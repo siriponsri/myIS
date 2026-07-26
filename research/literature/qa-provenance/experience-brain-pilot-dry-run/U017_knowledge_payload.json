@@ -1,0 +1,39 @@
+{
+  "dry_run": true,
+  "phase": "2A",
+  "mcp_tool": "save_knowledge_digest",
+  "note": "This file is a non-executable dry-run payload only. No save_knowledge_digest call has been made. Args below are shaped to the exact live MCP tool signature.",
+  "args": {
+    "title": "Needle in a haystack: Harnessing AI in drug patent searches and prediction",
+    "summary": "Addresses the fact that patent classification codes (IPC/CPC) do not delimit a subgroup for chemical drug-related pharmaceutical patents, making that subgroup a hidden 'needle in a haystack' for identification and prediction. Fine-tunes BERT as a binary text classifier on three purpose-built training databases, reaching 94.40% accuracy identifying chemical drug-related patents by title/abstract text where classification codes fail. Applied to USPTO and German DPMA patent databases (2010-2020), the classifier flags potential chemical drug patents at the application stage, up to roughly 10 years before drug approval, exploiting the temporal gap between patent grant and market approval. The paper's central point for this project is that pharmaceutical-patent identity cannot be read off classification codes, supporting content/claim-based approaches over code filters.\n\n## Bibliographic Metadata\n\n- ThaiPhaLex Paper ID: U017\n- Authors: Leonardo Costa Ribeiro; Valbona Muzaka\n- Publication Year: 2024\n- DOI: not verified\n- arXiv ID: not verified\n- Verified Digest Path: source-packet/03-priority-papers/digests/U017_needle_haystack_drug_patent_digest.md\n- Source PDF SHA-256: 23afd72319f09b3b25f39ad58ad18f6f3a4fc54c3d68da44539cdf72d40e7028\n- Verification Status: verified curated digest",
+    "key_facts": [
+      "IPC/CPC classification codes do not delimit a distinct subgroup for chemical drug-related pharmaceutical patents.",
+      "BERT fine-tuned as a binary text classifier on three purpose-built training databases reaches 94.40% accuracy identifying chemical drug-related patents from title/abstract text.",
+      "Applied to USPTO patent data, the classifier flags potential chemical drug patents at the patent-application stage, up to approximately 10 years before drug approval.",
+      "Evaluation used a self-constructed labeled dataset (author-defined construct of 'drug-related'); title/abstract text classification only, no ranking or retrieval component."
+    ],
+    "suggested_applicability": "External Knowledge only. Domain-adjacent background supporting the point that pharmaceutical-patent identity is not captured by classification codes, relevant to content/claim-based domain-labeling approaches. Not tested evidence on this project's own data, not Grounded Experience, and explicitly not a legal novelty, infringement, or freedom-to-operate judgment — the classifier's output is a drug-relatedness label only.",
+    "tags": ["patent", "classification", "prediction", "pharmaceutical", "not-grounded-experience"],
+    "source_filename": "research/ref-paper/is1/pdfs/17_needle_in_a_haystack_harnessing_ai_2024.pdf",
+    "source_content_hash": "23afd72319f09b3b25f39ad58ad18f6f3a4fc54c3d68da44539cdf72d40e7028",
+    "source_type": "pdf",
+    "source_mime_type": "application/pdf",
+    "project": "thaiphalex-is1",
+    "agent": "PENDING_PHASE2B_ASSIGNMENT",
+    "model": "PENDING_PHASE2B_ASSIGNMENT",
+    "reasoning_effort": "PENDING_PHASE2B_ASSIGNMENT",
+    "experiment_id": "PENDING_PHASE2B_ASSIGNMENT",
+    "run_id": "PENDING_PHASE2B_ASSIGNMENT"
+  },
+  "predicted_knowledge_id": "KNO-23AFD72319F0",
+  "predicted_knowledge_id_derivation": "KNO-{source_content_hash[:12].upper()}",
+  "knowledge_class": "external_knowledge",
+  "not_grounded_experience": true,
+  "prohibited_content_check": {
+    "raw_pdf_text_included": false,
+    "extraction_cache_text_included": false,
+    "protected_or_held_out_data_included": false
+  },
+  "source_digest_path": "source-packet/03-priority-papers/digests/U017_needle_haystack_drug_patent_digest.md",
+  "duplicate_check_result": "no exact SHA-256, title, normalized-title, DOI, or arXiv match found against the 17 live knowledge.jsonl records as of 2026-07-25"
+}

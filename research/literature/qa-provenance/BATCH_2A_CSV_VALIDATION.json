@@ -1,0 +1,20 @@
+{
+  "validated_at": "2026-07-25",
+  "csv_path": "source-packet/03-priority-papers/BATCH_2A_INGESTION_CANDIDATES.csv",
+  "row_count": 20,
+  "checks": {
+    "header_matches_expected_fieldnames": true,
+    "row_count_is_20": true,
+    "all_rows_field_count_matches_header": true,
+    "no_duplicate_unique_id": true,
+    "ids_match_expected_u021_u040": true,
+    "no_u041_or_beyond_present": true,
+    "sha256_matches_manifest_for_all_rows": true,
+    "all_digest_paths_exist_on_disk": true,
+    "all_cache_paths_exist_on_disk": true,
+    "no_stale_tool_results_or_inline_cache_refs": true,
+    "no_enum_violations": true
+  },
+  "issues": [],
+  "overall_pass": true
+}

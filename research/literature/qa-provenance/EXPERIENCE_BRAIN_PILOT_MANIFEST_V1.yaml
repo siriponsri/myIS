@@ -1,0 +1,149 @@
+# Experience Brain Pilot Manifest V1
+#
+# Phase 2A planning-metadata manifest for exactly four pilot papers: U011, U013, U017, U018.
+# Contains ONLY planning metadata. No Experience Brain write is authorized or performed by
+# this file. Governed by EXPERIENCE_BRAIN_INGESTION_CONTRACT_V1.md.
+#
+# Generated: 2026-07-25. Zero Experience Brain writes performed to produce this manifest.
+
+schema_version: pilot-manifest-v1
+contract_ref: EXPERIENCE_BRAIN_INGESTION_CONTRACT_V1.md
+pilot_scope: [U011, U013, U017, U018]
+batch_expansion_authorized: false
+
+papers:
+  - paper_id: U011
+    proposed_operation: link_existing_zero_write
+    existing_knowledge_id: KNO-384DFF3E3AC0
+    digest_path: source-packet/03-priority-papers/digests/U011_dapfam_digest.md
+    source_pdf_sha256: 384dff3e3ac0fe6d2064572bb0322ef4b059c82fcbd703e680a3b524e7120c27
+    title: "DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross-domain patent retrieval"
+    knowledge_class: external_knowledge
+    verification_status: verified curated digest
+    doi: null
+    arxiv_id: "2506.22141"
+    publication_year: 2025
+    authors: "Iliass Ayaou; Denis Cavallucci; Hicham Chibane"
+    duplicate_checks_required:
+      - exact_sha256_match
+    duplicate_checks_performed:
+      exact_sha256_match: "confirmed exact match against KNO-384DFF3E3AC0.source_content_hash"
+      exact_title_match: "not applicable — link_existing already resolved via hash"
+      normalized_title_match: "not applicable — link_existing already resolved via hash"
+      doi_match: "not applicable — DOI not verified for this paper (null)"
+      arxiv_id_match: "not checked — hash match sufficient and authoritative"
+      paper_id_cross_reference: "not recorded in any existing KNO metadata field"
+      narrow_keyword_query_knowledge: "performed read-only; returned KNO-384DFF3E3AC0 and related synthesis records, consistent with hash match"
+    readiness: link_confirmed_zero_write
+    unresolved_fields:
+      - "doi (not verified at source; preprint has no DOI)"
+    notes: "Zero-write link_existing. See U011_link_existing_plan.md for full evidence and read-only query trail."
+
+  - paper_id: U013
+    proposed_operation: ingest_new_dry_run
+    existing_knowledge_id: null
+    digest_path: source-packet/03-priority-papers/digests/U013_self_supervised_patent_representation_digest.md
+    source_pdf_sha256: 39aacd435c9acc78a744b6e818b142e5ff76cd2ab40fedf8ac371da6891d3214
+    title: "Patent Representation Learning via Self-supervision"
+    knowledge_class: external_knowledge
+    verification_status: verified curated digest
+    doi: null
+    arxiv_id: "2511.10657"
+    publication_year: 2025
+    authors: "You Zuo; Kim Gerdes; Éric de la Clergerie; Benoît Sagot"
+    duplicate_checks_required:
+      - exact_sha256_match
+      - exact_title_match
+      - normalized_title_match
+      - doi_match
+      - arxiv_id_match
+      - paper_id_cross_reference
+      - narrow_keyword_query_knowledge
+    duplicate_checks_performed:
+      exact_sha256_match: "no match against any of 17 live knowledge.jsonl records"
+      exact_title_match: "no match"
+      normalized_title_match: "no match"
+      doi_match: "not applicable — DOI not verified (null)"
+      arxiv_id_match: "no match against any recorded source_filename/metadata"
+      paper_id_cross_reference: "U013 not recorded in any existing KNO metadata field"
+      narrow_keyword_query_knowledge: "performed read-only; returned only DAPFAM/PatenTEB/PAECTER/literature-matrix/candidate-exposure synthesis — related topic, not this paper"
+    readiness: ready_for_ingest_new_dry_run
+    unresolved_fields:
+      - "doi (not verified at source; preprint has no DOI, arXiv-only)"
+    knowledge_id_generation: pending_write_time_generation
+    predicted_knowledge_id_if_generated_now: KNO-39AACD435C9A
+    notes: "No credible duplicate found. Not blocked. Predicted ID computed deterministically from source SHA-256 per _knowledge_id(); not created by this manifest."
+
+  - paper_id: U017
+    proposed_operation: ingest_new_dry_run
+    existing_knowledge_id: null
+    digest_path: source-packet/03-priority-papers/digests/U017_needle_haystack_drug_patent_digest.md
+    source_pdf_sha256: 23afd72319f09b3b25f39ad58ad18f6f3a4fc54c3d68da44539cdf72d40e7028
+    title: "Needle in a haystack: Harnessing AI in drug patent searches and prediction"
+    knowledge_class: external_knowledge
+    verification_status: verified curated digest
+    doi: null
+    arxiv_id: null
+    publication_year: 2024
+    authors: "Leonardo Costa Ribeiro; Valbona Muzaka"
+    duplicate_checks_required:
+      - exact_sha256_match
+      - exact_title_match
+      - normalized_title_match
+      - doi_match
+      - arxiv_id_match
+      - paper_id_cross_reference
+      - narrow_keyword_query_knowledge
+    duplicate_checks_performed:
+      exact_sha256_match: "no match against any of 17 live knowledge.jsonl records"
+      exact_title_match: "no match"
+      normalized_title_match: "no match"
+      doi_match: "not applicable — DOI not verified (null)"
+      arxiv_id_match: "not applicable — arXiv ID not verified (null)"
+      paper_id_cross_reference: "U017 not recorded in any existing KNO metadata field"
+      narrow_keyword_query_knowledge: "performed read-only; returned only IS1 plan/north-star (KNO-9F9F212D663E) — project scope, not this paper"
+    readiness: ready_for_ingest_new_dry_run
+    unresolved_fields:
+      - "doi (not verified at source)"
+      - "arxiv_id (not applicable — not an arXiv preprint)"
+      - "venue (inferred from header/affiliations, not independently confirmed)"
+    knowledge_id_generation: pending_write_time_generation
+    predicted_knowledge_id_if_generated_now: KNO-23AFD72319F0
+    notes: "No credible duplicate found. Not blocked. Predicted ID computed deterministically from source SHA-256 per _knowledge_id(); not created by this manifest."
+
+  - paper_id: U018
+    proposed_operation: ingest_new_dry_run
+    existing_knowledge_id: null
+    digest_path: source-packet/03-priority-papers/digests/U018_patent_retrieval_text_kg_embeddings_digest.md
+    source_pdf_sha256: 4b1023ef0c1e63256232782d5d72aa189133fd510bf282d21680ebfeb730b9cb
+    title: "Enhancing Patent Retrieval using Text and Knowledge Graph Embeddings: A Technical Note"
+    knowledge_class: external_knowledge
+    verification_status: verified curated digest
+    doi: null
+    arxiv_id: null
+    publication_year: 2022
+    authors: "L. Siddharth; Guangtong Li; Jianxi Luo"
+    duplicate_checks_required:
+      - exact_sha256_match
+      - exact_title_match
+      - normalized_title_match
+      - doi_match
+      - arxiv_id_match
+      - paper_id_cross_reference
+      - narrow_keyword_query_knowledge
+    duplicate_checks_performed:
+      exact_sha256_match: "no match against any of 17 live knowledge.jsonl records"
+      exact_title_match: "no match"
+      normalized_title_match: "no match"
+      doi_match: "not applicable — DOI not verified (null)"
+      arxiv_id_match: "not applicable — arXiv ID not verified (null)"
+      paper_id_cross_reference: "U018 not recorded in any existing KNO metadata field"
+      narrow_keyword_query_knowledge: "performed read-only; nearest return is U012 PatenTEB — a different paper"
+    readiness: ready_for_ingest_new_dry_run
+    unresolved_fields:
+      - "doi (not verified at source)"
+      - "arxiv_id (not applicable — not an arXiv preprint)"
+      - "venue (lab technical note; exact publication venue not independently confirmed)"
+    knowledge_id_generation: pending_write_time_generation
+    predicted_knowledge_id_if_generated_now: KNO-4B1023EF0C1E
+    notes: "No credible duplicate found. Not blocked. Predicted ID computed deterministically from source SHA-256 per _knowledge_id(); not created by this manifest."

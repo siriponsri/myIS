@@ -1,0 +1,25 @@
+project:
+  display_name: myIS Research
+  repository: https://github.com/siriponsri/myIS.git
+  experience_brain_project_id: thaiphalex-is1
+  status: restructure_only
+
+authority:
+  ask_owner_when_uncertain: true
+  delete_requires_explicit_yes_no: true
+  push_allowed: false
+  brain_write_mode: serial_writer
+
+research:
+  track_order: [C, R, S]
+  path_candidates_required: 3
+  owner_selects_top_1: true
+  u041_authorized: false
+  held_out_access: false
+
+restructure_prohibitions:
+  research_queries: true
+  experience_brain_writes: true
+  scientific_mlflow_runs: true
+  api_gpu_vast_runs: true
+

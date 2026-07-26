@@ -1,0 +1,21 @@
+{
+  "validated_at": "2026-07-25",
+  "scope": "U021-U040 (Batch 2A)",
+  "checks": {
+    "all_20_persistent_caches_exist": true,
+    "exactly_20_caches_in_range_no_extras": true,
+    "no_empty_cache_files": true,
+    "exactly_20_digest_files_in_range": true,
+    "no_duplicate_digest_files_per_id": true,
+    "every_id_has_a_digest_file": true,
+    "all_digests_have_normalized_extraction_cache_field": true,
+    "no_active_stale_cache_annotations_in_digests": true,
+    "csv_parses_and_passes_all_row_checks": true,
+    "checkpoint_has_no_active_stale_cache_refs": true,
+    "index_has_no_active_stale_cache_refs": true,
+    "no_duplicate_sha_across_distinct_ids": true,
+    "u041_not_started": true
+  },
+  "issues": [],
+  "overall_pass": true
+}

@@ -1,0 +1,30 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+
+# Research runtime artifacts
+artifacts/*
+!artifacts/.gitkeep
+mlruns/*
+!mlruns/.gitkeep
+mlartifacts/*
+!mlartifacts/.gitkeep
+data/private/
+data/held-out/
+
+# Tool workspaces and caches
+.hyperresearch/
+.open-deep-research/
+.cache/
+.pytest_cache/
+
+# Editors and OS
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini
+

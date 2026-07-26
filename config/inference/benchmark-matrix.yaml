@@ -1,0 +1,39 @@
+status: planning_only
+selection_metric: cost_per_1000_valid_queries
+
+workload_buckets:
+  - id: A
+    max_prompt_tokens: 1024
+  - id: B
+    min_prompt_tokens: 1025
+    max_prompt_tokens: 2048
+  - id: C
+    min_prompt_tokens: 2049
+    max_prompt_tokens: 4096
+  - id: D
+    min_prompt_tokens: 4097
+
+candidate_hardware:
+  - RTX_4090
+  - RTX_A6000
+  - L40S
+  - A100_80GB
+
+benchmark_grid:
+  short_generation_concurrency: [16, 32, 64]
+  long_generation_concurrency: [8, 16, 32]
+  embedding_batch_size: [32, 64, 128]
+
+required_metrics:
+  - completed_queries
+  - valid_queries
+  - tokens_per_second
+  - queries_per_hour
+  - gpu_utilization
+  - peak_vram_bytes
+  - latency_p50_ms
+  - latency_p95_ms
+  - oom_count
+  - retry_count
+  - cost_per_query
+

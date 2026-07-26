@@ -1,0 +1,40 @@
+{
+  "dry_run": true,
+  "phase": "2A",
+  "mcp_tool": "save_knowledge_digest",
+  "note": "This file is a non-executable dry-run payload only. No save_knowledge_digest call has been made. Args below are shaped to the exact live MCP tool signature.",
+  "args": {
+    "title": "Enhancing Patent Retrieval using Text and Knowledge Graph Embeddings: A Technical Note",
+    "summary": "Proposes retrieving patents relevant to an initial set of patents by representing multiple facets of a patent, text, citation, and inventor, in a single embedding rather than text alone. Sentence-BERT encodes titles and abstracts; TransE is trained separately on the citation knowledge graph and the inventor knowledge graph; a classification task selects concatenation of text+citation+inventor as the preferred combined representation. Retrieval ranks/associates target patents via mean cosine similarity over multiple initial patents. Applied to two curated sets, a product family and an inventor's portfolio, with qualitative design-inspiration evaluation rather than standard IR benchmarking (no MAP/NDCG). Retrieved patents surface distant yet in-domain concepts useful for design inspiration, though citation-sharing bias limits discovery of distant in-domain patents that do not share citations.\n\n## Bibliographic Metadata\n\n- ThaiPhaLex Paper ID: U018\n- Authors: L. Siddharth; Guangtong Li; Jianxi Luo\n- Publication Year: 2022\n- DOI: not verified\n- arXiv ID: not verified\n- Verified Digest Path: source-packet/03-priority-papers/digests/U018_patent_retrieval_text_kg_embeddings_digest.md\n- Source PDF SHA-256: 4b1023ef0c1e63256232782d5d72aa189133fd510bf282d21680ebfeb730b9cb\n- Verification Status: verified curated digest",
+    "key_facts": [
+      "Combines Sentence-BERT text embeddings with TransE embeddings trained separately on a citation knowledge graph and an inventor knowledge graph.",
+      "Concatenation of text, citation, and inventor embeddings is selected as the preferred patent representation via a classification task.",
+      "Retrieval ranks target patents by mean cosine similarity computed over multiple initial (query) patents.",
+      "Evaluated qualitatively on two curated sets (a product family and an inventor's portfolio); no standard IR benchmark, no MAP/NDCG reported.",
+      "Citation-sharing and original-search mechanisms bias the retrieved neighborhood; distant in-domain concepts can be missed when patents do not share citations."
+    ],
+    "suggested_applicability": "External Knowledge only. Planning input describing a concrete multi-view candidate-generation design (text, citation, inventor signals fused for retrieval), analogous to a multi-view candidate-generation hypothesis for this project. Not tested evidence on this project's own data, not Grounded Experience, and not a legal or novelty judgment — the paper's notion of relevance is citation/text/inventor similarity, explicitly not legal novelty.",
+    "tags": ["patent", "retrieval", "embedding", "multi-view", "knowledge-graph", "candidate-exposure", "not-grounded-experience"],
+    "source_filename": "research/ref-paper/is1/pdfs/18_enhancing_patent_retrieval_using_text_and_2022.pdf",
+    "source_content_hash": "4b1023ef0c1e63256232782d5d72aa189133fd510bf282d21680ebfeb730b9cb",
+    "source_type": "pdf",
+    "source_mime_type": "application/pdf",
+    "project": "thaiphalex-is1",
+    "agent": "PENDING_PHASE2B_ASSIGNMENT",
+    "model": "PENDING_PHASE2B_ASSIGNMENT",
+    "reasoning_effort": "PENDING_PHASE2B_ASSIGNMENT",
+    "experiment_id": "PENDING_PHASE2B_ASSIGNMENT",
+    "run_id": "PENDING_PHASE2B_ASSIGNMENT"
+  },
+  "predicted_knowledge_id": "KNO-4B1023EF0C1E",
+  "predicted_knowledge_id_derivation": "KNO-{source_content_hash[:12].upper()}",
+  "knowledge_class": "external_knowledge",
+  "not_grounded_experience": true,
+  "prohibited_content_check": {
+    "raw_pdf_text_included": false,
+    "extraction_cache_text_included": false,
+    "protected_or_held_out_data_included": false
+  },
+  "source_digest_path": "source-packet/03-priority-papers/digests/U018_patent_retrieval_text_kg_embeddings_digest.md",
+  "duplicate_check_result": "no exact SHA-256, title, normalized-title, DOI, or arXiv match found against the 17 live knowledge.jsonl records as of 2026-07-25"
+}

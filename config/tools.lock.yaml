@@ -1,0 +1,18 @@
+tools:
+  hyperresearch:
+    repository: https://github.com/jordan-gibbs/hyperresearch.git
+    version: v0.9.1
+    commit: 1af2f89bf19dd677fa0be0a1b2f83c939ec1d502
+    executor: claude_only
+  open_deep_research:
+    repository: https://github.com/langchain-ai/open_deep_research.git
+    commit: d337ae32ed4ff8f4c6fbe192ba3bf1b2d6610799
+  obsidian_mind:
+    repository: https://github.com/breferrari/obsidian-mind.git
+    version: v7.0.0
+    commit: dde3710fcdc71fcc10578e4a58cbc3014211ddbb
+  mlflow:
+    repository: https://github.com/mlflow/mlflow.git
+    version: 3.14.0
+    commit: 86cd7f5a1dc25a1387ad07c87811bbc30f62951c
+

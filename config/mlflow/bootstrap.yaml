@@ -1,0 +1,22 @@
+status: bootstrap_only
+tracking_uri: sqlite:///runtime/mlflow.db
+artifact_root: ./mlartifacts
+experiment_prefix: myis
+scientific_runs_allowed: false
+
+required_tags:
+  - project
+  - track
+  - stage
+  - git_commit
+  - dataset_version
+  - split
+  - prompt_version
+  - skill_version
+  - model_id
+  - model_revision
+  - provider
+  - inference_engine
+  - batch_config_version
+  - owner_approval_source
+

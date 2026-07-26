@@ -1,0 +1,52 @@
+schema_version: 1
+run_id: null
+track: C|R|S
+stage: performance_tuning|dev|confirmatory|bootstrap
+owner_approval_source: null
+git_commit: null
+
+dataset:
+  id: null
+  version: null
+  split: null
+  query_ids_sha256: null
+
+method:
+  path_id: null
+  prompt_version: null
+  skill_version: null
+  optimizer: null
+
+model:
+  id: null
+  revision: null
+  provider: null
+  dtype: null
+  quantization: null
+
+inference:
+  engine: vllm|api
+  engine_version: null
+  client_chunk_size: null
+  concurrency: null
+  max_num_seqs: null
+  max_num_batched_tokens: null
+  max_context_tokens: null
+  max_output_tokens: null
+  seed: null
+  temperature: null
+  batch_invariance_mode: null
+
+lineage:
+  mlflow_experiment_id: null
+  mlflow_run_id: null
+  parent_run_id: null
+
+cost:
+  currency: USD
+  gpu_hour_rate: null
+  storage: null
+  bandwidth: null
+  api: null
+  total: null
+

@@ -1,0 +1,40 @@
+{
+  "dry_run": true,
+  "phase": "2A",
+  "mcp_tool": "save_knowledge_digest",
+  "note": "This file is a non-executable dry-run payload only. No save_knowledge_digest call has been made. Args below are shaped to the exact live MCP tool signature.",
+  "args": {
+    "title": "Patent Representation Learning via Self-supervision",
+    "summary": "Investigates whether patent embeddings can be learned fully self-supervised, without citation or IPC labels, by treating different sections of the same patent (abstract, claims, background, description) as complementary contrastive views, replacing dropout-based augmentation which the paper shows causes patent-specific over-dispersion (loss of semantic cohesion). On a 200-query prior-art retrieval task, section-based augmentation raises Recall@100 from 56.21 to 71.22 using claims as the second view, matching or surpassing the citation-trained PAECTER baseline at several cutoffs. On IPC-subclass classification (30k USPTO patents, HUPD split), it performs on par with or better than the much larger gte-Qwen2-7B-instruct model. The result is a label-free route to patent embeddings competitive with citation-supervised baselines, of particular interest where citation signal is sparse.\n\n## Bibliographic Metadata\n\n- ThaiPhaLex Paper ID: U013\n- Authors: You Zuo; Kim Gerdes; Eric de la Clergerie; Benoit Sagot\n- Publication Year: 2025\n- DOI: not verified\n- arXiv ID: 2511.10657\n- Verified Digest Path: source-packet/03-priority-papers/digests/U013_self_supervised_patent_representation_digest.md\n- Source PDF SHA-256: 39aacd435c9acc78a744b6e818b142e5ff76cd2ab40fedf8ac371da6891d3214\n- Verification Status: verified curated digest",
+    "key_facts": [
+      "Section-based augmentation (different patent sections as contrastive views) replaces SimCSE-style dropout augmentation, which causes patent-specific over-dispersion (loss of semantic cohesion).",
+      "Prior-art retrieval (200 queries, Claims-to-All setting): R@100 rises from 56.21 to 71.22 with section-based augmentation using claims as the second view.",
+      "Section-augmented retrieval matches or surpasses citation-trained PAECTER at several cutoffs despite using no citation supervision.",
+      "IPC subclass classification (KNN k=10, 30k USPTO patents 2005-2009, HUPD 85/15 split): section-based augmentation performs on par with or better than gte-Qwen2-7B-instruct despite far fewer parameters.",
+      "Different patent sections specialize for different tasks; section-augmented models retrieve a more balanced section mix, indicating improved cross-structure generalization."
+    ],
+    "suggested_applicability": "External Knowledge only. Planning input for the Track-C candidate-generation question (sections-as-views, label-free embeddings competitive with citation-supervised baselines) — not tested evidence on this project's own data, not Grounded Experience, and not a legal or novelty judgment. Would need evaluation on the project's own cross-domain split before any applicability claim is substantiated.",
+    "tags": ["patent-level", "representation", "embedding", "self-supervised", "multi-view", "retrieval", "candidate-exposure", "not-grounded-experience"],
+    "source_filename": "research/ref-paper/is1/pdfs/13_patent_representation_learning_via_self_supervision_2025.pdf",
+    "source_content_hash": "39aacd435c9acc78a744b6e818b142e5ff76cd2ab40fedf8ac371da6891d3214",
+    "source_type": "pdf",
+    "source_mime_type": "application/pdf",
+    "project": "thaiphalex-is1",
+    "agent": "PENDING_PHASE2B_ASSIGNMENT",
+    "model": "PENDING_PHASE2B_ASSIGNMENT",
+    "reasoning_effort": "PENDING_PHASE2B_ASSIGNMENT",
+    "experiment_id": "PENDING_PHASE2B_ASSIGNMENT",
+    "run_id": "PENDING_PHASE2B_ASSIGNMENT"
+  },
+  "predicted_knowledge_id": "KNO-39AACD435C9A",
+  "predicted_knowledge_id_derivation": "KNO-{source_content_hash[:12].upper()}",
+  "knowledge_class": "external_knowledge",
+  "not_grounded_experience": true,
+  "prohibited_content_check": {
+    "raw_pdf_text_included": false,
+    "extraction_cache_text_included": false,
+    "protected_or_held_out_data_included": false
+  },
+  "source_digest_path": "source-packet/03-priority-papers/digests/U013_self_supervised_patent_representation_digest.md",
+  "duplicate_check_result": "no exact SHA-256, title, normalized-title, DOI, or arXiv match found against the 17 live knowledge.jsonl records as of 2026-07-25"
+}
