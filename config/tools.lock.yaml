@@ -2,7 +2,8 @@ tools:
   hyperresearch:
     repository: https://github.com/jordan-gibbs/hyperresearch.git
     version: v0.9.1
-    commit: 1af2f89bf19dd677fa0be0a1b2f83c939ec1d502
+    tag_object: 1af2f89bf19dd677fa0be0a1b2f83c939ec1d502
+    commit: 183443aefec8d0444f4b53095cee17bf77ad5fb2
     executor: claude_only
   open_deep_research:
     repository: https://github.com/langchain-ai/open_deep_research.git
@@ -15,4 +16,3 @@ tools:
     repository: https://github.com/mlflow/mlflow.git
     version: 3.14.0
     commit: 86cd7f5a1dc25a1387ad07c87811bbc30f62951c
-
