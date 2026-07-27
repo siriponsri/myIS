@@ -5,14 +5,47 @@ tools:
     tag_object: 1af2f89bf19dd677fa0be0a1b2f83c939ec1d502
     commit: 183443aefec8d0444f4b53095cee17bf77ad5fb2
     executor: claude_only
-  open_deep_research:
-    repository: https://github.com/langchain-ai/open_deep_research.git
-    commit: d337ae32ed4ff8f4c6fbe192ba3bf1b2d6610799
-  obsidian_mind:
-    repository: https://github.com/breferrari/obsidian-mind.git
-    version: v7.0.0
-    commit: dde3710fcdc71fcc10578e4a58cbc3014211ddbb
+    adoption: active
   mlflow:
     repository: https://github.com/mlflow/mlflow.git
     version: 3.14.0
     commit: 86cd7f5a1dc25a1387ad07c87811bbc30f62951c
+    adoption: active
+  obsidian_mind:
+    repository: https://github.com/breferrari/obsidian-mind.git
+    version: v7.0.0
+    commit: dde3710fcdc71fcc10578e4a58cbc3014211ddbb
+    adoption: active_memory_layer
+  open_websearch:
+    repository: https://github.com/Aas-ee/open-webSearch.git
+    version: 2.1.11
+    commit: 3094fa558fce35a8373e45ed5a6c43362e206906
+    adoption: claude_stdio_search
+  context7:
+    repository: https://github.com/upstash/context7.git
+    version: 3.2.5
+    commit: b250c2515694eee4b6df4db82fa056df9ed3e306
+    endpoint: https://mcp.context7.com/mcp
+    adoption: remote_documentation_mcp
+  loop_engineering:
+    repository: https://github.com/cobusgreyling/loop-engineering.git
+    version: v1.6.0
+    commit: 548ad72faca686766c23fcb88b3bccf643bd3b2d
+    adoption: pilot_complete_not_adopted
+  open_code_review:
+    repository: https://github.com/alibaba/open-code-review.git
+    version: v1.7.17
+    tag_object: b2038ceaa6ee7c676b91c6e6371a36c9cddd3e14
+    commit: 0ced7165718725e15223c3e5a506df7b7e9de51f
+    adoption: pilot_complete_not_adopted
+  open_deep_research:
+    repository: https://github.com/langchain-ai/open_deep_research.git
+    commit: d337ae32ed4ff8f4c6fbe192ba3bf1b2d6610799
+    adoption: retired_archive
+  pplx_cli:
+    repository: https://github.com/xerexcoded/pplx-cli.git
+    adoption: not_adopted
+  experience_brain:
+    adoption: retired_archive
+  agentmemory:
+    adoption: retired

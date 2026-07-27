@@ -29,9 +29,11 @@ earlier track or Paper D.
 
 - Claude alone executes HyperResearch.
 - A HyperResearch recommendation never authorizes implementation.
-- Experience Brain writes need a separate Owner gate.
+- The Obsidian Brain is the only active memory layer and uses a serial-writer
+  lease. Experience Brain and `agentmemory` are retired.
+- Loop Engineering and Open Code Review remain disposable pilots until the
+  Owner explicitly adopts a narrow operating contract.
 - A bootstrap-only MLflow smoke must be tagged `stage=bootstrap`; it may not log
   scientific metrics or touch a research dataset.
 - No provider fallback is allowed in confirmatory API runs unless it is pinned
   and declared in advance.
-

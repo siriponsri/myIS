@@ -7,22 +7,24 @@ __pycache__/
 *.py[cod]
 
 # Research runtime artifacts
-artifacts/*
-!artifacts/.gitkeep
-mlruns/*
-!mlruns/.gitkeep
-mlartifacts/*
-!mlartifacts/.gitkeep
-data/private/
-data/held-out/
-runtime/*
-!runtime/.gitkeep
+03_experiments/runtime/artifacts/*
+!03_experiments/runtime/artifacts/.gitkeep
+03_experiments/runtime/database/*
+!03_experiments/runtime/database/.gitkeep
+03_experiments/runtime/runs/*
+!03_experiments/runtime/runs/.gitkeep
+04_outputs/artifacts/*
+!04_outputs/artifacts/.gitkeep
+04_outputs/diagrams/*.svg
+01_evidence/private/
+01_evidence/held-out/
 
 # Tool workspaces and caches
 .hyperresearch/
-.open-deep-research/
 .cache/
 .pytest_cache/
+03_experiments/*/workspace/
+03_experiments/*/notebook_workspace/
 
 # Editors and OS
 .idea/

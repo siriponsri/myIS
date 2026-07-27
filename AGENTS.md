@@ -44,15 +44,14 @@ concurrent client requests; do not load one model per worker.
 The shared Brain repository is the human-readable project control plane.
 Codex and Claude are serial writers: only one may write to Brain at a time.
 Research facts remain canonical here or in immutable App evidence; Brain holds
-summaries, decisions, status, and pointers. Experience Brain remains a separate
-append-only knowledge system and requires its own write authorization.
+summaries, decisions, status, and pointers. It is the only active memory layer.
+Do not attach or write to Experience Brain or `agentmemory`; historical records
+remain provenance only.
 
 ## Frozen boundaries
 
 - Paper D is a frozen boundary study and must not be reopened implicitly.
-- Historical names and provenance remain unchanged. `myIS` is the current
-  program display name; the Experience Brain internal project ID remains
-  `thaiphalex-is1`.
-- During restructure: no scientific MLflow runs, research calls, Experience
-  Brain writes, API/GPU/Vast jobs, or held-out access.
-
+- Historical names and provenance remain unchanged even when they reference a
+  retired tool or earlier project name.
+- During restructure: no scientific MLflow runs, research calls, memory writes,
+  API/GPU/Vast jobs, or held-out access.

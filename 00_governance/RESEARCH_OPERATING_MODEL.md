@@ -2,36 +2,39 @@
 
 ## System boundaries
 
-```text
-App canonical evidence and datasets
-              |
-              v
-Research repo: methods, manifests, experiments, papers
-       |                         |
-       v                         v
-Brain: status/decisions     MLflow: run lineage
-       |
-       v
-Experience Brain: approved cross-session knowledge only
+<!-- mermaid-id: 02-01-research-system-boundaries -->
+```mermaid
+flowchart LR
+    accTitle: Research system boundaries
+    accDescr: Canonical application evidence enters Research, which produces governed outputs while the Brain records decisions and MLflow records run lineage.
+
+    App["App: canonical prior evidence"] --> Research["Research: scientific truth"]
+    Research --> Outputs["Validated outputs"]
+    Research --> Brain["Obsidian Brain: decisions and status"]
+    Research --> MLflow["MLflow: run and artifact lineage"]
+    Outputs --> Publication["Publication package"]
+
+    classDef source fill:#F1F3F5,stroke:#667085,color:#17222B
+    classDef agent fill:#DDF4EF,stroke:#0F766E,color:#17222B
+    classDef control fill:#FCE8E3,stroke:#C95D42,color:#17222B
+    class App source
+    class Research,Outputs,Publication agent
+    class Brain,MLflow control
 ```
 
-The Research repo owns scientific truth for new work. Brain is a readable
-control plane, not a replacement for manifests or results. Experience Brain is
-append-only long-term memory, not a PDF cache. HyperResearch workspaces are
-staging areas, not canonical repositories.
+Research owns scientific truth for new work. The Obsidian Brain is the only
+active memory layer and contains readable summaries, decisions, status, and
+pointers. It does not replace manifests, evidence, or results. MLflow stores
+experiment lineage. HyperResearch and source-staging workspaces are disposable,
+not canonical repositories.
 
 ## Evidence workflow
 
-```text
-approved PDF/web/deep-research inputs
-  -> Claude HyperResearch evidence synthesis
-  -> Top-3 path KM graph for one track
-  -> Owner selects Top-1
-  -> DEV implementation and leverage gates
-  -> frozen method and manifest
-  -> Owner-held-out gate
-  -> publication artifact package
-```
+Approved PDF, repository, dataset, and web inputs are verified and staged before
+Claude runs HyperResearch. The output is a claim-linked synthesis and three
+ranked paths for one track. The Owner selects exactly one path before any
+implementation. Development gates precede method freeze, protected evaluation,
+and publication review.
 
 ## Optimizer policy
 
@@ -49,4 +52,3 @@ when the primary method does not win: a benchmark, diagnostic taxonomy,
 validated boundary, transfer finding, or reproducible efficiency result. Claims
 must follow measured evidence; the publication narrative cannot redefine a
 failed primary endpoint after seeing held-out results.
-

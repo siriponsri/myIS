@@ -32,7 +32,8 @@ held-out labels. Select using cost per 1,000 valid completed queries, subject to
 latency and failure ceilings. A100 80GB is allowed only after measured evidence
 shows it is preferable for the selected model/context/workload.
 
-Required grid and metrics live in `config/inference/benchmark-matrix.yaml`.
+Required grid and metrics live in
+`03_experiments/config/inference/benchmark-matrix.yaml`.
 Record at least:
 
 - engine and exact version;
@@ -57,4 +58,3 @@ Use Vast/vLLM only for a selected local-capable target with enough rollouts to
 justify fixed hourly cost. Interruptible instances require per-mini-batch
 checkpointing. Record storage, bandwidth, startup, retry and idle cost. Destroy
 or retain an instance only under the applicable Owner budget/lifecycle gate.
-

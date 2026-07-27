@@ -8,11 +8,10 @@
 - Budget ceiling:
 - Dataset/split authorization:
 - API/GPU/Vast authorization:
-- Experience Brain write authorization: NO
+- Obsidian Brain write authorization: NO
 - Held-out authorization: NO
 - Approval source and date:
 - Notes:
 
 Implementation remains blocked unless `Decision` is `APPROVE` and all required
 scope fields are explicit.
-

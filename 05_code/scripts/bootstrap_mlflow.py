@@ -3,28 +3,48 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
 import mlflow
 
 
-ROOT = Path(__file__).resolve().parents[1]
-RUNTIME = ROOT / "runtime"
-ARTIFACTS = ROOT / "mlartifacts"
-DATABASE = RUNTIME / "mlflow.db"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def resolve_store_root() -> Path:
+    """Resolve the persistent MLflow store outside the Git repository."""
+    configured = os.environ.get("MYIS_MLFLOW_STORE")
+    if configured:
+        return Path(configured).expanduser().resolve()
+
+    for ancestor in (REPO_ROOT, *REPO_ROOT.parents):
+        numbered = ancestor / "01_Stores" / "00_myIS" / "mlflow"
+        legacy = ancestor / "Stores" / "myIS" / "mlflow"
+        if numbered.parent.is_dir():
+            return numbered
+        if legacy.parent.is_dir():
+            return legacy
+    raise RuntimeError(
+        "Cannot locate the workspace MLflow store; set MYIS_MLFLOW_STORE"
+    )
 
 
 def main() -> int:
-    RUNTIME.mkdir(parents=True, exist_ok=True)
-    ARTIFACTS.mkdir(parents=True, exist_ok=True)
-    tracking_uri = f"sqlite:///{DATABASE.as_posix()}"
+    store_root = resolve_store_root()
+    database_dir = store_root / "database"
+    artifacts = store_root / "artifacts"
+    database = database_dir / "mlflow.db"
+    database_dir.mkdir(parents=True, exist_ok=True)
+    artifacts.mkdir(parents=True, exist_ok=True)
+    tracking_uri = f"sqlite:///{database.as_posix()}"
     mlflow.set_tracking_uri(tracking_uri)
 
     experiment = mlflow.get_experiment_by_name("myis-bootstrap")
     if experiment is None:
         experiment_id = mlflow.create_experiment(
-            "myis-bootstrap", artifact_location=ARTIFACTS.resolve().as_uri()
+            "myis-bootstrap", artifact_location=artifacts.resolve().as_uri()
         )
     else:
         experiment_id = experiment.experiment_id
@@ -55,7 +75,7 @@ def main() -> int:
         "mlflow_version": mlflow.__version__,
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
-    report_path = RUNTIME / "mlflow-bootstrap.json"
+    report_path = store_root / "mlflow-bootstrap.json"
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
     return 0
@@ -63,4 +83,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

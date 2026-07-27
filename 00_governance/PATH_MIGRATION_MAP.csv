@@ -1,0 +1,10 @@
+legacy_path,target_domain,target_path,status,approval_required,notes
+00_Projects/00_myIS/00_App,app,app,checkpoint,yes,Production repository remains independent
+00_Projects/00_myIS/01_Research,research,research,checkpoint,no,This repository is the current Research root
+00_Projects/00_myIS/02_Brain,brain,brain,checkpoint,yes,Obsidian Mind local-only repository
+01_Stores/00_myIS/mlflow,stores,stores/mlflow,active,no,Canonical local MLflow persistence
+02_Tools,tools,tools,checkpoint,yes,Keep pinned dependencies separate from research code
+03_Workspaces,workspaces,workspaces,active,no,Disposable runtime sandboxes
+99_Archive,archive,archive,active,no,Archive-first destination for retired shells
+Projects,archive,archive/legacy-projects,candidate,yes,Legacy wrapper; no deletion authorized
+Tools,archive,archive/legacy-tools,candidate,yes,Historical runtime; no deletion authorized

@@ -1,30 +1,37 @@
-# Toolchain Contract
+# Minimal Toolchain Contract
 
-Exact source pins are recorded in `config/tools.lock.yaml`.
+Exact source pins and adoption states are recorded in
+`00_governance/config/tools.lock.yaml`.
 
-## HyperResearch
+## Active foundation
 
-Claude-only execution. It may digest approved PDFs, conduct approved web search,
-and call approved deep-research tooling. Its required deliverable is a Top-3
-path knowledge graph, not an automatic implementation decision.
+| Capability | Tool | Operating boundary |
+|---|---|---|
+| Evidence synthesis | HyperResearch `v0.9.1` | Claude-only, approved sources, Top-3 output, no automatic implementation |
+| Experiment lineage | MLflow `3.14.0` | Immutable manifests, traces, metrics, artifacts, cost, and batch settings |
+| Shared memory | Obsidian Brain | One human-readable Brain, one serial writer |
+| Codex web search | Native live search | Native capability; no duplicate search MCP |
+| Claude web search | Open-WebSearch `2.1.11` | STDIO, DuckDuckGo default, DuckDuckGo/Bing only |
+| Library documentation | Context7 remote MCP | Documentation lookup, no API key initially |
 
-## Open Deep Research
+Git is canonical for prompt, skill, code, and document source. MLflow records
+run lineage and generated artifacts. The Brain stores concise decisions and
+pointers. Search results are untrusted discovery inputs until primary sources
+are fetched, verified, and registered.
 
-Use as a source-gathering and synthesis component inside an approved research
-run. Preserve query, source URL, retrieval time, model/provider configuration,
-and claim-to-source mapping.
+## Retired or rejected
 
-## Obsidian Mind and Experience Brain
+- Open Deep Research is archived because it overlaps HyperResearch.
+- Experience Brain and `agentmemory` are retired to keep one memory layer.
+- `pplx-cli` is not adopted because it adds an API dependency without a unique
+  role in the minimal stack.
 
-Obsidian Mind is the shared human-readable Brain for Codex and Claude. Use one
-serial writer at a time. Experience Brain stores only approved external
-knowledge or grounded experience with provenance; never ingest raw PDFs or
-extraction-cache text.
+Historical files may retain these names as immutable provenance. They are not
+active operating instructions.
 
-## MLflow
+## Evaluation-only tools
 
-Git is canonical for prompt and skill source. MLflow records immutable prompt
-versions, run and trace lineage, metrics, artifacts, cost, latency, batch
-settings, optimizer lineage and API-to-local comparisons. Bootstrap tests use a
-dedicated `stage=bootstrap` tag and contain no scientific data.
-
+Loop Engineering and Open Code Review may run only at their pinned commits in a
+disposable fixture workspace. They receive no credentials and no write access
+to App, Research, Brain, or persistent stores. Adoption requires an evidence
+report and a separate Owner decision.

@@ -9,5 +9,4 @@ description = "Governed infrastructure for myIS publication research"
 requires-python = ">=3.11"
 
 [tool.setuptools.packages.find]
-where = ["src"]
-
+where = ["05_code/src"]

@@ -1,0 +1,16 @@
+mode: offline
+seed: 7
+sources:
+  - pdf
+  - web
+  - history
+engine: fixture-brain-compatible-with-obsidian-mind-qmd
+mlflow_artifacts:
+  - prompt.json
+  - flow.json
+  - progress.jsonl
+  - result.json
+  - metrics.json
+network: disabled
+api_calls: disabled
+gpu: disabled

@@ -1,7 +1,6 @@
 project:
   display_name: myIS Research
   repository: https://github.com/siriponsri/myIS.git
-  experience_brain_project_id: thaiphalex-is1
   status: restructure_only
 
 authority:
@@ -9,6 +8,7 @@ authority:
   delete_requires_explicit_yes_no: true
   push_allowed: false
   brain_write_mode: serial_writer
+  active_memory_layer: obsidian_brain
 
 research:
   track_order: [C, R, S]
@@ -19,7 +19,6 @@ research:
 
 restructure_prohibitions:
   research_queries: true
-  experience_brain_writes: true
+  memory_writes: true
   scientific_mlflow_runs: true
   api_gpu_vast_runs: true
-

@@ -1,6 +1,7 @@
 status: bootstrap_only
-tracking_uri: sqlite:///runtime/mlflow.db
-artifact_root: ./mlartifacts
+store_env: MYIS_MLFLOW_STORE
+database_relative_path: database/mlflow.db
+artifact_relative_path: artifacts
 experiment_prefix: myis
 scientific_runs_allowed: false
 
@@ -19,4 +20,3 @@ required_tags:
   - inference_engine
   - batch_config_version
   - owner_approval_source
-

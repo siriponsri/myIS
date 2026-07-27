@@ -7,8 +7,8 @@ import hashlib
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
-LITERATURE = ROOT / "research" / "literature"
+ROOT = Path(__file__).resolve().parents[2]
+LITERATURE = ROOT / "01_evidence" / "literature"
 MANIFEST = LITERATURE / "IMPORT_MANIFEST.csv"
 DIGESTS = LITERATURE / "validated-digests"
 
@@ -40,14 +40,23 @@ def main() -> int:
         failures.append(f"expected 64 import rows, found {len(rows)}")
 
     for row in rows:
-        target = Path(row["target_path"])
+        relative = row.get("current_repo_relative_path", "")
+        if not relative:
+            failures.append("manifest row missing current_repo_relative_path")
+            continue
+        target = ROOT / Path(relative)
+        try:
+            target.resolve().relative_to(ROOT.resolve())
+        except ValueError:
+            failures.append(f"manifest path escapes repository: {relative}")
+            continue
         if not target.is_file():
-            failures.append(f"missing imported artifact: {target}")
+            failures.append(f"missing imported artifact: {relative}")
             continue
         actual = sha256(target)
         expected = row["target_sha256"].upper()
         if actual != expected:
-            failures.append(f"hash mismatch: {target}")
+            failures.append(f"hash mismatch: {relative}")
 
     if failures:
         for failure in failures:
@@ -59,9 +68,9 @@ def main() -> int:
     print("U041_STARTED=false")
     print("IMPORT_MANIFEST_ROWS=64")
     print("IMPORT_HASHES_MATCH=true")
+    print("IMPORT_PATHS_PORTABLE=true")
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
