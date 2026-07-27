@@ -1,6 +1,6 @@
 # Restructure Status
 
-Updated: 2026-07-26 Asia/Bangkok
+Updated: 2026-07-27 Asia/Bangkok
 
 ## Target layout
 
@@ -16,7 +16,7 @@ My_Research/
   99_Archive/00_myIS/        preserved legacy paths
 ```
 
-## Completed without process cutover
+## Completed
 
 - Research internals now use `00_governance` through `05_code` navigation.
 - U001-U040 and all 64 imported artifacts validate through portable relative
@@ -33,19 +33,23 @@ My_Research/
 - Loop Engineering and Open Code Review pilots completed without project data,
   credentials, model calls, commits, or global installation. Neither tool is
   recommended for active adoption now.
+- App, Research, and Brain are now at the numbered workspace paths shown above.
+- The empty `Projects` wrapper and retired Experience Brain runtime were moved
+  into dated archive locations after Owner YES and process/path checks.
+- Nine empty Research navigation shells and the resulting empty root `Tools`
+  shell were removed after zero-entry checks.
+- The current PDF duplicate audit records 16 exact groups / 32 files. Every
+  alias remains referenced, so the files were retained and canonical mappings
+  were recorded instead of breaking provenance.
 
-## Current blockers
+## Remaining gated work
 
-- Research remains at `Projects/myIS/Research` because Windows denied its move
-  while this active session held the repository path.
-- App remains at `Projects/myIS/App/thaipha-lex`; its modified
-  `.codex/config.toml` and untracked SkillOpt PDF remain untouched.
-- Brain remains at `Projects/myIS-brain`.
-- Experience Brain processes `26984` and `29404` still reference retired paths.
-  Its runtime/store/config archival and removal of Experience Brain and
-  `agentmemory` MCP entries require the Owner's explicit process-stop approval.
-- Codex and Claude must restart after that cutover before final MCP and target
-  path validation.
+- Two misleading PDF aliases require reference migration before they can be
+  archived; see `PDF_DUPLICATE_MANIFEST.csv`.
+- Global Experience Brain or `agentmemory` MCP configuration, if still present,
+  requires a separate config backup and exact-entry review outside this repo.
+- U041, research execution, protected data, and publication remain separately
+  gated and were not opened by the cleanup approval.
 
 ## Immutable boundaries
 
@@ -56,10 +60,8 @@ My_Research/
 - No research query, new PDF acquisition, model/provider call, paid job,
   API/GPU/Vast run, scientific MLflow run, or held-out access occurred.
 
-## Required stop point
+## Cleanup evidence
 
-After the Owner authorizes stopping the two retired MCP processes, back up and
-hash the remaining global configs/store, stop only those PIDs, complete the
-App/Research/Brain moves, archive the retired runtime/store, detach Experience
-Brain and `agentmemory`, and stop. The Owner must restart Codex and Claude before
-read-only final validation.
+See `ARCHIVE_CUTOVER_20260727.md`, `CLEANUP_APPROVALS.md`, and
+`PDF_DUPLICATE_MANIFEST.csv` for exact sources, destinations, decisions, and
+retention reasons.
