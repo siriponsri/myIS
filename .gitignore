@@ -18,6 +18,10 @@ __pycache__/
 04_outputs/diagrams/*.svg
 01_evidence/private/
 01_evidence/held-out/
+01_evidence/A-tier/*.pdf
+01_evidence/B-tier/*.pdf
+01_evidence/C-tier/*.pdf
+01_evidence/N-tier/*.pdf
 
 # Tool workspaces and caches
 .hyperresearch/

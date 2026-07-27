@@ -1,0 +1,44 @@
+{
+  "alias_identity_counts": {
+    "alias_title_mismatch": 7,
+    "verified": 157,
+    "verified_with_title_variation": 5
+  },
+  "digests_frozen_untouched": 40,
+  "digests_generated": 113,
+  "duplicate_groups": 16,
+  "generated_at": "2026-07-27T12:46:51.697399+00:00",
+  "identifier_counts": {
+    "arxiv_id": 89,
+    "doi": 28
+  },
+  "identifier_source_counts": {
+    "arxiv_id": {
+      "acquisition_url": 72,
+      "not_detected": 64,
+      "pdf_front_matter": 17
+    },
+    "doi": {
+      "acquisition_url": 20,
+      "not_detected": 125,
+      "pdf_front_matter": 5,
+      "pdf_metadata": 3
+    }
+  },
+  "new_uid_paths": {
+    "U151": "research/ref-paper/is1/pdfs/85_skillopt_lite_better_and_faster_agent.pdf",
+    "U152": "research/ref-paper/is1/pdfs/86_marginal_advantage_accumulation_for_memory_driven_agent.pdf",
+    "U153": "research/ref-paper/is1/pdfs/87_skillgrad_optimizing_agent_skills_like_gradient_descent.pdf"
+  },
+  "source_pdf_paths": 169,
+  "tier_counts": {
+    "A": 55,
+    "B": 64,
+    "C": 28,
+    "N": 6
+  },
+  "u082_primary_alias": "research/ref-paper/is1/pdfs/84_skillopt_executive_strategy_for_self_evolving_agent_skills.pdf",
+  "u150_record_type": "template",
+  "u150_tier": "N",
+  "unique_sha256": 153
+}
