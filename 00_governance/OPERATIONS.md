@@ -40,6 +40,9 @@ research results inside third-party tool repositories.
 
 The offline contract requires `prompt.json`, `flow.json`, `progress.jsonl`,
 `result.json`, and `metrics.json` for every agent run, including failed runs.
+Install the `tracking` extra to mirror these artifacts and numeric metrics into
+the shared local MLflow SQLite/artifact store; the file ledger remains the
+offline and failure-safe source of audit evidence.
 Run the deterministic demo without external dependencies:
 
 ```powershell

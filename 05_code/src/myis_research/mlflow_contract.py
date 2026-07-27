@@ -105,7 +105,44 @@ class AgentRun:
         self._write_json("run.json", run_meta)
         manifest = {name: hashlib.sha256((self.run_dir / name).read_bytes()).hexdigest() for name in REQUIRED_ARTIFACTS}
         self._write_json("artifact_manifest.json", manifest)
+        self._mirror_to_mlflow(status)
         return self.run_dir
+
+    def _mirror_to_mlflow(self, status: str) -> bool:
+        """Mirror the ledger to local MLflow when the optional extra is installed."""
+        try:
+            import mlflow
+        except ImportError:
+            return False
+        database_dir = self.root / "database"
+        artifacts = self.root / "artifacts"
+        database_dir.mkdir(parents=True, exist_ok=True)
+        artifacts.mkdir(parents=True, exist_ok=True)
+        mlflow.set_tracking_uri(f"sqlite:///{(database_dir / 'mlflow.db').resolve().as_posix()}")
+        experiment = mlflow.get_experiment_by_name(self.spec.experiment)
+        experiment_id = (
+            experiment.experiment_id
+            if experiment
+            else mlflow.create_experiment(self.spec.experiment, artifact_location=artifacts.resolve().as_uri())
+        )
+        tags = {
+            "component": self.spec.component,
+            "agent_id": self.spec.agent_id,
+            "git_sha": self.spec.git_sha,
+            "source_manifest_hash": self.spec.source_manifest_hash,
+            "prompt_version": self.spec.prompt_version,
+            "skill_version": self.spec.skill_version,
+            "model_id": self.spec.model_id,
+            "status": status,
+            "owner_approval_source": self.spec.owner_approval_source,
+            **self.spec.tags,
+        }
+        with mlflow.start_run(experiment_id=experiment_id, run_name=self.run_id, tags=tags):
+            mlflow.log_artifacts(str(self.run_dir), artifact_path="agent_contract")
+            metrics = json.loads((self.run_dir / "metrics.json").read_text(encoding="utf-8"))
+            for name, value in metrics.items():
+                mlflow.log_metric(name, float(value))
+        return True
 
     def fail(self, error: BaseException | str) -> Path:
         """Close a failed run while preserving a complete audit record."""
