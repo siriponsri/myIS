@@ -1,0 +1,49 @@
+# Owner-authorized Linear projection. Linear never opens a scientific gate.
+linear:
+  project:
+    name: myIS Research 1.0
+    external_id: d866c23b-5b9f-422b-93cb-b0b6f6400fd4
+    url: https://linear.app/siriponsri/project/myis-research-10-a4dd5fe6fcda
+    status: planned
+  plan_binding:
+    canonical_plan: PLAN.md
+    plan_sha256: 27361e079c9fe1c5f2c42ced99af4bc1367de8070a6393d34c0791f576c06e38
+  milestones:
+    - {phase: F0, external_id: e2cd2782-b275-4f23-924d-8c3eeb1042fb}
+    - {phase: F1, external_id: 54953080-2559-4eec-8239-95a973ba339a}
+    - {phase: D0, external_id: 16ae8718-57fa-43a4-afe0-8449af23d2bd}
+    - {phase: C0, external_id: 552ec92d-499e-4d62-a9be-f7f7b34d0e3f}
+    - {phase: C1, external_id: db42b703-d8da-4f0c-98fc-1a77495d1e2b}
+    - {phase: CF, external_id: 3c6c483f-fac5-4cb1-ba5b-2ccd0164b6a3}
+    - {phase: S0, external_id: 5fc9546d-562e-4561-93d1-314816969754}
+    - {phase: S1, external_id: 3a4de385-9efc-493c-a5b1-e4350e461405}
+    - {phase: SF, external_id: a29f999d-9ff6-49eb-96e5-50bb68628cab}
+    - {phase: CT, external_id: a97060c3-f382-4e46-be76-13e17ce90c2b}
+    - {phase: Q, external_id: 773e979c-bbcc-4281-b3aa-4fbe781ddf7e}
+    - {phase: PC, external_id: 5a2f923f-f8ee-4b2c-a5e9-17cdc4bbaac8}
+    - {phase: PS, external_id: 3397e7de-99e3-403e-872c-eb411e94d756}
+  tasks:
+@@
+    - {task_id: F0.1, phase: F0, external_id: SIR-5, status: In Progress}
+    - {task_id: F0.2, phase: F0, external_id: SIR-6, status: In Progress}
+    - {task_id: F0.3, phase: F0, external_id: SIR-8, status: Todo}
+    - {task_id: F1.1, phase: F1, external_id: SIR-7, status: Todo}
+    - {task_id: D0.1, phase: D0, external_id: SIR-9, status: Todo}
+    - {task_id: D0.2, phase: D0, external_id: SIR-10, status: Todo}
+    - {task_id: C0.1, phase: C0, external_id: SIR-11, status: Todo}
+    - {task_id: C1.1, phase: C1, external_id: SIR-12, status: Todo}
+    - {task_id: C1.2, phase: C1, external_id: SIR-13, status: Todo}
+    - {task_id: CF.1, phase: CF, external_id: SIR-14, status: Todo}
+    - {task_id: S0.1, phase: S0, external_id: SIR-15, status: Todo}
+    - {task_id: S0.2, phase: S0, external_id: SIR-16, status: Todo}
+    - {task_id: S1.1, phase: S1, external_id: SIR-17, status: Todo}
+    - {task_id: S1.2, phase: S1, external_id: SIR-18, status: Todo}
+    - {task_id: S1.3, phase: S1, external_id: SIR-19, status: Todo}
+    - {task_id: SF.1, phase: SF, external_id: SIR-20, status: Todo}
+    - {task_id: CT.1, phase: CT, external_id: SIR-21, status: Todo}
+    - {task_id: Q.1, phase: Q, external_id: SIR-22, status: Todo}
+    - {task_id: Q.2, phase: Q, external_id: SIR-23, status: Todo}
+    - {task_id: Q.3, phase: Q, external_id: SIR-24, status: Todo}
+    - {task_id: PC.1, phase: PC, external_id: SIR-25, status: Todo}
+    - {task_id: PS.1, phase: PS, external_id: SIR-26, status: Todo}
+  preserved_legacy_issue_ids: [SIR-1, SIR-2, SIR-3, SIR-4]
