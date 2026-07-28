@@ -4,10 +4,15 @@ from __future__ import annotations
 
 import hashlib
 import json
+import uuid
+from dataclasses import replace
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
-from .mlflow_contract import AgentRun, AgentRunSpec
+from .harness import ApprovalRecord, GoalSpec, HarnessPolicy, LocalHarness, RunSpec
+from .harness.models import GoalState, canonical_hash
+from .harness.runner import KERNEL_VERSION
 from .sources import SourceCatalog, SourceRecord, register_source
 
 
@@ -37,7 +42,7 @@ class FixtureBrain:
 
 
 def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, object]:
-    """Run the complete source -> retrieve -> synthesize -> ledger flow."""
+    """Run Brain -> Harness -> structlog -> MLflow -> manifest offline."""
     fixture_dir = workdir / "fixtures"
     fixture_dir.mkdir(parents=True, exist_ok=True)
     pdf = fixture_dir / "paper.pdf"
@@ -63,19 +68,78 @@ def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, objec
     }
     report["report_sha256"] = hashlib.sha256(json.dumps(report, sort_keys=True).encode()).hexdigest()
     manifest_hash = hashlib.sha256((workdir / "source_catalog.jsonl").read_bytes()).hexdigest()
-    run = AgentRun.start(mlflow_root, AgentRunSpec(
-        component="research", agent_id="notebook-demo", experiment="V01_brain_drive_agent_demo",
-        prompt_version="01_Prompt+02_Prompt", skill_version="brain-drive-v1",
-        source_manifest_hash=manifest_hash,
-    ))
-    run.log_prompt("Synthesize a bounded ranking hypothesis from curated Brain sources.", rules=["raw inbox immutable", "provenance required"])
-    run.log_flow(["register sources", "retrieve from Obsidian Mind adapter", "synthesize report", "write KM pointers"])
-    for record in records:
-        run.progress("source_registered", source_id=record.source_id, kind=record.kind)
-    run.progress("retrieval_complete", hit_count=len(hits))
-    run.log_result(report)
-    run.log_metric("source_count", len(records))
-    run.log_metric("retrieval_hit_count", len(hits))
-    run.log_metric("provenance_completeness", len(records) / 3)
-    run_dir = run.close()
+    policy = HarnessPolicy(policy_id="offline-brain-drive-v1")
+    goal = GoalSpec(
+        goal_id="V01-brain-drive-demo",
+        objective="Demonstrate a governed Brain-drive research run using offline fixtures.",
+        track="F0",
+        state=GoalState.APPROVED,
+        success_metrics=("source_count", "retrieval_hit_count", "provenance_completeness"),
+    )
+    approval = ApprovalRecord(
+        approval_id="owner-offline-demo-20260727",
+        source="Owner approved local offline harness implementation",
+        approved_at_utc=datetime.now(timezone.utc).isoformat(),
+        scope_hash="pending",
+    )
+    spec = RunSpec(
+        run_id=f"v01-{uuid.uuid4().hex}",
+        goal=goal,
+        approval=approval,
+        arm="human",
+        phase="offline-demo",
+        dataset_id="V01-offline-pdf-web-history-fixtures",
+        dataset_manifest_hash=manifest_hash,
+        split="development",
+        split_query_ids_hash=hashlib.sha256(b"offline-query-001").hexdigest(),
+        evaluator_id="fixture-provenance-evaluator-v1",
+        evaluator_hash=hashlib.sha256(b"fixture-provenance-evaluator-v1").hexdigest(),
+        kernel_version=KERNEL_VERSION,
+        policy_hash=policy.sha256,
+        config_hash=canonical_hash({"seed": 7, "network": False}),
+        prompt_hash=hashlib.sha256(b"Synthesize a bounded ranking hypothesis from curated Brain sources.").hexdigest(),
+        skill_set_hash=hashlib.sha256(b"brain-drive-v1").hexdigest(),
+        seed=7,
+        budget={"max_seconds": 30, "max_api_cost_usd": 0, "max_gpu_seconds": 0},
+    )
+    spec = replace(spec, approval=replace(approval, scope_hash=spec.scope_hash()))
+    harness = LocalHarness(workdir / "runs", mlflow_root=mlflow_root)
+
+    def execute_fixture(_: RunSpec, __: HarnessPolicy, logger: object) -> dict[str, object]:
+        for record in records:
+            logger.emit("source.registered", status="RUNNING", milestone=True, source_id=record.source_id, source_kind=record.kind)
+        logger.emit("retrieval.completed", status="RUNNING", milestone=True, hit_count=len(hits))
+        return {
+            "result": report,
+            "metrics": {
+                "source_count": len(records),
+                "retrieval_hit_count": len(hits),
+                "provenance_completeness": len(records) / 3,
+            },
+            "per_query": [{"query_id": "offline-query-001", "hit_count": len(hits), "provenance_complete": 1.0}],
+        }
+
+    run_result = harness.execute(
+        spec,
+        policy,
+        executor=execute_fixture,
+        prompt_record={
+            "template_id": "brain-drive-synthesis",
+            "version": "01_Prompt+02_Prompt",
+            "sha256": spec.prompt_hash,
+            "rendered": "Synthesize a bounded ranking hypothesis from curated Brain sources.",
+            "rules": ["raw inbox immutable", "provenance required"],
+        },
+        flow_record={
+            "engine": "brain-drive-harness",
+            "steps": [
+                "register offline PDF, web, and history fixtures",
+                "retrieve through the QMD-compatible Brain adapter",
+                "execute under the immutable harness kernel",
+                "write structlog runtime/progress projections",
+                "mirror to local MLflow and finalize a canonical manifest",
+            ],
+        },
+    )
+    run_dir = run_result.run_dir
     return {"report": report, "records": records, "run_dir": str(run_dir)}

@@ -4,13 +4,20 @@ sources:
   - pdf
   - web
   - history
-engine: fixture-brain-compatible-with-obsidian-mind-qmd
+engine: myis-harness-kernel-v1
+brain_adapter: fixture-brain-compatible-with-obsidian-mind-qmd
+observability: structlog-26.1.0
 mlflow_artifacts:
   - prompt.json
   - flow.json
   - progress.jsonl
   - result.json
   - metrics.json
+  - runtime.jsonl
+  - per_query_metrics.jsonl
+  - validation_report.json
+  - manifest.json
+  - receipts/mlflow-initial.json
 network: disabled
 api_calls: disabled
 gpu: disabled

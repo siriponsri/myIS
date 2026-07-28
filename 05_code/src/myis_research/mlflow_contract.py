@@ -137,11 +137,19 @@ class AgentRun:
             "owner_approval_source": self.spec.owner_approval_source,
             **self.spec.tags,
         }
-        with mlflow.start_run(experiment_id=experiment_id, run_name=self.run_id, tags=tags):
-            mlflow.log_artifacts(str(self.run_dir), artifact_path="agent_contract")
-            metrics = json.loads((self.run_dir / "metrics.json").read_text(encoding="utf-8"))
-            for name, value in metrics.items():
-                mlflow.log_metric(name, float(value))
+        try:
+            with mlflow.start_run(experiment_id=experiment_id, run_name=self.run_id, tags=tags):
+                mlflow.log_artifacts(str(self.run_dir), artifact_path="agent_contract")
+                metrics = json.loads((self.run_dir / "metrics.json").read_text(encoding="utf-8"))
+                for name, value in metrics.items():
+                    mlflow.log_metric(name, float(value))
+        finally:
+            # SQLite keeps a Windows file handle until SQLAlchemy engines close.
+            from mlflow.tracking._tracking_service.utils import _get_store
+
+            store = _get_store()
+            if hasattr(store, "_dispose_engine"):
+                store._dispose_engine()
         return True
 
     def fail(self, error: BaseException | str) -> Path:

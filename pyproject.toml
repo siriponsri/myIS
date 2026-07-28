@@ -7,10 +7,15 @@ name = "myis-research"
 version = "0.1.0"
 description = "Governed infrastructure for myIS publication research"
 requires-python = ">=3.11"
+dependencies = ["structlog==26.1.0"]
 
 [project.optional-dependencies]
 tracking = ["mlflow>=3.0,<4"]
 notebook = ["nbclient>=0.10", "nbformat>=5.10"]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+myis-harness = "myis_research.harness.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["05_code/src"]
