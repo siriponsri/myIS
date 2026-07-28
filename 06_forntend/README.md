@@ -28,5 +28,16 @@ bash 06_forntend/mlflow/mlflow.sh start
 
 The local URLs are `http://127.0.0.1:8765` and `http://127.0.0.1:5000`.
 
+## One-click Owner use
+
+Open this folder in Windows Explorer and double-click:
+
+- `START_OWNER_CONSOLE.cmd` to start both services and open both browser tabs;
+- `STOP_OWNER_CONSOLE.cmd` to stop only these local Owner services.
+
+The launcher detects services that are already running and does not start
+duplicates. It never installs packages, runs `uv sync`, or changes canonical
+research files.
+
 See the component README in each subdirectory for startup and verification
 instructions.

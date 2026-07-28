@@ -138,6 +138,11 @@ Open `http://127.0.0.1:5000`. `start` runs in the foreground and stops with
 Ctrl+C. The launcher rejects WSL, remote binding, unknown MLflow route maps,
 write-capable database URIs, occupied ports, and version drift.
 
+For non-developer Owner operation, open `06_forntend/` in Windows Explorer and
+double-click `START_OWNER_CONSOLE.cmd`. It starts both loopback services and
+opens their browser tabs without installing or synchronizing dependencies.
+Double-click `STOP_OWNER_CONSOLE.cmd` to stop the two services.
+
 If MLflow is unavailable, the canonical run remains valid and an immutable
 `sync_deferred` receipt is written. Recovery:
 
