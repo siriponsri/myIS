@@ -17,8 +17,8 @@ and reusable code separate from the product application and the shared Brain.
 | Path | Purpose |
 |---|---|
 | `00_governance/` | Authority, gates, operating rules, templates, and tool pins |
-| `01_evidence/` | Validated literature and provenance; currently U001-U040 only |
-| `02_tracks/` | Track C, R, and S research questions and deliverables |
+| `01_evidence/` | Literature catalog, local-only tiered PDFs, digests and provenance |
+| `02_tracks/` | Candidate exposure/HarnessOpt, ranking/evidence and optional skill evolution |
 | `03_experiments/` | Configurations, manifests, and local runtime placeholders |
 | `04_outputs/` | Generated reports, diagrams, and approved result packages |
 | `05_code/` | Validation, bootstrap, library, and tests |
@@ -33,8 +33,8 @@ flowchart LR
     accTitle: myIS project architecture
     accDescr: The application supplies canonical source evidence, Research governs scientific work, the Brain records readable decisions, and MLflow stores experiment lineage.
 
-    App["App: canonical datasets and prior evidence"] --> Evidence["Research evidence"]
-    Evidence --> Tracks["Research tracks C, R, and S"]
+    App["App: product and frozen historical evidence"] --> Evidence["Research literature and evidence"]
+    Evidence --> Tracks["C/H, R and optional S tracks"]
     Tracks --> Experiments["Governed experiments"]
     Experiments --> Outputs["Publication outputs"]
     Tracks --> Brain["Obsidian Brain: decisions and status"]
@@ -52,10 +52,12 @@ flowchart LR
 
 ## Current boundary
 
-The restructure is active, but research execution is closed. U041, web/PDF
-acquisition, model/API/GPU/Vast jobs, scientific MLflow runs, held-out access,
-and publication changes require their own Owner gates. Existing U001-U040
-digests and 64 import artifacts remain preserved with hash validation.
+The numbered filesystem cutover is complete and F0 implementation is active.
+Full U041-U153 PDF triage, offline fixtures, local bootstrap checks, code and
+notebook validation are Owner-authorized. Existing U001-U040 digests and 64
+import artifacts remain frozen and hash-validated. Paid/API/GPU/Vast jobs,
+scientific development runs and prospective-confirmation access remain separate
+R3/R4 gates.
 
 The minimal active tool stack is HyperResearch, MLflow, one Obsidian Brain,
 Codex native live search, Claude Open-WebSearch, and Context7. Open Deep
@@ -72,14 +74,15 @@ a disposable pilot workspace.
 | Brain | `00_Projects/00_myIS/02_Brain/` | Human-readable shared decisions and status |
 
 See [00_governance/RESTRUCTURE_STATUS.md](00_governance/RESTRUCTURE_STATUS.md)
-for temporary Windows-handle blockers and the remaining cutover steps.
+for completed cutover evidence and the remaining implementation/audit work.
 
 ## Brain-drive contract demo
 
 `03_experiments/V01_brain_drive_agent_demo/` is a deterministic offline test of
 PDF, web-pointer, and project-history registration, fixture retrieval,
-synthesis, and the five-artifact local MLflow contract. It does not copy raw
-sources into Brain and does not use network, API, GPU, or protected data.
+synthesis, structlog runtime/progress events, the local MLflow mirror, immutable
+manifest validation and a paper-table projection. It does not copy raw sources
+into Brain and does not use network, paid API, GPU, or protected data.
 
 The implementation is under `05_code/src/myis_research/`. External execution
 remains gated: HyperResearch is Claude-only after an Owner decision, while the

@@ -1,0 +1,296 @@
+# คำสั่งใช้งาน ML Research Wiki (HELP DESK)
+
+คู่มืออ้างอิงคำสั่งหลักที่ใช้สั่ง LLM agent (Claude Code, Codex, OpenCode) ในการดูแล ML Research Wiki แบ่งตามความถี่การใช้งานเป็น 4 กลุ่ม
+
+---
+
+## 🟢 คำสั่งหลัก (ใช้บ่อยที่สุด — รายวัน/รายสัปดาห์)
+
+### process inbox
+
+คำสั่งที่ใช้บ่อยที่สุด — โยนไฟล์ลง raw/inbox/ แล้วสั่งคำสั่งนี้ LLM จะ classify, detect version, ย้ายไฟล์, สร้าง wiki pages, auto-ingest, extract architecture ของ external sources ที่ผูกกับ version, run completeness check ให้เองครบจบในคำสั่งเดียว
+
+text
+# วางไฟล์ลง inbox ก่อน
+raw/inbox/round1/
+├── v0_baseline.ipynb
+├── v3_gcn.ipynb
+├── attention_demo.ipynb       ← external .ipynb มี model code
+├── related_work_notebook/     ← reference bundle ทั้ง folder
+├── paper.pdf
+└── result.csv
+
+# แล้วสั่ง
+> process inbox
+
+LLM จะ:
+
+- ตัดสิน Type A (experiment batch) vs Type B (reference bundle) ของแต่ละ folder
+- detect version แบบผ่าน 2 เงื่อนไข (name match + content match)
+- ย้ายไฟล์ + rename notebook ให้ตรงกับชื่อ folder ปลายทาง
+- auto-chain ingest version ที่ trigger set ครบ (notebook + config + metrics)
+- extract architecture ของ external sources **เฉพาะที่มี version อ้างอิง** (on-demand ตาม §15.2)
+- run completeness check ทุก version page (§6.1)
+- update raw/_index.md (เฉพาะ section ที่เปลี่ยน — Obsidian-linked format)
+- commit Git
+
+---
+
+### query: <คำถาม>
+
+ถามคำถามเกี่ยวกับงานทดลอง LLM จะอ่าน wiki/index.md ก่อน → ระบุ pages ที่เกี่ยวข้อง → อ่านครบ → web search ถ้าจำเป็น → ตอบพร้อม citation [Source: page-name] หรือ [Source: web: <url>] → ถ้าค้นพบ insight ใหม่จะ file ลง lessons-learned / comparisons / roadmap / components
+
+text
+> query: ทำไม V21 PCC ต่ำกว่า V19?
+> query: version ไหน phoneme PCC สูงสุด?
+> query: เปรียบเทียบ V25 กับ V27
+> query: FAPF fusion ต่างจาก plain attention อย่างไร?
+> query: lessons-learned บอกอะไรเกี่ยวกับ aux loss coefficient?
+
+ถ้า wiki page ที่อ่านไม่สมบูรณ์ตอน query → จะ trigger retro-ingest อัตโนมัติ
+
+---
+
+### synthesize [คำแนะนำ / direction]
+
+**คำสั่งใหม่** — สร้าง experiment version ถัดไปโดย synthesize ความรู้จาก **6 แหล่ง** (version เก่า, wiki, external references, web search, generation logic, human notes) ตาม §16 ของ pattern
+
+text
+> synthesize
+> synthesize ลอง gating แบบ adaptive ที่ layer 4
+> synthesize keep coef ≤ 0.3, focus phoneme PCC
+> synthesize ใช้ idea จาก arxiv:2024.xxxxx
+> synthesize --no-web   # ไม่ต้อง web search
+
+ข้อความหลัง synthesize ถือเป็น **human note** ที่มี weight สูงในการ filter direction
+
+LLM จะ:
+
+- Parse user input → แยก keyword กับ human note
+- Load context จาก 6 แหล่ง (versions, wiki, references, web, generation, human note)
+- Identify gaps จาก roadmap + failure patterns
+- Cross-reference lessons-learned.md เพื่อเลี่ยง pitfall เดิม
+- Web search ถ้า wiki coverage ไม่พอ (skip ถ้าใส่ `--no-web`)
+- Draft hypothesis แบบ testable พร้อม predicted outcome และ risk
+- Generate raw/experiments/v<NN+1>_<title>/ + notebook stub + jupytext pair + config skeleton
+- สร้าง version page stub ใน wiki/versions/ พร้อม section ## Hypothesis & Rationale + rationale table ที่ trace กลับทุก source
+- Update wiki/roadmap.md
+- Commit synthesize: V<NN> <title> from <source-summary>
+
+Version page ที่ generate จาก synthesis เริ่มที่ ingest_status: stub_only หรือ partial_no_metrics เสมอ — ห้าม mark full ก่อนรัน experiment จริง
+
+---
+
+### ingest V<NN>
+
+สั่ง ingest version ใดเฉพาะ — ใช้เมื่อ trigger set ครบแล้วแต่ยังไม่ auto-trigger (เช่นเพิ่ม metrics.json ทีหลัง) หรือต้องการ rebuild page
+
+text
+> ingest V27
+
+LLM จะอ่าน .py jupytext pair → extract architecture/loss/diff → สร้าง ## Diff from parent table → follow inspired_by → trigger external extraction ถ้ายังไม่ทำ → run completeness check
+
+---
+
+## 🟡 คำสั่งรอง (ใช้สัปดาห์ละครั้ง / ก่อน meeting)
+
+### lint
+
+ตรวจความสมบูรณ์ของทั้งระบบ:
+
+- orphan components / source pages
+- version ขาด metrics / parent / source files
+- weak relations รอ review
+- inbox files ค้างเกิน 7 วัน
+- external sources ที่ extraction_done: false แต่มี version อ้างอิง
+- versions ที่ ingest_status != full ค้างนานเกิน 7 วัน
+- notebook ใน experiment folder ที่ชื่อไม่ตรง folder
+- ไฟล์ชื่อ generic (`notebook.ipynb`, `notebook.py`)
+- มี notebook มากกว่า 1 ไฟล์ใน 1 version folder
+- raw/_index.md ที่ยังเป็น flat YAML
+- synthesized versions ที่ขาด rationale table หรือ provenance
+
+text
+> lint
+
+### lint completeness
+
+Sub-command ของ lint — focus เฉพาะ version pages เช็คตาม checklist 12 section ใน §6.1:
+
+- ## TL;DR
+- ## Diff from parent (table รวม สิ่งที่เปลี่ยน + เหตุผล + ผล)
+- ## Architecture → Overview / Diagram / Model code / Loss code
+- ## Training setup
+- ## Results
+- ## Source files
+- ## External sources used (ถ้ามี)
+- ## Observations
+- ## Next steps
+
+ถ้า page ไหนขาด section ใด LLM จะพยายามเติมจาก source file ก่อน mark needs_completion
+
+text
+> lint completeness
+
+ใช้คำสั่งนี้หลัง process inbox ทุกครั้งที่สงสัยว่า version page ยังไม่ครบ
+
+### plan
+
+อ่าน index.md + roadmap.md + ผลล่าสุด + lessons-learned.md → วิเคราะห์ trend และ failure pattern → เสนอ experiment ถัดไปพร้อม **predicted outcome** และ **risk** อ้างอิง lesson ที่เกี่ยวข้อง → update roadmap
+
+text
+> plan
+
+ถ้าตรวจพบ plateau (ไม่ improve > 3 versions ติดกัน) จะ trigger retro-analysis อัตโนมัติแล้วเสนอ direction ใหม่
+
+> **ต่างจาก synthesize อย่างไร**: plan วาง roadmap ระดับ strategic (ไม่ generate ไฟล์) ส่วน synthesize generate experiment skeleton จริงพร้อม code stub + provenance
+
+---
+
+## 🔵 คำสั่งซ่อม/วิเคราะห์ (ใช้เป็นครั้งคราว)
+
+### retro ingest V<NN>
+
+ใช้กับ version เก่าที่ wiki page ยังไม่สมบูรณ์ ให้ LLM ย้อนไป ingest ใหม่ พร้อมค้นหา wiki ที่เกี่ยวข้อง (source pages, components) แล้ว update ตามไปด้วย
+
+text
+> retro ingest V13
+
+ถ้าใส่หลาย version พร้อมกัน LLM จะทำ cross-version pattern mining แล้วเสนอ lesson แบบ tentative ลง lessons-learned.md
+
+text
+> retro ingest V13, V14, V15
+
+### retro-analyze
+
+วิเคราะห์ข้าม version — โหลด metrics ทุก version, หา regression points, diff architecture, หา pattern ซ้ำ, web search เปรียบเทียบกับ literature, filed insight ลง lessons-learned + roadmap#failure-analysis
+
+text
+> retro-analyze
+> retro-analyze: ทำไมตั้งแต่ V20 phoneme PCC ไม่ขยับ?
+
+ใช้เมื่อสงสัยว่าทำไม metric หยุดขยับ หรือก่อนเริ่ม direction ใหม่ — มักรันก่อน synthesize เพื่อให้ context ครบ
+
+### promote lesson <topic>
+
+Refine lesson ใน lessons-learned.md จาก tentative → confirmed เมื่อพบหลักฐานเพิ่มจาก version อื่นหรือ external literature
+
+text
+> promote lesson auxiliary-loss-coefficient-bound
+> promote lesson learned-adjacency-needs-warmup
+
+LLM จะ verify evidence อีกครั้งก่อน promote — ถ้าหลักฐานไม่พอจะคงสถานะเดิม
+
+Lesson lifecycle: proposed (tentative จาก 1 version) → confirmed (เห็นซ้ำ ≥ 2 versions) → refined (scope ถูกจำกัดด้วย counter-evidence) → retired (หลักฐานขัดแย้งชัดเจน)
+
+---
+
+## 📋 สรุป Workflow ปกติ
+
+**วงจรรายวัน/รายสัปดาห์:**
+
+text
+1. โยนไฟล์ลง raw/inbox/<batch>/
+2. > process inbox
+3. > query: ...  (เมื่อต้องเปรียบเทียบ/ทบทวน)
+
+**วงจรเสนอ version ถัดไป:**
+
+text
+4. > retro-analyze       (ถ้าสงสัย plateau)
+5. > synthesize [direction หรือ constraint]
+6. รัน experiment จริง → ใส่ผลกลับ raw/experiments/v<NN+1>/
+7. > process inbox       (auto-promote stub → full)
+
+**วงจรสิ้นสัปดาห์/ก่อน meeting:**
+
+text
+8. > lint completeness   (เช็ค page ครบไหม)
+9. > plan                (วาง roadmap)
+
+**วงจรเมื่อเจอปัญหา/หยุดนิ่ง:**
+
+text
+10. > retro-analyze       (หา pattern จาก version เก่า)
+11. > retro ingest V<NN>  (ซ่อม page เก่า ถ้า lint บอกว่าไม่ครบ)
+12. > promote lesson ...  (ถ้ามี evidence ใหม่)
+
+---
+
+## 🎯 คำสั่งสำคัญที่สุด
+
+มี 2 คำสั่งที่ครอบคลุม pipeline หลัก:
+
+**`process inbox`** — pipeline ขาเข้า:
+
+text
+classify → detect version → move + rename → auto-chain ingest →
+extract external architecture (on-demand) → completeness check →
+update wiki → commit
+
+**`synthesize`** — pipeline ขาออก:
+
+text
+load 6 sources → identify gaps → cross-reference lessons →
+optional web search → draft hypothesis → generate skeleton →
+trace provenance → commit
+
+ถ้า trigger set ครบตั้งแต่แรก แทบไม่ต้องสั่ง ingest แยก และ external sources ที่มี model code จะถูก extract เป็น code + diagram + diff โดยอัตโนมัติในรอบ process inbox รอบเดียว
+
+---
+
+## ⚙️ Tools เสริม (รันเอง ไม่ผ่าน LLM)
+
+อยู่ใน tools/ ใช้เมื่อต้องการ summary เร็ว ๆ โดยไม่ผ่าน LLM
+
+bash
+# leaderboard ทุก version
+python tools/gen_comparison.py
+
+# diff architecture ระหว่าง 2 version
+bash tools/version_diff.sh raw/experiments/v26_xxx raw/experiments/v27_yyy
+
+# ดู inbox ที่ค้างเกิน 7 วัน
+bash tools/inbox_status.sh
+
+# เช็คชื่อ notebook ตรงกับ folder ไหม
+python tools/check_experiment_naming.py
+
+# เช็ค section ครบใน version pages
+python tools/check_version_completeness.py
+
+# list inbox batches ปัจจุบัน
+python tools/list_inbox_batches.py
+
+---
+
+## 🚫 สิ่งที่ห้ามทำผ่านคำสั่ง
+
+LLM จะปฏิเสธ/เตือน ถ้าสั่งให้ทำสิ่งต่อไปนี้:
+
+- แก้ไขไฟล์ใน raw/ หลัง classify แล้ว
+- แตก reference bundle (Type B) ออกเป็นไฟล์ ๆ
+- mark inspired_by โดยไม่มีหลักฐานชัด
+- mark ingest_status: full ทั้งที่ section ไม่ครบ
+- ตั้งชื่อ notebook เป็น generic (`notebook.ipynb`)
+- ใส่ notebook หลายไฟล์ใน 1 version folder
+- ประดิษฐ์ metrics หรือ code (ต้องมาจากไฟล์จริง)
+- Synthesize version โดยไม่อ่าน lessons-learned
+- ใส่ source ใน synthesis rationale ที่ไม่มีหลักฐานจริงใน wiki หรือ web
+- Filed lesson เป็น confirmed จากหลักฐาน 1 version
+- Extract external source ซ้ำ (extract 1 ครั้งต่อ source — รอบหลังแค่ append `used_in_versions`)
+- Clone full repositories (ใช้ git clone --depth 1 เท่านั้น)
+
+ถ้าจำเป็นต้องทำจริง ใช้ Git revert แล้วแก้ผ่าน raw file โดยตรง แล้วสั่ง process inbox หรือ retro ingest ใหม่
+
+---
+
+## 📑 Cheat Sheet
+
+| คำสั่ง | กลุ่ม | ใช้เมื่อ |
+|---|---|---|
+| process inbox | 🟢 หลัก | โยนไฟล์เข้า ระบบจัดการเอง |
+| query: <Q> | 🟢 หลัก | ถาม/เทียบ/ทบทวน |
+| synthesize [note] | 🟢 หลัก | เสนอ experiment ถัดไปพร้อม skeleton |
+| ingest V<NN> | 🟢 หลัก | สั่ง ingest version เฉพาะ |
+| lint | 🟡 รอง | health

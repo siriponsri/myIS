@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 LITERATURE = ROOT / "01_evidence" / "literature"
 MANIFEST = LITERATURE / "IMPORT_MANIFEST.csv"
 DIGESTS = LITERATURE / "validated-digests"
+CORPUS_MANIFEST = LITERATURE / "catalog" / "corpus_manifest.csv"
 
 
 def sha256(path: Path) -> str:
@@ -25,14 +26,22 @@ def main() -> int:
     failures: list[str] = []
     digest_files = sorted(DIGESTS.glob("U*_digest.md"))
     digest_ids = {path.name[:4] for path in digest_files}
-    expected_ids = {f"U{number:03d}" for number in range(1, 41)}
+    expected_ids = {f"U{number:03d}" for number in range(1, 154)}
 
-    if len(digest_files) != 40:
-        failures.append(f"expected 40 digests, found {len(digest_files)}")
+    if len(digest_files) != 153:
+        failures.append(f"expected 153 digests, found {len(digest_files)}")
     if digest_ids != expected_ids:
-        failures.append("digest IDs are not exactly U001-U040")
-    if list(ROOT.rglob("U041*")):
-        failures.append("U041 artifact found even though U041 is not authorized")
+        failures.append("digest IDs are not exactly U001-U153")
+
+    if not CORPUS_MANIFEST.is_file():
+        failures.append("missing canonical corpus manifest")
+    else:
+        with CORPUS_MANIFEST.open("r", encoding="utf-8-sig", newline="") as handle:
+            corpus_rows = list(csv.DictReader(handle))
+        if len(corpus_rows) != 153:
+            failures.append(f"expected 153 corpus rows, found {len(corpus_rows)}")
+        if {row.get("u_id", "") for row in corpus_rows} != expected_ids:
+            failures.append("corpus manifest IDs are not exactly U001-U153")
 
     with MANIFEST.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -64,8 +73,9 @@ def main() -> int:
         return 1
 
     print("RESEARCH_RESTRUCTURE_VALID=true")
-    print("VALIDATED_DIGEST_COUNT=40")
-    print("U041_STARTED=false")
+    print("VALIDATED_DIGEST_COUNT=153")
+    print("U041_U153_TRIAGE_AUTHORIZED=true")
+    print("CORPUS_MANIFEST_ROWS=153")
     print("IMPORT_MANIFEST_ROWS=64")
     print("IMPORT_HASHES_MATCH=true")
     print("IMPORT_PATHS_PORTABLE=true")

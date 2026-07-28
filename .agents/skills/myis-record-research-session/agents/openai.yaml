@@ -1,0 +1,4 @@
+interface:
+  display_name: "myIS Record Research Session"
+  short_description: "Record governed myIS research provenance"
+  default_prompt: "Use $myis-record-research-session to capture this completed research session with provenance and artifact links."

@@ -1,4 +1,10 @@
 tools:
+  structlog:
+    repository: https://github.com/hynek/structlog.git
+    version: 26.1.0
+    commit: 468fb162cc5369d25306cc0014d8baa66e682ec2
+    license: MIT_OR_APACHE_2_0
+    adoption: required_harness_runtime_logging
   hyperresearch:
     repository: https://github.com/jordan-gibbs/hyperresearch.git
     version: v0.9.1
@@ -49,3 +55,33 @@ tools:
     adoption: retired_archive
   agentmemory:
     adoption: retired
+  orchestra_research_skills:
+    repository: https://github.com/Orchestra-Research/AI-research-SKILLs.git
+    version: v1.7.2
+    commit: 773a52944ba4747a18bd4ae9ade53fff041adcbc
+    license: MIT
+    license_path: LICENSE
+    license_blob: 943d5753a5f02f9ef352ff8a1706f167004d6e6d
+    adoption: selected_project_adaptations
+    selected_skills:
+      - upstream_name: ara-research-manager
+        source_path: 22-agent-native-research-artifact/research-manager
+        source_blob: 09f056055bc85d39c45ac43924a4ae57efede868
+        license: MIT
+        adaptation: myIS post-task provenance capsule with immutable artifact and MLflow receipt bindings
+        project_path: .agents/skills/myis-record-research-session
+      - upstream_name: ara-rigor-reviewer
+        source_path: 22-agent-native-research-artifact/rigor-reviewer
+        source_blob: 0696bec51fe73c21b0b766049c286a4144fc99c6
+        license: MIT
+        adaptation: myIS governance-aware semantic review for plans, run bundles, split integrity, and DAPFAM claims
+        project_path: .agents/skills/myis-review-research-rigor
+  skillopt:
+    repository: https://github.com/microsoft/SkillOpt.git
+    version: v0.2.0
+    commit: 51d0a4d96e88558c84dee637f98e24e3fb2d1547
+    source_path: .
+    source_blob: https://github.com/microsoft/SkillOpt/tree/51d0a4d96e88558c84dee637f98e24e3fb2d1547
+    license: MIT
+    adaptation: benchmark baseline only; no vendored source, model-weight optimization, or autonomous installation
+    adoption: harnessopt_baseline

@@ -1,0 +1,4 @@
+interface:
+  display_name: "myIS Review Research Rigor"
+  short_description: "Audit myIS evidence and research rigor"
+  default_prompt: "Use $myis-review-research-rigor to audit this myIS evidence package and produce a severity-ranked review."

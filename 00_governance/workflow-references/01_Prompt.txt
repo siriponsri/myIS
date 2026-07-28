@@ -1,0 +1,322 @@
+# ML Research Wiki
+
+แพตเทิร์นสำหรับสร้างฐานความรู้ส่วนตัวของงาน ML/AI โดยให้ LLM agent (Claude Code, Codex, OpenCode ฯลฯ) ช่วยดูแลไฟล์ งานทดลอง และ provenance ของ model versions
+
+> เอกสารนี้เป็น **abstract pattern** — copy ไปวางใน LLM agent ของคุณได้เลย แล้วปรับให้เข้ากับ domain ของตัวเอง
+
+---
+
+## 1. ภาพรวม
+
+นักวิจัย ML เจอปัญหาเดิม ๆ: รัน experiment เป็นสิบ versions อ่าน paper เป็นสิบฉบับ save รูป architecture จาก slide แล้วลืมว่า **idea ของ V19 มาจากไหน** หรือ **ทำไม V21 แย่กว่า V19**
+
+W&B และ MLflow track metric ได้ดี แต่ไม่ track **เหตุผลและที่มา** ของการตัดสินใจ และที่หนักกว่า: **ผู้ใช้ไม่อยากเสียเวลาจัดหมวดหมู่ไฟล์** เพราะภาระสะสมจนเลิกใช้ระบบไป
+
+ระบบนี้ออกแบบให้ workflow ง่ายที่สุด:
+
+1. โยนไฟล์ทุกอย่างลง raw/inbox/
+2. ถ้าหลายไฟล์เกี่ยวข้องกัน โยนลง subfolder เดียวกัน เช่น raw/inbox/round1/
+3. สั่ง LLM: process inbox
+4. LLM จัดหมวดหมู่ detect version ย้ายไฟล์ สร้าง catalog update wiki และเชื่อมโยงไฟล์ที่เกี่ยวข้องให้เอง
+
+---
+
+## 2. หลักการ 3 ข้อ
+
+### หลักการที่ 1: LLM ดูแล wiki ทั้งหมด
+
+LLM ค่อย ๆ สร้าง research wiki ถาวร — markdown files ที่มีโครงสร้างและเชื่อมโยงกัน บันทึก model versions, metrics, experiment results, paper/repo/note ที่เกี่ยวข้อง, provenance, lessons learned, และ roadmap
+
+### หลักการที่ 2: User โยนของลง inbox, LLM จัดการ
+
+raw/inbox/ เป็นจุดรับไฟล์ทุกประเภท: notebook, script, config, metrics, PDF, markdown, CSV, screenshot, architecture image, repo URL, blog article, training log
+
+จากนั้น LLM ตรวจประเภทไฟล์ → detect version → ย้ายไฟล์ → สร้าง catalog → สร้าง summary page → เชื่อมโยงกับ version → commit
+
+### หลักการที่ 3: Zero-Metadata Batch
+
+> **ทุก subfolder ใน raw/inbox/ คือหนึ่ง batch context โดย default**
+> ไฟล์ใน folder เดียวกัน = "น่าจะเกี่ยวข้องกัน"
+> LLM infer ความสัมพันธ์เอง ใช้ weak relation ถ้าหลักฐานยังไม่ชัด
+
+ผู้ใช้ไม่ต้องใส่ `_context.md`, metadata, label, หรือคำอธิบายความสัมพันธ์ใด ๆ
+
+ถ้าหลักฐานไม่ชัดให้ใช้:
+
+yaml
+relation_type: batch_related
+confidence: low
+needs_review: true
+
+ห้าม mark เป็น inspired_by เว้นแต่มีหลักฐานชัดเจน
+
+---
+
+## 3. โครงสร้างไฟล์
+
+text
+ml-research-wiki/
+├── raw/                    ← ชั้น 1: source of truth
+├── wiki/                   ← ชั้น 2: LLM-managed wiki
+├── CLAUDE.md / AGENTS.md   ← ชั้น 3: schema / agent instruction
+├── tools/                  ← optional scripts
+└── .gitignore
+
+### Raw Layer
+
+**Source of truth** — LLM อ่านได้ แต่ห้ามแก้ไขไฟล์ที่ classify แล้ว (ยกเว้นไฟล์ใน raw/inbox/ ที่ย้ายออกได้)
+
+ใช้โครงสร้างแบบ **5 buckets**:
+
+text
+raw/
+├── README.md
+├── _index.md
+│
+├── inbox/                  ★ จุดรับของทุกอย่าง
+│   ├── drop_001/
+│   ├── drop_002/
+│   └── single_paper.pdf
+│
+├── experiments/            ← 1 version = 1 folder
+│   ├── v00_baseline/
+│   │   ├── v00_baseline.ipynb
+│   │   ├── v00_baseline.py
+│   │   ├── config.yaml
+│   │   ├── metrics.json
+│   │   └── logs/
+│   └── v27_fapf_fusion/
+│       ├── v27_fapf_fusion.ipynb
+│       ├── v27_fapf_fusion.py
+│       ├── config.yaml
+│       ├── metrics.json
+│       └── checkpoint_meta.json
+│
+├── references/             ← papers / repos / articles / notes รวมกัน
+│   ├── 2024_fapf_fusion.pdf
+│   ├── 2025_attention_pooling.md
+│   ├── coral-ordinal-repo/       ← reference bundle (ห้ามแตก)
+│   └── related_work_notebook/    ← reference bundle (ห้ามแตก)
+│
+├── assets/
+│   ├── architectures/
+│   ├── results_from_papers/
+│   ├── diagrams/
+│   └── misc/
+│
+└── data/
+    ├── samples/
+    └── meta/
+
+หลักคิด:
+
+- **1 version = 1 folder** ใน experiments/v<NN>_<title>/
+- **ชื่อ notebook = ชื่อ folder** (`.ipynb` และ .py ใช้ basename เดียวกับ folder)
+- **External sources ทุกชนิดอยู่ใน `references/`**
+- **Folder ใน references/ ถือเป็น atomic unit** — ห้ามแตก
+
+User ดูแค่ raw/inbox/ ก็พอ ส่วนอื่น LLM ดูแลเอง
+
+---
+
+## 4. การ Detect Version
+
+LLM ต้องตรวจ version จากหลายแหล่ง ไม่ยึดติดกับชื่อแบบเดียว
+
+### ตัวอย่างชื่อไฟล์ที่ต้องรองรับ
+
+text
+v0_baseline.ipynb              → V0
+v03_gcn.ipynb                  → V3
+V4_attention.ipynb             → V4
+version12_model.ipynb          → V12
+exp03_gcn.ipynb                → V3
+experiment_04_attention.ipynb  → V4
+run_005_test.ipynb             → V5
+trial06_fusion.ipynb           → V6
+
+### Regex patterns
+
+text
+\bv[\-_ ]?0*(\d+)\b
+\bver[\-_ ]?0*(\d+)\b
+\bversion[\-_ ]?0*(\d+)\b
+\bexp[\-_ ]?0*(\d+)\b
+\bexperiment[\-_ ]?0*(\d+)\b
+\brun[\-_ ]?0*(\d+)\b
+\btrial[\-_ ]?0*(\d+)\b
+
+Normalize เป็น canonical ID เสมอ (`v03` → `V3`, version12 → `V12`, exp0007 → `V7`)
+
+### Version file vs Auxiliary file
+
+ไฟล์จะถูก classify เป็น **version file** ก็ต่อเมื่อผ่านครบทั้ง 2 เงื่อนไข:
+
+**เงื่อนไข 1 — ชื่อไฟล์ match version pattern**
+
+**เงื่อนไข 2 — content match อย่างน้อย 1 อย่าง**:
+
+- notebook cell แรกมี # V<NN> หรือ # Version <NN>
+- มี variable VERSION = "V<NN>" หรือ version = <NN>
+- มี class \w+(Model|Module|Net) ที่ trainable
+- มี training loop (`for epoch`, `model.train()`, `loss.backward()`, `optimizer.step()`)
+
+| name match | content match | ผลลัพธ์ |
+|---|---|---|
+| ✅ | ✅ | **version file** |
+| ✅ | ❌ | **auxiliary** → raw/references/ |
+| ❌ | ✅ | **version file ไม่มี marker** → raw/experiments/unversioned_<date>/ + needs_review |
+| ❌ | ❌ | reference / asset / data |
+
+### ลำดับความน่าเชื่อถือเมื่อข้อมูลขัดกัน
+
+1. metrics.json / config / notebook variable
+2. notebook header
+3. filename
+4. batch folder name
+5. การอยู่ batch เดียวกัน
+
+ถ้าไม่มั่นใจ ห้ามเดาแรง:
+
+yaml
+candidate_versions: [V3, V4]
+version_detection_confidence: low
+needs_review: true
+
+---
+
+## 5. Inbox Workflow
+
+### รูปแบบที่ 1: ไฟล์เดี่ยว
+
+LLM classify ทีละไฟล์ตาม extension และเนื้อหา
+
+### รูปแบบที่ 2: Zero-Metadata Batch (แนะนำ)
+
+text
+raw/inbox/drop_001/
+├── version0.ipynb
+├── version3.ipynb
+├── version4.ipynb
+├── related_paper.pdf
+├── idea_note.md
+└── result.csv
+
+ไม่ต้องมี metadata อะไรเลย แค่สั่ง process inbox
+
+### Folder-as-Unit Detection
+
+ก่อน classify ไฟล์ใน batch folder LLM ต้องตัดสินใจก่อนว่า folder นี้เป็นแบบไหน:
+
+**Type A: Experiment Batch (default)**
+ไฟล์ใน folder = experiment versions + reference files ที่กระจาย classify ได้
+
+เงื่อนไข: มีไฟล์ที่ผ่านเกณฑ์ version file (§4) อย่างน้อย 1 ไฟล์ → ไฟล์แต่ละไฟล์ classify แยก
+
+**Type B: Reference Bundle (atomic unit — ห้ามแตก)**
+folder ทั้งก้อนคือ 1 reference เดียว ย้ายทั้ง folder ไป raw/references/<folder-name>/
+
+เงื่อนไข (ข้อใดข้อหนึ่ง):
+
+- folder name มีคำว่า `related_work`, `reference`, `ref_`, `external_`, `survey_`, `baseline_`, prior_art
+- มี README.md / readme.md ที่ root ของ folder
+- มี `.git/`, `requirements.txt`, `setup.py`, pyproject.toml (= repo clone)
+- ไม่มีไฟล์ใดผ่านเกณฑ์ version file
+- จำนวนไฟล์ > 5 และไม่มี version marker ใด ๆ
+
+ผลของ Type B:
+
+- ย้ายทั้ง folder ไป raw/references/<folder-name>/ คงโครงสร้างภายในไว้
+- สร้าง 1 entry ใน raw/_index.md ระดับ folder
+- สร้าง 1 source page ใน wiki/sources/
+- ห้าม recurse เข้าไปจัดหมวดหมู่ไฟล์ภายในแยก ๆ
+- ทำ External Source Architecture Extraction (§15.2) **เฉพาะเมื่อ trigger ตามเงื่อนไขใน §15.2**
+
+### ขั้นตอน Process Inbox
+
+เมื่อ user สั่ง `process inbox`:
+
+1. List ไฟล์ใน raw/inbox/
+2. แยกเป็นไฟล์เดี่ยว vs batch folder
+3. สำหรับ batch folder แต่ละ folder:
+   - ตัดสิน Type A vs Type B ก่อน
+   - ถ้า Type B → ย้ายทั้ง folder จบ
+   - ถ้า Type A → continue
+4. ตรวจ version (ต้องผ่าน 2 เงื่อนไขใน §4)
+5. classify ไฟล์ทั้งหมด
+6. infer relation แบบ weak relation
+7. ย้ายไฟล์ + rename ตาม §9
+8. Update raw/_index.md (§10)
+9. สร้าง batch manifest ใน wiki/inbox_batches/
+10. **Auto-chain ingest** สำหรับ version ที่ trigger ครบ (§6) — รวม Architecture Extraction ของ external sources ที่ผูกกับ version เหล่านั้น (§15.2)
+11. Commit
+
+> **หมายเหตุ**: Architecture Extraction ของ external sources ทำใน **step 10 เท่านั้น** ไม่แยก step — เพื่อไม่ให้ extract ซ้ำกับ version ที่ยังไม่ ingest
+
+---
+
+## 6. Auto-chain Ingest
+
+หลังจาก process inbox ย้ายไฟล์เสร็จ LLM ต้องตรวจทุก version ที่ detect ได้ว่ามี trigger set ครบหรือไม่ ถ้าครบให้ ingest ทันที
+
+Trigger set = notebook + config + metrics
+
+| ครบ | Action | ingest_status |
+|---|---|---|
+| notebook + config + metrics | trigger full ingest | full |
+| notebook + metrics (no config) | ลอง extract config จาก notebook | full หรือ partial_no_config |
+| notebook + config (no metrics) | partial page | partial_no_metrics |
+| notebook only | stub page | stub_only |
+| ไม่มี notebook | ห้ามสร้าง version page | — |
+
+State machine ใน version page frontmatter:
+
+yaml
+ingest_status: stub_only | partial_no_metrics | partial_no_config | full | needs_completion | needs_review
+auto_triggered: true
+trigger_source: batch_<name>
+missing_pieces: [config, metrics]
+
+### 6.1 Completeness Check (มาตรฐาน "full")
+
+หลัง ingest เสร็จ LLM ต้องเช็คทุก version page ว่ามี section ครบก่อน mark `ingest_status: full`:
+
+**Section ที่ต้องมีครบ:**
+
+- [ ] ## TL;DR — 2-3 บรรทัด
+- [ ] ## Diff from parent — รวม bullet list ของการเปลี่ยนแปลง + เหตุผล + ผลที่เกิด (ดูตัวอย่างใน §13)
+- [ ] ## Architecture
+  - [ ] ### Overview — backbone, modules, losses
+  - [ ] ### Diagram — mermaid block (ไม่ใช่ placeholder)
+  - [ ] ### Model code — Python code block ของ model class (จากไฟล์จริง)
+  - [ ] ### Loss code — Python code block ของ loss function (จากไฟล์จริง)
+- [ ] ## Training setup
+- [ ] ## Results — table เทียบกับ parent หรือ baseline
+- [ ] ## Source files
+- [ ] ## External sources used — wiki-links (ถ้ามี)
+- [ ] ## Observations
+- [ ] ## Next steps
+
+> **สำคัญ**: ความแตกต่างจาก parent (เปลี่ยนอะไร / ทำไม / ผลเป็นอย่างไร) **รวมอยู่ใน ## Diff from parent ที่เดียว** — ไม่ต้องแยก architecture diff section หรือ component rationale table อีก เพราะข้อมูลซ้ำกัน
+
+**ถ้าขาด section ใด:**
+
+yaml
+ingest_status: needs_completion
+missing_sections: [diff-from-parent, loss-code]
+
+LLM พยายามเติม section ที่ขาดจากไฟล์ source ก่อน mark needs_completion
+
+Completeness check รันใน 2 จุดเท่านั้น:
+1. ปลาย ingest แต่ละครั้ง (auto-chain หรือ manual)
+2. เมื่อ user สั่ง lint completeness
+
+---
+
+## 7. Classification Rules
+
+### ตามนามสกุล
+
+| นามสกุล | ปลายทาง | หมายเหตุ |
+|---|---|---|
+| .pdf | references/ |

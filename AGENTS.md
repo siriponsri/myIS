@@ -15,18 +15,16 @@ This contract applies equally to Codex and Claude.
 
 ## Research gates
 
-1. Execute tracks in order: C, then R, then S.
-2. Before implementing a track, research must present three ranked paths as a
-   knowledge graph with evidence, assumptions, cost, risk, falsification tests,
-   and dependencies.
-3. The Owner must select one Top-1 path. Ranking by an agent is a recommendation,
-   not approval.
-4. HyperResearch runs are Claude-only because the upstream workflow requires
-   Claude. Codex may organize inputs, validate artifacts, and implement an
-   Owner-selected path.
-5. U041 and subsequent literature digestion require explicit Owner approval.
-6. Never use a protected held-out set for design, tuning, performance tuning,
-   prompt optimization, or path selection.
+1. `PLAN.md` is canonical execution authority; the Full Research and Local
+   Harness plans define program strategy and implementation detail.
+2. Full U041-U153 triage is Owner-authorized. Preserve frozen U001-U040 bytes,
+   corpus identity, legacy aliases, tier metadata and QA provenance.
+3. HarnessOpt is the active governed optimization program and SkillOpt v0.2.0
+   is its pinned baseline. Use equal evaluator, split hashes, tools and budget.
+4. HyperResearch is an optional staged flow. Open Deep Research, Experience
+   Brain and `agentmemory` are retired and must not be reactivated.
+5. Never use the prospectively isolated confirmation cohort for design, tuning,
+   prompt optimization or path selection.
 
 ## Experiment gates
 
@@ -39,19 +37,24 @@ revision, prompt/skill version, dataset split, seed, batch settings, cost and
 latency fields, and MLflow lineage. One GPU starts with one vLLM engine and many
 concurrent client requests; do not load one model per worker.
 
+Every run also follows `00_governance/OBSERVABILITY_AND_RUN_LOGGING.md`.
+Structured runtime logs, progress, metrics, MLflow and the canonical manifest
+have distinct authority; paper generators read only validated manifests and
+metric artifacts.
+
 ## Brain use
 
 The shared Brain repository is the human-readable project control plane.
 Codex and Claude are serial writers: only one may write to Brain at a time.
 Research facts remain canonical here or in immutable App evidence; Brain holds
 summaries, decisions, status, and pointers. It is the only active memory layer.
-Do not attach or write to Experience Brain or `agentmemory`; historical records
-remain provenance only.
+Historical Experience Brain and `agentmemory` records remain provenance only;
+neither system is an active memory layer.
 
 ## Frozen boundaries
 
 - Paper D is a frozen boundary study and must not be reopened implicitly.
 - Historical names and provenance remain unchanged even when they reference a
   retired tool or earlier project name.
-- During restructure: no scientific MLflow runs, research calls, memory writes,
-  API/GPU/Vast jobs, or held-out access.
+- Paid/API/GPU/Vast runs and confirmation-cohort access require explicit Owner
+  approval. Offline fixtures, tests and governed local bootstrap checks are open.

@@ -25,11 +25,12 @@ python "C:\Users\Siripon Sri\.codex\skills\mermaid-task-mapper\scripts\render_me
 
 1. Record the Owner-approved track, questions, budget, sources, and protected
    split boundary.
-2. Verify U041 status explicitly.
-3. Create three path candidates from `00_governance/templates/`.
-4. Stop for one Owner Top-1 selection.
-5. Create an immutable experiment manifest and run Gates 0-3 in order.
-6. Stop again before protected held-out access or publication.
+2. Verify corpus/split hashes and whether the requested scope is offline,
+   development or prospective confirmation.
+3. Create path candidates when the active gate requires a method choice.
+4. Freeze evaluator, module pool, model roles and budget across benchmark arms.
+5. Create an immutable run specification and execute preflight/dry-run first.
+6. Stop before paid/API/GPU/Vast work, confirmation access or publication.
 
 ## Stores and workspaces
 
@@ -38,16 +39,18 @@ Persistent MLflow data belongs under the workspace-level
 pilots are disposable workspace data. Do not place datasets, credentials, or
 research results inside third-party tool repositories.
 
-The offline contract requires `prompt.json`, `flow.json`, `progress.jsonl`,
-`result.json`, and `metrics.json` for every agent run, including failed runs.
-Install the `tracking` extra to mirror these artifacts and numeric metrics into
-the shared local MLflow SQLite/artifact store; the file ledger remains the
-offline and failure-safe source of audit evidence.
-Run the deterministic demo without external dependencies:
+The run contract requires prompt, flow, progress, result, metrics, runtime
+JSONL, per-query rows, validation report, immutable manifest and append-only
+MLflow receipts. See `OBSERVABILITY_AND_RUN_LOGGING.md`.
+
+Run the deterministic demo in the pinned MLflow environment:
 
 ```powershell
-python 03_experiments/V01_brain_drive_agent_demo/V01_brain_drive_agent_demo.py
-jupyter-nbconvert --to notebook --execute 03_experiments/V01_brain_drive_agent_demo/V01_brain_drive_agent_demo.ipynb --output executed.ipynb
+$workspace = (Resolve-Path ..\..\..).Path
+$python = Join-Path $workspace "02_Tools\01_environments\mlflow\Scripts\python.exe"
+$env:PYTHONPATH = (Resolve-Path "05_code\src").Path
+& $python -m myis_research.harness.cli doctor --research-root . --mlflow-root (Join-Path $workspace "01_Stores\00_myIS\mlflow")
+& $python 03_experiments\V01_brain_drive_agent_demo\V01_brain_drive_agent_demo.py
 ```
 
 ## Change control

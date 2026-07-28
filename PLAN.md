@@ -1,26 +1,29 @@
-# myIS HyperResearch Plan
+# myIS Research Execution Plan
 
-This plan defines the first research pass for every track. It is planning-only:
-it does not authorize U041, source acquisition, model calls, experiments,
-held-out access, implementation, or publication. Each execution gate requires
-an explicit Owner decision recorded from the templates in `00_governance/`.
+This file is canonical execution authority. The Owner has opened restructure
+closeout, full U041-U153 literature triage, offline HarnessOpt implementation,
+local bootstrap checks and the notebook demo. Paid/API/GPU/Vast work,
+scientific development runs, prospectively isolated confirmation access and
+publication remain separate Owner gates in `00_governance/OWNER_GATES.md`.
 
 ## Program flow
 
-Track C must freeze a defensible candidate pool before Track R ranks it. Track S
-then studies reusable skill evolution, initially using the Track C environment.
+Track C/H must freeze a defensible candidate pool and compare HarnessOpt against
+the reproduced reference, fixed human harness and SkillOpt. Track R then ranks
+the frozen pool. Track S is optional methods work and is not on the critical path.
 
 <!-- mermaid-id: 01-01-program-flow -->
 ```mermaid
 flowchart TD
     accTitle: Ordered myIS research program
-    accDescr: Governance opens evidence collection, Track C freezes candidates, Track R ranks them, Track S studies reusable skills, and the Owner reviews publication evidence.
+    accDescr: Governance opens evidence collection, Track C/H freezes candidates and compares harnesses, Track R ranks them, and the Owner reviews publication evidence.
 
     Gate["Owner opens one research scope"] --> Evidence["Build an approved evidence packet"]
-    Evidence --> C["Track C: expose candidates"]
+    Evidence --> C["Track C/H: expose candidates and optimize harness"]
     C --> R["Track R: rank and explain evidence"]
-    R --> S["Track S: evolve reusable skills"]
-    S --> Package["Package claims and artifacts"]
+    R --> Package["Package claims and artifacts"]
+    C -. optional .-> S["Track S: study reusable skills"]
+    S -. methods evidence .-> Package
     Package --> Review["Owner publication review"]
 
     classDef owner fill:#FCE8E3,stroke:#C95D42,color:#17222B
@@ -35,7 +38,7 @@ flowchart TD
 | Phase | Task | Output | Stop condition |
 |---|---|---|---|
 | 0. Scope | Declare one track, questions, budget, allowed sources, and protected splits | Signed scope and source protocol | Missing Owner approval |
-| 1. Acquire | Search approved scholarly sources, repositories, and PDFs; verify provenance | Source inventory and immutable evidence packet | U041 or unapproved download would begin |
+| 1. Acquire | Search approved sources and register PDFs/web/history with provenance | Source inventory and immutable evidence packet | Source or license is unverified |
 | 2. Synthesize | Run HyperResearch on the approved packet and map claims to sources | Evidence table, uncertainties, and gaps | Unsupported or conflicting claims |
 | 3. Compare | Produce three paths with cost, risk, dependencies, and falsification tests | Ranked Top-3 path graph | Owner has not selected Top-1 |
 | 4. Pilot | Implement only the selected path on permitted development data | Manifest, code, MLflow lineage, diagnostics | Any gate or ceiling fails |
@@ -45,10 +48,10 @@ flowchart TD
 ## Evidence acquisition
 
 Candidate sources include primary papers, official datasets and benchmarks,
-official repositories, standards, and high-quality surveys used for discovery.
-PDFs and repositories are staged outside canonical evidence until hashes,
-licenses, versions, and relevance are recorded. U041 numbering begins only
-after the Owner explicitly opens that gate.
+official repositories, standards, web search, project history and high-quality
+surveys used for discovery. PDFs are stored local-only in Research after hashes,
+licenses, versions, aliases and relevance are recorded. Full U041-U153 triage is
+open; U001-U040 imported bytes remain frozen.
 
 <!-- mermaid-id: 01-02-evidence-acquisition -->
 ```mermaid
@@ -71,11 +74,12 @@ flowchart TD
     class Review owner
 ```
 
-## Track C: candidate exposure
+## Track C/H: candidate exposure and HarnessOpt
 
 Goal: improve the recall and usefulness of the candidate pool under a fixed,
-auditable budget. Initial questions cover query formulation, lexical/dense or
-late-interaction retrieval, hierarchy-aware expansion, and domain transfer.
+auditable budget by optimizing the governed workflow rather than model weights.
+Compare reproduced DAPFAM, fixed human harness, SkillOpt v0.2.0 and HarnessOpt
+with equal evaluator, split hashes, module pool, model roles and budgets.
 
 <!-- mermaid-id: 01-03-track-c-candidate-exposure -->
 ```mermaid
@@ -98,9 +102,11 @@ flowchart TD
     class Freeze completed
 ```
 
-Track C tasks: define candidate exposure and cost metrics; build a source-backed
-baseline matrix; identify failure strata; compare Top-3 methods; pilot the
-selected method; freeze queries, corpus version, candidate IDs, and diagnostics.
+Track C/H tasks: reproduce the reference, define deterministic 60/20/20 query
+cohorts, implement four-arm comparability checks, optimize only HarnessPolicy on
+train/selection, and freeze queries, corpus, policy and candidate IDs before one
+R4 confirmation pass. HarnessOpt wins only if OUT NDCG@100 and OUT Recall@100
+both exceed SkillOpt and the reproduced DAPFAM reference.
 
 ## Track R: ranking and evidence
 
@@ -136,10 +142,10 @@ freeze ranking, calibration, citations, and error taxonomy.
 
 ## Track S: skill evolution
 
-Goal: determine whether a reusable procedural skill improves research or
-retrieval work more reliably and efficiently than fixed prompts. SkillOpt is a
-hypothesis, while GEPA is a shared comparator and SPEAR is an optional
-diagnostic when example-level errors justify it.
+Goal: optionally study whether a reusable procedural skill transfers across
+research tasks after C/H is stable. SkillOpt is already the C/H baseline; this
+track opens only for a distinct methods question and is not required before the
+candidate-exposure publication.
 
 <!-- mermaid-id: 01-05-track-s-skill-evolution -->
 ```mermaid
@@ -171,11 +177,13 @@ pilot one path; freeze the skill, optimizer lineage, and transfer protocol.
 | Capability | Decision | Reason |
 |---|---|---|
 | Evidence workflow | HyperResearch `v0.9.1` | One governed synthesis workflow; Claude executes it |
-| Experiment lineage | MLflow `3.14.0` | Tracks manifests, traces, metrics, cost, and artifacts |
+| Runtime events | structlog `26.1.0` | One redacted event to console and JSONL projections |
+| Experiment lineage | MLflow `3.14.0` | Searchable mirror of parameters, metrics, artifacts and lineage |
 | Human-readable memory | Obsidian Brain | One shared serial-writer control plane |
 | Codex web search | Native `web_search = "live"` | No extra search MCP layer |
 | Claude web search | `open-websearch@2.1.11` | Pinned STDIO search with DuckDuckGo/Bing only |
 | Developer documentation | Context7 remote MCP | Focused current library/API documentation |
+| Harness baseline | SkillOpt `v0.2.0` | Fixed baseline only; HarnessOpt must exceed it under matched controls |
 | Deep research framework | Open Deep Research retired | Duplicates the selected HyperResearch workflow |
 | Answer synthesis CLI | `pplx-cli` not adopted | Adds an API/service dependency without a unique role |
 | Memory services | Experience Brain and `agentmemory` retired | One Brain avoids split truth and writer coordination |

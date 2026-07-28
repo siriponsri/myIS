@@ -1,7 +1,7 @@
 project:
   display_name: myIS Research
   repository: https://github.com/siriponsri/myIS.git
-  status: restructure_only
+  status: implementation_active
 
 authority:
   ask_owner_when_uncertain: true
@@ -14,11 +14,12 @@ research:
   track_order: [C, R, S]
   path_candidates_required: 3
   owner_selects_top_1: true
-  u041_authorized: false
+  u041_u153_triage_authorized: true
   held_out_access: false
 
-restructure_prohibitions:
-  research_queries: true
-  memory_writes: true
-  scientific_mlflow_runs: true
-  api_gpu_vast_runs: true
+execution_gates:
+  paid_api_gpu_vast_requires_owner_approval: true
+  confirmation_access_requires_owner_approval: true
+  protected_memory_content_forbidden: true
+  canonical_manifest_required: true
+  mlflow_lineage_required: true

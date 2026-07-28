@@ -8,7 +8,7 @@ flowchart LR
     accTitle: Research system boundaries
     accDescr: Canonical application evidence enters Research, which produces governed outputs while the Brain records decisions and MLflow records run lineage.
 
-    App["App: canonical prior evidence"] --> Research["Research: scientific truth"]
+    App["App: product and frozen prior evidence"] --> Research["Research: scientific truth"]
     Research --> Outputs["Validated outputs"]
     Research --> Brain["Obsidian Brain: decisions and status"]
     Research --> MLflow["MLflow: run and artifact lineage"]
@@ -30,20 +30,18 @@ not canonical repositories.
 
 ## Evidence workflow
 
-Approved PDF, repository, dataset, and web inputs are verified and staged before
-Claude runs HyperResearch. The output is a claim-linked synthesis and three
-ranked paths for one track. The Owner selects exactly one path before any
-implementation. Development gates precede method freeze, protected evaluation,
-and publication review.
+Approved PDF, repository, dataset, web and project-history inputs are verified,
+registered and digested in Research. HyperResearch is an optional Claude-only
+staging flow, not a required second literature system. Development gates precede
+method freeze, prospective confirmation and publication review.
 
 ## Optimizer policy
 
 - GEPA is a shared optimizer/comparator, not a fourth track.
-- SkillOpt is the primary Track S hypothesis, not a foregone conclusion.
+- SkillOpt v0.2.0 is the fixed baseline for HarnessOpt, not the target architecture.
 - SPEAR may be a diagnostic comparator when per-example errors justify it.
-- Track C optimizes exposure; Track R freezes the candidate pool before ranking;
-  Track S optimizes a reusable procedural skill and initially uses C as its
-  environment.
+- Track C/H optimizes exposure and the governed harness; Track R freezes the
+  candidate pool before ranking; Track S is optional methods work.
 
 ## Positive publication policy
 

@@ -1,6 +1,6 @@
 # Restructure Status
 
-Updated: 2026-07-27 Asia/Bangkok
+Updated: 2026-07-28 Asia/Bangkok
 
 ## Target layout
 
@@ -24,7 +24,10 @@ My_Research/
 - Stores, Archive, Workspaces, HyperResearch, and the retired Open Deep
   Research source/environment were moved into numbered boundaries.
 - The MLflow bootstrap database and report were moved to
-  `01_Stores/00_myIS/mlflow/` with matching pre/post SHA-256 hashes.
+  `01_Stores/00_myIS/mlflow/`. Internal experiment/run artifact URIs now use
+  the numbered store, SQLite integrity is `ok`, and an upload/download
+  round-trip returned matching SHA-256 hashes. A byte-identical pre-migration
+  database backup is retained under `01_Stores/00_myIS/backups/`.
 - Root and Research README files, the all-track plan, operations guide, tool
   decisions, source staging contract, and disposable pilot report are present.
 - Ten Mermaid diagrams render successfully with Mermaid CLI `11.16.0`.
@@ -38,27 +41,31 @@ My_Research/
   into dated archive locations after Owner YES and process/path checks.
 - Nine empty Research navigation shells and the resulting empty root `Tools`
   shell were removed after zero-entry checks.
-- The current PDF duplicate audit records 16 exact groups / 32 files. Every
-  alias remains referenced, so the files were retained and canonical mappings
-  were recorded instead of breaking provenance.
+- The canonical literature corpus now contains 153 unique tier-organized PDFs
+  with 169 legacy aliases and 16 duplicate groups preserved as metadata. Final
+  validation reports A/B/C/N counts of 55/64/28/6 and no App or legacy PDFs.
+- Brain literature ingestion covers U001-U153 with unique SHA-256 identities,
+  a complete literature index, topic maps and resolvable canonical PDF paths.
+  QMD sparse retrieval is operational; live index/vector counts remain runtime
+  state rather than governance facts.
 
-## Remaining gated work
+## Current implementation state
 
-- Two misleading PDF aliases require reference migration before they can be
-  archived; see `PDF_DUPLICATE_MANIFEST.csv`.
-- Global Experience Brain or `agentmemory` MCP configuration, if still present,
-  requires a separate config backup and exact-entry review outside this repo.
-- U041, research execution, protected data, and publication remain separately
-  gated and were not opened by the cleanup approval.
+- The PDF corpus migration and U001-U153 Brain ingestion are complete.
+- The offline HarnessOpt foundation, structured runtime logging, MLflow mirror,
+  canonical manifest and notebook demo are implemented and locally validated.
+- Scientific development runs, paid/API/GPU/Vast execution and prospective
+  confirmation remain closed until their separate Owner gates are recorded.
 
 ## Immutable boundaries
 
 - No project file or historical artifact has been deleted.
-- Papers A-D and PDFs remain canonical in App.
+- Papers A-D and frozen historical evidence remain canonical in App. The
+  literature/PDF corpus, new digests and HarnessOpt artifacts belong to Research.
 - Historical evidence may retain retired tool names as provenance.
-- U041 is not started and not authorized.
-- No research query, new PDF acquisition, model/provider call, paid job,
-  API/GPU/Vast run, scientific MLflow run, or held-out access occurred.
+- Full U041-U153 triage is authorized; frozen U001-U040 bytes remain unchanged.
+- Paid jobs, API/GPU/Vast execution and the prospectively isolated confirmation
+  cohort remain separately gated.
 
 ## Cleanup evidence
 

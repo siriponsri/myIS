@@ -1,0 +1,4 @@
+interface:
+  display_name: "myIS Run HarnessOpt"
+  short_description: "Run governed HarnessOpt benchmark workflows"
+  default_prompt: "Use $myis-run-harnessopt to preflight and run an approved HarnessOpt benchmark without crossing protected-split gates."
