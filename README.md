@@ -57,7 +57,7 @@ measures family-level retrieval relevance and is not novelty/FTO legal truth.
 | `00_governance/` | identity, Owner Gates, operations, approvals, tool/dependency rules |
 | `01_evidence/` | literature catalog, validated digests, provenance, local-only PDFs |
 | `02_tracks/` | C candidate exposure, R ranking/evidence, optional S adaptation |
-| `03_experiments/` | configuration, immutable manifest templates, runtime placeholders |
+| `03_experiments/` | experiment configuration and immutable manifest templates |
 | `04_outputs/` | validated reports, diagrams, audits, and publication packages |
 | `05_code/` | harness, metrics/statistics, confirmation contracts, dashboard, MLflow mirror, tests |
 | `.agents/skills/` | project procedures bound by the same protected-surface rules |
