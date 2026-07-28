@@ -13,6 +13,7 @@ from pathlib import Path
 from .harness import ApprovalRecord, GoalSpec, HarnessPolicy, LocalHarness, RunSpec
 from .harness.models import GoalState, canonical_hash
 from .harness.runner import KERNEL_VERSION
+from .mlflow_mirror import MLflowMirror, MirrorArtifact, MirrorKind, MirrorSpec, MirrorStage
 from .sources import SourceCatalog, SourceRecord, register_source
 
 
@@ -103,7 +104,9 @@ def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, objec
         budget={"max_seconds": 30, "max_api_cost_usd": 0, "max_gpu_seconds": 0},
     )
     spec = replace(spec, approval=replace(approval, scope_hash=spec.scope_hash()))
-    harness = LocalHarness(workdir / "runs", mlflow_root=mlflow_root)
+    # The harness writes the canonical bundle. MLflow receives only an explicit,
+    # validated projection after finalization, never the whole run directory.
+    harness = LocalHarness(workdir / "runs", mlflow_root=None)
 
     def execute_fixture(_: RunSpec, __: HarnessPolicy, logger: object) -> dict[str, object]:
         for record in records:
@@ -142,4 +145,42 @@ def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, objec
         },
     )
     run_dir = run_result.run_dir
-    return {"report": report, "records": records, "run_dir": str(run_dir)}
+    mirrored = tuple(
+        MirrorArtifact.from_path(path, kind=kind, canonical_root=run_dir)
+        for path, kind in (
+            (run_dir / "manifest.json", MirrorKind.RESULT),
+            (run_dir / "validation_report.json", MirrorKind.RESULT),
+            (run_dir / "result.json", MirrorKind.RESULT),
+            (run_dir / "metrics.json", MirrorKind.METRIC),
+        )
+    )
+    mirror_receipt = MLflowMirror(mlflow_root).sync(
+        MirrorSpec(
+            stage=MirrorStage.SCIENTIFIC,
+            run_name=spec.run_id,
+            git_commit=spec.git_commit,
+            canonical_source_sha256=run_result.manifest_sha256 or ("0" * 64),
+            tags={
+                "goal_id": spec.goal.goal_id,
+                "phase": spec.phase,
+                "scientific_run": "false",
+                "dataset_access": "offline-fixtures-only",
+            },
+            parameters={
+                "dataset_id": spec.dataset_id,
+                "split": spec.split,
+                "seed": spec.seed,
+                "model_id": spec.model_id,
+                "evaluator_id": spec.evaluator_id,
+            },
+            metrics={name: float(value) for name, value in run_result.metrics.items()},
+        ),
+        mirrored,
+        receipt_dir=run_dir / "receipts",
+    )
+    return {
+        "report": report,
+        "records": records,
+        "run_dir": str(run_dir),
+        "mlflow_receipt": mirror_receipt.as_dict(),
+    }

@@ -1,5 +1,11 @@
 project:
-  display_name: myIS Research
+  program_id: is1-research
+  display_name: IS1 Research V0.1
+  research_version: "0.1"
+  version_class: experimental_minor
+  protocol_family_id: candidate-exposure-freeze-ranking-v1
+  legacy_aliases:
+    - Paper E
   repository: https://github.com/siriponsri/myIS.git
   status: implementation_active
 
@@ -12,10 +18,27 @@ authority:
 
 research:
   track_order: [C, R, S]
-  path_candidates_required: 3
-  owner_selects_top_1: true
+  phase_order: [F0, F1, C0, C1, C2, CF, R0, R1, R2, S, Q, P]
+  gate_c_primary_metric: OUT_Recall@100
+  gate_r_primary_metric: OUT_nDCG@100
+  gate_c_and_r_independent: true
+  selection_rule: strictly_greater_reject_ties
+  mde_role: prospective_design_sensitivity_only
+  confirmation_execution: external_owner_run_aggregate_only
   u041_u153_triage_authorized: true
   held_out_access: false
+
+dependencies:
+  python: "3.11"
+  authority: pyproject.toml+uv.lock
+  clean_replay: uv sync --locked
+
+services:
+  dashboard_bind: 127.0.0.1
+  dashboard_artifacts_read_only: true
+  owner_decision_ledger: 00_governance/approvals
+  pdf_receipt_ledger: local_ignored_hash_chain
+  mlflow_authority: rebuildable_mirror_only
 
 execution_gates:
   paid_api_gpu_vast_requires_owner_approval: true

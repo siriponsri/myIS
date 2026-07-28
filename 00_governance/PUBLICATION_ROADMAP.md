@@ -1,5 +1,11 @@
 # Publication Roadmap
 
+> **Deprecated active instruction.** This file is retained temporarily for
+> migration provenance. The active publication protocol is `PLAN.md` Phase P
+> plus `FULL_RESEARCH_TRACK_PLAN.md`. `Paper E` below is a historical alias for
+> `IS1 Research V0.1`; do not use this file to select metrics, baselines, gates,
+> or names. Archive/delete requires a separate exact-path Owner decision.
+
 ## Frozen prior work
 
 Paper D remains a frozen boundary study: a fixed candidate pool and tested 0.6B
@@ -42,4 +48,3 @@ strong human-authored skill. Track S must measure both quality and transfer.
   transfer.
 
 Titles and claims remain provisional until results support them.
-

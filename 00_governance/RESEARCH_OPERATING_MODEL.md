@@ -1,5 +1,11 @@
 # Research Operating Model
 
+> **Deprecated active instruction.** The current authority map is
+> `AGENTS.md`, `LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md`, and
+> `00_governance/TOOLCHAIN.md`. This file is retained temporarily for migration
+> provenance and must not override IS1 V0.1 Gate C/R, confirmation, dashboard,
+> dependency, or MLflow rules. Archive/delete requires exact Owner approval.
+
 ## System boundaries
 
 <!-- mermaid-id: 02-01-research-system-boundaries -->

@@ -1,22 +1,27 @@
 # Literature Evidence
 
-`validated-digests/` contains frozen imported digests U001-U040 and the
-authorized U041-U153 metadata/full-text-section triage digests. The frozen
-U001-U040 bytes remain validated by `IMPORT_MANIFEST.csv`.
+This tree preserves source identity, provenance, license/privacy status, aliases,
+digests, and QA records for IS1 Research V0.1. Historical records may retain the
+legacy name `Paper E`; do not rewrite them merely to match the active identity.
 
-`catalog/corpus_manifest.csv` is the one-row-per-unique-PDF index.
-DOI and arXiv fields include evidence-source and confidence columns; accepted
-identifiers come only from acquisition URLs, PDF metadata, or labeled
-first-page front matter, never from bibliographies.
-`catalog/legacy_aliases.csv` preserves all 169 historical App paths, including
-16 exact-duplicate groups, after the App copies are removed.
-`catalog/tier_assignments.csv` is the canonical A/B/C/N classification; the
-four `tier_*.csv` files mirror the physical tier folders without duplicating
-PDF bytes.
+`validated-digests/` contains frozen imported U001-U040 digests and authorized
+U041-U153 triage digests. `catalog/corpus_manifest.csv` is the unique-PDF index;
+`catalog/legacy_aliases.csv` preserves historical paths and duplicate groups;
+`catalog/tier_assignments.csv` is the canonical A/B/C/N classification.
 
-Raw PDFs are local-only canonical files under
-`01_evidence/<A|B|C|N>-tier/Uxxx_<verified-title-slug>.pdf`. PDF files in all
-four tier folders are ignored by Git; SHA-256 remains the byte-identity
-authority in the manifest. Historical SHA-store paths are provenance only and
-the catalog is the current locator. `qa-provenance/` contains identity, build,
-migration, and historical QA records.
+Raw PDFs are local-only under the tier roots and are ignored by Git. SHA-256 is
+the byte identity authority. PDFs must not be committed or mirrored to MLflow
+until license/privacy review explicitly permits a different treatment. The
+loopback viewer defaults to metadata/digests and streams only an exact
+Owner-approved path/hash allowlist while writing a local tamper-evident access
+receipt.
+
+`qa-provenance/` contains identity, build, migration, and historical QA records.
+Do not edit/delete these records during active-doc migration. The three BATCH_2A
+hash decisions require producer/source provenance and semantic validation; never
+update an expected hash solely to make a validator green.
+
+Literature digests and evidence records retain source URI, version/date,
+license/privacy status, content hash, retrieval/acquisition provenance, and
+claim-to-source pointers. Brain and MLflow may hold allowlisted summaries or
+pointers, but Git/validated evidence remains canonical.

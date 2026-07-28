@@ -1,3 +1,7 @@
+# DEPRECATED: legacy Top-3 path template. PLAN.md now uses Goal-based
+# Phase -> Task authority and typed Owner Gate decisions under
+# 00_governance/approvals/. Retained only for migration provenance pending an
+# exact-path archive/delete decision.
 track: C|R|S
 research_run_id: null
 status: proposed
@@ -32,4 +36,3 @@ paths:
 km_graph:
   nodes: []
   edges: []
-

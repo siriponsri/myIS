@@ -6,16 +6,29 @@ build-backend = "setuptools.build_meta"
 name = "myis-research"
 version = "0.1.0"
 description = "Governed infrastructure for myIS publication research"
-requires-python = ">=3.11"
-dependencies = ["structlog==26.1.0"]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pydantic==2.13.4",
+    "pyyaml==6.0.2",
+    "structlog==26.1.0",
+]
 
 [project.optional-dependencies]
-tracking = ["mlflow>=3.0,<4"]
+dashboard = [
+    "fastapi==0.133.1",
+    "uvicorn==0.41.0",
+]
+tracking = ["mlflow==3.14.0"]
 notebook = ["nbclient>=0.10", "nbformat>=5.10"]
-test = ["pytest>=8,<10"]
+test = [
+    "httpx==0.28.1",
+    "pytest>=8,<10",
+]
 
 [project.scripts]
 myis-harness = "myis_research.harness.cli:main"
+myis-dashboard = "myis_research.dashboard.cli:main"
+myis-confirmation = "myis_research.confirmation_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["05_code/src"]

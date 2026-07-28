@@ -1,0 +1,5 @@
+# These imported provenance artifacts are byte-canonical CRLF files. Git must
+# not normalize them because IMPORT_MANIFEST.csv binds their exact SHA-256.
+01_evidence/literature/qa-provenance/BATCH_2A_ARTIFACT_VALIDATION.json -text whitespace=cr-at-eol
+01_evidence/literature/qa-provenance/BATCH_2A_CSV_VALIDATION.json -text whitespace=cr-at-eol
+01_evidence/literature/qa-provenance/BATCH_2A_INGESTION_CANDIDATES.csv -text whitespace=cr-at-eol

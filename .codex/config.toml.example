@@ -1,0 +1,17 @@
+# Copy only settings you intentionally own into local Codex configuration.
+# Never commit credentials or provider tokens.
+
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+
+[profiles.implementation]
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+
+[profiles.measured_optimizer]
+model = "gpt-5.6-sol"
+model_reasoning_effort = "medium"
+
+# Escalate the measured optimizer profile to high only after a documented
+# qrels-blind calibration failure. Then freeze model/provider/effort/budget
+# identically for A2 and A3. Do not configure silent fallback.

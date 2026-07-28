@@ -1,64 +1,37 @@
-# HarnessOpt execution contract
+# IS1 HarnessOpt execution contract
 
-## Required run bundle
+## Arm invariants
 
-Every successful, failed, cancelled, or invalidated run must preserve the applicable artifacts:
-
-```text
-prompt.json
-flow.json
-progress.jsonl
-result.json
-metrics.json
-runtime.jsonl
-per_query_metrics.jsonl
-validation_report.json
-receipts/mlflow-*.json
-manifest.json
-```
-
-Write `manifest.json` atomically and last. Once written, treat it as immutable. A failed MLflow mirror creates another receipt; it does not rewrite prior receipts or the manifest.
-
-## Runtime event fields
-
-Every runtime event must contain:
-
-```text
-schema_version, event_id, timestamp_utc, monotonic_ns, sequence,
-level, event, run_id, goal_id, phase, component, status
-```
-
-Sequence values are strictly increasing within a run. Console output is a human view; `runtime.jsonl` is diagnostic event truth; `progress.jsonl` is a milestone projection.
-
-## Comparison invariants
-
-All four arms share the evaluator, split hashes, query population, target and optimizer roles, tool/module pool, per-query ceilings, total budget, seeds, and stopping policy budget:
-
-1. reproduced DAPFAM/MTEB reference;
-2. fixed human harness;
-3. SkillOpt baseline;
-4. HarnessOpt.
-
-Primary task: DAPFAM OUT TAC-to-TAC at Top-100.
-
-Use deterministic, stratified query-ID partitions of 60% train, 20% selection, and 20% prospective confirmation. Because historical DAPFAM queries were evaluated previously, describe the final cohort as prospectively isolated, not globally untouched.
-
-## Result decision table
-
-| Check | Required outcome |
+| Arm | Editable surface |
 |---|---|
-| OUT NDCG@100 | HarnessOpt mean exceeds SkillOpt and reproduced reference |
-| OUT Recall@100 | HarnessOpt mean exceeds SkillOpt and reproduced reference |
-| IN NDCG@100 drop | No worse than 0.01 absolute |
-| IN Recall@100 drop | No worse than 0.01 absolute |
-| Invalid-query rate | At most 1% |
-| Budget | At or below predeclared ceiling |
+| A0 | frozen baseline |
+| A1 | human seed skill; frozen harness |
+| A2 | optimized skill; frozen harness |
+| A3 | optimized skill plus declared typed policy |
 
-If any required outcome fails, report no win. Do not substitute a diagnostic metric.
+A2/A3 share model/provider/effort, initial state, adaptation/selection data,
+evaluator/statistics, module pool, tools, trial/token/time/cost ceilings, repeat
+IDs/order, and stopping. All repeats are reported. Silent fallback or protected
+path access invalidates a run.
 
-## Approval boundaries
+## Selection
 
-- R3 authorizes only the specified paid/API/GPU/Vast run and budget.
-- R4 authorizes only the specified frozen prospective confirmation.
-- Confirmation feedback cannot re-enter policy selection or tuning.
-- DAPFAM measures retrieval relevance, not legal novelty or freedom to operate.
+Preregister one primary optimizer selection score. Accept a candidate only when
+`candidate_score > incumbent_score`; reject exact ties. Secondary metrics cannot
+rescue a tie/loss unless they were part of the preregistered score before data.
+
+Track S does not define Gate C/R success. Gate C remains OUT Recall@100 and Gate
+R remains OUT nDCG@100 on an identical frozen pool.
+
+## Required bundle
+
+Applicable artifacts include prompt, skill manifest, flow/config, runtime and
+progress JSONL, candidates/evidence/per-query rows, metrics/statistics/result,
+validation/environment, immutable manifest, and MLflow receipts. Manifest is
+written last and never overwritten. MLflow is a rebuildable mirror.
+
+## Approval and data boundaries
+
+G5 authorizes only its specified adaptation study and budget. Expose adaptation/
+selection qrels only. Confirmation membership/qrels/outcomes remain external and
+cannot re-enter policy selection. DAPFAM measures retrieval relevance only.

@@ -9,7 +9,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .models import ArtifactRecord, RunSpec, dataclass_dict
+from .models import ArtifactRecord, RunSpec, dataclass_dict, is_sha256
+
+
+MANIFEST_V2 = "myis.run-manifest.v2"
+MANIFEST_V3 = "myis.run-manifest.v3"
 
 
 MIME_BY_SUFFIX = {
@@ -34,9 +38,12 @@ def atomic_write_once(path: Path, value: Any) -> str:
             stream.write(payload)
             stream.flush()
             os.fsync(stream.fileno())
-        if path.exists():
-            raise FileExistsError(f"immutable artifact already exists: {path}")
-        temporary.replace(path)
+        try:
+            os.link(temporary, path)
+        except FileExistsError:
+            raise FileExistsError(f"immutable artifact already exists: {path}") from None
+        except OSError as error:
+            raise RuntimeError("no-overwrite link is required for immutable artifacts") from error
     finally:
         if temporary.exists():
             temporary.unlink()
@@ -70,15 +77,42 @@ def finalize_manifest(
     budget_actual: dict[str, float | int],
     stop_reason: str | None,
 ) -> str:
+    measured = not spec.phase.startswith(("offline", "bootstrap", "fixture"))
+    spec.research.validate()
+    if measured and spec.environment is None:
+        raise ValueError("measured manifests require a locked runtime environment")
+    if measured and spec.provider is None:
+        raise ValueError("measured manifests require requested/resolved provider identity")
+    if measured and spec.isolation is None:
+        raise ValueError("measured manifests require an offline execution-isolation contract")
+    if spec.environment is not None:
+        spec.environment.validate()
+    if spec.provider is not None:
+        spec.provider.validate(measured=measured)
+    if spec.replication is not None:
+        spec.replication.validate()
+    if spec.statistics is not None:
+        spec.statistics.validate()
+    if spec.surfaces is not None:
+        spec.surfaces.validate()
+    if spec.isolation is not None:
+        spec.isolation.validate()
+    if spec.candidate_pool is not None:
+        spec.candidate_pool.validate()
+    invalid_declared = sorted(name for name, value in spec.artifact_hashes.items() if not is_sha256(value))
+    if invalid_declared:
+        raise ValueError(f"declared artifacts require SHA-256 hashes: {invalid_declared}")
     records = artifact_records(run_dir)
     manifest = {
-        "schema_version": "myis.run-manifest.v2",
+        "schema_version": MANIFEST_V3,
         "identity": {
+            "research": dataclass_dict(spec.research),
             "run_id": spec.run_id,
             "goal_id": spec.goal.goal_id,
             "parent_run_id": spec.parent_run_id,
             "trial_id": spec.trial_id,
             "arm": spec.arm,
+            "phase": spec.phase,
         },
         "lifecycle": {
             "started_at_utc": started_at_utc,
@@ -100,6 +134,7 @@ def finalize_manifest(
             "skill_set_hash": spec.skill_set_hash,
             "model_id": spec.model_id,
             "module_pool_hash": spec.module_pool_hash,
+            "provider": dataclass_dict(spec.provider) if spec.provider else None,
         },
         "inputs": {
             "dataset_id": spec.dataset_id,
@@ -109,6 +144,13 @@ def finalize_manifest(
             "seed": spec.seed,
         },
         "evaluator": {"evaluator_id": spec.evaluator_id, "hash": spec.evaluator_hash, "immutable": True},
+        "environment": dataclass_dict(spec.environment) if spec.environment else None,
+        "replication": dataclass_dict(spec.replication) if spec.replication else None,
+        "statistics": dataclass_dict(spec.statistics) if spec.statistics else None,
+        "surfaces": dataclass_dict(spec.surfaces) if spec.surfaces else None,
+        "isolation": dataclass_dict(spec.isolation) if spec.isolation else None,
+        "candidate_pool": dataclass_dict(spec.candidate_pool) if spec.candidate_pool else None,
+        "declared_artifact_hashes": dict(sorted(spec.artifact_hashes.items())),
         "budget": {"limits": spec.budget, "actual": budget_actual},
         "metrics": {"summary_exact": metrics, "definition_version": "myis.retrieval-metrics.v1"},
         "artifacts": [dataclass_dict(record) for record in records],

@@ -19,7 +19,7 @@ from myis_research.harness import (
     ValidationError,
     validate_run_bundle,
 )
-from myis_research.harness.benchmark import deterministic_stratified_split, harnessopt_wins
+from myis_research.harness.benchmark import SelectionDecision, deterministic_stratified_split
 from myis_research.harness.models import canonical_hash
 from myis_research.harness.runner import KERNEL_VERSION
 
@@ -132,19 +132,28 @@ class HarnessTests(unittest.TestCase):
             self.assertEqual(receipt["status"], "sync_deferred")
             self.assertNotIn("must-not-leak", (run_dir / "runtime.jsonl").read_text(encoding="utf-8"))
 
-    def test_dapfam_split_and_win_rule(self) -> None:
-        split_a = deterministic_stratified_split([(f"q{i}", "A" if i % 2 else "B") for i in range(20)], seed=7)
-        split_b = deterministic_stratified_split([(f"q{i}", "A" if i % 2 else "B") for i in range(20)], seed=7)
-        self.assertEqual(split_a, split_b)
-        self.assertTrue(
-            harnessopt_wins(
-                {
-                    "dapfam": {"out_ndcg_at_100": 0.10, "out_recall_at_100": 0.20},
-                    "skillopt": {"out_ndcg_at_100": 0.11, "out_recall_at_100": 0.21},
-                    "harnessopt": {"out_ndcg_at_100": 0.12, "out_recall_at_100": 0.22},
-                }
-            )
+    def test_dapfam_split_and_strict_selection_rule(self) -> None:
+        split_a = deterministic_stratified_split(
+            [(f"q{i}", "A" if i % 2 else "B") for i in range(20)],
+            seed=7,
+            ratios=(0.60, 0.20, 0.20),
         )
+        split_b = deterministic_stratified_split(
+            [(f"q{i}", "A" if i % 2 else "B") for i in range(20)],
+            seed=7,
+            ratios=(0.60, 0.20, 0.20),
+        )
+        self.assertEqual(split_a, split_b)
+        accepted = SelectionDecision.decide(
+            candidate_id="new", incumbent_id="old", primary_metric="out_recall_at_100",
+            candidate_score=0.22, incumbent_score=0.21,
+        )
+        tied = SelectionDecision.decide(
+            candidate_id="tie", incumbent_id="old", primary_metric="out_recall_at_100",
+            candidate_score=0.21, incumbent_score=0.21,
+        )
+        self.assertTrue(accepted.accepted)
+        self.assertFalse(tied.accepted)
 
 
 if __name__ == "__main__":

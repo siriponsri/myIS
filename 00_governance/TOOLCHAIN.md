@@ -1,44 +1,113 @@
-# Minimal Toolchain Contract
+# IS1 Research V0.1 Toolchain and Authority
 
-Exact source pins and adoption states are recorded in
-`00_governance/config/tools.lock.yaml`.
+Use one source of truth per responsibility. Exact adopted tool pins remain in
+`00_governance/config/tools.lock.yaml`; dependency resolution is solely
+`pyproject.toml + uv.lock`.
 
-## Active foundation
+## Authority map
 
-| Capability | Tool | Operating boundary |
+| Layer | Role | Canonical content | Forbidden role |
+|---|---|---|---|
+| Git + validated artifacts | reviewable system of record | code, docs, configs, skills, decisions, manifests, metrics | secrets, protected confirmation data |
+| Harness kernel | deterministic control plane | schemas, gates, budgets, metrics, protection, validation | learning from confirmation |
+| Policy | bounded probabilistic surface | grounded views/routes/fusion/ranking/evidence/stopping | evaluator, qrels, split, executable expansion |
+| Brain | human-readable decision/status/pointer layer | concise summaries and evidence pointers | paper numeric truth or shadow evaluator |
+| MCP | typed external capability | provenance-bearing bounded reads/writes | scientific gate authority |
+| Dashboard | loopback read-only projection | metadata/digests and typed decision preview | direct artifact editing or remote operation |
+| PDF receipt ledger | ignored local audit surface | tamper-evident access receipts | PDF content, credentials, protected outcomes |
+| MLflow | searchable rebuildable mirror | allowlisted docs/results/metrics/rubrics/rules/tools/skills/environment | canonical truth, PDFs, qrels, membership, protected per-query data |
+
+## Dependency authority
+
+- Require Python 3.11 and record the exact patch.
+- `pyproject.toml` declares the project and groups/extras; `uv.lock` locks the
+  complete graph. No requirements file is a second authority.
+- Every measured manifest records uv version, OS/architecture, accelerator/CUDA,
+  selected groups/extras, and `uv.lock` SHA-256.
+- Replay with `uv sync --locked` and exact selections.
+
+## Model/provider policy
+
+| Role | Default | Boundary |
 |---|---|---|
-| Research orchestration | myIS HarnessOpt kernel | Immutable evaluator/split/approval/budget/logging; typed policy is the only optimization surface |
-| Harness baseline | SkillOpt `v0.2.0` | Matched four-arm baseline; no model-weight optimization in HarnessOpt v1 |
-| Runtime events | structlog `26.1.0` | One redacted event to console, runtime JSONL and milestone projection |
-| Experiment lineage | MLflow `3.14.0` | Searchable mirror; validated manifests and metric artifacts remain paper truth |
-| Evidence synthesis | HyperResearch `v0.9.1` | Optional Claude-only staging flow; approved sources, no automatic implementation |
-| Shared memory | Obsidian Brain | One human-readable Brain, one serial writer |
-| Codex web search | Native live search | Native capability; no duplicate search MCP |
-| Claude web search | Open-WebSearch `2.1.11` | STDIO, DuckDuckGo default, DuckDuckGo/Bing only |
-| Library documentation | Context7 remote MCP | Documentation lookup, no API key initially |
+| Implementation | GPT-5.6 Sol High | code/docs/tests, no scientific result implied |
+| Measured optimizer | GPT-5.6 Sol Medium | escalate to High only after qrels-blind validity failure |
+| A2/A3 main study | frozen selected Sol model/provider/effort/budget | identical across arms |
+| Luna | support tasks or separate cost ablation | never mixed into main A2/A3 |
+| Third-party provider | development only by default | upstream identity limitation disclosed |
 
-Git is canonical for prompt, skill, code, and document source. MLflow records
-run lineage and generated artifacts. The Brain stores concise decisions and
-pointers. Search results are untrusted discovery inputs until primary sources
-are fetched, verified, and registered.
+Log requested/resolved model, provider, endpoint class, effort, fallback,
+request ID, temperature/seed where available, token usage, latency, cost, and
+repeat ID. Requested/resolved identities must match and silent fallback is
+forbidden in measured work. Local vLLM additionally pins weights/revision/dtype/
+quantization/engine and requires compute approval.
 
-Project research skills are canonical under `.agents/skills/` and linked into
-Codex/Claude with `05_code/scripts/sync_project_skills.ps1`. Upstream skills are
-never bulk-installed or auto-updated.
+## Adapter contract
 
-## Retired or rejected
+Brain, MCP, retrieval, model, PageIndex, and store adapters should expose
+`preflight`, `dry_run`, `execute`, `cancel`, and `collect`, and return a typed
+provenance envelope:
 
-- Open Deep Research is archived because it overlaps HyperResearch.
-- Experience Brain and `agentmemory` are retired to keep one memory layer.
-- `pplx-cli` is not adopted because it adds an API dependency without a unique
-  role in the minimal stack.
+```json
+{
+  "adapter": "name@version",
+  "operation": "read",
+  "request_hash": "<sha256>",
+  "source_uri": "<redacted-or-public>",
+  "retrieved_at": "<RFC3339>",
+  "content_hash": "<sha256>",
+  "license": "<identifier-or-unknown>",
+  "payload": {}
+}
+```
 
-Historical files may retain these names as immutable provenance. They are not
-active operating instructions.
+Default to read-only. Writes require dry-run, idempotency key, append-only
+receipt, serial-writer boundary, redaction, and Owner scope. MCP output is
+untrusted until schema/provenance validation and cannot bypass repository gates.
 
-## Evaluation-only tools
+## Dashboard and identity
 
-Loop Engineering and Open Code Review may run only at their pinned commits in a
-disposable fixture workspace. They receive no credentials and no write access
-to App, Research, Brain, or persistent stores. Adoption requires an evidence
-report and a separate Owner decision.
+The dashboard uses FastAPI/Uvicorn only on `127.0.0.1`, validates Host/Origin,
+uses no CDN/CORS, sends `no-store`, and protects decision writes with session and
+CSRF tokens. Backend Windows/OS identity is authoritative and converted to a
+privacy-preserving stable actor ID. Fail closed on remote or multi-user use.
+Remote deployment requires a new authenticated identity design.
+
+The dashboard never edits manifests, metrics, qrels, splits, baselines, or
+results. The Owner decision API and local PDF receipt ledger are the only write
+surfaces described in `OWNER_GATES.md`.
+
+## MLflow mirror policy
+
+Three local experiments separate bootstrap, catalog, and scientific projection.
+Bootstrap contains zero artifacts/metrics. Catalog may mirror allowlisted docs,
+rubrics, rules, tools, skills, and environment. Scientific projection may mirror
+validated aggregate results, metrics, and environment. Each file is selected
+explicitly, hash-checked, redacted, non-symlink, inside its canonical root, and
+projected idempotently through one serialized SQLite writer.
+
+Mirror receipts and rebuild plans are append-only. Mirror failure is deferred and
+cannot invalidate a canonical bundle. The persistent store is outside Git.
+
+## PageIndex position
+
+PageIndex is optional for within-document evidence after BM25/dense large-corpus
+routing. It requires a separate pilot contract and cost/license/privacy review.
+It is not automatically adopted as DAPFAM first-stage retrieval, and local tree
+construction does not imply reasoning retrieval is API/GPU-free.
+
+## Skills and agent roles
+
+Project skills under `.agents/skills/` are versioned procedures, not code
+contracts or hidden benchmark data. Use Planner, Implementer, Experiment,
+Verifier, and Reporter roles only where independence is useful. Parallel agents
+share no permission to cross protected surfaces; a verifier should use frozen
+artifacts and a reporter should project only validated manifests.
+
+## Evidence tools
+
+Search and literature tools are discovery surfaces. Register primary sources,
+version, license, hash, and provenance before they influence protocol. Raw PDFs
+remain local-only until license/privacy approval and must not enter Git or MLflow.
+Historical retired tool names may remain in provenance but do not become active
+instructions.

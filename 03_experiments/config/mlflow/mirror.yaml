@@ -1,0 +1,38 @@
+schema_version: myis.mlflow-mirror-config.v1
+program_id: is1-research
+research_version: "0.1"
+authority: git-and-validated-artifacts
+store_env: MYIS_MLFLOW_STORE
+database_relative_path: database/mlflow.db
+artifact_relative_path: artifacts
+receipt_relative_path: receipts/mlflow
+ignored_local_deferred_root: 04_outputs/artifacts/mlflow/deferred
+writer:
+  mode: serialized
+  lock_relative_path: .mlflow-writer.lock
+  sqlite_workers: 1
+experiments:
+  bootstrap: is1-research-bootstrap
+  catalog: is1-research-catalog
+  scientific: is1-research-scientific
+allowlisted_kinds:
+  catalog: [docs, rubrics, rules, tools, skills, environment]
+  scientific: [results, metrics, environment]
+forbidden_content:
+  - qrels
+  - confirmation split membership
+  - confirmation outcomes
+  - per-query records
+  - credentials
+  - PDFs
+  - raw provider payloads
+upload_policy:
+  files_must_be_explicit: true
+  directory_uploads: false
+  validated_required: true
+  redacted_required: true
+  sha256_required: true
+recovery:
+  mlflow_is_authoritative: false
+  automatic_repair: false
+  rebuild_from_git_and_validated_artifacts: true

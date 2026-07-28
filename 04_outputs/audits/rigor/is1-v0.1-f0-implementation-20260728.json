@@ -1,0 +1,75 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "is1-v0.1-f0-implementation-20260728",
+  "artifact": "IS1 Research V0.1 F0 implementation package",
+  "artifact_path": "PLAN.md",
+  "artifact_sha256": "b2485beb57ed41ae05187754dcd209551797f064b6a45e1e87b02c7db4e3d2b9",
+  "review_status": "blocked_authorization",
+  "governance": {
+    "approval_valid": false,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "No immutable G0 Owner Gate decision record exists under 00_governance/approvals/."
+    ]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "The F0 implementation is structurally valid and confirmation-blind, but this artifact-only review cannot authorize scientific execution without a canonical G0 record.",
+    "strengths": [
+      "Repository restructure, protected BATCH_2A bytes, dependency lock, and all offline tests validate.",
+      "Gate C and Gate R are independent, point-delta aligned, and bound to strict selection and frozen-pool contracts.",
+      "No confirmation membership, qrels, protected payloads, or per-query confirmation outcomes were reviewed."
+    ],
+    "weaknesses": [
+      "The canonical Owner Gate ledger contains only .gitkeep, so approval scope and evidence hashes are not independently reviewable from repository artifacts.",
+      "F1 through Q remain planned or gated and have no scientific run bundle to assess."
+    ]
+  },
+  "dimensions": {},
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "governance",
+      "severity": "critical",
+      "target_artifact": "00_governance/approvals/",
+      "target_entity": "G0 decision",
+      "evidence_locator": "Directory contains only .gitkeep",
+      "observation": "No immutable, hash-chained G0 decision record is present.",
+      "reasoning": "The artifact-only review cannot infer canonical approval from chat history or an agent recommendation, and scientific phases must not open by implication.",
+      "suggestion": "After committing the implementation, use the loopback dashboard preview and explicit confirmation flow to append a scoped G0 decision that binds the final commit and evidence hashes."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "03_experiments/templates/experiment-manifest.yaml",
+      "target_entity": "planning placeholders",
+      "evidence_locator": "Null split, evaluator, isolation, provider, environment, and artifact commitments",
+      "observation": "The manifest is explicitly a planning template and is not executable as a measured run.",
+      "reasoning": "This is correct for F0, but no later phase may treat the template as a frozen run manifest.",
+      "suggestion": "Resolve every applicable commitment from validated artifacts and a named Owner decision before F1 or later execution."
+    }
+  ],
+  "questions_for_owner": [
+    "Approve or reject the exact deprecated-file cleanup list separately.",
+    "After the implementation commit, create the canonical G0 decision before any scientific phase is opened."
+  ],
+  "read_order": [
+    "00_governance/approvals/ (.gitkeep only)",
+    "PLAN.md",
+    "03_experiments/templates/experiment-manifest.yaml",
+    "offline restructure/integrity validation results",
+    "local MLflow bootstrap aggregate metadata",
+    "README.md",
+    "AGENTS.md",
+    "FULL_RESEARCH_TRACK_PLAN.md",
+    "LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md",
+    "00_governance/OWNER_GATES.md",
+    "00_governance/OPERATIONS.md",
+    "00_governance/TOOLCHAIN.md"
+  ]
+}

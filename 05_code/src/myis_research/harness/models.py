@@ -9,6 +9,21 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
+from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_FAMILY_ID, RESEARCH_VERSION
+
+
+SHA256_HEX_LENGTH = 64
+
+
+def is_sha256(value: str | None) -> bool:
+    if value is None or len(value) != SHA256_HEX_LENGTH:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return True
+
 
 def canonical_hash(value: Any) -> str:
     payload = json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
@@ -32,6 +47,18 @@ class RunState(StrEnum):
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
     INVALIDATED = "INVALIDATED"
+
+
+class EndpointClass(StrEnum):
+    OFFICIAL = "official"
+    THIRD_PARTY = "third_party"
+    LOCAL = "local"
+
+
+class SeedControl(StrEnum):
+    FIXED = "fixed"
+    UNAVAILABLE = "unavailable"
+    NOT_APPLICABLE = "not_applicable"
 
 
 GOAL_TRANSITIONS = {
@@ -80,6 +107,198 @@ class GoalSpec:
 
 
 @dataclass(frozen=True)
+class RuntimeEnvironment:
+    """Exact replay environment recorded for every measured run."""
+
+    python_version: str
+    uv_version: str
+    os: str
+    architecture: str
+    uv_lock_sha256: str
+    accelerator: str = "cpu"
+    cuda_stack: str | None = None
+    selected_groups: tuple[str, ...] = ()
+    selected_extras: tuple[str, ...] = ()
+
+    def validate(self) -> None:
+        for name, value in {
+            "python_version": self.python_version,
+            "uv_version": self.uv_version,
+            "os": self.os,
+            "architecture": self.architecture,
+            "accelerator": self.accelerator,
+        }.items():
+            if not value.strip():
+                raise ValueError(f"{name} is required")
+        if not self.python_version.startswith("3.11."):
+            raise ValueError("measured runs require an exact Python 3.11 patch version")
+        if not is_sha256(self.uv_lock_sha256):
+            raise ValueError("uv_lock_sha256 must be SHA-256")
+        if len(set(self.selected_groups)) != len(self.selected_groups):
+            raise ValueError("selected_groups must be unique")
+        if len(set(self.selected_extras)) != len(self.selected_extras):
+            raise ValueError("selected_extras must be unique")
+
+
+@dataclass(frozen=True)
+class ProviderExecution:
+    """Requested and resolved inference identity with explicit fallback state."""
+
+    requested_model: str
+    resolved_model: str
+    provider: str
+    effort: str
+    endpoint_class: EndpointClass = EndpointClass.OFFICIAL
+    fallback_allowed: bool = False
+    fallback_used: bool = False
+    request_id: str | None = None
+    temperature: float | None = None
+    seed: int | None = None
+    input_tokens: int = 0
+    output_tokens: int = 0
+    latency_seconds: float = 0.0
+    cost_usd: float = 0.0
+
+    def validate(self, *, measured: bool = True) -> None:
+        for name, value in {
+            "requested_model": self.requested_model,
+            "resolved_model": self.resolved_model,
+            "provider": self.provider,
+            "effort": self.effort,
+        }.items():
+            if not value.strip():
+                raise ValueError(f"{name} is required")
+        if self.requested_model != self.resolved_model:
+            raise ValueError("requested and resolved model identities differ")
+        if measured and (self.fallback_allowed or self.fallback_used):
+            raise ValueError("provider/model fallback is forbidden in measured runs")
+        if min(self.input_tokens, self.output_tokens) < 0:
+            raise ValueError("token usage must be non-negative")
+        if self.latency_seconds < 0 or self.cost_usd < 0:
+            raise ValueError("latency and cost must be non-negative")
+
+
+@dataclass(frozen=True)
+class ReplicationContract:
+    repeat_id: str = "r0"
+    stochastic: bool = False
+    seed_control: SeedControl = SeedControl.NOT_APPLICABLE
+    matched_group_id: str | None = None
+    order_index: int = 0
+
+    def validate(self) -> None:
+        if not self.repeat_id.strip():
+            raise ValueError("repeat_id is required")
+        if self.order_index < 0:
+            raise ValueError("order_index must be non-negative")
+        if self.stochastic and self.seed_control == SeedControl.NOT_APPLICABLE:
+            raise ValueError("stochastic runs must declare fixed or unavailable seed control")
+
+
+@dataclass(frozen=True)
+class StatisticsContract:
+    primary_metric: str
+    bootstrap_resamples: int = 10_000
+    confidence_level: float = 0.95
+    effect_size: str = "rank_biserial"
+    comparison_family_id: str = "primary"
+    comparison_role: str = "primary"
+    correction: str = "none"
+
+    def validate(self) -> None:
+        if not self.primary_metric.strip():
+            raise ValueError("primary_metric is required")
+        if self.bootstrap_resamples != 10_000:
+            raise ValueError("confirmation uses exactly 10,000 paired-bootstrap resamples")
+        if self.confidence_level != 0.95:
+            raise ValueError("confirmation confidence level must be 0.95")
+        if self.effect_size != "rank_biserial":
+            raise ValueError("effect_size must be rank_biserial")
+        if self.comparison_role not in {"primary", "additional"}:
+            raise ValueError("comparison_role must be primary or additional")
+        expected = "none" if self.comparison_role == "primary" else "holm"
+        if self.correction != expected:
+            raise ValueError(f"{self.comparison_role} comparisons require correction={expected}")
+
+
+@dataclass(frozen=True)
+class ProtectedSurfaceContract:
+    editable: tuple[str, ...] = ()
+    protected: tuple[str, ...] = ()
+
+    def validate(self) -> None:
+        editable = set(self.editable)
+        protected = set(self.protected)
+        overlap = editable & protected
+        if overlap:
+            raise ValueError(f"editable and protected surfaces overlap: {sorted(overlap)}")
+        if len(editable) != len(self.editable) or len(protected) != len(self.protected):
+            raise ValueError("surface paths must be unique")
+
+
+@dataclass(frozen=True)
+class ExecutionIsolationContract:
+    network_mode: str
+    network_guard_sha256: str
+    cached_inputs_sha256: str
+    data_scopes: tuple[str, ...] = ("adaptation", "selection")
+    dependency_replay_command: str = "uv sync --locked"
+    confirmation_access: bool = False
+
+    def validate(self) -> None:
+        if self.network_mode != "offline":
+            raise ValueError("measured optimization requires offline network mode")
+        if not is_sha256(self.network_guard_sha256) or not is_sha256(self.cached_inputs_sha256):
+            raise ValueError("network guard and cached inputs require SHA-256 commitments")
+        if not self.data_scopes or set(self.data_scopes) - {"adaptation", "selection"}:
+            raise ValueError("agent data scopes are limited to adaptation and selection")
+        if len(set(self.data_scopes)) != len(self.data_scopes):
+            raise ValueError("agent data scopes must be unique")
+        if self.dependency_replay_command != "uv sync --locked":
+            raise ValueError("dependency replay must use uv sync --locked")
+        if self.confirmation_access:
+            raise ValueError("confirmation access is forbidden in the agent workspace")
+
+
+@dataclass(frozen=True)
+class CandidatePoolReference:
+    candidate_pool_sha256: str
+    policy_sha256: str
+    final_k: int
+    query_count: int
+    frozen: bool = True
+
+    def validate(self) -> None:
+        if not is_sha256(self.candidate_pool_sha256):
+            raise ValueError("candidate_pool_sha256 must be SHA-256")
+        if not is_sha256(self.policy_sha256):
+            raise ValueError("policy_sha256 must be SHA-256")
+        if self.final_k <= 0 or self.query_count <= 0:
+            raise ValueError("candidate pool dimensions must be positive")
+
+
+@dataclass(frozen=True)
+class ResearchVersionSpec:
+    program_id: str = PROGRAM_ID
+    display_name: str = DISPLAY_NAME
+    research_version: str = RESEARCH_VERSION
+    protocol_family_id: str = PROTOCOL_FAMILY_ID
+    revision_id: str = "uncommitted"
+    owner_decision_id: str | None = None
+
+    def validate(self) -> None:
+        if (
+            self.program_id != PROGRAM_ID
+            or self.display_name != DISPLAY_NAME
+            or self.research_version != RESEARCH_VERSION
+            or self.protocol_family_id != PROTOCOL_FAMILY_ID
+        ):
+            raise ValueError("run is not bound to the canonical IS1 Research V0.1 identity")
+        if not self.revision_id.strip():
+            raise ValueError("revision_id is required")
+
+
+@dataclass(frozen=True)
 class RunSpec:
     run_id: str
     goal: GoalSpec
@@ -106,6 +325,15 @@ class RunSpec:
     module_pool_hash: str = "offline-fixture"
     parent_run_id: str | None = None
     trial_id: str | None = None
+    research: ResearchVersionSpec = field(default_factory=ResearchVersionSpec)
+    environment: RuntimeEnvironment | None = None
+    provider: ProviderExecution | None = None
+    replication: ReplicationContract | None = None
+    statistics: StatisticsContract | None = None
+    surfaces: ProtectedSurfaceContract | None = None
+    isolation: ExecutionIsolationContract | None = None
+    candidate_pool: CandidatePoolReference | None = None
+    artifact_hashes: dict[str, str] = field(default_factory=dict)
 
     def scope_hash(self) -> str:
         return canonical_hash(
@@ -116,6 +344,12 @@ class RunSpec:
                 "split": self.split,
                 "split_query_ids_hash": self.split_query_ids_hash,
                 "budget": self.budget,
+                "research": dataclass_dict(self.research),
+                "model_id": self.model_id,
+                "module_pool_hash": self.module_pool_hash,
+                "candidate_pool": dataclass_dict(self.candidate_pool) if self.candidate_pool else None,
+                "surfaces": dataclass_dict(self.surfaces) if self.surfaces else None,
+                "isolation": dataclass_dict(self.isolation) if self.isolation else None,
             }
         )
 

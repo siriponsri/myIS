@@ -1,5 +1,11 @@
 # Observability and Run Logging Rules
 
+> **Deprecated active instruction.** The maintained logging, immutable manifest,
+> MLflow mirror, dashboard, and receipt contracts are in
+> `LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md`, `00_governance/TOOLCHAIN.md`, and
+> `00_governance/OPERATIONS.md`. Retained temporarily for migration provenance;
+> archive/delete requires an exact-path Owner decision.
+
 These rules apply to every Research experiment, agent trial, benchmark arm and
 notebook demo. `PLAN.md`, `AGENTS.md` and Owner gates still control whether a
 run is allowed.
