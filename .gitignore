@@ -8,12 +8,6 @@ __pycache__/
 *.egg-info/
 
 # Research runtime artifacts
-03_experiments/runtime/artifacts/*
-!03_experiments/runtime/artifacts/.gitkeep
-03_experiments/runtime/database/*
-!03_experiments/runtime/database/.gitkeep
-03_experiments/runtime/runs/*
-!03_experiments/runtime/runs/.gitkeep
 04_outputs/artifacts/*
 !04_outputs/artifacts/.gitkeep
 04_outputs/diagrams/*.svg
@@ -23,6 +17,7 @@ __pycache__/
 01_evidence/B-tier/*.pdf
 01_evidence/C-tier/*.pdf
 01_evidence/N-tier/*.pdf
+00_governance/approvals/.writer.lock
 
 # Tool workspaces and caches
 .hyperresearch/

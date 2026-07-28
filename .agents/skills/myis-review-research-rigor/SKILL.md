@@ -53,13 +53,15 @@ Score each dimension from 1 to 5:
 5. **Exploration integrity**: Are alternatives, failed paths, pivots, and stopping decisions documented honestly?
 6. **Methodological rigor**: Are baselines, ablations, repeated seeds, metric definitions, latency/cost, and reproducibility adequate?
 
-For DAPFAM, enforce the project contract:
+For DAPFAM, enforce the IS1 V0.1 contract:
 
 - Treat retrieval relevance as retrieval evidence only, never legal novelty or freedom-to-operate evidence.
-- Compare the reproduced reference, fixed human harness, SkillOpt baseline, and HarnessOpt under shared evaluator, split hashes, budgets, model roles, and module pool.
-- Require HarnessOpt to exceed both SkillOpt and the reproduced reference on OUT NDCG@100 and OUT Recall@100.
-- Report three fixed-seed means plus absolute and relative deltas. Do not use confidence intervals as a pass/fail rule.
-- Check IN NDCG@100 and Recall@100 drops are each no worse than 0.01 absolute and invalid-query rate is at most 1%.
+- Gate C uses one preregistered protocol-matched primary baseline and OUT Recall@100. Gate R uses the frozen no-rerank baseline and OUT nDCG@100 on the identical pool hash. Review the claims independently.
+- During development/selection, accept only a strictly greater preregistered primary score and reject ties.
+- On confirmation, classify positive point delta as observed improvement; use CI lower > 0 only for statistically supported superiority. A positive delta with a CI crossing zero is a higher measured score with uncertain superiority. MDE is prospective design sensitivity, not a pass threshold.
+- Require exact n, point estimates, paired delta, deterministic 10,000-resample paired-bootstrap 95% CI, rank-biserial effect, W/L/T, comparison-family metadata, and input/output hashes.
+- Apply Holm only to preregistered additional confirmatory comparisons. Verify that confirmation membership/qrels/per-query outcomes never entered the agent workspace.
+- For optional A0-A3 work, require matched A2/A3 model/provider/effort/budget/data/evaluator/repeats/stopping and no silent fallback; do not substitute Track S for Gate C/R.
 
 ## Compile findings
 

@@ -1,52 +1,172 @@
-schema_version: 1
-run_id: null
-track: C|R|S
-stage: performance_tuning|dev|confirmatory|bootstrap
-owner_approval_source: null
-git_commit: null
+# Template for newly emitted manifests. The harness writes JSON atomically;
+# this YAML is a planning/example surface and is not itself a measured result.
+schema_version: myis.run-manifest.v3
 
-dataset:
-  id: null
-  version: null
-  split: null
-  query_ids_sha256: null
+identity:
+  research:
+    program_id: is1-research
+    display_name: IS1 Research V0.1
+    research_version: "0.1"
+    protocol_family_id: candidate-exposure-freeze-ranking-v1
+    revision_id: null
+    owner_decision_id: null
+  run_id: null
+  goal_id: null
+  parent_run_id: null
+  trial_id: null
+  arm: C0  # C0|C1|C2|CF|R0|R1|R2|A0|A1|A2|A3|Q|P
+  phase: offline_fixture
+
+lifecycle:
+  started_at_utc: null
+  finished_at_utc: null
+  status: CREATED  # CREATED|PREFLIGHTED|RUNNING|SUCCEEDED|FAILED|CANCELLED|INVALIDATED
+  stop_reason: null
+
+approval:
+  approval_id: null
+  source: 00_governance/approvals/<decision-id>.json
+  approved_at_utc: null
+  scope_hash: null
+  budget_tier: R0_OFFLINE
+  held_out_allowed: false
+
+code:
+  repository: siriponsri/myIS
+  git_commit: null
+  dirty: false
 
 method:
-  path_id: null
-  prompt_version: null
-  skill_version: null
-  optimizer: null
+  kernel_version: null
+  policy_hash: null
+  config_hash: null
+  prompt_hash: null
+  skill_set_hash: null
+  model_id: null
+  module_pool_hash: null
+  provider:
+    requested_model: gpt-5.6-sol
+    resolved_model: gpt-5.6-sol
+    provider: openai
+    effort: medium
+    endpoint_class: official  # official|third_party|local
+    fallback_allowed: false
+    fallback_used: false
+    request_id: null
+    temperature: null
+    seed: null
+    input_tokens: 0
+    output_tokens: 0
+    latency_seconds: 0.0
+    cost_usd: 0.0
 
-model:
-  id: null
-  revision: null
-  provider: null
-  dtype: null
-  quantization: null
+inputs:
+  dataset_id: dapfam
+  dataset_manifest_hash: null
+  split: adaptation  # adaptation|selection|external_confirmation|descriptive_all
+  split_query_ids_hash: null
+  seed: 0
 
-inference:
-  engine: vllm|api
-  engine_version: null
-  client_chunk_size: null
-  concurrency: null
-  max_num_seqs: null
-  max_num_batched_tokens: null
-  max_context_tokens: null
-  max_output_tokens: null
-  seed: null
-  temperature: null
-  batch_invariance_mode: null
+evaluator:
+  evaluator_id: null
+  hash: null
+  immutable: true
 
-lineage:
-  mlflow_experiment_id: null
-  mlflow_run_id: null
-  parent_run_id: null
+environment:
+  python_version: 3.11.x
+  uv_version: null
+  os: Windows
+  architecture: null
+  uv_lock_sha256: null
+  accelerator: cpu
+  cuda_stack: null
+  selected_groups: []
+  selected_extras: []
 
-cost:
-  currency: USD
-  gpu_hour_rate: null
-  storage: null
-  bandwidth: null
-  api: null
-  total: null
+replication:
+  repeat_id: r0
+  stochastic: false
+  seed_control: not_applicable  # fixed|unavailable|not_applicable
+  matched_group_id: null
+  order_index: 0
 
+statistics:
+  primary_metric: out_recall_at_100
+  bootstrap_resamples: 10000
+  confidence_level: 0.95
+  effect_size: rank_biserial
+  comparison_family_id: gate-c-primary
+  comparison_role: primary  # primary|additional
+  correction: none  # additional comparisons require holm
+
+surfaces:
+  editable:
+    - policy.query_views
+    - policy.routes
+    - policy.candidate_budget
+    - policy.fusion
+    - policy.stopping
+  protected:
+    - confirmation.membership
+    - confirmation.qrels
+    - confirmation.per_query_outcomes
+    - evaluator
+    - split.membership
+    - corpus.family_mapping
+    - baseline.results
+    - governance
+    - manifest.validation
+
+isolation:
+  network_mode: offline
+  network_guard_sha256: null
+  cached_inputs_sha256: null
+  data_scopes: [adaptation, selection]
+  dependency_replay_command: uv sync --locked
+  confirmation_access: false
+
+candidate_pool:
+  candidate_pool_sha256: null
+  policy_sha256: null
+  final_k: 100
+  query_count: null
+  frozen: false
+
+declared_artifact_hashes:
+  corpus_sha256: null
+  qrels_snapshot_sha256: null
+  family_map_sha256: null
+  parser_sha256: null
+  query_view_schema_sha256: null
+  out_positive_count_commitment_sha256: null
+  analysis_plan_sha256: null
+  tie_break_contract_sha256: null
+
+budget:
+  limits:
+    trials: 0
+    tokens: 0
+    wall_clock_seconds: 0
+    retries: 0
+    cost_usd: 0
+  actual:
+    trials: 0
+    tokens: 0
+    wall_clock_seconds: 0
+    retries: 0
+    cost_usd: 0
+
+metrics:
+  summary_exact: {}
+  definition_version: myis.retrieval-metrics.v1
+
+artifacts: []
+validation:
+  schema: PENDING
+  hashes: PENDING
+  split_leakage: PENDING
+  determinism: PENDING
+retention:
+  class: research-run
+  automatic_delete: false
+redaction_policy_version: myis.redaction.v1

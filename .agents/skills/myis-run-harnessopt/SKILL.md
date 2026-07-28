@@ -1,86 +1,50 @@
 ---
 name: myis-run-harnessopt
-description: Preflight, dry-run, execute, collect, and compare a governed myIS HarnessOpt experiment against fixed-harness, SkillOpt, and reproduced-reference baselines. Use for approved HarnessOpt or DAPFAM benchmark work that must preserve split isolation, budgets, immutable manifests, structlog JSONL, MLflow lineage, and paper-grade result provenance.
+description: Preflight, dry-run, execute, collect, and compare an approved optional IS1 Research V0.1 A0-A3 HarnessOpt adaptation-surface study while preserving Gate C/R, split isolation, immutable manifests, budgets, provider identity, and aggregate-only confirmation.
 ---
 
-# Run myIS HarnessOpt
+# Run IS1 Research V0.1 HarnessOpt
 
-Optimize the evolvable harness policy while preserving the immutable evaluation kernel. Never change model weights under this workflow.
+HarnessOpt is optional Track S methods work. It does not replace the Gate C
+candidate-exposure protocol or Gate R frozen-pool ranking protocol.
 
-## Load authority and contract
+Read `AGENTS.md`, `PLAN.md`, `00_governance/OWNER_GATES.md`, the active approval,
+run spec, split commitments, budget, module registry, and
+`references/harnessopt-contract.md`.
 
-Read, in order:
+## Preserve boundaries
 
-1. `AGENTS.md`
-2. `00_governance/OWNER_GATES.md`
-3. `PLAN.md`
-4. `00_governance/config/tools.lock.yaml`
-5. [references/harnessopt-contract.md](references/harnessopt-contract.md)
-6. The selected goal, approval, run specification, split manifest, budget, and module registry.
+Keep evaluator, metric/statistics definitions, split/qrels commitments,
+confirmation boundary, family mapping, baseline/frozen results, approval/budget/
+redaction/manifest validation, target model roles, module pool, and stopping
+ceilings fixed. Reject any patch touching protected paths or adding undeclared
+tools/executable code.
 
-If facts conflict, a source pin has drifted, or authorization is incomplete, stop and report the exact blocker. A recommendation, earlier run, or silent response is not approval.
+Arms are A0 frozen baseline, A1 human seed skill, A2 optimized skill/frozen
+harness, and A3 optimized skill plus declared typed policy. A2/A3 must use the
+same initial state, model, provider, effort, data access, evaluator, tools,
+budget, repeat schedule, and stopping. Start qrels-blind calibration with
+GPT-5.6 Sol Medium; escalate to High only after validity failure and then freeze
+the result. Luna is support-only or a separate cost ablation. No silent fallback.
 
-## Preserve immutable and evolvable boundaries
+## Execute
 
-Keep these kernel components fixed across all comparison arms:
+1. Validate IS1 identity, G5 approval, `RunSpec`, exact Python/uv/OS/lock
+   environment, provider identity, split hashes, protected/editable surfaces,
+   repeats, module pool, budget, and fresh output path.
+2. Dry-run fixtures to prove protected access denial, patch denial, budget stop,
+   event ordering, immutable manifest, MLflow-deferred behavior, and recovery.
+3. Expose only adaptation/selection qrels and prevent protected network
+   re-download.
+4. Execute adapter lifecycle `preflight -> dry_run -> execute -> collect` and
+   preserve every repeat, including invalid/failed runs.
+5. Accept a trial only when its preregistered primary selection score is strictly
+   greater than the incumbent. Reject ties and lower scores.
+6. Validate per-query/aggregate consistency, hashes, cost, provider/fallback,
+   repeat matching, batch-order invariance, and protected-surface integrity.
+7. Write canonical artifacts and manifest immutably. Mirror allowlisted files to
+   MLflow only after validation; mirror failure cannot invalidate the bundle.
 
-- evaluator and metric definitions;
-- split guard and query-ID hashes;
-- approval and budget enforcement;
-- event logging, artifact schemas, and manifest validation;
-- target/optimizer model roles and revisions;
-- tool/module pool and stopping budget.
-
-Allow optimization only in the declared policy surface: query and context planning, retrieval route, representation, fusion/RRF, reranking/evidence policy, fallback, and stopping decisions.
-
-Reject any candidate that changes the evaluator, sees protected confirmation feedback, changes model weights, expands tools, or exceeds the declared budget.
-
-## Follow the state machines
-
-Advance a goal only through `DRAFT -> REVIEWED -> APPROVED -> ACTIVE -> CLOSED` or `CANCELLED`.
-
-Advance a run only through `CREATED -> PREFLIGHTED -> RUNNING -> SUCCEEDED`, `FAILED`, `CANCELLED`, or `INVALIDATED`.
-
-Persist the transition reason, actor, approval reference, timestamp, and event ID. Never repair an invalid transition by editing history.
-
-## Execute the workflow
-
-1. **Preflight**
-   - Validate `GoalSpec`, `ApprovalRecord`, `RunSpec`, split hashes, model pins, module registry, seed list, budget, and output root.
-   - Verify the comparison arms are the reproduced reference, fixed human harness, SkillOpt baseline, and HarnessOpt.
-   - Verify SkillOpt is pinned to the lock file and is treated only as a baseline.
-   - Verify run artifacts do not already exist at the target run ID.
-
-2. **Dry run**
-   - Exercise fixtures or permitted development data only.
-   - Prove split denial, budget denial, cancellation, failure finalization, event ordering, MLflow retry receipts, and atomic manifest behavior.
-   - Do not treat fixture output as scientific evidence.
-
-3. **Approval check**
-   - Require R3 approval before paid/API/GPU/Vast execution.
-   - Require R4 approval and one frozen method before prospective confirmation.
-   - Stop if the approval scope, ceiling, split, or model differs from `RunSpec`.
-
-4. **Execute**
-   - Call the harness adapter lifecycle in order: `preflight`, `dry_run`, `execute`, `collect`.
-   - Use `cancel` only for an authorized cancellation or a kernel-enforced ceiling.
-   - Emit every diagnostic event through the configured structlog context to console and `runtime.jsonl`; derive milestones into `progress.jsonl`.
-   - Never let MLflow availability determine scientific execution success.
-
-5. **Collect and validate**
-   - Require all artifacts listed in the contract.
-   - Recompute aggregate metrics from `per_query_metrics.jsonl` and compare them to `metrics.json`.
-   - Validate all hashes, event ordering, split identity, budget use, Git revision, prompt/config/skill pins, and MLflow receipts.
-   - Write `manifest.json` atomically, last, and only after `validation_report.json` passes.
-
-6. **Compare**
-   - Report three fixed-seed means, absolute deltas, and relative deltas.
-   - Declare a HarnessOpt win only when both OUT NDCG@100 and OUT Recall@100 exceed both SkillOpt and the reproduced DAPFAM reference.
-   - Enforce each IN NDCG@100 and Recall@100 drop at no more than 0.01 absolute and invalid-query rate at no more than 1%.
-   - Treat MAP, MRR, P@10, ALL, latency, and cost as diagnostics, not alternate win conditions.
-
-## Finish safely
-
-On failure or cancellation, still finalize diagnostic artifacts and record the terminal state; do not fabricate scientific metrics. Keep MLflow retry receipts append-only. Present results as retrieval relevance evidence only, never as legal novelty or freedom-to-operate evidence.
-
-Do not alter Git state, publish, access another track, or tune after the frozen confirmation cohort has been observed.
+Do not choose the best repeat or tune after confirmation. Confirmation executes
+outside the workspace and returns aggregate-only statistics. Present DAPFAM as
+retrieval relevance, never legal novelty/FTO evidence.

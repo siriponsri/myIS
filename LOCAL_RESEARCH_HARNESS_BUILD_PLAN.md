@@ -1,236 +1,255 @@
-# Local Research Harness / HarnessOpt Build Plan
+# IS1 Research V0.1 Local Harness Build Contract
 
-> สถานะ: `DECIDED_IMPLEMENTATION_ROADMAP`
-> Execution authority: [`PLAN.md`](PLAN.md), [`AGENTS.md`](AGENTS.md), [`00_governance/OWNER_GATES.md`](00_governance/OWNER_GATES.md)
-> Scope เปิดแล้ว: code, offline fixtures, local logs/MLflow bootstrap และ notebook
-> Scope ยังปิด: paid/API/GPU/Vast.ai, scientific run และ confirmation set
+Status: `IMPLEMENTATION_ACTIVE_SCIENTIFIC_RUNS_GATED`
+Execution authority: `PLAN.md`, `AGENTS.md`, and `00_governance/OWNER_GATES.md`
 
-## 1. เป้าหมาย
+## Harness definition
 
-Harness ไม่ใช่เพียงตัวรัน prompt แต่เป็นระบบควบคุม research agent end-to-end: รับ goal, ตรวจ approval/split/budget, เลือก workflow, บันทึก event/metric/artifact, validate lineage และสร้างหลักฐานที่ paper ใช้ซ้ำได้
+The harness is the deterministic control system around retrieval/model policy:
+typed inputs, lifecycle, approvals, protected surfaces, budgets, tools, context,
+metrics, statistics, manifests, logs, recovery, Owner decisions, and mirrors.
 
-**HarnessOpt** ปรับ policy ของ workflow ภายใต้ kernel ที่แก้ไม่ได้. **SkillOpt** เป็น baseline. ไม่มีการเปลี่ยน model weights ใน HarnessOpt v1
+> Probabilistic components propose. Deterministic contracts decide validity,
+> comparability, immutability, and reportability.
 
-## 2. สถาปัตยกรรมสองชั้น
+## Implemented architecture
 
 ```mermaid
 flowchart TB
-    O["Owner-approved Goal"] --> K["Immutable Harness Kernel"]
-    P["Evolvable HarnessPolicy"] --> K
-    K --> A["Brain / Retrieval / Model Adapters"]
-    A --> E["Immutable Evaluator"]
-    K --> L["structlog runtime + progress"]
-    K --> M["Local MLflow mirror"]
-    E --> C["Canonical run manifest"]
-    L --> C
-    M --> R["Append-only MLflow receipt"]
+    O["Owner-approved goal/decision"] --> K["Deterministic kernel"]
+    P["Typed probabilistic policy"] --> K
+    K --> A["Read-only-first typed adapters"]
+    A --> T["Retrieval/model tools"]
+    T --> E["Frozen evaluator contracts"]
+    E --> M["Immutable manifest v3"]
+    M --> L["Rebuildable local MLflow mirror"]
+    O --> D["Loopback read-only dashboard"]
+    D --> G["Append-only Owner decision ledger"]
 ```
 
-### Immutable Harness Kernel
+The kernel owns schemas, lifecycle, identity, approvals, split and qrels
+commitments, budget ceilings, family dedup/tie-break, metrics/statistics,
+redaction, immutable artifacts, confirmation boundaries, and validation.
 
-Optimizer ห้ามแก้:
+The policy may own only declared grounded query views, allowlisted routes,
+route depth/quota, candidate budget allocation, fusion, ranking/evidence depth,
+and stopping. It cannot alter evaluator code, ground truth, family mapping,
+confirmation access, or executable tools outside an allowlist.
 
-- evaluator และ metric definitions
-- split/query-ID guard
-- approval และ held-out gate
-- budget/stop enforcement
-- event schema, redaction และ logging sinks
-- manifest hashing/validation
-- module registry/allowlist
-- trial lineage และ comparison validator
+## Public contracts and modules
 
-### Evolvable HarnessPolicy
+| Module | Implemented contract |
+|---|---|
+| `harness/models.py` | `GoalSpec`, `ApprovalRecord`, `ResearchVersionSpec`, `RuntimeEnvironment`, `ProviderExecution`, `ReplicationContract`, `StatisticsContract`, `ProtectedSurfaceContract`, `ExecutionIsolationContract`, `CandidatePoolReference`, `RunSpec`, events/artifacts/results |
+| `harness/policy.py` | grounded `QueryViewPolicy`, route-specific `RoutePolicy`, `CandidateBudget`, `FusionContract`, `HarnessPolicy` |
+| `harness/candidate_ledger.py` | deterministic family ledger and `freeze_candidate_pool` |
+| `harness/metrics.py` | family Recall/nDCG and canonical strict comparison helpers |
+| `harness/statistics.py` | paired delta, deterministic 10k bootstrap CI, W/L/T, rank-biserial effect, Holm support |
+| `harness/benchmark.py` | explicit-ratio split compatibility, `SplitFreezeCommitment`, strict `SelectionDecision`, independent C/R comparisons and confirmation classification |
+| `harness/manifest.py` | immutable no-overwrite manifest v3 and receipts |
+| `harness/validation.py` | v3 validation and v2 read-only legacy validation |
+| `protection.py` | protected path/key and aggregate-only boundaries |
+| `providers.py` | no-fallback and matched A2/A3 validation |
+| `confirmation.py` | hash-only request and aggregate-only response; no evaluator or protected-data loader |
+| `ledger.py`, `dashboard/*` | immutable governance decisions, loopback security, allowlisted viewer/receipts |
+| `mlflow_mirror.py` | explicit-file, validated/redacted, rebuildable local mirror |
 
-Optimizer แก้ได้ผ่าน typed schema เท่านั้น:
+Every external JSON/YAML/TOML input is parsed into a typed contract before use.
+Legacy v2 manifests may be read and validated but are never emitted as new runs.
 
-- query/context planning
-- retrieval routes และ representation
-- fusion/RRF strategy และ weights
-- retrieval/rerank/evidence depths
-- budget allocation ภายในเพดาน kernel
-- fallback และ stopping policy
+## State and immutable write contract
 
-Policy ไม่สามารถเพิ่ม executable/tool/module ที่อยู่นอก allowlist หรืออ่าน confirmation IDs
-
-## 3. Public contracts
-
-อยู่ใต้ `05_code/src/myis_research/harness/`:
-
-- `GoalSpec` — objective, track, success metric, stop conditions
-- `ApprovalRecord` — approval ID/source/time/scope hash/budget tier
-- `RunSpec` — arm, dataset/split/evaluator/policy/model/module/budget hashes
-- `RunEvent` — structured event envelope
-- `ArtifactRecord` — path, role, SHA-256, size, MIME, classification
-- `RunResult` — final state, metrics, bundle path, manifest hash
-- `HarnessPolicy` — optimizer-editable schema
-- `LocalHarness` — immutable execution kernel
-
-Adapter interface มี `preflight`, `dry_run`, `execute`, `cancel`, `collect`
-
-## 4. State machines
-
-Goal:
+Goals advance through:
 
 ```text
 DRAFT -> REVIEWED -> APPROVED -> ACTIVE -> CLOSED
-   \          \           \          -> CANCELLED
+                   \-> CANCELLED
 ```
 
-Run:
+Runs advance through:
 
 ```text
 CREATED -> PREFLIGHTED -> RUNNING -> SUCCEEDED
-    \          \            |----> FAILED
-     \----------\-----------|----> CANCELLED
-                              ----> INVALIDATED
+    |          |             |----> FAILED
+    |          |             |----> CANCELLED
+    \----------\-------------> INVALIDATED
 ```
 
-Transition ย้อนกลับไม่ได้; rerun สร้าง run ID ใหม่เสมอ
+Transitions are append-only. A rerun uses a new run ID. Canonical JSON records
+use no-overwrite creation. Manifest finalization occurs only after artifacts and
+validation are complete; existing manifests/decisions/receipts are never edited.
 
-## 5. Run bundle and authority
+## Candidate exposure kernel
+
+`HarnessPolicy.validate()` enforces unique grounded views, supported source
+fields, route IDs, route kind allowlists, positive depth/quota, quota <= depth,
+total route quota within maximum retrieval budget, final K, fusion references,
+family deduplication, provenance, and optional frozen-pool SHA-256.
+
+The family ledger retains publication-level provenance while deduplicating at
+family level. Stable ordering must not depend on batch order or Python mapping
+iteration. Required tie-break is score descending, best component rank ascending,
+then family ID ascending.
+
+Selection is implemented by `SelectionDecision.decide()`: canonicalize scores,
+accept only strict improvement, reject exact ties, and reject lower scores.
+
+## Gate C and Gate R kernel
+
+`CandidateExposureComparison` computes paired Gate C statistics for
+`out_recall_at_100`. `FrozenPoolRankingComparison` computes Gate R statistics for
+`out_ndcg_at_100` and rejects different pool hashes. Their classifications are
+independent.
+
+Confirmation classification is point-estimate aligned:
+
+- delta <= 0: `no_observed_improvement`;
+- delta > 0 with CI lower <= 0:
+  `higher_measured_score_uncertain_superiority`;
+- delta > 0 with CI lower > 0:
+  `statistically_supported_superiority`.
+
+MDE is not an input to this observed-result classifier. The primary comparison
+has no multiplicity correction; additional preregistered comparison families use
+Holm.
+
+## Split and protected-data implementation target
+
+`deterministic_stratified_split()` requires an explicit ratio and rejects
+duplicate query IDs. `SplitFreezeCommitment` binds the prospective-sensitivity
+report, seed, membership hashes, qrels snapshot, query counts, OUT-positive
+availability/count, and Owner decision. Before scientific use, C0 must execute
+that audit with externally held confirmation membership. Historical 60/20/20
+usage is not authorization to freeze that ratio.
+
+Confirmation must remain outside this repository. `confirmation.py` deliberately
+contains no evaluator and no protected-data loader. A request contains only Git,
+submission, config, and protocol hashes bound to IS1 V0.1. An aggregate package
+contains only n, point estimates, deltas, CIs, effects, W/L/T, comparison-family
+metadata, and hashes. `assert_aggregate_only` rejects protected keys.
+
+## Manifest v3 and replay
+
+Every measured `RunSpec` must bind:
+
+- `ResearchVersionSpec` for IS1 V0.1 and protocol family;
+- Owner approval and scope hash;
+- Git commit/dirty state and immutable artifact hashes;
+- dataset/split commitments, evaluator, kernel/policy/config/prompt/skill hashes;
+- `RuntimeEnvironment`: exact Python 3.11 patch, uv version, OS/architecture,
+  accelerator/CUDA, groups/extras, `uv.lock` SHA-256;
+- `ProviderExecution`: requested/resolved model, provider, endpoint class,
+  effort, fallback, request ID, tokens, latency, cost;
+- replication, statistics, protected/editable surfaces, offline execution
+  isolation, candidate pool, and budget.
+
+`pyproject.toml + uv.lock` is the sole dependency authority. Clean replay uses
+`uv sync --locked` with exact recorded groups/extras. Requirements exports are
+interoperability-only.
+
+## Dashboard and governance ledger
+
+The dashboard is a local read-only projection of metadata/digests. Security
+requirements are fail-closed:
+
+- bind `127.0.0.1` only and reject remote or multi-user operation;
+- validate Host and Origin; no CORS/CDN; `Cache-Control: no-store`;
+- session and CSRF token on the only canonical mutation endpoint;
+- derive authoritative actor from the backend Windows/OS account and store a
+  privacy-preserving stable ID; browser labels are non-authoritative;
+- no browser editing of manifests, metrics, qrels, splits, baselines, or results.
+
+Owner decisions use preview then explicit confirmation. One immutable JSON
+record under `00_governance/approvals/` stores decision ID, gate ID, status,
+rationale, timestamp, actor, evidence-manifest hashes, Git commit, and prior
+record hash. Corrections are new superseding records.
+
+PDF content streams only from an exact path/hash allowlist after license/privacy
+approval. The viewer rejects traversal, symlinks outside roots, hash drift, and
+protected files. Each access writes a separate ignored local receipt with
+receipt ID, approved file ID/hash, purpose, timestamp, authoritative actor ID,
+and prior hash. This chain is tamper-evident, not tamper-proof. A periodic Owner
+decision may anchor only chain-head digest and receipt range in Git. Recovery
+quarantines a corrupt local ledger, preserves it for audit, starts a superseding
+local chain, and records the event/anchor through an Owner decision.
+
+## MLflow mirror
+
+MLflow is local, serialized, searchable, idempotent, and rebuildable. Git and
+validated artifacts remain authoritative. The mirror supports allowlisted files
+classified as docs, results, metrics, rubrics, rules, tools, skills, or
+environment, and uses separate bootstrap/catalog/scientific experiments.
+
+It rejects directory-wide uploads, PDFs, symlinks, credentials, qrels,
+confirmation fields, split membership, raw provider payloads, and protected
+per-query artifacts. Bootstrap runs contain zero artifacts and zero scientific
+metrics. A failure produces one append-only deferred receipt and cannot alter
+canonical run validity. Rebuild quarantines the store and replays explicit mirror
+specs from canonical hashes; it never auto-repairs canonical files.
+
+## Brain, MCP, and skills
+
+Adapters should expose `preflight`, `dry_run`, `execute`, `cancel`, and `collect`
+through typed provenance envelopes. Reads are the default. Writes require narrow
+authority, idempotency, and a serial writer. Brain contains readable decisions
+and pointers, not evaluator output. MCP cannot decide gates or bypass the repo.
+Skills contain procedures and references only; their hashes and editable paths
+are recorded in measured runs.
+
+## Model and PageIndex protocol
+
+Implementation uses GPT-5.6 Sol High. Measured optimization starts Sol Medium,
+escalates to High only after qrels-blind calibration failure, and freezes the
+chosen model/provider/effort/budget identically in A2/A3. Luna is support-only or
+a separate cost ablation. Third-party providers are development-only by default.
+Requested and resolved model identities must match and fallback is forbidden in
+measured work.
+
+PageIndex is a separately preregistered within-document evidence pilot after
+BM25/dense corpus routing. The kernel must reject any configuration that uses it
+as an implicit first-stage DAPFAM retriever.
+
+## Run bundle and authority
 
 ```text
 <run-id>/
   prompt.json
+  skill_manifest.json
   flow.json
+  config.json
   progress.jsonl
-  result.json
-  metrics.json
   runtime.jsonl
+  candidates.jsonl
+  evidence.jsonl
   per_query_metrics.jsonl
+  metrics.json
+  statistics.json
+  result.json
   validation_report.json
+  environment.json
   manifest.json
-  receipts/mlflow-*.json
+  receipts/
 ```
 
-| Artifact | Authority |
-|---|---|
-| console | human live view |
-| `runtime.jsonl` | diagnostic event truth |
-| `progress.jsonl` | semantic milestone projection |
-| `metrics.json`, per-query rows | scientific numeric truth |
-| MLflow | searchable mirror/index |
-| validated `manifest.json` | paper-facing run truth |
+Runtime/progress are diagnostic, candidate/evidence/per-query rows are replay
+inputs, metrics/statistics are numeric artifacts, the validated manifest is the
+paper-facing index, and MLflow is only a mirror. Paper generators read validated
+canonical artifacts, never stdout or an MLflow UI.
 
-`manifest.json` เขียน atomic, immutable และเป็น canonical artifact สุดท้าย. MLflow sync ภายหลังเขียน append-only receipt โดยไม่แก้ manifest
+## Required tests and remaining implementation gaps
 
-## 6. structlog contract
+Implemented focused tests cover identity, import/environment integrity, strict
+selection, independent gates, point-delta classification, grounded policy and
+candidate determinism, statistics/Holm, provider fallback, protected paths,
+aggregate-only confirmation, manifest v2/v3, dashboard security, decision chain,
+PDF path/hash receipts, and MLflow projection/rebuild.
 
-Pin `structlog==26.1.0`. Application emit event ครั้งเดียว แล้ว `ProcessorFormatter` กระจาย event dictionary เดียวกันไป console และ `runtime.jsonl`; milestone event ถูก project เพิ่มไป `progress.jsonl`
+Before scientific execution, add end-to-end tests for real baseline adapter
+parity, OUT-positive power auditing, network denial during measured optimization,
+split membership externalization, batch-order invariance across actual retrieval
+backends, complete baseline replay on identical external confirmation IDs,
+PageIndex first-stage bypass, and paper-table projection from aggregate-only
+confirmation.
 
-Required fields:
-
-```text
-schema_version, event_id, timestamp_utc, monotonic_ns, sequence,
-level, event, run_id, goal_id, phase, component, status
-```
-
-Taxonomy เริ่มต้น:
-
-```text
-run.preflighted / run.started / run.succeeded / run.failed / run.interrupted
-phase.started / phase.completed
-approval.checked
-trial.proposed / trial.started / trial.evaluated / trial.decided
-tool.started / tool.completed / tool.failed
-metric.recorded / artifact.hashed / budget.updated / budget.exceeded
-mlflow.sync.completed / mlflow.sync.deferred
-```
-
-Redactor ต้องทำงาน recursive กับ token, API key, authorization, cookie, password, private/SSH key และข้อความ error. ห้าม log full environment, raw confidential source หรือ raw shell command
-
-## 7. MLflow mapping
-
-- Params: dataset/split/seed/model/evaluator/budget/config
-- Tags: goal/run/trial/arm/phase/git SHA/hashes/approval/status/manifest SHA
-- Metrics: explicit numeric values; ห้าม scrape log
-- Artifacts: sanitized bundle และ licensed per-query rows
-- Parent run: HarnessOpt study; child run: trial/arm
-- Traces: reserve trace/span IDs, ปิด payload capture จนผ่าน privacy gate
-
-SQLite ใช้ serialized writer. หาก MLflow ล่ม bundle ยัง finalize ได้เป็น `sync_deferred`; retry ต้อง idempotent และสร้าง receipt เพิ่ม
-
-## 8. DAPFAM benchmark harness
-
-Four arms: DAPFAM reference, fixed human harness, SkillOpt, HarnessOpt
-
-Primary task: OUT TAC→TAC Top-100. Split query IDs แบบ stratified/deterministic 60/20/20. Historical queries เคยเปิดแล้ว จึงใช้คำว่า prospectively isolated confirmation
-
-Win rule:
-
-```text
-HarnessOpt OUT NDCG@100 > DAPFAM and > SkillOpt
-AND
-HarnessOpt OUT Recall@100 > DAPFAM and > SkillOpt
-```
-
-รายงาน three-fixed-seed mean, absolute/relative deltas; IN drop ≤0.01 และ invalid query ≤1%. Four-arm validator ต้องปฏิเสธ comparison เมื่อ split, evaluator, model roles, module pool หรือ budget ต่างกัน
-
-## 9. Failure and recovery
-
-- Python exception/interrupt: flush JSONL, เขียน failed result/partial metrics/final manifest แล้ว re-raise
-- crash/power loss: recovery scan รายงาน run ที่ไม่มี manifest; ห้ามประกาศ success
-- disk full/canonical write failure: fail closed
-- tampered artifact/truncated JSONL/split mismatch: validator ปฏิเสธ
-- retention job รายงาน eligible items เท่านั้น ไม่ลบอัตโนมัติ
-
-## 10. File map
-
-```text
-05_code/src/myis_research/harness/
-  models.py       # public contracts and lifecycle states
-  policy.py       # evolvable policy schema
-  logging.py      # structlog, redaction, event projection
-  runner.py       # immutable kernel and MLflow mirror
-  manifest.py     # artifact hashes and atomic finalize
-  validation.py   # independent bundle verifier
-  benchmark.py    # split, comparability and HarnessOpt win rule
-```
-
-Related artifacts:
-
-- `03_experiments/V01_brain_drive_agent_demo/` — executable offline notebook
-- `.agents/skills/myis-run-harnessopt/` — project skill หลัง schema/tests ผ่าน
-- `00_governance/config/tools.lock.yaml` — SkillOpt/Orchestra pins
-
-## 11. Build phases
-
-| Phase | Deliverable | Gate |
-|---|---|---|
-| H0 | contracts, policy, logger, manifest, validator | offline unit tests |
-| H1 | Brain-drive notebook + local MLflow receipt | clean top-to-bottom execution |
-| H2 | DAPFAM fixtures, split/cohort validator, four-arm dry-run | no confirmation IDs exposed |
-| H3 | reproduced reference + fixed human baseline | Owner R3 |
-| H4 | SkillOpt baseline integration | matched budget/evaluator |
-| H5 | bounded HarnessOpt development loop | max trials/time/cost |
-| H6 | frozen prospective confirmation | separate Owner R4 |
-| H7 | paper tables from validated manifests | claim-evidence audit/R5 |
-
-H0/H1 codeและ offline validation อยู่ใน implementation scope ปัจจุบัน. H3–H7 ไม่เปิดโดยเอกสารนี้
-
-## 12. Acceptance tests
-
-- console/runtime/progress ใช้ event ID เดียวกัน
-- JSONL เป็น UTF-8 valid JSON และ sequence monotonic
-- secret fixtures ไม่ปรากฏใน console, JSONL, MLflow หรือ manifest
-- success/failure/interrupt/MLflow-down รักษา audit bundle
-- manifest hash validator จับ tampering และ split mismatch
-- MLflow deferred retry ไม่ duplicate
-- optimizer ไม่มีสิทธิ์แก้ kernel/evaluator หรืออ่าน confirmation IDs
-- cohort validator ตรวจ four-arm comparability
-- notebook ใช้ PDF/web/history fixtures และแสดง Brain → Harness → structlog → MLflow → manifest → paper table
-- paper table อ่าน validated manifests เท่านั้น
-
-## 13. Low-dev operator commands (target CLI)
-
-```text
-doctor
-goal plan
-goal approve
-run dry
-run dev
-run status
-report owner
-```
-
-CLI เป็น thin wrapper เหนือ contracts เดียวกัน ไม่สร้าง second source of truth
+Acceptance commands are maintained in `00_governance/OPERATIONS.md`. Passing
+offline tests proves contract behavior only; it does not prove a scientific win.

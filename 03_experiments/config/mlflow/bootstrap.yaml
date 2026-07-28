@@ -1,22 +1,23 @@
+schema_version: myis.mlflow-bootstrap-config.v2
+program_id: is1-research
+research_version: "0.1"
 status: bootstrap_only
 store_env: MYIS_MLFLOW_STORE
 database_relative_path: database/mlflow.db
 artifact_relative_path: artifacts
-experiment_prefix: myis
+receipt_relative_path: receipts/mlflow
+experiments:
+  bootstrap: is1-research-bootstrap
+  catalog: is1-research-catalog
+  scientific: is1-research-scientific
 scientific_runs_allowed: false
-
+artifact_count: 0
+scientific_metric_count: 0
 required_tags:
-  - project
-  - track
+  - program_id
+  - research_version
   - stage
+  - mirror_key
+  - canonical_source_sha256
   - git_commit
-  - dataset_version
-  - split
-  - prompt_version
-  - skill_version
-  - model_id
-  - model_revision
-  - provider
-  - inference_engine
-  - batch_config_version
-  - owner_approval_source
+  - canonical_authority

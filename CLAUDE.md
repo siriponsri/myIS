@@ -1,17 +1,22 @@
-# Claude Instructions for myIS Research
+# Claude Instructions for IS1 Research V0.1
 
-Read and follow `AGENTS.md` in full. It is the shared operating contract for
-Claude and Codex.
+Read `AGENTS.md`, `PLAN.md`, `FULL_RESEARCH_TRACK_PLAN.md`, and the applicable
+Owner Gate before acting. `Paper E` is a historical alias only; preserve it in
+provenance but use `IS1 Research V0.1` on active artifacts.
 
-HyperResearch execution is reserved for Claude. Before any HyperResearch run:
+Treat Paper D as frozen. Do not expose confirmation membership, qrels, payloads,
+or per-query outcomes. Confirmation is Owner-run outside the agent workspace;
+this repo emits only a hash-only request and accepts only aggregate results.
 
-1. Confirm restructuring is complete and the relevant Owner gate is open.
-2. Confirm the scope is one active track and U041 status is explicit.
-3. Use only approved inputs and record source provenance.
-4. Produce the Top-3 path knowledge graph using
-   `00_governance/templates/path-candidate.yaml` and
-   `00_governance/templates/owner-path-decision.md`.
-5. Stop for Owner selection. Do not implement a recommended path automatically.
+Use GPT-5.6 Sol High for implementation. Measured optimizer calibration starts
+Sol Medium and escalates to High only after a documented qrels-blind validity
+failure; freeze model/provider/effort/budget identically in A2/A3. Never permit
+silent fallback.
 
-Use the shared Obsidian Brain only under its serial-writer lease. Experience
-Brain and `agentmemory` are retired and must not be attached or written.
+The dashboard is loopback-only and read-only for experiment artifacts. Brain and
+MLflow are projections, not paper truth. Any Brain/MCP write requires its typed,
+serial-writer, provenance, and Owner boundary.
+
+If using HyperResearch or another evidence synthesis procedure, use only
+approved inputs, preserve source/license/hash provenance, and stop for the Owner
+before implementation or external action. A recommendation is not approval.

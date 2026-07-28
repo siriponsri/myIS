@@ -13,6 +13,7 @@ from .manifest import finalize_manifest, write_json, write_mlflow_receipt
 from .models import GoalState, RunResult, RunSpec, RunState
 from .policy import HarnessPolicy
 from .validation import validate_run_bundle
+from ..mlflow_mirror import MLflowMirror, MirrorArtifact, MirrorKind, MirrorSpec, MirrorStage
 
 
 KERNEL_VERSION = "myis-harness-kernel.v1"
@@ -59,6 +60,14 @@ class LocalHarness:
             errors.append("split_query_ids_hash must be SHA-256")
         if any(float(value) < 0 for value in spec.budget.values()):
             errors.append("budget values must be non-negative")
+        measured = not spec.phase.startswith(("offline", "bootstrap", "fixture"))
+        if measured and spec.isolation is None:
+            errors.append("measured optimization requires offline execution isolation")
+        if spec.isolation is not None:
+            try:
+                spec.isolation.validate()
+            except ValueError as error:
+                errors.append(str(error))
         if spec.run_id in self._cancelled:
             errors.append("run is cancelled")
         if errors:
@@ -240,60 +249,49 @@ class LocalHarness:
             receipt.update({"status": "sync_deferred", "reason": "mlflow_root_not_configured"})
             write_mlflow_receipt(run_dir, receipt)
             return
-        mlflow_store = None
         try:
-            import mlflow
-            from mlflow.tracking._tracking_service.utils import _get_store
-
-            database = self.mlflow_root / "database" / "mlflow.db"
-            artifacts = self.mlflow_root / "artifacts"
-            database.parent.mkdir(parents=True, exist_ok=True)
-            artifacts.mkdir(parents=True, exist_ok=True)
-            mlflow.set_tracking_uri(f"sqlite:///{database.resolve().as_posix()}")
-            experiment = mlflow.get_experiment_by_name("myis-harness")
-            experiment_id = experiment.experiment_id if experiment else mlflow.create_experiment(
-                "myis-harness", artifact_location=artifacts.resolve().as_uri()
+            selected = (
+                MirrorArtifact.from_path(run_dir / "manifest.json", kind=MirrorKind.RESULT, canonical_root=run_dir),
+                MirrorArtifact.from_path(
+                    run_dir / "validation_report.json", kind=MirrorKind.RESULT, canonical_root=run_dir
+                ),
+                MirrorArtifact.from_path(run_dir / "result.json", kind=MirrorKind.RESULT, canonical_root=run_dir),
+                MirrorArtifact.from_path(run_dir / "metrics.json", kind=MirrorKind.METRIC, canonical_root=run_dir),
             )
-            with mlflow.start_run(experiment_id=experiment_id, run_name=spec.run_id) as active:
-                mlflow.set_tags(
-                    {
+            MLflowMirror(self.mlflow_root).sync(
+                MirrorSpec(
+                    stage=MirrorStage.SCIENTIFIC,
+                    run_name=spec.run_id,
+                    git_commit=spec.git_commit,
+                    canonical_source_sha256=manifest_sha,
+                    tags={
                         "goal_id": spec.goal.goal_id,
                         "arm": spec.arm,
                         "phase": spec.phase,
-                        "stage": "bootstrap" if spec.phase.startswith("offline") else spec.phase,
-                        "git_commit": spec.git_commit,
-                        "manifest_sha256": manifest_sha,
-                        "split_query_ids_hash": spec.split_query_ids_hash,
                         "owner_approval_id": spec.approval.approval_id,
-                    }
-                )
-                mlflow.log_params(
-                    {
+                    },
+                    parameters={
                         "dataset_id": spec.dataset_id,
                         "split": spec.split,
                         "seed": spec.seed,
                         "model_id": spec.model_id,
                         "evaluator_id": spec.evaluator_id,
-                    }
-                )
-                for name, value in metrics.items():
-                    mlflow.log_metric(name, value)
-                mlflow.log_artifacts(str(run_dir), artifact_path="canonical-run")
-                receipt.update({"status": "synced", "mlflow_run_id": active.info.run_id})
-            mlflow_store = _get_store()
-        except Exception as error:  # local bundle remains canonical; receipt makes failure explicit
+                    },
+                    metrics=metrics,
+                ),
+                selected,
+                receipt_dir=run_dir / "receipts",
+            )
+        except Exception as error:
             receipt.update(
                 {
                     "status": "sync_deferred",
-                    "reason": "mlflow_error",
+                    "reason": "mlflow_projection_error",
                     "error_type": type(error).__name__,
                     "error_hash": hashlib.sha256(str(error).encode("utf-8")).hexdigest(),
                 }
             )
-        finally:
-            if mlflow_store is not None and hasattr(mlflow_store, "_dispose_engine"):
-                mlflow_store._dispose_engine()
-        write_mlflow_receipt(run_dir, receipt)
+            write_mlflow_receipt(run_dir, receipt)
 
     def cancel(self, run_id: str, reason: str) -> dict[str, Any]:
         if not reason.strip():

@@ -1,173 +1,264 @@
-# แผน Research Program ฉบับใช้งาน
+# IS1 Research V0.1 Scientific Protocol
 
-> สถานะ: `OWNER-APPROVED_IMPLEMENTATION_ROADMAP`
-> วันที่ฐาน: 2026-07-27
-> อำนาจการรัน: [`PLAN.md`](PLAN.md) และ [`00_governance/OWNER_GATES.md`](00_governance/OWNER_GATES.md) ยังเป็น execution authority
-> ขอบเขตที่เปิดแล้ว: restructure, PDF triage/digest, offline harness และ notebook demo
-> ขอบเขตที่ยังปิด: paid API, GPU/Vast.ai, scientific MLflow run และ confirmation cohort จนกว่าจะผ่าน R3/R4
+Status: `OWNER_APPROVED_ARCHITECTURE_IMPLEMENTATION_ACTIVE_RUNS_GATED`
+Execution authority: `PLAN.md` and `00_governance/OWNER_GATES.md`
+Historical alias: `Paper E`
+Benchmark unit: patent family
 
-## 1. เป้าหมายของโปรแกรม
+## Research thesis
 
-พัฒนาระบบวิจัยเพื่อค้นหา จัดอันดับ และเชื่อมหลักฐานสิทธิบัตรข้ามโดเมน โดยแยกปัญหาออกเป็นสามส่วนที่วัดได้:
+Prior myIS studies show that a reranker cannot recover a relevant patent family
+that first-stage retrieval never exposes. IS1 V0.1 therefore tests a causal
+sequence: recover candidate families through complementary grounded routes,
+freeze the candidate pool, then measure ranking and evidence quality without
+changing pool membership.
 
-1. **Candidate exposure:** ระบบค้นเจอ relevant family มากพอหรือไม่
-2. **Ranking and evidence:** เมื่อมี candidate แล้ว ระบบจัดอันดับและชี้ passage/claim evidence ได้ดีเพียงใด
-3. **Research harness optimization:** workflow ทั้งระบบเลือก query, route, representation, fusion, budget, reranking และ stopping ได้ดีกว่า skill/prompt optimization อย่างเดียวหรือไม่
+The proposed method family is **CrossRoute**. It is a retrieval and evidence
+system, not a legal novelty or freedom-to-operate evaluator.
 
-DAPFAM ใช้เป็นหลักฐานด้าน retrieval relevance เท่านั้น ไม่ใช้แทนการวินิจฉัย novelty, freedom-to-operate หรือข้อสรุปทางกฎหมาย
+Paper D remains a frozen historical boundary. Its bytes, claims, and reported
+results are not reopened, rewritten, or used as hidden optimizer feedback.
 
-## 2. ขอบเขตระบบที่ไม่ซ้อนกัน
+## Research questions and falsifiable claims
 
-| กลุ่ม | หน้าที่ | สิ่งที่ห้ามเป็น |
-|---|---|---|
-| `00_App` | product workflow, UI/API และการรับ frozen handoff | แหล่งกำหนด metric หรือ research truth |
-| `01_Research` | protocol, corpus manifest, code, experiment, metric และ paper truth | ที่เก็บ runtime ขนาดใหญ่หรือ secret |
-| `02_Brain` | Obsidian/QMD knowledge, decision, status และ pointer | แหล่งตัวเลขสำหรับ paper |
-| `02_Tools` | pinned tool repositories, environments และ cache | canonical research evidence |
-| `01_Stores` | MLflow, datasets, models, backups และ runtime payload | Git repository |
+| ID | Question | Primary endpoint | Falsification |
+|---|---|---|---|
+| C | Does CrossRoute expose more relevant OUT-domain families than one preregistered protocol-matched reproduced baseline? | OUT Recall@100 | confirmation point delta <= 0 |
+| C-route | Which routes uniquely recover relevant families after family deduplication? | unique relevant-family recovery and overlap | no non-leaking unique recovery |
+| R | On the identical frozen pool, does claim/passage-aware ranking improve order over no rerank? | OUT nDCG@100 | confirmation point delta <= 0 |
+| R-evidence | Can the system provide exact publication-level claim/passage evidence with traceability? | evidence coverage/support/error taxonomy | unsupported or untraceable evidence |
+| S | Does skill+typed-policy adaptation differ from skill-only adaptation under matched controls? | preregistered selection utility plus primary retrieval endpoints | A3 does not exceed A2 or violates controls |
 
-PDF ต้นฉบับอยู่แบบ local-only ใต้ `01_evidence/private/literature/`; Git เก็บ catalog, alias, tier, digest และ QA provenance เท่านั้น
+Gate C and Gate R are separate claims. A positive Gate C and negative Gate R,
+or the reverse, are both interpretable outcomes. R cannot attribute improvement
+to ranking if its candidate pool differs from the frozen C pool.
 
-## 3. Program flow
+## Benchmark and data contract
+
+DAPFAM contains 1,247 query families and 45,336 target families according to
+the published benchmark. Local manifests must verify these counts before use.
+Evaluation aggregates at family level and reports ALL, IN, and OUT. The primary
+cutoff is 100.
+
+Published passage baselines are reproduction references:
+
+| Method | OUT nDCG@100 | OUT Recall@100 |
+|---|---:|---:|
+| BM25 passage | 0.0589 | 0.1521 |
+| Dense passage | 0.0590 | 0.1552 |
+| Hybrid RRF K=30 | 0.0625 | 0.1653 |
+
+They are not results produced by this repository. A primary comparator is
+chosen once from a protocol-matched local reproduction before method selection.
+
+DAPFAM qrels have informed earlier development. Therefore no DAPFAM cohort is
+described as globally untouched. Before development, freeze and commit to:
+
+- split-generation seed and stratum definition;
+- adaptation, selection, and confirmation membership hashes;
+- qrels snapshot hashes;
+- exact query and OUT-positive availability/count;
+- evaluator, family mapping, parser, corpus, and baseline hashes;
+- network policy preventing protected re-download.
+
+Only adaptation and selection qrels are visible to an optimizer. Confirmation
+membership, qrels, protected payloads, and per-query outcomes stay outside the
+agent workspace. Before permanently freezing the proposed 60/20/20 split, run
+an OUT-primary prospective MDE/power audit. The final ratio is an Owner decision
+based on available positives and design sensitivity, not a legacy code default.
+
+A full-1,247-query result is protocol-matched descriptive benchmarking rather
+than unseen confirmation when DAPFAM qrels informed development.
+
+## CrossRoute architecture
 
 ```mermaid
-flowchart LR
-    F0["F0 Foundation"] --> F1["F1 Consolidate Paper A-D"]
-    F1 --> CH["C/H Candidate Exposure + HarnessOpt"]
-    CH --> R["R Ranking + Evidence"]
-    R --> P["Publication + frozen App handoff"]
-    CH -. optional .-> S["S Skill evolution"]
-    S -. methods evidence .-> P
+flowchart TD
+    Q["Query family: title, abstract, claims"] --> V["Grounded query views"]
+    V --> L["Lexical routes"]
+    V --> D["Dense routes"]
+    V --> X["Eligible citation/metadata routes"]
+    L --> C["Family candidate ledger"]
+    D --> C
+    X --> C
+    C --> F["Fixed-budget fusion and family dedup"]
+    F --> P["Frozen top-K candidate pool"]
+    P --> R["Claim/passage-aware ranking"]
+    R --> E["Publication-level evidence package"]
 ```
 
-### F0 — Foundation
+Every generated term must point to source span IDs from title, abstract, or
+claims, or be marked `quarantine_ungrounded`. Views may express TAC, independent
+claims, limitations, mechanism, function, structure/material, process/operation,
+application/use, and conservative restatement. Qrels and relevant-document text
+cannot be inputs to view generation.
 
-- ปิด restructure blockers: navigation, Brain/QMD, MLflow URI และ PDF ownership
-- สร้าง tier-organized literature corpus พร้อม full triage U041–U153
-- สร้าง immutable harness kernel, structured logs, canonical manifests และ offline notebook
-- ติดตั้งเฉพาะ project skills ที่ผ่าน safety review
+Routes require an explicit hypothesis and provenance:
 
-Gate: repository audit, QMD retrieval, MLflow artifact round-trip, PDF manifest และ offline test suite ผ่านทั้งหมด
-
-### F1 — Consolidate prior evidence
-
-- รักษา Paper A–D และ frozen artifacts โดยไม่ rerun
-- แยก `confirmed`, `diagnostic`, `exploratory` และ test-reuse history
-- ใช้ผลเดิมเพื่อกำหนดข้อจำกัดของ fixed prompt/reranker surfaces ไม่ขยายเป็นคำกล่าวว่า prompt optimization ทุกแบบล้มเหลว
-
-Gate: evidence map และ claim boundary ตรวจย้อนกลับถึง manifest ได้
-
-### C/H — Candidate Exposure and Harness Optimization
-
-คำถามหลัก: ภายใต้งบและ evaluator เดียวกัน HarnessOpt เพิ่ม OUT-domain candidate exposure ได้มากกว่า reproduced DAPFAM reference และ SkillOpt หรือไม่
-
-สี่แขนทดลอง:
-
-1. reproduced DAPFAM/MTEB reference
-2. fixed human-authored harness
-3. SkillOpt baseline
-4. HarnessOpt proposed method
-
-SkillOpt pin: `microsoft/SkillOpt` release `v0.2.0`, commit `51d0a4d96e88558c84dee637f98e24e3fb2d1547`, MIT. HarnessOpt optimize policy/workflow เท่านั้น ไม่แก้ model weights
-
-Primary success rule ต้องชนะทั้ง DAPFAM reference และ SkillOpt บน confirmation cohort ใน metric ทั้งคู่:
-
-- OUT NDCG@100
-- OUT Recall@100
-
-รายงาน mean ของ fixed seed 3 ค่า พร้อม absolute/relative delta; ไม่ใช้ confidence interval เป็น pass/fail. Guardrails: IN NDCG/Recall ลดได้ไม่เกิน 0.01 absolute, invalid-query rate ไม่เกิน 1%, และใช้งบที่ประกาศล่วงหน้าเท่ากัน
-
-### R — Ranking and Evidence
-
-- รับเฉพาะ candidate pool ที่ freeze จาก C/H
-- แยก ranking quality, calibration, evidence completeness และ abstention
-- ห้าม reranker ซ่อน candidate-exposure failure
-- เก็บ per-query rows และ error taxonomy สำหรับ IN/OUT แยกกัน
-
-Gate: pool hash, evaluator hash, evidence schema และ split hash ตรงกันทุก arm
-
-### S — Optional Skill Evolution
-
-SkillOpt เป็น baseline ที่ต้องวัด ไม่ใช่เป้าหมายสุดท้าย. เปิด track นี้เมื่อ C/H ให้ signal หรือเกิดคำถาม methods ที่แยกตีพิมพ์ได้ การศึกษา S ต้องไม่อยู่บน critical path ของ candidate-exposure paper
-
-### Publication and App handoff
-
-- paper table อ่านเฉพาะ validated canonical manifests และ metric artifacts
-- MLflow เป็น searchable mirror ไม่ใช่ paper truth
-- App รับเฉพาะ method/config/model/policy ที่ freeze พร้อม version, uncertainty และ provenance
-- ห้ามเรียก output ว่า legal verdict
-
-## 4. DAPFAM evaluation contract
-
-Primary task: DAPFAM OUT TAC→TAC, Top-100
-
-แบ่ง query ID แบบ deterministic และ stratified:
-
-- train 60%
-- selection 20%
-- prospective confirmation 20%
-
-ข้อมูล DAPFAM เคยถูกประเมินในงานก่อน จึงเรียกชุดสุดท้ายว่า **prospectively isolated confirmation cohort** ไม่เรียกว่า globally untouched. Optimizer อ่านได้เฉพาะ train/selection query IDs; confirmation เปิดครั้งเดียวหลัง method freeze และ R4 approval
-
-ทุก arm ต้องใช้ target/optimizer model roles, module pool, evaluator, split hashes และ budget เดียวกัน. MAP, MRR, P@10, ALL, latency และ cost เป็น diagnostics ไม่ใช่ primary win rule
-
-## 5. Literature-to-Brain flow
-
-แหล่ง Brain มาจาก web search, PDF, project history และ approved notes ตาม flow เดียว:
-
-1. ลงทะเบียน source ด้วย U-ID + SHA-256 + provenance
-2. ตรวจ duplicate, title/DOI, license และ record type
-3. จัด tier A/B/C/N แยกตาม scope; PDF จริงมี canonical object เพียงชุดเดียว
-4. สร้าง validated digest และ claim-to-source pointer
-5. ingest summary/pointer เข้า Obsidian/QMD ภายใต้ serial-writer lease
-6. ตัวเลขสำหรับ paper กลับไปอ่าน canonical manifest เสมอ
-
-U150 เป็น template (`record_type=template`, Tier N). U001–U040 digests และ imported manifest เป็น frozen bytes; การย้าย source ใช้ companion mapping ไม่แก้ historical artifact
-
-## 6. Observability and paper truth
-
-ลำดับ authority:
-
-1. `runtime.jsonl` — diagnostic event truth จาก structlog
-2. `progress.jsonl` — milestone projection
-3. `metrics.json` และ `per_query_metrics.jsonl` — scientific numeric truth
-4. MLflow — searchable mirror ของ params, metrics, artifacts และ lineage
-5. validated `manifest.json` — paper-facing run index
-
-ทุก run เก็บ prompt, flow, progress, result, metrics, runtime log, per-query rows, validation report, manifest และ MLflow receipt. Manifest เขียนแบบ atomic เป็น canonical artifact สุดท้ายและห้าม overwrite
-
-## 7. Compute and approval tiers
-
-| Tier | ตัวอย่าง | Gate |
+| Route | Hypothesis | Required provenance |
 |---|---|---|
-| R0 | read-only audit, code, fixture, unit test | เปิดแล้วตาม scope นี้ |
-| R1 | local CPU development data | Owner เปิด track |
-| R2 | short API/GPU probe | R3 budget approval |
-| R3 | bounded development study | R3 + frozen protocol |
-| R4 | one confirmation pass | separate R4 approval |
+| BM25 TAC/passage | exact terms, numerals, compounds | view, field/passage, rank, score |
+| BM25 claim/element | claim-limitation overlap | claim/source spans, normalized tokens |
+| Dense TAC/passage | vocabulary mismatch | model/revision, field, truncation |
+| Dense claim view | claim-level semantic match | grounded view and candidate passage |
+| Citation graph | prior-art relation beyond text | source, timestamp, mapping coverage |
+| Metadata/class | controlled routing/filtering | IPC/CPC/date source; never relevance proof |
 
-ทุก run ประกาศเวลา, token/API/GPU/retrieval budget และ stop condition ล่วงหน้า. Disk-full หรือ canonical write failure ต้อง fail closed
+Allocate route-specific depth and quota before fusion. Final family budget is
+identical across arms. The ledger retains family ID, publication ID, route,
+view, rank, score, matched passage, component provenance, and deterministic
+tie-break fields. Family dedup occurs before metric scoring.
 
-## 8. Publication strategy
+## Candidate exposure protocol
 
-- **Path A:** candidate-exposure/HarnessOpt paper หาก primary rule ผ่าน
-- **Path B:** diagnostic/benchmark paper หาก method ไม่ชนะ แต่ได้ reproducible boundary, benchmark หรือ error taxonomy ที่มี contribution
-- **Path C:** thesis-only evidence หากผลไม่พอสำหรับ standalone paper
+F1 reproduces BM25, dense, and Hybrid RRF. C0 then reports Recall@100/200/1000,
+judged-query coverage, zero-hit rate, OUT-positive counts, candidate exposure,
+and oracle performance inside each pool.
 
-ห้ามเปลี่ยน primary endpoint หลังเห็น confirmation result และห้ามบังคับ publication narrative ให้เป็นผลบวก
+C1 evaluates manual ablations in a preregistered order, beginning with cheap
+credible routes. C2 opens only if manual variants establish a valid responsive
+surface; its optimizer edits typed policy fields only and cannot add arbitrary
+tools or executable code.
 
-## 9. Definition of done
+Development and selection use this rule:
 
-- restructure audit ไม่มี active dangling legacy path
-- QMD ดึง known Brain note ได้
-- PDF aliases/objects/duplicates/tier/digest counts ผ่าน validator และไม่มี PDF ถูก track ใน Research
-- MLflow URI เป็น path ใหม่และ artifact round-trip ผ่าน
-- Harness state, approval, split, budget, redaction, manifest และ tamper tests ผ่าน
-- notebook รัน clean top-to-bottom ด้วย offline PDF/web/history fixtures
-- DAPFAM protocol มี four-arm comparability validator และ confirmation isolation
-- paper table สร้างจาก validated manifests โดยไม่อ่าน stdout/MLflow UI
-- ก่อน push ผ่าน test, path/secret scan, archive integrity และ three-repository diff review
+```text
+accept candidate iff preregistered primary selection score > current best
+reject exact ties and lower scores
+```
 
-## 10. สิ่งที่ยังต้องใช้ Owner gate
+For Gate C the primary selection score is OUT Recall@100. Secondary metrics,
+cost, and guardrails diagnose a candidate but cannot rescue a tie or loss unless
+the preregistered score itself explicitly includes them for a separate S study.
 
-Implementation ใน F0 ไม่ได้อนุญาตการเริ่ม scientific study. การใช้ paid/API/GPU/Vast.ai, การเปิด confirmation IDs, การ publish result และการเปลี่ยน frozen App handoff ต้องขอ R3/R4/R5 ตามลำดับ
+CF freezes code, query views, routes, model identity, environment, policy,
+candidate ledger, final pool, comparator, and analysis hashes. A new pool is a
+new protocol proposal, not an edit to the existing freeze.
+
+## Ranking and evidence protocol
+
+R0 measures no-rerank nDCG, oracle/reachable nDCG, query coverage, field
+availability, and family promotions/demotions on the CF pool. R1 compares
+no-rerank, a protocol-matched practical reranker, passage-aware scoring, and
+claim-limitation coverage. General rerankers are controls/baselines, not presumed
+improvements.
+
+Gate R selection uses strictly greater OUT nDCG@100 and rejects ties. Every
+comparison must pass the identical candidate-pool SHA-256 to
+`FrozenPoolRankingComparison`.
+
+R2 evidence records include:
+
+```text
+query_id
+family_id
+publication_id
+priority/publication date
+route and rank provenance
+claim limitation
+verbatim evidence span
+page/section/offset
+support: supports | partial | contradicts | unclear
+confidence and unresolved gaps
+```
+
+Evidence generation cannot modify relevance labels or candidate ranks. A model
+interpretation is separated from quoted source text. Missing support produces an
+abstention or `unclear`, never a more assertive legal conclusion.
+
+## PageIndex boundary
+
+PageIndex is optional and only for BM25/dense-routed within-document evidence
+retrieval after large-corpus candidate retrieval has selected publications. A
+pilot preregisters development queries, repeats if stochastic, a section-aware
+BM25/dense locator comparator, evidence hit/traceability/latency/cost/repeat
+agreement, and source/license handling. It cannot silently replace first-stage
+retrieval over the DAPFAM corpus.
+
+## Optional Track S protocol
+
+| Arm | Editable surface |
+|---|---|
+| A0 | frozen baseline; no adaptation |
+| A1 | human-authored seed skill; frozen harness |
+| A2 | optimized skill; frozen harness |
+| A3 | optimized skill plus declared typed policy fields |
+
+A2 and A3 use the same initial state, optimizer model, provider, reasoning
+effort, data access, evaluator, module pool, trial/token/time/cost ceiling,
+repeats, order balancing, tools, and stopping rule. Start calibration with
+GPT-5.6 Sol Medium on qrels-blind fixtures; escalate to High only if validity
+criteria fail, then freeze the selected setting. Luna is restricted to support
+tasks or a separate cost ablation and is not mixed into main A2/A3. Third-party
+providers are development-only by default. Silent fallback invalidates a run.
+
+Every repeat is reported. The best repeat cannot be selected as the headline.
+An S utility score must be preregistered and remains an optimizer decision
+metric; it does not replace Gate C or Gate R publication endpoints.
+
+## Estimation and confirmation framework
+
+MDE and power are prospective design-sensitivity analyses. They are reported
+separately and never become observed-result pass thresholds.
+
+Each gate preregisters one primary baseline and one primary comparison. The
+external Owner-run evaluator computes on identical confirmation query IDs:
+
+- exact query count `n`;
+- baseline and candidate point estimates;
+- paired per-query delta;
+- deterministic 10,000-resample paired-bootstrap 95% CI;
+- rank-biserial effect size;
+- win/loss/tie counts;
+- comparison-family role and correction metadata;
+- input, request, and output hashes.
+
+Interpretation:
+
+| Result | Classification | Allowed claim |
+|---|---|---|
+| delta > 0 and CI lower > 0 | statistically supported superiority | superior/outperformed under the protocol |
+| delta > 0 and CI includes 0 | higher measured score with uncertain superiority | achieved a higher measured score; uncertainty noted |
+| delta <= 0 | no observed improvement | did not detect improvement |
+
+The CI lower bound is not a hard success gate. Holm correction applies only to
+the preregistered family of additional confirmatory comparisons. Gate C and R
+are classified independently.
+
+Confirmation executes outside the agent workspace. This repository contains no
+confirmation evaluator or protected-data loader. It emits a hash-only
+`ConfirmationRequest` and accepts only a schema-validated aggregate package.
+The browser, dashboard, Brain, MCP, MLflow, logs, and manifests never expose
+confirmation membership, qrels, protected payloads, or per-query outcomes.
+
+## Compute and dependency protocol
+
+`pyproject.toml` plus `uv.lock` is the sole dependency authority and Python 3.11
+is required. Every measured run records exact Python patch, uv version, OS,
+architecture, accelerator/CUDA stack, groups/extras, and lock SHA-256. Replay
+uses `uv sync --locked` with those exact selections. Hashed requirements may be
+exported for interoperability only.
+
+Implementation uses GPT-5.6 Sol High. Paid API, GPU, Vast.ai, vLLM, new dense
+index generation, PageIndex model calls, and external datasets require their
+scoped Owner Gates and declared budgets. One measured arm cannot silently change
+provider, model, effort, endpoint class, or fallback behavior.
+
+## Publication strategy
+
+A positive publication strategy does not require manufacturing a metric win.
+Valid contributions include:
+
+1. statistically supported or uncertain-but-positive Gate C and/or Gate R;
+2. route-level unique recovery and cost/quality frontier;
+3. a reproducible exposure-versus-ranking loss decomposition;
+4. a validated negative boundary showing why a route or adaptation surface is
+   flat under strong controls;
+5. publication-level evidence traceability and transparent failure taxonomy.
+
+Required reports include protocol-matched baseline reproduction, candidate
+exposure and route overlap, frozen-pool ranking, paired uncertainty, evidence
+quality, cost/latency, optional A0-A3 results, and limitations. Report `did not
+detect` rather than universal failure. Do not change endpoints, comparator, or
+narrative after confirmation. Retrieval relevance remains decision support and
+never becomes a legal opinion.
