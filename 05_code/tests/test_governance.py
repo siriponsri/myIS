@@ -22,7 +22,17 @@ class GovernanceTests(unittest.TestCase):
         with self.assertRaises(AuthorizationError):
             assert_research_execution_enabled(False)
 
+    def test_active_owner_gate_actions_are_typed(self) -> None:
+        ExecutionAuthorization("owner gate", "S", "preflight", gate_id="G4", action="authorize_track_s").validate()
+        ExecutionAuthorization("owner gate", "S", "freeze", gate_id="G5", action="freeze_track_s").validate()
+        ExecutionAuthorization("owner gate", "C", "confirmation", gate_id="G6", action="authorize_joint_confirmation").validate()
+        ExecutionAuthorization("owner gate", "C", "transfer", gate_id="G7", action="authorize_transfer").validate()
+        ExecutionAuthorization("owner gate", "C", "publication", gate_id="G8", action="authorize_publication").validate()
+        with self.assertRaises(AuthorizationError):
+            ExecutionAuthorization("owner gate", "C", "legacy", gate_id="G4", action="authorize_track_r").validate()
+        with self.assertRaises(AuthorizationError):
+            ExecutionAuthorization("owner gate", "R", "legacy").validate()
+
 
 if __name__ == "__main__":
     unittest.main()
-

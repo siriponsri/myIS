@@ -125,6 +125,50 @@ class MLflowMirrorTests(unittest.TestCase):
             artifact = MirrorArtifact.from_path(manifest, kind=MirrorKind.RESULT, canonical_root=root)
             artifact.validate()
 
+    def test_track_projection_requires_c_s_lineage_and_rejects_inactive_track(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            mirror = MLflowMirror(Path(temp) / "store", backend=FakeBackend())
+            incomplete = MirrorSpec(
+                stage=MirrorStage.TRACK_C,
+                run_name="missing-lineage",
+                git_commit="f85404a",
+                canonical_source_sha256=SHA,
+            )
+            with self.assertRaisesRegex(MirrorValidationError, "lineage fields"):
+                mirror.sync(incomplete)
+
+            inactive = MirrorSpec(
+                stage=MirrorStage.TRACK_C,
+                run_name="retired-track",
+                git_commit="f85404a",
+                canonical_source_sha256=SHA,
+                track="retired",
+                arm="legacy-arm",
+                phase="legacy-phase",
+                data_role="selection",
+            )
+            with self.assertRaisesRegex(MirrorValidationError, "track-c mirrors require track C"):
+                mirror.sync(inactive)
+
+            valid = MirrorSpec(
+                stage=MirrorStage.TRACK_C,
+                run_name="track-c-lineage",
+                git_commit="f85404a",
+                canonical_source_sha256=SHA,
+                track="C",
+                arm="C1",
+                phase="C1",
+                data_role="selection",
+            )
+            receipt = mirror.sync(valid)
+            self.assertEqual(receipt.experiment_name, "myis-research-track-c")
+            tags = mirror.backend.logged[0]["tags"]
+            self.assertEqual(tags["track"], "C")
+            self.assertEqual(tags["arm"], "C1")
+            self.assertEqual(tags["phase"], "C1")
+            self.assertEqual(tags["data_role"], "selection")
+            self.assertEqual(tags["protocol_version"], "1.0")
+
     def test_bootstrap_has_zero_artifacts_and_metrics(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

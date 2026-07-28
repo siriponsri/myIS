@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Local Owner Research Dashboard for myIS Research">
+  <title>myIS Owner Research Dashboard</title>
+  <link rel="stylesheet" href="/assets/dashboard.css">
+  <script type="module" src="/assets/dashboard.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Research dashboard navigation">
+      <div class="brand-block">
+        <p class="brand-mark" aria-hidden="true">myIS</p>
+        <div>
+          <p class="eyebrow">Research protocol 1.0</p>
+          <p class="brand-name">Owner Console</p>
+        </div>
+      </div>
+
+      <div class="local-boundary">
+        <span class="boundary-dot" aria-hidden="true"></span>
+        <span>Local owner session</span>
+      </div>
+
+      <nav class="primary-nav" aria-label="Dashboard views">
+        <button class="nav-item is-active" type="button" data-view="work-plan" aria-current="page">
+          <span class="nav-index">01</span><span>Work Plan</span>
+        </button>
+        <button class="nav-item" type="button" data-view="process">
+          <span class="nav-index">02</span><span>Process</span>
+        </button>
+        <button class="nav-item" type="button" data-view="flow">
+          <span class="nav-index">03</span><span>Flow</span>
+        </button>
+        <button class="nav-item" type="button" data-view="harness">
+          <span class="nav-index">04</span><span>Harness Rules</span>
+        </button>
+        <button class="nav-item" type="button" data-view="tools">
+          <span class="nav-index">05</span><span>Tools</span>
+        </button>
+        <button class="nav-item" type="button" data-view="owner-gates">
+          <span class="nav-index">06</span><span>Owner Gates</span>
+        </button>
+        <button class="nav-item" type="button" data-view="artifacts">
+          <span class="nav-index">07</span><span>Artifacts</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>Decision support only</p>
+        <p>Not legal advice</p>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="view-kicker">Program control</p>
+          <h1 id="view-title">Work Plan</h1>
+        </div>
+        <div class="topbar-actions">
+          <p class="sync-state" id="sync-state" role="status" aria-live="polite">Connecting</p>
+          <button class="button button-secondary" id="refresh-button" type="button">Refresh</button>
+        </div>
+      </header>
+
+      <main id="main-content" tabindex="-1">
+        <section class="view is-visible" id="view-work-plan" data-view-panel="work-plan" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div>
+              <p class="section-label">Causal program map</p>
+              <p class="lede">Evidence completion and Owner authorization are tracked separately. A phase does not open by implication.</p>
+            </div>
+            <div class="legend" aria-label="Status legend">
+              <span><i class="legend-mark evidence" aria-hidden="true"></i>Evidence</span>
+              <span><i class="legend-mark approval" aria-hidden="true"></i>Authorization</span>
+            </div>
+          </div>
+          <div class="plan-layout">
+            <nav class="phase-spine" id="phase-spine" aria-label="Research phases"></nav>
+            <div class="plan-detail" id="plan-detail"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-process" data-view-panel="process" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div><p class="section-label">Operating protocol</p><p class="lede">Canonical research and governance procedures, projected from allowlisted documents.</p></div>
+          </div>
+          <div class="content-browser" id="process-content"></div>
+        </section>
+
+        <section class="view" id="view-flow" data-view-panel="flow" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div><p class="section-label">System relationships</p><p class="lede">Eight bounded flows explain how authority, evidence, execution, and mirrors interact.</p></div>
+          </div>
+          <div class="flow-browser">
+            <div class="flow-list" id="flow-list" role="list"></div>
+            <figure class="flow-stage">
+              <div class="flow-canvas" id="flow-canvas" role="img" aria-label="Select a flow to inspect"></div>
+              <figcaption id="flow-caption">Select a flow to inspect.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="view" id="view-harness" data-view-panel="harness" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div><p class="section-label">Deterministic authority</p><p class="lede">The kernel decides validity and comparability. Probabilistic components propose only within typed limits.</p></div>
+          </div>
+          <div class="content-browser" id="harness-content"></div>
+        </section>
+
+        <section class="view" id="view-tools" data-view-panel="tools" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div><p class="section-label">Pinned capability registry</p><p class="lede">Adoption state, exact versions, and authority boundaries for local research tools.</p></div>
+          </div>
+          <div id="tools-content"></div>
+        </section>
+
+        <section class="view" id="view-owner-gates" data-view-panel="owner-gates" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div><p class="section-label">Canonical governance ledger</p><p class="lede">Decisions are immutable, hash-chained records. Corrections append a superseding record.</p></div>
+            <button class="button button-primary" id="new-decision-button" type="button" disabled title="Decision entry opens only after a clean Git state is verified">New decision</button>
+          </div>
+          <div class="gate-summary" id="gate-summary"></div>
+          <div class="table-frame"><table><thead><tr><th>Decision</th><th>Gate</th><th>Status</th><th>Recorded</th><th>Evidence</th></tr></thead><tbody id="decision-table-body"></tbody></table></div>
+        </section>
+
+        <section class="view" id="view-artifacts" data-view-panel="artifacts" aria-labelledby="view-title">
+          <div class="view-intro">
+            <div><p class="section-label">Allowlisted metadata</p><p class="lede">This view shows metadata and digests only. Protected evaluation surfaces never enter the browser.</p></div>
+          </div>
+          <div class="artifact-grid" id="artifact-grid"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="decision-dialog" id="decision-dialog" aria-labelledby="decision-dialog-title">
+    <form id="decision-form">
+      <div class="dialog-header">
+        <div><p class="eyebrow">Owner Gate</p><h2 id="decision-dialog-title">Preview decision</h2></div>
+        <button class="icon-button" id="close-decision-button" type="button" aria-label="Close decision dialog">&times;</button>
+      </div>
+
+      <div class="dialog-body" id="decision-form-step">
+        <p class="form-note">The backend derives the authoritative actor and validates the scope. No record is written during preview.</p>
+        <div class="form-grid">
+          <label><span>Gate</span><select name="gate_id" required></select></label>
+          <label><span>Decision</span><select name="status" required><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="deferred">Deferred</option></select></label>
+        </div>
+        <label><span>Authorized action</span><select name="action" required></select></label>
+        <label><span>Rationale</span><textarea name="rationale" rows="5" minlength="3" maxlength="4000" required></textarea></label>
+        <div class="form-grid">
+          <label><span>Phase IDs</span><input name="phase_ids" placeholder="F0, F1"></label>
+          <label><span>Task IDs</span><input name="task_ids" placeholder="F0.1, F0.2"></label>
+        </div>
+        <label><span>Exact repository-relative targets</span><textarea class="mono-input" name="targets" rows="3" placeholder="One path per line; required for cleanup"></textarea></label>
+        <label><span>Evidence manifest SHA-256</span><textarea class="mono-input" name="evidence_hashes" rows="3" placeholder="One hash per line"></textarea></label>
+        <fieldset class="budget-fieldset">
+          <legend>Optional budget ceiling</legend>
+          <div class="form-grid">
+            <label><span>Maximum cost (USD)</span><input name="max_cost_usd" type="number" min="0" step="0.01"></label>
+            <label><span>Maximum tokens</span><input name="max_tokens" type="number" min="0" step="1"></label>
+            <label><span>Maximum minutes</span><input name="max_wall_clock_minutes" type="number" min="1" step="1"></label>
+            <label><span>Maximum trials</span><input name="max_trials" type="number" min="1" step="1"></label>
+          </div>
+        </fieldset>
+        <label><span>Supersedes decision ID</span><input class="mono-input" name="supersedes_decision_id" placeholder="Leave empty for a new decision"></label>
+        <label><span>Display label</span><input name="display_label" maxlength="120" placeholder="Optional, non-authoritative"></label>
+        <p class="form-error" id="decision-form-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-body preview-step" id="decision-preview-step" hidden>
+        <div class="preview-warning"><strong>Review the immutable record.</strong><span>Confirm only when the scope, evidence hashes, Git commit, actor, and prior-record hash are correct.</span></div>
+        <dl class="record-preview" id="record-preview"></dl>
+        <label class="confirmation-check"><input type="checkbox" id="explicit-confirmation"><span>I reviewed this exact preview and authorize appending it to the canonical Owner Gate ledger.</span></label>
+        <p class="form-error" id="decision-confirm-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-footer">
+        <button class="button button-secondary" id="decision-back-button" type="button" hidden>Back</button>
+        <button class="button button-primary" id="decision-preview-button" type="submit">Create preview</button>
+        <button class="button button-danger" id="decision-confirm-button" type="button" hidden disabled>Confirm and append</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

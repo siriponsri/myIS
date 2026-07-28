@@ -1,10 +1,10 @@
-"""DAPFAM split, selection, and independent Gate C/Gate R contracts."""
+"""DAPFAM split, Track C recovery, and frozen-pool diagnostic contracts."""
 
 from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Iterable, Mapping, Sequence
 
@@ -14,6 +14,8 @@ from .statistics import PairedStatistics, paired_statistics
 
 
 LEGACY_ARMS = ("dapfam", "human", "skillopt", "harnessopt")
+SHARED_SPLIT_SEED = 42
+SHARED_SPLIT_COUNTS = {"train": 250, "selection": 125, "joint_test": 872}
 
 
 @dataclass(frozen=True)
@@ -127,6 +129,57 @@ class SplitFreezeCommitment:
         )
 
 
+@dataclass(frozen=True)
+class SharedSplitCommitment:
+    """Hash-only shared membership with independently bound C and S firewalls."""
+
+    seed: int
+    membership_hashes: Mapping[str, str]
+    qrels_snapshot_sha256: str
+    c_firewall_sha256: str
+    s_firewall_sha256: str
+    owner_decision_id: str
+    query_counts: Mapping[str, int] = field(default_factory=lambda: dict(SHARED_SPLIT_COUNTS))
+
+    def validate(self) -> None:
+        expected_roles = set(SHARED_SPLIT_COUNTS)
+        counts = self.query_counts
+        if self.seed != SHARED_SPLIT_SEED:
+            raise ValueError("shared split seed must be 42")
+        if dict(counts) != SHARED_SPLIT_COUNTS:
+            raise ValueError("shared split counts must be train=250, selection=125, joint_test=872")
+        if set(self.membership_hashes) != expected_roles or any(
+            not is_sha256(value) for value in self.membership_hashes.values()
+        ):
+            raise ValueError("shared split membership commitments require three SHA-256 hashes")
+        for name, value in {
+            "qrels_snapshot_sha256": self.qrels_snapshot_sha256,
+            "c_firewall_sha256": self.c_firewall_sha256,
+            "s_firewall_sha256": self.s_firewall_sha256,
+        }.items():
+            if not is_sha256(value):
+                raise ValueError(f"{name} must be SHA-256")
+        if self.c_firewall_sha256 == self.s_firewall_sha256:
+            raise ValueError("Track C and Track S require independent firewall commitments")
+        if not self.owner_decision_id.strip():
+            raise ValueError("shared split commitment requires an Owner Gate decision")
+
+    @property
+    def sha256(self) -> str:
+        self.validate()
+        return canonical_hash(
+            {
+                "seed": self.seed,
+                "membership_hashes": dict(sorted(self.membership_hashes.items())),
+                "query_counts": dict(sorted(self.query_counts.items())),
+                "qrels_snapshot_sha256": self.qrels_snapshot_sha256,
+                "c_firewall_sha256": self.c_firewall_sha256,
+                "s_firewall_sha256": self.s_firewall_sha256,
+                "owner_decision_id": self.owner_decision_id,
+            }
+        )
+
+
 class SelectionStatus(StrEnum):
     ACCEPTED = "accepted"
     REJECTED_TIE = "rejected_tie"
@@ -216,6 +269,40 @@ class CandidateExposureComparison:
 
 
 @dataclass(frozen=True)
+class TrackCRankingDiagnostic:
+    """Post-freeze Track C ranking headroom; never an independent gate claim."""
+
+    candidate_pool_sha256: str
+    no_rerank_id: str
+    reranker_id: str
+    no_rerank_ndcg_at_100: float
+    reranked_ndcg_at_100: float
+    oracle_ndcg_at_100: float
+    reachable_ndcg_at_100: float
+    promotions: int
+    demotions: int
+    failure_layer: str
+
+    def validate(self) -> None:
+        if not is_sha256(self.candidate_pool_sha256):
+            raise ValueError("Track C diagnostic requires an identical frozen candidate-pool hash")
+        if not self.no_rerank_id.strip() or not self.reranker_id.strip():
+            raise ValueError("Track C diagnostic requires no-rerank and reranker identities")
+        scores = (
+            self.no_rerank_ndcg_at_100,
+            self.reranked_ndcg_at_100,
+            self.oracle_ndcg_at_100,
+            self.reachable_ndcg_at_100,
+        )
+        if any(not 0.0 <= score <= 1.0 for score in scores):
+            raise ValueError("Track C diagnostic nDCG values must be in [0, 1]")
+        if self.reachable_ndcg_at_100 > self.oracle_ndcg_at_100:
+            raise ValueError("reachable nDCG cannot exceed oracle nDCG")
+        if self.promotions < 0 or self.demotions < 0 or not self.failure_layer.strip():
+            raise ValueError("Track C diagnostic promotion/demotion counts and failure layer are required")
+
+
+@dataclass(frozen=True)
 class FrozenPoolRankingComparison:
     baseline_id: str
     candidate_id: str
@@ -223,7 +310,8 @@ class FrozenPoolRankingComparison:
     statistics: PairedStatistics
     classification: ConfirmationClassification
     primary_metric: str = "out_ndcg_at_100"
-    gate_id: str = "R"
+    track_id: str = "C"
+    diagnostic_id: str = "C_DIAGNOSTIC"
 
     @classmethod
     def compare(
@@ -239,7 +327,7 @@ class FrozenPoolRankingComparison:
         resamples: int = 10_000,
     ) -> "FrozenPoolRankingComparison":
         if baseline_pool_sha256 != candidate_pool_sha256:
-            raise ValueError("Gate R comparisons require an identical frozen candidate pool")
+            raise ValueError("Track C diagnostics require an identical frozen candidate pool")
         if len(candidate_pool_sha256) != 64:
             raise ValueError("candidate pool commitment must be SHA-256")
         try:

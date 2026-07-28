@@ -101,6 +101,8 @@ def assert_matched_optimizer_protocols(a2: OptimizerProtocol, a3: OptimizerProto
         "endpoint_class",
         "fallback_allowed",
         "fallback_used",
+        "routing_used",
+        "parameters_dropped",
         "temperature",
         "seed",
     )
@@ -114,3 +116,16 @@ def assert_matched_optimizer_protocols(a2: OptimizerProtocol, a3: OptimizerProto
             mismatches[field] = (getattr(a2, field), getattr(a3, field))
     if mismatches:
         raise ValueError(f"A2/A3 optimizer protocols are not matched: {mismatches}")
+
+
+def assert_matched_track_s_optimizer_protocols(
+    a2: OptimizerProtocol,
+    a2l: OptimizerProtocol,
+    a3: OptimizerProtocol,
+    *,
+    stage: str,
+) -> None:
+    """Require A2, A2L, and A3 to share the frozen A1 execution contract."""
+
+    assert_matched_optimizer_protocols(a2, a2l, stage=stage)
+    assert_matched_optimizer_protocols(a2, a3, stage=stage)

@@ -7,6 +7,7 @@ from myis_research.identity import (
     DISPLAY_NAME,
     PROGRAM_ID,
     PROTOCOL_FAMILY_ID,
+    PROTOCOL_VERSION,
     RESEARCH_VERSION,
     IdentityValidationError,
     ResearchIdentity,
@@ -19,15 +20,16 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ResearchIdentityTests(unittest.TestCase):
-    def test_is1_v01_identity_is_canonical(self) -> None:
+    def test_myis_identity_is_canonical(self) -> None:
         identity = load_research_identity(ROOT)
 
         assert_canonical_identity(identity)
         self.assertEqual(identity.program_id, PROGRAM_ID)
         self.assertEqual(identity.display_name, DISPLAY_NAME)
+        self.assertEqual(identity.protocol_version, PROTOCOL_VERSION)
         self.assertEqual(identity.research_version, RESEARCH_VERSION)
         self.assertEqual(identity.protocol_family_id, PROTOCOL_FAMILY_ID)
-        self.assertIn("Paper E", identity.legacy_aliases)
+        self.assertIn("historical-program-label", identity.legacy_aliases)
 
     def test_package_version_is_independent(self) -> None:
         identity = load_research_identity(ROOT)
@@ -41,7 +43,8 @@ class ResearchIdentityTests(unittest.TestCase):
             "program_id": PROGRAM_ID,
             "display_name": "Paper E",
             "research_version": RESEARCH_VERSION,
-            "version_class": "experimental_minor",
+            "protocol_version": PROTOCOL_VERSION,
+            "version_class": "protocol_major",
             "protocol_family_id": PROTOCOL_FAMILY_ID,
             "legacy_aliases": ["Paper E"],
         }

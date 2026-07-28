@@ -1,6 +1,6 @@
 # Restructure Status
 
-Updated: 2026-07-28 Asia/Bangkok
+Updated: 2026-07-29 Asia/Bangkok
 
 ## Target layout
 
@@ -54,6 +54,14 @@ My_Research/
 - The PDF corpus migration and U001-U153 Brain ingestion are complete.
 - The offline HarnessOpt foundation, structured runtime logging, MLflow mirror,
   canonical manifest and notebook demo are implemented and locally validated.
+- The active program identity is `myIS Research` (`myis-research`), protocol
+  `1.0`; Track C and Track S use research version `0.1` while package and
+  dependency-lock versions remain independent.
+- The active scientific path is Track C -> frozen C1 harness -> Track S. The
+  shared split commitment is seed `42`, 250/125/872 query membership; each track
+  has a separate evaluator, optimizer, budget, manifest, artifacts, and firewall.
+- Independent ranking/evidence work is retired from active navigation. Ranking/headroom is a
+  Track C diagnostic, and evidence R2 remains a deferred separately gated lane.
 - Scientific development runs, paid/API/GPU/Vast execution and prospective
   confirmation remain closed until their separate Owner gates are recorded.
 

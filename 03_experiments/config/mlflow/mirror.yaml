@@ -1,5 +1,7 @@
 schema_version: myis.mlflow-mirror-config.v1
-program_id: is1-research
+program_id: myis-research
+display_name: myIS Research
+protocol_version: "1.0"
 research_version: "0.1"
 authority: git-and-validated-artifacts
 store_env: MYIS_MLFLOW_STORE
@@ -12,12 +14,28 @@ writer:
   lock_relative_path: .mlflow-writer.lock
   sqlite_workers: 1
 experiments:
-  bootstrap: is1-research-bootstrap
-  catalog: is1-research-catalog
-  scientific: is1-research-scientific
+  bootstrap: myis-research-bootstrap
+  catalog: myis-research-catalog
+  track_c: myis-research-track-c
+  track_s: myis-research-track-s
+  joint: myis-research-joint
+  publication: myis-research-publication
 allowlisted_kinds:
   catalog: [docs, rubrics, rules, tools, skills, environment]
-  scientific: [results, metrics, environment]
+  track_c: [results, metrics, environment]
+  track_s: [results, metrics, environment]
+  joint: [results, metrics, environment]
+  publication: [docs, results, metrics, environment]
+required_tags:
+  - program_id
+  - display_name
+  - protocol_version
+  - research_version
+  - track
+  - arm
+  - phase
+  - data_role
+  - canonical_source_sha256
 forbidden_content:
   - qrels
   - confirmation split membership

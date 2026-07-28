@@ -78,7 +78,7 @@ def finalize_manifest(
     stop_reason: str | None,
 ) -> str:
     measured = not spec.phase.startswith(("offline", "bootstrap", "fixture"))
-    spec.research.validate()
+    spec.validate_active_contract()
     if measured and spec.environment is None:
         raise ValueError("measured manifests require a locked runtime environment")
     if measured and spec.provider is None:
@@ -141,6 +141,8 @@ def finalize_manifest(
             "dataset_manifest_hash": spec.dataset_manifest_hash,
             "split": spec.split,
             "split_query_ids_hash": spec.split_query_ids_hash,
+            "shared_split_commitment_sha256": spec.shared_split_commitment_sha256,
+            "track_firewall_sha256": spec.track_firewall_sha256,
             "seed": spec.seed,
         },
         "evaluator": {"evaluator_id": spec.evaluator_id, "hash": spec.evaluator_hash, "immutable": True},

@@ -1,116 +1,83 @@
-# IS1 Research V0.1
+# myIS Research
 
-`IS1 Research V0.1` is the governed myIS research workspace for family-level
-cross-domain patent retrieval. The active protocol separates candidate exposure,
-candidate-pool freeze, ranking, and evidence so each claim remains falsifiable
-and auditable. `Paper E` is retained only as a historical/legacy alias.
+`myIS Research` (`myis-research`, protocol `1.0`) is the governed workspace for
+two linked studies of family-level cross-domain patent retrieval. Track C and
+Track S each use research version `0.1`; package version `0.1.0` is independent.
 
-V0.2/V0.3 denote additive studies inside this architecture. A future change to
-the protocol family, protected-data boundary, or causal phase order becomes V1.0
-after an Owner decision.
+```mermaid
+flowchart LR
+  C["Track C: C0 zero-tuned -> C1 metric-tuned"] --> F["Freeze C0/C1 and C1 harness"]
+  F --> S["Track S: A2 | A2L | A3 from one A1"]
+  F --> D["Track C ranking diagnostic"]
+  S --> Q["One sealed joint test"]
+  D --> Q
+  Q --> P["Track C and Track S papers"]
+```
+
+There is no active independent ranking/evidence lane. Its historical files are
+preserved under `02_tracks/99_legacy/`; evidence transfer remains separately
+gated and deferred.
+DAPFAM is retrieval decision support, not legal advice.
 
 ## Start here
 
-1. [AGENTS.md](AGENTS.md) - invariant and safety contract.
-2. [PLAN.md](PLAN.md) - goal-based Phase -> Task execution authority.
-3. [FULL_RESEARCH_TRACK_PLAN.md](FULL_RESEARCH_TRACK_PLAN.md) - scientific protocol.
-4. [LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md](LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md) - code and schema contract.
-5. [00_governance/OWNER_GATES.md](00_governance/OWNER_GATES.md) and
-   [00_governance/OPERATIONS.md](00_governance/OPERATIONS.md) - approvals and commands.
+1. [AGENTS.md](AGENTS.md) - identity, safety, and scientific invariants.
+2. [PLAN.md](PLAN.md) - canonical Phase -> Task execution authority.
+3. [Track C source plan](00_governance/IS_RESEARCH_TRACK_C_V0.1_CROSSROUTE_PLAN.md).
+4. [Track S source plan](00_governance/IS_RESEARCH_TRACK_S_V0.1_SKILLOPT_HARNESSOPT_PLAN.md).
+5. [Scientific protocol](FULL_RESEARCH_TRACK_PLAN.md) and
+   [harness contract](LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md).
+6. [Owner Gates](00_governance/OWNER_GATES.md) and
+   [operations](00_governance/OPERATIONS.md).
 
-## Research program
+## Active protocol
 
-```mermaid
-flowchart TD
-    D["Paper D: frozen historical boundary"] --> F1["F1 reproduce DAPFAM baselines"]
-    F1 --> C["C0-C2 candidate exposure"]
-    C --> CF["CF freeze candidate pool"]
-    CF --> R["R0-R2 ranking and evidence"]
-    C -. optional .-> S["S A0-A3 adaptation surface"]
-    R --> Q["Q external Owner-run confirmation"]
-    Q --> P["P publication package"]
-```
+Shared query IDs use seed `42` and membership `250/125/872`, but Track C and S
+have separate evaluators, optimizers, budgets, manifests, artifacts, and data
+firewalls. Exact split hashes and OUT-positive counts are frozen only by the
+protected Owner process.
 
-The primary claims are independent:
-
-| Gate | Question | Primary metric | Comparator |
-|---|---|---|---|
-| C | Does CrossRoute expose more relevant OUT families? | OUT Recall@100 | one preregistered protocol-matched reproduced baseline |
-| R | Does ranking improve order on the frozen pool? | OUT nDCG@100 | frozen no-rerank baseline on the identical pool hash |
-
-During selection a candidate must score strictly above the current best; ties
-are rejected. On sealed confirmation a positive point-estimate delta is an
-observed improvement. The report also includes exact query count, paired delta,
-95% paired-bootstrap CI, rank-biserial effect size, and W/L/T counts. CI lower
-above zero supports statistically supported superiority; a positive delta with
-a CI crossing zero is a higher measured score with uncertain superiority. MDE
-is reported separately as prospective design sensitivity.
-
-Published DAPFAM passage Hybrid RRF references are OUT Recall@100 `0.1653` and
-OUT nDCG@100 `0.0625`. They are reproduction targets, not myIS results. DAPFAM
-measures family-level retrieval relevance and is not novelty/FTO legal truth.
+Track C compares C1 against C0 on OUT Recall@100. C0 is the locked six-route
+zero-tuned recipe; C1 searches only the typed route/fusion/depth surface. Track S
+compares matched-budget A2, A2L, and A3 arms that all start from the same A1.
+Primary Track S comparison is A3-A2 on the untouched joint test.
 
 ## Repository map
 
 | Path | Purpose |
 |---|---|
-| `00_governance/` | identity, Owner Gates, operations, approvals, tool/dependency rules |
-| `01_evidence/` | literature catalog, validated digests, provenance, local-only PDFs |
-| `02_tracks/` | C candidate exposure, R ranking/evidence, optional S adaptation |
-| `03_experiments/` | experiment configuration and immutable manifest templates |
-| `04_outputs/` | validated reports, diagrams, audits, and publication packages |
-| `05_code/` | harness, metrics/statistics, confirmation contracts, dashboard, MLflow mirror, tests |
-| `06_forntend/` | local Owner dashboard assets and the governed MLflow viewer launcher |
-| `.agents/skills/` | project procedures bound by the same protected-surface rules |
+| `00_governance/` | identity, gates, operations, Track C/S source plans, mappings |
+| `01_evidence/` | protected literature catalog, digests, provenance, local PDFs |
+| `02_tracks/00_C_crossroute/` | Track C documents and typed artifacts |
+| `02_tracks/01_S_skillopt/` | Track S documents and typed artifacts |
+| `02_tracks/99_legacy/` | protected historical track material |
+| `03_experiments/` | configs and manifest templates; no results implied |
+| `04_outputs/` | validated reports/audits/publication packages |
+| `05_code/` | deterministic kernel, dashboard backend, mirrors, tests |
+| `06_frontend/` | loopback Owner dashboard and read-only MLflow viewer |
+| `.agents/skills/` | project procedures under the same firewalls |
 
-## Implemented foundation
+## Gates and blockers
 
-The current code includes `ResearchVersionSpec`, strict `SelectionDecision`,
-independent `CandidateExposureComparison` and `FrozenPoolRankingComparison`,
-grounded/route-budgeted `HarnessPolicy`, deterministic family candidate ledgers,
-paired statistics, protected-surface checks, manifest v3, hash-only confirmation
-requests, aggregate-only confirmation validation, a loopback dashboard with an
-immutable Owner decision ledger and allowlisted PDF receipts, and a rebuildable
-local `MLflowMirror`.
+G0-G8 control migration, reproduction, C development/freeze, S preflight/run,
+joint test, transfer, and separate publication records. Current blocking Owner
+values are `C_MARGIN_VALUES_TBD_BLOCKING`, `C_SOEI_VALUE_TBD_BLOCKING`,
+`S_MARGIN_VALUES_TBD_BLOCKING`, `COREWEAVE_FINAL_FREEZE_TBD_BLOCKING`, and
+`CT_BUDGET_LICENSE_TBD_BLOCKING`. Silence never resolves them.
 
-These are contracts and offline infrastructure, not evidence that F1-Q
-scientific phases have run. Confirmation membership, qrels, protected payloads,
-and per-query outcomes remain outside the agent workspace.
-
-## Dependency authority
-
-Python 3.11 is required. `pyproject.toml` and `uv.lock` are the only dependency
-authority. Reproduce an environment with the exact recorded groups/extras:
+## Local validation
 
 ```powershell
 uv sync --locked --extra tracking --extra dashboard --extra test
+uv lock --check
 uv run --no-sync python 05_code/scripts/validate_restructure.py
 uv run --no-sync python 05_code/scripts/validate_integrity.py
+uv run --no-sync python 05_code/scripts/validate_literature_corpus.py
 uv run --no-sync python -m unittest discover -s 05_code/tests -v
+& "C:\Program Files\Git\bin\bash.exe" "06_frontend/mlflow/mlflow.sh" doctor
+git diff --check
 ```
 
-Every measured manifest records the exact Python patch, uv version, OS and
-architecture, accelerator/CUDA stack, selected groups/extras, and `uv.lock`
-SHA-256. Exported hashed requirements are interoperability-only.
-
-## Local services
-
-- The dashboard is read-only for experiment artifacts and binds only to
-  `127.0.0.1`. The only canonical Git write is a previewed, explicitly confirmed
-  typed Owner Gate decision under `00_governance/approvals/`. Its Owner console
-  exposes the canonical plan, Phase/Task evidence state, process, flow diagrams,
-  harness rules, tools, decisions, and pathless artifact metadata.
-- Task evidence completion and Owner authorization are separate states. Passing
-  evidence never opens a gated scientific phase without the applicable decision.
-- PDF streaming is disabled unless an exact path/hash is allowlisted after
-  license/privacy review. Each access writes a local ignored hash-chained receipt;
-  only periodic chain-head anchors may enter Git through an Owner Gate record.
-- MLflow mirrors allowlisted documents, results, metrics, rubrics, rules, tools,
-  skills, and environments. Git and validated artifacts remain canonical; PDFs,
-  qrels, split membership, confirmation outcomes, credentials, and protected
-  per-query artifacts are rejected. The browser viewer is separately constrained
-  to read/search routes and a read-only SQLite connection.
-
-See [00_governance/TOOLCHAIN.md](00_governance/TOOLCHAIN.md) for the complete
-authority map and [00_governance/OPERATIONS.md](00_governance/OPERATIONS.md) for
-loopback startup, replay, ledger verification, and recovery procedures.
+The dashboard is loopback-only and exposes only approved counts, hashes, and
+aggregate state. Git and validated immutable artifacts remain canonical;
+Brain, Linear, dashboard, and MLflow are rebuildable projections.

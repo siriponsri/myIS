@@ -13,7 +13,7 @@ from typing import Any
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import FileResponse
 
-from ..identity import DISPLAY_NAME, PROGRAM_ID, RESEARCH_VERSION
+from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_VERSION, RESEARCH_VERSION
 from ..ledger import ImmutableJsonLedger
 from .artifacts import ArtifactCatalog
 from .content import content_document, flow_catalog, flow_document, flow_image, tool_catalog
@@ -76,7 +76,12 @@ def create_app(
 
     @app.get("/healthz")
     def healthz() -> dict[str, str]:
-        return {"status": "ok", "program_id": PROGRAM_ID, "research_version": RESEARCH_VERSION}
+        return {
+            "status": "ok",
+            "program_id": PROGRAM_ID,
+            "protocol_version": PROTOCOL_VERSION,
+            "research_version": RESEARCH_VERSION,
+        }
 
     @app.get("/favicon.ico", include_in_schema=False)
     def favicon() -> Response:
@@ -291,7 +296,7 @@ def _frontend_file(repository_root: Path, relative_path: str) -> Path | None:
     allowed = {"index.html", "assets/dashboard.css", "assets/dashboard.js"}
     if relative_path not in allowed:
         return None
-    frontend_root = repository_root / "06_forntend/dashboard"
+    frontend_root = repository_root / "06_frontend/dashboard"
     target = frontend_root / relative_path
     if not target.exists():
         return None

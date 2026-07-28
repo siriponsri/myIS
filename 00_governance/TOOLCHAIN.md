@@ -1,4 +1,4 @@
-# IS1 Research V0.1 Toolchain and Authority
+# myIS Research 1.0 Toolchain and Authority
 
 Use one source of truth per responsibility. Exact adopted tool pins remain in
 `00_governance/config/tools.lock.yaml`; dependency resolution is solely
@@ -32,7 +32,9 @@ Use one source of truth per responsibility. Exact adopted tool pins remain in
 |---|---|---|
 | Implementation | GPT-5.6 Sol High | code/docs/tests, no scientific result implied |
 | Measured optimizer | GPT-5.6 Sol Medium | escalate to High only after qrels-blind validity failure |
-| A2/A3 main study | frozen selected Sol model/provider/effort/budget | identical across arms |
+| Track C | fixed Llama-Embed-Nemotron-8B TAC controls and frozen C0/C1 query/prompt/encoder contract | C1 edits only typed route/quota/fusion/depth surface |
+| Track S | `qwen/qwen3-30b-a3b-instruct-2507`, non-thinking, CoreWeave BF16 provisional | no routing, fallback, or parameter dropping; freeze only after G4 preflight |
+| A2/A2L/A3 main study | frozen selected model/provider/effort/budget | identical shared service and per-arm conditions |
 | Luna | support tasks or separate cost ablation | never mixed into main A2/A3 |
 | Third-party provider | development only by default | upstream identity limitation disclosed |
 
@@ -85,8 +87,11 @@ successful run is a completed task or that completed evidence is authorization.
 
 ## MLflow mirror policy
 
-Three local experiments separate bootstrap, catalog, and scientific projection.
-Bootstrap contains zero artifacts/metrics. Catalog may mirror allowlisted docs,
+Additive local experiments are `myis-research-bootstrap`,
+`myis-research-catalog`, `myis-research-track-c`, `myis-research-track-s`,
+`myis-research-joint`, and `myis-research-publication`; historical experiments
+are retained without rename or deletion. Bootstrap contains zero artifacts/metrics.
+Catalog may mirror allowlisted docs,
 rubrics, rules, tools, skills, and environment. Scientific projection may mirror
 validated aggregate results, metrics, and environment. Each file is selected
 explicitly, hash-checked, redacted, non-symlink, inside its canonical root, and

@@ -14,7 +14,7 @@ Use JSON with this minimum shape:
   "provenance": "agent-observed",
   "owner_approvals": [
     {
-      "gate": "R0",
+      "gate": "G0",
       "source": "verbatim pointer to the Owner approval",
       "scope": "what the approval permits"
     }

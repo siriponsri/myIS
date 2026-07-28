@@ -1,4 +1,4 @@
-# Repository structure decisions
+# myIS Research 1.0 repository structure decisions
 
 The design follows common research-repository guidance: separate importable
 source from tests, keep experiments/notebooks first-class but isolated, keep
@@ -21,6 +21,13 @@ persistent stores because they have different owners and release policies.
   pointers. It does not duplicate PDFs, web caches, or experiment artifacts.
 - Archive-first cleanup preserves provenance. Exact deletion groups require an
   Owner decision recorded in `CLEANUP_APPROVALS.md`.
+- Active research tracks are `02_tracks/00_C_crossroute/` and
+  `02_tracks/01_S_skillopt/`. Historical ranking/evidence material remains
+  read-only under `02_tracks/99_legacy/01_R_ranking_evidence/` and is excluded
+  from active navigation and emitters.
+- Track C and Track S may duplicate approved documents or artifacts only with a
+  source path and SHA-256 recorded next to each duplicate. Symlinks are not an
+  allowed substitute for an auditable duplicate.
 
 ## Final naming vocabulary
 

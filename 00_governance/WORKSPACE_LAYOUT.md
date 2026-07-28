@@ -1,4 +1,4 @@
-# myIS workspace layout
+# myIS Research workspace layout
 
 The workspace has four clear ownership domains and one shared persistence
 boundary:
@@ -22,6 +22,8 @@ names remain only in provenance fields; do not recreate parallel `Projects`,
 Ownership rules:
 
 - App owns production code and frozen historical application evidence.
-- Research owns the literature corpus, methods, manifests, experiments and publication outputs.
+- Research owns the literature corpus, Track C/S methods, manifests, experiments
+  and publication outputs. `02_tracks/99_legacy/` preserves inactive historical
+  material without making it part of the active protocol.
 - Brain owns curated synthesis and navigation pointers, never raw PDFs or web caches.
 - Stores owns persistent MLflow, datasets, model cache and backups.

@@ -10,11 +10,12 @@ from typing import Any, Mapping
 import yaml
 
 
-PROGRAM_ID = "is1-research"
-DISPLAY_NAME = "IS1 Research V0.1"
+PROGRAM_ID = "myis-research"
+DISPLAY_NAME = "myIS Research"
+PROTOCOL_VERSION = "1.0"
 RESEARCH_VERSION = "0.1"
-VERSION_CLASS = "experimental_minor"
-PROTOCOL_FAMILY_ID = "candidate-exposure-freeze-ranking-v1"
+VERSION_CLASS = "protocol_major"
+PROTOCOL_FAMILY_ID = "crossroute-frozen-c1-skillopt-v1"
 PROJECT_CONFIG = Path("00_governance/config/project.yaml")
 
 _PROGRAM_ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -27,10 +28,11 @@ class IdentityValidationError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class ResearchIdentity:
-    """Stable identity attached to every IS1 Research run and artifact."""
+    """Stable identity attached to every myIS Research run and artifact."""
 
     program_id: str
     display_name: str
+    protocol_version: str
     research_version: str
     version_class: str
     protocol_family_id: str
@@ -41,6 +43,7 @@ class ResearchIdentity:
         required = {
             "program_id",
             "display_name",
+            "protocol_version",
             "research_version",
             "version_class",
             "protocol_family_id",
@@ -61,6 +64,7 @@ class ResearchIdentity:
         identity = cls(
             program_id=_string(value, "program_id"),
             display_name=_string(value, "display_name"),
+            protocol_version=_string(value, "protocol_version"),
             research_version=_string(value, "research_version"),
             version_class=_string(value, "version_class"),
             protocol_family_id=_string(value, "protocol_family_id"),
@@ -74,11 +78,12 @@ class ResearchIdentity:
             raise IdentityValidationError("program_id must be a lowercase kebab-case identifier")
         if not _RESEARCH_VERSION_RE.fullmatch(self.research_version):
             raise IdentityValidationError("research_version must use MAJOR.MINOR notation")
-        expected_display = f"IS1 Research V{self.research_version}"
-        if self.display_name != expected_display:
+        if self.protocol_version != PROTOCOL_VERSION:
             raise IdentityValidationError(
-                f"display_name must be {expected_display!r} for this research_version"
+                f"protocol_version must be {PROTOCOL_VERSION!r}"
             )
+        if self.display_name != DISPLAY_NAME:
+            raise IdentityValidationError(f"display_name must be {DISPLAY_NAME!r}")
         if len(set(self.legacy_aliases)) != len(self.legacy_aliases):
             raise IdentityValidationError("legacy_aliases must not contain duplicates")
 
@@ -86,6 +91,7 @@ class ResearchIdentity:
         return {
             "program_id": self.program_id,
             "display_name": self.display_name,
+            "protocol_version": self.protocol_version,
             "research_version": self.research_version,
             "version_class": self.version_class,
             "protocol_family_id": self.protocol_family_id,
@@ -107,11 +113,12 @@ def load_research_identity(repository_root: Path) -> ResearchIdentity:
 
 
 def assert_canonical_identity(identity: ResearchIdentity) -> None:
-    """Fail if an active run is not bound to the Owner-approved V0.1 identity."""
+    """Fail if an active run is not bound to the Owner-approved identity."""
 
     expected = (
         PROGRAM_ID,
         DISPLAY_NAME,
+        PROTOCOL_VERSION,
         RESEARCH_VERSION,
         VERSION_CLASS,
         PROTOCOL_FAMILY_ID,
@@ -119,12 +126,13 @@ def assert_canonical_identity(identity: ResearchIdentity) -> None:
     actual = (
         identity.program_id,
         identity.display_name,
+        identity.protocol_version,
         identity.research_version,
         identity.version_class,
         identity.protocol_family_id,
     )
     if actual != expected:
-        raise IdentityValidationError("project identity does not match IS1 Research V0.1")
+        raise IdentityValidationError("project identity does not match myIS Research protocol 1.0")
 
 
 def _string(value: Mapping[str, Any], key: str) -> str:

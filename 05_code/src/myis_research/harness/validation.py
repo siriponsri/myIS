@@ -9,7 +9,8 @@ from typing import Any
 
 from .manifest import MANIFEST_V2, MANIFEST_V3
 from .models import is_sha256
-from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_FAMILY_ID, RESEARCH_VERSION
+from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_FAMILY_ID, PROTOCOL_VERSION, RESEARCH_VERSION
+from .models import PACKAGE_VERSION
 
 
 REQUIRED_RUN_FILES = (
@@ -70,11 +71,29 @@ def validate_manifest_payload(manifest: dict[str, Any]) -> dict[str, Any]:
         expected_research = {
             "program_id": PROGRAM_ID,
             "display_name": DISPLAY_NAME,
+            "protocol_version": PROTOCOL_VERSION,
+            "track_version": RESEARCH_VERSION,
+            "package_version": PACKAGE_VERSION,
             "research_version": RESEARCH_VERSION,
             "protocol_family_id": PROTOCOL_FAMILY_ID,
         }
-        if not isinstance(research, dict) or any(research.get(key) != value for key, value in expected_research.items()):
-            raise ValidationError("manifest is not bound to IS1 Research V0.1")
+        if not isinstance(research, dict):
+            raise ValidationError("manifest research identity is required")
+        if research.get("program_id") == "is1" + "-research":
+            return {"schema_version": schema, "read_only_legacy": True}
+        if any(research.get(key) != value for key, value in expected_research.items()):
+            raise ValidationError("manifest is not bound to myIS Research protocol 1.0")
+        if research.get("track_id") not in {"C", "S"}:
+            raise ValidationError("active manifest track_id must be C or S")
+        arm = str(manifest["identity"].get("arm", ""))
+        allowed_arms = {
+            "C": {"B0", "B1", "B2", "C0", "C1", "CF", "C_DIAGNOSTIC", "Q", "PC", "CT"},
+            "S": {"A0", "A1", "A2", "A2L", "A3", "SF", "Q", "PS", "CT"},
+        }
+        if arm not in allowed_arms[research["track_id"]]:
+            raise ValidationError("active manifest arm is not valid for its track")
+        if str(manifest["identity"].get("phase", "")).upper().startswith("R"):
+            raise ValidationError("independent ranking/evidence manifests are legacy read-only")
         if not str(research.get("revision_id", "")).strip():
             raise ValidationError("manifest research revision_id is required")
         environment = manifest.get("environment")
@@ -82,6 +101,10 @@ def validate_manifest_payload(manifest: dict[str, Any]) -> dict[str, Any]:
         measured = not phase.startswith(("offline", "bootstrap", "fixture"))
         if measured and environment is None:
             raise ValidationError("measured manifests require a locked runtime environment")
+        if measured and not is_sha256(manifest["inputs"].get("shared_split_commitment_sha256")):
+            raise ValidationError("measured manifests require a shared split commitment SHA-256")
+        if measured and not is_sha256(manifest["inputs"].get("track_firewall_sha256")):
+            raise ValidationError("measured manifests require a track-specific firewall SHA-256")
         if environment is not None:
             required_environment = ("python_version", "uv_version", "os", "architecture", "accelerator")
             missing_environment = [name for name in required_environment if not str(environment.get(name, "")).strip()]

@@ -16,8 +16,8 @@ from myis_research.dashboard.security import WindowsSession, _validate_session_s
 
 class DashboardSecurityTests(unittest.TestCase):
     def test_decision_id_is_ledger_safe(self) -> None:
-        value = _decision_id("IS1-G0", datetime(2026, 7, 28, 1, 2, 3, 456789, tzinfo=timezone.utc))
-        self.assertEqual(value, "IS1-G0-20260728T010203456789Z")
+        value = _decision_id("MYIS-G0", datetime(2026, 7, 28, 1, 2, 3, 456789, tzinfo=timezone.utc))
+        self.assertEqual(value, "MYIS-G0-20260728T010203456789Z")
 
     def test_superseded_is_not_a_decision_outcome(self) -> None:
         with self.assertRaises(ValidationError):
@@ -132,8 +132,8 @@ class DashboardSecurityTests(unittest.TestCase):
                 "G1",
                 {
                     "action": "authorize_reproduction",
-                    "phase_ids": ("R1",),
-                    "task_ids": ("R1.1",),
+                    "phase_ids": ("S1",),
+                    "task_ids": ("S1.1",),
                     "targets": (),
                 },
             )
@@ -145,7 +145,7 @@ class DashboardSecurityTests(unittest.TestCase):
                 plan,
                 "G6",
                 {
-                    "action": "authorize_confirmation",
+                    "action": "authorize_joint_confirmation",
                     "phase_ids": (),
                     "task_ids": (),
                     "targets": ("04_outputs/confirmation-request.json",),
@@ -155,7 +155,7 @@ class DashboardSecurityTests(unittest.TestCase):
             plan,
             "G6",
             {
-                "action": "authorize_confirmation",
+                    "action": "authorize_joint_confirmation",
                 "phase_ids": ("Q",),
                 "task_ids": ("Q.1",),
                 "targets": ("04_outputs/confirmation-request.json",),

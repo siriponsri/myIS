@@ -44,6 +44,10 @@ class LocalHarness:
     def preflight(self, spec: RunSpec, policy: HarnessPolicy) -> dict[str, Any]:
         policy.validate(self.module_allowlist)
         errors = []
+        try:
+            spec.validate_active_contract()
+        except ValueError as error:
+            errors.append(str(error))
         if spec.kernel_version != KERNEL_VERSION:
             errors.append("kernel_version mismatch")
         if spec.policy_hash != policy.sha256:

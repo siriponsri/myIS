@@ -1,4 +1,4 @@
-# IS1 Research V0.1 Local Operations
+# myIS Research 1.0 Local Operations
 
 Run commands from the Research repository root. `AGENTS.md`, `PLAN.md`, and
 `OWNER_GATES.md` remain authoritative.
@@ -49,7 +49,8 @@ For `BATCH_2A_ARTIFACT_VALIDATION.json`, `BATCH_2A_CSV_VALIDATION.json`, and
 ## Standard run preparation
 
 1. Identify Phase/Task, track, stage, primary metric, comparator, budget, and Gate.
-2. Verify IS1 V0.1 identity and the exact approval record.
+2. Verify `myIS Research` / `myis-research`, protocol `1.0`, Track C/S version
+   `0.1`, and the exact approval record.
 3. Validate corpus/split/qrels/family/evaluator/protected-surface commitments.
 4. Confirm only adaptation/selection labels are reachable and disable network
    re-download during measured optimization.
@@ -65,15 +66,17 @@ validated. Do not infer availability from documentation.
 ```text
 myis-harness doctor
 myis-harness reproduce dapfam --manifest PATH
-myis-harness audit exposure --manifest PATH
-myis-harness run dev --track C --manifest PATH
-myis-harness compare C --manifest PATH
-myis-harness freeze pool --manifest PATH
-myis-harness audit ranking --manifest PATH
-myis-harness run dev --track R --manifest PATH
-myis-harness compare R --manifest PATH
-myis-harness optimize --arm A2 --manifest PATH
-myis-harness optimize --arm A3 --manifest PATH
+myis-harness audit shared-split --manifest PATH
+myis-harness audit c-margin --manifest PATH
+myis-harness run dev --track C --arm C0 --manifest PATH
+myis-harness search --track C --arm C1 --manifest PATH
+myis-harness select --track C --arm C1 --manifest PATH
+myis-harness freeze c1-harness --manifest PATH
+myis-harness diagnostic c-ranking --manifest PATH
+myis-harness audit s-margin --manifest PATH
+myis-harness optimize --track S --arm A2 --manifest PATH
+myis-harness optimize --track S --arm A2L --manifest PATH
+myis-harness optimize --track S --arm A3 --manifest PATH
 myis-confirmation emit-request --request-id ID --git-commit COMMIT `
   --submission-hash C=SHA256 --config-hash C=SHA256 `
   --protocol-hash analysis=SHA256 --output REQUEST.json
@@ -130,15 +133,15 @@ Use the Git Bash launcher for browser access. It opens MLflow through the pinned
 read-only WSGI guard; it never starts the standard writable server directly.
 
 ```powershell
-& "C:\Program Files\Git\bin\bash.exe" "06_forntend/mlflow/mlflow.sh" doctor
-& "C:\Program Files\Git\bin\bash.exe" "06_forntend/mlflow/mlflow.sh" start
+& "C:\Program Files\Git\bin\bash.exe" "06_frontend/mlflow/mlflow.sh" doctor
+& "C:\Program Files\Git\bin\bash.exe" "06_frontend/mlflow/mlflow.sh" start
 ```
 
 Open `http://127.0.0.1:5000`. `start` runs in the foreground and stops with
 Ctrl+C. The launcher rejects WSL, remote binding, unknown MLflow route maps,
 write-capable database URIs, occupied ports, and version drift.
 
-For non-developer Owner operation, open `06_forntend/` in Windows Explorer and
+For non-developer Owner operation, open `06_frontend/` in Windows Explorer and
 double-click `START_OWNER_CONSOLE.cmd`. It starts both loopback services and
 opens their browser tabs without installing or synchronizing dependencies.
 Double-click `STOP_OWNER_CONSOLE.cmd` to stop the two services.

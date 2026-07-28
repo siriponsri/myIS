@@ -1,5 +1,7 @@
 schema_version: myis.mlflow-bootstrap-config.v2
-program_id: is1-research
+program_id: myis-research
+display_name: myIS Research
+protocol_version: "1.0"
 research_version: "0.1"
 status: bootstrap_only
 store_env: MYIS_MLFLOW_STORE
@@ -7,15 +9,24 @@ database_relative_path: database/mlflow.db
 artifact_relative_path: artifacts
 receipt_relative_path: receipts/mlflow
 experiments:
-  bootstrap: is1-research-bootstrap
-  catalog: is1-research-catalog
-  scientific: is1-research-scientific
+  bootstrap: myis-research-bootstrap
+  catalog: myis-research-catalog
+  track_c: myis-research-track-c
+  track_s: myis-research-track-s
+  joint: myis-research-joint
+  publication: myis-research-publication
 scientific_runs_allowed: false
 artifact_count: 0
 scientific_metric_count: 0
 required_tags:
   - program_id
+  - display_name
+  - protocol_version
   - research_version
+  - track
+  - arm
+  - phase
+  - data_role
   - stage
   - mirror_key
   - canonical_source_sha256

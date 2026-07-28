@@ -1,11 +1,13 @@
 project:
-  program_id: is1-research
-  display_name: IS1 Research V0.1
+  program_id: myis-research
+  display_name: myIS Research
+  protocol_version: "1.0"
   research_version: "0.1"
-  version_class: experimental_minor
-  protocol_family_id: candidate-exposure-freeze-ranking-v1
-  legacy_aliases:
-    - Paper E
+  track_research_version: "0.1"
+  package_version: "0.1.0"
+  version_class: protocol_major
+  protocol_family_id: crossroute-frozen-c1-skillopt-v1
+  legacy_aliases: [historical-program-label]
   repository: https://github.com/siriponsri/myIS.git
   status: implementation_active
 
@@ -17,11 +19,17 @@ authority:
   active_memory_layer: obsidian_brain
 
 research:
-  track_order: [C, R, S]
-  phase_order: [F0, F1, C0, C1, C2, CF, R0, R1, R2, S, Q, P]
+  track_order: [C, S]
+  phase_order: [F0, F1, D0, C0, C1, CF, S0, S1, SF, CT, Q, PC, PS]
+  gate_order: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  active_path: [C, CF, S]
+  shared_query_membership:
+    seed: 42
+    partitions: {train: 250, selection: 125, joint_test: 872}
+    status: commitment_only_owner_freeze_required
   gate_c_primary_metric: OUT_Recall@100
-  gate_r_primary_metric: OUT_nDCG@100
-  gate_c_and_r_independent: true
+  track_s_primary_metric: OUT_Recall@100
+  track_c_ranking_diagnostic: frozen_pool_only_not_independent_gate
   selection_rule: strictly_greater_reject_ties
   mde_role: prospective_design_sensitivity_only
   confirmation_execution: external_owner_run_aggregate_only

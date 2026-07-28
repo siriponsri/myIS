@@ -87,7 +87,7 @@ def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, objec
         run_id=f"v01-{uuid.uuid4().hex}",
         goal=goal,
         approval=approval,
-        arm="human",
+        arm="C0",
         phase="offline-demo",
         dataset_id="V01-offline-pdf-web-history-fixtures",
         dataset_manifest_hash=manifest_hash,
@@ -156,10 +156,14 @@ def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, objec
     )
     mirror_receipt = MLflowMirror(mlflow_root).sync(
         MirrorSpec(
-            stage=MirrorStage.SCIENTIFIC,
+            stage=MirrorStage.TRACK_C,
             run_name=spec.run_id,
             git_commit=spec.git_commit,
             canonical_source_sha256=run_result.manifest_sha256 or ("0" * 64),
+            track="C",
+            arm=spec.arm,
+            phase=spec.phase,
+            data_role="offline_fixture",
             tags={
                 "goal_id": spec.goal.goal_id,
                 "phase": spec.phase,

@@ -1,267 +1,101 @@
-# IS1 Research V0.1 Local Harness Build Contract
+# myIS Research 1.0 Local Harness Build Contract
 
-Status: `IMPLEMENTATION_ACTIVE_SCIENTIFIC_RUNS_GATED`
-Execution authority: `PLAN.md`, `AGENTS.md`, and `00_governance/OWNER_GATES.md`
+This contract defines deterministic implementation boundaries for Track C and
+Track S. It authorizes offline schemas, fixtures, validators, dashboard, and
+projection code only. Scientific execution requires the applicable Owner Gate.
 
-## Harness definition
+## Identity and compatibility
 
-The harness is the deterministic control system around retrieval/model policy:
-typed inputs, lifecycle, approvals, protected surfaces, budgets, tools, context,
-metrics, statistics, manifests, logs, recovery, Owner decisions, and mirrors.
+Active emitters require `program_id=myis-research`, display name `myIS Research`,
+protocol version `1.0`, and Track C/S version `0.1`. Package version remains
+`0.1.0`. Historical schema readers may load predecessor bundles in an explicit
+read-only legacy mode. Active creation, mutation, confirmation request, or
+measured execution with the predecessor identity or independent ranking phase
+must fail.
 
-> Probabilistic components propose. Deterministic contracts decide validity,
-> comparability, immutability, and reportability.
+## Deterministic kernel
 
-## Implemented architecture
+The kernel owns typed identity, lifecycle, approvals, split commitments, hash
+closure, budgets, family deduplication, tie-breaking, metrics/statistics,
+manifest validation, redaction, protected-path checks, and immutable writes.
+Policy code may propose only grounded query views, allowlisted routes, route
+depth/quota, fixed budgets, declared fusion, frozen-pool diagnostic depth, and
+bounded stopping. Probabilistic output is never authoritative before validation.
 
-```mermaid
-flowchart TB
-    O["Owner-approved goal/decision"] --> K["Deterministic kernel"]
-    P["Typed probabilistic policy"] --> K
-    K --> A["Read-only-first typed adapters"]
-    A --> T["Retrieval/model tools"]
-    T --> E["Frozen evaluator contracts"]
-    E --> M["Immutable manifest v3"]
-    M --> L["Rebuildable local MLflow mirror"]
-    O --> D["Loopback read-only dashboard"]
-    D --> G["Append-only Owner decision ledger"]
-```
+## Required schemas
 
-The kernel owns schemas, lifecycle, identity, approvals, split and qrels
-commitments, budget ceilings, family dedup/tie-break, metrics/statistics,
-redaction, immutable artifacts, confirmation boundaries, and validation.
+- `ResearchVersionSpec`: program, protocol, track, track version, package version.
+- `SharedSplitCommitment`: seed, counts, opaque membership hashes, qrels hash,
+  and separate C/S firewall identifiers; never raw protected IDs.
+- `TrackCManifest`: arms B0/B1/B2/C0/C1/CF/C_DIAGNOSTIC/Q/PC/CT.
+- `TrackSManifest`: arms A0/A1/A2/A2L/A3/SF/Q/PS/CT.
+- `TrackCRankingDiagnostic`: identical pool hash, no-rerank/rerank identities,
+  oracle/reachable nDCG, promotion/demotion counts, and failure layer.
+- `AggregateComparison`: required `track_id`, comparison family, exact n,
+  estimates, paired delta/CI/effect/W-L-T, multiplicity role, and hash closure.
+- `ProviderExecution`: requested/resolved model/provider/effort, endpoint class,
+  fallback/routing/parameter-drop flags, repeat, cost/latency/tokens.
 
-The policy may own only declared grounded query views, allowlisted routes,
-route depth/quota, candidate budget allocation, fusion, ranking/evidence depth,
-and stopping. It cannot alter evaluator code, ground truth, family mapping,
-confirmation access, or executable tools outside an allowlist.
+## Track C policy
 
-## Public contracts and modules
+C0 validates six named routes, quotas `100/100/50/50/50/50`, raw budget 400,
+RRF 60, and final K 100. C1 patch validation permits only route enablement,
+quotas, fusion, RRF, and pool/rerank depth. It rejects changes to query views,
+prompts, encoder revision, reranker instructions, evaluator, split, budget,
+protected surfaces, or executable tools. Search and one-batch selection ceilings
+are kernel-enforced.
 
-| Module | Implemented contract |
-|---|---|
-| `harness/models.py` | `GoalSpec`, `ApprovalRecord`, `ResearchVersionSpec`, `RuntimeEnvironment`, `ProviderExecution`, `ReplicationContract`, `StatisticsContract`, `ProtectedSurfaceContract`, `ExecutionIsolationContract`, `CandidatePoolReference`, `RunSpec`, events/artifacts/results |
-| `harness/policy.py` | grounded `QueryViewPolicy`, route-specific `RoutePolicy`, `CandidateBudget`, `FusionContract`, `HarnessPolicy` |
-| `harness/candidate_ledger.py` | deterministic family ledger and `freeze_candidate_pool` |
-| `harness/metrics.py` | family Recall/nDCG and canonical strict comparison helpers |
-| `harness/statistics.py` | paired delta, deterministic 10k bootstrap CI, W/L/T, rank-biserial effect, Holm support |
-| `harness/benchmark.py` | explicit-ratio split compatibility, `SplitFreezeCommitment`, strict `SelectionDecision`, independent C/R comparisons and confirmation classification |
-| `harness/manifest.py` | immutable no-overwrite manifest v3 and receipts |
-| `harness/validation.py` | v3 validation and v2 read-only legacy validation |
-| `protection.py` | protected path/key and aggregate-only boundaries |
-| `providers.py` | no-fallback and matched A2/A3 validation |
-| `confirmation.py` | hash-only request and aggregate-only response; no evaluator or protected-data loader |
-| `ledger.py`, `dashboard/*` | immutable governance decisions, loopback security, allowlisted viewer/receipts |
-| `mlflow_mirror.py` | explicit-file, validated/redacted, rebuildable local mirror |
+Candidate ledgers retain query/view/source-span, route, publication/family,
+component rank/score, fused rank/score, dedup decisions, and deterministic
+tie-break fields. Final family count never exceeds 100 and raw unique families
+never exceed 400.
 
-Every external JSON/YAML/TOML input is parsed into a typed contract before use.
-Legacy v2 manifests may be read and validated but are never emitted as new runs.
+## Track S optimizer adapter
 
-## State and immutable write contract
+Lifecycle is `preflight -> dry_run -> execute -> collect -> validate -> freeze`.
+Preflight validates the Qwen/CoreWeave identity and rejects routing, fallback,
+parameter dropping, tool drift, weak schema mode, or unstable fixtures. Only one
+identical transport retry is legal.
 
-Goals advance through:
+A2/A2L/A3 share A1, seeds, model/provider/effort, dataset access, evaluator,
+tools, 160-rollout seed cap, USD 20 arm cap, retry and stopping rules. A3 patch
+validation uses an exact typed allowlist and denies executable expansion.
+Every repeat, failure, invalid trial, and cost event is retained.
 
-```text
-DRAFT -> REVIEWED -> APPROVED -> ACTIVE -> CLOSED
-                   \-> CANCELLED
-```
+## Confirmation and statistics
 
-Runs advance through:
+The local command creates a hash-only request; external Owner infrastructure
+returns only aggregate packages. Validators reject raw IDs, qrels, membership,
+per-query outcomes, credentials, or unknown fields that can carry protected
+payloads. Track C primary and Track S primary remain distinct. Holm is applied
+only to each preregistered additional family, never the single primary.
 
-```text
-CREATED -> PREFLIGHTED -> RUNNING -> SUCCEEDED
-    |          |             |----> FAILED
-    |          |             |----> CANCELLED
-    \----------\-------------> INVALIDATED
-```
+## Manifest and artifact layout
 
-Transitions are append-only. A rerun uses a new run ID. Canonical JSON records
-use no-overwrite creation. Manifest finalization occurs only after artifacts and
-validation are complete; existing manifests/decisions/receipts are never edited.
+Track C writes only below `02_tracks/00_C_crossroute/C_artifacts/`; Track S only
+below `02_tracks/01_S_skillopt/S_artifacts/`. Cross-track duplicates require an
+Owner-approved source path plus SHA-256 record; symlinks are forbidden. Manifests
+record exact Python patch, uv version, OS/architecture, accelerator/CUDA,
+selected groups/extras, `uv.lock` hash, Git SHA, config/code/prompt/skill/model/
+provider/evaluator/split/pool hashes, costs, and artifact hashes.
 
-## Candidate exposure kernel
+MLflow is a rebuildable allowlisted mirror with additive experiments
+`myis-research-{bootstrap,catalog,track-c,track-s,joint,publication}` and required
+tags for track, arm, phase, data role, protocol/track version, and source hashes.
+It rejects protected data and cannot validate or invalidate a canonical bundle.
 
-`HarnessPolicy.validate()` enforces unique grounded views, supported source
-fields, route IDs, route kind allowlists, positive depth/quota, quota <= depth,
-total route quota within maximum retrieval budget, final K, fusion references,
-family deduplication, provenance, and optional frozen-pool SHA-256.
+## Dashboard boundary
 
-The family ledger retains publication-level provenance while deduplicating at
-family level. Stable ordering must not depend on batch order or Python mapping
-iteration. Required tie-break is score descending, best component rank ascending,
-then family ID ascending.
+The UI binds only `127.0.0.1`, validates Host/Origin/session/CSRF, disables
+cache/CDN/CORS, and exposes counts, hashes, aggregate state, phase dependencies,
+deferred lanes, and projection links only. Owner Gate decisions are immutable
+hash-chained records. PDF streaming remains exact allowlist/hash controlled with
+append-only local receipts.
 
-Selection is implemented by `SelectionDecision.decide()`: canonicalize scores,
-accept only strict improvement, reject exact ties, and reject lower scores.
+## Test obligations
 
-## Gate C and Gate R kernel
-
-`CandidateExposureComparison` computes paired Gate C statistics for
-`out_recall_at_100`. `FrozenPoolRankingComparison` computes Gate R statistics for
-`out_ndcg_at_100` and rejects different pool hashes. Their classifications are
-independent.
-
-Confirmation classification is point-estimate aligned:
-
-- delta <= 0: `no_observed_improvement`;
-- delta > 0 with CI lower <= 0:
-  `higher_measured_score_uncertain_superiority`;
-- delta > 0 with CI lower > 0:
-  `statistically_supported_superiority`.
-
-MDE is not an input to this observed-result classifier. The primary comparison
-has no multiplicity correction; additional preregistered comparison families use
-Holm.
-
-## Split and protected-data implementation target
-
-`deterministic_stratified_split()` requires an explicit ratio and rejects
-duplicate query IDs. `SplitFreezeCommitment` binds the prospective-sensitivity
-report, seed, membership hashes, qrels snapshot, query counts, OUT-positive
-availability/count, and Owner decision. Before scientific use, C0 must execute
-that audit with externally held confirmation membership. Historical 60/20/20
-usage is not authorization to freeze that ratio.
-
-Confirmation must remain outside this repository. `confirmation.py` deliberately
-contains no evaluator and no protected-data loader. A request contains only Git,
-submission, config, and protocol hashes bound to IS1 V0.1. An aggregate package
-contains only n, point estimates, deltas, CIs, effects, W/L/T, comparison-family
-metadata, and hashes. `assert_aggregate_only` rejects protected keys.
-
-## Manifest v3 and replay
-
-Every measured `RunSpec` must bind:
-
-- `ResearchVersionSpec` for IS1 V0.1 and protocol family;
-- Owner approval and scope hash;
-- Git commit/dirty state and immutable artifact hashes;
-- dataset/split commitments, evaluator, kernel/policy/config/prompt/skill hashes;
-- `RuntimeEnvironment`: exact Python 3.11 patch, uv version, OS/architecture,
-  accelerator/CUDA, groups/extras, `uv.lock` SHA-256;
-- `ProviderExecution`: requested/resolved model, provider, endpoint class,
-  effort, fallback, request ID, tokens, latency, cost;
-- replication, statistics, protected/editable surfaces, offline execution
-  isolation, candidate pool, and budget.
-
-`pyproject.toml + uv.lock` is the sole dependency authority. Clean replay uses
-`uv sync --locked` with exact recorded groups/extras. Requirements exports are
-interoperability-only.
-
-## Dashboard and governance ledger
-
-The dashboard is a local Owner research console and read-only projection of
-metadata/digests. It presents the canonical plan, Phase/Task evidence state,
-process, flow diagrams, harness rules, tools, decisions, and artifacts. Security
-requirements are fail-closed:
-
-- bind `127.0.0.1` only and reject remote or multi-user operation;
-- validate Host and Origin; no CORS/CDN; `Cache-Control: no-store`;
-- session and CSRF token on the only canonical mutation endpoint;
-- derive authoritative actor from the backend Windows/OS account and store a
-  privacy-preserving stable ID; browser labels are non-authoritative;
-- no browser editing of manifests, metrics, qrels, splits, baselines, or results.
-
-Owner decisions use preview then explicit confirmation. One immutable JSON
-record under `00_governance/approvals/` stores decision ID, gate ID, status,
-rationale, timestamp, actor, evidence-manifest hashes, Git commit, and prior
-record hash. Corrections are new superseding records.
-
-Task evidence is an operational, typed, immutable projection and never a second
-approval ledger. A Task becomes evidence-complete only when all registered
-acceptance checks pass against the current plan hash and validated artifact
-hashes. Owner authorization remains independent and is required before opening
-the next gated scientific scope.
-
-PDF content streams only from an exact path/hash allowlist after license/privacy
-approval. The viewer rejects traversal, symlinks outside roots, hash drift, and
-protected files. Each access writes a separate ignored local receipt with
-receipt ID, approved file ID/hash, purpose, timestamp, authoritative actor ID,
-and prior hash. This chain is tamper-evident, not tamper-proof. A periodic Owner
-decision may anchor only chain-head digest and receipt range in Git. Recovery
-quarantines a corrupt local ledger, preserves it for audit, starts a superseding
-local chain, and records the event/anchor through an Owner decision.
-
-## MLflow mirror
-
-MLflow is local, serialized, searchable, idempotent, and rebuildable. Git and
-validated artifacts remain authoritative. The mirror supports allowlisted files
-classified as docs, results, metrics, rubrics, rules, tools, skills, or
-environment, and uses separate bootstrap/catalog/scientific experiments.
-
-It rejects directory-wide uploads, PDFs, symlinks, credentials, qrels,
-confirmation fields, split membership, raw provider payloads, and protected
-per-query artifacts. Bootstrap runs contain zero artifacts and zero scientific
-metrics. A failure produces one append-only deferred receipt and cannot alter
-canonical run validity. Rebuild quarantines the store and replays explicit mirror
-specs from canonical hashes; it never auto-repairs canonical files.
-
-The browser-facing MLflow viewer is not the mirror writer. It uses the pinned
-MLflow UI behind a local WSGI allowlist and a read-only SQLite URI. Unknown
-routes and every create/update/delete/log/upload/gateway/job surface fail closed.
-
-## Brain, MCP, and skills
-
-Adapters should expose `preflight`, `dry_run`, `execute`, `cancel`, and `collect`
-through typed provenance envelopes. Reads are the default. Writes require narrow
-authority, idempotency, and a serial writer. Brain contains readable decisions
-and pointers, not evaluator output. MCP cannot decide gates or bypass the repo.
-Skills contain procedures and references only; their hashes and editable paths
-are recorded in measured runs.
-
-## Model and PageIndex protocol
-
-Implementation uses GPT-5.6 Sol High. Measured optimization starts Sol Medium,
-escalates to High only after qrels-blind calibration failure, and freezes the
-chosen model/provider/effort/budget identically in A2/A3. Luna is support-only or
-a separate cost ablation. Third-party providers are development-only by default.
-Requested and resolved model identities must match and fallback is forbidden in
-measured work.
-
-PageIndex is a separately preregistered within-document evidence pilot after
-BM25/dense corpus routing. The kernel must reject any configuration that uses it
-as an implicit first-stage DAPFAM retriever.
-
-## Run bundle and authority
-
-```text
-<run-id>/
-  prompt.json
-  skill_manifest.json
-  flow.json
-  config.json
-  progress.jsonl
-  runtime.jsonl
-  candidates.jsonl
-  evidence.jsonl
-  per_query_metrics.jsonl
-  metrics.json
-  statistics.json
-  result.json
-  validation_report.json
-  environment.json
-  manifest.json
-  receipts/
-```
-
-Runtime/progress are diagnostic, candidate/evidence/per-query rows are replay
-inputs, metrics/statistics are numeric artifacts, the validated manifest is the
-paper-facing index, and MLflow is only a mirror. Paper generators read validated
-canonical artifacts, never stdout or an MLflow UI.
-
-## Required tests and remaining implementation gaps
-
-Implemented focused tests cover identity, import/environment integrity, strict
-selection, independent gates, point-delta classification, grounded policy and
-candidate determinism, statistics/Holm, provider fallback, protected paths,
-aggregate-only confirmation, manifest v2/v3, dashboard security, decision chain,
-PDF path/hash receipts, and MLflow projection/rebuild.
-
-Before scientific execution, add end-to-end tests for real baseline adapter
-parity, OUT-positive power auditing, network denial during measured optimization,
-split membership externalization, batch-order invariance across actual retrieval
-backends, complete baseline replay on identical external confirmation IDs,
-PageIndex first-stage bypass, and paper-table projection from aggregate-only
-confirmation.
-
-Acceptance commands are maintained in `00_governance/OPERATIONS.md`. Passing
-offline tests proves contract behavior only; it does not prove a scientific win.
+Tests cover active/legacy identity separation; shared split commitments and dual
+firewalls; C0 recipe and C1 edit denial; strict tie rejection; one-batch limits;
+provider/fallback/parameter drift; A2/A2L/A3 matching; budget hard stops;
+diagnostic pool equality; aggregate track IDs; confirmation redaction; immutable
+manifests; dashboard security; MLflow rejection; and deterministic replay.

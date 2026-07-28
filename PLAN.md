@@ -1,554 +1,346 @@
-# IS1 Research V0.1 Canonical Execution Plan
+# myIS Research 1.0 Canonical Execution Plan
 
-Status: `IMPLEMENTATION_FOUNDATION_ACTIVE_SCIENTIFIC_EXECUTION_GATED`
-Protocol family: `candidate-exposure-freeze-ranking-v1`
-Active identity: `IS1 Research V0.1` (`Paper E` is a historical alias only)
-Execution authority: this file, interpreted with `AGENTS.md` and
-`00_governance/OWNER_GATES.md`.
+Status: `F0_MIGRATION_ACTIVE_SCIENTIFIC_EXECUTION_GATED`
+Active identity: `myIS Research` / `myis-research`
+Protocol: `1.0`; Track C/S research version: `0.1`
+Migration base: `4dd0f4b5698174a128d3d1c4d4efcdee6dd04f4c`
 
-This is a goal-based plan with exactly two planning levels: Phase and Task.
-Completing a task means satisfying its acceptance criteria, not obtaining a
-positive metric. Owner approval opens only the named scope. F1-Q scientific
-execution remains gated even when its contracts and offline tests are present.
+This file is the Phase -> Task execution authority. Completion means satisfying
+acceptance criteria, not obtaining a positive result. Owner approval opens only
+the named scope. This migration authorizes documentation, configuration, schema,
+tests, dashboard, and projection updates only; no experiment, qrels evaluation,
+GPU, paid API, or confirmation execution is authorized.
 
-## Phase F0 - Integrity and documentation migration
+## Phase F0 - Foundation migration
 
-### Task F0.1 - Prove repository, import, and dependency integrity
+### Task F0.1 - Capture integrity baseline
 
-- **Goal:** establish canonical bytes and a replayable Python environment before
-  any scientific development.
-- **Execution model:** GPT-5.6 Sol High for implementation and diagnosis; local
-  deterministic Python only for checks.
-- **Objective:** make `validate_restructure.py` and `validate_integrity.py`
-  explain every integrity decision, including the three BATCH_2A records, without
-  auto-repairing expected hashes.
-- **Contracts:** `RuntimeEnvironment`, Git index/worktree byte identity,
-  line-ending-aware semantic parsing, Python 3.11, `pyproject.toml + uv.lock` as
-  the sole dependency authority.
-- **Files/modules:** `.python-version`, `.gitattributes`, `pyproject.toml`,
-  `uv.lock`, `05_code/scripts/capture_environment.py`,
-  `05_code/scripts/validate_integrity.py`, `05_code/scripts/validate_restructure.py`,
-  `05_code/tests/test_integrity.py`, and the read-only BATCH_2A QA records.
-- **Inputs:** Git HEAD/index/worktree; BATCH_2A manifest expectations and current
-  bytes; selected uv groups/extras; OS and accelerator metadata.
-- **Outputs:** passing integrity reports and an environment JSON that records
-  exact Python patch, uv version, OS/architecture, accelerator/CUDA stack,
-  groups/extras, and `uv.lock` SHA-256.
-- **Hashes:** compare worktree SHA-256, Git blob representation, manifest hash,
-  semantic record hash, and `uv.lock` SHA-256. Canonicality requires provenance:
-  producer/source record, historical Git blob, independent semantic validation,
-  and backlink consistency. A green validator alone is insufficient.
-- **Tests:** `IntegrityTests.test_import_hashes_match_worktree_and_git_index`,
-  `test_semantic_parsers_ignore_line_ending_representation`,
-  `test_environment_capture_binds_uv_lock_and_selections`, and
-  `test_environment_json_is_canonicalizable`.
-- **Acceptance:** both validators pass from `uv run --no-sync`; all three
-  mismatches have recorded diagnoses; clean replay uses
-  `uv sync --locked` with the recorded groups/extras.
-- **Owner Gate:** G0 approves the migration evidence; a changed canonical hash or
-  provenance interpretation requires a new decision record.
-- **Budget/stop:** local CPU only; stop on unresolved producer provenance,
-  ambiguous canonical bytes, dependency drift, or a non-Python-3.11 runtime.
-- **Rollback:** revert only F0 implementation files to the pre-task commit; never
-  rewrite or delete QA provenance. Restore a prior lock only from Git.
-- **Scientific validity risk:** blessing current bytes merely because they parse
-  would erase evidence of source drift.
-- **Dependencies:** none.
+- **Goal:** Bind the migration to reproducible repository and dependency bytes.
+- **Inputs:** Git HEAD/index/worktree, protected-path inventory, Python and uv metadata.
+- **Outputs:** Migration base, protected-path comparison, and environment receipt.
+- **Tests:** `validate_restructure.py`, `validate_integrity.py`, `uv lock --check`.
+- **Acceptance:** Base and lock hashes are recorded; protected drift is zero.
+- **Owner Gate:** G0 Migration.
+- **Budget/stop:** Local CPU only; stop on unresolved provenance or lock drift.
+- **Rollback:** Restore only migration-owned files; preserve evidence and history.
+- **Risk:** A green parser without byte provenance could bless silent drift.
+- **Evidence:** Git SHA, SHA-256 inventory, validator output.
+- **Dependencies:** None.
 
-### Task F0.2 - Consolidate active documentation without deleting evidence
+### Task F0.2 - Migrate active docs and configuration
 
-- **Goal:** provide one small, complete active documentation set for IS1 V0.1.
-- **Execution model:** GPT-5.6 Sol High.
-- **Objective:** semantic-merge the migration overlay; use active identity IS1
-  Research V0.1; preserve Paper D and historical `Paper E` provenance; deprecate
-  rather than delete conflicting active documents until exact Owner approval.
-- **Contracts:** active docs are `README.md`, `AGENTS.md`, `PLAN.md`,
-  `FULL_RESEARCH_TRACK_PLAN.md`, `LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md`, and the
-  three governance runbooks. PLAN hierarchy remains Phase -> Task only.
-- **Files/modules:** those active docs, `CLAUDE.md`, track READMEs, literature
-  README, `.agents/skills/`, `.codex/config.toml.example`, manifest template, and
-  `00_governance/config/project.yaml`.
-- **Inputs:** current repo, migration overlay, implemented symbols/tests, Owner
-  decisions in the task record.
-- **Outputs:** coherent active docs, exact cleanup-candidate list, backlinks to
-  replacements, and no modification to historical QA/provenance.
-- **Hashes:** record source overlay commit `f85404a9c00da8d3192142528b85f8d4048e2b3e`
-  and final Git commit; preserve literature/PDF/digest hashes unchanged.
-- **Tests:** active-name/conflict `rg`, Markdown link resolution, manifest-template
-  schema lint, and `git diff --check`.
-- **Acceptance:** no active instruction retains the four-arm/both-metrics win
-  rule, direct confirmation access, requirements-as-authority, remote dashboard,
-  or MLflow-as-truth semantics. Historical evidence may retain old wording.
-- **Owner Gate:** G0; deletion of any duplicate/obsolete path requires a separate
-  exact path approval even when replacement backlinks exist.
-- **Budget/stop:** documentation/offline only; stop if an apparent conflict is
-  embedded in frozen provenance rather than an active instruction.
-- **Rollback:** restore active docs from the pre-migration commit; do not touch
-  historical artifacts.
-- **Scientific validity risk:** changing historical wording would create false
-  provenance; leaving conflicting active rules would permit protocol drift.
-- **Dependencies:** F0.1 diagnosis informs hash language but does not require
-  changing historical bytes.
+- **Goal:** Make C/S protocol 1.0 the only active authority.
+- **Inputs:** Owner-approved migration plan and the two untracked C/S source plans.
+- **Outputs:** Core docs, governance config, track roots, skills, and manuscript skeletons.
+- **Tests:** Active-context scan, Markdown links, YAML parse, `git diff --check`.
+- **Acceptance:** Active roots use myIS identity and contain no independent ranking/evidence lane.
+- **Owner Gate:** G0 Migration.
+- **Budget/stop:** Offline edits only; stop if an active edit overlaps frozen evidence.
+- **Rollback:** Revert migration-owned paths to the migration base.
+- **Risk:** Rewriting historical wording would create false provenance.
+- **Evidence:** Changed-file manifest and protected-path zero-diff.
+- **Dependencies:** F0.1.
 
-### Task F0.3 - Verify governance dashboard, ledgers, and MLflow mirror
+### Task F0.3 - Update read-only projections
 
-- **Goal:** make local Owner observability useful without widening write or data access.
-- **Execution model:** GPT-5.6 Sol High; local CPU services only.
-- **Objective:** provide a professional same-origin console for the canonical
-  plan, Phase/Task evidence state, process, flow, harness rules, tools, typed
-  Owner decisions, allowlisted PDF access receipts, and rebuildable MLflow
-  projection with an enforced read-only browser viewer.
-- **Contracts:** `DecisionLedger`, dashboard Host/Origin/session/CSRF rules,
-  backend OS actor identity, immutable approval records, `PDFViewer` allowlist
-  and local receipt chain, `MLflowMirror` explicit-file projection.
-- **Files/modules:** `05_code/src/myis_research/ledger.py`, `dashboard/*`,
-  `mlflow_mirror.py`, `06_forntend/dashboard/`, `06_forntend/mlflow/`,
-  `00_governance/approvals/`, PDF allowlist template, MLflow configs, and tests.
-- **Inputs:** metadata/digests and explicit allowlisted files only; never qrels,
-  membership, confirmation outcomes, credentials, protected per-query artifacts,
-  or unapproved PDF bytes.
-- **Outputs:** loopback Owner console, deterministic Phase/Task snapshot,
-  immutable decisions, local tamper-evident PDF receipts, optional Git-tracked
-  chain-head anchors, MLflow receipts/rebuild plan, and a read-only MLflow UI.
-- **Hashes:** each decision records evidence-manifest hashes, Git commit, and
-  prior-record hash; each PDF receipt records file hash and prior-record hash;
-  mirror receipts bind canonical source and artifact hashes.
-- **Tests:** `DashboardSecurityTests`, `DecisionLedgerTests`, `PDFViewerTests`,
-  and `MLflowMirrorTests`, including protected-data negative tests.
-- **Acceptance:** services bind only `127.0.0.1`, fail closed on remote/multi-user
-  conditions, use `no-store`, expose no generic mutation route, distinguish task
-  evidence from gate authorization, never overwrite decisions/receipts, and
-  prevent the MLflow browser process from mutating the canonical store.
-- **Owner Gate:** G0 for code; every actual canonical decision write requires
-  preview plus explicit confirmation. PDF allowlist/anchor writes require their
-  named Owner decisions.
-- **Budget/stop:** local CPU and disk only; stop on actor ambiguity, ACL/path
-  escape, chain corruption, remote bind, or missing canonical source hash.
-- **Rollback:** stop service, quarantine a corrupt local receipt/MLflow store,
-  verify canonical Git artifacts, then replay. Never auto-repair canonical data.
-- **Scientific validity risk:** a writable dashboard or mirrored protected data
-  would create an untracked path to alter or learn the experiment.
-- **Dependencies:** F0.1, F0.2.
+- **Goal:** Mirror the C/S plan in dashboard, MLflow, Brain, and Linear.
+- **Inputs:** Final PLAN task graph and PLAN SHA-256.
+- **Outputs:** Loopback dashboard, additive MLflow config, Brain notes, Linear mapping.
+- **Tests:** Dashboard/API/security tests, MLflow doctor, projection readback.
+- **Acceptance:** Projections match 13 phases and 22 tasks and expose no protected data.
+- **Owner Gate:** G0 Migration; each canonical decision write remains separately confirmed.
+- **Budget/stop:** Local projections only; stop on remote binding, write ambiguity, or data leak.
+- **Rollback:** Rebuild projections from Git; never alter canonical run evidence.
+- **Risk:** A projection could be mistaken for scientific or approval truth.
+- **Evidence:** API snapshot, mirror receipts, Brain/Linear mappings.
+- **Dependencies:** F0.2.
 
-## Phase F1 - Reproduce DAPFAM baselines
+## Phase F1 - Protocol-matched baselines
 
-### Task F1.1 - Reproduce BM25, dense, and Hybrid RRF
+### Task F1.1 - Reproduce B0, B1, and B2
 
-- **Goal:** establish one protocol-matched primary baseline for Gate C and the
-  no-rerank baseline used after pool freeze for Gate R.
-- **Execution model:** GPT-5.6 Sol High for implementation; deterministic local
-  CPU for BM25/cached evaluation; any new embedding/API/GPU work requires G1 plus
-  a scoped compute approval.
-- **Objective:** rerun DAPFAM BM25 passage, dense passage, and Hybrid RRF K=30
-  under identical corpus, query IDs, family mapping, evaluator, field view, and
-  top-100 protocol. Published scores are tolerance targets only.
-- **Contracts:** family-level aggregation, deterministic tie-break
-  `score desc -> best component rank asc -> family_id asc`, manifest v3,
-  `RuntimeEnvironment`, `StatisticsContract`, and explicit primary baseline ID.
-- **Files/modules:** baseline adapters/configs under `03_experiments/config/`,
-  `harness/candidate_ledger.py`, `harness/metrics.py`, `harness/statistics.py`,
-  `harness/manifest.py`, reproduction scripts/tests to be added under
-  `05_code/scripts/` and `05_code/tests/`.
-- **Inputs:** frozen DAPFAM corpus/query/qrels/family/evaluator snapshots and
-  split commitments authorized for reproduction.
-- **Outputs:** immutable BM25/dense/Hybrid bundles; ALL/IN/OUT Recall@100 and
-  nDCG@100; per-route ranks; a single preregistered Gate C baseline manifest.
-- **Hashes:** corpus, dataset manifest, family map, parser, query view, query IDs,
-  qrels snapshot, evaluator, config, model/revision, index, environment, and every
-  output artifact.
-- **Tests:** metric fixtures, family dedup/tie-break replay, index determinism,
-  manifest v3 validation, and protocol equality across baselines.
-- **Acceptance:** local scores are reproducible within a preregistered tolerance;
-  differences from published values are diagnosed rather than hidden; all
-  baselines can be rerun on identical future confirmation IDs externally.
+- **Goal:** Establish preregistered Track C comparators on one protocol.
+- **Inputs:** Frozen DAPFAM corpus/query/family/evaluator snapshots and G1 approval.
+- **Outputs:** Immutable B0/B1/B2 bundles plus secondary-control bundles.
+- **Tests:** Family dedup, tie-break, identity, replay, and evaluator equality tests.
+- **Acceptance:** B0 dense, B1 0.7/0.3 hybrid, and B2 naive RRF replay identically.
 - **Owner Gate:** G1 Reproduction.
-- **Budget/stop:** preregister wall-clock/storage/index budget; stop on corpus,
-  field, family, evaluator, or query-population mismatch.
-- **Rollback:** remove only unvalidated runtime outputs through approved cleanup;
-  retain failure manifests and restore previous config/code commit.
-- **Scientific validity risk:** choosing the strongest baseline after seeing Gate
-  C results would create comparator selection bias.
-- **Dependencies:** F0 complete.
+- **Budget/stop:** Run-specific compute budget; stop on field/model/query mismatch.
+- **Rollback:** Retain failure manifests; remove only approved invalid runtime outputs.
+- **Risk:** Post-result baseline choice would bias the comparator.
+- **Evidence:** Manifests, hashes, ALL/IN/OUT aggregate metrics.
+- **Dependencies:** F0.
 
-## Phase C0 - Exposure, split, oracle, and power audit
+## Phase D0 - Shared split and audit design
 
-### Task C0.1 - Freeze design inputs and quantify exposure headroom
+### Task D0.1 - Freeze shared membership and dual firewalls
 
-- **Goal:** decide whether candidate exposure is measurable and whether the
-  proposed split is adequately sensitive before optimization.
-- **Execution model:** GPT-5.6 Sol High for implementation/analysis; deterministic
-  local CPU evaluation.
-- **Objective:** audit OUT-positive availability/count, zero-hit rate,
-  Recall@100/200/1000, judged-query coverage, and oracle ranking inside baseline
-  pools; run prospective OUT-primary MDE/power analysis before freezing 60/20/20.
-- **Contracts:** `deterministic_stratified_split`, unique query IDs, frozen seed,
-  membership hashes, qrels snapshot hashes, descriptive-vs-confirmation labels,
-  and no optimizer access to confirmation membership.
-- **Files/modules:** `harness/benchmark.py`, new split/power audit module and CLI,
-  `03_experiments/config/` split protocol, and focused tests.
-- **Inputs:** F1 baseline per-query development outputs and authorized
-  adaptation/selection qrels only.
-- **Outputs:** power/MDE report, proposed final split ratio, frozen commitments,
-  exposure/oracle diagnostics, and no-headroom decision if applicable.
-- **Hashes:** seed, stratum definition, membership commitments, qrels snapshot,
-  baseline pool and analysis-plan hashes.
-- **Tests:** duplicate-ID rejection, deterministic split replay, confirmation
-  denial/network re-download denial, and synthetic power-analysis fixtures.
-- **Acceptance:** Owner can see exact counts and sensitivity trade-offs; MDE is
-  reported as design sensitivity only; the split is not frozen merely because
-  60/20/20 was historical code default.
-- **Owner Gate:** G2 opens development; G3 later freezes the chosen split/pool.
-- **Budget/stop:** offline statistics only; stop if OUT positives are too sparse,
-  confirmation isolation cannot be demonstrated, or baseline headroom is absent.
-- **Rollback:** retain audit report, revise split proposal with a new hash, and
-  never edit a previously frozen membership record.
-- **Scientific validity risk:** low OUT-positive counts can make a nominal split
-  unstable or underpowered; prior DAPFAM exposure prevents a globally untouched
-  claim.
+- **Goal:** Commit seed 42 membership 250/125/872 without exposing protected IDs.
+- **Inputs:** Protected query inventory, strata, qrels snapshot, Owner-run split process.
+- **Outputs:** Hash-only memberships and independent C/S firewall commitments.
+- **Tests:** Deterministic replay, duplicate rejection, access and re-download denial.
+- **Acceptance:** Exact hashes/counts are frozen; C and S evaluators remain isolated.
+- **Owner Gate:** G2 C Design.
+- **Budget/stop:** Protected local process only; stop on leakage or count mismatch.
+- **Rollback:** Supersede, never edit, a failed commitment.
+- **Risk:** Shared IDs could accidentally become shared optimizer state.
+- **Evidence:** Hash-only split manifest and protected audit receipt.
 - **Dependencies:** F1.
 
-## Phase C1 - Manual CrossRoute routes and views
+### Task D0.2 - Run C-MARGIN and C-SOEI audits
 
-### Task C1.1 - Evaluate grounded manual route ablations
+- **Goal:** Quantify baseline-only noninferiority margins and prespecify interpretive SOEI.
+- **Inputs:** B0/B1/B2 outputs on authorized audit surface.
+- **Outputs:** Margin audit and Owner decision request.
+- **Tests:** Paired bootstrap fixture, constraint `delta_ALL <= delta_IN`, no candidate access.
+- **Acceptance:** Owner selects C margins from `{0,0.0025,0.005}` and signs SOEI.
+- **Owner Gate:** G2 C Design.
+- **Budget/stop:** Baseline-only statistics; stop while either value is TBD_BLOCKING.
+- **Rollback:** Retain audit and issue a superseding decision request.
+- **Risk:** Candidate-informed margins would invalidate interpretation.
+- **Evidence:** `C_MARGIN_VALUES_TBD_BLOCKING`, `C_SOEI_VALUE_TBD_BLOCKING` resolutions.
+- **Dependencies:** D0.1.
 
-- **Goal:** test whether complementary routes recover relevant OUT families under
-  a fixed final candidate budget.
-- **Execution model:** GPT-5.6 Sol High for implementation; deterministic local
-  retrieval; support extraction may use Luna only outside main comparisons and
-  only when approved.
-- **Objective:** compare manual BM25/dense TAC, claim lexical/dense, grounded
-  mechanism/function/structure/process/application views, and eligible
-  citation/metadata routes.
-- **Contracts:** `QueryViewPolicy`, `RoutePolicy`, `CandidateBudget`,
-  `FusionContract`, `HarnessPolicy`, family-level candidate ledger, source-span
-  grounding, quarantine of ungrounded terms, fixed final K, and fusion provenance.
-- **Files/modules:** `harness/policy.py`, `harness/candidate_ledger.py`, retrieval
-  adapters/configs, route contribution reports, and tests.
-- **Inputs:** C0-authorized adaptation/selection IDs and qrels, F1 indexes/models,
-  source patent title/abstract/claims only.
-- **Outputs:** byte-stable family ledgers, overlap matrix, unique relevant-family
-  recovery, route latency/cost, and strict selection decisions.
-- **Hashes:** policy, query-view schema, every view/source-span mapping, route
-  config/index/model, ledger, final pool, and selected-candidate record.
-- **Tests:** `test_grounded_policy_and_candidate_ledger_are_deterministic`,
-  route quota/depth/budget rejection, ungrounded quarantine, leakage scan,
-  batch-order invariance, and deterministic tie-breaking.
-- **Acceptance:** selection accepts only `OUT Recall@100(candidate) > current
-  best`; ties reject. Route gain must reflect new relevant families after family
-  dedup, not publication duplicates or leakage.
-- **Owner Gate:** G2 Track C development.
-- **Budget/stop:** fixed candidate, route-depth, time, storage, and trial budgets;
-  stop on leakage, no unique recovery, or repeated flat selection score.
-- **Rollback:** reject candidate and restore incumbent policy hash; retain
-  negative result and failure taxonomy.
-- **Scientific validity risk:** qrels-informed view construction or changing final
-  K would confound route complementarity with tuning privilege.
+## Phase C0 - Zero-tuned CrossRoute
+
+### Task C0.1 - Freeze and validate the C0 recipe
+
+- **Goal:** Establish the locked zero-tuned six-route arm.
+- **Inputs:** Six atomic routes, quotas 100/100/50/50/50/50, raw 400, RRF 60.
+- **Outputs:** C0 policy, top-100 family ledger, route attribution, hashes.
+- **Tests:** Grounding, quota, raw/final budget, dedup, tie-break, batch-order tests.
+- **Acceptance:** No qrels-informed tuning; exact recipe replays byte-stably.
+- **Owner Gate:** G2 C Design.
+- **Budget/stop:** Authorized retrieval only; stop on leakage or recipe drift.
+- **Rollback:** Restore the frozen C0 policy hash and retain invalid attempt metadata.
+- **Risk:** Hidden tuning would erase the zero-vs-tuned decomposition.
+- **Evidence:** Policy/ledger/index/model/environment hashes.
+- **Dependencies:** D0.
+
+## Phase C1 - Metric-tuned CrossRoute
+
+### Task C1.1 - Search the typed C_TRAIN surface
+
+- **Goal:** Find strict OUT Recall@100 improvements over C0 without changing frozen semantics.
+- **Inputs:** C0, C_TRAIN, and typed route/fusion/RRF/pool/rerank fields.
+- **Outputs:** At most 100 valid trial records and five Pareto finalists.
+- **Tests:** Patch allow/deny, budget, tie rejection, protected-data denial.
+- **Acceptance:** Prompts/views/encoder/reranker instructions stay frozen; ties reject.
+- **Owner Gate:** G2 C Design.
+- **Budget/stop:** 100 valid configurations; stop on leakage, flat surface, or budget.
+- **Rollback:** Restore incumbent C0/C1 hash; retain all rejected trials.
+- **Risk:** Adaptive over-search could overfit the training surface.
+- **Evidence:** Trial manifests, strict selection ledger, Pareto rule.
 - **Dependencies:** C0.
 
-## Phase C2 - Bounded policy optimization
+### Task C1.2 - Evaluate one selection batch
 
-### Task C2.1 - Optimize only the typed CrossRoute policy surface
+- **Goal:** Select C1 once from exactly five preregistered finalists.
+- **Inputs:** Five frozen finalists and C_SELECTION.
+- **Outputs:** One selected C1 policy or transparent no-improvement decision.
+- **Tests:** One-batch enforcement, finalist hash equality, strict-score comparison.
+- **Acceptance:** Selection is opened once and no finalist is added afterward.
+- **Owner Gate:** G2 C Design.
+- **Budget/stop:** One selection batch; stop on mismatch or prior access.
+- **Rollback:** Reject invalid batch and request a new Owner-governed protocol revision.
+- **Risk:** Repeated selection access would turn holdout data into training data.
+- **Evidence:** Batch receipt, five hashes, paired selection summary.
+- **Dependencies:** C1.1.
 
-- **Goal:** determine whether bounded policy optimization improves Gate C beyond
-  the strongest manual policy.
-- **Execution model:** measured optimizer starts GPT-5.6 Sol Medium; escalate to
-  Sol High only after documented qrels-blind calibration failure. Implementation
-  remains GPT-5.6 Sol High.
-- **Objective:** optimize declared view, route, depth/quota, fusion, budget
-  allocation, and stopping fields without executable-tool expansion.
-- **Contracts:** strict `SelectionDecision`; `ProtectedSurfaceContract`;
-  `ProviderExecution`; `ReplicationContract`; patch allowlist/denylist; no silent
-  fallback; adaptation/selection qrels only.
-- **Files/modules:** `.agents/skills/myis-run-harnessopt/`, `harness/policy.py`,
-  `protection.py`, `providers.py`, optimizer adapter/config, manifest v3, tests.
-- **Inputs:** frozen C1 incumbent, declared module pool, authorized train/selection
-  labels, qrels-blind calibration fixtures.
-- **Outputs:** every trial manifest, accepted/rejected decision, all repeat
-  outcomes, cost/latency, failure class, and one selected policy hash.
-- **Hashes:** initial skill/policy, editable/protected surfaces, model/provider/
-  effort, tool pool, repeat/order, prompt, config, evaluator, split, trial outputs.
-- **Tests:** `test_strict_selection_rejects_ties`,
-  `test_provider_fallback_and_a2_a3_drift_are_rejected`,
-  `test_patch_and_aggregate_boundaries_fail_closed`, budget and batch-order tests.
-- **Acceptance:** no candidate is accepted on a tie or secondary metric; every
-  measured call records requested/resolved identity and cost; no confirmation
-  path or network re-download is available.
-- **Owner Gate:** G2 plus G5 if optimizer model calls are used.
-- **Budget/stop:** preregister trials, tokens, wall time, cost, retries, and
-  no-gain patience; stop at first exceeded ceiling, invalid patch, or flat surface.
-- **Rollback:** restore incumbent policy/skill hashes; retain all trial manifests
-  and negative outcomes.
-- **Scientific validity risk:** adaptive over-search on selection qrels and model
-  drift can exaggerate apparent gain.
-- **Dependencies:** C1 must show a valid responsive surface; otherwise C2 is
-  skipped and the negative boundary is reported.
+## Phase CF - Freeze C arms and harness
 
-## Phase CF - Freeze candidate pool
+### Task CF.1 - Freeze C0, C1, and the C1 harness
 
-### Task CF.1 - Commit the selected Gate C protocol and pool
+- **Goal:** Create the immutable boundary consumed by Track S and Track C diagnostics.
+- **Inputs:** Valid C0/C1 bundles, split commitments, environment, comparator plan.
+- **Outputs:** Frozen C0/C1 artifacts, C1 harness, pool and diagnostic specification.
+- **Tests:** Replay byte stability, overwrite denial, dimension and hash equality.
+- **Acceptance:** Every downstream consumer binds the same C1 harness/pool hash.
+- **Owner Gate:** G3 C Freeze.
+- **Budget/stop:** No new optimization; stop on dirty identity or replay mismatch.
+- **Rollback:** Do not overwrite; issue a new freeze candidate after correction.
+- **Risk:** Pool substitution would break causal attribution.
+- **Evidence:** Immutable manifests and complete hash closure.
+- **Dependencies:** C1.2.
 
-- **Goal:** create the immutable causal boundary between exposure and ranking.
-- **Execution model:** GPT-5.6 Sol High; deterministic local freeze tooling.
-- **Objective:** freeze code, policy, query views, routes, indexes, model identity,
-  environment, candidate ledger, candidate pool, comparator, split commitments,
-  and analysis plan.
-- **Contracts:** `freeze_candidate_pool`, `CandidatePoolReference`, immutable
-  write-once artifacts, final K/query count, exact pool SHA-256.
-- **Files/modules:** `harness/candidate_ledger.py`, manifest/validation modules,
-  `03_experiments/` freeze config, `04_outputs/` Owner evidence package.
-- **Inputs:** selected C1/C2 valid bundle and C0 split commitments.
-- **Outputs:** frozen pool artifact/hash, Gate C preregistration, R input contract,
-  and Owner preview.
-- **Hashes:** every input artifact plus canonical pool/ledger/policy/environment/
-  Git commit hashes.
-- **Tests:** replay freeze byte stability, overwrite rejection, pool dimension
-  checks, candidate membership equality, and artifact tamper rejection.
-- **Acceptance:** a fresh replay produces the same pool hash; no R component can
-  expand or substitute candidates; Owner approves exact evidence hashes.
-- **Owner Gate:** G3 Track C Freeze.
-- **Budget/stop:** no new optimization; stop on dirty/unknown code identity,
-  missing artifact hash, or replay mismatch.
-- **Rollback:** do not edit a freeze record; create a new superseding proposal
-  before confirmation and require a new G3 decision.
-- **Scientific validity risk:** freezing a pool with hidden membership drift
-  invalidates all downstream ranking attribution.
-- **Dependencies:** C1 and optional C2.
+## Phase S0 - Track S design and preflight
 
-## Phase R0 - Ranking headroom
+### Task S0.1 - Lock provider, A0, and A1
 
-### Task R0.1 - Measure reachable ranking performance on the frozen pool
-
-- **Goal:** establish whether reranking can improve order without changing exposure.
-- **Execution model:** GPT-5.6 Sol High; deterministic local evaluation.
-- **Objective:** compute no-rerank OUT nDCG@100, oracle/reachable nDCG, coverage,
-  promotions/demotions, and evidence-field availability on the CF pool.
-- **Contracts:** `FrozenPoolRankingComparison` pool-hash equality; family-level
-  metrics; no candidate addition/removal; deterministic ordering.
-- **Files/modules:** `harness/benchmark.py`, `harness/metrics.py`, ranking audit
-  script/config and tests.
-- **Inputs:** exact CF pool and authorized development/selection qrels.
-- **Outputs:** headroom report, frozen no-rerank primary baseline ID, and proceed/
-  stop recommendation.
-- **Hashes:** pool, ranking input order, evaluator, qrels snapshot, baseline
-  scores, analysis plan.
-- **Tests:** pool-hash mismatch rejection, metric fixtures, tie-breaking, and
-  candidate membership invariant.
-- **Acceptance:** every ranking comparison binds the identical pool hash; enough
-  oracle headroom exists to justify R1 or the track stops with a transparent
-  negative result.
-- **Owner Gate:** G4 Track R development.
-- **Budget/stop:** local CPU; stop on pool drift, missing evidence fields, or no
-  plausible headroom.
-- **Rollback:** retain R0 diagnosis and do not modify CF.
-- **Scientific validity risk:** oracle analysis on confirmation labels is
-  forbidden; candidate changes would collapse C/R decomposition.
+- **Goal:** Freeze the common starting state and target execution identity.
+- **Inputs:** Frozen C1 harness, A0/A1 artifacts, Qwen target, CoreWeave endpoint.
+- **Outputs:** Provider/run specs and identical A1 start hash for A2/A2L/A3.
+- **Tests:** Model/provider/seed/tool/schema/context/fallback/parameter checks.
+- **Acceptance:** CoreWeave preflight passes or execution stops for Owner decision.
+- **Owner Gate:** G4 S Preflight.
+- **Budget/stop:** Fixture-only preflight; one identical transport retry only.
+- **Rollback:** Retain preflight failure and leave endpoint provisional.
+- **Risk:** Provider drift would invalidate the causal arm comparison.
+- **Evidence:** `COREWEAVE_FINAL_FREEZE_TBD_BLOCKING` resolution and preflight receipt.
 - **Dependencies:** CF.
 
-## Phase R1 - Claim/passage-aware ranking
+### Task S0.2 - Run the independent S-MARGIN audit
 
-### Task R1.1 - Develop reranking on the identical frozen pool
+- **Goal:** Set Track S margins without borrowing Track C tuning evidence.
+- **Inputs:** Frozen A1 three-seed baseline-only audit surface.
+- **Outputs:** S margin report and Owner decision.
+- **Tests:** Seed matching, no arm-candidate access, deterministic statistics.
+- **Acceptance:** Owner resolves `S_MARGIN_VALUES_TBD_BLOCKING` before S1.
+- **Owner Gate:** G4 S Preflight.
+- **Budget/stop:** Baseline-only local audit; stop while margins are unsigned.
+- **Rollback:** Preserve report and supersede the decision request.
+- **Risk:** Shared or post-treatment margins would contaminate Track S.
+- **Evidence:** Three-seed audit hashes and signed margin values.
+- **Dependencies:** S0.1.
 
-- **Goal:** improve OUT nDCG@100 while preserving CF exposure exactly.
-- **Execution model:** GPT-5.6 Sol High implementation; measured model/provider
-  only under G4 and compute approval; PageIndex only as an optional routed pilot.
-- **Objective:** compare no-rerank, protocol-matched practical reranker,
-  passage-aware scoring, and claim-limitation coverage scoring.
-- **Contracts:** `FrozenPoolRankingComparison`; same pool hash; one preregistered
-  primary no-rerank baseline; strict selection; PageIndex receives only documents
-  routed by BM25/dense candidate retrieval.
-- **Files/modules:** ranking/evidence adapters, `harness/benchmark.py`, provider and
-  manifest contracts, R configs/tests.
-- **Inputs:** CF pool, source claims/passages, authorized development/selection
-  qrels, fixed evaluator.
-- **Outputs:** ranked family lists, paired per-query development deltas, evidence
-  diagnostics, controls, cost/latency, selected R policy.
-- **Hashes:** pool, model/revision/provider/effort, prompt, feature schema,
-  passage index, PageIndex pilot config if any, ranking outputs.
-- **Tests:** candidate-set equality, provider fallback denial, batch-order and
-  tie-breaking tests, degraded/scrambled control, PageIndex first-stage bypass
-  rejection.
-- **Acceptance:** selection accepts only strictly higher OUT nDCG@100; candidate
-  membership and pool hash never change; PageIndex is separately reported and
-  cannot become the corpus retriever implicitly.
-- **Owner Gate:** G4 and separate paid/API/GPU approval as applicable.
-- **Budget/stop:** fixed candidates/query, tokens, model calls, latency, cost,
-  retries, and trials; stop when controls fail or headroom is exhausted.
-- **Rollback:** restore no-rerank/previous incumbent ranking config and retain
-  negative/control evidence.
-- **Scientific validity risk:** reranker selection on secondary evidence metrics
-  or pool mutation would overstate ranking causality.
-- **Dependencies:** R0.
+## Phase S1 - Parallel matched-budget optimization
 
-## Phase R2 - Evidence package
+### Task S1.1 - Execute A2 SkillOpt
 
-### Task R2.1 - Produce traceable claim/passage evidence without legal conclusions
+- **Goal:** Optimize the skill with the harness frozen.
+- **Inputs:** A1, SkillOpt v0.2.0 pinned commit, seeds 11/23/47.
+- **Outputs:** Three seed finalists and complete lineage.
+- **Tests:** Provider, editable-surface, budget, retry, event-order tests.
+- **Acceptance:** 160 rollout cap per seed and USD 20 arm cap are enforced.
+- **Owner Gate:** G5 S Run.
+- **Budget/stop:** 480 rollouts/arm, USD 20; hard global USD 100.
+- **Rollback:** Restore A1 hash and retain every failure/invalid trial.
+- **Risk:** Undeclared fallback or cherry-picked repeats invalidates the arm.
+- **Evidence:** Trial manifests, costs, latency, token and seed receipts.
+- **Dependencies:** S0.
 
-- **Goal:** attach publication-level evidence to ranked families for inspection
-  and paper examples.
-- **Execution model:** GPT-5.6 Sol High implementation; deterministic locator
-  first; optional model interpretation only under G4 with exact citations.
-- **Objective:** emit family ID, publication ID, route/rank provenance, claim
-  limitation, verbatim span, page/section/offset, support status, confidence, and
-  unresolved gaps.
-- **Contracts:** evidence cannot change qrels, ranking relevance, or pool;
-  verbatim text and interpretation remain separate; legal claims are forbidden.
-- **Files/modules:** evidence schema/locator/validator, R2 configs, claim-evidence
-  renderer, tests, and validated output package.
-- **Inputs:** selected R1 ranking, source publications already approved for use,
-  and route provenance.
-- **Outputs:** immutable evidence records, coverage/error taxonomy, representative
-  recovery/failure cases, claim-evidence mapping.
-- **Hashes:** source publication, passage index, ranking, evidence schema,
-  evidence records, renderer, and final report.
-- **Tests:** exact-offset replay, source-hash drift, unsupported conclusion,
-  protected-data leakage, and deterministic report projection.
-- **Acceptance:** every material statement links to an exact source location;
-  missing evidence causes abstention/unclear status; no novelty/FTO verdict appears.
-- **Owner Gate:** G4 for development; PDF source access requires allowlist and
-  local receipt; publication use waits for G8.
-- **Budget/stop:** stop on source/license/privacy ambiguity, hash drift, or
-  unsupported interpretation.
-- **Rollback:** discard only unvalidated derived package; retain canonical source
-  and failure audit.
-- **Scientific validity risk:** fluent summaries can conceal incomplete evidence
-  or transform benchmark relevance into a legal conclusion.
-- **Dependencies:** R1; R2 may document a negative R1 result.
+### Task S1.2 - Execute A2L SkillOpt-Lite
 
-## Phase S - Optional A0-A3 HarnessOpt adaptation study
+- **Goal:** Measure the required lightweight optimizer at matched budget.
+- **Inputs:** Same A1, adapted pinned Lite commit, seeds 11/23/47.
+- **Outputs:** Three seed finalists and complete lineage.
+- **Tests:** Equality of start/model/provider/data/evaluator/budget and retry policy.
+- **Acceptance:** A2L is a required 160-rollout/seed arm, not post hoc replacement.
+- **Owner Gate:** G5 S Run.
+- **Budget/stop:** 480 rollouts/arm, USD 20; A2L-P 400/seed remains future only.
+- **Rollback:** Restore A1; retain all attempts.
+- **Risk:** Treating Lite as optional would bias the adaptation comparison.
+- **Evidence:** Matched-budget proof and immutable trial manifests.
+- **Dependencies:** S0; parallel with S1.1 and S1.3.
 
-### Task S.1 - Calibrate and freeze the A0-A3 study
+### Task S1.3 - Execute typed A3 HarnessOpt
 
-- **Goal:** isolate the effect of skill-only versus skill-plus-policy adaptation.
-- **Execution model:** implementation GPT-5.6 Sol High; qrels-blind optimizer
-  calibration starts Sol Medium and escalates to High only on validity failure.
-- **Objective:** preregister A0 frozen baseline, A1 human seed skill, A2 optimized
-  skill/frozen harness, and A3 optimized skill plus allowed typed policy.
-- **Contracts:** A2/A3 identical model, provider, effort, budget, initial state,
-  data access, evaluator, module pool, repeats, and stopping; Luna only support or
-  separately labeled cost ablation; no silent fallback.
-- **Files/modules:** `myis-run-harnessopt` skill/reference, provider/protection/
-  replication contracts, S manifests/configs/tests.
-- **Inputs:** qrels-blind fixtures for calibration and frozen adaptation/selection
-  surface for the measured study.
-- **Outputs:** calibration report, selected model protocol, A0-A3 preregistration,
-  matched repeat schedule.
-- **Hashes:** model/provider/effort, initial skill/harness, editable/protected
-  paths, budgets, prompts, tools, data commitments, repeats/order.
-- **Tests:** A2/A3 drift rejection, patch denylist, fallback rejection, and all
-  repeats reported.
-- **Acceptance:** the lowest approved Sol effort passing qrels-blind validity is
-  frozen identically for A2/A3; third-party provider remains development-only.
-- **Owner Gate:** G5 HarnessOpt.
-- **Budget/stop:** explicit calibration attempts and measured budgets; stop if a
-  matched design cannot be guaranteed.
-- **Rollback:** do not run S; C/R publication path remains intact.
-- **Scientific validity risk:** changing optimizer identity between arms would
-  confound editable surface with model capability.
-- **Dependencies:** C1 responsive surface; S is optional and independent of R.
+- **Goal:** Optimize only the declared typed harness surface at matched budget.
+- **Inputs:** Same A1, typed allowlist, seeds 11/23/47.
+- **Outputs:** Three seed finalists and policy/skill lineage.
+- **Tests:** Protected patch denial, tool allowlist, no executable expansion, drift checks.
+- **Acceptance:** Broad HarnessOpt A3X is excluded; all matching constraints hold.
+- **Owner Gate:** G5 S Run.
+- **Budget/stop:** 480 rollouts/arm, USD 20; hard global USD 100.
+- **Rollback:** Restore A1 and incumbent typed policy; retain failures.
+- **Risk:** Wider edit authority would confound skill and harness effects.
+- **Evidence:** Patch ledger, manifests, costs, provider identity.
+- **Dependencies:** S0; parallel with S1.1 and S1.2.
 
-### Task S.2 - Run and report A0-A3 under matched controls
+## Phase SF - Freeze Track S finalists
 
-- **Goal:** estimate adaptation-surface quality, cost, stability, and failure rate.
-- **Execution model:** frozen model/provider/effort from S.1.
-- **Objective:** execute all preregistered repeats, apply strict selection, and
-  report every arm/repeat without best-repeat cherry-picking.
-- **Contracts:** `ReplicationContract`, `ProviderExecution`, strict primary
-  utility/selection score, protected-surface scanner, complete cost lineage.
-- **Files/modules:** optimizer runner, S result/statistics reports, manifest v3,
-  MLflow scientific mirror projection.
-- **Inputs:** S.1 frozen protocol and authorized adaptation/selection data.
-- **Outputs:** per-repeat valid bundles, aggregate quality/cost/stability, failure
-  taxonomy, separately labeled Luna cost ablation if approved.
-- **Hashes:** every run input/output, repeat identity/order, manifest, and mirror
-  receipt.
-- **Tests:** replay/comparability checks, batch-order drift, protected leakage,
-  provider fallback, and mirror failure isolation.
-- **Acceptance:** all repeats and invalid runs appear; A2/A3 differ only in the
-  declared policy surface; results are optional methods evidence.
-- **Owner Gate:** G5.
-- **Budget/stop:** preregistered total calls/tokens/time/cost; stop at ceiling or
-  repeated diagnosed invalidity.
-- **Rollback:** retain results and revert selected skill/policy to their frozen
-  starting hashes.
-- **Scientific validity risk:** adaptive utility construction or omitted failed
-  repeats would bias the methods conclusion.
-- **Dependencies:** S.1.
+### Task SF.1 - Select once and freeze one artifact per arm
 
-## Phase Q - Prospective external confirmation
+- **Goal:** Submit nine seed finalists once and freeze A2/A2L/A3 artifacts.
+- **Inputs:** Three finalists from each required arm.
+- **Outputs:** One immutable artifact per arm and comparison preregistration.
+- **Tests:** Nine-hash equality, one-batch enforcement, seed completeness.
+- **Acceptance:** No test access or post-selection edits occur.
+- **Owner Gate:** G5 S Run.
+- **Budget/stop:** One selection submission; stop on missing seed or hash drift.
+- **Rollback:** Reject the entire invalid submission; never patch a frozen arm.
+- **Risk:** Selective seed reporting would inflate apparent optimizer quality.
+- **Evidence:** Nine-finalist receipt and three frozen manifests.
+- **Dependencies:** S1.1-S1.3.
 
-### Task Q.1 - Emit a frozen request and validate aggregate-only results
+## Phase CT - External transfer
 
-- **Goal:** evaluate Gate C and Gate R once without revealing confirmation data
-  to the agent workspace.
-- **Execution model:** Owner-run external evaluator; repository-side validation
-  uses deterministic local Python. No research agent executes the evaluator.
-- **Objective:** emit one hash-only `ConfirmationRequest`; the external one-command
-  evaluator runs all preregistered baselines/candidates on identical confirmation
-  IDs and returns only `ConfirmationAggregatePackage`.
-- **Contracts:** no membership/qrels/protected payload/per-query outcome enters
-  the repo; aggregate includes exact n, point estimates, paired deltas, 95% paired
-  bootstrap CIs, rank-biserial effects, W/L/T, comparison-family metadata, and
-  input/output hashes. Gate C/R remain independent.
-- **Files/modules:** `confirmation.py`, request/aggregate schemas, protection
-  checks, Q output package, and external evaluator documentation only (external
-  evaluator code/data remain outside this repo).
-- **Inputs:** frozen submission/config/protocol hashes and Owner authorization.
-- **Outputs:** immutable request and validated aggregate package. A full-1,247
-  result is labeled descriptive rather than unseen confirmation if DAPFAM qrels
-  informed development.
-- **Hashes:** Git commit, submission/config/protocol, request, evaluator input/
-  output commitments, and aggregate package.
-- **Tests:** `test_confirmation_request_and_aggregate_are_hash_only`, aggregate
-  schema/classification checks, protected key leakage negatives, request mismatch,
-  and replay validation.
-- **Acceptance:** primary delta > 0 yields observed improvement; CI lower > 0 is
-  statistically supported superiority; positive delta with CI crossing zero is
-  higher measured score with uncertain superiority; delta <= 0 is no observed
-  improvement. MDE is not used as a pass threshold.
-- **Owner Gate:** G6 Confirmation, previewed and recorded in the canonical ledger.
-- **Budget/stop:** exactly the preregistered external run; stop on hash mismatch,
-  schema violation, unauthorized additional comparison, or protected-data return.
-- **Rollback:** aggregate package is never edited; correction is a superseding
-  external package and Owner decision. No tuning follows confirmation.
-- **Scientific validity risk:** any confirmation feedback entering selection or
-  rerunning until positive destroys prospective isolation.
-- **Dependencies:** CF for Gate C submission; R1/R2 freeze for Gate R. Either gate
-  may be confirmed/reported independently.
+### Task CT.1 - Run frozen PatenTEB retrieval_OUT transfer
 
-## Phase P - Publication package
+- **Goal:** Test transfer without retuning the C/S artifacts.
+- **Inputs:** Frozen artifacts and licensed field-compatible PatenTEB surface.
+- **Outputs:** Separately labeled transfer bundle or explicit blocked record.
+- **Tests:** License/field compatibility, no-retuning, identity/hash equality.
+- **Acceptance:** G7 budget/license approval exists; transfer does not block Q or papers.
+- **Owner Gate:** G7 Transfer.
+- **Budget/stop:** `CT_BUDGET_LICENSE_TBD_BLOCKING`; stop until resolved.
+- **Rollback:** Retain blocked/negative transfer record; do not change primary artifacts.
+- **Risk:** Incompatible fields could produce a misleading generalization claim.
+- **Evidence:** License decision, run manifest, transfer-only metrics.
+- **Dependencies:** CF and SF; independent of Q/PC/PS.
 
-### Task P.1 - Build the falsifiable claim-evidence and reproducibility package
+## Phase Q - Joint sealed evaluation
 
-- **Goal:** publish what the protocol measured, including transparent negative or
-  uncertain results.
-- **Execution model:** GPT-5.6 Sol High for implementation/drafting; deterministic
-  report generators read only validated manifests and aggregate confirmation.
-- **Objective:** produce tables/figures for baseline reproduction, route-level
-  recovery, exposure/ranking decomposition, frozen-pool ranking, evidence quality,
-  paired uncertainty, cost, optional S study, and limitations.
-- **Contracts:** claim language follows confirmation classification; Holm applies
-  only to preregistered additional comparisons; no logs/MLflow UI become numeric
-  truth; DAPFAM is not legal truth.
-- **Files/modules:** publication generators under `05_code/`, validated outputs
-  under `04_outputs/`, manuscript/figure configs, claim-evidence audit.
-- **Inputs:** validated canonical manifests/artifacts, aggregate confirmation
-  package, historical Paper D boundary evidence, literature provenance.
-- **Outputs:** submission candidate, artifact inventory, reproducibility commands,
-  limitations and negative-result narrative.
-- **Hashes:** every table/figure input manifest, generator Git commit, output
-  artifact, environment, and approval record.
-- **Tests:** deterministic table/figure regeneration, claim-to-artifact link
-  audit, active-name lint, protected-data scan, and clean replay.
-- **Acceptance:** positive strategy arises from a falsifiable contribution,
-  route-level recovery, exposure/ranking decomposition, or transparent negative
-  boundary. No metric/end point is changed to manufacture a win.
-- **Owner Gate:** G8 Publication.
-- **Budget/stop:** local generation/review budget; stop on unsupported claim,
-  missing provenance, unresolved comparison multiplicity, or protected leakage.
-- **Rollback:** withdraw or supersede the publication package; canonical evidence
-  remains immutable.
-- **Scientific validity risk:** selective reporting, overclaiming uncertain CIs,
-  and collapsing C/R into one success statement.
-- **Dependencies:** F1 and the completed phases actually claimed; Q is required
-  only for confirmatory language, not for a clearly labeled descriptive or
-  negative methods report.
+### Task Q.1 - Evaluate the untouched joint test
+
+- **Goal:** Run the Owner-only 872-query confirmation once for C and S.
+- **Inputs:** Hash-only requests and frozen baseline/C/S artifacts.
+- **Outputs:** Schema-validated aggregate comparison packages.
+- **Tests:** Request/package schema, hash closure, exact n, paired statistics.
+- **Acceptance:** C primary C1-C0 and S primary A3-A2 are reported without leakage.
+- **Owner Gate:** G6 Joint Test.
+- **Budget/stop:** Owner-run external command only; stop on any hash mismatch.
+- **Rollback:** Reject invalid aggregates; never inspect protected per-query data.
+- **Risk:** Joint test reuse or membership exposure destroys confirmation status.
+- **Evidence:** Aggregate-only package with CI/effect/W-L-T and hashes.
+- **Dependencies:** CF and SF.
+
+### Task Q.2 - Run Track C ranking diagnostic
+
+- **Goal:** Explain reachable ranking headroom without creating an independent gate.
+- **Inputs:** Identical frozen C pool, no-rerank order, frozen reranker.
+- **Outputs:** Pool hash, oracle/reachable nDCG, promotions/demotions, failure layers.
+- **Tests:** Pool equality, no expansion, deterministic diagnostic replay.
+- **Acceptance:** Diagnostic is labeled non-gating and cannot adapt the ranking system.
+- **Owner Gate:** G6 Joint Test.
+- **Budget/stop:** Frozen-pool aggregate diagnostics only.
+- **Rollback:** Reject mismatched diagnostics and preserve CF.
+- **Risk:** Adaptive reranking would resurrect an unauthorized independent lane.
+- **Evidence:** `TrackCRankingDiagnostic` aggregate and pool hash.
+- **Dependencies:** Q.1 frozen inputs; no independent gate.
+
+### Task Q.3 - Run C0 full-benchmark descriptive evaluation
+
+- **Goal:** Report C0 on all 1,247 queries after every arm is frozen.
+- **Inputs:** Frozen C0 and full DAPFAM evaluator.
+- **Outputs:** Clearly labeled descriptive aggregate bundle.
+- **Tests:** Frozen-artifact equality and descriptive-label enforcement.
+- **Acceptance:** No unseen-confirmation language or tuning feedback is used.
+- **Owner Gate:** G6 Joint Test.
+- **Budget/stop:** Post-freeze descriptive run only.
+- **Rollback:** Withdraw mislabeled output; do not change frozen arms.
+- **Risk:** Calling qrels-informed full-data results confirmation overstates evidence.
+- **Evidence:** Descriptive manifest and aggregate metrics.
+- **Dependencies:** CF, SF, and completion of primary freeze.
+
+## Phase PC - Track C publication
+
+### Task PC.1 - Assemble the Track C manuscript
+
+- **Goal:** Publish the zero-vs-tuned CrossRoute study with bounded claims.
+- **Inputs:** Frozen protocol, validated C aggregates, diagnostic, citations.
+- **Outputs:** IEEE sections, appendices, integrity and independent-review records.
+- **Tests:** Citation/claim audit, anonymity/policy check, result binding, PDF assembly.
+- **Acceptance:** Null/boundary outcomes remain; no result is invented or cherry-picked.
+- **Owner Gate:** G8 Track C Publication.
+- **Budget/stop:** Writing only until validated results exist; result sections stay n/a.
+- **Rollback:** Revert prose to last integrity-audited revision.
+- **Risk:** Diagnostic or retrieval evidence could be overstated as legal truth.
+- **Evidence:** Research -> write -> audit -> review -> revise -> final audit chain.
+- **Dependencies:** Q for results; may draft protocol sections earlier.
+
+## Phase PS - Track S publication
+
+### Task PS.1 - Assemble the Track S manuscript
+
+- **Goal:** Publish the matched-budget A2/A2L/A3 causal comparison.
+- **Inputs:** Frozen protocol, validated S aggregates, optimization lineage, citations.
+- **Outputs:** IEEE sections, appendices, integrity and independent-review records.
+- **Tests:** Citation/claim audit, arm matching, result binding, PDF assembly.
+- **Acceptance:** Primary, Holm family, and exploratory A3-A2L are distinguished.
+- **Owner Gate:** Separate G8 Track S Publication record.
+- **Budget/stop:** Writing only until validated results exist; result sections stay n/a.
+- **Rollback:** Revert prose to last integrity-audited revision.
+- **Risk:** Cost or optimizer lineage omissions would weaken causal interpretation.
+- **Evidence:** Research -> write -> audit -> review -> revise -> final audit chain.
+- **Dependencies:** Q for results; parallel with PC.

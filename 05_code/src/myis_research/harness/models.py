@@ -9,10 +9,19 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
-from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_FAMILY_ID, RESEARCH_VERSION
+from ..identity import (
+    DISPLAY_NAME,
+    PROGRAM_ID,
+    PROTOCOL_FAMILY_ID,
+    PROTOCOL_VERSION,
+    RESEARCH_VERSION,
+)
 
 
 SHA256_HEX_LENGTH = 64
+PACKAGE_VERSION = "0.1.0"
+TRACK_C_ARMS = frozenset({"B0", "B1", "B2", "C0", "C1", "CF", "C_DIAGNOSTIC", "Q", "PC", "CT"})
+TRACK_S_ARMS = frozenset({"A0", "A1", "A2", "A2L", "A3", "SF", "Q", "PS", "CT"})
 
 
 def is_sha256(value: str | None) -> bool:
@@ -151,6 +160,8 @@ class ProviderExecution:
     endpoint_class: EndpointClass = EndpointClass.OFFICIAL
     fallback_allowed: bool = False
     fallback_used: bool = False
+    routing_used: bool = False
+    parameters_dropped: bool = False
     request_id: str | None = None
     temperature: float | None = None
     seed: int | None = None
@@ -172,6 +183,10 @@ class ProviderExecution:
             raise ValueError("requested and resolved model identities differ")
         if measured and (self.fallback_allowed or self.fallback_used):
             raise ValueError("provider/model fallback is forbidden in measured runs")
+        if measured and self.routing_used:
+            raise ValueError("provider routing is forbidden in measured runs")
+        if measured and self.parameters_dropped:
+            raise ValueError("provider parameter dropping is forbidden in measured runs")
         if min(self.input_tokens, self.output_tokens) < 0:
             raise ValueError("token usage must be non-negative")
         if self.latency_seconds < 0 or self.cost_usd < 0:
@@ -281,6 +296,10 @@ class CandidatePoolReference:
 class ResearchVersionSpec:
     program_id: str = PROGRAM_ID
     display_name: str = DISPLAY_NAME
+    protocol_version: str = PROTOCOL_VERSION
+    track_id: str = "C"
+    track_version: str = RESEARCH_VERSION
+    package_version: str = PACKAGE_VERSION
     research_version: str = RESEARCH_VERSION
     protocol_family_id: str = PROTOCOL_FAMILY_ID
     revision_id: str = "uncommitted"
@@ -290,12 +309,38 @@ class ResearchVersionSpec:
         if (
             self.program_id != PROGRAM_ID
             or self.display_name != DISPLAY_NAME
+            or self.protocol_version != PROTOCOL_VERSION
+            or self.track_id not in {"C", "S"}
+            or self.track_version != RESEARCH_VERSION
+            or self.package_version != PACKAGE_VERSION
             or self.research_version != RESEARCH_VERSION
             or self.protocol_family_id != PROTOCOL_FAMILY_ID
         ):
-            raise ValueError("run is not bound to the canonical IS1 Research V0.1 identity")
+            raise ValueError("run is not bound to the canonical myIS Research protocol 1.0 identity")
         if not self.revision_id.strip():
             raise ValueError("revision_id is required")
+
+
+@dataclass(frozen=True)
+class TrackCManifest:
+    """Typed active Track C arm binding; it has no independent R-track mode."""
+
+    arm: str
+
+    def validate(self) -> None:
+        if self.arm not in TRACK_C_ARMS:
+            raise ValueError(f"unsupported Track C arm: {self.arm}")
+
+
+@dataclass(frozen=True)
+class TrackSManifest:
+    """Typed active Track S arm binding for required matched-budget arms."""
+
+    arm: str
+
+    def validate(self) -> None:
+        if self.arm not in TRACK_S_ARMS:
+            raise ValueError(f"unsupported Track S arm: {self.arm}")
 
 
 @dataclass(frozen=True)
@@ -334,6 +379,24 @@ class RunSpec:
     isolation: ExecutionIsolationContract | None = None
     candidate_pool: CandidatePoolReference | None = None
     artifact_hashes: dict[str, str] = field(default_factory=dict)
+    shared_split_commitment_sha256: str | None = None
+    track_firewall_sha256: str | None = None
+
+    def validate_active_contract(self) -> None:
+        """Reject legacy identity and independent-R emissions before execution."""
+
+        self.research.validate()
+        if self.research.track_id == "C":
+            TrackCManifest(self.arm).validate()
+        else:
+            TrackSManifest(self.arm).validate()
+        if self.phase.upper().startswith("R"):
+            raise ValueError("independent ranking/evidence phases are legacy read-only and cannot be emitted")
+        measured = not self.phase.startswith(("offline", "bootstrap", "fixture"))
+        if measured and not is_sha256(self.shared_split_commitment_sha256):
+            raise ValueError("measured runs require a shared split commitment SHA-256")
+        if measured and not is_sha256(self.track_firewall_sha256):
+            raise ValueError("measured runs require a track-specific firewall SHA-256")
 
     def scope_hash(self) -> str:
         return canonical_hash(
@@ -343,6 +406,8 @@ class RunSpec:
                 "dataset_id": self.dataset_id,
                 "split": self.split,
                 "split_query_ids_hash": self.split_query_ids_hash,
+                "shared_split_commitment_sha256": self.shared_split_commitment_sha256,
+                "track_firewall_sha256": self.track_firewall_sha256,
                 "budget": self.budget,
                 "research": dataclass_dict(self.research),
                 "model_id": self.model_id,

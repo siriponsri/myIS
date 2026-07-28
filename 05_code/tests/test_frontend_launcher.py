@@ -4,7 +4,7 @@ import unittest
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-FRONTEND_ROOT = REPO_ROOT / "06_forntend"
+FRONTEND_ROOT = REPO_ROOT / "06_frontend"
 
 
 class FrontendLauncherTests(unittest.TestCase):

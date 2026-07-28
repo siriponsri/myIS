@@ -12,7 +12,7 @@ import mlflow.server
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-MODULE_PATH = REPO_ROOT / "06_forntend" / "mlflow" / "readonly_app.py"
+MODULE_PATH = REPO_ROOT / "06_frontend" / "mlflow" / "readonly_app.py"
 SPEC = importlib.util.spec_from_file_location("myis_readonly_mlflow", MODULE_PATH)
 assert SPEC and SPEC.loader
 viewer = importlib.util.module_from_spec(SPEC)

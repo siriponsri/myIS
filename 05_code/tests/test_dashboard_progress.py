@@ -35,10 +35,10 @@ def make_repository(root: Path) -> str:
 class DashboardProgressTests(unittest.TestCase):
     def test_plan_projection_preserves_current_phase_and_task_order(self) -> None:
         plan = parse_plan(REPO_ROOT / "PLAN.md")
-        self.assertEqual(len(plan.phases), 12)
-        self.assertEqual(sum(len(phase.tasks) for phase in plan.phases), 15)
+        self.assertEqual(len(plan.phases), 13)
+        self.assertEqual(sum(len(phase.tasks) for phase in plan.phases), 22)
         self.assertEqual(plan.phases[0].phase_id, "F0")
-        self.assertEqual(plan.phases[-1].phase_id, "P")
+        self.assertEqual(plan.phases[-1].phase_id, "PS")
 
     def test_successful_activity_without_task_evidence_is_not_complete(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

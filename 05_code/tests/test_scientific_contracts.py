@@ -13,8 +13,10 @@ from myis_research.harness.benchmark import (
     CandidateExposureComparison,
     ConfirmationClassification,
     FrozenPoolRankingComparison,
+    SharedSplitCommitment,
     SelectionDecision,
     SplitFreezeCommitment,
+    TrackCRankingDiagnostic,
     classify_confirmation,
     deterministic_stratified_split,
 )
@@ -27,7 +29,7 @@ from myis_research.harness.candidate_ledger import (
     freeze_candidate_pool,
 )
 from myis_research.harness.manifest import MANIFEST_V2, MANIFEST_V3
-from myis_research.harness.models import EndpointClass, ProviderExecution
+from myis_research.harness.models import EndpointClass, ProviderExecution, ResearchVersionSpec
 from myis_research.harness.policy import (
     CandidateBudget,
     FusionContract,
@@ -42,6 +44,7 @@ from myis_research.providers import (
     LunaUse,
     ModelCalibrationProtocol,
     OptimizerProtocol,
+    assert_matched_track_s_optimizer_protocols,
     assert_matched_optimizer_protocols,
     validate_luna_use,
 )
@@ -76,6 +79,25 @@ class ScientificContractTests(unittest.TestCase):
                 **{**freeze.__dict__, "out_positive_available": {**freeze.out_positive_available, "confirmation": False}}
             ).validate()
 
+    def test_shared_split_requires_locked_counts_and_independent_firewalls(self) -> None:
+        commitment = SharedSplitCommitment(
+            seed=42,
+            membership_hashes={name: sha(name) for name in ("train", "selection", "joint_test")},
+            qrels_snapshot_sha256=sha("qrels"),
+            c_firewall_sha256=sha("c-firewall"),
+            s_firewall_sha256=sha("s-firewall"),
+            owner_decision_id="MYIS-G2-SPLIT",
+        )
+        self.assertEqual(len(commitment.sha256), 64)
+        with self.assertRaises(ValueError):
+            SharedSplitCommitment(
+                **{**commitment.__dict__, "seed": 7}
+            ).validate()
+        with self.assertRaises(ValueError):
+            SharedSplitCommitment(
+                **{**commitment.__dict__, "s_firewall_sha256": commitment.c_firewall_sha256}
+            ).validate()
+
     def test_strict_selection_rejects_ties(self) -> None:
         better = SelectionDecision.decide(
             candidate_id="c1", incumbent_id="c0", primary_metric="out_recall_at_100",
@@ -88,7 +110,7 @@ class ScientificContractTests(unittest.TestCase):
         self.assertTrue(better.accepted)
         self.assertEqual(numeric_tie.status, "rejected_tie")
 
-    def test_gate_c_and_gate_r_are_independent(self) -> None:
+    def test_track_c_ranking_is_a_frozen_pool_diagnostic(self) -> None:
         gate_c = CandidateExposureComparison.compare(
             baseline_id="hybrid", candidate_id="crossroute",
             baseline_scores=[0.1, 0.2, 0.3], candidate_scores=[0.2, 0.3, 0.4],
@@ -102,7 +124,8 @@ class ScientificContractTests(unittest.TestCase):
             bootstrap_seed="R", resamples=200,
         )
         self.assertEqual(gate_c.gate_id, "C")
-        self.assertEqual(gate_r.gate_id, "R")
+        self.assertEqual(gate_r.track_id, "C")
+        self.assertEqual(gate_r.diagnostic_id, "C_DIAGNOSTIC")
         self.assertNotEqual(gate_c.classification, gate_r.classification)
         with self.assertRaises(ValueError):
             FrozenPoolRankingComparison.compare(
@@ -110,6 +133,19 @@ class ScientificContractTests(unittest.TestCase):
                 baseline_pool_sha256=pool_hash, candidate_pool_sha256=sha("other"),
                 baseline_scores=[0.3], candidate_scores=[0.4], bootstrap_seed="R", resamples=10,
             )
+        diagnostic = TrackCRankingDiagnostic(
+            candidate_pool_sha256=pool_hash,
+            no_rerank_id="c1-no-rerank",
+            reranker_id="frozen-reranker",
+            no_rerank_ndcg_at_100=0.30,
+            reranked_ndcg_at_100=0.35,
+            oracle_ndcg_at_100=0.55,
+            reachable_ndcg_at_100=0.50,
+            promotions=4,
+            demotions=2,
+            failure_layer="ranking",
+        )
+        diagnostic.validate()
 
     def test_confirmation_classification_uses_point_delta_not_ci_as_gate(self) -> None:
         self.assertEqual(
@@ -165,6 +201,7 @@ class ScientificContractTests(unittest.TestCase):
         provider = ProviderExecution("gpt-5.6-sol", "gpt-5.6-sol", "openai", "medium")
         protocol = OptimizerProtocol(provider, sha("budget"), sha("initial"), sha("eval"), sha("stop"))
         assert_matched_optimizer_protocols(protocol, protocol, stage="selection")
+        assert_matched_track_s_optimizer_protocols(protocol, protocol, protocol, stage="selection")
         fallback = ProviderExecution(
             "gpt-5.6-sol", "gpt-5.6-sol", "proxy", "medium",
             endpoint_class=EndpointClass.THIRD_PARTY, fallback_used=True,
@@ -173,6 +210,15 @@ class ScientificContractTests(unittest.TestCase):
             OptimizerProtocol(fallback, sha("budget"), sha("initial"), sha("eval"), sha("stop")).validate(
                 stage="selection"
             )
+        with self.assertRaises(ValueError):
+            ProviderExecution(
+                "qwen/qwen3-30b-a3b-instruct-2507",
+                "qwen/qwen3-30b-a3b-instruct-2507",
+                "openrouter-coreweave",
+                "non-thinking",
+                endpoint_class=EndpointClass.THIRD_PARTY,
+                routing_used=True,
+            ).validate(measured=True)
 
     def test_model_calibration_and_luna_roles_are_explicit(self) -> None:
         implementation = ProviderExecution("gpt-5.6-sol", "gpt-5.6-sol", "openai", "high")
@@ -209,7 +255,7 @@ class ScientificContractTests(unittest.TestCase):
         )
         request.validate()
         comparison = AggregateComparison(
-            gate_id="C", primary_metric="out_recall_at_100", baseline_id="hybrid", candidate_id="crossroute",
+            track_id="C", gate_id="C", primary_metric="out_recall_at_100", baseline_id="hybrid", candidate_id="crossroute",
             n=3, baseline_point_estimate=0.2, candidate_point_estimate=0.206, paired_delta=0.006,
             ci95_lower=-0.001, ci95_upper=0.013, effect_size_name="rank_biserial", effect_size_value=0.2,
             wins=2, losses=1, ties=0,
@@ -248,17 +294,16 @@ class ScientificContractTests(unittest.TestCase):
         v3 = {
             **base,
             "schema_version": MANIFEST_V3,
-            "identity": {
-                "phase": "fixture",
-                "research": {
-                    "program_id": "is1-research",
-                    "display_name": "IS1 Research V0.1",
-                    "research_version": "0.1",
-                    "protocol_family_id": "candidate-exposure-freeze-ranking-v1",
-                    "revision_id": "fixture",
-                }
-            },
             "method": {"provider": None},
+            "identity": {
+                "phase": "fixture", "arm": "C0",
+                "research": {
+                    "program_id": "myis-research", "display_name": "myIS Research",
+                    "protocol_version": "1.0", "track_id": "C", "track_version": "0.1",
+                    "package_version": "0.1.0", "research_version": "0.1",
+                    "protocol_family_id": "crossroute-frozen-c1-skillopt-v1", "revision_id": "fixture",
+                },
+            },
             "environment": {
                 "python_version": "3.11.9", "uv_version": "0.8.0", "os": "Windows",
                 "architecture": "AMD64", "accelerator": "cpu", "uv_lock_sha256": sha("uv.lock")
@@ -270,6 +315,16 @@ class ScientificContractTests(unittest.TestCase):
             "declared_artifact_hashes": {},
         }
         self.assertFalse(validate_manifest_payload(v3)["read_only_legacy"])
+        legacy_v3 = {
+            **v3,
+            "identity": {
+                **v3["identity"],
+                "research": {**v3["identity"]["research"], "program_id": "is1-research"},
+            },
+        }
+        self.assertTrue(validate_manifest_payload(legacy_v3)["read_only_legacy"])
+        with self.assertRaises(ValueError):
+            ResearchVersionSpec(program_id="is1-research").validate()
 
         measured = {
             **v3,
@@ -288,6 +343,11 @@ class ScientificContractTests(unittest.TestCase):
                 "data_scopes": ["adaptation", "selection"],
                 "dependency_replay_command": "uv sync --locked",
                 "confirmation_access": False,
+            },
+            "inputs": {
+                **v3["inputs"],
+                "shared_split_commitment_sha256": sha("shared-split"),
+                "track_firewall_sha256": sha("c-firewall"),
             },
         }
         self.assertFalse(validate_manifest_payload(measured)["read_only_legacy"])

@@ -21,13 +21,17 @@ from .models import (
     RunState,
     RuntimeEnvironment,
     StatisticsContract,
+    TrackCManifest,
+    TrackSManifest,
 )
 from .benchmark import (
     CandidateExposureComparison,
     ConfirmationClassification,
     FrozenPoolRankingComparison,
+    SharedSplitCommitment,
     SelectionDecision,
     SplitFreezeCommitment,
+    TrackCRankingDiagnostic,
 )
 from .policy import CandidateBudget, FusionContract, HarnessPolicy, QueryViewPolicy, RoutePolicy
 from .runner import HarnessAdapter, LocalHarness
@@ -61,7 +65,11 @@ __all__ = [
     "RuntimeEnvironment",
     "SelectionDecision",
     "StatisticsContract",
+    "SharedSplitCommitment",
     "SplitFreezeCommitment",
+    "TrackCManifest",
+    "TrackCRankingDiagnostic",
+    "TrackSManifest",
     "ValidationError",
     "validate_run_bundle",
 ]

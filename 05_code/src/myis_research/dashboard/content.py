@@ -23,14 +23,14 @@ DOCUMENTS = (
     ("tool-lock", "Pinned tool registry", "tools", "00_governance/config/tools.lock.yaml"),
 )
 FLOWS = (
-    ("research-program", "Research program", "06_forntend/dashboard/diagrams/research-program.svg"),
-    ("candidate-exposure", "Candidate exposure and pool freeze", "06_forntend/dashboard/diagrams/candidate-exposure.svg"),
-    ("owner-gate", "Owner Gate decision", "06_forntend/dashboard/diagrams/owner-gate.svg"),
-    ("confirmation-boundary", "External confirmation boundary", "06_forntend/dashboard/diagrams/confirmation-boundary.svg"),
-    ("harness-kernel", "Deterministic harness kernel", "06_forntend/dashboard/diagrams/harness-kernel.svg"),
-    ("run-lifecycle", "Governed run lifecycle", "06_forntend/dashboard/diagrams/run-lifecycle.svg"),
-    ("decision-ledger", "Immutable decision ledger", "06_forntend/dashboard/diagrams/decision-ledger.svg"),
-    ("mlflow-mirror", "Rebuildable MLflow mirror", "06_forntend/dashboard/diagrams/mlflow-mirror.svg"),
+    ("research-program", "Research program", "06_frontend/dashboard/diagrams/research-program.svg"),
+    ("candidate-exposure", "Candidate exposure and pool freeze", "06_frontend/dashboard/diagrams/candidate-exposure.svg"),
+    ("owner-gate", "Owner Gate decision", "06_frontend/dashboard/diagrams/owner-gate.svg"),
+    ("confirmation-boundary", "External confirmation boundary", "06_frontend/dashboard/diagrams/confirmation-boundary.svg"),
+    ("harness-kernel", "Deterministic harness kernel", "06_frontend/dashboard/diagrams/harness-kernel.svg"),
+    ("run-lifecycle", "Governed run lifecycle", "06_frontend/dashboard/diagrams/run-lifecycle.svg"),
+    ("decision-ledger", "Immutable decision ledger", "06_frontend/dashboard/diagrams/decision-ledger.svg"),
+    ("mlflow-mirror", "Rebuildable MLflow mirror", "06_frontend/dashboard/diagrams/mlflow-mirror.svg"),
 )
 CONTENT_TITLES = {
     "process": "Research Process",
@@ -164,7 +164,7 @@ def _registry(repository_root: Path) -> dict[str, Any]:
         ],
         "tools": {"source": TOOLS_SOURCE},
     }
-    relative_path = "06_forntend/dashboard/content_registry.yaml"
+    relative_path = "06_frontend/dashboard/content_registry.yaml"
     if not (repository_root / relative_path).exists():
         raise ValueError("dashboard content registry is missing")
     path = _resolve_regular_file(repository_root, relative_path)

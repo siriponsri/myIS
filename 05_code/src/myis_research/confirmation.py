@@ -15,7 +15,7 @@ from .harness.benchmark import ConfirmationClassification, classify_confirmation
 from .harness.manifest import atomic_write_once
 from .harness.metrics import canonical_metric
 from .harness.models import canonical_hash, is_sha256
-from .identity import PROGRAM_ID, PROTOCOL_FAMILY_ID, RESEARCH_VERSION
+from .identity import PROGRAM_ID, PROTOCOL_FAMILY_ID, PROTOCOL_VERSION, RESEARCH_VERSION
 from .protection import assert_aggregate_only, assert_hash_only_mapping
 
 
@@ -32,6 +32,7 @@ class ConfirmationRequest:
     config_hashes: dict[str, str]
     protocol_hashes: dict[str, str]
     program_id: str = PROGRAM_ID
+    protocol_version: str = PROTOCOL_VERSION
     research_version: str = RESEARCH_VERSION
     protocol_family_id: str = PROTOCOL_FAMILY_ID
     schema_version: str = REQUEST_SCHEMA
@@ -41,10 +42,11 @@ class ConfirmationRequest:
             raise ValueError("unsupported confirmation request schema")
         if (
             self.program_id != PROGRAM_ID
+            or self.protocol_version != PROTOCOL_VERSION
             or self.research_version != RESEARCH_VERSION
             or self.protocol_family_id != PROTOCOL_FAMILY_ID
         ):
-            raise ValueError("confirmation request is not bound to IS1 Research V0.1")
+            raise ValueError("confirmation request is not bound to myIS Research protocol 1.0")
         if not self.request_id.strip() or not self.created_at_utc.strip():
             raise ValueError("request_id and created_at_utc are required")
         if len(self.git_commit) not in {40, 64}:
@@ -84,6 +86,7 @@ def load_confirmation_request(payload: Mapping[str, Any]) -> ConfirmationRequest
         config_hashes=dict(payload["config_hashes"]),
         protocol_hashes=dict(payload["protocol_hashes"]),
         program_id=payload["program_id"],
+        protocol_version=payload["protocol_version"],
         research_version=payload["research_version"],
         protocol_family_id=payload["protocol_family_id"],
         schema_version=payload["schema_version"],
@@ -111,6 +114,7 @@ class ComparisonFamilyMetadata:
 
 @dataclass(frozen=True)
 class AggregateComparison:
+    track_id: str
     gate_id: str
     primary_metric: str
     baseline_id: str
@@ -130,11 +134,10 @@ class AggregateComparison:
     comparison_family: ComparisonFamilyMetadata
 
     def validate(self) -> None:
-        expected_metric = {"C": "out_recall_at_100", "R": "out_ndcg_at_100"}.get(self.gate_id)
-        if self.gate_id not in {"C", "R", "S"}:
-            raise ValueError("gate_id must be C, R, or S")
-        if expected_metric and self.primary_metric != expected_metric:
-            raise ValueError(f"Gate {self.gate_id} primary metric must be {expected_metric}")
+        if self.track_id not in {"C", "S"}:
+            raise ValueError("track_id must be C or S")
+        if self.gate_id != self.track_id or self.primary_metric != "out_recall_at_100":
+            raise ValueError("active aggregate comparisons require matching C/S track and OUT Recall@100")
         if not self.baseline_id.strip() or not self.candidate_id.strip() or not self.primary_metric.strip():
             raise ValueError("comparison identities and primary metric are required")
         if self.n <= 0 or min(self.wins, self.losses, self.ties) < 0:
@@ -168,7 +171,7 @@ class AggregateComparison:
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "AggregateComparison":
         expected = {
-            "gate_id", "primary_metric", "baseline_id", "candidate_id", "n",
+            "track_id", "gate_id", "primary_metric", "baseline_id", "candidate_id", "n",
             "baseline_point_estimate", "candidate_point_estimate", "paired_delta",
             "ci95_lower", "ci95_upper", "effect_size_name", "effect_size_value",
             "wins", "losses", "ties", "classification", "comparison_family",
@@ -180,6 +183,7 @@ class AggregateComparison:
             raise ValueError("comparison-family fields do not match the schema")
         family = ComparisonFamilyMetadata(**value["comparison_family"])
         return cls(
+            track_id=value["track_id"],
             gate_id=value["gate_id"],
             primary_metric=value["primary_metric"],
             baseline_id=value["baseline_id"],

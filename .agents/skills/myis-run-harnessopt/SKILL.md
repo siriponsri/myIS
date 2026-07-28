@@ -1,50 +1,58 @@
 ---
 name: myis-run-harnessopt
-description: Preflight, dry-run, execute, collect, and compare an approved optional IS1 Research V0.1 A0-A3 HarnessOpt adaptation-surface study while preserving Gate C/R, split isolation, immutable manifests, budgets, provider identity, and aggregate-only confirmation.
+description: Preflight, dry-run, execute, collect, and compare the approved myIS Research Track S v0.1 matched-budget SkillOpt, SkillOpt-Lite, and typed HarnessOpt study.
 ---
 
-# Run IS1 Research V0.1 HarnessOpt
+# Run myIS Research Track S HarnessOpt
 
-HarnessOpt is optional Track S methods work. It does not replace the Gate C
-candidate-exposure protocol or Gate R frozen-pool ranking protocol.
+Read `AGENTS.md`, the active `PLAN.md`, `00_governance/OWNER_GATES.md`, the
+Track S protocol, approval, run specification, split commitments, budget,
+module registry, and `references/harnessopt-contract.md` before any action.
+This skill does not authorize experiments, provider calls, GPU work, or
+confirmation evaluation.
 
-Read `AGENTS.md`, `PLAN.md`, `00_governance/OWNER_GATES.md`, the active approval,
-run spec, split commitments, budget, module registry, and
-`references/harnessopt-contract.md`.
+## Preserve the locked design
 
-## Preserve boundaries
+Track S follows frozen Track C1. It has no independent ranking phase. The shared
+query-ID commitment is 250/125/872 at seed 42, but Track S keeps independent
+evaluator, optimizer, firewall, budget, manifests, and artifacts. Never expose
+joint-test membership, qrels, protected payloads, or per-query outcomes.
 
-Keep evaluator, metric/statistics definitions, split/qrels commitments,
-confirmation boundary, family mapping, baseline/frozen results, approval/budget/
-redaction/manifest validation, target model roles, module pool, and stopping
-ceilings fixed. Reject any patch touching protected paths or adding undeclared
-tools/executable code.
+Required arms are A0, A1, A2, A2L, and A3. A2/A2L/A3 each begin at the same
+frozen A1 state and use seeds 11, 23, and 47, a cap of 160 rollouts per seed,
+and USD 20 per optimized arm. Shared services have USD 30; stop at USD 100
+project total. A2 is SkillOpt v0.2.0 commit
+`51d0a4d96e88558c84dee637f98e24e3fb2d1547`; A2L is adapted SkillOpt-Lite
+commit `4cb4eeef1f95375a9179737ab94cf5e64b9647c6`. A2L-P and A3X are deferred,
+exploratory variants and are not valid Track S v0.1 arms.
 
-Arms are A0 frozen baseline, A1 human seed skill, A2 optimized skill/frozen
-harness, and A3 optimized skill plus declared typed policy. A2/A3 must use the
-same initial state, model, provider, effort, data access, evaluator, tools,
-budget, repeat schedule, and stopping. Start qrels-blind calibration with
-GPT-5.6 Sol Medium; escalate to High only after validity failure and then freeze
-the result. Luna is support-only or a separate cost ablation. No silent fallback.
+Use `qwen/qwen3-30b-a3b-instruct-2507` non-thinking via the provisional
+OpenRouter CoreWeave BF16 endpoint. No routing, fallback, or parameter dropping
+is allowed. Permit one identical retry only for a transport error. A failed
+identity/schema/context/latency/repeated-fixture preflight stops for an Owner
+decision under `COREWEAVE_FINAL_FREEZE_TBD_BLOCKING`.
 
-## Execute
+## Execute only under the relevant gate
 
-1. Validate IS1 identity, G5 approval, `RunSpec`, exact Python/uv/OS/lock
-   environment, provider identity, split hashes, protected/editable surfaces,
-   repeats, module pool, budget, and fresh output path.
-2. Dry-run fixtures to prove protected access denial, patch denial, budget stop,
-   event ordering, immutable manifest, MLflow-deferred behavior, and recovery.
-3. Expose only adaptation/selection qrels and prevent protected network
-   re-download.
-4. Execute adapter lifecycle `preflight -> dry_run -> execute -> collect` and
-   preserve every repeat, including invalid/failed runs.
-5. Accept a trial only when its preregistered primary selection score is strictly
-   greater than the incumbent. Reject ties and lower scores.
-6. Validate per-query/aggregate consistency, hashes, cost, provider/fallback,
-   repeat matching, batch-order invariance, and protected-surface integrity.
-7. Write canonical artifacts and manifest immutably. Mirror allowlisted files to
-   MLflow only after validation; mirror failure cannot invalidate the bundle.
+1. Validate `myIS Research` / `myis-research`, protocol 1.0, Track S v0.1,
+   G4/G5 scope, exact Python/uv/OS/lock environment, split hashes, budget,
+   provider identity, frozen A1, and fresh artifact path.
+2. Dry-run fixtures proving protected-access denial, typed-patch denial, budget
+   stop, event ordering, immutable manifest writing, and MLflow mirror
+   isolation. Do not contact a provider during a dry run.
+3. Run S0: lock A0/A1/provider and complete the separate three-seed S-MARGIN
+   audit. Stop until the Owner resolves `S_MARGIN_VALUES_TBD_BLOCKING`.
+4. Run A2, A2L, and A3 as required matched parallel arms from A1 with matched
+   seeds, rollout caps, data access, evaluator, tool set, and stop rules. A3
+   may edit only the typed allowlist in the reference contract.
+5. Accept only when the preregistered primary selection score is strictly
+   greater than the incumbent. Reject ties and lower scores; retain all outcomes.
+6. Validate hashes, provider/fallback state, costs, repeat matching, batch-order
+   invariance, and firewall integrity. Write the manifest last and immutably;
+   MLflow mirrors only allowlisted validated material.
+7. At SF, freeze one final artifact per arm and emit a hash-only Owner
+   confirmation request. The external evaluator returns aggregate-only evidence.
 
-Do not choose the best repeat or tune after confirmation. Confirmation executes
-outside the workspace and returns aggregate-only statistics. Present DAPFAM as
-retrieval relevance, never legal novelty/FTO evidence.
+Report the primary A3-A2 paired OUT Recall@100 comparison without multiplicity
+correction. Apply Holm only to A1-A0, A2-A1, A2L-A1, A3-A1, and A2L-A2;
+A3-A2L is exploratory. DAPFAM is retrieval relevance, not legal advice.

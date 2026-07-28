@@ -4,17 +4,21 @@ schema_version: myis.run-manifest.v3
 
 identity:
   research:
-    program_id: is1-research
-    display_name: IS1 Research V0.1
+    program_id: myis-research
+    display_name: myIS Research
+    protocol_version: "1.0"
+    track_id: C  # C|S
+    track_version: "0.1"
+    package_version: "0.1.0"
     research_version: "0.1"
-    protocol_family_id: candidate-exposure-freeze-ranking-v1
+    protocol_family_id: crossroute-frozen-c1-skillopt-v1
     revision_id: null
     owner_decision_id: null
   run_id: null
   goal_id: null
   parent_run_id: null
   trial_id: null
-  arm: C0  # C0|C1|C2|CF|R0|R1|R2|A0|A1|A2|A3|Q|P
+  arm: C0  # C: B0|B1|B2|C0|C1|CF|C_DIAGNOSTIC|Q|PC|CT; S: A0|A1|A2|A2L|A3|SF|Q|PS|CT
   phase: offline_fixture
 
 lifecycle:
@@ -52,6 +56,8 @@ method:
     endpoint_class: official  # official|third_party|local
     fallback_allowed: false
     fallback_used: false
+    routing_used: false
+    parameters_dropped: false
     request_id: null
     temperature: null
     seed: null
@@ -63,9 +69,11 @@ method:
 inputs:
   dataset_id: dapfam
   dataset_manifest_hash: null
-  split: adaptation  # adaptation|selection|external_confirmation|descriptive_all
+  split: train  # train|selection|joint_test|descriptive_all
   split_query_ids_hash: null
-  seed: 0
+  shared_split_commitment_sha256: null
+  track_firewall_sha256: null
+  seed: 42
 
 evaluator:
   evaluator_id: null

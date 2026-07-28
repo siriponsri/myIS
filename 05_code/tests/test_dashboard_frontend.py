@@ -21,18 +21,18 @@ CONTENT_FILES = (
     "00_governance/TOOLCHAIN.md",
     "00_governance/TOOL_BOOTSTRAP_STATUS.md",
     "00_governance/config/tools.lock.yaml",
-    "06_forntend/dashboard/content_registry.yaml",
-    "06_forntend/dashboard/index.html",
-    "06_forntend/dashboard/assets/dashboard.css",
-    "06_forntend/dashboard/assets/dashboard.js",
-    "06_forntend/dashboard/diagrams/research-program.svg",
-    "06_forntend/dashboard/diagrams/candidate-exposure.svg",
-    "06_forntend/dashboard/diagrams/owner-gate.svg",
-    "06_forntend/dashboard/diagrams/confirmation-boundary.svg",
-    "06_forntend/dashboard/diagrams/harness-kernel.svg",
-    "06_forntend/dashboard/diagrams/run-lifecycle.svg",
-    "06_forntend/dashboard/diagrams/decision-ledger.svg",
-    "06_forntend/dashboard/diagrams/mlflow-mirror.svg",
+    "06_frontend/dashboard/content_registry.yaml",
+    "06_frontend/dashboard/index.html",
+    "06_frontend/dashboard/assets/dashboard.css",
+    "06_frontend/dashboard/assets/dashboard.js",
+    "06_frontend/dashboard/diagrams/research-program.svg",
+    "06_frontend/dashboard/diagrams/candidate-exposure.svg",
+    "06_frontend/dashboard/diagrams/owner-gate.svg",
+    "06_frontend/dashboard/diagrams/confirmation-boundary.svg",
+    "06_frontend/dashboard/diagrams/harness-kernel.svg",
+    "06_frontend/dashboard/diagrams/run-lifecycle.svg",
+    "06_frontend/dashboard/diagrams/decision-ledger.svg",
+    "06_frontend/dashboard/diagrams/mlflow-mirror.svg",
 )
 
 
@@ -83,7 +83,7 @@ class DashboardFrontendTests(unittest.TestCase):
 
             index = client.get("/")
             self.assertEqual(index.status_code, 200)
-            self.assertIn("IS1 Owner Research Dashboard", index.text)
+            self.assertIn("myIS Owner Research Dashboard", index.text)
             self.assertEqual(index.headers["cache-control"], "no-store, max-age=0")
             self.assertEqual(client.get("/assets/dashboard.css").status_code, 200)
             self.assertEqual(client.get("/assets/dashboard.js").status_code, 200)
@@ -176,7 +176,7 @@ class DashboardFrontendTests(unittest.TestCase):
                 with tempfile.TemporaryDirectory() as temp:
                     root = Path(temp)
                     make_fixture(root)
-                    diagram = root / "06_forntend/dashboard/diagrams/research-program.svg"
+                    diagram = root / "06_frontend/dashboard/diagrams/research-program.svg"
                     diagram.write_text(payload, encoding="utf-8")
                     client, _ = session_client(root)
                     response = client.get("/api/v1/flows/research-program")
@@ -188,7 +188,7 @@ class DashboardFrontendTests(unittest.TestCase):
             make_fixture(root)
             client, _ = session_client(root)
             detail = client.get("/api/v1/flows/research-program").json()
-            diagram = root / "06_forntend/dashboard/diagrams/research-program.svg"
+            diagram = root / "06_frontend/dashboard/diagrams/research-program.svg"
             replacement = b'<svg xmlns="http://www.w3.org/2000/svg"><text>changed</text></svg>\n'
             diagram.write_bytes(replacement)
             self.assertEqual(client.get(detail["image_url"]).status_code, 409)
@@ -202,7 +202,7 @@ class DashboardFrontendTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             make_fixture(root)
-            registry = root / "06_forntend/dashboard/content_registry.yaml"
+            registry = root / "06_frontend/dashboard/content_registry.yaml"
             registry.write_text(
                 registry.read_text(encoding="utf-8").replace(
                     "PLAN.md", "../protected/confirmation-qrels.json", 1
@@ -218,7 +218,7 @@ class DashboardFrontendTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             make_fixture(root)
-            (root / "06_forntend/dashboard/content_registry.yaml").unlink()
+            (root / "06_frontend/dashboard/content_registry.yaml").unlink()
             client, _ = session_client(root)
             response = client.get("/api/v1/content/process")
             self.assertEqual(response.status_code, 409)
@@ -227,7 +227,7 @@ class DashboardFrontendTests(unittest.TestCase):
     def test_allowlisted_sources_reject_in_repo_symlinks(self) -> None:
         cases = (
             "PLAN.md",
-            "06_forntend/dashboard/diagrams/research-program.svg",
+            "06_frontend/dashboard/diagrams/research-program.svg",
             "00_governance/config/tools.lock.yaml",
         )
         for relative in cases:

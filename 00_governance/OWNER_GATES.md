@@ -1,4 +1,4 @@
-# IS1 Research V0.1 Owner Gates
+# myIS Research 1.0 Owner Gates
 
 Owner Gates authorize a named scope, evidence set, budget, and action. Silence,
 an agent recommendation, an earlier approval, or a dashboard preview is not
@@ -27,17 +27,19 @@ in Git.
 |---|---|---|
 | G0 Integrity/Migration | repo/overlay conflict map, integrity diagnosis, locked environment, tests, rollback, exact cleanup candidates | approve active documentation/contracts and any separately named archive/delete action |
 | G1 Reproduction | corpus/query/qrels/family/evaluator commitments, field protocol, published targets, compute budget | run BM25/dense/Hybrid RRF reproduction |
-| G2 Track C Development | OUT-positive/power audit, proposed split, qrels-blind view schema, route/final budgets, protected workspace design | open candidate-exposure development/selection |
-| G3 Track C Freeze | valid ablations, selected policy, failure table, exact pool and protocol hashes | freeze Gate C method, split commitments, and candidate pool |
-| G4 Track R Development | G3 pool hash, R0 headroom, reranker/evidence budget, negative controls, PDF/source permissions | open ranking/evidence development on the identical pool |
-| G5 Optional HarnessOpt | A0-A3 preregistration, calibration report, matched model/provider/effort/budget/repeats, patch protections | open optional S optimizer work |
-| G6 External Confirmation | frozen Git/config/prompt/skill/model/environment/pool, one primary baseline per gate, aggregate schema, external evaluator receipt | authorize the Owner-run one-command confirmation request exactly once |
-| G7 External Transfer | external corpus/license/privacy/protocol comparability and budget | run a separately scoped transfer study |
-| G8 Publication | aggregate confirmation or clearly labeled descriptive evidence, claim-evidence audit, all repeats, limitations, artifact inventory | build/submit the named publication package |
+| G2 Shared split and C development | shared membership commitment, C firewall, OUT-positive/power audit, C-MARGIN/C-SOEI audit, qrels-blind view schema, route/final budgets | open Track C C0/C1 development and selection |
+| G3 Track C freeze | valid C0/C1 ablations, selected C1 policy, failure table, exact frozen-pool/protocol hashes, C ranking-diagnostic specification | freeze C0/C1 and hand over the frozen C1 harness to Track S |
+| G4 Track S provider and baseline lock | G3 frozen-harness receipt, A0/A1 preregistration, provider/model preflight, S firewall, S-MARGIN audit, budget/retry plan | open required matched-budget A2/A2L/A3 optimization arms |
+| G5 Track S freeze | all A2/A2L/A3 three-seed finalists, matched budget/model/provider evidence, optimization lineage, one frozen artifact per arm | submit nine seed-finalists once and freeze Track S arms |
+| G6 Joint confirmation | frozen Git/config/prompt/skill/model/environment/pool, Track C and S aggregate schemas, one sealed joint test, external evaluator receipt | authorize the Owner-run one-command joint confirmation request exactly once |
+| G7 External transfer | frozen PatenTEB `retrieval_OUT` compatibility, license/privacy evidence, no-retuning protocol and run-specific budget | run separately scoped C1 transfer without blocking Q or publication |
+| G8 Publication | aggregate confirmation or clearly labeled descriptive evidence, claim-evidence audit, all repeats, limitations, artifact inventory, independent review | build or submit the named Track C and/or Track S publication package |
 
-Gate C and Gate R claims are independent. G4 requires a G3 pool, but a negative
-Gate C confirmation does not erase a positive Gate R comparison on that frozen
-pool, and vice versa. Track S is optional and never blocks C/R reporting.
+The active graph is `Track C -> frozen C1 harness -> Track S`. Track C contains
+a frozen-pool ranking/headroom diagnostic only; it is not an independent ranking/evidence lane
+or a separately confirmable gate. Track S is required after a valid C1 harness.
+Deferred evidence/ranking transfer work remains separately gated and cannot
+change a frozen C1 or S result.
 
 ## Protected surfaces
 
@@ -53,8 +55,11 @@ access or mutate:
   optimization;
 - immutable provenance, decisions, manifests, receipts, and result artifacts.
 
-Only adaptation and selection qrels may be exposed to an approved optimizer.
-Network re-download is disabled during measured optimization.
+Only Track C adaptation/selection qrels may be exposed to its approved optimizer.
+Track S optimizers receive only the separately authorized S surface. Shared query
+membership uses seed `42` and the committed 250/125/872 partition; evaluators,
+budgets, manifests, artifacts, and firewalls remain track-specific. Network
+re-download is disabled during measured optimization.
 
 ## Confirmation boundary
 

@@ -1,0 +1,65 @@
+schema_version: myis.dashboard-content-registry.v1
+documents:
+  - content_id: canonical-plan
+    title: Canonical execution plan
+    kind: plan
+    path: PLAN.md
+  - content_id: research-protocol
+    title: Full research track protocol
+    kind: process
+    path: FULL_RESEARCH_TRACK_PLAN.md
+  - content_id: harness-contract
+    title: Local harness build contract
+    kind: harness
+    path: LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md
+  - content_id: agent-contract
+    title: Agent contract
+    kind: harness
+    path: AGENTS.md
+  - content_id: owner-gates
+    title: Owner Gate authority
+    kind: process
+    path: 00_governance/OWNER_GATES.md
+  - content_id: operations
+    title: Local operations
+    kind: process
+    path: 00_governance/OPERATIONS.md
+  - content_id: toolchain
+    title: Toolchain and authority
+    kind: tools
+    path: 00_governance/TOOLCHAIN.md
+  - content_id: tool-bootstrap
+    title: Tool bootstrap status
+    kind: tools
+    path: 00_governance/TOOL_BOOTSTRAP_STATUS.md
+  - content_id: tool-lock
+    title: Pinned tool registry
+    kind: tools
+    path: 00_governance/config/tools.lock.yaml
+flows:
+  - flow_id: research-program
+    title: Research program
+    path: 06_frontend/dashboard/diagrams/research-program.svg
+  - flow_id: candidate-exposure
+    title: Candidate exposure and pool freeze
+    path: 06_frontend/dashboard/diagrams/candidate-exposure.svg
+  - flow_id: owner-gate
+    title: Owner Gate decision
+    path: 06_frontend/dashboard/diagrams/owner-gate.svg
+  - flow_id: confirmation-boundary
+    title: External confirmation boundary
+    path: 06_frontend/dashboard/diagrams/confirmation-boundary.svg
+  - flow_id: harness-kernel
+    title: Deterministic harness kernel
+    path: 06_frontend/dashboard/diagrams/harness-kernel.svg
+  - flow_id: run-lifecycle
+    title: Governed run lifecycle
+    path: 06_frontend/dashboard/diagrams/run-lifecycle.svg
+  - flow_id: decision-ledger
+    title: Immutable decision ledger
+    path: 06_frontend/dashboard/diagrams/decision-ledger.svg
+  - flow_id: mlflow-mirror
+    title: Rebuildable MLflow mirror
+    path: 06_frontend/dashboard/diagrams/mlflow-mirror.svg
+tools:
+  source: 00_governance/config/tools.lock.yaml

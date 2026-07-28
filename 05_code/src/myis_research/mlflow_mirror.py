@@ -1,4 +1,4 @@
-"""Governed local MLflow mirror for IS1 Research V0.1.
+"""Governed local MLflow mirror for myIS Research.
 
 Git and immutable validated artifacts remain authoritative.  This module only
 creates a searchable, rebuildable projection and deliberately accepts files
@@ -23,12 +23,24 @@ from pathlib import Path
 from typing import Any, Iterator, Mapping, Protocol, Sequence
 
 
-PROGRAM_ID = "is1-research"
+PROGRAM_ID = "myis-research"
+DISPLAY_NAME = "myIS Research"
+PROTOCOL_VERSION = "1.0"
 RESEARCH_VERSION = "0.1"
-BOOTSTRAP_EXPERIMENT = "is1-research-bootstrap"
-CATALOG_EXPERIMENT = "is1-research-catalog"
-SCIENTIFIC_EXPERIMENT = "is1-research-scientific"
-EXPERIMENTS = (BOOTSTRAP_EXPERIMENT, CATALOG_EXPERIMENT, SCIENTIFIC_EXPERIMENT)
+BOOTSTRAP_EXPERIMENT = "myis-research-bootstrap"
+CATALOG_EXPERIMENT = "myis-research-catalog"
+TRACK_C_EXPERIMENT = "myis-research-track-c"
+TRACK_S_EXPERIMENT = "myis-research-track-s"
+JOINT_EXPERIMENT = "myis-research-joint"
+PUBLICATION_EXPERIMENT = "myis-research-publication"
+EXPERIMENTS = (
+    BOOTSTRAP_EXPERIMENT,
+    CATALOG_EXPERIMENT,
+    TRACK_C_EXPERIMENT,
+    TRACK_S_EXPERIMENT,
+    JOINT_EXPERIMENT,
+    PUBLICATION_EXPERIMENT,
+)
 RECEIPT_SCHEMA = "myis.mlflow-mirror-receipt.v1"
 
 _SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
@@ -51,6 +63,8 @@ _SECRET_VALUE_RE = re.compile(
 _TEXT_SUFFIXES = {".csv", ".json", ".jsonl", ".md", ".toml", ".txt", ".yaml", ".yml"}
 _RESERVED_TAGS = {
     "program_id",
+    "display_name",
+    "protocol_version",
     "research_version",
     "stage",
     "mirror_key",
@@ -78,14 +92,20 @@ class MirrorKind(StrEnum):
 class MirrorStage(StrEnum):
     BOOTSTRAP = "bootstrap"
     CATALOG = "catalog"
-    SCIENTIFIC = "scientific"
+    TRACK_C = "track-c"
+    TRACK_S = "track-s"
+    JOINT = "joint"
+    PUBLICATION = "publication"
 
     @property
     def experiment_name(self) -> str:
         return {
             MirrorStage.BOOTSTRAP: BOOTSTRAP_EXPERIMENT,
             MirrorStage.CATALOG: CATALOG_EXPERIMENT,
-            MirrorStage.SCIENTIFIC: SCIENTIFIC_EXPERIMENT,
+            MirrorStage.TRACK_C: TRACK_C_EXPERIMENT,
+            MirrorStage.TRACK_S: TRACK_S_EXPERIMENT,
+            MirrorStage.JOINT: JOINT_EXPERIMENT,
+            MirrorStage.PUBLICATION: PUBLICATION_EXPERIMENT,
         }[self]
 
 
@@ -94,7 +114,10 @@ _STAGE_KINDS = {
     MirrorStage.CATALOG: frozenset(
         {MirrorKind.DOC, MirrorKind.RUBRIC, MirrorKind.RULE, MirrorKind.TOOL, MirrorKind.SKILL, MirrorKind.ENVIRONMENT}
     ),
-    MirrorStage.SCIENTIFIC: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
+    MirrorStage.TRACK_C: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
+    MirrorStage.TRACK_S: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
+    MirrorStage.JOINT: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
+    MirrorStage.PUBLICATION: frozenset({MirrorKind.DOC, MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
 }
 
 
@@ -171,14 +194,25 @@ class MirrorSpec:
     git_commit: str
     canonical_source_sha256: str
     program_id: str = PROGRAM_ID
+    display_name: str = DISPLAY_NAME
+    protocol_version: str = PROTOCOL_VERSION
     research_version: str = RESEARCH_VERSION
+    track: str | None = None
+    arm: str | None = None
+    phase: str | None = None
+    data_role: str | None = None
     tags: Mapping[str, str] = field(default_factory=dict)
     parameters: Mapping[str, str | int | float | bool] = field(default_factory=dict)
     metrics: Mapping[str, float] = field(default_factory=dict)
 
     def validate(self, artifacts: Sequence[MirrorArtifact]) -> None:
-        if self.program_id != PROGRAM_ID or self.research_version != RESEARCH_VERSION:
-            raise MirrorValidationError("mirror identity must be IS1 Research V0.1")
+        if (
+            self.program_id != PROGRAM_ID
+            or self.display_name != DISPLAY_NAME
+            or self.protocol_version != PROTOCOL_VERSION
+            or self.research_version != RESEARCH_VERSION
+        ):
+            raise MirrorValidationError("mirror identity must be myIS Research protocol 1.0")
         if not self.run_name.strip() or not self.git_commit.strip():
             raise MirrorValidationError("run_name and git_commit are required")
         if not _SHA256_RE.fullmatch(self.canonical_source_sha256):
@@ -194,8 +228,26 @@ class MirrorSpec:
         disallowed = sorted({artifact.kind.value for artifact in artifacts if artifact.kind not in allowed})
         if disallowed:
             raise MirrorValidationError(f"artifact kinds are not allowed for {self.stage.value}: {disallowed}")
-        if self.stage != MirrorStage.SCIENTIFIC and self.metrics:
-            raise MirrorValidationError("metrics are allowed only in the scientific experiment")
+        if self.stage in {MirrorStage.BOOTSTRAP, MirrorStage.CATALOG} and self.metrics:
+            raise MirrorValidationError("metrics are allowed only in active scientific mirror stages")
+        active_stages = {MirrorStage.TRACK_C, MirrorStage.TRACK_S, MirrorStage.JOINT, MirrorStage.PUBLICATION}
+        if self.stage in active_stages:
+            required = {
+                "track": self.track,
+                "arm": self.arm,
+                "phase": self.phase,
+                "data_role": self.data_role,
+            }
+            missing = sorted(key for key, value in required.items() if not isinstance(value, str) or not value.strip())
+            if missing:
+                raise MirrorValidationError(f"active mirror stages require lineage fields: {', '.join(missing)}")
+        if self.stage == MirrorStage.TRACK_C and self.track != "C":
+            raise MirrorValidationError("track-c mirrors require track C")
+        if self.stage == MirrorStage.TRACK_S and self.track != "S":
+            raise MirrorValidationError("track-s mirrors require track S")
+        allowed_tracks = {"C", "S", "joint", "publication"}
+        if self.track is not None and self.track not in allowed_tracks:
+            raise MirrorValidationError("mirror track must be an active track or aggregate projection")
         if _RESERVED_TAGS.intersection(self.tags):
             raise MirrorValidationError("caller tags cannot override reserved mirror lineage tags")
         if any(
@@ -219,7 +271,13 @@ class MirrorSpec:
             "git_commit": self.git_commit,
             "canonical_source_sha256": self.canonical_source_sha256.lower(),
             "program_id": self.program_id,
+            "display_name": self.display_name,
+            "protocol_version": self.protocol_version,
             "research_version": self.research_version,
+            "track": self.track,
+            "arm": self.arm,
+            "phase": self.phase,
+            "data_role": self.data_role,
             "tags": dict(sorted(self.tags.items())),
             "parameters": dict(sorted(self.parameters.items())),
             "metrics": dict(sorted(self.metrics.items())),
@@ -391,7 +449,13 @@ class MLflowMirror:
                     tags={
                         **dict(spec.tags),
                         "program_id": spec.program_id,
+                        "display_name": spec.display_name,
+                        "protocol_version": spec.protocol_version,
                         "research_version": spec.research_version,
+                        "track": spec.track or "not_applicable",
+                        "arm": spec.arm or "not_applicable",
+                        "phase": spec.phase or "not_applicable",
+                        "data_role": spec.data_role or "not_applicable",
                         "stage": spec.stage.value,
                         "mirror_key": mirror_key,
                         "canonical_source_sha256": spec.canonical_source_sha256.lower(),

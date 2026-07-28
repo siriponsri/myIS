@@ -1,4 +1,4 @@
-"""Loopback-only read dashboard for IS1 Research V0.1."""
+"""Loopback-only read dashboard for myIS Research."""
 
 from .app import create_app
 

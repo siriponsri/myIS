@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-LAUNCHER = REPO_ROOT / "06_forntend" / "mlflow" / "mlflow.sh"
+LAUNCHER = REPO_ROOT / "06_frontend" / "mlflow" / "mlflow.sh"
 GIT_BASH_CANDIDATES = (
     Path("C:/Program Files/Git/bin/bash.exe"),
     Path("C:/Program Files/Git/usr/bin/bash.exe"),
