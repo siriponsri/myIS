@@ -60,6 +60,7 @@ measures family-level retrieval relevance and is not novelty/FTO legal truth.
 | `03_experiments/` | experiment configuration and immutable manifest templates |
 | `04_outputs/` | validated reports, diagrams, audits, and publication packages |
 | `05_code/` | harness, metrics/statistics, confirmation contracts, dashboard, MLflow mirror, tests |
+| `06_forntend/` | local Owner dashboard assets and the governed MLflow viewer launcher |
 | `.agents/skills/` | project procedures bound by the same protected-surface rules |
 
 ## Implemented foundation
@@ -96,14 +97,19 @@ SHA-256. Exported hashed requirements are interoperability-only.
 
 - The dashboard is read-only for experiment artifacts and binds only to
   `127.0.0.1`. The only canonical Git write is a previewed, explicitly confirmed
-  typed Owner Gate decision under `00_governance/approvals/`.
+  typed Owner Gate decision under `00_governance/approvals/`. Its Owner console
+  exposes the canonical plan, Phase/Task evidence state, process, flow diagrams,
+  harness rules, tools, decisions, and pathless artifact metadata.
+- Task evidence completion and Owner authorization are separate states. Passing
+  evidence never opens a gated scientific phase without the applicable decision.
 - PDF streaming is disabled unless an exact path/hash is allowlisted after
   license/privacy review. Each access writes a local ignored hash-chained receipt;
   only periodic chain-head anchors may enter Git through an Owner Gate record.
 - MLflow mirrors allowlisted documents, results, metrics, rubrics, rules, tools,
   skills, and environments. Git and validated artifacts remain canonical; PDFs,
   qrels, split membership, confirmation outcomes, credentials, and protected
-  per-query artifacts are rejected.
+  per-query artifacts are rejected. The browser viewer is separately constrained
+  to read/search routes and a read-only SQLite connection.
 
 See [00_governance/TOOLCHAIN.md](00_governance/TOOLCHAIN.md) for the complete
 authority map and [00_governance/OPERATIONS.md](00_governance/OPERATIONS.md) for

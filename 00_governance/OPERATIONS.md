@@ -93,6 +93,11 @@ Bind exactly to loopback; remote hosts are invalid.
 uv run --no-sync myis-dashboard --repository-root . --port 8765
 ```
 
+Open `http://127.0.0.1:8765`. The same-origin Owner console reads the canonical
+plan, process, flow, harness-rule, tool, gate, and artifact projections. Evidence
+completion is operational evidence only; authorization remains a separate Owner
+Gate state.
+
 Before a decision write, inspect the preview, evidence hashes, Git commit,
 authoritative OS actor ID, and prior-record hash, then explicitly confirm. The
 browser never supplies authoritative actor identity. Do not add CORS/CDN or
@@ -120,6 +125,18 @@ On a lost/corrupt local receipt ledger:
 Set `MYIS_MLFLOW_STORE` to the approved persistent root outside Git. Bootstrap
 logs no artifacts and no scientific metrics. Catalog/scientific projection uses
 explicit validated/redacted files only.
+
+Use the Git Bash launcher for browser access. It opens MLflow through the pinned
+read-only WSGI guard; it never starts the standard writable server directly.
+
+```powershell
+& "C:\Program Files\Git\bin\bash.exe" "06_forntend/mlflow/mlflow.sh" doctor
+& "C:\Program Files\Git\bin\bash.exe" "06_forntend/mlflow/mlflow.sh" start
+```
+
+Open `http://127.0.0.1:5000`. `start` runs in the foreground and stops with
+Ctrl+C. The launcher rejects WSL, remote binding, unknown MLflow route maps,
+write-capable database URIs, occupied ports, and version drift.
 
 If MLflow is unavailable, the canonical run remains valid and an immutable
 `sync_deferred` receipt is written. Recovery:

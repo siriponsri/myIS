@@ -77,6 +77,12 @@ The dashboard never edits manifests, metrics, qrels, splits, baselines, or
 results. The Owner decision API and local PDF receipt ledger are the only write
 surfaces described in `OWNER_GATES.md`.
 
+The Owner console projects Phase/Task evidence completion independently from
+gate authorization. It reads the canonical Phase -> Task plan, allowlisted
+process/harness/tool documents, validated task-evidence records, exact SVG flow
+IDs, the approval chain, and pathless artifact metadata. It never infers that a
+successful run is a completed task or that completed evidence is authorization.
+
 ## MLflow mirror policy
 
 Three local experiments separate bootstrap, catalog, and scientific projection.
@@ -88,6 +94,12 @@ projected idempotently through one serialized SQLite writer.
 
 Mirror receipts and rebuild plans are append-only. Mirror failure is deferred and
 cannot invalidate a canonical bundle. The persistent store is outside Git.
+
+Browser access uses a separate enforced read-only viewer: SQLite opens with
+`mode=ro`, the WSGI boundary allowlists only required read/search endpoints, and
+artifact upload, run/experiment mutation, gateway, job, telemetry-write, and
+GraphQL surfaces are rejected before MLflow handlers execute. Standard writable
+MLflow UI startup is not an approved operation.
 
 ## PageIndex position
 

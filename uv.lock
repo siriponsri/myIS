@@ -909,6 +909,7 @@ test = [
 ]
 tracking = [
     { name = "mlflow" },
+    { name = "waitress", marker = "sys_platform == 'win32'" },
 ]
 
 [package.metadata]
@@ -923,6 +924,7 @@ requires-dist = [
     { name = "pyyaml", specifier = "==6.0.2" },
     { name = "structlog", specifier = "==26.1.0" },
     { name = "uvicorn", marker = "extra == 'dashboard'", specifier = "==0.41.0" },
+    { name = "waitress", marker = "sys_platform == 'win32' and extra == 'tracking'", specifier = "==3.0.2" },
 ]
 provides-extras = ["dashboard", "tracking", "notebook", "test"]
 

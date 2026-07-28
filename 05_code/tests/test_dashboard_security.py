@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from myis_research.dashboard.app import _decision_id, create_app
 from myis_research.dashboard.artifacts import ArtifactCatalog
 from myis_research.dashboard.contracts import DecisionPreviewRequest
+from myis_research.dashboard.progress import parse_plan, validate_decision_scope
 from myis_research.dashboard.security import WindowsSession, _validate_session_snapshot
 
 
@@ -18,14 +19,19 @@ class DashboardSecurityTests(unittest.TestCase):
         value = _decision_id("IS1-G0", datetime(2026, 7, 28, 1, 2, 3, 456789, tzinfo=timezone.utc))
         self.assertEqual(value, "IS1-G0-20260728T010203456789Z")
 
-    def test_superseded_decision_requires_original_reference(self) -> None:
+    def test_superseded_is_not_a_decision_outcome(self) -> None:
         with self.assertRaises(ValidationError):
             DecisionPreviewRequest(
                 gate_id="G0",
                 status="superseded",
                 rationale="correct an earlier record",
                 evidence_manifest_hashes=(),
-                scope_hash="a" * 64,
+                scope={
+                    "action": "approve_implementation",
+                    "phase_ids": ["F0"],
+                    "task_ids": [],
+                    "targets": [],
+                },
             )
 
     def test_session_snapshot_rejects_remote_and_multi_user_operation(self) -> None:
@@ -62,11 +68,16 @@ class DashboardSecurityTests(unittest.TestCase):
                 "/api/v1/owner-gates/preview",
                 headers={"origin": "http://evil.invalid", "x-csrf-token": csrf},
                 json={
-                    "gate_id": "IS1-V0.1-G0",
+                    "gate_id": "G0",
                     "status": "approved",
                     "rationale": "fixture approval",
                     "evidence_manifest_hashes": [],
-                    "scope_hash": "a" * 64,
+                    "scope": {
+                        "action": "approve_implementation",
+                        "phase_ids": ["F0"],
+                        "task_ids": [],
+                        "targets": [],
+                    },
                 },
             )
             self.assertEqual(rejected.status_code, 403)
@@ -101,6 +112,79 @@ class DashboardSecurityTests(unittest.TestCase):
             )
             with self.assertRaises(PermissionError):
                 ArtifactCatalog(path).public_entries()
+
+    def test_gate_scope_rejects_tasks_and_phases_owned_by_another_gate(self) -> None:
+        plan = parse_plan(Path(__file__).resolve().parents[2] / "PLAN.md")
+        with self.assertRaisesRegex(ValueError, "not governed by G8"):
+            validate_decision_scope(
+                plan,
+                "G8",
+                {
+                    "action": "authorize_publication",
+                    "phase_ids": ("F0",),
+                    "task_ids": ("F0.1",),
+                    "targets": (),
+                },
+            )
+        with self.assertRaisesRegex(ValueError, "not governed by G1"):
+            validate_decision_scope(
+                plan,
+                "G1",
+                {
+                    "action": "authorize_reproduction",
+                    "phase_ids": ("R1",),
+                    "task_ids": ("R1.1",),
+                    "targets": (),
+                },
+            )
+
+    def test_confirmation_requires_q_phase_or_task_scope(self) -> None:
+        plan = parse_plan(Path(__file__).resolve().parents[2] / "PLAN.md")
+        with self.assertRaisesRegex(ValueError, "requires a governed phase or task"):
+            validate_decision_scope(
+                plan,
+                "G6",
+                {
+                    "action": "authorize_confirmation",
+                    "phase_ids": (),
+                    "task_ids": (),
+                    "targets": ("04_outputs/confirmation-request.json",),
+                },
+            )
+        validate_decision_scope(
+            plan,
+            "G6",
+            {
+                "action": "authorize_confirmation",
+                "phase_ids": ("Q",),
+                "task_ids": ("Q.1",),
+                "targets": ("04_outputs/confirmation-request.json",),
+            },
+        )
+
+    def test_transfer_target_only_scope_requires_exact_targets(self) -> None:
+        plan = parse_plan(Path(__file__).resolve().parents[2] / "PLAN.md")
+        with self.assertRaisesRegex(ValueError, "requires a named phase, task, or target|requires exact"):
+            validate_decision_scope(
+                plan,
+                "G7",
+                {
+                    "action": "authorize_transfer",
+                    "phase_ids": (),
+                    "task_ids": (),
+                    "targets": (),
+                },
+            )
+        validate_decision_scope(
+            plan,
+            "G7",
+            {
+                "action": "authorize_transfer",
+                "phase_ids": (),
+                "task_ids": (),
+                "targets": ("04_outputs/confirmation/request.json",),
+            },
+        )
 
 
 if __name__ == "__main__":

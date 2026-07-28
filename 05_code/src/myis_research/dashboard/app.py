@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import secrets
 import subprocess
 from dataclasses import dataclass
@@ -11,13 +10,21 @@ from pathlib import Path
 from time import time
 from typing import Any
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import FileResponse
 
 from ..identity import DISPLAY_NAME, PROGRAM_ID, RESEARCH_VERSION
 from ..ledger import ImmutableJsonLedger
 from .artifacts import ArtifactCatalog
+from .content import content_document, flow_catalog, flow_document, flow_image, tool_catalog
 from .contracts import DecisionConfirmRequest, DecisionPreviewRequest, PdfAccessRequest
+from .progress import (
+    build_dashboard_snapshot,
+    parse_plan,
+    scope_sha256,
+    validate_decision_scope,
+    validated_owner_gate_ledger,
+)
 from .security import (
     LoopbackSecurityMiddleware,
     SessionStore,
@@ -71,9 +78,26 @@ def create_app(
     def healthz() -> dict[str, str]:
         return {"status": "ok", "program_id": PROGRAM_ID, "research_version": RESEARCH_VERSION}
 
+    @app.get("/favicon.ico", include_in_schema=False)
+    def favicon() -> Response:
+        return Response(status_code=204)
+
     @app.get("/")
-    def index() -> dict[str, Any]:
+    def index():
+        frontend = _frontend_file(repository_root, "index.html")
+        if frontend is not None:
+            return FileResponse(frontend, media_type="text/html")
         return {"display_name": DISPLAY_NAME, "mode": "read-only", "artifact_mutation": False}
+
+    @app.get("/assets/{asset_name}")
+    def frontend_asset(asset_name: str):
+        media_types = {"dashboard.css": "text/css", "dashboard.js": "text/javascript"}
+        if asset_name not in media_types:
+            raise HTTPException(status_code=404, detail="frontend asset is not allowlisted")
+        frontend = _frontend_file(repository_root, f"assets/{asset_name}")
+        if frontend is None:
+            raise HTTPException(status_code=404, detail="frontend asset is unavailable")
+        return FileResponse(frontend, media_type=media_types[asset_name])
 
     @app.get("/api/v1/session")
     def create_session(response: Response) -> dict[str, str]:
@@ -85,8 +109,54 @@ def create_app(
 
     @app.get("/api/v1/owner-gates")
     def owner_gates(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
-        records = [payload for _, payload, _ in approvals.records()]
-        return {"records": records, "chain": approvals.validate_chain()}
+        plan = parse_plan(repository_root / "PLAN.md")
+        return _projection_response(
+            lambda: validated_owner_gate_ledger(approvals.root, plan)
+        )
+
+    @app.get("/api/v1/dashboard-snapshot")
+    def dashboard_snapshot(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: build_dashboard_snapshot(repository_root))
+
+    @app.get("/api/v1/content/{content_id}")
+    def content(content_id: str, _: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        try:
+            return _projection_response(lambda: content_document(repository_root, content_id))
+        except KeyError as error:
+            raise HTTPException(status_code=404, detail="content view is not allowlisted") from error
+
+    @app.get("/api/v1/flows")
+    def flows(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: flow_catalog(repository_root))
+
+    @app.get("/api/v1/flows/{flow_id}")
+    def flow(flow_id: str, _: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        try:
+            return _projection_response(lambda: flow_document(repository_root, flow_id))
+        except KeyError as error:
+            raise HTTPException(status_code=404, detail="flow is not allowlisted") from error
+
+    @app.get("/api/v1/flows/{flow_id}/image")
+    def flow_svg(
+        flow_id: str,
+        expected_sha256: str = Query(alias="sha256", min_length=64, max_length=64, pattern=r"^[0-9a-f]{64}$"),
+        _: tuple[str, Any] = Depends(require_session),
+    ):
+        try:
+            payload, digest = _projection_response(lambda: flow_image(repository_root, flow_id))
+        except KeyError as error:
+            raise HTTPException(status_code=404, detail="flow is not allowlisted") from error
+        if not secrets.compare_digest(digest, expected_sha256):
+            raise HTTPException(status_code=409, detail="flow image hash changed; refresh the flow detail")
+        return Response(
+            content=payload,
+            media_type="image/svg+xml",
+            headers={"X-Content-SHA256": digest},
+        )
+
+    @app.get("/api/v1/tools")
+    def tools(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: tool_catalog(repository_root))
 
     @app.post("/api/v1/owner-gates/preview")
     def preview_decision(
@@ -96,18 +166,27 @@ def create_app(
         git_commit = _git_commit(repository_root)
         if _git_dirty(repository_root):
             raise HTTPException(status_code=409, detail="repository must be clean before an Owner decision")
+        plan = parse_plan(repository_root / "PLAN.md")
+        scope = body.scope.model_dump(mode="json", exclude_none=True)
+        try:
+            validate_decision_scope(plan, body.gate_id, scope)
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
         if body.supersedes_decision_id:
             existing = [payload for _, payload, _ in approvals.records()]
-            decision_ids = {item.get("decision_id") for item in existing}
-            if body.supersedes_decision_id not in decision_ids:
+            decisions = {item.get("decision_id"): item for item in existing}
+            if body.supersedes_decision_id not in decisions:
                 raise HTTPException(status_code=409, detail="superseded decision does not exist")
+            prior_gate = _normalized_gate_id(str(decisions[body.supersedes_decision_id].get("gate_id", "")))
+            if prior_gate != body.gate_id:
+                raise HTTPException(status_code=409, detail="a correction must use the original gate ID")
             if any(item.get("supersedes_decision_id") == body.supersedes_decision_id for item in existing):
                 raise HTTPException(status_code=409, detail="superseded decision already has a correction")
         now = datetime.now(timezone.utc)
         timestamp = now.isoformat()
         decision_id = _decision_id(body.gate_id, now)
         payload = {
-            "schema_version": "myis.owner-gate-decision.v1",
+            "schema_version": "myis.owner-gate-decision.v2",
             "decision_id": decision_id,
             "gate_id": body.gate_id,
             "status": body.status,
@@ -117,7 +196,8 @@ def create_app(
             "display_label": body.display_label,
             "evidence_manifest_hashes": list(body.evidence_manifest_hashes),
             "git_commit": git_commit,
-            "scope_hash": body.scope_hash,
+            "scope": scope,
+            "scope_hash": scope_sha256(scope),
             "prior_record_hash": approvals.head(),
             "supersedes_decision_id": body.supersedes_decision_id,
         }
@@ -205,3 +285,36 @@ def _git_dirty(root: Path) -> bool:
             text=True,
         ).stdout.strip()
     )
+
+
+def _frontend_file(repository_root: Path, relative_path: str) -> Path | None:
+    allowed = {"index.html", "assets/dashboard.css", "assets/dashboard.js"}
+    if relative_path not in allowed:
+        return None
+    frontend_root = repository_root / "06_forntend/dashboard"
+    target = frontend_root / relative_path
+    if not target.exists():
+        return None
+    if frontend_root.is_symlink() or target.is_symlink() or not target.is_file():
+        raise HTTPException(status_code=409, detail="frontend files must be regular non-symlink files")
+    resolved_root = frontend_root.resolve(strict=True)
+    resolved_target = target.resolve(strict=True)
+    try:
+        resolved_target.relative_to(resolved_root)
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail="frontend file escapes the allowlisted root") from error
+    return resolved_target
+
+
+def _projection_response(factory: Any) -> Any:
+    try:
+        return factory()
+    except (OSError, PermissionError, ValueError, subprocess.SubprocessError) as error:
+        raise HTTPException(status_code=409, detail=f"dashboard projection unavailable: {error}") from error
+
+
+def _normalized_gate_id(value: str) -> str | None:
+    for gate_id in (f"G{index}" for index in range(9)):
+        if value == gate_id or value.endswith(f"-{gate_id}"):
+            return gate_id
+    return None

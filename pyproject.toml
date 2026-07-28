@@ -18,7 +18,10 @@ dashboard = [
     "fastapi==0.133.1",
     "uvicorn==0.41.0",
 ]
-tracking = ["mlflow==3.14.0"]
+tracking = [
+    "mlflow==3.14.0",
+    "waitress==3.0.2; sys_platform == 'win32'",
+]
 notebook = ["nbclient>=0.10", "nbformat>=5.10"]
 test = [
     "httpx==0.28.1",
