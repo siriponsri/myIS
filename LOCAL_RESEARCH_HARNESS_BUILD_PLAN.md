@@ -149,7 +149,9 @@ interoperability-only.
 
 ## Dashboard and governance ledger
 
-The dashboard is a local read-only projection of metadata/digests. Security
+The dashboard is a local Owner research console and read-only projection of
+metadata/digests. It presents the canonical plan, Phase/Task evidence state,
+process, flow diagrams, harness rules, tools, decisions, and artifacts. Security
 requirements are fail-closed:
 
 - bind `127.0.0.1` only and reject remote or multi-user operation;
@@ -163,6 +165,12 @@ Owner decisions use preview then explicit confirmation. One immutable JSON
 record under `00_governance/approvals/` stores decision ID, gate ID, status,
 rationale, timestamp, actor, evidence-manifest hashes, Git commit, and prior
 record hash. Corrections are new superseding records.
+
+Task evidence is an operational, typed, immutable projection and never a second
+approval ledger. A Task becomes evidence-complete only when all registered
+acceptance checks pass against the current plan hash and validated artifact
+hashes. Owner authorization remains independent and is required before opening
+the next gated scientific scope.
 
 PDF content streams only from an exact path/hash allowlist after license/privacy
 approval. The viewer rejects traversal, symlinks outside roots, hash drift, and
@@ -186,6 +194,10 @@ per-query artifacts. Bootstrap runs contain zero artifacts and zero scientific
 metrics. A failure produces one append-only deferred receipt and cannot alter
 canonical run validity. Rebuild quarantines the store and replays explicit mirror
 specs from canonical hashes; it never auto-repairs canonical files.
+
+The browser-facing MLflow viewer is not the mirror writer. It uses the pinned
+MLflow UI behind a local WSGI allowlist and a read-only SQLite URI. Unknown
+routes and every create/update/delete/log/upload/gateway/job surface fail closed.
 
 ## Brain, MCP, and skills
 

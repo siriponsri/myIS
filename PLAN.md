@@ -92,29 +92,33 @@ execution remains gated even when its contracts and offline tests are present.
 
 ### Task F0.3 - Verify governance dashboard, ledgers, and MLflow mirror
 
-- **Goal:** make local observability useful without widening write or data access.
+- **Goal:** make local Owner observability useful without widening write or data access.
 - **Execution model:** GPT-5.6 Sol High; local CPU services only.
-- **Objective:** verify read-only artifact browsing, typed Owner decisions,
-  allowlisted PDF access receipts, and rebuildable MLflow projection.
+- **Objective:** provide a professional same-origin console for the canonical
+  plan, Phase/Task evidence state, process, flow, harness rules, tools, typed
+  Owner decisions, allowlisted PDF access receipts, and rebuildable MLflow
+  projection with an enforced read-only browser viewer.
 - **Contracts:** `DecisionLedger`, dashboard Host/Origin/session/CSRF rules,
   backend OS actor identity, immutable approval records, `PDFViewer` allowlist
   and local receipt chain, `MLflowMirror` explicit-file projection.
 - **Files/modules:** `05_code/src/myis_research/ledger.py`, `dashboard/*`,
-  `mlflow_mirror.py`, `00_governance/approvals/`, PDF allowlist template,
-  MLflow configs, and related tests.
+  `mlflow_mirror.py`, `06_forntend/dashboard/`, `06_forntend/mlflow/`,
+  `00_governance/approvals/`, PDF allowlist template, MLflow configs, and tests.
 - **Inputs:** metadata/digests and explicit allowlisted files only; never qrels,
   membership, confirmation outcomes, credentials, protected per-query artifacts,
   or unapproved PDF bytes.
-- **Outputs:** loopback service, immutable decisions, local tamper-evident PDF
-  receipts, optional Git-tracked chain-head anchors, MLflow receipts/rebuild plan.
+- **Outputs:** loopback Owner console, deterministic Phase/Task snapshot,
+  immutable decisions, local tamper-evident PDF receipts, optional Git-tracked
+  chain-head anchors, MLflow receipts/rebuild plan, and a read-only MLflow UI.
 - **Hashes:** each decision records evidence-manifest hashes, Git commit, and
   prior-record hash; each PDF receipt records file hash and prior-record hash;
   mirror receipts bind canonical source and artifact hashes.
 - **Tests:** `DashboardSecurityTests`, `DecisionLedgerTests`, `PDFViewerTests`,
   and `MLflowMirrorTests`, including protected-data negative tests.
-- **Acceptance:** service binds only `127.0.0.1`, fails closed on remote/multi-user
-  conditions, uses `no-store`, has no generic mutation route, never overwrites a
-  decision/receipt, and mirror failure leaves canonical bundles valid.
+- **Acceptance:** services bind only `127.0.0.1`, fail closed on remote/multi-user
+  conditions, use `no-store`, expose no generic mutation route, distinguish task
+  evidence from gate authorization, never overwrite decisions/receipts, and
+  prevent the MLflow browser process from mutating the canonical store.
 - **Owner Gate:** G0 for code; every actual canonical decision write requires
   preview plus explicit confirmation. PDF allowlist/anchor writes require their
   named Owner decisions.

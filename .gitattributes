@@ -3,3 +3,6 @@
 01_evidence/literature/qa-provenance/BATCH_2A_ARTIFACT_VALIDATION.json -text whitespace=cr-at-eol
 01_evidence/literature/qa-provenance/BATCH_2A_CSV_VALIDATION.json -text whitespace=cr-at-eol
 01_evidence/literature/qa-provenance/BATCH_2A_INGESTION_CANDIDATES.csv -text whitespace=cr-at-eol
+
+# Git Bash launchers must retain LF line endings on Windows.
+06_forntend/mlflow/*.sh text eol=lf
