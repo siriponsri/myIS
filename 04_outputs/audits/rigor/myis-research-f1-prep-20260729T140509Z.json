@@ -1,0 +1,67 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "myis-research-f1-prep-20260729T140509Z",
+  "artifact": "F1.1 CPU-local implementation preparation",
+  "artifact_path": "05_code/src/myis_research/harness/f1_baselines.py",
+  "artifact_sha256": "75f5cc80f5530bcbcb385a97b81e8bcc74a9bceca9be2c663873dccbf92f75d0",
+  "repository_revision": "a455e8bd0bcf22cd4cdc65ebca66cc59020eac23",
+  "review_status": "not_assessable",
+  "governance": {
+    "approval_valid": null,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": null,
+    "manifest_integrity_valid": null,
+    "blocking_findings": [
+      "G1 remains pending.",
+      "No measured F1 executor or frozen executable RunSpec exists.",
+      "The locked Nemotron artifact is unavailable."
+    ]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "Implementation preparation is structurally validated, but scientific rigor cannot be scored before an authorized measured package exists.",
+    "strengths": [
+      "Fail-closed Gate, hash, source, runtime, provider, and fixture protocol validation.",
+      "No protected payload, qrels row, model weight, paid provider, GPU job, or scientific metric was accessed."
+    ],
+    "weaknesses": [
+      "No measured B0/B1/B2 evidence exists.",
+      "No valid scientific manifest, validation report, or per-query package exists."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {"score": null, "strengths": [], "weaknesses": ["No measured package."], "suggestions": ["Assess after G1-authorized reproduction."]},
+    "D2_falsifiability": {"score": null, "strengths": ["The protocol and rejection boundaries are typed."], "weaknesses": ["No measured claim was tested."], "suggestions": ["Freeze the final RunSpec before execution."]},
+    "D3_scope_calibration": {"score": null, "strengths": ["The implementation states that fixture evidence is not scientific evidence."], "weaknesses": ["No result scope exists to assess."], "suggestions": ["Keep future claims limited to family-level retrieval relevance."]},
+    "D4_argument_coherence": {"score": null, "strengths": ["Dashboard and harness report the same pending Gate boundary."], "weaknesses": ["No result-to-claim chain exists."], "suggestions": ["Bind future results to the frozen manifest and evidence map."]},
+    "D5_exploration_integrity": {"score": null, "strengths": ["Missing executor and model resources are reported rather than hidden."], "weaknesses": ["No measured alternatives were executed."], "suggestions": ["Record negative outcomes once development is authorized."]},
+    "D6_methodological_rigor": {"score": null, "strengths": ["Fixture replay, family deduplication, tie handling, runtime identity, and immutable preflight are tested."], "weaknesses": ["No real evaluator or baseline bundle exists."], "suggestions": ["Run the full acceptance matrix only after G1."]}
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "F1.1 scientific bundle",
+      "target_entity": "B0/B1/B2 measured reproduction",
+      "evidence_locator": "No finalized manifest or measured bundle is present at repository revision a455e8bd0bcf22cd4cdc65ebca66cc59020eac23.",
+      "observation": "The reviewed artifact is an implementation scaffold and fixture harness only.",
+      "reasoning": "Scientific claims cannot be reviewed without authorized measured evidence.",
+      "suggestion": "Implement the real measured executor, prepare a fresh Owner-local batch, freeze the RunSpec, obtain explicit G1 approval, then execute and review the immutable bundle."
+    }
+  ],
+  "questions_for_owner": [
+    "Which approved compute path will host the locked Nemotron revision?",
+    "What time, cost, network, data-egress, and no-fallback limits should the frozen RunSpec bind?"
+  ],
+  "read_order": [
+    "00_governance/OWNER_GATES.md",
+    "PLAN.md",
+    "05_code/src/myis_research/harness/f1_baselines.py",
+    "05_code/src/myis_research/harness/reproduction.py",
+    "05_code/tests/test_f1_cpu_scaffold.py",
+    "05_code/tests/test_reproduction_scaffold.py"
+  ]
+}

@@ -1,0 +1,275 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260729T140509Z-owner-dashboard-f1-prep",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T14:05:09Z",
+  "scope": "Audit the Research repository, rebuild the Owner Dashboard and presentation views, harden F1.1 CPU-local preparation, close Data_Review.ipynb, and establish validated cross-session closeout memory.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "a455e8bd0bcf22cd4cdc65ebca66cc59020eac23",
+    "dirty_paths": [
+      "04_outputs/audits/research-sessions/20260729T140509Z-owner-dashboard-f1-prep.json",
+      "04_outputs/audits/research-session-index.json",
+      "04_outputs/audits/rigor/myis-research-f1-prep-20260729T140509Z.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The Owner Dashboard now provides a Thai-first work inbox, dataset view, presentation modes, and an interactive research flow while remaining loopback-only and aggregate-only.",
+      "evidence_refs": [
+        {
+          "path": "06_frontend/dashboard/index.html",
+          "sha256": "f70cfe64d9cc7c29d1f3191b7669ffc86d8a2807049c779f38b9c4052368c65c",
+          "locator": "Today, Data, Presentation, Plan, and hidden compatibility projection markup"
+        },
+        {
+          "path": "06_frontend/dashboard/assets/dashboard.js",
+          "sha256": "d37ab6720df077abfb20c38d2d15e1c4a5dcb43f2c31467ceeee86a169ab6ddf",
+          "locator": "renderOwnerInbox, renderResearchFlow, renderData, and renderPresentation"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "F1.1 preparation now has a strict frozen RunSpec contract, exact runtime and provider identity, source-free B0/B1/B2 fixture replay, immutable SQLite inspection, and model-manifest-only preflight.",
+      "evidence_refs": [
+        {
+          "path": "05_code/src/myis_research/harness/f1_baselines.py",
+          "sha256": "75f5cc80f5530bcbcb385a97b81e8bcc74a9bceca9be2c663873dccbf92f75d0",
+          "locator": "FrozenF1RunSpecV1, replay_fixture_baselines, preflight_model_manifest"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Cross-session memory now uses strict append-only v2 capsules, correction coverage, scoped latest-valid discovery, and a mandatory beginner-readable Gate closeout contract.",
+      "evidence_refs": [
+        {
+          "path": "05_code/src/myis_research/session_capsules.py",
+          "sha256": "6dc1f71c3063a9c08cfc2b4d5352ca59b126d51fcf510a62557c405cd29ea77f",
+          "locator": "validate_all_session_capsules, latest_valid_session, and v2 closeout validation"
+        },
+        {
+          "path": "AGENTS.md",
+          "sha256": "800db86fd4e1bce5117187e053b9166d191711dfc48d1b278dd150f1cac91191",
+          "locator": "Fast start, Current F1.1 CPU-local preparation, and Beginner closeout and Gate request"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Data_Review.ipynb is a preparation-only, output-free notebook that verifies the safe projection hash and does not report B0/B1/B2 scientific results.",
+      "evidence_refs": [
+        {
+          "path": "03_experiments/notebooks/Data_Review.ipynb",
+          "sha256": "d4fd1e9b5518e796573c1db45e9e2ac8816f23f5f0455cf81de8b62716b0b39c",
+          "locator": "Python 3.11 kernelspec, safe-batch discovery/hash check, and empty code-cell outputs"
+        }
+      ],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "summary": "Implement and validate the real measured F1 reproduction executor without opening protected data before G1.",
+      "blocking_gate": "G1"
+    },
+    {
+      "thread_id": "OT0002",
+      "provenance": "agent-proposed",
+      "summary": "Prepare a fresh Owner-local batch and frozen RunSpec only after model, compute, time, cost, egress, and no-fallback commitments are available.",
+      "blocking_gate": "G1"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "F1",
+    "task_id": "F1.1",
+    "gate_id": "G1",
+    "gate_status": "pending"
+  },
+  "owner_brief_th": "รอบนี้ปิดงานปรับ Dashboard ตรวจ notebook และสร้างโครง CPU-local สำหรับ F1.1 แล้ว แต่ยังไม่ได้รันผลวิทยาศาสตร์ งาน F1.1 ยังรอ G1 และยังขาดตัวรันจริงกับโมเดลรุ่นที่ล็อกไว้",
+  "owner_actions": [
+    {
+      "action_id": "OA001",
+      "priority": "required",
+      "action_th": "เลือกทรัพยากรที่จะใช้กับโมเดลรุ่นที่ล็อกไว้ โดยระบุเครื่อง เวลา ค่าใช้จ่าย และการเชื่อมต่อเครือข่าย",
+      "reason_th": "ระบบห้ามเปลี่ยนไปใช้โมเดลอื่น และต้องผูกทรัพยากรทั้งหมดใน RunSpec ก่อนขออนุมัติ G1",
+      "blocking_gate": "G1"
+    },
+    {
+      "action_id": "OA002",
+      "priority": "required",
+      "action_th": "ยังไม่อนุมัติ G1 จนกว่าจะมีตัวรันจริง ชุดเตรียม Owner-local ใหม่ และ RunSpec ที่ตรวจสอบครบ",
+      "reason_th": "โค้ดรอบนี้เป็น fixture และ preflight เท่านั้น จึงยังไม่มีหลักฐานสำหรับการรัน B0 B1 และ B2 จริง",
+      "blocking_gate": "G1"
+    },
+    {
+      "action_id": "OA003",
+      "priority": "optional",
+      "action_th": "เปิด Dashboard เพื่อดู Today Data Present และแผนงานแบบโต้ตอบ",
+      "reason_th": "หน้าเหล่านี้สรุปสิ่งที่ทำแล้ว สิ่งที่กำลังรอ และขอบเขตข้อมูลที่ยังถูกล็อก",
+      "blocking_gate": null
+    }
+  ],
+  "gate_request": {
+    "gate_id": "G1",
+    "state": "blocked",
+    "summary_th": "ร้องขอให้เตรียมตรวจ G1 หลังจบ implementation รอบนี้ แต่ยังไม่พร้อมให้ตัดสินใจอนุมัติ",
+    "blocking_reason_th": "ยังขาดตัวรัน measured F1 โมเดล Llama-Embed-Nemotron-8B revision ที่ล็อกไว้ ชุด Owner-local ใหม่ และ frozen RunSpec ที่ผูกทรัพยากรครบ",
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "NR001",
+        "description_th": "โมเดล Llama-Embed-Nemotron-8B revision aa3b43a495a9b280d1bdb716da37c54bb495d630 พร้อม manifest และ hash",
+        "purpose_th": "ใช้เป็น encoder ที่ protocol ล็อกไว้สำหรับ B0 และ B1 โดยห้ามใช้โมเดลอื่นแทน"
+      },
+      {
+        "resource_id": "NR002",
+        "description_th": "การเลือก CPU GPU ที่ Owner ควบคุม หรือ cloud GPU ที่อนุมัติ พร้อมเพดานเวลาและค่าใช้จ่าย",
+        "purpose_th": "ใช้กำหนด compute budget และ stop rule ใน frozen RunSpec"
+      },
+      {
+        "resource_id": "NR003",
+        "description_th": "นโยบาย network data egress และ no-fallback ที่ Owner ยืนยัน",
+        "purpose_th": "ใช้ป้องกันการดาวน์โหลด ส่งข้อมูล หรือเปลี่ยน provider โดยไม่ได้รับอนุมัติ"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "CHK001",
+        "status": "PASS",
+        "summary": "Full repository test suite and focused subtests passed."
+      },
+      {
+        "check_id": "CHK002",
+        "status": "PASS",
+        "summary": "Restructure, integrity, and literature validators passed."
+      },
+      {
+        "check_id": "CHK003",
+        "status": "PASS",
+        "summary": "Harness and read-only MLflow doctors passed."
+      },
+      {
+        "check_id": "CHK004",
+        "status": "PASS",
+        "summary": "Reusable asset quick validation and generated map check passed."
+      },
+      {
+        "check_id": "CHK005",
+        "status": "PASS",
+        "summary": "Desktop and mobile browser verification passed with no external dataset fetch and no horizontal overflow."
+      },
+      {
+        "check_id": "CHK006",
+        "status": "PASS",
+        "summary": "Notebook JSON, output-free policy, JavaScript syntax, lockfile, and Git whitespace checks passed."
+      }
+    ],
+    "changed_files": [
+      "00_governance/OPERATIONS.md",
+      "00_governance/config/dashboard_topics.yaml",
+      "00_governance/config/reusable_assets.yaml",
+      "03_experiments/notebooks/Data_Review.ipynb",
+      "05_code/src/myis_research/asset_registry.py",
+      "05_code/src/myis_research/dashboard/app.py",
+      "05_code/src/myis_research/dashboard/progress.py",
+      "05_code/src/myis_research/dashboard/topics.py",
+      "05_code/src/myis_research/harness/__init__.py",
+      "05_code/src/myis_research/harness/f1_baselines.py",
+      "05_code/src/myis_research/harness/reproduction.py",
+      "05_code/src/myis_research/harness/sparse.py",
+      "05_code/src/myis_research/session_capsules.py",
+      "05_code/src/myis_research/session_cli.py",
+      "05_code/tests/test_asset_registry.py",
+      "05_code/tests/test_dashboard_f1_g1.py",
+      "05_code/tests/test_dashboard_frontend.py",
+      "05_code/tests/test_dashboard_progress.py",
+      "05_code/tests/test_f1_cpu_scaffold.py",
+      "05_code/tests/test_frontend_launcher.py",
+      "05_code/tests/test_reproduction_scaffold.py",
+      "05_code/tests/test_session_capsules.py",
+      "06_frontend/dashboard/README.md",
+      "06_frontend/dashboard/assets/dashboard.css",
+      "06_frontend/dashboard/assets/dashboard.js",
+      "06_frontend/dashboard/index.html",
+      "06_frontend/start_owner_console.ps1",
+      "06_frontend/stop_owner_console.ps1",
+      "AGENTS.md",
+      "pyproject.toml",
+      "04_outputs/audits/research-sessions/20260729T140509Z-owner-dashboard-f1-prep.json",
+      "04_outputs/audits/research-session-index.json",
+      "04_outputs/audits/rigor/myis-research-f1-prep-20260729T140509Z.json"
+    ],
+    "untouched_protected_surfaces": [
+      "confirmation membership and query identifiers",
+      "confirmation qrels and protected payloads",
+      "per-query outcomes and measured result bundles",
+      "model weights and paid provider endpoints",
+      "GPU jobs and scientific MLflow metrics",
+      "immutable historical session capsules"
+    ]
+  },
+  "corrections": [
+    {
+      "target_session_id": "20260729T040557Z-ffc5463",
+      "observed_validation_error": "evidence reference hash mismatch: 05_code/src/myis_research/dashboard/progress.py",
+      "correction_th": "เก็บไฟล์เดิมไว้เป็นประวัติและใช้ capsule ใหม่นี้ชี้ว่าหลักฐานเดิมมี hash ไม่ตรงกับ revision ที่บันทึก"
+    },
+    {
+      "target_session_id": "20260729T041555Z-mlflow-recovery",
+      "observed_validation_error": "evidence reference hash mismatch: 00_governance/OPERATIONS.md",
+      "correction_th": "เก็บไฟล์เดิมไว้เป็นประวัติและใช้ capsule ใหม่นี้ชี้ว่าเอกสารปฏิบัติการเดิมมี hash ไม่ตรงกับ revision ที่บันทึก"
+    },
+    {
+      "target_session_id": "20260729T120620Z-reusable-assets",
+      "observed_validation_error": "owner approval gate is invalid",
+      "correction_th": "เก็บไฟล์เดิมไว้เป็นประวัติและไม่ตีความป้าย repository-scope หรือ commit-scope ว่าเป็น Owner Gate"
+    }
+  ]
+}
