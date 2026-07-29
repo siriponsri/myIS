@@ -49,6 +49,7 @@ class DashboardProjectionCatalogTests(unittest.TestCase):
             paths = (
                 "PLAN.md",
                 "00_governance/config/evidence_catalog.yaml",
+                "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
                 "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
             )
             for relative in paths:

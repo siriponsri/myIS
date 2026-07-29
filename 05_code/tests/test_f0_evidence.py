@@ -40,6 +40,68 @@ class F0EvidenceTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 capture.append_json(path, {"record": 2})
 
+    def test_task_evidence_ledger_chains_repeated_capture(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            task_root = root / "04_outputs/artifacts/task-evidence/F0.1"
+            task_root.mkdir(parents=True)
+            first = {
+                "schema_version": "myis.task-evidence.v1",
+                "record_id": "F0-1-first",
+                "task_id": "F0.1",
+                "plan_sha256": "a" * 64,
+                "git_commit": "1" * 40,
+                "acceptance_checks": [],
+                "evidence_manifest_hashes": [],
+                "prior_record_hash": None,
+                "supersedes_record_id": None,
+            }
+            ledger = capture.ImmutableJsonLedger(
+                task_root,
+                prior_field="prior_record_hash",
+                record_id_field="record_id",
+                supersedes_field="supersedes_record_id",
+            )
+            ledger.append(first["record_id"], first)
+            second = {**first, "record_id": "F0-1-second", "git_commit": "2" * 40, "prior_record_hash": ledger.head()}
+            ledger.append(second["record_id"], second)
+            self.assertEqual(ledger.validate_chain()["count"], 2)
+
+    def test_task_evidence_ledger_reconciles_superseded_second_genesis(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            task_root = Path(directory)
+            base = {
+                "schema_version": "myis.task-evidence.v1",
+                "task_id": "F0.1",
+                "plan_sha256": "a" * 64,
+                "git_commit": "1" * 40,
+                "acceptance_checks": [],
+                "evidence_manifest_hashes": [],
+                "prior_record_hash": None,
+                "supersedes_record_id": None,
+            }
+            first = {**base, "record_id": "F0-1-first"}
+            malformed = {**base, "record_id": "F0-1-malformed", "git_commit": "2" * 40}
+            capture.append_json(task_root / "F0-1-first.json", first)
+            capture.append_json(task_root / "F0-1-malformed.json", malformed)
+            ledger = capture.ImmutableJsonLedger(
+                task_root,
+                prior_field="prior_record_hash",
+                record_id_field="record_id",
+                supersedes_field="supersedes_record_id",
+            )
+            first_hash = next(digest for _, record, digest in ledger.records() if record["record_id"] == "F0-1-first")
+            correction = {
+                **malformed,
+                "record_id": "F0-1-correction",
+                "prior_record_hash": first_hash,
+                "supersedes_record_id": "F0-1-malformed",
+            }
+            capture.append_json(task_root / "F0-1-correction.json", correction)
+            chain = ledger.validate_chain()
+            self.assertEqual(chain["count"], 2)
+            self.assertEqual(chain["head"], next(digest for _, record, digest in ledger.records() if record["record_id"] == "F0-1-correction"))
+
     def test_authorized_output_root_rejects_symlink(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -400,7 +400,12 @@ def _task_evidence(
         return {"state": "not_recorded", "record": None}
     if root.is_symlink() or not root.is_dir():
         raise ValueError(f"task evidence root must be a regular directory: {task_id}")
-    ledger = ImmutableJsonLedger(root, prior_field="prior_record_hash")
+    ledger = ImmutableJsonLedger(
+        root,
+        prior_field="prior_record_hash",
+        record_id_field="record_id",
+        supersedes_field="supersedes_record_id",
+    )
     chain = ledger.validate_chain()
     if chain["count"] == 0:
         return {"state": "not_recorded", "record": None}
@@ -410,13 +415,24 @@ def _task_evidence(
         if path.stem != record.record_id or record.task_id != task_id:
             raise ValueError(f"task evidence identity mismatch: {path.name}")
         by_hash[digest] = (path, record)
+    all_record_ids = {record.record_id for _, record in by_hash.values()}
+    by_id = {record.record_id: digest for digest, (_, record) in by_hash.items()}
+    superseded_ids = {
+        record.supersedes_record_id
+        for _, record in by_hash.values()
+        if record.supersedes_record_id is not None
+        and record.prior_record_hash != by_id.get(record.supersedes_record_id)
+    }
+    if superseded_ids:
+        by_hash = {
+            digest: item for digest, item in by_hash.items() if item[1].record_id not in superseded_ids
+        }
     head_hash = chain["head"]
     if head_hash not in by_hash:
         raise ValueError(f"task evidence head is invalid: {task_id}")
     _, head = by_hash[head_hash]
     if head.supersedes_record_id is not None:
-        prior_ids = {record.record_id for digest, (_, record) in by_hash.items() if digest != head_hash}
-        if head.supersedes_record_id not in prior_ids:
+        if head.supersedes_record_id not in all_record_ids:
             raise ValueError(f"task evidence supersedes an unknown record: {task_id}")
     if head.plan_sha256 != plan_sha256 or not _commit_is_ancestor(
         repository_root, head.git_commit, current_git_commit

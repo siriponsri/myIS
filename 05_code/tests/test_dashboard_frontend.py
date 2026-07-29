@@ -25,6 +25,7 @@ CONTENT_FILES = (
     "00_governance/config/linear.yaml",
     "00_governance/config/evidence_catalog.yaml",
     "03_experiments/config/mlflow/governance_documents.yaml",
+    "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
     "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
     "06_frontend/dashboard/content_registry.yaml",
     "06_frontend/dashboard/index.html",

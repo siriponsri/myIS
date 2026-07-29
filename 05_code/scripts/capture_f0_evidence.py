@@ -16,6 +16,7 @@ from typing import Any, Sequence
 import yaml
 
 from myis_research.dashboard.contracts import TaskEvidenceRecord
+from myis_research.ledger import ImmutableJsonLedger
 from myis_research.protection import assert_aggregate_only
 
 
@@ -313,6 +314,12 @@ def write_evidence(payload: dict[str, Any], checks: list[dict[str, Any]], *, roo
     pending: list[tuple[Path, dict[str, Any]]] = [(manifest_path, payload)]
     for task_id, receipt_ids in task_checks.items():
         task_root = _assert_regular_output_root(root, Path(f"04_outputs/artifacts/task-evidence/{task_id}"))
+        ledger = ImmutableJsonLedger(
+            task_root,
+            prior_field="prior_record_hash",
+            record_id_field="record_id",
+            supersedes_field="supersedes_record_id",
+        )
         record_id = f"{task_id.replace('.', '-')}-{source[:12]}"
         record = {
             "schema_version": "myis.task-evidence.v1",
@@ -325,7 +332,7 @@ def write_evidence(payload: dict[str, Any], checks: list[dict[str, Any]], *, roo
                 for receipt_id in receipt_ids
             ],
             "evidence_manifest_hashes": [manifest_sha256],
-            "prior_record_hash": None,
+            "prior_record_hash": ledger.head(),
             "supersedes_record_id": None,
         }
         TaskEvidenceRecord.model_validate(record)

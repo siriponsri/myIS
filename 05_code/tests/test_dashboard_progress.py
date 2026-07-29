@@ -1,4 +1,5 @@
 import hashlib
+import json
 import shutil
 import subprocess
 import tempfile
@@ -93,6 +94,51 @@ class DashboardProgressTests(unittest.TestCase):
             self.assertEqual(task["governance_state"], "pending")
             self.assertEqual(task["project_state"], "complete")
             self.assertEqual(snapshot["phases"][0]["project_state"], "in_progress")
+
+    def test_superseding_correction_reconciles_a_second_genesis(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source_commit = make_repository(root)
+            plan_sha256 = hashlib.sha256((root / "PLAN.md").read_bytes()).hexdigest()
+            evidence_root = root / "04_outputs/artifacts/task-evidence/F0.1"
+            evidence_root.mkdir()
+            base = {
+                "schema_version": "myis.task-evidence.v1",
+                "task_id": "F0.1",
+                "plan_sha256": plan_sha256,
+                "git_commit": source_commit,
+                "acceptance_checks": [
+                    {"check_id": "validators", "status": "passed", "evidence_sha256": "a" * 64}
+                ],
+                "evidence_manifest_hashes": ["b" * 64],
+                "prior_record_hash": None,
+                "supersedes_record_id": None,
+            }
+            first = {**base, "record_id": "F0-1-first"}
+            malformed = {**base, "record_id": "F0-1-malformed"}
+            (evidence_root / "F0-1-first.json").write_text(json.dumps(first), encoding="utf-8")
+            (evidence_root / "F0-1-malformed.json").write_text(json.dumps(malformed), encoding="utf-8")
+            ledger = ImmutableJsonLedger(
+                evidence_root,
+                prior_field="prior_record_hash",
+                record_id_field="record_id",
+                supersedes_field="supersedes_record_id",
+            )
+            first_hash = next(digest for _, payload, digest in ledger.records() if payload["record_id"] == "F0-1-first")
+            correction = {
+                **malformed,
+                "record_id": "F0-1-correction",
+                "prior_record_hash": first_hash,
+                "supersedes_record_id": "F0-1-malformed",
+            }
+            (evidence_root / "F0-1-correction.json").write_text(json.dumps(correction), encoding="utf-8")
+            git(root, "add", "04_outputs")
+            git(root, "commit", "-m", "repair evidence chain")
+
+            snapshot = build_dashboard_snapshot(root)
+            task = snapshot["phases"][0]["tasks"][0]
+            self.assertEqual(task["evidence_state"], "complete")
+            self.assertEqual(task["evidence"]["record_id"], "F0-1-correction")
 
     def test_linear_done_without_canonical_evidence_needs_verification(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
