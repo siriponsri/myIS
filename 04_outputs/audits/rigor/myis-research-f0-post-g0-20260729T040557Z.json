@@ -1,0 +1,151 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "myis-research-f0-post-g0-20260729T040557Z",
+  "artifact": "myIS Research F0 foundation, Dashboard and G0 correction package",
+  "artifact_path": "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
+  "artifact_sha256": "3bd6b7d957f5b0fa0dd6220f9af381e312b3d460e44d0a3b717750fa0a160af3",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.17,
+    "one_line_summary": "The corrected G0 record and effective task-evidence heads close the former F0 authorization gap without opening F1 or making scientific claims.",
+    "strengths": [
+      "The typed, immutable G0 record names Phase F0 and Tasks F0.1-F0.3, binds both verified evidence manifests, and explicitly leaves F1 locked behind G1.",
+      "Canonical completion derives from validated task-evidence records; Linear, Dashboard, Brain, and MLflow remain rebuildable projections rather than approval or scientific truth.",
+      "The package preserves protected boundaries and reports fixture evidence separately from development, descriptive, and confirmation evidence."
+    ],
+    "weaknesses": [
+      "No scientific run bundle exists at F0, so development, descriptive, and confirmation evidence remain not assessable by design.",
+      "The broad Brain template test suite includes pre-existing infrastructure failures outside the two corrected projection notes, although the relevant frontmatter, wikilink, Literature, and QMD checks pass."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": [
+        "The evidence directly tests F0 integrity, migration, projection, and owner-workflow claims."
+      ],
+      "weaknesses": [
+        "The package cannot support a retrieval or optimizer-effect claim because no scientific execution was authorized."
+      ],
+      "suggestions": [
+        "Keep later scientific claims bound only to validated run manifests and aggregate result artifacts."
+      ]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": [
+        "F0 acceptance is expressed through exact hashes, protected-drift checks, validator outcomes, typed decision scope, and append-only evidence heads."
+      ],
+      "weaknesses": [
+        "External projection readbacks still require local operational verification rather than one canonical cross-system manifest."
+      ],
+      "suggestions": [
+        "Continue recording projection revisions as non-authoritative hash pointers."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The approval and evidence consistently limit the conclusion to F0.1-F0.3 and explicitly exclude F1, qrels, experiments, GPU, paid APIs, and confirmation."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": [
+        "PLAN tasks, corrected evidence heads, G0 scope, Dashboard state, Linear status, and MLflow document bindings form a traceable Phase-to-Task chain."
+      ],
+      "weaknesses": [
+        "The Brain projection required a second correction because a seven-character prefix concealed a mismatched full Research commit hash."
+      ],
+      "suggestions": [
+        "Validate full commit hashes for every future cross-repository projection pointer."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The malformed ledger path and stale Brain pointer were preserved as observed failures and corrected through explicit supersession or a new commit."
+      ],
+      "weaknesses": [
+        "The Brain infrastructure-suite failures are not part of a canonical Research artifact and therefore remain an operational maintenance item."
+      ],
+      "suggestions": [
+        "Track unrelated Brain template failures separately instead of conflating them with F0 scientific or governance evidence."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "The package binds environment, dependency lock, code and document hashes, protected comparison, validator receipts, and projection counts without inventing metrics."
+      ],
+      "weaknesses": [
+        "The experiment manifest remains a non-executable planning template until later Gate-specific commitments are resolved."
+      ],
+      "suggestions": [
+        "Require a fully resolved, immutable run manifest and G1 approval before F1.1 execution."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "minor",
+      "target_artifact": "Brain projection at local revision 5244b6140a4999897d359877948921217bf5716d",
+      "target_entity": "F0/G0 canonical Research commit pointer",
+      "evidence_locator": "Direct local Git and QMD readback of brain/Key Decisions.md and work/active/myIS Research/myIS Research.md",
+      "observation": "The prior Brain projection used a non-existent full Research commit hash sharing the same seven-character prefix as the canonical commit; the current Brain revision corrects both restatements.",
+      "reasoning": "Short-hash equality can conceal full-hash provenance drift even when the human-readable projection appears aligned.",
+      "suggestion": "Compare and store full cross-repository commit hashes in future projection validation."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D6_methodological_rigor",
+      "severity": "minor",
+      "target_artifact": "Brain .claude/scripts test suite",
+      "target_entity": "optional template infrastructure tests",
+      "evidence_locator": "Local Node test readback: 583 passed and 5 failed because referenced .shardmind/.github template files or a shard fingerprint contract were absent or mismatched",
+      "observation": "The broad Brain template suite is not fully green, while the F0-relevant frontmatter and wikilink tests pass 31 of 31, Literature validates 153 notes, and QMD reads the corrected pointer.",
+      "reasoning": "These failures do not invalidate canonical Research evidence, but they prevent an unqualified claim that every Brain infrastructure test passes.",
+      "suggestion": "Resolve the Brain template infrastructure failures under a separately scoped maintenance task before using the broad suite as an acceptance gate."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "03_experiments/templates/experiment-manifest.yaml",
+      "target_entity": "planning placeholders",
+      "evidence_locator": "Null or unresolved run-specific split, evaluator, isolation, provider, environment, and artifact commitments",
+      "observation": "The template is correctly non-executable at F0 and no measured manifest or scientific result was created.",
+      "reasoning": "A later phase would lose reproducibility and Gate discipline if it treated the planning template as a frozen run manifest.",
+      "suggestion": "Resolve all applicable commitments from validated artifacts and a named Owner decision before F1 or later execution."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "00_governance/approvals/G0-20260729T034449581785Z.json",
+    "PLAN.md (Phase F0 and Phase F1 goal and Gate specifications)",
+    "No finalized scientific manifest exists for this non-run F0 package",
+    "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
+    "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
+    "04_outputs/artifacts/task-evidence/F0.1/F0-1-f32ac040efb5-correction.json",
+    "04_outputs/artifacts/task-evidence/F0.2/F0-2-f32ac040efb5-correction.json",
+    "04_outputs/artifacts/task-evidence/F0.3/F0-3-f32ac040efb5-correction.json",
+    "No prompt.json, flow.json, progress.jsonl, runtime.jsonl, result.json, metrics.json, or per_query_metrics.jsonl exists because no scientific run occurred",
+    "05_code/src/myis_research/ledger.py and 05_code/src/myis_research/dashboard/progress.py",
+    "00_governance/config/linear.yaml and 03_experiments/config/mlflow/governance_documents.yaml",
+    "04_outputs/audits/rigor/is1-v0.1-f0-implementation-20260728.json (historical audit, read-only)",
+    "AGENTS.md, FULL_RESEARCH_TRACK_PLAN.md, LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md, 00_governance/OWNER_GATES.md, and 00_governance/OPERATIONS.md"
+  ]
+}

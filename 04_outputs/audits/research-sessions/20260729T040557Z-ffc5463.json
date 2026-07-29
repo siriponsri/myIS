@@ -1,0 +1,162 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260729T040557Z-ffc5463",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T04:05:57Z",
+  "scope": "Close the F0 governance and projection revision with a corrected typed G0 decision, repaired task-evidence heads, human-readable Dashboard and MLflow alignment, and a post-G0 artifact-only rigor review.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "G0",
+      "source": "00_governance/approvals/G0-20260729T034449581785Z.json#/decision_id",
+      "scope": "approve_implementation for Phase F0 Tasks F0.1-F0.3 only; F1 and scientific execution remain locked pending G1"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "ffc5463984fbc82ed207a0f148b2dc67d31b9960",
+    "dirty_paths": []
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner approved the corrected G0 implementation scope for F0.1-F0.3 and explicitly kept F1 and all scientific execution locked pending G1.",
+      "evidence_refs": [
+        {
+          "path": "00_governance/approvals/G0-20260729T034449581785Z.json",
+          "sha256": "a8ff2eeb13a81b512ae031c93e586ff1c01a97ba39eb818efa37bbd8f617df2d",
+          "locator": "JSON pointers /status, /scope, /rationale, /supersedes_decision_id"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The original F0 task-evidence records did not provide valid effective ledger heads; the records were preserved and repaired through explicit superseding corrections.",
+      "evidence_refs": [
+        {
+          "path": "05_code/src/myis_research/ledger.py",
+          "sha256": "401562ed5b263f3164dffc8eb0d1a30fb22179935dc890d8a6d3af08edca9e86",
+          "locator": "effective ledger-head and explicit supersession handling"
+        },
+        {
+          "path": "04_outputs/artifacts/task-evidence/F0.1/F0-1-f32ac040efb5-correction.json",
+          "sha256": "3d1e6a5bbfe0a7cda0321eff8414b79282c624f3a7068aa5b01be53402676b5f",
+          "locator": "JSON pointers /record_id, /prior_record_hash, /supersedes_record_id"
+        },
+        {
+          "path": "04_outputs/artifacts/task-evidence/F0.2/F0-2-f32ac040efb5-correction.json",
+          "sha256": "f75f7770c192981114a5b1c47e66c4856a3781e33fa4593e754cd4f2b08aca0a",
+          "locator": "JSON pointers /record_id, /prior_record_hash, /supersedes_record_id"
+        },
+        {
+          "path": "04_outputs/artifacts/task-evidence/F0.3/F0-3-f32ac040efb5-correction.json",
+          "sha256": "cf29cd94a1406f45f5c7e20d3eb5a66f6236c0b77d66a23bbc0fc5ee6a95b897",
+          "locator": "JSON pointers /record_id, /prior_record_hash, /supersedes_record_id"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "owner-revised",
+      "summary": "The Dashboard was revised to an English-first, Thai-detailed, interactive Phase-to-Task owner flow with friendly Gate and evidence labels, and important governance documents were bound to the aligned MLflow catalog.",
+      "evidence_refs": [
+        {
+          "path": "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
+          "sha256": "3bd6b7d957f5b0fa0dd6220f9af381e312b3d460e44d0a3b717750fa0a160af3",
+          "locator": "JSON pointers /changed_files, /checks, /projections"
+        },
+        {
+          "path": "03_experiments/config/mlflow/governance_documents.yaml",
+          "sha256": "8a6d69fd9371cbda4f01ee13c50669949c8e961baac9d1a9a93908f32e45299a",
+          "locator": "projection and documents catalogs"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The deterministic Dashboard progress projection resolved the corrected F0 evidence heads as complete while keeping Gate approval independent from work-tracking status.",
+      "evidence_refs": [
+        {
+          "path": "05_code/src/myis_research/dashboard/progress.py",
+          "sha256": "c2f0d3d9cfaefbc127272ca40249273909218a2a02fe6386e744371631fb0ae1",
+          "locator": "build_dashboard_snapshot and canonical task-evidence completion logic"
+        },
+        {
+          "path": "00_governance/config/linear.yaml",
+          "sha256": "30b383390ba116a80d5ab3689b3e17fa20519a8fd692dd3271f994d0fced090e",
+          "locator": "project.milestones, project.issues, project.dependencies"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "A direct local Git and QMD readback confirmed the Brain projection at revision 5244b6140a4999897d359877948921217bf5716d after correcting its stale full Research commit pointer; Brain remained a non-authoritative pointer layer.",
+      "evidence_refs": [],
+      "observation_commands": [
+        "git -C ../02_Brain rev-parse HEAD",
+        "qmd --index myis-research-brain get #0b4e66 --no-line-numbers"
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "F0 produced fixture and operational evidence only; no development, descriptive, confirmation, qrels, GPU, paid API, or scientific experiment execution occurred.",
+      "evidence_refs": [
+        {
+          "path": "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
+          "sha256": "ea80439e33aa92781503233988019368a8be8420054d0e5a63b5e2f409d0823f",
+          "locator": "JSON pointers /scientific_execution and /evidence_roles"
+        },
+        {
+          "path": "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
+          "sha256": "3bd6b7d957f5b0fa0dd6220f9af381e312b3d460e44d0a3b717750fa0a160af3",
+          "locator": "JSON pointers /scientific_execution and /evidence_roles"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "summary": "Prepare and obtain G1 Reproduction approval before starting F1.1 or any baseline reproduction.",
+      "blocking_gate": "G1"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
