@@ -202,7 +202,7 @@ GPU, paid API, or confirmation execution is authorized.
 - **Outputs:** Three seed finalists and complete lineage.
 - **Tests:** Provider, editable-surface, budget, retry, event-order tests.
 - **Acceptance:** 160 rollout cap per seed and USD 20 arm cap are enforced.
-- **Owner Gate:** G5 S Run.
+- **Owner Gate:** G4 S Provider and Baseline Lock authorizes the matched S1 campaign.
 - **Budget/stop:** 480 rollouts/arm, USD 20; hard global USD 100.
 - **Rollback:** Restore A1 hash and retain every failure/invalid trial.
 - **Risk:** Undeclared fallback or cherry-picked repeats invalidates the arm.
@@ -216,7 +216,7 @@ GPU, paid API, or confirmation execution is authorized.
 - **Outputs:** Three seed finalists and complete lineage.
 - **Tests:** Equality of start/model/provider/data/evaluator/budget and retry policy.
 - **Acceptance:** A2L is a required 160-rollout/seed arm, not post hoc replacement.
-- **Owner Gate:** G5 S Run.
+- **Owner Gate:** G4 S Provider and Baseline Lock authorizes the matched S1 campaign.
 - **Budget/stop:** 480 rollouts/arm, USD 20; A2L-P 400/seed remains future only.
 - **Rollback:** Restore A1; retain all attempts.
 - **Risk:** Treating Lite as optional would bias the adaptation comparison.
@@ -230,7 +230,7 @@ GPU, paid API, or confirmation execution is authorized.
 - **Outputs:** Three seed finalists and policy/skill lineage.
 - **Tests:** Protected patch denial, tool allowlist, no executable expansion, drift checks.
 - **Acceptance:** Broad HarnessOpt A3X is excluded; all matching constraints hold.
-- **Owner Gate:** G5 S Run.
+- **Owner Gate:** G4 S Provider and Baseline Lock authorizes the matched S1 campaign.
 - **Budget/stop:** 480 rollouts/arm, USD 20; hard global USD 100.
 - **Rollback:** Restore A1 and incumbent typed policy; retain failures.
 - **Risk:** Wider edit authority would confound skill and harness effects.

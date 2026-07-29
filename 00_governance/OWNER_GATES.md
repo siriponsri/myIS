@@ -49,6 +49,17 @@ or a separately confirmable gate. Track S is required after a valid C1 harness.
 Deferred evidence/ranking transfer work remains separately gated and cannot
 change a frozen C1 or S result.
 
+Every implementation session produces a Gate request report, but the report is
+not an approval. It must name the current Phase, Task, Gate and status; what the
+Owner must do; what decision or resource will be requested; and the resources
+needed next. A request may be `draft`, `blocked`, or `ready_for_decision`.
+
+For a cloud GPU request, G1 evidence must also bind the exact instance class,
+wall-time limit, hourly rate and hard cost ceiling, storage and data-egress
+allowance, SSH scope, and a no-fallback/no-substitution policy. Destruction is
+an Owner action after the GPU Sprint; the agent must stop and wait for the
+Owner's confirmation before continuing.
+
 ## Protected surfaces
 
 Agents, optimizers, dashboard, Brain, MCP, MLflow, and report generators cannot

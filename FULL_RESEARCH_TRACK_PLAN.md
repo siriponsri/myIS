@@ -96,11 +96,13 @@ failure stops execution and requires a new Owner decision. The endpoint remains
 
 - A0: frozen baseline.
 - A1: frozen human seed skill and common start.
-- A2: SkillOpt `v0.2.0`, commit
-  `51d0a4d96e88558c84dee637f98e24e3fb2d1547`, frozen harness.
+- A2: SkillOpt `v0.2.0`, tag object
+  `51d0a4d96e88558c84dee637f98e24e3fb2d1547`, peeled executable commit
+  `e4ea6a6771e797ef820cdd8bfea64c57e0481065`, frozen harness.
 - A2L: required adapted SkillOpt-Lite, source commit
   `4cb4eeef1f95375a9179737ab94cf5e64b9647c6`, frozen harness.
-- A3: optimized skill plus the declared typed harness allowlist.
+- A3: the same full SkillOpt core and skill-text optimization as A2, plus a
+  declared typed C1 overlay.
 
 A2, A2L, and A3 execute in parallel from the same A1 with seeds `11,23,47`, cap
 `160 rollouts/seed` and `480/arm`, USD 20 per arm, USD 30 shared services, USD 90
@@ -108,9 +110,25 @@ target and USD 100 hard stop. Model, provider, effort, data, evaluator, tools,
 initial state, retry policy, and stopping rules match. A2L-P (`400/seed`) and
 broad HarnessOpt A3X are future exploratory variants and cannot replace an arm.
 
+A2 changes skill text only. A3 uses the identical full SkillOpt core and
+skill-text proposal/selection logic, then adds at most twelve scalar typed C1
+overlay values for six frozen route quotas, deterministic fusion profile, RRF
+`k`, pool depth, or rerank depth. There are no vague context/control fields. The overlay is data only: no code,
+prompt, dynamic policy, executable tool, model/provider parameter, query-view,
+encoder, reranker-instruction, corpus, evaluator, split, qrels, family-map, or
+budget change is allowed. Its immutable manifest binds the frozen C1 harness and
+C1 policy hashes.
+
 An independent baseline-only three-seed S-MARGIN audit must resolve
 `S_MARGIN_VALUES_TBD_BLOCKING` before arm execution. Nine seed-finalists are
-submitted once; one artifact per arm is frozen without test feedback.
+submitted once; one artifact per arm is frozen without test feedback. The signed
+prospective rule requires candidate-minus-incumbent `delta_OUT > 0`,
+`delta_ALL >= -m_ALL`, and `delta_IN >= -m_IN`; the Owner alone signs the
+margin values after the audit. Each arm contributes exactly seeds 11/23/47; its
+artifact is the highest preregistered selection-score finalist, with fixed
+priority `11 -> 23 -> 47` for an exact tie. Missing seeds or unmatched realized rollout/stop schedules invalidate the
+primary comparison. Mechanism traces are descriptive only: skill edit count,
+typed-overlay count, enabled routes, pool depth, and rerank depth.
 
 ## Track S evaluation
 

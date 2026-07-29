@@ -1,0 +1,193 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260729T160100Z-implementation-closeout",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": "2026-07-29T14:45:00Z",
+  "ended_at_utc": "2026-07-29T16:01:00Z",
+  "scope": "Implement F1 CPU preparation contracts, bounded Track S protocol repair, Dashboard and Obsidian notes, and governed session handoff.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "98aa02117660603a07708bff342b4a62834421c5",
+    "dirty_paths": [
+      "00_governance/IS_RESEARCH_TRACK_C_V0.1_CROSSROUTE_PLAN.md",
+      "00_governance/IS_RESEARCH_TRACK_S_V0.1_SKILLOPT_HARNESSOPT_PLAN.md",
+      "00_governance/OPERATIONS.md",
+      "00_governance/OWNER_GATES.md",
+      "00_governance/REUSABLE_ASSET_MAP.md",
+      "00_governance/config/linear.yaml",
+      "00_governance/config/reusable_assets.yaml",
+      "00_governance/config/tools.lock.yaml",
+      "03_experiments/config/mlflow/governance_documents.yaml",
+      "05_code/src/myis_research/dashboard/app.py",
+      "05_code/src/myis_research/harness/__init__.py",
+      "05_code/src/myis_research/harness/f1_baselines.py",
+      "05_code/tests/test_dashboard_frontend.py",
+      "05_code/tests/test_f1_cpu_scaffold.py",
+      "05_code/tests/test_scientific_contracts.py",
+      "06_frontend/dashboard/assets/dashboard.css",
+      "06_frontend/dashboard/assets/dashboard.js",
+      "06_frontend/dashboard/index.html",
+      "AGENTS.md",
+      "FULL_RESEARCH_TRACK_PLAN.md",
+      "HANDOFF.md",
+      "LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md",
+      "PLAN.md",
+      "pyproject.toml",
+      ".agents/skills/myis-autoresearch-notes",
+      "05_code/src/myis_research/dashboard/notes.py",
+      "05_code/src/myis_research/harness/track_s.py",
+      "05_code/src/myis_research/notes",
+      "05_code/tests/test_research_notes.py",
+      "07_obsidian_note"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Implemented fail-closed F1.1 CPU contracts and synthetic-only baseline replay without opening protected data or a scientific run.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Repaired Track S treatment, signed S-MARGIN, deterministic seed finalist selection, matched campaign checks, and descriptive mechanism metrics.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added Dashboard Notes and interactive graph projections plus Thai-first Obsidian generated notes and a reusable notes skill.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "G1 remains pending because the locked model artifact, Owner compute decision, and executable measured F1 runner are not authorized or complete.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "summary": "Owner must decide G1 compute/provider/time/cost/egress and provide the locked Nemotron artifact provenance before measured F1.",
+      "blocking_gate": "G1"
+    },
+    {
+      "thread_id": "OT0002",
+      "provenance": "agent-observed",
+      "summary": "Track S engine provenance, CoreWeave preflight, and Owner-selected S-MARGIN values remain blockers.",
+      "blocking_gate": "G4"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "F1",
+    "task_id": "F1.1",
+    "gate_id": "G1",
+    "gate_status": "pending"
+  },
+  "owner_brief_th": "สถานะปัจจุบันคือ F1.1 CPU preparation เสร็จในขอบเขต fixture และเอกสาร แต่ G1 ยัง pending ยังไม่มีการทดลองจริง Owner ต้องตรวจหลักฐาน เลือก compute/provider/time/cost/egress และตัดสินใจว่าจะขอเปิด G1 หรือไม่",
+  "owner_actions": [
+    {
+      "action_id": "OA001",
+      "priority": "required",
+      "action_th": "ตรวจ HANDOFF และ Obsidian handoff note แล้วเลือกแนวทาง compute สำหรับ G1",
+      "reason_th": "CPU local เพียงพอสำหรับ fixture แต่ไม่เหมาะกับ encoder 8B และการตัดสินใจนี้ต้องเป็น Owner approval",
+      "blocking_gate": "G1"
+    },
+    {
+      "action_id": "OA002",
+      "priority": "required",
+      "action_th": "ยืนยัน provenance ของ SkillOpt/A2L และเลือกค่า S-MARGIN หลัง baseline-only audit",
+      "reason_th": "Track S ยังเปิด S0/S1 ไม่ได้จนกว่านิยาม engine และ margin จะปิดช่องว่างเชิงเหตุผล",
+      "blocking_gate": "G4"
+    }
+  ],
+  "gate_request": {
+    "gate_id": "G1",
+    "state": "blocked",
+    "summary_th": "รายงานขอเตรียม G1 เท่านั้น ยังไม่เปิด Gate และยังไม่อนุญาตการทดลอง",
+    "blocking_reason_th": "ยังขาด model artifact/hash, Owner compute/provider/time/cost/egress decision และ measured executor",
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "CPU-LOCAL",
+        "description_th": "เครื่อง local สำหรับ fixture, dry run, manifest และ validation",
+        "purpose_th": "เตรียม F1.1 ต่อโดยไม่เปิดข้อมูล protected"
+      },
+      {
+        "resource_id": "GPU-APPROVED",
+        "description_th": "Owner-controlled หรือ cloud GPU ที่มี VRAM อย่างน้อย 48 GiB เมื่อ G1 อนุมัติ",
+        "purpose_th": "รัน encoder 8B ตาม RunSpec โดยมี wall-time, cost และ egress limit ชัดเจน"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {"check_id": "focused-tests", "status": "PASS", "summary": "39 tests passed; 30 subtests passed; one dependency warning."},
+      {"check_id": "asset-quick", "status": "PASS", "summary": "Reusable asset quick validation and map check passed."},
+      {"check_id": "brain-literature", "status": "PASS", "summary": "Brain literature validator passed for 153 notes."},
+      {"check_id": "scientific-run", "status": "SKIPPED", "summary": "No scientific run, qrels, provider, GPU, or confirmation access was authorized."}
+    ],
+    "changed_files": [
+      "AGENTS.md",
+      "HANDOFF.md",
+      "PLAN.md",
+      "FULL_RESEARCH_TRACK_PLAN.md",
+      "LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md",
+      "00_governance/OWNER_GATES.md",
+      "00_governance/OPERATIONS.md",
+      "00_governance/config/reusable_assets.yaml",
+      "05_code/src/myis_research/harness/f1_baselines.py",
+      "05_code/src/myis_research/harness/track_s.py",
+      "05_code/src/myis_research/dashboard/notes.py",
+      "05_code/src/myis_research/notes/catalog.py",
+      "07_obsidian_note"
+    ],
+    "untouched_protected_surfaces": [
+      "confirmation qrels and membership",
+      "per-query outcomes and protected payloads",
+      "App datasets, models, and indexes",
+      "paid API, GPU/Vast, and external publication",
+      "immutable Owner approvals and historical capsules"
+    ]
+  },
+  "corrections": []
+}

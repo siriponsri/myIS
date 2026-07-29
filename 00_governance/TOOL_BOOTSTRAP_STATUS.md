@@ -8,7 +8,7 @@ Updated: 2026-07-28 Asia/Bangkok
 | MLflow | `3.14.0`, commit `86cd7f5a1dc25a1387ad07c87811bbc30f62951c` | Active | Relocated SQLite integrity, URI migration, artifact upload/download SHA-256 round-trip |
 | Obsidian Mind / QMD | `v7.0.0`, commit `dde3710fcdc71fcc10578e4a58cbc3014211ddbb` | Active | Named index `myis-research-brain`; U001-U153 literature-note validation and HarnessOpt sparse retrieval pass; query live index/vector counts from QMD |
 | structlog | `26.1.0` | Active harness dependency | Shared console/runtime/progress event IDs and redaction tests |
-| SkillOpt | `v0.2.0`, commit `51d0a4d96e88558c84dee637f98e24e3fb2d1547` | Baseline only | Pinned in tool lock; no model-weight changes |
+| SkillOpt | `v0.2.0`, tag object `51d0a4d96e88558c84dee637f98e24e3fb2d1547`, peeled commit `e4ea6a6771e797ef820cdd8bfea64c57e0481065` | Baseline only | Pinned in tool lock; no model-weight changes |
 | Orchestra research skills | `v1.7.2`, commit `773a52944ba4747a18bd4ae9ade53fff041adcbc` | Three adapted project skills | quick_validate and unsafe-command scan pass; Codex/Claude junctions synced |
 | Codex native search | top-level `web_search = "live"` | Configured; restart validation pending | Official Codex config surface; no duplicate search MCP |
 | Open-WebSearch | `2.1.11`, commit `3094fa558fce35a8373e45ed5a6c43362e206906` | Configured; restart validation pending | Claude STDIO; DuckDuckGo/Bing; request-only; no daemon |

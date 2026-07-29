@@ -19,9 +19,9 @@
 | `CF.1` | Freeze C0, C1, and the C1 harness | `G3` | `APP-PAPER-B-RERANKING` (adapt, preport); `APP-PAPER-D-METHOD-LESSONS` (reference_only, none) |
 | `S0.1` | Lock provider, A0, and A1 | `G4` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
 | `S0.2` | Run the independent S-MARGIN audit | `G4` | `APP-PAPER-C-COST-PATTERNS` (reference_only, preport); `APP-PAPER-D-METHOD-LESSONS` (reference_only, none) |
-| `S1.1` | Execute A2 SkillOpt | `G5` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
-| `S1.2` | Execute A2L SkillOpt-Lite | `G5` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
-| `S1.3` | Execute typed A3 HarnessOpt | `G5` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
+| `S1.1` | Execute A2 SkillOpt | `G4` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
+| `S1.2` | Execute A2L SkillOpt-Lite | `G4` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
+| `S1.3` | Execute typed A3 HarnessOpt | `G4` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-C-COST-PATTERNS` (reference_only, preport) |
 | `SF.1` | Select once and freeze one artifact per arm | `G5` | `APP-PAPER-B-GEPA` (reference_only, none); `APP-PAPER-D-METHOD-LESSONS` (reference_only, none) |
 | `CT.1` | Run frozen PatenTEB retrieval_OUT transfer | `G7` | `APP-WIKI-GRAPH-POINTERS` (reference_only, pointer) |
 | `Q.1` | Evaluate the untouched joint test | `G6` | `APP-DAPFAM-CORE` (reuse, pointer); `APP-DAPFAM-PAPER-VIEWS` (reuse, pointer); `APP-PAPER-D-METHOD-LESSONS` (reference_only, none) |

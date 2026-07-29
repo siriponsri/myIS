@@ -13,11 +13,14 @@ from myis_research.dashboard.app import create_app
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONTENT_FILES = (
     "PLAN.md",
+    "HANDOFF.md",
     "FULL_RESEARCH_TRACK_PLAN.md",
     "LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md",
     "AGENTS.md",
     "00_governance/OWNER_GATES.md",
     "00_governance/OPERATIONS.md",
+    "00_governance/STRUCTURE_DECISIONS.md",
+    "00_governance/REUSABLE_ASSET_MAP.md",
     "00_governance/TOOLCHAIN.md",
     "00_governance/TOOL_BOOTSTRAP_STATUS.md",
     "00_governance/config/tools.lock.yaml",
@@ -43,10 +46,20 @@ CONTENT_FILES = (
     "06_frontend/dashboard/diagrams/decision-ledger.svg",
     "06_frontend/dashboard/diagrams/mlflow-mirror.svg",
 )
+NOTE_FILES = (
+    "07_obsidian_note/generated/current-status.md",
+    "07_obsidian_note/generated/f1-1-cpu-sprint.md",
+    "07_obsidian_note/generated/handoff.md",
+    "07_obsidian_note/generated/track-s-protocol.md",
+)
 
 
 def make_fixture(root: Path, *, git_repository: bool = False) -> None:
     for relative in CONTENT_FILES:
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(REPO_ROOT / relative, target)
+    for relative in NOTE_FILES:
         target = root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(REPO_ROOT / relative, target)
@@ -102,6 +115,8 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn('id="owner-inbox"', index.text)
             self.assertIn('id="owner-focus" hidden', index.text)
             self.assertIn('data-view="data"', index.text)
+            self.assertIn('data-view="graph"', index.text)
+            self.assertIn('data-view="notes"', index.text)
             self.assertIn('data-view="presentation"', index.text)
             self.assertIn('id="presentation-content"', index.text)
             self.assertEqual(index.headers["cache-control"], "no-store, max-age=0")
@@ -118,6 +133,8 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn("renderOwnerInbox", script.text)
             self.assertIn("renderResearchFlow", script.text)
             self.assertIn("renderData", script.text)
+            self.assertIn("renderGraph", script.text)
+            self.assertIn("renderNotes", script.text)
             self.assertIn("bindFlowPan", script.text)
             self.assertIn("flow-toolbar", script.text)
             self.assertIn("aria-label\": \"Zoom in\"", script.text)
@@ -156,6 +173,7 @@ class DashboardFrontendTests(unittest.TestCase):
             )
             client = TestClient(app, base_url="http://127.0.0.1:8765")
             self.assertEqual(client.get("/api/v1/content/process").status_code, 401)
+            self.assertEqual(client.get("/api/v1/notes").status_code, 401)
             client.get("/api/v1/session")
 
             process = client.get("/api/v1/content/process")
@@ -165,6 +183,7 @@ class DashboardFrontendTests(unittest.TestCase):
             governance = client.get("/api/v1/governance-catalog")
             inbox = client.get("/api/v1/owner-inbox")
             datasets = client.get("/api/v1/datasets")
+            notes = client.get("/api/v1/notes")
             self.assertEqual(process.status_code, 200)
             self.assertEqual(harness.status_code, 200)
             self.assertEqual(tools.status_code, 200)
@@ -172,6 +191,13 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertEqual(governance.status_code, 200)
             self.assertEqual(inbox.status_code, 200)
             self.assertEqual(datasets.status_code, 200)
+            self.assertEqual(notes.status_code, 200)
+            self.assertEqual(notes.json()["notes"][0]["note_id"], "handoff")
+            self.assertTrue(notes.json()["notes"][0]["obsidian_uri"].startswith("obsidian://open?vault="))
+            note = client.get("/api/v1/notes/handoff")
+            self.assertEqual(note.status_code, 200)
+            self.assertNotIn(str(root), note.text)
+            self.assertEqual(client.get("/api/v1/notes/not-allowlisted").status_code, 404)
             dataset = datasets.json()["datasets"][0]
             self.assertEqual(dataset["raw_access"], False)
             self.assertEqual(dataset["live_fetch"], False)
@@ -179,7 +205,7 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertEqual(dataset["public_source"]["license"], "cc-by-nc-sa-4.0")
             self.assertEqual(dataset["inventory_counts"]["corpus"], 45_336)
             self.assertEqual(len(dataset["lineage"]), 4)
-            combined = process.text + harness.text + tools.text + flows.text + governance.text + inbox.text + datasets.text
+            combined = process.text + harness.text + tools.text + flows.text + governance.text + inbox.text + datasets.text + notes.text + note.text
             self.assertNotIn(str(root), combined)
             self.assertNotIn('"path"', combined)
             tool_documents = tools.json()["documents"]

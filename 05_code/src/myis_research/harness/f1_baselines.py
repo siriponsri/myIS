@@ -23,6 +23,11 @@ from .candidate_ledger import (
 
 
 FROZEN_F1_RUNSPEC_SCHEMA = "myis.frozen-f1-runspec.v1"
+MODEL_SOURCE_MANIFEST_V1 = "myis.model-source-manifest.v1"
+MODEL_ARTIFACT_MANIFEST_V2 = "myis.model-artifact.v2"
+CLOUD_TRANSFER_POLICY_V2 = "myis.cloud-transfer-policy.v2"
+RUNTIME_MAP_V1 = "myis.f1-runtime-map.v1"
+COMPUTE_SPRINT_RECEIPT_V1 = "myis.f1-compute-sprint-receipt.v1"
 LOCKED_ENCODER = "Llama-Embed-Nemotron-8B"
 LOCKED_ENCODER_REVISION = "aa3b43a495a9b280d1bdb716da37c54bb495d630"
 SHA256_PATTERN = r"^[0-9a-f]{64}$"
@@ -75,6 +80,101 @@ class ModelArtifactCommitment(_StrictModel):
     revision: Literal[LOCKED_ENCODER_REVISION]
     artifact_sha256: str = Field(pattern=SHA256_PATTERN)
     manifest_sha256: str = Field(pattern=SHA256_PATTERN)
+
+
+class ModelSourceManifestV1(_StrictModel):
+    """Identity of a pre-provisioned model source without reading model bytes."""
+
+    schema_version: Literal[MODEL_SOURCE_MANIFEST_V1]
+    source_id: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{2,127}$")
+    source_kind: Literal["local_preprovisioned"]
+    repository: str = Field(min_length=1, max_length=256)
+    revision: Literal[LOCKED_ENCODER_REVISION]
+    license: str = Field(min_length=1, max_length=128)
+    source_manifest_sha256: str = Field(pattern=SHA256_PATTERN)
+    network_access: Literal["none"]
+    data_egress: Literal[False]
+
+
+class ModelArtifactManifestV2(_StrictModel):
+    """V2 local artifact manifest with an independently hash-bound source record."""
+
+    schema_version: Literal[MODEL_ARTIFACT_MANIFEST_V2]
+    model_id: Literal[LOCKED_ENCODER]
+    revision: Literal[LOCKED_ENCODER_REVISION]
+    artifact_sha256: str = Field(pattern=SHA256_PATTERN)
+    source: ModelSourceManifestV1
+    source_manifest_sha256: str = Field(pattern=SHA256_PATTERN)
+
+    @model_validator(mode="after")
+    def source_hash_matches(self) -> "ModelArtifactManifestV2":
+        if self.source_manifest_sha256 != _canonical_sha256(self.source.model_dump(mode="json")):
+            raise ValueError("model source manifest hash does not match its canonical source record")
+        return self
+
+
+class CloudTransferPolicyV2(_StrictModel):
+    """Current CPU-stage cloud transfer policy. A future enabled policy needs a new schema."""
+
+    schema_version: Literal[CLOUD_TRANSFER_POLICY_V2]
+    status: Literal["blocked"]
+    authorization: Literal["NOT_AUTHORIZED"]
+    target_compute_class: Literal["approved_cloud_gpu"]
+    provider: Literal["none"]
+    network_access: Literal["none"]
+    data_egress: Literal[False]
+    gpu_access: Literal["none"]
+    fallback: Literal["forbidden"]
+    reason: str = Field(min_length=1, max_length=256)
+
+
+class RuntimeMapV1(_StrictModel):
+    """Owner-supplied local CPU facts; this is metadata, not hardware discovery."""
+
+    schema_version: Literal[RUNTIME_MAP_V1]
+    runtime_id: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{2,127}$")
+    compute_class: Literal["local_cpu"]
+    python_version: str = Field(pattern=r"^3\.11\.\d+$")
+    uv_version: str = Field(min_length=1, max_length=64)
+    os: str = Field(min_length=1, max_length=128)
+    architecture: str = Field(min_length=1, max_length=64)
+    accelerator: Literal["cpu"]
+    logical_cpu_count: int = Field(ge=1, le=256)
+    memory_bytes: int = Field(gt=0)
+    available_temp_bytes: int = Field(gt=0)
+    network_access: Literal["none"]
+    gpu_access: Literal["none"]
+
+
+class ComputeSprintReceiptV1(_StrictModel):
+    """Hash-only receipt for a source-free CPU fixture sprint."""
+
+    schema_version: Literal[COMPUTE_SPRINT_RECEIPT_V1]
+    sprint_id: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{2,127}$")
+    status: Literal["PASS", "RESOURCE_BLOCKED"]
+    reason: str = Field(min_length=1, max_length=256)
+    gate: Literal["G1"]
+    gate_status: Literal["pending"]
+    mode: Literal["synthetic_fixture_only"]
+    runtime_map_sha256: str = Field(pattern=SHA256_PATTERN)
+    cloud_transfer_policy_sha256: str = Field(pattern=SHA256_PATTERN)
+    model_manifest_sha256: str | None = Field(default=None, pattern=SHA256_PATTERN)
+    fixture_ledger_sha256: dict[str, str]
+    scientific_run: Literal[False]
+    dataset_access: Literal["none"]
+    network_access: Literal["none"]
+    provider_access: Literal["none"]
+    gpu_access: Literal["none"]
+    model_loaded: Literal[False]
+    artifact_count: Literal[0]
+    scientific_metric_count: Literal[0]
+
+    @field_validator("fixture_ledger_sha256")
+    @classmethod
+    def fixture_ledgers_are_exact(cls, value: dict[str, str]) -> dict[str, str]:
+        if set(value) != {"B0", "B1", "B2"} or any(not _is_sha256(item) for item in value.values()):
+            raise ValueError("fixture receipt must bind B0, B1, and B2 ledger hashes")
+        return value
 
 
 class ExecutionBudget(_StrictModel):
@@ -158,6 +258,21 @@ class ResourcePreflight:
     manifest_sha256: str | None
     network_access: Literal["none"] = "none"
     model_loaded: Literal[False] = False
+    source_manifest_sha256: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class CpuFixtureAdapterResult:
+    """The only executable F1 adapter before G1: deterministic synthetic replay."""
+
+    status: Literal["PASS"]
+    replays: Mapping[str, BaselineReplay]
+    dataset_access: Literal["none"] = "none"
+    network_access: Literal["none"] = "none"
+    provider_access: Literal["none"] = "none"
+    gpu_access: Literal["none"] = "none"
+    model_loaded: Literal[False] = False
+    scientific_metric_count: Literal[0] = 0
 
 
 def validate_frozen_f1_runspec(payload: Mapping[str, object]) -> FrozenF1RunSpecV1:
@@ -192,6 +307,12 @@ def replay_fixture_baselines(fixtures: Mapping[str, Iterable[RouteHit]]) -> dict
     }
 
 
+def execute_cpu_fixture_adapter(fixtures: Mapping[str, Iterable[RouteHit]]) -> CpuFixtureAdapterResult:
+    """Execute only deterministic synthetic fixtures; no data, model, or network path exists."""
+
+    return CpuFixtureAdapterResult(status="PASS", replays=replay_fixture_baselines(fixtures))
+
+
 def preflight_model_manifest(path: Path | None, commitment: ModelArtifactCommitment) -> ResourcePreflight:
     """Validate only the local model manifest; never load or download model bytes."""
 
@@ -206,15 +327,72 @@ def preflight_model_manifest(path: Path | None, commitment: ModelArtifactCommitm
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return ResourcePreflight("RESOURCE_BLOCKED", "LOCKED_MODEL_MANIFEST_INVALID", manifest_sha256)
-    expected = {
+    legacy_expected = {
         "schema_version": "myis.model-artifact.v1",
         "model_id": commitment.model_id,
         "revision": commitment.revision,
         "artifact_sha256": commitment.artifact_sha256,
     }
-    if payload != expected:
+    if payload == legacy_expected:
+        return ResourcePreflight("PASS", "LOCKED_MODEL_MANIFEST_VALID", manifest_sha256)
+    try:
+        v2 = ModelArtifactManifestV2.model_validate(payload)
+    except ValueError:
         return ResourcePreflight("RESOURCE_BLOCKED", "LOCKED_MODEL_IDENTITY_MISMATCH", manifest_sha256)
-    return ResourcePreflight("PASS", "LOCKED_MODEL_MANIFEST_VALID", manifest_sha256)
+    if (
+        v2.model_id != commitment.model_id
+        or v2.revision != commitment.revision
+        or v2.artifact_sha256 != commitment.artifact_sha256
+    ):
+        return ResourcePreflight("RESOURCE_BLOCKED", "LOCKED_MODEL_IDENTITY_MISMATCH", manifest_sha256)
+    return ResourcePreflight(
+        "PASS",
+        "LOCKED_MODEL_MANIFEST_VALID",
+        manifest_sha256,
+        source_manifest_sha256=v2.source_manifest_sha256,
+    )
+
+
+def create_compute_sprint_receipt(
+    *,
+    sprint_id: str,
+    runtime_map: RuntimeMapV1,
+    cloud_transfer_policy: CloudTransferPolicyV2,
+    model_preflight: ResourcePreflight,
+    fixture_result: CpuFixtureAdapterResult,
+) -> ComputeSprintReceiptV1:
+    """Create a non-scientific receipt from contracts and synthetic ledger hashes only."""
+
+    runtime_hash = _canonical_sha256(runtime_map.model_dump(mode="json"))
+    transfer_hash = _canonical_sha256(cloud_transfer_policy.model_dump(mode="json"))
+    ledgers = {arm: replay.ledger_sha256 for arm, replay in fixture_result.replays.items()}
+    return ComputeSprintReceiptV1(
+        schema_version=COMPUTE_SPRINT_RECEIPT_V1,
+        sprint_id=sprint_id,
+        status="PASS" if model_preflight.status == "PASS" else "RESOURCE_BLOCKED",
+        reason=model_preflight.reason,
+        gate="G1",
+        gate_status="pending",
+        mode="synthetic_fixture_only",
+        runtime_map_sha256=runtime_hash,
+        cloud_transfer_policy_sha256=transfer_hash,
+        model_manifest_sha256=model_preflight.manifest_sha256,
+        fixture_ledger_sha256=ledgers,
+        scientific_run=False,
+        dataset_access="none",
+        network_access="none",
+        provider_access="none",
+        gpu_access="none",
+        model_loaded=False,
+        artifact_count=0,
+        scientific_metric_count=0,
+    )
+
+
+def validate_compute_sprint_receipt(payload: Mapping[str, object]) -> ComputeSprintReceiptV1:
+    """Typed validation for a JSON receipt supplied to a low-dev CLI or dashboard."""
+
+    return ComputeSprintReceiptV1.model_validate(payload)
 
 
 def _validate_hash_map(value: Mapping[str, str], expected: frozenset[str], label: str) -> None:
@@ -245,3 +423,8 @@ def _validate_fixture_hits(
 
 def _is_sha256(value: str) -> bool:
     return len(value) == 64 and all(character in "0123456789abcdef" for character in value)
+
+
+def _canonical_sha256(payload: Mapping[str, object]) -> str:
+    encoded = json.dumps(payload, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()

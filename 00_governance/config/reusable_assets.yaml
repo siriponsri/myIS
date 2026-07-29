@@ -384,7 +384,7 @@ assets:
       - Reusing benchmark-specific prompts or events as measured runs.
     phase_ids: [C1, S0, S1]
     task_ids: [C1.1, C1.2, S0.1, S0.2, S1.1, S1.2, S1.3]
-    gate_ids: [G2, G4, G5]
+    gate_ids: [G2, G4]
     protected_data_level: metadata
     copy_mode: preport
     validation_mode: full

@@ -105,8 +105,9 @@ then repeat the checks. Do not bypass a failed validation by editing its output.
   BF16 provisional, with no routing, fallback, or parameter dropping.
 - CoreWeave preflight is a hard gate. One identical retry is allowed only for a
   transport error.
-- A2 uses SkillOpt `v0.2.0` commit
-  `51d0a4d96e88558c84dee637f98e24e3fb2d1547`; A2L derives from
+- A2 uses SkillOpt `v0.2.0` tag object
+  `51d0a4d96e88558c84dee637f98e24e3fb2d1547`, peeled executable commit
+  `e4ea6a6771e797ef820cdd8bfea64c57e0481065`; A2L derives from
   `4cb4eeef1f95375a9179737ab94cf5e64b9647c6`.
 - Seeds `11,23,47`; rollout cap `160/seed`, `480/arm`; USD 20/arm, USD 30 shared,
   USD 90 target, USD 100 hard stop. A3 uses only the typed allowlist. A2L-P and
@@ -210,3 +211,29 @@ v2 correction that names the exact failed legacy validation error, and preserve
 the invalid historical file. Evidence references in a capsule must exist with
 the stated hash at its recorded Git revision; list newly changed uncommitted
 paths only in the v2 closeout, not as evidence references.
+
+## CPU/GPU sprint lifecycle
+
+Every implementation task is split into a local CPU Sprint and, only after an
+explicit Gate, a GPU Sprint. CPU work may prepare code, schemas, fixture
+replay, manifests, dry runs, and safe aggregate projections. It must not load
+the locked 8B model, access protected rows/qrels, call a paid provider, or
+claim measured metrics.
+
+For a GPU Sprint, the Owner chooses an Owner-controlled GPU or an explicitly
+approved cloud GPU. Vast SSH credentials are never reused from a prior session:
+after the CPU Sprint the agent requests the Owner-provided host, user, port,
+and approval for the named key path. The RunSpec must state wall-time, cost,
+network/data-egress scope, and that fallback, routing, model substitution, and
+parameter dropping are forbidden. A cloud cost ceiling is `hourly_rate *
+max_wall_hours + approved_storage + approved_egress`.
+
+After a GPU Sprint, pull and validate only allowlisted artifacts, stop all
+remote processes, record local manifest/hash and MLflow-safe receipts, and then
+stop. Report exactly: `บันทึกข้อมูลครบทุกอย่างแล้ว เสนอ Owner destroy Vast Instance ทันที หลังจากนั้น ให้ Owner พิมพ์ “ดำเนินการต่อ” เพื่อทำงานต่อบน local project ครับ`.
+Do not continue until the Owner confirms destruction and types `ดำเนินการต่อ`.
+
+Before every commit or push, update relevant governance docs, `HANDOFF.md`,
+generated Obsidian notes, and the Brain pointer through its serial-writer lease.
+Run consistency checks first; if Brain update or validation fails, do not commit
+or push.

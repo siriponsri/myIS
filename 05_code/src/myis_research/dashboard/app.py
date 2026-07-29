@@ -28,6 +28,7 @@ from .progress import (
 )
 from .projections import public_governance_catalog, validate_evidence_selection
 from .readiness import load_f1_g1_readiness
+from .notes import note_catalog, note_document
 from .security import (
     LoopbackSecurityMiddleware,
     SessionStore,
@@ -151,6 +152,17 @@ def create_app(
     @app.get("/api/v1/presentation-topics")
     def presentation_topic_catalog(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
         return _projection_response(lambda: presentation_topics(repository_root))
+
+    @app.get("/api/v1/notes")
+    def notes(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: note_catalog(repository_root))
+
+    @app.get("/api/v1/notes/{note_id}")
+    def note(note_id: str, _: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        try:
+            return _projection_response(lambda: note_document(repository_root, note_id))
+        except KeyError as error:
+            raise HTTPException(status_code=404, detail="note is not allowlisted") from error
 
     @app.get("/api/v1/content/{content_id}")
     def content(content_id: str, _: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:

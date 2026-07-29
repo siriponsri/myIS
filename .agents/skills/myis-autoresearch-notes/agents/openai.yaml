@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Notes Workflow"
+  short_description: "Build governed Thai research notes"
+  default_prompt: "Use $myis-autoresearch-notes to record a governed CPU or research handoff."

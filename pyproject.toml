@@ -34,6 +34,7 @@ myis-dashboard = "myis_research.dashboard.cli:main"
 myis-confirmation = "myis_research.confirmation_cli:main"
 myis-assets = "myis_research.asset_cli:main"
 myis-sessions = "myis_research.session_cli:main"
+myis-notes = "myis_research.notes.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["05_code/src"]

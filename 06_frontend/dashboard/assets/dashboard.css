@@ -247,6 +247,25 @@ th { color: var(--muted); font: 700 .72rem var(--font-utility); text-transform: 
 .results-guardrail p { line-height: 1.55; }
 .dataset-content { display: grid; min-width: 0; max-width: 100%; gap: 1rem; }
 .dataset-card { min-width: 0; max-width: 100%; padding: 1.25rem; border: 1px solid var(--line); border-top: 3px solid var(--teal); background: var(--surface); }
+.graph-content, .notes-content { min-width: 0; }
+.graph-caption { color: var(--muted); line-height: 1.5; }
+.native-graph { display: grid; grid-template-columns: repeat(7, minmax(9rem, 1fr)); gap: .65rem; margin-top: 1rem; overflow-x: auto; padding-bottom: .5rem; }
+.graph-node { position: relative; min-width: 9rem; border-top: 3px solid var(--line-strong); background: var(--surface); }
+.graph-node:not(:last-child)::after { content: "→"; position: absolute; z-index: 1; top: 50%; right: -.52rem; color: var(--teal); background: var(--canvas); transform: translateY(-50%); }
+.graph-node.done { border-color: var(--green); }
+.graph-node.doing { border-color: var(--teal); }
+.graph-node.needs-owner { border-color: var(--amber); }
+.graph-node.blocked { border-color: var(--red); }
+.graph-node-button { display: grid; width: 100%; min-height: 8rem; gap: .35rem; padding: .8rem; border: 1px solid var(--line); border-top: 0; background: transparent; color: var(--ink); text-align: left; }
+.graph-node-button:hover { background: var(--surface-soft); }
+.graph-node-button strong, .graph-node-button span:last-child { overflow-wrap: anywhere; }
+.notes-layout { display: grid; grid-template-columns: minmax(13rem, .28fr) minmax(0, .72fr); gap: 1rem; }
+.notes-index { display: grid; align-content: start; gap: .35rem; }
+.notes-index button { min-height: 3rem; padding: .7rem; border: 1px solid transparent; background: transparent; color: var(--ink); text-align: left; }
+.notes-index button:hover, .notes-index button.is-active { border-color: var(--teal); background: var(--teal-soft); }
+.note-detail { min-width: 0; padding: 1.25rem; border: 1px solid var(--line); background: var(--surface); }
+.note-section { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.note-section h3 { font-size: 1.05rem; }
 .dataset-lineage, .presentation-flow-scene { min-width: 0; max-width: 100%; }
 .dataset-lineage { margin-block: 1.25rem; padding-block: 1rem; border-block: 1px solid var(--line); }
 .dataset-lineage.is-compact { margin-block: .75rem; padding-block: .75rem; }
@@ -361,13 +380,16 @@ legend { padding: 0 .35rem; font-weight: 700; }
   .lineage-node { min-width: 0; }
   .lineage-node:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -.7rem; transform: translateX(50%); }
   .inbox-footer { align-items: flex-start; flex-direction: column; }
+  .native-graph { grid-template-columns: 1fr; overflow: visible; }
+  .graph-node { min-width: 0; }
+  .graph-node:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -.7rem; transform: translateX(50%); }
   .owner-map { grid-template-columns: 1fr; }
   .owner-map:not(.is-compact) .map-phase-row { grid-template-columns: 1fr; }
   .map-group { padding: .7rem; }
   .phase-node { min-height: 5.5rem; }
   .task-row { grid-template-columns: 4.2rem minmax(0, 1fr); }
   .task-row .status-badge { grid-column: 2; justify-self: start; }
-  .decision-layout, .document-browser, .flow-browser { grid-template-columns: 1fr; }
+  .decision-layout, .document-browser, .flow-browser, .notes-layout { grid-template-columns: 1fr; }
   .flow-canvas { min-height: 24rem; max-height: 68vh; }
   .gate-index { display: flex; gap: .35rem; overflow-x: auto; padding-bottom: .35rem; }
   .gate-index button { flex: 0 0 11rem; }

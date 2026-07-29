@@ -39,14 +39,16 @@ protocol facts.
 |---|---|---|---|
 | A0 | frozen C1 harness | none | required control |
 | A1 | human-authored seed skill | seed skill only | required control |
-| A2 | identical frozen A1 | SkillOpt skill text only | required |
+| A2 | identical frozen A1 | full SkillOpt core, skill text only | required |
 | A2L | identical frozen A1 | SkillOpt-Lite skill text only | required |
-| A3 | identical frozen A1 | declared typed HarnessOpt allowlist | required |
+| A3 | identical frozen A1 | same full SkillOpt core as A2, skill text plus declared typed C1 overlay | required |
 | A2L-P | future exploratory | larger Lite schedule | deferred |
 | A3X | future exploratory | broad harness surface | deferred |
 
 Arms A2, A2L, and A3 are required matched parallel campaigns from the same
-frozen A1 state. They may not inherit a selected artifact from another arm. A2L-P (`400` rollouts/seed)
+frozen A1 state. A2 and A3 use the same full SkillOpt core; their only intended
+treatment difference is A3's typed C1 overlay. A2L is the required pinned Lite
+comparison. No arm may inherit a selected artifact from another arm. A2L-P (`400` rollouts/seed)
 and A3X are not part of Track S v0.1 and require new approval.
 
 ## Provider and optimization lock
@@ -58,13 +60,18 @@ fallback, or parameter dropping. The endpoint becomes final only after the
 permitted only for a transport error; any hard preflight failure stops and
 requires an Owner decision.
 
-- A2 uses SkillOpt `v0.2.0`, commit
-  `51d0a4d96e88558c84dee637f98e24e3fb2d1547`.
+- A2 uses SkillOpt `v0.2.0`: unsigned annotated tag object
+  `51d0a4d96e88558c84dee637f98e24e3fb2d1547`, peeled executable commit
+  `e4ea6a6771e797ef820cdd8bfea64c57e0481065`, and tree
+  `5a603e937a20f1078059f94039a50028c022487a`.
 - A2L uses the adapted SkillOpt-Lite commit
   `4cb4eeef1f95375a9179737ab94cf5e64b9647c6`.
-- A3 changes only the typed allowlist: route enablement, quotas/depths inside
-  the fixed candidate budget, deterministic fusion parameters, pool/rerank
-  depths, and validated context/control fields. It cannot change query views,
+- A3 uses the same full SkillOpt core and skill-text proposal/selection logic as
+  A2, plus no more than twelve scalar typed C1 overlay values. The overlay may
+  cover the six frozen route quotas, deterministic fusion profile, RRF `k`, pool
+  depth, and rerank depth. It contains no vague context/control field, code, prompt,
+  dynamic policy,
+  executable tool, or model/provider setting. It cannot change query views,
   prompts, encoder, reranker instructions, corpus, evaluator, split, qrels,
   family map, model/provider, or budget.
 
@@ -82,12 +89,28 @@ are capped at USD `30`; the project target is USD `90` and the hard stop is USD
 `100`. The deterministic kernel stops before a ceiling is crossed and preserves
 invalid, rejected, and failed attempts.
 
+The S-MARGIN audit fixes signed candidate acceptance before optimization. For
+candidate-minus-incumbent deltas, acceptance requires `delta_OUT > 0`,
+`delta_ALL >= -m_ALL`, and `delta_IN >= -m_IN`. The same rule applies to A2,
+A2L, and A3. The Owner signs `m_ALL`, `m_IN`, and the baseline-only A1 audit
+hash before S1; Codex and the optimizer cannot choose these values.
+
 Selection accepts a candidate only when the preregistered primary selection
 score is strictly greater than its incumbent; ties and losses are rejected.
 This rule applies within each arm and cannot be replaced by cost, secondary
 metrics, or post-hoc judgment. A separate three-seed A1 S-MARGIN audit selects
 `S_MARGIN_VALUES_TBD_BLOCKING` before A2/A2L/A3. It is not an optimization or
 joint-test run.
+
+At SF, each arm supplies exactly one finalist from each of seeds `11`, `23`,
+and `47`. The sole arm artifact is the finalist with the highest preregistered
+selection score; an exact score tie resolves by fixed priority `11 -> 23 -> 47`.
+Joint-test results, cost, prose quality, visual review, and Owner preference are
+not tie-breakers, and all three seed outcomes
+remain in the immutable lineage. A comparison is invalid if any arm lacks a
+preregistered seed or matched realized rollout/stop schedule. The kernel records
+only descriptive mechanism traces (skill edit count, typed overlay count,
+enabled routes, pool depth, and rerank depth); they do not establish performance.
 
 ## Comparisons and reporting
 
@@ -103,7 +126,7 @@ DAPFAM qrels informed development.
 | Phase | Task | Required acceptance and gate |
 |---|---|---|
 | S0 | S0.1 provider/A0/A1 lock; S0.2 S-MARGIN audit | frozen identity, firewall, A1 state, and Owner G4 |
-| S1 | S1.1 A2; S1.2 A2L; S1.3 A3 | required matched parallel three-seed campaigns from A1 under G5 |
+| S1 | S1.1 A2; S1.2 A2L; S1.3 A3 | required matched parallel three-seed campaigns from A1 under G4 |
 | SF | nine seed-finalist submission and arm freeze | one immutable artifact per arm; G5 |
 | Q | joint test | Owner-run aggregate-only evaluation under G6 |
 | PS | Track S manuscript | evidence-bound publication decision G8 |
@@ -113,6 +136,10 @@ input, and Track S does not create an independent ranking claim or ranking gate.
 
 ## Blocking Owner decisions
 
+- `S_ENGINE_PROVENANCE_TBD_BLOCKING`: bind clean source, tree, license,
+  adaptation, command, and environment receipts for A2 and A2L before G4.
+- `S_MARGIN_APPLICATION_TBD_BLOCKING`: validate the signed OUT/ALL/IN rule in
+  the deterministic evaluator before G4.
 - `S_MARGIN_VALUES_TBD_BLOCKING`: choose the S-MARGIN rule after the isolated
   A1 three-seed audit.
 - `COREWEAVE_FINAL_FREEZE_TBD_BLOCKING`: approve the endpoint only after all

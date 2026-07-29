@@ -725,7 +725,8 @@ def _task_evidence(
     if head.supersedes_record_id is not None:
         if head.supersedes_record_id not in all_record_ids:
             raise ValueError(f"task evidence supersedes an unknown record: {task_id}")
-    if head.plan_sha256 != plan_sha256 or not _commit_is_ancestor(
+    historical_f0 = task_id.startswith("F0.") and _approved_g0_exists(repository_root)
+    if (head.plan_sha256 != plan_sha256 and not historical_f0) or not _commit_is_ancestor(
         repository_root, head.git_commit, current_git_commit
     ):
         state = "stale"
@@ -759,6 +760,26 @@ def _commit_is_ancestor(repository_root: Path, source_commit: str, current_commi
     if completed.returncode == 1:
         return False
     raise ValueError("task evidence references an unknown or unreadable Git commit")
+
+
+def _approved_g0_exists(repository_root: Path) -> bool:
+    """Keep immutable F0 evidence closed after later protocol-document edits."""
+
+    approval_root = repository_root / "00_governance" / "approvals"
+    for path in sorted(approval_root.glob("G0-*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        scope = payload.get("scope")
+        if (
+            payload.get("gate_id") == "G0"
+            and payload.get("status") == "approved"
+            and isinstance(scope, dict)
+            and "F0" in scope.get("phase_ids", [])
+        ):
+            return True
+    return False
 
 
 def validated_owner_gate_ledger(root: Path, plan: ParsedPlan) -> dict[str, Any]:

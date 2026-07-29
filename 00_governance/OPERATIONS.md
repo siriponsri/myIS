@@ -298,3 +298,20 @@ or incomplete/tampered bundle. Stop before retry when the class is unknown.
 Resume only from a checkpoint whose input/config hashes match. Never report only
 successful repeats, tune from confirmation aggregates, or use a stronger claim
 than the Gate classification permits.
+
+## CPU/GPU sprint closeout
+
+Use CPU-local work for fixture replay, code, manifests, dependency and dry-run
+checks. When a GPU Sprint is authorized, record the instance, wall cap, cost
+formula, egress scope, SSH request, and no-fallback rule in the session capsule.
+Pull only allowlisted aggregate/hash artifacts, validate locally, stop remote
+processes, and then pause with:
+
+> บันทึกข้อมูลครบทุกอย่างแล้ว เสนอ Owner destroy Vast Instance ทันที หลังจากนั้น ให้ Owner พิมพ์ “ดำเนินการต่อ” เพื่อทำงานต่อบน local project ครับ
+
+Do not run another command until the Owner confirms destruction and types
+`ดำเนินการต่อ`.
+
+Before `git commit` or `git push`, update `HANDOFF.md`, relevant docs, generated
+Obsidian notes, and the Brain pointer. Validate all projections and the serial
+Brain writer first; a failed Brain update blocks commit/push.

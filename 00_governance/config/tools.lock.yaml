@@ -79,9 +79,28 @@ tools:
   skillopt:
     repository: https://github.com/microsoft/SkillOpt.git
     version: v0.2.0
-    commit: 51d0a4d96e88558c84dee637f98e24e3fb2d1547
+    tag_object: 51d0a4d96e88558c84dee637f98e24e3fb2d1547
+    tag_signature: unsigned
+    peeled_commit: e4ea6a6771e797ef820cdd8bfea64c57e0481065
+    tree: 5a603e937a20f1078059f94039a50028c022487a
+    parents: [5487e2c426db8b75a0e8e2714641542325d55f9e]
     source_path: .
-    source_blob: https://github.com/microsoft/SkillOpt/tree/51d0a4d96e88558c84dee637f98e24e3fb2d1547
+    source_blob: https://github.com/microsoft/SkillOpt/tree/e4ea6a6771e797ef820cdd8bfea64c57e0481065
     license: MIT
     adaptation: benchmark baseline only; no vendored source, model-weight optimization, or autonomous installation
     adoption: harnessopt_baseline
+  skillopt_lite:
+    repository: https://github.com/EvolvingLMMs-Lab/SkillOpt-Lite.git
+    version: untagged_upstream_snapshot
+    commit: 4cb4eeef1f95375a9179737ab94cf5e64b9647c6
+    tree: 6e2cf3d17f251312412f4393cd60254dfd046a4a
+    parents: [32708a1349105b59183afb1b417385aa4e8812e0, 636791a4b5f949c10b4540512fd67f149a98eecc]
+    commit_signature: verified_merge
+    license: MIT
+    adoption: required_matched_lite_arm
+  harnessopt_typed_overlay:
+    implementation: myis-research deterministic kernel
+    base_engine: skillopt
+    base_engine_commit: e4ea6a6771e797ef820cdd8bfea64c57e0481065
+    contract: same_full_skillopt_core_plus_max_12_allowlisted_scalar_or_enum_c1_overlay_values
+    adoption: required_a3_treatment

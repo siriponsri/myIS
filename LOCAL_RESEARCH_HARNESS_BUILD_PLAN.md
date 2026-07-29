@@ -119,3 +119,18 @@ firewalls; C0 recipe and C1 edit denial; strict tie rejection; one-batch limits;
 provider/fallback/parameter drift; A2/A2L/A3 matching; budget hard stops;
 diagnostic pool equality; aggregate track IDs; confirmation redaction; immutable
 manifests; dashboard security; MLflow rejection; and deterministic replay.
+
+## Sprint and remote-resource contract
+
+F1.1 begins with a CPU-local sprint. The CPU sprint prepares the executor
+boundary, synthetic fixtures, manifests, dependency checks, dry-run commands,
+and a beginner-readable handoff. It does not execute B0/B1/B2 or create
+scientific metrics. G1 stays `pending` until the Owner binds compute, model
+artifact/hash, provider, time, cost, egress, split, and protected-surface
+scope in an immutable decision.
+
+The optional GPU sprint starts only after G1. The Owner supplies the approved
+host/user/port and explicitly requests SSH for that session. No silent fallback
+or provider/model substitution is allowed. After collection, local hash and
+MLflow-safe validation, and remote process shutdown, the agent must stop and
+request instance destruction before any further local task.

@@ -28,6 +28,8 @@
         <button class="nav-item" type="button" data-view="data"><span class="nav-icon" aria-hidden="true">▦</span><span>Data</span></button>
         <button class="nav-item" type="button" data-view="presentation"><span class="nav-icon" aria-hidden="true">P</span><span>Present</span></button>
         <button class="nav-item" type="button" data-view="decisions"><span class="nav-icon" aria-hidden="true">✓</span><span>Decisions</span></button>
+        <button class="nav-item secondary-nav-item" type="button" data-view="graph"><span class="nav-icon" aria-hidden="true">⌘</span><span>Graph</span></button>
+        <button class="nav-item secondary-nav-item" type="button" data-view="notes"><span class="nav-icon" aria-hidden="true">✎</span><span>Notes</span></button>
         <button class="nav-item secondary-nav-item" type="button" data-view="evidence"><span class="nav-icon" aria-hidden="true">▤</span><span>Evidence</span></button>
         <button class="nav-item secondary-nav-item" type="button" data-view="reference"><span class="nav-icon" aria-hidden="true">☷</span><span>Reference</span></button>
         <button class="nav-item mobile-more" type="button" data-mobile-more aria-expanded="false"><span class="nav-icon" aria-hidden="true">•••</span><span>More</span></button>
@@ -56,6 +58,16 @@
         <section class="view" id="view-data" data-view-panel="data" aria-labelledby="view-title">
           <div class="view-intro"><div><p class="section-label">Data boundary</p><p class="lede">Registered dataset metadata, safe readiness, and access limits.</p><p class="detail-thai" lang="th">แสดงเฉพาะข้อมูลสรุปที่อนุญาต ไม่เปิด raw data, query ID หรือผลราย query</p></div></div>
           <section id="dataset-content" class="dataset-content" aria-live="polite"></section>
+        </section>
+
+        <section class="view" id="view-graph" data-view-panel="graph" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Research graph</p><p class="lede">A live map of what is connected, what is ready, and what remains intentionally unrun.</p><p class="detail-thai" lang="th">เลือก node เพื่อเปิดรายละเอียดของงาน, Gate หรือข้อมูลที่เกี่ยวข้อง</p></div></div>
+          <section id="graph-content" class="graph-content" aria-live="polite"></section>
+        </section>
+
+        <section class="view" id="view-notes" data-view-panel="notes" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Research notes</p><p class="lede">Curated handoff and decision notes, without a filesystem browser.</p><p class="detail-thai" lang="th">อ่านเฉพาะโน้ตที่ dashboard อนุญาต และเปิดต่อใน Obsidian ได้เมื่อ vault ถูกตั้งค่าแล้ว</p></div></div>
+          <section id="notes-content" class="notes-content" aria-live="polite"></section>
         </section>
 
         <section class="view" id="view-presentation" data-view-panel="presentation" aria-labelledby="view-title">

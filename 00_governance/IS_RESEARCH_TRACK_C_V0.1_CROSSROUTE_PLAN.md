@@ -77,6 +77,13 @@ configurations on C_TRAIN; it submits at most five Pareto finalists to
 C_SELECTION once. The selection score must be strictly greater than the
 incumbent; ties are rejected.
 
+The G3 C1 handover records separate frozen C1 harness and C1 policy hashes. A
+future Track S typed overlay may bind both hashes but cannot replace or mutate
+them. It is limited to at most twelve scalar values over the already permitted
+C1 dimensions; it cannot carry code, prompts, dynamic policy, executable tools,
+or changes to the frozen query views, encoder, reranker instructions, corpus,
+evaluator, split, qrels, family map, provider, or budget.
+
 ## 4. Data and leakage contract
 
 Candidate generation is qrel-blind. It may use the query patent's TAC,

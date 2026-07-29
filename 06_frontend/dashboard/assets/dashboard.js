@@ -1,6 +1,8 @@
 const VIEW_METADATA = {
   overview: ["Owner control", "Today"],
   data: ["Data boundary", "Data"],
+  graph: ["Research graph", "Graph"],
+  notes: ["Research notes", "Notes"],
   presentation: ["Research briefing", "Presentation"],
   plan: ["Canonical execution order", "Plan & Tasks"],
   decisions: ["Immutable governance ledger", "Decisions"],
@@ -44,6 +46,9 @@ const state = {
   f1g1: null,
   ownerInbox: null,
   datasets: null,
+  notes: null,
+  noteDocuments: {},
+  activeNoteId: "",
   presentationTopics: null,
   previewToken: "",
   previewRecord: null,
@@ -72,7 +77,7 @@ async function initialize() {
 function cacheElements() {
   for (const id of [
     "view-title", "view-kicker", "sync-state", "refresh-button", "owner-focus", "overview-readiness", "f1-g1-panel", "overview-map-content",
-    "overview-legend", "overview-metrics", "overview-blockers", "overview-recent", "overview-projections", "owner-inbox", "dataset-content",
+    "overview-legend", "overview-metrics", "overview-blockers", "overview-recent", "overview-projections", "owner-inbox", "dataset-content", "graph-content", "notes-content",
     "owner-map", "task-workspace", "gate-index", "gate-detail", "ledger-summary", "decision-table-body",
     "evidence-summary", "evidence-grid", "reference-content", "new-decision-button", "decision-dialog",
     "decision-form", "decision-form-step", "decision-preview-step", "decision-form-error", "decision-confirm-error",
@@ -175,7 +180,7 @@ function renderLoadingStates() {
   [elements.owner_focus, elements.overview_readiness, elements.overview_map_content, elements.overview_metrics, elements.overview_blockers, elements.overview_recent,
     elements.overview_projections, elements.owner_map, elements.task_workspace, elements.gate_index, elements.gate_detail,
     elements.evidence_summary, elements.evidence_grid, elements.reference_content, elements.f1_g1_panel,
-    elements.presentation_content, elements.owner_inbox, elements.dataset_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
+    elements.presentation_content, elements.owner_inbox, elements.dataset_content, elements.graph_content, elements.notes_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
 }
 
 async function refreshAll() {
@@ -189,7 +194,7 @@ async function refreshAll() {
       fetchJson("/api/v1/dashboard-snapshot"), fetchJson("/api/v1/governance-catalog"), fetchJson("/api/v1/owner-gates"),
       fetchJson("/api/v1/artifacts"), fetchJson("/api/v1/content/process"), fetchJson("/api/v1/content/harness"),
       fetchJson("/api/v1/tools"), fetchJson("/api/v1/flows"), fetchJson("/api/v1/f1-g1-readiness"),
-      fetchJson("/api/v1/presentation-topics"), fetchJson("/api/v1/owner-inbox"), fetchJson("/api/v1/datasets"),
+      fetchJson("/api/v1/presentation-topics"), fetchJson("/api/v1/owner-inbox"), fetchJson("/api/v1/datasets"), fetchJson("/api/v1/notes"),
     ]);
     applyResult(results[0], (value) => { state.snapshot = value; });
     applyResult(results[1], (value) => { state.governanceCatalog = value; });
@@ -203,6 +208,7 @@ async function refreshAll() {
     applyResult(results[9], (value) => { state.presentationTopics = value; });
     applyResult(results[10], (value) => { state.ownerInbox = value; });
     applyResult(results[11], (value) => { state.datasets = value; });
+    applyResult(results[12], (value) => { state.notes = value; });
     if (state.snapshot && state.lastRevision !== state.snapshot.projection_revision) {
       state.lastRevision = state.snapshot.projection_revision || "legacy";
       normalizeSelection();
@@ -213,6 +219,8 @@ async function refreshAll() {
       renderReference();
       renderPresentation();
       renderData();
+      renderGraph();
+      renderNotes();
     }
     const failures = results.filter((result) => result.status === "rejected").length;
     setSyncState(failures ? `${failures} view${failures === 1 ? "" : "s"} unavailable` : `Updated ${formatTime(new Date())}`, failures > 0);
@@ -242,6 +250,8 @@ function renderAll() {
   renderEvidence();
   renderReference();
   renderData();
+  renderGraph();
+  renderNotes();
 }
 
 function renderOverview() {
@@ -420,6 +430,58 @@ function renderData() {
     el("section", "local-asset-list", el("div", "section-heading", el("div", "", el("p", "section-label", "Local processed assets"), el("h3", "", "ใช้จาก App แบบ pointer"))), ...dataset.local_assets.map((asset) => el("div", "local-asset-row", el("strong", "", asset.asset_id), el("span", "", asset.title), el("small", "", `${asset.disposition} · ${asset.copy_mode} · ${asset.byte_count ? formatBytes(asset.byte_count) : "in-place index"}`)))),
     el("p", "guardrail", "ไม่มี query ID, qrels, split membership, payload หรือผลราย query ใน Dashboard")
   )));
+}
+
+function renderGraph() {
+  const target = elements.graph_content;
+  const snapshot = state.snapshot;
+  if (!snapshot) return target.replaceChildren(messageState("Research graph unavailable. Refresh the local projection.", "error-state"));
+  const focus = snapshot.owner_focus || {};
+  const currentTask = snapshot.phases.flatMap((phase) => phase.tasks).find((task) => task.task_id === focus.next_task_id);
+  const dataset = state.datasets?.datasets?.[0];
+  const nodes = [
+    graphNode("Phase", focus.current_phase_id || "Planned", focus.current_phase_id ? "Current phase" : "No active phase", "doing", () => focus.current_phase_id && selectPhase(focus.current_phase_id)),
+    graphNode("Task", currentTask?.task_id || "No task", currentTask?.title || "Waiting for the next task", researchFlowStatus({ project_state: currentTask?.project_state || "waiting_dependency", tasks: [] })[0], () => currentTask && selectTask(currentTask.phase_id, currentTask.task_id)),
+    graphNode("Gate", focus.next_gate_id || "No Gate", humanState(snapshot.gate_states?.[focus.next_gate_id] || "not_required"), snapshot.gate_readiness?.[focus.next_gate_id]?.ready ? "needs-owner" : "planned", () => { state.activeGateId = focus.next_gate_id || state.activeGateId; activateView("decisions", true); renderDecisions(); }),
+    graphNode("Method", "B0 / B1 / B2", "Protocol-matched baselines", "planned", () => selectTask("F1", "F1.1")),
+    graphNode("Run", "Not started", "G1 remains required", "blocked", () => { state.activeGateId = "G1"; activateView("decisions", true); renderDecisions(); }),
+    graphNode("Result", "Not run", "No scientific result is displayed", "blocked", () => activateView("presentation", true)),
+    graphNode("Dataset", dataset?.title || "DAPFAM", "Metadata-only projection", "done", () => activateView("data", true)),
+  ];
+  target.replaceChildren(
+    el("p", "graph-caption", "Phase -> Task -> Gate -> Method -> Run -> Result, with the dataset boundary kept visible."),
+    el("div", "native-graph", ...nodes, { role: "list", "aria-label": "Interactive research graph" })
+  );
+}
+
+function graphNode(kind, title, detail, stateValue, action) {
+  return el("div", `graph-node ${stateValue}`, el("button", "graph-node-button", el("span", "section-label", kind), el("strong", "", title), el("span", "", detail), { "aria-label": `${kind}: ${title}. ${detail}.` }, action), { role: "listitem" });
+}
+
+function renderNotes() {
+  const target = elements.notes_content;
+  const notes = state.notes?.notes;
+  if (!notes) return target.replaceChildren(messageState("Notes catalog unavailable. Refresh the local projection.", "error-state"));
+  const list = el("nav", "notes-index", { "aria-label": "Research notes" });
+  const detail = el("article", "note-detail", messageState("Select a note to read its curated content.", "loading-state"));
+  const select = async (note) => {
+    state.activeNoteId = note.note_id;
+    list.querySelectorAll("button").forEach((button) => button.classList.toggle("is-active", button.dataset.noteId === note.note_id));
+    detail.replaceChildren(messageState("Loading note", "loading-state"));
+    try {
+      const document = state.noteDocuments[note.note_id] || await fetchJson(`/api/v1/notes/${note.note_id}`);
+      state.noteDocuments[note.note_id] = document;
+      const metadata = document.metadata || {};
+      detail.replaceChildren(
+        el("div", "detail-header", el("div", "", el("p", "section-label", `${metadata.note_type || "Curated note"} · ${metadata.gate || ""}`), el("h2", "", document.note_id), el("p", "muted", `${metadata.phase || ""} / ${metadata.task || ""}`)), el("a", "text-button", "Open in Obsidian", { href: metadata.obsidian_uri, rel: "noopener" })),
+        ...document.sections.map((section) => el("section", "note-section", el("h3", "", section.heading), el("pre", "document-body", section.body)))
+      );
+    } catch (error) { detail.replaceChildren(messageState(readError(error), "error-state")); }
+  };
+  list.replaceChildren(...notes.map((note) => el("button", "", `${note.note_id} · ${note.status}`, { type: "button", "data-note-id": note.note_id }, () => select(note))));
+  target.replaceChildren(el("div", "notes-layout", list, detail));
+  const initial = notes.find((note) => note.note_id === state.activeNoteId) || notes[0];
+  if (initial) select(initial);
 }
 
 function datasetLineage(dataset, compact) {

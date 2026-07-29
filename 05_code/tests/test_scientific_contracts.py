@@ -39,6 +39,18 @@ from myis_research.harness.policy import (
     RoutePolicy,
 )
 from myis_research.harness.statistics import holm_adjust, paired_statistics
+from myis_research.harness.track_s import (
+    C1TypedOverlay,
+    EngineProvenance,
+    MatchedCampaign,
+    MechanismMetrics,
+    SMarginRule,
+    SelectionScores,
+    SeedFinalist,
+    TrackSTreatment,
+    assert_matched_realized_campaigns,
+    select_arm_finalist,
+)
 from myis_research.harness.validation import ValidationError, validate_manifest_payload
 from myis_research.protection import (
     C1_EDITABLE_SURFACES,
@@ -59,6 +71,18 @@ from myis_research.providers import (
 
 def sha(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
+
+
+def full_engine(arm: str) -> EngineProvenance:
+    return EngineProvenance(
+        arm,
+        "skillopt-full",
+        "51d0a4d96e88558c84dee637f98e24e3fb2d1547",
+        "e4ea6a6771e797ef820cdd8bfea64c57e0481065",
+        "5a603e937a20f1078059f94039a50028c022487a",
+        ("5487e2c426db8b75a0e8e2714641542325d55f9e",),
+        "51d0a4d96e88558c84dee637f98e24e3fb2d1547",
+    )
 
 
 class ScientificContractTests(unittest.TestCase):
@@ -226,6 +250,73 @@ class ScientificContractTests(unittest.TestCase):
                 endpoint_class=EndpointClass.THIRD_PARTY,
                 routing_used=True,
             ).validate(measured=True)
+
+    def test_track_s_a3_uses_full_skillopt_with_a_typed_c1_overlay(self) -> None:
+        a2 = TrackSTreatment(
+            full_engine("A2"),
+            sha("a2-skill"),
+        )
+        a3 = TrackSTreatment(
+            full_engine("A3"),
+            sha("a3-skill"),
+            C1TypedOverlay(sha("c1-harness"), sha("c1-policy"), {"tac_bm25_quota": 50, "rrf_k": 60}),
+        )
+        a2.validate()
+        a3.validate()
+        with self.assertRaises(ValueError):
+            TrackSTreatment(
+                full_engine("A3"),
+                sha("missing-overlay"),
+            ).validate()
+        with self.assertRaises(ValueError):
+            C1TypedOverlay(sha("c1-harness"), sha("c1-policy"), {"prompt": 1}).validate()
+        with self.assertRaises(ValueError):
+            C1TypedOverlay(
+                sha("c1-harness"), sha("c1-policy"), {f"unknown_{index}": index for index in range(13)}
+            ).validate()
+        with self.assertRaisesRegex(ValueError, "two typed field groups"):
+            C1TypedOverlay(
+                sha("c1-harness"),
+                sha("c1-policy"),
+                {"tac_bm25_quota": 50, "fusion_profile": "rrf", "pool_depth": 300},
+            ).validate()
+
+    def test_track_s_margin_seed_selection_and_mechanism_metrics_are_deterministic(self) -> None:
+        margin = SMarginRule(0.01, 0.02, sha("a1-audit"), sha("owner-margin"))
+        accepted = margin.evaluate(SelectionScores(0.20, 0.50, 0.40), SelectionScores(0.21, 0.49, 0.38))
+        self.assertTrue(accepted.accepted)
+        self.assertEqual(accepted.reason, "STRICT_OUT_AND_NONINFERIORITY_PASS")
+        self.assertFalse(
+            margin.evaluate(SelectionScores(0.20, 0.50, 0.40), SelectionScores(0.20, 0.50, 0.40)).accepted
+        )
+        self.assertFalse(
+            margin.evaluate(SelectionScores(0.20, 0.50, 0.40), SelectionScores(0.21, 0.48, 0.40)).accepted
+        )
+        finalists = (
+            SeedFinalist(47, sha("seed-47"), 0.30),
+            SeedFinalist(11, sha("seed-11"), 0.20),
+            SeedFinalist(23, sha("seed-23"), 0.25),
+        )
+        self.assertEqual(select_arm_finalist(finalists).seed, 47)
+        with self.assertRaises(ValueError):
+            select_arm_finalist(finalists[:2])
+        tied = tuple(SeedFinalist(seed, sha(f"tie-{seed}"), 0.30) for seed in (47, 23, 11))
+        self.assertEqual(select_arm_finalist(tied).seed, 11)
+        MechanismMetrics(3, 2, 4, 400, 100).validate()
+        with self.assertRaises(ValueError):
+            MechanismMetrics(3, 13, 4, 400, 100).validate()
+
+    def test_track_s_primary_requires_matched_realized_campaigns(self) -> None:
+        a2 = MatchedCampaign("A2", {11: 160, 23: 160, 47: 160}, "budget_complete")
+        a2l = MatchedCampaign("A2L", {11: 160, 23: 160, 47: 160}, "budget_complete")
+        a3 = MatchedCampaign("A3", {11: 160, 23: 160, 47: 160}, "budget_complete")
+        assert_matched_realized_campaigns(a2, a2l, a3)
+        with self.assertRaises(ValueError):
+            assert_matched_realized_campaigns(
+                a2,
+                a2l,
+                MatchedCampaign("A3", {11: 160, 23: 120, 47: 160}, "hard_budget_stop"),
+            )
 
     def test_model_calibration_and_luna_roles_are_explicit(self) -> None:
         implementation = ProviderExecution("gpt-5.6-sol", "gpt-5.6-sol", "openai", "high")

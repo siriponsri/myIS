@@ -26,7 +26,7 @@ from myis_research.asset_registry import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN_SHA256 = "677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32"
+PLAN_SHA256 = "54d3e820ee1abfdf05f5478db553e506805265355e62c7b4e2dd112fc8ed2700"
 
 
 class AssetRegistryTests(unittest.TestCase):
