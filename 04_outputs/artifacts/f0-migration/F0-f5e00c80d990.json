@@ -1,0 +1,716 @@
+{
+  "audit_base": "3a4da2d45a133b80a840900ff65cb23a33b16cfc",
+  "canonical_hashes": {
+    "PLAN.md": "677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32",
+    "pyproject.toml": "38ae0e708e210e2c143df105d2cf270c050531e0e6185ae080725cb6d8f5f7eb",
+    "uv.lock": "3e5e4204074b98422e624ada7c7ddab8b1732f46b8b946b219303f6aaec9eef4"
+  },
+  "changed_files": [
+    {
+      "path": ".agents/skills/myis-record-research-session/references/session-record-schema.md",
+      "status": "M"
+    },
+    {
+      "path": ".agents/skills/myis-review-research-rigor/SKILL.md",
+      "status": "M"
+    },
+    {
+      "path": ".agents/skills/myis-run-harnessopt/SKILL.md",
+      "status": "M"
+    },
+    {
+      "path": ".agents/skills/myis-run-harnessopt/agents/openai.yaml",
+      "status": "M"
+    },
+    {
+      "path": ".agents/skills/myis-run-harnessopt/references/harnessopt-contract.md",
+      "status": "M"
+    },
+    {
+      "path": ".agents/skills/patent-rag-harness/SKILL.md",
+      "status": "M"
+    },
+    {
+      "path": ".gitattributes",
+      "status": "M"
+    },
+    {
+      "path": ".gitignore",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/IS_RESEARCH_TRACK_C_V0.1_CROSSROUTE_PLAN.md",
+      "status": "A"
+    },
+    {
+      "path": "00_governance/IS_RESEARCH_TRACK_S_V0.1_SKILLOPT_HARNESSOPT_PLAN.md",
+      "status": "A"
+    },
+    {
+      "path": "00_governance/OPERATIONS.md",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/OWNER_GATES.md",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/RESTRUCTURE_STATUS.md",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/STRUCTURE_DECISIONS.md",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/TOOLCHAIN.md",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/WORKSPACE_LAYOUT.md",
+      "status": "M"
+    },
+    {
+      "path": "00_governance/config/linear.yaml",
+      "status": "A"
+    },
+    {
+      "path": "00_governance/config/project.yaml",
+      "status": "M"
+    },
+    {
+      "path": "02_tracks/00_C_candidate_exposure/README.md",
+      "status": "D"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_artifacts/configs/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_artifacts/diagnostics/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_artifacts/manifests/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_artifacts/receipts/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_artifacts/results/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Abstract.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Appendix_A_Protocol_and_Leakage.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Appendix_B_Route_Attribution_and_Ranking_Diagnostic.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Conclusion.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Discussion.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Introduction.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Methodology.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_References.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Related_Work.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/C_Results.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/C_documents/README.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/00_C_crossroute/README.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_R_ranking_evidence/README.md",
+      "status": "D"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/README.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_artifacts/configs/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_artifacts/manifests/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_artifacts/optimization/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_artifacts/receipts/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_artifacts/results/.gitkeep",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Abstract.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Appendix_A_Arms_Firewall_Editable_Surface.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Appendix_B_Optimization_Lineage_Reproducibility.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Conclusion.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Discussion.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Introduction.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Methodology.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_References.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Related_Work.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/01_S_skillopt/S_documents/S_Results.md",
+      "status": "A"
+    },
+    {
+      "path": "02_tracks/02_S_skill_evolution/README.md",
+      "status": "D"
+    },
+    {
+      "path": "02_tracks/99_legacy/01_R_ranking_evidence/README.md",
+      "status": "A"
+    },
+    {
+      "path": "03_experiments/config/mlflow/bootstrap.yaml",
+      "status": "M"
+    },
+    {
+      "path": "03_experiments/config/mlflow/mirror.yaml",
+      "status": "M"
+    },
+    {
+      "path": "03_experiments/templates/experiment-manifest.yaml",
+      "status": "M"
+    },
+    {
+      "path": "05_code/scripts/capture_f0_evidence.py",
+      "status": "A"
+    },
+    {
+      "path": "05_code/scripts/validate_restructure.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/brain_drive.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/confirmation.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/dashboard/__init__.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/dashboard/app.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/dashboard/content.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/dashboard/contracts.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/dashboard/progress.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/governance.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/harness/__init__.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/harness/benchmark.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/harness/manifest.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/harness/models.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/harness/runner.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/harness/validation.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/identity.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/mlflow_mirror.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/protection.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/src/myis_research/providers.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_dashboard_frontend.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_dashboard_progress.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_dashboard_security.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_f0_evidence.py",
+      "status": "A"
+    },
+    {
+      "path": "05_code/tests/test_frontend_launcher.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_governance.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_harness.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_identity.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_mlflow_launcher.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_mlflow_mirror.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_mlflow_viewer.py",
+      "status": "M"
+    },
+    {
+      "path": "05_code/tests/test_restructure.py",
+      "status": "A"
+    },
+    {
+      "path": "05_code/tests/test_scientific_contracts.py",
+      "status": "M"
+    },
+    {
+      "path": "06_forntend/dashboard/diagrams/research-program.svg",
+      "status": "D"
+    },
+    {
+      "path": "06_frontend/README.md",
+      "status": "R086"
+    },
+    {
+      "path": "06_frontend/START_OWNER_CONSOLE.cmd",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/STOP_OWNER_CONSOLE.cmd",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/README.md",
+      "status": "R097"
+    },
+    {
+      "path": "06_frontend/dashboard/assets/dashboard.css",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/assets/dashboard.js",
+      "status": "R098"
+    },
+    {
+      "path": "06_frontend/dashboard/content_registry.yaml",
+      "status": "R077"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/candidate-exposure.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/confirmation-boundary.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/decision-ledger.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/harness-kernel.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/mlflow-mirror.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/owner-gate.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/research-program.svg",
+      "status": "A"
+    },
+    {
+      "path": "06_frontend/dashboard/diagrams/run-lifecycle.svg",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/dashboard/index.html",
+      "status": "R098"
+    },
+    {
+      "path": "06_frontend/mlflow/README.md",
+      "status": "R093"
+    },
+    {
+      "path": "06_frontend/mlflow/mlflow.sh",
+      "status": "R096"
+    },
+    {
+      "path": "06_frontend/mlflow/readonly_app.py",
+      "status": "R100"
+    },
+    {
+      "path": "06_frontend/start_owner_console.ps1",
+      "status": "R098"
+    },
+    {
+      "path": "06_frontend/stop_owner_console.ps1",
+      "status": "R084"
+    },
+    {
+      "path": "AGENTS.md",
+      "status": "M"
+    },
+    {
+      "path": "CLAUDE.md",
+      "status": "M"
+    },
+    {
+      "path": "FULL_RESEARCH_TRACK_PLAN.md",
+      "status": "M"
+    },
+    {
+      "path": "HANDOFF.md",
+      "status": "A"
+    },
+    {
+      "path": "LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md",
+      "status": "M"
+    },
+    {
+      "path": "PLAN.md",
+      "status": "M"
+    },
+    {
+      "path": "README.md",
+      "status": "M"
+    }
+  ],
+  "checks": [
+    {
+      "check_id": "uv_lock",
+      "command": "uv lock --check",
+      "exit_code": 0,
+      "output_line_count": 1,
+      "output_sha256": "0bd2337c1f3426890c9d913290e0f467a65c13e0b8d098d737448cf13959f833",
+      "status": "passed"
+    },
+    {
+      "check_id": "restructure",
+      "command": "uv run --no-sync python 05_code/scripts/validate_restructure.py",
+      "exit_code": 0,
+      "output_line_count": 7,
+      "output_sha256": "db0aa269bad829a9f132a685216cf9a9d20875debfd38b7fe81cf22329a2756a",
+      "status": "passed"
+    },
+    {
+      "check_id": "integrity",
+      "command": "uv run --no-sync python 05_code/scripts/validate_integrity.py",
+      "exit_code": 0,
+      "output_line_count": 3,
+      "output_sha256": "cfb5a788dd17252183c0ab7dbc66b55431aced470bd15911d1e0d71bc6f9b3f3",
+      "status": "passed"
+    },
+    {
+      "check_id": "literature",
+      "command": "uv run --no-sync python 05_code/scripts/validate_literature_corpus.py",
+      "exit_code": 0,
+      "output_line_count": 65,
+      "output_sha256": "7f6b8f54883c548e6f274ad806da7227e09f73e0489afdadc14b6f9a9a1b8391",
+      "status": "passed"
+    },
+    {
+      "check_id": "unit_suite",
+      "command": "uv run --no-sync python -m unittest discover -s 05_code/tests -v",
+      "exit_code": 0,
+      "output_line_count": 145,
+      "output_sha256": "ba3961d7104a74b49650318f91fb02f573b0c428596a59653810347592c7aee7",
+      "status": "passed"
+    },
+    {
+      "check_id": "diff_check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "output_line_count": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "passed"
+    },
+    {
+      "check_id": "mlflow_doctor",
+      "command": "bash 06_frontend/mlflow/mlflow.sh doctor",
+      "exit_code": 0,
+      "output_line_count": 1,
+      "output_sha256": "aedab623037040b2c7fa813e8fe81a2f9b9b17ece03379ed37a40287c4050578",
+      "status": "passed"
+    }
+  ],
+  "environment": {
+    "accelerator": {
+      "cuda_toolkit": null,
+      "cuda_visible_devices": null,
+      "nvidia_smi": null
+    },
+    "os": {
+      "architecture": "AMD64",
+      "release": "10",
+      "system": "Windows",
+      "version": "10.0.22631"
+    },
+    "pyproject_sha256": "38AE0E708E210E2C143DF105D2CF270C050531E0E6185AE080725CB6D8F5F7EB",
+    "python": {
+      "executable": "<LOCAL_PATH>/python.exe",
+      "implementation": "CPython",
+      "version": "3.11.9"
+    },
+    "schema_version": "myis.environment.v1",
+    "selected_extras": [
+      "dashboard",
+      "test",
+      "tracking"
+    ],
+    "selected_groups": [],
+    "uv_lock_sha256": "3E5E4204074B98422E624ADA7C7DDAB8B1732F46B8B946B219303F6AAEC9EEF4",
+    "uv_version": "uv 0.11.29 (901092ee1 2026-07-15 x86_64-pc-windows-msvc)"
+  },
+  "evidence_id": "F0-f5e00c80d990",
+  "evidence_roles": {
+    "confirmation": "not_assessable",
+    "descriptive": "not_assessable",
+    "development": "not_assessable",
+    "fixture": "assessable"
+  },
+  "identity": {
+    "display_name": "myIS Research",
+    "program_id": "myis-research",
+    "protocol_version": "1.0",
+    "research_version": "0.1"
+  },
+  "legal_scope": "decision_support_not_legal_advice",
+  "migration_base": "4dd0f4b5698174a128d3d1c4d4efcdee6dd04f4c",
+  "projections": {
+    "brain": {
+      "branch": "main",
+      "commit": "082a762569c81d6842513bcd3a9eaff75044c779",
+      "literature_note_count": 153,
+      "pending_active_hashes": 0,
+      "protected_payloads": "not_present"
+    },
+    "linear": {
+      "dependency_count": 27,
+      "f0_statuses": [
+        "In Progress",
+        "In Progress",
+        "Todo"
+      ],
+      "milestone_count": 13,
+      "plan_sha256": "677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32",
+      "project_external_id": "d866c23b-5b9f-422b-93cb-b0b6f6400fd4",
+      "task_count": 22
+    },
+    "mlflow": {
+      "authoritative": false,
+      "doctor_status": "passed",
+      "experiment_count": 6,
+      "experiments": [
+        "myis-research-bootstrap",
+        "myis-research-catalog",
+        "myis-research-joint",
+        "myis-research-publication",
+        "myis-research-track-c",
+        "myis-research-track-s"
+      ]
+    }
+  },
+  "protected_comparison": {
+    "base": [
+      {
+        "entry_count": 190,
+        "path": "01_evidence",
+        "tree_listing_sha256": "e1681f1173a3afc3464590bd2b6502520f08e84a560ef0dfcd1f897fc9f119c4"
+      },
+      {
+        "entry_count": 1,
+        "path": "02_tracks/99_legacy",
+        "tree_listing_sha256": "1997141537cb92ca936d3deb8ff6a87c0fd6bd50af4c15f9c5fb417c8fdfd954"
+      },
+      {
+        "entry_count": 5,
+        "path": "03_experiments/V01_brain_drive_agent_demo",
+        "tree_listing_sha256": "5381923257bdf21e7547cd633e8ec3bfd3e60c4b3791c76779dc2f49b7f936cf"
+      },
+      {
+        "entry_count": 2,
+        "path": "04_outputs",
+        "tree_listing_sha256": "9a3804427a627d1626fc08083e4dbfcba449530883454bce275330bbafdf2ba1"
+      },
+      {
+        "entry_count": 1,
+        "path": "00_governance/approvals",
+        "tree_listing_sha256": "6981ae7cd156b280b57f0b15442769902a1a0f25a787679c3e07a385d3fb6990"
+      },
+      {
+        "entry_count": 1,
+        "path": "uv.lock",
+        "tree_listing_sha256": "409c6373a33514cd12db58feaa91dc5584a9e7cdd8225e06d2a7a676139a8306"
+      },
+      {
+        "entry_count": 1,
+        "path": ".python-version",
+        "tree_listing_sha256": "5022264bf82af7c4a74b563f222ad176098a0f02be15fdf945629ae8e5eeb11b"
+      }
+    ],
+    "confirmation_surfaces": "not_accessed",
+    "external_app_repository": "not_accessed",
+    "paths": [
+      "01_evidence",
+      "02_tracks/99_legacy",
+      "03_experiments/V01_brain_drive_agent_demo",
+      "04_outputs",
+      "00_governance/approvals",
+      "uv.lock",
+      ".python-version"
+    ],
+    "source": [
+      {
+        "entry_count": 190,
+        "path": "01_evidence",
+        "tree_listing_sha256": "e1681f1173a3afc3464590bd2b6502520f08e84a560ef0dfcd1f897fc9f119c4"
+      },
+      {
+        "entry_count": 1,
+        "path": "02_tracks/99_legacy",
+        "tree_listing_sha256": "1997141537cb92ca936d3deb8ff6a87c0fd6bd50af4c15f9c5fb417c8fdfd954"
+      },
+      {
+        "entry_count": 5,
+        "path": "03_experiments/V01_brain_drive_agent_demo",
+        "tree_listing_sha256": "5381923257bdf21e7547cd633e8ec3bfd3e60c4b3791c76779dc2f49b7f936cf"
+      },
+      {
+        "entry_count": 2,
+        "path": "04_outputs",
+        "tree_listing_sha256": "9a3804427a627d1626fc08083e4dbfcba449530883454bce275330bbafdf2ba1"
+      },
+      {
+        "entry_count": 1,
+        "path": "00_governance/approvals",
+        "tree_listing_sha256": "6981ae7cd156b280b57f0b15442769902a1a0f25a787679c3e07a385d3fb6990"
+      },
+      {
+        "entry_count": 1,
+        "path": "uv.lock",
+        "tree_listing_sha256": "409c6373a33514cd12db58feaa91dc5584a9e7cdd8225e06d2a7a676139a8306"
+      },
+      {
+        "entry_count": 1,
+        "path": ".python-version",
+        "tree_listing_sha256": "5022264bf82af7c4a74b563f222ad176098a0f02be15fdf945629ae8e5eeb11b"
+      }
+    ],
+    "status": "zero_drift"
+  },
+  "schema_version": "myis.f0-evidence.v1",
+  "scientific_execution": "not_run",
+  "source_git_commit": "f5e00c80d9907a915217d37c90d66c6cfcdbf646"
+}
