@@ -5,12 +5,15 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import subprocess
+
+import yaml
 
 import structlog
 
 from ..brain_drive import run_brain_drive_demo
 from .drafts import DraftValidationError
-from .reproduction import WAITING_GATE_EXIT_CODE, reproduce_dapfam
+from .reproduction import HANDOFF_READY_EXIT_CODE, WAITING_GATE_EXIT_CODE, reproduce_dapfam
 from .runner import KERNEL_VERSION
 from .validation import validate_run_bundle
 
@@ -54,6 +57,9 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="validate a non-executable draft only; never starts reproduction",
     )
+    dapfam.add_argument("--owner-batch", type=Path, help="validated external G1 Owner-value batch")
+    dapfam.add_argument("--g1-decision", type=Path, help="immutable approved G1 decision record")
+    dapfam.add_argument("--frozen-runspec", type=Path, help="G1-bound frozen F1 RunSpec")
     return parser
 
 
@@ -72,24 +78,48 @@ def main(argv: list[str] | None = None) -> int:
                 repository_root=Path.cwd().resolve(),
                 manifest=args.manifest,
                 validate_draft=args.validate_draft,
+                owner_batch=args.owner_batch,
+                g1_decision=args.g1_decision,
+                frozen_runspec=args.frozen_runspec,
             )
         except DraftValidationError as error:
-            result = {
-                "status": "WAITING_GATE",
-                "gate": "G1",
-                "gate_status": "pending",
-                "reason": "DRAFT_VALIDATION_FAILED",
-                "message": str(error),
-                "executor_available": False,
-                "scientific_run": False,
-                "dataset_access": "none",
-                "artifact_count": 0,
-                "scientific_metric_count": 0,
-            }
+            if args.validate_draft:
+                result = {
+                    "status": "WAITING_GATE",
+                    "gate": "G1",
+                    "gate_status": "pending",
+                    "reason": "DRAFT_VALIDATION_FAILED",
+                    "message": str(error),
+                    "executor_available": False,
+                    "scientific_run": False,
+                    "dataset_access": "none",
+                    "artifact_count": 0,
+                    "scientific_metric_count": 0,
+                }
+            else:
+                result = _blocked_handoff_result()
+        except (OSError, ValueError, yaml.YAMLError, subprocess.SubprocessError):
+            result = _blocked_handoff_result()
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
     if args.command == "reproduce":
-        return WAITING_GATE_EXIT_CODE
+        return HANDOFF_READY_EXIT_CODE if result["status"] == "HANDOFF_READY_EXECUTOR_UNAVAILABLE" else WAITING_GATE_EXIT_CODE
     return 0 if result["status"] == "PASS" else 1
+
+
+def _blocked_handoff_result() -> dict[str, object]:
+    """Return a payload-safe refusal for malformed G1 handoff inputs."""
+
+    return {
+        "status": "BLOCKED",
+        "gate": "G1",
+        "gate_status": "pending",
+        "reason": "G1_HANDOFF_VALIDATION_FAILED",
+        "executor_available": False,
+        "scientific_run": False,
+        "dataset_access": "none",
+        "artifact_count": 0,
+        "scientific_metric_count": 0,
+    }
 
 
 if __name__ == "__main__":

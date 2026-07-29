@@ -23,8 +23,17 @@ DAPFAM is retrieval decision support, not legal advice.
 
 The verified foundation state is `F0 = closed` and `G0 = approved`. `F1` is
 `waiting_gate` and `G1` is `pending`; the only current project readiness is
-`F1/G1 preparation only`. No reproduction, dataset or qrels access, scientific
-metric, paid API, GPU, or confirmation activity is authorized.
+`F1/G1 preparation only`. No reproduction, agent-facing dataset/qrels access,
+scientific metric, paid API, GPU, or confirmation activity is authorized.
+
+The dedicated Owner-local preparation workflow may read the approved local
+DAPFAM sources without moving them. It writes raw split membership only outside
+Git and exposes a validated hash/count-only proposal to the Dashboard and
+MLflow. This preparation is not a G1 decision and does not change F1 readiness.
+
+```powershell
+& ".\05_code\scripts\Start-F1G1Preparation.ps1"
+```
 
 The approved external MLflow runtime store is a rebuildable mirror outside Git.
 Its F0 bootstrap records connectivity only, with no scientific run, dataset
@@ -86,12 +95,13 @@ authorization. A draft or scaffold is not a frozen RunSpec and cannot open G1.
 ## Local validation
 
 ```powershell
-uv sync --locked --extra tracking --extra dashboard --extra test
+uv sync --locked --extra tracking --extra dashboard --extra test --extra notebook
 uv lock --check
 uv run --no-sync python 05_code/scripts/validate_restructure.py
 uv run --no-sync python 05_code/scripts/validate_integrity.py
 uv run --no-sync python 05_code/scripts/validate_literature_corpus.py
 uv run --no-sync python -m unittest discover -s 05_code/tests -v
+uv run --no-sync python 05_code/scripts/validate_f1_g1_preparation.py
 & "C:\Program Files\Git\bin\bash.exe" "06_frontend/mlflow/mlflow.sh" doctor
 git diff --check
 ```

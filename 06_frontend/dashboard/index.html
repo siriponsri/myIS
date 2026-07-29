@@ -23,6 +23,7 @@
       </div>
       <div class="local-boundary"><span class="boundary-dot" aria-hidden="true"></span><span>Local machine only</span></div>
       <nav class="primary-nav" aria-label="Dashboard views">
+        <button class="nav-item" type="button" data-view="presentation"><span class="nav-icon" aria-hidden="true">P</span><span>Presentation</span></button>
         <button class="nav-item is-active" type="button" data-view="overview" aria-current="page"><span class="nav-icon" aria-hidden="true">◈</span><span>Overview</span></button>
         <button class="nav-item" type="button" data-view="plan"><span class="nav-icon" aria-hidden="true">↦</span><span>Plan &amp; Tasks</span></button>
         <button class="nav-item" type="button" data-view="decisions"><span class="nav-icon" aria-hidden="true">✓</span><span>Decisions</span></button>
@@ -44,9 +45,15 @@
           <div class="view-intro"><div><p class="section-label">Owner attention</p><p class="lede">One verified view of the next decision, current work, blockers, and project progress.</p><p class="detail-thai" lang="th">แสดงสิ่งที่ Owner ต้องสนใจในตอนนี้ โดยแยกหลักฐานงานออกจากสถานะอนุมัติ</p></div><div class="legend" id="overview-legend"></div></div>
           <section class="attention-band" id="owner-focus" aria-live="polite"></section>
           <section class="readiness-band" id="overview-readiness" aria-live="polite"></section>
+          <section class="f1-g1-panel" id="f1-g1-panel" aria-live="polite"></section>
           <section class="overview-map" aria-labelledby="overview-map-title"><div class="section-heading"><div><p class="section-label">Program map</p><h2 id="overview-map-title">Phase progress</h2></div><button class="text-button" type="button" data-view="plan">Open full plan <span aria-hidden="true">→</span></button></div><div id="flow-progress" class="flow-progress-note" aria-live="polite">Completion requires canonical Task evidence.</div><div id="overview-map-content"></div></section>
           <div class="overview-grid"><section class="metric-band" id="overview-metrics"></section><section class="attention-list" id="overview-blockers"></section><section class="recent-decision" id="overview-recent"></section></div>
           <section class="projection-health" id="overview-projections"></section>
+        </section>
+
+        <section class="view" id="view-presentation" data-view-panel="presentation" aria-labelledby="view-title">
+          <div class="view-intro presentation-intro"><div><p class="section-label">Research briefing</p><p class="lede">DAPFAM, the governed split, and current reproduction readiness in one teaching view.</p><p class="detail-thai" lang="th">ภาพรวม DAPFAM สำหรับเรียนรู้หรือใช้นำเสนอ โดยแสดงเฉพาะข้อมูลสรุปและ commitment ที่ผ่าน validation</p></div><div class="presentation-controls"><div class="segmented-control" role="group" aria-label="Audience mode"><button class="button button-secondary is-active" type="button" data-audience-mode="beginner" aria-pressed="true">Beginner</button><button class="button button-secondary" type="button" data-audience-mode="instructor" aria-pressed="false">Instructor</button></div><div class="segmented-control" role="group" aria-label="Delivery mode"><button class="button button-secondary is-active" type="button" data-delivery-mode="learn" aria-pressed="true">Learn</button><button class="button button-secondary" type="button" data-delivery-mode="present" aria-pressed="false">Present</button></div></div></div>
+          <section id="presentation-content" class="presentation-content" aria-live="polite"></section>
         </section>
 
         <section class="view" id="view-plan" data-view-panel="plan" aria-labelledby="view-title">

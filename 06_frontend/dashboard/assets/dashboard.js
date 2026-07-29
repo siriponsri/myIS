@@ -1,5 +1,6 @@
 const VIEW_METADATA = {
   overview: ["Owner control", "Overview"],
+  presentation: ["Research briefing", "Presentation"],
   plan: ["Canonical execution order", "Plan & Tasks"],
   decisions: ["Immutable governance ledger", "Decisions"],
   evidence: ["Verified packages", "Evidence"],
@@ -28,6 +29,8 @@ const state = {
   referenceTab: "process",
   flowFilter: "all",
   planDensity: "readable",
+  audienceMode: "beginner",
+  deliveryMode: "learn",
   flowZoom: 100,
   flowFit: false,
   snapshot: null,
@@ -37,6 +40,8 @@ const state = {
   content: {},
   flows: null,
   tools: null,
+  f1g1: null,
+  presentationTopics: null,
   previewToken: "",
   previewRecord: null,
   refreshing: false,
@@ -63,14 +68,14 @@ async function initialize() {
 
 function cacheElements() {
   for (const id of [
-    "view-title", "view-kicker", "sync-state", "refresh-button", "owner-focus", "overview-readiness", "overview-map-content",
+    "view-title", "view-kicker", "sync-state", "refresh-button", "owner-focus", "overview-readiness", "f1-g1-panel", "overview-map-content",
     "overview-legend", "overview-metrics", "overview-blockers", "overview-recent", "overview-projections",
     "owner-map", "task-workspace", "gate-index", "gate-detail", "ledger-summary", "decision-table-body",
     "evidence-summary", "evidence-grid", "reference-content", "new-decision-button", "decision-dialog",
     "decision-form", "decision-form-step", "decision-preview-step", "decision-form-error", "decision-confirm-error",
     "gate-decision-context", "scope-options", "evidence-options", "preview-approval-sentence", "record-preview",
     "technical-preview", "decision-preview-button", "decision-confirm-button", "decision-back-button",
-    "explicit-confirmation", "toast-region",
+    "explicit-confirmation", "toast-region", "presentation-content",
   ]) elements[id.replaceAll("-", "_")] = document.getElementById(id);
   elements.main = document.getElementById("main-content");
 }
@@ -98,6 +103,14 @@ function bindNavigation() {
       renderReference();
     });
   });
+  document.querySelectorAll("[data-audience-mode]").forEach((button) => button.addEventListener("click", () => {
+    state.audienceMode = button.dataset.audienceMode;
+    renderPresentation();
+  }));
+  document.querySelectorAll("[data-delivery-mode]").forEach((button) => button.addEventListener("click", () => {
+    state.deliveryMode = button.dataset.deliveryMode;
+    renderPresentation();
+  }));
   const more = document.querySelector("[data-mobile-more]");
   more?.addEventListener("click", () => {
     const open = document.querySelector(".primary-nav").classList.toggle("is-open");
@@ -158,7 +171,8 @@ function activateView(viewId, updateHash) {
 function renderLoadingStates() {
   [elements.owner_focus, elements.overview_readiness, elements.overview_map_content, elements.overview_metrics, elements.overview_blockers, elements.overview_recent,
     elements.overview_projections, elements.owner_map, elements.task_workspace, elements.gate_index, elements.gate_detail,
-    elements.evidence_summary, elements.evidence_grid, elements.reference_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
+    elements.evidence_summary, elements.evidence_grid, elements.reference_content, elements.f1_g1_panel,
+    elements.presentation_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
 }
 
 async function refreshAll() {
@@ -171,7 +185,8 @@ async function refreshAll() {
     const results = await Promise.allSettled([
       fetchJson("/api/v1/dashboard-snapshot"), fetchJson("/api/v1/governance-catalog"), fetchJson("/api/v1/owner-gates"),
       fetchJson("/api/v1/artifacts"), fetchJson("/api/v1/content/process"), fetchJson("/api/v1/content/harness"),
-      fetchJson("/api/v1/tools"), fetchJson("/api/v1/flows"),
+      fetchJson("/api/v1/tools"), fetchJson("/api/v1/flows"), fetchJson("/api/v1/f1-g1-readiness"),
+      fetchJson("/api/v1/presentation-topics"),
     ]);
     applyResult(results[0], (value) => { state.snapshot = value; });
     applyResult(results[1], (value) => { state.governanceCatalog = value; });
@@ -181,6 +196,8 @@ async function refreshAll() {
     applyResult(results[5], (value) => { state.content.harness = value; });
     applyResult(results[6], (value) => { state.tools = value; });
     applyResult(results[7], (value) => { state.flows = value; });
+    applyResult(results[8], (value) => { state.f1g1 = value; });
+    applyResult(results[9], (value) => { state.presentationTopics = value; });
     if (state.snapshot && state.lastRevision !== state.snapshot.projection_revision) {
       state.lastRevision = state.snapshot.projection_revision || "legacy";
       normalizeSelection();
@@ -189,6 +206,7 @@ async function refreshAll() {
       renderDecisions();
       renderEvidence();
       renderReference();
+      renderPresentation();
     }
     const failures = results.filter((result) => result.status === "rejected").length;
     setSyncState(failures ? `${failures} view${failures === 1 ? "" : "s"} unavailable` : `Updated ${formatTime(new Date())}`, failures > 0);
@@ -212,6 +230,7 @@ function normalizeSelection() {
 
 function renderAll() {
   renderOverview();
+  renderPresentation();
   renderPlan();
   renderDecisions();
   renderEvidence();
@@ -230,6 +249,7 @@ function renderOverview() {
       el("button", "button button-primary", focus.mode === "decision" ? "Review decision" : "Open plan", () => focus.mode === "decision" ? openDecisionDialog(focus.next_gate_id) : activateView("plan", true)))
   );
   renderReadiness(snapshot.readiness || {});
+  renderF1G1Panel();
   elements.overview_legend.replaceChildren(statusLegend("complete", "Verified"), statusLegend("approved", "Gate approved"), statusLegend("waiting", "Needs attention"));
   renderMap(elements.overview_map_content, true);
   const progress = snapshot.progress || {};
@@ -269,6 +289,65 @@ function renderReadiness(readiness) {
     el("div", "readiness-states", ...items.map(([label, value]) => el("div", "readiness-state", el("span", "section-label", label), el("span", `status-badge status-${statusClass(value)}`, humanState(value))))),
   );
 }
+
+function renderF1G1Panel() {
+  const data = state.f1g1;
+  if (!data) return;
+  if (!data.prepared) {
+    elements.f1_g1_panel.replaceChildren(
+      el("div", "f1-g1-copy", el("p", "section-label", "F1 / G1 preparation"), el("h2", "", "Owner-local batch not prepared"), el("p", "muted", "Run the dedicated local preparation command. G1 remains pending.")),
+      el("span", "status-badge status-pending", "Not prepared"),
+    );
+    return;
+  }
+  const split = data.split?.counts || {};
+  elements.f1_g1_panel.replaceChildren(
+    el("div", "f1-g1-copy", el("p", "section-label", "F1 / G1 preparation"), el("h2", "", "Commitments ready for Owner review"), el("p", "detail-thai", "ข้อมูลจริงยังอยู่ภายนอก Git; หน้านี้แสดงเฉพาะ hash, count และสถานะ validation")),
+    el("div", "f1-g1-facts", compactFact("Proposal", shortHash(data.proposal_sha256)), compactFact("Split", `${split.train}/${split.selection}/${split.joint_test}`), compactFact("MLflow", data.mlflow?.status || "not linked"), compactFact("G1", data.gate_status)),
+  );
+}
+
+function renderPresentation() {
+  const target = elements.presentation_content;
+  const topic = state.presentationTopics?.topics?.find((item) => item.topic_id === "dapfam");
+  if (!target || !topic) return;
+  document.querySelectorAll("[data-audience-mode]").forEach((button) => {
+    const active = button.dataset.audienceMode === state.audienceMode;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  document.querySelectorAll("[data-delivery-mode]").forEach((button) => {
+    const active = button.dataset.deliveryMode === state.deliveryMode;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  const data = topic.data || {};
+  const counts = data.inventory_counts || { corpus: 45336, queries: 1247, qrels: 49869 };
+  const split = data.split?.counts || { train: 250, selection: 125, joint_test: 872 };
+  const domains = data.qrels_domain_distribution || { IN: 0, OUT: 0, NC: 0 };
+  const awaiting = "ยังไม่รัน — รอ G1";
+  const sections = topic.sections.map((section) => el(
+    "section", "presentation-section", el("p", "section-label", section.title_en), el("h2", "", section.title_th),
+    el("p", "presentation-body", state.audienceMode === "beginner" ? section.body_th : `${section.body_th} / ${section.body_en}`),
+  ));
+  target.classList.toggle("is-present-mode", state.deliveryMode === "present");
+  target.replaceChildren(
+    el("header", "dapfam-header", el("div", "", el("p", "section-label", "Family-level patent retrieval"), el("h2", "", topic.title), el("p", "dapfam-thesis", topic.subtitle_th)), el("span", "status-badge status-pending", data.prepared ? "Prepared / G1 pending" : "Not prepared")),
+    el("section", "dataset-ledger", compactFact("Corpus", formatNumber(counts.corpus)), compactFact("Queries", formatNumber(counts.queries)), compactFact("Qrels", formatNumber(counts.qrels))),
+    el("section", "claim-boundary", el("strong", "", "ขอบเขตข้ออ้าง"), el("p", "", "DAPFAM วัด family-level retrieval relevance เท่านั้น ไม่ใช่ novelty, validity, infringement, FTO หรือข้อสรุปทางกฎหมาย")),
+    el("section", "split-story", el("div", "section-heading", el("div", "", el("p", "section-label", "Seed 42"), el("h2", "", "Fresh governed split")), el("span", "hash-label", data.split ? shortHash(data.split.membership_sha256?.joint_test) : "hash pending")), el("div", "split-track", splitBlock("Train", split.train, 1247), splitBlock("Selection", split.selection, 1247), splitBlock("Joint test", split.joint_test, 1247))),
+    el("section", "domain-summary", el("div", "section-heading", el("div", "", el("p", "section-label", "Qrels context"), el("h2", "", "IN / OUT / NC distribution"))), el("div", "domain-bars", domainBar("IN", domains.IN || 0, domains), domainBar("OUT", domains.OUT || 0, domains), domainBar("NC", domains.NC || 0, domains))),
+    el("section", "baseline-table", el("div", "section-heading", el("div", "", el("p", "section-label", "Protocol-matched baselines"), el("h2", "", "B0 / B1 / B2")), el("span", "status-badge status-pending", awaiting)), el("div", "baseline-row", el("strong", "", "B0"), el("span", "", "TAC dense top-400"), el("small", "", awaiting)), el("div", "baseline-row", el("strong", "", "B1"), el("span", "", "Dense + BM25, 0.7 / 0.3"), el("small", "", awaiting)), el("div", "baseline-row", el("strong", "", "B2"), el("span", "", "TAC / Abstract / Claim1 RRF"), el("small", "", awaiting))),
+    el("div", "presentation-sections", ...sections),
+    el("footer", "presentation-footer", el("strong", "", "Decision support, not legal advice"), el("span", "", data.prepared ? `Proposal ${shortHash(data.proposal_sha256)} · scientific metrics 0` : "G1 pending · scientific metrics 0")),
+  );
+}
+
+function compactFact(label, value) { return el("div", "compact-fact", el("span", "section-label", label), el("strong", "", value ?? "—")); }
+function shortHash(value) { return value ? `${value.slice(0, 12)}…${value.slice(-8)}` : "pending"; }
+function formatNumber(value) { return Number(value || 0).toLocaleString("en-US"); }
+function splitBlock(label, value, total) { return el("div", "split-block", el("strong", "", formatNumber(value)), el("span", "", label), el("progress", "split-meter", { max: total, value: Number(value), "aria-label": `${label}: ${value} of ${total}` })); }
+function domainBar(label, value, values) { const total = Math.max(1, Object.values(values).reduce((sum, item) => sum + Number(item || 0), 0)); return el("div", "domain-bar", el("span", "", label), el("progress", "domain-meter", { max: total, value: Number(value), "aria-label": `${label}: ${value} of ${total}` }), el("strong", "", formatNumber(value))); }
 
 function renderPlan() {
   if (!state.snapshot) return;

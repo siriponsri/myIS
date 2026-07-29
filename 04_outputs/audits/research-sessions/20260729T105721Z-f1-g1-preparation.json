@@ -1,0 +1,192 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260729T105721Z-f1-g1-preparation",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T10:57:21Z",
+  "scope": "Implement and validate the F1/G1 preparation system, safe Owner-local projection, preparation-only MLflow linkage, notebook, and Dashboard presentation without scientific execution or G1 approval.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "04e738681fed68fe56d6f10c43236498cfa0d103",
+    "dirty_paths": [
+      "00_governance/OPERATIONS.md",
+      "00_governance/OWNER_GATES.md",
+      "00_governance/config/dashboard_topics.yaml",
+      "00_governance/config/evidence_catalog.yaml",
+      "02_tracks/00_C_crossroute/C_documents/F1_G1_PREPARATION.md",
+      "03_experiments/config/f1_g1_preparation.yaml",
+      "03_experiments/notebooks/Data_Review.ipynb",
+      "03_experiments/templates/f1-dapfam-measured-manifest-draft.yaml",
+      "03_experiments/templates/f1-dapfam-runspec-draft.yaml",
+      "03_experiments/templates/g1-owner-value-batch.schema.json",
+      "04_outputs/audits/research-sessions/20260729T105721Z-f1-g1-preparation.json",
+      "05_code/scripts/Start-F1G1Preparation.ps1",
+      "05_code/scripts/bootstrap_mlflow.py",
+      "05_code/scripts/prepare_f1_g1.py",
+      "05_code/scripts/validate_f1_g1_preparation.py",
+      "05_code/src/myis_research/dashboard/app.py",
+      "05_code/src/myis_research/dashboard/content.py",
+      "05_code/src/myis_research/dashboard/progress.py",
+      "05_code/src/myis_research/dashboard/projections.py",
+      "05_code/src/myis_research/dashboard/readiness.py",
+      "05_code/src/myis_research/dashboard/topics.py",
+      "05_code/src/myis_research/harness/benchmark.py",
+      "05_code/src/myis_research/harness/cli.py",
+      "05_code/src/myis_research/harness/dapfam_contracts.py",
+      "05_code/src/myis_research/harness/drafts.py",
+      "05_code/src/myis_research/harness/g1_preparation.py",
+      "05_code/src/myis_research/harness/owner_local.py",
+      "05_code/src/myis_research/harness/reproduction.py",
+      "05_code/src/myis_research/mlflow_mirror.py",
+      "05_code/tests/test_dashboard_f1_g1.py",
+      "05_code/tests/test_dashboard_frontend.py",
+      "05_code/tests/test_dashboard_projections.py",
+      "05_code/tests/test_f1_g1_preparation.py",
+      "05_code/tests/test_reproduction_scaffold.py",
+      "06_frontend/dashboard/README.md",
+      "06_frontend/dashboard/assets/dashboard.css",
+      "06_frontend/dashboard/assets/dashboard.js",
+      "06_frontend/dashboard/content_registry.yaml",
+      "06_frontend/dashboard/index.html",
+      "LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md",
+      "README.md"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner authorized committing and pushing the completed preparation implementation; this authorization does not approve G1 or scientific execution.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "A deterministic Owner-local process validated the DAPFAM source commitments and produced an append-only safe proposal plus sealed split commitments; protected membership remained outside Git.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32",
+          "locator": "F1 / F1.1 protocol-matched baseline task and G1 boundary"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The preparation-only MLflow projection and executed aggregate notebook were linked without metrics or scientific artifacts, and the Dashboard exposed readiness plus Thai-first DAPFAM teaching views.",
+      "evidence_refs": [
+        {
+          "path": "04_outputs/audits/rigor/myis-research-f0-post-g0-20260729T040557Z.json",
+          "sha256": "cc3dd8c90a476d11b41fa40fe4f76665a691963ea89a0fc49e8ed3abf94128f8",
+          "locator": "governance boundaries and F0 follow-up findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "All deterministic validators, the full unit suite, redaction checks, and responsive browser checks passed while F1 remained waiting_gate and G1 remained pending.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32",
+          "locator": "F1 status, task acceptance, and Gate G1 dependency"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The earlier F0 preparation and MLflow closeout capsules were preserved unchanged; this is a new append-only implementation record.",
+      "evidence_refs": [
+        {
+          "path": "04_outputs/audits/research-sessions/20260729T064958Z-f0-mlflow-11of11.json",
+          "sha256": "3ae4e36c0355c3b5c618acaf21ca4cba5b871f82380145b3cca9d528c7044673",
+          "locator": "session_id and append-only F0 closeout scope"
+        }
+      ]
+    }
+  ],
+  "preparation_validation": {
+    "safe_batch_receipt": "external:safe/batches/g1-owner-value-batch-c0510101e2499e41ecbc8cf298a55a51cef19a03ed09bf22b54fb16fe93da450.json",
+    "proposal_sha256": "c0510101e2499e41ecbc8cf298a55a51cef19a03ed09bf22b54fb16fe93da450",
+    "safe_batch_sha256": "6b7fca4a914200aed90edfca0e13ec9f1423f7fbcd8f073ca778cf710821f083",
+    "source_counts": {
+      "corpus": 45336,
+      "queries": 1247,
+      "relevance_rows": 49869
+    },
+    "split_counts": {
+      "train": 250,
+      "selection": 125,
+      "joint_test": 872
+    },
+    "out_positive_counts": {
+      "train": 181,
+      "selection": 91,
+      "joint_test": 633,
+      "total": 905
+    },
+    "mlflow_run_id": "520c66aad77c43d0b04fcdc961b22c32",
+    "mlflow_mirror_key": "8e9bb9af083e28e68957a5eeb42121334498c2e3445ff7fcb2fa5c9bb113eac5",
+    "notebook_status": "PASS",
+    "unit_test_count": 137,
+    "scientific_run": false,
+    "scientific_metric_count": 0,
+    "gate_status": "pending"
+  },
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "external:safe/validation/g1-owner-value-batch-c0510101e2499e41ecbc8cf298a55a51cef19a03ed09bf22b54fb16fe93da450.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "external:receipts/mlflow/mlflow-mirror-8e9bb9af083e28e68957a5eeb42121334498c2e3445ff7fcb2fa5c9bb113eac5.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-proposed",
+      "summary": "The Owner must set the scientific compute, provider, time, and cost budget before any reproduction execution.",
+      "blocking_gate": "G1"
+    },
+    {
+      "thread_id": "OT0002",
+      "provenance": "agent-proposed",
+      "summary": "The Owner must explicitly authorize the F1.1 B0/B1/B2 reproduction scope and any paid GPU, API, or data egress.",
+      "blocking_gate": "G1"
+    },
+    {
+      "thread_id": "OT0003",
+      "provenance": "agent-proposed",
+      "summary": "Final G1 approval must be recorded through the immutable Owner decision workflow after reviewing the committed preparation identity.",
+      "blocking_gate": "G1"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

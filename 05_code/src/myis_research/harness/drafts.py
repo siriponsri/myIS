@@ -26,6 +26,11 @@ _REQUIRED_COMMITMENTS = {
     "exact_split_membership_hash",
     "exact_out_positive_counts",
     "reproduction_authorization",
+    "owner_value_batch",
+    "source_commitment_hashes",
+    "split_aliases",
+    "proposal_sha256",
+    "validation_receipt",
 }
 _FORBIDDEN_KEYS = {
     "approval_id",

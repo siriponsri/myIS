@@ -26,6 +26,7 @@ from .progress import (
     validated_owner_gate_ledger,
 )
 from .projections import public_governance_catalog, validate_evidence_selection
+from .readiness import load_f1_g1_readiness
 from .security import (
     LoopbackSecurityMiddleware,
     SessionStore,
@@ -35,6 +36,7 @@ from .security import (
     windows_account_sid,
 )
 from .viewer import PdfCatalog
+from .topics import presentation_topics
 
 
 @dataclass
@@ -132,6 +134,14 @@ def create_app(
     def governance_catalog(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
         plan = parse_plan(repository_root / "PLAN.md")
         return _projection_response(lambda: public_governance_catalog(repository_root, plan))
+
+    @app.get("/api/v1/f1-g1-readiness")
+    def f1_g1_readiness(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: load_f1_g1_readiness(repository_root))
+
+    @app.get("/api/v1/presentation-topics")
+    def presentation_topic_catalog(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: presentation_topics(repository_root))
 
     @app.get("/api/v1/content/{content_id}")
     def content(content_id: str, _: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:

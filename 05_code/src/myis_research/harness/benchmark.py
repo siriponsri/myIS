@@ -11,11 +11,20 @@ from typing import Iterable, Mapping, Sequence
 from .metrics import canonical_metric, strictly_greater
 from .models import canonical_hash, is_sha256
 from .statistics import PairedStatistics, paired_statistics
+from .g1_preparation import PreparedSplit, prepare_shared_split
 
 
 LEGACY_ARMS = ("dapfam", "human", "skillopt", "harnessopt")
 SHARED_SPLIT_SEED = 42
 SHARED_SPLIT_COUNTS = {"train": 250, "selection": 125, "joint_test": 872}
+
+
+def deterministic_shared_split(
+    strata_by_query: Mapping[str, str], *, out_positive_query_ids: Iterable[str]
+) -> PreparedSplit:
+    """Build the locked 250/125/872 proposal used by Owner-local preparation."""
+
+    return prepare_shared_split(strata_by_query, out_positive_query_ids=out_positive_query_ids, seed=42)
 
 
 @dataclass(frozen=True)

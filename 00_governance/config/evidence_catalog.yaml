@@ -22,3 +22,15 @@ packages:
     phase_ids: [F0]
     task_ids: [F0.3]
     evidence_role: fixture
+  - evidence_id: f1-g1-owner-value-batch
+    title_en: F1/G1 Owner-value preparation batch
+    title_th: ชุดข้อเสนอค่าและ commitment สำหรับ Owner พิจารณา G1
+    summary_en: Validated external hash/count-only corpus, query, qrels, family, evaluator, field, target, and fresh split commitments. It is a proposal and does not authorize reproduction.
+    summary_th: ข้อเสนอแบบ hash/count-only ที่ผ่าน validation สำหรับ corpus, query, qrels, family, evaluator, field, target และ fresh split โดยยังไม่ใช่การอนุมัติให้รัน
+    path: safe/projections/current.json
+    sha256: OWNER_LOCAL_VALIDATED
+    gate_ids: [G1]
+    phase_ids: [F1]
+    task_ids: [F1.1]
+    evidence_role: fixture
+    source: owner_local_f1_g1

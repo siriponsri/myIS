@@ -26,3 +26,8 @@ owner_commitments:
   exact_split_membership_hash: PENDING_OWNER_DECISION
   exact_out_positive_counts: PENDING_OWNER_DECISION
   reproduction_authorization: PENDING_OWNER_DECISION
+  owner_value_batch: PENDING_OWNER_DECISION
+  source_commitment_hashes: PENDING_OWNER_DECISION
+  split_aliases: PENDING_OWNER_DECISION
+  proposal_sha256: PENDING_OWNER_DECISION
+  validation_receipt: PENDING_OWNER_DECISION

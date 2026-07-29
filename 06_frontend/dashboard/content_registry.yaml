@@ -63,3 +63,5 @@ flows:
     path: 06_frontend/dashboard/diagrams/mlflow-mirror.svg
 tools:
   source: 00_governance/config/tools.lock.yaml
+presentation:
+  source: 00_governance/config/dashboard_topics.yaml

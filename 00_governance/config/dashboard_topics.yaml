@@ -1,0 +1,34 @@
+schema_version: myis.dashboard-topics.v1
+topics:
+  - topic_id: dapfam
+    title: DAPFAM
+    subtitle_th: ชุดประเมินการค้นคืนสิทธิบัตรระดับตระกูล สำหรับตรวจว่าระบบดึงเอกสารที่เกี่ยวข้องกลับมาได้หรือไม่
+    subtitle_en: Family-level patent retrieval evaluation with a strict non-legal claim boundary.
+    audience_modes: [beginner, instructor]
+    delivery_modes: [learn, present]
+    sections:
+      - section_id: what-it-measures
+        title_th: DAPFAM วัดอะไร
+        title_en: What DAPFAM measures
+        body_th: วัดความเกี่ยวข้องของผลการค้นคืนในระดับตระกูลสิทธิบัตร ไม่ได้ตัดสิน novelty, validity, infringement หรือ freedom to operate
+        body_en: It measures family-level retrieval relevance, not novelty, validity, infringement, freedom to operate, or any other legal truth.
+      - section_id: data-shape
+        title_th: โครงสร้างข้อมูล
+        title_en: Data shape
+        body_th: Corpus มี 45,336 รายการ, query 1,247 รายการ และ qrels 49,869 คู่ โดยแยกบริบท IN, OUT และ NC
+        body_en: The source inventory contains 45,336 corpus records, 1,247 queries, and 49,869 relevance rows across IN, OUT, and NC contexts.
+      - section_id: split
+        title_th: การแบ่งข้อมูลใหม่
+        title_en: Fresh governed split
+        body_th: seed 42 แบ่งเป็น train 250, selection 125 และ joint test 872; ID จริงอยู่เฉพาะใน sealed Owner-local store
+        body_en: Seed 42 assigns 250 train, 125 selection, and 872 joint-test queries; raw IDs remain sealed Owner-local data.
+      - section_id: metrics
+        title_th: อ่าน metric อย่างไร
+        title_en: Reading the metrics
+        body_th: Recall@100 ถามว่าตระกูลที่เกี่ยวข้องถูกดึงกลับมาใน 100 อันดับแรกมากเพียงใด ส่วน nDCG เป็น diagnostic หลัง freeze บน pool เดิม
+        body_en: Recall@100 measures relevant-family recovery in the first 100 results. nDCG is a post-freeze diagnostic on the identical pool.
+      - section_id: current-state
+        title_th: สถานะปัจจุบัน
+        title_en: Current state
+        body_th: ยังไม่รันผลเชิงวิทยาศาสตร์ รอ Owner อนุมัติ G1 อย่างชัดเจน
+        body_en: Scientific results have not been run. G1 remains pending explicit Owner approval.

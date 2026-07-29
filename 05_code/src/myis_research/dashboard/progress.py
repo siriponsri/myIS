@@ -13,6 +13,7 @@ from typing import Any
 from ..ledger import ImmutableJsonLedger
 from .contracts import OwnerGateDecisionRecord, TaskEvidenceRecord
 from .projections import load_linear_projection
+from .readiness import load_f1_g1_readiness
 
 
 EXPECTED_PHASE_ORDER = ("F0", "F1", "D0", "C0", "C1", "CF", "S0", "S1", "SF", "CT", "Q", "PC", "PS")
@@ -206,6 +207,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
     plan_graph = _build_plan_graph(plan, linear)
     owner_focus = _owner_focus(phase_views, governance, git_dirty)
     readiness = _readiness_projection(phase_views, governance)
+    f1_g1_preparation = load_f1_g1_readiness(repository_root)
     completed_task_count = sum(
         task["project_state"] == "complete"
         for phase in phase_views
@@ -246,6 +248,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
         "plan_graph": plan_graph,
         "owner_focus": owner_focus,
         "readiness": readiness,
+        "f1_g1_preparation": f1_g1_preparation,
         "projection_revision": hashlib.sha256(
             json.dumps(
                 {
@@ -255,6 +258,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
                     "dirty": git_dirty,
                     "progress": project_state_counts,
                     "gates": governance,
+                    "f1_g1_proposal": f1_g1_preparation.get("proposal_sha256", "not_prepared"),
                 },
                 sort_keys=True,
                 separators=(",", ":"),

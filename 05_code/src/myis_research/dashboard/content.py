@@ -38,6 +38,7 @@ CONTENT_TITLES = {
     "tools": "Tool Governance",
 }
 TOOLS_SOURCE = "00_governance/config/tools.lock.yaml"
+TOPICS_SOURCE = "00_governance/config/dashboard_topics.yaml"
 _HEADING = re.compile(r"^(#{1,6})\s+(.+)$")
 _UNSAFE_HTML = re.compile(r"<\s*(script|iframe|object|embed|link|style)\b|\bon[a-z]+\s*=", re.I)
 _SVG_NAMESPACE = "http://www.w3.org/2000/svg"
@@ -163,6 +164,7 @@ def _registry(repository_root: Path) -> dict[str, Any]:
             for flow_id, title, path in FLOWS
         ],
         "tools": {"source": TOOLS_SOURCE},
+        "presentation": {"source": TOPICS_SOURCE},
     }
     relative_path = "06_frontend/dashboard/content_registry.yaml"
     if not (repository_root / relative_path).exists():

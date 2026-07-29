@@ -187,11 +187,24 @@ class EvidencePackage(StrictModel):
     phase_ids: tuple[str, ...]
     task_ids: tuple[str, ...]
     evidence_role: Literal["fixture", "development", "descriptive", "confirmation"]
+    source: Literal["git", "owner_local_f1_g1"] = "git"
 
     @field_validator("sha256")
     @classmethod
     def validate_sha256(cls, value: str) -> str:
+        if value == "OWNER_LOCAL_VALIDATED":
+            return value
         return _sha256(value)
+
+    @model_validator(mode="after")
+    def validate_source_contract(self) -> "EvidencePackage":
+        if self.source == "git" and self.sha256 == "OWNER_LOCAL_VALIDATED":
+            raise ValueError("Git evidence requires a fixed SHA-256")
+        if self.source == "owner_local_f1_g1" and (
+            self.path != "safe/projections/current.json" or self.sha256 != "OWNER_LOCAL_VALIDATED"
+        ):
+            raise ValueError("Owner-local F1/G1 evidence must use its validated current projection")
+        return self
 
     @field_validator("gate_ids", "phase_ids", "task_ids")
     @classmethod
@@ -209,7 +222,7 @@ class EvidenceCatalog(StrictModel):
     def unique_packages(self) -> "EvidenceCatalog":
         identifiers = tuple(item.evidence_id for item in self.packages)
         paths = tuple(item.path for item in self.packages)
-        hashes = tuple(item.sha256 for item in self.packages)
+        hashes = tuple(item.sha256 for item in self.packages if item.sha256 != "OWNER_LOCAL_VALIDATED")
         if len(identifiers) != len(set(identifiers)) or len(paths) != len(set(paths)):
             raise ValueError("evidence catalog IDs and paths must be unique")
         if len(hashes) != len(set(hashes)):
@@ -354,13 +367,27 @@ def load_evidence_catalog(repository_root: Path, plan: Any) -> dict[str, Any]:
             raise ValueError(f"evidence package {item.evidence_id} names an unknown Gate")
         if not set(item.phase_ids) <= known_phases or not set(item.task_ids) <= known_tasks:
             raise ValueError(f"evidence package {item.evidence_id} names an unknown PLAN scope")
-        path = _resolve_regular_file(repository_root, item.path)
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if digest != item.sha256:
-            raise ValueError(f"evidence package hash drifted: {item.evidence_id}")
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        if not isinstance(payload, dict) or not isinstance(payload.get("schema_version"), str):
-            raise ValueError(f"evidence package is not a typed JSON manifest: {item.evidence_id}")
+        if item.source == "owner_local_f1_g1":
+            from .readiness import load_f1_g1_readiness
+
+            readiness = load_f1_g1_readiness(repository_root)
+            if not readiness.get("prepared"):
+                continue
+            digest = readiness["safe_batch_sha256"]
+            schema_version = readiness["safe_batch_schema_version"]
+            source_git_commit = None
+            check_count = None
+        else:
+            path = _resolve_regular_file(repository_root, item.path)
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if digest != item.sha256:
+                raise ValueError(f"evidence package hash drifted: {item.evidence_id}")
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(payload, dict) or not isinstance(payload.get("schema_version"), str):
+                raise ValueError(f"evidence package is not a typed JSON manifest: {item.evidence_id}")
+            schema_version = payload["schema_version"]
+            source_git_commit = payload.get("source_git_commit")
+            check_count = len(payload.get("checks", [])) if isinstance(payload.get("checks"), list) else None
         packages.append(
             {
                 "evidence_id": item.evidence_id,
@@ -368,14 +395,15 @@ def load_evidence_catalog(repository_root: Path, plan: Any) -> dict[str, Any]:
                 "title_th": item.title_th,
                 "summary_en": item.summary_en,
                 "summary_th": item.summary_th,
-                "sha256": item.sha256,
+                "sha256": digest,
                 "gate_ids": list(item.gate_ids),
                 "phase_ids": list(item.phase_ids),
                 "task_ids": list(item.task_ids),
                 "evidence_role": item.evidence_role,
-                "schema_version": payload["schema_version"],
-                "source_git_commit": payload.get("source_git_commit"),
-                "check_count": len(payload.get("checks", [])) if isinstance(payload.get("checks"), list) else None,
+                "schema_version": schema_version,
+                "source_git_commit": source_git_commit,
+                "check_count": check_count,
+                "source": item.source,
             }
         )
     return {

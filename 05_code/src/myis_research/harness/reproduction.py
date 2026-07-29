@@ -7,11 +7,18 @@ executor imports. A future executor requires separate Owner-approved work.
 from __future__ import annotations
 
 from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+import yaml
 
 from .drafts import DRAFT_RUNSPEC_SCHEMA, DraftValidationError, load_draft_document
+from .dapfam_contracts import validate_owner_value_batch
 
 
 WAITING_GATE_EXIT_CODE = 2
+HANDOFF_READY_EXIT_CODE = 3
 
 
 def reproduce_dapfam(
@@ -19,6 +26,9 @@ def reproduce_dapfam(
     repository_root: Path,
     manifest: Path | None,
     validate_draft: bool,
+    owner_batch: Path | None = None,
+    g1_decision: Path | None = None,
+    frozen_runspec: Path | None = None,
 ) -> dict[str, object]:
     """Return a fail-closed F1/G1 preparation result without executing anything."""
 
@@ -47,4 +57,85 @@ def reproduce_dapfam(
             template_root=repository_root / "03_experiments" / "templates",
             expected_schema=DRAFT_RUNSPEC_SCHEMA,
         )
+        return result
+    supplied = (owner_batch, g1_decision, frozen_runspec)
+    if any(supplied) and not all(supplied):
+        return {**result, "status": "BLOCKED", "reason": "G1_HANDOFF_INPUTS_INCOMPLETE"}
+    if all(supplied):
+        decision = _validate_g1_decision(repository_root, g1_decision)  # type: ignore[arg-type]
+        runspec = _validate_frozen_runspec(repository_root, frozen_runspec, decision)  # type: ignore[arg-type]
+        batch_path = owner_batch.resolve(strict=True)  # type: ignore[union-attr]
+        if batch_path.is_symlink() or not batch_path.is_file():
+            raise DraftValidationError("Owner-value batch must be a regular file")
+        batch = validate_owner_value_batch(json.loads(batch_path.read_text(encoding="utf-8")))
+        batch_sha = hashlib.sha256(batch_path.read_bytes()).hexdigest()
+        if batch_sha not in decision.get("evidence_manifest_hashes", []):
+            raise DraftValidationError("G1 decision does not bind the Owner-value batch SHA-256")
+        if runspec.get("proposal_sha256") != batch.proposal_sha256:
+            raise DraftValidationError("frozen RunSpec proposal hash does not match the Owner-value batch")
+        if runspec.get("split_membership_sha256") != batch.split.membership_sha256:
+            raise DraftValidationError("frozen RunSpec split commitments do not match the Owner-value batch")
+        return {
+            **result,
+            "status": "HANDOFF_READY_EXECUTOR_UNAVAILABLE",
+            "reason": "REPRODUCTION_EXECUTOR_NOT_IMPLEMENTED",
+            "gate_status": "approved",
+            "authorization": "F1.1_B0_B1_B2_ONLY",
+            "proposal_sha256": batch.proposal_sha256,
+            "owner_decision_id": decision["decision_id"],
+            "frozen_runspec_sha256": hashlib.sha256(frozen_runspec.resolve().read_bytes()).hexdigest(),  # type: ignore[union-attr]
+        }
     return result
+
+
+def _validate_g1_decision(repository_root: Path, path: Path) -> dict[str, object]:
+    approvals = (repository_root / "00_governance" / "approvals").resolve(strict=True)
+    resolved = path.resolve(strict=True)
+    if resolved.is_symlink() or not resolved.is_file():
+        raise DraftValidationError("G1 decision must be a regular file")
+    try:
+        resolved.relative_to(approvals)
+    except ValueError as error:
+        raise DraftValidationError("G1 decision must be an immutable repository approval") from error
+    payload = json.loads(resolved.read_text(encoding="utf-8"))
+    scope = payload.get("scope", {})
+    if (
+        payload.get("schema_version") != "myis.owner-gate-decision.v2"
+        or payload.get("gate_id") != "G1"
+        or payload.get("status") != "approved"
+        or scope.get("action") != "authorize_reproduction"
+        or "F1.1" not in scope.get("task_ids", [])
+    ):
+        raise DraftValidationError("G1 decision does not authorize F1.1 reproduction")
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=repository_root, check=True, capture_output=True, text=True
+    ).stdout.strip()
+    if payload.get("git_commit") != head:
+        raise DraftValidationError("G1 decision is not bound to the current Git commit")
+    if resolved.name != f"{payload.get('decision_id')}.json":
+        raise DraftValidationError("G1 decision filename does not match its immutable ID")
+    return payload
+
+
+def _validate_frozen_runspec(repository_root: Path, path: Path, decision: dict[str, object]) -> dict[str, object]:
+    resolved = path.resolve(strict=True)
+    if resolved.is_symlink() or not resolved.is_file() or resolved.suffix.lower() not in {".yaml", ".yml"}:
+        raise DraftValidationError("frozen RunSpec must be a regular YAML file")
+    try:
+        resolved.relative_to((repository_root / "03_experiments").resolve(strict=True))
+    except ValueError as error:
+        raise DraftValidationError("frozen RunSpec must remain under 03_experiments") from error
+    payload = yaml.safe_load(resolved.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise DraftValidationError("frozen RunSpec must be a mapping")
+    if (
+        payload.get("schema_version") != "myis.frozen-f1-runspec.v1"
+        or payload.get("status") != "frozen"
+        or payload.get("executable") is not True
+        or payload.get("gate") != "G1"
+        or payload.get("authorization") != "F1.1_B0_B1_B2_ONLY"
+        or payload.get("owner_decision_id") != decision.get("decision_id")
+        or payload.get("arms") != ["B0", "B1", "B2"]
+    ):
+        raise DraftValidationError("frozen RunSpec is not an exact G1 F1.1 B0/B1/B2 contract")
+    return payload

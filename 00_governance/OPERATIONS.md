@@ -9,7 +9,7 @@ Python 3.11 and `pyproject.toml + uv.lock` are canonical. Select only the groups
 and extras required by the task and record them in measured manifests.
 
 ```powershell
-uv sync --locked --extra tracking --extra dashboard --extra test
+uv sync --locked --extra tracking --extra dashboard --extra test --extra notebook
 uv run --no-sync python 05_code/scripts/capture_environment.py
 ```
 
@@ -62,15 +62,42 @@ For `BATCH_2A_ARTIFACT_VALIDATION.json`, `BATCH_2A_CSV_VALIDATION.json`, and
 
 Current verified readiness is `F0 = closed`, `G0 = approved`,
 `F1 = waiting_gate`, and `G1 = pending`. Preparation may create or validate
-non-executable drafts and fail-closed adapter scaffolding only; it must not
-access datasets, qrels, confirmation surfaces, held-out membership, paid APIs,
-or GPU resources.
+non-executable drafts and fail-closed adapter scaffolding. Only the dedicated
+Owner-local preparation command may read the declared corpus/query/qrels files,
+and only to validate/hash them and produce sealed membership plus safe
+aggregates. No agent-facing raw data, confirmation surface, measured evaluation,
+paid API, or GPU resource is authorized.
 
 `myis-harness reproduce dapfam` is not a scientific execution path at this
 state. Until a future valid G1 authorization and frozen RunSpec are supplied,
 it must fail closed as unavailable or `waiting_gate` before any protected or
 scientific access. Help, dry-run, and schema-only validation do not authorize
 reproduction and cannot create measured manifests or scientific metrics.
+
+Run the complete preparation workflow from the repository root without editing
+YAML or moving the source data:
+
+```powershell
+& ".\05_code\scripts\Start-F1G1Preparation.ps1"
+```
+
+The command discovers the approved in-place DAPFAM source, validates exact byte
+anchors, computes full SHA-256 hashes, checks query/qrels/corpus alignment,
+creates the deterministic `250/125/872` split, seals raw IDs outside Git, writes
+an append-only safe batch, validates redaction, mirrors one zero-metric
+preparation run, and executes the safe review notebook. Absolute source paths
+stay only in external `config/owner-paths.json`; Dashboard and MLflow receive no
+membership or payload.
+
+Use the read-only validator independently:
+
+```powershell
+uv run --no-sync python 05_code/scripts/validate_f1_g1_preparation.py
+```
+
+`--describe-schema` reports field names and aggregate identifier counts only and
+writes nothing. A failed or corrected semantic proposal is retained and a new
+append-only proposal supersedes it through `safe/projections/current.json`.
 
 ## Scientific phase commands
 

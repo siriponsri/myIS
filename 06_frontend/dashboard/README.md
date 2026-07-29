@@ -53,6 +53,8 @@ worktree. The service has no remote-bind option.
 | `GET /api/v1/session` | Establish the loopback browser session and CSRF token |
 | `GET /api/v1/dashboard-snapshot` | Phase, Task, evidence, dependency, and gate projection |
 | `GET /api/v1/governance-catalog` | Friendly Gate/evidence names and validated PLAN/Linear/MLflow bindings |
+| `GET /api/v1/f1-g1-readiness` | Validated hash/count-only Owner-local preparation projection |
+| `GET /api/v1/presentation-topics` | Registry-driven Thai-first DAPFAM teaching content |
 | `GET /api/v1/content/process` | Allowlisted process documentation |
 | `GET /api/v1/content/harness` | Allowlisted harness rules |
 | `GET /api/v1/flows` | Flow catalog |
@@ -84,6 +86,12 @@ every 60 seconds while visible. `Complete` is derived only from validated
 canonical Task evidence; Linear status cannot complete work or approve a Gate.
 Any future DAPFAM reproduction control must remain a fail-closed
 `waiting_gate` path until a valid G1 decision and frozen RunSpec are present.
+
+The primary Presentation tab supports Beginner/Instructor and Learn/Present
+modes. Its DAPFAM topic shows source counts, IN/OUT/NC distribution, the fresh
+split, metric interpretation, commitments, and current readiness. Unrun
+scientific charts are explicitly labeled as waiting for G1; no placeholder
+measurement is rendered.
 
 ## Verification
 

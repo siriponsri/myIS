@@ -99,6 +99,7 @@ class MirrorKind(StrEnum):
 class MirrorStage(StrEnum):
     BOOTSTRAP = "bootstrap"
     CATALOG = "catalog"
+    F1_G1_PREPARATION = "f1-g1-preparation"
     TRACK_C = "track-c"
     TRACK_S = "track-s"
     JOINT = "joint"
@@ -109,6 +110,7 @@ class MirrorStage(StrEnum):
         return {
             MirrorStage.BOOTSTRAP: BOOTSTRAP_EXPERIMENT,
             MirrorStage.CATALOG: CATALOG_EXPERIMENT,
+            MirrorStage.F1_G1_PREPARATION: TRACK_C_EXPERIMENT,
             MirrorStage.TRACK_C: TRACK_C_EXPERIMENT,
             MirrorStage.TRACK_S: TRACK_S_EXPERIMENT,
             MirrorStage.JOINT: JOINT_EXPERIMENT,
@@ -121,6 +123,7 @@ _STAGE_KINDS = {
     MirrorStage.CATALOG: frozenset(
         {MirrorKind.DOC, MirrorKind.RUBRIC, MirrorKind.RULE, MirrorKind.TOOL, MirrorKind.SKILL, MirrorKind.ENVIRONMENT}
     ),
+    MirrorStage.F1_G1_PREPARATION: frozenset(),
     MirrorStage.TRACK_C: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
     MirrorStage.TRACK_S: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
     MirrorStage.JOINT: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
@@ -294,8 +297,17 @@ class MirrorSpec:
         disallowed = sorted({artifact.kind.value for artifact in artifacts if artifact.kind not in allowed})
         if disallowed:
             raise MirrorValidationError(f"artifact kinds are not allowed for {self.stage.value}: {disallowed}")
-        if self.stage in {MirrorStage.BOOTSTRAP, MirrorStage.CATALOG} and self.metrics:
-            raise MirrorValidationError("metrics are allowed only in active scientific mirror stages")
+        if self.stage in {MirrorStage.BOOTSTRAP, MirrorStage.CATALOG, MirrorStage.F1_G1_PREPARATION} and self.metrics:
+            raise MirrorValidationError("metrics are forbidden in non-scientific mirror stages")
+        if self.stage == MirrorStage.F1_G1_PREPARATION:
+            if artifacts:
+                raise MirrorValidationError("F1/G1 preparation mirrors metadata only")
+            if self.track != "C" or self.arm != "G1_PREPARATION" or self.phase != "F1":
+                raise MirrorValidationError("F1/G1 preparation lineage must bind C/G1_PREPARATION/F1")
+            if self.data_role != "preparation":
+                raise MirrorValidationError("F1/G1 preparation data role must be preparation")
+            if self.tags.get("scientific_run") != "false":
+                raise MirrorValidationError("F1/G1 preparation must declare scientific_run=false")
         active_stages = {MirrorStage.TRACK_C, MirrorStage.TRACK_S, MirrorStage.JOINT, MirrorStage.PUBLICATION}
         if self.stage in active_stages:
             required = {

@@ -110,3 +110,24 @@ class ReproductionScaffoldTests(TestCase):
         self.assertEqual(exit_code, 2)
         self.assertEqual(payload["reason"], "DRAFT_VALIDATION_FAILED")
         self.assertEqual(payload["dataset_access"], "none")
+
+    def test_invalid_handoff_input_returns_generic_blocked_payload(self) -> None:
+        with patch(
+            "myis_research.harness.cli.reproduce_dapfam",
+            side_effect=ValueError("protected owner-local payload detail"),
+        ):
+            exit_code, payload = self._run_cli(
+                "reproduce",
+                "dapfam",
+                "--owner-batch",
+                "owner-batch.json",
+                "--g1-decision",
+                "g1.json",
+                "--frozen-runspec",
+                "runspec.yaml",
+            )
+        self.assertEqual(exit_code, 2)
+        self.assertEqual(payload["status"], "BLOCKED")
+        self.assertEqual(payload["reason"], "G1_HANDOFF_VALIDATION_FAILED")
+        self.assertNotIn("message", payload)
+        self.assertNotIn("protected owner-local payload detail", json.dumps(payload))

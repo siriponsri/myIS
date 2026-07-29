@@ -35,6 +35,14 @@ in Git.
 | G7 External transfer | frozen PatenTEB `retrieval_OUT` compatibility, license/privacy evidence, no-retuning protocol and run-specific budget | run separately scoped C1 transfer without blocking Q or publication |
 | G8 Publication | aggregate confirmation or clearly labeled descriptive evidence, claim-evidence audit, all repeats, limitations, artifact inventory, independent review | build or submit the named Track C and/or Track S publication package |
 
+For G1, the Dashboard may present one validated external `OwnerValueBatchV1`
+as a single hash/count-only evidence package. The batch remains a proposal while
+`gate_status=pending` and `authorization=NOT_AUTHORIZED`. Approval still requires
+an explicit immutable G1 decision binding the exact proposal/evidence hash,
+clean Git commit, frozen RunSpec, compute/provider/time/cost budget, reproduction
+scope, and any paid GPU/API or data-egress permission. Preparing or viewing the
+batch is never approval.
+
 The active graph is `Track C -> frozen C1 harness -> Track S`. Track C contains
 a frozen-pool ranking/headroom diagnostic only; it is not an independent ranking/evidence lane
 or a separately confirmable gate. Track S is required after a valid C1 harness.

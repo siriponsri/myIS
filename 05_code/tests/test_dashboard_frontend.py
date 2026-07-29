@@ -24,6 +24,7 @@ CONTENT_FILES = (
     "00_governance/config/project.yaml",
     "00_governance/config/linear.yaml",
     "00_governance/config/evidence_catalog.yaml",
+    "00_governance/config/dashboard_topics.yaml",
     "03_experiments/config/mlflow/governance_documents.yaml",
     "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
     "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
@@ -97,6 +98,8 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn('data-plan-density="readable"', index.text)
             self.assertIn('data-plan-density="compact"', index.text)
             self.assertIn('id="overview-readiness"', index.text)
+            self.assertIn('data-view="presentation"', index.text)
+            self.assertIn('id="presentation-content"', index.text)
             self.assertEqual(index.headers["cache-control"], "no-store, max-age=0")
             self.assertEqual(client.get("/assets/dashboard.css").status_code, 200)
             self.assertEqual(client.get("/assets/tokens.css").status_code, 200)
@@ -107,6 +110,7 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn("item.title_en", script.text)
             self.assertIn("item.title_th", script.text)
             self.assertIn("renderReadiness", script.text)
+            self.assertIn("renderPresentation", script.text)
             self.assertIn("bindFlowPan", script.text)
             self.assertIn("flow-toolbar", script.text)
             self.assertIn("aria-label\": \"Zoom in\"", script.text)

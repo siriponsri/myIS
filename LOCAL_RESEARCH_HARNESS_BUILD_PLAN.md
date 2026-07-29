@@ -92,6 +92,26 @@ deferred lanes, and projection links only. Owner Gate decisions are immutable
 hash-chained records. PDF streaming remains exact allowlist/hash controlled with
 append-only local receipts.
 
+## F1/G1 preparation boundary
+
+`OwnerValueBatchV1` is a non-executable G1 proposal containing only source
+identifiers, byte counts, SHA-256 commitments, aggregate inventory/domain
+counts, family/evaluator/field/target commitments, and a hash-only fresh split.
+Its canonical proposal hash excludes timestamps, validation state, MLflow
+linkage, and a future Owner decision hash. Raw membership is stored only in the
+external Owner-local sealed store.
+
+The locked split uses seed `42`, Hamilton allocation, and SHA-256 tie-breaking
+to assign exactly `250/125/872`. Aliases are `c_train=train=adaptation`,
+`c_selection=selection`, and `joint_test=confirmation`. OUT-positive means a
+query with at least one aligned `OUT` row whose grade is greater than zero.
+
+The preparation-only MLflow stage uses `myis-research-track-c`, logs no artifact
+and no metric, and cannot authorize a Gate. `myis-harness reproduce dapfam`
+validates a G1 decision and frozen RunSpec before a safe batch, but even a valid
+handoff returns `HANDOFF_READY_EXECUTOR_UNAVAILABLE`; B0/B1/B2 execution is not
+implemented by this preparation scope.
+
 ## Test obligations
 
 Tests cover active/legacy identity separation; shared split commitments and dual

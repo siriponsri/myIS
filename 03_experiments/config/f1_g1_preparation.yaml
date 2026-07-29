@@ -1,0 +1,33 @@
+schema_version: myis.f1-g1-preparation-config.v1
+identity:
+  program_id: myis-research
+  protocol_version: "1.0"
+  research_version: "0.1"
+boundary:
+  gate: G1
+  gate_status: pending
+  authorization: NOT_AUTHORIZED
+  scientific_run: false
+  scientific_metric_count: 0
+source_anchors:
+  corpus: {path: processed/dapfam/patents.jsonl, bytes: 3125138209, sha256: 2d79ee7d0479565711889553d2da849fef5e3a7aa5014bf398a43c5becd0cab7}
+  queries: {path: processed/dapfam/queries.jsonl, bytes: 158762269, sha256: 50a0e9c5673e9e3e0ae2558272dc824572554067bd1443d043016aedeb7fe3fa}
+  qrels: {path: processed/dapfam/qrels.tsv, bytes: 2194236, sha256: adf93d74d539d883f4ebeb48ecf5ef7e39acc21680c589b1b171c07d25097828}
+  out_strata: {path: processed/retrieval/dapfam_paper_aligned/qrels_domain.tsv, bytes: 2349036, sha256: 07a2f16a98c1c430422eb83e29d597668246eef2892d0609ee72f040a0dd0270}
+  validation: {path: processed/dapfam/validation_summary.json, bytes: 2243, sha256: e3af6a11caad81021b8f0ae33ba3da688d512a70290e0df42eeda19086e8cc74}
+expected_inventory:
+  corpus: 45336
+  queries: 1247
+  qrels: 49869
+split:
+  algorithm: hamilton-sha256-v1
+  seed: 42
+  counts: {train: 250, selection: 125, joint_test: 872}
+  aliases:
+    c_train: train
+    train: train
+    adaptation: train
+    c_selection: selection
+    selection: selection
+    joint_test: joint_test
+    confirmation: joint_test

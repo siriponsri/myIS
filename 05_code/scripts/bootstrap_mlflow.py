@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
@@ -127,8 +128,15 @@ def bootstrap(store_root: Path | None = None) -> dict[str, object]:
     return report
 
 
-def main() -> int:
-    report = bootstrap()
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Bootstrap the zero-data local MLflow mirror")
+    parser.add_argument("--store-root", type=Path)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    report = bootstrap(args.store_root)
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["status"] == "PASS" else 2
 
