@@ -1,0 +1,127 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260729T141104Z-gate-inbox-task-context",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T14:11:04Z",
+  "scope": "Retain the governed F1.1 task context in the Owner Inbox when the clean repository makes G1 ready for review.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "d8177f4a8a8c0eb5556a1503990116dfdb011676",
+    "dirty_paths": [
+      "04_outputs/audits/research-sessions/20260729T141104Z-gate-inbox-task-context.json",
+      "04_outputs/audits/research-session-index.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The Gate decision projection now keeps the governed task identifier so the Owner Inbox shows F1.1 beside the pending G1 request.",
+      "evidence_refs": [
+        {
+          "path": "05_code/src/myis_research/dashboard/progress.py",
+          "sha256": "12f781eaa4d08b90a46a1ec64b96b19a793834a8d60c7be99589f8db300a785a",
+          "locator": "_owner_focus decision projection and build_owner_inbox task selection"
+        },
+        {
+          "path": "05_code/tests/test_dashboard_progress.py",
+          "sha256": "82c1dfbbcc6223f927cc6352c1db41029978f127c41e67aa220329335618e761",
+          "locator": "test_owner_inbox_requests_g1_from_pre_f1_prerequisites"
+        }
+      ],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "summary": "G1 remains blocked for decision until the real measured executor, locked model artifact, fresh Owner-local batch, and frozen RunSpec are available.",
+      "blocking_gate": "G1"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "F1",
+    "task_id": "F1.1",
+    "gate_id": "G1",
+    "gate_status": "pending"
+  },
+  "owner_brief_th": "แก้หน้า Today ให้ยังแสดงงาน F1.1 เมื่อระบบเข้าสู่โหมดเตรียมตรวจ G1 แล้ว สถานะวิทยาศาสตร์ไม่เปลี่ยนและยังไม่ได้รันผลจริง",
+  "owner_actions": [
+    {
+      "action_id": "OA001",
+      "priority": "required",
+      "action_th": "ยังไม่อนุมัติ G1 จนกว่าทรัพยากรและหลักฐานที่ขาดจะครบ",
+      "reason_th": "การแก้รอบนี้เป็นการคงบริบทงานใน Dashboard เท่านั้น ไม่ได้เพิ่มหลักฐานการทดลอง",
+      "blocking_gate": "G1"
+    }
+  ],
+  "gate_request": {
+    "gate_id": "G1",
+    "state": "blocked",
+    "summary_th": "ร้องขอให้เตรียมตรวจ G1 หลังจบ patch แต่ยังไม่พร้อมให้ตัดสินใจอนุมัติ",
+    "blocking_reason_th": "ยังขาดตัวรัน measured F1 โมเดล revision ที่ล็อกไว้ ชุด Owner-local ใหม่ และ frozen RunSpec",
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "NR001",
+        "description_th": "ตัวรัน measured F1 โมเดล revision ที่ล็อกไว้ และ frozen RunSpec ที่ผูกทรัพยากรครบ",
+        "purpose_th": "ใช้สร้างหลักฐานที่เพียงพอสำหรับให้ Owner ตรวจ G1"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "CHK001",
+        "status": "PASS",
+        "summary": "Focused Dashboard progress and frontend tests passed."
+      },
+      {
+        "check_id": "CHK002",
+        "status": "PASS",
+        "summary": "Git whitespace validation passed."
+      }
+    ],
+    "changed_files": [
+      "05_code/src/myis_research/dashboard/progress.py",
+      "05_code/tests/test_dashboard_progress.py",
+      "04_outputs/audits/research-sessions/20260729T141104Z-gate-inbox-task-context.json",
+      "04_outputs/audits/research-session-index.json"
+    ],
+    "untouched_protected_surfaces": [
+      "confirmation membership and qrels",
+      "protected payloads and per-query outcomes",
+      "model weights and provider endpoints",
+      "measured result bundles and scientific MLflow metrics"
+    ]
+  },
+  "corrections": []
+}

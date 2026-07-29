@@ -43,6 +43,13 @@
       "capsule_schema_version": "myis.research-session.v2",
       "classification": "PASS",
       "reason": null
+    },
+    {
+      "path": "04_outputs/audits/research-sessions/20260729T141104Z-gate-inbox-task-context.json",
+      "session_id": "20260729T141104Z-gate-inbox-task-context",
+      "capsule_schema_version": "myis.research-session.v2",
+      "classification": "PASS",
+      "reason": null
     }
   ],
   "unresolved_invalid_count": 0
