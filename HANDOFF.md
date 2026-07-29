@@ -35,10 +35,28 @@ literature collection and Paper D boundary, `03_experiments/V01_brain_drive_agen
 `uv.lock`, `.python-version`, package version, App data/models/prompts/pools, and
 unrelated `.codex/config.toml` untouched.
 
-## Next authorized action
+## Verified status and next authorized work
 
-Complete F0 validation and Owner G0 review. F1 and every scientific phase remain
-gated. This system supports retrieval decisions and is not legal advice.
+- `F0 = closed`; all three F0 tasks have validated task evidence.
+- `G0 = approved` by the immutable scoped Owner record.
+- `F1 = waiting_gate` and `G1 = pending`.
+- Project readiness is `F1/G1 preparation only`.
+
+The next authorized work is non-executable F1/G1 preparation: draft contracts,
+schema validation, fail-closed adapter scaffolding, documentation, and local
+projection updates. `F1.1` cannot run until the Owner records G1 approval for
+the corpus, queries, qrels, family mapping, evaluator, field protocol,
+published targets, compute budget, exact split membership/hash, exact
+OUT-positive counts, and reproduction scope. Exact membership/counts must come
+from the protected Owner process; estimates are not accepted. This system
+supports retrieval decisions and is not legal advice.
+
+## MLflow runtime boundary
+
+The approved MLflow runtime store is outside Git and remains a non-authoritative
+mirror. F0 bootstrap is limited to connectivity and records no scientific run,
+dataset access, artifacts, or scientific metrics. Do not replay or mirror
+governance documents during F1/G1 preparation without a separate Owner approval.
 
 ## Projection receipts
 

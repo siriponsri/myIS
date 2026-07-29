@@ -282,9 +282,13 @@ class MirrorSpec:
         if self.stage == MirrorStage.BOOTSTRAP and (artifacts or self.metrics):
             raise MirrorValidationError("bootstrap runs cannot contain artifacts or scientific metrics")
         if self.stage == MirrorStage.BOOTSTRAP:
-            if self.parameters.get("artifact_count", 0) != 0:
+            if self.tags.get("scientific_run") != "false":
+                raise MirrorValidationError("bootstrap scientific_run tag must be false")
+            if self.tags.get("dataset_access") != "none":
+                raise MirrorValidationError("bootstrap dataset_access tag must be none")
+            if self.parameters.get("artifact_count") != 0:
                 raise MirrorValidationError("bootstrap artifact_count must be zero")
-            if self.parameters.get("scientific_metric_count", 0) != 0:
+            if self.parameters.get("scientific_metric_count") != 0:
                 raise MirrorValidationError("bootstrap scientific_metric_count must be zero")
         allowed = _STAGE_KINDS[self.stage]
         disallowed = sorted({artifact.kind.value for artifact in artifacts if artifact.kind not in allowed})

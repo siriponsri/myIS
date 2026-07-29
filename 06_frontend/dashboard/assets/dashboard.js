@@ -27,6 +27,9 @@ const state = {
   activeGateId: "G0",
   referenceTab: "process",
   flowFilter: "all",
+  planDensity: "readable",
+  flowZoom: 100,
+  flowFit: false,
   snapshot: null,
   governanceCatalog: null,
   gateLedger: null,
@@ -60,7 +63,7 @@ async function initialize() {
 
 function cacheElements() {
   for (const id of [
-    "view-title", "view-kicker", "sync-state", "refresh-button", "owner-focus", "overview-map-content",
+    "view-title", "view-kicker", "sync-state", "refresh-button", "owner-focus", "overview-readiness", "overview-map-content",
     "overview-legend", "overview-metrics", "overview-blockers", "overview-recent", "overview-projections",
     "owner-map", "task-workspace", "gate-index", "gate-detail", "ledger-summary", "decision-table-body",
     "evidence-summary", "evidence-grid", "reference-content", "new-decision-button", "decision-dialog",
@@ -81,6 +84,12 @@ function bindNavigation() {
     button.addEventListener("click", () => {
       state.flowFilter = button.dataset.filter;
       renderPlan(state.snapshot);
+    });
+  });
+  document.querySelectorAll("[data-plan-density]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.planDensity = button.dataset.planDensity === "compact" ? "compact" : "readable";
+      renderPlan();
     });
   });
   document.querySelectorAll("[data-reference]").forEach((button) => {
@@ -147,7 +156,7 @@ function activateView(viewId, updateHash) {
 }
 
 function renderLoadingStates() {
-  [elements.owner_focus, elements.overview_map_content, elements.overview_metrics, elements.overview_blockers, elements.overview_recent,
+  [elements.owner_focus, elements.overview_readiness, elements.overview_map_content, elements.overview_metrics, elements.overview_blockers, elements.overview_recent,
     elements.overview_projections, elements.owner_map, elements.task_workspace, elements.gate_index, elements.gate_detail,
     elements.evidence_summary, elements.evidence_grid, elements.reference_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
 }
@@ -220,6 +229,7 @@ function renderOverview() {
     el("div", "attention-actions", gate ? el("span", "status-badge status-pending", `${gate.name_en} · ${gate.gate_id}`) : null,
       el("button", "button button-primary", focus.mode === "decision" ? "Review decision" : "Open plan", () => focus.mode === "decision" ? openDecisionDialog(focus.next_gate_id) : activateView("plan", true)))
   );
+  renderReadiness(snapshot.readiness || {});
   elements.overview_legend.replaceChildren(statusLegend("complete", "Verified"), statusLegend("approved", "Gate approved"), statusLegend("waiting", "Needs attention"));
   renderMap(elements.overview_map_content, true);
   const progress = snapshot.progress || {};
@@ -247,10 +257,28 @@ function renderProjectionHealth(snapshot) {
   elements.overview_projections.replaceChildren(el("div", "section-heading", el("div", "", el("p", "section-label", "Projection health"), el("h2", "", "Four systems, one source"))), el("div", "projection-grid", ...nodes.map(([title, value, note]) => el("div", "projection-node", el("strong", "", title), el("span", "", value), el("small", "", note)))));
 }
 
+function renderReadiness(readiness) {
+  const items = [
+    ["F0", readiness.f0 || "review_required"],
+    ["G0", readiness.g0 || "review_required"],
+    ["F1", readiness.f1 || "review_required"],
+    ["G1", readiness.g1 || "review_required"],
+  ];
+  elements.overview_readiness.replaceChildren(
+    el("div", "readiness-copy", el("p", "section-label", "Verified readiness"), el("h2", "", readiness.project_label || "Readiness requires review"), el("p", "muted", "Dashboard projection only. Git and validated immutable artifacts remain authoritative.")),
+    el("div", "readiness-states", ...items.map(([label, value]) => el("div", "readiness-state", el("span", "section-label", label), el("span", `status-badge status-${statusClass(value)}`, humanState(value))))),
+  );
+}
+
 function renderPlan() {
   if (!state.snapshot) return;
   document.querySelectorAll("[data-filter]").forEach((button) => button.classList.toggle("is-active", button.dataset.filter === state.flowFilter));
-  renderMap(elements.owner_map, false);
+  document.querySelectorAll("[data-plan-density]").forEach((button) => {
+    const active = button.dataset.planDensity === state.planDensity;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  renderMap(elements.owner_map, state.planDensity === "compact");
   const phase = state.snapshot.phases.find((item) => item.phase_id === state.activePhaseId);
   if (!phase) return;
   const visible = phase.tasks.filter((task) => state.flowFilter === "all" || (state.flowFilter === "complete" ? task.project_state === "complete" : task.project_state !== "complete"));
@@ -291,7 +319,8 @@ function renderMap(target, compact) {
     const phaseButtons = group.phase_ids.map((phaseId) => {
       const phase = phases.find((item) => item.phase_id === phaseId);
       if (!phase) return null;
-      return el("button", `phase-node phase-${statusClass(phase.project_state)} ${phase.phase_id === state.activePhaseId ? "is-active" : ""}`, el("span", "phase-code", phase.phase_id), el("span", "phase-name", phase.title), el("span", "phase-progress", `${phase.completed_task_count}/${phase.tasks.length}`), () => selectPhase(phase.phase_id));
+      const accessibleName = `${phase.phase_id}: ${phase.title}. ${humanState(phase.project_state)}. ${phase.completed_task_count} of ${phase.tasks.length} verified.`;
+      return el("button", `phase-node phase-${statusClass(phase.project_state)} ${phase.phase_id === state.activePhaseId ? "is-active" : ""}`, el("span", "phase-code", phase.phase_id), el("span", "phase-name", phase.title), el("span", "phase-progress", `${phase.completed_task_count}/${phase.tasks.length}`), { "aria-label": accessibleName }, () => selectPhase(phase.phase_id));
     }).filter(Boolean);
     return el("div", `map-group ${group.group_id}`, el("div", "map-group-label", group.title_en), el("div", "map-phase-row", ...phaseButtons));
   });
@@ -352,15 +381,68 @@ function renderTools(target) {
 async function renderFlows(target) {
   if (!state.flows) return target.replaceChildren(messageState("System maps unavailable", "error-state"));
   const list = el("nav", "flow-index", ...state.flows.flows.map((flow, index) => el("button", index === 0 ? "is-active" : "", flow.title, () => loadFlow(flow, list, canvas, caption))));
-  const canvas = el("div", "flow-canvas");
-  const caption = el("p", "flow-caption", "Select a system map.");
-  target.replaceChildren(el("div", "flow-browser", list, el("figure", "flow-stage", canvas, caption)));
+  const canvas = el("div", "flow-canvas", "", { tabindex: "0", "aria-label": "Flow diagram viewport. Use scrollbars or mouse drag to pan.", "aria-describedby": "flow-caption" });
+  const caption = el("p", "flow-caption", "Select a system map.", { id: "flow-caption" });
+  const zoomLabel = el("output", "flow-zoom-label", "100%", { "aria-live": "polite", "aria-label": "Flow zoom" });
+  const updateViewport = () => applyFlowViewport(canvas, zoomLabel);
+  const zoom = (change) => {
+    state.flowFit = false;
+    state.flowZoom = Math.max(75, Math.min(200, state.flowZoom + change));
+    updateViewport();
+  };
+  const toolbar = el("div", "flow-toolbar",
+    el("div", "flow-zoom-actions",
+      el("button", "icon-button flow-control", "-", { type: "button", title: "Zoom out", "aria-label": "Zoom out" }, () => zoom(-25)),
+      el("button", "button button-secondary flow-reset", "100%", { type: "button", title: "Reset to native size", "aria-label": "Reset to native size" }, () => { state.flowFit = false; state.flowZoom = 100; updateViewport(); }),
+      el("button", "icon-button flow-control", "+", { type: "button", title: "Zoom in", "aria-label": "Zoom in" }, () => zoom(25)),
+      el("button", "button button-secondary flow-fit", "Fit", { type: "button", title: "Fit diagram to viewport", "aria-label": "Fit diagram to viewport" }, () => { state.flowFit = true; updateViewport(); }),
+    ), zoomLabel,
+  );
+  bindFlowPan(canvas);
+  target.replaceChildren(el("div", "flow-browser", list, el("figure", "flow-stage", toolbar, canvas, caption)));
   if (state.flows.flows[0]) loadFlow(state.flows.flows[0], list, canvas, caption);
 }
 
 async function loadFlow(flow, list, canvas, caption) {
   list.querySelectorAll("button").forEach((button, index) => button.classList.toggle("is-active", state.flows.flows[index].flow_id === flow.flow_id));
-  try { const detail = await fetchJson(flow.detail_url); canvas.replaceChildren(el("img", "flow-image", "", { src: detail.image_url, alt: detail.title })); caption.textContent = detail.title; } catch (error) { canvas.replaceChildren(messageState(readError(error), "error-state")); }
+  state.flowFit = false;
+  state.flowZoom = 100;
+  try {
+    const detail = await fetchJson(flow.detail_url);
+    canvas.replaceChildren(el("img", "flow-image", "", { src: detail.image_url, alt: detail.title, draggable: "false" }));
+    caption.textContent = detail.title;
+    applyFlowViewport(canvas, document.querySelector(".flow-zoom-label"));
+  } catch (error) { canvas.replaceChildren(messageState(readError(error), "error-state")); }
+}
+
+function applyFlowViewport(canvas, zoomLabel) {
+  const image = canvas.querySelector(".flow-image");
+  if (!image) return;
+  image.classList.toggle("is-fit", state.flowFit);
+  image.style.width = state.flowFit ? "100%" : `${960 * state.flowZoom / 100}px`;
+  zoomLabel.textContent = state.flowFit ? "Fit" : `${state.flowZoom}%`;
+}
+
+function bindFlowPan(canvas) {
+  let pan = null;
+  canvas.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "touch" || event.button !== 0) return;
+    pan = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, left: canvas.scrollLeft, top: canvas.scrollTop };
+    canvas.setPointerCapture(event.pointerId);
+    canvas.classList.add("is-panning");
+  });
+  canvas.addEventListener("pointermove", (event) => {
+    if (!pan || event.pointerId !== pan.pointerId) return;
+    canvas.scrollLeft = pan.left - (event.clientX - pan.x);
+    canvas.scrollTop = pan.top - (event.clientY - pan.y);
+  });
+  const stopPan = (event) => {
+    if (!pan || event.pointerId !== pan.pointerId) return;
+    pan = null;
+    canvas.classList.remove("is-panning");
+  };
+  canvas.addEventListener("pointerup", stopPan);
+  canvas.addEventListener("pointercancel", stopPan);
 }
 
 function renderAlignment(target) {
@@ -448,8 +530,8 @@ async function parseResponse(response) { const payload = await response.json().c
 function setSyncState(text, error) { elements.sync_state.textContent = text; elements.sync_state.classList.toggle("is-error", Boolean(error)); }
 function gateById(id) { return state.governanceCatalog?.gates?.find((gate) => gate.gate_id === id); }
 function phaseTitle(id) { return state.snapshot?.phases.find((phase) => phase.phase_id === id)?.title || id; }
-function humanState(value) { return ({ complete: "Complete", approved: "Approved", in_progress: "In progress", ready: "Ready", waiting_dependency: "Waiting on dependency", waiting_gate: "Waiting for Gate", blocked_gate: "Gate blocked", verification_needed: "Verify evidence", stale: "Stale", incomplete: "Incomplete", not_recorded: "Not recorded", pending: "Pending", deferred: "Deferred", rejected: "Rejected", conflict: "Conflict" })[value] || "Needs attention"; }
-function statusClass(value) { return value === "complete" || value === "approved" ? "complete" : ["in_progress", "ready"].includes(value) ? "active" : ["pending", "waiting_dependency", "waiting_gate"].includes(value) ? "pending" : "blocked"; }
+function humanState(value) { return ({ closed: "Closed", complete: "Complete", approved: "Approved", in_progress: "In progress", ready: "Ready", waiting_dependency: "Waiting on dependency", waiting_gate: "Waiting for Gate", blocked_gate: "Gate blocked", verification_needed: "Verify evidence", stale: "Stale", incomplete: "Incomplete", not_recorded: "Not recorded", pending: "Pending", deferred: "Deferred", rejected: "Rejected", conflict: "Conflict", review_required: "Review required" })[value] || "Needs attention"; }
+function statusClass(value) { return ["closed", "complete", "approved"].includes(value) ? "complete" : ["in_progress", "ready"].includes(value) ? "active" : ["pending", "waiting_dependency", "waiting_gate"].includes(value) ? "pending" : "blocked"; }
 function statusLegend(status, label) { return el("span", "legend-item", el("i", `legend-mark ${statusClass(status)}`, ""), label); }
 function metric(label, value, note) { return el("div", "metric-node", el("span", "section-label", label), el("strong", "", value), el("small", "", note)); }
 function scopeBlock(title, value, note) { return el("div", "scope-block", el("span", "section-label", title), el("strong", "", value), el("small", "", note)); }

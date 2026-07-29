@@ -1,0 +1,148 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260729T064958Z-f0-mlflow-11of11",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T06:49:58Z",
+  "scope": "Close the F0 MLflow runtime bootstrap and record the independently validated 11/11 governance catalog state without scientific execution.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "G0",
+      "source": "00_governance/approvals/G0-20260729T034449581785Z.json#/decision_id",
+      "scope": "F0 Dashboard and MLflow projection work only; no scientific execution"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "e96fe316ae901d5dfb6a1bef4a225bd573261e7d",
+    "dirty_paths": [
+      "00_governance/OPERATIONS.md",
+      "00_governance/RESTRUCTURE_STATUS.md",
+      "02_tracks/00_C_crossroute/README.md",
+      "05_code/scripts/bootstrap_mlflow.py",
+      "05_code/src/myis_research/dashboard/progress.py",
+      "05_code/src/myis_research/harness/cli.py",
+      "05_code/src/myis_research/identity.py",
+      "05_code/src/myis_research/mlflow_mirror.py",
+      "05_code/tests/test_dashboard_frontend.py",
+      "05_code/tests/test_dashboard_progress.py",
+      "05_code/tests/test_identity.py",
+      "05_code/tests/test_mlflow_mirror.py",
+      "06_frontend/dashboard/README.md",
+      "06_frontend/dashboard/assets/dashboard.css",
+      "06_frontend/dashboard/assets/dashboard.js",
+      "06_frontend/dashboard/diagrams/candidate-exposure.svg",
+      "06_frontend/dashboard/diagrams/confirmation-boundary.svg",
+      "06_frontend/dashboard/diagrams/decision-ledger.svg",
+      "06_frontend/dashboard/diagrams/harness-kernel.svg",
+      "06_frontend/dashboard/diagrams/mlflow-mirror.svg",
+      "06_frontend/dashboard/diagrams/owner-gate.svg",
+      "06_frontend/dashboard/diagrams/research-program.svg",
+      "06_frontend/dashboard/diagrams/run-lifecycle.svg",
+      "06_frontend/dashboard/index.html",
+      "HANDOFF.md",
+      "README.md",
+      "04_outputs/audits/research-sessions/20260729T064958Z-f0-mlflow-11of11.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The F0 post-G0 audit remains complete with grade Accept, mean 4.17, zero critical findings, zero major findings, two minor findings, and one suggestion; no scientific execution was authorized.",
+      "evidence_refs": [
+        {
+          "path": "04_outputs/audits/rigor/myis-research-f0-post-g0-20260729T040557Z.json",
+          "sha256": "cc3dd8c90a476d11b41fa40fe4f76665a691963ea89a0fc49e8ed3abf94128f8",
+          "locator": "review_status, overall, and governance.blocking_findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The current validated governance-document catalog contains 11 distinct document IDs; validation was metadata-only and did not mirror documents during this session.",
+      "evidence_refs": [
+        {
+          "path": "03_experiments/config/mlflow/governance_documents.yaml",
+          "sha256": "8a6d69fd9371cbda4f01ee13c50669949c8e961baac9d1a9a93908f32e45299a",
+          "locator": "documents catalog source; read-only dry-run document_count=11"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The approved external MLflow store was bootstrapped with active myis-research identity, an append-only v3 report, scientific_run=false, dataset_access=none, artifact_count=0, and scientific_metric_count=0; the read-only validator preserved the database hash.",
+      "evidence_refs": [
+        {
+          "path": "03_experiments/config/mlflow/governance_documents.yaml",
+          "sha256": "8a6d69fd9371cbda4f01ee13c50669949c8e961baac9d1a9a93908f32e45299a",
+          "locator": "catalog source used for the metadata-only validation boundary"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The historical 7/11 pre-replay capsule was preserved unchanged; OT0001 is closed only by this new follow-up record. The prior capsule is not revalidated as current runtime evidence.",
+      "evidence_refs": [
+        {
+          "path": "04_outputs/audits/research-sessions/20260729T041555Z-mlflow-recovery.json",
+          "sha256": "8631f34a0bc9d62342c1ef501ae259b16af4b465de8ab8aa8deedb1d29984507",
+          "locator": "session_id, events[2], and open_threads[0]"
+        }
+      ]
+    }
+  ],
+  "runtime_validation": {
+    "store_label": "01_Stores/00_myIS/mlflow outside Git",
+    "bootstrap_report": "external:bootstrap-reports/mlflow-bootstrap-e96fe316ae901d5dfb6a1bef4a225bd573261e7d-7b62007ef0988b37c36d1699f80b891122aa30bdd7dd1224482a2788d57bc8e1.json",
+    "bootstrap_run_id": "412dab829085407d96109316ee3cbe93",
+    "catalog_document_count": 11,
+    "database_sha256": "e1c68c82bf4ad094b02b67675397d8b4789cb5bea18b48d694609a9d58e2a965",
+    "scientific_run": false,
+    "dataset_access": "none",
+    "artifact_count": 0,
+    "scientific_metric_count": 0,
+    "doctor_checks": {
+      "research_root": "PASS",
+      "source_package": "PASS",
+      "mlflow_root": "PASS",
+      "mlflow_database": "PASS",
+      "mlflow_artifacts": "PASS",
+      "structlog_version": "PASS"
+    }
+  },
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "external:receipts/mlflow/mlflow-mirror-7b62007ef0988b37c36d1699f80b891122aa30bdd7dd1224482a2788d57bc8e1.json"
+    ]
+  },
+  "open_threads": [],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

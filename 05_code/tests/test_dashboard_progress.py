@@ -90,6 +90,20 @@ class DashboardProgressTests(unittest.TestCase):
         self.assertEqual(plan.phases[0].phase_id, "F0")
         self.assertEqual(plan.phases[-1].phase_id, "PS")
 
+    def test_current_pre_f1_readiness_is_a_projection_of_verified_phase_and_gate_state(self) -> None:
+        snapshot = build_dashboard_snapshot(REPO_ROOT)
+        self.assertEqual(
+            snapshot["readiness"],
+            {
+                "f0": "closed",
+                "g0": "approved",
+                "f1": "waiting_gate",
+                "g1": "pending",
+                "project": "f1_g1_preparation_only",
+                "project_label": "F1/G1 preparation only",
+            },
+        )
+
     def test_successful_activity_without_task_evidence_is_not_complete(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

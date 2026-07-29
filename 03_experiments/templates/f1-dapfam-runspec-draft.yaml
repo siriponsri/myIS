@@ -1,0 +1,28 @@
+# Planning-only input. This is neither an executable RunSpec nor a measured manifest.
+schema_version: myis.draft-runspec.v1
+document_kind: f1_dapfam_runspec_draft
+status: draft
+executable: false
+gate: G1
+gate_status: pending
+authorization: NOT_AUTHORIZED
+frozen_run_spec: NOT_YET_FROZEN
+scientific_run: false
+dataset_access: none
+artifact_count: 0
+scientific_metric_count: 0
+track: C
+phase: F1
+task: F1.1
+owner_commitments:
+  corpus: PENDING_OWNER_DECISION
+  query: PENDING_OWNER_DECISION
+  qrels: PENDING_OWNER_DECISION
+  family: PENDING_OWNER_DECISION
+  evaluator: PENDING_OWNER_DECISION
+  field_protocol: PENDING_OWNER_DECISION
+  published_targets: PENDING_OWNER_DECISION
+  compute_budget: PENDING_OWNER_DECISION
+  exact_split_membership_hash: PENDING_OWNER_DECISION
+  exact_out_positive_counts: PENDING_OWNER_DECISION
+  reproduction_authorization: PENDING_OWNER_DECISION

@@ -180,6 +180,7 @@ class MLflowMirrorTests(unittest.TestCase):
                 run_name="bootstrap",
                 git_commit="f85404a",
                 canonical_source_sha256=SHA,
+                tags={"scientific_run": "false", "dataset_access": "none"},
                 parameters={"artifact_count": 0, "scientific_metric_count": 0},
             )
             receipt = mirror.sync(valid)
@@ -192,10 +193,34 @@ class MLflowMirrorTests(unittest.TestCase):
                 run_name="bad-bootstrap",
                 git_commit="f85404a",
                 canonical_source_sha256=SHA,
+                tags={"scientific_run": "false", "dataset_access": "none"},
                 metrics={"score": 1.0},
             )
             with self.assertRaises(MirrorValidationError):
                 mirror.sync(invalid)
+
+    def test_bootstrap_requires_explicit_non_scientific_tags_and_zero_parameters(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            mirror = MLflowMirror(Path(temp) / "store", backend=FakeBackend())
+            cases = (
+                ({}, {"artifact_count": 0, "scientific_metric_count": 0}),
+                ({"scientific_run": "true", "dataset_access": "none"}, {"artifact_count": 0, "scientific_metric_count": 0}),
+                ({"scientific_run": "false", "dataset_access": "all"}, {"artifact_count": 0, "scientific_metric_count": 0}),
+                ({"scientific_run": "false", "dataset_access": "none"}, {"artifact_count": 0}),
+            )
+            for tags, parameters in cases:
+                with self.subTest(tags=tags, parameters=parameters):
+                    with self.assertRaises(MirrorValidationError):
+                        mirror.sync(
+                            MirrorSpec(
+                                stage=MirrorStage.BOOTSTRAP,
+                                run_name="invalid-bootstrap",
+                                git_commit="f85404a",
+                                canonical_source_sha256=SHA,
+                                tags=tags,
+                                parameters=parameters,
+                            )
+                        )
 
     def test_reserved_lineage_tags_and_secret_metadata_are_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

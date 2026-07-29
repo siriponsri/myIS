@@ -13,6 +13,7 @@ from myis_research.identity import (
     ResearchIdentity,
     assert_canonical_identity,
     load_research_identity,
+    validate_full_git_commit,
 )
 
 
@@ -61,6 +62,14 @@ class ResearchIdentityTests(unittest.TestCase):
 
             with self.assertRaises(IdentityValidationError):
                 load_research_identity(root)
+
+    def test_full_git_commit_rejects_abbreviated_or_noncanonical_values(self) -> None:
+        commit = "a" * 40
+        self.assertEqual(validate_full_git_commit(commit), commit)
+        self.assertEqual(validate_full_git_commit("b" * 64), "b" * 64)
+        for invalid in ("a" * 12, "A" * 40, "g" * 40, ""):
+            with self.subTest(invalid=invalid), self.assertRaises(IdentityValidationError):
+                validate_full_git_commit(invalid)
 
 
 if __name__ == "__main__":

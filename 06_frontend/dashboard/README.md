@@ -6,6 +6,14 @@ Dashboard. It presents an English-first Owner workbench with Thai detail help, t
 the Owner Gate ledger, and allowlisted artifact metadata without becoming a
 second source of truth.
 
+## Current readiness projection
+
+The verified current view is `F0 = closed`, `G0 = approved`,
+`F1 = waiting_gate`, `G1 = pending`, and `F1/G1 preparation only`. This is a
+read-only projection of validated canonical Task evidence and immutable Gate
+records; it does not authorize reproduction or change a Gate. MLflow remains a
+separate rebuildable mirror and is not a source of dashboard authorization.
+
 ## Runtime contract
 
 - Serve this directory only through the repository dashboard backend.
@@ -74,6 +82,8 @@ Flow controls let the Owner jump to a Phase, expand a Task, and filter active,
 complete, waiting, or Gate-blocked work. The page refreshes the local projection
 every 60 seconds while visible. `Complete` is derived only from validated
 canonical Task evidence; Linear status cannot complete work or approve a Gate.
+Any future DAPFAM reproduction control must remain a fail-closed
+`waiting_gate` path until a valid G1 decision and frozen RunSpec are present.
 
 ## Verification
 

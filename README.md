@@ -19,6 +19,18 @@ preserved under `02_tracks/99_legacy/`; evidence transfer remains separately
 gated and deferred.
 DAPFAM is retrieval decision support, not legal advice.
 
+## Current readiness
+
+The verified foundation state is `F0 = closed` and `G0 = approved`. `F1` is
+`waiting_gate` and `G1` is `pending`; the only current project readiness is
+`F1/G1 preparation only`. No reproduction, dataset or qrels access, scientific
+metric, paid API, GPU, or confirmation activity is authorized.
+
+The approved external MLflow runtime store is a rebuildable mirror outside Git.
+Its F0 bootstrap records connectivity only, with no scientific run, dataset
+access, artifacts, or scientific metrics. Do not mirror or replay governance
+documents unless the Owner separately approves that action.
+
 ## Start here
 
 1. [AGENTS.md](AGENTS.md) - identity, safety, and scientific invariants.
@@ -64,6 +76,12 @@ joint test, transfer, and separate publication records. Current blocking Owner
 values are `C_MARGIN_VALUES_TBD_BLOCKING`, `C_SOEI_VALUE_TBD_BLOCKING`,
 `S_MARGIN_VALUES_TBD_BLOCKING`, `COREWEAVE_FINAL_FREEZE_TBD_BLOCKING`, and
 `CT_BUDGET_LICENSE_TBD_BLOCKING`. Silence never resolves them.
+
+Before `F1.1` can run, the Owner must explicitly approve G1 with committed
+corpus, query, qrels, family, and evaluator inputs; the field protocol and
+published targets; a compute budget; exact split membership/hash and exact
+OUT-positive counts from the protected Owner process; and reproduction
+authorization. A draft or scaffold is not a frozen RunSpec and cannot open G1.
 
 ## Local validation
 

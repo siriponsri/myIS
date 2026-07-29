@@ -20,6 +20,7 @@ PROJECT_CONFIG = Path("00_governance/config/project.yaml")
 
 _PROGRAM_ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _RESEARCH_VERSION_RE = re.compile(r"^(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)$")
+_FULL_GIT_COMMIT_RE = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
 
 
 class IdentityValidationError(ValueError):
@@ -133,6 +134,16 @@ def assert_canonical_identity(identity: ResearchIdentity) -> None:
     )
     if actual != expected:
         raise IdentityValidationError("project identity does not match myIS Research protocol 1.0")
+
+
+def validate_full_git_commit(value: str, *, field_name: str = "git_commit") -> str:
+    """Return a canonical full Git object ID or reject abbreviated provenance."""
+
+    if not isinstance(value, str) or not _FULL_GIT_COMMIT_RE.fullmatch(value):
+        raise IdentityValidationError(
+            f"{field_name} must be a full lowercase 40- or 64-hex Git commit identity"
+        )
+    return value
 
 
 def _string(value: Mapping[str, Any], key: str) -> str:

@@ -205,6 +205,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
     _add_project_progress(phase_views)
     plan_graph = _build_plan_graph(plan, linear)
     owner_focus = _owner_focus(phase_views, governance, git_dirty)
+    readiness = _readiness_projection(phase_views, governance)
     completed_task_count = sum(
         task["project_state"] == "complete"
         for phase in phase_views
@@ -244,6 +245,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
         },
         "plan_graph": plan_graph,
         "owner_focus": owner_focus,
+        "readiness": readiness,
         "projection_revision": hashlib.sha256(
             json.dumps(
                 {
@@ -258,6 +260,26 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
                 separators=(",", ":"),
             ).encode("utf-8")
         ).hexdigest(),
+    }
+
+
+def _readiness_projection(
+    phases: list[dict[str, Any]], governance: dict[str, str]
+) -> dict[str, str]:
+    """Project the current pre-F1 boundary without creating a new authority."""
+
+    phase_states = {phase["phase_id"]: phase["project_state"] for phase in phases}
+    f0_closed = phase_states.get("F0") == "complete" and governance.get("G0") == "approved"
+    f1_state = phase_states.get("F1", "review_required")
+    g1_state = governance.get("G1", "review_required")
+    preparation_only = f0_closed and f1_state == "waiting_gate" and g1_state == "pending"
+    return {
+        "f0": "closed" if f0_closed else phase_states.get("F0", "review_required"),
+        "g0": governance.get("G0", "review_required"),
+        "f1": f1_state,
+        "g1": g1_state,
+        "project": "f1_g1_preparation_only" if preparation_only else "review_required",
+        "project_label": "F1/G1 preparation only" if preparation_only else "Readiness requires review",
     }
 
 

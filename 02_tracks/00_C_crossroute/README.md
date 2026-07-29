@@ -11,6 +11,19 @@ Track C owns candidate exposure. The frozen C1 harness is the only retrieval
 harness handed to Track S. Ranking is a diagnostic performed on an identical
 frozen pool; it is not an independent scientific track or a separate gate.
 
+## Current gate state
+
+Foundation migration is closed: `F0 = closed` and `G0 = approved`. Track C
+baseline reproduction remains `F1 = waiting_gate` because `G1 = pending`.
+Current work is F1/G1 preparation only. Draft schemas, documentation, fixtures,
+and fail-closed adapter checks may be prepared, but no DAPFAM reproduction,
+dataset or qrels access, confirmation access, paid API, GPU use, measured
+manifest, or scientific metric is authorized.
+
+Any future `myis-harness reproduce dapfam` path must refuse before protected or
+scientific access unless a valid G1 decision and a frozen, resolved RunSpec are
+available. A draft is not executable and cannot stand in for that authorization.
+
 ## Locked comparison
 
 The primary comparison is `C1 - C0` on family-level `OUT Recall@100` over the
@@ -50,6 +63,16 @@ claim.
 
 No experiment, qrels evaluation, paid API, GPU, or confirmation action is
 authorized by this directory. This is decision support, not legal advice.
+
+## F1/G1 preparation
+
+The F1.1 DAPFAM material is a non-executable preparation scaffold only. Its
+draft templates live in `03_experiments/templates/`; they do not belong in
+`C_artifacts/manifests/`, which is reserved for immutable measured outputs.
+`myis-harness reproduce dapfam` can validate the draft only in explicit dry-run
+mode and otherwise fails closed with `WAITING_GATE`. G1 must approve the corpus,
+query, qrels, family, evaluator, field protocol, published targets, compute
+budget, and reproduction authorization before any F1 execution work begins.
 
 See [the Track C source plan](../../00_governance/IS_RESEARCH_TRACK_C_V0.1_CROSSROUTE_PLAN.md)
 and the canonical execution plan.

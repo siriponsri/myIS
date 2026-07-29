@@ -2,7 +2,7 @@
   <title id="title">myIS Research C-to-S program</title><desc id="desc">Track C establishes and freezes the C1 candidate harness before the required matched Track S arms begin. Joint confirmation and publication remain separately gated.</desc>
   <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#8a949b"/></marker></defs>
   <rect width="960" height="560" fill="#f7f8fa"/>
-  <g font-family="Segoe UI,Arial,sans-serif" font-size="13" text-anchor="middle">
+  <g font-family="Segoe UI,Arial,sans-serif" font-size="14" text-anchor="middle">
     <g fill="none" stroke="#8a949b" stroke-width="2" marker-end="url(#a)"><path d="M165 115H235"/><path d="M355 115H425"/><path d="M545 115H615"/><path d="M735 115V235"/><path d="M735 315V395"/><path d="M675 435H545"/><path d="M425 435H355"/></g>
     <g fill="#fff" stroke="#b8c1c8"><rect x="45" y="75" width="120" height="80" rx="4"/><rect x="235" y="75" width="120" height="80" rx="4"/><rect x="425" y="75" width="120" height="80" rx="4"/><rect x="615" y="75" width="120" height="80" rx="4"/><rect x="675" y="235" width="120" height="80" rx="4"/><rect x="675" y="395" width="120" height="80" rx="4"/><rect x="425" y="395" width="120" height="80" rx="4"/><rect x="235" y="395" width="120" height="80" rx="4"/></g>
     <g fill="#147d75" font-family="Cascadia Mono,Consolas,monospace" font-weight="700"><text x="105" y="105">F0/F1</text><text x="295" y="105">D0</text><text x="485" y="105">C0/C1</text><text x="675" y="105">CF</text><text x="735" y="265">S0/S1/SF</text><text x="735" y="425">Q</text><text x="485" y="425">PC/PS</text><text x="295" y="425">CT</text></g>

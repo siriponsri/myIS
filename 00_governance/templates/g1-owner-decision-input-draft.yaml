@@ -1,0 +1,19 @@
+# Preparation input only. Do not place this file under approvals/ and do not treat it as a decision.
+schema_version: myis.g1-decision-input-draft.v1
+status: draft
+gate: G1
+gate_status: pending
+authorization: NOT_AUTHORIZED
+frozen_run_spec: NOT_YET_FROZEN
+required_owner_commitments:
+  corpus: PENDING_OWNER_DECISION
+  query: PENDING_OWNER_DECISION
+  qrels: PENDING_OWNER_DECISION
+  family: PENDING_OWNER_DECISION
+  evaluator: PENDING_OWNER_DECISION
+  field_protocol: PENDING_OWNER_DECISION
+  published_targets: PENDING_OWNER_DECISION
+  compute_budget: PENDING_OWNER_DECISION
+  exact_split_membership_hash: PENDING_OWNER_DECISION
+  exact_out_positive_counts: PENDING_OWNER_DECISION
+  reproduction_authorization: PENDING_OWNER_DECISION

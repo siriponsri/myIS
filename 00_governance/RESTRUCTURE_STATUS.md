@@ -64,6 +64,17 @@ My_Research/
   Track C diagnostic, and evidence R2 remains a deferred separately gated lane.
 - Scientific development runs, paid/API/GPU/Vast execution and prospective
   confirmation remain closed until their separate Owner gates are recorded.
+- F0 is closed and G0 is approved by validated task evidence and the immutable
+  G0 decision chain. F1 is `waiting_gate`, G1 is `pending`, and the program is
+  ready for F1/G1 preparation only, not scientific execution.
+- The approved MLflow runtime store remains outside Git and is a rebuildable
+  mirror. Bootstrap connectivity must record `scientific_run=false`,
+  `dataset_access=none`, `artifact_count=0`, and
+  `scientific_metric_count=0`; it must not mirror governance documents unless
+  separately approved by the Owner.
+- A DAPFAM reproduction path is not executable at this state. It must fail
+  closed before dataset, qrels, confirmation, paid API, GPU, or scientific
+  access until a valid G1 approval and frozen RunSpec exist.
 
 ## Immutable boundaries
 

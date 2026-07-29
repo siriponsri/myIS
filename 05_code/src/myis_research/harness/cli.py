@@ -9,6 +9,8 @@ from pathlib import Path
 import structlog
 
 from ..brain_drive import run_brain_drive_demo
+from .drafts import DraftValidationError
+from .reproduction import WAITING_GATE_EXIT_CODE, reproduce_dapfam
 from .runner import KERNEL_VERSION
 from .validation import validate_run_bundle
 
@@ -40,6 +42,18 @@ def build_parser() -> argparse.ArgumentParser:
     validate = subparsers.add_parser("validate", help="validate an immutable run bundle")
     validate.add_argument("run_dir", type=Path)
     validate.add_argument("--split-hash")
+
+    reproduce = subparsers.add_parser("reproduce", help="non-executable reproduction preparation")
+    reproduce_targets = reproduce.add_subparsers(dest="reproduction_target", required=True)
+    dapfam = reproduce_targets.add_parser("dapfam", help="validate a draft and refuse until G1")
+    dapfam.add_argument("--manifest", type=Path, help="draft RunSpec YAML under 03_experiments/templates")
+    dapfam.add_argument(
+        "--dry-run",
+        "--validate-draft",
+        dest="validate_draft",
+        action="store_true",
+        help="validate a non-executable draft only; never starts reproduction",
+    )
     return parser
 
 
@@ -50,9 +64,31 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "demo":
         output = run_brain_drive_demo(args.workdir.resolve(), mlflow_root=args.mlflow_root.resolve())
         result = {"status": "PASS", "run_dir": output["run_dir"], "report": output["report"]}
-    else:
+    elif args.command == "validate":
         result = validate_run_bundle(args.run_dir.resolve(), expected_split_hash=args.split_hash)
+    else:
+        try:
+            result = reproduce_dapfam(
+                repository_root=Path.cwd().resolve(),
+                manifest=args.manifest,
+                validate_draft=args.validate_draft,
+            )
+        except DraftValidationError as error:
+            result = {
+                "status": "WAITING_GATE",
+                "gate": "G1",
+                "gate_status": "pending",
+                "reason": "DRAFT_VALIDATION_FAILED",
+                "message": str(error),
+                "executor_available": False,
+                "scientific_run": False,
+                "dataset_access": "none",
+                "artifact_count": 0,
+                "scientific_metric_count": 0,
+            }
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
+    if args.command == "reproduce":
+        return WAITING_GATE_EXIT_CODE
     return 0 if result["status"] == "PASS" else 1
 
 

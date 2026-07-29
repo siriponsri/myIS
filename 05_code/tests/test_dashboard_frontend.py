@@ -94,6 +94,9 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn('<html lang="en">', index.text)
             self.assertIn("Connecting / กำลังเชื่อมต่อ", index.text)
             self.assertIn('id="flow-progress"', index.text)
+            self.assertIn('data-plan-density="readable"', index.text)
+            self.assertIn('data-plan-density="compact"', index.text)
+            self.assertIn('id="overview-readiness"', index.text)
             self.assertEqual(index.headers["cache-control"], "no-store, max-age=0")
             self.assertEqual(client.get("/assets/dashboard.css").status_code, 200)
             self.assertEqual(client.get("/assets/tokens.css").status_code, 200)
@@ -103,6 +106,11 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn("Completion requires canonical Task evidence", script.text)
             self.assertIn("item.title_en", script.text)
             self.assertIn("item.title_th", script.text)
+            self.assertIn("renderReadiness", script.text)
+            self.assertIn("bindFlowPan", script.text)
+            self.assertIn("flow-toolbar", script.text)
+            self.assertIn("aria-label\": \"Zoom in\"", script.text)
+            self.assertIn("min-width: 960px", client.get("/assets/dashboard.css").text)
             self.assertEqual(client.get("/assets/unknown.js").status_code, 404)
 
     def test_response_policy_applies_to_html_static_json_and_svg(self) -> None:

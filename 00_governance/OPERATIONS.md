@@ -58,14 +58,31 @@ For `BATCH_2A_ARTIFACT_VALIDATION.json`, `BATCH_2A_CSV_VALIDATION.json`, and
 6. Run preflight and deterministic fixture/dry-run tests before scientific data.
 7. Stop before any unapproved API/GPU/Vast/vLLM/PageIndex/external action.
 
+## Current F1/G1 preparation boundary
+
+Current verified readiness is `F0 = closed`, `G0 = approved`,
+`F1 = waiting_gate`, and `G1 = pending`. Preparation may create or validate
+non-executable drafts and fail-closed adapter scaffolding only; it must not
+access datasets, qrels, confirmation surfaces, held-out membership, paid APIs,
+or GPU resources.
+
+`myis-harness reproduce dapfam` is not a scientific execution path at this
+state. Until a future valid G1 authorization and frozen RunSpec are supplied,
+it must fail closed as unavailable or `waiting_gate` before any protected or
+scientific access. Help, dry-run, and schema-only validation do not authorize
+reproduction and cannot create measured manifests or scientific metrics.
+
 ## Scientific phase commands
 
 Commands below are target interfaces until their adapters are implemented and
-validated. Do not infer availability from documentation.
+validated. Do not infer availability from documentation. The DAPFAM command is
+currently a non-executable F1/G1 scaffold: it can validate its checked-in draft
+only when explicitly requested, always returns `WAITING_GATE`, and never opens
+research data, qrels, a provider, GPU, MLflow, or a run-artifact directory.
 
 ```text
 myis-harness doctor
-myis-harness reproduce dapfam --manifest PATH
+myis-harness reproduce dapfam --manifest 03_experiments/templates/f1-dapfam-runspec-draft.yaml --dry-run
 myis-harness audit shared-split --manifest PATH
 myis-harness audit c-margin --manifest PATH
 myis-harness run dev --track C --arm C0 --manifest PATH
@@ -148,6 +165,12 @@ On a lost/corrupt local receipt ledger:
 Set `MYIS_MLFLOW_STORE` to the approved persistent root outside Git. Bootstrap
 logs no artifacts and no scientific metrics. Catalog/scientific projection uses
 explicit validated/redacted files only.
+
+For the current F0 closeout, bootstrap is limited to the approved external
+runtime root, `database/mlflow.db`, `artifacts/`, and a connectivity record
+showing `scientific_run=false`, `dataset_access=none`, `artifact_count=0`, and
+`scientific_metric_count=0`. Do not run governance-document replay or mirroring
+as part of this bootstrap; that requires separate Owner approval after review.
 
 Validate the important-document catalog without writing to MLflow:
 
