@@ -53,7 +53,7 @@ class DashboardProgressTests(unittest.TestCase):
             task = snapshot["phases"][0]["tasks"][0]
             self.assertEqual(task["evidence_state"], "not_recorded")
             self.assertEqual(task["governance_state"], "pending")
-            self.assertEqual(task["project_state"], "in_progress")
+            self.assertEqual(task["project_state"], "verification_needed")
             self.assertEqual(snapshot["progress"]["completed_task_count"], 0)
             self.assertEqual(snapshot["progress"]["completion_authority"], "canonical_task_evidence")
 

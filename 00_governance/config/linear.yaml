@@ -31,9 +31,9 @@ linear:
     - {phase: PC, external_id: 5a2f923f-f8ee-4b2c-a5e9-17cdc4bbaac8}
     - {phase: PS, external_id: 3397e7de-99e3-403e-872c-eb411e94d756}
   tasks:
-    - {task_id: F0.1, phase: F0, external_id: SIR-5, status: In Progress}
-    - {task_id: F0.2, phase: F0, external_id: SIR-6, status: In Progress}
-    - {task_id: F0.3, phase: F0, external_id: SIR-8, status: Todo}
+    - {task_id: F0.1, phase: F0, external_id: SIR-5, status: Done}
+    - {task_id: F0.2, phase: F0, external_id: SIR-6, status: Done}
+    - {task_id: F0.3, phase: F0, external_id: SIR-8, status: Done}
     - {task_id: F1.1, phase: F1, external_id: SIR-7, status: Todo}
     - {task_id: D0.1, phase: D0, external_id: SIR-9, status: Todo}
     - {task_id: D0.2, phase: D0, external_id: SIR-10, status: Todo}
