@@ -28,6 +28,7 @@ _TASK_RE = re.compile(r"^### Task ([A-Z0-9]+\.\d+) - (.+)$")
 _GATE_RE = re.compile(r"^- \*\*Owner Gate:\*\* .*?\b(G[0-8])\b")
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _GIT_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+_HF_DATASET_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 _TICK = chr(96)
 
 
@@ -176,6 +177,8 @@ def validate_registry(payload: dict[str, Any], root: Path) -> None:
             raise AssetRegistryError(f"{asset_id} references an unknown source repository")
         if source.get("commit") != repositories[source["repository"]]["commit"]:
             raise AssetRegistryError(f"{asset_id} source commit does not match repository commit")
+        if asset_id == "APP-DAPFAM-CORE":
+            _validate_huggingface_metadata(source.get("upstream_huggingface"))
         source_paths = source.get("paths")
         if not isinstance(source_paths, list) or not source_paths:
             raise AssetRegistryError(f"{asset_id} requires source paths")
@@ -216,6 +219,28 @@ def _validate_source_entry(asset_id: str, entry: Any) -> None:
         _safe_relative_path(entry["manifest_path"])
     else:
         raise AssetRegistryError(f"{asset_id} source entry has invalid type")
+
+
+def _validate_huggingface_metadata(value: Any) -> None:
+    required = {
+        "dataset_id", "dataset_url", "revision", "license", "configs",
+        "metadata_only", "live_fetch_allowed",
+    }
+    if not isinstance(value, dict) or set(value) != required:
+        raise AssetRegistryError("APP-DAPFAM-CORE requires complete Hugging Face metadata")
+    if not _HF_DATASET_RE.fullmatch(str(value["dataset_id"])):
+        raise AssetRegistryError("APP-DAPFAM-CORE Hugging Face dataset_id is invalid")
+    expected_url = f"https://huggingface.co/datasets/{value['dataset_id']}"
+    if value["dataset_url"] != expected_url:
+        raise AssetRegistryError("APP-DAPFAM-CORE Hugging Face dataset_url is invalid")
+    if not _GIT_COMMIT_RE.fullmatch(str(value["revision"]).casefold()):
+        raise AssetRegistryError("APP-DAPFAM-CORE Hugging Face revision is invalid")
+    if not isinstance(value["license"], str) or not value["license"].strip():
+        raise AssetRegistryError("APP-DAPFAM-CORE Hugging Face license is invalid")
+    if value["configs"] != ["corpus", "queries", "relations"]:
+        raise AssetRegistryError("APP-DAPFAM-CORE Hugging Face configs are invalid")
+    if value["metadata_only"] is not True or value["live_fetch_allowed"] is not False:
+        raise AssetRegistryError("APP-DAPFAM-CORE upstream metadata must not authorize live fetch")
 
 
 def query_assets(

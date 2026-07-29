@@ -4,8 +4,8 @@ topics:
     title: DAPFAM
     subtitle_th: ชุดประเมินการค้นคืนสิทธิบัตรระดับตระกูล สำหรับตรวจว่าระบบดึงเอกสารที่เกี่ยวข้องกลับมาได้หรือไม่
     subtitle_en: Family-level patent retrieval evaluation with a strict non-legal claim boundary.
-    audience_modes: [beginner, instructor]
-    delivery_modes: [learn, present]
+    audience_modes: [owner, advisor, peer]
+    delivery_modes: [explore, present]
     sections:
       - section_id: what-it-measures
         title_th: DAPFAM วัดอะไร

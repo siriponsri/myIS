@@ -1,8 +1,8 @@
 # Owner Research Dashboard Frontend
 
 This is the build-free, same-origin frontend for the myIS Research protocol 1.0 Owner
-Dashboard. It presents an English-first Owner workbench with Thai detail help, the canonical PLAN flow as
-`Phase -> Task`, plain-language Gate guidance, process, harness rules, tools,
+Dashboard. It presents a Thai-first Owner workbench with Today, Data, Flow, and
+Presentation views, the canonical PLAN flow as `Phase -> Task`, plain-language Gate guidance, process, harness rules, tools,
 the Owner Gate ledger, and allowlisted artifact metadata without becoming a
 second source of truth.
 
@@ -52,6 +52,8 @@ worktree. The service has no remote-bind option.
 | `GET /assets/tokens.css` | Locked local design tokens; no remote fonts or CDN |
 | `GET /api/v1/session` | Establish the loopback browser session and CSRF token |
 | `GET /api/v1/dashboard-snapshot` | Phase, Task, evidence, dependency, and gate projection |
+| `GET /api/v1/owner-inbox` | Current Task, Gate readiness, Owner actions, validated closeout, and next resources |
+| `GET /api/v1/datasets` | Registry-derived public metadata, in-place App assets, and data lineage; never raw rows |
 | `GET /api/v1/governance-catalog` | Friendly Gate/evidence names and validated PLAN/Linear/MLflow bindings |
 | `GET /api/v1/f1-g1-readiness` | Validated hash/count-only Owner-local preparation projection |
 | `GET /api/v1/presentation-topics` | Registry-driven Thai-first DAPFAM teaching content |
@@ -87,8 +89,8 @@ canonical Task evidence; Linear status cannot complete work or approve a Gate.
 Any future DAPFAM reproduction control must remain a fail-closed
 `waiting_gate` path until a valid G1 decision and frozen RunSpec are present.
 
-The primary Presentation tab supports Beginner/Instructor and Learn/Present
-modes. Its DAPFAM topic shows source counts, IN/OUT/NC distribution, the fresh
+The primary Presentation tab supports Owner/Advisor/Peer and Explore/Present
+modes. Its DAPFAM topic shows public source metadata, in-place lineage, source counts, IN/OUT/NC distribution, the fresh
 split, metric interpretation, commitments, and current readiness. Unrun
 scientific charts are explicitly labeled as waiting for G1; no placeholder
 measurement is rendered.

@@ -13,6 +13,23 @@ This contract applies to every agent and adapter operating in this repository.
 7. `00_governance/OPERATIONS.md` - local commands and recovery.
 8. Files owned by the active task.
 
+## Fast start
+
+Run these read-only checks from the Research root before any implementation:
+
+```powershell
+git status --short
+uv run --no-sync myis-assets validate --mode quick
+uv run --no-sync myis-assets query --task <TASK_ID>
+uv run --no-sync myis-assets map --check
+uv run --no-sync myis-sessions validate-all
+uv run --no-sync myis-sessions latest-valid
+```
+
+If a locked environment is missing a console entry point, stop any local
+Dashboard process that locks its executable, run the required locked `uv sync`,
+then repeat the checks. Do not bypass a failed validation by editing its output.
+
 ## Identity and versioning
 
 - Active program: `myIS Research`; machine ID: `myis-research`; protocol: `1.0`.
@@ -29,7 +46,11 @@ This contract applies to every agent and adapter operating in this repository.
   provenance check that can change scientific interpretation.
 - Preserve user work and history. Delete only exact Owner-approved paths.
 - Do not access paid APIs, GPU jobs, qrels evaluation, protected confirmation
-  data, external publication surfaces, or the App repository without approval.
+  data, or external publication surfaces without approval. Registry-listed App
+  metadata, code, scripts, and documentation may be read in place only when
+  their disposition allows it; this does not authorize protected App datasets,
+  qrels, query IDs, payloads, per-query outcomes, writes, copies, or network
+  fetches.
 - Git and validated immutable artifacts are canonical. Brain, Linear, dashboard,
   and MLflow are projections and pointers.
 
@@ -142,6 +163,29 @@ This contract applies to every agent and adapter operating in this repository.
 10. Freeze code/config/prompt/skill/model/environment/pool hashes before an
     Owner confirmation request.
 
+## Current F1.1 CPU-local preparation
+
+Current authority is `F1/F1.1 = waiting_gate` and `G1 = pending`. CPU-local
+work means building and testing the reproduction machinery with synthetic
+fixtures; it does not mean that B0, B1, or B2 has been run or measured. The
+observed Owner machine has 12 logical CPU threads, about 15.7 GB RAM, and Intel
+integrated graphics. These observations are planning context, not a frozen
+RunSpec or a promise that the locked 8B encoder can run locally.
+
+Before G1, agents may implement strict RunSpec and handoff validation, replay
+B0/B1/B2 fixture hits, inspect SQLite FTS schema in immutable query-only mode,
+and inspect a small local model manifest without loading model weights. They
+must not read protected dataset rows, run qrels evaluation, load or download
+Nemotron, create measured bundles, or emit scientific MLflow metrics.
+
+Explain the next Owner choice in beginner language. The preferred privacy path
+is an Owner-controlled GPU with the locked Nemotron revision already cached;
+alternatives are an explicitly approved cloud GPU with named cost/time/egress
+limits, or deferral. BGE, Qwen, and `patembed-base` cannot replace B0. A G1
+request remains `draft` until the model artifact, compute/provider/time/cost
+budget, no-fallback policy, fresh Owner-local preparation, frozen RunSpec, and
+clean committed Git revision are all bound.
+
 ## Completion
 
 List changed files and untouched protected surfaces; run restructure, integrity,
@@ -149,3 +193,20 @@ literature, relevant test, MLflow doctor, and `git diff --check` checks; state t
 exact environment; separate fixture, development, descriptive, and confirmation
 evidence; report blockers without claiming success from partial work; and state
 that this system is decision support, not legal advice.
+
+## Beginner closeout and Gate request
+
+Every implementation session must close with a `myis.research-session.v2`
+capsule and a beginner-readable Thai Owner brief. The closeout must always state
+the current Phase, Task, Gate, Gate status, checks run, changed files, untouched
+protected surfaces, corrections, required Owner actions, the next Gate request,
+and the resources needed in the next phase. A Gate request is mandatory after
+each implementation session and is explicitly `draft`, `blocked`, or
+`ready_for_decision`; a dashboard preview never grants approval.
+
+Use `myis-sessions validate-all` and `myis-sessions latest-valid` before
+reporting provenance status. Never edit an older capsule to repair it. Record a
+v2 correction that names the exact failed legacy validation error, and preserve
+the invalid historical file. Evidence references in a capsule must exist with
+the stated hash at its recorded Git revision; list newly changed uncommitted
+paths only in the v2 closeout, not as evidence references.

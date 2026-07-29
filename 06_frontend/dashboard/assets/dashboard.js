@@ -1,5 +1,6 @@
 const VIEW_METADATA = {
-  overview: ["Owner control", "Overview"],
+  overview: ["Owner control", "Today"],
+  data: ["Data boundary", "Data"],
   presentation: ["Research briefing", "Presentation"],
   plan: ["Canonical execution order", "Plan & Tasks"],
   decisions: ["Immutable governance ledger", "Decisions"],
@@ -29,8 +30,8 @@ const state = {
   referenceTab: "process",
   flowFilter: "all",
   planDensity: "readable",
-  audienceMode: "beginner",
-  deliveryMode: "learn",
+  audienceMode: "owner",
+  deliveryMode: "explore",
   flowZoom: 100,
   flowFit: false,
   snapshot: null,
@@ -41,6 +42,8 @@ const state = {
   flows: null,
   tools: null,
   f1g1: null,
+  ownerInbox: null,
+  datasets: null,
   presentationTopics: null,
   previewToken: "",
   previewRecord: null,
@@ -69,7 +72,7 @@ async function initialize() {
 function cacheElements() {
   for (const id of [
     "view-title", "view-kicker", "sync-state", "refresh-button", "owner-focus", "overview-readiness", "f1-g1-panel", "overview-map-content",
-    "overview-legend", "overview-metrics", "overview-blockers", "overview-recent", "overview-projections",
+    "overview-legend", "overview-metrics", "overview-blockers", "overview-recent", "overview-projections", "owner-inbox", "dataset-content",
     "owner-map", "task-workspace", "gate-index", "gate-detail", "ledger-summary", "decision-table-body",
     "evidence-summary", "evidence-grid", "reference-content", "new-decision-button", "decision-dialog",
     "decision-form", "decision-form-step", "decision-preview-step", "decision-form-error", "decision-confirm-error",
@@ -172,7 +175,7 @@ function renderLoadingStates() {
   [elements.owner_focus, elements.overview_readiness, elements.overview_map_content, elements.overview_metrics, elements.overview_blockers, elements.overview_recent,
     elements.overview_projections, elements.owner_map, elements.task_workspace, elements.gate_index, elements.gate_detail,
     elements.evidence_summary, elements.evidence_grid, elements.reference_content, elements.f1_g1_panel,
-    elements.presentation_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
+    elements.presentation_content, elements.owner_inbox, elements.dataset_content].forEach((target) => target.replaceChildren(messageState("Loading local projection", "loading-state")));
 }
 
 async function refreshAll() {
@@ -186,7 +189,7 @@ async function refreshAll() {
       fetchJson("/api/v1/dashboard-snapshot"), fetchJson("/api/v1/governance-catalog"), fetchJson("/api/v1/owner-gates"),
       fetchJson("/api/v1/artifacts"), fetchJson("/api/v1/content/process"), fetchJson("/api/v1/content/harness"),
       fetchJson("/api/v1/tools"), fetchJson("/api/v1/flows"), fetchJson("/api/v1/f1-g1-readiness"),
-      fetchJson("/api/v1/presentation-topics"),
+      fetchJson("/api/v1/presentation-topics"), fetchJson("/api/v1/owner-inbox"), fetchJson("/api/v1/datasets"),
     ]);
     applyResult(results[0], (value) => { state.snapshot = value; });
     applyResult(results[1], (value) => { state.governanceCatalog = value; });
@@ -198,6 +201,8 @@ async function refreshAll() {
     applyResult(results[7], (value) => { state.flows = value; });
     applyResult(results[8], (value) => { state.f1g1 = value; });
     applyResult(results[9], (value) => { state.presentationTopics = value; });
+    applyResult(results[10], (value) => { state.ownerInbox = value; });
+    applyResult(results[11], (value) => { state.datasets = value; });
     if (state.snapshot && state.lastRevision !== state.snapshot.projection_revision) {
       state.lastRevision = state.snapshot.projection_revision || "legacy";
       normalizeSelection();
@@ -207,6 +212,7 @@ async function refreshAll() {
       renderEvidence();
       renderReference();
       renderPresentation();
+      renderData();
     }
     const failures = results.filter((result) => result.status === "rejected").length;
     setSyncState(failures ? `${failures} view${failures === 1 ? "" : "s"} unavailable` : `Updated ${formatTime(new Date())}`, failures > 0);
@@ -235,11 +241,16 @@ function renderAll() {
   renderDecisions();
   renderEvidence();
   renderReference();
+  renderData();
 }
 
 function renderOverview() {
   const snapshot = state.snapshot;
-  if (!snapshot) return;
+  if (!snapshot) {
+    [elements.owner_focus, elements.overview_readiness, elements.overview_map_content, elements.overview_metrics, elements.overview_blockers, elements.overview_recent, elements.overview_projections].forEach((target) => target.replaceChildren(messageState("Project status unavailable. Refresh the local projection.", "error-state")));
+    renderOwnerInbox();
+    return;
+  }
   const focus = snapshot.owner_focus || {};
   const gate = gateById(focus.next_gate_id);
   elements.owner_focus.replaceChildren(
@@ -248,10 +259,11 @@ function renderOverview() {
     el("div", "attention-actions", gate ? el("span", "status-badge status-pending", `${gate.name_en} · ${gate.gate_id}`) : null,
       el("button", "button button-primary", focus.mode === "decision" ? "Review decision" : "Open plan", () => focus.mode === "decision" ? openDecisionDialog(focus.next_gate_id) : activateView("plan", true)))
   );
+  renderOwnerInbox();
   renderReadiness(snapshot.readiness || {});
   renderF1G1Panel();
   elements.overview_legend.replaceChildren(statusLegend("complete", "Verified"), statusLegend("approved", "Gate approved"), statusLegend("waiting", "Needs attention"));
-  renderMap(elements.overview_map_content, true);
+  renderResearchFlow(elements.overview_map_content);
   const progress = snapshot.progress || {};
   elements.overview_metrics.replaceChildren(
     metric("Verified tasks", `${progress.completed_task_count || 0}/${snapshot.task_count}`, "Canonical evidence only"),
@@ -264,6 +276,50 @@ function renderOverview() {
   const latest = records[records.length - 1];
   elements.overview_recent.replaceChildren(el("div", "section-heading", el("div", "", el("p", "section-label", "Recent decision"), el("h2", "", latest ? friendlyDecision(latest) : "No decisions recorded"))), latest ? el("p", "muted", formatTime(latest.timestamp)) : el("p", "detail-thai", "ยังไม่มีบันทึกการตัดสินใจ"));
   renderProjectionHealth(snapshot);
+}
+
+function renderOwnerInbox() {
+  const inbox = state.ownerInbox;
+  if (!inbox) return elements.owner_inbox.replaceChildren(messageState("Owner inbox unavailable. Refresh the local projection.", "error-state"));
+  const task = inbox.task;
+  const gate = inbox.gate || {};
+  const action = inbox.mode === "decision"
+    ? el("button", "button button-primary", inbox.action_th, () => openDecisionDialog(gate.gate_id))
+    : el("button", "button button-primary", inbox.action_th, () => task ? selectTask(task.phase_id, task.task_id) : activateView("plan", true));
+  elements.owner_inbox.replaceChildren(
+    el("div", "inbox-heading", el("p", "section-label", "สิ่งที่ต้องทำตอนนี้"), el("h2", "", inbox.headline_th), el("p", "muted", inbox.headline_en)),
+    el("div", "inbox-grid",
+      inboxCard("งาน", task ? `${task.task_id} · ${task.title}` : "ไม่มีงานที่เลือก", task?.goal || "ดูแผนงานเพื่อเลือกงานถัดไป"),
+      inboxCard("Gate", gate.gate_id ? `${gate.gate_id} · ${humanState(gate.state)}` : "ยังไม่มี Gate", gate.reason_th || ""),
+      inboxCard("ต้องใช้ต่อไป", "ทรัพยากรใน phase ถัดไป", inbox.next_phase_resources || "ไม่มี")
+    ),
+    el("div", "inbox-footer", action, el("p", "guardrail", inbox.scientific_results_note_th))
+  );
+}
+
+function inboxCard(label, title, detail) {
+  return el("article", "inbox-card", el("p", "section-label", label), el("h3", "", title), el("p", "", detail));
+}
+
+function renderResearchFlow(target) {
+  if (!state.snapshot) return target.replaceChildren(messageState("Program status unavailable. Refresh the local projection.", "error-state"));
+  target.replaceChildren(researchFlowList(false));
+}
+
+function researchFlowStatus(phase) {
+  if (phase.project_state === "complete") return ["done", "Done"];
+  if (phase.project_state === "in_progress") return ["doing", "Doing"];
+  if (phase.project_state === "waiting_gate" && phase.tasks.some((task) => task.owner_gate_ids?.some((gateId) => state.snapshot.gate_readiness?.[gateId]?.ready))) return ["needs-owner", "Needs Owner"];
+  if (["blocked_gate", "rejected", "conflict"].includes(phase.project_state)) return ["blocked", "Blocked"];
+  return ["planned", "Planned"];
+}
+
+function researchFlowList(compact) {
+  const phases = state.snapshot?.phases || [];
+  return el("ol", `research-flow ${compact ? "is-compact" : ""}`, ...phases.map((phase) => {
+    const [kind, label] = researchFlowStatus(phase);
+    return el("li", `research-flow-step ${kind}`, el("button", "flow-step-button", el("span", "flow-step-state", label), el("strong", "", phase.phase_id), el("span", "", phase.title), { "aria-label": `${phase.phase_id}: ${phase.title}. ${label}.` }, () => selectPhase(phase.phase_id)));
+  }));
 }
 
 function renderProjectionHealth(snapshot) {
@@ -322,17 +378,23 @@ function renderPresentation() {
     button.setAttribute("aria-pressed", String(active));
   });
   const data = topic.data || {};
-  const counts = data.inventory_counts || { corpus: 45336, queries: 1247, qrels: 49869 };
+  const dataset = state.datasets?.datasets?.[0];
+  const registeredCounts = dataset?.inventory_counts || {};
+  const counts = data.inventory_counts || { corpus: registeredCounts.corpus || 45336, queries: registeredCounts.queries || 1247, qrels: registeredCounts.relations || 49869 };
   const split = data.split?.counts || { train: 250, selection: 125, joint_test: 872 };
   const domains = data.qrels_domain_distribution || { IN: 0, OUT: 0, NC: 0 };
   const awaiting = "ยังไม่รัน — รอ G1";
+  const bodyFor = (section) => state.audienceMode === "peer" ? section.body_en : state.audienceMode === "advisor" ? `${section.body_th} / ${section.body_en}` : section.body_th;
   const sections = topic.sections.map((section) => el(
     "section", "presentation-section", el("p", "section-label", section.title_en), el("h2", "", section.title_th),
-    el("p", "presentation-body", state.audienceMode === "beginner" ? section.body_th : `${section.body_th} / ${section.body_en}`),
+    el("p", "presentation-body", bodyFor(section)),
   ));
   target.classList.toggle("is-present-mode", state.deliveryMode === "present");
   target.replaceChildren(
     el("header", "dapfam-header", el("div", "", el("p", "section-label", "Family-level patent retrieval"), el("h2", "", topic.title), el("p", "dapfam-thesis", topic.subtitle_th)), el("span", "status-badge status-pending", data.prepared ? "Prepared / G1 pending" : "Not prepared")),
+    el("section", "results-guardrail", el("strong", "", "ยังไม่มีผลการทดลองเชิงวิทยาศาสตร์"), el("p", "", "หน้านี้แสดง protocol, readiness และสถานะงานเท่านั้น ผลการวัดจะปรากฏหลังผ่าน Gate และ validation ที่เกี่ยวข้องเท่านั้น")),
+    dataset ? datasetLineage(dataset, true) : null,
+    state.snapshot ? el("section", "presentation-flow-scene", el("div", "section-heading", el("div", "", el("p", "section-label", "Done / current / planned"), el("h2", "", "Research program flow"))), researchFlowList(true)) : null,
     el("section", "dataset-ledger", compactFact("Corpus", formatNumber(counts.corpus)), compactFact("Queries", formatNumber(counts.queries)), compactFact("Qrels", formatNumber(counts.qrels))),
     el("section", "claim-boundary", el("strong", "", "ขอบเขตข้ออ้าง"), el("p", "", "DAPFAM วัด family-level retrieval relevance เท่านั้น ไม่ใช่ novelty, validity, infringement, FTO หรือข้อสรุปทางกฎหมาย")),
     el("section", "split-story", el("div", "section-heading", el("div", "", el("p", "section-label", "Seed 42"), el("h2", "", "Fresh governed split")), el("span", "hash-label", data.split ? shortHash(data.split.membership_sha256?.joint_test) : "hash pending")), el("div", "split-track", splitBlock("Train", split.train, 1247), splitBlock("Selection", split.selection, 1247), splitBlock("Joint test", split.joint_test, 1247))),
@@ -341,6 +403,45 @@ function renderPresentation() {
     el("div", "presentation-sections", ...sections),
     el("footer", "presentation-footer", el("strong", "", "Decision support, not legal advice"), el("span", "", data.prepared ? `Proposal ${shortHash(data.proposal_sha256)} · scientific metrics 0` : "G1 pending · scientific metrics 0")),
   );
+}
+
+function renderData() {
+  const target = elements.dataset_content;
+  const datasets = state.datasets?.datasets;
+  if (!datasets) return target.replaceChildren(messageState("Dataset metadata unavailable. Refresh the local projection.", "error-state"));
+  target.replaceChildren(...datasets.map((dataset) => el("article", "dataset-card",
+    el("div", "detail-header", el("div", "", el("p", "section-label", "Registered dataset"), el("h2", "", dataset.title)), el("span", "status-badge status-pending", dataset.availability.replaceAll("_", " "))),
+    el("p", "detail-thai", dataset.summary_th),
+    el("p", "", dataset.claim_boundary_th),
+    el("section", "dataset-ledger", compactFact("Corpus", formatNumber(dataset.inventory_counts.corpus)), compactFact("Queries", formatNumber(dataset.inventory_counts.queries)), compactFact("Relations", formatNumber(dataset.inventory_counts.relations))),
+    el("dl", "definition-grid", ...definition("Public revision", shortHash(dataset.public_source.revision)), ...definition("License", dataset.public_source.license), ...definition("Configs", dataset.public_source.configs.join(" / ")), ...definition("Access", "Metadata only; raw access disabled"), ...definition("Live fetch", dataset.live_fetch ? "Allowed" : "Disabled"), ...definition("Scientific results", "Not run"), ...definition("Gate", dataset.split_status)),
+    el("a", "text-button", "Open public dataset", { href: dataset.public_source.url, target: "_blank", rel: "noopener noreferrer", referrerpolicy: "no-referrer" }),
+    datasetLineage(dataset, false),
+    el("section", "local-asset-list", el("div", "section-heading", el("div", "", el("p", "section-label", "Local processed assets"), el("h3", "", "ใช้จาก App แบบ pointer"))), ...dataset.local_assets.map((asset) => el("div", "local-asset-row", el("strong", "", asset.asset_id), el("span", "", asset.title), el("small", "", `${asset.disposition} · ${asset.copy_mode} · ${asset.byte_count ? formatBytes(asset.byte_count) : "in-place index"}`)))),
+    el("p", "guardrail", "ไม่มี query ID, qrels, split membership, payload หรือผลราย query ใน Dashboard")
+  )));
+}
+
+function datasetLineage(dataset, compact) {
+  const labels = {
+    "huggingface-public-card": "Hugging Face public card",
+    "APP-DAPFAM-CORE": "App processed snapshot",
+    "research-registry": "Research hash / pointer",
+    "F1/G1-preparation": "F1 / G1 preparation",
+    "B0/B1/B2": "Future B0 / B1 / B2",
+  };
+  const nodes = [dataset.lineage[0]?.from, ...dataset.lineage.map((edge) => edge.to)].filter(Boolean);
+  return el("section", `dataset-lineage ${compact ? "is-compact" : ""}`,
+    el("p", "section-label", "Data lineage"),
+    el("ol", "lineage-track", ...nodes.map((node, index) => el("li", "lineage-node", el("span", "lineage-index", String(index + 1)), el("strong", "", labels[node] || node))))
+  );
+}
+
+function formatBytes(value) {
+  const bytes = Number(value || 0);
+  if (bytes >= 1024 ** 3) return `${(bytes / 1024 ** 3).toFixed(1)} GB`;
+  if (bytes >= 1024 ** 2) return `${(bytes / 1024 ** 2).toFixed(1)} MB`;
+  return `${formatNumber(bytes)} bytes`;
 }
 
 function compactFact(label, value) { return el("div", "compact-fact", el("span", "section-label", label), el("strong", "", value ?? "—")); }

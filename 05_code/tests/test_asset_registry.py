@@ -39,6 +39,15 @@ class AssetRegistryTests(unittest.TestCase):
         covered = {task_id for asset in assets for task_id in asset["task_ids"]}
         self.assertEqual(covered, plan_tasks)
 
+    def test_dapfam_core_has_metadata_only_huggingface_provenance(self) -> None:
+        registry = load_registry(ROOT)
+        asset = next(item for item in registry["assets"] if item["asset_id"] == "APP-DAPFAM-CORE")
+        upstream = asset["source"]["upstream_huggingface"]
+        self.assertEqual(upstream["dataset_id"], "datalyes/DAPFAM_patent")
+        self.assertEqual(upstream["configs"], ["corpus", "queries", "relations"])
+        self.assertTrue(upstream["metadata_only"])
+        self.assertFalse(upstream["live_fetch_allowed"])
+
     def test_query_filters_and_outputs_are_deterministic(self) -> None:
         registry = load_registry(ROOT)
         selected = query_assets(registry, task_id="F1.1", disposition="reuse")

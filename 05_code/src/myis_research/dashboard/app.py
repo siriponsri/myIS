@@ -19,6 +19,7 @@ from .artifacts import ArtifactCatalog
 from .content import content_document, flow_catalog, flow_document, flow_image, tool_catalog
 from .contracts import DecisionConfirmRequest, DecisionPreviewRequest, PdfAccessRequest
 from .progress import (
+    build_owner_inbox,
     build_dashboard_snapshot,
     parse_plan,
     scope_sha256,
@@ -36,7 +37,7 @@ from .security import (
     windows_account_sid,
 )
 from .viewer import PdfCatalog
-from .topics import presentation_topics
+from .topics import dataset_catalog, presentation_topics
 
 
 @dataclass
@@ -129,6 +130,14 @@ def create_app(
     @app.get("/api/v1/dashboard-snapshot")
     def dashboard_snapshot(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
         return _projection_response(lambda: build_dashboard_snapshot(repository_root))
+
+    @app.get("/api/v1/owner-inbox")
+    def owner_inbox(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: build_owner_inbox(repository_root))
+
+    @app.get("/api/v1/datasets")
+    def datasets(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        return _projection_response(lambda: dataset_catalog(repository_root))
 
     @app.get("/api/v1/governance-catalog")
     def governance_catalog(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:

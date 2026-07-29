@@ -25,6 +25,7 @@ CONTENT_FILES = (
     "00_governance/config/linear.yaml",
     "00_governance/config/evidence_catalog.yaml",
     "00_governance/config/dashboard_topics.yaml",
+    "00_governance/config/reusable_assets.yaml",
     "03_experiments/config/mlflow/governance_documents.yaml",
     "04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json",
     "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
@@ -92,12 +93,15 @@ class DashboardFrontendTests(unittest.TestCase):
             index = client.get("/")
             self.assertEqual(index.status_code, 200)
             self.assertIn("myIS Owner Workbench", index.text)
-            self.assertIn('<html lang="en">', index.text)
+            self.assertIn('<html lang="th">', index.text)
             self.assertIn("Connecting / กำลังเชื่อมต่อ", index.text)
             self.assertIn('id="flow-progress"', index.text)
             self.assertIn('data-plan-density="readable"', index.text)
             self.assertIn('data-plan-density="compact"', index.text)
             self.assertIn('id="overview-readiness"', index.text)
+            self.assertIn('id="owner-inbox"', index.text)
+            self.assertIn('id="owner-focus" hidden', index.text)
+            self.assertIn('data-view="data"', index.text)
             self.assertIn('data-view="presentation"', index.text)
             self.assertIn('id="presentation-content"', index.text)
             self.assertEqual(index.headers["cache-control"], "no-store, max-age=0")
@@ -111,6 +115,9 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertIn("item.title_th", script.text)
             self.assertIn("renderReadiness", script.text)
             self.assertIn("renderPresentation", script.text)
+            self.assertIn("renderOwnerInbox", script.text)
+            self.assertIn("renderResearchFlow", script.text)
+            self.assertIn("renderData", script.text)
             self.assertIn("bindFlowPan", script.text)
             self.assertIn("flow-toolbar", script.text)
             self.assertIn("aria-label\": \"Zoom in\"", script.text)
@@ -140,7 +147,7 @@ class DashboardFrontendTests(unittest.TestCase):
     def test_projections_require_session_and_expose_no_filesystem_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            make_fixture(root)
+            make_fixture(root, git_repository=True)
             app = create_app(
                 repository_root=root,
                 port=8765,
@@ -156,12 +163,23 @@ class DashboardFrontendTests(unittest.TestCase):
             tools = client.get("/api/v1/tools")
             flows = client.get("/api/v1/flows")
             governance = client.get("/api/v1/governance-catalog")
+            inbox = client.get("/api/v1/owner-inbox")
+            datasets = client.get("/api/v1/datasets")
             self.assertEqual(process.status_code, 200)
             self.assertEqual(harness.status_code, 200)
             self.assertEqual(tools.status_code, 200)
             self.assertEqual(flows.status_code, 200)
             self.assertEqual(governance.status_code, 200)
-            combined = process.text + harness.text + tools.text + flows.text + governance.text
+            self.assertEqual(inbox.status_code, 200)
+            self.assertEqual(datasets.status_code, 200)
+            dataset = datasets.json()["datasets"][0]
+            self.assertEqual(dataset["raw_access"], False)
+            self.assertEqual(dataset["live_fetch"], False)
+            self.assertEqual(dataset["dataset_id"], "datalyes/DAPFAM_patent")
+            self.assertEqual(dataset["public_source"]["license"], "cc-by-nc-sa-4.0")
+            self.assertEqual(dataset["inventory_counts"]["corpus"], 45_336)
+            self.assertEqual(len(dataset["lineage"]), 4)
+            combined = process.text + harness.text + tools.text + flows.text + governance.text + inbox.text + datasets.text
             self.assertNotIn(str(root), combined)
             self.assertNotIn('"path"', combined)
             tool_documents = tools.json()["documents"]

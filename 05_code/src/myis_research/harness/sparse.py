@@ -88,9 +88,14 @@ def inspect_fts5_schema(
 
 
 def inspect_fts5_database(path: Path, contract: Fts5SchemaContract) -> Fts5SchemaInspection:
-    uri = f"file:{quote(path.resolve().as_posix(), safe='/:')}?mode=ro"
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("FTS5 database must be a regular file")
+    uri = f"file:{quote(path.resolve(strict=True).as_posix(), safe='/:')}?mode=ro&immutable=1"
     connection = sqlite3.connect(uri, uri=True)
     try:
+        connection.execute("PRAGMA query_only = ON")
+        if connection.execute("PRAGMA query_only").fetchone() != (1,):
+            raise ValueError("SQLite query_only mode could not be enforced")
         return inspect_fts5_schema(connection, contract)
     finally:
         connection.close()

@@ -158,11 +158,13 @@ command. The repo only emits/validates hash-only/aggregate-only packages.
 
 ## Dashboard startup and security
 
-Use the `myis-dashboard` entry point after the dashboard extra is installed.
-Bind exactly to loopback; remote hosts are invalid.
+Use the singleton Owner Console launcher after the locked extras are installed.
+It reuses a healthy myIS Dashboard on ports 8765-8770 and never installs
+dependencies automatically. Bind exactly to loopback; remote hosts are invalid.
 
 ```powershell
-uv run --no-sync myis-dashboard --repository-root . --port 8765
+uv sync --locked --extra dashboard --extra tracking --extra notebook --extra test
+& 06_frontend/start_owner_console.ps1 -NoBrowser
 ```
 
 Open `http://127.0.0.1:8765`. The same-origin Owner console reads the canonical
@@ -170,12 +172,25 @@ plan, process, flow, harness-rule, tool, gate, and artifact projections. Evidenc
 completion is operational evidence only; authorization remains a separate Owner
 Gate state.
 
-The Owner view is English-first with Thai detail guidance and renders the
-execution path directly from `PLAN.md` as `Phase -> Task`. Each Task shows its purpose, inputs, outputs,
+The Owner view is Thai-first and opens on Today/Owner Inbox. Data and
+Presentation show registry-derived DAPFAM metadata, in-place lineage, and an
+explicit no-results guardrail without live fetches. The execution path renders
+directly from `PLAN.md` as `Phase -> Task`. Each Task shows its purpose, inputs, outputs,
 tests, acceptance criteria, Gate, budget/stop rule, rollback, risk, evidence,
 dependencies, and Linear issue/status. The Gate handbook explains in plain
 language what approval opens and what remains locked. PLAN is canonical;
 Dashboard, Linear, and MLflow are validated projections and cannot open a Gate.
+
+Use the validated session index instead of rereading every historical capsule:
+
+```powershell
+uv run --no-sync myis-sessions validate-all
+uv run --no-sync myis-sessions latest-valid --task F1.1 --gate G1
+```
+
+Every implementation closeout includes a Gate request state, Owner actions,
+and next resources. This request is a report only; approval still requires the
+existing preview-confirm decision flow and immutable Gate record.
 
 The interactive Flow computes completion only from validated canonical Task
 evidence, uses Linear only as a work-tracking signal, and keeps Gate approval as

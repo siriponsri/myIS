@@ -18,11 +18,14 @@ class FrontendLauncherTests(unittest.TestCase):
 
     def test_launcher_is_loopback_only_and_never_installs_dependencies(self) -> None:
         script = (FRONTEND_ROOT / "start_owner_console.ps1").read_text(encoding="utf-8")
-        self.assertIn("http://127.0.0.1:8765", script)
+        self.assertIn("127.0.0.1", script)
+        self.assertIn("8765..8770", script)
         self.assertIn("http://127.0.0.1:5000", script)
         self.assertIn('"--no-sync"', script)
+        self.assertIn('program_id -eq "myis-research"', script)
+        self.assertIn('"myis-dashboard.exe", "myis-assets.exe", "myis-sessions.exe"', script)
         lowered = script.lower()
-        self.assertNotIn("uv sync", lowered)
+        self.assertNotIn('-argumentlist @("sync"', lowered)
         self.assertNotIn("pip install", lowered)
         self.assertNotIn("npm install", lowered)
         self.assertNotIn("0.0.0.0", script)

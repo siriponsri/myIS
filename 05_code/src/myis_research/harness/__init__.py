@@ -35,6 +35,13 @@ from .benchmark import (
 )
 from .policy import CandidateBudget, FusionContract, HarnessPolicy, QueryViewPolicy, RoutePolicy
 from .runner import HarnessAdapter, LocalHarness
+from .f1_baselines import (
+    BaselineReplay,
+    FrozenF1RunSpecV1,
+    ResourcePreflight,
+    replay_fixture_baselines,
+    validate_frozen_f1_runspec,
+)
 from .validation import ValidationError, validate_run_bundle
 
 __all__ = [
@@ -47,6 +54,7 @@ __all__ = [
     "EndpointClass",
     "ExecutionIsolationContract",
     "FrozenPoolRankingComparison",
+    "FrozenF1RunSpecV1",
     "FusionContract",
     "GoalSpec",
     "GoalState",
@@ -57,6 +65,7 @@ __all__ = [
     "ProviderExecution",
     "QueryViewPolicy",
     "ReplicationContract",
+    "ResourcePreflight",
     "RoutePolicy",
     "RunEvent",
     "RunResult",
@@ -70,6 +79,9 @@ __all__ = [
     "TrackCManifest",
     "TrackCRankingDiagnostic",
     "TrackSManifest",
+    "BaselineReplay",
     "ValidationError",
     "validate_run_bundle",
+    "replay_fixture_baselines",
+    "validate_frozen_f1_runspec",
 ]

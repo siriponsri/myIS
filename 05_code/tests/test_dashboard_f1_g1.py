@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import shutil
@@ -64,6 +65,7 @@ class DashboardF1G1Tests(TestCase):
         text = json.dumps(payload, ensure_ascii=False)
         self.assertIn("ยังไม่รัน - รอ G1", text)
         self.assertNotIn("Recall@100 =", text)
+        self.assertEqual(payload["metadata"]["kernelspec"]["name"], "python3")
 
     def test_notebook_discovers_safe_batch_without_environment_override(self) -> None:
         payload = json.loads((ROOT / "03_experiments/notebooks/Data_Review.ipynb").read_text(encoding="utf-8"))
@@ -92,6 +94,7 @@ class DashboardF1G1Tests(TestCase):
                     {
                         "schema_version": "myis.f1-g1-safe-projection.v1",
                         "safe_batch_id": batch_path.name,
+                        "safe_batch_sha256": hashlib.sha256(batch_path.read_bytes()).hexdigest(),
                     }
                 ),
                 encoding="utf-8",
@@ -107,6 +110,38 @@ class DashboardF1G1Tests(TestCase):
             finally:
                 os.chdir(previous)
         self.assertEqual(namespace["safe_batch"], batch_path.resolve())
+
+    def test_notebook_rejects_tampered_safe_batch(self) -> None:
+        payload = json.loads((ROOT / "03_experiments/notebooks/Data_Review.ipynb").read_text(encoding="utf-8"))
+        first_code_cell = next(cell for cell in payload["cells"] if cell["cell_type"] == "code")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            safe_root = root / "01_Stores/00_myIS/owner-local/f1-g1/safe"
+            batch_path = safe_root / "batches/fixture.json"
+            projection_path = safe_root / "projections/current.json"
+            batch_path.parent.mkdir(parents=True)
+            projection_path.parent.mkdir(parents=True)
+            batch_path.write_text("{}", encoding="utf-8")
+            projection_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "myis.f1-g1-safe-projection.v1",
+                        "safe_batch_id": batch_path.name,
+                        "safe_batch_sha256": "0" * 64,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            workdir = root / "workspace/repository"
+            workdir.mkdir(parents=True)
+            previous = Path.cwd()
+            try:
+                os.chdir(workdir)
+                with patch.dict(os.environ, {"MYIS_F1G1_SAFE_BATCH": ""}):
+                    with self.assertRaisesRegex(RuntimeError, "hash mismatch"):
+                        exec(compile("".join(first_code_cell["source"]), "Data_Review.ipynb", "exec"), {})
+            finally:
+                os.chdir(previous)
 
 
 if __name__ == "__main__":

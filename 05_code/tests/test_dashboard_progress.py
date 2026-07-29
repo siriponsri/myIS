@@ -5,10 +5,13 @@ import subprocess
 import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 from myis_research.dashboard.progress import (
     _dependency_annotations,
     _dependency_ids,
+    _gate_readiness,
+    build_owner_inbox,
     build_dashboard_snapshot,
     parse_plan,
     scope_sha256,
@@ -69,6 +72,10 @@ class DashboardProgressTests(unittest.TestCase):
             ["S1.1", "S1.2", "S1.3"],
         )
 
+    def test_phase_dependency_with_sentence_punctuation_is_not_dropped(self) -> None:
+        self.assertEqual(_dependency_ids("F1.", "D0.1"), ["F1"])
+        self.assertEqual(_dependency_ids("F1.1", "D0.1"), ["F1.1"])
+
     def test_snapshot_exposes_validated_graph_and_owner_focus(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -103,6 +110,34 @@ class DashboardProgressTests(unittest.TestCase):
                 "project_label": "F1/G1 preparation only",
             },
         )
+        self.assertTrue(snapshot["gate_readiness"]["G1"]["ready"])
+        self.assertEqual(snapshot["gate_readiness"]["G1"]["waiting_for"], [])
+        self.assertFalse(snapshot["gate_readiness"]["G2"]["ready"])
+        self.assertEqual(snapshot["gate_readiness"]["G2"]["waiting_for"], ["F1"])
+        self.assertFalse(snapshot["gate_readiness"]["G4"]["ready"])
+        self.assertEqual(snapshot["gate_readiness"]["G4"]["waiting_for"], ["CF"])
+
+    def test_owner_inbox_requests_g1_from_pre_f1_prerequisites(self) -> None:
+        with patch("myis_research.dashboard.progress.latest_valid_session", return_value=None) as latest:
+            inbox = build_owner_inbox(REPO_ROOT)
+        self.assertEqual(inbox["gate"]["gate_id"], "G1")
+        self.assertTrue(inbox["gate"]["ready"])
+        self.assertEqual(inbox["scientific_results"], "NOT_RUN")
+        latest.assert_called_once_with(
+            REPO_ROOT,
+            phase_id="F1",
+            task_id="F1.1",
+            gate_id="G1",
+        )
+
+    def test_later_gate_requires_all_prior_gates_even_when_phase_evidence_is_complete(self) -> None:
+        snapshot = build_dashboard_snapshot(REPO_ROOT)
+        phases = json.loads(json.dumps(snapshot["phases"]))
+        next(phase for phase in phases if phase["phase_id"] == "F1")["evidence_state"] = "complete"
+        readiness = _gate_readiness(phases, snapshot["gate_states"])
+        self.assertEqual(readiness["G2"]["waiting_for"], [])
+        self.assertEqual(readiness["G2"]["prior_gates_pending"], ["G1"])
+        self.assertFalse(readiness["G2"]["ready"])
 
     def test_successful_activity_without_task_evidence_is_not_complete(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

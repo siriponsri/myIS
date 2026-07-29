@@ -14,6 +14,7 @@ from ..ledger import ImmutableJsonLedger
 from .contracts import OwnerGateDecisionRecord, TaskEvidenceRecord
 from .projections import load_linear_projection
 from .readiness import load_f1_g1_readiness
+from ..session_capsules import latest_valid_session
 
 
 EXPECTED_PHASE_ORDER = ("F0", "F1", "D0", "C0", "C1", "CF", "S0", "S1", "SF", "CT", "Q", "PC", "PS")
@@ -205,7 +206,8 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
         )
     _add_project_progress(phase_views)
     plan_graph = _build_plan_graph(plan, linear)
-    owner_focus = _owner_focus(phase_views, governance, git_dirty)
+    gate_readiness = _gate_readiness(phase_views, governance)
+    owner_focus = _owner_focus(phase_views, governance, git_dirty, gate_readiness)
     readiness = _readiness_projection(phase_views, governance)
     f1_g1_preparation = load_f1_g1_readiness(repository_root)
     completed_task_count = sum(
@@ -240,6 +242,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
         },
         "phases": phase_views,
         "gate_states": governance,
+        "gate_readiness": gate_readiness,
         "linear": {
             "source_sha256": linear["source_sha256"],
             "project": linear["project"],
@@ -264,6 +267,68 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
                 separators=(",", ":"),
             ).encode("utf-8")
         ).hexdigest(),
+    }
+
+
+def build_owner_inbox(repository_root: Path) -> dict[str, Any]:
+    """Return a small, owner-facing work queue derived from the canonical snapshot."""
+
+    snapshot = build_dashboard_snapshot(repository_root)
+    focus = snapshot["owner_focus"]
+    tasks = [task for phase in snapshot["phases"] for task in phase["tasks"]]
+    task = next((item for item in tasks if item["task_id"] == focus.get("next_task_id")), None)
+    gate_id = focus.get("next_gate_id")
+    gate = snapshot["gate_readiness"].get(gate_id or "", {})
+    closeout = latest_valid_session(
+        repository_root,
+        phase_id=focus.get("current_phase_id"),
+        task_id=task.get("task_id") if task is not None else None,
+        gate_id=gate_id,
+    )
+    v2_closeout = closeout if closeout and closeout.get("capsule_schema_version") == "myis.research-session.v2" else None
+
+    if focus["mode"] == "decision":
+        headline_th = "มีการตัดสินใจของ Owner ที่พร้อมให้ตรวจ"
+        action_th = f"ตรวจและตัดสินใจ {gate_id}"
+    elif task is not None:
+        headline_th = "ติดตามงานถัดไปก่อนเริ่มขั้นตอนใหม่"
+        action_th = "เปิดรายละเอียดงาน"
+    else:
+        headline_th = "ยังไม่มีงานที่ต้องดำเนินการ"
+        action_th = "ตรวจแผนงาน"
+
+    resources = task["inputs"] if task is not None else "ไม่มีทรัพยากรเพิ่มเติมในตอนนี้"
+    if v2_closeout and v2_closeout.get("next_resources", {}).get("status") == "required":
+        resources = "; ".join(item["description_th"] for item in v2_closeout["next_resources"]["items"])
+    owner_checklist = [
+        "ดูสถานะงานและหลักฐานที่ผ่านการตรวจสอบแล้ว",
+        "ตรวจขอบเขต Gate และสิ่งที่จะยังถูกล็อก",
+        "อนุมัติ เลื่อน หรือปฏิเสธเฉพาะเมื่อ Git อยู่ในสถานะสะอาด",
+    ]
+    if v2_closeout:
+        owner_checklist = [item["action_th"] for item in v2_closeout.get("owner_actions") or []]
+    return {
+        "schema_version": "myis.owner-inbox.v1",
+        "headline_th": headline_th,
+        "headline_en": focus["headline_en"],
+        "action_th": action_th,
+        "mode": focus["mode"],
+        "phase_id": focus.get("current_phase_id"),
+        "task": None if task is None else {
+            key: task[key] for key in ("task_id", "phase_id", "title", "project_state", "goal", "inputs", "tests", "evidence_state")
+        },
+        "gate": {
+            "gate_id": gate_id,
+            "state": snapshot["gate_states"].get(gate_id or "", "not_required"),
+            "ready": bool(gate.get("ready")),
+            "waiting_for": gate.get("waiting_for", []),
+            "reason_th": gate.get("reason_th", "ไม่มี Gate ที่ต้องตัดสินใจ"),
+        },
+        "owner_checklist": owner_checklist,
+        "next_phase_resources": resources,
+        "implementation_closeout": v2_closeout,
+        "scientific_results": "NOT_RUN",
+        "scientific_results_note_th": "Dashboard นี้ยังไม่มีผลการทดลองเชิงวิทยาศาสตร์ และไม่แสดงข้อมูล protected.",
     }
 
 
@@ -329,23 +394,80 @@ def _build_plan_graph(plan: ParsedPlan, linear: dict[str, Any]) -> dict[str, Any
     }
 
 
+def _gate_readiness(
+    phases: list[dict[str, Any]], governance: dict[str, str]
+) -> dict[str, dict[str, Any]]:
+    """Gate readiness is based on work before a Gate, never on work it authorizes."""
+
+    tasks = [task for phase in phases for task in phase["tasks"]]
+    task_by_id = {task["task_id"]: task for task in tasks}
+    phase_by_id = {phase["phase_id"]: phase for phase in phases}
+    readiness: dict[str, dict[str, Any]] = {}
+    gate_order = tuple(f"G{index}" for index in range(9))
+    for gate_index, gate_id in enumerate(gate_order):
+        governed = [task for task in tasks if gate_id in task["owner_gate_ids"]]
+        governed_ids = {task["task_id"] for task in governed}
+        governed_phases = {task["phase_id"] for task in governed}
+        prerequisites = sorted(
+            {
+                dependency
+                for task in governed
+                for dependency in task["dependencies"]
+                if dependency not in governed_ids and dependency not in governed_phases
+            }
+        )
+        waiting_for = [
+            dependency
+            for dependency in prerequisites
+            if (
+                task_by_id[dependency]["evidence_state"] != "complete"
+                if dependency in task_by_id
+                else phase_by_id.get(dependency, {}).get("evidence_state") != "complete"
+            )
+        ]
+        prior_gates_pending = [
+            prior_gate
+            for prior_gate in gate_order[:gate_index]
+            if governance.get(prior_gate) != "approved"
+        ]
+        ready = (
+            bool(governed)
+            and not waiting_for
+            and not prior_gates_pending
+            and governance.get(gate_id) != "approved"
+        )
+        readiness[gate_id] = {
+            "ready": ready,
+            "prerequisites": prerequisites,
+            "waiting_for": waiting_for,
+            "prior_gates_pending": prior_gates_pending,
+            "reason_th": (
+                "หลักฐานของงานก่อนหน้าเพียงพอสำหรับการตรวจ Gate"
+                if ready
+                else "รอหลักฐานของงานก่อนหน้า: " + ", ".join(waiting_for)
+                if waiting_for
+                else "รอการอนุมัติ Gate ก่อนหน้า: " + ", ".join(prior_gates_pending)
+                if prior_gates_pending
+                else "Gate นี้ไม่มีงานที่ต้องเปิดเพิ่มเติม"
+            ),
+        }
+    return readiness
+
+
 def _owner_focus(
-    phases: list[dict[str, Any]], governance: dict[str, str], git_dirty: bool
+    phases: list[dict[str, Any]],
+    governance: dict[str, str],
+    git_dirty: bool,
+    gate_readiness: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     tasks = [task for phase in phases for task in phase["tasks"]]
     task_by_id = {task["task_id"]: task for task in tasks}
     gate_order = [f"G{index}" for index in range(9)]
-    gate_ready: dict[str, bool] = {}
-    for gate_id in gate_order:
-        governed = [task for task in tasks if gate_id in task["owner_gate_ids"]]
-        gate_ready[gate_id] = bool(governed) and all(
-            task["evidence_state"] == "complete" for task in governed
-        )
     next_gate = next(
         (gate_id for gate_id in gate_order if governance.get(gate_id) not in {"approved"}),
         None,
     )
-    if next_gate and gate_ready.get(next_gate) and not git_dirty:
+    if next_gate and gate_readiness.get(next_gate, {}).get("ready") and not git_dirty:
         governed = [task for task in tasks if next_gate in task["owner_gate_ids"]]
         phase_id = governed[0]["phase_id"] if governed else None
         return {
@@ -769,7 +891,7 @@ def _dependency_ids(value: str, task_id: str) -> list[str]:
     clause = value.split(";", 1)[0]
     identifiers: list[str] = []
     for phase_id in EXPECTED_PHASE_ORDER:
-        if phase_id != task_id.split(".", 1)[0] and re.search(rf"\b{re.escape(phase_id)}\b(?!\.)", clause):
+        if phase_id != task_id.split(".", 1)[0] and re.search(rf"\b{re.escape(phase_id)}\b(?!\.\d)", clause):
             identifiers.append(phase_id)
     for match in re.finditer(r"\b([A-Z][A-Z0-9]*)\.(\d+)-\1\.(\d+)\b", clause):
         phase_id, start, end = match.group(1), int(match.group(2)), int(match.group(3))
