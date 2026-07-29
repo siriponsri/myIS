@@ -122,6 +122,7 @@ class DashboardProgressTests(unittest.TestCase):
             inbox = build_owner_inbox(REPO_ROOT)
         self.assertEqual(inbox["gate"]["gate_id"], "G1")
         self.assertTrue(inbox["gate"]["ready"])
+        self.assertEqual(inbox["task"]["task_id"], "F1.1")
         self.assertEqual(inbox["scientific_results"], "NOT_RUN")
         latest.assert_called_once_with(
             REPO_ROOT,

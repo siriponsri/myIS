@@ -473,7 +473,7 @@ def _owner_focus(
         return {
             "mode": "decision",
             "current_phase_id": phase_id,
-            "next_task_id": None,
+            "next_task_id": governed[0]["task_id"] if governed else None,
             "next_gate_id": next_gate,
             "blocker_codes": [],
             "headline_en": f"Review {next_gate} before the next phase",
