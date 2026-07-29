@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Local Owner workbench for the myIS Research program with bilingual details.">
+  <meta name="description" content="Local myIS Owner workbench with an English-first project map and Thai detail guidance.">
   <title>myIS Owner Workbench</title>
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/dashboard.css">
@@ -21,130 +21,54 @@
           <p class="brand-name">Owner Workbench</p>
         </div>
       </div>
-
-      <div class="local-boundary">
-        <span class="boundary-dot" aria-hidden="true"></span>
-        <span>Local machine only / ใช้ในเครื่องนี้เท่านั้น</span>
-      </div>
-
+      <div class="local-boundary"><span class="boundary-dot" aria-hidden="true"></span><span>Local machine only</span></div>
       <nav class="primary-nav" aria-label="Dashboard views">
-        <button class="nav-item is-active" type="button" data-view="work-plan" aria-current="page">
-          <span class="nav-index">01</span><span>Work Plan</span>
-        </button>
-        <button class="nav-item" type="button" data-view="process">
-          <span class="nav-index">02</span><span>Research Process</span>
-        </button>
-        <button class="nav-item" type="button" data-view="flow">
-          <span class="nav-index">03</span><span>PLAN Flow</span>
-        </button>
-        <button class="nav-item" type="button" data-view="harness">
-          <span class="nav-index">04</span><span>Harness Rules</span>
-        </button>
-        <button class="nav-item" type="button" data-view="tools">
-          <span class="nav-index">05</span><span>Tools</span>
-        </button>
-        <button class="nav-item" type="button" data-view="owner-gates">
-          <span class="nav-index">06</span><span>Owner Gates</span>
-        </button>
-        <button class="nav-item" type="button" data-view="artifacts">
-          <span class="nav-index">07</span><span>Evidence</span>
-        </button>
+        <button class="nav-item is-active" type="button" data-view="overview" aria-current="page"><span class="nav-icon" aria-hidden="true">◈</span><span>Overview</span></button>
+        <button class="nav-item" type="button" data-view="plan"><span class="nav-icon" aria-hidden="true">↦</span><span>Plan &amp; Tasks</span></button>
+        <button class="nav-item" type="button" data-view="decisions"><span class="nav-icon" aria-hidden="true">✓</span><span>Decisions</span></button>
+        <button class="nav-item secondary-nav-item" type="button" data-view="evidence"><span class="nav-icon" aria-hidden="true">▤</span><span>Evidence</span></button>
+        <button class="nav-item secondary-nav-item" type="button" data-view="reference"><span class="nav-icon" aria-hidden="true">☷</span><span>Reference</span></button>
+        <button class="nav-item mobile-more" type="button" data-mobile-more aria-expanded="false"><span class="nav-icon" aria-hidden="true">•••</span><span>More</span></button>
       </nav>
-
-      <div class="sidebar-footer">
-        <p>Decision support</p>
-        <p>Not legal advice / ไม่ใช่คำแนะนำทางกฎหมาย</p>
-      </div>
+      <div class="sidebar-footer"><p>Decision support</p><p>Not legal advice</p></div>
     </aside>
 
     <div class="workspace">
       <header class="topbar">
-        <div>
-          <p class="eyebrow" id="view-kicker">Program control</p>
-          <h1 id="view-title">Work Plan</h1>
-        </div>
-        <div class="topbar-actions">
-          <p class="sync-state" id="sync-state" role="status" aria-live="polite">Connecting / กำลังเชื่อมต่อ</p>
-          <button class="button button-secondary" id="refresh-button" type="button">Refresh</button>
-        </div>
+        <div><p class="eyebrow" id="view-kicker">Owner control</p><h1 id="view-title">Overview</h1></div>
+        <div class="topbar-actions"><p class="sync-state" id="sync-state" role="status" aria-live="polite">Connecting / กำลังเชื่อมต่อ</p><button class="button button-secondary" id="refresh-button" type="button">Refresh</button></div>
       </header>
 
       <main id="main-content" tabindex="-1">
-        <section class="view is-visible" id="view-work-plan" data-view-panel="work-plan" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div>
-              <p class="section-label">Program overview</p>
-              <p class="lede">Track progress from PLAN while keeping “evidence complete” separate from “Owner approved.” <span class="detail-thai" lang="th">ดูความคืบหน้าโดยไม่ตีความว่างานเสร็จเท่ากับผ่าน Gate</span></p>
-            </div>
-            <div class="legend" aria-label="Status legend">
-              <span><i class="legend-mark evidence" aria-hidden="true"></i>Evidence complete / หลักฐานครบ</span>
-              <span><i class="legend-mark approval" aria-hidden="true"></i>Gate approved / อนุมัติแล้ว</span>
-            </div>
-          </div>
-          <div class="projection-strip" id="projection-strip" aria-label="PLAN, Dashboard, Linear, and MLflow projection status / สถานะการเชื่อมโยงระบบ"></div>
-          <div class="plan-layout">
-            <nav class="phase-spine" id="phase-spine" aria-label="Research phases"></nav>
-            <div class="plan-detail" id="plan-detail"></div>
-          </div>
+        <section class="view is-visible" id="view-overview" data-view-panel="overview" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Owner attention</p><p class="lede">One verified view of the next decision, current work, blockers, and project progress.</p><p class="detail-thai" lang="th">แสดงสิ่งที่ Owner ต้องสนใจในตอนนี้ โดยแยกหลักฐานงานออกจากสถานะอนุมัติ</p></div><div class="legend" id="overview-legend"></div></div>
+          <section class="attention-band" id="owner-focus" aria-live="polite"></section>
+          <section class="overview-map" aria-labelledby="overview-map-title"><div class="section-heading"><div><p class="section-label">Program map</p><h2 id="overview-map-title">Phase progress</h2></div><button class="text-button" type="button" data-view="plan">Open full plan <span aria-hidden="true">→</span></button></div><div id="flow-progress" class="flow-progress-note" aria-live="polite">Completion requires canonical Task evidence.</div><div id="overview-map-content"></div></section>
+          <div class="overview-grid"><section class="metric-band" id="overview-metrics"></section><section class="attention-list" id="overview-blockers"></section><section class="recent-decision" id="overview-recent"></section></div>
+          <section class="projection-health" id="overview-projections"></section>
         </section>
 
-        <section class="view" id="view-process" data-view-panel="process" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div><p class="section-label">Operating protocol</p><p class="lede">Canonical research and governance procedures, projected from allowlisted documents.</p></div>
-          </div>
-          <div class="content-browser" id="process-content"></div>
+        <section class="view" id="view-plan" data-view-panel="plan" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Canonical execution order</p><p class="lede">Explore the PLAN as Phase → Task. Select a Phase to see its work lane and verified detail.</p><p class="detail-thai" lang="th">เลือก Phase เพื่อดู Task, dependency, หลักฐาน และ Gate ที่เกี่ยวข้อง</p></div><div class="view-actions"><button class="button button-secondary" type="button" data-filter="all">All</button><button class="button button-secondary" type="button" data-filter="attention">Needs attention</button><button class="button button-secondary" type="button" data-filter="complete">Complete</button></div></div>
+          <section class="owner-map-section" aria-labelledby="owner-map-title"><div class="section-heading"><div><p class="section-label">Interactive owner map</p><h2 id="owner-map-title">Where the program is now</h2></div><p class="map-note">Solid lines block. Forks run in parallel.</p></div><div id="owner-map"></div></section>
+          <section class="task-workspace" id="task-workspace"></section>
         </section>
 
-        <section class="view" id="view-flow" data-view-panel="flow" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div><p class="section-label">PLAN execution order</p><p class="lede">Interactive Phase → Task progress from canonical evidence and the Linear tracking projection. <span class="detail-thai" lang="th">คลิก Phase หรือกรองสถานะเพื่อดูงานที่ต้องสนใจ</span></p></div>
-          </div>
-          <div class="flow-progress" id="flow-progress" aria-live="polite"></div>
-          <div class="program-flow" id="program-flow"></div>
-          <div class="subsection-heading"><h2>System diagrams</h2><p>Authority, evidence, execution, and mirror relationships / แผนภาพความสัมพันธ์ของระบบ</p></div>
-          <div class="flow-browser">
-            <div class="flow-list" id="flow-list" role="list"></div>
-            <figure class="flow-stage">
-              <div class="flow-canvas" id="flow-canvas" role="img" aria-label="Select a flow to inspect"></div>
-              <figcaption id="flow-caption">Select a flow to inspect.</figcaption>
-            </figure>
-          </div>
+        <section class="view" id="view-decisions" data-view-panel="decisions" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Owner decision points</p><p class="lede">Friendly Gate names first. Technical IDs and hashes remain available in the audit detail.</p><p class="detail-thai" lang="th">ดูว่า Gate เปิดอะไร ตรวจงานอะไร และยังล็อกอะไรอยู่</p></div><button class="button button-primary" id="new-decision-button" type="button" disabled>New decision</button></div>
+          <div class="decision-layout"><nav class="gate-index" id="gate-index" aria-label="Owner Gate list"></nav><article class="gate-detail" id="gate-detail"></article></div>
+          <section class="decision-history"><div class="section-heading"><div><p class="section-label">Immutable history</p><h2>Recent decisions</h2></div><p id="ledger-summary">Reading local ledger</p></div><div class="table-frame"><table><thead><tr><th>Decision</th><th>Gate</th><th>Status</th><th>Date</th><th>Evidence</th></tr></thead><tbody id="decision-table-body"></tbody></table></div></section>
         </section>
 
-        <section class="view" id="view-harness" data-view-panel="harness" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div><p class="section-label">Deterministic authority</p><p class="lede">The kernel decides validity and comparability. Probabilistic components propose only within typed limits.</p></div>
-          </div>
-          <div class="content-browser" id="harness-content"></div>
+        <section class="view" id="view-evidence" data-view-panel="evidence" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Verified packages</p><p class="lede">Evidence names are readable; hashes are audit details. Fixture, development, descriptive, and confirmation roles stay separate.</p><p class="detail-thai" lang="th">หลักฐานแต่ละชุดมีบทบาทแยกกัน และไม่ใช่ผลยืนยันทางวิทยาศาสตร์โดยอัตโนมัติ</p></div></div>
+          <section class="evidence-summary" id="evidence-summary"></section><div class="evidence-grid" id="evidence-grid"></div>
         </section>
 
-        <section class="view" id="view-tools" data-view-panel="tools" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div><p class="section-label">Pinned capability registry</p><p class="lede">Adoption state, exact versions, and authority boundaries for local research tools.</p></div>
-          </div>
-          <div id="tools-content"></div>
-        </section>
-
-        <section class="view" id="view-owner-gates" data-view-panel="owner-gates" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div><p class="section-label">Owner decision points</p><p class="lede">Select a Gate to see what it opens, the exact Phase/Task scope, required evidence, and what remains locked. <span class="detail-thai" lang="th">อ่านรายละเอียดภาษาไทยได้ในแต่ละ Gate</span></p></div>
-            <button class="button button-primary" id="new-decision-button" type="button" disabled title="Available only after Git and PLAN validation">New decision</button>
-          </div>
-          <div class="gate-workbench">
-            <nav class="gate-index" id="gate-summary" aria-label="Owner Gate list / รายการ Owner Gates"></nav>
-            <article class="gate-detail" id="gate-detail"></article>
-          </div>
-          <section class="decision-history">
-            <div class="subsection-heading"><h2>Decision history</h2><p id="ledger-summary">Reading immutable ledger</p></div>
-            <div class="table-frame"><table><thead><tr><th>Decision</th><th>Gate</th><th>Status</th><th>Date</th><th>Evidence</th></tr></thead><tbody id="decision-table-body"></tbody></table></div>
-          </section>
-        </section>
-
-        <section class="view" id="view-artifacts" data-view-panel="artifacts" aria-labelledby="view-title">
-          <div class="view-intro">
-            <div><p class="section-label">Allowlisted metadata</p><p class="lede">This view shows metadata and digests only. Protected evaluation surfaces never enter the browser.</p></div>
-          </div>
-          <div class="artifact-grid" id="artifact-grid"></div>
+        <section class="view" id="view-reference" data-view-panel="reference" aria-labelledby="view-title">
+          <div class="view-intro"><div><p class="section-label">Reference library</p><p class="lede">Process, harness, tools, diagrams, and the PLAN–Dashboard–Linear–MLflow alignment in one secondary workspace.</p><p class="detail-thai" lang="th">เอกสารอ้างอิงอยู่แยกจากงานที่ Owner ต้องตัดสินใจ</p></div></div>
+          <div class="reference-tabs" role="tablist" aria-label="Reference sections"><button class="tab-button is-active" type="button" data-reference="process">Process</button><button class="tab-button" type="button" data-reference="harness">Harness</button><button class="tab-button" type="button" data-reference="tools">Tools</button><button class="tab-button" type="button" data-reference="flows">System maps</button><button class="tab-button" type="button" data-reference="alignment">System alignment</button></div>
+          <section class="reference-content" id="reference-content"></section>
         </section>
       </main>
     </div>
@@ -152,54 +76,23 @@
 
   <dialog class="decision-dialog" id="decision-dialog" aria-labelledby="decision-dialog-title">
     <form id="decision-form">
-      <div class="dialog-header">
-        <div><p class="eyebrow">Owner Gate</p><h2 id="decision-dialog-title">New decision / สร้างคำตัดสินใจ</h2></div>
-        <button class="icon-button" id="close-decision-button" type="button" aria-label="Close decision dialog">&times;</button>
-      </div>
-
+      <div class="dialog-header"><div><p class="eyebrow">Owner decision</p><h2 id="decision-dialog-title">Review a Gate</h2></div><button class="icon-button" id="close-decision-button" type="button" aria-label="Close decision dialog">×</button></div>
       <div class="dialog-body" id="decision-form-step">
-        <p class="form-note">Select a typed Gate scope and verified evidence. Preview does not write a record. / ขั้น Preview ยังไม่บันทึกคำตัดสินใจ</p>
-        <div class="form-grid">
-          <label><span>Gate / จุดอนุมัติ</span><select name="gate_id" required></select></label>
-          <label><span>Decision / ผลการตัดสินใจ</span><select name="status" required><option value="approved">Approve / อนุมัติ</option><option value="rejected">Reject / ไม่อนุมัติ</option><option value="deferred">Defer / ขอข้อมูลเพิ่ม</option></select></label>
-        </div>
-        <label><span>Authorized action / ขอบเขตการอนุญาต</span><select name="action" required></select></label>
-        <div class="decision-context" id="gate-decision-context"></div>
-        <fieldset class="scope-fieldset"><legend>Covered Phase and Tasks / งานที่ครอบคลุม</legend><div id="scope-options"></div></fieldset>
-        <fieldset class="evidence-fieldset"><legend>Verified evidence packages / ชุดหลักฐาน</legend><div id="evidence-options"></div></fieldset>
-        <p class="approval-sentence" id="approval-sentence" aria-live="polite"></p>
-        <label><span>Owner rationale / เหตุผลของ Owner</span><textarea name="rationale" rows="4" minlength="3" maxlength="4000" required placeholder="Why approve, reject, or defer? / เหตุผลสั้น ๆ"></textarea></label>
-        <label id="targets-field"><span>Exact repository-relative targets / เป้าหมายเฉพาะ</span><textarea class="mono-input" name="targets" rows="3" placeholder="One path per line / หนึ่ง path ต่อบรรทัด"></textarea></label>
-        <fieldset class="budget-fieldset">
-          <legend>Budget ceiling, when applicable / เพดานงบ</legend>
-          <div class="form-grid">
-            <label><span>Maximum cost (USD)</span><input name="max_cost_usd" type="number" min="0" step="0.01"></label>
-            <label><span>Maximum tokens</span><input name="max_tokens" type="number" min="0" step="1"></label>
-            <label><span>Maximum minutes</span><input name="max_wall_clock_minutes" type="number" min="1" step="1"></label>
-            <label><span>Maximum trials</span><input name="max_trials" type="number" min="1" step="1"></label>
-          </div>
-        </fieldset>
-        <label><span>Supersede an earlier decision / แก้ไขคำตัดสินใจเดิม</span><select name="supersedes_decision_id"><option value="">Not a correction / ไม่ใช่การแก้ไข</option></select></label>
-        <label><span>Friendly decision name / ชื่อที่อ่านง่าย</span><input name="display_label" maxlength="120" placeholder="Example: Approve F0 after evidence review"></label>
+        <div class="wizard-steps"><span class="is-active">1 Understand</span><span>2 Decide</span><span>3 Confirm</span></div>
+        <section class="decision-context" id="gate-decision-context"></section>
+        <div class="form-grid"><label><span>Gate</span><select name="gate_id" required></select></label><label><span>Decision</span><select name="status" required><option value="approved">Approve</option><option value="deferred">Defer</option><option value="rejected">Reject</option></select></label></div>
+        <label><span>Authorized action</span><select name="action" required></select></label>
+        <fieldset class="scope-fieldset"><legend>Scope under review</legend><div id="scope-options"></div></fieldset>
+        <fieldset class="evidence-fieldset"><legend>Verified evidence</legend><div id="evidence-options"></div></fieldset>
+        <label><span>Owner rationale</span><textarea name="rationale" rows="4" minlength="3" maxlength="4000" required placeholder="Why approve, defer, or reject?"></textarea></label>
+        <label><span>Friendly decision name <small>(optional)</small></span><input name="display_label" maxlength="120" placeholder="Example: Confirm F0 foundation"></label>
+        <label id="supersede-field"><span>Correct an earlier decision <small>(optional)</small></span><select name="supersedes_decision_id"><option value="">No correction</option></select></label>
         <p class="form-error" id="decision-form-error" role="alert"></p>
       </div>
-
-      <div class="dialog-body preview-step" id="decision-preview-step" hidden>
-        <div class="preview-warning"><strong>Review the decision sentence and scope / ตรวจขอบเขตก่อนยืนยัน</strong><span>Confirmation appends a new immutable record; it never edits an earlier record.</span></div>
-        <p class="approval-sentence preview-sentence" id="preview-approval-sentence"></p>
-        <dl class="record-preview" id="record-preview"></dl>
-        <label class="confirmation-check"><input type="checkbox" id="explicit-confirmation"><span>I reviewed the Gate, Phase, Tasks, evidence, and remaining locks, and confirm this canonical decision. / ผมตรวจรายละเอียดและยืนยันแล้ว</span></label>
-        <p class="form-error" id="decision-confirm-error" role="alert"></p>
-      </div>
-
-      <div class="dialog-footer">
-        <button class="button button-secondary" id="decision-back-button" type="button" hidden>Back / ย้อนกลับ</button>
-        <button class="button button-primary" id="decision-preview-button" type="submit">Preview / ตรวจสอบ</button>
-        <button class="button button-danger" id="decision-confirm-button" type="button" hidden disabled>Confirm and record / ยืนยัน</button>
-      </div>
+      <div class="dialog-body" id="decision-preview-step" hidden><div class="wizard-steps"><span>1 Understand</span><span class="is-active">2 Decide</span><span>3 Confirm</span></div><div class="preview-warning"><strong>Review the plain-language decision</strong><span>A confirmation appends a new immutable record; it never edits an earlier record.</span></div><p class="approval-sentence" id="preview-approval-sentence"></p><dl class="record-preview" id="record-preview"></dl><details class="technical-audit"><summary>Technical audit</summary><pre id="technical-preview"></pre></details><label class="confirmation-check"><input type="checkbox" id="explicit-confirmation"><span>I reviewed the Gate, scope, evidence, and remaining locks and confirm this decision.</span></label><p class="form-error" id="decision-confirm-error" role="alert"></p></div>
+      <div class="dialog-footer"><button class="button button-secondary" id="decision-back-button" type="button" hidden>Back</button><button class="button button-secondary" id="decision-preview-button" type="submit">Preview decision</button><button class="button button-primary" id="decision-confirm-button" type="button" hidden disabled>Confirm decision</button></div>
     </form>
   </dialog>
-
-  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
 </body>
 </html>

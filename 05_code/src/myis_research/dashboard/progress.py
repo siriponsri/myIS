@@ -54,6 +54,14 @@ REQUIRED_TASK_FIELDS = (
     "Dependencies",
 )
 
+PHASE_GROUPS = (
+    {"group_id": "foundation", "title_en": "Foundation", "phase_ids": ("F0", "F1", "D0")},
+    {"group_id": "track-c", "title_en": "Track C", "phase_ids": ("C0", "C1", "CF")},
+    {"group_id": "track-s", "title_en": "Track S", "phase_ids": ("S0", "S1", "SF")},
+    {"group_id": "evaluation-publication", "title_en": "Evaluation & publication", "phase_ids": ("Q", "PC", "PS")},
+    {"group_id": "transfer", "title_en": "External transfer", "phase_ids": ("CT",)},
+)
+
 _PHASE_HEADING = re.compile(r"^## Phase ([A-Z][A-Z0-9]*) - (.+)$")
 _TASK_HEADING = re.compile(r"^### Task ([A-Z][A-Z0-9]*\.[0-9]+) - (.+)$")
 _FIELD = re.compile(r"^- \*\*(.+?):\*\*\s*(.*)$")
@@ -162,6 +170,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
             tasks.append(
                 {
                     "task_id": task.task_id,
+                    "phase_id": phase.phase_id,
                     "title": task.title,
                     "goal": task.fields["Goal"],
                     "inputs": task.fields["Inputs"],
@@ -174,6 +183,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
                     "risk": task.fields["Risk"],
                     "evidence_contract": task.fields["Evidence"],
                     "dependencies": _dependency_ids(task.fields["Dependencies"], task.task_id),
+                    "dependency_annotations": _dependency_annotations(task.fields["Dependencies"], task.task_id),
                     "linear_issue_id": linear_task["issue_id"],
                     "linear_status": linear_task["status"],
                     "evidence_state": evidence["state"],
@@ -193,6 +203,8 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
             }
         )
     _add_project_progress(phase_views)
+    plan_graph = _build_plan_graph(plan, linear)
+    owner_focus = _owner_focus(phase_views, governance, git_dirty)
     completed_task_count = sum(
         task["project_state"] == "complete"
         for phase in phase_views
@@ -230,6 +242,137 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
             "project": linear["project"],
             "task_count": len(linear["tasks"]),
         },
+        "plan_graph": plan_graph,
+        "owner_focus": owner_focus,
+        "projection_revision": hashlib.sha256(
+            json.dumps(
+                {
+                    "plan": plan.sha256,
+                    "linear": linear["source_sha256"],
+                    "git": git_commit,
+                    "dirty": git_dirty,
+                    "progress": project_state_counts,
+                    "gates": governance,
+                },
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest(),
+    }
+
+
+def _build_plan_graph(plan: ParsedPlan, linear: dict[str, Any]) -> dict[str, Any]:
+    task_to_phase = {
+        task.task_id: phase.phase_id for phase in plan.phases for task in phase.tasks
+    }
+    phase_edges: set[tuple[str, str]] = set()
+    for edge in linear["dependencies"]:
+        from_phase = task_to_phase[edge["from_task"]]
+        to_phase = task_to_phase[edge["to_task"]]
+        if from_phase != to_phase:
+            phase_edges.add((from_phase, to_phase))
+    annotations = []
+    for phase in plan.phases:
+        for task in phase.tasks:
+            parsed = _dependency_annotations(task.fields["Dependencies"], task.task_id)
+            if parsed["parallel_with"] or parsed["independent_of"]:
+                annotations.append({"task_id": task.task_id, **parsed})
+    return {
+        "groups": [
+            {"group_id": item["group_id"], "title_en": item["title_en"], "phase_ids": list(item["phase_ids"])}
+            for item in PHASE_GROUPS
+        ],
+        "phase_edges": [
+            {"from_phase": source, "to_phase": target, "relation": "blocks"}
+            for source, target in sorted(phase_edges, key=lambda item: (item[0], item[1]))
+        ],
+        "task_edges": [
+            {
+                "from_task": edge["from_task"],
+                "to_task": edge["to_task"],
+                "relation": edge["relation"],
+            }
+            for edge in linear["dependencies"]
+        ],
+        "annotations": annotations,
+        "source_bindings": {
+            "canonical_plan_sha256": plan.sha256,
+            "linear_projection_sha256": linear["source_sha256"],
+            "authority": "PLAN.md",
+        },
+    }
+
+
+def _owner_focus(
+    phases: list[dict[str, Any]], governance: dict[str, str], git_dirty: bool
+) -> dict[str, Any]:
+    tasks = [task for phase in phases for task in phase["tasks"]]
+    task_by_id = {task["task_id"]: task for task in tasks}
+    gate_order = [f"G{index}" for index in range(9)]
+    gate_ready: dict[str, bool] = {}
+    for gate_id in gate_order:
+        governed = [task for task in tasks if gate_id in task["owner_gate_ids"]]
+        gate_ready[gate_id] = bool(governed) and all(
+            task["evidence_state"] == "complete" for task in governed
+        )
+    next_gate = next(
+        (gate_id for gate_id in gate_order if governance.get(gate_id) not in {"approved"}),
+        None,
+    )
+    if next_gate and gate_ready.get(next_gate) and not git_dirty:
+        governed = [task for task in tasks if next_gate in task["owner_gate_ids"]]
+        phase_id = governed[0]["phase_id"] if governed else None
+        return {
+            "mode": "decision",
+            "current_phase_id": phase_id,
+            "next_task_id": None,
+            "next_gate_id": next_gate,
+            "blocker_codes": [],
+            "headline_en": f"Review {next_gate} before the next phase",
+            "detail_th": "ตรวจ Gate ที่พร้อมอนุมัติก่อนเริ่มงานถัดไป",
+        }
+    priority = (
+        "verification_needed",
+        "blocked_gate",
+        "waiting_gate",
+        "in_progress",
+        "ready",
+        "waiting_dependency",
+    )
+    selected = next((task for state in priority for task in tasks if task["project_state"] == state), None)
+    if selected is None:
+        return {
+            "mode": "complete",
+            "current_phase_id": None,
+            "next_task_id": None,
+            "next_gate_id": next_gate,
+            "blocker_codes": [],
+            "headline_en": "All recorded tasks are complete",
+            "detail_th": "งานที่มีหลักฐานครบแล้วทั้งหมด",
+        }
+    blocker_codes = []
+    if selected["unmet_dependencies"]:
+        blocker_codes.append("dependency")
+    if selected["project_state"] in {"blocked_gate", "waiting_gate"}:
+        blocker_codes.append("gate")
+    if selected["project_state"] == "verification_needed":
+        blocker_codes.append("evidence")
+    headline = {
+        "verification_needed": f"Verify evidence for {selected['task_id']}",
+        "blocked_gate": f"Resolve the Gate blocker for {selected['task_id']}",
+        "waiting_gate": f"Wait for Gate approval before {selected['task_id']}",
+        "in_progress": f"Continue {selected['task_id']}",
+        "ready": f"Start {selected['task_id']}",
+        "waiting_dependency": f"Complete dependencies before {selected['task_id']}",
+    }[selected["project_state"]]
+    return {
+        "mode": "work",
+        "current_phase_id": selected["phase_id"],
+        "next_task_id": selected["task_id"],
+        "next_gate_id": next_gate,
+        "blocker_codes": blocker_codes,
+        "headline_en": headline,
+        "detail_th": "ดูงานถัดไปและเหตุผลที่ยังเริ่มไม่ได้",
     }
 
 
@@ -597,14 +740,46 @@ def _combined_gate_state(values: list[str]) -> str:
 
 
 def _dependency_ids(value: str, task_id: str) -> list[str]:
-    identifiers = []
-    for candidate in EXPECTED_TASK_ORDER:
-        if candidate != task_id and re.search(rf"\b{re.escape(candidate)}\b", value):
-            identifiers.append(candidate)
+    clause = value.split(";", 1)[0]
+    identifiers: list[str] = []
     for phase_id in EXPECTED_PHASE_ORDER:
-        if phase_id != task_id.split(".", 1)[0] and re.search(rf"\b{phase_id}\b", value):
+        if phase_id != task_id.split(".", 1)[0] and re.search(rf"\b{re.escape(phase_id)}\b(?!\.)", clause):
             identifiers.append(phase_id)
+    for match in re.finditer(r"\b([A-Z][A-Z0-9]*)\.(\d+)-\1\.(\d+)\b", clause):
+        phase_id, start, end = match.group(1), int(match.group(2)), int(match.group(3))
+        for number in range(min(start, end), max(start, end) + 1):
+            candidate = f"{phase_id}.{number}"
+            if candidate in EXPECTED_TASK_ORDER and candidate != task_id:
+                identifiers.append(candidate)
+    for candidate in EXPECTED_TASK_ORDER:
+        if candidate != task_id and re.search(rf"\b{re.escape(candidate)}\b", clause):
+            identifiers.append(candidate)
     return list(dict.fromkeys(identifiers))
+
+
+def _dependency_annotations(value: str, task_id: str) -> dict[str, list[str]]:
+    suffix = value.split(";", 1)[1] if ";" in value else ""
+    parallel_with: list[str] = []
+    independent_of: list[str] = []
+    if "parallel with" in suffix.lower():
+        parallel_with = _referenced_ids(suffix, task_id, include_phases=False)
+    if "independent of" in suffix.lower():
+        independent_of = _referenced_ids(suffix, task_id, include_phases=True)
+    return {
+        "parallel_with": parallel_with,
+        "independent_of": independent_of,
+    }
+
+
+def _referenced_ids(value: str, task_id: str, *, include_phases: bool) -> list[str]:
+    candidates = list(EXPECTED_TASK_ORDER)
+    if include_phases:
+        candidates += list(EXPECTED_PHASE_ORDER)
+    return [
+        candidate
+        for candidate in candidates
+        if candidate != task_id and re.search(rf"\b{re.escape(candidate)}\b", value)
+    ]
 
 
 def _phase_dependencies(tasks: list[dict[str, Any]], phase_id: str) -> list[str]:

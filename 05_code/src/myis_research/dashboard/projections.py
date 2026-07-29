@@ -27,6 +27,20 @@ EXPERIMENT_NAMES = (
     "myis-research-publication",
 )
 
+EXPECTED_LINEAR_DEPENDENCY_COUNT = 27
+
+GATE_OPEN_SCOPE: dict[str, tuple[str, ...]] = {
+    "G0": ("F0",),
+    "G1": ("F1",),
+    "G2": ("D0", "C0", "C1"),
+    "G3": ("CF",),
+    "G4": ("S0",),
+    "G5": ("S1", "SF"),
+    "G6": ("Q",),
+    "G7": ("CT",),
+    "G8": ("PC", "PS"),
+}
+
 GATE_ACTIONS = {
     "G0": (
         "approve_implementation",
@@ -284,6 +298,39 @@ def load_linear_projection(repository_root: Path, plan: Any) -> dict[str, Any]:
     project = linear.get("project")
     if not isinstance(project, dict):
         raise ValueError("Linear project projection is missing")
+    dependency_rows = linear.get("dependencies")
+    if not isinstance(dependency_rows, list) or len(dependency_rows) != EXPECTED_LINEAR_DEPENDENCY_COUNT:
+        raise ValueError("Linear dependency projection must contain exactly 27 relations")
+    dependencies: list[dict[str, str]] = []
+    known_tasks = set(expected)
+    for item in dependency_rows:
+        if not isinstance(item, dict) or set(item) != {"relation", "from_task", "to_task"}:
+            raise ValueError("Linear dependency row is invalid")
+        if item["relation"] != "blocks" or item["from_task"] not in known_tasks or item["to_task"] not in known_tasks:
+            raise ValueError("Linear dependency references an unknown task or relation")
+        dependencies.append({key: str(item[key]) for key in ("relation", "from_task", "to_task")})
+    edges = {(item["from_task"], item["to_task"]) for item in dependencies}
+    if len(edges) != EXPECTED_LINEAR_DEPENDENCY_COUNT:
+        raise ValueError("Linear dependency projection contains duplicate relations")
+    adjacency = {task_id: [] for task_id in expected}
+    for item in dependencies:
+        adjacency[item["from_task"]].append(item["to_task"])
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(task_id: str) -> None:
+        if task_id in visiting:
+            raise ValueError("Linear dependency projection contains a cycle")
+        if task_id in visited:
+            return
+        visiting.add(task_id)
+        for child in adjacency[task_id]:
+            visit(child)
+        visiting.remove(task_id)
+        visited.add(task_id)
+
+    for task_id in expected:
+        visit(task_id)
     return {
         "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
         "project": {
@@ -292,6 +339,7 @@ def load_linear_projection(repository_root: Path, plan: Any) -> dict[str, Any]:
             "status": str(project.get("status", "")),
         },
         "tasks": task_map,
+        "dependencies": dependencies,
     }
 
 
@@ -399,6 +447,15 @@ def public_governance_catalog(repository_root: Path, plan: Any) -> dict[str, Any
             {
                 "gate_id": gate_id,
                 **guidance,
+                "title_en": guidance["name_en"],
+                "opens_scope": {
+                    "phase_ids": list(GATE_OPEN_SCOPE[gate_id]),
+                    "action": GATE_ACTIONS[gate_id][0],
+                },
+                "reviews_scope": {
+                    "phase_ids": phase_ids,
+                    "task_ids": [task.task_id for task in tasks],
+                },
                 "phase_ids": phase_ids,
                 "tasks": [
                     {

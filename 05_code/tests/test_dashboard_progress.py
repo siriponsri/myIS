@@ -6,7 +6,13 @@ import tempfile
 from pathlib import Path
 import unittest
 
-from myis_research.dashboard.progress import build_dashboard_snapshot, parse_plan, scope_sha256
+from myis_research.dashboard.progress import (
+    _dependency_annotations,
+    _dependency_ids,
+    build_dashboard_snapshot,
+    parse_plan,
+    scope_sha256,
+)
 from myis_research.ledger import ImmutableJsonLedger
 
 
@@ -39,6 +45,44 @@ def make_repository(root: Path) -> str:
 
 
 class DashboardProgressTests(unittest.TestCase):
+    def test_dependency_parser_ignores_parallel_and_independent_annotations(self) -> None:
+        self.assertEqual(
+            _dependency_ids("S0; parallel with S1.1 and S1.3", "S1.2"),
+            ["S0"],
+        )
+        self.assertEqual(
+            _dependency_annotations("S0; parallel with S1.1 and S1.3", "S1.2"),
+            {"parallel_with": ["S1.1", "S1.3"], "independent_of": []},
+        )
+        self.assertEqual(
+            _dependency_ids("CF and SF; independent of Q/PC/PS", "CT.1"),
+            ["CF", "SF"],
+        )
+        self.assertEqual(
+            _dependency_annotations("CF and SF; independent of Q/PC/PS", "CT.1"),
+            {"parallel_with": [], "independent_of": ["Q", "PC", "PS"]},
+        )
+
+    def test_dependency_range_expands_inclusive(self) -> None:
+        self.assertEqual(
+            _dependency_ids("S1.1-S1.3", "SF.1"),
+            ["S1.1", "S1.2", "S1.3"],
+        )
+
+    def test_snapshot_exposes_validated_graph_and_owner_focus(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            make_repository(root)
+            snapshot = build_dashboard_snapshot(root)
+            self.assertEqual(len(snapshot["plan_graph"]["task_edges"]), 27)
+            self.assertEqual(len(snapshot["plan_graph"]["groups"]), 5)
+            self.assertEqual(snapshot["plan_graph"]["source_bindings"]["authority"], "PLAN.md")
+            self.assertIn("mode", snapshot["owner_focus"])
+            s1_annotations = [
+                item for item in snapshot["plan_graph"]["annotations"] if item["task_id"] == "S1.2"
+            ]
+            self.assertEqual(s1_annotations[0]["parallel_with"], ["S1.1", "S1.3"])
+
     def test_plan_projection_preserves_current_phase_and_task_order(self) -> None:
         plan = parse_plan(REPO_ROOT / "PLAN.md")
         self.assertEqual(len(plan.phases), 13)
