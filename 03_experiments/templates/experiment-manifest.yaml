@@ -109,21 +109,26 @@ statistics:
 
 surfaces:
   editable:
-    - policy.query_views
-    - policy.routes
-    - policy.candidate_budget
-    - policy.fusion
-    - policy.stopping
+    - routes.enabled
+    - routes.quota
+    - fusion
+    - fusion_k
+    - weights
+    - retrieval_depth
+    - rerank_depth
   protected:
-    - confirmation.membership
-    - confirmation.qrels
-    - confirmation.per_query_outcomes
+    - query_views
+    - candidate_budget
+    - stopping
+    - prompt
+    - encoder
+    - reranker_instructions
     - evaluator
-    - split.membership
-    - corpus.family_mapping
-    - baseline.results
+    - split
+    - confirmation
+    - corpus
     - governance
-    - manifest.validation
+    - manifest_validation
 
 isolation:
   network_mode: offline

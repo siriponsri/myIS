@@ -1,6 +1,6 @@
 # myIS Research 1.0 Canonical Execution Plan
 
-Status: `F0_MIGRATION_ACTIVE_SCIENTIFIC_EXECUTION_GATED`
+Status: `F0_STATE_FROM_G0_LEDGER_F1_REPRODUCTION_G1_GATED`
 Active identity: `myIS Research` / `myis-research`
 Protocol: `1.0`; Track C/S research version: `0.1`
 Migration base: `4dd0f4b5698174a128d3d1c4d4efcdee6dd04f4c`

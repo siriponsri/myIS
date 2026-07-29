@@ -1,13 +1,21 @@
-# Owner-authorized Linear projection. Linear never opens a scientific gate.
+schema_version: myis.linear-projection.v1
+# Owner-authorized projection. Linear never opens a scientific gate.
 linear:
   project:
     name: myIS Research 1.0
     external_id: d866c23b-5b9f-422b-93cb-b0b6f6400fd4
     url: https://linear.app/siriponsri/project/myis-research-10-a4dd5fe6fcda
-    status: planned
+    status: Planned
   plan_binding:
     canonical_plan: PLAN.md
-    plan_sha256: 27361e079c9fe1c5f2c42ced99af4bc1367de8070a6393d34c0791f576c06e38
+    plan_sha256: 677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32
+  catalogs:
+    phases: [F0, F1, D0, C0, C1, CF, S0, S1, SF, CT, Q, PC, PS]
+    tasks: [F0.1, F0.2, F0.3, F1.1, D0.1, D0.2, C0.1, C1.1, C1.2, CF.1, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1, CT.1, Q.1, Q.2, Q.3, PC.1, PS.1]
+    statuses:
+      - {name: Todo, type: unstarted}
+      - {name: In Progress, type: started}
+      - {name: Done, type: completed}
   milestones:
     - {phase: F0, external_id: e2cd2782-b275-4f23-924d-8c3eeb1042fb}
     - {phase: F1, external_id: 54953080-2559-4eec-8239-95a973ba339a}
@@ -23,7 +31,6 @@ linear:
     - {phase: PC, external_id: 5a2f923f-f8ee-4b2c-a5e9-17cdc4bbaac8}
     - {phase: PS, external_id: 3397e7de-99e3-403e-872c-eb411e94d756}
   tasks:
-@@
     - {task_id: F0.1, phase: F0, external_id: SIR-5, status: In Progress}
     - {task_id: F0.2, phase: F0, external_id: SIR-6, status: In Progress}
     - {task_id: F0.3, phase: F0, external_id: SIR-8, status: Todo}
@@ -46,4 +53,32 @@ linear:
     - {task_id: Q.3, phase: Q, external_id: SIR-24, status: Todo}
     - {task_id: PC.1, phase: PC, external_id: SIR-25, status: Todo}
     - {task_id: PS.1, phase: PS, external_id: SIR-26, status: Todo}
+  dependencies:
+    - {relation: blocks, from_task: F0.1, to_task: F0.2}
+    - {relation: blocks, from_task: F0.2, to_task: F0.3}
+    - {relation: blocks, from_task: F0.3, to_task: F1.1}
+    - {relation: blocks, from_task: F1.1, to_task: D0.1}
+    - {relation: blocks, from_task: D0.1, to_task: D0.2}
+    - {relation: blocks, from_task: D0.2, to_task: C0.1}
+    - {relation: blocks, from_task: C0.1, to_task: C1.1}
+    - {relation: blocks, from_task: C1.1, to_task: C1.2}
+    - {relation: blocks, from_task: C1.2, to_task: CF.1}
+    - {relation: blocks, from_task: CF.1, to_task: Q.1}
+    - {relation: blocks, from_task: CF.1, to_task: CT.1}
+    - {relation: blocks, from_task: CF.1, to_task: S0.1}
+    - {relation: blocks, from_task: S0.1, to_task: S0.2}
+    - {relation: blocks, from_task: S0.2, to_task: S1.3}
+    - {relation: blocks, from_task: S0.2, to_task: S1.2}
+    - {relation: blocks, from_task: S0.2, to_task: S1.1}
+    - {relation: blocks, from_task: S1.1, to_task: SF.1}
+    - {relation: blocks, from_task: S1.2, to_task: SF.1}
+    - {relation: blocks, from_task: S1.3, to_task: SF.1}
+    - {relation: blocks, from_task: SF.1, to_task: Q.1}
+    - {relation: blocks, from_task: SF.1, to_task: CT.1}
+    - {relation: blocks, from_task: Q.1, to_task: PS.1}
+    - {relation: blocks, from_task: Q.1, to_task: PC.1}
+    - {relation: blocks, from_task: Q.1, to_task: Q.3}
+    - {relation: blocks, from_task: Q.1, to_task: Q.2}
+    - {relation: blocks, from_task: Q.2, to_task: PC.1}
+    - {relation: blocks, from_task: Q.3, to_task: PC.1}
   preserved_legacy_issue_ids: [SIR-1, SIR-2, SIR-3, SIR-4]

@@ -10,6 +10,15 @@ __pycache__/
 # Research runtime artifacts
 04_outputs/artifacts/*
 !04_outputs/artifacts/.gitkeep
+!04_outputs/artifacts/f0-migration/
+!04_outputs/artifacts/f0-migration/**
+!04_outputs/artifacts/task-evidence/
+!04_outputs/artifacts/task-evidence/F0.1/
+!04_outputs/artifacts/task-evidence/F0.1/**
+!04_outputs/artifacts/task-evidence/F0.2/
+!04_outputs/artifacts/task-evidence/F0.2/**
+!04_outputs/artifacts/task-evidence/F0.3/
+!04_outputs/artifacts/task-evidence/F0.3/**
 04_outputs/diagrams/*.svg
 01_evidence/private/
 01_evidence/held-out/
@@ -18,6 +27,7 @@ __pycache__/
 01_evidence/C-tier/*.pdf
 01_evidence/N-tier/*.pdf
 00_governance/approvals/.writer.lock
+04_outputs/audits/rigor/.writer.lock
 
 # Tool workspaces and caches
 .hyperresearch/

@@ -1,4 +1,5 @@
 import hashlib
+import copy
 import unittest
 
 from myis_research.confirmation import (
@@ -39,7 +40,13 @@ from myis_research.harness.policy import (
 )
 from myis_research.harness.statistics import holm_adjust, paired_statistics
 from myis_research.harness.validation import ValidationError, validate_manifest_payload
-from myis_research.protection import PatchSurfacePolicy, assert_aggregate_only
+from myis_research.protection import (
+    C1_EDITABLE_SURFACES,
+    C1_PROTECTED_SURFACES,
+    PatchSurfacePolicy,
+    assert_aggregate_only,
+    c1_patch_surface_policy,
+)
 from myis_research.providers import (
     LunaUse,
     ModelCalibrationProtocol,
@@ -248,6 +255,15 @@ class ScientificContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             assert_aggregate_only({"per_query": [{"query_id": "q1"}]})
 
+    def test_c1_patch_surface_is_exact_and_protected_fields_are_denied(self) -> None:
+        surfaces = c1_patch_surface_policy()
+        self.assertEqual(surfaces.editable_paths, C1_EDITABLE_SURFACES)
+        self.assertEqual(surfaces.protected_paths, C1_PROTECTED_SURFACES)
+        surfaces.validate_changed_paths(C1_EDITABLE_SURFACES)
+        for protected in ("query_views", "candidate_budget", "stopping", "prompt", "encoder", "reranker_instructions"):
+            with self.subTest(protected=protected), self.assertRaises(PermissionError):
+                surfaces.validate_changed_paths([protected])
+
     def test_confirmation_request_and_aggregate_are_hash_only(self) -> None:
         request = ConfirmationRequest(
             "request-1", "2026-07-28T00:00:00Z", "f" * 40,
@@ -333,6 +349,7 @@ class ScientificContractTests(unittest.TestCase):
                 "provider": {
                     "requested_model": "gpt-5.6-sol", "resolved_model": "gpt-5.6-sol",
                     "provider": "openai", "effort": "medium", "endpoint_class": "official",
+                    "routing_used": False, "parameters_dropped": False,
                     "fallback_allowed": False, "fallback_used": False,
                 }
             },
@@ -349,8 +366,25 @@ class ScientificContractTests(unittest.TestCase):
                 "shared_split_commitment_sha256": sha("shared-split"),
                 "track_firewall_sha256": sha("c-firewall"),
             },
+            "surfaces": {
+                "editable": list(C1_EDITABLE_SURFACES),
+                "protected": list(C1_PROTECTED_SURFACES),
+            },
         }
         self.assertFalse(validate_manifest_payload(measured)["read_only_legacy"])
+        for flag, invalid in (
+            ("routing_used", None),
+            ("parameters_dropped", "false"),
+            ("fallback_allowed", 0),
+            ("fallback_used", True),
+        ):
+            invalid_manifest = copy.deepcopy(measured)
+            if invalid is None:
+                invalid_manifest["method"]["provider"].pop(flag)
+            else:
+                invalid_manifest["method"]["provider"][flag] = invalid
+            with self.subTest(flag=flag, invalid=invalid), self.assertRaises(ValidationError):
+                validate_manifest_payload(invalid_manifest)
         measured["method"] = {"provider": None}
         with self.assertRaises(ValidationError):
             validate_manifest_payload(measured)

@@ -11,6 +11,7 @@ from .manifest import MANIFEST_V2, MANIFEST_V3
 from .models import is_sha256
 from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_FAMILY_ID, PROTOCOL_VERSION, RESEARCH_VERSION
 from .models import PACKAGE_VERSION
+from ..protection import C1_EDITABLE_SURFACES, C1_PROTECTED_SURFACES
 
 
 REQUIRED_RUN_FILES = (
@@ -124,8 +125,12 @@ def validate_manifest_payload(manifest: dict[str, Any]) -> dict[str, Any]:
                 raise ValidationError(f"provider identity missing fields: {missing_provider}")
             if provider.get("requested_model") != provider.get("resolved_model"):
                 raise ValidationError("requested/resolved model identity mismatch")
-            if measured and (provider.get("fallback_allowed") or provider.get("fallback_used")):
-                raise ValidationError("provider fallback invalidates a measured manifest")
+            if measured:
+                for flag in ("routing_used", "parameters_dropped", "fallback_allowed", "fallback_used"):
+                    if type(provider.get(flag)) is not bool:
+                        raise ValidationError(f"measured provider flag {flag} must be a boolean")
+                    if provider[flag]:
+                        raise ValidationError(f"measured provider flag {flag} must be false")
         isolation = manifest.get("isolation")
         if measured and isolation is None:
             raise ValidationError("measured manifests require offline execution isolation")
@@ -150,6 +155,13 @@ def validate_manifest_payload(manifest: dict[str, Any]) -> dict[str, Any]:
             overlap = set(surfaces.get("editable", [])) & set(surfaces.get("protected", []))
             if overlap:
                 raise ValidationError(f"editable/protected surface overlap: {sorted(overlap)}")
+        if measured and phase == "C1":
+            if not isinstance(surfaces, dict):
+                raise ValidationError("C1 measured manifests require the typed editable/protected surface contract")
+            if tuple(surfaces.get("editable", ())) != C1_EDITABLE_SURFACES:
+                raise ValidationError("C1 editable surfaces do not match the frozen allowlist")
+            if tuple(surfaces.get("protected", ())) != C1_PROTECTED_SURFACES:
+                raise ValidationError("C1 protected surfaces do not match the frozen contract")
         statistics = manifest.get("statistics")
         if statistics is not None:
             if statistics.get("bootstrap_resamples") != 10_000 or statistics.get("confidence_level") != 0.95:

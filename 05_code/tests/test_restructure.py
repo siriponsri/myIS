@@ -4,6 +4,8 @@ import sys
 import tempfile
 import unittest
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -75,6 +77,49 @@ class RestructureValidatorTests(unittest.TestCase):
             failures = validate_restructure.active_context_failures(root)
 
             self.assertEqual(failures, ["legacy active-context reference (IS1 Research V0.1): README.md"])
+
+    def test_yaml_validator_rejects_malformed_config(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "03_experiments/config/broken.yaml"
+            path.parent.mkdir(parents=True)
+            path.write_text("root: [unterminated\n", encoding="utf-8")
+
+            failures = validate_restructure.yaml_config_failures(root)
+
+            self.assertEqual(len(failures), 1)
+            self.assertIn("malformed YAML config", failures[0])
+
+    def test_active_context_rejects_standalone_patch_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "README.md").write_text("# Valid heading\n@@\n", encoding="utf-8")
+
+            self.assertEqual(
+                validate_restructure.standalone_patch_marker_failures(root),
+                ["standalone patch marker: README.md"],
+            )
+
+    def test_linear_projection_rejects_unknown_dependency_and_cycle(self) -> None:
+        payload = yaml.safe_load((ROOT / "00_governance/config/linear.yaml").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "00_governance/config/linear.yaml"
+            path.parent.mkdir(parents=True)
+            plan_bytes = (ROOT / "PLAN.md").read_bytes()
+            (root / "PLAN.md").write_bytes(plan_bytes)
+            payload["linear"]["dependencies"][0]["from_task"] = "UNKNOWN.1"
+            path.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
+            failures = validate_restructure.linear_projection_failures(root)
+            self.assertTrue(any("invalid task reference" in failure for failure in failures))
+
+            payload = yaml.safe_load((ROOT / "00_governance/config/linear.yaml").read_text(encoding="utf-8"))
+            payload["linear"]["dependencies"][10] = {
+                "relation": "blocks", "from_task": "PC.1", "to_task": "F0.1"
+            }
+            path.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
+            failures = validate_restructure.linear_projection_failures(root)
+            self.assertTrue(any("acyclic" in failure for failure in failures))
 
     def test_repository_restructure_contract_is_valid(self) -> None:
         self.assertEqual(validate_restructure.validate(), [])

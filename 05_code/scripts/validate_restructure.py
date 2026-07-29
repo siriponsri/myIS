@@ -6,7 +6,9 @@ import csv
 import hashlib
 from pathlib import Path
 import re
-from typing import Iterable
+from typing import Any, Iterable
+
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -89,6 +91,13 @@ OBSOLETE_ACTIVE_PATHS = (
 
 MARKDOWN_INLINE_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 MARKDOWN_REFERENCE_LINK = re.compile(r"^\s*\[[^\]]+\]:\s*(\S+)", re.MULTILINE)
+STANDALONE_PATCH_MARKER = re.compile(r"^\s*@@\s*$", re.MULTILINE)
+
+EXPECTED_PHASE_ORDER = ("F0", "F1", "D0", "C0", "C1", "CF", "S0", "S1", "SF", "CT", "Q", "PC", "PS")
+EXPECTED_TASK_ORDER = (
+    "F0.1", "F0.2", "F0.3", "F1.1", "D0.1", "D0.2", "C0.1", "C1.1", "C1.2", "CF.1",
+    "S0.1", "S0.2", "S1.1", "S1.2", "S1.3", "SF.1", "CT.1", "Q.1", "Q.2", "Q.3", "PC.1", "PS.1",
+)
 
 
 def sha256(path: Path) -> str:
@@ -139,6 +148,183 @@ def active_context_failures(root: Path) -> list[str]:
         for label, pattern in LEGACY_PATTERNS:
             if pattern.search(content):
                 failures.append(f"legacy active-context reference ({label}): {relative}")
+    return failures
+
+
+def standalone_patch_marker_failures(root: Path) -> list[str]:
+    failures: list[str] = []
+    for path in iter_active_context_files(root):
+        if STANDALONE_PATCH_MARKER.search(read_text(path)):
+            failures.append(f"standalone patch marker: {path.relative_to(root).as_posix()}")
+    return failures
+
+
+def yaml_config_paths(root: Path) -> Iterable[Path]:
+    roots = (
+        root / "00_governance/config",
+        root / "03_experiments/config",
+        root / "03_experiments/templates",
+    )
+    for config_root in roots:
+        if config_root.is_dir():
+            yield from sorted(
+                path for path in config_root.rglob("*") if path.is_file() and path.suffix.lower() in {".yaml", ".yml"}
+            )
+    registry = root / "06_frontend/dashboard/content_registry.yaml"
+    if registry.is_file():
+        yield registry
+
+
+def yaml_config_failures(root: Path) -> list[str]:
+    failures: list[str] = []
+    for path in yaml_config_paths(root):
+        relative = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            failures.append(f"YAML config must not be a symlink: {relative}")
+            continue
+        try:
+            payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, yaml.YAMLError) as error:
+            failures.append(f"malformed YAML config: {relative}: {error}")
+            continue
+        if not isinstance(payload, dict):
+            failures.append(f"YAML config root must be a mapping: {relative}")
+    return failures
+
+
+def _unique_values(rows: list[dict[str, Any]], field: str) -> bool:
+    values = [row.get(field) for row in rows]
+    return len(values) == len(set(values)) and all(value is not None for value in values)
+
+
+def linear_projection_failures(root: Path) -> list[str]:
+    path = root / "00_governance/config/linear.yaml"
+    if not path.is_file():
+        return ["missing Linear projection config"]
+    try:
+        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, yaml.YAMLError):
+        return []  # The generic YAML validator reports the parse error.
+    if not isinstance(payload, dict) or payload.get("schema_version") != "myis.linear-projection.v1":
+        return ["Linear projection schema_version must be myis.linear-projection.v1"]
+    linear = payload.get("linear")
+    if not isinstance(linear, dict):
+        return ["Linear projection must contain a linear mapping"]
+
+    failures: list[str] = []
+    catalogs = linear.get("catalogs", {})
+    if tuple(catalogs.get("phases", ())) != EXPECTED_PHASE_ORDER:
+        failures.append("Linear phase catalog must contain the canonical 13 phases in order")
+    if tuple(catalogs.get("tasks", ())) != EXPECTED_TASK_ORDER:
+        failures.append("Linear task catalog must contain the canonical 22 tasks in order")
+    status_rows = catalogs.get("statuses", [])
+    status_names = {row.get("name") for row in status_rows if isinstance(row, dict)}
+    if status_names != {"Todo", "In Progress", "Done"} or len(status_rows) != 3:
+        failures.append("Linear status catalog must define Todo, In Progress, and Done exactly once")
+
+    milestones = linear.get("milestones", [])
+    tasks = linear.get("tasks", [])
+    dependencies = linear.get("dependencies", [])
+    if not all(isinstance(row, dict) for row in milestones + tasks + dependencies):
+        return [*failures, "Linear milestone, task, and dependency entries must be mappings"]
+    if len(milestones) != 13 or not _unique_values(milestones, "phase") or not _unique_values(milestones, "external_id"):
+        failures.append("Linear milestones must contain 13 unique phases and external IDs")
+    if tuple(row.get("phase") for row in milestones) != EXPECTED_PHASE_ORDER:
+        failures.append("Linear milestone phases must match the canonical phase order")
+    if len(tasks) != 22 or not _unique_values(tasks, "task_id") or not _unique_values(tasks, "external_id"):
+        failures.append("Linear tasks must contain 22 unique task IDs and external IDs")
+    if tuple(row.get("task_id") for row in tasks) != EXPECTED_TASK_ORDER:
+        failures.append("Linear tasks must match the canonical task order")
+    phase_ids = set(EXPECTED_PHASE_ORDER)
+    task_ids = set(EXPECTED_TASK_ORDER)
+    for row in tasks:
+        task_id = row.get("task_id")
+        phase = row.get("phase")
+        if phase not in phase_ids or not str(task_id).startswith(f"{phase}."):
+            failures.append(f"Linear task has an invalid phase reference: {task_id}")
+        if row.get("status") not in status_names:
+            failures.append(f"Linear task has an unknown status: {task_id}")
+
+    edges: list[tuple[str, str]] = []
+    for row in dependencies:
+        if set(row) != {"relation", "from_task", "to_task"} or row.get("relation") != "blocks":
+            failures.append("Linear dependencies must be typed blocks objects")
+            continue
+        edge = (row.get("from_task"), row.get("to_task"))
+        if edge[0] not in task_ids or edge[1] not in task_ids or edge[0] == edge[1]:
+            failures.append(f"Linear dependency has an invalid task reference: {edge}")
+            continue
+        edges.append(edge)
+    if len(dependencies) != 27 or len(edges) != len(set(edges)):
+        failures.append("Linear projection must contain exactly 27 unique dependency relations")
+    incoming = {task_id: 0 for task_id in task_ids}
+    outgoing: dict[str, list[str]] = {task_id: [] for task_id in task_ids}
+    for source, target in set(edges):
+        incoming[target] += 1
+        outgoing[source].append(target)
+    ready = [task_id for task_id, count in incoming.items() if count == 0]
+    visited = 0
+    while ready:
+        source = ready.pop()
+        visited += 1
+        for target in outgoing[source]:
+            incoming[target] -= 1
+            if incoming[target] == 0:
+                ready.append(target)
+    if visited != len(task_ids):
+        failures.append("Linear dependency graph must be acyclic")
+
+    plan = root / "PLAN.md"
+    binding = linear.get("plan_binding", {})
+    if plan.is_file() and binding.get("plan_sha256") != hashlib.sha256(plan.read_bytes()).hexdigest():
+        failures.append("Linear projection PLAN SHA-256 is stale")
+    return failures
+
+
+def manuscript_contract_failures(root: Path) -> list[str]:
+    failures: list[str] = []
+    documents = root / "02_tracks/01_S_skillopt/S_documents"
+    abstract_path = documents / "S_Abstract.md"
+    if abstract_path.is_file():
+        abstract_text = read_text(abstract_path).split("Results:", maxsplit=1)[0]
+        word_count = len(re.findall(r"[A-Za-z0-9][A-Za-z0-9'-]*", abstract_text.removeprefix("# Abstract")))
+        if not 150 <= word_count <= 250:
+            failures.append(f"Track S abstract must contain 150-250 words before Results, found {word_count}")
+
+    methodology = documents / "S_Methodology.md"
+    if methodology.is_file():
+        method_text = read_text(methodology)
+        normalized_method_text = re.sub(r"\s+", " ", method_text)
+        required_method_strings = (
+            "51d0a4d96e88558c84dee637f98e24e3fb2d1547",
+            "4cb4eeef1f95375a9179737ab94cf5e64b9647c6",
+            "CoreWeave preflight is a hard gate",
+            "Exactly one identical retry is allowed only for a transport error",
+            "A3-A2 paired OUT Recall@100",
+            "A1-A0, A2-A1, A2L-A1, A3-A1, and A2L-A2",
+            "A3-A2L is exploratory only",
+            "10,000-resample paired-bootstrap 95% CI",
+            "rank-biserial",
+            "win/loss/tie",
+            "input/output hashes",
+        )
+        for required in required_method_strings:
+            if required not in normalized_method_text:
+                failures.append(f"Track S methodology missing frozen commitment: {required}")
+
+    required_citations = {"U011", "U067", "U082", "U151", "U152", "U153"}
+    catalog_path = root / "01_evidence/literature/catalog/corpus_manifest.csv"
+    if catalog_path.is_file():
+        with catalog_path.open("r", encoding="utf-8-sig", newline="") as handle:
+            catalog = {row.get("u_id"): row for row in csv.DictReader(handle)}
+        for citation in sorted(required_citations):
+            if citation not in catalog or catalog[citation].get("identity_status") != "verified":
+                failures.append(f"Track S citation is not identity-verified in the local catalog: {citation}")
+    references = read_text(documents / "S_References.md") if (documents / "S_References.md").is_file() else ""
+    related = read_text(documents / "S_Related_Work.md") if (documents / "S_Related_Work.md").is_file() else ""
+    for citation in sorted(required_citations):
+        if f"[{citation}]" not in references or f"[{citation}]" not in related:
+            failures.append(f"Track S References and Related Work must both bind citation key {citation}")
     return failures
 
 
@@ -285,8 +471,12 @@ def validate(root: Path = ROOT) -> list[str]:
             if actual != expected:
                 failures.append(f"hash mismatch: {relative}")
 
+    failures.extend(yaml_config_failures(root))
+    failures.extend(linear_projection_failures(root))
+    failures.extend(manuscript_contract_failures(root))
     failures.extend(migration_contract_failures(root))
     failures.extend(active_context_failures(root))
+    failures.extend(standalone_patch_marker_failures(root))
     failures.extend(markdown_link_failures(root))
     return failures
 

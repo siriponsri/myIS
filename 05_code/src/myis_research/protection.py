@@ -43,6 +43,31 @@ PROTECTED_PAYLOAD_KEYS = {
     "password",
 }
 
+C1_EDITABLE_SURFACES = (
+    "routes.enabled",
+    "routes.quota",
+    "fusion",
+    "fusion_k",
+    "weights",
+    "retrieval_depth",
+    "rerank_depth",
+)
+
+C1_PROTECTED_SURFACES = (
+    "query_views",
+    "candidate_budget",
+    "stopping",
+    "prompt",
+    "encoder",
+    "reranker_instructions",
+    "evaluator",
+    "split",
+    "confirmation",
+    "corpus",
+    "governance",
+    "manifest_validation",
+)
+
 
 @dataclass(frozen=True)
 class PatchSurfacePolicy:
@@ -68,6 +93,12 @@ class PatchSurfacePolicy:
                 violations.append(raw_path)
         if violations:
             raise PermissionError(f"patch changes paths outside the editable surface: {sorted(violations)}")
+
+
+def c1_patch_surface_policy() -> PatchSurfacePolicy:
+    """Return the exact C1 tuning boundary from the frozen Track C protocol."""
+
+    return PatchSurfacePolicy(C1_EDITABLE_SURFACES, C1_PROTECTED_SURFACES)
 
 
 def _normalize_path(path: str) -> str:
