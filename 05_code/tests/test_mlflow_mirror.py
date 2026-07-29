@@ -11,6 +11,7 @@ from myis_research.mlflow_mirror import (
     MirrorSpec,
     MirrorStage,
     MirrorValidationError,
+    ProjectionLineage,
     rebuild_plan,
     _assert_store_outside_git,
 )
@@ -212,6 +213,47 @@ class MLflowMirrorTests(unittest.TestCase):
                 )
                 with self.subTest(tags=tags), self.assertRaises(MirrorValidationError):
                     mirror.sync(spec)
+
+    def test_projection_lineage_adds_plan_dashboard_linear_and_gate_tags(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            backend = FakeBackend()
+            mirror = MLflowMirror(Path(temp) / "store", backend=backend)
+            lineage = ProjectionLineage(
+                plan_sha256=SHA,
+                phase_ids=("F0",),
+                task_ids=("F0.3",),
+                gate_ids=("G0",),
+                linear_issue_ids=("SIR-8",),
+                dashboard_content_id="canonical-plan",
+            )
+            receipt = mirror.sync(
+                MirrorSpec(
+                    stage=MirrorStage.CATALOG,
+                    run_name="governance-plan",
+                    git_commit="f85404a",
+                    canonical_source_sha256=SHA,
+                    projection=lineage,
+                )
+            )
+            self.assertEqual(receipt.status, "synced")
+            tags = backend.logged[0]["tags"]
+            self.assertEqual(tags["projection_schema_version"], "myis.projection-binding.v1")
+            self.assertEqual(tags["plan_sha256"], SHA)
+            self.assertEqual(tags["phase_ids"], "F0")
+            self.assertEqual(tags["task_ids"], "F0.3")
+            self.assertEqual(tags["gate_ids"], "G0")
+            self.assertEqual(tags["linear_issue_ids"], "SIR-8")
+            self.assertEqual(tags["dashboard_content_id"], "canonical-plan")
+
+            invalid = ProjectionLineage(
+                plan_sha256=SHA,
+                phase_ids=("F0",),
+                task_ids=("F0.3",),
+                gate_ids=("G0",),
+                linear_issue_ids=(),
+            )
+            with self.assertRaisesRegex(MirrorValidationError, "one Linear issue ID"):
+                invalid.validate()
 
     def test_failure_writes_one_deferred_receipt_without_error_text(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

@@ -101,11 +101,31 @@ plan, process, flow, harness-rule, tool, gate, and artifact projections. Evidenc
 completion is operational evidence only; authorization remains a separate Owner
 Gate state.
 
+The Owner view is English-first with Thai detail guidance and renders the
+execution path directly from `PLAN.md` as `Phase -> Task`. Each Task shows its purpose, inputs, outputs,
+tests, acceptance criteria, Gate, budget/stop rule, rollback, risk, evidence,
+dependencies, and Linear issue/status. The Gate handbook explains in plain
+language what approval opens and what remains locked. PLAN is canonical;
+Dashboard, Linear, and MLflow are validated projections and cannot open a Gate.
+
+The interactive Flow computes completion only from validated canonical Task
+evidence, uses Linear only as a work-tracking signal, and keeps Gate approval as
+a separate status. It provides Phase jump controls, human-readable filters, and
+automatic refresh every 60 seconds while the page is visible. A Linear `Done`
+without canonical evidence is shown as `Verify evidence`, never `Complete`.
+
 Before a decision write, inspect the preview, evidence hashes, Git commit,
 authoritative OS actor ID, and prior-record hash, then explicitly confirm. The
 browser never supplies authoritative actor identity. Do not add CORS/CDN or
 remote binding. A future remote deployment requires a new authenticated identity
 architecture and Owner decision.
+
+An `approved` preview must select at least one verified evidence package from
+`00_governance/config/evidence_catalog.yaml`. The backend verifies its path,
+SHA-256, Gate, Phase, and Task compatibility; free-form evidence hashes cannot
+authorize an approval. Rejection or deferral may still be recorded without an
+evidence package. Existing immutable decisions remain readable even when they
+predate the catalog.
 
 ## PDF viewer operation
 
@@ -128,6 +148,23 @@ On a lost/corrupt local receipt ledger:
 Set `MYIS_MLFLOW_STORE` to the approved persistent root outside Git. Bootstrap
 logs no artifacts and no scientific metrics. Catalog/scientific projection uses
 explicit validated/redacted files only.
+
+Validate the important-document catalog without writing to MLflow:
+
+```powershell
+uv run --no-sync python 05_code/scripts/sync_governance_documents.py --dry-run
+```
+
+After the source commit is clean, mirror the allowlisted governance documents:
+
+```powershell
+uv run --no-sync python 05_code/scripts/sync_governance_documents.py
+```
+
+Each document run records its canonical SHA-256 plus the validated PLAN, Phase,
+Task, Gate, Linear issue, Dashboard content, and MLflow experiment bindings.
+This is an additive, rebuildable mirror; the documents and decisions in Git
+remain authoritative.
 
 Use the Git Bash launcher for browser access. It opens MLflow through the pinned
 read-only WSGI guard; it never starts the standard writable server directly.

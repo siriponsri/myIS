@@ -21,13 +21,18 @@ def git(root: Path, *args: str) -> str:
 
 def make_repository(root: Path) -> str:
     shutil.copy2(REPO_ROOT / "PLAN.md", root / "PLAN.md")
+    (root / "00_governance/config").mkdir(parents=True)
+    shutil.copy2(
+        REPO_ROOT / "00_governance/config/linear.yaml",
+        root / "00_governance/config/linear.yaml",
+    )
     (root / "00_governance/approvals").mkdir(parents=True)
     (root / "04_outputs/artifacts/task-evidence").mkdir(parents=True)
     (root / ".gitignore").write_text("01_evidence/private/\n", encoding="utf-8")
     git(root, "init")
     git(root, "config", "user.email", "test@example.invalid")
     git(root, "config", "user.name", "Dashboard Test")
-    git(root, "add", "PLAN.md", ".gitignore")
+    git(root, "add", "PLAN.md", ".gitignore", "00_governance/config/linear.yaml")
     git(root, "commit", "-m", "plan fixture")
     return git(root, "rev-parse", "HEAD")
 
@@ -48,6 +53,9 @@ class DashboardProgressTests(unittest.TestCase):
             task = snapshot["phases"][0]["tasks"][0]
             self.assertEqual(task["evidence_state"], "not_recorded")
             self.assertEqual(task["governance_state"], "pending")
+            self.assertEqual(task["project_state"], "in_progress")
+            self.assertEqual(snapshot["progress"]["completed_task_count"], 0)
+            self.assertEqual(snapshot["progress"]["completion_authority"], "canonical_task_evidence")
 
     def test_passed_evidence_is_complete_but_owner_gate_remains_pending(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -83,6 +91,23 @@ class DashboardProgressTests(unittest.TestCase):
             task = snapshot["phases"][0]["tasks"][0]
             self.assertEqual(task["evidence_state"], "complete")
             self.assertEqual(task["governance_state"], "pending")
+            self.assertEqual(task["project_state"], "complete")
+            self.assertEqual(snapshot["phases"][0]["project_state"], "in_progress")
+
+    def test_linear_done_without_canonical_evidence_needs_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            make_repository(root)
+            linear_path = root / "00_governance/config/linear.yaml"
+            linear_text = linear_path.read_text(encoding="utf-8").replace(
+                "task_id: F0.1, phase: F0, external_id: SIR-5, status: In Progress",
+                "task_id: F0.1, phase: F0, external_id: SIR-5, status: Done",
+            )
+            linear_path.write_text(linear_text, encoding="utf-8")
+            snapshot = build_dashboard_snapshot(root)
+            task = snapshot["phases"][0]["tasks"][0]
+            self.assertEqual(task["evidence_state"], "not_recorded")
+            self.assertEqual(task["project_state"], "verification_needed")
 
     def test_plan_hash_drift_marks_existing_evidence_stale(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

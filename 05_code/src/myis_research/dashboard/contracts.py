@@ -163,6 +163,12 @@ class DecisionPreviewRequest(StrictModel):
             _sha256(value)
         return values
 
+    @model_validator(mode="after")
+    def approved_requires_evidence(self) -> "DecisionPreviewRequest":
+        if self.status == "approved" and not self.evidence_manifest_hashes:
+            raise ValueError("approved decisions require at least one evidence manifest hash")
+        return self
+
 class DecisionConfirmRequest(StrictModel):
     preview_token: str = Field(min_length=32, max_length=256)
     confirm: Literal[True]

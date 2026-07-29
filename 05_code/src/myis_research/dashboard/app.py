@@ -25,6 +25,7 @@ from .progress import (
     validate_decision_scope,
     validated_owner_gate_ledger,
 )
+from .projections import public_governance_catalog, validate_evidence_selection
 from .security import (
     LoopbackSecurityMiddleware,
     SessionStore,
@@ -96,7 +97,11 @@ def create_app(
 
     @app.get("/assets/{asset_name}")
     def frontend_asset(asset_name: str):
-        media_types = {"dashboard.css": "text/css", "dashboard.js": "text/javascript"}
+        media_types = {
+            "tokens.css": "text/css",
+            "dashboard.css": "text/css",
+            "dashboard.js": "text/javascript",
+        }
         if asset_name not in media_types:
             raise HTTPException(status_code=404, detail="frontend asset is not allowlisted")
         frontend = _frontend_file(repository_root, f"assets/{asset_name}")
@@ -122,6 +127,11 @@ def create_app(
     @app.get("/api/v1/dashboard-snapshot")
     def dashboard_snapshot(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
         return _projection_response(lambda: build_dashboard_snapshot(repository_root))
+
+    @app.get("/api/v1/governance-catalog")
+    def governance_catalog(_: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
+        plan = parse_plan(repository_root / "PLAN.md")
+        return _projection_response(lambda: public_governance_catalog(repository_root, plan))
 
     @app.get("/api/v1/content/{content_id}")
     def content(content_id: str, _: tuple[str, Any] = Depends(require_session)) -> dict[str, Any]:
@@ -175,6 +185,13 @@ def create_app(
         scope = body.scope.model_dump(mode="json", exclude_none=True)
         try:
             validate_decision_scope(plan, body.gate_id, scope)
+            validate_evidence_selection(
+                repository_root,
+                plan,
+                gate_id=body.gate_id,
+                status=body.status,
+                hashes=body.evidence_manifest_hashes,
+            )
         except ValueError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         if body.supersedes_decision_id:
@@ -293,7 +310,12 @@ def _git_dirty(root: Path) -> bool:
 
 
 def _frontend_file(repository_root: Path, relative_path: str) -> Path | None:
-    allowed = {"index.html", "assets/dashboard.css", "assets/dashboard.js"}
+    allowed = {
+        "index.html",
+        "assets/tokens.css",
+        "assets/dashboard.css",
+        "assets/dashboard.js",
+    }
     if relative_path not in allowed:
         return None
     frontend_root = repository_root / "06_frontend/dashboard"

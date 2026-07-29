@@ -1,0 +1,21 @@
+{
+  "date": "2026-07-29",
+  "scope": "06_frontend/dashboard",
+  "font_stack": "Local Segoe UI/Aptos display and body roles with Cascadia Mono utility role",
+  "palette": "Existing neutral canvas with governed teal accent and amber/red semantic states",
+  "motion": "Motion-cut with short state transitions and reduced-motion support",
+  "spacing": "Tokenized rem scale in 06_frontend/dashboard/assets/tokens.css",
+  "framework": "Build-free vanilla HTML, CSS, and JavaScript served by the typed FastAPI backend",
+  "preserve": [
+    "loopback-only security boundary",
+    "existing myIS identity",
+    "canonical PLAN-driven information architecture",
+    "local fonts and no external assets"
+  ],
+  "introduce": [
+    "Workbench macrostructure",
+    "English-first Gate handbook with Thai detail guidance",
+    "typed approval sentence",
+    "Hallmark responsive and slop-test checks"
+  ]
+}

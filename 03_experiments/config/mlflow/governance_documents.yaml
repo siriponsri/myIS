@@ -1,0 +1,136 @@
+schema_version: myis.mlflow-governance-catalog.v1
+projection:
+  canonical_plan: PLAN.md
+  plan_sha256: 677b40dbc44eaca42a6f415f11498aa7a84b5e44f2deb99cb6239e1d24ed8b32
+  dashboard_registry: 06_frontend/dashboard/content_registry.yaml
+  linear_projection: 00_governance/config/linear.yaml
+  experiments:
+    - myis-research-bootstrap
+    - myis-research-catalog
+    - myis-research-track-c
+    - myis-research-track-s
+    - myis-research-joint
+    - myis-research-publication
+  tag_schema_version: myis.projection-binding.v1
+documents:
+  - document_id: canonical-plan
+    title_en: Canonical execution plan
+    title_th: แผนดำเนินงานหลัก
+    summary_en: The authoritative Phase and Task execution order for the full research program.
+    summary_th: Phase และ Task ที่เป็น authority ของลำดับงานทั้งหมด
+    path: PLAN.md
+    kind: docs
+    dashboard_content_id: canonical-plan
+    phase_ids: [C0, C1, CF, CT, D0, F0, F1, PC, PS, Q, S0, S1, SF]
+    task_ids: [C0.1, C1.1, C1.2, CF.1, CT.1, D0.1, D0.2, F0.1, F0.2, F0.3, F1.1, PC.1, PS.1, Q.1, Q.2, Q.3, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1]
+    gate_ids: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  - document_id: research-protocol
+    title_en: Full research protocol
+    title_th: โปรโตคอลวิจัยฉบับเต็ม
+    summary_en: Claim boundaries, comparators, data splits, budgets, and stop conditions for Track C and Track S.
+    summary_th: ขอบเขตข้ออ้าง ตัวเปรียบเทียบ การแบ่งข้อมูล งบ และ stop conditions ของ Track C และ Track S
+    path: FULL_RESEARCH_TRACK_PLAN.md
+    kind: docs
+    dashboard_content_id: research-protocol
+    phase_ids: [C0, C1, CF, CT, D0, F1, PC, PS, Q, S0, S1, SF]
+    task_ids: [C0.1, C1.1, C1.2, CF.1, CT.1, D0.1, D0.2, F1.1, PC.1, PS.1, Q.1, Q.2, Q.3, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1]
+    gate_ids: [G1, G2, G3, G4, G5, G6, G7, G8]
+  - document_id: harness-contract
+    title_en: Research harness build contract
+    title_th: สัญญาการสร้าง Research Harness
+    summary_en: Typed schemas, deterministic kernel responsibilities, protection boundaries, and test obligations.
+    summary_th: typed schemas, deterministic kernel, protection boundary และข้อบังคับการทดสอบ
+    path: LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md
+    kind: rules
+    dashboard_content_id: harness-contract
+    phase_ids: [C0, C1, CF, CT, D0, F0, F1, PC, PS, Q, S0, S1, SF]
+    task_ids: [C0.1, C1.1, C1.2, CF.1, CT.1, D0.1, D0.2, F0.1, F0.2, F0.3, F1.1, PC.1, PS.1, Q.1, Q.2, Q.3, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1]
+    gate_ids: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  - document_id: agent-contract
+    title_en: Agent operating contract
+    title_th: ข้อกำกับ Agent
+    summary_en: Authority, safety, scientific invariants, and completion rules for every repository agent.
+    summary_th: authority, safety, scientific invariants และ completion contract สำหรับทุก agent
+    path: AGENTS.md
+    kind: rules
+    dashboard_content_id: agent-contract
+    phase_ids: [C0, C1, CF, CT, D0, F0, F1, PC, PS, Q, S0, S1, SF]
+    task_ids: [C0.1, C1.1, C1.2, CF.1, CT.1, D0.1, D0.2, F0.1, F0.2, F0.3, F1.1, PC.1, PS.1, Q.1, Q.2, Q.3, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1]
+    gate_ids: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  - document_id: owner-gates
+    title_en: Owner Gate authority
+    title_th: ขอบเขต Owner Gates
+    summary_en: Evidence requirements and the exact authority opened by each Owner Gate.
+    summary_th: หลักฐานที่ต้องมีและอำนาจที่แต่ละ Gate เปิดได้
+    path: 00_governance/OWNER_GATES.md
+    kind: rules
+    dashboard_content_id: owner-gates
+    phase_ids: [C0, C1, CF, CT, D0, F0, F1, PC, PS, Q, S0, S1, SF]
+    task_ids: [C0.1, C1.1, C1.2, CF.1, CT.1, D0.1, D0.2, F0.1, F0.2, F0.3, F1.1, PC.1, PS.1, Q.1, Q.2, Q.3, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1]
+    gate_ids: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  - document_id: operations
+    title_en: Local operations guide
+    title_th: คู่มือปฏิบัติการในเครื่อง
+    summary_en: Validation commands, Dashboard and MLflow startup, and recovery procedures.
+    summary_th: คำสั่งตรวจสอบ การเปิด Dashboard/MLflow และ recovery procedures
+    path: 00_governance/OPERATIONS.md
+    kind: tools
+    dashboard_content_id: operations
+    phase_ids: [C0, C1, CF, CT, D0, F0, F1, PC, PS, Q, S0, S1, SF]
+    task_ids: [C0.1, C1.1, C1.2, CF.1, CT.1, D0.1, D0.2, F0.1, F0.2, F0.3, F1.1, PC.1, PS.1, Q.1, Q.2, Q.3, S0.1, S0.2, S1.1, S1.2, S1.3, SF.1]
+    gate_ids: [G0, G1, G2, G3, G4, G5, G6, G7, G8]
+  - document_id: toolchain
+    title_en: Toolchain and authority registry
+    title_th: ทะเบียนเครื่องมือและ authority
+    summary_en: Adoption status, pinned tools, and the authority boundary of each system.
+    summary_th: สถานะการรับรอง เครื่องมือที่ pin และขอบเขตที่แต่ละระบบทำได้
+    path: 00_governance/TOOLCHAIN.md
+    kind: tools
+    dashboard_content_id: toolchain
+    phase_ids: [F0]
+    task_ids: [F0.3]
+    gate_ids: [G0]
+  - document_id: project-config
+    title_en: Program configuration
+    title_th: การตั้งค่าโปรแกรม
+    summary_en: Machine-readable identity, Phase and Gate order, services, and execution boundaries.
+    summary_th: identity, phase/gate order, services และ execution boundaries ที่เครื่องอ่านได้
+    path: 00_governance/config/project.yaml
+    kind: rules
+    dashboard_content_id: null
+    phase_ids: [F0]
+    task_ids: [F0.2, F0.3]
+    gate_ids: [G0]
+  - document_id: linear-projection
+    title_en: Linear work-tracking map
+    title_th: แผนที่ Linear
+    summary_en: Binding of 13 Phases, 22 Tasks, and 27 dependencies to the canonical PLAN.
+    summary_th: การผูก 13 Phase, 22 Task และ 27 dependencies เข้ากับ PLAN
+    path: 00_governance/config/linear.yaml
+    kind: tools
+    dashboard_content_id: null
+    phase_ids: [F0]
+    task_ids: [F0.3]
+    gate_ids: [G0]
+  - document_id: dashboard-registry
+    title_en: Dashboard content registry
+    title_th: ทะเบียนเนื้อหา Dashboard
+    summary_en: Allowlist of documents and system diagrams available to the local Dashboard.
+    summary_th: allowlist ของเอกสารและ system diagrams ที่ Dashboard อ่านได้
+    path: 06_frontend/dashboard/content_registry.yaml
+    kind: tools
+    dashboard_content_id: null
+    phase_ids: [F0]
+    task_ids: [F0.3]
+    gate_ids: [G0]
+  - document_id: mlflow-governance-catalog
+    title_en: MLflow governance document catalog
+    title_th: ทะเบียนเอกสาร MLflow
+    summary_en: Important documents and lineage tags binding MLflow to PLAN, Dashboard, and Linear.
+    summary_th: เอกสารสำคัญและ tags ที่ผูก MLflow เข้ากับ PLAN, Dashboard และ Linear
+    path: 03_experiments/config/mlflow/governance_documents.yaml
+    kind: tools
+    dashboard_content_id: null
+    phase_ids: [F0]
+    task_ids: [F0.3]
+    gate_ids: [G0]

@@ -12,6 +12,7 @@ from typing import Any
 
 from ..ledger import ImmutableJsonLedger
 from .contracts import OwnerGateDecisionRecord, TaskEvidenceRecord
+from .projections import load_linear_projection
 
 
 EXPECTED_PHASE_ORDER = ("F0", "F1", "D0", "C0", "C1", "CF", "S0", "S1", "SF", "CT", "Q", "PC", "PS")
@@ -137,6 +138,7 @@ def parse_plan(path: Path) -> ParsedPlan:
 
 def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
     plan = parse_plan(repository_root / "PLAN.md")
+    linear = load_linear_projection(repository_root, plan)
     git_commit, git_dirty = _git_state(repository_root)
     decisions = _active_governance_decisions(
         repository_root / "00_governance/approvals", plan
@@ -147,6 +149,7 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
     for order, phase in enumerate(plan.phases):
         tasks = []
         for task in phase.tasks:
+            linear_task = linear["tasks"][task.task_id]
             evidence = _task_evidence(
                 evidence_root / task.task_id,
                 task_id=task.task_id,
@@ -171,6 +174,8 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
                     "risk": task.fields["Risk"],
                     "evidence_contract": task.fields["Evidence"],
                     "dependencies": _dependency_ids(task.fields["Dependencies"], task.task_id),
+                    "linear_issue_id": linear_task["issue_id"],
+                    "linear_status": linear_task["status"],
                     "evidence_state": evidence["state"],
                     "evidence": evidence["record"],
                     "governance_state": task_gate_state,
@@ -187,6 +192,17 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
                 "tasks": tasks,
             }
         )
+    _add_project_progress(phase_views)
+    completed_task_count = sum(
+        task["project_state"] == "complete"
+        for phase in phase_views
+        for task in phase["tasks"]
+    )
+    project_state_counts: dict[str, int] = {}
+    for phase in phase_views:
+        for task in phase["tasks"]:
+            state = task["project_state"]
+            project_state_counts[state] = project_state_counts.get(state, 0) + 1
     return {
         "schema_version": "myis.dashboard-snapshot.v1",
         "program_id": "myis-research",
@@ -198,9 +214,87 @@ def build_dashboard_snapshot(repository_root: Path) -> dict[str, Any]:
         "git_dirty": git_dirty,
         "phase_count": len(phase_views),
         "task_count": sum(len(item["tasks"]) for item in phase_views),
+        "progress": {
+            "completed_task_count": completed_task_count,
+            "completion_percent": round(
+                completed_task_count * 100 / sum(len(item["tasks"]) for item in phase_views)
+            ),
+            "state_counts": dict(sorted(project_state_counts.items())),
+            "completion_authority": "canonical_task_evidence",
+            "tracking_projection": "linear",
+        },
         "phases": phase_views,
         "gate_states": governance,
+        "linear": {
+            "source_sha256": linear["source_sha256"],
+            "project": linear["project"],
+            "task_count": len(linear["tasks"]),
+        },
     }
+
+
+def _add_project_progress(phases: list[dict[str, Any]]) -> None:
+    """Add human-readable progress without allowing Linear to claim completion."""
+
+    tasks = {task["task_id"]: task for phase in phases for task in phase["tasks"]}
+    phase_complete = {
+        phase["phase_id"]: all(task["evidence_state"] == "complete" for task in phase["tasks"])
+        for phase in phases
+    }
+    for phase in phases:
+        for task in phase["tasks"]:
+            unmet = []
+            for dependency in task["dependencies"]:
+                if dependency in tasks:
+                    complete = tasks[dependency]["evidence_state"] == "complete"
+                else:
+                    complete = phase_complete.get(dependency, False)
+                if not complete:
+                    unmet.append(dependency)
+            task["unmet_dependencies"] = unmet
+            task["project_state"] = _task_project_state(task, unmet)
+
+        completed = sum(task["project_state"] == "complete" for task in phase["tasks"])
+        phase["completed_task_count"] = completed
+        phase["completion_percent"] = round(completed * 100 / len(phase["tasks"]))
+        phase["project_state"] = _phase_project_state(phase["tasks"])
+
+
+def _task_project_state(task: dict[str, Any], unmet_dependencies: list[str]) -> str:
+    if task["evidence_state"] == "complete":
+        return "complete"
+    linear_status = str(task["linear_status"]).strip().lower().replace("_", " ")
+    if task["evidence_state"] in {"stale", "incomplete"} or linear_status in {
+        "done",
+        "completed",
+        "canceled",
+        "cancelled",
+    }:
+        return "verification_needed"
+    if linear_status in {"in progress", "started"}:
+        return "in_progress"
+    if unmet_dependencies:
+        return "waiting_dependency"
+    governance_state = task["governance_state"]
+    if governance_state in {"rejected", "deferred", "conflict"}:
+        return "blocked_gate"
+    if governance_state not in {"approved", "not_required"}:
+        return "waiting_gate"
+    return "ready"
+
+
+def _phase_project_state(tasks: list[dict[str, Any]]) -> str:
+    states = [task["project_state"] for task in tasks]
+    if all(state == "complete" for state in states):
+        return "complete"
+    if any(state in {"in_progress", "verification_needed"} for state in states):
+        return "in_progress"
+    if "complete" in states:
+        return "in_progress"
+    for state in ("blocked_gate", "waiting_gate", "ready", "waiting_dependency"):
+        if state in states:
+            return state
+    return "waiting_dependency"
 
 
 def validate_decision_scope(plan: ParsedPlan, gate_id: str, scope: dict[str, Any]) -> None:

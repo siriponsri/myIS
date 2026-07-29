@@ -1,0 +1,13 @@
+schema_version: myis.evidence-catalog.v1
+packages:
+  - evidence_id: f0-foundation-migration
+    title_en: F0 foundation migration evidence
+    title_th: หลักฐานการย้าย Foundation F0
+    summary_en: Environment, changed-file manifest, protected-path comparison, validator and test results, and projection readback for F0.1-F0.3.
+    summary_th: สภาพแวดล้อม รายการไฟล์ที่เปลี่ยน protected-path comparison ผล validator/tests และ projection readback ของ F0.1-F0.3
+    path: 04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json
+    sha256: ea80439e33aa92781503233988019368a8be8420054d0e5a63b5e2f409d0823f
+    gate_ids: [G0]
+    phase_ids: [F0]
+    task_ids: [F0.1, F0.2, F0.3]
+    evidence_role: fixture

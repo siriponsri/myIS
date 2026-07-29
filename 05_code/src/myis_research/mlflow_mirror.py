@@ -71,6 +71,13 @@ _RESERVED_TAGS = {
     "canonical_source_sha256",
     "git_commit",
     "canonical_authority",
+    "projection_schema_version",
+    "plan_sha256",
+    "phase_ids",
+    "task_ids",
+    "gate_ids",
+    "linear_issue_ids",
+    "dashboard_content_id",
 }
 
 
@@ -119,6 +126,60 @@ _STAGE_KINDS = {
     MirrorStage.JOINT: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
     MirrorStage.PUBLICATION: frozenset({MirrorKind.DOC, MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
 }
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectionLineage:
+    """Cross-projection binding shared by PLAN, Dashboard, Linear and MLflow."""
+
+    plan_sha256: str
+    phase_ids: tuple[str, ...]
+    task_ids: tuple[str, ...]
+    gate_ids: tuple[str, ...]
+    linear_issue_ids: tuple[str, ...]
+    dashboard_content_id: str | None = None
+    schema_version: str = "myis.projection-binding.v1"
+
+    def validate(self) -> None:
+        if self.schema_version != "myis.projection-binding.v1":
+            raise MirrorValidationError("projection lineage schema_version is invalid")
+        if not _SHA256_RE.fullmatch(self.plan_sha256):
+            raise MirrorValidationError("projection lineage plan_sha256 must be SHA-256")
+        for label, values in (
+            ("phase_ids", self.phase_ids),
+            ("task_ids", self.task_ids),
+            ("gate_ids", self.gate_ids),
+        ):
+            if values != tuple(sorted(set(values))):
+                raise MirrorValidationError(f"projection lineage {label} must be sorted and unique")
+        if len(self.linear_issue_ids) != len(set(self.linear_issue_ids)):
+            raise MirrorValidationError("projection lineage Linear issue IDs must be unique")
+        if len(self.linear_issue_ids) != len(self.task_ids):
+            raise MirrorValidationError("projection lineage requires one Linear issue ID per Task ID")
+        if any(not re.fullmatch(r"[A-Z][A-Z0-9]*", value) for value in self.phase_ids):
+            raise MirrorValidationError("projection lineage contains an invalid Phase ID")
+        if any(not re.fullmatch(r"[A-Z][A-Z0-9]*\.[0-9]+", value) for value in self.task_ids):
+            raise MirrorValidationError("projection lineage contains an invalid Task ID")
+        if any(not re.fullmatch(r"G[0-8]", value) for value in self.gate_ids):
+            raise MirrorValidationError("projection lineage contains an invalid Gate ID")
+        if any(not re.fullmatch(r"[A-Z][A-Z0-9]*-[0-9]+", value) for value in self.linear_issue_ids):
+            raise MirrorValidationError("projection lineage contains an invalid Linear issue ID")
+        if self.dashboard_content_id is not None and not re.fullmatch(
+            r"[a-z0-9][a-z0-9._-]+", self.dashboard_content_id
+        ):
+            raise MirrorValidationError("projection lineage Dashboard content ID is invalid")
+
+    def tags(self) -> dict[str, str]:
+        self.validate()
+        return {
+            "projection_schema_version": self.schema_version,
+            "plan_sha256": self.plan_sha256.lower(),
+            "phase_ids": ",".join(self.phase_ids) or "not_applicable",
+            "task_ids": ",".join(self.task_ids) or "not_applicable",
+            "gate_ids": ",".join(self.gate_ids) or "not_applicable",
+            "linear_issue_ids": ",".join(self.linear_issue_ids) or "not_applicable",
+            "dashboard_content_id": self.dashboard_content_id or "not_applicable",
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -204,6 +265,7 @@ class MirrorSpec:
     tags: Mapping[str, str] = field(default_factory=dict)
     parameters: Mapping[str, str | int | float | bool] = field(default_factory=dict)
     metrics: Mapping[str, float] = field(default_factory=dict)
+    projection: ProjectionLineage | None = None
 
     def validate(self, artifacts: Sequence[MirrorArtifact]) -> None:
         if (
@@ -250,6 +312,8 @@ class MirrorSpec:
             raise MirrorValidationError("mirror track must be an active track or aggregate projection")
         if _RESERVED_TAGS.intersection(self.tags):
             raise MirrorValidationError("caller tags cannot override reserved mirror lineage tags")
+        if self.projection is not None:
+            self.projection.validate()
         if any(
             isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(float(value))
             for value in self.metrics.values()
@@ -281,6 +345,7 @@ class MirrorSpec:
             "tags": dict(sorted(self.tags.items())),
             "parameters": dict(sorted(self.parameters.items())),
             "metrics": dict(sorted(self.metrics.items())),
+            "projection": asdict(self.projection) if self.projection is not None else None,
             "artifacts": [
                 {"kind": item.kind.value, "path": item.relative_path, "sha256": item.sha256.lower()}
                 for item in sorted(artifacts, key=lambda value: (value.kind.value, value.relative_path))
@@ -448,6 +513,19 @@ class MLflowMirror:
                     run_name=spec.run_name,
                     tags={
                         **dict(spec.tags),
+                        **(
+                            spec.projection.tags()
+                            if spec.projection is not None
+                            else {
+                                "projection_schema_version": "not_applicable",
+                                "plan_sha256": "not_applicable",
+                                "phase_ids": spec.phase or "not_applicable",
+                                "task_ids": "not_applicable",
+                                "gate_ids": "not_applicable",
+                                "linear_issue_ids": "not_applicable",
+                                "dashboard_content_id": "not_applicable",
+                            }
+                        ),
                         "program_id": spec.program_id,
                         "display_name": spec.display_name,
                         "protocol_version": spec.protocol_version,

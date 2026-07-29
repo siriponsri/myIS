@@ -281,6 +281,24 @@ def linear_projection_failures(root: Path) -> list[str]:
     return failures
 
 
+def projection_catalog_failures(root: Path) -> list[str]:
+    """Validate cross-bindings among PLAN, Dashboard, Linear and MLflow catalogs."""
+
+    try:
+        from myis_research.dashboard.progress import parse_plan
+        from myis_research.dashboard.projections import (
+            load_evidence_catalog,
+            load_governance_document_catalog,
+        )
+
+        plan = parse_plan(root / "PLAN.md")
+        load_evidence_catalog(root, plan)
+        load_governance_document_catalog(root, plan)
+    except (OSError, PermissionError, ValueError, yaml.YAMLError) as error:
+        return [f"projection catalog validation failed: {error}"]
+    return []
+
+
 def manuscript_contract_failures(root: Path) -> list[str]:
     failures: list[str] = []
     documents = root / "02_tracks/01_S_skillopt/S_documents"
@@ -473,6 +491,7 @@ def validate(root: Path = ROOT) -> list[str]:
 
     failures.extend(yaml_config_failures(root))
     failures.extend(linear_projection_failures(root))
+    failures.extend(projection_catalog_failures(root))
     failures.extend(manuscript_contract_failures(root))
     failures.extend(migration_contract_failures(root))
     failures.extend(active_context_failures(root))

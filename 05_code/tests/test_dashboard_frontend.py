@@ -21,8 +21,14 @@ CONTENT_FILES = (
     "00_governance/TOOLCHAIN.md",
     "00_governance/TOOL_BOOTSTRAP_STATUS.md",
     "00_governance/config/tools.lock.yaml",
+    "00_governance/config/project.yaml",
+    "00_governance/config/linear.yaml",
+    "00_governance/config/evidence_catalog.yaml",
+    "03_experiments/config/mlflow/governance_documents.yaml",
+    "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json",
     "06_frontend/dashboard/content_registry.yaml",
     "06_frontend/dashboard/index.html",
+    "06_frontend/dashboard/assets/tokens.css",
     "06_frontend/dashboard/assets/dashboard.css",
     "06_frontend/dashboard/assets/dashboard.js",
     "06_frontend/dashboard/diagrams/research-program.svg",
@@ -83,10 +89,19 @@ class DashboardFrontendTests(unittest.TestCase):
 
             index = client.get("/")
             self.assertEqual(index.status_code, 200)
-            self.assertIn("myIS Owner Research Dashboard", index.text)
+            self.assertIn("myIS Owner Workbench", index.text)
+            self.assertIn('<html lang="en">', index.text)
+            self.assertIn("Connecting / กำลังเชื่อมต่อ", index.text)
+            self.assertIn('id="flow-progress"', index.text)
             self.assertEqual(index.headers["cache-control"], "no-store, max-age=0")
             self.assertEqual(client.get("/assets/dashboard.css").status_code, 200)
-            self.assertEqual(client.get("/assets/dashboard.js").status_code, 200)
+            self.assertEqual(client.get("/assets/tokens.css").status_code, 200)
+            script = client.get("/assets/dashboard.js")
+            self.assertEqual(script.status_code, 200)
+            self.assertIn("AUTO_REFRESH_MS = 60000", script.text)
+            self.assertIn("Completion requires canonical Task evidence", script.text)
+            self.assertIn("item.title_en", script.text)
+            self.assertIn("item.title_th", script.text)
             self.assertEqual(client.get("/assets/unknown.js").status_code, 404)
 
     def test_response_policy_applies_to_html_static_json_and_svg(self) -> None:
@@ -127,11 +142,13 @@ class DashboardFrontendTests(unittest.TestCase):
             harness = client.get("/api/v1/content/harness")
             tools = client.get("/api/v1/tools")
             flows = client.get("/api/v1/flows")
+            governance = client.get("/api/v1/governance-catalog")
             self.assertEqual(process.status_code, 200)
             self.assertEqual(harness.status_code, 200)
             self.assertEqual(tools.status_code, 200)
             self.assertEqual(flows.status_code, 200)
-            combined = process.text + harness.text + tools.text + flows.text
+            self.assertEqual(governance.status_code, 200)
+            combined = process.text + harness.text + tools.text + flows.text + governance.text
             self.assertNotIn(str(root), combined)
             self.assertNotIn('"path"', combined)
             tool_documents = tools.json()["documents"]
@@ -276,7 +293,11 @@ class DashboardFrontendTests(unittest.TestCase):
                     "gate_id": "G0",
                     "status": "approved",
                     "rationale": "Approve the exact fixture implementation scope.",
-                    "evidence_manifest_hashes": [],
+                    "evidence_manifest_hashes": [
+                        hashlib.sha256(
+                            (root / "04_outputs/artifacts/f0-migration/F0-f5e00c80d990.json").read_bytes()
+                        ).hexdigest()
+                    ],
                     "scope": scope,
                 },
             )
@@ -288,6 +309,30 @@ class DashboardFrontendTests(unittest.TestCase):
             self.assertEqual(record["scope_hash"], expected)
             self.assertEqual(len(record["actor"]), 64)
             self.assertNotIn("actor", scope)
+
+    def test_owner_gate_approval_requires_verified_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            make_fixture(root, git_repository=True)
+            client, csrf = session_client(root)
+            response = client.post(
+                "/api/v1/owner-gates/preview",
+                headers={"origin": "http://127.0.0.1:8765", "x-csrf-token": csrf},
+                json={
+                    "gate_id": "G0",
+                    "status": "approved",
+                    "rationale": "Evidence is intentionally missing.",
+                    "evidence_manifest_hashes": [],
+                    "scope": {
+                        "action": "approve_implementation",
+                        "phase_ids": ["F0"],
+                        "task_ids": ["F0.1"],
+                        "targets": [],
+                    },
+                },
+            )
+            self.assertEqual(response.status_code, 422)
+            self.assertIn("evidence", response.text)
 
     def test_owner_gates_endpoint_fails_closed_for_invalid_record(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

@@ -45,3 +45,24 @@ network.
 
 Do not use the MLflow UI to create scientific truth. Rebuild the mirror from
 canonical validated sources if it is lost or corrupt.
+
+## Governance document projection
+
+Important documents are allowlisted in
+`03_experiments/config/mlflow/governance_documents.yaml`. Validate the catalog
+without writing:
+
+```powershell
+uv run --no-sync python 05_code/scripts/sync_governance_documents.py --dry-run
+```
+
+Run the actual additive sync only from a clean source commit:
+
+```powershell
+uv run --no-sync python 05_code/scripts/sync_governance_documents.py
+```
+
+Each document run carries the canonical document hash and bindings to the PLAN
+hash, Phase, Task, Owner Gate, Linear issue, Dashboard content ID, and one of
+the six governed MLflow experiments. MLflow remains a rebuildable mirror;
+changing or losing it cannot change a Gate decision or canonical Git artifact.
