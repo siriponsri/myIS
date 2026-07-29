@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -58,6 +59,12 @@ class F0EvidenceTests(unittest.TestCase):
         capture.assert_aggregate_only({"schema_version": capture.F0_SCHEMA, "query_ids_hash": "a" * 64})
         with self.assertRaises(ValueError):
             capture.assert_aggregate_only({"query_id": "protected"})
+
+    @unittest.skipUnless(os.name == "nt", "Windows Git Bash selection")
+    def test_git_bash_does_not_select_wsl_system32_launcher(self) -> None:
+        bash = capture._git_bash()
+        self.assertIsNotNone(bash)
+        self.assertNotIn("system32", str(bash).casefold())
 
 
 if __name__ == "__main__":

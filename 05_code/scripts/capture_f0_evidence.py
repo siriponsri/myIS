@@ -172,8 +172,21 @@ def _command_receipt(check_id: str, command: Sequence[str], *, display: str | No
     }
 
 
+def _git_bash() -> str | None:
+    if os.name == "nt":
+        candidates = (
+            Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / "Git/bin/bash.exe",
+            Path(os.environ.get("LOCALAPPDATA", "")) / "Programs/Git/bin/bash.exe",
+        )
+        for candidate in candidates:
+            if candidate.is_file():
+                return str(candidate)
+        return None
+    return shutil.which("bash")
+
+
 def run_required_checks() -> list[dict[str, Any]]:
-    bash = shutil.which("bash")
+    bash = _git_bash()
     commands: list[tuple[str, Sequence[str], str | None]] = [
         ("uv_lock", ("uv", "lock", "--check"), None),
         ("restructure", ("uv", "run", "--no-sync", "python", "05_code/scripts/validate_restructure.py"), None),
