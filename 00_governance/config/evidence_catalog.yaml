@@ -11,3 +11,14 @@ packages:
     phase_ids: [F0]
     task_ids: [F0.1, F0.2, F0.3]
     evidence_role: fixture
+  - evidence_id: f0-dashboard-mlflow-revision
+    title_en: F0 Dashboard and MLflow revision evidence
+    title_th: หลักฐานแก้ไข Dashboard และ MLflow ของ F0
+    summary_en: English-first owner workflow, interactive PLAN progress, typed Gate approval, friendly evidence names, and the aligned MLflow document mirror for Task F0.3.
+    summary_th: Dashboard ภาษาอังกฤษเป็นหลัก รายละเอียดภาษาไทย Flow แบบโต้ตอบ การอนุมัติ Gate แบบ typed ชื่อหลักฐานที่อ่านง่าย และ MLflow mirror ที่สอดคล้องกันสำหรับ Task F0.3
+    path: 04_outputs/artifacts/f0-migration/F0-f32ac040efb5.json
+    sha256: 3bd6b7d957f5b0fa0dd6220f9af381e312b3d460e44d0a3b717750fa0a160af3
+    gate_ids: [G0]
+    phase_ids: [F0]
+    task_ids: [F0.3]
+    evidence_role: fixture

@@ -24,9 +24,14 @@ class DashboardProjectionCatalogTests(unittest.TestCase):
         self.assertEqual(payload["projection_alignment"]["linear"]["task_count"], 22)
         self.assertEqual(payload["projection_alignment"]["mlflow"]["document_count"], 11)
         self.assertEqual(len(payload["projection_alignment"]["mlflow"]["experiments"]), 6)
-        self.assertEqual(payload["evidence_packages"][0]["gate_ids"], ["G0"])
-        self.assertEqual(payload["evidence_packages"][0]["title_en"], "F0 foundation migration evidence")
-        self.assertIn("protected-path comparison", payload["evidence_packages"][0]["summary_en"])
+        self.assertEqual(len(payload["evidence_packages"]), 2)
+        original = next(item for item in payload["evidence_packages"] if item["evidence_id"] == "f0-foundation-migration")
+        revision = next(item for item in payload["evidence_packages"] if item["evidence_id"] == "f0-dashboard-mlflow-revision")
+        self.assertEqual(original["gate_ids"], ["G0"])
+        self.assertEqual(original["title_en"], "F0 foundation migration evidence")
+        self.assertIn("protected-path comparison", original["summary_en"])
+        self.assertEqual(revision["task_ids"], ["F0.3"])
+        self.assertIn("English-first owner workflow", revision["summary_en"])
         self.assertNotIn(str(REPO_ROOT), str(payload))
 
     def test_governance_document_catalog_resolves_linear_issue_for_each_task(self) -> None:
