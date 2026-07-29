@@ -9,10 +9,12 @@ from typing import Any
 from .models import canonical_hash
 
 
-_ALLOWED_FUSION = {"rrf", "weighted_rrf", "max"}
+_ALLOWED_FUSION = {"rrf", "weighted_rrf", "max", "minmax_weighted"}
 _ALLOWED_STOPPING = {"budget", "no_gain", "fixed_depth"}
 _ALLOWED_ROUTE_KINDS = {"lexical", "dense", "citation", "metadata"}
 _ALLOWED_SOURCE_FIELDS = {"title", "abstract", "claims"}
+B1_MINMAX_WEIGHTS = {"dense": 0.7, "bm25": 0.3}
+B1_SCORE_DIRECTIONS = {"dense": "higher", "bm25": "lower"}
 
 
 class GroundingMode(StrEnum):
@@ -77,6 +79,7 @@ class FusionContract:
     method: str = "rrf"
     k: int = 60
     weights: dict[str, float] = field(default_factory=dict)
+    score_directions: dict[str, str] = field(default_factory=dict)
 
     def validate(self, route_ids: set[str]) -> None:
         if self.method not in _ALLOWED_FUSION:
@@ -87,6 +90,31 @@ class FusionContract:
             raise ValueError(f"fusion weights reference unknown routes: {sorted(set(self.weights) - route_ids)}")
         if any(value < 0 for value in self.weights.values()):
             raise ValueError("fusion weights must be non-negative")
+        if not set(self.score_directions) <= route_ids:
+            raise ValueError(
+                f"score directions reference unknown routes: {sorted(set(self.score_directions) - route_ids)}"
+            )
+        invalid = {
+            route_id: direction
+            for route_id, direction in self.score_directions.items()
+            if direction not in {"higher", "lower"}
+        }
+        if invalid:
+            raise ValueError(f"score directions must be higher or lower: {invalid}")
+        if self.method == "minmax_weighted":
+            missing = set(self.weights) - set(self.score_directions)
+            if missing:
+                raise ValueError(f"minmax fusion requires score directions for: {sorted(missing)}")
+
+
+def b1_fusion_contract() -> FusionContract:
+    """Return the locked B1 dense/BM25 min-max fusion contract."""
+
+    return FusionContract(
+        method="minmax_weighted",
+        weights=dict(B1_MINMAX_WEIGHTS),
+        score_directions=dict(B1_SCORE_DIRECTIONS),
+    )
 
 
 @dataclass(frozen=True)
@@ -170,6 +198,8 @@ class HarnessPolicy:
                 raise ValueError("route quotas exceed max_total_retrieved")
         if self.fusion_contract is not None:
             self.fusion_contract.validate(set(route_ids))
+        elif self.fusion == "minmax_weighted":
+            raise ValueError("minmax_weighted requires a typed fusion_contract")
         if not self.family_deduplication:
             raise ValueError("family-level evaluation requires family deduplication")
         if not self.provenance_required:

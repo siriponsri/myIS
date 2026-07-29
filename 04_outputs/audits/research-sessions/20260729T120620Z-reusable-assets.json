@@ -1,0 +1,128 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260729T120620Z-reusable-assets",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T12:06:20Z",
+  "scope": "Inventory reusable knowledge, code, datasets, and artifacts from governance, the sibling App repository, and llm-wiki; register approved reuse for Track C and Track S; add deterministic reusable harness primitives; and document the inventory for future sessions and PLAN tasks.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "repository-scope",
+      "source": "Owner message: session ถัดไปรู้ด้วยว่ามีของอะไรอยู่แล้วบ้าง ... สามารถ update AGENTS.md ได้เลย ... ทำงานกับ root ที่ 01_Research เป็นหลัก",
+      "scope": "Persist the reusable-asset inventory and operating instructions in 01_Research, including AGENTS.md."
+    },
+    {
+      "gate": "commit-scope",
+      "source": "Owner message: owner approve ให้ปิด Data_Review.iypnb แล้วรวม commit ได้เลย",
+      "scope": "Include the metadata-only Data_Review.ipynb change in the Research commit and close the implementation session."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "7b554a5599a3e157a0c9a254ee0cfcc85490acd9",
+    "dirty_paths": [
+      "00_governance/OPERATIONS.md",
+      "00_governance/REUSABLE_ASSET_MAP.md",
+      "00_governance/config/reusable_assets.yaml",
+      "03_experiments/notebooks/Data_Review.ipynb",
+      "04_outputs/audits/research-sessions/20260729T120620Z-reusable-assets.json",
+      "05_code/src/myis_research/asset_cli.py",
+      "05_code/src/myis_research/asset_registry.py",
+      "05_code/src/myis_research/harness/candidate_ledger.py",
+      "05_code/src/myis_research/harness/dapfam_text.py",
+      "05_code/src/myis_research/harness/policy.py",
+      "05_code/src/myis_research/harness/reranking.py",
+      "05_code/src/myis_research/harness/sparse.py",
+      "05_code/src/myis_research/harness/usage.py",
+      "05_code/tests/test_asset_registry.py",
+      "05_code/tests/test_reusable_harness.py",
+      "AGENTS.md",
+      "README.md",
+      "pyproject.toml"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner selected 01_Research as the primary working root and authorized durable AGENTS.md guidance so later sessions can discover existing reusable assets before creating replacements.",
+      "evidence_refs": [
+        {
+          "path": "00_governance/config/reusable_assets.yaml",
+          "sha256": "7e418d54a4f1d5d0743c68dec479fb7e7340b1448362e3f5b30d61802cd8b242",
+          "locator": "registry metadata, source_roots, and assets"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "A governed reusable-asset registry and generated Phase/Task map now classify source assets as reuse, adapt, reference_only, blocked, or duplicate while keeping large and protected material in place.",
+      "evidence_refs": [
+        {
+          "path": "00_governance/REUSABLE_ASSET_MAP.md",
+          "sha256": "217eed01a1dce708a4af4f6189acb35d863ed2e2069ca0a2a540b79792e32c86",
+          "locator": "Track C and Track S reusable asset tables"
+        },
+        {
+          "path": "05_code/src/myis_research/asset_registry.py",
+          "sha256": "45f7822a1836e8737c6b3bb7954761dab453317b11a1a2736ad01c24edce6272",
+          "locator": "registry loading, querying, validation, and map rendering"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Research-owned deterministic primitives now cover DAPFAM text handling, sparse retrieval, reranking, usage accounting, and explicit score-direction fusion so App and Paper D implementations remain reusable inputs without becoming scientific authority.",
+      "evidence_refs": [
+        {
+          "path": "05_code/tests/test_asset_registry.py",
+          "sha256": "836acf8ceede0f351ee3e10d672ef0408925ecedf9dd5ce6f7ffabcb3d2232ca",
+          "locator": "registry validation and generated-map regression tests"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner explicitly approved including the metadata-only Data_Review.ipynb change in the same Research commit.",
+      "evidence_refs": [
+        {
+          "path": "03_experiments/notebooks/Data_Review.ipynb",
+          "sha256": "58fcca0c9c8791787f31b1f1de1e34bb4578e28d2e83e347c4bdbff803c9e21c",
+          "locator": "kernelspec and language_info metadata; code-cell outputs remain empty"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

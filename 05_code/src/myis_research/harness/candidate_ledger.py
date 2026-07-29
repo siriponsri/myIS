@@ -124,11 +124,12 @@ def build_family_ledger(
     fusion_method: str = "rrf",
     fusion_k: int = 60,
     weights: dict[str, float] | None = None,
+    score_directions: dict[str, str] | None = None,
     final_k: int = 100,
 ) -> tuple[FamilyCandidate, ...]:
     """Fuse route hits, deduplicate by family, and assign stable final ranks."""
 
-    if fusion_method not in {"rrf", "weighted_rrf", "max"}:
+    if fusion_method not in {"rrf", "weighted_rrf", "max", "minmax_weighted"}:
         raise ValueError("unsupported fusion method")
     if fusion_k <= 0 or final_k <= 0:
         raise ValueError("fusion_k and final_k must be positive")
@@ -136,8 +137,36 @@ def build_family_ledger(
     if any(value < 0 for value in route_weights.values()):
         raise ValueError("route weights must be non-negative")
 
+    deduplicated = _deduplicate_route_hits(hits)
+    normalized_scores: dict[tuple[str, str, str], Decimal] = {}
+    if fusion_method == "minmax_weighted":
+        directions = score_directions or {}
+        route_groups: dict[tuple[str, str], list[RouteHit]] = {}
+        for hit in deduplicated:
+            route_groups.setdefault((hit.query_id, hit.route_id), []).append(hit)
+        missing = sorted({route_id for _query_id, route_id in route_groups} - set(directions))
+        invalid = sorted(
+            route_id for route_id, direction in directions.items()
+            if direction not in {"higher", "lower"}
+        )
+        if missing:
+            raise ValueError(f"score directions are required for routes: {missing}")
+        if invalid:
+            raise ValueError(f"score directions must be higher or lower: {invalid}")
+        for (query_id, route_id), route_hits in route_groups.items():
+            values = [Decimal(str(hit.score)) for hit in route_hits]
+            low, high = min(values), max(values)
+            for hit, value in zip(route_hits, values, strict=True):
+                if high == low:
+                    normalized = Decimal(1)
+                elif directions[route_id] == "higher":
+                    normalized = (value - low) / (high - low)
+                else:
+                    normalized = (high - value) / (high - low)
+                normalized_scores[(query_id, route_id, hit.family_id)] = _quantized(normalized)
+
     grouped: dict[tuple[str, str], list[RouteHit]] = {}
-    for hit in _deduplicate_route_hits(hits):
+    for hit in deduplicated:
         grouped.setdefault((hit.query_id, hit.family_id), []).append(hit)
 
     pending: dict[str, list[tuple[str, str, Decimal, int, tuple[RouteProvenance, ...]]]] = {}
@@ -148,6 +177,8 @@ def build_family_ledger(
             weight = Decimal(str(route_weights.get(hit.route_id, 1.0)))
             if fusion_method == "max":
                 contribution = weight * Decimal(str(hit.score))
+            elif fusion_method == "minmax_weighted":
+                contribution = weight * normalized_scores[(hit.query_id, hit.route_id, hit.family_id)]
             else:
                 contribution = weight / Decimal(fusion_k + hit.rank)
             contribution = _quantized(contribution)

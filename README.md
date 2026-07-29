@@ -44,12 +44,25 @@ documents unless the Owner separately approves that action.
 
 1. [AGENTS.md](AGENTS.md) - identity, safety, and scientific invariants.
 2. [PLAN.md](PLAN.md) - canonical Phase -> Task execution authority.
-3. [Track C source plan](00_governance/IS_RESEARCH_TRACK_C_V0.1_CROSSROUTE_PLAN.md).
-4. [Track S source plan](00_governance/IS_RESEARCH_TRACK_S_V0.1_SKILLOPT_HARNESSOPT_PLAN.md).
-5. [Scientific protocol](FULL_RESEARCH_TRACK_PLAN.md) and
+3. [Reusable asset registry](00_governance/config/reusable_assets.yaml) and
+   [Phase/Task map](00_governance/REUSABLE_ASSET_MAP.md).
+4. [Track C source plan](00_governance/IS_RESEARCH_TRACK_C_V0.1_CROSSROUTE_PLAN.md).
+5. [Track S source plan](00_governance/IS_RESEARCH_TRACK_S_V0.1_SKILLOPT_HARNESSOPT_PLAN.md).
+6. [Scientific protocol](FULL_RESEARCH_TRACK_PLAN.md) and
    [harness contract](LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md).
-6. [Owner Gates](00_governance/OWNER_GATES.md) and
+7. [Owner Gates](00_governance/OWNER_GATES.md) and
    [operations](00_governance/OPERATIONS.md).
+
+Before implementing a PLAN task, query and validate reusable App assets:
+
+```powershell
+uv run --no-sync myis-assets query --task F1.1
+uv run --no-sync myis-assets validate --mode quick
+uv run --no-sync myis-assets map --check
+```
+
+The registry contains pointers, hashes, compatibility conditions, and reuse
+dispositions. It does not authorize a Gate or copy protected App payloads.
 
 ## Active protocol
 
@@ -102,6 +115,8 @@ uv run --no-sync python 05_code/scripts/validate_integrity.py
 uv run --no-sync python 05_code/scripts/validate_literature_corpus.py
 uv run --no-sync python -m unittest discover -s 05_code/tests -v
 uv run --no-sync python 05_code/scripts/validate_f1_g1_preparation.py
+uv run --no-sync myis-assets validate --mode quick
+uv run --no-sync myis-assets map --check
 & "C:\Program Files\Git\bin\bash.exe" "06_frontend/mlflow/mlflow.sh" doctor
 git diff --check
 ```

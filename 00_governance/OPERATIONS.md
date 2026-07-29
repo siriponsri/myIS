@@ -3,6 +3,31 @@
 Run commands from the Research repository root. `AGENTS.md`, `PLAN.md`, and
 `OWNER_GATES.md` remain authoritative.
 
+## Reusable asset preflight
+
+Use the Research registry before creating or recomputing an artifact:
+
+```powershell
+uv run --no-sync myis-assets validate --mode quick
+uv run --no-sync myis-assets query --task <TASK_ID>
+uv run --no-sync myis-assets query --asset-id <ASSET_ID> --json
+uv run --no-sync myis-assets map --check
+```
+
+Quick validation checks registry structure, source existence, byte anchors,
+manifest presence, and registered-path Git drift without reading protected
+payloads. Full validation hashes source files and manifest closures, and is
+fail-closed before protected content:
+
+```powershell
+uv run --no-sync myis-assets validate --mode full --asset-id <ASSET_ID> `
+  --approval-record <OWNER_GATE_DECISION.json>
+```
+
+An unrelated App HEAD advance is a warning. A changed registered path, byte
+anchor, source SHA-256, or manifest SHA-256 is a drift failure. Do not edit App
+assets in place or use the registry as Gate approval.
+
 ## Clean locked environment
 
 Python 3.11 and `pyproject.toml + uv.lock` are canonical. Select only the groups

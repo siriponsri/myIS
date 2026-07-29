@@ -5,11 +5,13 @@ This contract applies to every agent and adapter operating in this repository.
 ## Read order
 
 1. `PLAN.md` - canonical Phase -> Task execution authority.
-2. `FULL_RESEARCH_TRACK_PLAN.md` - scientific protocol and claim boundaries.
-3. `LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md` - implementation contracts.
-4. `00_governance/OWNER_GATES.md` - approval boundaries.
-5. `00_governance/OPERATIONS.md` - local commands and recovery.
-6. Files owned by the active task.
+2. `00_governance/config/reusable_assets.yaml` - reusable asset source of truth.
+3. `00_governance/REUSABLE_ASSET_MAP.md` - generated Phase/Task asset map.
+4. `FULL_RESEARCH_TRACK_PLAN.md` - scientific protocol and claim boundaries.
+5. `LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md` - implementation contracts.
+6. `00_governance/OWNER_GATES.md` - approval boundaries.
+7. `00_governance/OPERATIONS.md` - local commands and recovery.
+8. Files owned by the active task.
 
 ## Identity and versioning
 
@@ -102,6 +104,29 @@ This contract applies to every agent and adapter operating in this repository.
 - MLflow experiments are additive mirrors:
   `myis-research-{bootstrap,catalog,track-c,track-s,joint,publication}`.
 - Brain has one serial writer. Linear mirrors PLAN and never opens gates.
+
+## Reusable asset first
+
+- Treat this `01_Research` repository as the primary working root. The sibling
+  App repository is a read-only source and Brain is a pointer-only projection.
+- At the start of every task, run `myis-assets query --task <TASK_ID>` and
+  inspect the registry entry before creating data, code, indexes, prompts,
+  figures, or packaging.
+- Run `myis-assets validate --mode quick` at session start. Full validation of
+  protected assets requires `--approval-record` or `--receipt` and must fail
+  before source content is opened when authorization is absent.
+- Use only the registry dispositions `reuse`, `adapt`, `reference_only`,
+  `blocked`, and `duplicate`. Research kernel modules remain canonical when
+  an App implementation is marked duplicate or reference-only.
+- Keep large App datasets and indexes in place. Never copy qrels, query IDs,
+  split membership, per-query outcomes, embeddings, binaries, or metrics
+  payloads into Brain.
+- When a durable reusable asset is added, removed, or changed, update
+  `reusable_assets.yaml`, regenerate the map with `myis-assets map`, and run
+  `myis-assets map --check`.
+- The Brain note
+  `work/active/myIS Research/Reusable Assets for Track C-S.md` is a summary
+  pointer only. Git registry bytes remain authoritative.
 
 ## Required execution loop
 
