@@ -1,0 +1,98 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260729T041555Z-mlflow-recovery",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-29T04:15:55Z",
+  "scope": "Record the additive recovery boundary for the F0 governance-document MLflow mirror after a stale serialized-writer lock created immutable deferred receipts.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "G0",
+      "source": "00_governance/approvals/G0-20260729T034449581785Z.json#/decision_id",
+      "scope": "Local F0 Dashboard and MLflow projection work only; no scientific execution"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "86fa60b789149d1cf810a01071c04f59dec0de71",
+    "dirty_paths": []
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "A terminated local document-sync process left a serialized-writer lock whose recorded PID no longer existed; later attempts emitted immutable sync_deferred receipts instead of overwriting the failed state.",
+      "evidence_refs": [
+        {
+          "path": "05_code/scripts/sync_governance_documents.py",
+          "sha256": "c54917863ceb16fa8603db6a75428e7ffaa418191fd9ab167fe6282712f90f95",
+          "locator": "sync_documents and clean-repository precondition"
+        },
+        {
+          "path": "00_governance/OPERATIONS.md",
+          "sha256": "d1c6324409e0322acb625fd740c367956bd8efd6ed6a7b7cb70a9a9664fbdb08",
+          "locator": "MLflow operation and recovery"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Only the orphaned sync child processes and the exact stale lock were removed after confirming the lock owner PID was absent; immutable receipts and MLflow data were preserved.",
+      "evidence_refs": [
+        {
+          "path": "00_governance/OPERATIONS.md",
+          "sha256": "d1c6324409e0322acb625fd740c367956bd8efd6ed6a7b7cb70a9a9664fbdb08",
+          "locator": "MLflow operation and recovery"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The clean-commit retry mirrored seven of the eleven allowlisted governance documents and retained four prior sync_deferred receipts; zero scientific metrics were logged.",
+      "evidence_refs": [
+        {
+          "path": "03_experiments/config/mlflow/governance_documents.yaml",
+          "sha256": "8a6d69fd9371cbda4f01ee13c50669949c8e961baac9d1a9a93908f32e45299a",
+          "locator": "documents catalog"
+        }
+      ],
+      "observation_command": "uv run --no-sync python 05_code/scripts/sync_governance_documents.py"
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "summary": "Replay the eleven-document catalog from the next clean Git commit so new mirror keys can succeed without overwriting the preserved deferred receipts.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
