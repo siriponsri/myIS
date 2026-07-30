@@ -1,0 +1,70 @@
+{
+  "campaigns": [
+    {
+      "campaign_id": "scope-autoindex-v1",
+      "primary_metric": "recall_at_100/out",
+      "status": "preparation",
+      "title": "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
+    }
+  ],
+  "cost": {
+    "actual": null,
+    "budget": 100.0,
+    "currency": "USD",
+    "estimated": 0.0
+  },
+  "decisions": [
+    {
+      "campaign_id": "scope-autoindex-v1",
+      "decision_id": "D1_START_CAMPAIGN",
+      "evidence_hashes": [],
+      "prior_record_hash": null,
+      "rationale": "Standing campaign authorization recorded from the Owner instruction; protected aggregate/count binding is produced by the Owner-local process.",
+      "schema_version": "myis.decision-record.v1",
+      "status": "approved"
+    }
+  ],
+  "evidence": [],
+  "experiments": [],
+  "generated_at": "2026-07-30T04:47:22.779909Z",
+  "metrics": [],
+  "projection_revision": "78f43d3fee12565379c2f90090abe5d0c91133e1e6fff6c634dd903f532ab5ce",
+  "publication_readiness": {
+    "checks": [
+      {
+        "id": "canonical_run_manifest",
+        "source": "campaigns/scope-autoindex-v1/manifests",
+        "status": "blocked"
+      },
+      {
+        "id": "owner_local_aggregate",
+        "source": "control/owner-local",
+        "status": "blocked"
+      },
+      {
+        "id": "d2_open_final",
+        "source": "control/decisions/ledger.jsonl",
+        "status": "blocked"
+      },
+      {
+        "id": "live_venue_check",
+        "source": "Owner/live venue verification",
+        "status": "unknown"
+      },
+      {
+        "id": "prior_publication_status",
+        "source": "Owner publication declaration",
+        "status": "unknown"
+      },
+      {
+        "id": "paper_build_hash_closure",
+        "source": "03_Paper/publications/isai-nlp-2026",
+        "status": "blocked"
+      }
+    ],
+    "schema_version": "myis.publication-readiness.v1",
+    "status": "blocked"
+  },
+  "runs": [],
+  "schema_version": "myis.read-model.v1"
+}

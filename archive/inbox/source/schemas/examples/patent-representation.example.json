@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.1.0",
+  "representation_id": "rep-flat-v01",
+  "record_id": "fam-fixture-001",
+  "identity_level": "family",
+  "family_id": "fam-fixture-001",
+  "dataset": {
+    "dataset_id": "dapfam",
+    "snapshot_id": "dapfam-fixture-00000000",
+    "source_record_sha256": "2e26a0700b8bcf053efd454e8751869ee0ad779ff98e2a27d8cb2f528656ce6c"
+  },
+  "created_by": {
+    "spec_id": "spec-flat-v01",
+    "spec_sha256": "1310ca2c8932dbd118668bd97442558a3e1f546b5e15c69699dfbd6024f548d8",
+    "compiler_id": "compiler-scope-v01",
+    "compiler_sha256": "9db46b70ce5d3ab28397237672f9c781f1ecf9185d927fe89c169aaf4c080d10",
+    "created_at": "2026-07-30T09:15:30Z"
+  },
+  "source_fields": [
+    {
+      "name": "title_en",
+      "sha256": "4ddc261312db6c329e9f35fca985900e706d47ba04b7fd209b8c9272b61a302c",
+      "char_length": 12
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "n-patent-record-0001",
+      "node_type": "patent_record",
+      "parent_id": null,
+      "source_refs": [],
+      "parser": {
+        "strategy": "identity",
+        "confidence": 1.0,
+        "fallback_used": false
+      },
+      "attributes": {
+        "claim_kind": "not_applicable",
+        "section_kind": "not_applicable"
+      }
+    },
+    {
+      "node_id": "n-title-0001",
+      "node_type": "title",
+      "parent_id": "n-patent-record-0001",
+      "source_refs": [
+        {
+          "ref_id": "fam-fixture-001:title_en:0-12",
+          "source_field": "title_en",
+          "start": 0,
+          "end": 12,
+          "span_sha256": "4ddc261312db6c329e9f35fca985900e706d47ba04b7fd209b8c9272b61a302c"
+        }
+      ],
+      "parser": {
+        "strategy": "exact_field",
+        "confidence": 1.0,
+        "fallback_used": false
+      },
+      "attributes": {
+        "claim_kind": "not_applicable",
+        "section_kind": "not_applicable"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e-0001",
+      "from_node_id": "n-patent-record-0001",
+      "to_node_id": "n-title-0001",
+      "relation": "contains",
+      "confidence": 1.0,
+      "evidence_refs": []
+    }
+  ],
+  "searchable_units": [
+    {
+      "unit_id": "u-core-01",
+      "view_type": "core",
+      "node_ids": [
+        "n-title-0001"
+      ],
+      "text": "Test device.",
+      "text_sha256": "4ddc261312db6c329e9f35fca985900e706d47ba04b7fd209b8c9272b61a302c",
+      "text_origin": "exact_source",
+      "grounding_refs": [
+        {
+          "ref_id": "fam-fixture-001:title_en:0-12",
+          "source_field": "title_en",
+          "start": 0,
+          "end": 12,
+          "span_sha256": "4ddc261312db6c329e9f35fca985900e706d47ba04b7fd209b8c9272b61a302c"
+        }
+      ]
+    }
+  ],
+  "parser_report": {
+    "claim_strategy": "not_present_in_fixture",
+    "description_strategy": "not_present_in_fixture",
+    "claim_parse_rate": 0.0,
+    "description_section_rate": 0.0,
+    "fallback_rate": 0.0,
+    "warnings": []
+  }
+}

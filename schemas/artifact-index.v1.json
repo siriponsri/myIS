@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:artifact-index:v1",
+  "title": "myIS content-addressed artifact index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "artifacts"],
+  "properties": {
+    "schema_version": {"const": "myis.artifact-index.v1"},
+    "run_id": {"type": "string"},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact_id", "uri", "sha256", "bytes", "media_type", "classification"],
+        "properties": {
+          "artifact_id": {"type": "string"},
+          "uri": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "media_type": {"type": "string"},
+          "classification": {"enum": ["fixture", "aggregate", "metadata", "publication", "external_reference"]}
+        }
+      }
+    }
+  }
+}

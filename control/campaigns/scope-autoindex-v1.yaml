@@ -1,0 +1,57 @@
+campaign:
+  id: scope-autoindex-v1
+  title: Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval
+  status: preparation
+  venue_target: isai-nlp-2026
+  standing_decision: D1_START_CAMPAIGN
+
+protocol:
+  dataset_id: dapfam
+  evaluation_unit: family
+  query_view: tac
+  corpus_view: full
+  top_k: 100
+  primary_metric: recall_at_100/out
+  split_seed: 42
+  split_roles:
+    train: 250
+    selection: 125
+    final: 872
+  selection_rule: strictly_greater_reject_ties
+
+arms:
+  - id: R0
+    method: flat_bm25
+    role: primary_baseline
+  - id: R0-W
+    method: deterministic_window_maxp
+    role: efficiency_control
+  - id: R1
+    method: patent_native_autoindex_scope
+    role: primary_method
+    compiler_frozen: true
+    max_searchable_units_per_family: 4
+
+transfer:
+  required:
+    - fine_patents_zero_retuning
+  optional:
+    - patenteb_zero_retuning
+    - dense_or_hybrid
+
+conditional_extensions:
+  skillopt:
+    default: disabled
+    admission:
+      - frozen_structure_leverage
+      - ranking_headroom
+      - frozen_representation_and_retriever
+      - equal_budget_simple_search_control
+      - core_publication_safe
+
+budget:
+  currency: USD
+  preferred_total: 100
+  hard_stop: 100
+  cpu_first: true
+  provider_fallback: false

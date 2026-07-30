@@ -1,0 +1,28 @@
+schema_version: myis.source-of-truth.v2
+records:
+  - id: control
+    authority: control/program.yaml
+    projections: [dashboard, brain, paper, mlflow]
+  - id: protocol
+    authority: control/campaigns/scope-autoindex-v1.yaml
+    projections: [campaigns, dashboard, paper]
+  - id: schemas_and_kernel
+    authority: [schemas, src/myis_research/kernel, src/myis_research/scope]
+    projections: [harness, mlflow, reports]
+  - id: raw_and_protected_bytes
+    authority: MYIS_STORE
+    projections: [hash_only]
+  - id: run_facts
+    authority: [campaigns/scope-autoindex-v1/manifests, MYIS_STORE]
+    projections: [mlflow, projections/read-model, dashboard, brain, paper]
+  - id: owner_decisions
+    authority: control/decisions/ledger.jsonl
+    projections: [dashboard, brain, paper]
+  - id: human_memory
+    authority: 02_Brain/memory
+    projections: [qmd, obsidian]
+    restrictions: [cannot_override_run_facts, cannot_store_protected_payloads]
+  - id: publication_prose
+    authority: 03_Paper/publications/isai-nlp-2026/manuscript
+    projections: [release_pdf]
+    restrictions: [numbers_must_resolve_to_run_facts]

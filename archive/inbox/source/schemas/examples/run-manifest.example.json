@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.1.0",
+  "run_id": "20260730T091530Z__smoke__rep-flat-v01__ret-bm25-v01__s42__r01",
+  "experiment_id": "exp-20260730-structure-pilot",
+  "parent_run_id": null,
+  "freeze_id": null,
+  "supersedes": null,
+  "status": "complete",
+  "stage": "smoke",
+  "started_at": "2026-07-30T09:15:30Z",
+  "finished_at": "2026-07-30T09:15:31Z",
+  "protocol": {
+    "protocol_id": "dapfam-family-tac-to-full-v1",
+    "split_id": "s42-tr250-se125-fi872-v1",
+    "split_role": "fixture",
+    "query_view": "tac",
+    "corpus_view": "full",
+    "evaluation_unit": "family",
+    "primary_metric": "recall_at_100/out"
+  },
+  "source": {
+    "git_commit": null,
+    "source_tree_sha256": "b79606fb3afea5bd1609ed40b622142f1c98125abcfe89a76a661b0e8e343910",
+    "dirty": false,
+    "config_sha256": "b79606fb3afea5bd1609ed40b622142f1c98125abcfe89a76a661b0e8e343910",
+    "representation_schema_sha256": "df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4",
+    "run_schema_sha256": "df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4",
+    "evaluator_sha256": "27f6343f980c4c0ab821d9c72d211d0eb76b0853825cefd80476a05e43cab27e",
+    "dependency_lock_sha256": "0c030586945fe504b604ecc2e875c38ede400cd5cd73da9730302162e6b02c6f"
+  },
+  "data": {
+    "dataset_id": "dapfam",
+    "dataset_revision": "fixture",
+    "snapshot_id": "dapfam-fixture-00000000",
+    "files": [
+      {
+        "name": "fixture.jsonl",
+        "sha256": "3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7",
+        "bytes": 4
+      }
+    ],
+    "split_manifest_sha256": "ad1a64057f9ab34fecfe3f4ee78660bb0316dbda9370581ffbeb1e8bddf3d598",
+    "qrels_manifest_id": "qrels-fixture-v01"
+  },
+  "method": {
+    "arm_id": "R0",
+    "representation_id": "rep-flat-v01",
+    "representation_spec_sha256": "1310ca2c8932dbd118668bd97442558a3e1f546b5e15c69699dfbd6024f548d8",
+    "representation_compiler_sha256": "9db46b70ce5d3ab28397237672f9c781f1ecf9185d927fe89c169aaf4c080d10",
+    "retriever_id": "ret-bm25-v01",
+    "retriever_config_sha256": "98f59f08450f3e244879c5ce846d2d55d2c81d4d0f136b6635b70bb0d033f77c",
+    "policy_id": "pol-fixed-v01",
+    "policy_sha256": "823412d1eacb67956220e532959f0104603057c88704863ca38e7cd188fda812",
+    "family_aggregation": "max",
+    "seed": 42,
+    "agents": []
+  },
+  "resources": {
+    "budget_currency": "USD",
+    "budget_approved": 0.0,
+    "cost_estimated": 0.0,
+    "cost_actual": 0.0,
+    "wall_time_seconds": 1.0,
+    "compute_profile": "cpu-fixture",
+    "searchable_units_total": 2,
+    "index_bytes": 128
+  },
+  "metrics": [
+    {
+      "name": "recall_at_100/out",
+      "metric": "recall",
+      "scope": "out",
+      "k": 100,
+      "value": 1.0,
+      "n_queries": 1
+    }
+  ],
+  "artifacts": [],
+  "access_events": [
+    {
+      "at": "2026-07-30T09:15:30Z",
+      "split_role": "fixture",
+      "event": "evaluation_run",
+      "outcome": "allowed",
+      "decision_id": null
+    }
+  ],
+  "audit": null,
+  "failure": null
+}

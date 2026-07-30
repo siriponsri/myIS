@@ -1,0 +1,468 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/myis/schemas/patent-representation.schema.json",
+  "title": "SCOPE Patent Record Representation",
+  "description": "A grounded patent-record typed evidence graph compiled into at most four searchable units while preserving benchmark-native identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "representation_id",
+    "record_id",
+    "identity_level",
+    "dataset",
+    "created_by",
+    "source_fields",
+    "nodes",
+    "edges",
+    "searchable_units",
+    "parser_report"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "representation_id": {
+      "type": "string",
+      "pattern": "^rep-[a-z0-9][a-z0-9-]*-v[0-9]{2}(?:-frozen)?$"
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "identity_level": {
+      "type": "string",
+      "enum": [
+        "family",
+        "document",
+        "passage_context"
+      ]
+    },
+    "family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "snapshot_id",
+        "source_record_sha256"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "enum": [
+            "dapfam",
+            "fine_patents",
+            "patenteb"
+          ]
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_record_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "created_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec_id",
+        "spec_sha256",
+        "compiler_id",
+        "compiler_sha256",
+        "created_at"
+      ],
+      "properties": {
+        "spec_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spec_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "compiler_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compiler_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "source_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source_field"
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    },
+    "searchable_units": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/searchable_unit"
+      }
+    },
+    "parser_report": {
+      "$ref": "#/$defs/parser_report"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_field_name": {
+      "type": "string",
+      "enum": [
+        "title_en",
+        "abstract_en",
+        "claims_text",
+        "description_en",
+        "ipcr_codes_str",
+        "classifications_ipcr_list_first_three_chars_list",
+        "earliest_claim_date",
+        "earliest_claim_year",
+        "earliest_claim_jusrisdiction",
+        "jurisdiction"
+      ]
+    },
+    "source_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "sha256",
+        "char_length"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/source_field_name"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "char_length": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref_id",
+        "source_field",
+        "start",
+        "end",
+        "span_sha256"
+      ],
+      "properties": {
+        "ref_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_field": {
+          "$ref": "#/$defs/source_field_name"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "node_type",
+        "parent_id",
+        "source_refs",
+        "parser"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "pattern": "^n-[a-z0-9][a-z0-9-]*-[0-9]{4}$"
+        },
+        "node_type": {
+          "type": "string",
+          "enum": [
+            "patent_record",
+            "metadata",
+            "title",
+            "abstract",
+            "claims",
+            "claim_group",
+            "claim",
+            "limitation",
+            "claim_block_unparsed",
+            "description",
+            "section",
+            "passage",
+            "description_block_unparsed"
+          ]
+        },
+        "parent_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "parser": {
+          "$ref": "#/$defs/parser_state"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "claim_number": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "claim_kind": {
+              "type": "string",
+              "enum": [
+                "independent",
+                "dependent",
+                "unknown",
+                "not_applicable"
+              ]
+            },
+            "section_kind": {
+              "type": "string",
+              "enum": [
+                "field",
+                "background",
+                "summary",
+                "brief_drawings",
+                "detailed_description",
+                "examples",
+                "unknown",
+                "not_applicable"
+              ]
+            },
+            "heading_text": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "parser_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "confidence",
+        "fallback_used"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fallback_used": {
+          "type": "boolean"
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_id",
+        "from_node_id",
+        "to_node_id",
+        "relation",
+        "confidence",
+        "evidence_refs"
+      ],
+      "properties": {
+        "edge_id": {
+          "type": "string",
+          "pattern": "^e-[0-9]{4,}$"
+        },
+        "from_node_id": {
+          "type": "string"
+        },
+        "to_node_id": {
+          "type": "string"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "contains",
+            "depends_on",
+            "narrows",
+            "supported_by",
+            "derived_from"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        }
+      }
+    },
+    "searchable_unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "view_type",
+        "node_ids",
+        "text",
+        "text_sha256",
+        "text_origin",
+        "grounding_refs"
+      ],
+      "properties": {
+        "unit_id": {
+          "type": "string",
+          "pattern": "^u-[a-z0-9][a-z0-9-]*-[0-9]{2}$"
+        },
+        "view_type": {
+          "type": "string",
+          "enum": [
+            "core",
+            "claims",
+            "mechanism",
+            "support",
+            "fallback"
+          ]
+        },
+        "node_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "text_origin": {
+          "type": "string",
+          "enum": [
+            "exact_source",
+            "source_concat",
+            "extractive_group"
+          ]
+        },
+        "grounding_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        }
+      }
+    },
+    "parser_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_strategy",
+        "description_strategy",
+        "claim_parse_rate",
+        "description_section_rate",
+        "fallback_rate",
+        "warnings"
+      ],
+      "properties": {
+        "claim_strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description_strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_parse_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "description_section_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fallback_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Semantic validator requirements: IDs are unique and references resolve; source spans are in bounds with start < end; source and text hashes match exact content; searchable text is reconstructable from grounding refs; textual nodes have provenance; DAPFAM records use identity_level=family with family_id equal to record_id and do not imply publication provenance; external adapters preserve native answer identities."
+}

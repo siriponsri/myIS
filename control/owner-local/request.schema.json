@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:owner-local-request:v1",
+  "title": "Owner-local aggregate request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "decision_id", "scope", "git_commit", "input_hashes"],
+  "properties": {
+    "schema_version": {"const": "myis.owner-local-request.v1"},
+    "request_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "decision_id": {"type": "string", "enum": ["D1_START_CAMPAIGN", "D2_OPEN_FINAL"]},
+    "scope": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "git_commit": {"type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"},
+    "input_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+  }
+}

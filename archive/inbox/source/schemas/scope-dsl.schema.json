@@ -1,0 +1,345 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/myis/schemas/scope-dsl.schema.json",
+  "title": "SCOPE Declarative Representation Specification",
+  "description": "The JSON-only candidate surface for the patent-native AutoIndex loop. A frozen compiler converts a valid specification into grounded patent representations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "spec_id",
+    "parent_spec_id",
+    "hypothesis_id",
+    "compiler_api_version",
+    "fields",
+    "claims",
+    "description",
+    "graph",
+    "views",
+    "aggregation",
+    "constraints"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "spec_id": {
+      "type": "string",
+      "pattern": "^spec-[a-z0-9][a-z0-9-]*-v[0-9]{2}$"
+    },
+    "parent_spec_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^spec-[a-z0-9][a-z0-9-]*-v[0-9]{2}$"
+    },
+    "hypothesis_id": {
+      "type": "string",
+      "pattern": "^hyp-i[0-9]{2}-[0-9]{3}$"
+    },
+    "compiler_api_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "core",
+        "allow_exact_repetition",
+        "exact_repetition"
+      ],
+      "properties": {
+        "core": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/source_field"
+          }
+        },
+        "allow_exact_repetition": {
+          "type": "boolean"
+        },
+        "exact_repetition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title_en": {
+              "$ref": "#/$defs/repetition"
+            },
+            "abstract_en": {
+              "$ref": "#/$defs/repetition"
+            },
+            "claims_text": {
+              "$ref": "#/$defs/repetition"
+            },
+            "description_en": {
+              "$ref": "#/$defs/repetition"
+            }
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary_strategy",
+        "confidence_threshold",
+        "dependency_edges",
+        "limitation_strategy",
+        "path_depth",
+        "low_confidence_policy"
+      ],
+      "properties": {
+        "boundary_strategy": {
+          "type": "string",
+          "enum": [
+            "sequential_numeric",
+            "anchored_numeric",
+            "whole_block"
+          ]
+        },
+        "confidence_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dependency_edges": {
+          "type": "boolean"
+        },
+        "limitation_strategy": {
+          "type": "string",
+          "enum": [
+            "off",
+            "punctuation_rules",
+            "component_function_rules"
+          ]
+        },
+        "path_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "low_confidence_policy": {
+          "const": "grounded_block"
+        }
+      }
+    },
+    "description": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "section_strategy",
+        "confidence_threshold",
+        "window_chars",
+        "overlap_chars",
+        "low_confidence_policy"
+      ],
+      "properties": {
+        "section_strategy": {
+          "type": "string",
+          "enum": [
+            "headings_ordered",
+            "headings_relaxed",
+            "windows_only"
+          ]
+        },
+        "confidence_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "window_chars": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 20000
+        },
+        "overlap_chars": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        },
+        "low_confidence_policy": {
+          "const": "grounded_windows"
+        }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled_node_types",
+        "enabled_edge_types"
+      ],
+      "properties": {
+        "enabled_node_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/node_type"
+          }
+        },
+        "enabled_edge_types": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/edge_type"
+          }
+        }
+      }
+    },
+    "views": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/view"
+      }
+    },
+    "aggregation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "top_n"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "max",
+            "sum_top_n",
+            "rrf"
+          ]
+        },
+        "top_n": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_searchable_units_per_record",
+        "require_source_grounding",
+        "abstractive_summaries",
+        "query_specific_vocabulary"
+      ],
+      "properties": {
+        "max_searchable_units_per_record": {
+          "const": 4
+        },
+        "require_source_grounding": {
+          "const": true
+        },
+        "abstractive_summaries": {
+          "const": false
+        },
+        "query_specific_vocabulary": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "source_field": {
+      "type": "string",
+      "enum": [
+        "title_en",
+        "abstract_en",
+        "claims_text",
+        "description_en"
+      ]
+    },
+    "repetition": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "node_type": {
+      "type": "string",
+      "enum": [
+        "patent_record",
+        "metadata",
+        "title",
+        "abstract",
+        "claims",
+        "claim_group",
+        "claim",
+        "limitation",
+        "claim_block_unparsed",
+        "description",
+        "section",
+        "passage",
+        "description_block_unparsed"
+      ]
+    },
+    "edge_type": {
+      "type": "string",
+      "enum": [
+        "contains",
+        "depends_on",
+        "narrows",
+        "supported_by",
+        "derived_from"
+      ]
+    },
+    "view": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "view_id",
+        "view_type",
+        "source_nodes",
+        "path_serialization",
+        "max_chars"
+      ],
+      "properties": {
+        "view_id": {
+          "type": "string",
+          "pattern": "^view-[a-z0-9][a-z0-9-]*$"
+        },
+        "view_type": {
+          "type": "string",
+          "enum": [
+            "core",
+            "claims",
+            "mechanism",
+            "support",
+            "fallback"
+          ]
+        },
+        "source_nodes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/node_type"
+          }
+        },
+        "path_serialization": {
+          "type": "string",
+          "enum": [
+            "none",
+            "titles_only",
+            "fixed_labels"
+          ]
+        },
+        "max_chars": {
+          "type": "integer",
+          "minimum": 128,
+          "maximum": 200000
+        }
+      }
+    }
+  },
+  "$comment": "Semantic validation additionally requires overlap_chars < window_chars; unique view_id values; at least one containment-capable root node; enabled view source nodes to exist in enabled_node_types; exact repetition to be zero when allow_exact_repetition is false; and no dataset labels, query terms, executable content, or protected identifiers."
+}

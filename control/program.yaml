@@ -1,0 +1,41 @@
+project:
+  program_id: myis-research
+  display_name: myIS Research
+  protocol_version: "1.0"
+  research_version: "0.1"
+  active_layout: myis-research-v2
+  active_campaign: scope-autoindex-v1
+  git_branch: main
+
+authority:
+  control_plane: 01_Research
+  raw_store_env: MYIS_STORE
+  mlflow_role: validated_rebuildable_mirror
+  dashboard_role: read_only_projection
+  brain_role: curated_memory_projection
+  paper_role: generated_publication_projection
+
+owner_decisions:
+  standing_campaign_authorization: D1_START_CAMPAIGN
+  final_access: D2_OPEN_FINAL
+  external_release: D3_SUBMIT_RELEASE
+  micro_gates: false
+
+defaults:
+  campaign_budget_usd: 100
+  hard_stop_usd: 100
+  selection_rule: strictly_greater_reject_ties
+  split_seed: 42
+  train_queries: 250
+  selection_queries: 125
+  final_queries: 872
+  primary_metric: recall_at_100/out
+  cpu_first: true
+  model_provider_fallback: false
+
+protected_boundary:
+  agent_access: aggregate_hash_count_only
+  owner_local_aggregate_script: enabled
+  protected_membership_in_agent_workspace: false
+  qrels_in_projections: false
+  per_query_outcomes_in_projections: false

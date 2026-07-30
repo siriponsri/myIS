@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "spec_id": "spec-flat-v01",
+  "parent_spec_id": null,
+  "hypothesis_id": "hyp-i00-001",
+  "compiler_api_version": "1.0.0",
+  "fields": {
+    "core": [
+      "title_en",
+      "abstract_en",
+      "claims_text"
+    ],
+    "allow_exact_repetition": false,
+    "exact_repetition": {
+      "title_en": 0,
+      "abstract_en": 0,
+      "claims_text": 0,
+      "description_en": 0
+    }
+  },
+  "claims": {
+    "boundary_strategy": "sequential_numeric",
+    "confidence_threshold": 0.75,
+    "dependency_edges": true,
+    "limitation_strategy": "punctuation_rules",
+    "path_depth": 2,
+    "low_confidence_policy": "grounded_block"
+  },
+  "description": {
+    "section_strategy": "headings_relaxed",
+    "confidence_threshold": 0.7,
+    "window_chars": 4000,
+    "overlap_chars": 400,
+    "low_confidence_policy": "grounded_windows"
+  },
+  "graph": {
+    "enabled_node_types": [
+      "patent_record",
+      "title",
+      "abstract",
+      "claims",
+      "claim_group",
+      "claim",
+      "limitation",
+      "claim_block_unparsed",
+      "description",
+      "section",
+      "passage",
+      "description_block_unparsed"
+    ],
+    "enabled_edge_types": [
+      "contains",
+      "depends_on",
+      "narrows",
+      "derived_from"
+    ]
+  },
+  "views": [
+    {
+      "view_id": "view-core",
+      "view_type": "core",
+      "source_nodes": [
+        "title",
+        "abstract",
+        "claim"
+      ],
+      "path_serialization": "titles_only",
+      "max_chars": 24000
+    },
+    {
+      "view_id": "view-claims",
+      "view_type": "claims",
+      "source_nodes": [
+        "claim",
+        "limitation",
+        "claim_block_unparsed"
+      ],
+      "path_serialization": "fixed_labels",
+      "max_chars": 32000
+    },
+    {
+      "view_id": "view-support",
+      "view_type": "support",
+      "source_nodes": [
+        "section",
+        "passage",
+        "description_block_unparsed"
+      ],
+      "path_serialization": "titles_only",
+      "max_chars": 48000
+    }
+  ],
+  "aggregation": {
+    "strategy": "max",
+    "top_n": 1
+  },
+  "constraints": {
+    "max_searchable_units_per_record": 4,
+    "require_source_grounding": true,
+    "abstractive_summaries": false,
+    "query_specific_vocabulary": false
+  }
+}

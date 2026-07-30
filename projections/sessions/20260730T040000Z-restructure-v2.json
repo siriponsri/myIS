@@ -1,0 +1,23 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260730T040000Z-restructure-v2",
+  "run_id": "restructure-v2",
+  "goal_id": "SCOPE_RESTRUCTURE",
+  "started_at_utc": "2026-07-30T03:00:00Z",
+  "ended_at_utc": "2026-07-30T04:00:00Z",
+  "scope": "scope-autoindex-v1 repository-restructure",
+  "provenance": "agent-observed",
+  "owner_approvals": [{"gate": "D1_START_CAMPAIGN", "source": "user instruction", "scope": "active control plane restructure"}],
+  "repository": {"path": ".", "revision": "69810d311f066bc7c60be7e13cff6aa77bed264a", "dirty_paths": ["control", "campaigns", "src", "tests", "dashboard", "projections", "archive"]},
+  "events": [{"event_id": "EV0001", "sequence": 1, "type": "action", "provenance": "agent-observed", "summary": "Activated SCOPE control plane and archived legacy roots.", "evidence_refs": [], "quantitative_claims": []}],
+  "run_artifacts": {"prompt": null, "flow": null, "progress": null, "result": null, "metrics": null, "runtime": null, "per_query_metrics": null, "validation_report": null, "manifest": null, "mlflow_receipts": []},
+  "open_threads": [],
+  "integrity": {"all_refs_exist": true, "all_hashes_match": true, "contains_protected_payload": false, "contains_secrets": false},
+  "execution_snapshot": {"phase_id": "V0", "task_id": "V0.1", "gate_id": "D1_START_CAMPAIGN", "gate_status": "approved"},
+  "owner_brief_th": "โครงสร้างใหม่เปิดใช้งานแล้ว โดย Research เป็นแหล่งข้อมูลหลัก Dashboard, MLflow, Obsidian และ Paper อ่านจาก projection เดียวกัน ยังไม่มีผลวิทยาศาสตร์หรือการยืนยันชุด final",
+  "owner_actions": [{"action_id": "review-d1", "priority": "required", "action_th": "ตรวจยืนยัน D1 standing campaign authorization", "reason_th": "ใช้เป็นสิทธิ์เริ่ม campaign และเตรียมงานภายใต้งบที่กำหนด", "blocking_gate": "D1_START_CAMPAIGN"}],
+  "gate_request": {"gate_id": "D1_START_CAMPAIGN", "state": "draft", "summary_th": "ขอให้ยืนยันบันทึก D1 standing authorization สำหรับการเตรียมระบบ", "blocking_reason_th": null, "evidence_refs": []},
+  "next_resources": {"status": "required", "items": [{"resource_id": "owner-local-aggregate", "description_th": "สคริปต์ Owner-local สำหรับ aggregate/count/hash", "purpose_th": "เตรียม receipt โดยไม่เปิดข้อมูล protected"}]},
+  "closeout": {"checks": [{"check_id": "focused-tests", "status": "PASS", "summary": "16 active tests passed"}, {"check_id": "layout-v2", "status": "PASS", "summary": "No legacy active roots"}, {"check_id": "read-model", "status": "PASS", "summary": "Canonical projection built"}], "changed_files": ["control", "campaigns", "src", "tests", "dashboard", "projections", "archive"], "untouched_protected_surfaces": ["qrels", "query-ids", "split-membership", "per-query-outcomes", "paid-providers", "gpu-jobs"]},
+  "corrections": []
+}

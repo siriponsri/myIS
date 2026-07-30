@@ -1,0 +1,21 @@
+layout_id: myis-research-v2
+repository_role: active_control_plane
+branch: main
+active_campaign_root: campaigns/scope-autoindex-v1
+legacy_roots:
+  - archive/legacy-cs
+  - archive/old-layout
+  - archive/inbox
+index_names:
+  control: myis-research-control-v2
+  evidence: myis-research-evidence-v1
+  campaign: myis-campaign-scope-autoindex-v1
+  read_model: myis-research-readmodel-v1
+  brain: myis-brain-v2
+  paper: myis-paper-isai-nlp-2026-v1
+  mlflow_experiment: myis-research-campaign-scope-autoindex-v1
+  artifact_store: myis-store-scope-autoindex-v1
+compatibility:
+  root_plan_pointer: PLAN.md
+  old_active_paths_allowed: false
+  archive_paths_read_only: true

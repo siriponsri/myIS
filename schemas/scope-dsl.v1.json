@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:scope-dsl:v1",
+  "title": "Grounded SCOPE declarative specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "spec_id", "parent_spec_id", "hypothesis_id", "compiler_api_version", "fields", "claims", "description", "graph", "views", "aggregation", "constraints"],
+  "properties": {
+    "schema_version": {"const": "myis.scope-dsl.v1"},
+    "spec_id": {"type": "string", "pattern": "^spec-[a-z0-9][a-z0-9-]*-v[0-9]{2}$"},
+    "parent_spec_id": {"type": ["string", "null"]},
+    "hypothesis_id": {"type": "string", "pattern": "^hyp-i[0-9]{2}-[0-9]{3}$"},
+    "compiler_api_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "fields": {"type": "object"},
+    "claims": {"type": "object"},
+    "description": {"type": "object"},
+    "graph": {"type": "object"},
+    "views": {"type": "array", "maxItems": 4},
+    "aggregation": {"type": "object"},
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_searchable_units_per_record", "require_source_grounding", "abstractive_summaries", "query_specific_vocabulary"],
+      "properties": {
+        "max_searchable_units_per_record": {"const": 4},
+        "require_source_grounding": {"const": true},
+        "abstractive_summaries": {"const": false},
+        "query_specific_vocabulary": {"const": false}
+      }
+    }
+  }
+}

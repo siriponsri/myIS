@@ -41,3 +41,7 @@ __pycache__/
 .vscode/
 Thumbs.db
 Desktop.ini
+
+# Generated migration inventory is local audit input; the compact migration map is tracked.
+archive/migration-manifests/*.json
+projections/dashboard-private/

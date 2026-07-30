@@ -1,0 +1,16 @@
+schema_version: myis.migration-map.v2
+status: cutover_complete
+active_root: 01_Research
+single_source_of_truth: control/program.yaml
+rules:
+  keep: immutable evidence, approvals, manifests, session capsules, provenance
+  merge: duplicate status, dashboard, Obsidian and publication facts into read-model projections
+  rewrite: plans, gates, MLflow tags, report generation and dashboard state to SCOPE/D1-D3
+  archive: legacy C/S governance, old layout, Paper D and inbox input
+  remove: only exact generated/cache paths with zero references and no unique evidence
+  owner_decisions: [D1_START_CAMPAIGN, D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  micro_gates: false
+verification:
+  layout_validator: scripts/validate_layout_v2.py
+  migration_inventory: archive/migration-manifests/migration-manifest.v1.json
+  cleanup_manifest: control/cleanup/cleanup-manifest.v1.json

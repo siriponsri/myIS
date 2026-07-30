@@ -1,0 +1,654 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/myis/schemas/run-manifest.schema.json",
+  "title": "SCOPE Run Manifest",
+  "description": "Immutable reconstruction record for one smoke, train, selection, transfer, final, or report run.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "experiment_id",
+    "status",
+    "stage",
+    "started_at",
+    "finished_at",
+    "protocol",
+    "source",
+    "data",
+    "method",
+    "resources",
+    "metrics",
+    "artifacts",
+    "access_events"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}T[0-9]{6}Z__[a-z]+__rep-[a-z0-9-]+-v[0-9]{2}(?:-frozen)?__ret-[a-z0-9-]+-v[0-9]{2}__s[0-9]+__r[0-9]{2}$"
+    },
+    "experiment_id": {
+      "type": "string",
+      "pattern": "^exp-[0-9]{8}-[a-z0-9][a-z0-9-]*$"
+    },
+    "parent_run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "freeze_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^freeze-[0-9]{8}-[a-f0-9]{8}$"
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "failed",
+        "invalid",
+        "superseded"
+      ]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "smoke",
+        "train",
+        "selection",
+        "transfer",
+        "final",
+        "report"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "protocol": {
+      "$ref": "#/$defs/protocol"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "data": {
+      "$ref": "#/$defs/data"
+    },
+    "method": {
+      "$ref": "#/$defs/method"
+    },
+    "resources": {
+      "$ref": "#/$defs/resources"
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metric"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "access_events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/access_event"
+      }
+    },
+    "audit": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/audit"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "failure": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/failure"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol_id",
+        "split_id",
+        "split_role",
+        "query_view",
+        "corpus_view",
+        "evaluation_unit",
+        "primary_metric"
+      ],
+      "properties": {
+        "protocol_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "split_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "split_role": {
+          "type": "string",
+          "enum": [
+            "fixture",
+            "train",
+            "selection",
+            "final"
+          ]
+        },
+        "query_view": {
+          "type": "string",
+          "enum": [
+            "ta",
+            "tac"
+          ]
+        },
+        "corpus_view": {
+          "type": "string",
+          "enum": [
+            "ta",
+            "tac",
+            "full"
+          ]
+        },
+        "evaluation_unit": {
+          "const": "family"
+        },
+        "primary_metric": {
+          "const": "recall_at_100/out"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "git_commit",
+        "source_tree_sha256",
+        "dirty",
+        "config_sha256",
+        "representation_schema_sha256",
+        "run_schema_sha256",
+        "evaluator_sha256",
+        "dependency_lock_sha256"
+      ],
+      "properties": {
+        "git_commit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "source_tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dirty": {
+          "type": "boolean"
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "representation_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "evaluator_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dependency_lock_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "data_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "dataset_revision",
+        "snapshot_id",
+        "files",
+        "split_manifest_sha256",
+        "qrels_manifest_id"
+      ],
+      "properties": {
+        "dataset_id": {
+          "const": "dapfam"
+        },
+        "dataset_revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/data_file"
+          }
+        },
+        "split_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "qrels_manifest_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "agent_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "model",
+        "reasoning_effort",
+        "prompt_sha256"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "analysis",
+            "structure",
+            "auditor"
+          ]
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasoning_effort": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        "prompt_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm_id",
+        "representation_id",
+        "representation_spec_sha256",
+        "representation_compiler_sha256",
+        "retriever_id",
+        "retriever_config_sha256",
+        "policy_id",
+        "policy_sha256",
+        "family_aggregation",
+        "seed",
+        "agents"
+      ],
+      "properties": {
+        "arm_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representation_spec_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "representation_compiler_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "retriever_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retriever_config_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "family_aggregation": {
+          "type": "string",
+          "enum": [
+            "max",
+            "sum_top_n",
+            "rrf"
+          ]
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/agent_profile"
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "budget_currency",
+        "budget_approved",
+        "cost_estimated",
+        "cost_actual",
+        "wall_time_seconds",
+        "compute_profile",
+        "searchable_units_total",
+        "index_bytes"
+      ],
+      "properties": {
+        "budget_currency": {
+          "const": "USD"
+        },
+        "budget_approved": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost_estimated": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost_actual": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "wall_time_seconds": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "compute_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "searchable_units_total": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "index_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "metric",
+        "scope",
+        "k",
+        "value",
+        "n_queries"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(recall|ndcg)_at_[0-9]+/(all|in|out)$"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "recall",
+            "ndcg"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "all",
+            "in",
+            "out"
+          ]
+        },
+        "k": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "n_queries": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ci_low": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "ci_high": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "uri",
+        "sha256",
+        "media_type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "access_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "at",
+        "split_role",
+        "event",
+        "outcome"
+      ],
+      "properties": {
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "split_role": {
+          "type": "string",
+          "enum": [
+            "fixture",
+            "train",
+            "selection",
+            "final"
+          ]
+        },
+        "event": {
+          "type": "string",
+          "enum": [
+            "metadata_read",
+            "queries_read",
+            "qrels_read",
+            "evaluation_run"
+          ]
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "allowed",
+            "denied",
+            "contaminated"
+          ]
+        },
+        "decision_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "verdict",
+        "report_sha256"
+      ],
+      "properties": {
+        "packet_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verdict": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "REVISE",
+            "REJECT"
+          ]
+        },
+        "report_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category",
+        "message"
+      ],
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "data",
+            "schema",
+            "leakage",
+            "candidate_boundary",
+            "retrieval",
+            "evaluation",
+            "resource",
+            "external",
+            "unknown"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "$comment": "Semantic validator requirements: metric name agrees with metric/scope/k; complete runs include configured metrics; protected access has a bound decision; final runs have a freeze ID; failures preserve evidence; artifact URIs contain no secrets; actual cost stays within approval; measured model profiles match frozen configuration."
+}

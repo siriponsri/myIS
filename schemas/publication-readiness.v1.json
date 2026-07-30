@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:publication-readiness:v1",
+  "title": "myIS publication readiness projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "checks"],
+  "properties": {
+    "schema_version": {"const": "myis.publication-readiness.v1"},
+    "status": {"enum": ["ready", "blocked", "unknown"]},
+    "checks": {"type": "array"}
+  }
+}

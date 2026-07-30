@@ -1,0 +1,363 @@
+schema_version: "1.1.0"
+
+project:
+  id: myis-scope
+  title: "SCOPE: Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
+  status: migration_proposed
+  historical_state:
+    F0: closed
+    G0: approved
+    F1: waiting_gate
+    G1: pending
+  note: >-
+    Historical state is descriptive only. Migration must preserve the original
+    ledger and must not retroactively change an approval.
+
+campaign:
+  id: exp-20260730-structure-pilot
+  measured_execution_authorized: false
+  primary_phase: structureopt
+  stop_after_three_iterations_without_incumbent: true
+
+submission:
+  venue_id: isai-nlp-2026
+  venue_url: "https://isai-nlp2026.aiat.or.th/"
+  submission_url: "https://isai-nlp2026.aiat.or.th/submission"
+  track: track_1_natural_language_processing
+  official_deadline_date: "2026-08-15"
+  official_deadline_timezone: unspecified_on_inspected_page
+  internal_deadline: "2026-08-14T18:00:00+07:00"
+  format: ieee_conference_manuscript
+  file_type: pdf
+  page_limit: 6
+  page_limit_includes:
+    - figures
+    - tables
+    - appendices
+    - references
+  review: double_anonymous
+  concurrent_submission_allowed: false
+  minimum_keywords: 3
+  in_person_presentation_required_if_accepted: true
+  release_requires_d3: true
+
+dataset:
+  id: dapfam
+  source: "https://huggingface.co/datasets/datalyes/DAPFAM_patent"
+  revision: null
+  license: CC-BY-NC-SA-4.0
+  language: en
+  identity_field: relevant_id
+  query_identity_field: query_id
+  source_field_aliases:
+    earliest_claim_jusrisdiction: earliest_claim_jurisdiction
+  query_file:
+    name: queries.parquet
+    sha256: b5ad91a650349a0096911fadcb7bc35a0399eb12d1470fb2601d73af5fc2bcbe
+  manifest_policy:
+    discover_revision_and_hashes: true
+    require_complete_manifest_before_baseline: true
+    owner_must_supply_hashes_manually: false
+
+external_validation:
+  fine_patents:
+    required_for_isai_core: true
+    tuning: none_after_scope_freeze
+    source: "https://github.com/boschresearch/fine-patents"
+    paper: "https://arxiv.org/abs/2605.02392"
+    data_license: CC-BY-4.0
+    code_license: MIT
+    native_answer_unit: prior_art_passage
+    evaluator: official
+  patenteb:
+    required_for_isai_core: false
+    status: deadline_safe_stretch
+    tuning: none
+    source: "https://github.com/iliass-y/patenteb"
+    paper: "https://arxiv.org/abs/2510.22264"
+    data_license: CC-BY-NC-SA-4.0
+    tasks:
+      - retrieval_OUT
+      - title2full
+      - problem2full
+      - effect2full
+
+split:
+  id: s42-tr250-se125-fi872-v1
+  seed: 42
+  train:
+    queries: 250
+    access: optimizer_and_evaluator
+  selection:
+    queries: 125
+    access: evaluator_once_after_shortlist_freeze
+  final:
+    queries: 872
+    access: evaluator_once_after_full_freeze_and_d2
+  regenerate: false
+
+protocol:
+  id: dapfam-family-tac-to-full-v1
+  evaluation_unit: family
+  query_view: tac
+  corpus_view: full
+  top_k: 100
+  scopes:
+    - all
+    - in
+    - out
+  in_out_definition: ipc_three_character_overlap
+  candidate_features_may_use_in_out_labels: false
+
+objectives:
+  search_primary:
+    metric: recall
+    k: 100
+    scope: out
+    direction: maximize
+    rationale: first_stage_candidate_exposure
+  benchmark_primary:
+    metric: ndcg
+    k: 100
+    scopes:
+      - all
+      - in
+      - out
+    selection_role: confirmatory_not_optimizer_feedback
+  companions:
+    - {metric: recall, k: 100, scope: all}
+    - {metric: recall, k: 100, scope: in}
+    - {metric: ndcg, k: 100, scope: out}
+    - {metric: ndcg, k: 100, scope: all}
+    - {metric: ndcg, k: 100, scope: in}
+  eligibility:
+    max_absolute_all_recall_drop: 0.01
+    provenance_rate_required: 1.0
+    max_searchable_units_per_family: 4
+    deterministic_rerun_required: true
+  tie_break:
+    search_primary_difference_tolerance: 0.005
+    order:
+      - fewer_searchable_units
+      - lower_query_p95_latency
+      - simpler_specification
+
+representation:
+  kind: typed_evidence_graph
+  search_lineage: patent_native_autoindex
+  candidate_artifact: scope_dsl_json
+  compiler_policy: frozen_deterministic
+  arbitrary_candidate_code_allowed: false
+  identity_level: family
+  publication_id_available: false
+  required_source_fields:
+    - title_en
+    - abstract_en
+    - claims_text
+    - description_en
+  node_types:
+    - patent_record
+    - metadata
+    - title
+    - abstract
+    - claims
+    - claim_group
+    - claim
+    - limitation
+    - claim_block_unparsed
+    - description
+    - section
+    - passage
+    - description_block_unparsed
+  edge_types:
+    - contains
+    - depends_on
+    - narrows
+    - supported_by
+    - derived_from
+  searchable_view_types:
+    - core
+    - claims
+    - mechanism
+    - support
+    - fallback
+  max_searchable_units_per_family: 4
+  primary_text_origins:
+    - exact_source
+    - source_concat
+    - extractive_group
+  abstractive_summaries_enabled: false
+  low_confidence_policy: grounded_fallback
+
+baseline:
+  arm_id: R0
+  representation_id: rep-flat-v01
+  retriever_id: ret-bm25-v01
+  policy_id: pol-fixed-v01
+  family_aggregation: max
+  must_reproduce_before_search: true
+  deterministic_window_control:
+    arm_id: R0-W
+    required: true
+    candidate_token_lengths:
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+      - 2048
+      - 4096
+      - 8192
+    select_on: train
+    aggregation: max
+    same_bm25_config: true
+    subject_to_four_unit_candidate_cap: false
+    efficiency_comparator: true
+    report_search_budget: true
+
+structureopt:
+  arm_id: R1
+  method: patent_native_autoindex
+  candidate_artifact: scope_dsl_json
+  retriever_frozen_to: ret-bm25-v01
+  policy_frozen_to: pol-fixed-v01
+  pilot:
+    iterations: 3
+    candidates_per_iteration: 3
+  expansion:
+    enabled_only_after_pilot_leverage: true
+    maximum_iterations: 5
+    maximum_candidates_per_iteration: 4
+  controls:
+    equal_budget_random_search: required
+    enumerated_or_grid_subset: required_if_feasible
+    same_candidate_evaluation_budget: true
+  auditor_invocation:
+    - preflight
+    - new_eligible_incumbent
+    - selection_freeze
+    - final_freeze
+  optimizable:
+    - claim_boundary_strategy
+    - parser_confidence_threshold
+    - enabled_node_types
+    - enabled_searchable_views
+    - claim_path_depth
+    - limitation_segmentation
+    - description_heading_strategy
+    - window_size
+    - window_overlap
+    - path_serialization
+    - exact_field_repetition
+    - max_text_per_view
+    - family_aggregation_allowlist_choice
+  protected:
+    - source_text
+    - family_mapping
+    - split
+    - qrels
+    - in_out_labels
+    - evaluator
+    - metric_definitions
+    - cost_accounting
+    - provenance_fields
+    - max_searchable_units_per_family
+
+agents:
+  analysis:
+    model: gpt-5.6-sol
+    reasoning_effort: medium
+    access: train_read_only
+  structure:
+    model: gpt-5.6-sol
+    reasoning_effort: medium
+    access: candidate_spec_json_write_only
+  auditor:
+    model: gpt-5.6-sol
+    reasoning_effort: high
+    access: blinded_packet_read_only
+  measured_model_substitution: forbidden
+  smoke_test_substitution:
+    allowed: true
+    must_be_labeled: true
+
+skillopt:
+  status: conditional_extension
+  include_in_isai_core: false
+  admission_requires:
+    - frozen_held_out_structure_leverage
+    - ranking_headroom
+    - fixed_representation_and_retriever
+    - equal_budget_simple_search_control
+    - submission_core_safe
+  joint_structure_policy_optimization: deferred
+
+budget:
+  currency: USD
+  preferred_total: 100
+  hard_ceiling_without_new_d1: 200
+  cpu_first: true
+  gpu_allowed_for:
+    - dense_transfer_after_structure_leverage
+    - hybrid_transfer_after_structure_leverage
+  automatic_stop_at_cap: true
+
+owner_decisions:
+  D1:
+    name: START_CAMPAIGN
+    status: pending
+  D2:
+    name: OPEN_FINAL
+    status: pending
+  D3:
+    name: RELEASE
+    status: pending
+
+storage:
+  external_root_env: MYIS_STORE
+  allow_repository_as_external_root: false
+  git_contains:
+    - source
+    - tests
+    - configs
+    - schemas
+    - small_fixtures
+    - compact_manifests
+    - aggregate_reports
+    - publication_assets
+  external_store_contains:
+    - datasets
+    - qrels
+    - indexes
+    - models
+    - raw_rankings
+    - per_query_artifacts
+    - candidate_workspaces
+    - mlflow_backend
+    - mlflow_artifacts
+
+observability:
+  structured_logs: jsonl
+  canonical_run_registry: mlflow
+  scope_dsl_schema: schemas/scope-dsl.schema.json
+  run_manifest_schema: schemas/run-manifest.schema.json
+  representation_schema: schemas/patent-representation.schema.json
+  dashboard:
+    retained: true
+    read_only: true
+    bind_host: 127.0.0.1
+  obsidian_reports:
+    retained: true
+    generated_from_canonical_records: true
+  presentations:
+    retained: true
+    generated_from_canonical_records: true
+
+automatic_stop_conditions:
+  - protected_split_leakage
+  - evaluator_or_qrel_mutation
+  - provenance_failure
+  - ranking_nondeterminism
+  - candidate_boundary_violation
+  - measured_model_substitution
+  - budget_cap_reached
