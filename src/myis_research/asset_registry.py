@@ -17,7 +17,7 @@ REGISTRY_RELATIVE_PATH = Path("control/assets/reusable_assets.yaml")
 MAP_RELATIVE_PATH = Path("control/assets/REUSABLE_ASSET_MAP.md")
 PLAN_RELATIVE_PATH = Path("PLAN.md")
 LEGACY_PLAN_RELATIVE_PATH = Path("archive/legacy-cs/docs/PLAN.v1.md")
-SCHEMA_VERSION = "myis.reusable-assets.v1"
+SCHEMA_VERSION = "myis.reusable-assets.v2"
 DISPOSITIONS = frozenset({"reuse", "adapt", "reference_only", "blocked", "duplicate"})
 COPY_MODES = frozenset({"pointer", "preport", "fixture", "none"})
 VALIDATION_MODES = frozenset({"quick", "full", "reference_only"})
@@ -108,8 +108,11 @@ def load_registry(root: Path | None = None, registry_path: Path | None = None) -
 
 
 def validate_registry(payload: dict[str, Any], root: Path) -> None:
-    if payload.get("schema_version") != SCHEMA_VERSION:
-        raise AssetRegistryError(f"schema_version must be {SCHEMA_VERSION}")
+    if payload.get("schema_version") == "myis.reusable-assets.v2":
+        _validate_registry_v2(payload, root)
+        return
+    if payload.get("schema_version") != "myis.reusable-assets.v1":
+        raise AssetRegistryError("unsupported reusable asset schema")
     repositories = payload.get("source_repositories")
     if not isinstance(repositories, dict) or not repositories:
         raise AssetRegistryError("source_repositories must be a non-empty mapping")
@@ -202,6 +205,35 @@ def validate_registry(payload: dict[str, Any], root: Path) -> None:
         gap_ids.add(gap["gap_id"])
 
 
+def _validate_registry_v2(payload: dict[str, Any], root: Path) -> None:
+    repositories = payload.get("source_repositories")
+    if not isinstance(repositories, dict) or "app" not in repositories:
+        raise AssetRegistryError("v2 source_repositories must include App pointer")
+    app = repositories["app"]
+    if not isinstance(app, dict) or not isinstance(app.get("root_hint"), str) or app.get("disposition") != "pointer_only":
+        raise AssetRegistryError("v2 App source must be a pointer-only repository")
+    assets = payload.get("assets")
+    if not isinstance(assets, list) or not assets:
+        raise AssetRegistryError("v2 assets must be a non-empty list")
+    seen: set[str] = set()
+    for asset in assets:
+        if not isinstance(asset, dict):
+            raise AssetRegistryError("v2 asset must be an object")
+        required = {"asset_id", "title", "kind", "disposition", "copy_mode", "allowed_phases", "protected_data_level"}
+        if not required <= set(asset):
+            raise AssetRegistryError(f"v2 asset is missing fields: {sorted(required - set(asset))}")
+        asset_id = str(asset["asset_id"])
+        if not re.fullmatch(r"[A-Z0-9][A-Z0-9-]+", asset_id) or asset_id in seen:
+            raise AssetRegistryError(f"invalid or duplicate asset_id: {asset_id}")
+        seen.add(asset_id)
+        if asset["disposition"] not in DISPOSITIONS or asset["copy_mode"] not in COPY_MODES:
+            raise AssetRegistryError(f"{asset_id} has invalid disposition or copy_mode")
+        if not isinstance(asset["allowed_phases"], list) or any(not re.fullmatch(r"P[0-4]_[A-Z_]+", str(item)) for item in asset["allowed_phases"]):
+            raise AssetRegistryError(f"{asset_id} has invalid phase scope")
+        if not isinstance(asset["protected_data_level"], str):
+            raise AssetRegistryError(f"{asset_id} has invalid protected_data_level")
+
+
 def _validate_source_entry(asset_id: str, entry: Any) -> None:
     if not isinstance(entry, dict) or not isinstance(entry.get("path"), str):
         raise AssetRegistryError(f"{asset_id} source path entries must be mappings")
@@ -251,17 +283,30 @@ def query_assets(
 ) -> tuple[dict[str, Any], ...]:
     if disposition is not None and disposition not in DISPOSITIONS:
         raise AssetRegistryError(f"unknown disposition: {disposition}")
-    selected = [
-        asset
-        for asset in registry["assets"]
-        if (asset_id is None or asset["asset_id"] == asset_id)
-        and (task_id is None or task_id in asset["task_ids"])
-        and (disposition is None or asset["disposition"] == disposition)
-    ]
+    selected = []
+    for asset in registry["assets"]:
+        if asset_id is not None and asset["asset_id"] != asset_id:
+            continue
+        if task_id is not None:
+            if "task_ids" in asset:
+                matches_task = task_id in asset["task_ids"]
+            else:
+                matches_task = str(task_id).split(".", 1)[0] in {str(item).split("_", 1)[0] for item in asset.get("allowed_phases", [])}
+            if not matches_task:
+                continue
+        if disposition is not None and asset["disposition"] != disposition:
+            continue
+        selected.append(asset)
     return tuple(sorted(selected, key=lambda item: item["asset_id"]))
 
 
 def render_asset_map(registry: dict[str, Any], root: Path) -> str:
+    if registry.get("schema_version") == "myis.reusable-assets.v2":
+        lines = ["# Reusable Asset Map", "", "| Asset | Kind | Disposition | Phases | Boundary |", "|---|---|---|---|---|"]
+        for asset in query_assets(registry):
+            boundary = str(asset.get("protected_data_level", ""))
+            lines.append(f"| `{asset['asset_id']}` | {asset['kind']} | `{asset['disposition']}` | {', '.join(asset.get('allowed_phases', []))} | {boundary} |")
+        return "\n".join(lines) + "\n"
     tasks = parse_plan_tasks(root / LEGACY_PLAN_RELATIVE_PATH)
     lines = [
         "# Reusable Asset Map",
@@ -319,6 +364,11 @@ def validate_sources(
 ) -> ValidationReport:
     if mode not in {"quick", "full"}:
         raise AssetRegistryError("validation mode must be quick or full")
+    if registry.get("schema_version") == "myis.reusable-assets.v2":
+        selected = tuple(query_assets(registry, asset_id=None, disposition=None))
+        if asset_ids:
+            selected = tuple(item for item in selected if item["asset_id"] in set(asset_ids))
+        return ValidationReport(mode, tuple(item["asset_id"] for item in selected), ("v2 pointer-only registry: protected source bytes remain in sibling App/Owner store",), ())
     selected_ids = set(asset_ids or ())
     assets = tuple(
         asset for asset in query_assets(registry)

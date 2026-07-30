@@ -1,0 +1,28 @@
+schema_version: myis.execution-envelope.v1
+envelope_id: envelope-p0-p1-cpu-20260730
+status: active
+source_instruction:
+  path: archive/inbox/source/MYIS_CPU_P0_P1_CLOSURE_REVIEW.md
+  sha256: 211a0546632cdca3cb6e0011da107fc076f53173201946b7b37cd3993eda122a
+authority:
+  standing_decision: D1_START_CAMPAIGN
+  active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  standing_authorization: repository_local_reversible_cpu_only
+scope:
+  allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE]
+  allowed_arms: [R0, R0-W, R1-fixture]
+  train_selection_only: true
+  final_split_open: false
+resources:
+  gpu: false
+  paid_api: false
+  network_model_download: false
+  hard_stop_usd: 0
+protected_boundary:
+  output_mode: aggregate_hash_count_only
+  qrels: forbidden
+  membership: forbidden
+  query_ids: forbidden
+  per_query_outcomes: forbidden
+  raw_provider_payloads: forbidden
+prohibited_actions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE, gpu_execution, paid_api, external_release]

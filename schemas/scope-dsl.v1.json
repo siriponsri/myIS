@@ -11,21 +11,60 @@
     "parent_spec_id": {"type": ["string", "null"]},
     "hypothesis_id": {"type": "string", "pattern": "^hyp-i[0-9]{2}-[0-9]{3}$"},
     "compiler_api_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
-    "fields": {"type": "object"},
-    "claims": {"type": "object"},
-    "description": {"type": "object"},
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field_id", "source", "role"],
+        "properties": {
+          "field_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+          "source": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+          "role": {"enum": ["identity", "text", "span", "metadata"]}
+        }
+      }
+    },
+    "claims": {"type": "object", "additionalProperties": {"type": "string"}},
+    "description": {"type": "object", "additionalProperties": {"type": "string"}},
     "graph": {"type": "object"},
-    "views": {"type": "array", "maxItems": 4},
+    "views": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["view_id", "kind", "source_fields", "family_field", "publication_field", "span_scheme", "compiler_version", "normalization_version"],
+        "properties": {
+          "view_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+          "kind": {"enum": ["document", "section", "claim", "passage", "generated"]},
+          "source_fields": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}},
+          "family_field": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+          "publication_field": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+          "span_scheme": {"type": "string", "minLength": 1},
+          "compiler_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+          "normalization_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+          "searchable": {"type": "boolean", "default": true},
+          "aggregation": {"enum": ["family_maxp", "family_first", "official", "none"]},
+          "deterministic_order": {"enum": ["source", "lexicographic", "explicit"]},
+          "source_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "output_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
     "aggregation": {"type": "object"},
     "constraints": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max_searchable_units_per_record", "require_source_grounding", "abstractive_summaries", "query_specific_vocabulary"],
+      "required": ["require_source_grounding", "abstractive_summaries", "query_specific_vocabulary"],
       "properties": {
-        "max_searchable_units_per_record": {"const": 4},
         "require_source_grounding": {"const": true},
         "abstractive_summaries": {"const": false},
-        "query_specific_vocabulary": {"const": false}
+        "query_specific_vocabulary": {"const": false},
+        "adapter_limits": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        }
       }
     }
   }

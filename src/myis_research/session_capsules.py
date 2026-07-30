@@ -450,7 +450,11 @@ def _validate_v2_closeout(payload: Mapping[str, Any], root: Path, revision: str)
 
 
 def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str) -> None:
-    if not _TASK_RE.fullmatch(task_id) or phase_id != task_id.split(".", 1)[0] or not _GATE_RE.fullmatch(gate_id):
+    phase_aliases = {f"P{index}": name for index, name in enumerate((
+        "P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"
+    ))}
+    task_prefix = task_id.split(".", 1)[0] if _TASK_RE.fullmatch(task_id) else ""
+    if not _TASK_RE.fullmatch(task_id) or phase_id != phase_aliases.get(task_prefix, task_prefix) or not _GATE_RE.fullmatch(gate_id):
         raise SessionCapsuleValidationError("execution_snapshot phase, task, or gate is invalid")
     if (phase_id, task_id, gate_id) == ("V0", "V0.1", "D1_START_CAMPAIGN"):
         return
@@ -463,7 +467,7 @@ def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str
             continue
         gate_match = _PLAN_GATE_RE.match(line)
         if current_task and gate_match:
-            bindings[current_task] = (current_task.split(".", 1)[0], gate_match.group(1))
+            bindings[current_task] = (phase_aliases.get(current_task.split(".", 1)[0], current_task.split(".", 1)[0]), gate_match.group(1))
             current_task = None
     if bindings.get(task_id) != (phase_id, gate_id):
         raise SessionCapsuleValidationError("execution_snapshot does not match PLAN.md")

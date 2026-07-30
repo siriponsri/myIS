@@ -1,0 +1,36 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "20260730T160500Z-plan-closure",
+  "artifact": "P0/P1 implementation and projection package",
+  "artifact_path": ".",
+  "artifact_sha256": null,
+  "review_status": "not_assessable",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": ["No measured scientific run manifest exists; this review cannot grade empirical claims."]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "The control-plane and projection package is structurally ready for a protected CPU baseline, but scientific rigor is not assessable until a validated run bundle exists.",
+    "strengths": ["Single source-of-truth projection contract", "D1 standing authorization with D2/D3-only writable decisions", "Protected aggregate-only boundary", "Deterministic synthetic validation"],
+    "weaknesses": ["No measured baseline, paired comparison, or publication evidence is present yet"]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {"score": 3, "strengths": ["Primary metric and split roles are declared"], "weaknesses": ["No observed evidence"], "suggestions": ["Re-review after P1 aggregate receipt"]},
+    "D2_falsifiability": {"score": 4, "strengths": ["Strict improvement and tie rejection are encoded"], "weaknesses": ["Observed effect is not yet available"], "suggestions": ["Bind exact n and paired statistics in the first measured receipt"]},
+    "D3_scope_calibration": {"score": 4, "strengths": ["P0-P4 and protected final boundary are explicit"], "weaknesses": ["No final evaluation has occurred"], "suggestions": ["Keep final claims blocked until D2"]},
+    "D4_argument_coherence": {"score": 4, "strengths": ["AutoIndex/SCOPE lineage and conditional SkillOpt are explicit"], "weaknesses": ["Empirical chain is pending"], "suggestions": ["Link each result note to a manifest field"]},
+    "D5_exploration_integrity": {"score": 4, "strengths": ["Legacy and failed paths are archived and searchable"], "weaknesses": ["No measured candidate history"], "suggestions": ["Record rejected candidates and stopping reasons during P2"]},
+    "D6_methodological_rigor": {"score": 3, "strengths": ["CPU baseline arms, lineage hashes, cost, and reproducibility contracts exist"], "weaknesses": ["No repeated measured runs or confirmation statistics"], "suggestions": ["Run protocol-matched P1 before any method conclusion"]}
+  },
+  "findings": [
+    {"finding_id": "F001", "dimension": "D6_methodological_rigor", "severity": "major", "target_artifact": "campaigns/scope-autoindex-v1/manifests", "target_entity": "measured-run-bundle", "evidence_locator": "directory is empty", "observation": "The package contains no measured scientific run manifest.", "reasoning": "No empirical claim can be accepted or compared until a protected owner-local run produces a validated aggregate receipt.", "suggestion": "Execute P1 through scripts/owner_local_runner.py only after the Owner supplies the protected bundle."}
+  ],
+  "questions_for_owner": ["When ready, provide the protected P1 bundle and confirm the local resource boundary; do not open D2 from fixture evidence."],
+  "read_order": ["AGENTS.md", "PLAN.md", "control/execution-envelope.yaml", "control/campaigns/scope-autoindex-v1.yaml", "control/source-of-truth.yaml", "projections/read-model/read-model.v1.json", "HANDOFF.md"]
+}

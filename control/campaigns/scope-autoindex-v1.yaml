@@ -3,7 +3,8 @@ campaign:
   title: Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval
   status: preparation
   venue_target: isai-nlp-2026
-  standing_decision: D1_START_CAMPAIGN
+  standing_authorization: P1_CPU_EXECUTION_ENVELOPE
+  active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
 
 protocol:
   dataset_id: dapfam
@@ -30,7 +31,51 @@ arms:
     method: patent_native_autoindex_scope
     role: primary_method
     compiler_frozen: true
-    max_searchable_units_per_family: 4
+    max_searchable_units_per_family: adapter_specific_dapfam_limit
+
+phases:
+  - id: P0_FOUNDATION
+    status: in_progress
+    tasks:
+      - id: P0.1
+        title: Deterministic kernel and schema contracts
+        status: complete
+      - id: P0.2
+        title: Integrity preflight and protected boundary
+        status: complete
+      - id: P0.3
+        title: Projection contracts and migration closure
+        status: in_progress
+  - id: P1_CPU_BASELINE
+    status: executable_pending_protected_bundle
+    tasks:
+      - id: P1.1
+        title: R0 flat BM25 fixture lane
+        status: executable
+      - id: P1.2
+        title: R0-W window maxP fixture lane
+        status: executable
+      - id: P1.3
+        title: Protected owner-local CPU handoff
+        status: waiting_external_data
+  - id: P2_SCOPE_DEVELOPMENT
+    status: blocked_until_p1
+    tasks:
+      - id: P2.1
+        title: R1 SCOPE/AutoIndex development
+        status: planned
+  - id: P3_FINAL
+    status: locked_until_D2
+    tasks:
+      - id: P3.1
+        title: Frozen final evaluation
+        status: locked_owner_D2
+  - id: P4_PUBLICATION
+    status: locked_until_D3
+    tasks:
+      - id: P4.1
+        title: Manuscript and release package
+        status: locked_owner_D3
 
 transfer:
   required:

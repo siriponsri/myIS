@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:run-manifest:v2-strict",
+  "title": "Strict immutable CPU run manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "parent_run_id", "experiment_id", "campaign_id", "evidence_class", "status", "created_at_utc", "git", "inputs", "method", "resources", "metrics", "artifacts", "receipt_sha256", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.run-manifest.v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "status": {"enum": ["valid", "invalid", "exploratory", "blocked", "superseded", "aggregate_pending"]},
+    "stage": {"enum": ["fixture", "train", "selection", "final", "report"]},
+    "timestamp": {"type": "string", "minLength": 1},
+    "source": {"type": "object", "additionalProperties": false},
+    "data": {"type": "object", "additionalProperties": false},
+    "method": {"type": "object", "additionalProperties": false},
+    "resources": {"type": "object", "additionalProperties": false},
+    "metrics": {"type": "array"},
+    "artifacts": {"type": "array"},
+    "evidence_class": {"enum": ["fixture", "train", "selection", "final", "report"]},
+    "git_commit": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+    "owner_local_receipt_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -1,0 +1,50 @@
+name: myIS CPU contract
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: "1"
+      MYIS_NETWORK_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.17"
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install locked dependencies
+        run: uv sync --locked --all-extras
+      - name: Run synthetic and deterministic tests
+        run: uv run --no-sync pytest -q
+      - name: Validate active layout and projections
+        run: |
+          uv run --no-sync python scripts/validate_layout_v2.py
+          uv run --no-sync myis-report sync --repository-root .
+          uv run --no-sync myis-report check --repository-root .
+      - name: Reject archive runtime coupling
+        shell: bash
+        run: |
+          if rg -n 'archive/old-layout|archive\\old-layout|01_evidence' src scripts dashboard --glob '*.py' --glob '*.sh' --glob '*.js' --glob '*.html'; then
+            echo 'archive coupling or retired active path found'
+            exit 1
+          fi
+          if rg -n 'G[0-8]|F1/G1|Track [CS]' src/myis_research/dashboard/app.py src/myis_research/mlflow_mirror.py dashboard/index.html dashboard/assets --glob '*.py' --glob '*.js' --glob '*.html' --glob '*.css'; then
+            echo 'retired gate vocabulary found in active dashboard or MLflow runtime'
+            exit 1
+          fi
+      - name: Check diff whitespace
+        run: git diff --check

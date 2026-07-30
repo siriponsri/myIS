@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:scope-dsl:v2",
+  "title": "Strict grounded SCOPE specification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "spec_id", "parent_spec_id", "hypothesis_id", "compiler_api_version", "dataset_adapter", "views", "aggregation", "constraints"],
+  "properties": {
+    "schema_version": {"const": "myis.scope-dsl.v2"},
+    "spec_id": {"type": "string", "pattern": "^spec-[a-z0-9][a-z0-9-]*-v[0-9]{2}$"},
+    "parent_spec_id": {"type": ["string", "null"]},
+    "hypothesis_id": {"type": "string", "pattern": "^hyp-i[0-9]{2}-[0-9]{3}$"},
+    "compiler_api_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "dataset_adapter": {"enum": ["dapfam", "fine_patents"]},
+    "views": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["view_id", "kind", "source_fields", "source_spans", "searchable", "aggregation"],
+        "properties": {
+          "view_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"},
+          "kind": {"enum": ["tac", "abstract", "claim", "grounded_span", "official_passage"]},
+          "source_fields": {"type": "array", "minItems": 0, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "source_spans": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["span_id", "source_field", "start", "end"],
+              "properties": {
+                "span_id": {"type": "string", "minLength": 1},
+                "source_field": {"type": "string", "minLength": 1},
+                "start": {"type": "integer", "minimum": 0},
+                "end": {"type": "integer", "minimum": 0}
+              }
+            }
+          },
+          "searchable": {"type": "boolean"},
+          "aggregation": {"enum": ["family_max", "family_union", "official_identity"]},
+          "official_passage_ids": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "aggregation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["family_key", "publication_key", "source_identity"],
+      "properties": {
+        "family_key": {"type": "string", "minLength": 1},
+        "publication_key": {"type": "string", "minLength": 1},
+        "source_identity": {"type": "string", "minLength": 1}
+      }
+    },
+    "constraints": {
+      "type": "object", "additionalProperties": false,
+      "required": ["require_source_grounding", "abstractive_summaries", "query_specific_vocabulary"],
+      "properties": {
+        "require_source_grounding": {"const": true},
+        "abstractive_summaries": {"const": false},
+        "query_specific_vocabulary": {"const": false},
+        "adapter_limits": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"dataset_adapter": {"const": "dapfam"}}},
+      "then": {
+        "properties": {
+          "constraints": {
+            "required": ["adapter_limits"],
+            "properties": {"adapter_limits": {"required": ["dapfam"], "properties": {"dapfam": {"const": 4}}}}
+          }
+        }
+      }
+    }
+  ]
+}

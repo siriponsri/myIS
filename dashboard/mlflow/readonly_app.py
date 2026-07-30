@@ -156,12 +156,25 @@ def _validate_database_artifact_locations(database: Path, artifacts: Path) -> No
     connection = sqlite3.connect(f"file:{database.as_posix()}?mode=ro", uri=True)
     try:
         rows: list[tuple[str]] = []
-        for table, column in (("experiments", "artifact_location"), ("runs", "artifact_uri")):
-            exists = connection.execute(
-                "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)
-            ).fetchone()
-            if exists:
-                rows.extend(connection.execute(f"SELECT {column} FROM {table} WHERE {column} IS NOT NULL"))
+        if connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='experiments'"
+        ).fetchone():
+            # MLflow always creates a built-in Default experiment whose
+            # artifact URI points at a process-local `mlruns/` directory.
+            # Only the governed myis-research-* namespace belongs to this
+            # viewer boundary.
+            rows.extend(connection.execute(
+                "SELECT artifact_location FROM experiments "
+                "WHERE name LIKE 'myis-research-%' AND artifact_location IS NOT NULL"
+            ))
+        if connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='runs'"
+        ).fetchone():
+            rows.extend(connection.execute(
+                "SELECT r.artifact_uri FROM runs r JOIN experiments e "
+                "ON e.experiment_id = r.experiment_id "
+                "WHERE e.name LIKE 'myis-research-%' AND r.artifact_uri IS NOT NULL"
+            ))
         for (value,) in rows:
             if not _inside(_artifact_location_path(str(value)), artifacts):
                 raise ViewerConfigurationError("MLflow database references artifacts outside the approved root")

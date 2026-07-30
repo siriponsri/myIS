@@ -11,7 +11,7 @@ from myis_research.owner_local import (
 )
 
 
-def request(decision: str = "D1_START_CAMPAIGN") -> dict[str, object]:
+def request(decision: str = "P1_CPU_EXECUTION_ENVELOPE") -> dict[str, object]:
     return {
         "schema_version": "myis.owner-local-request.v1",
         "request_id": "scope-aggregate-01",
@@ -24,18 +24,18 @@ def request(decision: str = "D1_START_CAMPAIGN") -> dict[str, object]:
 
 def test_request_hash_is_stable_under_mapping_order() -> None:
     assert canonical_sha256({"a": 1, "b": 2}) == canonical_sha256({"b": 2, "a": 1})
-    assert validate_request(request())["decision_id"] == "D1_START_CAMPAIGN"
+    assert validate_request(request())["decision_id"] == "P1_CPU_EXECUTION_ENVELOPE"
 
 
-@pytest.mark.parametrize("decision", ["D1_START_CAMPAIGN", "D2_OPEN_FINAL"])
+@pytest.mark.parametrize("decision", ["P1_CPU_EXECUTION_ENVELOPE", "D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"])
 def test_valid_decisions_build_and_validate_receipt(decision: str) -> None:
     receipt = build_receipt(request(decision), aggregate_counts={"n": 3}, aggregate_hashes={"metric": "e" * 64})
     assert validate_receipt(receipt)["decision_id"] == decision
 
 
-def test_d3_and_legacy_gates_are_rejected() -> None:
+def test_d1_and_legacy_gates_are_rejected() -> None:
     with pytest.raises(OwnerLocalContractError):
-        validate_request(request("D3_SUBMIT_RELEASE"))
+        validate_request(request("D1_START_CAMPAIGN"))
 
 
 @pytest.mark.parametrize("key", ["query_id", "qrels", "per_query_outcomes", "membership", "raw_payload"])

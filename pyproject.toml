@@ -29,12 +29,9 @@ test = [
 ]
 
 [project.scripts]
-myis-harness = "myis_research.harness.cli:main"
 myis-dashboard = "myis_research.dashboard.cli:main"
-myis-confirmation = "myis_research.confirmation_cli:main"
 myis-assets = "myis_research.asset_cli:main"
 myis-sessions = "myis_research.session_cli:main"
-myis-notes = "myis_research.notes.cli:main"
 myis-report = "myis_research.report_cli:main"
 myis-owner-local = "scripts.owner_local_runner:main"
 

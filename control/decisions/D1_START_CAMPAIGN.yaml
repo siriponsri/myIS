@@ -1,0 +1,15 @@
+schema_version: myis.standing-decision.v1
+decision_id: D1_START_CAMPAIGN
+status: active
+campaign_id: scope-autoindex-v1
+scope:
+  allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE, P2_SCOPE_DEVELOPMENT]
+  allowed_arms: [R0, R0-W, R1]
+  execution_mode: cpu_local_reversible
+  paid_api: false
+  gpu: false
+  final_split_open: false
+  protected_output: aggregate_hash_count_only
+owner_action: one_time_campaign_authorization
+supersedes: archive/authority/20260730/legacy-d1-invalid.json
+notes: D1 is standing authorization, not a recurring gate and not a Dashboard write action.

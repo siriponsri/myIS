@@ -63,6 +63,21 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             if isinstance(artifact, dict) and artifact.get("sha256"):
                 evidence.append({"evidence_id": artifact.get("artifact_id", artifact.get("name", "artifact")), "sha256": artifact["sha256"], "run_id": run_id, "uri": artifact.get("uri")})
     readiness = _publication_readiness(root, manifests, decisions)
+    configured_phases = campaign_config.get("phases", []) if isinstance(campaign_config.get("phases"), list) else []
+    phases = []
+    tasks = []
+    for phase in configured_phases:
+        if not isinstance(phase, dict):
+            continue
+        phase_id = str(phase.get("id", ""))
+        phase_row = {"phase_id": phase_id, "status": str(phase.get("status", "planned")), "tasks": []}
+        for task in phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []:
+            if not isinstance(task, dict):
+                continue
+            task_row = {"task_id": str(task.get("id", "")), "phase_id": phase_id, "title": str(task.get("title", "")), "status": str(task.get("status", "planned")), "evidence_ids": []}
+            phase_row["tasks"].append(task_row)
+            tasks.append(task_row)
+        phases.append(phase_row)
     body: dict[str, Any] = {
         "schema_version": READ_MODEL_SCHEMA,
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -71,7 +86,15 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "status": campaign_config.get("campaign", {}).get("status", "preparation"),
             "title": campaign_config.get("campaign", {}).get("title", campaign_id),
             "primary_metric": campaign_config.get("protocol", {}).get("primary_metric", "recall_at_100/out"),
+            "standing_authorization": "D1_START_CAMPAIGN",
+            "active_owner_decisions": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
         }],
+        "phases": phases,
+        "tasks": tasks,
+        "gates": [
+            {"gate_id": "D2_OPEN_FINAL", "status": "approved" if any(item.get("decision_id") == "D2_OPEN_FINAL" and item.get("status") == "approved" for item in decisions) else "waiting_owner"},
+            {"gate_id": "D3_SUBMIT_RELEASE", "status": "approved" if any(item.get("decision_id") == "D3_SUBMIT_RELEASE" and item.get("status") == "approved" for item in decisions) else "waiting_owner"},
+        ],
         "experiments": sorted(experiments.values(), key=lambda item: item["experiment_id"]),
         "runs": sorted(runs, key=lambda item: item["run_id"]),
         "metrics": metrics,

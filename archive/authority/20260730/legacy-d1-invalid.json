@@ -1,0 +1,9 @@
+{
+  "schema_version": "myis.invalid-authority-receipt.v1",
+  "receipt_id": "invalid-d1-20260730",
+  "legacy_path": "archive/authority/20260730/legacy-ledger.jsonl",
+  "legacy_sha256": "8fe1ce634c45085b2865a18879be02afae5e42a0227401d09ef1418abf0728b9",
+  "invalid_decisions": ["D1_START_CAMPAIGN"],
+  "reason": "Historical D1 record has no typed actor, timestamp, scope, evidence, or record hash and is not active authorization.",
+  "active_replacement": "control/execution-envelope.yaml"
+}

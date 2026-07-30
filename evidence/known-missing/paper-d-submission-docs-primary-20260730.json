@@ -1,0 +1,14 @@
+{
+  "schema_version": "myis.known-missing-evidence.v1",
+  "evidence_id": "known-missing-paper-d-submission-docs-primary-20260730",
+  "expected_origin": "04_outputs/audits/rigor/paper-d-submission-docs-primary-20260730.json",
+  "last_known_reference": "03_Paper/00_Paper_GEPA historical submission package",
+  "search_performed": [
+    "01_Research active tree",
+    "01_Research archive/legacy-cs",
+    "03_Paper package"
+  ],
+  "recovery_status": "not-found-preserved-as-known-missing",
+  "effect_on_claims": "No new SCOPE claim may cite this missing audit; historical Paper D evidence remains historical only.",
+  "protected_data_opened": false
+}

@@ -1,11 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
-  <title id="title">myIS Research C-to-S program</title><desc id="desc">Track C establishes and freezes the C1 candidate harness before the required matched Track S arms begin. Joint confirmation and publication remain separately gated.</desc>
-  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#8a949b"/></marker></defs>
-  <rect width="960" height="560" fill="#f7f8fa"/>
-  <g font-family="Segoe UI,Arial,sans-serif" font-size="14" text-anchor="middle">
-    <g fill="none" stroke="#8a949b" stroke-width="2" marker-end="url(#a)"><path d="M165 115H235"/><path d="M355 115H425"/><path d="M545 115H615"/><path d="M735 115V235"/><path d="M735 315V395"/><path d="M675 435H545"/><path d="M425 435H355"/></g>
-    <g fill="#fff" stroke="#b8c1c8"><rect x="45" y="75" width="120" height="80" rx="4"/><rect x="235" y="75" width="120" height="80" rx="4"/><rect x="425" y="75" width="120" height="80" rx="4"/><rect x="615" y="75" width="120" height="80" rx="4"/><rect x="675" y="235" width="120" height="80" rx="4"/><rect x="675" y="395" width="120" height="80" rx="4"/><rect x="425" y="395" width="120" height="80" rx="4"/><rect x="235" y="395" width="120" height="80" rx="4"/></g>
-    <g fill="#147d75" font-family="Cascadia Mono,Consolas,monospace" font-weight="700"><text x="105" y="105">F0/F1</text><text x="295" y="105">D0</text><text x="485" y="105">C0/C1</text><text x="675" y="105">CF</text><text x="735" y="265">S0/S1/SF</text><text x="735" y="425">Q</text><text x="485" y="425">PC/PS</text><text x="295" y="425">CT</text></g>
-    <g fill="#182126"><text x="105" y="130">Integrity and baseline</text><text x="295" y="130">Shared split firewall</text><text x="485" y="130">Track C arms</text><text x="675" y="130">Frozen C1 harness</text><text x="735" y="290">Track S matched arms</text><text x="735" y="450">Joint test</text><text x="485" y="450">Track manuscripts</text><text x="295" y="450">Deferred transfer</text></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 310" role="img" aria-labelledby="title desc">
+  <title id="title">myIS Research P0 to P4 program</title>
+  <desc id="desc">The canonical flow from foundation through CPU baseline and SCOPE development to final evaluation and publication, with D2 and D3 as the only owner decisions.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#0f6b68"/></marker>
+  </defs>
+  <rect width="1280" height="310" fill="#f3f7f6"/>
+  <g font-family="Segoe UI, Tahoma, sans-serif" fill="#203033">
+    <text x="48" y="42" font-size="24" font-weight="700">myIS Research execution flow</text>
+    <text x="48" y="68" font-size="14" fill="#5a6b6e">One canonical read model → MLflow, Obsidian, Dashboard, Paper projections</text>
+    <g stroke="#0f6b68" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M230 165 H278"/><path d="M470 165 H518"/><path d="M710 165 H758"/><path d="M950 165 H998"/>
+    </g>
+    <g>
+      <rect x="48" y="105" width="180" height="120" rx="8" fill="#dcefee" stroke="#0f6b68"/>
+      <rect x="288" y="105" width="180" height="120" rx="8" fill="#e2f1e7" stroke="#2f7a4f"/>
+      <rect x="528" y="105" width="180" height="120" rx="8" fill="#fff0d2" stroke="#a45d0a"/>
+      <rect x="768" y="105" width="180" height="120" rx="8" fill="#e9e5fb" stroke="#6250a4"/>
+      <rect x="1008" y="105" width="180" height="120" rx="8" fill="#f9e3e3" stroke="#b23a3a"/>
+    </g>
+    <g font-size="16" font-weight="700">
+      <text x="72" y="140">P0_FOUNDATION</text><text x="312" y="140">P1_CPU_BASELINE</text><text x="552" y="140">P2_SCOPE_DEVELOPMENT</text><text x="792" y="140">P3_FINAL</text><text x="1032" y="140">P4_PUBLICATION</text>
+    </g>
+    <g font-size="13" fill="#5a6b6e">
+      <text x="72" y="168">schemas + kernel</text><text x="72" y="190">protected boundary</text>
+      <text x="312" y="168">R0 / R0-W</text><text x="312" y="190">CPU fixtures first</text>
+      <text x="552" y="168">R1 AutoIndex/SCOPE</text><text x="552" y="190">SkillOpt conditional</text>
+      <text x="792" y="168">one frozen split</text><text x="792" y="190">D2_OPEN_FINAL</text>
+      <text x="1032" y="168">paper + release</text><text x="1032" y="190">D3_SUBMIT_RELEASE</text>
+    </g>
+    <text x="48" y="270" font-size="13" fill="#5a6b6e">Owner decisions are standing records; routine task defaults are automatic and no micro-gates are created.</text>
   </g>
 </svg>

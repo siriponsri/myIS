@@ -33,7 +33,8 @@ TRACK_C_EXPERIMENT = "myis-research-track-c"
 TRACK_S_EXPERIMENT = "myis-research-track-s"
 JOINT_EXPERIMENT = "myis-research-joint"
 PUBLICATION_EXPERIMENT = "myis-research-publication"
-SCOPE_AUTOINDEX_EXPERIMENT = "myis-research-campaign-scope-autoindex-v1"
+CAMPAIGN_EXPERIMENT = TRACK_C_EXPERIMENT
+SCOPE_AUTOINDEX_EXPERIMENT = TRACK_C_EXPERIMENT
 EXPERIMENTS = (
     BOOTSTRAP_EXPERIMENT,
     CATALOG_EXPERIMENT,
@@ -41,7 +42,6 @@ EXPERIMENTS = (
     TRACK_S_EXPERIMENT,
     JOINT_EXPERIMENT,
     PUBLICATION_EXPERIMENT,
-    SCOPE_AUTOINDEX_EXPERIMENT,
 )
 RECEIPT_SCHEMA = "myis.mlflow-mirror-receipt.v1"
 
@@ -80,6 +80,14 @@ _RESERVED_TAGS = {
     "gate_ids",
     "linear_issue_ids",
     "dashboard_content_id",
+    "experiment_name",
+    "campaign_id",
+    "run_id",
+    "parent_run_id",
+    "decision_id",
+    "dataset_lineage_sha256",
+    "model_lineage_sha256",
+    "reproducibility_sha256",
 }
 
 
@@ -130,38 +138,24 @@ class MirrorKind(StrEnum):
 
 
 class MirrorStage(StrEnum):
-    BOOTSTRAP = "bootstrap"
-    CATALOG = "catalog"
-    F1_G1_PREPARATION = "f1-g1-preparation"
-    TRACK_C = "track-c"
-    TRACK_S = "track-s"
-    JOINT = "joint"
-    PUBLICATION = "publication"
+    P0_FOUNDATION = "P0_FOUNDATION"
+    P1_CPU_BASELINE = "P1_CPU_BASELINE"
+    P2_SCOPE_DEVELOPMENT = "P2_SCOPE_DEVELOPMENT"
+    P3_FINAL = "P3_FINAL"
+    P4_PUBLICATION = "P4_PUBLICATION"
 
     @property
     def experiment_name(self) -> str:
         return {
-            MirrorStage.BOOTSTRAP: BOOTSTRAP_EXPERIMENT,
-            MirrorStage.CATALOG: CATALOG_EXPERIMENT,
-            MirrorStage.F1_G1_PREPARATION: TRACK_C_EXPERIMENT,
-            MirrorStage.TRACK_C: TRACK_C_EXPERIMENT,
-            MirrorStage.TRACK_S: TRACK_S_EXPERIMENT,
-            MirrorStage.JOINT: JOINT_EXPERIMENT,
-            MirrorStage.PUBLICATION: PUBLICATION_EXPERIMENT,
+            MirrorStage.P0_FOUNDATION: CATALOG_EXPERIMENT,
+            MirrorStage.P1_CPU_BASELINE: TRACK_C_EXPERIMENT,
+            MirrorStage.P2_SCOPE_DEVELOPMENT: TRACK_C_EXPERIMENT,
+            MirrorStage.P3_FINAL: JOINT_EXPERIMENT,
+            MirrorStage.P4_PUBLICATION: PUBLICATION_EXPERIMENT,
         }[self]
 
 
-_STAGE_KINDS = {
-    MirrorStage.BOOTSTRAP: frozenset(),
-    MirrorStage.CATALOG: frozenset(
-        {MirrorKind.DOC, MirrorKind.RUBRIC, MirrorKind.RULE, MirrorKind.TOOL, MirrorKind.SKILL, MirrorKind.ENVIRONMENT}
-    ),
-    MirrorStage.F1_G1_PREPARATION: frozenset(),
-    MirrorStage.TRACK_C: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
-    MirrorStage.TRACK_S: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
-    MirrorStage.JOINT: frozenset({MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
-    MirrorStage.PUBLICATION: frozenset({MirrorKind.DOC, MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}),
-}
+_STAGE_KINDS = {stage: frozenset({MirrorKind.DOC, MirrorKind.RESULT, MirrorKind.METRIC, MirrorKind.ENVIRONMENT}) for stage in MirrorStage}
 
 
 @dataclass(frozen=True, slots=True)
@@ -192,11 +186,11 @@ class ProjectionLineage:
             raise MirrorValidationError("projection lineage Linear issue IDs must be unique")
         if len(self.linear_issue_ids) != len(self.task_ids):
             raise MirrorValidationError("projection lineage requires one Linear issue ID per Task ID")
-        if any(not re.fullmatch(r"[A-Z][A-Z0-9]*", value) for value in self.phase_ids):
+        if any(not re.fullmatch(r"P[0-4]_[A-Z_]+", value) for value in self.phase_ids):
             raise MirrorValidationError("projection lineage contains an invalid Phase ID")
-        if any(not re.fullmatch(r"[A-Z][A-Z0-9]*\.[0-9]+", value) for value in self.task_ids):
+        if any(not re.fullmatch(r"P[0-4]\.[0-9]+", value) for value in self.task_ids):
             raise MirrorValidationError("projection lineage contains an invalid Task ID")
-        if any(not re.fullmatch(r"G[0-8]", value) for value in self.gate_ids):
+        if any(value not in {"D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"} for value in self.gate_ids):
             raise MirrorValidationError("projection lineage contains an invalid Gate ID")
         if any(not re.fullmatch(r"[A-Z][A-Z0-9]*-[0-9]+", value) for value in self.linear_issue_ids):
             raise MirrorValidationError("projection lineage contains an invalid Linear issue ID")
@@ -298,6 +292,14 @@ class MirrorSpec:
     arm: str | None = None
     phase: str | None = None
     data_role: str | None = None
+    experiment_name: str | None = None
+    campaign_id: str | None = None
+    run_id: str | None = None
+    parent_run_id: str | None = None
+    decision_id: str | None = None
+    dataset_lineage_sha256: str | None = None
+    model_lineage_sha256: str | None = None
+    reproducibility_sha256: str | None = None
     tags: Mapping[str, str] = field(default_factory=dict)
     parameters: Mapping[str, str | int | float | bool] = field(default_factory=dict)
     metrics: Mapping[str, float] = field(default_factory=dict)
@@ -315,50 +317,23 @@ class MirrorSpec:
             raise MirrorValidationError("run_name and git_commit are required")
         if not _SHA256_RE.fullmatch(self.canonical_source_sha256):
             raise MirrorValidationError("canonical_source_sha256 must be SHA-256")
-        if self.stage == MirrorStage.BOOTSTRAP and (artifacts or self.metrics):
-            raise MirrorValidationError("bootstrap runs cannot contain artifacts or scientific metrics")
-        if self.stage == MirrorStage.BOOTSTRAP:
-            if self.tags.get("scientific_run") != "false":
-                raise MirrorValidationError("bootstrap scientific_run tag must be false")
-            if self.tags.get("dataset_access") != "none":
-                raise MirrorValidationError("bootstrap dataset_access tag must be none")
-            if self.parameters.get("artifact_count") != 0:
-                raise MirrorValidationError("bootstrap artifact_count must be zero")
-            if self.parameters.get("scientific_metric_count") != 0:
-                raise MirrorValidationError("bootstrap scientific_metric_count must be zero")
         allowed = _STAGE_KINDS[self.stage]
         disallowed = sorted({artifact.kind.value for artifact in artifacts if artifact.kind not in allowed})
         if disallowed:
             raise MirrorValidationError(f"artifact kinds are not allowed for {self.stage.value}: {disallowed}")
-        if self.stage in {MirrorStage.BOOTSTRAP, MirrorStage.CATALOG, MirrorStage.F1_G1_PREPARATION} and self.metrics:
-            raise MirrorValidationError("metrics are forbidden in non-scientific mirror stages")
-        if self.stage == MirrorStage.F1_G1_PREPARATION:
-            if artifacts:
-                raise MirrorValidationError("F1/G1 preparation mirrors metadata only")
-            if self.track != "C" or self.arm != "G1_PREPARATION" or self.phase != "F1":
-                raise MirrorValidationError("F1/G1 preparation lineage must bind C/G1_PREPARATION/F1")
-            if self.data_role != "preparation":
-                raise MirrorValidationError("F1/G1 preparation data role must be preparation")
-            if self.tags.get("scientific_run") != "false":
-                raise MirrorValidationError("F1/G1 preparation must declare scientific_run=false")
-        active_stages = {MirrorStage.TRACK_C, MirrorStage.TRACK_S, MirrorStage.JOINT, MirrorStage.PUBLICATION}
-        if self.stage in active_stages:
-            required = {
-                "track": self.track,
-                "arm": self.arm,
-                "phase": self.phase,
-                "data_role": self.data_role,
-            }
-            missing = sorted(key for key, value in required.items() if not isinstance(value, str) or not value.strip())
-            if missing:
-                raise MirrorValidationError(f"active mirror stages require lineage fields: {', '.join(missing)}")
-        if self.stage == MirrorStage.TRACK_C and self.track != "C":
-            raise MirrorValidationError("track-c mirrors require track C")
-        if self.stage == MirrorStage.TRACK_S and self.track != "S":
-            raise MirrorValidationError("track-s mirrors require track S")
-        allowed_tracks = {"C", "S", "joint", "publication"}
-        if self.track is not None and self.track not in allowed_tracks:
-            raise MirrorValidationError("mirror track must be an active track or aggregate projection")
+        if self.phase is not None and self.phase != self.stage.value:
+            raise MirrorValidationError("MLflow phase must equal the active P0-P4 stage")
+        if self.arm is not None and self.arm not in {"R0", "R0-W", "R1", "publication"}:
+            raise MirrorValidationError("MLflow arm must be R0, R0-W, R1, or publication")
+        if self.experiment_name is not None and self.experiment_name not in EXPERIMENTS:
+            raise MirrorValidationError("MLflow experiment_name is not allowlisted")
+        for name, value in (
+            ("dataset_lineage_sha256", self.dataset_lineage_sha256),
+            ("model_lineage_sha256", self.model_lineage_sha256),
+            ("reproducibility_sha256", self.reproducibility_sha256),
+        ):
+            if value is not None and not _SHA256_RE.fullmatch(value):
+                raise MirrorValidationError(f"{name} must be SHA-256")
         if _RESERVED_TAGS.intersection(self.tags):
             raise MirrorValidationError("caller tags cannot override reserved mirror lineage tags")
         if self.projection is not None:
@@ -391,6 +366,14 @@ class MirrorSpec:
             "arm": self.arm,
             "phase": self.phase,
             "data_role": self.data_role,
+            "experiment_name": self.experiment_name,
+            "campaign_id": self.campaign_id,
+            "run_id": self.run_id,
+            "parent_run_id": self.parent_run_id,
+            "decision_id": self.decision_id,
+            "dataset_lineage_sha256": self.dataset_lineage_sha256,
+            "model_lineage_sha256": self.model_lineage_sha256,
+            "reproducibility_sha256": self.reproducibility_sha256,
             "tags": dict(sorted(self.tags.items())),
             "parameters": dict(sorted(self.parameters.items())),
             "metrics": dict(sorted(self.metrics.items())),
@@ -402,6 +385,10 @@ class MirrorSpec:
         }
         payload = json.dumps(body, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("utf-8")
         return hashlib.sha256(payload).hexdigest()
+
+    @property
+    def target_experiment(self) -> str:
+        return self.experiment_name or self.stage.experiment_name
 
 
 @dataclass(frozen=True, slots=True)
@@ -556,9 +543,9 @@ class MLflowMirror:
             with _serialized_writer(self.store_root, self.lock_timeout_seconds):
                 backend = backend or LocalMLflowBackend(self.store_root)
                 backend.ensure_experiments(EXPERIMENTS, self.store_root / "artifacts")
-                existing_run = backend.find_run(spec.stage.experiment_name, mirror_key)
+                existing_run = backend.find_run(spec.target_experiment, mirror_key)
                 run_id = existing_run or backend.log_run(
-                    experiment_name=spec.stage.experiment_name,
+                    experiment_name=spec.target_experiment,
                     run_name=spec.run_name,
                     tags={
                         **dict(spec.tags),
@@ -584,6 +571,14 @@ class MLflowMirror:
                         "phase": spec.phase or "not_applicable",
                         "data_role": spec.data_role or "not_applicable",
                         "stage": spec.stage.value,
+                        "experiment_name": spec.target_experiment,
+                        "campaign_id": spec.campaign_id or "not_applicable",
+                        "run_id": spec.run_id or "not_applicable",
+                        "parent_run_id": spec.parent_run_id or "not_applicable",
+                        "decision_id": spec.decision_id or "not_applicable",
+                        "dataset_lineage_sha256": spec.dataset_lineage_sha256 or "not_applicable",
+                        "model_lineage_sha256": spec.model_lineage_sha256 or "not_applicable",
+                        "reproducibility_sha256": spec.reproducibility_sha256 or "not_applicable",
                         "mirror_key": mirror_key,
                         "canonical_source_sha256": spec.canonical_source_sha256.lower(),
                         "git_commit": spec.git_commit,
@@ -597,7 +592,7 @@ class MLflowMirror:
                 receipt_id=mirror_key,
                 mirror_key=mirror_key,
                 status="already_synced" if existing_run else "synced",
-                experiment_name=spec.stage.experiment_name,
+                experiment_name=spec.target_experiment,
                 recorded_at_utc=_now(),
                 canonical_source_sha256=spec.canonical_source_sha256.lower(),
                 git_commit=spec.git_commit,
@@ -609,7 +604,7 @@ class MLflowMirror:
                 receipt_id=mirror_key,
                 mirror_key=mirror_key,
                 status="sync_deferred",
-                experiment_name=spec.stage.experiment_name,
+                experiment_name=spec.target_experiment,
                 recorded_at_utc=_now(),
                 canonical_source_sha256=spec.canonical_source_sha256.lower(),
                 git_commit=spec.git_commit,

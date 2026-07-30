@@ -43,7 +43,7 @@ PROTECTED_PAYLOAD_KEYS = {
     "password",
 }
 
-C1_EDITABLE_SURFACES = (
+R1_EDITABLE_SURFACES = (
     "routes.enabled",
     "routes.quota",
     "fusion",
@@ -53,7 +53,7 @@ C1_EDITABLE_SURFACES = (
     "rerank_depth",
 )
 
-C1_PROTECTED_SURFACES = (
+R1_PROTECTED_SURFACES = (
     "query_views",
     "candidate_budget",
     "stopping",
@@ -95,10 +95,10 @@ class PatchSurfacePolicy:
             raise PermissionError(f"patch changes paths outside the editable surface: {sorted(violations)}")
 
 
-def c1_patch_surface_policy() -> PatchSurfacePolicy:
-    """Return the exact C1 tuning boundary from the frozen Track C protocol."""
+def r1_patch_surface_policy() -> PatchSurfacePolicy:
+    """Return the exact R1 tuning boundary from the active campaign protocol."""
 
-    return PatchSurfacePolicy(C1_EDITABLE_SURFACES, C1_PROTECTED_SURFACES)
+    return PatchSurfacePolicy(R1_EDITABLE_SURFACES, R1_PROTECTED_SURFACES)
 
 
 def _normalize_path(path: str) -> str:

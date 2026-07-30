@@ -49,7 +49,9 @@ case "$command_name" in
   bootstrap)
     run_app target
     uv run --no-sync python -c 'import mlflow,sys; assert sys.version_info[:2] == (3, 11); assert mlflow.__version__ == "3.14.0"'
-    MYIS_MLFLOW_STORE="$STORE_ROOT" uv run --no-sync python "$REPOSITORY_ROOT/archive/old-layout/05_code/scripts/bootstrap_mlflow.py"
+    uv run --no-sync python "$REPOSITORY_ROOT/scripts/bootstrap_mlflow.py" \
+      --repository-root "$REPOSITORY_ROOT" \
+      --store-root "$STORE_ROOT"
     run_app doctor
     ;;
   start)

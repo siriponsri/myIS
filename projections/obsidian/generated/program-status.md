@@ -1,6 +1,6 @@
 ---
-source: ../../01_Research/projections/read-model/read-model.v1.json
-source_sha256: 78f43d3fee12565379c2f90090abe5d0c91133e1e6fff6c634dd903f532ab5ce
+source: ../../read-model/read-model.v1.json
+source_sha256: 2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b
 ---
 
 # Program Status

@@ -264,10 +264,13 @@ class LocalHarness:
             )
             MLflowMirror(self.mlflow_root).sync(
                 MirrorSpec(
-                    stage=MirrorStage.TRACK_C,
+                    stage=MirrorStage.P1_CPU_BASELINE,
                     run_name=spec.run_id,
                     git_commit=spec.git_commit,
                     canonical_source_sha256=manifest_sha,
+                    campaign_id="scope-autoindex-v1",
+                    run_id=spec.run_id,
+                    decision_id="D1_START_CAMPAIGN",
                     tags={
                         "goal_id": spec.goal.goal_id,
                         "arm": spec.arm,

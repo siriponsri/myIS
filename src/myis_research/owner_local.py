@@ -47,8 +47,8 @@ def validate_request(payload: Mapping[str, Any]) -> dict[str, Any]:
     _validate_mapping(payload, _REQUEST_KEYS, "request")
     if payload["schema_version"] != OWNER_LOCAL_REQUEST_SCHEMA:
         raise OwnerLocalContractError("unsupported owner-local request schema")
-    if payload["decision_id"] not in {"D1_START_CAMPAIGN", "D2_OPEN_FINAL"}:
-        raise OwnerLocalContractError("request must bind D1 or D2")
+    if payload["decision_id"] not in {"P1_CPU_EXECUTION_ENVELOPE", "D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"}:
+        raise OwnerLocalContractError("request must bind the P1 execution envelope, D2, or D3")
     if not isinstance(payload["request_id"], str) or not re.fullmatch(r"[a-z0-9][a-z0-9._-]+", payload["request_id"]):
         raise OwnerLocalContractError("request_id is invalid")
     if not isinstance(payload["git_commit"], str) or not _GIT.fullmatch(payload["git_commit"]):
@@ -91,8 +91,8 @@ def validate_receipt(payload: Mapping[str, Any]) -> dict[str, Any]:
     _validate_mapping(payload, _RECEIPT_KEYS, "receipt")
     if payload["schema_version"] != OWNER_LOCAL_RECEIPT_SCHEMA or payload["status"] != "accepted":
         raise OwnerLocalContractError("receipt schema or status is invalid")
-    if payload["decision_id"] not in {"D1_START_CAMPAIGN", "D2_OPEN_FINAL"}:
-        raise OwnerLocalContractError("receipt must bind D1 or D2")
+    if payload["decision_id"] not in {"P1_CPU_EXECUTION_ENVELOPE", "D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"}:
+        raise OwnerLocalContractError("receipt must bind the P1 execution envelope, D2, or D3")
     for key in ("request_sha256", "scope_sha256", "receipt_sha256"):
         if not isinstance(payload[key], str) or not _SHA256.fullmatch(payload[key]):
             raise OwnerLocalContractError(f"{key} must be SHA-256")

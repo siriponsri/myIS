@@ -1,0 +1,145 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260730T160000Z-p0p1-closure-v3",
+  "run_id": null,
+  "goal_id": "P0_P1_PROJECTION_CLOSURE",
+  "started_at_utc": "2026-07-30T08:00:00Z",
+  "ended_at_utc": "2026-07-30T09:00:00Z",
+  "scope": "Complete the active P0 foundation and P1 CPU-local implementation slice: MLflow hierarchy, report/read-model projections, Dashboard presentation, literature pointer repair, archive cutover, and validation.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "current user instruction: D1 is a one-time standing campaign authorization",
+      "scope": "reversible repository-local CPU work, aggregate/hash/count-only outputs, no protected data access"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "aff150ef9f6c14618d3d78bb9da2f617fb457e0f",
+    "dirty_paths": ["AGENTS.md", "PLAN.md", "README.md", "control", "campaigns", "src", "scripts", "schemas", "evidence", "dashboard", "projections", "archive", "tests"]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "Recorded D1_START_CAMPAIGN as one standing authorization; D2 and D3 remain the only writable Owner decisions.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Moved unused legacy Dashboard runtime modules behind archive/legacy-cs/runtime/dashboard and kept the active package minimal.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Implemented MLflow bootstrap, six-experiment hierarchy, read-only store validation, and projection schema checks.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Repaired Brain literature pointers and validated U001-U154 with unique identifiers and hashes.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "No scientific measured run was executed; P1 remains pending the Owner protected input bundle.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {"thread_id": "owner-local-bundle", "provenance": "agent-observed", "summary": "Owner must provide or authorize the protected local documents/queries/qrels/splits bundle before P1 measured execution.", "blocking_gate": null},
+    {"thread_id": "d2-final-split", "provenance": "agent-observed", "summary": "D2_OPEN_FINAL remains waiting_owner; no final split has been opened.", "blocking_gate": "D2_OPEN_FINAL"},
+    {"thread_id": "d3-release", "provenance": "agent-observed", "summary": "D3_SUBMIT_RELEASE remains waiting_owner; no external publication or release has occurred.", "blocking_gate": "D3_SUBMIT_RELEASE"}
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "P0_FOUNDATION",
+    "task_id": "P0.3",
+    "gate_id": "D2_OPEN_FINAL",
+    "gate_status": "pending"
+  },
+  "owner_brief_th": "P0 foundation และ projection contract ปิดงานในระดับโค้ดและ fixture แล้ว Dashboard อ่าน phase/task/gate และแยกทำแล้ว/ทำต่อ/รอ Owner ได้ MLflow bootstrap และ report pipeline ตรวจผ่าน แต่ยังไม่มี measured result เพราะยังไม่ได้เปิดข้อมูล protected หรือ final split",
+  "owner_actions": [
+    {
+      "action_id": "run-p1-owner-local",
+      "priority": "required",
+      "action_th": "เตรียม protected bundle แล้วสั่งรัน P1 CPU-local ผ่าน owner-local runner",
+      "reason_th": "ต้องสร้าง aggregate receipt จากข้อมูลจริงก่อนเริ่ม P2 และห้ามส่ง qrels/query IDs ออกนอกเครื่อง",
+      "blocking_gate": null
+    },
+    {
+      "action_id": "review-d2",
+      "priority": "optional",
+      "action_th": "พิจารณา D2_OPEN_FINAL เมื่อ P1/P2 มีหลักฐานครบ",
+      "reason_th": "D2 เป็นการเปิด final split ครั้งเดียวและยังไม่ควรอนุมัติจาก fixture",
+      "blocking_gate": "D2_OPEN_FINAL"
+    }
+  ],
+  "gate_request": {
+    "gate_id": "D2_OPEN_FINAL",
+    "state": "draft",
+    "summary_th": "ยังไม่ขอเปิด final split; รอ P1/P2 evidence และ Owner review",
+    "blocking_reason_th": null,
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "owner-local-protected-bundle",
+        "description_th": "documents.json, queries.json, qrels.json และ splits.json ใน protected directory ของ Owner",
+        "purpose_th": "ให้ owner-local runner คำนวณ aggregate/count/hash โดยไม่คัดลอก payload ออกมา"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {"check_id": "locked-sync", "status": "PASS", "summary": "uv sync --locked --all-extras"},
+      {"check_id": "pytest", "status": "PASS", "summary": "30 tests passed"},
+      {"check_id": "report-stability", "status": "PASS", "summary": "two sync/check cycles reported drift=false"},
+      {"check_id": "layout", "status": "PASS", "summary": "active layout has no stale legacy roots"},
+      {"check_id": "literature", "status": "PASS", "summary": "U001-U154 literature notes validated"},
+      {"check_id": "mlflow", "status": "PASS", "summary": "temporary SQLite bootstrap, doctor, and read-only viewer passed"}
+    ],
+    "changed_files": ["AGENTS.md", "PLAN.md", "README.md", "control", "campaigns", "src", "scripts", "schemas", "evidence", "dashboard", "projections", "archive", "tests"],
+    "untouched_protected_surfaces": ["qrels", "query-ids", "split-membership", "per-query-outcomes", "raw-provider-payloads", "GPU", "paid APIs", "external publication"]
+  },
+  "corrections": []
+}

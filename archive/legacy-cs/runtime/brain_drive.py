@@ -156,13 +156,13 @@ def run_brain_drive_demo(workdir: Path, *, mlflow_root: Path) -> dict[str, objec
     )
     mirror_receipt = MLflowMirror(mlflow_root).sync(
         MirrorSpec(
-            stage=MirrorStage.TRACK_C,
+            stage=MirrorStage.P0_FOUNDATION,
             run_name=spec.run_id,
             git_commit=spec.git_commit,
             canonical_source_sha256=run_result.manifest_sha256 or ("0" * 64),
             track="C",
             arm=spec.arm,
-            phase=spec.phase,
+            phase=MirrorStage.P0_FOUNDATION.value,
             data_role="offline_fixture",
             tags={
                 "goal_id": spec.goal.goal_id,

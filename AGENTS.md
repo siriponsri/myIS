@@ -1,37 +1,72 @@
 # myIS Research Agent Contract
 
+This repository is `myIS Research` (`myis-research`), protocol `1.0`, research
+version `0.1`. `01_Research` is the active control plane and the only place
+where canonical plans, schemas, manifests, receipts, and publication facts are
+written.
+
 ## Read order
 
 1. `PLAN.md`
-2. `control/program.yaml`
-3. `control/campaigns/scope-autoindex-v1.yaml`
-4. `control/source-of-truth.yaml`
-5. `control/assets/reusable_assets.yaml`
-6. files owned by the active task
+2. `control/assets/reusable_assets.yaml`
+3. `control/assets/REUSABLE_ASSET_MAP.md`
+4. `control/campaigns/scope-autoindex-v1.yaml`
+5. `control/execution-envelope.yaml`
+6. `control/source-of-truth.yaml`
+7. files owned by the active task
 
-## Authority
+## Active vocabulary
 
-- `01_Research` is the active control plane. Git and immutable validated artifacts are canonical.
-- Dashboard, MLflow, Obsidian/Brain, Linear, and Paper are rebuildable projections and pointers.
-- Owner decisions are limited to `D1_START_CAMPAIGN`, `D2_OPEN_FINAL`, and `D3_SUBMIT_RELEASE`. D1 is standing authorization; do not create micro-gates.
-- AutoIndex/SCOPE is the core campaign. SkillOpt is disabled unless its admission criteria in the campaign config pass.
-- Use Python 3.11 and `pyproject.toml + uv.lock` only.
+Use only `P0_FOUNDATION`, `P1_CPU_BASELINE`, `P2_SCOPE_DEVELOPMENT`,
+`P3_FINAL`, and `P4_PUBLICATION`. Use arms `R0`, `R0-W`, and `R1`.
+`D1_START_CAMPAIGN` is the one-time standing campaign authorization;
+`D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` are the only writable Owner decisions.
+Do not add micro-gates. Historical vocabulary remains under `archive/` only.
 
-## Protected boundary
+## Safety boundary
 
-Never open, copy, log, or project protected rows, qrels, split membership, query IDs, per-query outcomes, credentials, or raw provider payloads. Paid APIs, GPU jobs, final-set access, and external release require the applicable Owner decision and explicit resource authorization. Owner-local processing emits aggregate/count/hash receipts only.
+- CPU-only, zero paid API, no GPU, no network model download, and no provider
+  fallback through P1.
+- Final split, qrels, membership, query IDs, per-query outcomes, credentials,
+  and raw provider payloads stay in the Owner-local protected store.
+- Git, MLflow, Dashboard, Brain, Obsidian, and Paper receive only validated
+  aggregates, hashes, counts, and pointers.
+- Never treat fixture evidence as measured evidence or a dashboard preview as
+  authorization. This is decision support, not legal advice.
 
-## Execution
+## Engineering rules
 
-1. Validate Git state, campaign config, reusable assets, and latest valid session.
-2. State one falsifiable hypothesis and the exact editable surface.
-3. Reproduce the matched baseline before evaluating a method.
-4. Run deterministic tests before any measured work.
-5. Accept a candidate only on strict primary-score improvement; ties reject.
-6. Freeze code, config, dataset, model, evaluator, artifact, and environment hashes.
-7. Generate the canonical read model, then regenerate Dashboard/Obsidian/Paper projections.
-8. Record a new `myis.research-session.v2` capsule; never edit historical capsules.
+- `control/`, schemas, deterministic kernel, manifests, and receipts are
+  canonical. MLflow is an additive mirror; Dashboard and Obsidian are
+  projections.
+- Use the reusable-asset registry before adapting App material. Keep App data
+  in place and use pointers.
+- Use canonical JSON and SHA-256 commitments. Stable IDs and lexical tie-breaks
+  are mandatory for deterministic output.
+- One report sync builds one read-model object and passes that object to every
+  projection writer. Never copy metric values into manually edited notes.
+- Preserve history. Archive before removing. Delete only exact, verified paths.
+- Before commit/push run tests, layout, report drift, MLflow doctor, Brain
+  literature validation when touched, and `git diff --check`.
 
-## Completion
+## Agent responsibilities
 
-Run focused and full tests, `myis-report check`, MLflow doctor, protected-content scan, archive/reference validation, and `git diff --check`. Report changed files, archived legacy roots, untouched protected surfaces, evidence class, current D1-D3 state, next resources, and blockers. This system is decision support, not legal advice.
+Logical responsibilities are: Kernel, SCOPE/adapter, CPU baseline, Projection,
+MLflow, Brain/memory, and Paper. Use actual agents only when a bounded task is
+independent. The Owner only decides D2 and D3; routine defaults are encoded in
+the campaign file and execution envelope.
+
+## Memory lifecycle
+
+Brain memory is pointer-only and has five kinds: `decision`, `evidence`,
+`lesson`, `failed_attempt`, and `active_context`. Every note carries a source
+URI, source SHA-256, evidence IDs, creation time, review time, and supersession
+pointer. Stale active context is archived; failed attempts remain searchable but
+cannot override run facts.
+
+## Closeout
+
+Report the exact phase, task, status, checks, changed files, untouched
+protected surfaces, evidence class, blockers, and next automatic action. Do not
+claim P1 measured completion unless a protected Owner-local run actually
+completed. Keep the next action reversible and CPU-only until D2 is requested.

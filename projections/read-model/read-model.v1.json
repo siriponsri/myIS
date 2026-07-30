@@ -1,8 +1,13 @@
 {
   "campaigns": [
     {
+      "active_owner_decisions": [
+        "D2_OPEN_FINAL",
+        "D3_SUBMIT_RELEASE"
+      ],
       "campaign_id": "scope-autoindex-v1",
       "primary_metric": "recall_at_100/out",
+      "standing_authorization": "D1_START_CAMPAIGN",
       "status": "preparation",
       "title": "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
     }
@@ -13,22 +18,117 @@
     "currency": "USD",
     "estimated": 0.0
   },
-  "decisions": [
-    {
-      "campaign_id": "scope-autoindex-v1",
-      "decision_id": "D1_START_CAMPAIGN",
-      "evidence_hashes": [],
-      "prior_record_hash": null,
-      "rationale": "Standing campaign authorization recorded from the Owner instruction; protected aggregate/count binding is produced by the Owner-local process.",
-      "schema_version": "myis.decision-record.v1",
-      "status": "approved"
-    }
-  ],
+  "decisions": [],
   "evidence": [],
   "experiments": [],
-  "generated_at": "2026-07-30T05:22:04.345047Z",
+  "gates": [
+    {
+      "gate_id": "D2_OPEN_FINAL",
+      "status": "waiting_owner"
+    },
+    {
+      "gate_id": "D3_SUBMIT_RELEASE",
+      "status": "waiting_owner"
+    }
+  ],
+  "generated_at": "2026-07-30T09:10:11.575557Z",
   "metrics": [],
-  "projection_revision": "78f43d3fee12565379c2f90090abe5d0c91133e1e6fff6c634dd903f532ab5ce",
+  "phases": [
+    {
+      "phase_id": "P0_FOUNDATION",
+      "status": "in_progress",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P0_FOUNDATION",
+          "status": "complete",
+          "task_id": "P0.1",
+          "title": "Deterministic kernel and schema contracts"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P0_FOUNDATION",
+          "status": "complete",
+          "task_id": "P0.2",
+          "title": "Integrity preflight and protected boundary"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P0_FOUNDATION",
+          "status": "in_progress",
+          "task_id": "P0.3",
+          "title": "Projection contracts and migration closure"
+        }
+      ]
+    },
+    {
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "executable_pending_protected_bundle",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P1_CPU_BASELINE",
+          "status": "executable",
+          "task_id": "P1.1",
+          "title": "R0 flat BM25 fixture lane"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P1_CPU_BASELINE",
+          "status": "executable",
+          "task_id": "P1.2",
+          "title": "R0-W window maxP fixture lane"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P1_CPU_BASELINE",
+          "status": "waiting_external_data",
+          "task_id": "P1.3",
+          "title": "Protected owner-local CPU handoff"
+        }
+      ]
+    },
+    {
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "status": "blocked_until_p1",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P2_SCOPE_DEVELOPMENT",
+          "status": "planned",
+          "task_id": "P2.1",
+          "title": "R1 SCOPE/AutoIndex development"
+        }
+      ]
+    },
+    {
+      "phase_id": "P3_FINAL",
+      "status": "locked_until_D2",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P3_FINAL",
+          "status": "locked_owner_D2",
+          "task_id": "P3.1",
+          "title": "Frozen final evaluation"
+        }
+      ]
+    },
+    {
+      "phase_id": "P4_PUBLICATION",
+      "status": "locked_until_D3",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P4_PUBLICATION",
+          "status": "locked_owner_D3",
+          "task_id": "P4.1",
+          "title": "Manuscript and release package"
+        }
+      ]
+    }
+  ],
+  "projection_revision": "2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b",
   "publication_readiness": {
     "checks": [
       {
@@ -66,5 +166,70 @@
     "status": "blocked"
   },
   "runs": [],
-  "schema_version": "myis.read-model.v1"
+  "schema_version": "myis.read-model.v1",
+  "tasks": [
+    {
+      "evidence_ids": [],
+      "phase_id": "P0_FOUNDATION",
+      "status": "complete",
+      "task_id": "P0.1",
+      "title": "Deterministic kernel and schema contracts"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P0_FOUNDATION",
+      "status": "complete",
+      "task_id": "P0.2",
+      "title": "Integrity preflight and protected boundary"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P0_FOUNDATION",
+      "status": "in_progress",
+      "task_id": "P0.3",
+      "title": "Projection contracts and migration closure"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "executable",
+      "task_id": "P1.1",
+      "title": "R0 flat BM25 fixture lane"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "executable",
+      "task_id": "P1.2",
+      "title": "R0-W window maxP fixture lane"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "waiting_external_data",
+      "task_id": "P1.3",
+      "title": "Protected owner-local CPU handoff"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "status": "planned",
+      "task_id": "P2.1",
+      "title": "R1 SCOPE/AutoIndex development"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P3_FINAL",
+      "status": "locked_owner_D2",
+      "task_id": "P3.1",
+      "title": "Frozen final evaluation"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P4_PUBLICATION",
+      "status": "locked_owner_D3",
+      "task_id": "P4.1",
+      "title": "Manuscript and release package"
+    }
+  ]
 }

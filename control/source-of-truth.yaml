@@ -1,4 +1,6 @@
 schema_version: myis.source-of-truth.v2
+active_control_plane: 01_Research
+projection_contract: projections/read-model/read-model.v1.json
 records:
   - id: control
     authority: control/program.yaml
@@ -6,6 +8,9 @@ records:
   - id: protocol
     authority: control/campaigns/scope-autoindex-v1.yaml
     projections: [campaigns, dashboard, paper]
+  - id: execution_boundary
+    authority: control/execution-envelope.yaml
+    projections: [harness, dashboard, mlflow, brain]
   - id: schemas_and_kernel
     authority: [schemas, src/myis_research/kernel, src/myis_research/scope]
     projections: [harness, mlflow, reports]
@@ -16,8 +21,9 @@ records:
     authority: [campaigns/scope-autoindex-v1/manifests, MYIS_STORE]
     projections: [mlflow, projections/read-model, dashboard, brain, paper]
   - id: owner_decisions
-    authority: control/decisions/ledger.jsonl
+    authority: [control/decisions/D1_START_CAMPAIGN.yaml, control/decisions/ledger.jsonl]
     projections: [dashboard, brain, paper]
+    allowed_ids: [D1_START_CAMPAIGN, D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
   - id: human_memory
     authority: 02_Brain/memory
     projections: [qmd, obsidian]

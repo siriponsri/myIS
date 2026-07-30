@@ -3,123 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="description" content="Local myIS Owner workbench with an English-first project map and Thai detail guidance.">
-  <title>myIS Owner Workbench</title>
+  <title>myIS Research Console</title>
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/dashboard.css">
-  <script type="module" src="/assets/dashboard.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Research dashboard navigation">
-      <div class="brand-block">
-        <p class="brand-mark" aria-hidden="true">myIS</p>
-        <div>
-          <p class="eyebrow">Research protocol 1.0</p>
-          <p class="brand-name">Owner Workbench</p>
-        </div>
-      </div>
-      <div class="local-boundary"><span class="boundary-dot" aria-hidden="true"></span><span>Local machine only</span></div>
-      <nav class="primary-nav" aria-label="Dashboard views">
-        <button class="nav-item is-active" type="button" data-view="overview" aria-current="page"><span class="nav-icon" aria-hidden="true">◈</span><span>Today</span></button>
-        <button class="nav-item" type="button" data-view="plan"><span class="nav-icon" aria-hidden="true">↦</span><span>Plan &amp; Tasks</span></button>
-        <button class="nav-item" type="button" data-view="data"><span class="nav-icon" aria-hidden="true">▦</span><span>Data</span></button>
-        <button class="nav-item" type="button" data-view="presentation"><span class="nav-icon" aria-hidden="true">P</span><span>Present</span></button>
-        <button class="nav-item" type="button" data-view="decisions"><span class="nav-icon" aria-hidden="true">✓</span><span>Decisions</span></button>
-        <button class="nav-item secondary-nav-item" type="button" data-view="graph"><span class="nav-icon" aria-hidden="true">⌘</span><span>Graph</span></button>
-        <button class="nav-item secondary-nav-item" type="button" data-view="notes"><span class="nav-icon" aria-hidden="true">✎</span><span>Notes</span></button>
-        <button class="nav-item secondary-nav-item" type="button" data-view="evidence"><span class="nav-icon" aria-hidden="true">▤</span><span>Evidence</span></button>
-        <button class="nav-item secondary-nav-item" type="button" data-view="reference"><span class="nav-icon" aria-hidden="true">☷</span><span>Reference</span></button>
-        <button class="nav-item mobile-more" type="button" data-mobile-more aria-expanded="false"><span class="nav-icon" aria-hidden="true">•••</span><span>More</span></button>
-      </nav>
-      <div class="sidebar-footer"><p>Decision support</p><p>Not legal advice</p></div>
-    </aside>
-
-    <div class="workspace">
-      <header class="topbar">
-        <div><p class="eyebrow" id="view-kicker">Owner control</p><h1 id="view-title">Today</h1></div>
-        <div class="topbar-actions"><p class="sync-state" id="sync-state" role="status" aria-live="polite">Connecting / กำลังเชื่อมต่อ</p><button class="button button-secondary" id="refresh-button" type="button">Refresh</button></div>
-      </header>
-
-      <main id="main-content" tabindex="-1">
-        <section class="view is-visible" id="view-overview" data-view-panel="overview" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Owner inbox</p><p class="lede">The next action, the evidence behind it, and what remains locked.</p><p class="detail-thai" lang="th">เริ่มจากสิ่งที่ Owner ต้องทำตอนนี้ แล้วค่อยเปิดรายละเอียดเมื่อจำเป็น</p></div><div class="legend" id="overview-legend"></div></div>
-          <section class="attention-band" id="owner-focus" hidden></section>
-          <section class="owner-inbox" id="owner-inbox" aria-live="polite"></section>
-          <section class="readiness-band" id="overview-readiness" aria-live="polite"></section>
-          <section class="f1-g1-panel" id="f1-g1-panel" aria-live="polite"></section>
-          <section class="overview-map" aria-labelledby="overview-map-title"><div class="section-heading"><div><p class="section-label">Research path</p><h2 id="overview-map-title">Where the work is now</h2></div><button class="text-button" type="button" data-view="plan">Open full plan <span aria-hidden="true">→</span></button></div><div id="flow-progress" class="flow-progress-note" aria-live="polite">Completion requires canonical Task evidence.</div><div id="overview-map-content"></div></section>
-          <div class="overview-grid"><section class="metric-band" id="overview-metrics"></section><section class="attention-list" id="overview-blockers"></section><section class="recent-decision" id="overview-recent"></section></div>
-          <section class="projection-health" id="overview-projections"></section>
-        </section>
-
-        <section class="view" id="view-data" data-view-panel="data" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Data boundary</p><p class="lede">Registered dataset metadata, safe readiness, and access limits.</p><p class="detail-thai" lang="th">แสดงเฉพาะข้อมูลสรุปที่อนุญาต ไม่เปิด raw data, query ID หรือผลราย query</p></div></div>
-          <section id="dataset-content" class="dataset-content" aria-live="polite"></section>
-        </section>
-
-        <section class="view" id="view-graph" data-view-panel="graph" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Research graph</p><p class="lede">A live map of what is connected, what is ready, and what remains intentionally unrun.</p><p class="detail-thai" lang="th">เลือก node เพื่อเปิดรายละเอียดของงาน, Gate หรือข้อมูลที่เกี่ยวข้อง</p></div></div>
-          <section id="graph-content" class="graph-content" aria-live="polite"></section>
-        </section>
-
-        <section class="view" id="view-notes" data-view-panel="notes" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Research notes</p><p class="lede">Curated handoff and decision notes, without a filesystem browser.</p><p class="detail-thai" lang="th">อ่านเฉพาะโน้ตที่ dashboard อนุญาต และเปิดต่อใน Obsidian ได้เมื่อ vault ถูกตั้งค่าแล้ว</p></div></div>
-          <section id="notes-content" class="notes-content" aria-live="polite"></section>
-        </section>
-
-        <section class="view" id="view-presentation" data-view-panel="presentation" aria-labelledby="view-title">
-          <div class="view-intro presentation-intro"><div><p class="section-label">Research briefing</p><p class="lede">A presentation-safe account of the question, current work, and decision boundary.</p><p class="detail-thai" lang="th">สำหรับนำเสนอความคืบหน้าโดยไม่อ้างว่ามีผลวิทยาศาสตร์ก่อนมีหลักฐานที่ตรวจสอบแล้ว</p></div><div class="presentation-controls"><div class="segmented-control" role="group" aria-label="Audience mode"><button class="button button-secondary is-active" type="button" data-audience-mode="owner" aria-pressed="true">Owner</button><button class="button button-secondary" type="button" data-audience-mode="advisor" aria-pressed="false">Advisor</button><button class="button button-secondary" type="button" data-audience-mode="peer" aria-pressed="false">Peer</button></div><div class="segmented-control" role="group" aria-label="Delivery mode"><button class="button button-secondary is-active" type="button" data-delivery-mode="explore" aria-pressed="true">Explore</button><button class="button button-secondary" type="button" data-delivery-mode="present" aria-pressed="false">Present</button></div></div></div>
-          <section id="presentation-content" class="presentation-content" aria-live="polite"></section>
-        </section>
-
-        <section class="view" id="view-plan" data-view-panel="plan" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Canonical execution order</p><p class="lede">Explore the PLAN as Phase → Task. Select a Phase to see its work lane and verified detail.</p><p class="detail-thai" lang="th">เลือก Phase เพื่อดู Task, dependency, หลักฐาน และ Gate ที่เกี่ยวข้อง</p></div><div class="view-actions"><div class="segmented-control" role="group" aria-label="Plan map density"><button class="button button-secondary is-active" type="button" data-plan-density="readable" aria-pressed="true">Readable</button><button class="button button-secondary" type="button" data-plan-density="compact" aria-pressed="false">Compact</button></div><div class="filter-controls" aria-label="Task filter"><button class="button button-secondary" type="button" data-filter="all">All</button><button class="button button-secondary" type="button" data-filter="attention">Needs attention</button><button class="button button-secondary" type="button" data-filter="complete">Complete</button></div></div></div>
-          <section class="owner-map-section" aria-labelledby="owner-map-title"><div class="section-heading"><div><p class="section-label">Interactive owner map</p><h2 id="owner-map-title">Where the program is now</h2></div><p class="map-note">Solid lines block. Forks run in parallel.</p></div><div id="owner-map"></div></section>
-          <section class="task-workspace" id="task-workspace"></section>
-        </section>
-
-        <section class="view" id="view-decisions" data-view-panel="decisions" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Owner decision points</p><p class="lede">Friendly Gate names first. Technical IDs and hashes remain available in the audit detail.</p><p class="detail-thai" lang="th">ดูว่า Gate เปิดอะไร ตรวจงานอะไร และยังล็อกอะไรอยู่</p></div><button class="button button-primary" id="new-decision-button" type="button" disabled>New decision</button></div>
-          <div class="decision-layout"><nav class="gate-index" id="gate-index" aria-label="Owner Gate list"></nav><article class="gate-detail" id="gate-detail"></article></div>
-          <section class="decision-history"><div class="section-heading"><div><p class="section-label">Immutable history</p><h2>Recent decisions</h2></div><p id="ledger-summary">Reading local ledger</p></div><div class="table-frame"><table><thead><tr><th>Decision</th><th>Gate</th><th>Status</th><th>Date</th><th>Evidence</th></tr></thead><tbody id="decision-table-body"></tbody></table></div></section>
-        </section>
-
-        <section class="view" id="view-evidence" data-view-panel="evidence" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Verified packages</p><p class="lede">Evidence names are readable; hashes are audit details. Fixture, development, descriptive, and confirmation roles stay separate.</p><p class="detail-thai" lang="th">หลักฐานแต่ละชุดมีบทบาทแยกกัน และไม่ใช่ผลยืนยันทางวิทยาศาสตร์โดยอัตโนมัติ</p></div></div>
-          <section class="evidence-summary" id="evidence-summary"></section><div class="evidence-grid" id="evidence-grid"></div>
-        </section>
-
-        <section class="view" id="view-reference" data-view-panel="reference" aria-labelledby="view-title">
-          <div class="view-intro"><div><p class="section-label">Reference library</p><p class="lede">Process, harness, tools, diagrams, and the PLAN–Dashboard–Linear–MLflow alignment in one secondary workspace.</p><p class="detail-thai" lang="th">เอกสารอ้างอิงอยู่แยกจากงานที่ Owner ต้องตัดสินใจ</p></div></div>
-          <div class="reference-tabs" role="tablist" aria-label="Reference sections"><button class="tab-button is-active" type="button" data-reference="process">Process</button><button class="tab-button" type="button" data-reference="harness">Harness</button><button class="tab-button" type="button" data-reference="tools">Tools</button><button class="tab-button" type="button" data-reference="flows">System maps</button><button class="tab-button" type="button" data-reference="alignment">System alignment</button></div>
-          <section class="reference-content" id="reference-content"></section>
-        </section>
-      </main>
-    </div>
-  </div>
-
-  <dialog class="decision-dialog" id="decision-dialog" aria-labelledby="decision-dialog-title">
-    <form id="decision-form">
-      <div class="dialog-header"><div><p class="eyebrow">Owner decision</p><h2 id="decision-dialog-title">Review a Gate</h2></div><button class="icon-button" id="close-decision-button" type="button" aria-label="Close decision dialog">×</button></div>
-      <div class="dialog-body" id="decision-form-step">
-        <div class="wizard-steps"><span class="is-active">1 Understand</span><span>2 Decide</span><span>3 Confirm</span></div>
-        <section class="decision-context" id="gate-decision-context"></section>
-        <div class="form-grid"><label><span>Gate</span><select name="gate_id" required></select></label><label><span>Decision</span><select name="status" required><option value="approved">Approve</option><option value="deferred">Defer</option><option value="rejected">Reject</option></select></label></div>
-        <label><span>Authorized action</span><select name="action" required></select></label>
-        <fieldset class="scope-fieldset"><legend>Scope under review</legend><div id="scope-options"></div></fieldset>
-        <fieldset class="evidence-fieldset"><legend>Verified evidence</legend><div id="evidence-options"></div></fieldset>
-        <label><span>Owner rationale</span><textarea name="rationale" rows="4" minlength="3" maxlength="4000" required placeholder="Why approve, defer, or reject?"></textarea></label>
-        <label><span>Friendly decision name <small>(optional)</small></span><input name="display_label" maxlength="120" placeholder="Example: Confirm F0 foundation"></label>
-        <label id="supersede-field"><span>Correct an earlier decision <small>(optional)</small></span><select name="supersedes_decision_id"><option value="">No correction</option></select></label>
-        <p class="form-error" id="decision-form-error" role="alert"></p>
-      </div>
-      <div class="dialog-body" id="decision-preview-step" hidden><div class="wizard-steps"><span>1 Understand</span><span class="is-active">2 Decide</span><span>3 Confirm</span></div><div class="preview-warning"><strong>Review the plain-language decision</strong><span>A confirmation appends a new immutable record; it never edits an earlier record.</span></div><p class="approval-sentence" id="preview-approval-sentence"></p><dl class="record-preview" id="record-preview"></dl><details class="technical-audit"><summary>Technical audit</summary><pre id="technical-preview"></pre></details><label class="confirmation-check"><input type="checkbox" id="explicit-confirmation"><span>I reviewed the Gate, scope, evidence, and remaining locks and confirm this decision.</span></label><p class="form-error" id="decision-confirm-error" role="alert"></p></div>
-      <div class="dialog-footer"><button class="button button-secondary" id="decision-back-button" type="button" hidden>Back</button><button class="button button-secondary" id="decision-preview-button" type="submit">Preview decision</button><button class="button button-primary" id="decision-confirm-button" type="button" hidden disabled>Confirm decision</button></div>
-    </form>
-  </dialog>
-  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+  <header class="topbar">
+    <div><p class="eyebrow">myIS Research / Control Plane</p><h1>Research Console</h1></div>
+    <div class="topbar-actions"><span id="sync-state">กำลังโหลด</span><button id="refresh" class="button button-secondary">รีเฟรช</button></div>
+  </header>
+  <main class="shell">
+    <nav class="tabs" aria-label="มุมมอง">
+      <button class="tab is-active" data-tab="overview">ภาพรวม</button>
+      <button class="tab" data-tab="flow">Phase / Task</button>
+      <button class="tab" data-tab="evidence">Evidence</button>
+      <button class="tab" data-tab="presentation">Presentation</button>
+    </nav>
+    <section id="overview" class="panel is-visible">
+      <div class="hero"><div><p class="eyebrow">สถานะจากข้อมูลจริง</p><h2 id="campaign-title">SCOPE / AutoIndex</h2><p id="campaign-status">กำลังอ่าน read-model</p></div><div class="revision" id="revision"></div></div>
+      <div id="status-cards" class="card-grid"></div>
+      <section class="section"><div class="section-heading"><div><p class="eyebrow">Owner Inbox</p><h2>สิ่งที่ต้องทำต่อ</h2></div></div><div id="owner-inbox" class="inbox"></div></section>
+    </section>
+    <section id="flow" class="panel"><div class="section-heading"><div><p class="eyebrow">Execution map</p><h2>Phase → Task → Gate</h2><p class="muted">เส้นทางเดียวจาก foundation ไป publication</p></div></div><div id="phase-flow" class="phase-flow"></div></section>
+    <section id="evidence" class="panel"><div class="section-heading"><div><p class="eyebrow">Evidence / MLflow / Reports</p><h2>หลักฐานและความพร้อม</h2></div></div><div id="evidence-table" class="table-wrap"></div></section>
+    <section id="presentation" class="panel"><div class="presentation-toolbar"><div><p class="eyebrow">Presentation mode</p><h2>Research Briefing</h2></div><button id="present-toggle" class="button button-primary">สลับโหมดนำเสนอ</button></div><div id="presentation-content" class="presentation"></div></section>
+  </main>
+  <script src="/assets/dashboard.js" defer></script>
 </body>
 </html>
