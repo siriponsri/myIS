@@ -3,19 +3,12 @@
 `read-model/` is the only generated read model consumed by Dashboard, Brain,
 and Paper projections.
 
-## Bash launchers
+## One-click launchers
 
-Run each surface separately from Git Bash:
+Double-click these files in Windows Explorer:
 
-```bash
-bash projections/start-dashboard.sh
-bash projections/start-mlflow.sh
-bash projections/start-obsidian-report.sh
-```
+- `open-dashboard.cmd`: starts the loopback Dashboard and opens `http://127.0.0.1:8765`.
+- `open-mlflow.cmd`: starts the read-only MLflow viewer and opens `http://127.0.0.1:5000`.
+- `open-obsidian-report.cmd`: rebuilds the read model and generated reports, then opens the `02_Brain` Obsidian vault.
 
-- `start-dashboard.sh`: loopback Dashboard, default port `8765`.
-- `start-mlflow.sh`: read-only MLflow viewer, default port `5000`.
-- `start-obsidian-report.sh`: rebuilds Research read model and generated reports for `02_Brain`, local Obsidian projection, and Paper.
-
-Dashboard and MLflow remain foreground processes. Stop them with `Ctrl-C`.
-Set `MYIS_DASHBOARD_PORT`, `MYIS_MLFLOW_PORT`, and `MYIS_MLFLOW_STORE` when a non-default local configuration is required.
+Set `MYIS_DASHBOARD_PORT`, `MYIS_MLFLOW_PORT`, or `MYIS_MLFLOW_STORE` before launching when a non-default local configuration is required. Dashboard and MLflow run in minimized PowerShell windows; close those windows to stop the services.
