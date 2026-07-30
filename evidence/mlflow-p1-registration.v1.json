@@ -1,0 +1,26 @@
+{
+  "authority": "01_Research/campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+  "children": [
+    {
+      "arm": "R0",
+      "mirror_key": "2c277c3271ca66f4d293b0b42c4b9d6041e695daa1ba027f8acc1df4d0ee800e",
+      "mlflow_run_id": "3122f329aa5946dd8e8630e725a97c04",
+      "status": "synced"
+    },
+    {
+      "arm": "R0-W",
+      "mirror_key": "fdbf5cef895cf6c5ccba4f15876f35e0d94964a04b07af5a1138abcb02a5b6b5",
+      "mlflow_run_id": "d7a5be3cbfa4418eb43b04269757e913",
+      "status": "synced"
+    }
+  ],
+  "dataset_lineage_sha256": "f2892ad4c81c6da00c5fc694be2e77a6cafb7406def576d0b9e68809eb3cbfc5",
+  "parent": {
+    "mirror_key": "1b4d03e72c9f11e64ba2a7d7248e12faa5f0687a3fb282a0c3f057a5391d007a",
+    "mlflow_run_id": "68ff537e32fa43e2a1a93e2b7620139e",
+    "status": "already_synced"
+  },
+  "schema_version": "myis.p1-mlflow-registration.v1",
+  "source_receipt_sha256": "0bccf873b40cf39693b16f6b2a5e8ce82e3681f5ac114bb8f8afb00dde0d3fd1",
+  "store_external": true
+}

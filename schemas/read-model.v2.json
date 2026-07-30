@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:read-model:v2",
+  "title": "myIS integrated projection read model v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "projection_schema_version", "source_commit", "generated_at",
+    "read_model_revision", "projection_revision", "read_model_sha256", "project",
+    "projection_health", "owner_inbox", "progress", "campaigns", "phases", "tasks",
+    "gates", "experiments", "runs", "metrics", "cost", "decisions", "evidence",
+    "datasets", "historical_exposure", "mlflow_registration", "publication_readiness",
+    "milestones", "outputs", "results", "interpretations", "raid", "resources",
+    "presentation", "reports", "literature", "advisor_updates", "tools"
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase_id", "status", "tasks"],
+      "properties": {
+        "phase_id": {"enum": ["P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"]},
+        "status": {"type": "string"},
+        "tasks": {"type": "array", "items": {"$ref": "#/$defs/task"}}
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "phase_id", "title", "status", "evidence_ids"],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^P[0-4]\\.[0-9]+$"},
+        "phase_id": {"type": "string"},
+        "title": {"type": "string"},
+        "status": {"type": "string"},
+        "evidence_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "openObject": {"type": "object"},
+    "openArray": {"type": "array", "items": {}}
+  },
+  "properties": {
+    "schema_version": {"const": "myis.read-model.v2"},
+    "projection_schema_version": {"const": "myis.integrated-projection.v2"},
+    "source_commit": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "read_model_revision": {"$ref": "#/$defs/sha256"},
+    "projection_revision": {"$ref": "#/$defs/sha256"},
+    "read_model_sha256": {"$ref": "#/$defs/sha256"},
+    "project": {"$ref": "#/$defs/openObject"},
+    "projection_health": {"$ref": "#/$defs/openObject"},
+    "owner_inbox": {"$ref": "#/$defs/openArray"},
+    "progress": {"$ref": "#/$defs/openObject"},
+    "campaigns": {"$ref": "#/$defs/openArray"},
+    "phases": {"type": "array", "items": {"$ref": "#/$defs/phase"}, "minItems": 5, "maxItems": 5},
+    "tasks": {"type": "array", "items": {"$ref": "#/$defs/task"}},
+    "gates": {"$ref": "#/$defs/openArray"},
+    "experiments": {"$ref": "#/$defs/openArray"},
+    "runs": {"$ref": "#/$defs/openArray"},
+    "metrics": {"$ref": "#/$defs/openArray"},
+    "cost": {"$ref": "#/$defs/openObject"},
+    "decisions": {"$ref": "#/$defs/openArray"},
+    "evidence": {"$ref": "#/$defs/openArray"},
+    "datasets": {"$ref": "#/$defs/openArray"},
+    "historical_exposure": {"$ref": "#/$defs/openObject"},
+    "mlflow_registration": {"$ref": "#/$defs/openObject"},
+    "publication_readiness": {"$ref": "#/$defs/openObject"},
+    "milestones": {"$ref": "#/$defs/openArray"},
+    "outputs": {"$ref": "#/$defs/openArray"},
+    "results": {"$ref": "#/$defs/openArray"},
+    "interpretations": {"$ref": "#/$defs/openArray"},
+    "raid": {"$ref": "#/$defs/openArray"},
+    "resources": {"$ref": "#/$defs/openObject"},
+    "presentation": {"$ref": "#/$defs/openObject"},
+    "reports": {"$ref": "#/$defs/openObject"},
+    "literature": {"$ref": "#/$defs/openObject"},
+    "advisor_updates": {"$ref": "#/$defs/openObject"},
+    "tools": {"$ref": "#/$defs/openObject"}
+  }
+}

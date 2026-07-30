@@ -1,0 +1,69 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260730T180521Z-p1-legacy-certification-v1",
+  "run_id": "legacy-dapfam-p1-cpu",
+  "goal_id": "LEGACY_DAPFAM_CERTIFICATION_P1_CPU_CLOSURE",
+  "started_at_utc": "2026-07-30T10:00:00Z",
+  "ended_at_utc": "2026-07-30T11:05:21Z",
+  "scope": "CPU-only reversible legacy DAPFAM certification and P1 train/selection closure; no P2 or final split.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml",
+      "scope": "owner-local protected execution, aggregate/hash/count-only projections, zero paid API"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "7a32cdd61be385628760f2be2b67d6c40bb05d25",
+    "dirty_paths": ["HANDOFF.md", "PLAN.md", "README.md", "control", "campaigns", "dashboard", "evidence", "projections", "pyproject.toml", "schemas", "scripts", "src", "tests"]
+  },
+  "events": [
+    {"event_id": "EV0001", "sequence": 1, "type": "observation", "provenance": "agent-observed", "summary": "Legacy inventory classified reusable, reference-only, historical, and incompatible assets without moving or editing source files.", "evidence_refs": [], "quantitative_claims": []},
+    {"event_id": "EV0002", "sequence": 2, "type": "action", "provenance": "agent-observed", "summary": "Adapter discovered legacy inputs and bound request hashes inside the owner-local process.", "evidence_refs": [], "quantitative_claims": []},
+    {"event_id": "EV0003", "sequence": 3, "type": "experiment", "provenance": "agent-observed", "summary": "Measured real Okapi BM25 R0 and deterministic window MaxP R0-W on train and selection; repeat hashes matched.", "evidence_refs": [], "quantitative_claims": []},
+    {"event_id": "EV0004", "sequence": 4, "type": "action", "provenance": "agent-observed", "summary": "Registered safe aggregate facts in external MLflow and generated dataset, phase, and publication projections.", "evidence_refs": [], "quantitative_claims": []},
+    {"event_id": "EV0005", "sequence": 5, "type": "observation", "provenance": "agent-observed", "summary": "Historical exposure means final 872 is not claimable as globally untouched; work stops before P2 review.", "evidence_refs": [], "quantitative_claims": []}
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": ["evidence/mlflow-p1-registration.v1.json"]
+  },
+  "open_threads": [
+    {"thread_id": "p2-review", "provenance": "agent-observed", "summary": "P1 is complete; Owner review is required before any P2 work begins.", "blocking_gate": null},
+    {"thread_id": "d2-final-split", "provenance": "agent-observed", "summary": "D2_OPEN_FINAL remains waiting_owner and was not used in P1.", "blocking_gate": "D2_OPEN_FINAL"},
+    {"thread_id": "d3-release", "provenance": "agent-observed", "summary": "D3_SUBMIT_RELEASE remains waiting_owner; no publication release occurred.", "blocking_gate": "D3_SUBMIT_RELEASE"}
+  ],
+  "integrity": {"all_refs_exist": true, "all_hashes_match": true, "contains_protected_payload": false, "contains_secrets": false},
+  "execution_snapshot": {"phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "gate_id": "D1_START_CAMPAIGN", "gate_status": "pending"},
+  "owner_brief_th": "P1 CPU baseline เสร็จแล้วจากข้อมูล legacy จริง ได้ receipt แบบ aggregate-only และลง MLflow/Obsidian/Dashboard แล้ว ระบบยังไม่เปิด final split และหยุดรอ Owner review ก่อนเริ่ม P2",
+  "owner_actions": [
+    {"action_id": "review-p1", "priority": "required", "action_th": "เปิด Dashboard และตรวจผล P1 กับ dataset classification", "reason_th": "ยืนยันว่า baseline และ lineage ตรงกับสิ่งที่ต้องการก่อนเริ่ม P2", "blocking_gate": null},
+    {"action_id": "continue-p2", "priority": "optional", "action_th": "ส่งคำสั่งใหม่เพื่อเริ่ม P2 หลัง review", "reason_th": "ระบบไม่เริ่ม P2 หรือเปิด D2 เอง", "blocking_gate": null}
+  ],
+  "gate_request": {"gate_id": "D1_START_CAMPAIGN", "state": "draft", "summary_th": "P1 เสร็จและพร้อมให้ Owner review ก่อนเริ่ม P2", "blocking_reason_th": null, "evidence_refs": []},
+  "next_resources": {"status": "none", "items": []},
+  "closeout": {
+    "checks": [
+      {"check_id": "pytest", "status": "PASS", "summary": "36 tests passed"},
+      {"check_id": "report-stability", "status": "PASS", "summary": "two sync/check cycles reported drift=false"},
+      {"check_id": "mlflow", "status": "PASS", "summary": "external mlflow-p1 bootstrap, registration, and doctor passed"},
+      {"check_id": "owner-local", "status": "PASS", "summary": "accepted aggregate-only P1 receipt with deterministic repeat"},
+      {"check_id": "protected-boundary", "status": "PASS", "summary": "no protected payload was projected"}
+    ],
+    "changed_files": ["HANDOFF.md", "PLAN.md", "README.md", "control/campaigns/scope-autoindex-v1.yaml", "dashboard/index.html", "dashboard/assets/dashboard.css", "dashboard/assets/dashboard.js", "evidence/legacy-dapfam-inventory.v1.json", "evidence/mlflow-p1-registration.v1.json", "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json", "projections/read-model/read-model.v1.json", "projections/obsidian/generated", "scripts/register_p1_mlflow.py", "src/myis_research/projections/read_model.py", "src/myis_research/owner_local_runner.py"],
+    "untouched_protected_surfaces": ["legacy source bytes", "qrels rows", "query IDs", "split membership", "per-query outcomes", "GPU", "paid APIs", "external publication"]
+  },
+  "corrections": [
+    {"target_session_id": "20260730T160000Z-p0p1-closure-v3", "observed_validation_error": "execution_snapshot does not match PLAN.md", "correction_th": "เก็บ capsule เดิมไว้เป็นประวัติ และใช้ capsule v2 ฉบับนี้บันทึก correction ตามกติกา append-only"}
+  ]
+}

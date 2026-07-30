@@ -6,9 +6,10 @@
         "D3_SUBMIT_RELEASE"
       ],
       "campaign_id": "scope-autoindex-v1",
+      "current_state": "P1_BLOCKED_WITH_EVIDENCE",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "preparation",
+      "status": "p1_cpu_measured_complete_waiting_review",
       "title": "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
     }
   ],
@@ -18,6 +19,86 @@
     "currency": "USD",
     "estimated": 0.0
   },
+  "datasets": [
+    {
+      "bytes": 3125138209,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "families": null,
+        "patents": null
+      },
+      "dataset_id": "DAPFAM-FAMILY-CORPUS",
+      "protection": "metadata-safe",
+      "representation": "patent family records",
+      "role": "family-corpus",
+      "sha256": "2d79ee7d0479565711889553d2da849fef5e3a7aa5014bf398a43c5becd0cab7"
+    },
+    {
+      "bytes": 158762269,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "queries": null
+      },
+      "dataset_id": "DAPFAM-QUERY-SET",
+      "protection": "owner-local-only",
+      "representation": "TAC query records",
+      "role": "query-set",
+      "sha256": "50a0e9c5673e9e3e0ae2558272dc824572554067bd1443d043016aedeb7fe3fa"
+    },
+    {
+      "bytes": 2194236,
+      "classification": "reusable-after-certification",
+      "dataset_id": "DAPFAM-RELEVANCE-LABELS",
+      "protection": "owner-local-only",
+      "representation": "family relevance labels",
+      "role": "relevance-labels",
+      "sha256": null
+    },
+    {
+      "bytes": 3114241891,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "documents": null
+      },
+      "dataset_id": "DAPFAM-R0-CANDIDATES",
+      "protection": "metadata-safe",
+      "representation": "one document per family candidate",
+      "role": "r0-candidate",
+      "sha256": "ed4ee8a98c89722d88d15ad83b398a125bec0e2bd4e7c79385613676b135e99e"
+    },
+    {
+      "bytes": 381979442,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "passages": null
+      },
+      "dataset_id": "DAPFAM-R0W-CANDIDATES",
+      "protection": "metadata-safe",
+      "representation": "TAC512 passages with family MaxP",
+      "role": "r0-w-candidate",
+      "sha256": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061"
+    },
+    {
+      "bytes": 3162706100,
+      "classification": "historical-reference",
+      "constraint": "reference only; not active R1 main",
+      "dataset_id": "DAPFAM-R1-REFERENCE",
+      "protection": "metadata-safe",
+      "representation": "section units",
+      "role": "r1-reference",
+      "sha256": "b661798f7946f3512d69c6cdc70430cef38e957f6bb2116f93b9e4a6a49f054d"
+    },
+    {
+      "bytes": 1172767750,
+      "classification": "incompatible",
+      "constraint": "exceeds four-unit DAPFAM limit; never active R1 main",
+      "dataset_id": "DAPFAM-INCOMPATIBLE",
+      "protection": "metadata-safe",
+      "representation": "element units",
+      "role": "incompatible",
+      "sha256": "e00d64fb7b8a2eda62d8728a0eda543b188b1f79e732b053af255fe1232cd095"
+    }
+  ],
   "decisions": [],
   "evidence": [],
   "experiments": [],
@@ -31,12 +112,14 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-07-30T09:10:11.575557Z",
+  "generated_at": "2026-07-30T12:16:12.114922Z",
+  "historical_exposure": {},
   "metrics": [],
+  "mlflow_registration": {},
   "phases": [
     {
       "phase_id": "P0_FOUNDATION",
-      "status": "in_progress",
+      "status": "complete",
       "tasks": [
         {
           "evidence_ids": [],
@@ -55,7 +138,7 @@
         {
           "evidence_ids": [],
           "phase_id": "P0_FOUNDATION",
-          "status": "in_progress",
+          "status": "complete",
           "task_id": "P0.3",
           "title": "Projection contracts and migration closure"
         }
@@ -63,26 +146,26 @@
     },
     {
       "phase_id": "P1_CPU_BASELINE",
-      "status": "executable_pending_protected_bundle",
+      "status": "blocked",
       "tasks": [
         {
           "evidence_ids": [],
           "phase_id": "P1_CPU_BASELINE",
-          "status": "executable",
+          "status": "measured",
           "task_id": "P1.1",
           "title": "R0 flat BM25 fixture lane"
         },
         {
           "evidence_ids": [],
           "phase_id": "P1_CPU_BASELINE",
-          "status": "executable",
+          "status": "measured",
           "task_id": "P1.2",
           "title": "R0-W window maxP fixture lane"
         },
         {
           "evidence_ids": [],
           "phase_id": "P1_CPU_BASELINE",
-          "status": "waiting_external_data",
+          "status": "measured",
           "task_id": "P1.3",
           "title": "Protected owner-local CPU handoff"
         }
@@ -90,7 +173,7 @@
     },
     {
       "phase_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "blocked_until_p1",
+      "status": "waiting_review_before_p2",
       "tasks": [
         {
           "evidence_ids": [],
@@ -128,7 +211,7 @@
       ]
     }
   ],
-  "projection_revision": "2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b",
+  "projection_revision": "d1521113aa8bbd3f6d98f0d9ee8181d53be0970ef3779171e870c1f5a17ff524",
   "publication_readiness": {
     "checks": [
       {
@@ -138,7 +221,7 @@
       },
       {
         "id": "owner_local_aggregate",
-        "source": "control/owner-local",
+        "source": "campaigns/scope-autoindex-v1/evidence",
         "status": "blocked"
       },
       {
@@ -160,6 +243,11 @@
         "id": "paper_build_hash_closure",
         "source": "03_Paper/publications/isai-nlp-2026",
         "status": "blocked"
+      },
+      {
+        "id": "historical_final_872_exposure",
+        "source": "owner-local historical exposure audit",
+        "status": "unknown"
       }
     ],
     "schema_version": "myis.publication-readiness.v1",
@@ -185,28 +273,28 @@
     {
       "evidence_ids": [],
       "phase_id": "P0_FOUNDATION",
-      "status": "in_progress",
+      "status": "complete",
       "task_id": "P0.3",
       "title": "Projection contracts and migration closure"
     },
     {
       "evidence_ids": [],
       "phase_id": "P1_CPU_BASELINE",
-      "status": "executable",
+      "status": "measured",
       "task_id": "P1.1",
       "title": "R0 flat BM25 fixture lane"
     },
     {
       "evidence_ids": [],
       "phase_id": "P1_CPU_BASELINE",
-      "status": "executable",
+      "status": "measured",
       "task_id": "P1.2",
       "title": "R0-W window maxP fixture lane"
     },
     {
       "evidence_ids": [],
       "phase_id": "P1_CPU_BASELINE",
-      "status": "waiting_external_data",
+      "status": "measured",
       "task_id": "P1.3",
       "title": "Protected owner-local CPU handoff"
     },

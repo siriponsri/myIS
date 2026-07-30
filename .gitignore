@@ -31,6 +31,7 @@ __pycache__/
 
 # Tool workspaces and caches
 .hyperresearch/
+.understand-anything/
 .cache/
 .pytest_cache/
 03_experiments/*/workspace/

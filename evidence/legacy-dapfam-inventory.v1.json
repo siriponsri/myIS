@@ -1,0 +1,1493 @@
+{
+  "asset_count": 163,
+  "assets": [
+    {
+      "bytes": 34960,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source",
+      "path": "benchmark_table_section_a.csv",
+      "sha256": "c7846c23ba0f7814880d04289657e46276d844d1fa5e0baf47063c0dc299308f"
+    },
+    {
+      "bytes": 11,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/.gitkeep",
+      "sha256": "654bdf95229d0071948900cc7a662469a84a656cc69d5806187d76a3a84ff9cb"
+    },
+    {
+      "bytes": 2755,
+      "disposition": "historical-reference",
+      "kind": "embedding_manifest",
+      "note": "not used by P1 lexical baseline",
+      "path": "embeddings/dapfam/claim/embedding_manifest__20260527T063839Z__f81a8135d608.json",
+      "sha256": "3141d0cffa11ea2a7cc8cd792e4c47d2680e47e47e93b6a4c0e9785e5785d9c5"
+    },
+    {
+      "bytes": 8572784,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/claim/ids.jsonl",
+      "sha256": "530333715e449a1ba816a210b88f2915f0158d53c8187933aae7aacd9bc1a6be"
+    },
+    {
+      "bytes": 8572784,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/claim/ids_000000.jsonl",
+      "sha256": "530333715e449a1ba816a210b88f2915f0158d53c8187933aae7aacd9bc1a6be"
+    },
+    {
+      "bytes": 95629440,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/claim/vectors_000000.npy",
+      "sha256": "c8c2fce8a764aca9837507855c4dd8bff9314b811bdf065c15755f80baffad21"
+    },
+    {
+      "bytes": 3279,
+      "disposition": "historical-reference",
+      "kind": "embedding_manifest",
+      "note": "not used by P1 lexical baseline",
+      "path": "embeddings/dapfam/element/embedding_manifest__20260527T070637Z__6893c3a47d86.json",
+      "sha256": "c83ccb042300fe44c7c3363b9262a70c59488c7a86001fc9508e25b344e62338"
+    },
+    {
+      "bytes": 25170,
+      "disposition": "historical-reference",
+      "kind": "embedding_manifest",
+      "note": "not used by P1 lexical baseline",
+      "path": "embeddings/dapfam/element/embedding_manifest__20260527T090003Z__ab48dde7f4ee.json",
+      "sha256": "2024b2038c9a3876c7a5fb9dc502c574c25e1436243908d68e566c74a3de4894"
+    },
+    {
+      "bytes": 457313330,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids.jsonl",
+      "sha256": "01098a7181788fcb794a0ea503293a9bb79f5eb37319891e147398c4cc852074"
+    },
+    {
+      "bytes": 10106237,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000000.jsonl",
+      "sha256": "8ed315063cf5124b31d852bd992ba23acd0d8bbd5f19a4ee6bf3282e8b3257e9"
+    },
+    {
+      "bytes": 10117461,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000001.jsonl",
+      "sha256": "ab1015ad0e355204bf8bfaf4093fa69c0cbe640242b27f10176a98a7598979c3"
+    },
+    {
+      "bytes": 10169324,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000002.jsonl",
+      "sha256": "776307a407d42ba677c8ad73af898391ed3aa0d19e8668b84718923db309e9b6"
+    },
+    {
+      "bytes": 10167850,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000003.jsonl",
+      "sha256": "ae8de9ccb4924eb4eb56c3ff7dcc6d6ccc2bbb890fb463489ac6ae2dc36ae706"
+    },
+    {
+      "bytes": 10166511,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000004.jsonl",
+      "sha256": "3b1381597b2785a1d12dfbfee8919112d5653fa7feeccf07adfbe696b0c2496e"
+    },
+    {
+      "bytes": 10167378,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000005.jsonl",
+      "sha256": "d3efd247733a26ee4376d549e34b464ef4c09c6ae0087b3accdf482979da70f5"
+    },
+    {
+      "bytes": 10166083,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000006.jsonl",
+      "sha256": "4404a2ab7669e1df7e085f6f0afa11741a9a05b83879e811335c695c05613b19"
+    },
+    {
+      "bytes": 10168500,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000007.jsonl",
+      "sha256": "7e027cd7d831a03263a481a8ddd7428adc835429e43be24f353626c885ecf347"
+    },
+    {
+      "bytes": 10169527,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000008.jsonl",
+      "sha256": "b61b8f4b9f6158c2517501723a4b3120a57aefd30e1d4cd5c44bbea3cb2b38bb"
+    },
+    {
+      "bytes": 10166959,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000009.jsonl",
+      "sha256": "f4240373e9a98ced843b040d072aa8b76165d697eb37b763e5dde45a4a59ae02"
+    },
+    {
+      "bytes": 10217061,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000010.jsonl",
+      "sha256": "99b429127d99d8f9a1996db08d0334c36018e53609411556c3b53f1dc3247c3e"
+    },
+    {
+      "bytes": 10217860,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000011.jsonl",
+      "sha256": "42d28d70def071047dce0df4bb551dc5144b381f66150546dab6c4f442ff145b"
+    },
+    {
+      "bytes": 10217902,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000012.jsonl",
+      "sha256": "2783d3a4f191fc68aa794baa5d42f9ea6f4310118cc9efbfbfdbc1097f911693"
+    },
+    {
+      "bytes": 10217474,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000013.jsonl",
+      "sha256": "eb58e467e5cbaf5711494903564f6a99e53def84bc4c9e3814d882b80c4d9781"
+    },
+    {
+      "bytes": 10217592,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000014.jsonl",
+      "sha256": "437f6a0d11371aab798b811d8eeec0d6b04020820a54e13e88e37589a11be8c9"
+    },
+    {
+      "bytes": 10220757,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000015.jsonl",
+      "sha256": "749eefb30408184f7cc93b8cc3fdb981183868c3b47abfeffac7681facc136e8"
+    },
+    {
+      "bytes": 10217955,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000016.jsonl",
+      "sha256": "615e3db0929e30b883911ad15ecc5dcb3bc867d4d786471cde2238fe500c8a74"
+    },
+    {
+      "bytes": 10218713,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000017.jsonl",
+      "sha256": "8d21ac0e98195d1bbca05e0a97d10bf83d2e99deb9a9ff6abbba5c49d8b6b696"
+    },
+    {
+      "bytes": 10217280,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000018.jsonl",
+      "sha256": "8e1667d4197c8601560ce0e5755faf0d4b3d83fce19170590ebca85b64cf51bd"
+    },
+    {
+      "bytes": 10216969,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000019.jsonl",
+      "sha256": "dafdc29927875e62ca31c01ea25105ed66c72b11d05d7c2711940357c5834531"
+    },
+    {
+      "bytes": 10266455,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000020.jsonl",
+      "sha256": "db9948deaee15dc12c69cd2c1ba066fdac470b35716c2b3b3231785d8274478b"
+    },
+    {
+      "bytes": 10266871,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000021.jsonl",
+      "sha256": "894825fae958dd3d6494a2144318d24ac5d191ad0a9b6524d01cd9ffa6a4d660"
+    },
+    {
+      "bytes": 10267472,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000022.jsonl",
+      "sha256": "e8ec71a2e2a1e4e861bf368add37b9760ff6e453eb430d4f40f94c1ba0b1e7e6"
+    },
+    {
+      "bytes": 10268072,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000023.jsonl",
+      "sha256": "441515b9edeaefb59b2d4de4e2826ed59f01a9cf61fe70d8d3eb2474c81587d5"
+    },
+    {
+      "bytes": 10267174,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000024.jsonl",
+      "sha256": "894ff6ffc399a7c3aaf9c8f1478d29303bfde362ef2c66a9165a557ffe04ee17"
+    },
+    {
+      "bytes": 10267571,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000025.jsonl",
+      "sha256": "8a75408cd618f3cc0db700da2b93143b77ff5b1f70013360eb721e2b5f3e7db4"
+    },
+    {
+      "bytes": 10267110,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000026.jsonl",
+      "sha256": "3a55a7f556de16ab14258f470c2c037cb7c64307bb1c4ed3551e2635f496e61f"
+    },
+    {
+      "bytes": 10268105,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000027.jsonl",
+      "sha256": "b31507632ef328939d00d31a0667847d4bc2cfc843343a34991cd000157f60c2"
+    },
+    {
+      "bytes": 10265855,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000028.jsonl",
+      "sha256": "9dfee848bce418eeb4eee8bff39238ee5ddb59c377c0610536760dc9c352ba15"
+    },
+    {
+      "bytes": 10268929,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000029.jsonl",
+      "sha256": "e03de2deb19acb657cc00badbf0276f7d2b642b43b623006bf4ed65f6afc1e0e"
+    },
+    {
+      "bytes": 10266399,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000030.jsonl",
+      "sha256": "b548a53ab1b1cd59a7cc1cd8374410f4e5600c7915c840b1c611d2560f6977df"
+    },
+    {
+      "bytes": 10265495,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000031.jsonl",
+      "sha256": "96324075f9ebaec4d1175d18114b3740b200b99900bde07db3634d6bde36ee45"
+    },
+    {
+      "bytes": 10268626,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000032.jsonl",
+      "sha256": "8dc7669034bc48939b4b6c70c2cd28212c5a7754d86558c7fa07bea549ee608f"
+    },
+    {
+      "bytes": 10268149,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000033.jsonl",
+      "sha256": "4b11cd650606c7f8a33b3242e8a2e16d40a2913e18f4e52b4b956cfd8ce99108"
+    },
+    {
+      "bytes": 10267357,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000034.jsonl",
+      "sha256": "f8eca5ce28933ee723ee47d650594eee858ba7fb19682ae4892c89aa3268daa1"
+    },
+    {
+      "bytes": 10267542,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000035.jsonl",
+      "sha256": "bb22010ceebe0f572509654cdd80b242bc7651c2fb608eedb2b7a111007f4ac3"
+    },
+    {
+      "bytes": 10266950,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000036.jsonl",
+      "sha256": "3287a0b9e37ab989b63d12bb933d43d28be9f83d520b1c3ebca0142238b9462b"
+    },
+    {
+      "bytes": 10267057,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000037.jsonl",
+      "sha256": "4795d4eded9c9353a256cbaac5181dd5eea7e75621ebf26dade7b63892ff3545"
+    },
+    {
+      "bytes": 10266927,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000038.jsonl",
+      "sha256": "3a6ec53c9726f34ac1f8c79574c8ee67f2ddc7c3fe1fc3f8b0682353b49b283e"
+    },
+    {
+      "bytes": 10268277,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000039.jsonl",
+      "sha256": "3893a558c107d12781646e8af4d3d58956f0051403477ccddfac6d9ac0d26783"
+    },
+    {
+      "bytes": 10265649,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000040.jsonl",
+      "sha256": "0d38d209ace68e2792fa8416b97ce640c005164620b6e9502f0cfff0855ac441"
+    },
+    {
+      "bytes": 10271145,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000041.jsonl",
+      "sha256": "2310dce8f7dbd70af027c8475ef3d0542face404e9a87ffbc0870b3a82e4d773"
+    },
+    {
+      "bytes": 10266394,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000042.jsonl",
+      "sha256": "ceb045bf2143f68c7876656616d15d0f8484034ea058cf8a1a2c5d1a3baf7234"
+    },
+    {
+      "bytes": 10267565,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000043.jsonl",
+      "sha256": "b721d84d7bc05288451d9fae8f82027c69d32cde53c0eb42d4eb98a9db15155c"
+    },
+    {
+      "bytes": 7150791,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "embeddings/dapfam/element/ids_000044.jsonl",
+      "sha256": "1460117c594f5d4b85a091b9bf41f3a75c8c169e36870aebc5c46ccc0ee47650"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000000.npy",
+      "sha256": "8c4dad820c29dbe98fdf683e319d47ceb780f37f985396d359396137b7c326b6"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000001.npy",
+      "sha256": "00e6e290c3dfc1491c4a5730073324d938b416164047ac56e27d44e37414a73e"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000002.npy",
+      "sha256": "383fc27d59bef8d788a3c2f08d066090758fdef0e4826c0fadda67a75ff402d8"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000003.npy",
+      "sha256": "f49effcc6699edc3b236fc7864c6fc9df4c6d63aec78bcad9aee2bb112b66540"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000004.npy",
+      "sha256": "28a093af1fcb1ae90d02c81bf52527b3544bc57539e7a70847126f4aae1b04a1"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000005.npy",
+      "sha256": "d6cddf4be5aa4a394f1fcde27957ed3ceb90f924fc61d6f05d4c29be89bab68b"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000006.npy",
+      "sha256": "4e38eab0d243b4e1bbbfe25a00e26a35eb4670e096b7cab4a09e3c7dddccb555"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000007.npy",
+      "sha256": "ad65418d3d8cbccad68155860919575b9be7e442d9fa2c3de8739b1f35db205e"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000008.npy",
+      "sha256": "8cf56288d0a632b827876bd1ea48658693ddb4eb11edd7d5bc41f5d978db6b8f"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000009.npy",
+      "sha256": "7179d6d144285e05e7d8d4d03c3b4176b24bbaf5a0e0e627bb7b0e3a0c1aed69"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000010.npy",
+      "sha256": "8916c2e88f2ca1bd69bf39cf7750dca9451041f6b9fb09c4cb0d74911afd12be"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000011.npy",
+      "sha256": "8275c86f89e99d93f117d262364009175d7cdd5752e11296865a583fda7a8584"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000012.npy",
+      "sha256": "c2ae64f944f7379c5e478f8e6c1447b80b168f3369d02a9cf4a957605f913698"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000013.npy",
+      "sha256": "b18a254424ea78dc5f1ddd55adac2a79ea8cc5145018fc4a5924c7d0bddf6949"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000014.npy",
+      "sha256": "efcf1bbf0eb5b066fb1ee4abff113270d99ec680b22c4df5a9c94add442f50e2"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000015.npy",
+      "sha256": "f04e82af6cce04ff5a44157005ccc0eae2774c5c0574a280548cc2799f9ae451"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000016.npy",
+      "sha256": "bd4d8498843ec394d5333b5971a44972c7adc3f773ab3c6ec99de8ed2eee64b7"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000017.npy",
+      "sha256": "e8e619f7a86038abebf570291de54d988d99398fa3492c2a1fedb4e71e5a61a0"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000018.npy",
+      "sha256": "b22131e6d5d8d5abaf845318c9a667fd5993b3fe85737292aacf0fcdba948312"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000019.npy",
+      "sha256": "149ba2a55972b9d5b5adddcdd0daeb8748304ae451382438254d11633d4ca745"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000020.npy",
+      "sha256": "47234d2010864fede460f789a34f7e617d9a7ffb92385d7331e5bd8c033c578f"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000021.npy",
+      "sha256": "3dc7be5037b6544ab27d755d0a08b15d9d20f5ed5572d5e61ad29459da7bd39c"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000022.npy",
+      "sha256": "099ccd2d13e4f567061790cafeefa2329633bff9675917e31f19e2f175758bcb"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000023.npy",
+      "sha256": "cd5e1e83a59b97febfcd8db2c59b0f01ba7189e499124b38b23f8f616e3a7922"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000024.npy",
+      "sha256": "b6f0a5f78ff6ff6a31dc8cf0869efb06a81269fdeaacd507d7794b1d5c53e1a6"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000025.npy",
+      "sha256": "b6dfac8b1b65f65a7bf044bec19cbad1d5b26ef60e54e4407fd6c6466b2cdd4a"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000026.npy",
+      "sha256": "8723eaafd3afd8f5e3fa23fe6e6f7d6d833638dcc02862680ca19c02a21b94d9"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000027.npy",
+      "sha256": "3ea7be009fe0c2a8e55b0dd898e11721b605220345a08514fc5f3a43be85bafb"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000028.npy",
+      "sha256": "4c08ab167475d7e20c0d5e7162269c533d1c2e3e6ebd5d98e27e4047b8528b0a"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000029.npy",
+      "sha256": "8e987b87bc9c8362797a4a1e687697897bd6cd7e2b3dfcbd9e0ee866ec499e89"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000030.npy",
+      "sha256": "4db1de1fe4b3774046f7771686b4ab53a6b5f9b458297d493eb6241352787f37"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000031.npy",
+      "sha256": "37b9eaf809a472f12aa040fada87812e92571c6778d2e32c262d4fcf436161a0"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000032.npy",
+      "sha256": "a143910284bd7ba7e232e8abe4fcfe3ef6ccbe801d02aad99119a4a32f636f9e"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000033.npy",
+      "sha256": "4e458ff6781fee6faea1e26bfe498e1c533e4a5c01eb80cbc773ce100a4c3a6a"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000034.npy",
+      "sha256": "7e498bc94c30f4c8a3467feec4ee13d989301b67291603c6bae50d3e907e4cba"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000035.npy",
+      "sha256": "886fd69782ee27252f6f2f5cc56293ee64486d3e4da8d761681ed35ea4bbecc3"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000036.npy",
+      "sha256": "f3d10e8ffa671ab17b21cacbaad404d6771c173ae2d80e8143cb144b7346c72a"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000037.npy",
+      "sha256": "3fcc7e0715f297f20a661265688dca3d7ec712e2d11fc9e98db447256fc5bc01"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000038.npy",
+      "sha256": "f252219af5125aa6b67c94425655f3ac4247052844433f8788f6fc5e33d80e96"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000039.npy",
+      "sha256": "6494f02537bcf2ba77407c4cfb77f6f177cb08a9c962bb9a38de440773fc12e4"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000040.npy",
+      "sha256": "e97c2571a2c3adc2ed9d6bf55712698bebee61b9939e61c7d58a1000ec7c95bb"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000041.npy",
+      "sha256": "52f1ec9183e87f8bd7eb464f1fc4cb349da99179dff9c7acd8368c564f36f496"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000042.npy",
+      "sha256": "9c26f1cc7fd8eae498ec2fe941dabf95163b854f7b3e144c26dd99b0f6dd275d"
+    },
+    {
+      "bytes": 102400128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000043.npy",
+      "sha256": "ce52c81d43782ce652e1b8ed8226112d5c68d96412550b4fef7d310a8f1de1bb"
+    },
+    {
+      "bytes": 71354496,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/element/vectors_000044.npy",
+      "sha256": "3c97fad92c5059a973c2e9d86e38f76cebb7bd45c76d1efcf03963d4260c20db"
+    },
+    {
+      "bytes": 12256,
+      "disposition": "historical-reference",
+      "kind": "embedding_manifest",
+      "note": "not used by P1 lexical baseline",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/embedding_manifest.json",
+      "sha256": "4f46ca742415823a2495d527b9ffaf66c7bb8ec92cd3adeeb532532a9b907090"
+    },
+    {
+      "bytes": 24302110,
+      "disposition": "historical-reference",
+      "kind": "historical_reference",
+      "note": "Paper A/B/D evidence is exposed history",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids.jsonl",
+      "sha256": "213b12ea4326ed3a2ec43731345f389baa3e1b8c14dc2bb2de25e57bcc95b8b3"
+    },
+    {
+      "bytes": 9624058,
+      "disposition": "historical-reference",
+      "kind": "historical_reference",
+      "note": "Paper A/B/D evidence is exposed history",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids_000000.jsonl",
+      "sha256": "fb2ad0abd9b01f2f84154c16b0475b338e60e7931384eec1b6dd25eb834a5c26"
+    },
+    {
+      "bytes": 9635118,
+      "disposition": "historical-reference",
+      "kind": "historical_reference",
+      "note": "Paper A/B/D evidence is exposed history",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids_000001.jsonl",
+      "sha256": "8fcec6c93dd06130a9524c1f3e706bc4b41630c14ac15e24d15e9c8e548752e9"
+    },
+    {
+      "bytes": 5042934,
+      "disposition": "historical-reference",
+      "kind": "historical_reference",
+      "note": "Paper A/B/D evidence is exposed history",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids_000002.jsonl",
+      "sha256": "92e3804766bcfe210b428c7d0b4340e353dc0263344b3a11af466e3daf1e0d4e"
+    },
+    {
+      "bytes": 76800128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/vectors_000000.npy",
+      "sha256": "c2c7583b7e8d896c46d8d2af3d1e95a3515eea079539ff98f9007151fb97b6d4"
+    },
+    {
+      "bytes": 76800128,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/vectors_000001.npy",
+      "sha256": "47c96bcc7a3c4d999d7b067c562ae7fe570ebd544f9c36f8ae9f559a4fb72fb7"
+    },
+    {
+      "bytes": 40031360,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/vectors_000002.npy",
+      "sha256": "c2616a904701c81659f0b077769b22398eba54b2e88a7d4295bf7af921adb5ea"
+    },
+    {
+      "bytes": 1138,
+      "disposition": "historical-reference",
+      "kind": "historical_reference",
+      "note": "Paper A/B/D evidence is exposed history; hash withheld outside owner-local process",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_queries/query_vectors.metadata.json",
+      "sha256": null
+    },
+    {
+      "bytes": 3830912,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes; hash withheld outside owner-local process",
+      "path": "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_queries/query_vectors.npy",
+      "sha256": null
+    },
+    {
+      "bytes": 11,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/.gitkeep",
+      "sha256": "654bdf95229d0071948900cc7a662469a84a656cc69d5806187d76a3a84ff9cb"
+    },
+    {
+      "bytes": 305454434,
+      "disposition": "historical-reference",
+      "kind": "representation",
+      "note": "not an active P1 corpus candidate",
+      "path": "processed/dapfam/chunks_claim.jsonl",
+      "sha256": "d083eb62229aa31d993ae9eef5548980a89eca06419ba86e60db8db25b1f7493"
+    },
+    {
+      "bytes": 3114241891,
+      "disposition": "reusable-after-certification",
+      "kind": "processed_corpus",
+      "note": "safe corpus candidate",
+      "path": "processed/dapfam/chunks_doc.jsonl",
+      "sha256": "ed4ee8a98c89722d88d15ad83b398a125bec0e2bd4e7c79385613676b135e99e"
+    },
+    {
+      "bytes": 1172767750,
+      "disposition": "incompatible",
+      "kind": "representation",
+      "note": "2,234,841 rows exceed the DAPFAM four-unit R1 limit",
+      "path": "processed/dapfam/chunks_element.jsonl",
+      "sha256": "e00d64fb7b8a2eda62d8728a0eda543b188b1f79e732b053af255fe1232cd095"
+    },
+    {
+      "bytes": 3162706100,
+      "disposition": "historical-reference",
+      "kind": "representation",
+      "note": "not an active P1 corpus candidate",
+      "path": "processed/dapfam/chunks_section.jsonl",
+      "sha256": "b661798f7946f3512d69c6cdc70430cef38e957f6bb2116f93b9e4a6a49f054d"
+    },
+    {
+      "bytes": 3125138209,
+      "disposition": "reusable-after-certification",
+      "kind": "processed_corpus",
+      "note": "safe corpus candidate",
+      "path": "processed/dapfam/patents.jsonl",
+      "sha256": "2d79ee7d0479565711889553d2da849fef5e3a7aa5014bf398a43c5becd0cab7"
+    },
+    {
+      "bytes": 2194236,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only; hash withheld outside owner-local process",
+      "path": "processed/dapfam/qrels.tsv",
+      "sha256": null
+    },
+    {
+      "bytes": 158762269,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only",
+      "path": "processed/dapfam/queries.jsonl",
+      "sha256": "50a0e9c5673e9e3e0ae2558272dc824572554067bd1443d043016aedeb7fe3fa"
+    },
+    {
+      "bytes": 1259,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source",
+      "path": "processed/dapfam/README.md",
+      "sha256": "0aa4fc50d562a02694bb82c8d168b0dd4207c6661d46f9f07f5bfd695be5343d"
+    },
+    {
+      "bytes": 2243,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/dapfam/validation_summary.json",
+      "sha256": "e3af6a11caad81021b8f0ae33ba3da688d512a70290e0df42eeda19086e8cc74"
+    },
+    {
+      "bytes": 1048760320,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512/bm25_tac_passages/index.sqlite",
+      "sha256": "291cd27a2edfebc1ac671686bd9a6a94f0518fbc8ac13195656e82c8fdc4d80d"
+    },
+    {
+      "bytes": 428,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512/bm25_tac_passages/manifest.json",
+      "sha256": "f367760c8ab9e4f9104c143d77add3c04c89681257bb6ba064a4b8efcdcdf22e"
+    },
+    {
+      "bytes": 381979442,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512/corpus_tac_passages.jsonl",
+      "sha256": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061"
+    },
+    {
+      "bytes": 9629,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512/manifest.json",
+      "sha256": "c8a947ac6222c1fe43483f32f71387ecbd5b566c509d1eb9348d71f26c4e29dc"
+    },
+    {
+      "bytes": 2349036,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only; hash withheld outside owner-local process",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512/qrels_domain.tsv",
+      "sha256": null
+    },
+    {
+      "bytes": 11641315,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512/queries_tac.jsonl",
+      "sha256": "409e5c2a48f3ce549303608605fc945bad3ac16ac370293278e6c2d6cb2d5bd9"
+    },
+    {
+      "bytes": 1048760320,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512_v2/bm25_tac_passages/index.sqlite",
+      "sha256": "291cd27a2edfebc1ac671686bd9a6a94f0518fbc8ac13195656e82c8fdc4d80d"
+    },
+    {
+      "bytes": 434,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512_v2/bm25_tac_passages/manifest.json",
+      "sha256": "79c9a3a82ae8d6fadf9ddb14c7d6ea33512415a8eb6f2c9f24682e236ab0450d"
+    },
+    {
+      "bytes": 381979442,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512_v2/corpus_tac_passages.jsonl",
+      "sha256": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061"
+    },
+    {
+      "bytes": 10889,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512_v2/manifest.json",
+      "sha256": "996789aaddf7a609cd62db605561d605206e8648898fc4cf4280181688803169"
+    },
+    {
+      "bytes": 2349036,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only; hash withheld outside owner-local process",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512_v2/qrels_domain.tsv",
+      "sha256": null
+    },
+    {
+      "bytes": 11641315,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only",
+      "path": "processed/retrieval/dapfam_citation_controlled_tac512_v2/queries_tac.jsonl",
+      "sha256": "409e5c2a48f3ce549303608605fc945bad3ac16ac370293278e6c2d6cb2d5bd9"
+    },
+    {
+      "bytes": 18259,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/retrieval/dapfam_claim_bm25/chunks-preview.jsonl",
+      "sha256": "8e590905ab05b31cd3c7f170a29049c23384a9953e36231aba0983da8bc2eb85"
+    },
+    {
+      "bytes": 751001600,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_claim_bm25/index.sqlite",
+      "sha256": "37d5630374fb1a210919372f67706936219310e4f7f0537d62a4121da6d9f8b4"
+    },
+    {
+      "bytes": 1073,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_claim_bm25/manifest.json",
+      "sha256": "01a67f98feab6b6c2ca40a134212ecc339c7e7b1e03f74f86b4f59d46735f3a1"
+    },
+    {
+      "bytes": 18113,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/retrieval/dapfam_doc_bm25/chunks-preview.jsonl",
+      "sha256": "2853b2e6c5427452a57b705eaf284e25696345db8f4e1dd5f0236c59849c6013"
+    },
+    {
+      "bytes": 7149776896,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_doc_bm25/index.sqlite",
+      "sha256": "0f3a0398fcabceed7a8f67fcf8fa651161fee2a06a0728eb06817c1cfbc24073"
+    },
+    {
+      "bytes": 1061,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_doc_bm25/manifest.json",
+      "sha256": "37aba37dd8e1df5e983eb959335c5b4af10da81f7374570102be6234f15b6f37"
+    },
+    {
+      "bytes": 18113,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/retrieval/dapfam_doc_bm25_sample/chunks-preview.jsonl",
+      "sha256": "2853b2e6c5427452a57b705eaf284e25696345db8f4e1dd5f0236c59849c6013"
+    },
+    {
+      "bytes": 34115584,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_doc_bm25_sample/index.sqlite",
+      "sha256": "a889a738bdf3fdeeb73e0c007a1686ced6d6eb82c5ce442af5ae57ac40c1916d"
+    },
+    {
+      "bytes": 1086,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_doc_bm25_sample/manifest.json",
+      "sha256": "35b234ed66212c3e3c644f5e346f42c928f726aa0bf7d16eee2ab975f555aa0d"
+    },
+    {
+      "bytes": 15765,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "processed/retrieval/dapfam_element_bm25/chunks-preview.jsonl",
+      "sha256": "fe261621b887756b0ab9bdb42992838599e49f9489e38d6952ad7d671a5e8989"
+    },
+    {
+      "bytes": 2239823872,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_element_bm25/index.sqlite",
+      "sha256": "c8475ebf69eb7e72b3036f58e4ca88d8d296cf120864be8f0dc80a7b1216d3cb"
+    },
+    {
+      "bytes": 1290,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_element_bm25/manifest.json",
+      "sha256": "175d8b630a1055c520f404f4788413dec3735c473c2ad96b8cb2d84895aba8e6"
+    },
+    {
+      "bytes": 430,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source",
+      "path": "processed/retrieval/dapfam_element_bm25/README.md",
+      "sha256": "f5fb68e87c4655b01f9ad7becfdb3ba8e0d32fd9619e700e5e1d096e428c417c"
+    },
+    {
+      "bytes": 1048760320,
+      "disposition": "reusable-after-certification",
+      "kind": "bm25_index",
+      "note": "reuse only after full lineage match",
+      "path": "processed/retrieval/dapfam_paper_aligned/bm25_tac_passages/index.sqlite",
+      "sha256": "291cd27a2edfebc1ac671686bd9a6a94f0518fbc8ac13195656e82c8fdc4d80d"
+    },
+    {
+      "bytes": 402,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_paper_aligned/bm25_tac_passages/manifest.json",
+      "sha256": "ee60a649c58efab63fa3dd8113a925ba1f179ad16c0974302118070935ca14d3"
+    },
+    {
+      "bytes": 381979442,
+      "disposition": "historical-reference",
+      "kind": "historical_reference",
+      "note": "Paper A/B/D evidence is exposed history",
+      "path": "processed/retrieval/dapfam_paper_aligned/corpus_tac_passages.jsonl",
+      "sha256": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061"
+    },
+    {
+      "bytes": 10793,
+      "disposition": "reusable-after-certification",
+      "kind": "manifest",
+      "note": "metadata/provenance only",
+      "path": "processed/retrieval/dapfam_paper_aligned/manifest.json",
+      "sha256": "208c19384af85c6d0f1552eb36af8def06ed2b74f889bed0d2d6f3cfab9de9e5"
+    },
+    {
+      "bytes": 2349036,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only; hash withheld outside owner-local process",
+      "path": "processed/retrieval/dapfam_paper_aligned/qrels_domain.tsv",
+      "sha256": null
+    },
+    {
+      "bytes": 11641315,
+      "disposition": "reusable-after-certification",
+      "kind": "protected_evaluator_input",
+      "note": "owner-local process only",
+      "path": "processed/retrieval/dapfam_paper_aligned/queries_tac.jsonl",
+      "sha256": "409e5c2a48f3ce549303608605fc945bad3ac16ac370293278e6c2d6cb2d5bd9"
+    },
+    {
+      "bytes": 11,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "raw/.gitkeep",
+      "sha256": "654bdf95229d0071948900cc7a662469a84a656cc69d5806187d76a3a84ff9cb"
+    },
+    {
+      "bytes": 2403955872,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/corpus/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train-00000-of-00002.arrow",
+      "sha256": "7589459c6fcf647703fcae05ece85dfde06c41a121d82cc9ae155ce4f5a2a38e"
+    },
+    {
+      "bytes": 704837616,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/corpus/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train-00001-of-00002.arrow",
+      "sha256": "5405ad3dcda16f134f0e2fd88a22f4c1725f9a93e559b1c170c5e4ccbcc87956"
+    },
+    {
+      "bytes": 1219,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/corpus/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dataset_info.json",
+      "sha256": "35ea4c3862b4de363973dcf863c604b8e4f47f4345f1847be728d72db99660dd"
+    },
+    {
+      "bytes": 158414032,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/queries/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train.arrow",
+      "sha256": "b596c2dcc73399840c0a9c2143b23e8497bbaa33af8dbb2a8877ad52e5f9f2fd"
+    },
+    {
+      "bytes": 1268,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/queries/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dataset_info.json",
+      "sha256": "9e9e99154249f8b3711f6a841d1585caf383295d9af552183ec4b9966f99dc30"
+    },
+    {
+      "bytes": 3417120,
+      "disposition": "reference_only",
+      "kind": "raw_or_embedding_cache",
+      "note": "read-only source bytes",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/relations/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train.arrow",
+      "sha256": "861a991875f3594e301c84ffe0ad4f0fbd6edcf07c534c172609f40bf623e298"
+    },
+    {
+      "bytes": 664,
+      "disposition": "reference_only",
+      "kind": "other",
+      "note": "not selected by the active P1 adapter",
+      "path": "raw/hf-cache/datalyes___dapfam_patent/relations/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dataset_info.json",
+      "sha256": "cfc6e04ae02c05758a227c5b6f28ce8b1a1d91864018f30d23c90ffe1dcd16b9"
+    },
+    {
+      "bytes": 1631,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source; hash withheld outside owner-local process",
+      "path": "raw-global/bigquery/2026-05-02-legacy-10k/README.md",
+      "sha256": null
+    },
+    {
+      "bytes": 1713,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source; hash withheld outside owner-local process",
+      "path": "raw-global/bigquery/2026-05-16-global-pharma-v1/pass1/README.md",
+      "sha256": null
+    },
+    {
+      "bytes": 2772,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source; hash withheld outside owner-local process",
+      "path": "raw-global/bigquery/2026-05-16-global-pharma-v1/pass2/README.md",
+      "sha256": null
+    },
+    {
+      "bytes": 2133,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source; hash withheld outside owner-local process",
+      "path": "raw-global/bigquery/2026-05-16-global-pharma-v1/README.md",
+      "sha256": null
+    },
+    {
+      "bytes": 1370,
+      "disposition": "historical-reference",
+      "kind": "documentation_or_table",
+      "note": "not a P1 numeric source; hash withheld outside owner-local process",
+      "path": "raw-global/bigquery/README.md",
+      "sha256": null
+    }
+  ],
+  "candidates": {
+    "chunks_doc": "processed/dapfam/chunks_doc.jsonl",
+    "chunks_tac": "processed/retrieval/dapfam_citation_controlled_tac512/corpus_tac_passages.jsonl",
+    "patents": "processed/dapfam/patents.jsonl",
+    "qrels": "processed/dapfam/qrels.tsv",
+    "qrels_domain": "processed/retrieval/dapfam_citation_controlled_tac512/qrels_domain.tsv",
+    "queries": "processed/dapfam/queries.jsonl"
+  },
+  "paper_history": {
+    "active_final_872_global_untouched": "not_claimable",
+    "paper_a": "historically_exposed",
+    "paper_b": "historically_exposed",
+    "paper_d": "historically_exposed",
+    "paper_d_test_997": "historically_exposed"
+  },
+  "protected_assets_owner_local_only": [
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_queries/query_vectors.metadata.json",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_queries/query_vectors.npy",
+    "processed/dapfam/qrels.tsv",
+    "processed/retrieval/dapfam_citation_controlled_tac512/qrels_domain.tsv",
+    "processed/retrieval/dapfam_citation_controlled_tac512_v2/qrels_domain.tsv",
+    "processed/retrieval/dapfam_paper_aligned/qrels_domain.tsv",
+    "raw-global/bigquery/2026-05-02-legacy-10k/README.md",
+    "raw-global/bigquery/2026-05-16-global-pharma-v1/pass1/README.md",
+    "raw-global/bigquery/2026-05-16-global-pharma-v1/pass2/README.md",
+    "raw-global/bigquery/2026-05-16-global-pharma-v1/README.md",
+    "raw-global/bigquery/README.md"
+  ],
+  "root": "C:\\Users\\Siripon Sri\\Desktop\\My_Research\\00_Projects\\00_myIS\\00_App\\is1-projects\\shared\\data",
+  "safe_file_hashes": {
+    "benchmark_table_section_a.csv": "c7846c23ba0f7814880d04289657e46276d844d1fa5e0baf47063c0dc299308f",
+    "embeddings/.gitkeep": "654bdf95229d0071948900cc7a662469a84a656cc69d5806187d76a3a84ff9cb",
+    "embeddings/dapfam/claim/embedding_manifest__20260527T063839Z__f81a8135d608.json": "3141d0cffa11ea2a7cc8cd792e4c47d2680e47e47e93b6a4c0e9785e5785d9c5",
+    "embeddings/dapfam/claim/ids.jsonl": "530333715e449a1ba816a210b88f2915f0158d53c8187933aae7aacd9bc1a6be",
+    "embeddings/dapfam/claim/ids_000000.jsonl": "530333715e449a1ba816a210b88f2915f0158d53c8187933aae7aacd9bc1a6be",
+    "embeddings/dapfam/claim/vectors_000000.npy": "c8c2fce8a764aca9837507855c4dd8bff9314b811bdf065c15755f80baffad21",
+    "embeddings/dapfam/element/embedding_manifest__20260527T070637Z__6893c3a47d86.json": "c83ccb042300fe44c7c3363b9262a70c59488c7a86001fc9508e25b344e62338",
+    "embeddings/dapfam/element/embedding_manifest__20260527T090003Z__ab48dde7f4ee.json": "2024b2038c9a3876c7a5fb9dc502c574c25e1436243908d68e566c74a3de4894",
+    "embeddings/dapfam/element/ids.jsonl": "01098a7181788fcb794a0ea503293a9bb79f5eb37319891e147398c4cc852074",
+    "embeddings/dapfam/element/ids_000000.jsonl": "8ed315063cf5124b31d852bd992ba23acd0d8bbd5f19a4ee6bf3282e8b3257e9",
+    "embeddings/dapfam/element/ids_000001.jsonl": "ab1015ad0e355204bf8bfaf4093fa69c0cbe640242b27f10176a98a7598979c3",
+    "embeddings/dapfam/element/ids_000002.jsonl": "776307a407d42ba677c8ad73af898391ed3aa0d19e8668b84718923db309e9b6",
+    "embeddings/dapfam/element/ids_000003.jsonl": "ae8de9ccb4924eb4eb56c3ff7dcc6d6ccc2bbb890fb463489ac6ae2dc36ae706",
+    "embeddings/dapfam/element/ids_000004.jsonl": "3b1381597b2785a1d12dfbfee8919112d5653fa7feeccf07adfbe696b0c2496e",
+    "embeddings/dapfam/element/ids_000005.jsonl": "d3efd247733a26ee4376d549e34b464ef4c09c6ae0087b3accdf482979da70f5",
+    "embeddings/dapfam/element/ids_000006.jsonl": "4404a2ab7669e1df7e085f6f0afa11741a9a05b83879e811335c695c05613b19",
+    "embeddings/dapfam/element/ids_000007.jsonl": "7e027cd7d831a03263a481a8ddd7428adc835429e43be24f353626c885ecf347",
+    "embeddings/dapfam/element/ids_000008.jsonl": "b61b8f4b9f6158c2517501723a4b3120a57aefd30e1d4cd5c44bbea3cb2b38bb",
+    "embeddings/dapfam/element/ids_000009.jsonl": "f4240373e9a98ced843b040d072aa8b76165d697eb37b763e5dde45a4a59ae02",
+    "embeddings/dapfam/element/ids_000010.jsonl": "99b429127d99d8f9a1996db08d0334c36018e53609411556c3b53f1dc3247c3e",
+    "embeddings/dapfam/element/ids_000011.jsonl": "42d28d70def071047dce0df4bb551dc5144b381f66150546dab6c4f442ff145b",
+    "embeddings/dapfam/element/ids_000012.jsonl": "2783d3a4f191fc68aa794baa5d42f9ea6f4310118cc9efbfbfdbc1097f911693",
+    "embeddings/dapfam/element/ids_000013.jsonl": "eb58e467e5cbaf5711494903564f6a99e53def84bc4c9e3814d882b80c4d9781",
+    "embeddings/dapfam/element/ids_000014.jsonl": "437f6a0d11371aab798b811d8eeec0d6b04020820a54e13e88e37589a11be8c9",
+    "embeddings/dapfam/element/ids_000015.jsonl": "749eefb30408184f7cc93b8cc3fdb981183868c3b47abfeffac7681facc136e8",
+    "embeddings/dapfam/element/ids_000016.jsonl": "615e3db0929e30b883911ad15ecc5dcb3bc867d4d786471cde2238fe500c8a74",
+    "embeddings/dapfam/element/ids_000017.jsonl": "8d21ac0e98195d1bbca05e0a97d10bf83d2e99deb9a9ff6abbba5c49d8b6b696",
+    "embeddings/dapfam/element/ids_000018.jsonl": "8e1667d4197c8601560ce0e5755faf0d4b3d83fce19170590ebca85b64cf51bd",
+    "embeddings/dapfam/element/ids_000019.jsonl": "dafdc29927875e62ca31c01ea25105ed66c72b11d05d7c2711940357c5834531",
+    "embeddings/dapfam/element/ids_000020.jsonl": "db9948deaee15dc12c69cd2c1ba066fdac470b35716c2b3b3231785d8274478b",
+    "embeddings/dapfam/element/ids_000021.jsonl": "894825fae958dd3d6494a2144318d24ac5d191ad0a9b6524d01cd9ffa6a4d660",
+    "embeddings/dapfam/element/ids_000022.jsonl": "e8ec71a2e2a1e4e861bf368add37b9760ff6e453eb430d4f40f94c1ba0b1e7e6",
+    "embeddings/dapfam/element/ids_000023.jsonl": "441515b9edeaefb59b2d4de4e2826ed59f01a9cf61fe70d8d3eb2474c81587d5",
+    "embeddings/dapfam/element/ids_000024.jsonl": "894ff6ffc399a7c3aaf9c8f1478d29303bfde362ef2c66a9165a557ffe04ee17",
+    "embeddings/dapfam/element/ids_000025.jsonl": "8a75408cd618f3cc0db700da2b93143b77ff5b1f70013360eb721e2b5f3e7db4",
+    "embeddings/dapfam/element/ids_000026.jsonl": "3a55a7f556de16ab14258f470c2c037cb7c64307bb1c4ed3551e2635f496e61f",
+    "embeddings/dapfam/element/ids_000027.jsonl": "b31507632ef328939d00d31a0667847d4bc2cfc843343a34991cd000157f60c2",
+    "embeddings/dapfam/element/ids_000028.jsonl": "9dfee848bce418eeb4eee8bff39238ee5ddb59c377c0610536760dc9c352ba15",
+    "embeddings/dapfam/element/ids_000029.jsonl": "e03de2deb19acb657cc00badbf0276f7d2b642b43b623006bf4ed65f6afc1e0e",
+    "embeddings/dapfam/element/ids_000030.jsonl": "b548a53ab1b1cd59a7cc1cd8374410f4e5600c7915c840b1c611d2560f6977df",
+    "embeddings/dapfam/element/ids_000031.jsonl": "96324075f9ebaec4d1175d18114b3740b200b99900bde07db3634d6bde36ee45",
+    "embeddings/dapfam/element/ids_000032.jsonl": "8dc7669034bc48939b4b6c70c2cd28212c5a7754d86558c7fa07bea549ee608f",
+    "embeddings/dapfam/element/ids_000033.jsonl": "4b11cd650606c7f8a33b3242e8a2e16d40a2913e18f4e52b4b956cfd8ce99108",
+    "embeddings/dapfam/element/ids_000034.jsonl": "f8eca5ce28933ee723ee47d650594eee858ba7fb19682ae4892c89aa3268daa1",
+    "embeddings/dapfam/element/ids_000035.jsonl": "bb22010ceebe0f572509654cdd80b242bc7651c2fb608eedb2b7a111007f4ac3",
+    "embeddings/dapfam/element/ids_000036.jsonl": "3287a0b9e37ab989b63d12bb933d43d28be9f83d520b1c3ebca0142238b9462b",
+    "embeddings/dapfam/element/ids_000037.jsonl": "4795d4eded9c9353a256cbaac5181dd5eea7e75621ebf26dade7b63892ff3545",
+    "embeddings/dapfam/element/ids_000038.jsonl": "3a6ec53c9726f34ac1f8c79574c8ee67f2ddc7c3fe1fc3f8b0682353b49b283e",
+    "embeddings/dapfam/element/ids_000039.jsonl": "3893a558c107d12781646e8af4d3d58956f0051403477ccddfac6d9ac0d26783",
+    "embeddings/dapfam/element/ids_000040.jsonl": "0d38d209ace68e2792fa8416b97ce640c005164620b6e9502f0cfff0855ac441",
+    "embeddings/dapfam/element/ids_000041.jsonl": "2310dce8f7dbd70af027c8475ef3d0542face404e9a87ffbc0870b3a82e4d773",
+    "embeddings/dapfam/element/ids_000042.jsonl": "ceb045bf2143f68c7876656616d15d0f8484034ea058cf8a1a2c5d1a3baf7234",
+    "embeddings/dapfam/element/ids_000043.jsonl": "b721d84d7bc05288451d9fae8f82027c69d32cde53c0eb42d4eb98a9db15155c",
+    "embeddings/dapfam/element/ids_000044.jsonl": "1460117c594f5d4b85a091b9bf41f3a75c8c169e36870aebc5c46ccc0ee47650",
+    "embeddings/dapfam/element/vectors_000000.npy": "8c4dad820c29dbe98fdf683e319d47ceb780f37f985396d359396137b7c326b6",
+    "embeddings/dapfam/element/vectors_000001.npy": "00e6e290c3dfc1491c4a5730073324d938b416164047ac56e27d44e37414a73e",
+    "embeddings/dapfam/element/vectors_000002.npy": "383fc27d59bef8d788a3c2f08d066090758fdef0e4826c0fadda67a75ff402d8",
+    "embeddings/dapfam/element/vectors_000003.npy": "f49effcc6699edc3b236fc7864c6fc9df4c6d63aec78bcad9aee2bb112b66540",
+    "embeddings/dapfam/element/vectors_000004.npy": "28a093af1fcb1ae90d02c81bf52527b3544bc57539e7a70847126f4aae1b04a1",
+    "embeddings/dapfam/element/vectors_000005.npy": "d6cddf4be5aa4a394f1fcde27957ed3ceb90f924fc61d6f05d4c29be89bab68b",
+    "embeddings/dapfam/element/vectors_000006.npy": "4e38eab0d243b4e1bbbfe25a00e26a35eb4670e096b7cab4a09e3c7dddccb555",
+    "embeddings/dapfam/element/vectors_000007.npy": "ad65418d3d8cbccad68155860919575b9be7e442d9fa2c3de8739b1f35db205e",
+    "embeddings/dapfam/element/vectors_000008.npy": "8cf56288d0a632b827876bd1ea48658693ddb4eb11edd7d5bc41f5d978db6b8f",
+    "embeddings/dapfam/element/vectors_000009.npy": "7179d6d144285e05e7d8d4d03c3b4176b24bbaf5a0e0e627bb7b0e3a0c1aed69",
+    "embeddings/dapfam/element/vectors_000010.npy": "8916c2e88f2ca1bd69bf39cf7750dca9451041f6b9fb09c4cb0d74911afd12be",
+    "embeddings/dapfam/element/vectors_000011.npy": "8275c86f89e99d93f117d262364009175d7cdd5752e11296865a583fda7a8584",
+    "embeddings/dapfam/element/vectors_000012.npy": "c2ae64f944f7379c5e478f8e6c1447b80b168f3369d02a9cf4a957605f913698",
+    "embeddings/dapfam/element/vectors_000013.npy": "b18a254424ea78dc5f1ddd55adac2a79ea8cc5145018fc4a5924c7d0bddf6949",
+    "embeddings/dapfam/element/vectors_000014.npy": "efcf1bbf0eb5b066fb1ee4abff113270d99ec680b22c4df5a9c94add442f50e2",
+    "embeddings/dapfam/element/vectors_000015.npy": "f04e82af6cce04ff5a44157005ccc0eae2774c5c0574a280548cc2799f9ae451",
+    "embeddings/dapfam/element/vectors_000016.npy": "bd4d8498843ec394d5333b5971a44972c7adc3f773ab3c6ec99de8ed2eee64b7",
+    "embeddings/dapfam/element/vectors_000017.npy": "e8e619f7a86038abebf570291de54d988d99398fa3492c2a1fedb4e71e5a61a0",
+    "embeddings/dapfam/element/vectors_000018.npy": "b22131e6d5d8d5abaf845318c9a667fd5993b3fe85737292aacf0fcdba948312",
+    "embeddings/dapfam/element/vectors_000019.npy": "149ba2a55972b9d5b5adddcdd0daeb8748304ae451382438254d11633d4ca745",
+    "embeddings/dapfam/element/vectors_000020.npy": "47234d2010864fede460f789a34f7e617d9a7ffb92385d7331e5bd8c033c578f",
+    "embeddings/dapfam/element/vectors_000021.npy": "3dc7be5037b6544ab27d755d0a08b15d9d20f5ed5572d5e61ad29459da7bd39c",
+    "embeddings/dapfam/element/vectors_000022.npy": "099ccd2d13e4f567061790cafeefa2329633bff9675917e31f19e2f175758bcb",
+    "embeddings/dapfam/element/vectors_000023.npy": "cd5e1e83a59b97febfcd8db2c59b0f01ba7189e499124b38b23f8f616e3a7922",
+    "embeddings/dapfam/element/vectors_000024.npy": "b6f0a5f78ff6ff6a31dc8cf0869efb06a81269fdeaacd507d7794b1d5c53e1a6",
+    "embeddings/dapfam/element/vectors_000025.npy": "b6dfac8b1b65f65a7bf044bec19cbad1d5b26ef60e54e4407fd6c6466b2cdd4a",
+    "embeddings/dapfam/element/vectors_000026.npy": "8723eaafd3afd8f5e3fa23fe6e6f7d6d833638dcc02862680ca19c02a21b94d9",
+    "embeddings/dapfam/element/vectors_000027.npy": "3ea7be009fe0c2a8e55b0dd898e11721b605220345a08514fc5f3a43be85bafb",
+    "embeddings/dapfam/element/vectors_000028.npy": "4c08ab167475d7e20c0d5e7162269c533d1c2e3e6ebd5d98e27e4047b8528b0a",
+    "embeddings/dapfam/element/vectors_000029.npy": "8e987b87bc9c8362797a4a1e687697897bd6cd7e2b3dfcbd9e0ee866ec499e89",
+    "embeddings/dapfam/element/vectors_000030.npy": "4db1de1fe4b3774046f7771686b4ab53a6b5f9b458297d493eb6241352787f37",
+    "embeddings/dapfam/element/vectors_000031.npy": "37b9eaf809a472f12aa040fada87812e92571c6778d2e32c262d4fcf436161a0",
+    "embeddings/dapfam/element/vectors_000032.npy": "a143910284bd7ba7e232e8abe4fcfe3ef6ccbe801d02aad99119a4a32f636f9e",
+    "embeddings/dapfam/element/vectors_000033.npy": "4e458ff6781fee6faea1e26bfe498e1c533e4a5c01eb80cbc773ce100a4c3a6a",
+    "embeddings/dapfam/element/vectors_000034.npy": "7e498bc94c30f4c8a3467feec4ee13d989301b67291603c6bae50d3e907e4cba",
+    "embeddings/dapfam/element/vectors_000035.npy": "886fd69782ee27252f6f2f5cc56293ee64486d3e4da8d761681ed35ea4bbecc3",
+    "embeddings/dapfam/element/vectors_000036.npy": "f3d10e8ffa671ab17b21cacbaad404d6771c173ae2d80e8143cb144b7346c72a",
+    "embeddings/dapfam/element/vectors_000037.npy": "3fcc7e0715f297f20a661265688dca3d7ec712e2d11fc9e98db447256fc5bc01",
+    "embeddings/dapfam/element/vectors_000038.npy": "f252219af5125aa6b67c94425655f3ac4247052844433f8788f6fc5e33d80e96",
+    "embeddings/dapfam/element/vectors_000039.npy": "6494f02537bcf2ba77407c4cfb77f6f177cb08a9c962bb9a38de440773fc12e4",
+    "embeddings/dapfam/element/vectors_000040.npy": "e97c2571a2c3adc2ed9d6bf55712698bebee61b9939e61c7d58a1000ec7c95bb",
+    "embeddings/dapfam/element/vectors_000041.npy": "52f1ec9183e87f8bd7eb464f1fc4cb349da99179dff9c7acd8368c564f36f496",
+    "embeddings/dapfam/element/vectors_000042.npy": "9c26f1cc7fd8eae498ec2fe941dabf95163b854f7b3e144c26dd99b0f6dd275d",
+    "embeddings/dapfam/element/vectors_000043.npy": "ce52c81d43782ce652e1b8ed8226112d5c68d96412550b4fef7d310a8f1de1bb",
+    "embeddings/dapfam/element/vectors_000044.npy": "3c97fad92c5059a973c2e9d86e38f76cebb7bd45c76d1efcf03963d4260c20db",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/embedding_manifest.json": "4f46ca742415823a2495d527b9ffaf66c7bb8ec92cd3adeeb532532a9b907090",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids.jsonl": "213b12ea4326ed3a2ec43731345f389baa3e1b8c14dc2bb2de25e57bcc95b8b3",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids_000000.jsonl": "fb2ad0abd9b01f2f84154c16b0475b338e60e7931384eec1b6dd25eb834a5c26",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids_000001.jsonl": "8fcec6c93dd06130a9524c1f3e706bc4b41630c14ac15e24d15e9c8e548752e9",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/ids_000002.jsonl": "92e3804766bcfe210b428c7d0b4340e353dc0263344b3a11af466e3daf1e0d4e",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/vectors_000000.npy": "c2c7583b7e8d896c46d8d2af3d1e95a3515eea079539ff98f9007151fb97b6d4",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/vectors_000001.npy": "47c96bcc7a3c4d999d7b067c562ae7fe570ebd544f9c36f8ae9f559a4fb72fb7",
+    "embeddings/dapfam/paper_aligned/datalyes-patembed-base_tac_passages/vectors_000002.npy": "c2616a904701c81659f0b077769b22398eba54b2e88a7d4295bf7af921adb5ea",
+    "processed/.gitkeep": "654bdf95229d0071948900cc7a662469a84a656cc69d5806187d76a3a84ff9cb",
+    "processed/dapfam/README.md": "0aa4fc50d562a02694bb82c8d168b0dd4207c6661d46f9f07f5bfd695be5343d",
+    "processed/dapfam/chunks_claim.jsonl": "d083eb62229aa31d993ae9eef5548980a89eca06419ba86e60db8db25b1f7493",
+    "processed/dapfam/chunks_doc.jsonl": "ed4ee8a98c89722d88d15ad83b398a125bec0e2bd4e7c79385613676b135e99e",
+    "processed/dapfam/chunks_element.jsonl": "e00d64fb7b8a2eda62d8728a0eda543b188b1f79e732b053af255fe1232cd095",
+    "processed/dapfam/chunks_section.jsonl": "b661798f7946f3512d69c6cdc70430cef38e957f6bb2116f93b9e4a6a49f054d",
+    "processed/dapfam/patents.jsonl": "2d79ee7d0479565711889553d2da849fef5e3a7aa5014bf398a43c5becd0cab7",
+    "processed/dapfam/queries.jsonl": "50a0e9c5673e9e3e0ae2558272dc824572554067bd1443d043016aedeb7fe3fa",
+    "processed/dapfam/validation_summary.json": "e3af6a11caad81021b8f0ae33ba3da688d512a70290e0df42eeda19086e8cc74",
+    "processed/retrieval/dapfam_citation_controlled_tac512/bm25_tac_passages/index.sqlite": "291cd27a2edfebc1ac671686bd9a6a94f0518fbc8ac13195656e82c8fdc4d80d",
+    "processed/retrieval/dapfam_citation_controlled_tac512/bm25_tac_passages/manifest.json": "f367760c8ab9e4f9104c143d77add3c04c89681257bb6ba064a4b8efcdcdf22e",
+    "processed/retrieval/dapfam_citation_controlled_tac512/corpus_tac_passages.jsonl": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061",
+    "processed/retrieval/dapfam_citation_controlled_tac512/manifest.json": "c8a947ac6222c1fe43483f32f71387ecbd5b566c509d1eb9348d71f26c4e29dc",
+    "processed/retrieval/dapfam_citation_controlled_tac512/queries_tac.jsonl": "409e5c2a48f3ce549303608605fc945bad3ac16ac370293278e6c2d6cb2d5bd9",
+    "processed/retrieval/dapfam_citation_controlled_tac512_v2/bm25_tac_passages/index.sqlite": "291cd27a2edfebc1ac671686bd9a6a94f0518fbc8ac13195656e82c8fdc4d80d",
+    "processed/retrieval/dapfam_citation_controlled_tac512_v2/bm25_tac_passages/manifest.json": "79c9a3a82ae8d6fadf9ddb14c7d6ea33512415a8eb6f2c9f24682e236ab0450d",
+    "processed/retrieval/dapfam_citation_controlled_tac512_v2/corpus_tac_passages.jsonl": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061",
+    "processed/retrieval/dapfam_citation_controlled_tac512_v2/manifest.json": "996789aaddf7a609cd62db605561d605206e8648898fc4cf4280181688803169",
+    "processed/retrieval/dapfam_citation_controlled_tac512_v2/queries_tac.jsonl": "409e5c2a48f3ce549303608605fc945bad3ac16ac370293278e6c2d6cb2d5bd9",
+    "processed/retrieval/dapfam_claim_bm25/chunks-preview.jsonl": "8e590905ab05b31cd3c7f170a29049c23384a9953e36231aba0983da8bc2eb85",
+    "processed/retrieval/dapfam_claim_bm25/index.sqlite": "37d5630374fb1a210919372f67706936219310e4f7f0537d62a4121da6d9f8b4",
+    "processed/retrieval/dapfam_claim_bm25/manifest.json": "01a67f98feab6b6c2ca40a134212ecc339c7e7b1e03f74f86b4f59d46735f3a1",
+    "processed/retrieval/dapfam_doc_bm25/chunks-preview.jsonl": "2853b2e6c5427452a57b705eaf284e25696345db8f4e1dd5f0236c59849c6013",
+    "processed/retrieval/dapfam_doc_bm25/index.sqlite": "0f3a0398fcabceed7a8f67fcf8fa651161fee2a06a0728eb06817c1cfbc24073",
+    "processed/retrieval/dapfam_doc_bm25/manifest.json": "37aba37dd8e1df5e983eb959335c5b4af10da81f7374570102be6234f15b6f37",
+    "processed/retrieval/dapfam_doc_bm25_sample/chunks-preview.jsonl": "2853b2e6c5427452a57b705eaf284e25696345db8f4e1dd5f0236c59849c6013",
+    "processed/retrieval/dapfam_doc_bm25_sample/index.sqlite": "a889a738bdf3fdeeb73e0c007a1686ced6d6eb82c5ce442af5ae57ac40c1916d",
+    "processed/retrieval/dapfam_doc_bm25_sample/manifest.json": "35b234ed66212c3e3c644f5e346f42c928f726aa0bf7d16eee2ab975f555aa0d",
+    "processed/retrieval/dapfam_element_bm25/README.md": "f5fb68e87c4655b01f9ad7becfdb3ba8e0d32fd9619e700e5e1d096e428c417c",
+    "processed/retrieval/dapfam_element_bm25/chunks-preview.jsonl": "fe261621b887756b0ab9bdb42992838599e49f9489e38d6952ad7d671a5e8989",
+    "processed/retrieval/dapfam_element_bm25/index.sqlite": "c8475ebf69eb7e72b3036f58e4ca88d8d296cf120864be8f0dc80a7b1216d3cb",
+    "processed/retrieval/dapfam_element_bm25/manifest.json": "175d8b630a1055c520f404f4788413dec3735c473c2ad96b8cb2d84895aba8e6",
+    "processed/retrieval/dapfam_paper_aligned/bm25_tac_passages/index.sqlite": "291cd27a2edfebc1ac671686bd9a6a94f0518fbc8ac13195656e82c8fdc4d80d",
+    "processed/retrieval/dapfam_paper_aligned/bm25_tac_passages/manifest.json": "ee60a649c58efab63fa3dd8113a925ba1f179ad16c0974302118070935ca14d3",
+    "processed/retrieval/dapfam_paper_aligned/corpus_tac_passages.jsonl": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061",
+    "processed/retrieval/dapfam_paper_aligned/manifest.json": "208c19384af85c6d0f1552eb36af8def06ed2b74f889bed0d2d6f3cfab9de9e5",
+    "processed/retrieval/dapfam_paper_aligned/queries_tac.jsonl": "409e5c2a48f3ce549303608605fc945bad3ac16ac370293278e6c2d6cb2d5bd9",
+    "raw/.gitkeep": "654bdf95229d0071948900cc7a662469a84a656cc69d5806187d76a3a84ff9cb",
+    "raw/hf-cache/datalyes___dapfam_patent/corpus/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train-00000-of-00002.arrow": "7589459c6fcf647703fcae05ece85dfde06c41a121d82cc9ae155ce4f5a2a38e",
+    "raw/hf-cache/datalyes___dapfam_patent/corpus/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train-00001-of-00002.arrow": "5405ad3dcda16f134f0e2fd88a22f4c1725f9a93e559b1c170c5e4ccbcc87956",
+    "raw/hf-cache/datalyes___dapfam_patent/corpus/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dataset_info.json": "35ea4c3862b4de363973dcf863c604b8e4f47f4345f1847be728d72db99660dd",
+    "raw/hf-cache/datalyes___dapfam_patent/queries/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train.arrow": "b596c2dcc73399840c0a9c2143b23e8497bbaa33af8dbb2a8877ad52e5f9f2fd",
+    "raw/hf-cache/datalyes___dapfam_patent/queries/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dataset_info.json": "9e9e99154249f8b3711f6a841d1585caf383295d9af552183ec4b9966f99dc30",
+    "raw/hf-cache/datalyes___dapfam_patent/relations/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dapfam_patent-train.arrow": "861a991875f3594e301c84ffe0ad4f0fbd6edcf07c534c172609f40bf623e298",
+    "raw/hf-cache/datalyes___dapfam_patent/relations/0.0.0/a59a74ce31384165065af1823a83c6f94ccafd48/dataset_info.json": "cfc6e04ae02c05758a227c5b6f28ce8b1a1d91864018f30d23c90ffe1dcd16b9"
+  },
+  "schema_version": "myis.legacy-dapfam-inventory.v1"
+}

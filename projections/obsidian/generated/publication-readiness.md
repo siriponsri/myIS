@@ -1,14 +1,15 @@
 ---
-source_sha256: 2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b
+source_sha256: c66fa096b90062dd602290c99644b57642ca49bb3bdad5318cfc01b66efd388b
 ---
 
 # Publication Readiness
 
 Status: **blocked**
 
-- canonical_run_manifest: **blocked**
-- owner_local_aggregate: **blocked**
+- canonical_run_manifest: **pass**
+- owner_local_aggregate: **pass**
 - d2_open_final: **blocked**
 - live_venue_check: **unknown**
 - prior_publication_status: **unknown**
 - paper_build_hash_closure: **blocked**
+- historical_final_872_exposure: **blocked**

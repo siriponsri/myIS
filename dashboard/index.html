@@ -3,30 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>myIS Research Console</title>
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/dashboard.css">
 </head>
 <body>
   <header class="topbar">
-    <div><p class="eyebrow">myIS Research / Control Plane</p><h1>Research Console</h1></div>
-    <div class="topbar-actions"><span id="sync-state">กำลังโหลด</span><button id="refresh" class="button button-secondary">รีเฟรช</button></div>
+    <div class="brand-lockup">
+      <span class="brand-mark" aria-hidden="true">myIS</span>
+      <div><p class="eyebrow">Research control plane</p><h1>Research Console</h1></div>
+    </div>
+    <div class="topbar-actions">
+      <span class="live-indicator"><span class="live-dot"></span><span id="sync-state">กำลังโหลด</span></span>
+      <button id="refresh" class="icon-button" type="button" title="รีเฟรชข้อมูล" aria-label="รีเฟรชข้อมูล">↻</button>
+    </div>
   </header>
   <main class="shell">
-    <nav class="tabs" aria-label="มุมมอง">
-      <button class="tab is-active" data-tab="overview">ภาพรวม</button>
-      <button class="tab" data-tab="flow">Phase / Task</button>
-      <button class="tab" data-tab="evidence">Evidence</button>
-      <button class="tab" data-tab="presentation">Presentation</button>
-    </nav>
-    <section id="overview" class="panel is-visible">
-      <div class="hero"><div><p class="eyebrow">สถานะจากข้อมูลจริง</p><h2 id="campaign-title">SCOPE / AutoIndex</h2><p id="campaign-status">กำลังอ่าน read-model</p></div><div class="revision" id="revision"></div></div>
-      <div id="status-cards" class="card-grid"></div>
-      <section class="section"><div class="section-heading"><div><p class="eyebrow">Owner Inbox</p><h2>สิ่งที่ต้องทำต่อ</h2></div></div><div id="owner-inbox" class="inbox"></div></section>
+    <section class="hero" aria-labelledby="campaign-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Active campaign / evidence-aware workflow</p>
+        <h2 id="campaign-title">SCOPE / AutoIndex</h2>
+        <p id="campaign-status" class="hero-subtitle">กำลังอ่าน read-model</p>
+      </div>
+      <div class="hero-side">
+        <div class="hero-label">Projection revision</div>
+        <code id="revision">—</code>
+        <div id="hero-authorization" class="authorization-badge">D1 standing authorization</div>
+      </div>
     </section>
-    <section id="flow" class="panel"><div class="section-heading"><div><p class="eyebrow">Execution map</p><h2>Phase → Task → Gate</h2><p class="muted">เส้นทางเดียวจาก foundation ไป publication</p></div></div><div id="phase-flow" class="phase-flow"></div></section>
-    <section id="evidence" class="panel"><div class="section-heading"><div><p class="eyebrow">Evidence / MLflow / Reports</p><h2>หลักฐานและความพร้อม</h2></div></div><div id="evidence-table" class="table-wrap"></div></section>
-    <section id="presentation" class="panel"><div class="presentation-toolbar"><div><p class="eyebrow">Presentation mode</p><h2>Research Briefing</h2></div><button id="present-toggle" class="button button-primary">สลับโหมดนำเสนอ</button></div><div id="presentation-content" class="presentation"></div></section>
+
+    <div id="phase-ribbon" class="phase-ribbon" aria-label="ลำดับ phase"></div>
+
+    <nav class="tabs" aria-label="มุมมอง dashboard">
+      <button class="tab is-active" data-tab="overview" type="button">ภาพรวม</button>
+      <button class="tab" data-tab="flow" type="button">Execution board</button>
+      <button class="tab" data-tab="evidence" type="button">Evidence &amp; MLflow</button>
+      <button class="tab" data-tab="presentation" type="button">Presentation</button>
+    </nav>
+
+    <section id="overview" class="panel is-visible">
+      <div id="status-cards" class="card-grid"></div>
+      <div class="overview-grid">
+        <section class="section-block">
+          <div class="section-heading"><div><p class="eyebrow">Owner inbox</p><h2>สิ่งที่ต้องทำต่อ</h2></div><span class="section-note">ข้อมูลจาก read-model</span></div>
+          <div id="owner-inbox" class="inbox"></div>
+        </section>
+        <section class="section-block readiness-block">
+          <div class="section-heading"><div><p class="eyebrow">Publication readiness</p><h2>ความพร้อมเผยแพร่</h2></div></div>
+          <div id="readiness-summary" class="readiness-summary"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="flow" class="panel">
+      <div class="section-heading flow-heading"><div><p class="eyebrow">Agile / waterfall execution map</p><h2>Phase → Sprint → Task → Gate</h2><p class="muted">คลิก task เพื่อดูหลักฐาน, ผู้รับผิดชอบ และเงื่อนไขถัดไป</p></div><div class="legend"><span><i class="legend-dot done"></i>เสร็จแล้ว</span><span><i class="legend-dot next"></i>ทำต่อได้</span><span><i class="legend-dot waiting"></i>รอ Owner</span></div></div>
+      <div class="flow-layout">
+        <div id="phase-flow" class="phase-flow"></div>
+        <aside id="task-detail" class="task-detail" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section id="evidence" class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Evidence / MLflow / reports</p><h2>หลักฐานและการวัดผล</h2><p class="muted">ตัวเลขที่แสดงเป็น projection จาก run manifest และ aggregate receipt เท่านั้น</p></div></div>
+      <div id="evidence-table" class="table-wrap"></div>
+      <div class="section-heading dataset-heading"><div><p class="eyebrow">Dataset registry / safe projection</p><h2>Datasets ที่ใช้และสถานะการรับรอง</h2><p class="muted">แสดงเฉพาะ metadata, count, classification และ hash; ไม่มี qrels, query IDs หรือ per-query outcomes</p></div></div>
+      <div id="dataset-table" class="table-wrap"></div>
+    </section>
+
+    <section id="presentation" class="panel">
+      <div class="presentation-toolbar"><div><p class="eyebrow">Briefing view</p><h2>Research Briefing</h2><p class="muted">มุมมองพร้อมนำเสนอจากสถานะจริงของแคมเปญ</p></div><button id="present-toggle" class="button button-primary" type="button">สลับโหมดนำเสนอ</button></div>
+      <div id="presentation-content" class="presentation"></div>
+    </section>
   </main>
   <script src="/assets/dashboard.js" defer></script>
 </body>

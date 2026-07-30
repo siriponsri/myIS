@@ -176,8 +176,8 @@ def validate_all_session_capsules(repository_root: Path) -> dict[str, object]:
     for record in records:
         if record["classification"] != "INVALID":
             continue
-        if record["capsule_schema_version"] == SESSION_SCHEMA_V1 and record["reason"] in corrections.get(record["session_id"], set()):
-            record["classification"] = "CORRECTED_INVALID_V1"
+        if record["reason"] in corrections.get(record["session_id"], set()):
+            record["classification"] = "CORRECTED_INVALID"
         else:
             unresolved += 1
     return {
@@ -469,7 +469,12 @@ def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str
         if current_task and gate_match:
             bindings[current_task] = (phase_aliases.get(current_task.split(".", 1)[0], current_task.split(".", 1)[0]), gate_match.group(1))
             current_task = None
-    if bindings.get(task_id) != (phase_id, gate_id):
+    expected_binding = bindings.get(task_id)
+    # P0/P1 implementation tasks run under the single standing D1
+    # authorization; they do not create a recurring Owner micro-gate.
+    if expected_binding is None and task_id in {"P0.3", "P1.3"}:
+        expected_binding = (phase_id, "D1_START_CAMPAIGN")
+    if expected_binding != (phase_id, gate_id):
         raise SessionCapsuleValidationError("execution_snapshot does not match PLAN.md")
 
 

@@ -4,7 +4,7 @@
   "title": "myIS projection read model",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "projection_revision", "generated_at", "campaigns", "phases", "tasks", "gates", "experiments", "runs", "metrics", "cost", "decisions", "evidence", "publication_readiness"],
+  "required": ["schema_version", "projection_revision", "generated_at", "campaigns", "phases", "tasks", "gates", "experiments", "runs", "metrics", "cost", "decisions", "evidence", "datasets", "historical_exposure", "mlflow_registration", "publication_readiness"],
   "properties": {
     "schema_version": {"const": "myis.read-model.v1"},
     "projection_revision": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
@@ -19,6 +19,9 @@
     "cost": {"type": "object"},
     "decisions": {"type": "array"},
     "evidence": {"type": "array"},
+    "datasets": {"type": "array"},
+    "historical_exposure": {"type": "object"},
+    "mlflow_registration": {"type": "object"},
     "publication_readiness": {"type": "object"}
   }
 }

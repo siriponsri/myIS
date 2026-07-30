@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:manifest-validation-report:v1",
+  "title": "myIS run manifest validation report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at_utc", "status", "manifest_sha256", "checks", "validation_report_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.run-manifest-validation.v1"},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "status": {"const": "valid"},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "checks": {"type": "object", "additionalProperties": false, "required": ["json_schema", "git_state_commitment", "request_receipt_binding", "content_commitments", "manifest_commitment", "aggregate_only_boundary"], "properties": {"json_schema": {"const": "pass"}, "git_state_commitment": {"const": "pass"}, "request_receipt_binding": {"const": "pass"}, "content_commitments": {"const": "pass"}, "manifest_commitment": {"const": "pass"}, "aggregate_only_boundary": {"const": "pass"}}},
+    "validation_report_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

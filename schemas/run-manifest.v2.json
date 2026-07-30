@@ -1,23 +1,29 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:myis:research:schema:run-manifest:v2",
-  "title": "myIS immutable run manifest",
+  "title": "myIS canonical immutable run manifest v2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "run_id", "experiment_id", "campaign_id", "status", "stage", "source", "data", "method", "resources", "metrics", "artifacts"],
+  "required": ["schema_version", "run_id", "parent_run_id", "experiment_id", "campaign_id", "evidence_class", "status", "stage", "created_at_utc", "git", "request_sha256", "inputs", "method", "resources", "metrics", "artifacts", "commitments", "receipt_sha256", "manifest_sha256"],
   "properties": {
     "schema_version": {"const": "myis.run-manifest.v2"},
     "run_id": {"type": "string", "minLength": 1},
+    "parent_run_id": {"type": ["string", "null"]},
     "experiment_id": {"type": "string", "minLength": 1},
     "campaign_id": {"const": "scope-autoindex-v1"},
-    "status": {"enum": ["complete", "failed", "invalid", "superseded", "aggregate_pending"]},
-    "stage": {"enum": ["fixture", "train", "selection", "transfer", "final", "report"]},
-    "source": {"type": "object"},
-    "data": {"type": "object"},
+    "evidence_class": {"enum": ["fixture", "train_selection_measured", "final", "report", "blocked"]},
+    "status": {"enum": ["valid", "invalid", "blocked", "exploratory", "superseded", "aggregate_pending"]},
+    "stage": {"enum": ["fixture", "train", "selection", "final", "report"]},
+    "created_at_utc": {"type": "string", "minLength": 1},
+    "git": {"type": "object", "additionalProperties": false, "required": ["commit", "tracked_worktree_state", "tracked_worktree_diff_sha256"], "properties": {"commit": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"}, "tracked_worktree_state": {"enum": ["clean", "dirty"]}, "tracked_worktree_diff_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "inputs": {"type": "object", "required": ["hashes"], "properties": {"hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
     "method": {"type": "object"},
     "resources": {"type": "object"},
-    "metrics": {"type": "array"},
-    "artifacts": {"type": "array"},
-    "owner_local_receipt_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+    "metrics": {"type": "array", "items": {"type": "object"}},
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "commitments": {"type": "object", "additionalProperties": false, "required": ["inputs_sha256", "method_sha256", "resources_sha256", "metrics_sha256", "artifacts_sha256"], "properties": {"inputs_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "method_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "resources_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "metrics_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "artifacts_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
   }
 }

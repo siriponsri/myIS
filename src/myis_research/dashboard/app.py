@@ -42,6 +42,10 @@ def create_app(*, repository_root: Path, port: int = 8765, actor_sid_override: s
     def index() -> FileResponse:
         return FileResponse(_frontend(root, "index.html"), media_type="text/html")
 
+    @app.get("/favicon.ico")
+    def favicon() -> Response:
+        return Response(status_code=204)
+
     @app.get("/assets/{asset_name}")
     def asset(asset_name: str) -> FileResponse:
         path = _frontend(root, f"assets/{asset_name}")
@@ -165,6 +169,7 @@ def _dashboard_projection(model: dict[str, Any]) -> dict[str, Any]:
         "metrics": model.get("metrics", []),
         "cost": model.get("cost", {}),
         "evidence": model.get("evidence", []),
+        "datasets": model.get("datasets", []),
         "publication_readiness": model.get("publication_readiness", {}),
         "owner_decisions": list(ACTIVE_DECISIONS),
         "done": done,

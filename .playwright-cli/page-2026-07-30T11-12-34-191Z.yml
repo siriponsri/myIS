@@ -1,0 +1,139 @@
+- generic [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e4]: myIS
+      - generic [ref=f1e5]:
+        - paragraph [ref=f1e6]: Research control plane
+        - heading "Research Console" [level=1] [ref=f1e7]
+    - generic [ref=f1e8]:
+      - generic [ref=f1e9]: อัปเดต 18:12:16
+      - button "รีเฟรชข้อมูล" [ref=f1e12] [cursor=pointer]: ↻
+  - main [ref=f1e13]:
+    - region [ref=f1e44]:
+      - generic [ref=f1e15]:
+        - paragraph [ref=f1e16]: Active campaign / evidence-aware workflow
+        - heading "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval" [level=2] [ref=f1e45]
+        - paragraph [ref=f1e18]: "สถานะ: p1_cpu_measured_complete_waiting_review · metric หลัก: recall_at_100/out"
+      - generic [ref=f1e19]:
+        - generic [ref=f1e20]: Projection revision
+        - code [ref=f1e21]: read-model 93f316562e23…
+        - generic [ref=f1e22]: D1 standing authorization
+    - generic "ลำดับ phase" [ref=f1e23]:
+      - generic [ref=f1e46]:
+        - generic [ref=f1e47]: P0_FOUNDATION
+        - generic [ref=f1e48]: Foundation & control
+        - generic [ref=f1e49]: complete
+      - generic [ref=f1e50]:
+        - generic [ref=f1e51]: P1_CPU_BASELINE
+        - generic [ref=f1e52]: CPU baseline
+        - generic [ref=f1e53]: complete
+      - generic [ref=f1e54]:
+        - generic [ref=f1e55]: P2_SCOPE_DEVELOPMENT
+        - generic [ref=f1e56]: SCOPE / AutoIndex
+        - generic [ref=f1e57]: waiting_review_before_p2
+      - generic [ref=f1e58]:
+        - generic [ref=f1e59]: P3_FINAL
+        - generic [ref=f1e60]: Final evaluation
+        - generic [ref=f1e61]: locked
+      - generic [ref=f1e62]:
+        - generic [ref=f1e63]: P4_PUBLICATION
+        - generic [ref=f1e64]: Publication
+        - generic [ref=f1e65]: locked
+    - navigation "มุมมอง dashboard" [ref=f1e24]:
+      - button "ภาพรวม" [ref=f1e25] [cursor=pointer]
+      - button "Execution board" [active] [ref=f1e26] [cursor=pointer]
+      - button "Evidence & MLflow" [ref=f1e27] [cursor=pointer]
+      - button "Presentation" [ref=f1e28] [cursor=pointer]
+    - generic [ref=f1e136]:
+      - generic [ref=f1e137]:
+        - generic [ref=f1e138]:
+          - paragraph [ref=f1e139]: Agile / waterfall execution map
+          - heading "Phase → Sprint → Task → Gate" [level=2] [ref=f1e140]
+          - paragraph [ref=f1e141]: คลิก task เพื่อดูหลักฐาน, ผู้รับผิดชอบ และเงื่อนไขถัดไป
+        - generic [ref=f1e142]:
+          - generic [ref=f1e143]: เสร็จแล้ว
+          - generic [ref=f1e145]: ทำต่อได้
+          - generic [ref=f1e147]: รอ Owner
+      - generic [ref=f1e149]:
+        - generic [ref=f1e150]:
+          - article [ref=f1e151]:
+            - generic [ref=f1e152]:
+              - generic [ref=f1e153]: P0_FOUNDATION
+              - generic [ref=f1e154]: complete
+            - heading "Foundation & control" [level=3] [ref=f1e155]
+            - paragraph [ref=f1e156]: Schema, integrity และ projection contracts ที่ตรวจซ้ำได้
+            - generic [ref=f1e157]:
+              - button "P0.1 Deterministic kernel and schema contracts done" [ref=f1e158] [cursor=pointer]:
+                - generic [ref=f1e159]: P0.1 Deterministic kernel and schema contracts
+                - generic [ref=f1e160]: done
+              - button "P0.2 Integrity preflight and protected boundary done" [ref=f1e161] [cursor=pointer]:
+                - generic [ref=f1e162]: P0.2 Integrity preflight and protected boundary
+                - generic [ref=f1e163]: done
+              - button "P0.3 Projection contracts and migration closure done" [ref=f1e164] [cursor=pointer]:
+                - generic [ref=f1e165]: P0.3 Projection contracts and migration closure
+                - generic [ref=f1e166]: done
+          - article [ref=f1e167]:
+            - generic [ref=f1e168]:
+              - generic [ref=f1e169]: P1_CPU_BASELINE
+              - generic [ref=f1e170]: measured
+            - heading "CPU baseline" [level=3] [ref=f1e171]
+            - paragraph [ref=f1e172]: R0 และ R0-W บน CPU กับ protected bundle
+            - generic [ref=f1e173]:
+              - button "P1.1 R0 flat BM25 fixture lane done" [ref=f1e174] [cursor=pointer]:
+                - generic [ref=f1e175]: P1.1 R0 flat BM25 fixture lane
+                - generic [ref=f1e176]: done
+              - button "P1.2 R0-W window maxP fixture lane done" [ref=f1e177] [cursor=pointer]:
+                - generic [ref=f1e178]: P1.2 R0-W window maxP fixture lane
+                - generic [ref=f1e179]: done
+              - button "P1.3 Protected owner-local CPU handoff done" [ref=f1e180] [cursor=pointer]:
+                - generic [ref=f1e181]: P1.3 Protected owner-local CPU handoff
+                - generic [ref=f1e182]: done
+          - article [ref=f1e183]:
+            - generic [ref=f1e184]:
+              - generic [ref=f1e185]: P2_SCOPE_DEVELOPMENT
+              - generic [ref=f1e186]: waiting_review_before_p2
+            - heading "SCOPE / AutoIndex" [level=3] [ref=f1e187]
+            - paragraph [ref=f1e188]: R1 representation search ผ่าน SCOPE compiler
+            - button "P2.1 R1 SCOPE/AutoIndex development planned" [ref=f1e190] [cursor=pointer]:
+              - generic [ref=f1e191]: P2.1 R1 SCOPE/AutoIndex development
+              - generic [ref=f1e192]: planned
+          - article [ref=f1e193]:
+            - generic [ref=f1e194]:
+              - generic [ref=f1e195]: P3_FINAL
+              - generic [ref=f1e196]: locked_until_D2
+            - heading "Final evaluation" [level=3] [ref=f1e197]
+            - paragraph [ref=f1e198]: เปิด final split ได้เมื่อ D2 ผ่านเท่านั้น
+            - button "P3.1 Frozen final evaluation locked" [ref=f1e200] [cursor=pointer]:
+              - generic [ref=f1e201]: P3.1 Frozen final evaluation
+              - generic [ref=f1e202]: locked
+            - generic [ref=f1e203]: Owner decision · D2_OPEN_FINAL
+          - article [ref=f1e204]:
+            - generic [ref=f1e205]:
+              - generic [ref=f1e206]: P4_PUBLICATION
+              - generic [ref=f1e207]: locked_until_D3
+            - heading "Publication" [level=3] [ref=f1e208]
+            - paragraph [ref=f1e209]: สร้าง manuscript และ release package เมื่อ D3 ผ่าน
+            - button "P4.1 Manuscript and release package locked" [ref=f1e211] [cursor=pointer]:
+              - generic [ref=f1e212]: P4.1 Manuscript and release package
+              - generic [ref=f1e213]: locked
+            - generic [ref=f1e214]: Owner decision · D3_SUBMIT_RELEASE
+        - complementary [ref=f1e215]:
+          - paragraph [ref=f1e216]: Task detail / P0_FOUNDATION
+          - heading "Deterministic kernel and schema contracts" [level=3] [ref=f1e217]
+          - paragraph [ref=f1e218]: Schema, integrity และ projection contracts ที่ตรวจซ้ำได้
+          - generic [ref=f1e219]:
+            - generic [ref=f1e220]:
+              - generic [ref=f1e221]: Task ID
+              - generic [ref=f1e222]: P0.1
+            - generic [ref=f1e223]:
+              - generic [ref=f1e224]: Status
+              - generic [ref=f1e225]: complete
+            - generic [ref=f1e226]:
+              - generic [ref=f1e227]: Gate
+              - generic [ref=f1e228]: No owner decision required
+            - generic [ref=f1e229]:
+              - generic [ref=f1e230]: Evidence
+              - generic [ref=f1e231]: ยังไม่มี evidence pointer
+            - generic [ref=f1e232]:
+              - generic [ref=f1e233]: Next action
+              - generic [ref=f1e234]: ตรวจ evidence และไป task ถัดไป

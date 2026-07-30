@@ -1,9 +1,9 @@
 campaign:
   id: scope-autoindex-v1
   title: Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval
-  status: preparation
+  status: p1_cpu_measured_complete_waiting_review
   venue_target: isai-nlp-2026
-  standing_authorization: P1_CPU_EXECUTION_ENVELOPE
+  standing_authorization: D1_START_CAMPAIGN
   active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
 
 protocol:
@@ -35,7 +35,7 @@ arms:
 
 phases:
   - id: P0_FOUNDATION
-    status: in_progress
+    status: complete
     tasks:
       - id: P0.1
         title: Deterministic kernel and schema contracts
@@ -45,21 +45,21 @@ phases:
         status: complete
       - id: P0.3
         title: Projection contracts and migration closure
-        status: in_progress
+        status: complete
   - id: P1_CPU_BASELINE
-    status: executable_pending_protected_bundle
+    status: measured
     tasks:
       - id: P1.1
         title: R0 flat BM25 fixture lane
-        status: executable
+        status: measured
       - id: P1.2
         title: R0-W window maxP fixture lane
-        status: executable
+        status: measured
       - id: P1.3
         title: Protected owner-local CPU handoff
-        status: waiting_external_data
+        status: measured
   - id: P2_SCOPE_DEVELOPMENT
-    status: blocked_until_p1
+    status: waiting_review_before_p2
     tasks:
       - id: P2.1
         title: R1 SCOPE/AutoIndex development

@@ -1,0 +1,16 @@
+{
+  "schema_version": "myis.subagent-audit.v1",
+  "audit_scope": "review of delegated outputs before P1 closeout",
+  "audited_agents": [
+    {"responsibility": "audit_cpu_closure", "status": "merged_and_tested", "finding": "P0/P1 contract slice, BM25, receipt boundary and scalable integrity were reconciled; full suite now passes."},
+    {"responsibility": "audit_cross_repo", "status": "accepted_as_context", "finding": "01_Research remains active control plane; App is read-only legacy source; Brain and Paper remain projections/pointers."},
+    {"responsibility": "audit_literature_brain", "status": "merged_and_validated", "finding": "U154 AutoIndex Tier A and active Brain literature paths validated; 154 notes and hashes pass."},
+    {"responsibility": "audit_mlflow_dashboard", "status": "merged_with_followups", "finding": "MLflow additive mirror and projection boundary retained; read model now drives dataset, receipt, dashboard and reports."},
+    {"responsibility": "audit_research", "status": "accepted_as_review", "finding": "No protected data or unapproved external execution was introduced."},
+    {"responsibility": "impl_kernel_scope", "status": "merged_and_tested", "finding": "Strict SCOPE v1 compatibility and deterministic kernel changes pass focused tests."},
+    {"responsibility": "impl_literature", "status": "merged_and_validated", "finding": "ArXiv 2607.18603 digest and U154 routing are present and validated."},
+    {"responsibility": "redesign_dashboard", "status": "merged_and_browser_checked", "finding": "Interactive phase/task/gate board, dataset/evidence view and presentation mode render on loopback dashboard."}
+  ],
+  "open_followups": ["P2 remains stopped pending Owner review", "D2/D3 remain unopened", "final-872 is not globally untouched"],
+  "protected_surfaces_untouched": ["qrels rows", "query IDs", "split membership", "per-query outcomes", "raw provider payloads"]
+}

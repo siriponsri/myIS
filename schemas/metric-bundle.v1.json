@@ -1,15 +1,46 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:myis:research:schema:metric-bundle:v1",
-  "title": "myIS aggregate metric bundle",
+  "title": "myIS aggregate metric bundle v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "run_id", "metrics", "cost"],
+  "required": ["schema_version", "run_id", "arm_id", "split", "metrics", "cost", "latency_seconds", "lineage"],
   "properties": {
     "schema_version": {"const": "myis.metric-bundle.v1"},
-    "run_id": {"type": "string"},
-    "metrics": {"type": "array"},
-    "cost": {"type": "object"},
-    "evidence_ids": {"type": "array", "items": {"type": "string"}}
+    "run_id": {"type": "string", "minLength": 1},
+    "arm_id": {"enum": ["R0", "R0-W"]},
+    "split": {"enum": ["fixture", "train", "selection"]},
+    "metrics": {"type": "array", "minItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["name", "value", "n", "scope", "split", "direction", "denominator"], "properties": {
+      "name": {"const": "recall_at_100"},
+      "value": {"type": ["number", "null"]},
+      "n": {"type": "integer", "minimum": 0},
+      "hits": {"type": "integer", "minimum": 0},
+      "retrieved_relevant": {"type": "integer", "minimum": 0},
+      "relevant_total": {"type": "integer", "minimum": 0},
+      "scope": {"enum": ["ALL", "IN", "OUT"]},
+      "split": {"type": "string"},
+      "direction": {"const": "maximize"},
+      "denominator": {"enum": ["macro_mean_per_query_relevant_families", "queries_with_positive_family_relevance"]},
+      "evidence_role": {"type": "string"},
+      "arm": {"enum": ["R0", "R0-W"]}
+    }}},
+    "cost": {"type": "object", "additionalProperties": false, "required": ["currency", "value"], "properties": {"currency": {"const": "USD"}, "value": {"type": "number", "minimum": 0}}},
+    "latency_seconds": {"type": "number", "minimum": 0},
+    "lineage": {"type": "object", "additionalProperties": false, "required": ["dataset_sha256", "corpus_sha256", "query_sha256", "qrels_sha256", "split_sha256", "index_sha256", "evaluator_sha256"], "properties": {
+      "dataset_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+      "corpus_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+      "query_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+      "qrels_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+      "split_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+      "index_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+      "evaluator_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+    }},
+    "metrics_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evidence_class": {"type": "string"},
+    "counts": {"type": "object"},
+    "input_commitment": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "query_commitment": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "ranking_commitment": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "retrieval": {"type": "object"}
   }
 }

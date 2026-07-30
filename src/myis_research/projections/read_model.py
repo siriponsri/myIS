@@ -4,12 +4,25 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from ..kernel.manifest import manifest_round_trip
+from ..kernel.manifest_validation import ManifestValidationError, validate_validation_report
+from ..owner_local import OwnerLocalContractError, validate_receipt
 
-READ_MODEL_SCHEMA = "myis.read-model.v1"
+
+READ_MODEL_SCHEMA = "myis.read-model.v2"
+PROJECTION_SCHEMA_VERSION = "myis.integrated-projection.v2"
+P1_ARMS = frozenset({"R0", "R0-W"})
+P1_SPLITS = frozenset({"train", "selection"})
+P1_SCOPES = frozenset({"ALL", "IN", "OUT"})
+P1_ACCEPTED_METRIC_FIELDS = frozenset({
+    "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
+    "scope", "split", "direction", "denominator", "evidence_role",
+})
 
 
 def canonical_json(value: Any) -> bytes:
@@ -25,6 +38,12 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     campaign_id = "scope-autoindex-v1"
     campaign_config = _load_yaml_like(root / "control" / "campaigns" / f"{campaign_id}.yaml")
     manifests = _load_manifests(root / "campaigns" / campaign_id / "manifests")
+    receipts = _load_receipts(root / "campaigns" / campaign_id / "evidence")
+    validation_reports = _load_validation_reports(root / "campaigns" / campaign_id / "validation-reports")
+    p1_pairs = validated_p1_matrix(manifests, receipts, validation_reports)
+    paired_manifest_hashes = {str(pair["manifest"]["manifest_sha256"]) for pair in p1_pairs}
+    paired_receipts = [pair["receipt"] for pair in p1_pairs]
+    mlflow_registration = _load_optional_json(root / "evidence" / "mlflow-p1-registration.v1.json")
     decisions = _load_jsonl(root / "control" / "decisions" / "ledger.jsonl")
     metrics: list[dict[str, Any]] = []
     runs: list[dict[str, Any]] = []
@@ -33,6 +52,8 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     total_actual = 0.0
     total_estimated = 0.0
     for manifest in manifests:
+        if _is_p1_manifest(manifest) and str(manifest.get("manifest_sha256", "")) not in paired_manifest_hashes:
+            continue
         run_id = str(manifest.get("run_id", "unknown"))
         experiment_id = str(manifest.get("experiment_id", f"exp-{run_id}"))
         experiments.setdefault(experiment_id, {"experiment_id": experiment_id, "campaign_id": campaign_id, "run_count": 0})["run_count"] += 1
@@ -55,14 +76,19 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "campaign_id": campaign_id,
             "stage": manifest.get("stage", "unknown"),
             "status": manifest.get("status", "unknown"),
-            "arm": manifest.get("method", {}).get("arm_id") if isinstance(manifest.get("method"), dict) else None,
+            "arm": (manifest["method"].get("arm_id") or manifest["method"].get("arm")) if isinstance(manifest.get("method"), dict) else None,
             "source": manifest.get("source", {}),
-            "owner_local_receipt_sha256": manifest.get("owner_local_receipt_sha256"),
+            "owner_local_receipt_sha256": manifest.get("receipt_sha256"),
         })
         for artifact in manifest.get("artifacts", []) if isinstance(manifest.get("artifacts"), list) else []:
             if isinstance(artifact, dict) and artifact.get("sha256"):
                 evidence.append({"evidence_id": artifact.get("artifact_id", artifact.get("name", "artifact")), "sha256": artifact["sha256"], "run_id": run_id, "uri": artifact.get("uri")})
-    readiness = _publication_readiness(root, manifests, decisions)
+    datasets = _dataset_projection(root, paired_receipts)
+    if _registration_matches_p1_pair(mlflow_registration, p1_pairs):
+        evidence.append({"evidence_id": "mlflow-p1-registration", "sha256": _file_sha256(root / "evidence" / "mlflow-p1-registration.v1.json"), "run_id": str(mlflow_registration["source_run_id"]), "uri": "evidence/mlflow-p1-registration.v1.json"})
+    else:
+        mlflow_registration = {}
+    readiness = _publication_readiness(root, p1_pairs, decisions)
     configured_phases = campaign_config.get("phases", []) if isinstance(campaign_config.get("phases"), list) else []
     phases = []
     tasks = []
@@ -70,17 +96,56 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if not isinstance(phase, dict):
             continue
         phase_id = str(phase.get("id", ""))
-        phase_row = {"phase_id": phase_id, "status": str(phase.get("status", "planned")), "tasks": []}
+        phase_status = str(phase.get("status", "planned"))
+        if phase_id == "P1_CPU_BASELINE":
+            phase_status = "measured" if p1_pairs else "blocked"
+        phase_row = {"phase_id": phase_id, "status": phase_status, "tasks": []}
         for task in phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []:
             if not isinstance(task, dict):
                 continue
             task_row = {"task_id": str(task.get("id", "")), "phase_id": phase_id, "title": str(task.get("title", "")), "status": str(task.get("status", "planned")), "evidence_ids": []}
+            if phase_id == "P1_CPU_BASELINE":
+                task_row["status"] = "measured" if p1_pairs else "blocked"
+                if p1_pairs:
+                    task_row["evidence_ids"] = [str(pair["receipt"]["request_id"]) for pair in p1_pairs]
             phase_row["tasks"].append(task_row)
             tasks.append(task_row)
         phases.append(phase_row)
+    source_commit, generated_at = _source_commit_metadata(root)
+    p1_state = "P1_CPU_MEASURED_COMPLETE" if p1_pairs else "P1_BLOCKED_WITH_EVIDENCE"
+    next_actions = ([
+        {"action_id": "recover-p1-evidence", "label": "สร้าง validation reports และ four-slot manifests จากหลักฐานที่ยอมรับแล้ว", "kind": "automatic"},
+        {"action_id": "verify-integrated-projections", "label": "ทำ Dashboard, MLflow และ Obsidian ให้ผูก read-model revision เดียวกัน", "kind": "automatic"},
+        {"action_id": "hold-before-p2", "label": "หยุดก่อน P2 จนกว่า acceptance suite และ commit/push จะผ่าน", "kind": "constraint"},
+    ] if not p1_pairs else [
+        {"action_id": "review-p1", "label": "ตรวจ P1 evidence package ก่อนพิจารณาคำสั่ง P2 แยกต่างหาก", "kind": "owner_command"},
+    ])
+    result_state = "valid" if p1_pairs else "blocked"
     body: dict[str, Any] = {
         "schema_version": READ_MODEL_SCHEMA,
-        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "projection_schema_version": PROJECTION_SCHEMA_VERSION,
+        "source_commit": source_commit,
+        "generated_at": generated_at,
+        "project": {
+            "program_id": "myis-research",
+            "display_name": "myIS Research",
+            "campaign_id": campaign_id,
+            "current_phase": "P1_CPU_BASELINE",
+            "current_task": "P1.3",
+            "state": p1_state,
+        },
+        "projection_health": {
+            "status": "blocked" if not p1_pairs else "current",
+            "reason": "p1_evidence_matrix_missing" if not p1_pairs else None,
+            "shared_revision_required": True,
+        },
+        "owner_inbox": next_actions[:3],
+        "progress": {
+            "done": sum(1 for task in tasks if task["status"] in {"complete", "measured"}),
+            "in_process": sum(1 for task in tasks if task["status"] in {"in_progress", "executable"}),
+            "planned_or_blocked": sum(1 for task in tasks if task["status"] not in {"complete", "measured", "in_progress", "executable"}),
+            "total": len(tasks),
+        },
         "campaigns": [{
             "campaign_id": campaign_id,
             "status": campaign_config.get("campaign", {}).get("status", "preparation"),
@@ -88,6 +153,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "primary_metric": campaign_config.get("protocol", {}).get("primary_metric", "recall_at_100/out"),
             "standing_authorization": "D1_START_CAMPAIGN",
             "active_owner_decisions": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
+            "current_state": p1_state,
         }],
         "phases": phases,
         "tasks": tasks,
@@ -101,16 +167,72 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "cost": {"currency": "USD", "actual": total_actual if manifests else None, "estimated": total_estimated if manifests else 0.0, "budget": 100.0},
         "decisions": decisions,
         "evidence": evidence,
+        "datasets": datasets,
+        "historical_exposure": (paired_receipts[0].get("historical_exposure", {}) if paired_receipts else {}),
+        "mlflow_registration": {key: mlflow_registration.get(key) for key in ("schema_version", "source_manifest_sha256", "source_receipt_sha256", "dataset_lineage_sha256", "parent", "children") if key in mlflow_registration},
         "publication_readiness": readiness,
+        "milestones": [
+            {"milestone_id": phase["phase_id"], "status": phase["status"], "depends_on": ([phases[index - 1]["phase_id"]] if index else [])}
+            for index, phase in enumerate(phases)
+        ],
+        "outputs": ([{
+            "output_id": "P1-AGGREGATE-RECEIPT",
+            "phase_id": "P1_CPU_BASELINE",
+            "task_id": "P1.3",
+            "status": "unpromoted",
+            "evidence_class": "aggregate_receipt",
+            "source_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+        }] if receipts else []),
+        "results": [{
+            "result_id": "P1-CPU-BASELINE",
+            "phase_id": "P1_CPU_BASELINE",
+            "task_id": "P1.3",
+            "validity": result_state,
+            "evidence_maturity": "selection" if p1_pairs else "not_run",
+            "metric_ids": [str(item.get("name", "")) for item in metrics] if p1_pairs else [],
+            "claim_boundary": "train_selection_only" if p1_pairs else "no_measured_claim",
+            "limitations": ["active_final_872_global_untouched_not_claimable"],
+        }],
+        "interpretations": ([{
+            "interpretation_id": "P1-CPU-BASELINE-INTERPRETATION",
+            "result_id": "P1-CPU-BASELINE",
+            "status": "pending_review" if p1_pairs else "blocked",
+            "statement": "ยังสรุปผลเชิงวิทยาศาสตร์ไม่ได้จนกว่า evidence matrix จะผ่าน",
+        }]),
+        "raid": ([{
+            "raid_id": "RISK-P1-EVIDENCE-MATRIX",
+            "kind": "risk",
+            "status": "open",
+            "summary": "P1 receipt ยังไม่มี hash-matched validation reports และ four-slot manifests",
+        }] if not p1_pairs else []),
+        "resources": {"cpu_only": True, "gpu": False, "paid_api": False, "budget_usd": 100.0, "actual_cost_usd": total_actual if manifests else 0.0},
+        "presentation": {
+            "audiences": ["owner", "advisor", "peer"],
+            "safe_result_ids": ["P1-CPU-BASELINE"],
+            "claim_boundary": "no_measured_claim" if not p1_pairs else "train_selection_only",
+        },
+        "reports": {
+            "vault_id": "myis-obsidian-report",
+            "vault_path": "obsidian_report",
+            "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
+        },
+        "literature": {"registry": "evidence/literature/catalog/corpus_manifest.csv", "proxy_mode": True},
+        "advisor_updates": {"draft_path": "obsidian_report/02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md", "presented_immutable": True},
+        "tools": {
+            "mlflow": {"mode": "read_only_on_demand", "port": 5000},
+            "obsidian": {"vault_id": "myis-obsidian-report", "open_via_dashboard": True},
+        },
     }
     revision_body = {key: value for key, value in body.items() if key != "generated_at"}
-    body["projection_revision"] = sha256(canonical_json(revision_body))
+    body["read_model_revision"] = sha256(canonical_json(revision_body))
+    body["projection_revision"] = body["read_model_revision"]
+    body["read_model_sha256"] = sha256(canonical_json(body))
     return body
 
 
 def write_read_model(repository_root: Path, output: Path | None = None) -> Path:
     root = repository_root.resolve()
-    target = output or root / "projections" / "read-model" / "read-model.v1.json"
+    target = output or root / "projections" / "read-model" / "read-model.v2.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(build_read_model(root), ensure_ascii=True, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return target
@@ -125,9 +247,225 @@ def _load_manifests(directory: Path) -> list[dict[str, Any]]:
             value = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        if isinstance(value, dict):
-            values.append(value)
+        if not isinstance(value, dict):
+            continue
+        try:
+            values.append(manifest_round_trip(value))
+        except ValueError:
+            continue
     return values
+
+
+def _load_receipts(directory: Path) -> list[dict[str, Any]]:
+    values: list[dict[str, Any]] = []
+    if not directory.is_dir():
+        return values
+    for path in sorted(directory.glob("*.json")):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(value, dict):
+            continue
+        try:
+            values.append(validate_receipt(value))
+        except (OwnerLocalContractError, ValueError):
+            continue
+    return values
+
+
+def _load_validation_reports(directory: Path) -> list[dict[str, Any]]:
+    values: list[dict[str, Any]] = []
+    if not directory.is_dir():
+        return values
+    for path in sorted(directory.glob("*.json")):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+            validate_validation_report(value)
+        except (OSError, json.JSONDecodeError, ManifestValidationError, TypeError, ValueError):
+            continue
+        values.append(value)
+    return values
+
+
+def validated_p1_matrix(
+    manifests: list[dict[str, Any]],
+    receipts: list[dict[str, Any]],
+    validation_reports: list[dict[str, Any]] | None = None,
+) -> list[dict[str, dict[str, Any]]]:
+    """Return P1 facts only when the full arm/split/scope matrix is committed."""
+
+    reports = validation_reports or []
+    valid_manifest_hashes = {
+        str(report.get("manifest_sha256", ""))
+        for report in reports
+        if report.get("status") == "valid"
+    }
+    pairs = [
+        pair for pair in validated_p1_pairs(manifests, receipts)
+        if str(pair["manifest"].get("manifest_sha256", "")) in valid_manifest_hashes
+    ]
+    ordered = sorted(pairs, key=lambda item: str(item["manifest"]["run_id"]))
+    return ordered if _has_complete_p1_matrix(ordered) else []
+
+
+def validated_p1_pairs(manifests: list[dict[str, Any]], receipts: list[dict[str, Any]]) -> list[dict[str, dict[str, Any]]]:
+    """Return individually validated P1 manifest/receipt pairs for additive mirrors."""
+
+    valid_manifests: list[dict[str, Any]] = []
+    for manifest in manifests:
+        try:
+            valid_manifests.append(manifest_round_trip(manifest))
+        except (TypeError, ValueError):
+            continue
+    valid_receipts: list[dict[str, Any]] = []
+    for receipt in receipts:
+        try:
+            valid_receipts.append(validate_receipt(receipt))
+        except (OwnerLocalContractError, TypeError, ValueError):
+            continue
+    receipts_by_sha = {str(receipt.get("receipt_sha256", "")): receipt for receipt in valid_receipts}
+    invalidated_receipts = {
+        str(manifest.get("receipt_sha256", ""))
+        for manifest in valid_manifests
+        if _is_p1_manifest(manifest) and manifest.get("status") != "valid"
+    }
+    pairs: list[dict[str, dict[str, Any]]] = []
+    for manifest in valid_manifests:
+        if not _is_p1_manifest(manifest) or manifest.get("status") != "valid":
+            continue
+        receipt_sha = str(manifest.get("receipt_sha256", ""))
+        receipt = receipts_by_sha.get(receipt_sha)
+        if receipt_sha in invalidated_receipts or not _is_accepted_p1_receipt(receipt):
+            continue
+        if not _manifest_metrics_match_receipt(manifest, receipt):
+            continue
+        pairs.append({"manifest": manifest, "receipt": receipt})
+    return sorted(pairs, key=lambda item: str(item["manifest"]["run_id"]))
+
+
+def _is_p1_manifest(manifest: dict[str, Any]) -> bool:
+    return (
+        manifest.get("campaign_id") == "scope-autoindex-v1"
+        and manifest.get("evidence_class") == "train_selection_measured"
+        and manifest.get("stage") in {"train", "selection"}
+    )
+
+
+def _is_accepted_p1_receipt(receipt: dict[str, Any] | None) -> bool:
+    return bool(receipt) and (
+        receipt.get("status") == "accepted"
+        and not receipt.get("blockers")
+        and receipt.get("decision_id") == "P1_CPU_EXECUTION_ENVELOPE"
+        and receipt.get("phase_id") == "P1_CPU_BASELINE"
+        and receipt.get("stage") == "train_selection"
+    )
+
+
+def _manifest_metrics_match_receipt(manifest: dict[str, Any], receipt: dict[str, Any]) -> bool:
+    metrics = manifest.get("metrics")
+    receipt_metrics = receipt.get("metrics")
+    if not isinstance(metrics, list) or not metrics or not isinstance(receipt_metrics, list):
+        return False
+    arm = _manifest_arm(manifest)
+    split = manifest.get("stage")
+    if arm not in P1_ARMS or split not in P1_SPLITS:
+        return False
+    if len(metrics) != len(P1_SCOPES):
+        return False
+    manifest_rows = _metric_rows(metrics, arm, split)
+    receipt_rows = _metric_rows(receipt_metrics, arm, split)
+    if manifest_rows is None or receipt_rows is None:
+        return False
+    return {canonical_json(row) for row in manifest_rows} == {canonical_json(row) for row in receipt_rows}
+
+
+def _has_complete_p1_matrix(pairs: list[dict[str, dict[str, Any]]]) -> bool:
+    """Require R0/R0-W x train/selection with exactly ALL/IN/OUT each."""
+
+    slots: dict[tuple[str, str], dict[str, dict[str, Any]]] = {}
+    for pair in pairs:
+        manifest = pair["manifest"]
+        slot = (_manifest_arm(manifest), str(manifest.get("stage", "")))
+        if slot[0] not in P1_ARMS or slot[1] not in P1_SPLITS or slot in slots:
+            return False
+        slots[slot] = pair
+    expected_slots = {(arm, split) for arm in P1_ARMS for split in P1_SPLITS}
+    if set(slots) != expected_slots:
+        return False
+    receipt_hashes = {str(pair["receipt"].get("receipt_sha256", "")) for pair in slots.values()}
+    return len(receipt_hashes) == 1
+
+
+def _manifest_arm(manifest: dict[str, Any]) -> str:
+    method = manifest.get("method", {})
+    if not isinstance(method, dict):
+        return ""
+    return str(method.get("arm_id") or method.get("arm") or "")
+
+
+def _metric_rows(metrics: list[Any], arm: str, split: str) -> list[dict[str, Any]] | None:
+    rows = [
+        row for row in metrics
+        if isinstance(row, dict) and row.get("arm") == arm and row.get("split") == split
+    ]
+    if len(rows) != len(P1_SCOPES) or {str(row.get("scope", "")) for row in rows} != P1_SCOPES:
+        return None
+    if any(set(row) != P1_ACCEPTED_METRIC_FIELDS for row in rows):
+        return None
+    return rows
+
+
+def _registration_matches_p1_pair(registration: dict[str, Any], pairs: list[dict[str, dict[str, Any]]]) -> bool:
+    return any(
+        registration.get("source_manifest_sha256") == pair["manifest"]["manifest_sha256"]
+        and registration.get("source_receipt_sha256") == pair["receipt"]["receipt_sha256"]
+        and registration.get("source_run_id") == pair["manifest"]["run_id"]
+        for pair in pairs
+    )
+
+
+def _dataset_projection(root: Path, receipts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    inventory_path = root / "evidence" / "legacy-dapfam-inventory.v1.json"
+    if not inventory_path.is_file():
+        return []
+    try:
+        inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    assets = inventory.get("assets", []) if isinstance(inventory, dict) else []
+    by_path = {str(item.get("path")): item for item in assets if isinstance(item, dict)}
+    receipt = receipts[0] if receipts else {}
+    counts = receipt.get("aggregate_counts", {}) if isinstance(receipt, dict) else {}
+    hashes = receipt.get("aggregate_hashes", {}) if isinstance(receipt, dict) else {}
+    def asset(asset_id: str, path: str, role: str, representation: str, classification: str) -> dict[str, Any]:
+        row = by_path.get(path, {})
+        return {
+            "dataset_id": asset_id,
+            "role": role,
+            "representation": representation,
+            "classification": classification,
+            "bytes": row.get("bytes"),
+            "sha256": row.get("sha256"),
+            "protection": "owner-local-only" if ("qrel" in path or "quer" in path) else "metadata-safe",
+        }
+    rows = [
+        asset("DAPFAM-FAMILY-CORPUS", "processed/dapfam/patents.jsonl", "family-corpus", "patent family records", "reusable-after-certification"),
+        asset("DAPFAM-QUERY-SET", "processed/dapfam/queries.jsonl", "query-set", "TAC query records", "reusable-after-certification"),
+        asset("DAPFAM-RELEVANCE-LABELS", "processed/dapfam/qrels.tsv", "relevance-labels", "family relevance labels", "reusable-after-certification"),
+        asset("DAPFAM-R0-CANDIDATES", "processed/dapfam/chunks_doc.jsonl", "r0-candidate", "one document per family candidate", "reusable-after-certification"),
+        asset("DAPFAM-R0W-CANDIDATES", "processed/retrieval/dapfam_citation_controlled_tac512/corpus_tac_passages.jsonl", "r0-w-candidate", "TAC512 passages with family MaxP", "reusable-after-certification"),
+        asset("DAPFAM-R1-REFERENCE", "processed/dapfam/chunks_section.jsonl", "r1-reference", "section units", "historical-reference"),
+        asset("DAPFAM-INCOMPATIBLE", "processed/dapfam/chunks_element.jsonl", "incompatible", "element units", "incompatible"),
+    ]
+    rows[0]["counts"] = {"patents": counts.get("patents"), "families": counts.get("patents")}
+    rows[1]["counts"] = {"queries": counts.get("queries")}
+    rows[2]["sha256"] = next((str(value) for key, value in hashes.items() if "qrels" in str(key) and str(key).endswith("sha256")), None)
+    rows[3]["counts"] = {"documents": counts.get("r0_documents")}
+    rows[4]["counts"] = {"passages": counts.get("r0w_passages")}
+    rows[5]["constraint"] = "reference only; not active R1 main"
+    rows[6]["constraint"] = "exceeds four-unit DAPFAM limit; never active R1 main"
+    return rows
 
 
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -143,6 +481,22 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     return values
 
 
+def _load_optional_json(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {}
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _file_sha256(path: Path) -> str:
+    if not path.is_file():
+        return ""
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def _load_yaml_like(path: Path) -> dict[str, Any]:
     try:
         import yaml
@@ -154,14 +508,31 @@ def _load_yaml_like(path: Path) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-def _publication_readiness(root: Path, manifests: list[dict[str, Any]], decisions: list[dict[str, Any]]) -> dict[str, Any]:
+def _source_commit_metadata(root: Path) -> tuple[str, str]:
+    try:
+        completed = subprocess.run(
+            ["git", "show", "-s", "--format=%H%n%cI", "HEAD"],
+            cwd=root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        commit, timestamp = completed.stdout.strip().splitlines()[:2]
+        parsed = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+        return commit, parsed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return "0" * 40, "1970-01-01T00:00:00Z"
+
+
+def _publication_readiness(root: Path, p1_pairs: list[dict[str, dict[str, Any]]], decisions: list[dict[str, Any]]) -> dict[str, Any]:
     checks = [
-        {"id": "canonical_run_manifest", "status": "pass" if manifests else "blocked", "source": "campaigns/scope-autoindex-v1/manifests"},
-        {"id": "owner_local_aggregate", "status": "pass" if any(item.get("owner_local_receipt_sha256") for item in manifests) else "blocked", "source": "control/owner-local"},
+        {"id": "canonical_run_manifest", "status": "pass" if p1_pairs else "blocked", "source": "campaigns/scope-autoindex-v1/manifests"},
+        {"id": "owner_local_aggregate", "status": "pass" if p1_pairs else "blocked", "source": "campaigns/scope-autoindex-v1/evidence"},
         {"id": "d2_open_final", "status": "pass" if any(item.get("decision_id") == "D2_OPEN_FINAL" and item.get("status") == "approved" for item in decisions) else "blocked", "source": "control/decisions/ledger.jsonl"},
         {"id": "live_venue_check", "status": "unknown", "source": "Owner/live venue verification"},
         {"id": "prior_publication_status", "status": "unknown", "source": "Owner publication declaration"},
         {"id": "paper_build_hash_closure", "status": "blocked", "source": "03_Paper/publications/isai-nlp-2026"},
+        {"id": "historical_final_872_exposure", "status": "blocked" if any(pair["receipt"].get("historical_exposure", {}).get("active_final_872_global_untouched") == "not_claimable" for pair in p1_pairs) else "unknown", "source": "owner-local historical exposure audit"},
     ]
     status = "ready" if all(item["status"] == "pass" for item in checks) else "blocked"
     return {"schema_version": "myis.publication-readiness.v1", "status": status, "checks": checks}

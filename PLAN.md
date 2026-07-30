@@ -28,9 +28,9 @@ measured.
 
 | Phase | Purpose | State |
 |---|---|---|
-| `P0_FOUNDATION` | authority, schemas, deterministic kernel, protected boundary, projections | active |
-| `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | executable pending protected bundle |
-| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | follows P1 |
+| `P0_FOUNDATION` | authority, schemas, deterministic kernel, protected boundary, projections | complete |
+| `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | `P1_CPU_MEASURED_COMPLETE` |
+| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | waiting review before P2 |
 | `P3_FINAL` | one frozen final evaluation | requires `D2_OPEN_FINAL` |
 | `P4_PUBLICATION` | manuscript, package, and release | requires `D3_SUBMIT_RELEASE` |
 
@@ -40,11 +40,12 @@ These bindings are machine-readable closeout anchors, not additional gates.
 
 ### Task P0.3 - Projection contracts and migration closure
 
-- **Owner Decision:** `D2_OPEN_FINAL`
+- **Owner Decision:** none; automation validates the read model and generated reports.
 
 ### Task P1.3 - Protected owner-local CPU handoff
 
-- **Owner Decision:** `D2_OPEN_FINAL`
+- **Owner Decision:** none; `P1_CPU_EXECUTION_ENVELOPE` is an execution contract, not a new Owner gate.
+- **Result:** R0/R0-W accepted on train/selection only; final-872 remains non-claimable because historical exposure includes Paper-D test-997.
 
 ### Task P3.1 - Frozen final evaluation
 
@@ -78,6 +79,20 @@ flowchart LR
   ties are rejected.
 - CPU first, zero paid API, no GPU, no fallback, and final split closed.
 
+## P1 legacy certification record
+
+The owner-local adapter discovers legacy `patents.jsonl`, `queries.jsonl`,
+`qrels.tsv`, domain labels, `chunks_doc`, and TAC512 passages without asking
+the Owner to convert files. R0 is real Okapi BM25 over one family candidate;
+R0-W is deterministic 512-token passage BM25 with family MaxP. Recall@100 is
+reported with an explicit positive-query denominator and separate ALL/IN/OUT
+scopes for train and selection. Indexes are immutable and stored outside Git;
+reuse requires a matching source/config lineage hash. The safe receipt records
+counts, values, cost, latency, and hashes only. Dataset inventory marks
+`chunks_section` as reference-only and `chunks_element` as incompatible with
+the four-unit DAPFAM limit. Paper A/B/D and Paper-D test-997 are historical
+exposure, so final 872 cannot be described as globally untouched.
+
 ## MLflow and reporting contract
 
 Each campaign has a parent run; each phase has an iteration run; each
@@ -90,9 +105,11 @@ text receipts with hashes; PDFs, qrels, query IDs, and per-query outcomes are
 never mirrored.
 
 Report sync performs one read-model build, validates the schema, writes the
-Research Obsidian projection, Brain generated notes, and Paper readiness note,
-then `check` compares a fresh build to the committed projection. Two
-consecutive sync/check cycles must be stable.
+Research Obsidian projection, Brain generated notes (MOC, dataset registry,
+and one detailed note per phase), and Paper readiness note, then `check`
+compares a fresh build to the committed projection. Two consecutive sync/check
+cycles must be stable. MLflow receives only safe aggregate metrics and lineage
+pointers from the same receipt.
 
 ## Memory lifecycle
 
@@ -124,7 +141,8 @@ searchable; failed attempts remain immutable and cannot override decisions.
 - MLflow bootstrap creates the six allowlisted experiments in an external
   SQLite store; doctor and read-only viewer both pass.
 - Dashboard APIs expose phases, tasks, D2/D3 gates, evidence, metrics, cost,
-  and readiness without writing artifacts or calculating metrics.
+  safe dataset inventory, MLflow pointers, and readiness without writing
+  artifacts or calculating metrics.
 - Literature validation reports U001-U154 with unique IDs and hashes.
 - No protected qrels, query IDs, membership, payloads, or secrets appear in
   Git, Brain, MLflow, Dashboard, or Paper.

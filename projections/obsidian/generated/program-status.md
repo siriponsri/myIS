@@ -1,11 +1,11 @@
 ---
 source: ../../read-model/read-model.v1.json
-source_sha256: 2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b
+source_sha256: c66fa096b90062dd602290c99644b57642ca49bb3bdad5318cfc01b66efd388b
 ---
 
 # Program Status
 
 - Campaign: `scope-autoindex-v1`
-- Phase status: **preparation**
-- Runs: 0
-- Evidence pointers: 0
+- Phase status: **p1_cpu_measured_complete_waiting_review**
+- Runs: 3
+- Evidence pointers: 2

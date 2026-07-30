@@ -90,10 +90,11 @@ Presentation tab ready for measured results.
 ## Active research
 
 - `P0_FOUNDATION`: deterministic kernel, strict SCOPE/FiNE adapters, integrity
-  preflight, owner-local boundary, and projections.
-- `P1_CPU_BASELINE`: `R0` and `R0-W` on train/selection only.
-- `P2_SCOPE_DEVELOPMENT`: R1 representation programs; AutoIndex is the main
-  lineage and SkillOpt remains conditional.
+  preflight, owner-local boundary, and projections; complete.
+- `P1_CPU_BASELINE`: `R0` and `R0-W` measured on train/selection only;
+  current state is `P1_CPU_MEASURED_COMPLETE`.
+- `P2_SCOPE_DEVELOPMENT`: waiting for review before work starts; AutoIndex is
+  the main lineage and SkillOpt remains conditional.
 - `P3_FINAL`: locked until `D2_OPEN_FINAL`.
 - `P4_PUBLICATION`: locked until `D3_SUBMIT_RELEASE`.
 
@@ -119,3 +120,19 @@ git diff --check
 
 No GPU, paid API, final split, qrels, query IDs, or per-query outcomes are
 required for P0/P1. This system is decision support, not legal advice.
+
+## Certified P1 datasets
+
+The Dashboard reads the generated dataset registry from the canonical legacy
+inventory and owner-local receipt. It shows source path, representation,
+classification, byte count, safe hash, and aggregate count. The active roles
+are `family-corpus`, `r0-candidate` (`chunks_doc`), and `r0-w-candidate`
+(TAC512 passages). `chunks_section` is reference-only and `chunks_element` is
+incompatible with the four-unit DAPFAM limit. Queries and relevance labels are
+marked owner-local-only; no query IDs, qrels rows, membership, or per-query
+outcomes are projected.
+
+P1 results are mirrored to an external MLflow store as one parent run with R0
+and R0-W child runs. Obsidian phase notes and the interactive presentation are
+generated from the same `projections/read-model/read-model.v1.json`, so a
+Dashboard or note can be regenerated without changing evidence.

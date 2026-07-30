@@ -7,13 +7,28 @@ written.
 
 ## Read order
 
-1. `PLAN.md`
-2. `control/assets/reusable_assets.yaml`
-3. `control/assets/REUSABLE_ASSET_MAP.md`
-4. `control/campaigns/scope-autoindex-v1.yaml`
-5. `control/execution-envelope.yaml`
-6. `control/source-of-truth.yaml`
-7. files owned by the active task
+1. Read `HANDOFF.md` for orientation only.
+2. Read `PLAN.md`.
+3. Read only the files owned by the active task.
+4. Read additional control files only when required by the conditional rules below.
+
+`HANDOFF.md` is a concise orientation document, not a canonical source. It cannot override plans, control files, schemas, manifests, receipts, or measured evidence.
+
+### Conditional reads
+
+- Read `control/assets/reusable_assets.yaml` and
+  `control/assets/REUSABLE_ASSET_MAP.md` only when discovering, selecting, or
+  adapting reusable App assets.
+- Read `control/campaigns/scope-autoindex-v1.yaml` before changing or executing
+  the active campaign.
+- Read `control/execution-envelope.yaml` before starting an experiment,
+  measured run, or execution-policy change.
+- Read `control/source-of-truth.yaml` before report sync, projection writes,
+  publication work, or resolving conflicting facts.
+- Read schemas, manifests, receipts, and evidence files only when the active
+  task uses or changes them.
+- Before writing, verify every canonical file relevant to that specific write.
+- Do not re-read an unchanged file repeatedly within the same session.
 
 ## Active vocabulary
 
@@ -48,6 +63,37 @@ Do not add micro-gates. Historical vocabulary remains under `archive/` only.
 - Preserve history. Archive before removing. Delete only exact, verified paths.
 - Before commit/push run tests, layout, report drift, MLflow doctor, Brain
   literature validation when touched, and `git diff --check`.
+
+## Token-efficient operations
+
+- Search for filenames, symbols, headings, or exact terms before opening files.
+- Open only the relevant files and line ranges. Do not read entire large files
+  when a focused range is sufficient.
+- Do not recursively inspect the whole repository unless the task explicitly
+  requires a repository-wide audit.
+- For Git, inspect `status --short` or `diff --stat` first, then inspect only
+  the relevant file diff.
+- Run the smallest relevant test first. Use concise output and short tracebacks
+  before running a full test suite.
+- Store verbose logs in files. Report only the result summary, failures,
+  important counts, and exact log paths.
+- Do not print complete datasets, JSONL files, generated artifacts, MLflow
+  payloads, or long command outputs into the conversation.
+- For PDF and image review, inspect only the required pages or figures.
+- Keep visual-review sessions separate from long implementation sessions.
+- Carry verified findings between sessions through `HANDOFF.md`, not through
+  repeated image inspection.
+- When RTK is installed and `rtk --version` succeeds, prefer:
+  - `rtk ls`
+  - `rtk read`
+  - `rtk grep`
+  - `rtk git status`
+  - `rtk git diff`
+  - `rtk git log`
+  - `rtk pytest`
+  - `rtk ruff check`
+- If compact output hides information needed to diagnose a failure, rerun only
+  the affected command with narrowly scoped raw output.
 
 ## Agent responsibilities
 

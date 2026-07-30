@@ -4,7 +4,7 @@ from collections.abc import Iterable, Mapping
 
 from ..kernel.failures import FailureCategory, KernelFailure
 from ..kernel.errors import FailureCategory as ContractFailureCategory, KernelContractError
-from .dsl import ScopeSpec, compile_scope
+from .models import ScopeSpec
 
 
 class DapfamAdapter:
@@ -25,7 +25,9 @@ class DapfamAdapter:
             raise KernelContractError("DAPFAM record exceeds four searchable units", ContractFailureCategory.CONSTRAINT)
 
     def compile(self, spec: ScopeSpec, record: Mapping[str, object]) -> list[dict[str, object]]:
-        units = compile_scope(spec, record)
+        from .compiler import compile_scope
+
+        units = [unit.as_dict() for unit in compile_scope(spec, [record], adapter=self).units]
         searchable = [unit for unit in units if unit["searchable"]]
         if len(searchable) > self.max_searchable_units:
             raise KernelFailure(FailureCategory.COMPILER, "DAPFAM record exceeds four searchable units")
@@ -75,7 +77,9 @@ class FinePatentsAdapter:
 
     def compile_additional_view(self, spec: ScopeSpec, record: Mapping[str, object], official: Iterable[Mapping[str, object]]) -> dict[str, object]:
         official_rows = [dict(row) for row in official]
-        units = compile_scope(spec, record)
+        from .compiler import compile_scope
+
+        units = [unit.as_dict() for unit in compile_scope(spec, [record], adapter=self, official_passages=official_rows).units]
         for unit in units:
             unit["official_passage_ids"] = [str(row["passage_id"]) for row in official_rows]
             unit["official_view"] = False

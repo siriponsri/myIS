@@ -1,19 +1,28 @@
 ---
 source: ../../read-model/read-model.v1.json
-source_sha256: 2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b
+source_sha256: c66fa096b90062dd602290c99644b57642ca49bb3bdad5318cfc01b66efd388b
 ---
 
 # myIS Research MOC
 
 - [[program-status]]
 - [[phase-task-status]]
+- [[datasets]]
 - [[experiments]]
 - [[publication-readiness]]
 - [[weekly-summary]]
+
+## Phase reports / รายงานราย Phase
+
+- [[phase-P0_FOUNDATION]]
+- [[phase-P1_CPU_BASELINE]]
+- [[phase-P2_SCOPE_DEVELOPMENT]]
+- [[phase-P3_FINAL]]
+- [[phase-P4_PUBLICATION]]
 
 ## Backlinks
 
 - [[../../../02_Brain/memory/MOC]]
 - [[../../../02_Brain/reference/Literature/Literature Index]]
 
-Source revision: `2b756fb13115c2e83360325fa032cca30764f27630f395c4b7dbcdc40cbd8e6b`
+Source revision: `c66fa096b90062dd602290c99644b57642ca49bb3bdad5318cfc01b66efd388b`

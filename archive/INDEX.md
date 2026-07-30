@@ -15,6 +15,7 @@ execution source and must not be silently deleted.
 | `05_code/` | keep/restructure | `src/`, `tests/`, `scripts/` |
 | `06_frontend/` | keep/restructure | `dashboard/` and `dashboard/mlflow/` |
 | `07_obsidian_note/` | archive/merge | `02_Brain/reports/generated/` and `projections/obsidian/` |
+| `schemas/run-manifest.v2.strict.json`, `schemas/scope-dsl.v2.json` | archive | Active runtime uses `run-manifest.v2.json` and `scope-dsl.v1.json` only |
 | `inbox/` | archive/input | `archive/inbox/source/`; no file is active authority |
 | generated caches | remove | exact-path cleanup only after hash/reference scan |
 

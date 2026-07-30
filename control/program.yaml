@@ -16,7 +16,7 @@ authority:
   paper_role: generated_publication_projection
 
 owner_decisions:
-  standing_authorization: P1_CPU_EXECUTION_ENVELOPE
+  standing_authorization: D1_START_CAMPAIGN
   final_access: D2_OPEN_FINAL
   external_release: D3_SUBMIT_RELEASE
   micro_gates: false

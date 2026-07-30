@@ -1,0 +1,172 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p1-legacy-dapfam-recovery-20260730",
+  "artifact": "legacy DAPFAM P1 CPU measured package",
+  "artifact_path": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+  "artifact_sha256": "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766",
+  "review_status": "blocked_structural",
+  "boundary": "Artifact-only recovery review. No qrels rows, query IDs, split membership, per-query outcomes, or raw provider payloads were read.",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": null,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": [
+      "F001",
+      "F002",
+      "F003",
+      "F004",
+      "F005"
+    ]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "P1 measured completion is not certifiable: the package has no canonical run manifest, is not bound to the executed code, and the measured retrieval/evaluator semantics contradict the frozen goal.",
+    "strengths": [
+      "The receipt self-commitment and request commitment validate.",
+      "The execution remained CPU-only, zero-cost, train/selection-only, and aggregate-only.",
+      "Legacy source hashes and external index-lineage records are present."
+    ],
+    "weaknesses": [
+      "The primary metric is binary query hit rate mislabeled as Recall@100.",
+      "The SQLite retrieval path uses an implicit conjunctive FTS query rather than bag-of-words BM25 retrieval.",
+      "The request points to commit 7a32cdd while the measured implementation exists only in the dirty worktree.",
+      "No canonical run manifest or validation report exists for the measured package.",
+      "No authoritative active split commitment is included in the request inputs."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": null,
+      "strengths": [],
+      "weaknesses": ["The reported primary value does not implement the named retrieval metric."],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": null,
+      "strengths": [],
+      "weaknesses": ["The package cannot be independently reproduced from its declared Git revision."],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": null,
+      "strengths": ["The receipt explicitly records that final-872 is not claimable as globally untouched."],
+      "weaknesses": ["Split membership is derived at runtime without a request-bound active split commitment."],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": null,
+      "strengths": [],
+      "weaknesses": ["PLAN and projections claim P1_CPU_MEASURED_COMPLETE despite missing and contradictory run evidence."],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": null,
+      "strengths": ["Historical Paper A/B/D exposure is disclosed."],
+      "weaknesses": ["The prior rigor review records structural PASS without inspecting the missing run manifest or code-revision mismatch."],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": null,
+      "strengths": ["Aggregate train and selection values include n, cost, latency, and lineage commitments."],
+      "weaknesses": ["The BM25 query and Recall@100 semantics are invalid for the stated contract."],
+      "suggestions": []
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": "%TEMP%/myis-legacy-dapfam-p1-request.json",
+      "target_entity": "git_commit",
+      "evidence_locator": "git_commit = 7a32cdd61be385628760f2be2b67d6c40bb05d25; git status shows owner-local runner and P1 kernel changes are uncommitted",
+      "observation": "The request binds the pre-change repository revision, not the code that produced the receipt.",
+      "reasoning": "The measured result is not reproducible or attributable to an immutable code revision.",
+      "suggestion": "Commit the corrected implementation first, create a new hash-bound request, and rerun into new immutable artifact paths."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D1_evidence_relevance",
+      "severity": "critical",
+      "target_artifact": "src/myis_research/kernel/p1.py",
+      "target_entity": "evaluate_baseline",
+      "evidence_locator": "hits[scope] += int(bool(set(family_rank[:top_k]) & relevant)); value = hits / number of positive queries",
+      "observation": "The evaluator computes query hit rate, not Recall@100 over relevant families.",
+      "reasoning": "The receipt's primary metric is mislabeled and cannot satisfy the explicit P1 contract.",
+      "suggestion": "Compute per-query relevant-family recall with an explicit aggregation contract and add a multiple-positive regression test."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": "src/myis_research/owner_local_runner.py",
+      "target_entity": "_sqlite_ranker",
+      "evidence_locator": "expression joins quoted terms with spaces before SQLite FTS5 MATCH",
+      "observation": "FTS5 interprets the generated expression conjunctively, filtering out documents that match only some query terms.",
+      "reasoning": "This is not the required bag-of-words Okapi BM25 retrieval behavior and materially changes rankings and recall.",
+      "suggestion": "Use a deterministic OR expression with escaping and regression-test partial-term retrieval plus lexical tie-breaking."
+    },
+    {
+      "finding_id": "F004",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "campaigns/scope-autoindex-v1",
+      "target_entity": "measured run package",
+      "evidence_locator": "campaigns/scope-autoindex-v1/manifests is absent; session capsule run_artifacts.manifest and validation_report are null",
+      "observation": "The claimed measured run has only an aggregate receipt and MLflow mirror record.",
+      "reasoning": "The goal explicitly requires immutable manifests and the source-of-truth contract names manifests as canonical run facts.",
+      "suggestion": "Create schema-valid train and selection manifests that bind the new receipt, code revision, input lineage, method, and resources; write validation before manifests."
+    },
+    {
+      "finding_id": "F005",
+      "dimension": "D3_scope_calibration",
+      "severity": "major",
+      "target_artifact": "src/myis_research/owner_local_runner.py",
+      "target_entity": "_derive_splits",
+      "evidence_locator": "split membership is generated by SHA-256 ordering of query IDs; request input_hashes has no split commitment",
+      "observation": "The adapter does not discover or bind an authoritative active split commitment as required by the goal.",
+      "reasoning": "Cardinality alone cannot prove train/selection isolation or membership continuity across runs.",
+      "suggestion": "Discover the approved commitment source or create an owner-local commitment under the frozen seed protocol and bind its hash in the request without exposing membership."
+    },
+    {
+      "finding_id": "F006",
+      "dimension": "D5_exploration_integrity",
+      "severity": "major",
+      "target_artifact": "outputs/audits/rigor/p1-legacy-dapfam-20260730.json",
+      "target_entity": "structural_status",
+      "evidence_locator": "structural_status = PASS; decision = P1_CPU_MEASURED_COMPLETE",
+      "observation": "The previous review does not follow the required review schema and misses the absent manifest and invalid metric/retrieval semantics.",
+      "reasoning": "It cannot support the recorded completion decision.",
+      "suggestion": "Preserve it as historical evidence and supersede it with this recovery review plus a post-remediation review."
+    },
+    {
+      "finding_id": "F007",
+      "dimension": "D4_argument_coherence",
+      "severity": "minor",
+      "target_artifact": "control/campaigns/scope-autoindex-v1.yaml",
+      "target_entity": "campaign status",
+      "evidence_locator": "current campaign file SHA-256 differs from request.scope.campaign_sha256; the request hash matches the 7a32cdd version",
+      "observation": "The live campaign was updated to measured-complete after execution without a canonical manifest retaining the exact transition evidence.",
+      "reasoning": "The request remains self-consistent, but the completion state is ahead of the certifiable evidence.",
+      "suggestion": "Set the campaign back to a non-complete recovery state until a valid rerun package is finalized."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "archive/inbox/source/MYIS_CPU_P0_P1_CLOSURE_REVIEW.md",
+    "control/decisions/D1_START_CAMPAIGN.yaml",
+    "control/execution-envelope.yaml",
+    "%TEMP%/myis-legacy-dapfam-p1-request.json",
+    "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+    "evidence/mlflow-p1-registration.v1.json",
+    "projections/sessions/20260730T180521Z-p1-legacy-certification-v1.json",
+    "outputs/audits/rigor/p1-legacy-dapfam-20260730.json",
+    "src/myis_research/kernel/p1.py",
+    "src/myis_research/owner_local_runner.py",
+    "tests/test_p1_contracts.py",
+    "tests/test_owner_local_runner.py"
+  ]
+}

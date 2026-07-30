@@ -1,4 +1,4 @@
-"""Strict SCOPE-DSL parsing and dataset adapters."""
+"""Strict SCOPE-DSL v1 parsing, compilation, and dataset adapters."""
 
 from .dsl import ScopeSpec, compile_scope as compile_simple_scope, parse_scope
 from .models import ScopeSpec as StrictScopeSpec, parse_scope_spec

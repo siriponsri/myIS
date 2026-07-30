@@ -1,0 +1,55 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p1-legacy-dapfam-20260730",
+  "boundary": "artifact-only review of P1 CPU baseline; no protected payload or final split access",
+  "read_order": [
+    "PLAN.md",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "evidence/legacy-dapfam-inventory.v1.json",
+    "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+    "evidence/mlflow-p1-registration.v1.json",
+    "projections/read-model/read-model.v1.json"
+  ],
+  "structural_status": "PASS",
+  "scores": {
+    "evidence_relevance": 4,
+    "falsifiability": 4,
+    "scope_calibration": 5,
+    "argument_coherence": 4,
+    "exploration_integrity": 4,
+    "methodological_rigor": 4
+  },
+  "findings": [
+    {
+      "severity": "major",
+      "dimension": "scope_calibration",
+      "target": "historical exposure boundary",
+      "evidence": "receipt historical_exposure.active_final_872_global_untouched = not_claimable",
+      "observation": "Paper A/B/D and Paper-D test-997 are recorded as historically exposed and overlap the derived final query pool.",
+      "impact": "The result cannot support a globally untouched final-872 or confirmation claim.",
+      "remediation": "Keep P3 locked; require a new Owner-reviewed exposure protocol before any final evaluation."
+    },
+    {
+      "severity": "minor",
+      "dimension": "methodological_rigor",
+      "target": "P1 receipt",
+      "evidence": "metrics contain aggregate Recall@100 with n, denominator, cost, latency and lineage hashes",
+      "observation": "P1 is a train/selection baseline, not a paired confirmation package with bootstrap CI or effect statistics.",
+      "impact": "It is sufficient for baseline calibration but not for publication superiority claims.",
+      "remediation": "Add paired confirmation statistics only in the separately governed P3/P4 protocol after D2."
+    },
+    {
+      "severity": "suggestion",
+      "dimension": "argument_coherence",
+      "target": "Dashboard and Obsidian projections",
+      "evidence": "read-model projection_revision and MLflow registration source receipt hash",
+      "observation": "All projections resolve to one read model and one owner-local receipt.",
+      "impact": "No action required; this is a positive control worth preserving.",
+      "remediation": "Keep two consecutive report sync/check cycles in CI."
+    }
+  ],
+  "claim_boundary": "DAPFAM values are retrieval evidence only, not novelty, infringement, validity, freedom-to-operate, or legal truth.",
+  "decision": "P1_CPU_MEASURED_COMPLETE; stop and wait for Owner review before P2; D2 and D3 remain unopened",
+  "reviewer": "agent-observed",
+  "protected_surfaces_untouched": ["qrels rows", "query IDs", "split membership", "per-query outcomes", "raw provider payloads"]
+}
