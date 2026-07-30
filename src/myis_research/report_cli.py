@@ -12,7 +12,8 @@ from .projections.read_model import write_read_model, build_read_model, canonica
 def write_projection_reports(root: Path, model: dict) -> list[Path]:
     """Atomically regenerate Brain and Paper text projections from one model."""
     outputs: list[Path] = []
-    source_sha = sha256(canonical_json(model))
+    # Bind reports to the stable read-model revision, excluding generation time.
+    source_sha = str(model.get("projection_revision") or sha256(canonical_json({key: value for key, value in model.items() if key != "generated_at"})))
     campaign = model.get("campaigns", [{}])[0]
     readiness = model.get("publication_readiness", {})
     brain_root = (root.parent / "02_Brain" / "reports" / "generated").resolve()
