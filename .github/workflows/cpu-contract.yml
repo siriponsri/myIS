@@ -33,7 +33,6 @@ jobs:
       - name: Validate active layout and projections
         run: |
           uv run --no-sync python scripts/validate_layout_v2.py
-          uv run --no-sync myis-report sync --repository-root .
           uv run --no-sync myis-report check --repository-root .
       - name: Reject archive runtime coupling
         shell: bash

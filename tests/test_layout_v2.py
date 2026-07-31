@@ -29,3 +29,11 @@ def test_cpu_contract_fetches_history_required_by_projection_lineage():
         if step.get("uses") == "actions/checkout@v4"
     )
     assert checkout["with"]["fetch-depth"] == 0
+
+    projection_step = next(
+        step
+        for step in workflow["jobs"]["contract"]["steps"]
+        if step.get("name") == "Validate active layout and projections"
+    )
+    assert "myis-report check" in projection_step["run"]
+    assert "myis-report sync" not in projection_step["run"]
