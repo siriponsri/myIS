@@ -8,6 +8,7 @@ import pytest
 from myis_research.projections.read_model import build_read_model
 from myis_research.report_cli import (
     VAULT_RELATIVE_PATH,
+    _check,
     _validate_generated_contents,
     correct_advisor_update,
     present_advisor_update,
@@ -62,6 +63,23 @@ def test_two_syncs_are_idempotent_and_preserve_owner_files(tmp_path: Path) -> No
     second = {path.relative_to(repo).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in (repo / VAULT_RELATIVE_PATH).rglob("*") if path.is_file()}
     assert first == second
     assert owner.read_bytes() == b"owner bytes must remain exact\n"
+
+
+def test_read_model_only_check_does_not_require_external_projections(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("external projection validation must not run")
+
+    monkeypatch.setattr("myis_research.report_cli.projection_report_contents", fail_if_called)
+    monkeypatch.setattr("myis_research.report_cli._validate_sync_receipt", fail_if_called)
+    result = _check(
+        ROOT,
+        ROOT / "projections/read-model/read-model.v2.json",
+        read_model_only=True,
+    )
+    assert result["status"] == "PASS"
+    assert result["read_model_drift"] is False
+    assert result["report_drift"] == []
+    assert result["sync_receipt_error"] is None
 
 
 def test_generated_content_rejects_unsafe_protected_and_unknown_properties() -> None:

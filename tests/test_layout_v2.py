@@ -35,5 +35,5 @@ def test_cpu_contract_fetches_history_required_by_projection_lineage():
         for step in workflow["jobs"]["contract"]["steps"]
         if step.get("name") == "Validate active layout and projections"
     )
-    assert "myis-report check" in projection_step["run"]
+    assert "myis-report check --read-model-only" in projection_step["run"]
     assert "myis-report sync" not in projection_step["run"]

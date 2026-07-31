@@ -975,7 +975,7 @@ def correct_advisor_update(root: Path, snapshot_id: str, corrects_snapshot_id: s
     return _write_immutable_snapshot(target, correction)
 
 
-def _check(root: Path, target: Path) -> dict[str, Any]:
+def _check(root: Path, target: Path, *, read_model_only: bool = False) -> dict[str, Any]:
     if not target.is_file():
         return {"status": "FAIL", "reason": "read_model_missing", "read_model": str(target)}
     try:
@@ -986,16 +986,18 @@ def _check(root: Path, target: Path) -> dict[str, Any]:
     expected = build_read_model(root)
     read_model_drift = payload != expected
     report_drift = []
-    for path, content in projection_report_contents(root, expected).items():
-        try:
-            matches = path.is_file() and path.read_bytes() == content.encode("utf-8")
-        except (OSError, UnicodeError):
-            matches = False
-        if not matches:
-            report_drift.append(str(path))
-    sync_receipt_error = _validate_sync_receipt(root, expected)
-    if sync_receipt_error:
-        report_drift.append(str(root / SYNC_RECEIPT_RELATIVE_PATH))
+    sync_receipt_error = None
+    if not read_model_only:
+        for path, content in projection_report_contents(root, expected).items():
+            try:
+                matches = path.is_file() and path.read_bytes() == content.encode("utf-8")
+            except (OSError, UnicodeError):
+                matches = False
+            if not matches:
+                report_drift.append(str(path))
+        sync_receipt_error = _validate_sync_receipt(root, expected)
+        if sync_receipt_error:
+            report_drift.append(str(root / SYNC_RECEIPT_RELATIVE_PATH))
     drift = read_model_drift or bool(report_drift)
     return {
         "status": "FAIL" if drift else "PASS",
@@ -1049,7 +1051,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--snapshot-id")
     parser.add_argument("--mlflow-store", type=Path)
     parser.add_argument("--corrects-snapshot-id")
+    parser.add_argument("--read-model-only", action="store_true")
     args = parser.parse_args(argv)
+    if args.read_model_only and args.command != "check":
+        parser.error("--read-model-only is valid only with check")
     root = args.repository_root.resolve()
     target = args.output.resolve() if args.output else root / READ_MODEL_RELATIVE_PATH
     if args.command == "build":
@@ -1082,7 +1087,7 @@ def main(argv: list[str] | None = None) -> int:
         outputs = write_projection_reports(root, model, mlflow_run_id=mlflow_run_id)
         print(json.dumps({"status": "PASS", "read_model": str(target), "report_count": len(outputs), "read_model_revision": model["read_model_revision"], "mlflow_run_id": mlflow_run_id}, ensure_ascii=True))
         return 0
-    result = _check(root, target)
+    result = _check(root, target, read_model_only=args.read_model_only)
     print(json.dumps(result, ensure_ascii=True))
     return 0 if result["status"] == "PASS" else 1
 
