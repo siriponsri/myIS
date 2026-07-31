@@ -360,11 +360,17 @@ def test_checked_in_p1_raw_hash_bindings_are_checkout_stable() -> None:
     review_path = repository_root / (
         "outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json"
     )
+    registration_path = repository_root / "evidence/mlflow-p1-registration.v2.json"
     package = json.loads(package_path.read_text(encoding="utf-8"))
     review = json.loads(review_path.read_text(encoding="utf-8"))
+    read_model = build_read_model(repository_root)
 
     assert hashlib.sha256(source_path.read_bytes()).hexdigest() == package["source_contract_sha256"]
     assert hashlib.sha256(package_path.read_bytes()).hexdigest() == review["artifact_sha256"]
+    registration_evidence = next(
+        item for item in read_model["evidence"] if item["evidence_id"] == "mlflow-p1-registration"
+    )
+    assert hashlib.sha256(registration_path.read_bytes()).hexdigest() == registration_evidence["sha256"]
 
     attributes = {
         line.strip()
@@ -375,6 +381,7 @@ def test_checked_in_p1_raw_hash_bindings_are_checkout_stable() -> None:
         "control/assets/dapfam-p1-source.v1.json -text",
         "campaigns/scope-autoindex-v1/packages/*.json -text",
         "outputs/audits/rigor/**/*.json -text",
+        "evidence/mlflow-p1-registration.v2.json -text",
     } <= attributes
 
 

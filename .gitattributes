@@ -16,3 +16,4 @@ campaigns/scope-autoindex-v1/manifests/*.json -text
 campaigns/scope-autoindex-v1/validation-reports/*.json -text
 campaigns/scope-autoindex-v1/packages/*.json -text
 outputs/audits/rigor/**/*.json -text
+evidence/mlflow-p1-registration.v2.json -text
