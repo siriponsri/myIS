@@ -63,6 +63,29 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "P1_CPU_MEASURED_COMPLETE" in contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
 
 
+def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
+    vault_root = ROOT / VAULT_RELATIVE_PATH
+    manifest = json.loads(
+        (vault_root / "00_System/Generated/generated-manifest.json").read_text(encoding="utf-8")
+    )
+    for entry in manifest["files"]:
+        path = vault_root / entry["relative_path"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["sha256"]
+
+    attributes = {
+        line.strip()
+        for line in (ROOT / ".gitattributes").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    assert {
+        "obsidian_report/** -text",
+        "obsidian_report/**/Owner_Notes/** text",
+        "obsidian_report/80_Owner_Notes/** text",
+        "obsidian_report/.obsidian/** text",
+        "obsidian_report/*.canvas text",
+    } <= attributes
+
+
 def test_projection_archive_identity_changes_when_generator_binding_changes() -> None:
     bindings = _projection_bindings()
     first = _projection_identity_fingerprint(**bindings)

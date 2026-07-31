@@ -17,3 +17,11 @@ campaigns/scope-autoindex-v1/validation-reports/*.json -text
 campaigns/scope-autoindex-v1/packages/*.json -text
 outputs/audits/rigor/**/*.json -text
 evidence/mlflow-p1-registration.v2.json -text
+
+# The generated vault manifest binds report bytes. Keep generated output exact,
+# while retaining normal text handling for Owner-authored and Obsidian-local files.
+obsidian_report/** -text
+obsidian_report/**/Owner_Notes/** text
+obsidian_report/80_Owner_Notes/** text
+obsidian_report/.obsidian/** text
+obsidian_report/*.canvas text
