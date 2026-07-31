@@ -1,11 +1,11 @@
 :root {
-  --canvas: #f3f7f6;
+  --canvas: #f5f6f5;
   --surface: #ffffff;
-  --surface-soft: #eaf1f0;
-  --ink: #203033;
-  --muted: #5a6b6e;
-  --line: #d4dfdd;
-  --line-strong: #aebfbc;
+  --surface-soft: #f1f3f2;
+  --ink: #263033;
+  --muted: #626d70;
+  --line: #d9dedc;
+  --line-strong: #aeb8b5;
   --teal: #0f6b68;
   --teal-soft: #dcefee;
   --green: #2f7a4f;
@@ -17,7 +17,7 @@
   --focus: #1478a0;
   --overlay: rgb(20 33 35 / 48%);
   --font-display: Bahnschrift, "Aptos Display", "Segoe UI", sans-serif;
-  --font-body: Aptos, "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  --font-body: "Leelawadee UI", Aptos, "Segoe UI Variable Text", "Segoe UI", sans-serif;
   --font-thai: "Leelawadee UI", Tahoma, "Segoe UI", sans-serif;
   --font-utility: "Cascadia Mono", "Aptos Mono", Consolas, monospace;
   --space-2xs: 0.25rem;

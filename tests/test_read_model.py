@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 
 import pytest
 
 from myis_research.kernel.manifest import build_manifest
-from myis_research.kernel.manifest_validation import capture_git_state
+from myis_research.kernel.manifest_validation import build_validation_report, capture_git_state
 from myis_research.owner_local import build_receipt
 from myis_research.projections.read_model import build_read_model, write_read_model
 from myis_research.report_cli import validate_read_model
@@ -19,7 +20,7 @@ def test_empty_campaign_read_model_is_safe(tmp_path: Path) -> None:
     (tmp_path / "control" / "campaigns" / "scope-autoindex-v1.yaml").write_text("campaign:\n  status: preparation\n", encoding="utf-8")
     (tmp_path / "control" / "decisions" / "ledger.jsonl").write_text("", encoding="utf-8")
     model = build_read_model(tmp_path)
-    assert model["schema_version"] == "myis.read-model.v1"
+    assert model["schema_version"] == "myis.read-model.v2"
     assert model["publication_readiness"]["status"] == "blocked"
     output = write_read_model(tmp_path)
     assert json.loads(output.read_text(encoding="utf-8"))["projection_revision"] == model["projection_revision"]
@@ -31,7 +32,7 @@ def test_read_model_validation_rejects_unknown_field_and_non_object(tmp_path: Pa
     (tmp_path / "control" / "campaigns" / "scope-autoindex-v1.yaml").write_text("campaign: {}\n", encoding="utf-8")
     (tmp_path / "control" / "decisions" / "ledger.jsonl").write_text("", encoding="utf-8")
     model = build_read_model(tmp_path)
-    with pytest.raises(ValueError, match="absent from its schema"):
+    with pytest.raises(ValueError, match="schema validation failed"):
         validate_read_model({**model, "source_path": "protected"})
     with pytest.raises(ValueError, match="JSON object"):
         validate_read_model([])  # type: ignore[arg-type]
@@ -112,6 +113,7 @@ def _write_p1_manifest(
     status: str = "valid",
     metrics: list[dict[str, object]] | None = None,
     run_suffix: str = "",
+    write_validation: bool = True,
 ) -> Path:
     manifest_dir = tmp_path / "campaigns" / "scope-autoindex-v1" / "manifests"
     manifest_dir.mkdir(parents=True, exist_ok=True)
@@ -135,7 +137,26 @@ def _write_p1_manifest(
     )
     path = manifest_dir / f"{arm.lower()}-{split}-{status}{run_suffix}.json"
     path.write_text(json.dumps(manifest), encoding="utf-8")
+    if write_validation:
+        _write_validation_report(tmp_path, path, request, receipt)
     return path
+
+
+def _write_validation_report(
+    tmp_path: Path,
+    manifest_path: Path,
+    request: dict[str, object],
+    receipt: dict[str, object],
+) -> None:
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    report = build_validation_report(
+        manifest,
+        owner_local_request=request,
+        owner_local_receipt=receipt,
+    )
+    report_dir = tmp_path / "campaigns" / "scope-autoindex-v1" / "validation-reports"
+    report_dir.mkdir(parents=True, exist_ok=True)
+    (report_dir / manifest_path.name).write_text(json.dumps(report), encoding="utf-8")
 
 
 def _write_p1_matrix(tmp_path: Path, repository_root: Path, request: dict[str, object], receipt: dict[str, object]) -> None:
@@ -167,6 +188,63 @@ def test_p1_requires_a_valid_non_invalidated_manifest_receipt_pair(tmp_path: Pat
     invalidated = build_read_model(tmp_path)
     assert invalidated["campaigns"][0]["current_state"] == "P1_BLOCKED_WITH_EVIDENCE"
     assert invalidated["metrics"] == []
+
+
+def test_p1_requires_validation_reports_for_all_four_slots(tmp_path: Path) -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    request, receipt = _p1_receipt(repository_root)
+    _write_p1_campaign(tmp_path, receipt)
+    paths = [
+        _write_p1_manifest(
+            tmp_path,
+            repository_root,
+            request,
+            receipt,
+            arm=arm,
+            split=split,
+            write_validation=False,
+        )
+        for arm in ("R0", "R0-W")
+        for split in ("train", "selection")
+    ]
+    blocked = build_read_model(tmp_path)
+    assert blocked["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
+    assert blocked["runs"] == []
+    assert blocked["metrics"] == []
+    assert blocked["evidence"] == []
+
+    for path in paths:
+        _write_validation_report(tmp_path, path, request, receipt)
+    promoted = build_read_model(tmp_path)
+    assert promoted["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
+    assert len(promoted["runs"]) == 4
+    assert len(promoted["metrics"]) == 12
+
+
+def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    receipt_path = repository_root / "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json"
+    assert hashlib.sha256(receipt_path.read_bytes()).hexdigest() == (
+        "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766"
+    )
+    model = build_read_model(repository_root)
+    assert model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
+    assert model["runs"] == []
+    assert model["metrics"] == []
+    assert model["evidence"] == []
+    assert model["mlflow_registration"] == {}
+    assert model["outputs"] == [{
+        "output_id": "P1-LEGACY-RECEIPT",
+        "phase_id": "P1_CPU_BASELINE",
+        "task_id": "P1.3",
+        "status": "historical_invalid_superseded",
+        "evidence_class": "historical_invalid",
+        "source_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+        "source_sha256": "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766",
+        "disposition_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.disposition.json",
+        "promotable": False,
+        "superseded_by": "fresh-owner-local-p1-rerun-pending",
+    }]
 
 
 def test_manifest_metrics_must_match_the_paired_receipt(tmp_path: Path) -> None:

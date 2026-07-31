@@ -1,6 +1,9 @@
 # Obsidian Report Projection
 
-This directory contains small, rebuildable Markdown reports generated from `projections/read-model/read-model.v1.json`. The primary vault is `02_Brain`; Research keeps this projection contract and compatibility output only.
+This directory contains the retired small-report compatibility projection built
+from `projections/read-model/read-model.v2.json`. The canonical reporting vault
+is `obsidian_report/`; `02_Brain` remains pointer-only research memory and is not
+the Phase/Task reporting vault.
 
 - `generated/` is overwritten by `myis-report sync`.
 - `templates/` defines pointer-only manual note fields.

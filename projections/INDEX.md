@@ -3,13 +3,24 @@
 `read-model/` is the only generated read model consumed by Dashboard, Brain,
 and Paper projections.
 
-## One-click launchers
+## Owner entry point
 
-Double-click these files in Windows Explorer:
+The only supported user-facing start entry point is
+`../dashboard/open-dashboard.cmd`. It owns Dashboard health validation and
+provides fixed actions for the external read-only MLflow archive and the
+canonical `../obsidian_report/` vault.
 
-- `open-dashboard.cmd`: starts the loopback Dashboard and opens `http://127.0.0.1:8765`.
-- `open-mlflow.cmd`: starts the read-only MLflow viewer for the external active store (`01_Stores/00_myIS/mlflow-p1`) and opens `http://127.0.0.1:5000`.
-- `open-obsidian-report.cmd`: rebuilds the read model and generated reports, then opens the `02_Brain` Obsidian vault.
-- `run-legacy-p1.cmd`: certifies the legacy DAPFAM tree and runs only P1 `R0/R0-W` on train/selection inside the owner-local process.
+The retired `open-dashboard.cmd`, `open-mlflow.cmd`, and
+`open-obsidian-report.cmd` sources are preserved under
+`../archive/p1-recovery-20260730/legacy-launchers/` and are not runtime entry
+points. Restore them only from a reviewed rollback commit; they do not meet the
+unified health/security contract.
 
-Set `MYIS_DASHBOARD_PORT`, `MYIS_MLFLOW_PORT`, or `MYIS_MLFLOW_STORE` before launching when a non-default local configuration is required. Dashboard and MLflow run in minimized PowerShell windows; close those windows to stop the services.
+`run-legacy-p1.cmd` is a protected Owner-local execution command, not a UI
+launcher. Never use it for launcher or interface acceptance and never run it
+during the recovery freeze.
+
+Set `MYIS_DASHBOARD_PORT` before starting the unified Dashboard when a
+non-default loopback port is required. `MYIS_MLFLOW_STORE` is a maintenance
+override for the safe external store and must never point at `mlflow-p1` during
+projection acceptance.

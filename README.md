@@ -46,7 +46,7 @@ Dashboard is presentation only. It never recalculates metrics or opens a phase.
 ```text
 Owner-local harness -> manifest/aggregate receipt -> MLflow mirror
                                            \-> report generator
-                                                \-> read-model.v1.json
+                                                \-> read-model.v2.json
                                                      \-> Dashboard
                                                      \-> Obsidian / Brain
                                                      \-> Paper readiness
@@ -56,14 +56,15 @@ The read model is rebuilt from canonical files. A changed Dashboard, MLflow
 store, or Obsidian note can therefore be deleted and regenerated without
 changing scientific facts.
 
-## MLflow hierarchy
+## MLflow archive
 
-The mirror uses additive experiments with stable names:
-`myis-research-bootstrap`, `myis-research-catalog`, `myis-research-track-c`,
-`myis-research-track-s`, `myis-research-joint`, and
-`myis-research-publication`. Runs carry parent/campaign identifiers, phase,
-arm, data role, manifest/config/model/evaluator hashes, metrics, cost, and
-artifact hashes. The store is external to Git and the viewer is read-only.
+The active v2 archive uses `myis-scope-autoindex-v1` for scientific records
+and `myis-system` for maintenance records. The six `myis-research-*`
+experiments are preserved as `legacy_read_only` history. Every v2 archive run
+is hash-bound to its shared read-model revision, freeze bundle, metric and
+schema/rule registries, manifest/receipt pointers, lifecycle state, and safe
+artifacts. The SQLite/artifact store remains external to Git and the viewer is
+read-only; maintenance supports local backup and a non-destructive rebuild plan.
 
 ## Target tree
 
@@ -74,7 +75,7 @@ artifact hashes. The store is external to Git and the viewer is read-only.
   src/           # deterministic kernel, SCOPE, harness, projections
   schemas/       # versioned contracts
   evidence/      # hashes, literature, known-missing receipts
-  projections/   # read model and one-click launchers
+  projections/   # shared read model and rebuildable compatibility projections
   dashboard/     # presentation UI and local MLflow viewer
   scripts/       # validators, report sync, MLflow bootstrap/doctor
   archive/       # immutable historical source and migration pointers
@@ -82,18 +83,22 @@ artifact hashes. The store is external to Git and the viewer is read-only.
 
 ## Owner view
 
-Open `projections/open-dashboard.cmd` for the interactive dashboard, or use the
-three one-click launchers in `projections/` for Dashboard, MLflow, and Obsidian.
-The dashboard separates **done**, **next**, and **waiting for Owner** and has a
-Presentation tab ready for measured results.
+Open `dashboard/open-dashboard.cmd` for the unified interactive dashboard. The
+Dashboard is the only user-facing start entry point. It separates **done**,
+**next**, and **waiting for Owner**, and provides Execution, Results, Evidence,
+Governance, Reports, Research Tools, and a ten-screen Presentation view.
+MLflow and the canonical Obsidian reporting vault are opened from fixed
+Dashboard actions. Retired standalone launcher sources are archived under
+`archive/p1-recovery-20260730/legacy-launchers/` for rollback inspection only.
 
 ## Active research
 
 - `P0_FOUNDATION`: deterministic kernel, strict SCOPE/FiNE adapters, integrity
   preflight, owner-local boundary, and projections; complete.
-- `P1_CPU_BASELINE`: `R0` and `R0-W` measured on train/selection only;
-  current state is `P1_CPU_MEASURED_COMPLETE`.
-- `P2_SCOPE_DEVELOPMENT`: waiting for review before work starts; AutoIndex is
+- `P1_CPU_BASELINE`: current state is `P1_BLOCKED_WITH_EVIDENCE`. The retained
+  legacy aggregate receipt is historical invalid/superseded evidence and has
+  no promoted runs, metrics, or evidence.
+- `P2_SCOPE_DEVELOPMENT`: blocked until a fresh valid P1 rerun; AutoIndex is
   the main lineage and SkillOpt remains conditional.
 - `P3_FINAL`: locked until `D2_OPEN_FINAL`.
 - `P4_PUBLICATION`: locked until `D3_SUBMIT_RELEASE`.
@@ -114,25 +119,35 @@ beginner-readable closeout and does not replace canonical control records.
 uv run --no-sync pytest -q
 uv run --no-sync myis-report sync --repository-root .
 uv run --no-sync myis-report check --repository-root .
+uv run --no-sync myis-report advisor-validate --repository-root .
 uv run --no-sync python scripts/validate_layout_v2.py
+uv run --no-sync python scripts/mlflow_doctor.py --repository-root . --store-root $env:MYIS_MLFLOW_STORE
+uv run --no-sync pytest -q tests/test_dashboard_launcher.py tests/test_projection_launchers.py
 git diff --check
 ```
 
-No GPU, paid API, final split, qrels, query IDs, or per-query outcomes are
-required for P0/P1. This system is decision support, not legal advice.
+No GPU, paid API, final split, or protected data are required for this recovery
+freeze. A future P1 rerun uses protected evaluator inputs only inside the
+Owner-local process and projects aggregates/hashes/counts only. This system is
+decision support, not legal advice.
 
 ## Certified P1 datasets
 
 The Dashboard reads the generated dataset registry from the canonical legacy
-inventory and owner-local receipt. It shows source path, representation,
-classification, byte count, safe hash, and aggregate count. The active roles
+inventory and owner-local receipt. It shows logical identifier, representation,
+classification, byte count, safe hash, and aggregate count, but never exposes
+an Owner-local source path. The active roles
 are `family-corpus`, `r0-candidate` (`chunks_doc`), and `r0-w-candidate`
 (TAC512 passages). `chunks_section` is reference-only and `chunks_element` is
 incompatible with the four-unit DAPFAM limit. Queries and relevance labels are
 marked owner-local-only; no query IDs, qrels rows, membership, or per-query
 outcomes are projected.
 
-P1 results are mirrored to an external MLflow store as one parent run with R0
-and R0-W child runs. Obsidian phase notes and the interactive presentation are
-generated from the same `projections/read-model/read-model.v1.json`, so a
-Dashboard or note can be regenerated without changing evidence.
+The historical MLflow registration is not promoted. Dashboard, the generated
+MLflow archive, Obsidian phase notes, and Paper readiness are rebuilt from the
+same `projections/read-model/read-model.v2.json` revision, so a projection can
+be regenerated without changing evidence.
+
+The active projection contract is v2. Legacy `/api/v1` read routes remain only
+as tested migration aliases and return v2 data; archived v1 files are never
+loaded as current facts.

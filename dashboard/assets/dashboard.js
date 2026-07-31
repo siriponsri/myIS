@@ -1,158 +1,536 @@
-const state = { tab: "overview", model: null, dashboard: null, presentation: null, csrf: "", presenting: false, selectedTaskId: null };
+const state = {
+  tab: "overview",
+  model: null,
+  dashboard: null,
+  presentation: null,
+  csrf: "",
+  reports: null,
+  tools: null,
+  selectedTaskId: null,
+  selectedPhaseId: null,
+  selectedNoteId: null,
+  boardMode: "simple",
+  resultFilter: "all",
+  reportType: "",
+  search: "",
+  audience: "owner",
+  presenting: false,
+  slideIndex: 0,
+};
+
 const $ = (id) => document.getElementById(id);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  document.querySelectorAll("[data-tab]").forEach((button) => button.addEventListener("click", () => selectTab(button.dataset.tab)));
-  $("refresh").addEventListener("click", refresh);
-  $("present-toggle").addEventListener("click", () => {
-    state.presenting = !state.presenting;
-    document.body.classList.toggle("presentation-mode", state.presenting);
-    $("present-toggle").textContent = state.presenting ? "กลับสู่ dashboard" : "สลับโหมดนำเสนอ";
-    renderPresentation();
+  const requestedTab = location.hash.match(/^#\/(\w+)/)?.[1];
+  if (requestedTab && document.getElementById(requestedTab)) state.tab = requestedTab;
+  document.querySelector(".skip-link").addEventListener("click", () => {
+    window.setTimeout(() => $("main-content").focus(), 0);
   });
+  document.querySelectorAll("[data-tab]").forEach((button) => {
+    button.addEventListener("click", () => selectTab(button.dataset.tab));
+    button.addEventListener("keydown", handleTabKeydown);
+  });
+  document.querySelectorAll("[data-board-mode]").forEach((button) => button.addEventListener("click", () => setBoardMode(button.dataset.boardMode)));
+  document.querySelectorAll("[data-result-filter]").forEach((button) => button.addEventListener("click", () => setResultFilter(button.dataset.resultFilter)));
+  $("refresh").addEventListener("click", refresh);
+  $("present-shortcut").addEventListener("click", () => selectTab("presentation"));
+  $("global-search").addEventListener("input", (event) => {
+    state.search = event.target.value.trim().toLocaleLowerCase("th");
+    renderFlow();
+    renderOutputsResults();
+    if (state.reports) renderReports();
+  });
+  $("report-type").addEventListener("change", async (event) => {
+    state.reportType = event.target.value;
+    state.selectedNoteId = null;
+    await loadReports();
+  });
+  $("audience").addEventListener("change", async (event) => {
+    state.audience = event.target.value;
+    state.slideIndex = 0;
+    await loadPresentation();
+  });
+  $("present-toggle").addEventListener("click", togglePresentation);
+  $("present-prev").addEventListener("click", () => moveSlide(-1));
+  $("present-next").addEventListener("click", () => moveSlide(1));
+  $("print-view").addEventListener("click", () => window.print());
+  document.addEventListener("keydown", handleKeyboard);
+  selectTab(state.tab, false);
   await refresh();
+  window.setInterval(() => {
+    if (!document.hidden && !state.presenting) refresh();
+  }, 60000);
 });
 
 async function refresh() {
-  $("sync-state").textContent = "กำลังอ่านข้อมูล";
+  $("sync-state").textContent = "กำลังอ่าน projection";
   try {
     const session = await fetchJson("/api/v1/session");
     state.csrf = session.csrf_token;
-    [state.model, state.dashboard, state.presentation] = await Promise.all([
-      fetchJson("/api/v1/read-model"), fetchJson("/api/v1/dashboard"), fetchJson("/api/v1/presentation"),
+    [state.model, state.dashboard, state.presentation, state.tools] = await Promise.all([
+      fetchJson("/api/v2/snapshot"),
+      fetchJson("/api/v2/overview"),
+      fetchJson(`/api/v2/presentation/${state.audience}`),
+      fetchJson("/api/v2/tools"),
     ]);
+    state.selectedTaskId ||= state.model?.project?.current_task || state.model?.tasks?.[0]?.task_id || null;
+    state.selectedPhaseId ||= state.model?.project?.current_phase || state.model?.phases?.[0]?.phase_id || null;
     renderAll();
-    $("sync-state").textContent = `อัปเดต ${new Date().toLocaleTimeString("th-TH")}`;
+    $("sync-state").textContent = `อัปเดต ${new Date().toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}`;
+    clearMessage();
   } catch (error) {
-    $("sync-state").textContent = `อ่านข้อมูลไม่ได้: ${error.message}`;
+    $("sync-state").textContent = "Projection unavailable";
+    showMessage(error.message, "error");
   }
 }
 
-function selectTab(tab) {
+function selectTab(tab, updateLocation = true) {
+  if (!document.getElementById(tab)) return;
   state.tab = tab;
-  document.querySelectorAll("[data-tab]").forEach((button) => button.classList.toggle("is-active", button.dataset.tab === tab));
-  document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("is-visible", panel.id === tab));
-  if (tab === "presentation") renderPresentation();
+  document.querySelectorAll("[data-tab]").forEach((button) => {
+    const active = button.dataset.tab === tab;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-selected", String(active));
+    button.tabIndex = active ? 0 : -1;
+  });
+  document.querySelectorAll(".panel").forEach((panel) => {
+    const active = panel.id === tab;
+    panel.classList.toggle("is-visible", active);
+    panel.hidden = !active;
+  });
+  if (updateLocation) history.replaceState(null, "", `#/${tab}`);
+  if (tab === "reports") loadReports();
+  if (tab === "tools") loadTools();
+  if (tab === "presentation") loadPresentation();
+}
+
+function handleTabKeydown(event) {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  const tabs = [...document.querySelectorAll("[data-tab]")];
+  let index = tabs.indexOf(event.currentTarget);
+  if (event.key === 'Home') index = 0;
+  if (event.key === 'End') index = tabs.length - 1;
+  if (event.key === 'ArrowLeft') index = (index - 1 + tabs.length) % tabs.length;
+  if (event.key === 'ArrowRight') index = (index + 1) % tabs.length;
+  event.preventDefault();
+  tabs[index].focus();
+  selectTab(tabs[index].dataset.tab);
+}
+
+function setBoardMode(mode) {
+  state.boardMode = mode;
+  document.querySelectorAll("[data-board-mode]").forEach((button) => {
+    const active = button.dataset.boardMode === mode;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  renderFlow();
+}
+
+function setResultFilter(filter) {
+  state.resultFilter = filter;
+  document.querySelectorAll("[data-result-filter]").forEach((button) => {
+    const active = button.dataset.resultFilter === filter;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  renderOutputsResults();
 }
 
 function renderAll() {
-  const model = state.model || {};
-  const campaign = model.campaigns?.[0] || {};
-  const dashboard = state.dashboard || {};
+  const project = state.model?.project || {};
+  const campaign = state.model?.campaigns?.[0] || {};
   $("campaign-title").textContent = campaign.title || "SCOPE / AutoIndex";
-  $("campaign-status").textContent = `สถานะ: ${campaign.status || "preparation"} · metric หลัก: ${campaign.primary_metric || "recall_at_100/out"}`;
-  $("revision").textContent = model.projection_revision ? `read-model ${short(model.projection_revision)}` : "read-model —";
+  $("campaign-status").textContent = `${project.state || campaign.status || "preparation"} · Phase ${project.current_phase || "-"} · Task ${project.current_task || "-"}`;
+  $("breadcrumb").textContent = `myIS / ${shortPhase(project.current_phase)} / ${project.current_task || "-"}`;
+  $("revision").textContent = state.model?.read_model_revision ? short(state.model.read_model_revision, 16) : "ยังไม่โหลด";
   renderRibbon();
   renderStatusCards();
   renderInbox();
+  renderLatestEvidence();
   renderReadiness();
+  renderOverviewRisks();
   renderFlow();
+  renderOutputsResults();
   renderEvidence();
   renderDatasets();
+  renderGovernance();
+  renderTools();
   renderPresentation();
 }
 
 function renderRibbon() {
-  const phases = state.model?.phases || [];
-  const current = state.dashboard?.current_phase;
-  $("phase-ribbon").innerHTML = phases.map((phase) => {
+  const current = state.model?.project?.current_phase;
+  $("phase-ribbon").innerHTML = (state.model?.phases || []).map((phase) => {
     const tone = statusTone(phase.status);
-    const stateLabel = tone === "ready" ? "complete" : tone === "locked" ? "locked" : phase.status || "planned";
-    return `<div class="phase-ribbon-item ${phase.phase_id === current ? "is-current" : ""} ${tone === "ready" ? "is-done" : ""}"><span class="phase-ribbon-id">${escapeHtml(phase.phase_id)}</span><span class="phase-ribbon-label">${escapeHtml(phaseTitle(phase.phase_id))}</span><span class="phase-ribbon-status">${escapeHtml(stateLabel)}</span></div>`;
+    const selected = phase.phase_id === state.selectedPhaseId;
+    return `<button type="button" class="phase-ribbon-item ${phase.phase_id === current ? "is-current" : ""} ${tone === "ready" ? "is-done" : ""} ${selected ? "is-selected" : ""}" data-phase-id="${escapeHtml(phase.phase_id)}" aria-pressed="${selected}"><span class="phase-ribbon-id">${escapeHtml(shortPhase(phase.phase_id))}</span><span class="phase-ribbon-label">${escapeHtml(phaseTitle(phase.phase_id))}</span><span class="phase-ribbon-status">${escapeHtml(phase.status || "planned")}</span></button>`;
   }).join("");
+  document.querySelectorAll("[data-phase-id]").forEach((button) => button.addEventListener("click", () => {
+    state.selectedPhaseId = button.dataset.phaseId;
+    selectTab("flow");
+    renderRibbon();
+    renderPhaseDetail();
+  }));
 }
 
 function renderStatusCards() {
-  const dashboard = state.dashboard || {};
-  const model = state.model || {};
-  const tasks = model.tasks || [];
+  const tasks = state.model?.tasks || [];
   const done = tasks.filter((task) => ["complete", "measured"].includes(task.status)).length;
-  const readiness = model.publication_readiness || {};
-  const cost = model.cost || {};
+  const health = state.model?.projection_health || {};
+  const resources = state.model?.resources || {};
   $("status-cards").innerHTML = [
-    card("Current phase", dashboard.current_phase || "P0_FOUNDATION", "phase ที่ยังทำงานอยู่", "◈"),
-    card("Task progress", `${done}/${tasks.length || 0}`, "งานที่มีสถานะ complete / measured", "✓"),
-    card("Runs / metrics", `${model.runs?.length || 0} / ${model.metrics?.length || 0}`, "จาก validated manifest และ aggregate", "∿"),
-    card("Readiness", readiness.status || "blocked", cost.actual == null ? `budget ${cost.budget || 100} ${cost.currency || "USD"}` : `${cost.actual} ${cost.currency || "USD"}`, "□"),
+    card("Current Phase", shortPhase(state.model?.project?.current_phase), phaseTitle(state.model?.project?.current_phase), "P"),
+    card("Task evidence", `${done}/${tasks.length}`, "เสร็จพร้อมหลักฐาน", "T"),
+    card("Promoted evidence", `${state.model?.runs?.length || 0} runs`, `${state.model?.metrics?.length || 0} metrics`, "E"),
+    card("Projection", health.status || "unknown", resources.cpu_only ? "CPU-only" : "ตรวจ execution envelope", "H"),
   ].join("");
 }
 
 function renderInbox() {
-  const dashboard = state.dashboard || {};
-  const done = dashboard.done || [];
-  const next = dashboard.next || [];
-  const owner = dashboard.waiting_owner || ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"];
-  const command = dashboard.waiting_command || [];
-  $("owner-inbox").innerHTML = [
-    inboxRow("ready", "ทำแล้ว", done.length ? done.slice(0, 3).join("; ") : "ยังไม่มี measured evidence", done.length),
-    inboxRow("next", "ทำต่อได้ทันที", next.length ? next.join("; ") : "รอข้อมูลจากขั้นก่อนหน้า", next.length),
-    inboxRow("owner", "รอ Owner ตัดสินใจ", owner.length ? owner.join("; ") : "ไม่มี decision ค้าง", owner.length),
-    inboxRow("owner", "รอ Owner ออกคำสั่ง", command.length ? command.join("; ") : "ไม่มีคำสั่งค้าง", command.length),
-  ].join("");
+  const actions = state.model?.owner_inbox || [];
+  $("owner-inbox").innerHTML = actions.map((action, index) => `<div class="inbox-row"><span class="action-index">${index + 1}</span><div><strong>${escapeHtml(action.label || action.action_id)}</strong><p>${escapeHtml(action.kind === "constraint" ? "ข้อจำกัดตาม protocol" : "Owner action")}</p></div><span class="task-status ${action.kind === "constraint" ? "locked" : "next"}">${escapeHtml(action.kind || "action")}</span></div>`).join("") || `<div class="empty-state">Agent ดำเนินงานต่อได้โดยไม่ต้องตัดสินใจจาก Owner</div>`;
+}
+
+function renderLatestEvidence() {
+  const output = state.model?.outputs?.[0];
+  const result = state.model?.results?.[0];
+  const interpretation = state.model?.interpretations?.find((item) => item.result_id === result?.result_id) || state.model?.interpretations?.[0];
+  $("latest-output").innerHTML = output
+    ? `<strong>${escapeHtml(output.output_id)}</strong><p>${escapeHtml(output.status || "unknown")} · ${escapeHtml(output.evidence_class || "unclassified")}</p>`
+    : `<strong>ยังไม่มี verified output</strong><p>ไม่มี artifact ที่ promote ได้</p>`;
+  $("latest-result").innerHTML = result
+    ? `<strong>${escapeHtml(result.validity === "valid" ? "Validated result" : "Not measured")}</strong><p>${escapeHtml(result.claim_boundary || "no claim")}</p>`
+    : `<strong>Not measured</strong><p>ไม่มี result record</p>`;
+  $("current-interpretation").innerHTML = interpretation
+    ? `<strong>${escapeHtml(interpretation.status || "pending")}</strong><p>${escapeHtml(interpretation.statement || "ยังไม่มี reviewed interpretation")}</p>`
+    : `<strong>ยังไม่มี reviewed interpretation</strong>`;
 }
 
 function renderReadiness() {
   const readiness = state.model?.publication_readiness || {};
   const checks = readiness.checks || [];
-  $("readiness-summary").innerHTML = `<div class="readiness-status"><strong>${escapeHtml(readiness.status || "blocked")}</strong><span>${checks.filter((check) => check.status === "clear" || check.status === "complete").length}/${checks.length} checks clear</span></div><ul class="readiness-list">${checks.map((check) => `<li class="${["clear", "complete"].includes(check.status) ? "is-clear" : ""}"><span>${escapeHtml(check.id || "check")}</span><small>${escapeHtml(check.status || "unknown")}</small></li>`).join("") || `<li>ยังไม่มี readiness check</li>`}</ul>`;
+  const health = state.model?.projection_health || {};
+  $("readiness-summary").innerHTML = `<div class="readiness-status"><strong>${escapeHtml(health.status || readiness.status || "blocked")}</strong><span>${checks.filter((check) => ["clear", "complete"].includes(check.status)).length}/${checks.length} checks clear</span></div><ul class="readiness-list">${checks.map((check) => `<li class="${["clear", "complete"].includes(check.status) ? "is-clear" : ""}"><span>${escapeHtml(check.id || "check")}</span><small>${escapeHtml(check.status || "unknown")}</small></li>`).join("") || `<li><span>${escapeHtml(health.reason || "No readiness receipt")}</span></li>`}</ul>`;
+}
+
+function renderOverviewRisks() {
+  const risks = state.model?.raid || [];
+  $("overview-risks").innerHTML = risks.slice(0, 3).map((item) => `<div class="rail-row"><span class="state-dot state-owner" aria-hidden="true"></span><div><strong>${escapeHtml(item.raid_id || item.kind)}</strong><p>${escapeHtml(item.summary || "No summary")}</p></div></div>`).join("") || `<div class="empty-state">ไม่มี active RAID item</div>`;
 }
 
 function renderFlow() {
-  const phases = state.model?.phases || [];
-  const current = state.dashboard?.current_phase;
-  $("phase-flow").innerHTML = phases.map((phase) => `<article class="phase-card ${phase.phase_id === current ? "is-current" : ""} ${statusTone(phase.status) === "ready" ? "is-done" : ""}"><div class="phase-head"><span class="phase-id">${escapeHtml(phase.phase_id)}</span><span class="phase-status ${statusTone(phase.status)}">${escapeHtml(phase.status || "planned")}</span></div><h3>${escapeHtml(phaseTitle(phase.phase_id))}</h3><p>${escapeHtml(phaseDescription(phase.phase_id))}</p><div class="task-list">${(phase.tasks || []).map((task) => `<button type="button" class="task-row ${task.task_id === state.selectedTaskId ? "is-selected" : ""}" data-task-id="${escapeHtml(task.task_id)}"><span class="task-row-label"><span class="task-row-id">${escapeHtml(task.task_id)}</span> ${escapeHtml(task.title || "Untitled task")}</span><span class="task-status ${statusTone(task.status)}">${escapeHtml(shortStatus(task.status))}</span></button>`).join("") || `<span class="muted">ยังไม่มี task ตาม contract</span>`}</div>${gateForPhase(phase.phase_id)}</article>`).join("");
+  const tasks = (state.model?.tasks || []).filter((task) => matchesSearch(task.task_id, task.title, task.phase_id, task.status));
+  const lanes = state.boardMode === "pm"
+    ? [["Not ready", ["waiting_dependency"]], ["Ready", ["ready", "executable", "planned"]], ["In progress", ["in_progress"]], ["Verification", ["verification_needed"]], ["Waiting / blocked", ["waiting_owner", "waiting_external_data", "blocked", "blocked_until_p1", "locked_owner_D2", "locked_owner_D3"]], ["Done", ["complete", "measured"]]]
+    : [["Planned", ["waiting_dependency", "ready", "executable", "planned", "waiting_owner", "waiting_external_data", "blocked", "blocked_until_p1", "locked_owner_D2", "locked_owner_D3"]], ["In process", ["in_progress", "verification_needed"]], ["Done", ["complete", "measured"]]];
+  const board = lanes.map(([label, statuses]) => ({ label, tasks: tasks.filter((task) => statuses.includes(task.status)) }));
+  const wip = (state.model?.tasks || []).filter((task) => ["in_progress", "verification_needed"].includes(task.status)).length;
+  $("board-summary").textContent = `${state.boardMode === "pm" ? "PM detail" : "Simple"}: ${tasks.length} tasks · WIP ${wip}/3`;
+  $("phase-flow").className = `board-lanes board-${state.boardMode}`;
+  $("phase-flow").innerHTML = board.map((lane) => `<section class="board-lane"><header><h3>${escapeHtml(lane.label)}</h3><span>${lane.tasks.length}</span></header><div class="task-list">${lane.tasks.map(taskCard).join("") || `<p class="muted empty-lane">ไม่มี Task</p>`}</div></section>`).join("");
   document.querySelectorAll("[data-task-id]").forEach((button) => button.addEventListener("click", () => {
     state.selectedTaskId = button.dataset.taskId;
+    state.selectedPhaseId = (state.model?.tasks || []).find((item) => item.task_id === state.selectedTaskId)?.phase_id || state.selectedPhaseId;
     renderFlow();
+    renderRibbon();
   }));
   renderTaskDetail();
+  renderPhaseDetail();
+  renderMilestones();
+}
+
+function taskCard(task) {
+  return `<button type="button" class="task-row ${task.task_id === state.selectedTaskId ? "is-selected" : ""}" data-task-id="${escapeHtml(task.task_id)}"><span class="task-row-label"><span class="task-row-id">${escapeHtml(task.task_id)}</span> ${escapeHtml(task.title || "Untitled task")}</span><span class="task-status ${statusTone(task.status)}">${escapeHtml(simpleStatus(task.status))}</span></button>`;
 }
 
 function renderTaskDetail() {
   const tasks = state.model?.tasks || [];
   const task = tasks.find((item) => item.task_id === state.selectedTaskId) || tasks[0];
   if (!task) {
-    $("task-detail").innerHTML = `<p class="eyebrow">Task detail</p><h3>ยังไม่มี task</h3><p>read-model ยังไม่ส่ง task ที่แสดงผลได้</p>`;
+    $("task-detail").innerHTML = `<p class="muted">ไม่มี Task detail</p>`;
     return;
   }
   state.selectedTaskId = task.task_id;
-  const phase = task.phase_id || "—";
-  const evidence = task.evidence_ids?.length ? task.evidence_ids.join(", ") : "ยังไม่มี evidence pointer";
-  const waiting = ["waiting_owner", "locked_owner_D2", "locked_owner_D3"].includes(task.status);
-  const nextAction = waiting ? (task.status === "locked_owner_D2" ? "รอ D2_OPEN_FINAL" : task.status === "locked_owner_D3" ? "รอ D3_SUBMIT_RELEASE" : "รอ Owner" ) : statusTone(task.status) === "ready" ? "ตรวจ evidence และไป task ถัดไป" : "รันตาม execution envelope";
-  $("task-detail").innerHTML = `<p class="eyebrow">Task detail / ${escapeHtml(phase)}</p><h3>${escapeHtml(task.title || task.task_id)}</h3><p>${escapeHtml(phaseDescription(phase))}</p><div class="detail-grid"><div class="detail-row"><span class="detail-label">Task ID</span><span class="detail-value">${escapeHtml(task.task_id)}</span></div><div class="detail-row"><span class="detail-label">Status</span><span class="detail-value">${escapeHtml(task.status || "planned")}</span></div><div class="detail-row"><span class="detail-label">Gate</span><span class="detail-value">${escapeHtml(gateName(task))}</span></div><div class="detail-row"><span class="detail-label">Evidence</span><span class="detail-value">${escapeHtml(evidence)}</span></div><div class="detail-row"><span class="detail-label">Next action</span><span class="detail-value">${escapeHtml(nextAction)}</span></div></div>`;
+  const evidence = task.evidence_ids || [];
+  const next = ["waiting_owner", "locked_owner_D2", "locked_owner_D3"].includes(task.status)
+    ? gateName(task)
+    : task.status === "blocked" ? "แก้ blocker ตาม evidence record" : "ดำเนินการตาม execution envelope";
+  $("task-detail").innerHTML = `<p class="eyebrow">${escapeHtml(task.phase_id)}</p><h3>${escapeHtml(task.task_id)} · ${escapeHtml(task.title || "Untitled")}</h3><div class="detail-grid"><div class="detail-row"><span class="detail-label">สถานะ</span><span class="detail-value">${escapeHtml(task.status || "planned")}</span></div><div class="detail-row"><span class="detail-label">Evidence</span><span class="detail-value">${escapeHtml(evidence.join(", ") || "ยังไม่มี acceptance evidence")}</span></div><div class="detail-row"><span class="detail-label">Definition of Done</span><span class="detail-value">required outputs, checks และ immutable evidence ผ่าน</span></div><div class="detail-row"><span class="detail-label">ขั้นถัดไป</span><span class="detail-value">${escapeHtml(next)}</span></div></div>`;
+}
+
+function renderPhaseDetail() {
+  const phases = state.model?.phases || [];
+  const phase = phases.find((item) => item.phase_id === state.selectedPhaseId) || phases[0];
+  if (!phase) {
+    $("phase-detail").innerHTML = `<div class="empty-state">ไม่มี Phase record</div>`;
+    return;
+  }
+  state.selectedPhaseId = phase.phase_id;
+  const done = (phase.tasks || []).filter((task) => ["complete", "measured"].includes(task.status)).length;
+  const milestone = (state.model?.milestones || []).find((item) => item.milestone_id === phase.phase_id) || {};
+  const gate = phase.phase_id === "P3_FINAL" ? "D2_OPEN_FINAL" : phase.phase_id === "P4_PUBLICATION" ? "D3_SUBMIT_RELEASE" : "No Owner gate";
+  $("phase-detail").innerHTML = `<div class="phase-detail-grid"><div><span class="detail-label">Phase</span><strong>${escapeHtml(shortPhase(phase.phase_id))} · ${escapeHtml(phaseTitle(phase.phase_id))}</strong></div><div><span class="detail-label">สถานะ</span><strong>${escapeHtml(phase.status || "planned")}</strong></div><div><span class="detail-label">Task evidence</span><strong>${done}/${(phase.tasks || []).length}</strong></div><div><span class="detail-label">Dependency</span><strong>${escapeHtml((milestone.depends_on || []).map(shortPhase).join(", ") || "None")}</strong></div><div><span class="detail-label">Gate</span><strong>${escapeHtml(gate)}</strong></div></div>`;
+}
+
+function renderMilestones() {
+  const milestones = state.model?.milestones || [];
+  $("milestone-timeline").innerHTML = milestones.map((item, index) => `<article class="milestone ${item.milestone_id === state.model?.project?.current_phase ? "is-current" : ""}"><span class="milestone-index">${index + 1}</span><div><strong>${escapeHtml(shortPhase(item.milestone_id))} · ${escapeHtml(phaseTitle(item.milestone_id))}</strong><p>${escapeHtml(item.status || "planned")} · depends on ${escapeHtml((item.depends_on || []).map(shortPhase).join(", ") || "none")}</p></div></article>`).join("") || `<div class="empty-state">ยังไม่มี milestone registry</div>`;
+}
+
+function renderOutputsResults() {
+  const outputs = (state.model?.outputs || []).filter((item) => resultFilterMatch(item.evidence_class || item.status)).filter((item) => matchesSearch(item.output_id, item.phase_id, item.task_id, item.status, item.evidence_class));
+  const results = (state.model?.results || []).filter((item) => resultFilterMatch(item.evidence_maturity || item.validity)).filter((item) => matchesSearch(item.result_id, item.phase_id, item.task_id, item.validity, item.claim_boundary));
+  $("outputs-grid").innerHTML = outputs.map((item) => `<article class="artifact-card"><div class="item-heading"><span class="status-chip ${item.promotable === false ? "is-warning" : ""}">${escapeHtml(item.evidence_class || item.status || "output")}</span><code>${escapeHtml(short(item.source_sha256, 12))}</code></div><h4>${escapeHtml(item.output_id)}</h4><p>${escapeHtml(item.status || "unknown")} · ${escapeHtml(item.promotable === false ? "not promotable" : "verified")}</p><small>${escapeHtml(item.phase_id || "-")} / ${escapeHtml(item.task_id || "-")}</small></article>`).join("") || `<div class="empty-state">ไม่มี Output ที่ตรงกับตัวกรอง</div>`;
+  $("results-grid").innerHTML = results.map((item) => {
+    const interpretation = (state.model?.interpretations || []).find((entry) => entry.result_id === item.result_id);
+    const measured = item.validity === "valid" && (item.metric_ids || []).length > 0;
+    return `<article class="result-card"><div class="item-heading"><span class="status-chip ${measured ? "" : "is-warning"}">${escapeHtml(item.evidence_maturity || "not_run")}</span><span>${escapeHtml(item.validity || "unknown")}</span></div><h4>${escapeHtml(item.result_id)}</h4><dl><div><dt>Metric</dt><dd>${escapeHtml(measured ? (item.metric_ids || []).join(", ") : "Not measured")}</dd></div><div><dt>Uncertainty</dt><dd>${escapeHtml(measured ? "See bound receipt" : "Not available")}</dd></div><div><dt>Controls</dt><dd>${escapeHtml(measured ? "See frozen protocol" : "Not run")}</dd></div><div><dt>Claim boundary</dt><dd>${escapeHtml(item.claim_boundary || "none")}</dd></div></dl><p>${escapeHtml(interpretation?.statement || "ยังไม่มี reviewed interpretation")}</p></article>`;
+  }).join("") || `<div class="empty-state">ไม่มี Result ที่ตรงกับตัวกรอง</div>`;
+  $("interpretation-ledger").innerHTML = (state.model?.interpretations || []).filter((item) => matchesSearch(item.interpretation_id, item.result_id, item.statement, item.status)).map((item) => `<article><div><strong>${escapeHtml(item.interpretation_id)}</strong><p>${escapeHtml(item.statement || "No statement")}</p></div><div class="claim-boundary"><span>รองรับ</span><strong>${escapeHtml(item.status === "blocked" ? "สถานะ blocked และ recovery evidence" : item.status)}</strong><span>ยังไม่รองรับ</span><strong>final หรือ publication claim</strong></div></article>`).join("") || `<div class="empty-state">ยังไม่มี reviewed interpretation</div>`;
+}
+
+function resultFilterMatch(value) {
+  const normalized = String(value || "").toLowerCase();
+  if (state.resultFilter === "all") return true;
+  if (state.resultFilter === "not_run") return normalized.includes("not_run") || normalized === "blocked";
+  if (state.resultFilter === "historical") return normalized.includes("historical") || normalized.includes("invalid") || normalized.includes("superseded");
+  if (state.resultFilter === "measured") return normalized.includes("measured") || normalized.includes("selection") || normalized.includes("confirm") || normalized === "valid";
+  return true;
 }
 
 function renderEvidence() {
-  const rows = state.model?.runs || [];
+  const rows = (state.model?.runs || []).filter((run) => matchesSearch(run.run_id, run.experiment_id, run.stage, run.arm));
   const metrics = state.model?.metrics || [];
-  $("evidence-table").innerHTML = `<table><thead><tr><th>Run / Experiment</th><th>Stage / Arm</th><th>Metrics</th><th>Lineage receipt</th></tr></thead><tbody>${rows.map((run) => `<tr><td><strong>${escapeHtml(run.run_id)}</strong><small>${escapeHtml(run.experiment_id || "—")}</small></td><td>${escapeHtml(run.stage || "—")}<small>${escapeHtml(run.arm || "—")}</small></td><td>${metrics.filter((metric) => metric.run_id === run.run_id).map((metric) => `${escapeHtml(metric.name || "metric")}: ${escapeHtml(String(metric.value ?? "—"))}`).join("<br>") || "pending"}</td><td>${run.owner_local_receipt_sha256 ? `<code>${escapeHtml(short(run.owner_local_receipt_sha256))}</code>` : "blocked / fixture"}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">ยังไม่มี measured run ระบบจะไม่สร้างตัวเลขแทนหลักฐาน</td></tr>`}</tbody></table>`;
+  $("evidence-table").innerHTML = `<table><thead><tr><th>Run / experiment</th><th>Stage / arm</th><th>Metric</th><th>Receipt</th></tr></thead><tbody>${rows.map((run) => `<tr><td><strong>${escapeHtml(run.run_id)}</strong><small>${escapeHtml(run.experiment_id || "-")}</small></td><td>${escapeHtml(run.stage || "-")}<small>${escapeHtml(run.arm || "-")}</small></td><td>${metrics.filter((metric) => metric.run_id === run.run_id).map((metric) => `${escapeHtml(metric.name || "metric")}: ${escapeHtml(String(metric.value ?? "-"))}`).join("<br>") || "Not measured"}</td><td>${run.owner_local_receipt_sha256 ? `<code>${escapeHtml(short(run.owner_local_receipt_sha256))}</code>` : "No promoted receipt"}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">ยังไม่มี P1 run ที่ promote ได้</td></tr>`}</tbody></table>`;
 }
 
 function renderDatasets() {
-  const datasets = state.model?.datasets || [];
-  $("dataset-table").innerHTML = `<table><thead><tr><th>Dataset</th><th>Role / representation</th><th>Classification</th><th>Count</th><th>Source hash</th></tr></thead><tbody>${datasets.map((dataset) => {
-    const counts = Object.entries(dataset.counts || {}).map(([key, value]) => `${key}: ${value ?? "-"}`).join("<br>");
-    return `<tr><td><strong>${escapeHtml(dataset.dataset_id || "dataset")}</strong></td><td>${escapeHtml(dataset.role || "-")}<small>${escapeHtml(dataset.representation || "-")}</small></td><td><span class="status-chip ${dataset.classification === "incompatible" ? "is-warning" : ""}">${escapeHtml(dataset.classification || "unknown")}</span><small>${escapeHtml(dataset.constraint || dataset.protection || "")}</small></td><td>${counts || "-"}</td><td><code>${escapeHtml(short(dataset.sha256 || "not recorded"))}</code></td></tr>`;
-  }).join("") || `<tr><td colspan="5" class="empty">ยังไม่มี dataset inventory ใน read-model</td></tr>`}</tbody></table>`;
+  const datasets = (state.model?.datasets || []).filter((dataset) => matchesSearch(dataset.dataset_id, dataset.role, dataset.representation, dataset.classification));
+  $("dataset-table").innerHTML = `<table><thead><tr><th>Dataset</th><th>Role</th><th>Classification</th><th>Aggregate count</th><th>Source hash</th></tr></thead><tbody>${datasets.map((dataset) => `<tr><td><strong>${escapeHtml(dataset.dataset_id || "dataset")}</strong></td><td>${escapeHtml(dataset.role || "-")}<small>${escapeHtml(dataset.representation || "-")}</small></td><td><span class="status-chip ${dataset.classification === "incompatible" ? "is-warning" : ""}">${escapeHtml(dataset.classification || "unknown")}</span><small>${escapeHtml(dataset.constraint || dataset.protection || "")}</small></td><td>${escapeHtml(Object.entries(dataset.counts || {}).map(([key, value]) => `${key}: ${value}`).join("; ") || "-")}</td><td><code>${escapeHtml(short(dataset.sha256 || "not recorded"))}</code></td></tr>`).join("") || `<tr><td colspan="5" class="empty">ไม่มี safe dataset metadata</td></tr>`}</tbody></table>`;
+}
+
+function renderGovernance() {
+  const gates = state.model?.gates || [];
+  $("gate-grid").innerHTML = gates.map((gate) => `<article class="gate-card"><div class="item-heading"><span class="status-chip ${gate.status === "approved" ? "" : "is-warning"}">${escapeHtml(gate.status || "waiting_owner")}</span><span>Owner only</span></div><h3>${escapeHtml(gate.gate_id)}</h3><p>${escapeHtml(gate.gate_id === "D2_OPEN_FINAL" ? "เปิด final confirmation หลัง freeze audit" : "อนุมัติ submission หรือ external release")}</p><dl><div><dt>Approval unlocks</dt><dd>${escapeHtml(gate.gate_id === "D2_OPEN_FINAL" ? "one-shot final run" : "submission/release")}</dd></div><div><dt>ยังคงล็อก</dt><dd>protected payloads และ manual metric edits</dd></div></dl></article>`).join("") || `<div class="empty-state">ไม่มี Gate record</div>`;
+  const raid = state.model?.raid || [];
+  $("raid-list").innerHTML = raid.map((item) => `<article><span class="raid-kind">${escapeHtml(item.kind || "risk")}</span><div><strong>${escapeHtml(item.raid_id || "RAID")}</strong><p>${escapeHtml(item.summary || "No summary")}</p></div><span class="task-status ${item.status === "open" ? "locked" : "ready"}">${escapeHtml(item.status || "unknown")}</span></article>`).join("") || `<div class="empty-state">ไม่มี active RAID item</div>`;
+  const resources = state.model?.resources || {};
+  const resourceRows = [
+    ["CPU-only", resources.cpu_only === true ? "Active" : "Review"],
+    ["GPU", resources.gpu === true ? "Enabled" : "Locked"],
+    ["Paid API", resources.paid_api === true ? "Enabled" : "Locked"],
+    ["Budget", `${resources.actual_cost_usd ?? 0} / ${resources.budget_usd ?? "-"} USD`],
+  ];
+  $("resources-grid").innerHTML = resourceRows.map(([label, value]) => `<article><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></article>`).join("");
+  const decisions = state.model?.decisions || [];
+  $("decisions-table").innerHTML = `<table><thead><tr><th>Decision</th><th>Status</th><th>Timestamp</th><th>Record</th></tr></thead><tbody>${decisions.map((item) => `<tr><td>${escapeHtml(item.decision_id || "-")}</td><td>${escapeHtml(item.status || "-")}</td><td>${escapeHtml(item.timestamp || item.effective_at || "-")}</td><td><code>${escapeHtml(short(item.record_sha256 || item.sha256))}</code></td></tr>`).join("") || `<tr><td colspan="4" class="empty">ยังไม่มี D2/D3 decision record</td></tr>`}</tbody></table>`;
+}
+
+async function loadReports() {
+  $("report-list").innerHTML = `<p class="muted">กำลังตรวจ report manifest</p>`;
+  const query = state.reportType ? `?note_type=${encodeURIComponent(state.reportType)}` : "";
+  try {
+    state.reports = await fetchJson(`/api/v2/reports${query}`);
+    $("report-revision").textContent = `Revision ${short(state.reports.read_model_revision)}`;
+    renderReports();
+  } catch (error) {
+    $("report-list").innerHTML = `<p class="error-state">รายงานไม่พร้อม: ${escapeHtml(error.message)}</p>`;
+    $("report-detail").innerHTML = `<p class="error-state">Report vault ไม่ตรงกับ shared revision</p>`;
+    showMessage(error.message, "error");
+  }
+}
+
+function renderReports() {
+  const reports = (state.reports?.reports || []).filter((report) => matchesSearch(report.note_id, report.title, report.note_type, report.phase_id, report.task_id));
+  $("report-list").innerHTML = reports.map((report) => `<button class="report-row ${report.note_id === state.selectedNoteId ? "is-selected" : ""}" type="button" data-note-id="${escapeHtml(report.note_id)}"><span><strong>${escapeHtml(report.title)}</strong><small>${escapeHtml(report.note_type)} · ${escapeHtml(report.status || "current")}</small></span><span class="report-badge ${report.stale ? "is-stale" : ""}">${report.stale ? "stale" : report.safe_to_present ? "safe" : "verified"}</span></button>`).join("") || `<p class="muted">ไม่มีรายงานที่ตรงกับตัวกรอง</p>`;
+  document.querySelectorAll("[data-note-id]").forEach((button) => button.addEventListener("click", () => openReport(button.dataset.noteId)));
+  if ((!state.selectedNoteId || !reports.some((report) => report.note_id === state.selectedNoteId)) && reports.length) openReport(reports[0].note_id);
+}
+
+async function openReport(noteId) {
+  try {
+    const report = await fetchJson(`/api/v2/reports/${encodeURIComponent(noteId)}`);
+    state.selectedNoteId = report.note_id;
+    renderReports();
+    $("report-detail").innerHTML = `<header><p class="eyebrow">${escapeHtml(report.note_type)}</p><h3>${escapeHtml(report.title)}</h3><p class="muted">${escapeHtml(report.status || "current")} · ${escapeHtml(report.evidence_maturity || "non_scientific")} · ${short(report.sha256)}</p></header><div class="report-content">${report.html}</div><footer><button class="button" type="button" data-open-obsidian="${escapeHtml(report.note_id)}">เปิดใน Obsidian</button><button class="button" type="button" data-open-mlflow>เปิด MLflow archive</button></footer>`;
+    $("report-detail").querySelector("[data-open-obsidian]").addEventListener("click", () => openObsidian(report.note_id));
+    $("report-detail").querySelector("[data-open-mlflow]").addEventListener("click", () => invokeTool("mlflow-start"));
+  } catch (error) {
+    $("report-detail").innerHTML = `<p class="error-state">เปิดรายงานไม่ได้: ${escapeHtml(error.message)}</p>`;
+    showMessage(error.message, "error");
+  }
+}
+
+async function loadTools() {
+  try {
+    state.tools = await fetchJson("/api/v2/tools");
+    renderTools();
+  } catch (error) {
+    $("tools-status").innerHTML = `<p class="error-state">Tool status unavailable: ${escapeHtml(error.message)}</p>`;
+  }
+}
+
+function renderTools() {
+  const tools = state.tools || {};
+  const mlflow = tools.mlflow || { status: "unknown" };
+  const obsidian = tools.obsidian || { status: "unknown" };
+  const mlflowAction = mlflow.status === "ready" ? "Open" : "Start & Open";
+  $("tools-status").innerHTML = `<article class="tool-card"><div><p class="eyebrow">Read-only evidence archive</p><h3>MLflow</h3><p class="tool-status">${escapeHtml(mlflow.status)}${mlflow.reason ? ` · ${escapeHtml(mlflow.reason)}` : ""}</p></div><div class="tool-actions"><button class="button button-primary" type="button" data-tool-action="mlflow-start">${mlflowAction}</button><details class="advanced-actions"><summary>Advanced</summary><button class="button" type="button" data-tool-action="mlflow-stop">Stop</button><button class="button" type="button" data-tool-action="mlflow-restart">Restart</button></details></div></article><article class="tool-card"><div><p class="eyebrow">Phase / Task report vault</p><h3>Obsidian</h3><p class="tool-status">${escapeHtml(obsidian.status)}${obsidian.note_count ? ` · ${escapeHtml(String(obsidian.note_count))} notes` : ""}${obsidian.reason ? ` · ${escapeHtml(obsidian.reason)}` : ""}</p></div><div class="tool-actions"><button class="button button-primary" type="button" data-tool-action="obsidian-home">Open Vault</button></div></article>`;
+  document.querySelectorAll("[data-tool-action]").forEach((button) => button.addEventListener("click", () => invokeTool(button.dataset.toolAction)));
+}
+
+async function invokeTool(action) {
+  const routes = {
+    "mlflow-start": ["/api/v2/tools/mlflow/start", {}],
+    "mlflow-stop": ["/api/v2/tools/mlflow/stop", {}],
+    "mlflow-restart": ["/api/v2/tools/mlflow/restart", {}],
+    "obsidian-home": ["/api/v2/tools/obsidian/open", { note_id: "HOME" }],
+  };
+  const [path, body] = routes[action] || [];
+  if (!path) return;
+  try {
+    const result = await postJson(path, body);
+    state.tools = await fetchJson("/api/v2/tools");
+    renderTools();
+    if (result.url) window.open(result.url, "_blank", "noopener");
+    showMessage(result.status === "opened" ? "เปิด Obsidian แล้ว" : `สถานะเครื่องมือ: ${result.status}`, "success");
+  } catch (error) {
+    showMessage(`Tool action failed: ${error.message}`, "error");
+  }
+}
+
+function openObsidian(noteId) {
+  return postJson("/api/v2/tools/obsidian/open", { note_id: noteId })
+    .then(() => showMessage("เปิด Obsidian แล้ว", "success"))
+    .catch((error) => showMessage(`Obsidian unavailable: ${error.message}`, "error"));
+}
+
+async function loadPresentation() {
+  try {
+    state.presentation = await fetchJson(`/api/v2/presentation/${state.audience}`);
+    state.slideIndex = 0;
+    renderPresentation();
+  } catch (error) {
+    showMessage(`Presentation unavailable: ${error.message}`, "error");
+  }
 }
 
 function renderPresentation() {
-  const sections = state.presentation?.sections || [];
-  const dashboard = state.dashboard || {};
-  const signal = dashboard.waiting_command?.length ? "Awaiting owner command" : dashboard.waiting_owner?.length ? "Awaiting owner decision" : dashboard.current_phase === "P2_SCOPE_DEVELOPMENT" ? "Awaiting review before P2" : "Execution in progress";
-  const intro = `<article class="slide slide-lead"><p class="eyebrow">myIS Research / ${escapeHtml(dashboard.current_phase || "P0_FOUNDATION")}</p><h3>Grounded evidence compilers for patent retrieval</h3><p>${escapeHtml(state.model?.campaigns?.[0]?.primary_metric || "recall_at_100/out")} เป็น metric หลักที่ใช้ติดตามเมื่อ evidence พร้อม</p><div class="slide-signal"><strong>${escapeHtml(signal)}</strong><span>${escapeHtml(dashboard.waiting_owner?.join(" · ") || "Standing authorization D1")}</span></div></article>`;
-  $("presentation-content").innerHTML = intro + sections.map((section) => `<article class="slide"><p class="eyebrow">${escapeHtml(section.title_en)}</p><h3>${escapeHtml(section.title_th)}</h3><p>${typeof section.body === "string" ? escapeHtml(section.body) : `<strong>Phase:</strong> ${escapeHtml(section.body?.phase || "—")}<br><strong>Runs:</strong> ${escapeHtml(String(section.body?.runs || 0))}<br><strong>Readiness:</strong> ${escapeHtml(section.body?.readiness || "blocked")}`}</p></article>`).join("");
+  const screens = state.presentation?.presentation?.screens || [];
+  if (!screens.length) {
+    $("presentation-progress").textContent = "0 / 0";
+    $("presentation-content").innerHTML = `<div class="empty-state">ยังไม่มี presentation-safe story</div>`;
+    return;
+  }
+  state.slideIndex = Math.max(0, Math.min(state.slideIndex, screens.length - 1));
+  $("presentation-progress").textContent = `${state.slideIndex + 1} / ${screens.length}`;
+  $("presentation-content").innerHTML = screens.map((screen, index) => `<article class="slide ${index === state.slideIndex ? "is-current-slide" : ""}" ${state.presenting && index !== state.slideIndex ? "hidden" : ""}><div class="slide-number">${String(screen.order).padStart(2, "0")}</div><p class="eyebrow">${escapeHtml(state.audience)} briefing</p><h3>${escapeHtml(screen.title_th)}</h3><p>${escapeHtml(screen.message_th)}</p><footer>${escapeHtml(state.model?.project?.state || "-")} · ${escapeHtml(short(state.model?.read_model_revision, 12))}</footer></article>`).join("");
 }
 
-function card(label, value, detail, icon) { return `<article class="metric-card"><div class="metric-kicker"><p class="eyebrow">${escapeHtml(label)}</p><span class="metric-icon" aria-hidden="true">${icon}</span></div><strong>${escapeHtml(value)}</strong><span>${escapeHtml(detail)}</span></article>`; }
-function inboxRow(kind, title, body, count) { return `<div class="inbox-row"><span class="state-dot state-${kind}"></span><div><strong>${escapeHtml(title)}</strong><p>${escapeHtml(body)}</p></div><span class="inbox-count">${escapeHtml(String(count || 0))}</span></div>`; }
-function phaseTitle(id) { return ({ P0_FOUNDATION: "Foundation & control", P1_CPU_BASELINE: "CPU baseline", P2_SCOPE_DEVELOPMENT: "SCOPE / AutoIndex", P3_FINAL: "Final evaluation", P4_PUBLICATION: "Publication" })[id] || id; }
-function phaseDescription(id) { return ({ P0_FOUNDATION: "Schema, integrity และ projection contracts ที่ตรวจซ้ำได้", P1_CPU_BASELINE: "R0 และ R0-W บน CPU กับ protected bundle", P2_SCOPE_DEVELOPMENT: "R1 representation search ผ่าน SCOPE compiler", P3_FINAL: "เปิด final split ได้เมื่อ D2 ผ่านเท่านั้น", P4_PUBLICATION: "สร้าง manuscript และ release package เมื่อ D3 ผ่าน" })[id] || "ทำตาม execution envelope ของ phase นี้"; }
-function statusTone(status) { return ["complete", "measured"].includes(status) ? "ready" : ["waiting_owner", "waiting_external_data", "locked_owner_D2", "locked_owner_D3", "blocked_until_p1"].includes(status) || String(status || "").includes("locked") ? "locked" : "next"; }
-function shortStatus(status) { return status === "complete" || status === "measured" ? "done" : status === "waiting_external_data" ? "waiting" : status === "in_progress" ? "active" : status === "planned" ? "planned" : statusTone(status); }
-function gateForPhase(id) { return id === "P3_FINAL" ? `<div class="owner-gate">Owner decision · D2_OPEN_FINAL</div>` : id === "P4_PUBLICATION" ? `<div class="owner-gate">Owner decision · D3_SUBMIT_RELEASE</div>` : ""; }
-function gateName(task) { return task.status === "locked_owner_D2" || task.phase_id === "P3_FINAL" ? "D2_OPEN_FINAL" : task.status === "locked_owner_D3" || task.phase_id === "P4_PUBLICATION" ? "D3_SUBMIT_RELEASE" : "No owner decision required"; }
-function short(value) { const text = String(value || ""); return text ? `${text.slice(0, 12)}…` : "—"; }
-function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]); }
-async function fetchJson(path) { const response = await fetch(path, { credentials: "same-origin" }); if (!response.ok) throw new Error(`${response.status} ${path}`); return response.json(); }
+function togglePresentation() {
+  state.presenting = !state.presenting;
+  document.body.classList.toggle("presentation-mode", state.presenting);
+  $("present-toggle").textContent = state.presenting ? "ออกจากการนำเสนอ" : "เริ่มนำเสนอ";
+  $("present-toggle").setAttribute("aria-pressed", String(state.presenting));
+  renderPresentation();
+}
+
+function moveSlide(delta) {
+  if (!state.presenting) return;
+  const count = state.presentation?.presentation?.screens?.length || 0;
+  state.slideIndex = Math.max(0, Math.min(state.slideIndex + delta, Math.max(0, count - 1)));
+  renderPresentation();
+}
+
+function handleKeyboard(event) {
+  if (state.presenting && event.key === "ArrowRight") {
+    event.preventDefault();
+    moveSlide(1);
+  }
+  if (state.presenting && event.key === "ArrowLeft") {
+    event.preventDefault();
+    moveSlide(-1);
+  }
+  if (state.presenting && event.key === "Escape") togglePresentation();
+}
+
+function matchesSearch(...values) {
+  if (!state.search) return true;
+  return values.some((value) => String(value ?? "").toLocaleLowerCase("th").includes(state.search));
+}
+
+function showMessage(message, kind) {
+  const target = $("ui-message");
+  target.hidden = false;
+  target.className = `ui-message is-${kind}`;
+  target.textContent = message;
+}
+
+function clearMessage() {
+  $("ui-message").hidden = true;
+}
+
+function card(label, value, detail, icon) {
+  return `<article class="metric-card"><div class="metric-kicker"><p class="eyebrow">${escapeHtml(label)}</p><span class="metric-icon" aria-hidden="true">${icon}</span></div><strong>${escapeHtml(value || "-")}</strong><span>${escapeHtml(detail)}</span></article>`;
+}
+
+function phaseTitle(id) {
+  return ({ P0_FOUNDATION: "Foundation", P1_CPU_BASELINE: "CPU baseline", P2_SCOPE_DEVELOPMENT: "SCOPE development", P3_FINAL: "Final confirmation", P4_PUBLICATION: "Publication" })[id] || id || "-";
+}
+
+function shortPhase(id) {
+  return String(id || "-").split("_", 1)[0];
+}
+
+function statusTone(status) {
+  if (["complete", "measured", "current", "approved"].includes(status)) return "ready";
+  if (["waiting_owner", "waiting_external_data", "blocked", "blocked_until_p1"].includes(status) || String(status || "").includes("locked")) return "locked";
+  return "next";
+}
+
+function simpleStatus(status) {
+  if (["complete", "measured"].includes(status)) return "Done";
+  if (["in_progress", "verification_needed"].includes(status)) return "In Process";
+  return "Planned";
+}
+
+function gateName(task) {
+  if (task.status === "locked_owner_D2" || task.phase_id === "P3_FINAL") return "รอ D2_OPEN_FINAL";
+  if (task.status === "locked_owner_D3" || task.phase_id === "P4_PUBLICATION") return "รอ D3_SUBMIT_RELEASE";
+  return "รอ Owner review";
+}
+
+function short(value, length = 12) {
+  const text = String(value || "");
+  return text ? `${text.slice(0, length)}${text.length > length ? "…" : ""}` : "-";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>\"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+}
+
+async function fetchJson(path) {
+  const response = await fetch(path, { credentials: "same-origin" });
+  if (!response.ok) {
+    let detail = "";
+    try { detail = (await response.json()).detail || ""; } catch (_) {}
+    throw new Error(detail || `${response.status} ${path}`);
+  }
+  return response.json();
+}
+
+async function postJson(path, body) {
+  const response = await fetch(path, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", "x-csrf-token": state.csrf },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    let detail = "";
+    try { detail = (await response.json()).detail || ""; } catch (_) {}
+    throw new Error(detail || `${response.status} ${path}`);
+  }
+  return response.json();
+}

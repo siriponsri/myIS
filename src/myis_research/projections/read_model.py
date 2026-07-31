@@ -23,6 +23,29 @@ P1_ACCEPTED_METRIC_FIELDS = frozenset({
     "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
     "scope", "split", "direction", "denominator", "evidence_role",
 })
+LEGACY_DISPOSITION_RELATIVE_PATH = Path(
+    "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.disposition.json"
+)
+LEGACY_DISPOSITION_KEYS = frozenset({
+    "schema_version", "disposition_id", "evidence_id", "source_uri",
+    "source_file_sha256", "receipt_sha256", "status", "evidence_class",
+    "promotable", "superseded_by", "reason_codes", "invalidation_evidence",
+    "related_records", "record_sha256",
+})
+PROJECTION_SOURCE_PATHS = (
+    "control/program.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "control/execution-envelope.yaml",
+    "control/source-of-truth.yaml",
+    "control/decisions",
+    "campaigns/scope-autoindex-v1/evidence",
+    "campaigns/scope-autoindex-v1/manifests",
+    "campaigns/scope-autoindex-v1/validation-reports",
+    "evidence/legacy-dapfam-inventory.v1.json",
+    "schemas/read-model.v2.json",
+    "src/myis_research/projections/read_model.py",
+    "src/myis_research/report_cli.py",
+)
 
 
 def canonical_json(value: Any) -> bytes:
@@ -37,8 +60,15 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     root = repository_root.resolve()
     campaign_id = "scope-autoindex-v1"
     campaign_config = _load_yaml_like(root / "control" / "campaigns" / f"{campaign_id}.yaml")
+    legacy_disposition = _load_legacy_disposition(root)
     manifests = _load_manifests(root / "campaigns" / campaign_id / "manifests")
-    receipts = _load_receipts(root / "campaigns" / campaign_id / "evidence")
+    invalidated_receipt_hashes = (
+        {str(legacy_disposition["receipt_sha256"])} if legacy_disposition else set()
+    )
+    receipts = _load_receipts(
+        root / "campaigns" / campaign_id / "evidence",
+        invalidated_receipt_hashes=invalidated_receipt_hashes,
+    )
     validation_reports = _load_validation_reports(root / "campaigns" / campaign_id / "validation-reports")
     p1_pairs = validated_p1_matrix(manifests, receipts, validation_reports)
     paired_manifest_hashes = {str(pair["manifest"]["manifest_sha256"]) for pair in p1_pairs}
@@ -88,7 +118,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         evidence.append({"evidence_id": "mlflow-p1-registration", "sha256": _file_sha256(root / "evidence" / "mlflow-p1-registration.v1.json"), "run_id": str(mlflow_registration["source_run_id"]), "uri": "evidence/mlflow-p1-registration.v1.json"})
     else:
         mlflow_registration = {}
-    readiness = _publication_readiness(root, p1_pairs, decisions)
+    readiness = _publication_readiness(root, p1_pairs, decisions, legacy_disposition)
     configured_phases = campaign_config.get("phases", []) if isinstance(campaign_config.get("phases"), list) else []
     phases = []
     tasks = []
@@ -114,9 +144,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     source_commit, generated_at = _source_commit_metadata(root)
     p1_state = "P1_CPU_MEASURED_COMPLETE" if p1_pairs else "P1_BLOCKED_WITH_EVIDENCE"
     next_actions = ([
-        {"action_id": "recover-p1-evidence", "label": "สร้าง validation reports และ four-slot manifests จากหลักฐานที่ยอมรับแล้ว", "kind": "automatic"},
-        {"action_id": "verify-integrated-projections", "label": "ทำ Dashboard, MLflow และ Obsidian ให้ผูก read-model revision เดียวกัน", "kind": "automatic"},
-        {"action_id": "hold-before-p2", "label": "หยุดก่อน P2 จนกว่า acceptance suite และ commit/push จะผ่าน", "kind": "constraint"},
+        {"action_id": "review-recovery-freeze", "label": "รอ Owner ตรวจ recovery freeze และหลักฐาน invalidation", "kind": "owner_command"},
+        {"action_id": "fresh-owner-local-p1-rerun", "label": "รัน P1 ใหม่แบบ Owner-local เมื่อ Owner สั่งหลัง review", "kind": "owner_command"},
+        {"action_id": "hold-before-p2", "label": "ห้ามเริ่ม P2 จนกว่า P1 rerun จะมี receipt, manifests และ validation reports ครบ", "kind": "constraint"},
     ] if not p1_pairs else [
         {"action_id": "review-p1", "label": "ตรวจ P1 evidence package ก่อนพิจารณาคำสั่ง P2 แยกต่างหาก", "kind": "owner_command"},
     ])
@@ -168,7 +198,11 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "decisions": decisions,
         "evidence": evidence,
         "datasets": datasets,
-        "historical_exposure": (paired_receipts[0].get("historical_exposure", {}) if paired_receipts else {}),
+        "historical_exposure": (
+            paired_receipts[0].get("historical_exposure", {})
+            if paired_receipts
+            else ({"active_final_872_global_untouched": "not_claimable"} if legacy_disposition else {})
+        ),
         "mlflow_registration": {key: mlflow_registration.get(key) for key in ("schema_version", "source_manifest_sha256", "source_receipt_sha256", "dataset_lineage_sha256", "parent", "children") if key in mlflow_registration},
         "publication_readiness": readiness,
         "milestones": [
@@ -176,13 +210,17 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             for index, phase in enumerate(phases)
         ],
         "outputs": ([{
-            "output_id": "P1-AGGREGATE-RECEIPT",
+            "output_id": "P1-LEGACY-RECEIPT",
             "phase_id": "P1_CPU_BASELINE",
             "task_id": "P1.3",
-            "status": "unpromoted",
-            "evidence_class": "aggregate_receipt",
-            "source_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
-        }] if receipts else []),
+            "status": legacy_disposition["status"],
+            "evidence_class": legacy_disposition["evidence_class"],
+            "source_uri": legacy_disposition["source_uri"],
+            "source_sha256": legacy_disposition["source_file_sha256"],
+            "disposition_uri": LEGACY_DISPOSITION_RELATIVE_PATH.as_posix(),
+            "promotable": False,
+            "superseded_by": legacy_disposition["superseded_by"],
+        }] if legacy_disposition else []),
         "results": [{
             "result_id": "P1-CPU-BASELINE",
             "phase_id": "P1_CPU_BASELINE",
@@ -210,6 +248,14 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "audiences": ["owner", "advisor", "peer"],
             "safe_result_ids": ["P1-CPU-BASELINE"],
             "claim_boundary": "no_measured_claim" if not p1_pairs else "train_selection_only",
+            "screens": _presentation_screens(
+                p1_state=p1_state,
+                phases=phases,
+                tasks=tasks,
+                next_actions=next_actions,
+                has_valid_result=bool(p1_pairs),
+                has_legacy_output=bool(legacy_disposition),
+            ),
         },
         "reports": {
             "vault_id": "myis-obsidian-report",
@@ -222,12 +268,117 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "mlflow": {"mode": "read_only_on_demand", "port": 5000},
             "obsidian": {"vault_id": "myis-obsidian-report", "open_via_dashboard": True},
         },
+        "archive_contract": {
+            "schema_version": "myis.mlflow-archive-contract.v2",
+            "active_experiments": ["myis-scope-autoindex-v1", "myis-system"],
+            "scientific_experiment": "myis-scope-autoindex-v1",
+            "system_experiment": "myis-system",
+            "legacy_policy": "legacy_read_only",
+            "writer": "serialized_append_only",
+            "viewer": "sqlite_read_only",
+            "freeze_required_for_measured_runs": True,
+        },
     }
     revision_body = {key: value for key, value in body.items() if key != "generated_at"}
     body["read_model_revision"] = sha256(canonical_json(revision_body))
     body["projection_revision"] = body["read_model_revision"]
     body["read_model_sha256"] = sha256(canonical_json(body))
     return body
+
+
+def _presentation_screens(
+    *,
+    p1_state: str,
+    phases: list[dict[str, Any]],
+    tasks: list[dict[str, Any]],
+    next_actions: list[dict[str, str]],
+    has_valid_result: bool,
+    has_legacy_output: bool,
+) -> list[dict[str, Any]]:
+    """Build the reviewed, presentation-safe ten-screen story from canonical state."""
+
+    audiences = ["owner", "advisor", "peer"]
+    complete_tasks = sum(task.get("status") in {"complete", "measured"} for task in tasks)
+    phase_summary = ", ".join(
+        f"{str(phase.get('phase_id', '')).split('_', 1)[0]}: {phase.get('status', 'planned')}"
+        for phase in phases
+    )
+    next_label = str(next_actions[0]["label"]) if next_actions else "ไม่มีคำสั่งจาก Owner ที่ค้างอยู่"
+    latest_result = (
+        "มีผล P1 ที่ผ่าน evidence matrix สำหรับ train/selection; final ยังปิดตาม protocol"
+        if has_valid_result
+        else "ยังไม่มีผล P1 ที่ผ่าน validation; สถานะที่รายงานได้คือ blocked with evidence"
+    )
+    delivered = (
+        f"Task ที่เสร็จพร้อมหลักฐาน {complete_tasks}/{len(tasks)}; เก็บ legacy receipt ไว้เป็น historical-invalid output"
+        if has_legacy_output
+        else f"Task ที่เสร็จพร้อมหลักฐาน {complete_tasks}/{len(tasks)}; ยังไม่มี measured output ที่ promote ได้"
+    )
+    rows = [
+        (
+            "thesis",
+            "myIS Research: SCOPE / AutoIndex",
+            "คำถามหลักคือ representation ที่ยึดหลักฐานจะช่วย family-level patent retrieval ได้หรือไม่ เมื่อ retriever, evaluator และ budget คงที่",
+        ),
+        (
+            "difficulty",
+            "เหตุใดการค้น prior art จึงยาก",
+            "สิทธิบัตรยาว ใช้ถ้อยคำหลากหลาย และหลักฐานอาจอยู่คนละส่วนของเอกสาร การประเมินจึงต้องแยก retrieval evidence ออกจากข้อสรุปทางกฎหมาย",
+        ),
+        (
+            "boundary",
+            "ขอบเขตข้อมูลและการประเมิน",
+            "งานปัจจุบันเป็น CPU-only และ aggregate-only; ข้อมูล protected และ final confirmation ยังอยู่ใน Owner-local boundary",
+        ),
+        (
+            "history",
+            "เส้นทาง A → B → D → SCOPE",
+            "บทเรียนจากงานเดิมชี้ให้ตรวจ candidate exposure และ headroom ก่อนเพิ่มความซับซ้อน ผลเดิมถูกเก็บเป็น historical/exposed และไม่ปะปนกับผลปัจจุบัน",
+        ),
+        (
+            "architecture",
+            "ระบบหลักฐานหนึ่งชุด หลายมุมมอง",
+            "Control files และ immutable receipts สร้าง shared read model หนึ่งครั้ง แล้ว fan out ไป Dashboard, MLflow และ Obsidian ด้วย revision เดียวกัน",
+        ),
+        (
+            "plan",
+            "แผน P0–P4",
+            phase_summary,
+        ),
+        (
+            "delivered",
+            "สิ่งที่ส่งมอบแล้ว",
+            delivered,
+        ),
+        (
+            "result",
+            "ผลที่ตรวจสอบแล้วล่าสุด",
+            latest_result,
+        ),
+        (
+            "interpretation",
+            "การแปลผลและข้อจำกัด",
+            "หลักฐานปัจจุบันรองรับเฉพาะสถานะ recovery ของ P1 ยังไม่รองรับ measured claim, P2, final confirmation หรือ publication claim",
+        ),
+        (
+            "next",
+            "สถานะและการตัดสินใจถัดไป",
+            f"{p1_state}. ขั้นถัดไป: {next_label}. D2 และ D3 ยังคงเป็น Owner-only decisions",
+        ),
+    ]
+    return [
+        {
+            "screen_id": f"shared-{index:02d}-{screen_id}",
+            "audience": audiences,
+            "order": index,
+            "title_th": title,
+            "message_th": message,
+            "visual_artifact_id": None,
+            "evidence_ids": [],
+            "safe_to_present": True,
+        }
+        for index, (screen_id, title, message) in enumerate(rows, start=1)
+    ]
 
 
 def write_read_model(repository_root: Path, output: Path | None = None) -> Path:
@@ -256,8 +407,13 @@ def _load_manifests(directory: Path) -> list[dict[str, Any]]:
     return values
 
 
-def _load_receipts(directory: Path) -> list[dict[str, Any]]:
+def _load_receipts(
+    directory: Path,
+    *,
+    invalidated_receipt_hashes: set[str] | None = None,
+) -> list[dict[str, Any]]:
     values: list[dict[str, Any]] = []
+    invalidated = invalidated_receipt_hashes or set()
     if not directory.is_dir():
         return values
     for path in sorted(directory.glob("*.json")):
@@ -268,10 +424,56 @@ def _load_receipts(directory: Path) -> list[dict[str, Any]]:
         if not isinstance(value, dict):
             continue
         try:
-            values.append(validate_receipt(value))
+            receipt = validate_receipt(value)
         except (OwnerLocalContractError, ValueError):
             continue
+        if str(receipt.get("receipt_sha256", "")) in invalidated:
+            continue
+        values.append(receipt)
     return values
+
+
+def _load_legacy_disposition(root: Path) -> dict[str, Any]:
+    path = root / LEGACY_DISPOSITION_RELATIVE_PATH
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict) or set(payload) != LEGACY_DISPOSITION_KEYS:
+        return {}
+    if (
+        payload.get("schema_version") != "myis.evidence-disposition.v1"
+        or payload.get("status") != "historical_invalid_superseded"
+        or payload.get("evidence_class") != "historical_invalid"
+        or payload.get("promotable") is not False
+    ):
+        return {}
+    unsigned = {key: value for key, value in payload.items() if key != "record_sha256"}
+    if sha256(canonical_json(unsigned)) != payload.get("record_sha256"):
+        return {}
+    source_uri = payload.get("source_uri")
+    if not isinstance(source_uri, str):
+        return {}
+    try:
+        source = (root / source_uri).resolve(strict=True)
+        source.relative_to(root)
+    except (OSError, ValueError):
+        return {}
+    if source.is_symlink() or not source.is_file() or _file_sha256(source) != payload.get("source_file_sha256"):
+        return {}
+    invalidation = payload.get("invalidation_evidence")
+    if not isinstance(invalidation, dict) or set(invalidation) != {"uri", "sha256"}:
+        return {}
+    try:
+        audit = (root / str(invalidation["uri"])).resolve(strict=True)
+        audit.relative_to(root)
+    except (OSError, ValueError):
+        return {}
+    if audit.is_symlink() or not audit.is_file() or _file_sha256(audit) != invalidation.get("sha256"):
+        return {}
+    if not isinstance(payload.get("reason_codes"), list) or not payload["reason_codes"]:
+        return {}
+    return payload
 
 
 def _load_validation_reports(directory: Path) -> list[dict[str, Any]]:
@@ -511,7 +713,7 @@ def _load_yaml_like(path: Path) -> dict[str, Any]:
 def _source_commit_metadata(root: Path) -> tuple[str, str]:
     try:
         completed = subprocess.run(
-            ["git", "show", "-s", "--format=%H%n%cI", "HEAD"],
+            ["git", "log", "-1", "--format=%H%n%cI", "--", *PROJECTION_SOURCE_PATHS],
             cwd=root,
             check=True,
             capture_output=True,
@@ -524,7 +726,12 @@ def _source_commit_metadata(root: Path) -> tuple[str, str]:
         return "0" * 40, "1970-01-01T00:00:00Z"
 
 
-def _publication_readiness(root: Path, p1_pairs: list[dict[str, dict[str, Any]]], decisions: list[dict[str, Any]]) -> dict[str, Any]:
+def _publication_readiness(
+    root: Path,
+    p1_pairs: list[dict[str, dict[str, Any]]],
+    decisions: list[dict[str, Any]],
+    legacy_disposition: dict[str, Any],
+) -> dict[str, Any]:
     checks = [
         {"id": "canonical_run_manifest", "status": "pass" if p1_pairs else "blocked", "source": "campaigns/scope-autoindex-v1/manifests"},
         {"id": "owner_local_aggregate", "status": "pass" if p1_pairs else "blocked", "source": "campaigns/scope-autoindex-v1/evidence"},
@@ -532,7 +739,7 @@ def _publication_readiness(root: Path, p1_pairs: list[dict[str, dict[str, Any]]]
         {"id": "live_venue_check", "status": "unknown", "source": "Owner/live venue verification"},
         {"id": "prior_publication_status", "status": "unknown", "source": "Owner publication declaration"},
         {"id": "paper_build_hash_closure", "status": "blocked", "source": "03_Paper/publications/isai-nlp-2026"},
-        {"id": "historical_final_872_exposure", "status": "blocked" if any(pair["receipt"].get("historical_exposure", {}).get("active_final_872_global_untouched") == "not_claimable" for pair in p1_pairs) else "unknown", "source": "owner-local historical exposure audit"},
+        {"id": "historical_final_872_exposure", "status": "blocked" if legacy_disposition or any(pair["receipt"].get("historical_exposure", {}).get("active_final_872_global_untouched") == "not_claimable" for pair in p1_pairs) else "unknown", "source": "owner-local historical exposure audit"},
     ]
     status = "ready" if all(item["status"] == "pass" for item in checks) else "blocked"
     return {"schema_version": "myis.publication-readiness.v1", "status": status, "checks": checks}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "myis.mlflow-legacy-experiment-map.v2",
+  "policy": "legacy_read_only",
+  "active_experiments": [
+    "myis-scope-autoindex-v1",
+    "myis-system"
+  ],
+  "experiments": [
+    {
+      "name": "myis-research-bootstrap",
+      "status": "legacy_read_only",
+      "replacement": "myis-system",
+      "reason": "pre-v2 connectivity and environment receipts"
+    },
+    {
+      "name": "myis-research-catalog",
+      "status": "legacy_read_only",
+      "replacement": "myis-system",
+      "reason": "pre-v2 catalog mirror"
+    },
+    {
+      "name": "myis-research-track-c",
+      "status": "legacy_read_only",
+      "replacement": "myis-scope-autoindex-v1",
+      "reason": "pre-v2 Track C mirror"
+    },
+    {
+      "name": "myis-research-track-s",
+      "status": "legacy_read_only",
+      "replacement": "myis-scope-autoindex-v1",
+      "reason": "pre-v2 Track S mirror"
+    },
+    {
+      "name": "myis-research-joint",
+      "status": "legacy_read_only",
+      "replacement": "myis-scope-autoindex-v1",
+      "reason": "pre-v2 joint study mirror"
+    },
+    {
+      "name": "myis-research-publication",
+      "status": "legacy_read_only",
+      "replacement": "myis-system",
+      "reason": "pre-v2 publication mirror"
+    }
+  ]
+}

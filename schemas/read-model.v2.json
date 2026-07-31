@@ -11,7 +11,8 @@
     "gates", "experiments", "runs", "metrics", "cost", "decisions", "evidence",
     "datasets", "historical_exposure", "mlflow_registration", "publication_readiness",
     "milestones", "outputs", "results", "interpretations", "raid", "resources",
-    "presentation", "reports", "literature", "advisor_updates", "tools"
+    "presentation", "reports", "literature", "advisor_updates", "tools",
+    "archive_contract"
   ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
@@ -76,6 +77,7 @@
     "reports": {"$ref": "#/$defs/openObject"},
     "literature": {"$ref": "#/$defs/openObject"},
     "advisor_updates": {"$ref": "#/$defs/openObject"},
-    "tools": {"$ref": "#/$defs/openObject"}
+    "tools": {"$ref": "#/$defs/openObject"},
+    "archive_contract": {"$ref": "#/$defs/openObject"}
   }
 }

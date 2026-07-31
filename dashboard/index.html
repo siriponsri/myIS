@@ -3,76 +3,176 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
-  <title>myIS Research Console</title>
+  <meta name="color-scheme" content="light">
+  <title>myIS Research Command Center</title>
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/dashboard.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">ข้ามไปยังเนื้อหาหลัก</a>
   <header class="topbar">
     <div class="brand-lockup">
       <span class="brand-mark" aria-hidden="true">myIS</span>
-      <div><p class="eyebrow">Research control plane</p><h1>Research Console</h1></div>
+      <div>
+        <p id="breadcrumb" class="eyebrow">myIS / P1 / P1.3</p>
+        <h1>Research Command Center</h1>
+      </div>
     </div>
     <div class="topbar-actions">
-      <span class="live-indicator"><span class="live-dot"></span><span id="sync-state">กำลังโหลด</span></span>
+      <label class="search-control" for="global-search">
+        <span class="sr-only">ค้นหา Task, Output หรือ Evidence</span>
+        <input id="global-search" type="search" placeholder="ค้นหา Task หรือ Evidence" autocomplete="off">
+      </label>
+      <span class="live-indicator"><span class="live-dot" aria-hidden="true"></span><span id="sync-state" role="status">กำลังอ่าน projection</span></span>
+      <button id="present-shortcut" class="button button-quiet" type="button">นำเสนอ</button>
       <button id="refresh" class="icon-button" type="button" title="รีเฟรชข้อมูล" aria-label="รีเฟรชข้อมูล">↻</button>
     </div>
   </header>
-  <main class="shell">
+
+  <main id="main-content" class="shell" tabindex="-1">
     <section class="hero" aria-labelledby="campaign-title">
       <div class="hero-copy">
         <p class="eyebrow">Active campaign / evidence-aware workflow</p>
         <h2 id="campaign-title">SCOPE / AutoIndex</h2>
-        <p id="campaign-status" class="hero-subtitle">กำลังอ่าน read-model</p>
+        <p id="campaign-status" class="hero-subtitle">กำลังอ่าน canonical state</p>
       </div>
       <div class="hero-side">
-        <div class="hero-label">Projection revision</div>
-        <code id="revision">—</code>
+        <div class="hero-label">Shared read-model revision</div>
+        <code id="revision">ยังไม่โหลด</code>
         <div id="hero-authorization" class="authorization-badge">D1 standing authorization</div>
       </div>
     </section>
 
-    <div id="phase-ribbon" class="phase-ribbon" aria-label="ลำดับ phase"></div>
+    <div id="phase-ribbon" class="phase-ribbon" aria-label="ลำดับ Phase P0 ถึง P4"></div>
+    <div id="ui-message" class="ui-message" role="status" aria-live="polite" hidden></div>
 
-    <nav class="tabs" aria-label="มุมมอง dashboard">
-      <button class="tab is-active" data-tab="overview" type="button">ภาพรวม</button>
-      <button class="tab" data-tab="flow" type="button">Execution board</button>
-      <button class="tab" data-tab="evidence" type="button">Evidence &amp; MLflow</button>
-      <button class="tab" data-tab="presentation" type="button">Presentation</button>
+    <nav class="tabs" role="tablist" aria-label="มุมมอง Dashboard">
+      <button id="tab-overview" class="tab is-active" data-tab="overview" type="button" role="tab" aria-selected="true" aria-controls="overview">ภาพรวม</button>
+      <button id="tab-flow" class="tab" data-tab="flow" type="button" role="tab" aria-selected="false" aria-controls="flow">งานและ Phase</button>
+      <button id="tab-results" class="tab" data-tab="results" type="button" role="tab" aria-selected="false" aria-controls="results">ผลและหลักฐาน</button>
+      <button id="tab-governance" class="tab" data-tab="governance" type="button" role="tab" aria-selected="false" aria-controls="governance">Gate และ RAID</button>
+      <button id="tab-reports" class="tab" data-tab="reports" type="button" role="tab" aria-selected="false" aria-controls="reports">รายงาน</button>
+      <button id="tab-tools" class="tab" data-tab="tools" type="button" role="tab" aria-selected="false" aria-controls="tools">เครื่องมือวิจัย</button>
+      <button id="tab-presentation" class="tab" data-tab="presentation" type="button" role="tab" aria-selected="false" aria-controls="presentation">นำเสนอ</button>
     </nav>
 
-    <section id="overview" class="panel is-visible">
+    <section id="overview" class="panel is-visible" role="tabpanel" aria-labelledby="tab-overview">
       <div id="status-cards" class="card-grid"></div>
       <div class="overview-grid">
-        <section class="section-block">
-          <div class="section-heading"><div><p class="eyebrow">Owner inbox</p><h2>สิ่งที่ต้องทำต่อ</h2></div><span class="section-note">ข้อมูลจาก read-model</span></div>
-          <div id="owner-inbox" class="inbox"></div>
-        </section>
-        <section class="section-block readiness-block">
-          <div class="section-heading"><div><p class="eyebrow">Publication readiness</p><h2>ความพร้อมเผยแพร่</h2></div></div>
-          <div id="readiness-summary" class="readiness-summary"></div>
-        </section>
+        <div class="overview-main">
+          <section class="section-block" aria-labelledby="inbox-heading">
+            <div class="section-heading"><div><p class="eyebrow">Owner inbox</p><h2 id="inbox-heading">สิ่งที่ต้องทำต่อ</h2></div><span class="section-note">สูงสุด 3 รายการ</span></div>
+            <div id="owner-inbox" class="inbox"></div>
+          </section>
+          <section class="section-band" aria-labelledby="latest-heading">
+            <div class="section-heading"><div><p class="eyebrow">Evidence chain</p><h2 id="latest-heading">Output, Result และ Interpretation ล่าสุด</h2></div></div>
+            <div class="evidence-triad">
+              <article><span>Output</span><div id="latest-output"></div></article>
+              <article><span>Result</span><div id="latest-result"></div></article>
+              <article><span>Interpretation</span><div id="current-interpretation"></div></article>
+            </div>
+          </section>
+        </div>
+        <aside class="overview-rail" aria-label="สถานะโครงการ">
+          <section class="section-block readiness-block" aria-labelledby="readiness-heading">
+            <div class="section-heading"><div><p class="eyebrow">Projection health</p><h2 id="readiness-heading">ความพร้อม</h2></div></div>
+            <div id="readiness-summary" class="readiness-summary"></div>
+          </section>
+          <section class="section-block" aria-labelledby="risk-heading">
+            <div class="section-heading"><div><p class="eyebrow">Current blocker</p><h2 id="risk-heading">ข้อจำกัดหลัก</h2></div></div>
+            <div id="overview-risks" class="rail-list"></div>
+          </section>
+        </aside>
       </div>
     </section>
 
-    <section id="flow" class="panel">
-      <div class="section-heading flow-heading"><div><p class="eyebrow">Agile / waterfall execution map</p><h2>Phase → Sprint → Task → Gate</h2><p class="muted">คลิก task เพื่อดูหลักฐาน, ผู้รับผิดชอบ และเงื่อนไขถัดไป</p></div><div class="legend"><span><i class="legend-dot done"></i>เสร็จแล้ว</span><span><i class="legend-dot next"></i>ทำต่อได้</span><span><i class="legend-dot waiting"></i>รอ Owner</span></div></div>
-      <div class="flow-layout">
-        <div id="phase-flow" class="phase-flow"></div>
-        <aside id="task-detail" class="task-detail" aria-live="polite"></aside>
+    <section id="flow" class="panel" role="tabpanel" aria-labelledby="tab-flow" hidden>
+      <div class="section-heading flow-heading">
+        <div><p class="eyebrow">Phase → Task → Evidence</p><h2>กระดานงาน</h2></div>
+        <div class="segmented-control" aria-label="ระดับรายละเอียดของกระดาน">
+          <button class="segment is-active" data-board-mode="simple" type="button" aria-pressed="true">Simple</button>
+          <button class="segment" data-board-mode="pm" type="button" aria-pressed="false">PM detail</button>
+        </div>
+      </div>
+      <div id="board-summary" class="board-summary" aria-live="polite"></div>
+      <div id="phase-flow" class="board-lanes" aria-label="Task board"></div>
+      <aside id="task-detail" class="task-detail" aria-live="polite"></aside>
+      <section class="section-band" aria-labelledby="phase-detail-heading">
+        <div class="section-heading"><div><p class="eyebrow">Phase charter</p><h2 id="phase-detail-heading">รายละเอียด Phase</h2></div></div>
+        <div id="phase-detail" class="phase-detail"></div>
+      </section>
+      <section class="section-band" aria-labelledby="timeline-heading">
+        <div class="section-heading"><div><p class="eyebrow">Dependency timeline</p><h2 id="timeline-heading">Milestones P0–P4</h2></div></div>
+        <div id="milestone-timeline" class="milestone-timeline"></div>
+      </section>
+    </section>
+
+    <section id="results" class="panel" role="tabpanel" aria-labelledby="tab-results" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">Output ≠ Result ≠ Interpretation</p><h2>ผลและหลักฐาน</h2></div>
+        <div class="segmented-control result-filters" aria-label="กรองระดับหลักฐาน">
+          <button class="segment is-active" data-result-filter="all" type="button" aria-pressed="true">ทั้งหมด</button>
+          <button class="segment" data-result-filter="not_run" type="button" aria-pressed="false">Not run</button>
+          <button class="segment" data-result-filter="historical" type="button" aria-pressed="false">Historical</button>
+          <button class="segment" data-result-filter="measured" type="button" aria-pressed="false">Measured</button>
+        </div>
+      </div>
+      <section class="section-band" aria-labelledby="outputs-heading"><h3 id="outputs-heading">Outputs</h3><div id="outputs-grid" class="artifact-grid"></div></section>
+      <section class="section-band" aria-labelledby="results-heading"><h3 id="results-heading">Results</h3><div id="results-grid" class="result-grid"></div></section>
+      <section class="section-band" aria-labelledby="interpretation-heading"><h3 id="interpretation-heading">Interpretation ledger</h3><div id="interpretation-ledger" class="interpretation-ledger"></div></section>
+      <section class="section-band" aria-labelledby="evidence-heading"><div class="section-heading"><div><p class="eyebrow">Validated aggregate records</p><h3 id="evidence-heading">Evidence registry</h3></div></div><div id="evidence-table" class="table-wrap"></div></section>
+      <section class="section-band" aria-labelledby="dataset-heading"><div class="section-heading"><div><p class="eyebrow">Safe metadata</p><h3 id="dataset-heading">Dataset registry</h3></div></div><div id="dataset-table" class="table-wrap"></div></section>
+    </section>
+
+    <section id="governance" class="panel" role="tabpanel" aria-labelledby="tab-governance" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Stage Gate and project control</p><h2>Gate, RAID และทรัพยากร</h2></div></div>
+      <div id="gate-grid" class="gate-grid"></div>
+      <section class="section-band" aria-labelledby="raid-heading"><h3 id="raid-heading">RAID log</h3><div id="raid-list" class="raid-list"></div></section>
+      <section class="section-band" aria-labelledby="resources-heading"><h3 id="resources-heading">ทรัพยากร</h3><div id="resources-grid" class="resource-grid"></div></section>
+      <section class="section-band" aria-labelledby="decisions-heading"><h3 id="decisions-heading">Decision history</h3><div id="decisions-table" class="table-wrap"></div></section>
+    </section>
+
+    <section id="reports" class="panel" role="tabpanel" aria-labelledby="tab-reports" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">Obsidian reporting vault</p><h2>รายงาน</h2></div>
+        <div class="report-controls">
+          <label for="report-type">ประเภท</label>
+          <select id="report-type">
+            <option value="">ทั้งหมด</option>
+            <option value="phase_report">Phase</option>
+            <option value="task_report">Task</option>
+            <option value="result_report">Result</option>
+            <option value="literature_proxy">Literature</option>
+            <option value="history_report">History</option>
+            <option value="advisor_update">Advisor update</option>
+          </select>
+          <span id="report-revision" class="section-note"></span>
+        </div>
+      </div>
+      <div class="reports-layout">
+        <div id="report-list" class="report-list" aria-live="polite"></div>
+        <article id="report-detail" class="report-detail" aria-live="polite"><p class="muted">เลือกรายงานจากรายการ</p></article>
       </div>
     </section>
 
-    <section id="evidence" class="panel">
-      <div class="section-heading"><div><p class="eyebrow">Evidence / MLflow / reports</p><h2>หลักฐานและการวัดผล</h2><p class="muted">ตัวเลขที่แสดงเป็น projection จาก run manifest และ aggregate receipt เท่านั้น</p></div></div>
-      <div id="evidence-table" class="table-wrap"></div>
-      <div class="section-heading dataset-heading"><div><p class="eyebrow">Dataset registry / safe projection</p><h2>Datasets ที่ใช้และสถานะการรับรอง</h2><p class="muted">แสดงเฉพาะ metadata, count, classification และ hash; ไม่มี qrels, query IDs หรือ per-query outcomes</p></div></div>
-      <div id="dataset-table" class="table-wrap"></div>
+    <section id="tools" class="panel" role="tabpanel" aria-labelledby="tab-tools" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Loopback-only</p><h2>เครื่องมือวิจัย</h2></div></div>
+      <div id="tools-status" class="tool-grid" aria-live="polite"></div>
     </section>
 
-    <section id="presentation" class="panel">
-      <div class="presentation-toolbar"><div><p class="eyebrow">Briefing view</p><h2>Research Briefing</h2><p class="muted">มุมมองพร้อมนำเสนอจากสถานะจริงของแคมเปญ</p></div><button id="present-toggle" class="button button-primary" type="button">สลับโหมดนำเสนอ</button></div>
+    <section id="presentation" class="panel" role="tabpanel" aria-labelledby="tab-presentation" hidden>
+      <div class="presentation-toolbar">
+        <div><p class="eyebrow">Evidence-bound briefing</p><h2>Research briefing</h2></div>
+        <div class="presentation-controls">
+          <label for="audience">ผู้ฟัง</label>
+          <select id="audience"><option value="owner">Owner</option><option value="advisor">Advisor</option><option value="peer">Peer / PM</option></select>
+          <button id="present-prev" class="icon-button" type="button" aria-label="จอก่อนหน้า">←</button>
+          <span id="presentation-progress" class="presentation-progress" aria-live="polite">1 / 10</span>
+          <button id="present-next" class="icon-button" type="button" aria-label="จอถัดไป">→</button>
+          <button id="print-view" class="button" type="button">พิมพ์</button>
+          <button id="present-toggle" class="button button-primary" type="button" aria-pressed="false">เริ่มนำเสนอ</button>
+        </div>
+      </div>
       <div id="presentation-content" class="presentation"></div>
     </section>
   </main>

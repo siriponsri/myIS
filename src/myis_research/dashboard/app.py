@@ -14,19 +14,31 @@ from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_VERSION, RESEARCH_VERS
 from ..ledger import ImmutableJsonLedger, record_sha256
 from ..projections.read_model import build_read_model
 from .security import LoopbackSecurityMiddleware, SessionStore
+from .reports import ReportCatalog, ReportCatalogError
+from .tools import ToolController, ToolControllerError
 
 
 ACTIVE_DECISIONS = ("D2_OPEN_FINAL", "D3_SUBMIT_RELEASE")
 FRONTEND_FILES = {"index.html", "assets/tokens.css", "assets/dashboard.css", "assets/dashboard.js"}
 
 
-def create_app(*, repository_root: Path, port: int = 8765, actor_sid_override: str | None = None, test_mode: bool = False) -> FastAPI:
+def create_app(
+    *,
+    repository_root: Path,
+    port: int = 8765,
+    actor_sid_override: str | None = None,
+    test_mode: bool = False,
+    tool_controller: ToolController | None = None,
+    launch_token: str | None = None,
+) -> FastAPI:
     root = repository_root.resolve()
     app = FastAPI(title=DISPLAY_NAME, docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(LoopbackSecurityMiddleware, origin=f"http://127.0.0.1:{port}", test_mode=test_mode)
     sessions = SessionStore()
     previews: dict[str, dict[str, Any]] = {}
     ledger = ImmutableJsonLedger(root / "control" / "decisions" / "records", prior_field="prior_record_hash")
+    tools = tool_controller or ToolController(root)
+    reports = ReportCatalog(root)
 
     def session(request: Request) -> tuple[str, Any]:
         return sessions.require(request)
@@ -36,7 +48,10 @@ def create_app(*, repository_root: Path, port: int = 8765, actor_sid_override: s
 
     @app.get("/healthz")
     def healthz() -> dict[str, str]:
-        return {"status": "ok", "program_id": PROGRAM_ID, "protocol_version": PROTOCOL_VERSION, "research_version": RESEARCH_VERSION}
+        payload = {"status": "ok", "program_id": PROGRAM_ID, "protocol_version": PROTOCOL_VERSION, "research_version": RESEARCH_VERSION}
+        if launch_token is not None:
+            payload["launch_token"] = launch_token
+        return payload
 
     @app.get("/")
     def index() -> FileResponse:
@@ -61,11 +76,13 @@ def create_app(*, repository_root: Path, port: int = 8765, actor_sid_override: s
         return {"csrf_token": state.csrf}
 
     @app.get("/api/v1/read-model")
+    @app.get("/api/v2/snapshot")
     def read_model(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         return build_read_model(root)
 
     @app.get("/api/v1/dashboard")
     @app.get("/api/v1/dashboard-snapshot")
+    @app.get("/api/v2/overview")
     def dashboard(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         return _dashboard_projection(build_read_model(root))
 
@@ -101,6 +118,116 @@ def create_app(*, repository_root: Path, port: int = 8765, actor_sid_override: s
             {"id": "status", "title_th": "สถานะจากข้อมูลจริง", "title_en": "Evidence status", "body": {"phase": _current_phase(model), "runs": len(model.get("runs", [])), "metrics": len(model.get("metrics", [])), "readiness": model.get("publication_readiness", {}).get("status", "blocked")}},
         ]}
 
+    @app.get("/api/v2/board")
+    def board(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {
+            "schema_version": "myis.dashboard-board.v2",
+            "read_model_revision": model["read_model_revision"],
+            "tasks": model["tasks"],
+            "wip_limit": 3,
+            "wip_count": sum(item.get("status") == "in_progress" for item in model["tasks"]),
+        }
+
+    @app.get("/api/v2/phases/{phase_id}")
+    def phase_detail(phase_id: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        phase = next((item for item in model["phases"] if item.get("phase_id") == phase_id), None)
+        if phase is None:
+            raise HTTPException(404, "phase_id is not in the active P0-P4 registry")
+        return {"schema_version": "myis.dashboard-phase.v2", "read_model_revision": model["read_model_revision"], "phase": phase}
+
+    @app.get("/api/v2/results")
+    def results(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {"schema_version": "myis.dashboard-results.v2", "read_model_revision": model["read_model_revision"], "results": model["results"], "interpretations": model["interpretations"]}
+
+    @app.get("/api/v2/presentation/{audience}")
+    def presentation_v2(audience: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        if audience not in {"owner", "advisor", "peer"}:
+            raise HTTPException(404, "audience is not allowlisted")
+        model = build_read_model(root)
+        presentation = model["presentation"]
+        screens = [
+            screen
+            for screen in presentation.get("screens", [])
+            if audience in screen.get("audience", []) and screen.get("safe_to_present") is True
+        ]
+        return {
+            "schema_version": "myis.dashboard-presentation.v2",
+            "read_model_revision": model["read_model_revision"],
+            "audience": audience,
+            "presentation": {**presentation, "screens": screens},
+        }
+
+    @app.get("/api/v2/raid")
+    def raid(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {"schema_version": "myis.dashboard-raid.v2", "read_model_revision": model["read_model_revision"], "items": model["raid"]}
+
+    @app.get("/api/v2/timeline")
+    def timeline(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {
+            "schema_version": "myis.dashboard-timeline.v2",
+            "read_model_revision": model["read_model_revision"],
+            "milestones": model["milestones"],
+        }
+
+    @app.get("/api/v2/governance")
+    def governance(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {
+            "schema_version": "myis.dashboard-governance.v2",
+            "read_model_revision": model["read_model_revision"],
+            "gates": model["gates"],
+            "decisions": model["decisions"],
+            "raid": model["raid"],
+            "resources": model["resources"],
+        }
+
+    @app.get("/api/v2/tools")
+    def tool_status(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return tools.status()
+
+    @app.post("/api/v2/tools/mlflow/start")
+    def start_mlflow(_: tuple[str, Any] = Depends(write_session)) -> dict[str, Any]:
+        return _tool_action(tools.start_mlflow)
+
+    @app.post("/api/v2/tools/mlflow/stop")
+    def stop_mlflow(_: tuple[str, Any] = Depends(write_session)) -> dict[str, Any]:
+        return _tool_action(tools.stop_mlflow)
+
+    @app.post("/api/v2/tools/mlflow/restart")
+    def restart_mlflow(_: tuple[str, Any] = Depends(write_session)) -> dict[str, Any]:
+        return _tool_action(tools.restart_mlflow)
+
+    @app.post("/api/v2/tools/obsidian/open")
+    def open_obsidian(body: dict[str, Any], _: tuple[str, Any] = Depends(write_session)) -> dict[str, Any]:
+        if set(body) - {"note_id"}:
+            raise HTTPException(422, "only note_id is accepted")
+        return _tool_action(lambda: tools.open_obsidian(str(body.get("note_id", "HOME"))))
+
+    @app.get("/api/v2/reports")
+    def report_list(note_type: str | None = None, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return _report_action(lambda: reports.list(note_type=note_type))
+
+    @app.get("/api/v2/reports/{note_id}")
+    def report_detail(note_id: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return _report_action(lambda: reports.get(note_id))
+
+    @app.get("/api/v2/literature")
+    def literature(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return _report_action(reports.literature)
+
+    @app.get("/api/v2/literature/{paper_id}")
+    def literature_detail(paper_id: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return _report_action(lambda: reports.literature(paper_id))
+
+    @app.get("/api/v2/advisor-updates")
+    def advisor_updates(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return _report_action(reports.advisor_updates)
+
     @app.post("/api/v1/owner-decisions/preview")
     @app.post("/api/v1/owner-gates/preview")
     def preview(body: dict[str, Any], _: tuple[str, Any] = Depends(write_session)) -> dict[str, Any]:
@@ -128,6 +255,20 @@ def create_app(*, repository_root: Path, port: int = 8765, actor_sid_override: s
         return {"decision_id": decision_id, "record_sha256": digest, "path": path.name}
 
     return app
+
+
+def _tool_action(action: Any) -> dict[str, Any]:
+    try:
+        return action()
+    except ToolControllerError as error:
+        raise HTTPException(409, str(error)) from error
+
+
+def _report_action(action: Any) -> dict[str, Any]:
+    try:
+        return action()
+    except ReportCatalogError as error:
+        raise HTTPException(409, str(error)) from error
 
 
 def _frontend(root: Path, relative: str) -> Path:

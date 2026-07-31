@@ -14,10 +14,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repository-root", type=Path, default=Path.cwd())
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--launch-token")
     args = parser.parse_args(argv)
     if not 1024 <= args.port <= 65535:
         raise SystemExit("port must be between 1024 and 65535")
-    app = create_app(repository_root=args.repository_root, port=args.port)
+    app = create_app(
+        repository_root=args.repository_root,
+        port=args.port,
+        launch_token=args.launch_token,
+    )
     uvicorn.run(
         app,
         host="127.0.0.1",

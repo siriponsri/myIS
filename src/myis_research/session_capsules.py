@@ -174,9 +174,14 @@ def validate_all_session_capsules(repository_root: Path) -> dict[str, object]:
 
     unresolved = 0
     for record in records:
+        reasons = corrections.get(record["session_id"], set())
+        if record["classification"] == "PASS" and reasons:
+            record["classification"] = "SUPERSEDED"
+            record["reason"] = "; ".join(sorted(reasons))
+            continue
         if record["classification"] != "INVALID":
             continue
-        if record["reason"] in corrections.get(record["session_id"], set()):
+        if record["reason"] in reasons:
             record["classification"] = "CORRECTED_INVALID"
         else:
             unresolved += 1
@@ -195,12 +200,18 @@ def latest_valid_session(
 
     root = repository_root.resolve(strict=True)
     candidates: list[tuple[datetime, str, dict[str, object]]] = []
+    superseded: set[str] = set()
     for path in sorted((root / SESSION_ROOT).glob("*.json")):
         try:
             payload = _read_payload(path)
             report = validate_session_capsule(path, root)
         except SessionCapsuleValidationError:
             continue
+        if report.schema_version == SESSION_SCHEMA_V2:
+            superseded.update(
+                str(item["target_session_id"])
+                for item in payload["corrections"]
+            )
         snapshot = payload.get("execution_snapshot")
         if any(value is not None for value in (phase_id, task_id, gate_id)):
             if report.schema_version != SESSION_SCHEMA_V2 or not isinstance(snapshot, dict):
@@ -221,6 +232,7 @@ def latest_valid_session(
             "next_resources": payload.get("next_resources"),
             "closeout": payload.get("closeout"),
         }))
+    candidates = [item for item in candidates if item[1] not in superseded]
     return max(candidates, default=(None, "", None), key=lambda item: (item[0] is not None, item[0], item[1]))[2]
 
 

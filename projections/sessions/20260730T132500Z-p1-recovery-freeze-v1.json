@@ -1,0 +1,137 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260730T132500Z-p1-recovery-freeze-v1",
+  "run_id": null,
+  "goal_id": "P1_RECOVERY_FREEZE",
+  "started_at_utc": "2026-07-30T13:20:00Z",
+  "ended_at_utc": "2026-07-30T13:25:00Z",
+  "scope": "Recovery-freeze correction for the historical P1 legacy certification projection; no protected P1 execution or metric promotion.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml",
+      "scope": "reversible repository-local CPU-only recovery freeze with aggregate/hash/count-only projections"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "95b74e58a549af0daa4521d933150cffbb3a17a9",
+    "dirty_paths": ["HANDOFF.md", "dashboard", "projections", "tests"]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The legacy P1 receipt disposition records five structural blockers and forbids promotion because canonical manifests and validation reports are absent.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added an append-only correction so session discovery does not return the historical P1 measured-complete capsule as active context.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "fresh-owner-local-p1-rerun",
+      "provenance": "agent-observed",
+      "summary": "A fresh Owner-local P1 run requires the complete hash-bound R0/R0-W train/selection manifest and validation-report matrix before promotion or P2.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "d2-final-split",
+      "provenance": "agent-observed",
+      "summary": "D2_OPEN_FINAL remains waiting_owner and the final split remains closed.",
+      "blocking_gate": "D2_OPEN_FINAL"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "P1_CPU_BASELINE",
+    "task_id": "P1.3",
+    "gate_id": "D1_START_CAMPAIGN",
+    "gate_status": "blocked"
+  },
+  "owner_brief_th": "การทบทวน recovery freeze ยืนยันว่า receipt P1 เดิมเป็นหลักฐานประวัติศาสตร์ที่ห้าม promote เพราะไม่มี manifest และ validation report ครบสี่ช่อง จึงคงสถานะ P1_BLOCKED_WITH_EVIDENCE และยังไม่เริ่ม P2 หรือเปิด final split",
+  "owner_actions": [
+    {
+      "action_id": "review-recovery-freeze",
+      "priority": "required",
+      "action_th": "ตรวจ disposition ของ receipt เดิมและยืนยันให้ P1 คงสถานะ blocked ก่อนสั่งรันใหม่แบบ Owner-local",
+      "reason_th": "ป้องกันไม่ให้ historical receipt หรือ session เดิมถูกตีความเป็นผลวัดที่ promote ได้",
+      "blocking_gate": null
+    },
+    {
+      "action_id": "fresh-owner-local-p1-rerun",
+      "priority": "optional",
+      "action_th": "เมื่อ Owner สั่ง ให้รัน P1 ใหม่ภายใน protected store พร้อม manifest และ validation report ครบตาม protocol",
+      "reason_th": "ผลใหม่ต้องผ่าน matrix ที่ hash-bound ก่อนสร้าง claim หรืออนุญาต P2",
+      "blocking_gate": null
+    }
+  ],
+  "gate_request": {
+    "gate_id": "D1_START_CAMPAIGN",
+    "state": "blocked",
+    "summary_th": "ไม่มีคำขอเปิด D2 หรือ D3; งานนี้บันทึกการ freeze หลักฐาน P1 เดิมเท่านั้น",
+    "blocking_reason_th": "ต้องมี Owner-local P1 rerun ที่มี manifest และ validation report ครบก่อนดำเนินการเชิงวิทยาศาสตร์ต่อ",
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "owner-local-p1-manifest-matrix",
+        "description_th": "ชุด manifest และ validation report สำหรับ R0 และ R0-W ทั้ง train และ selection ใน protected Owner-local store",
+        "purpose_th": "ใช้ตรวจความสมบูรณ์ของหลักฐานโดยไม่เผย qrels, query IDs, split membership หรือผลราย query"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "recovery-freeze-state",
+        "status": "PASS",
+        "summary": "The canonical read model retains zero promoted P1 runs, metrics, and evidence."
+      },
+      {
+        "check_id": "legacy-capsule-supersession",
+        "status": "PASS",
+        "summary": "The historical measured-complete capsule is superseded through this append-only correction."
+      }
+    ],
+    "changed_files": ["projections/sessions/20260730T132500Z-p1-recovery-freeze-v1.json"],
+    "untouched_protected_surfaces": ["qrels", "query IDs", "split membership", "per-query outcomes", "raw provider payloads", "GPU", "paid APIs", "final split"]
+  },
+  "corrections": [
+    {
+      "target_session_id": "20260730T180521Z-p1-legacy-certification-v1",
+      "observed_validation_error": "historical P1 completion claim is superseded by the non-promotable recovery-freeze disposition",
+      "correction_th": "เก็บ capsule เดิมไว้แบบ append-only เพื่อการตรวจสอบย้อนหลัง แต่ห้ามใช้เป็น active session หรือหลักฐาน P1 ที่ promote ได้"
+    }
+  ]
+}

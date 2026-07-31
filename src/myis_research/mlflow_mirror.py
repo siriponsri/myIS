@@ -33,15 +33,23 @@ TRACK_C_EXPERIMENT = "myis-research-track-c"
 TRACK_S_EXPERIMENT = "myis-research-track-s"
 JOINT_EXPERIMENT = "myis-research-joint"
 PUBLICATION_EXPERIMENT = "myis-research-publication"
-CAMPAIGN_EXPERIMENT = TRACK_C_EXPERIMENT
-SCOPE_AUTOINDEX_EXPERIMENT = TRACK_C_EXPERIMENT
-EXPERIMENTS = (
+# These six experiments are retained for historical inspection only.  New v2
+# archive records use the campaign/system pair below.
+LEGACY_EXPERIMENTS = (
     BOOTSTRAP_EXPERIMENT,
     CATALOG_EXPERIMENT,
     TRACK_C_EXPERIMENT,
     TRACK_S_EXPERIMENT,
     JOINT_EXPERIMENT,
     PUBLICATION_EXPERIMENT,
+)
+CAMPAIGN_EXPERIMENT = "myis-scope-autoindex-v1"
+SCOPE_AUTOINDEX_EXPERIMENT = CAMPAIGN_EXPERIMENT
+SYSTEM_EXPERIMENT = "myis-system"
+V2_EXPERIMENTS = (CAMPAIGN_EXPERIMENT, SYSTEM_EXPERIMENT)
+EXPERIMENTS = (
+    *LEGACY_EXPERIMENTS,
+    *V2_EXPERIMENTS,
 )
 RECEIPT_SCHEMA = "myis.mlflow-mirror-receipt.v1"
 
@@ -147,11 +155,11 @@ class MirrorStage(StrEnum):
     @property
     def experiment_name(self) -> str:
         return {
-            MirrorStage.P0_FOUNDATION: CATALOG_EXPERIMENT,
-            MirrorStage.P1_CPU_BASELINE: TRACK_C_EXPERIMENT,
-            MirrorStage.P2_SCOPE_DEVELOPMENT: TRACK_C_EXPERIMENT,
-            MirrorStage.P3_FINAL: JOINT_EXPERIMENT,
-            MirrorStage.P4_PUBLICATION: PUBLICATION_EXPERIMENT,
+            MirrorStage.P0_FOUNDATION: SYSTEM_EXPERIMENT,
+            MirrorStage.P1_CPU_BASELINE: CAMPAIGN_EXPERIMENT,
+            MirrorStage.P2_SCOPE_DEVELOPMENT: CAMPAIGN_EXPERIMENT,
+            MirrorStage.P3_FINAL: CAMPAIGN_EXPERIMENT,
+            MirrorStage.P4_PUBLICATION: CAMPAIGN_EXPERIMENT,
         }[self]
 
 
@@ -694,7 +702,8 @@ def _scan_structured_value(value: Any) -> None:
         for key, item in value.items():
             normalized_key = str(key).lower()
             is_commitment = normalized_key.endswith(("_hash", "_sha256"))
-            if _FORBIDDEN_STRUCTURED_KEY_RE.search(str(key)) and not is_commitment:
+            is_lifecycle_flag = normalized_key in {"confirmation", "is_confirmation"} and isinstance(item, bool)
+            if _FORBIDDEN_STRUCTURED_KEY_RE.search(str(key)) and not (is_commitment or is_lifecycle_flag):
                 raise MirrorValidationError(f"protected structured field is forbidden: {key}")
             _scan_structured_value(item)
     elif isinstance(value, list):
@@ -706,7 +715,12 @@ def _validate_metadata(value: Mapping[str, Any]) -> None:
     for key, item in value.items():
         normalized_key = str(key).lower()
         is_commitment = normalized_key.endswith(("_hash", "_sha256"))
-        if _FORBIDDEN_STRUCTURED_KEY_RE.search(normalized_key) and not is_commitment:
+        # Tags are string-valued in MLflow, while parameter payloads may retain
+        # a real boolean.  Do not allow confirmation identifiers or free text.
+        is_lifecycle_flag = (
+            normalized_key == "is_confirmation" and str(item).lower() in {"true", "false"}
+        ) or (normalized_key == "confirmation" and isinstance(item, bool))
+        if _FORBIDDEN_STRUCTURED_KEY_RE.search(normalized_key) and not (is_commitment or is_lifecycle_flag):
             raise MirrorValidationError(f"protected MLflow metadata field is forbidden: {key}")
         if _SECRET_VALUE_RE.search(str(item)):
             raise MirrorValidationError(f"MLflow metadata appears to contain a secret: {key}")

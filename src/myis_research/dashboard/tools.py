@@ -36,7 +36,12 @@ class ToolController:
     ) -> None:
         self.repository_root = repository_root.resolve()
         configured = os.environ.get("MYIS_MLFLOW_STORE")
-        self.store_root = (store_root or (Path(configured) if configured else self.repository_root.parent / "01_Stores/00_myIS/mlflow")).resolve()
+        default_store = (
+            self.repository_root.parents[2] / "01_Stores/00_myIS/mlflow"
+            if self.repository_root.name == "01_Research" and len(self.repository_root.parents) >= 3
+            else self.repository_root.parent / "01_Stores/00_myIS/mlflow"
+        )
+        self.store_root = (store_root or (Path(configured) if configured else default_store)).resolve()
         if not 1024 <= mlflow_port <= 65535:
             raise ToolControllerError("MLflow port is outside the allowed range")
         self.mlflow_port = mlflow_port

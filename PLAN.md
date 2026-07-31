@@ -29,8 +29,8 @@ measured.
 | Phase | Purpose | State |
 |---|---|---|
 | `P0_FOUNDATION` | authority, schemas, deterministic kernel, protected boundary, projections | complete |
-| `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | `P1_CPU_MEASURED_COMPLETE` |
-| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | waiting review before P2 |
+| `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | `P1_BLOCKED_WITH_EVIDENCE` |
+| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | blocked until valid P1 evidence exists |
 | `P3_FINAL` | one frozen final evaluation | requires `D2_OPEN_FINAL` |
 | `P4_PUBLICATION` | manuscript, package, and release | requires `D3_SUBMIT_RELEASE` |
 
@@ -45,7 +45,11 @@ These bindings are machine-readable closeout anchors, not additional gates.
 ### Task P1.3 - Protected owner-local CPU handoff
 
 - **Owner Decision:** none; `P1_CPU_EXECUTION_ENVELOPE` is an execution contract, not a new Owner gate.
-- **Result:** R0/R0-W accepted on train/selection only; final-872 remains non-claimable because historical exposure includes Paper-D test-997.
+- **Result:** blocked with evidence. The legacy aggregate receipt is historical,
+  structurally invalid, and superseded for promotion because no hash-bound
+  four-slot manifest and validation-report matrix exists. A fresh owner-local
+  CPU rerun is required; final-872 remains closed and non-claimable as globally
+  untouched.
 
 ### Task P3.1 - Frozen final evaluation
 
@@ -111,6 +115,12 @@ compares a fresh build to the committed projection. Two consecutive sync/check
 cycles must be stable. MLflow receives only safe aggregate metrics and lineage
 pointers from the same receipt.
 
+The legacy receipt at
+`campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json` is retained
+byte-for-byte as historical invalid evidence. Its disposition record binds the
+original file SHA-256 and forbids promotion. It cannot supply run, metric,
+evidence, Dashboard, Obsidian, Paper, or MLflow facts.
+
 ## Memory lifecycle
 
 `02_Brain/memory` is pointer-only and has five folders: `decisions`,
@@ -143,9 +153,22 @@ searchable; failed attempts remain immutable and cannot override decisions.
 - Dashboard APIs expose phases, tasks, D2/D3 gates, evidence, metrics, cost,
   safe dataset inventory, MLflow pointers, and readiness without writing
   artifacts or calculating metrics.
+- Dashboard Overview, boards, Results, Governance, Reports, Tools, and the
+  ten-screen presentation render one shared revision; keyboard, reduced-motion,
+  print, 1920/1366/1024/390 responsive, and protected-DOM checks pass.
+- The Windows launcher passes health-token, malformed-port, concurrent-launch,
+  duplicate-process, unknown-owner, browser-after-health, and rollback checks.
+- Dashboard opens the hash-verified MLflow viewer and exact Obsidian vault note;
+  the external database remains byte-identical and retired standalone launchers
+  exist only under archive history.
+- Obsidian provides P0-P4 Phase masters, every active Task report, Literature
+  Map proxies, Research History, Advisor lifecycle, Graph links, and six Bases;
+  Owner notes remain byte-identical across two syncs.
 - Literature validation reports U001-U154 with unique IDs and hashes.
 - No protected qrels, query IDs, membership, payloads, or secrets appear in
   Git, Brain, MLflow, Dashboard, or Paper.
+- A hash-bound acceptance receipt and final append-only session capsule record
+  changed/untouched files, checks, evidence class, and rollback path.
 
 ## Owner decisions
 

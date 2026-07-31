@@ -1,8 +1,8 @@
 """Create the zero-data MLflow registry used by the local projections.
 
-Bootstrap is a connectivity receipt only. It creates the six allowlisted
-experiments and a SQLite store, but never reads protected research inputs or
-records scientific metrics.
+Bootstrap is a connectivity receipt only. It creates the active campaign and
+system experiments while preserving pre-v2 experiments as legacy_read_only.
+It never reads protected research inputs or records scientific metrics.
 """
 
 from __future__ import annotations
@@ -15,7 +15,6 @@ import subprocess
 from pathlib import Path
 
 from myis_research.mlflow_mirror import (
-    BOOTSTRAP_EXPERIMENT,
     DISPLAY_NAME,
     EXPERIMENTS,
     MLflowMirror,
@@ -25,6 +24,7 @@ from myis_research.mlflow_mirror import (
     PROGRAM_ID,
     PROTOCOL_VERSION,
     RESEARCH_VERSION,
+    SYSTEM_EXPERIMENT,
     default_store,
 )
 
@@ -56,6 +56,19 @@ def _write_once(path: Path, payload: dict[str, object]) -> None:
             raise RuntimeError(f"immutable bootstrap report drifted: {path}")
 
 
+def _write_bootstrap_report(store: Path, report: dict[str, object]) -> Path:
+    primary = store / "mlflow-bootstrap.json"
+    data = (json.dumps(report, ensure_ascii=True, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    if not primary.exists():
+        _write_once(primary, report)
+        return primary
+    if primary.read_bytes() == data:
+        return primary
+    versioned = store / "mlflow-bootstrap-v2.json"
+    _write_once(versioned, report)
+    return versioned
+
+
 def bootstrap(store_root: Path | None = None, *, repository_root: Path | None = None) -> dict[str, object]:
     root = (repository_root or _repository_root()).resolve(strict=True)
     store = default_store(store_root)
@@ -65,8 +78,8 @@ def bootstrap(store_root: Path | None = None, *, repository_root: Path | None = 
     receipt = MLflowMirror(store).sync(
         MirrorSpec(
             stage=MirrorStage.P0_FOUNDATION,
-            experiment_name=BOOTSTRAP_EXPERIMENT,
-            run_name="myis-research-store-connectivity",
+            experiment_name=SYSTEM_EXPERIMENT,
+            run_name=f"myis-system-bootstrap-{git_commit[:12]}",
             git_commit=git_commit,
             canonical_source_sha256=source_hash,
             phase=MirrorStage.P0_FOUNDATION.value,
@@ -106,8 +119,21 @@ def bootstrap(store_root: Path | None = None, *, repository_root: Path | None = 
         "receipt_status": receipt.status,
         "recorded_at_utc": receipt.recorded_at_utc,
     }
-    _write_once(store / "mlflow-bootstrap.json", report)
-    return report
+    report_path = _write_bootstrap_report(store, report)
+    metadata = {
+        "schema_version": "myis.mlflow-store.v2",
+        "artifact_root": "artifacts",
+        "repository_program_id": PROGRAM_ID,
+        "created_by": "bootstrap_mlflow.py",
+    }
+    metadata_path = store / "store.json"
+    if metadata_path.exists():
+        existing = json.loads(metadata_path.read_text(encoding="utf-8"))
+        if existing.get("schema_version") != "myis.mlflow-store.v2" or existing.get("artifact_root") != "artifacts":
+            raise RuntimeError("existing MLflow store metadata is invalid")
+    else:
+        _write_once(metadata_path, metadata)
+    return {**report, "report_path": str(report_path)}
 
 
 def main(argv: list[str] | None = None) -> int:

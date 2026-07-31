@@ -1,0 +1,42 @@
+{
+  "active_experiment_lineage": [
+    "myis-research-bootstrap",
+    "myis-research-catalog",
+    "myis-research-joint",
+    "myis-research-publication",
+    "myis-research-track-c",
+    "myis-research-track-s"
+  ],
+  "archived_predecessor_experiments": [
+    {"experiment_id": "1", "name": "myis-bootstrap"},
+    {"experiment_id": "2", "name": "myis-harness"},
+    {"experiment_id": "3", "name": "is1-research-bootstrap"},
+    {"experiment_id": "4", "name": "is1-research-catalog"},
+    {"experiment_id": "5", "name": "is1-research-scientific"}
+  ],
+  "historical_p1_runs": [
+    {
+      "evidence_status": "historical_invalid_superseded",
+      "promotable": false,
+      "run_id": "caeac38c03b349f2b7f4787e275a22aa",
+      "run_name": "legacy-dapfam-p1-cpu"
+    },
+    {
+      "evidence_status": "historical_invalid_superseded",
+      "promotable": false,
+      "run_id": "0bc1c22ba5e24b8891fc1acbf3dd484e",
+      "run_name": "legacy-dapfam-p1-r0"
+    },
+    {
+      "evidence_status": "historical_invalid_superseded",
+      "promotable": false,
+      "run_id": "6055480e6fd04044b18efc213c4dbaf5",
+      "run_name": "legacy-dapfam-p1-r0-w"
+    }
+  ],
+  "mlflow_doctor": "PASS",
+  "recorded_at_utc": "2026-07-30T14:49:22Z",
+  "schema_version": "myis.mlflow-p1-recovery.v1",
+  "store_external": true,
+  "viewer_doctor": "PASS"
+}

@@ -1,7 +1,7 @@
 campaign:
   id: scope-autoindex-v1
   title: Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval
-  status: p1_cpu_measured_complete_waiting_review
+  status: P1_BLOCKED_WITH_EVIDENCE
   venue_target: isai-nlp-2026
   standing_authorization: D1_START_CAMPAIGN
   active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
@@ -47,23 +47,23 @@ phases:
         title: Projection contracts and migration closure
         status: complete
   - id: P1_CPU_BASELINE
-    status: measured
+    status: blocked
     tasks:
       - id: P1.1
         title: R0 flat BM25 fixture lane
-        status: measured
+        status: blocked
       - id: P1.2
         title: R0-W window maxP fixture lane
-        status: measured
+        status: blocked
       - id: P1.3
         title: Protected owner-local CPU handoff
-        status: measured
+        status: blocked
   - id: P2_SCOPE_DEVELOPMENT
-    status: waiting_review_before_p2
+    status: blocked_until_p1
     tasks:
       - id: P2.1
         title: R1 SCOPE/AutoIndex development
-        status: planned
+        status: blocked_until_p1
   - id: P3_FINAL
     status: locked_until_D2
     tasks:

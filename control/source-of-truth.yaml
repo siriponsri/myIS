@@ -1,6 +1,6 @@
 schema_version: myis.source-of-truth.v2
 active_control_plane: 01_Research
-projection_contract: projections/read-model/read-model.v1.json
+projection_contract: projections/read-model/read-model.v2.json
 records:
   - id: control
     authority: control/program.yaml
