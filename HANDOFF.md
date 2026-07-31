@@ -83,36 +83,53 @@ evidence เท่านั้น ไม่ใช่ statistical superiority, co
 - ห้ามส่ง item identifier, query identifier หรือ outcome รายรายการ
 - interval 120 วินาทีเหมาะกับ batch ระดับชั่วโมงและลด CLI polling ที่ไม่จำเป็น
 
+## CI และ cross-platform closeout
+
+- GitHub Actions run `30646599835` พบ projection drift หลัง commit และ raw SHA drift
+  จาก Git LF/CRLF normalization ใน clean Windows checkout
+- แก้ด้วย byte policy `-text` สำหรับ canonical P1 JSON, MLflow registration evidence
+  และ generated Obsidian vault โดยยกเว้น Owner Notes, `.obsidian` และ `.canvas`
+- เพิ่ม regression tests ที่ตรวจ source contract, package-to-rigor binding,
+  MLflow registration SHA, generated vault manifest hashes และ checkout policy
+- clean committed checkout ที่ `1ca7b167221b59f3910213fc0db819e9a5e44a64`
+  ผ่าน full suite `133 passed`, layout PASS และ read-model-only check PASS
+- GitHub Actions run `30648584198` ผ่านครบทุก step:
+  `https://github.com/siriponsri/myIS/actions/runs/30648584198`
+
 ## Projection status
 
 - Shared read-model revision:
-  `fa1e4eacaf735fa488214cb9854fe10e91cca84a521dbba34cc56c07da366527`
+  `c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5`
 - Shared read-model SHA-256:
-  `513a512b2cba60ff82893c039e678c8553046f44ee6039cee0f1c567e5a38389`
+  `9ed1a20bba710370a552ed03768c005b39b90efb7238fb9a758eb098eb23589d`
 - Obsidian generated manifest: 190 files, manifest SHA-256
-  `1f680e29f6c2a0a40e182dd390ea55e52c44334e90a7be350689c3deedecf18b`
+  `1e3ccc7a67ab4ffaa903fa304631a61fe2c92df86aa74649b37d266cf0c222ad`
 - Obsidian แยกรายงาน Phase 1 และ Task P1.1/P1.2/P1.3 พร้อม metric,
   evidence, interpretation boundary และ progress contract
 - Brain มี MOC, phase/task status, datasets, experiments, publication readiness,
   weekly summary และรายงาน P0-P4 จาก read model v2 เดียวกัน
-- Brain scoped commit: `26dc919`; Brain ไม่มี remote จึงไม่มีปลายทาง push
+- Brain scoped commits: `26dc919` (P1 closeout) และ `d41544b` (CI projection sync);
+  Brain ไม่มี remote จึงไม่มีปลายทาง push
 - Dashboard/API แสดง `P1_CPU_MEASURED_COMPLETE`, 4 runs และ 12 metric rows
 - Paper readiness และ publication source lock ชี้ read model v2 และคง
   `train_selection_only`
-- Projection sync ล่าสุดใช้ MLflow run `414662ec1d684526b94a95bb003b0e5f`
+- Projection sync ล่าสุดใช้ MLflow run `aff1615bf1e44cc0b95086dda86b5d86`
 
 ## ผลตรวจ
 
-- Full tests: `131 passed`, มี 1 Starlette deprecation warning เดิม
+- Full tests บน main worktree: `132 passed` ก่อนเพิ่ม generated-vault regression
+- Full tests บน clean committed checkout: `133 passed`, มี 1 Starlette deprecation warning เดิม
 - Dashboard/API/launcher focused tests: `19 passed`
 - Layout validator: PASS
-- Report sync/check: PASS, no drift
+- Report sync/check สองรอบ: PASS, no drift
+- Clean-checkout read-model-only check: PASS, no drift
 - Advisor validation: PASS
 - Asset registry quick validation และ P1.3 query: PASS
 - Brain literature validation: PASS, U001-U154 มี ID/hash ไม่ซ้ำ
-- MLflow doctor: PASS, 13 archive runs, 13 receipts, 152 safe artifacts
-- Session capsule audit ก่อนเพิ่ม closeout capsule: PASS, unresolved invalid `0`
-- Git diff check จะรันซ้ำก่อน commit
+- MLflow doctor: PASS, 14 archive runs, 14 receipts, 164 safe artifacts
+- Session capsule audit ก่อนเพิ่ม CI closeout capsule: PASS, unresolved invalid `0`
+- GitHub Actions `30648584198`: PASS
+- Git diff check: PASS
 
 ## ไฟล์และระบบที่เปลี่ยน
 
@@ -124,6 +141,7 @@ evidence เท่านั้น ไม่ใช่ statistical superiority, co
 - Obsidian Phase/Task/Result/Advisor/Literature projection set
 - Brain generated reports และ active-context pointer
 - Paper readiness, source lock และ GEPA project-context boundary
+- Cross-platform byte policy และ clean-checkout regression tests
 - `PLAN.md`, `README.md` และ `HANDOFF.md`
 
 ## ขอบเขตที่ยังไม่แตะ
@@ -140,12 +158,12 @@ network model download หรือ provider fallback
 
 ## สิ่งที่ Owner ต้องทำ
 
-ไม่มี Owner decision ที่ต้องให้เพื่อปิด P1 งานนี้จะ commit/push และตรวจ CI ให้จบก่อนหยุด
+ไม่มี Owner decision ที่ต้องให้เพื่อปิด P1 ตัวแก้ CI ถูก commit/push และ workflow ผ่านแล้ว
 Owner สามารถเปิด `dashboard/open-dashboard.cmd` เพื่อตรวจผลและ evidence chain
 
 ## Next automatic action
 
-หลัง commit/push และ CI ผ่าน ให้หยุดรอ Owner review `P2_SCOPE_DEVELOPMENT` พร้อมเริ่ม
+หลังปิด P1 และ CI ผ่าน ให้หยุดรอ Owner review `P2_SCOPE_DEVELOPMENT` พร้อมเริ่ม
 แต่ยังไม่เริ่มอัตโนมัติ เพราะ execution envelope ปัจจุบันอนุญาตถึง P1 เท่านั้น
 การเริ่ม P2 ต้องเป็นงานแยกที่กำหนด execution policy แบบ reversible, CPU-first และยังไม่เปิด
 `D2_OPEN_FINAL` ส่วน `D3_SUBMIT_RELEASE` ยังคงปิดจนถึง Phase 4

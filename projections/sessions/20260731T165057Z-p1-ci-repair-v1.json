@@ -1,0 +1,236 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260731T165057Z-p1-ci-repair-v1",
+  "run_id": null,
+  "goal_id": "P1_CPU_BASELINE_CI_CLOSEOUT",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-07-31T16:50:58Z",
+  "scope": "Repair P1 clean-checkout reproducibility, resynchronize governed projections, validate a committed Windows checkout, and close GitHub Actions.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml and the active P0-P1 execution envelope",
+      "scope": "reversible CPU-only P1 closeout and repository-local CI repair"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "1ca7b167221b59f3910213fc0db819e9a5e44a64",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "projections/sessions/20260731T165057Z-p1-ci-repair-v1.json",
+      "obsidian_report/.obsidian/graph.json",
+      "obsidian_report/Untitled.canvas"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "GitHub Actions run 30646599835 exposed projection drift after commit, while clean Windows checkout diagnostics additionally exposed LF/CRLF raw-hash drift.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "9a2c8e1d2fb32c9f3aeab5b939b6d25a01497547ee921bd77860ac8a65cb1ae5",
+          "locator": "source_commit, read_model_revision, evidence, and project state"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Raw SHA-bound artifacts and generated report files require explicit Git byte-preservation policy on every supported checkout platform.",
+      "evidence_refs": [
+        {
+          "path": ".gitattributes",
+          "sha256": "73d40ceb5ba4123ca2d8ddbfcea69ddc2aef03bf838a79819aab0d205cec14de",
+          "locator": "canonical P1 JSON, MLflow registration, generated Obsidian, and Owner-file exception rules"
+        },
+        {
+          "path": "tests/test_read_model.py",
+          "sha256": "50a7d8315cff65d14f661625d66a16050c49a5c5d3ab24fade2b543edff42703",
+          "locator": "test_checked_in_p1_raw_hash_bindings_are_checkout_stable"
+        },
+        {
+          "path": "tests/test_obsidian_report_contract.py",
+          "sha256": "b61230db22c4fc598fb37b27effa63b488aab91d15fcbf8180f35d427910af94",
+          "locator": "test_generated_vault_raw_hashes_are_checkout_stable"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Resynchronized Dashboard, Obsidian, Brain, Paper, and MLflow from one measured P1 read model without changing scientific metrics.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "42eda98b8315fb84a1126374b1b64c867458a5ae2ab9b20407be93de64cbbc9d",
+          "locator": "shared revision, projection hashes, and MLflow run ID"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "A fresh committed Windows worktree passed the complete local contract, and GitHub Actions run 30648584198 completed successfully.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_obsidian_report_contract.py",
+          "sha256": "b61230db22c4fc598fb37b27effa63b488aab91d15fcbf8180f35d427910af94",
+          "locator": "cross-platform generated-vault contract coverage"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P1 remains complete with descriptive train/selection evidence; the CI repair does not open P2, final evaluation, D2, or D3.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "9a2c8e1d2fb32c9f3aeab5b939b6d25a01497547ee921bd77860ac8a65cb1ae5",
+          "locator": "project state, phases, results, gates, and claim boundary"
+        }
+      ],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-review-p1",
+      "provenance": "agent-observed",
+      "summary": "The measured P1 package, detailed Phase and Task reports, and green CI are ready for Owner review.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "separate-p2-envelope",
+      "provenance": "agent-observed",
+      "summary": "P2 is ready but not started because the active execution envelope ends at P1.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "brain-remote-unavailable",
+      "provenance": "agent-observed",
+      "summary": "Brain generated reports are committed locally at d41544b, but the Brain repository has no configured remote.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "P1_CPU_BASELINE",
+    "task_id": "P1.3",
+    "gate_id": "D1_START_CAMPAIGN",
+    "gate_status": "approved"
+  },
+  "owner_brief_th": "ปิด P1 และซ่อม CI เรียบร้อยแล้ว โดย clean checkout และ GitHub Actions ผ่าน ข้อมูลผลวิจัยเดิมไม่เปลี่ยน และไม่ใช้ GPU",
+  "owner_actions": [
+    {
+      "action_id": "review-p1-dashboard",
+      "priority": "optional",
+      "action_th": "เปิด Dashboard เพื่อตรวจผล P1 ราย Task และสายหลักฐานเมื่อสะดวก",
+      "reason_th": "ผลและรายงานพร้อมตรวจแล้ว ส่วน P2 ยังไม่เริ่มและไม่ต้องตัดสินใจ D2 หรือ D3 ตอนนี้",
+      "blocking_gate": null
+    }
+  ],
+  "gate_request": {
+    "gate_id": "D1_START_CAMPAIGN",
+    "state": "draft",
+    "summary_th": "งานนี้ปิด P1 ภายใต้ standing authorization เดิมและไม่ได้สร้าง Owner gate ใหม่",
+    "blocking_reason_th": null,
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "none",
+    "items": []
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "clean-checkout",
+        "status": "PASS",
+        "summary": "Fresh committed Windows checkout passed the complete test suite, layout validation, and read-model-only drift check."
+      },
+      {
+        "check_id": "github-actions",
+        "status": "PASS",
+        "summary": "GitHub Actions run 30648584198 passed all contract steps."
+      },
+      {
+        "check_id": "projections",
+        "status": "PASS",
+        "summary": "Two sync/check cycles were stable across Dashboard, Obsidian, Brain, Paper, and MLflow."
+      },
+      {
+        "check_id": "mlflow",
+        "status": "PASS",
+        "summary": "MLflow doctor validated the external governed store after projection synchronization."
+      },
+      {
+        "check_id": "protected-boundary",
+        "status": "PASS",
+        "summary": "No final access, GPU, paid API, network model download, provider fallback, or protected payload projection occurred."
+      }
+    ],
+    "changed_files": [
+      ".gitattributes",
+      "tests/test_read_model.py",
+      "tests/test_obsidian_report_contract.py",
+      "projections/read-model/read-model.v2.json",
+      "projections/sync-receipt.v2.json",
+      "mlflow/generated/archive-index.v2.json",
+      "obsidian_report/00_System/Generated/generated-manifest.json",
+      "obsidian_report/01_Phases/P1_CPU_BASELINE/P1_CPU_BASELINE_MASTER_REPORT.md",
+      "obsidian_report/01_Phases/P1_CPU_BASELINE/Tasks/P1.1.md",
+      "obsidian_report/01_Phases/P1_CPU_BASELINE/Tasks/P1.2.md",
+      "obsidian_report/01_Phases/P1_CPU_BASELINE/Tasks/P1.3.md",
+      "obsidian_report/03_Results/Current/P1_CPU_BASELINE_RESULT.md",
+      "projections/obsidian/generated/program-status.md",
+      "HANDOFF.md",
+      "projections/sessions/20260731T165057Z-p1-ci-repair-v1.json"
+    ],
+    "untouched_protected_surfaces": [
+      "Owner-local final 872 data and access decision",
+      "Protected relevance rows, split membership, query identifiers, and item-level outcomes",
+      "Credentials and raw provider payloads",
+      "Legacy mlflow-p1 store",
+      "obsidian_report/.obsidian/graph.json",
+      "obsidian_report/Untitled.canvas"
+    ]
+  },
+  "corrections": []
+}
