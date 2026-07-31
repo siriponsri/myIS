@@ -1,14 +1,14 @@
 {
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "51f2dffab29eb1b45b0d51d88bc8a0c0dc67758a6b970c7036a579a947ed990c",
+  "dashboard_snapshot_sha256": "993ffdf50d5127554c48c5d2261e7457a8202352d33cf6f73520e5ab37185283",
   "evidence_ids": [],
-  "obsidian_manifest_sha256": "ac9a4ea3105e778db6a46aeb6e9a5804b156bd85591a3169ceec86a2e238d29b",
+  "obsidian_manifest_sha256": "4138179f0e7311f47f87600a6abd9783b732b6040df12fff3ffd50fa0288ced1",
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "b3b7dc7e84ce51b02b49742327ae429ea6084d613403814cde86882dac6f9eb9",
-  "read_model_sha256": "51f2dffab29eb1b45b0d51d88bc8a0c0dc67758a6b970c7036a579a947ed990c",
+  "read_model_revision": "d8d1a743d4f3bea1189056ee62176e7051a10c01bfc4288b8e86b1fc71f32755",
+  "read_model_sha256": "993ffdf50d5127554c48c5d2261e7457a8202352d33cf6f73520e5ab37185283",
   "run_ids": [],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "bb65a2e1cd65833057c6bfb9bc026146b8dc763a",
+  "source_commit": "df9582c94bce5c32a65717b140f66dbe8fea87b2",
   "status": "blocked",
   "system_experiment": "myis-system"
 }

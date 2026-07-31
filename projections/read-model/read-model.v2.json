@@ -129,7 +129,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-07-31T12:05:16Z",
+  "generated_at": "2026-07-31T12:24:09Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable"
   },
@@ -480,7 +480,7 @@
     "shared_revision_required": true,
     "status": "blocked"
   },
-  "projection_revision": "b3b7dc7e84ce51b02b49742327ae429ea6084d613403814cde86882dac6f9eb9",
+  "projection_revision": "d8d1a743d4f3bea1189056ee62176e7051a10c01bfc4288b8e86b1fc71f32755",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -531,8 +531,8 @@
       "summary": "P1 receipt \u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35 hash-matched validation reports \u0e41\u0e25\u0e30 four-slot manifests"
     }
   ],
-  "read_model_revision": "b3b7dc7e84ce51b02b49742327ae429ea6084d613403814cde86882dac6f9eb9",
-  "read_model_sha256": "51f2dffab29eb1b45b0d51d88bc8a0c0dc67758a6b970c7036a579a947ed990c",
+  "read_model_revision": "d8d1a743d4f3bea1189056ee62176e7051a10c01bfc4288b8e86b1fc71f32755",
+  "read_model_sha256": "993ffdf50d5127554c48c5d2261e7457a8202352d33cf6f73520e5ab37185283",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -566,7 +566,7 @@
   ],
   "runs": [],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "bb65a2e1cd65833057c6bfb9bc026146b8dc763a",
+  "source_commit": "df9582c94bce5c32a65717b140f66dbe8fea87b2",
   "tasks": [
     {
       "evidence_ids": [],
