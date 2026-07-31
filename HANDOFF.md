@@ -1,88 +1,153 @@
 # Owner Handoff / สรุปสำหรับ Owner
 
-อัปเดตจาก canonical records และ implementation acceptance ณ 2026-07-31 เอกสารนี้
-ใช้เพื่อ orientation เท่านั้น ไม่แทนที่ control files, schemas, manifests, receipts
-หรือ measured evidence หากข้อความขัดกันให้ยึด `control/source-of-truth.yaml`
+อัปเดตจาก canonical records และ measured evidence ณ 2026-07-31 เอกสารนี้ใช้เพื่อ
+orientation เท่านั้น หากขัดกับ control files, schemas, manifests, receipts หรือ
+measured evidence ให้ยึด `control/source-of-truth.yaml`
 
-## สถานะปัจจุบัน
+## สถานะตอนนี้
 
 - Phase: `P1_CPU_BASELINE`
 - Task: `P1.3`
-- Evidence state: `P1_BLOCKED_WITH_EVIDENCE`
-- Source implementation commit: `94e979449d11675c57432661b0972d3f32d6bb00`
-- `P2_SCOPE_DEVELOPMENT`: ยังไม่เริ่ม
-- `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE`: `waiting_owner`; final split ยังปิด
+- Phase status: `complete`
+- Evidence state: `P1_CPU_MEASURED_COMPLETE`
+- Evidence class: measured train/selection, descriptive only
+- Source execution commit: `df9582c94bce5c32a65717b140f66dbe8fea87b2`
+- Request: `dapfam-p1-fulltext-c058a3aa7357c782`
+- `P2_SCOPE_DEVELOPMENT`: ready, not started
+- `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE`: `waiting_owner`
 - Standing authorization: `D1_START_CAMPAIGN`
-- Evidence class ของงานรอบนี้: implementation/projection validation ไม่ใช่ measured
-  scientific evidence
+- GPU: ไม่ใช้และไม่ต้องเปิด Vast Instance สำหรับงานปิด P1 นี้
 
-## P1 evidence truth
+## Phase 1 - ผลรวม
 
-- ยังไม่มี canonical P1 manifest + validation-report matrix ครบ `R0`/`R0-W` x
-  `train`/`selection`
-- Legacy aggregate receipt คง byte เดิมและมี disposition เป็น
-  `historical_invalid_superseded`; ห้าม promote เป็น run, metric, evidence หรือ
-  completion claim
-- Session `20260730T180521Z-p1-legacy-certification-v1` คงอยู่แบบ append-only แต่
-  discovery จัดเป็น `SUPERSEDED` และไม่ surface เป็น latest valid session
-- Active read model มี promoted runs `0`, metrics `0`, evidence `0`
-- Historical exposure รองรับเพียง
-  `active_final_872_global_untouched: not_claimable`
+Owner-local CPU run เสร็จใน `10835.097` วินาที หรือประมาณ `3.01` ชั่วโมง โดยมี
+ค่าใช้จ่าย `$0` และสร้าง evidence matrix ครบ 4 ช่อง:
 
-## Integrated Research Control Center
+| Arm | Train | Selection | สถานะ |
+|---|---|---|---|
+| `R0` | valid | valid | complete |
+| `R0-W` | valid | valid | complete |
 
-- Dashboard เป็น user-facing start entry point เดียวผ่าน
-  `dashboard/open-dashboard.cmd`
-- Dashboard มี Overview, Simple/PM boards, Phase/Task detail, timeline, Results,
-  Evidence, Governance/RAID, Reports, Tools และ ten-screen Presentation สำหรับ
-  Owner/Advisor/Peer
-- MLflow เป็น external hash-bound searchable archive; Dashboard เริ่มและเปิด
-  read-only viewer on demand โดยฐาน SQLite ไม่เปลี่ยน
-- Obsidian reporting vault อยู่ที่ `obsidian_report/` มี 5 Phase masters, 9 Task
-  reports, 154 Literature proxies, Research History A-D, Advisor draft lifecycle
-  และ 6 Bases
-- Dashboard, MLflow projection receipt และ Obsidian manifest ใช้ revision
-  `2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3`
-  กับ model SHA-256
-  `267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b`
-- `/api/v1` read routes เป็น migration aliases ที่คืน v2 contract; ไม่มี active
-  v1 read-model/schema เป็น source of truth
-- Standalone `projections/open-*.cmd` สามไฟล์ถูก archive หลัง unified launcher
-  ผ่าน acceptance แล้ว; `projections/run-legacy-p1.cmd` เป็น protected execution
-  command ไม่ใช่ UI launcher และไม่ได้ถูกรัน
+ขนาดข้อมูล aggregate ที่ตรวจรับแล้ว:
+
+- 45,336 patent families
+- 45,336 R0 family documents
+- 127,019 R0-W windows
+- 250 train queries และ 125 selection queries
+- Final 872 ยังปิดและไม่ถูกใช้
+
+Package ภายในมี SHA-256
+`b5626b59484f429bcaa13f914ba9b7b3175a2013715d0b10d8f9c1c5638b34b3`
+และ package file มี SHA-256
+`f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c`
+manifest 4 ไฟล์และ validation report 4 ไฟล์ผ่านครบโดยมี blocker `0`
+artifact-only rigor review ได้ `Strong Accept`, mean `4.67`
+
+## Task P1.1 - R0 flat BM25
+
+- สถานะ: `complete`
+- วิธี: BM25 หนึ่ง full TAC document ต่อ patent family
+- Train OUT Recall@100: `0.076057227485`
+- Selection OUT Recall@100: `0.062392548637`
+- Evidence: valid train/selection manifests, validation reports และ aggregate receipt
+
+## Task P1.2 - R0-W deterministic window MaxP
+
+- สถานะ: `complete`
+- วิธี: non-overlapping 512-token full TAC windows และ family-level MaxP
+- Train OUT Recall@100: `0.085847360337`
+- Selection OUT Recall@100: `0.074661067156`
+- Evidence: valid train/selection manifests, validation reports และ aggregate receipt
+
+Observed delta ของ R0-W เทียบ R0 เท่ากับ `+0.009790132852` บน train/OUT และ
+`+0.012268518519` บน selection/OUT ตัวเลขนี้เป็น descriptive development
+evidence เท่านั้น ไม่ใช่ statistical superiority, confirmation หรือ final claim
+
+## Task P1.3 - Evidence import และ closeout
+
+- สถานะ: `complete`
+- นำ package, receipt, manifests และ validation reports เข้า canonical control plane
+- Rigor review ผูก hash กับ package และไม่มี blocking finding
+- MLflow ลงทะเบียน parent 1 run และ child 4 runs ใน external governed store
+- `protected_artifacts_mirrored=false`; legacy `mlflow-p1` ไม่ถูกแตะ
+- Legacy aggregate receipt ยังคง `historical_invalid_superseded` และไม่ถูก promote
+- Campaign, read model, Dashboard, Obsidian, Brain และ Paper แสดง P1 measured ตรงกัน
+
+## Progress และ monitoring
+
+- Accepted run รอบนี้เริ่มก่อน progress contract ใหม่ จึงมี aggregate completion กับ
+  total latency แต่ไม่มี heartbeat ย้อนหลัง
+- Runner ปัจจุบันมี TTY progress bar
+- non-TTY mode ส่ง privacy-safe JSON heartbeat ทุก `120` วินาที
+- Heartbeat มีเฉพาะ stage, processed/total, elapsed time และ capped ETA
+- ห้ามส่ง item identifier, query identifier หรือ outcome รายรายการ
+- interval 120 วินาทีเหมาะกับ batch ระดับชั่วโมงและลด CLI polling ที่ไม่จำเป็น
+
+## Projection status
+
+- Shared read-model revision:
+  `fa1e4eacaf735fa488214cb9854fe10e91cca84a521dbba34cc56c07da366527`
+- Shared read-model SHA-256:
+  `513a512b2cba60ff82893c039e678c8553046f44ee6039cee0f1c567e5a38389`
+- Obsidian generated manifest: 190 files, manifest SHA-256
+  `1f680e29f6c2a0a40e182dd390ea55e52c44334e90a7be350689c3deedecf18b`
+- Obsidian แยกรายงาน Phase 1 และ Task P1.1/P1.2/P1.3 พร้อม metric,
+  evidence, interpretation boundary และ progress contract
+- Brain มี MOC, phase/task status, datasets, experiments, publication readiness,
+  weekly summary และรายงาน P0-P4 จาก read model v2 เดียวกัน
+- Brain scoped commit: `26dc919`; Brain ไม่มี remote จึงไม่มีปลายทาง push
+- Dashboard/API แสดง `P1_CPU_MEASURED_COMPLETE`, 4 runs และ 12 metric rows
+- Paper readiness และ publication source lock ชี้ read model v2 และคง
+  `train_selection_only`
+- Projection sync ล่าสุดใช้ MLflow run `414662ec1d684526b94a95bb003b0e5f`
 
 ## ผลตรวจ
 
-- Full tests: `112 passed`, มี 1 existing Starlette deprecation warning
+- Full tests: `131 passed`, มี 1 Starlette deprecation warning เดิม
+- Dashboard/API/launcher focused tests: `19 passed`
 - Layout validator: PASS
-- Real report sync/check สองรอบ: PASS, no drift, reuse MLflow run
-  `a104ccdf389b43d3b5c15c18c868fa51`
-- MLflow doctor: PASS, 5 archive runs, 5 receipts, 56 verified artifacts
-- Read-only viewer doctor: PASS, MLflow `3.14.0`
-- Obsidian: 190 manifest files, hash/revision/symlink checks PASS;
-  `advisor-validate` PASS
-- Advisor presented snapshots: `0` ตามข้อเท็จจริง เพราะยังไม่มี meeting snapshot
-  จริง; draft/validate/present/correct lifecycle และ tests พร้อมแล้ว
-- Windows launcher: health token, malformed port, sequential/concurrent reuse,
-  unknown listener preservation, failed-child rollback และ browser-after-health PASS
-- Dashboard tools: MLflow start/open/reuse/stop และ exact Obsidian `HOME` open PASS;
-  external database SHA-256 คงเดิม
-- Browser QA: 1920x1080, 1366x768, 1024x768, 390x844, keyboard, skip link,
-  Present/Escape/Print, console/network และ horizontal overflow PASS
-- Session capsule audit: PASS, unresolved invalid count `0`
-- Acceptance receipt:
-  `outputs/audits/dashboard/integrated-dashboard-acceptance-20260731.json`
+- Report sync/check: PASS, no drift
+- Advisor validation: PASS
+- Asset registry quick validation และ P1.3 query: PASS
+- Brain literature validation: PASS, U001-U154 มี ID/hash ไม่ซ้ำ
+- MLflow doctor: PASS, 13 archive runs, 13 receipts, 152 safe artifacts
+- Session capsule audit ก่อนเพิ่ม closeout capsule: PASS, unresolved invalid `0`
+- Git diff check จะรันซ้ำก่อน commit
 
-## Untouched protected surfaces
+## ไฟล์และระบบที่เปลี่ยน
 
-ไม่ได้เปิดหรือแก้ protected P1 store, `mlflow-p1`, final-872, qrels, query IDs,
-split membership, per-query outcomes, rankings, credentials หรือ raw provider
-payloads และไม่ได้ใช้ GPU, paid API หรือ network model download
+- Canonical campaign status, fresh P1 request/receipt/package/manifests/validation reports
+- P1 adapter, deterministic kernel binding และ reusable progress reporter
+- Read-model builder, report generator และ projection identity fingerprint
+- MLflow registration/aggregate archive index
+- Dashboard regression assertion และ projection/progress/P1 tests
+- Obsidian Phase/Task/Result/Advisor/Literature projection set
+- Brain generated reports และ active-context pointer
+- Paper readiness, source lock และ GEPA project-context boundary
+- `PLAN.md`, `README.md` และ `HANDOFF.md`
+
+## ขอบเขตที่ยังไม่แตะ
+
+ไม่ได้เปิดหรือคัดลอก final-872, protected qrels, split membership, query IDs,
+per-query outcomes, rankings payload, credentials หรือ raw provider payloads เข้า Git,
+Brain, MLflow, Dashboard, Obsidian หรือ Paper และไม่ได้ใช้ GPU, paid API,
+network model download หรือ provider fallback
+
+ไฟล์ Owner-local ต่อไปนี้ไม่ถูกแตะและจะไม่ถูก stage:
+
+- `obsidian_report/.obsidian/graph.json`
+- `obsidian_report/Untitled.canvas`
+
+## สิ่งที่ Owner ต้องทำ
+
+ไม่มี Owner decision ที่ต้องให้เพื่อปิด P1 งานนี้จะ commit/push และตรวจ CI ให้จบก่อนหยุด
+Owner สามารถเปิด `dashboard/open-dashboard.cmd` เพื่อตรวจผลและ evidence chain
 
 ## Next automatic action
 
-หลัง commit/push และยืนยัน clean remote ให้หยุดรอ Owner review ผ่าน Dashboard
-การสร้าง measured evidence ครั้งถัดไปต้องเป็น fresh protected Owner-local P1 rerun
-ภายใต้ execution envelope เดิม; ห้ามเริ่ม P2, เปิด D2 หรือเขียน D3 อัตโนมัติ
+หลัง commit/push และ CI ผ่าน ให้หยุดรอ Owner review `P2_SCOPE_DEVELOPMENT` พร้อมเริ่ม
+แต่ยังไม่เริ่มอัตโนมัติ เพราะ execution envelope ปัจจุบันอนุญาตถึง P1 เท่านั้น
+การเริ่ม P2 ต้องเป็นงานแยกที่กำหนด execution policy แบบ reversible, CPU-first และยังไม่เปิด
+`D2_OPEN_FINAL` ส่วน `D3_SUBMIT_RELEASE` ยังคงปิดจนถึง Phase 4
 
 ระบบนี้เป็น decision support ไม่ใช่คำแนะนำทางกฎหมาย

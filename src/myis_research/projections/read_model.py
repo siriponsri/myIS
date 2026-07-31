@@ -163,7 +163,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             if phase_id == "P1_CPU_BASELINE":
                 task_row["status"] = "measured" if p1_pairs else "blocked"
                 if p1_pairs:
-                    task_row["evidence_ids"] = [str(pair["receipt"]["request_id"]) for pair in p1_pairs]
+                    task_row["evidence_ids"] = sorted({
+                        str(pair["receipt"]["request_id"])
+                        for pair in p1_pairs
+                    })
             phase_row["tasks"].append(task_row)
             tasks.append(task_row)
         phases.append(phase_row)
@@ -177,6 +180,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         {"action_id": "review-p1", "label": "ตรวจ P1 evidence package ก่อนพิจารณาคำสั่ง P2 แยกต่างหาก", "kind": "owner_command"},
     ])
     result_state = "valid" if p1_pairs else "blocked"
+    p1_latency = paired_receipts[0].get("latency_seconds") if paired_receipts else None
     body: dict[str, Any] = {
         "schema_version": READ_MODEL_SCHEMA,
         "projection_schema_version": PROJECTION_SCHEMA_VERSION,
@@ -274,7 +278,18 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "status": "open",
             "summary": "P1 receipt ยังไม่มี hash-matched validation reports และ four-slot manifests",
         }] if not p1_pairs else []),
-        "resources": {"cpu_only": True, "gpu": False, "paid_api": False, "budget_usd": 100.0, "actual_cost_usd": total_actual if manifests else 0.0},
+        "resources": {
+            "cpu_only": True,
+            "gpu": False,
+            "paid_api": False,
+            "budget_usd": 100.0,
+            "actual_cost_usd": total_actual if manifests else 0.0,
+            "latency_seconds": (
+                float(p1_latency)
+                if isinstance(p1_latency, (int, float)) and not isinstance(p1_latency, bool)
+                else None
+            ),
+        },
         "presentation": {
             "audiences": ["owner", "advisor", "peer"],
             "safe_result_ids": ["P1-CPU-BASELINE"],
@@ -707,7 +722,7 @@ def _validated_p1_package_review(root: Path, pairs: list[dict[str, dict[str, Any
             continue
         relative_package = package_path.relative_to(root).as_posix()
         package_file_hash = _file_sha256(package_path)
-        for review_path in sorted(review_directory.glob("*.json")) if review_directory.is_dir() else ():
+        for review_path in sorted(review_directory.rglob("*.json")) if review_directory.is_dir() else ():
             try:
                 review = json.loads(review_path.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError):

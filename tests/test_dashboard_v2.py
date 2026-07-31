@@ -14,10 +14,10 @@ def test_dashboard_presents_read_model_and_frontend():
     model = client.get("/api/v1/read-model", headers=headers)
     assert model.status_code == 200
     assert model.json()["schema_version"] == "myis.read-model.v2"
-    assert model.json()["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
-    assert model.json()["runs"] == []
-    assert model.json()["metrics"] == []
-    assert model.json()["evidence"] == []
+    assert model.json()["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
+    assert len(model.json()["runs"]) == 4
+    assert len(model.json()["metrics"]) == 12
+    assert model.json()["evidence"]
     assert model.headers["cache-control"] == "no-store, max-age=0"
     assert "default-src 'self'" in model.headers["content-security-policy"]
     page = client.get("/", headers=headers)

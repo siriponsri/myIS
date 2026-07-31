@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from .dapfam_p1 import DapfamP1Error, import_p1_package, prepare_request, run_p1
+from .progress import DEFAULT_HEARTBEAT_SECONDS
 
 
 def _default_root(name: str) -> Path:
@@ -30,6 +31,12 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--cache-root", type=Path, required=True)
     run.add_argument("--index-root", type=Path, default=_default_root("p1-cpu-store"))
     run.add_argument("--evidence-root", type=Path, default=_default_root("p1-evidence"))
+    run.add_argument(
+        "--progress-interval-seconds",
+        type=float,
+        default=DEFAULT_HEARTBEAT_SECONDS,
+        help="structured heartbeat interval for non-interactive execution",
+    )
 
     import_command = commands.add_parser("import", help="import an accepted aggregate package into Git")
     import_command.add_argument("--request", type=Path, required=True)
@@ -50,7 +57,14 @@ def main(argv: list[str] | None = None) -> int:
                 "protected_payloads_emitted_to_git": False,
             }
         elif args.command == "run":
-            receipt_path = run_p1(args.request, args.cache_root, root, args.index_root, args.evidence_root)
+            receipt_path = run_p1(
+                args.request,
+                args.cache_root,
+                root,
+                args.index_root,
+                args.evidence_root,
+                progress_interval_seconds=args.progress_interval_seconds,
+            )
             receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
             result = {
                 "status": "accepted",

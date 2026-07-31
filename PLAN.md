@@ -29,8 +29,8 @@ measured.
 | Phase | Purpose | State |
 |---|---|---|
 | `P0_FOUNDATION` | authority, schemas, deterministic kernel, protected boundary, projections | complete |
-| `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | `P1_BLOCKED_WITH_EVIDENCE` |
-| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | blocked until valid P1 evidence exists |
+| `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | complete with measured train/selection evidence |
+| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | ready; not started |
 | `P3_FINAL` | one frozen final evaluation | requires `D2_OPEN_FINAL` |
 | `P4_PUBLICATION` | manuscript, package, and release | requires `D3_SUBMIT_RELEASE` |
 
@@ -45,11 +45,14 @@ These bindings are machine-readable closeout anchors, not additional gates.
 ### Task P1.3 - Protected owner-local CPU handoff
 
 - **Owner Decision:** none; `P1_CPU_EXECUTION_ENVELOPE` is an execution contract, not a new Owner gate.
-- **Result:** blocked with evidence. The legacy aggregate receipt is historical,
-  structurally invalid, and superseded for promotion because no hash-bound
-  four-slot manifest and validation-report matrix exists. A fresh owner-local
-  CPU rerun is required; final-872 remains closed and non-claimable as globally
-  untouched.
+- **Result:** complete with measured train/selection evidence. Fresh request
+  `dapfam-p1-fulltext-c058a3aa7357c782` produced one accepted aggregate receipt,
+  twelve metric rows, and the exact four-slot `R0`/`R0-W` by
+  `train`/`selection` manifest and validation-report matrix. Package
+  `b5626b59484f429bcaa13f914ba9b7b3175a2013715d0b10d8f9c1c5638b34b3`
+  passed artifact-only rigor review and was mirrored to MLflow without protected
+  artifacts. P2 is ready but not started; final-872 remains closed and globally
+  untouched remains non-claimable.
 
 ### Task P3.1 - Frozen final evaluation
 

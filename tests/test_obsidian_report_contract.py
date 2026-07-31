@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,7 @@ from myis_research.projections.read_model import build_read_model
 from myis_research.report_cli import (
     VAULT_RELATIVE_PATH,
     _check,
+    _projection_identity_fingerprint,
     _validate_generated_contents,
     correct_advisor_update,
     present_advisor_update,
@@ -19,6 +21,21 @@ from myis_research.report_cli import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _projection_bindings() -> dict[str, str]:
+    return {
+        "archive_sha256": "a" * 64,
+        "config_sha256": "b" * 64,
+        "dataset_lineage_sha256": "c" * 64,
+        "environment_sha256": "d" * 64,
+        "evaluator_sha256": "e" * 64,
+        "metric_registry_sha256": "f" * 64,
+        "read_model_revision": "1" * 64,
+        "read_model_sha256": "2" * 64,
+        "rule_registry_sha256": "3" * 64,
+        "schema_registry_sha256": "4" * 64,
+    }
 
 
 def _vault_contents() -> dict[Path, str]:
@@ -37,9 +54,82 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     task_reports = [path for path in contents if "/Tasks/" in path.as_posix()]
     assert len(phase_reports) == 5
     assert len(task_reports) == 9
-    assert "## Output" in contents[ROOT / VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"]
-    assert "## Interpretation" in contents[ROOT / VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"]
-    assert "P1 is not measured complete" in contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
+    result_report = contents[ROOT / VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"]
+    phase_report = contents[ROOT / VAULT_RELATIVE_PATH / "01_Phases/P1_CPU_BASELINE/P1_CPU_BASELINE_MASTER_REPORT.md"]
+    assert "## Output" in result_report
+    assert "## Interpretation" in result_report
+    assert "## Execution progress / observability" in result_report
+    assert "## Execution progress / observability" in phase_report
+    assert "P1_CPU_MEASURED_COMPLETE" in contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
+
+
+def test_projection_archive_identity_changes_when_generator_binding_changes() -> None:
+    bindings = _projection_bindings()
+    first = _projection_identity_fingerprint(**bindings)
+    assert first == _projection_identity_fingerprint(**bindings)
+    assert first != _projection_identity_fingerprint(
+        **{**bindings, "evaluator_sha256": "9" * 64}
+    )
+    with pytest.raises(ValueError, match="bindings are incomplete"):
+        _projection_identity_fingerprint(**{key: value for key, value in bindings.items() if key != "archive_sha256"})
+
+
+def test_brain_and_paper_projections_share_current_v2_read_model_without_protected_fields() -> None:
+    model = build_read_model(ROOT)
+    outputs = projection_report_contents(ROOT, model)
+    brain_directory = (ROOT.parent / "02_Brain/reports/generated").resolve()
+    expected_brain_files = {
+        "MOC.md",
+        "datasets.md",
+        "experiments.md",
+        "phase-P0_FOUNDATION.md",
+        "phase-P1_CPU_BASELINE.md",
+        "phase-P2_SCOPE_DEVELOPMENT.md",
+        "phase-P3_FINAL.md",
+        "phase-P4_PUBLICATION.md",
+        "phase-task-status.md",
+        "program-status.md",
+        "publication-readiness.md",
+        "weekly-summary.md",
+    }
+    brain_outputs = {
+        path.name: content
+        for path, content in outputs.items()
+        if path.parent == brain_directory
+    }
+    assert set(brain_outputs) == expected_brain_files
+    for content in brain_outputs.values():
+        assert model["read_model_revision"] in content
+        assert "read-model.v2.json" in content
+        assert "read-model.v1.json" not in content
+        assert "query_ids:" not in content.lower()
+        assert "split_membership:" not in content.lower()
+        assert "per_query" not in content.lower()
+
+    p1_report = brain_outputs["phase-P1_CPU_BASELINE.md"]
+    assert "`P1.1` **measured**" in p1_report
+    assert "`P1.2` **measured**" in p1_report
+    assert "`P1.3` **measured**" in p1_report
+    assert "every `120` seconds" in p1_report
+    assert model["results"][0]["package_sha256"] in p1_report
+    assert "descriptive train/selection results" in p1_report
+
+    paper_path = (
+        ROOT.parent
+        / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md"
+    ).resolve()
+    assert model["read_model_revision"] in outputs[paper_path]
+    assert "P1_CPU_MEASURED_COMPLETE" in outputs[paper_path]
+    assert "D2 and D3 remain Owner-only" in outputs[paper_path]
+    source_lock_path = (
+        ROOT.parent
+        / "03_Paper/publications/isai-nlp-2026/provenance/publication-source-lock.json"
+    ).resolve()
+    source_lock = json.loads(outputs[source_lock_path])
+    assert source_lock["schema_version"] == "myis.publication-source-lock.v2"
+    assert source_lock["read_model_revision"] == model["read_model_revision"]
+    assert source_lock["read_model_sha256"] == model["read_model_sha256"]
+    assert source_lock["claim_boundary"] == "train_selection_only"
 
 
 def test_two_syncs_are_idempotent_and_preserve_owner_files(tmp_path: Path) -> None:

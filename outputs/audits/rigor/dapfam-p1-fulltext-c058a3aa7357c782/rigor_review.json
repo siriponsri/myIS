@@ -1,0 +1,129 @@
+{
+  "artifact": "DAPFAM P1 measured CPU baseline package",
+  "artifact_path": "campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json",
+  "artifact_sha256": "f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c",
+  "boundary": "Artifact-only review of the validated aggregate P1 package. No protected split membership, qrels, query IDs, rankings, per-query outcomes, provider payloads, final evaluation, or external evidence was accessed.",
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The package measures family-level Recall@100 for the preregistered R0 and R0-W CPU baselines on train and selection only.",
+        "OUT Recall@100 is explicitly tagged primary while ALL and IN remain secondary diagnostics."
+      ],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "The package requires exactly four arm/split slots, twelve aggregate metric rows, fixed top_k=100, and hash-bound request, receipt, manifest, and validation artifacts.",
+        "Each slot passed JSON schema, content commitment, Git commitment, manifest commitment, request-receipt binding, and aggregate-only boundary checks."
+      ],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The evidence is limited to P1_CPU_BASELINE, R0/R0-W, and train/selection; it does not claim R1 improvement, held-out confirmation, legal validity, or publication readiness.",
+        "The receipt preserves active_final_872_global_untouched as not_claimable and the final split remains closed."
+      ],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": [
+        "The source contract, request commit, aggregate receipt, four manifests, four validation reports, and MLflow registration form one traceable hash-bound chain.",
+        "R0 is family-first SQLite FTS5 BM25 and R0-W is deterministic 512-token MaxP under the same evaluator and top-k contract."
+      ],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The fresh package does not promote the superseded legacy receipt, and historical exposure remains explicit.",
+        "The protected runner repeated every slot and rejected any determinism mismatch before accepting the receipt."
+      ],
+      "suggestions": [
+        "Retain the transient MLflow launcher failure in the append-only session capsule as an operational failed attempt, without changing the measured package."
+      ],
+      "weaknesses": [
+        "Operational failed attempts are intentionally outside the immutable measured package and must be preserved in session provenance."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "The run used 45,336 families, 250 train queries, 125 selection queries, fixed lexical retrieval, exact family aggregation, deterministic duplicate execution, zero paid cost, and no GPU or model download.",
+        "All four manifests bind the same 10,835.0971197-second aggregate execution and immutable external index/evidence stores."
+      ],
+      "suggestions": [
+        "Add privacy-safe progress reporting with stage, processed/total, elapsed time, and bounded ETA for future long-running executions."
+      ],
+      "weaknesses": [
+        "The accepted package records only total latency and completion; it has no non-protected stage heartbeat for live operational monitoring."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "dimension": "D6_methodological_rigor",
+      "evidence_locator": "receipt.latency_seconds and package slots; no progress artifact or heartbeat contract is present",
+      "finding_id": "F001",
+      "observation": "The run exposes accepted aggregate completion and total latency but no privacy-safe live stage or processed-count telemetry.",
+      "reasoning": "This does not invalidate the deterministic metrics, but it prevents precise ETA and stall diagnosis during a multi-hour CPU run.",
+      "severity": "minor",
+      "suggestion": "Emit interactive progress for TTY users and structured non-TTY heartbeats containing only stage, processed, total, elapsed_seconds, and bounded eta_seconds.",
+      "target_artifact": "src/myis_research/dapfam_p1.py",
+      "target_entity": "run_p1 execution observability"
+    }
+  ],
+  "governance": {
+    "approval_valid": true,
+    "blocking_findings": [],
+    "budget_valid": true,
+    "gate_order_valid": true,
+    "manifest_integrity_valid": true,
+    "split_isolation_valid": true
+  },
+  "overall": {
+    "grade": "Strong Accept",
+    "mean_score": 4.67,
+    "one_line_summary": "The fresh P1 CPU package is structurally valid, reproducible, aggregate-only, and sufficient to close P1 while keeping P2 unstarted and final-872 closed.",
+    "strengths": [
+      "Accepted receipt with zero blockers and twelve aggregate metrics across the exact four required slots.",
+      "All four validation reports are valid with every declared structural check passing.",
+      "The run is CPU-only, offline, zero paid cost, and hash-bound to source commit 947d9a132f2272774dcd8b4ab6e831e0734ec7d3.",
+      "MLflow mirrors one parent and four children without protected artifacts."
+    ],
+    "weaknesses": [
+      "Live execution observability was limited to operating-system process counters because the runner had no privacy-safe heartbeat."
+    ]
+  },
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "PLAN.md",
+    "control/execution-envelope.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "control/source-of-truth.yaml",
+    "campaigns/scope-autoindex-v1/requests/dapfam-p1-fulltext-c058a3aa7357c782.json",
+    "campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json",
+    "campaigns/scope-autoindex-v1/evidence/dapfam-p1-fulltext-c058a3aa7357c782.receipt.json",
+    "campaigns/scope-autoindex-v1/validation-reports/p1-r0-train-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/validation-reports/p1-r0-selection-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/validation-reports/p1-r0ww-train-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/validation-reports/p1-r0ww-selection-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/manifests/p1-r0-train-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/manifests/p1-r0-selection-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/manifests/p1-r0ww-train-d9533ba623ce.json",
+    "campaigns/scope-autoindex-v1/manifests/p1-r0ww-selection-d9533ba623ce.json",
+    "evidence/mlflow-p1-registration.v2.json"
+  ],
+  "requested_decision": "Promote the validated P1 baseline facts, mark P1 complete, and mark P2 ready but not started; do not open D2 or D3.",
+  "review_id": "dapfam-p1-fulltext-c058a3aa7357c782-rigor-20260731",
+  "review_status": "complete",
+  "schema_version": "myis.rigor-review.v1"
+}

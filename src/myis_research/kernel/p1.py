@@ -92,6 +92,7 @@ def evaluate_baseline(
     ranker: Callable[[str], Sequence[tuple[str, str, float]]] | None = None,
     lineage_hint: Mapping[str, str] | None = None,
     protected_sink: Callable[[dict[str, Any]], None] | None = None,
+    progress_sink: Callable[[], None] | None = None,
     documents_are_windowed: bool = False,
 ) -> dict[str, Any]:
     """Evaluate aggregate family-level Recall@100 for one split.
@@ -129,6 +130,8 @@ def evaluate_baseline(
         query_id = str(query["query_id"])
         all_relevant = {str(value) for value in qrels.get(query_id, ())}
         if not all_relevant:
+            if progress_sink is not None:
+                progress_sink()
             continue
         query_commitments.append(canonical_sha256({"query": str(query["text"]), "split": split_name}))
         ranked = list(ranker(str(query["text"])))
@@ -164,6 +167,8 @@ def evaluate_baseline(
             protected_row["recall_at_100"][scope] = query_recall
         if protected_sink is not None:
             protected_sink(protected_row)
+        if progress_sink is not None:
+            progress_sink()
     metrics = [
         {
             "name": "recall_at_100",

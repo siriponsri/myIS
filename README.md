@@ -95,11 +95,13 @@ Dashboard actions. Retired standalone launcher sources are archived under
 
 - `P0_FOUNDATION`: deterministic kernel, strict SCOPE/FiNE adapters, integrity
   preflight, owner-local boundary, and projections; complete.
-- `P1_CPU_BASELINE`: current state is `P1_BLOCKED_WITH_EVIDENCE`. The retained
-  legacy aggregate receipt is historical invalid/superseded evidence and has
-  no promoted runs, metrics, or evidence.
-- `P2_SCOPE_DEVELOPMENT`: blocked until a fresh valid P1 rerun; AutoIndex is
-  the main lineage and SkillOpt remains conditional.
+- `P1_CPU_BASELINE`: `P1_CPU_MEASURED_COMPLETE`. Fresh CPU request
+  `dapfam-p1-fulltext-c058a3aa7357c782` produced the complete R0/R0-W by
+  train/selection matrix, 12 aggregate metric rows, a validated package, and
+  an artifact-only rigor review. The legacy receipt remains historical-invalid
+  and is not promoted.
+- `P2_SCOPE_DEVELOPMENT`: ready but not started; AutoIndex is the main lineage
+  and SkillOpt remains conditional.
 - `P3_FINAL`: locked until `D2_OPEN_FINAL`.
 - `P4_PUBLICATION`: locked until `D3_SUBMIT_RELEASE`.
 
@@ -126,15 +128,15 @@ uv run --no-sync pytest -q tests/test_dashboard_launcher.py tests/test_projectio
 git diff --check
 ```
 
-No GPU, paid API, final split, or protected data are required for this recovery
-freeze. A future P1 rerun uses protected evaluator inputs only inside the
-Owner-local process and projects aggregates/hashes/counts only. This system is
-decision support, not legal advice.
+No GPU, paid API, network model download, or final-split access was used for P1.
+The measured run stayed inside the Owner-local process and projected only
+validated aggregates, hashes, counts, and pointers. This system is decision
+support, not legal advice.
 
 ## Certified P1 datasets
 
-The Dashboard reads the generated dataset registry from the canonical legacy
-inventory and owner-local receipt. It shows logical identifier, representation,
+The Dashboard reads the generated dataset registry from the validated P1
+package, manifests, and aggregate receipt. It shows logical identifier, representation,
 classification, byte count, safe hash, and aggregate count, but never exposes
 an Owner-local source path. The active roles
 are `family-corpus`, `r0-candidate` (`chunks_doc`), and `r0-w-candidate`
@@ -143,10 +145,11 @@ incompatible with the four-unit DAPFAM limit. Queries and relevance labels are
 marked owner-local-only; no query IDs, qrels rows, membership, or per-query
 outcomes are projected.
 
-The historical MLflow registration is not promoted. Dashboard, the generated
-MLflow archive, Obsidian phase notes, and Paper readiness are rebuilt from the
-same `projections/read-model/read-model.v2.json` revision, so a projection can
-be regenerated without changing evidence.
+The validated P1 package is mirrored to MLflow as one parent and four child
+runs without protected artifacts. Dashboard, the generated MLflow archive,
+Obsidian phase/task notes, Brain reports, and Paper readiness are rebuilt from
+the same `projections/read-model/read-model.v2.json` revision, so a projection
+can be regenerated without changing evidence.
 
 The active projection contract is v2. Legacy `/api/v1` read routes remain only
 as tested migration aliases and return v2 data; archived v1 files are never

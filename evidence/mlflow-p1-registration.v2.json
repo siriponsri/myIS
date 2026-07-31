@@ -1,0 +1,53 @@
+{
+  "authority": "validated canonical four-slot P1 package",
+  "children": [
+    {
+      "arm": "R0",
+      "mirror_key": "cead0d4a6610d35976d65183dece7ad8463e73ad18d7ef32e6d38e480d41c92c",
+      "mlflow_run_id": "ca77998975334ab09dffc72ce8d73a4e",
+      "source_manifest_sha256": "6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6",
+      "source_run_id": "p1-r0-selection-d9533ba623ce",
+      "split": "selection",
+      "status": "synced"
+    },
+    {
+      "arm": "R0",
+      "mirror_key": "a13bf521e41f530bb2bbed9385d60351c9e84a3cc7b58444998332e95e8102bd",
+      "mlflow_run_id": "7278a25fb7af45d6aba17d4aad4db30f",
+      "source_manifest_sha256": "31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3",
+      "source_run_id": "p1-r0-train-d9533ba623ce",
+      "split": "train",
+      "status": "synced"
+    },
+    {
+      "arm": "R0-W",
+      "mirror_key": "206108244435aa21a7d61fbb0ed84e60fb29704854e2100690e9aed0e4972e61",
+      "mlflow_run_id": "05279f5832734e6e975630b6127cdd4f",
+      "source_manifest_sha256": "8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58",
+      "source_run_id": "p1-r0ww-selection-d9533ba623ce",
+      "split": "selection",
+      "status": "already_synced"
+    },
+    {
+      "arm": "R0-W",
+      "mirror_key": "f8546d187a1375ffdfc3667f4c0f87eeb0fc6ed8b79e25febc90779e55879deb",
+      "mlflow_run_id": "617084d552724f51a714b68b4ff84565",
+      "source_manifest_sha256": "cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1",
+      "source_run_id": "p1-r0ww-train-d9533ba623ce",
+      "split": "train",
+      "status": "already_synced"
+    }
+  ],
+  "dataset_lineage_sha256": "3dbb55b0d9f98d2e27665ad87fb6711f1e43d9466fcf7a96eea917df753adaf6",
+  "package_sha256": "b5626b59484f429bcaa13f914ba9b7b3175a2013715d0b10d8f9c1c5638b34b3",
+  "parent": {
+    "mirror_key": "fc4091ba830728380d5b40f2d8fa66a248e01250bcad26169ac6d3e89c4d3f37",
+    "mlflow_run_id": "cc04e1c6773347f5be21212c7f1c6748",
+    "source_run_id": "p1-dapfam-fulltext-d9533ba623ce",
+    "status": "synced"
+  },
+  "protected_artifacts_mirrored": false,
+  "schema_version": "myis.p1-mlflow-registration.v2",
+  "source_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068",
+  "store_external": true
+}

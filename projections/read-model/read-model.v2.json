@@ -23,102 +23,158 @@
         "D3_SUBMIT_RELEASE"
       ],
       "campaign_id": "scope-autoindex-v1",
-      "current_state": "P1_BLOCKED_WITH_EVIDENCE",
+      "current_state": "P1_CPU_MEASURED_COMPLETE",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "P1_BLOCKED_WITH_EVIDENCE",
+      "status": "P1_CPU_MEASURED_COMPLETE",
       "title": "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
     }
   ],
   "cost": {
-    "actual": null,
+    "actual": 0.0,
     "budget": 100.0,
     "currency": "USD",
     "estimated": 0.0
   },
   "datasets": [
     {
-      "bytes": 3125138209,
-      "classification": "reusable-after-certification",
+      "classification": "measured-source",
       "counts": {
-        "families": null,
-        "patents": null
+        "documents": 45336,
+        "families": 45336
       },
       "dataset_id": "DAPFAM-FAMILY-CORPUS",
-      "protection": "metadata-safe",
-      "representation": "patent family records",
+      "protection": "owner-local-only",
+      "representation": "one full TAC document per family",
       "role": "family-corpus",
-      "sha256": "2d79ee7d0479565711889553d2da849fef5e3a7aa5014bf398a43c5becd0cab7"
+      "sha256": "5f6ec2a143bea89ef1f76c65db62adfa41b1a18611424337fa4233c19af5a9ba"
     },
     {
-      "bytes": 158762269,
-      "classification": "reusable-after-certification",
+      "classification": "measured-source",
       "counts": {
-        "queries": null
+        "final_closed": 872,
+        "queries": 1247,
+        "selection": 125,
+        "train": 250
       },
       "dataset_id": "DAPFAM-QUERY-SET",
       "protection": "owner-local-only",
-      "representation": "TAC query records",
+      "representation": "TAC train/selection queries",
       "role": "query-set",
-      "sha256": "50a0e9c5673e9e3e0ae2558272dc824572554067bd1443d043016aedeb7fe3fa"
+      "sha256": "39d39c5a189ce0996645bf80809c0968332ca2ff1e4e0049afcc93260a7fe782"
     },
     {
-      "bytes": 2194236,
-      "classification": "reusable-after-certification",
+      "classification": "measured-source",
+      "counts": {
+        "in": 19736,
+        "out": 5193,
+        "positive": 24929
+      },
       "dataset_id": "DAPFAM-RELEVANCE-LABELS",
       "protection": "owner-local-only",
-      "representation": "family relevance labels",
+      "representation": "positive family relations with released IN/OUT labels",
       "role": "relevance-labels",
-      "sha256": null
+      "sha256": "59dd0389df57f79c8b7481122edd851871809966eba7f44f83c29b3381cfaabc"
     },
     {
-      "bytes": 3114241891,
-      "classification": "reusable-after-certification",
+      "classification": "measured-derived",
       "counts": {
-        "documents": null
+        "documents": 45336
       },
       "dataset_id": "DAPFAM-R0-CANDIDATES",
-      "protection": "metadata-safe",
-      "representation": "one document per family candidate",
+      "protection": "external-derived-store",
+      "representation": "full TAC family document",
       "role": "r0-candidate",
-      "sha256": "ed4ee8a98c89722d88d15ad83b398a125bec0e2bd4e7c79385613676b135e99e"
+      "sha256": "1f3e2afce4876c43fae3bdf9495cd57954cb664512fb4994cf1cb71f7065e807"
     },
     {
-      "bytes": 381979442,
-      "classification": "reusable-after-certification",
+      "classification": "measured-derived",
       "counts": {
-        "passages": null
+        "windows": 127019
       },
       "dataset_id": "DAPFAM-R0W-CANDIDATES",
-      "protection": "metadata-safe",
-      "representation": "TAC512 passages with family MaxP",
+      "protection": "external-derived-store",
+      "representation": "non-overlapping 512-token full TAC windows with family MaxP",
       "role": "r0-w-candidate",
-      "sha256": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061"
-    },
-    {
-      "bytes": 3162706100,
-      "classification": "historical-reference",
-      "constraint": "reference only; not active R1 main",
-      "dataset_id": "DAPFAM-R1-REFERENCE",
-      "protection": "metadata-safe",
-      "representation": "section units",
-      "role": "r1-reference",
-      "sha256": "b661798f7946f3512d69c6cdc70430cef38e957f6bb2116f93b9e4a6a49f054d"
-    },
-    {
-      "bytes": 1172767750,
-      "classification": "incompatible",
-      "constraint": "exceeds four-unit DAPFAM limit; never active R1 main",
-      "dataset_id": "DAPFAM-INCOMPATIBLE",
-      "protection": "metadata-safe",
-      "representation": "element units",
-      "role": "incompatible",
-      "sha256": "e00d64fb7b8a2eda62d8728a0eda543b188b1f79e732b053af255fe1232cd095"
+      "sha256": "51f98df9d2aacaec7f3950bfe78f6b3ea2d07fc263fb1574c1d170969b00f74a"
     }
   ],
   "decisions": [],
-  "evidence": [],
-  "experiments": [],
+  "evidence": [
+    {
+      "evidence_id": "r0-index",
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "sha256": "1f3e2afce4876c43fae3bdf9495cd57954cb664512fb4994cf1cb71f7065e807",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0/index"
+    },
+    {
+      "evidence_id": "r0-selection-rankings",
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "sha256": "459e3599ca98ab058b56c443cc75c5b4ca5f9486313383e703bd0cc3a7c1827f",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0/selection/rankings"
+    },
+    {
+      "evidence_id": "r0-index",
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "sha256": "1f3e2afce4876c43fae3bdf9495cd57954cb664512fb4994cf1cb71f7065e807",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0/index"
+    },
+    {
+      "evidence_id": "r0-train-rankings",
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "sha256": "4e0e9494a1ff86d1db1ad962c7c2c78bfc23a00dba8003ff97847475caee8b1a",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0/train/rankings"
+    },
+    {
+      "evidence_id": "r0-w-index",
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "sha256": "51f98df9d2aacaec7f3950bfe78f6b3ea2d07fc263fb1574c1d170969b00f74a",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0-w/index"
+    },
+    {
+      "evidence_id": "r0-w-selection-rankings",
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "sha256": "6a1141c373137209f1f91c9d6a1da6c028dda3e524108b0e19da49a0f99039e4",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0-w/selection/rankings"
+    },
+    {
+      "evidence_id": "r0-w-index",
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "sha256": "51f98df9d2aacaec7f3950bfe78f6b3ea2d07fc263fb1574c1d170969b00f74a",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0-w/index"
+    },
+    {
+      "evidence_id": "r0-w-train-rankings",
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "sha256": "8af392800a00dacff2fd12e24a6aab420262fbafc11130eb6eb4b99dbedfa43e",
+      "uri": "owner-local://p1/dapfam-p1-fulltext-c058a3aa7357c782/r0-w/train/rankings"
+    },
+    {
+      "evidence_id": "p1-four-slot-package",
+      "run_id": "dapfam-p1-fulltext-c058a3aa7357c782",
+      "sha256": "f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c",
+      "uri": "campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json"
+    },
+    {
+      "evidence_id": "p1-rigor-review",
+      "run_id": "dapfam-p1-fulltext-c058a3aa7357c782-rigor-20260731",
+      "sha256": "4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38",
+      "uri": "outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json"
+    },
+    {
+      "evidence_id": "mlflow-p1-registration",
+      "run_id": "p1-dapfam-fulltext-d9533ba623ce",
+      "sha256": "efb9fd9be3297ec0f220af93f48a69a13b1142b3435caedd1ad578c1ea8ed395",
+      "uri": "evidence/mlflow-p1-registration.v2.json"
+    }
+  ],
+  "experiments": [
+    {
+      "campaign_id": "scope-autoindex-v1",
+      "experiment_id": "myis-scope-autoindex-v1",
+      "run_count": 4
+    }
+  ],
   "gates": [
     {
       "gate_id": "D2_OPEN_FINAL",
@@ -131,21 +187,194 @@
   ],
   "generated_at": "2026-07-31T12:24:09Z",
   "historical_exposure": {
-    "active_final_872_global_untouched": "not_claimable"
+    "active_final_872_global_untouched": "not_claimable",
+    "paper_a": "historically_exposed",
+    "paper_b": "historically_exposed",
+    "paper_d": "historically_exposed",
+    "paper_d_test_997": "historically_exposed"
   },
   "interpretations": [
     {
       "interpretation_id": "P1-CPU-BASELINE-INTERPRETATION",
       "result_id": "P1-CPU-BASELINE",
       "statement": "\u0e22\u0e31\u0e07\u0e2a\u0e23\u0e38\u0e1b\u0e1c\u0e25\u0e40\u0e0a\u0e34\u0e07\u0e27\u0e34\u0e17\u0e22\u0e32\u0e28\u0e32\u0e2a\u0e15\u0e23\u0e4c\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e08\u0e19\u0e01\u0e27\u0e48\u0e32 evidence matrix \u0e08\u0e30\u0e1c\u0e48\u0e32\u0e19",
-      "status": "blocked"
+      "status": "pending_review"
     }
   ],
   "literature": {
     "proxy_mode": true,
     "registry": "evidence/literature/catalog/corpus_manifest.csv"
   },
-  "metrics": [],
+  "metrics": [
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 125,
+      "name": "recall_at_100",
+      "relevant_total": 2500,
+      "retrieved_relevant": 490,
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "scope": "ALL",
+      "split": "selection",
+      "value": 0.196
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 121,
+      "name": "recall_at_100",
+      "relevant_total": 2005,
+      "retrieved_relevant": 461,
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "scope": "IN",
+      "split": "selection",
+      "value": 0.233819891725
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 90,
+      "name": "recall_at_100",
+      "relevant_total": 495,
+      "retrieved_relevant": 29,
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "scope": "OUT",
+      "split": "selection",
+      "value": 0.062392548637
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 250,
+      "name": "recall_at_100",
+      "relevant_total": 5000,
+      "retrieved_relevant": 1081,
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "scope": "ALL",
+      "split": "train",
+      "value": 0.2162
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 247,
+      "name": "recall_at_100",
+      "relevant_total": 4062,
+      "retrieved_relevant": 1024,
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "scope": "IN",
+      "split": "train",
+      "value": 0.258622280076
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 179,
+      "name": "recall_at_100",
+      "relevant_total": 938,
+      "retrieved_relevant": 57,
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "scope": "OUT",
+      "split": "train",
+      "value": 0.076057227485
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 125,
+      "name": "recall_at_100",
+      "relevant_total": 2500,
+      "retrieved_relevant": 535,
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "scope": "ALL",
+      "split": "selection",
+      "value": 0.214
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 121,
+      "name": "recall_at_100",
+      "relevant_total": 2005,
+      "retrieved_relevant": 501,
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "scope": "IN",
+      "split": "selection",
+      "value": 0.260759203902
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 90,
+      "name": "recall_at_100",
+      "relevant_total": 495,
+      "retrieved_relevant": 34,
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "scope": "OUT",
+      "split": "selection",
+      "value": 0.074661067156
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 250,
+      "name": "recall_at_100",
+      "relevant_total": 5000,
+      "retrieved_relevant": 1215,
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "scope": "ALL",
+      "split": "train",
+      "value": 0.243
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 247,
+      "name": "recall_at_100",
+      "relevant_total": 4062,
+      "retrieved_relevant": 1150,
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "scope": "IN",
+      "split": "train",
+      "value": 0.287953506066
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 179,
+      "name": "recall_at_100",
+      "relevant_total": 938,
+      "retrieved_relevant": 65,
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "scope": "OUT",
+      "split": "train",
+      "value": 0.085847360337
+    }
+  ],
   "milestones": [
     {
       "depends_on": [],
@@ -157,14 +386,14 @@
         "P0_FOUNDATION"
       ],
       "milestone_id": "P1_CPU_BASELINE",
-      "status": "blocked"
+      "status": "measured"
     },
     {
       "depends_on": [
         "P1_CPU_BASELINE"
       ],
       "milestone_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "blocked_until_p1"
+      "status": "planned"
     },
     {
       "depends_on": [
@@ -181,7 +410,56 @@
       "status": "locked_until_D3"
     }
   ],
-  "mlflow_registration": {},
+  "mlflow_registration": {
+    "children": [
+      {
+        "arm": "R0",
+        "mirror_key": "cead0d4a6610d35976d65183dece7ad8463e73ad18d7ef32e6d38e480d41c92c",
+        "mlflow_run_id": "ca77998975334ab09dffc72ce8d73a4e",
+        "source_manifest_sha256": "6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6",
+        "source_run_id": "p1-r0-selection-d9533ba623ce",
+        "split": "selection",
+        "status": "synced"
+      },
+      {
+        "arm": "R0",
+        "mirror_key": "a13bf521e41f530bb2bbed9385d60351c9e84a3cc7b58444998332e95e8102bd",
+        "mlflow_run_id": "7278a25fb7af45d6aba17d4aad4db30f",
+        "source_manifest_sha256": "31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3",
+        "source_run_id": "p1-r0-train-d9533ba623ce",
+        "split": "train",
+        "status": "synced"
+      },
+      {
+        "arm": "R0-W",
+        "mirror_key": "206108244435aa21a7d61fbb0ed84e60fb29704854e2100690e9aed0e4972e61",
+        "mlflow_run_id": "05279f5832734e6e975630b6127cdd4f",
+        "source_manifest_sha256": "8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58",
+        "source_run_id": "p1-r0ww-selection-d9533ba623ce",
+        "split": "selection",
+        "status": "already_synced"
+      },
+      {
+        "arm": "R0-W",
+        "mirror_key": "f8546d187a1375ffdfc3667f4c0f87eeb0fc6ed8b79e25febc90779e55879deb",
+        "mlflow_run_id": "617084d552724f51a714b68b4ff84565",
+        "source_manifest_sha256": "cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1",
+        "source_run_id": "p1-r0ww-train-d9533ba623ce",
+        "split": "train",
+        "status": "already_synced"
+      }
+    ],
+    "dataset_lineage_sha256": "3dbb55b0d9f98d2e27665ad87fb6711f1e43d9466fcf7a96eea917df753adaf6",
+    "package_sha256": "b5626b59484f429bcaa13f914ba9b7b3175a2013715d0b10d8f9c1c5638b34b3",
+    "parent": {
+      "mirror_key": "fc4091ba830728380d5b40f2d8fa66a248e01250bcad26169ac6d3e89c4d3f37",
+      "mlflow_run_id": "cc04e1c6773347f5be21212c7f1c6748",
+      "source_run_id": "p1-dapfam-fulltext-d9533ba623ce",
+      "status": "synced"
+    },
+    "schema_version": "myis.p1-mlflow-registration.v2",
+    "source_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068"
+  },
   "outputs": [
     {
       "disposition_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.disposition.json",
@@ -198,19 +476,9 @@
   ],
   "owner_inbox": [
     {
-      "action_id": "review-recovery-freeze",
+      "action_id": "review-p1",
       "kind": "owner_command",
-      "label": "\u0e23\u0e2d Owner \u0e15\u0e23\u0e27\u0e08 recovery freeze \u0e41\u0e25\u0e30\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 invalidation"
-    },
-    {
-      "action_id": "fresh-owner-local-p1-rerun",
-      "kind": "owner_command",
-      "label": "\u0e23\u0e31\u0e19 P1 \u0e43\u0e2b\u0e21\u0e48\u0e41\u0e1a\u0e1a Owner-local \u0e40\u0e21\u0e37\u0e48\u0e2d Owner \u0e2a\u0e31\u0e48\u0e07\u0e2b\u0e25\u0e31\u0e07 review"
-    },
-    {
-      "action_id": "hold-before-p2",
-      "kind": "constraint",
-      "label": "\u0e2b\u0e49\u0e32\u0e21\u0e40\u0e23\u0e34\u0e48\u0e21 P2 \u0e08\u0e19\u0e01\u0e27\u0e48\u0e32 P1 rerun \u0e08\u0e30\u0e21\u0e35 receipt, manifests \u0e41\u0e25\u0e30 validation reports \u0e04\u0e23\u0e1a"
+      "label": "\u0e15\u0e23\u0e27\u0e08 P1 evidence package \u0e01\u0e48\u0e2d\u0e19\u0e1e\u0e34\u0e08\u0e32\u0e23\u0e13\u0e32\u0e04\u0e33\u0e2a\u0e31\u0e48\u0e07 P2 \u0e41\u0e22\u0e01\u0e15\u0e48\u0e32\u0e07\u0e2b\u0e32\u0e01"
     }
   ],
   "phases": [
@@ -243,39 +511,45 @@
     },
     {
       "phase_id": "P1_CPU_BASELINE",
-      "status": "blocked",
+      "status": "measured",
       "tasks": [
         {
-          "evidence_ids": [],
+          "evidence_ids": [
+            "dapfam-p1-fulltext-c058a3aa7357c782"
+          ],
           "phase_id": "P1_CPU_BASELINE",
-          "status": "blocked",
+          "status": "measured",
           "task_id": "P1.1",
-          "title": "R0 flat BM25 fixture lane"
+          "title": "R0 flat BM25 measured CPU baseline"
         },
         {
-          "evidence_ids": [],
+          "evidence_ids": [
+            "dapfam-p1-fulltext-c058a3aa7357c782"
+          ],
           "phase_id": "P1_CPU_BASELINE",
-          "status": "blocked",
+          "status": "measured",
           "task_id": "P1.2",
-          "title": "R0-W window maxP fixture lane"
+          "title": "R0-W window MaxP measured CPU baseline"
         },
         {
-          "evidence_ids": [],
+          "evidence_ids": [
+            "dapfam-p1-fulltext-c058a3aa7357c782"
+          ],
           "phase_id": "P1_CPU_BASELINE",
-          "status": "blocked",
+          "status": "measured",
           "task_id": "P1.3",
-          "title": "Protected owner-local CPU handoff"
+          "title": "Protected owner-local CPU evidence import"
         }
       ]
     },
     {
       "phase_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "blocked_until_p1",
+      "status": "planned",
       "tasks": [
         {
           "evidence_ids": [],
           "phase_id": "P2_SCOPE_DEVELOPMENT",
-          "status": "blocked_until_p1",
+          "status": "planned",
           "task_id": "P2.1",
           "title": "R1 SCOPE/AutoIndex development"
         }
@@ -314,7 +588,7 @@
       "advisor",
       "peer"
     ],
-    "claim_boundary": "no_measured_claim",
+    "claim_boundary": "train_selection_only",
     "safe_result_ids": [
       "P1-CPU-BASELINE"
     ],
@@ -396,7 +670,7 @@
           "peer"
         ],
         "evidence_ids": [],
-        "message_th": "P0: complete, P1: blocked, P2: blocked_until_p1, P3: locked_until_D2, P4: locked_until_D3",
+        "message_th": "P0: complete, P1: measured, P2: planned, P3: locked_until_D2, P4: locked_until_D3",
         "order": 6,
         "safe_to_present": true,
         "screen_id": "shared-06-plan",
@@ -410,7 +684,7 @@
           "peer"
         ],
         "evidence_ids": [],
-        "message_th": "Task \u0e17\u0e35\u0e48\u0e40\u0e2a\u0e23\u0e47\u0e08\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 3/9; \u0e40\u0e01\u0e47\u0e1a legacy receipt \u0e44\u0e27\u0e49\u0e40\u0e1b\u0e47\u0e19 historical-invalid output",
+        "message_th": "Task \u0e17\u0e35\u0e48\u0e40\u0e2a\u0e23\u0e47\u0e08\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 6/9; \u0e40\u0e01\u0e47\u0e1a legacy receipt \u0e44\u0e27\u0e49\u0e40\u0e1b\u0e47\u0e19 historical-invalid output",
         "order": 7,
         "safe_to_present": true,
         "screen_id": "shared-07-delivered",
@@ -424,7 +698,7 @@
           "peer"
         ],
         "evidence_ids": [],
-        "message_th": "\u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35\u0e1c\u0e25 P1 \u0e17\u0e35\u0e48\u0e1c\u0e48\u0e32\u0e19 validation; \u0e2a\u0e16\u0e32\u0e19\u0e30\u0e17\u0e35\u0e48\u0e23\u0e32\u0e22\u0e07\u0e32\u0e19\u0e44\u0e14\u0e49\u0e04\u0e37\u0e2d blocked with evidence",
+        "message_th": "\u0e21\u0e35\u0e1c\u0e25 P1 \u0e17\u0e35\u0e48\u0e1c\u0e48\u0e32\u0e19 evidence matrix \u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a train/selection; final \u0e22\u0e31\u0e07\u0e1b\u0e34\u0e14\u0e15\u0e32\u0e21 protocol",
         "order": 8,
         "safe_to_present": true,
         "screen_id": "shared-08-result",
@@ -452,7 +726,7 @@
           "peer"
         ],
         "evidence_ids": [],
-        "message_th": "P1_BLOCKED_WITH_EVIDENCE. \u0e02\u0e31\u0e49\u0e19\u0e16\u0e31\u0e14\u0e44\u0e1b: \u0e23\u0e2d Owner \u0e15\u0e23\u0e27\u0e08 recovery freeze \u0e41\u0e25\u0e30\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 invalidation. D2 \u0e41\u0e25\u0e30 D3 \u0e22\u0e31\u0e07\u0e04\u0e07\u0e40\u0e1b\u0e47\u0e19 Owner-only decisions",
+        "message_th": "P1_CPU_MEASURED_COMPLETE. \u0e02\u0e31\u0e49\u0e19\u0e16\u0e31\u0e14\u0e44\u0e1b: \u0e15\u0e23\u0e27\u0e08 P1 evidence package \u0e01\u0e48\u0e2d\u0e19\u0e1e\u0e34\u0e08\u0e32\u0e23\u0e13\u0e32\u0e04\u0e33\u0e2a\u0e31\u0e48\u0e07 P2 \u0e41\u0e22\u0e01\u0e15\u0e48\u0e32\u0e07\u0e2b\u0e32\u0e01. D2 \u0e41\u0e25\u0e30 D3 \u0e22\u0e31\u0e07\u0e04\u0e07\u0e40\u0e1b\u0e47\u0e19 Owner-only decisions",
         "order": 10,
         "safe_to_present": true,
         "screen_id": "shared-10-next",
@@ -462,9 +736,9 @@
     ]
   },
   "progress": {
-    "done": 3,
+    "done": 6,
     "in_process": 0,
-    "planned_or_blocked": 6,
+    "planned_or_blocked": 3,
     "total": 9
   },
   "project": {
@@ -473,26 +747,26 @@
     "current_task": "P1.3",
     "display_name": "myIS Research",
     "program_id": "myis-research",
-    "state": "P1_BLOCKED_WITH_EVIDENCE"
+    "state": "P1_CPU_MEASURED_COMPLETE"
   },
   "projection_health": {
-    "reason": "p1_evidence_matrix_missing",
+    "reason": null,
     "shared_revision_required": true,
-    "status": "blocked"
+    "status": "current"
   },
-  "projection_revision": "d8d1a743d4f3bea1189056ee62176e7051a10c01bfc4288b8e86b1fc71f32755",
+  "projection_revision": "fa1e4eacaf735fa488214cb9854fe10e91cca84a521dbba34cc56c07da366527",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
       {
         "id": "canonical_run_manifest",
         "source": "campaigns/scope-autoindex-v1/manifests",
-        "status": "blocked"
+        "status": "pass"
       },
       {
         "id": "owner_local_aggregate",
         "source": "campaigns/scope-autoindex-v1/evidence",
-        "status": "blocked"
+        "status": "pass"
       },
       {
         "id": "d2_open_final",
@@ -523,16 +797,9 @@
     "schema_version": "myis.publication-readiness.v1",
     "status": "blocked"
   },
-  "raid": [
-    {
-      "kind": "risk",
-      "raid_id": "RISK-P1-EVIDENCE-MATRIX",
-      "status": "open",
-      "summary": "P1 receipt \u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35 hash-matched validation reports \u0e41\u0e25\u0e30 four-slot manifests"
-    }
-  ],
-  "read_model_revision": "d8d1a743d4f3bea1189056ee62176e7051a10c01bfc4288b8e86b1fc71f32755",
-  "read_model_sha256": "993ffdf50d5127554c48c5d2261e7457a8202352d33cf6f73520e5ab37185283",
+  "raid": [],
+  "read_model_revision": "fa1e4eacaf735fa488214cb9854fe10e91cca84a521dbba34cc56c07da366527",
+  "read_model_sha256": "513a512b2cba60ff82893c039e678c8553046f44ee6039cee0f1c567e5a38389",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -543,28 +810,107 @@
     "budget_usd": 100.0,
     "cpu_only": true,
     "gpu": false,
+    "latency_seconds": 10835.097119699998,
     "paid_api": false
   },
   "results": [
     {
-      "claim_boundary": "no_measured_claim",
-      "evidence_maturity": "not_run",
+      "claim_boundary": "train_selection_only",
+      "evidence_maturity": "selection",
       "limitations": [
         "active_final_872_global_untouched_not_claimable"
       ],
-      "metric_ids": [],
-      "package_file_sha256": null,
-      "package_sha256": null,
+      "metric_ids": [
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100",
+        "recall_at_100"
+      ],
+      "package_file_sha256": "f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c",
+      "package_sha256": "b5626b59484f429bcaa13f914ba9b7b3175a2013715d0b10d8f9c1c5638b34b3",
       "phase_id": "P1_CPU_BASELINE",
       "result_id": "P1-CPU-BASELINE",
-      "rigor_grade": null,
-      "rigor_mean_score": null,
-      "rigor_review_sha256": null,
+      "rigor_grade": "Strong Accept",
+      "rigor_mean_score": 4.67,
+      "rigor_review_sha256": "4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38",
       "task_id": "P1.3",
-      "validity": "blocked"
+      "validity": "valid"
     }
   ],
-  "runs": [],
+  "runs": [
+    {
+      "arm": "R0",
+      "campaign_id": "scope-autoindex-v1",
+      "experiment_id": "myis-scope-autoindex-v1",
+      "manifest_sha256": "6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6",
+      "owner_local_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068",
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "source": {
+        "dataset_id": "datalyes/DAPFAM_patent",
+        "license": "CC-BY-NC-SA-4.0",
+        "revision": "a59a74ce31384165065af1823a83c6f94ccafd48",
+        "source_contract_sha256": "f829e1827aff84dfb332742f74c1f717da655a1ef962e1aca0260d8d2a450d6c"
+      },
+      "stage": "selection",
+      "status": "valid"
+    },
+    {
+      "arm": "R0",
+      "campaign_id": "scope-autoindex-v1",
+      "experiment_id": "myis-scope-autoindex-v1",
+      "manifest_sha256": "31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3",
+      "owner_local_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068",
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "source": {
+        "dataset_id": "datalyes/DAPFAM_patent",
+        "license": "CC-BY-NC-SA-4.0",
+        "revision": "a59a74ce31384165065af1823a83c6f94ccafd48",
+        "source_contract_sha256": "f829e1827aff84dfb332742f74c1f717da655a1ef962e1aca0260d8d2a450d6c"
+      },
+      "stage": "train",
+      "status": "valid"
+    },
+    {
+      "arm": "R0-W",
+      "campaign_id": "scope-autoindex-v1",
+      "experiment_id": "myis-scope-autoindex-v1",
+      "manifest_sha256": "8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58",
+      "owner_local_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068",
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "source": {
+        "dataset_id": "datalyes/DAPFAM_patent",
+        "license": "CC-BY-NC-SA-4.0",
+        "revision": "a59a74ce31384165065af1823a83c6f94ccafd48",
+        "source_contract_sha256": "f829e1827aff84dfb332742f74c1f717da655a1ef962e1aca0260d8d2a450d6c"
+      },
+      "stage": "selection",
+      "status": "valid"
+    },
+    {
+      "arm": "R0-W",
+      "campaign_id": "scope-autoindex-v1",
+      "experiment_id": "myis-scope-autoindex-v1",
+      "manifest_sha256": "cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1",
+      "owner_local_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068",
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "source": {
+        "dataset_id": "datalyes/DAPFAM_patent",
+        "license": "CC-BY-NC-SA-4.0",
+        "revision": "a59a74ce31384165065af1823a83c6f94ccafd48",
+        "source_contract_sha256": "f829e1827aff84dfb332742f74c1f717da655a1ef962e1aca0260d8d2a450d6c"
+      },
+      "stage": "train",
+      "status": "valid"
+    }
+  ],
   "schema_version": "myis.read-model.v2",
   "source_commit": "df9582c94bce5c32a65717b140f66dbe8fea87b2",
   "tasks": [
@@ -590,30 +936,36 @@
       "title": "Projection contracts and migration closure"
     },
     {
-      "evidence_ids": [],
+      "evidence_ids": [
+        "dapfam-p1-fulltext-c058a3aa7357c782"
+      ],
       "phase_id": "P1_CPU_BASELINE",
-      "status": "blocked",
+      "status": "measured",
       "task_id": "P1.1",
-      "title": "R0 flat BM25 fixture lane"
+      "title": "R0 flat BM25 measured CPU baseline"
     },
     {
-      "evidence_ids": [],
+      "evidence_ids": [
+        "dapfam-p1-fulltext-c058a3aa7357c782"
+      ],
       "phase_id": "P1_CPU_BASELINE",
-      "status": "blocked",
+      "status": "measured",
       "task_id": "P1.2",
-      "title": "R0-W window maxP fixture lane"
+      "title": "R0-W window MaxP measured CPU baseline"
     },
     {
-      "evidence_ids": [],
+      "evidence_ids": [
+        "dapfam-p1-fulltext-c058a3aa7357c782"
+      ],
       "phase_id": "P1_CPU_BASELINE",
-      "status": "blocked",
+      "status": "measured",
       "task_id": "P1.3",
-      "title": "Protected owner-local CPU handoff"
+      "title": "Protected owner-local CPU evidence import"
     },
     {
       "evidence_ids": [],
       "phase_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "blocked_until_p1",
+      "status": "planned",
       "task_id": "P2.1",
       "title": "R1 SCOPE/AutoIndex development"
     },

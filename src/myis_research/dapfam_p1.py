@@ -30,6 +30,7 @@ from .owner_local import (
     validate_receipt,
     validate_request,
 )
+from .progress import DEFAULT_HEARTBEAT_SECONDS, ProgressReporter, ProgressTask
 
 
 SOURCE_CONTRACT = Path("control/assets/dapfam-p1-source.v1.json")
@@ -266,6 +267,7 @@ def run_p1(
     repository_root: Path,
     index_root: Path,
     evidence_root: Path,
+    progress_interval_seconds: float = DEFAULT_HEARTBEAT_SECONDS,
 ) -> Path:
     """Execute the protected train/selection baseline and emit one aggregate receipt."""
 
@@ -280,77 +282,88 @@ def run_p1(
     run_dir = _allocate_generation(evidence / request["request_id"] / "runs")
     started = time.perf_counter()
 
-    corpus_ids = _load_corpus_ids(layout)
-    queries = _load_selected_queries(layout, split)
-    qrels, domains, relation_counts = _load_selected_relations(layout, split, corpus_ids)
-    artifacts = _build_or_reuse_indexes(layout, indexes, request)
+    progress = ProgressReporter(heartbeat_seconds=progress_interval_seconds)
+    with progress.stage("load_inputs", total=3) as input_progress:
+        corpus_ids = _load_corpus_ids(layout)
+        input_progress.advance()
+        queries = _load_selected_queries(layout, split)
+        input_progress.advance()
+        qrels, domains, relation_counts = _load_selected_relations(layout, split, corpus_ids)
+        input_progress.advance()
+    artifacts = _build_or_reuse_indexes(layout, indexes, request, progress)
 
     metrics: list[dict[str, Any]] = []
     aggregate_hashes: dict[str, str] = {
         f"input_{key}": value for key, value in request["input_hashes"].items()
     }
-    for arm, split_name in EXPECTED_SLOTS:
-        artifact = artifacts[arm]
-        outcome_path = run_dir / "protected" / f"{arm.lower()}-{split_name}-rankings.jsonl"
-        subset = queries[split_name]
-        lineage_hint = {
-            "dataset_sha256": canonical_sha256(request["input_hashes"]),
-            "corpus_sha256": _corpus_commitment(request["input_hashes"]),
-            "query_sha256": _config_commitment(request["input_hashes"], "queries"),
-            "qrels_sha256": _config_commitment(request["input_hashes"], "relations"),
-            "split_sha256": str(split["split_sha256"]),
-            "index_sha256": artifact.sha256,
-            "evaluator_sha256": request["scope"]["evaluator_code_sha256"],
-        }
-        first_sink = _OutcomeSink(outcome_path)
-        with _FTSRanker(artifact.path, limit=100) as ranker:
-            first = evaluate_baseline(
-                documents=[],
-                queries=subset,
-                qrels=qrels,
-                arm_id=arm,
-                top_k=100,
-                window_size=512,
-                qrel_domains=domains,
-                split_name=split_name,
-                ranker=ranker,
-                lineage_hint=lineage_hint,
-                protected_sink=first_sink,
-                documents_are_windowed=arm == "R0-W",
-            )
-        first_outcome_hash = first_sink.close()
-        second_sink = _OutcomeSink(None)
-        with _FTSRanker(artifact.path, limit=100) as ranker:
-            second = evaluate_baseline(
-                documents=[],
-                queries=subset,
-                qrels=qrels,
-                arm_id=arm,
-                top_k=100,
-                window_size=512,
-                qrel_domains=domains,
-                split_name=split_name,
-                ranker=ranker,
-                lineage_hint=lineage_hint,
-                protected_sink=second_sink,
-                documents_are_windowed=arm == "R0-W",
-            )
-        second_outcome_hash = second_sink.close()
-        if not _results_equivalent(first, second) or first_outcome_hash != second_outcome_hash:
-            raise DapfamP1Error(f"determinism mismatch for {arm}/{split_name}")
-        metrics.extend({**row, "arm": arm} for row in first["metrics"])
-        key = arm.lower()
-        aggregate_hashes[f"{key}_{split_name}_metrics"] = str(first["metrics_hash"])
-        aggregate_hashes[f"{key}_{split_name}_rankings_sha256"] = first_outcome_hash
+    evaluation_total = sum(2 * len(queries[split_name]) for _, split_name in EXPECTED_SLOTS)
+    with progress.stage("evaluate_slots", total=evaluation_total) as evaluation_progress:
+        for arm, split_name in EXPECTED_SLOTS:
+            artifact = artifacts[arm]
+            outcome_path = run_dir / "protected" / f"{arm.lower()}-{split_name}-rankings.jsonl"
+            subset = queries[split_name]
+            lineage_hint = {
+                "dataset_sha256": canonical_sha256(request["input_hashes"]),
+                "corpus_sha256": _corpus_commitment(request["input_hashes"]),
+                "query_sha256": _config_commitment(request["input_hashes"], "queries"),
+                "qrels_sha256": _config_commitment(request["input_hashes"], "relations"),
+                "split_sha256": str(split["split_sha256"]),
+                "index_sha256": artifact.sha256,
+                "evaluator_sha256": request["scope"]["evaluator_code_sha256"],
+            }
+            first_sink = _OutcomeSink(outcome_path)
+            with _FTSRanker(artifact.path, limit=100) as ranker:
+                first = evaluate_baseline(
+                    documents=[],
+                    queries=subset,
+                    qrels=qrels,
+                    arm_id=arm,
+                    top_k=100,
+                    window_size=512,
+                    qrel_domains=domains,
+                    split_name=split_name,
+                    ranker=ranker,
+                    lineage_hint=lineage_hint,
+                    protected_sink=first_sink,
+                    progress_sink=evaluation_progress.advance,
+                    documents_are_windowed=arm == "R0-W",
+                )
+            first_outcome_hash = first_sink.close()
+            second_sink = _OutcomeSink(None)
+            with _FTSRanker(artifact.path, limit=100) as ranker:
+                second = evaluate_baseline(
+                    documents=[],
+                    queries=subset,
+                    qrels=qrels,
+                    arm_id=arm,
+                    top_k=100,
+                    window_size=512,
+                    qrel_domains=domains,
+                    split_name=split_name,
+                    ranker=ranker,
+                    lineage_hint=lineage_hint,
+                    protected_sink=second_sink,
+                    progress_sink=evaluation_progress.advance,
+                    documents_are_windowed=arm == "R0-W",
+                )
+            second_outcome_hash = second_sink.close()
+            if not _results_equivalent(first, second) or first_outcome_hash != second_outcome_hash:
+                raise DapfamP1Error(f"determinism mismatch for {arm}/{split_name}")
+            metrics.extend({**row, "arm": arm} for row in first["metrics"])
+            key = arm.lower()
+            aggregate_hashes[f"{key}_{split_name}_metrics"] = str(first["metrics_hash"])
+            aggregate_hashes[f"{key}_{split_name}_rankings_sha256"] = first_outcome_hash
 
     for arm, artifact in artifacts.items():
         aggregate_hashes[f"{arm.lower()}_index"] = artifact.sha256
         aggregate_hashes[f"{arm.lower()}_index_lineage"] = artifact.lineage_sha256
 
     # Detect source mutation during a long index build before accepting evidence.
-    post_layout = resolve_cache(cache_root, root, verify_hashes=True)
-    if post_layout.input_hashes != request["input_hashes"]:
-        raise DapfamP1Error("DAPFAM cache changed during execution")
+    with progress.stage("verify_sources", total=1) as verification_progress:
+        post_layout = resolve_cache(cache_root, root, verify_hashes=True)
+        if post_layout.input_hashes != request["input_hashes"]:
+            raise DapfamP1Error("DAPFAM cache changed during execution")
+        verification_progress.advance()
 
     aggregate_counts = {
         "families": len(corpus_ids),
@@ -498,6 +511,7 @@ def _build_or_reuse_indexes(
     layout: CacheLayout,
     index_root: Path,
     request: Mapping[str, Any],
+    progress: ProgressReporter,
 ) -> dict[str, IndexArtifact]:
     configs = {
         arm: {
@@ -516,32 +530,36 @@ def _build_or_reuse_indexes(
     }
     artifacts: dict[str, IndexArtifact] = {}
     pending: dict[str, tuple[Path, Path, Path, dict[str, Any]]] = {}
-    for arm, config in configs.items():
-        lineage = canonical_sha256(config)
-        base = index_root / arm.lower()
-        base.mkdir(parents=True, exist_ok=True)
-        for generation in range(1000):
-            suffix = "" if generation == 0 else f"-g{generation:04d}"
-            directory = base / f"{lineage[:16]}{suffix}"
-            index_path = directory / "index.sqlite"
-            manifest_path = directory / "lineage.json"
-            if directory.exists():
+    with progress.stage("resolve_indexes", total=len(configs)) as resolution_progress:
+        for arm, config in configs.items():
+            lineage = canonical_sha256(config)
+            base = index_root / arm.lower()
+            base.mkdir(parents=True, exist_ok=True)
+            for generation in range(1000):
+                suffix = "" if generation == 0 else f"-g{generation:04d}"
+                directory = base / f"{lineage[:16]}{suffix}"
+                index_path = directory / "index.sqlite"
+                manifest_path = directory / "lineage.json"
+                if directory.exists():
+                    try:
+                        artifacts[arm] = _reuse_index(arm, index_path, manifest_path, config, lineage)
+                        break
+                    except DapfamP1Error:
+                        continue
                 try:
-                    artifacts[arm] = _reuse_index(arm, index_path, manifest_path, config, lineage)
-                    break
-                except DapfamP1Error:
+                    directory.mkdir()
+                except FileExistsError:
                     continue
-            try:
-                directory.mkdir()
-            except FileExistsError:
-                continue
-            pending[arm] = (directory, index_path, manifest_path, config)
-            break
-        else:
-            raise DapfamP1Error(f"index generation limit reached for {arm}")
+                pending[arm] = (directory, index_path, manifest_path, config)
+                break
+            else:
+                raise DapfamP1Error(f"index generation limit reached for {arm}")
+            resolution_progress.advance()
 
     if pending:
-        built = _stream_build_indexes(layout, pending)
+        family_total = int(layout.contract["configs"]["corpus"]["rows"])
+        with progress.stage("build_indexes", total=family_total) as build_progress:
+            built = _stream_build_indexes(layout, pending, build_progress)
         artifacts.update(built)
     if set(artifacts) != {"R0", "R0-W"}:
         raise DapfamP1Error("both P1 indexes must be available")
@@ -551,6 +569,7 @@ def _build_or_reuse_indexes(
 def _stream_build_indexes(
     layout: CacheLayout,
     pending: Mapping[str, tuple[Path, Path, Path, dict[str, Any]]],
+    progress: ProgressTask,
 ) -> dict[str, IndexArtifact]:
     connections: dict[str, sqlite3.Connection] = {}
     temp_paths: dict[str, Path] = {}
@@ -594,6 +613,7 @@ def _stream_build_indexes(
                     batches["R0-W"].append((unit_id, family_id, window))
                     counts["R0-W"] += 1
                     _flush_batch(connections["R0-W"], batches["R0-W"])
+            progress.advance()
         if len(families) != int(layout.contract["configs"]["corpus"]["rows"]):
             raise DapfamP1Error("DAPFAM corpus cardinality drifted during index construction")
         for arm, connection in connections.items():

@@ -1,14 +1,14 @@
 ---
-read_model_revision: d8d1a743d4f3bea1189056ee62176e7051a10c01bfc4288b8e86b1fc71f32755
+read_model_revision: fa1e4eacaf735fa488214cb9854fe10e91cca84a521dbba34cc56c07da366527
 managed_by: myis-report
 ---
 
 # Program Status
 
-State: **P1_BLOCKED_WITH_EVIDENCE**
+State: **P1_CPU_MEASURED_COMPLETE**
 
 - **P0_FOUNDATION**: complete
-- **P1_CPU_BASELINE**: blocked
-- **P2_SCOPE_DEVELOPMENT**: blocked_until_p1
+- **P1_CPU_BASELINE**: measured
+- **P2_SCOPE_DEVELOPMENT**: planned
 - **P3_FINAL**: locked_until_D2
 - **P4_PUBLICATION**: locked_until_D3

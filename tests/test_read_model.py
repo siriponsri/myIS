@@ -218,7 +218,8 @@ def _write_p1_package(
 
 
 def _write_p1_rigor_review(tmp_path: Path, package_path: Path) -> Path:
-    review_dir = tmp_path / "outputs/audits/rigor"
+    package_id = package_path.name.removesuffix(".package.json")
+    review_dir = tmp_path / "outputs/audits/rigor" / package_id
     review_dir.mkdir(parents=True, exist_ok=True)
     review = {
         "schema_version": "myis.rigor-review.v1",
@@ -235,7 +236,7 @@ def _write_p1_rigor_review(tmp_path: Path, package_path: Path) -> Path:
         },
         "findings": [],
     }
-    path = review_dir / "p1-package-review.json"
+    path = review_dir / "rigor_review.json"
     path.write_text(json.dumps(review), encoding="utf-8")
     return path
 
@@ -293,6 +294,7 @@ def test_p1_requires_validation_reports_for_all_four_slots(tmp_path: Path) -> No
     promoted = build_read_model(tmp_path)
     assert promoted["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
     assert len(promoted["runs"]) == 4
+    assert promoted["phases"][0]["tasks"][0]["evidence_ids"] == [request["request_id"]]
     assert len(promoted["metrics"]) == 12
 
 
@@ -322,11 +324,18 @@ def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
     )
     assert disposition["source_file_sha256"] == "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766"
     model = build_read_model(repository_root)
-    assert model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
-    assert model["runs"] == []
-    assert model["metrics"] == []
-    assert model["evidence"] == []
-    assert model["mlflow_registration"] == {}
+    assert model["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
+    assert len(model["runs"]) == 4
+    assert len(model["metrics"]) == 12
+    assert all(
+        run["owner_local_receipt_sha256"] != disposition["receipt_sha256"]
+        for run in model["runs"]
+    )
+    assert all(
+        item.get("uri") != disposition["source_uri"]
+        for item in model["evidence"]
+    )
+    assert len(model["mlflow_registration"]["children"]) == 4
     assert model["outputs"] == [{
         "output_id": "P1-LEGACY-RECEIPT",
         "phase_id": "P1_CPU_BASELINE",

@@ -25,6 +25,7 @@ from .mlflow_archive import (
     SCHEMA_REGISTRY_SCHEMA,
 )
 from .mlflow_mirror import default_store as default_mlflow_store
+from .progress import DEFAULT_HEARTBEAT_SECONDS
 from .projections.read_model import build_read_model, canonical_json, sha256, write_read_model
 
 
@@ -136,7 +137,13 @@ def projection_report_contents(
             "obsidian_manifest_sha256": manifest["manifest_sha256"],
             "status": "PASS",
         })
-    outputs.update(_compatibility_report_contents(root, model))
+    external_outputs = {
+        **_brain_report_contents(root, model),
+        **_paper_report_contents(root, model),
+        **_compatibility_report_contents(root, model),
+    }
+    _validate_external_projection_contents(external_outputs)
+    outputs.update(external_outputs)
     return outputs
 
 
@@ -153,6 +160,24 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
         "evidence_ids": [item.get("evidence_id") for item in model.get("evidence", [])],
         "status": "blocked" if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "current",
     }
+
+
+def _projection_identity_fingerprint(**bindings: str) -> str:
+    required = {
+        "archive_sha256",
+        "config_sha256",
+        "dataset_lineage_sha256",
+        "environment_sha256",
+        "evaluator_sha256",
+        "metric_registry_sha256",
+        "read_model_revision",
+        "read_model_sha256",
+        "rule_registry_sha256",
+        "schema_registry_sha256",
+    }
+    if set(bindings) != required or any(not value for value in bindings.values()):
+        raise ValueError("projection identity bindings are incomplete")
+    return sha256(canonical_json(dict(sorted(bindings.items()))))
 
 
 def _sync_mlflow_projection(
@@ -199,8 +224,24 @@ def _sync_mlflow_projection(
     }
     no_metric_registry["registry_sha256"] = sha256(canonical_json(no_metric_registry))
     evaluator_sha = sha256(evaluator_path.read_bytes())
+    archive_text = _json_text(archive_index)
+    config_sha = sha256(campaign_path.read_bytes())
+    environment_sha = sha256(environment_path.read_bytes())
+    dataset_lineage_sha = sha256(canonical_json(model.get("datasets", [])))
+    projection_fingerprint = _projection_identity_fingerprint(
+        archive_sha256=sha256(archive_text.encode("utf-8")),
+        config_sha256=config_sha,
+        dataset_lineage_sha256=dataset_lineage_sha,
+        environment_sha256=environment_sha,
+        evaluator_sha256=evaluator_sha,
+        metric_registry_sha256=str(no_metric_registry["registry_sha256"]),
+        read_model_revision=str(model["read_model_revision"]),
+        read_model_sha256=str(model["read_model_sha256"]),
+        rule_registry_sha256=str(rule_registry.as_dict()["registry_sha256"]),
+        schema_registry_sha256=str(schema_registry.as_dict()["registry_sha256"]),
+    )
     freeze = FreezeBundle(
-        freeze_id=f"freeze-projection-{str(model['read_model_revision'])[:16]}",
+        freeze_id=f"freeze-projection-v4-{projection_fingerprint[:20]}",
         campaign_id=ACTIVE_CAMPAIGN,
         phase_id="P0_FOUNDATION",
         scope="projection_sync",
@@ -211,21 +252,20 @@ def _sync_mlflow_projection(
         schema_registry_sha256=str(schema_registry.as_dict()["registry_sha256"]),
         evaluator_sha256=evaluator_sha,
         protocol_sha256=sha256(campaign_path.read_bytes()),
-        environment_lock_sha256=sha256(environment_path.read_bytes()),
+        environment_lock_sha256=environment_sha,
     )
-    archive_text = _json_text(archive_index)
     run = ArchiveRun(
-        run_id=f"projection-sync-v3-{str(model['read_model_revision'])[:20]}",
+        run_id=f"projection-sync-v4-{projection_fingerprint[:20]}",
         phase_id="P0_FOUNDATION",
         task_id="P0.3",
         run_kind="projection_sync",
         git_commit=str(model["source_commit"]),
         manifest_sha256=str(model["read_model_sha256"]),
         receipt_sha256=sha256(archive_text.encode("utf-8")),
-        dataset_lineage_sha256=sha256(canonical_json(model.get("datasets", []))),
-        config_sha256=sha256(campaign_path.read_bytes()),
+        dataset_lineage_sha256=dataset_lineage_sha,
+        config_sha256=config_sha,
         evaluator_sha256=evaluator_sha,
-        environment_sha256=sha256(environment_path.read_bytes()),
+        environment_sha256=environment_sha,
         read_model_revision=str(model["read_model_revision"]),
         read_model_sha256=str(model["read_model_sha256"]),
         evidence_maturity="non_scientific",
@@ -288,7 +328,7 @@ def _p1_metric_table(model: Mapping[str, Any], arm: str | None = None) -> str:
             f"{row.get('name')} | {rendered} | {row.get('n')} | "
             f"{row.get('retrieved_relevant')} | {row.get('relevant_total')} |"
         )
-    return "\n".join(lines)
+    return "\n".join(lines) + "\n"
 
 
 def _p1_comparison(model: Mapping[str, Any]) -> str:
@@ -342,6 +382,22 @@ def _p1_evidence_table(model: Mapping[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _p1_execution_summary(model: Mapping[str, Any]) -> str:
+    resources = model.get("resources", {})
+    latency = resources.get("latency_seconds") if isinstance(resources, Mapping) else None
+    if isinstance(latency, (int, float)) and not isinstance(latency, bool):
+        elapsed = f"`{float(latency):.3f}` seconds (`{float(latency) / 3600:.2f}` hours)"
+    else:
+        elapsed = "not available"
+    return (
+        f"- Accepted measured run elapsed: {elapsed}.\n"
+        "- The accepted source run predates the progress contract and records aggregate completion plus total latency only.\n"
+        f"- The current runner shows a TTY progress bar and emits privacy-safe JSON heartbeats every "
+        f"`{int(DEFAULT_HEARTBEAT_SECONDS)}` seconds for non-TTY execution.\n"
+        "- Heartbeats contain only stage, processed/total, elapsed time, and bounded ETA; no item identifiers or outcomes are emitted."
+    )
+
+
 def _p1_home_body(model: Mapping[str, Any], next_lines: str) -> str:
     if not _p1_measured(model):
         latest = "No validated measured result is available. The retained aggregate receipt is historical-invalid and cannot be promoted."
@@ -389,6 +445,7 @@ def _p1_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision:
         f"## Dataset projections\n\n{_p1_dataset_table(model)}\n\n"
         "## Task board\n\n| Task | Work | Status | Evidence |\n|---|---|---|---|\n"
         f"{task_rows}\n\n"
+        f"## Execution progress / observability\n\n{_p1_execution_summary(model)}\n\n"
         f"## Measured results\n\n{_p1_metric_table(model)}\n\n"
         f"## Interpretation\n\n{_p1_comparison(model)}\n\n"
         "## Checks และ evidence chain\n\n"
@@ -423,6 +480,7 @@ def _p1_task_body(model: Mapping[str, Any], phase_id: str, task: Mapping[str, An
         "## Definition of Ready\n\nPinned source contract, clean execution commit, protected split commitment และ CPU execution envelope ต้องผ่าน\n\n"
         "## Definition of Done\n\nMeasured aggregate ต้อง reproducible สองรอบต่อ slot และผูกกับ canonical evidence chain โดยไม่มี blocker\n\n"
         f"## Inputs and method\n\n{method}\n\n"
+        f"## Execution progress / observability\n\n{_p1_execution_summary(model)}\n\n"
         "## สิ่งที่ทำแล้ว\n\nImplementation ตรวจ source SHA-256, split cardinality, deterministic ranking, family deduplication และ aggregate-only output\n\n"
         f"## Result\n\n{result}\n\n"
         f"## Interpretation\n\n{_p1_comparison(model) if measured else 'ยังไม่มี measured interpretation ที่ promote ได้'}\n\n"
@@ -452,6 +510,7 @@ def _p1_result_body(model: Mapping[str, Any]) -> str:
         f"## Metric table\n\n{_p1_metric_table(model)}\n\n"
         f"## Comparison\n\n{_p1_comparison(model)}\n\n"
         f"## Resource result\n\nCPU-only: `{model['resources']['cpu_only']}`; GPU: `{model['resources']['gpu']}`; paid API: `{model['resources']['paid_api']}`; actual cost USD: `{model['resources']['actual_cost_usd']}`\n\n"
+        f"## Execution progress / observability\n\n{_p1_execution_summary(model)}\n\n"
         f"## Rigor\n\nGrade: `{result.get('rigor_grade')}`; mean score: `{result.get('rigor_mean_score')}`; review SHA-256: `{result.get('rigor_review_sha256')}`\n\n"
         f"## Evidence and audit details\n\n{_p1_evidence_table(model)}\n\n"
         "## Interpretation boundary\n\nผลนี้ใช้วาง baseline สำหรับ P2 เท่านั้น Final 872 ยังปิด และไม่มี confirmatory/statistical claim\n\n"
@@ -694,15 +753,253 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
     )
 
 
+def _projection_frontmatter(model: Mapping[str, Any], **properties: Any) -> str:
+    values = {
+        "schema_version": "myis.generated-projection.v2",
+        "managed_by": "myis-report",
+        "read_model_path": "../../../01_Research/projections/read-model/read-model.v2.json",
+        "read_model_revision": model["read_model_revision"],
+        "read_model_sha256": model["read_model_sha256"],
+        "source_commit": model["source_commit"],
+        **properties,
+    }
+    lines = ["---"]
+    for key, value in values.items():
+        lines.append(f"{key}: {json.dumps(value, ensure_ascii=False)}")
+    lines.extend(["---", ""])
+    return "\n".join(lines)
+
+
+def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
+    directory = (root.parent / "02_Brain/reports/generated").resolve()
+    revision = str(model["read_model_revision"])
+    state = str(model["project"]["state"])
+    phases = [row for row in model.get("phases", []) if isinstance(row, Mapping)]
+    tasks = [row for row in model.get("tasks", []) if isinstance(row, Mapping)]
+
+    phase_lines: list[str] = []
+    for phase in phases:
+        phase_lines.append(f"- **{phase['phase_id']}**: {phase['status']}")
+        for task in phase.get("tasks", []):
+            phase_lines.append(
+                f"  - `{task['task_id']}` {task['title']}: **{task['status']}**"
+            )
+    status_body = (
+        "# Program Status / สถานะโครงการ\n\n"
+        f"State: **{state}**\n\n"
+        + "\n".join(f"- **{phase['phase_id']}**: {phase['status']}" for phase in phases)
+        + "\n\n## Resource boundary\n\n"
+        f"- CPU-only: `{model['resources']['cpu_only']}`\n"
+        f"- GPU used: `{model['resources']['gpu']}`\n"
+        f"- Paid API used: `{model['resources']['paid_api']}`\n"
+        f"- Actual cost USD: `{model['resources']['actual_cost_usd']}`\n\n"
+        "D2 and D3 remain Owner-only. Final 872 is still closed.\n"
+    )
+    phase_task_body = (
+        "# Phase / Task Status\n\n"
+        + "\n".join(phase_lines)
+        + f"\n\nProgress: `{model['progress']['done']}/{model['progress']['total']}` tasks complete.\n"
+    )
+
+    dataset_lines = [
+        "| Dataset | Role | Representation | Classification | Safe counts | SHA-256 |",
+        "|---|---|---|---|---|---|",
+    ]
+    for dataset in model.get("datasets", []):
+        counts = dataset.get("counts", {})
+        count_text = ", ".join(f"{key}={value}" for key, value in sorted(counts.items()))
+        dataset_lines.append(
+            f"| `{dataset['dataset_id']}` | {dataset['role']} | {dataset['representation']} | "
+            f"{dataset['classification']} | {count_text} | `{dataset['sha256']}` |"
+        )
+    datasets_body = (
+        "# Dataset Registry / ชุดข้อมูล\n\n"
+        "All rows are aggregate/hash-only projections. Owner-local bytes stay outside Brain.\n\n"
+        + "\n".join(dataset_lines)
+        + "\n"
+    )
+
+    experiment_rows = [
+        row for row in model.get("experiments", []) if isinstance(row, Mapping)
+    ]
+    experiment = experiment_rows[0] if experiment_rows else {}
+    run_lines = [
+        "| Arm | Split | Run ID | Status | Manifest SHA-256 |",
+        "|---|---|---|---|---|",
+    ]
+    for run in sorted(model.get("runs", []), key=lambda row: (str(row.get("arm")), str(row.get("stage")))):
+        run_lines.append(
+            f"| {run['arm']} | {run['stage']} | `{run['run_id']}` | {run['status']} | "
+            f"`{run['manifest_sha256']}` |"
+        )
+    experiments_body = (
+        "# Experiments / การทดลอง\n\n"
+        f"Campaign: `{experiment.get('campaign_id')}`; experiment: "
+        f"`{experiment.get('experiment_id')}`; validated runs: `{experiment.get('run_count', 0)}`.\n\n"
+        + "\n".join(run_lines)
+        + "\n\nMLflow is an additive aggregate-only mirror; canonical manifests and receipts remain authoritative.\n"
+    )
+
+    readiness = model.get("publication_readiness", {})
+    readiness_lines = ["| Check | Status | Canonical source |", "|---|---|---|"]
+    for check in readiness.get("checks", []):
+        readiness_lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
+    readiness_body = (
+        "# Publication Readiness\n\n"
+        f"Status: **{readiness.get('status', 'unknown')}**\n\n"
+        + "\n".join(readiness_lines)
+        + "\n\nP1 selection evidence does not open D2, establish a final result, or authorize publication.\n"
+    )
+
+    result_rows = [row for row in model.get("results", []) if isinstance(row, Mapping)]
+    result = result_rows[0] if result_rows else {}
+    weekly_body = (
+        "# Weekly Summary / สรุปสัปดาห์\n\n"
+        "## Completed\n\n"
+        f"- P1 CPU baseline is `{state}` with four validated R0/R0-W train/selection slots.\n"
+        f"- Package: `{result.get('package_sha256')}`; rigor: `{result.get('rigor_grade')}`.\n"
+        f"- MLflow parent + children: `{1 + len(model.get('mlflow_registration', {}).get('children', []))}` runs.\n\n"
+        "## Next automatic action\n\n"
+        "P2 is ready but not started. Keep work reversible and CPU-only until a separate P2 action begins; "
+        "D2 and D3 remain unchanged.\n"
+    )
+
+    moc_body = (
+        "# myIS Research MOC\n\n"
+        "- [[program-status]]\n- [[phase-task-status]]\n- [[datasets]]\n"
+        "- [[experiments]]\n- [[publication-readiness]]\n- [[weekly-summary]]\n\n"
+        "## Phase reports / รายงานราย Phase\n\n"
+        + "\n".join(f"- [[phase-{phase['phase_id']}]]" for phase in phases)
+        + "\n\n## Backlinks\n\n- [[../../memory/MOC]]\n- [[../../reference/Literature/Literature Index]]\n\n"
+        f"Source revision: `{revision}`\n"
+    )
+
+    common = _projection_frontmatter(model)
+    outputs = {
+        directory / "MOC.md": common + moc_body,
+        directory / "program-status.md": common + status_body,
+        directory / "phase-task-status.md": common + phase_task_body,
+        directory / "datasets.md": common + datasets_body,
+        directory / "experiments.md": common + experiments_body,
+        directory / "publication-readiness.md": common + readiness_body,
+        directory / "weekly-summary.md": common + weekly_body,
+    }
+    for phase in phases:
+        phase_id = str(phase["phase_id"])
+        task_rows = [task for task in tasks if task.get("phase_id") == phase_id]
+        task_lines = []
+        for task in task_rows:
+            evidence_ids = ", ".join(f"`{item}`" for item in task.get("evidence_ids", [])) or "none"
+            task_lines.append(
+                f"- `{task['task_id']}` **{task['status']}**: {task['title']}; evidence: {evidence_ids}"
+            )
+        gate_text = (
+            "`D2_OPEN_FINAL` is required only before P3 final evaluation."
+            if phase_id == "P3_FINAL"
+            else "`D3_SUBMIT_RELEASE` is required only before P4 publication."
+            if phase_id == "P4_PUBLICATION"
+            else "No additional Owner micro-gate is created by this phase report."
+        )
+        body = (
+            f"# {phase_id} / รายงาน Phase\n\n"
+            f"สถานะปัจจุบัน: **{phase['status']}**\n\n"
+            "## Tasks\n\n"
+            + "\n".join(task_lines)
+            + f"\n\n## Gate / Owner action\n\n- {gate_text}\n"
+        )
+        if phase_id == "P1_CPU_BASELINE":
+            registration = model.get("mlflow_registration", {})
+            body += (
+                "\n## Execution and progress\n\n"
+                f"{_p1_execution_summary(model)}\n\n"
+                f"## Dataset aggregates\n\n{_p1_dataset_table(model)}\n\n"
+                f"## Measured train/selection results\n\n{_p1_metric_table(model)}\n\n"
+                f"## Interpretation\n\n{_p1_comparison(model)}\n\n"
+                f"## Evidence package\n\n{_p1_evidence_table(model)}\n\n"
+                f"- Package SHA-256: `{result.get('package_sha256')}`\n"
+                f"- Package file SHA-256: `{result.get('package_file_sha256')}`\n"
+                f"- Rigor: `{result.get('rigor_grade')}` (mean `{result.get('rigor_mean_score')}`)\n"
+                f"- MLflow parent status: `{registration.get('parent', {}).get('status')}`; "
+                f"children: `{len(registration.get('children', []))}`\n\n"
+                "## Evidence boundary\n\n"
+                "These are descriptive train/selection results. Final 872 remains closed, globally untouched "
+                "remains not claimable, and no statistical superiority or publication claim is made.\n"
+            )
+        else:
+            body += (
+                "\n## Evidence and next step\n\n"
+                f"- Read-model revision: `{revision}`\n"
+                "- Follow the canonical phase order and keep D2/D3 Owner-only.\n"
+            )
+        outputs[directory / f"phase-{phase_id}.md"] = (
+            _projection_frontmatter(model, phase_id=phase_id) + body
+        )
+    return outputs
+
+
+def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
+    path = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
+    source_lock_path = (
+        root.parent
+        / "03_Paper/publications/isai-nlp-2026/provenance/publication-source-lock.json"
+    ).resolve()
+    readiness = model.get("publication_readiness", {})
+    lines = ["| Check | Status | Canonical source |", "|---|---|---|"]
+    for check in readiness.get("checks", []):
+        lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
+    body = (
+        "# Publication Readiness\n\n"
+        f"Program state: **{model['project']['state']}**\n\n"
+        f"Publication status: **{readiness.get('status', 'unknown')}**\n\n"
+        + "\n".join(lines)
+        + "\n\nP1 contains measured train/selection evidence only. D2 and D3 remain Owner-only, "
+        "and this projection does not authorize final evaluation or release.\n"
+    )
+    source_lock = {
+        "schema_version": "myis.publication-source-lock.v2",
+        "research_repository": "../01_Research",
+        "campaign_id": model["project"]["campaign_id"],
+        "read_model_path": "../01_Research/projections/read-model/read-model.v2.json",
+        "read_model_revision": model["read_model_revision"],
+        "read_model_sha256": model["read_model_sha256"],
+        "status": "bound_train_selection_only",
+        "claim_boundary": "train_selection_only",
+        "claim_policy": "all_numeric_claims_resolve_to_hash_bound_research_evidence",
+        "owner_decisions": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
+    }
+    return {
+        path: _projection_frontmatter(
+            model,
+            read_model_path="../../../../01_Research/projections/read-model/read-model.v2.json",
+        ) + body,
+        source_lock_path: _json_text(source_lock),
+    }
+
+
 def _compatibility_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
     revision = str(model["read_model_revision"])
     state = str(model["project"]["state"])
     phases = "\n".join(f"- **{phase['phase_id']}**: {phase['status']}" for phase in model.get("phases", []))
     content = f"---\nread_model_revision: {revision}\nmanaged_by: myis-report\n---\n\n# Program Status\n\nState: **{state}**\n\n{phases}\n"
-    brain = (root.parent / "02_Brain/reports/generated/program-status.md").resolve()
-    paper = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
     legacy = root / "projections/obsidian/generated/program-status.md"
-    return {brain: content, paper: content, legacy: content}
+    return {legacy: content}
+
+
+def _validate_external_projection_contents(contents: Mapping[Path, str]) -> None:
+    for path, content in contents.items():
+        if path.suffix.lower() not in {".json", ".md"}:
+            raise ValueError(f"external projection has unsupported format: {path}")
+        if path.suffix.lower() == ".json":
+            try:
+                parsed = json.loads(content)
+            except json.JSONDecodeError as error:
+                raise ValueError(f"external JSON projection is invalid: {path}") from error
+            if not isinstance(parsed, Mapping):
+                raise ValueError(f"external JSON projection is not an object: {path}")
+        if _UNSAFE_HTML_RE.search(content) or _ABSOLUTE_PERSONAL_PATH_RE.search(content):
+            raise ValueError(f"unsafe external projection content: {path}")
+        if _PROTECTED_FIELD_RE.search(content) or _REMOTE_IMAGE_RE.search(content):
+            raise ValueError(f"protected or remote external projection content: {path}")
 
 
 def _generated_manifest(model: Mapping[str, Any], contents: Mapping[Path, str]) -> dict[str, Any]:
@@ -835,8 +1132,18 @@ def _validate_generated_contents(contents: Mapping[Path, str]) -> None:
                 raise ValueError(f"generated ownership contract failed: {relative}")
             if not isinstance(properties.get("safe_to_present"), bool):
                 raise ValueError(f"safe_to_present must be boolean: {relative}")
-            if properties.get("note_type") == "result_report" and properties.get("current_scientific_authority") is not False:
-                raise ValueError(f"unpromoted result must be non-authoritative: {relative}")
+            if properties.get("note_type") == "result_report":
+                authority = properties.get("current_scientific_authority")
+                if not isinstance(authority, bool):
+                    raise ValueError(f"result authority must be boolean: {relative}")
+                if authority and (
+                    properties.get("workflow_status") != "complete"
+                    or properties.get("evidence_maturity") != "measured_selection"
+                    or properties.get("claim_level") != "descriptive"
+                    or not properties.get("source_run_ids")
+                    or not properties.get("source_manifest_sha256")
+                ):
+                    raise ValueError(f"promoted result is missing measured authority bindings: {relative}")
         for target in _WIKILINK_RE.findall(content):
             target_name = Path(target.replace("\\", "/")).name
             if target_name not in known_links and not target.startswith("80_Owner_Notes/"):
