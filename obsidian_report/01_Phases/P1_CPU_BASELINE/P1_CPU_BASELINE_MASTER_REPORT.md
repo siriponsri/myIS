@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3"
-read_model_sha256: "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b"
-source_commit: "94e979449d11675c57432661b0972d3f32d6bb00"
+read_model_revision: "95c4b03e4d3eda6f6df23fe470b7a4203f336ca6ffb889462393fb112a60441d"
+read_model_sha256: "18bd7500c01e09a985c7d99a4879bf6c686a248b2262eb82eb3344583f334a51"
+source_commit: "fb55ce62df935d70245d39cf52a952552935f0a6"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,8 +11,8 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-07-31T01:17:04Z"
-updated_at: "2026-07-31T01:17:04Z"
+created_at: "2026-07-31T01:29:49Z"
+updated_at: "2026-07-31T01:29:49Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -22,17 +22,35 @@ evidence_maturity: "non_scientific"
 claim_level: "none"
 ---
 
-# P1_CPU_BASELINE
+# Phase 1: P1_CPU_BASELINE
 
-Generated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.
+รายงาน Phase นี้แยกผล baseline แบบเอกสารเต็มและแบบ window ก่อนเริ่ม SCOPE development
 
-## Summary for Owner
+## สถานะตอนนี้
 
-This report is a narrative projection of the shared read model, not a source of scientific truth.
+**blocked with evidence**. ใช้ standing authorization `D1_START_CAMPAIGN`; ไม่ได้ร้องขอหรือเปลี่ยน `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE`
 
-## Current status and gate
+## ขอบเขตและ protocol
 
-**blocked**. D2 and D3 remain Owner-only.
+- Dataset: pinned DAPFAM revision; evaluation unit เป็น patent family
+- Query/corpus view: full TAC = title + abstract + claims; ไม่ใช้ description
+- R0: หนึ่งเอกสาร TAC ต่อ family
+- R0-W: window TAC แบบไม่ซ้อน 512 tokens และรวมผลด้วย family MaxP
+- Retriever: deterministic SQLite FTS5 BM25, OR query, top 100 unique families
+- Split ที่วัด: train 250 และ selection 125; final 872 ยังปิด
+- Compute: CPU-only, zero paid API, zero GPU, zero network model download
+
+## Dataset projections
+
+| Dataset view | Representation | Safe aggregate counts |
+|---|---|---|
+| DAPFAM-FAMILY-CORPUS | patent family records | families=None, patents=None |
+| DAPFAM-QUERY-SET | TAC query records | queries=None |
+| DAPFAM-RELEVANCE-LABELS | family relevance labels | n/a |
+| DAPFAM-R0-CANDIDATES | one document per family candidate | documents=None |
+| DAPFAM-R0W-CANDIDATES | TAC512 passages with family MaxP | passages=None |
+| DAPFAM-R1-REFERENCE | section units | n/a |
+| DAPFAM-INCOMPATIBLE | element units | n/a |
 
 ## Task board
 
@@ -42,34 +60,34 @@ This report is a narrative projection of the shared read model, not a source of 
 | [[P1.2]] | R0-W window maxP fixture lane | blocked | not measured |
 | [[P1.3]] | Protected owner-local CPU handoff | blocked | not measured |
 
-## Output
-
-Generated task records are available; no run output is promoted from historical-invalid evidence.
-
 ## Measured results
 
-[[P1_CPU_BASELINE_RESULT]]
+ยังไม่มี measured metric ที่ผ่าน package และ rigor review
 
 ## Interpretation
 
-No scientific interpretation is promoted without validated evidence.
+ยังเปรียบเทียบ selection/OUT ไม่ได้ เพราะ evidence matrix ยังไม่สมบูรณ์
 
-## What we can say
+## Checks และ evidence chain
 
-The control plane records the evidence boundary and blocks promotion safely.
+ยังไม่มี canonical four-slot run matrix
 
-## What we must not say yet
+## สิ่งที่พูดได้
 
-No P1 measured-complete, selection, or final-split claim.
+ผล Recall@100 ที่แสดงเป็น aggregate development evidence สำหรับ train/selection ภายใต้ protocol ที่ระบุ
 
-## Literature basis
+## สิ่งที่ยังพูดไม่ได้
 
-[[LITERATURE_INDEX]]
+ห้ามสรุป final performance, statistical superiority, legal novelty, infringement, validity หรือ freedom to operate จากผลนี้
 
-## Decisions and RAID
+## สิ่งที่ Owner ต้องทำ
 
-[[RAID]]
+ไม่ต้องตัดสินใจ Gate เพื่อปิด P1. การเริ่ม P2 เป็น next automatic CPU-only action; D2/D3 ยังเป็น Owner-only
 
-## Evidence and audit details
+## ขอบเขตที่ยังไม่แตะ
 
-Read-model revision: `2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3`
+Final split content, protected labels, per-query outcomes, credentials, paid API, GPU และ provider payload ยังคงอยู่นอก projection
+
+## Evidence revision
+
+Read-model revision: `95c4b03e4d3eda6f6df23fe470b7a4203f336ca6ffb889462393fb112a60441d`

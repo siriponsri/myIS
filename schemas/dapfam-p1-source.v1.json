@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:dapfam-p1-source:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset", "configs", "protocol"],
+  "properties": {
+    "schema_version": {"const": "myis.dapfam-p1-source.v1"},
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_id", "dataset_url", "revision", "license", "live_fetch_allowed"],
+      "properties": {
+        "dataset_id": {"const": "datalyes/DAPFAM_patent"},
+        "dataset_url": {"const": "https://huggingface.co/datasets/datalyes/DAPFAM_patent"},
+        "revision": {"pattern": "^[a-f0-9]{40}$"},
+        "license": {"const": "CC-BY-NC-SA-4.0"},
+        "live_fetch_allowed": {"const": false}
+      }
+    },
+    "configs": {"type": "object", "required": ["corpus", "queries", "relations"]},
+    "protocol": {"type": "object", "required": ["evaluation_unit", "query_view", "corpus_view", "split", "retrieval", "arms"]}
+  }
+}

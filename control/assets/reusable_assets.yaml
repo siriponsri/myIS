@@ -16,6 +16,15 @@ assets:
     protected_data_level: owner_local_only
     allowed_use: owner-local integrity, retrieval, and aggregate evaluation
     forbidden_use: copy qrels, membership, query IDs, or per-query outcomes into Git, Brain, MLflow, Dashboard, or Paper
+    upstream_huggingface:
+      dataset_id: datalyes/DAPFAM_patent
+      dataset_url: https://huggingface.co/datasets/datalyes/DAPFAM_patent
+      revision: a59a74ce31384165065af1823a83c6f94ccafd48
+      license: CC-BY-NC-SA-4.0
+      configs: [corpus, queries, relations]
+      metadata_only: true
+      live_fetch_allowed: false
+    source_contract: control/assets/dapfam-p1-source.v1.json
   - asset_id: APP-DAPFAM-TEXT-PRIMITIVES
     title: DAPFAM text composition primitives
     kind: source_code

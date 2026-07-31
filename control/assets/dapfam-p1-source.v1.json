@@ -1,0 +1,54 @@
+{
+  "schema_version": "myis.dapfam-p1-source.v1",
+  "dataset": {
+    "dataset_id": "datalyes/DAPFAM_patent",
+    "dataset_url": "https://huggingface.co/datasets/datalyes/DAPFAM_patent",
+    "revision": "a59a74ce31384165065af1823a83c6f94ccafd48",
+    "license": "CC-BY-NC-SA-4.0",
+    "live_fetch_allowed": false
+  },
+  "configs": {
+    "corpus": {
+      "rows": 45336,
+      "required_fields": ["relevant_id", "title_en", "abstract_en", "claims_text"],
+      "files": [
+        {"name": "dapfam_patent-train-00000-of-00002.arrow", "bytes": 2403955872, "rows": 34810, "sha256": "7589459c6fcf647703fcae05ece85dfde06c41a121d82cc9ae155ce4f5a2a38e"},
+        {"name": "dapfam_patent-train-00001-of-00002.arrow", "bytes": 704837616, "rows": 10526, "sha256": "5405ad3dcda16f134f0e2fd88a22f4c1725f9a93e559b1c170c5e4ccbcc87956"},
+        {"name": "dataset_info.json", "bytes": 1219, "rows": 0, "sha256": "35ea4c3862b4de363973dcf863c604b8e4f47f4345f1847be728d72db99660dd"}
+      ]
+    },
+    "queries": {
+      "rows": 1247,
+      "required_fields": ["query_id", "title_en", "abstract_en", "claims_text"],
+      "files": [
+        {"name": "dapfam_patent-train.arrow", "bytes": 158414032, "rows": 1247, "sha256": "b596c2dcc73399840c0a9c2143b23e8497bbaa33af8dbb2a8877ad52e5f9f2fd"},
+        {"name": "dataset_info.json", "bytes": 1268, "rows": 0, "sha256": "9e9e99154249f8b3711f6a841d1585caf383295d9af552183ec4b9966f99dc30"}
+      ]
+    },
+    "relations": {
+      "rows": 49869,
+      "positive_rows": {"IN": 19736, "OUT": 5193},
+      "required_fields": ["query_id", "relevant_id", "relevance_score", "domain_rel"],
+      "files": [
+        {"name": "dapfam_patent-train.arrow", "bytes": 3417120, "rows": 49869, "sha256": "861a991875f3594e301c84ffe0ad4f0fbd6edcf07c534c172609f40bf623e298"},
+        {"name": "dataset_info.json", "bytes": 664, "rows": 0, "sha256": "cfc6e04ae02c05758a227c5b6f28ce8b1a1d91864018f30d23c90ffe1dcd16b9"}
+      ]
+    }
+  },
+  "protocol": {
+    "evaluation_unit": "family",
+    "family_id_field": "relevant_id",
+    "query_id_field": "query_id",
+    "query_view": {"id": "tac", "fields": ["title_en", "abstract_en", "claims_text"], "joiner": "\n\n"},
+    "corpus_view": {"id": "full_tac", "fields": ["title_en", "abstract_en", "claims_text"], "joiner": "\n\n"},
+    "positive_relevance_rule": "relevance_score > 0",
+    "domain_field": "domain_rel",
+    "domain_values": ["IN", "OUT"],
+    "split": {"seed": 42, "algorithm": "sha256-seed-colon-id-lexical-v1", "train": 250, "selection": 125, "final": 872},
+    "retrieval": {"scorer": "sqlite_fts5_bm25_v1", "k1": 1.2, "b": 0.75, "fts_tokenizer": "unicode61 remove_diacritics 2", "lexical_tokenizer": "python-re-unicode-word-casefold-v1", "query_operator": "OR", "top_k": 100},
+    "arms": {
+      "R0": {"unit": "one_full_tac_document_per_family", "aggregation": "family_first"},
+      "R0-W": {"unit": "non_overlapping_full_tac_window", "window_tokens": 512, "stride_tokens": 512, "aggregation": "family_maxp"}
+    }
+  }
+}

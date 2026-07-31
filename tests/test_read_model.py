@@ -9,6 +9,7 @@ import pytest
 
 from myis_research.kernel.manifest import build_manifest
 from myis_research.kernel.manifest_validation import build_validation_report, capture_git_state
+from myis_research.kernel.canonical import canonical_sha256
 from myis_research.owner_local import build_receipt
 from myis_research.projections.read_model import build_read_model, write_read_model
 from myis_research.report_cli import validate_read_model
@@ -45,7 +46,7 @@ def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -
         "decision_id": "P1_CPU_EXECUTION_ENVELOPE",
         "phase_id": "P1_CPU_BASELINE",
         "stage": "train_selection",
-        "scope": {"campaign": "a" * 64},
+        "scope": {"campaign": "a" * 64, "source_contract_sha256": "b" * 64},
         "git_commit": capture_git_state(repository_root)["commit"],
         "input_hashes": {"dataset": "c" * 64},
     }
@@ -119,14 +120,14 @@ def _write_p1_manifest(
     manifest_dir.mkdir(parents=True, exist_ok=True)
     manifest = build_manifest(
         run_id=f"p1-{arm.lower()}-{split}-{status}{run_suffix}",
-        parent_run_id=None,
+        parent_run_id="p1-projection-parent",
         experiment_id="myis-research-track-c",
         campaign_id="scope-autoindex-v1",
         stage=split,
         status=status,
         source={"dataset": "dapfam"},
         data={"split": split},
-        method={"arm": arm},
+        method={"arm_id": arm, "top_k": 100},
         resources={"cost_usd": 0.0},
         metrics=metrics or [row for row in receipt["metrics"] if row["arm"] == arm and row["split"] == split],
         artifacts=[],
@@ -163,6 +164,76 @@ def _write_p1_matrix(tmp_path: Path, repository_root: Path, request: dict[str, o
     for arm in ("R0", "R0-W"):
         for split in ("train", "selection"):
             _write_p1_manifest(tmp_path, repository_root, request, receipt, arm=arm, split=split)
+
+
+def _write_p1_package(
+    tmp_path: Path,
+    request: dict[str, object],
+    receipt: dict[str, object],
+) -> Path:
+    request_dir = tmp_path / "campaigns/scope-autoindex-v1/requests"
+    package_dir = tmp_path / "campaigns/scope-autoindex-v1/packages"
+    request_dir.mkdir(parents=True, exist_ok=True)
+    package_dir.mkdir(parents=True, exist_ok=True)
+    request_path = request_dir / "p1-request.json"
+    request_path.write_text(json.dumps(request), encoding="utf-8")
+    receipt_path = tmp_path / "campaigns/scope-autoindex-v1/evidence/p1-receipt.json"
+    slots = []
+    for arm in ("R0", "R0-W"):
+        for split in ("train", "selection"):
+            stem = f"{arm.lower()}-{split}-valid"
+            manifest_path = tmp_path / f"campaigns/scope-autoindex-v1/manifests/{stem}.json"
+            report_path = tmp_path / f"campaigns/scope-autoindex-v1/validation-reports/{stem}.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            slots.append({
+                "arm": arm,
+                "split": split,
+                "run_id": manifest["run_id"],
+                "manifest_uri": manifest_path.relative_to(tmp_path).as_posix(),
+                "manifest_sha256": manifest["manifest_sha256"],
+                "validation_report_uri": report_path.relative_to(tmp_path).as_posix(),
+                "validation_report_sha256": report["validation_report_sha256"],
+            })
+    package = {
+        "schema_version": "myis.p1-package.v1",
+        "package_id": request["request_id"],
+        "status": "validated_structural",
+        "source_commit": request["git_commit"],
+        "request_uri": request_path.relative_to(tmp_path).as_posix(),
+        "request_sha256": canonical_sha256(request),
+        "receipt_uri": receipt_path.relative_to(tmp_path).as_posix(),
+        "receipt_sha256": receipt["receipt_sha256"],
+        "source_contract_sha256": request["scope"]["source_contract_sha256"],
+        "slots": slots,
+    }
+    package["package_sha256"] = canonical_sha256(package)
+    package_path = package_dir / f"{request['request_id']}.package.json"
+    package_path.write_text(json.dumps(package), encoding="utf-8")
+    return package_path
+
+
+def _write_p1_rigor_review(tmp_path: Path, package_path: Path) -> Path:
+    review_dir = tmp_path / "outputs/audits/rigor"
+    review_dir.mkdir(parents=True, exist_ok=True)
+    review = {
+        "schema_version": "myis.rigor-review.v1",
+        "review_status": "complete",
+        "artifact_path": package_path.relative_to(tmp_path).as_posix(),
+        "artifact_sha256": hashlib.sha256(package_path.read_bytes()).hexdigest(),
+        "governance": {
+            "approval_valid": True,
+            "split_isolation_valid": True,
+            "gate_order_valid": True,
+            "budget_valid": True,
+            "manifest_integrity_valid": True,
+            "blocking_findings": [],
+        },
+        "findings": [],
+    }
+    path = review_dir / "p1-package-review.json"
+    path.write_text(json.dumps(review), encoding="utf-8")
+    return path
 
 
 def test_accepted_receipt_without_manifest_cannot_complete_p1(tmp_path: Path) -> None:
@@ -219,6 +290,24 @@ def test_p1_requires_validation_reports_for_all_four_slots(tmp_path: Path) -> No
     assert promoted["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
     assert len(promoted["runs"]) == 4
     assert len(promoted["metrics"]) == 12
+
+
+def test_full_text_p1_requires_hash_bound_package_and_rigor_review(tmp_path: Path) -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    request, receipt = _p1_receipt(repository_root)
+    _write_p1_campaign(tmp_path, receipt)
+    _write_p1_matrix(tmp_path, repository_root, request, receipt)
+    source_contract = tmp_path / "control/assets/dapfam-p1-source.v1.json"
+    source_contract.parent.mkdir(parents=True)
+    source_contract.write_text("{}", encoding="utf-8")
+
+    assert build_read_model(tmp_path)["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
+    package_path = _write_p1_package(tmp_path, request, receipt)
+    assert build_read_model(tmp_path)["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
+    _write_p1_rigor_review(tmp_path, package_path)
+    promoted = build_read_model(tmp_path)
+    assert promoted["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
+    assert len(promoted["runs"]) == 4
 
 
 def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
@@ -354,17 +443,19 @@ def _registration_module():
     return module
 
 
-def test_mlflow_registration_requires_the_same_validated_manifest_receipt_pair(tmp_path: Path) -> None:
+def test_mlflow_registration_requires_a_complete_validated_package(tmp_path: Path) -> None:
     repository_root = Path(__file__).resolve().parents[1]
     request, receipt = _p1_receipt(repository_root)
-    receipt_path = _write_p1_campaign(tmp_path, receipt)
-    manifest_path = _write_p1_manifest(tmp_path, repository_root, request, receipt, arm="R0", split="train")
+    _write_p1_campaign(tmp_path, receipt)
+    _write_p1_matrix(tmp_path, repository_root, request, receipt)
+    package_path = _write_p1_package(tmp_path, request, receipt)
     register_p1_mlflow = _registration_module()
 
-    manifest, accepted_receipt = register_p1_mlflow.load_validated_p1_package(manifest_path, receipt_path)
-    assert manifest["receipt_sha256"] == accepted_receipt["receipt_sha256"]
+    package, manifests, accepted_receipt = register_p1_mlflow.load_validated_p1_matrix(package_path, tmp_path)
+    assert package["receipt_sha256"] == accepted_receipt["receipt_sha256"]
+    assert len(manifests) == 4
 
     legacy_only = tmp_path / "legacy-only.json"
     legacy_only.write_text("{}", encoding="utf-8")
-    with pytest.raises(ValueError, match="valid manifest"):
-        register_p1_mlflow.load_validated_p1_package(legacy_only, receipt_path)
+    with pytest.raises((ValueError, FileNotFoundError)):
+        register_p1_mlflow.load_validated_p1_matrix(legacy_only, tmp_path)

@@ -246,6 +246,242 @@ def _sync_mlflow_projection(
     return receipt.mlflow_run_id
 
 
+def _p1_measured(model: Mapping[str, Any]) -> bool:
+    return model.get("project", {}).get("state") == "P1_CPU_MEASURED_COMPLETE"
+
+
+def _p1_run_ids(model: Mapping[str, Any]) -> list[str]:
+    return sorted(str(row["run_id"]) for row in model.get("runs", []) if row.get("campaign_id") == "scope-autoindex-v1")
+
+
+def _p1_manifest_hashes(model: Mapping[str, Any]) -> list[str]:
+    return sorted(
+        str(row["manifest_sha256"])
+        for row in model.get("runs", [])
+        if row.get("campaign_id") == "scope-autoindex-v1" and row.get("manifest_sha256")
+    )
+
+
+def _p1_metric_table(model: Mapping[str, Any], arm: str | None = None) -> str:
+    split_order = {"train": 0, "selection": 1}
+    scope_order = {"ALL": 0, "IN": 1, "OUT": 2}
+    rows = [
+        row for row in model.get("metrics", [])
+        if isinstance(row, Mapping) and (arm is None or row.get("arm") == arm)
+    ]
+    rows.sort(key=lambda row: (
+        str(row.get("arm", "")),
+        split_order.get(str(row.get("split", "")), 9),
+        scope_order.get(str(row.get("scope", "")), 9),
+    ))
+    if not rows:
+        return "ยังไม่มี measured metric ที่ผ่าน package และ rigor review"
+    lines = [
+        "| Arm | Split | Scope | Metric | Value | n | Retrieved relevant | Relevant total |",
+        "|---|---|---|---|---:|---:|---:|---:|",
+    ]
+    for row in rows:
+        value = row.get("value")
+        rendered = f"{float(value):.6f}" if isinstance(value, (int, float)) and not isinstance(value, bool) else "n/a"
+        lines.append(
+            f"| {row.get('arm')} | {row.get('split')} | {row.get('scope')} | "
+            f"{row.get('name')} | {rendered} | {row.get('n')} | "
+            f"{row.get('retrieved_relevant')} | {row.get('relevant_total')} |"
+        )
+    return "\n".join(lines)
+
+
+def _p1_comparison(model: Mapping[str, Any]) -> str:
+    values = {
+        str(row.get("arm")): float(row["value"])
+        for row in model.get("metrics", [])
+        if isinstance(row, Mapping)
+        and row.get("split") == "selection"
+        and row.get("scope") == "OUT"
+        and isinstance(row.get("value"), (int, float))
+        and not isinstance(row.get("value"), bool)
+    }
+    if set(values) != {"R0", "R0-W"}:
+        return "ยังเปรียบเทียบ selection/OUT ไม่ได้ เพราะ evidence matrix ยังไม่สมบูรณ์"
+    delta = values["R0-W"] - values["R0"]
+    relation = "สูงกว่า" if delta > 0 else "ต่ำกว่า" if delta < 0 else "เท่ากัน"
+    return (
+        f"บน selection/OUT ค่า R0-W {relation} R0 โดย observed delta = `{delta:+.6f}`. "
+        "นี่เป็น descriptive development evidence เท่านั้น ไม่ใช่ผลยืนยันเชิงสถิติและไม่ใช่ final-split claim"
+    )
+
+
+def _p1_dataset_table(model: Mapping[str, Any]) -> str:
+    rows = [row for row in model.get("datasets", []) if isinstance(row, Mapping)]
+    if not rows:
+        return "ยังไม่มี dataset projection ที่ผ่าน validation"
+    lines = ["| Dataset view | Representation | Safe aggregate counts |", "|---|---|---|"]
+    for row in rows:
+        counts = row.get("counts", {})
+        count_text = ", ".join(f"{key}={value}" for key, value in sorted(counts.items())) if isinstance(counts, Mapping) else "n/a"
+        lines.append(f"| {row.get('dataset_id')} | {row.get('representation')} | {count_text or 'n/a'} |")
+    return "\n".join(lines)
+
+
+def _p1_evidence_table(model: Mapping[str, Any]) -> str:
+    rows = [row for row in model.get("runs", []) if row.get("campaign_id") == "scope-autoindex-v1"]
+    if not rows:
+        return "ยังไม่มี canonical four-slot run matrix"
+    lines = ["| Arm | Split | Run ID | Manifest SHA-256 |", "|---|---|---|---|"]
+    for row in sorted(rows, key=lambda item: (str(item.get("arm")), str(item.get("stage")))):
+        lines.append(f"| {row.get('arm')} | {row.get('stage')} | `{row.get('run_id')}` | `{row.get('manifest_sha256')}` |")
+    evidence = {
+        str(row.get("evidence_id")): row
+        for row in model.get("evidence", [])
+        if isinstance(row, Mapping)
+    }
+    for evidence_id in ("p1-four-slot-package", "p1-rigor-review", "mlflow-p1-registration"):
+        row = evidence.get(evidence_id)
+        if row:
+            lines.append(f"\n- `{evidence_id}`: `{row.get('sha256')}` at `{row.get('uri')}`")
+    return "\n".join(lines)
+
+
+def _p1_home_body(model: Mapping[str, Any], next_lines: str) -> str:
+    if not _p1_measured(model):
+        latest = "No validated measured result is available. The retained aggregate receipt is historical-invalid and cannot be promoted."
+        boundary = "P1 is not measured complete; final-872 cannot be claimed globally untouched."
+    else:
+        latest = (
+            "P1 CPU baseline ผ่าน four-slot manifest, validation reports, package binding และ artifact-only rigor review "
+            "สำหรับ train/selection แล้ว ดูรายละเอียดที่ [[P1_CPU_BASELINE_RESULT]]."
+        )
+        boundary = (
+            "ผลนี้รองรับเฉพาะ development train/selection. ชุด final 872 ยังปิด และ historical exposure "
+            "ทำให้ห้ามอ้างว่า final split ไม่เคยถูกแตะทั่วทั้งโครงการ"
+        )
+    return (
+        "# myIS Research Report\n\n"
+        "รายงานนี้สร้างจาก validated shared read model; การแก้มืออาจถูกแทนที่ ให้บันทึกความเห็นส่วนตัวใน Owner Note\n\n"
+        "## Thesis\n\nCan a patent-native grounded representation compiler improve family-level DAPFAM retrieval while the retriever, evaluator, and budget remain fixed?\n\n"
+        f"## สถานะตอนนี้\n\n- Phase: `{model['project']['current_phase']}`\n- Task: `{model['project']['current_task']}`\n- State: **{model['project']['state']}**\n\n"
+        f"## สิ่งที่ทำแล้ว\n\n{latest}\n\n"
+        f"## สิ่งที่ Owner ต้องทำ\n\n{next_lines}\n\n"
+        f"## ขอบเขตที่ยังไม่แตะ\n\n{boundary}\n\n"
+        "## Navigate\n\n- [[P0_FOUNDATION_MASTER_REPORT]]\n- [[P1_CPU_BASELINE_MASTER_REPORT]]\n- [[P1_CPU_BASELINE_RESULT]]\n- [[CURRENT_ADVISOR_UPDATE]]\n- [[LITERATURE_INDEX]]\n- [[RESEARCH_HISTORY_INDEX]]\n"
+    )
+
+
+def _p1_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision: str) -> str:
+    measured = _p1_measured(model)
+    status = "complete (measured train/selection)" if measured else "blocked with evidence"
+    task_rows = "\n".join(
+        f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
+        for task in phase.get("tasks", [])
+    )
+    return (
+        "# Phase 1: P1_CPU_BASELINE\n\n"
+        "รายงาน Phase นี้แยกผล baseline แบบเอกสารเต็มและแบบ window ก่อนเริ่ม SCOPE development\n\n"
+        f"## สถานะตอนนี้\n\n**{status}**. ใช้ standing authorization `D1_START_CAMPAIGN`; ไม่ได้ร้องขอหรือเปลี่ยน `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE`\n\n"
+        "## ขอบเขตและ protocol\n\n"
+        "- Dataset: pinned DAPFAM revision; evaluation unit เป็น patent family\n"
+        "- Query/corpus view: full TAC = title + abstract + claims; ไม่ใช้ description\n"
+        "- R0: หนึ่งเอกสาร TAC ต่อ family\n"
+        "- R0-W: window TAC แบบไม่ซ้อน 512 tokens และรวมผลด้วย family MaxP\n"
+        "- Retriever: deterministic SQLite FTS5 BM25, OR query, top 100 unique families\n"
+        "- Split ที่วัด: train 250 และ selection 125; final 872 ยังปิด\n"
+        "- Compute: CPU-only, zero paid API, zero GPU, zero network model download\n\n"
+        f"## Dataset projections\n\n{_p1_dataset_table(model)}\n\n"
+        "## Task board\n\n| Task | Work | Status | Evidence |\n|---|---|---|---|\n"
+        f"{task_rows}\n\n"
+        f"## Measured results\n\n{_p1_metric_table(model)}\n\n"
+        f"## Interpretation\n\n{_p1_comparison(model)}\n\n"
+        "## Checks และ evidence chain\n\n"
+        f"{_p1_evidence_table(model)}\n\n"
+        "## สิ่งที่พูดได้\n\nผล Recall@100 ที่แสดงเป็น aggregate development evidence สำหรับ train/selection ภายใต้ protocol ที่ระบุ\n\n"
+        "## สิ่งที่ยังพูดไม่ได้\n\nห้ามสรุป final performance, statistical superiority, legal novelty, infringement, validity หรือ freedom to operate จากผลนี้\n\n"
+        "## สิ่งที่ Owner ต้องทำ\n\nไม่ต้องตัดสินใจ Gate เพื่อปิด P1. การเริ่ม P2 เป็น next automatic CPU-only action; D2/D3 ยังเป็น Owner-only\n\n"
+        "## ขอบเขตที่ยังไม่แตะ\n\nFinal split content, protected labels, per-query outcomes, credentials, paid API, GPU และ provider payload ยังคงอยู่นอก projection\n\n"
+        f"## Evidence revision\n\nRead-model revision: `{revision}`\n"
+    )
+
+
+def _p1_task_body(model: Mapping[str, Any], phase_id: str, task: Mapping[str, Any]) -> str:
+    task_id = str(task["task_id"])
+    measured = _p1_measured(model)
+    arm = "R0" if task_id == "P1.1" else "R0-W" if task_id == "P1.2" else None
+    if task_id == "P1.1":
+        objective = "สร้าง flat BM25 baseline จาก full TAC หนึ่งเอกสารต่อ patent family และวัด train/selection"
+        method = "one full TAC document per family; family-first ranking; top 100"
+    elif task_id == "P1.2":
+        objective = "สร้าง deterministic window baseline เพื่อทดสอบผลของการแบ่ง TAC โดยคง retriever และ evaluator เดิม"
+        method = "non-overlapping 512-token TAC windows; exact family MaxP; top 100 unique families"
+    else:
+        objective = "ผูก measured run กับ request, aggregate receipt, four manifests, validation reports, package, rigor review และ MLflow mirror"
+        method = "immutable aggregate-only evidence chain; protected run artifacts remain Owner-local"
+    result = _p1_metric_table(model, arm=arm) if arm else _p1_metric_table(model)
+    evidence = _p1_evidence_table(model) if measured else "evidence chain ยังไม่ครบ จึง fail closed"
+    return (
+        f"# {task_id}: {task['title']}\n\n"
+        f"## Objective / hypothesis\n\n{objective}\n\n"
+        f"## สถานะตอนนี้\n\n**{_workflow_status(task['status'])}**\n\n"
+        "## Definition of Ready\n\nPinned source contract, clean execution commit, protected split commitment และ CPU execution envelope ต้องผ่าน\n\n"
+        "## Definition of Done\n\nMeasured aggregate ต้อง reproducible สองรอบต่อ slot และผูกกับ canonical evidence chain โดยไม่มี blocker\n\n"
+        f"## Inputs and method\n\n{method}\n\n"
+        "## สิ่งที่ทำแล้ว\n\nImplementation ตรวจ source SHA-256, split cardinality, deterministic ranking, family deduplication และ aggregate-only output\n\n"
+        f"## Result\n\n{result}\n\n"
+        f"## Interpretation\n\n{_p1_comparison(model) if measured else 'ยังไม่มี measured interpretation ที่ promote ได้'}\n\n"
+        "## Checks / blockers / failures\n\n"
+        f"{'ไม่มี blocking finding ใน promoted package; historical receipt เดิมยังคงเป็น historical-invalid' if measured else 'four-slot package หรือ rigor review ยังไม่ผ่าน'}\n\n"
+        f"## Evidence and MLflow links\n\n{evidence}\n\n"
+        "## What this does not prove\n\nไม่พิสูจน์ final performance, statistical superiority หรือข้อสรุปทางกฎหมาย\n\n"
+        f"## Dependencies\n\n[[{phase_id}_MASTER_REPORT]] และ [[P1_CPU_BASELINE_RESULT]]\n\n"
+        "## Next action\n\nเมื่อ P1 complete ให้เปิดงาน P2 แบบ CPU-only โดยไม่แตะ D2\n\n"
+        "## Owner notes\n\n[[80_Owner_Notes/README]]\n"
+    )
+
+
+def _p1_result_body(model: Mapping[str, Any]) -> str:
+    result = model.get("results", [{}])[0]
+    if not _p1_measured(model):
+        return (
+            "# P1 CPU Baseline Result\n\n## Output\n\nAggregate receipt เดิมถูกจัดเป็น historical-invalid และยัง promote ไม่ได้\n\n"
+            f"## Result\n\nValidity: **{result.get('validity', 'blocked')}**. No validated measured value is available.\n\n"
+            "## Interpretation\n\nNo measured claim is available while the hash-bound four-slot evidence matrix is missing.\n\n"
+            "## What we must not say\n\nP1 is not measured complete and final-872 is not globally untouched.\n\n## Evidence\n\n[[P1.3]]\n"
+        )
+    return (
+        "# P1 CPU Baseline Result\n\n"
+        "## Output\n\nValidated aggregate results from four slots: R0/R0-W crossed with train/selection\n\n"
+        f"## Result status\n\nValidity: **{result.get('validity')}**; maturity: **{result.get('evidence_maturity')}**; claim boundary: **{result.get('claim_boundary')}**\n\n"
+        f"## Metric table\n\n{_p1_metric_table(model)}\n\n"
+        f"## Comparison\n\n{_p1_comparison(model)}\n\n"
+        f"## Resource result\n\nCPU-only: `{model['resources']['cpu_only']}`; GPU: `{model['resources']['gpu']}`; paid API: `{model['resources']['paid_api']}`; actual cost USD: `{model['resources']['actual_cost_usd']}`\n\n"
+        f"## Rigor\n\nGrade: `{result.get('rigor_grade')}`; mean score: `{result.get('rigor_mean_score')}`; review SHA-256: `{result.get('rigor_review_sha256')}`\n\n"
+        f"## Evidence and audit details\n\n{_p1_evidence_table(model)}\n\n"
+        "## Interpretation boundary\n\nผลนี้ใช้วาง baseline สำหรับ P2 เท่านั้น Final 872 ยังปิด และไม่มี confirmatory/statistical claim\n\n"
+        "## Links\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] · [[P1.1]] · [[P1.2]] · [[P1.3]]\n"
+    )
+
+
+def _p1_advisor_body(model: Mapping[str, Any]) -> str:
+    measured = _p1_measured(model)
+    summary = (
+        "P1 CPU baseline เสร็จด้วย measured train/selection evidence ครบ R0 และ R0-W; package ผ่าน structural validation และ artifact-only rigor review"
+        if measured else
+        "P1 ยัง blocked เพราะ four-slot package และ validation evidence ยังไม่ครบ"
+    )
+    measured_result = _p1_comparison(model) if measured else "ยังไม่มี validated measured result"
+    return (
+        "# Advisor Update\n\nGenerated draft; Owner edits belong in a separate immutable meeting note\n\n"
+        f"## One-paragraph summary\n\n{summary}.\n\n"
+        "## Plain-language primer\n\nR0 อ่าน TAC เต็มหนึ่งฉบับต่อ family; R0-W แบ่ง TAC เป็นช่วง 512 tokens แล้วเลือกคะแนนดีที่สุดของ family\n\n"
+        "## Current Phase/Task\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] และ [[P1.3]]\n\n"
+        f"## Measured result\n\n{measured_result}\n\n"
+        f"## Evidence ledger\n\n{_p1_evidence_table(model)}\n\n"
+        "## Gate/decision\n\nD1 ครอบคลุม P1; D2 และ D3 ยังไม่ถูกเปิดหรือเปลี่ยนแปลง\n\n"
+        "## What we can say\n\nรายงาน aggregate Recall@100 สำหรับ train/selection ภายใต้ fixed CPU protocol ได้\n\n"
+        "## What we must not say\n\nยังอ้าง final performance, statistical superiority หรือ legal conclusion ไม่ได้\n\n"
+        "## Recommended next action\n\nเริ่ม P2 SCOPE development แบบ CPU-only และ reversible; ขอ Owner เฉพาะเมื่อถึง D2 หรือจำเป็นต้องขยาย compute\n\n"
+        "## Literature used\n\n[[LITERATURE_INDEX]]\n"
+    )
+
+
 def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
     revision = str(model["read_model_revision"])
     common = {
@@ -267,17 +503,12 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     project = model["project"]
     inbox = model.get("owner_inbox", [])
     next_lines = "\n".join(f"- {item.get('label')}" for item in inbox) or "- ไม่มีรายการ"
+    p1_run_ids = _p1_run_ids(model)
+    p1_manifest_hashes = _p1_manifest_hashes(model)
     outputs: dict[Path, str] = {}
     outputs[VAULT_RELATIVE_PATH / "HOME.md"] = _note(
-        {**common, "note_id": "HOME", "note_type": "home", "phase_id": project["current_phase"], "task_id": project["current_task"], "workflow_status": "blocked" if project["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "in_progress", "evidence_maturity": "non_scientific", "claim_level": "none"},
-        "# myIS Research Report\n\n"
-        "Generated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
-        "## Thesis\n\nCan a patent-native grounded representation compiler improve family-level DAPFAM retrieval while the retriever, evaluator, and budget remain fixed?\n\n"
-        f"## Current Phase and Task\n\n- Phase: `{project['current_phase']}`\n- Task: `{project['current_task']}`\n- State: **{project['state']}**\n\n"
-        f"## Next actions\n\n{next_lines}\n\n"
-        "## Latest valid result\n\nNo validated measured result is available. The retained aggregate receipt is historical-invalid and cannot be promoted.\n\n"
-        "## What we must not say\n\nP1 is not measured complete; final-872 cannot be claimed globally untouched.\n\n"
-        "## Navigate\n\n- [[P0_FOUNDATION_MASTER_REPORT]]\n- [[P1_CPU_BASELINE_MASTER_REPORT]]\n- [[CURRENT_ADVISOR_UPDATE]]\n- [[LITERATURE_INDEX]]\n- [[RESEARCH_HISTORY_INDEX]]\n",
+        {**common, "note_id": "HOME", "note_type": "home", "phase_id": project["current_phase"], "task_id": project["current_task"], "workflow_status": "blocked" if project["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "complete", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
+        _p1_home_body(model, next_lines),
     )
 
     for phase in model.get("phases", []):
@@ -287,7 +518,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
             for task in phase.get("tasks", [])
         ) or "| none | none | planned | none |"
-        phase_body = (
+        phase_body = _p1_phase_body(model, phase, revision) if phase_id == "P1_CPU_BASELINE" else (
             f"# {phase_id}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
             "## Summary for Owner\n\nThis report is a narrative projection of the shared read model, not a source of scientific truth.\n\n"
             f"## Current status and gate\n\n**{_workflow_status(phase['status'])}**. D2 and D3 remain Owner-only.\n\n"
@@ -302,12 +533,12 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             f"## Evidence and audit details\n\nRead-model revision: `{revision}`\n"
         )
         outputs[phase_folder / f"{phase_id}_MASTER_REPORT.md"] = _note(
-            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(phase["status"]), "evidence_maturity": "non_scientific" if phase["status"] in {"blocked", "planned", "blocked_until_p1", "locked_until_D2", "locked_until_D3"} else "measured_development", "claim_level": "none"},
+            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(phase["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase["status"] in {"blocked", "planned", "blocked_until_p1", "locked_until_D2", "locked_until_D3"} else "measured_development", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else []},
             phase_body,
         )
         for task in phase.get("tasks", []):
             task_id = str(task["task_id"])
-            body = (
+            body = _p1_task_body(model, phase_id, task) if phase_id == "P1_CPU_BASELINE" else (
                 f"# {task_id}: {task['title']}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
                 "## Objective / hypothesis\n\nDeliver the registry-defined task without crossing the protected-data boundary.\n\n"
                 f"## Status\n\n**{_workflow_status(task['status'])}**\n\n"
@@ -327,46 +558,24 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
                 f"## Owner notes\n\n[[80_Owner_Notes/README]]\n"
             )
             outputs[phase_folder / "Tasks" / f"{task_id}.md"] = _note(
-                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(task["status"]), "evidence_maturity": "measured_development" if task.get("evidence_ids") else "non_scientific", "claim_level": "none"},
+                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(task["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "measured_development" if task.get("evidence_ids") else "non_scientific", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else []},
                 body,
             )
 
     result = model.get("results", [{}])[0]
     outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"] = _note(
-        {**common, "note_id": "P1-CPU-BASELINE-RESULT", "note_type": "result_report", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "blocked", "evidence_maturity": "historical_exposed", "claim_level": "none", "result_id": result.get("result_id", "P1-CPU-BASELINE"), "current_scientific_authority": False, "source_manifest_sha256": []},
-        "# P1 CPU Baseline Result\n\nGenerated from validated evidence. Manual edits may be replaced.\n\n"
-        "## Output\n\nAn aggregate receipt exists, but its explicit historical-invalid disposition prevents promotion.\n\n"
-        f"## Result\n\nValidity: **{result.get('validity', 'blocked')}**. No validated measured value is available.\n\n"
-        "## Interpretation\n\nNo measured claim is available while the hash-bound four-slot evidence matrix is missing.\n\n"
-        "## What we can say\n\nThe integration and evidence-recovery work is active and historical evidence remains traceable.\n\n"
-        "## What we must not say\n\nP1 is not measured complete and final-872 is not globally untouched.\n\n"
-        "## Evidence and audit details\n\n[[P1.3]]\n",
+        {**common, "note_id": "P1-CPU-BASELINE-RESULT", "note_type": "result_report", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete" if _p1_measured(model) else "blocked", "evidence_maturity": "measured_selection" if _p1_measured(model) else "historical_exposed", "claim_level": "descriptive" if _p1_measured(model) else "none", "result_id": result.get("result_id", "P1-CPU-BASELINE"), "current_scientific_authority": _p1_measured(model), "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
+        _p1_result_body(model),
     )
 
     outputs[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"] = _note(
-        {**common, "note_id": "CURRENT-ADVISOR-UPDATE", "note_type": "advisor_update", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "lifecycle": "draft", "snapshot_status": "draft", "supersedes": None},
-        "# Advisor Update\n\nGenerated draft. Owner edits belong in a separate meeting note; this draft is rebuilt from the shared revision.\n\n"
-        "## One-paragraph summary\n\nP1 is blocked with evidence recovery in progress; no measured or final-split conclusion is available.\n\n"
-        "## Plain-language primer\n\nA measured claim requires a hash-bound manifest and validation evidence, not merely an aggregate receipt.\n\n"
-        "## Current Phase/Task\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] and [[P1.3]].\n\n"
-        "## Evidence ledger\n\n- [[P1_CPU_BASELINE_RESULT]]\n\n"
-        "## Main outputs\n\nThe read model records a safe historical-invalid disposition.\n\n"
-        "## Measured result\n\nNo validated measured result.\n\n"
-        "## Interpretation\n\nThe current evidence blocks promotion, which is a valid governance outcome.\n\n"
-        "## Gate/decision\n\nD2 and D3 remain Owner-only.\n\n"
-        "## What we can say\n\nThe control plane and safe aggregate receipt exist.\n\n"
-        "## What we must not say\n\nNo measured-complete or final-split claim.\n\n"
-        "## Risks and blockers\n\n[[RAID]]\n\n"
-        "## Questions for advisor\n\nWhat evidence-recovery framing is most useful before a fresh Owner-local P1 run?\n\n"
-        "## Recommended next action\n\nReview the recovery freeze, then authorize only the existing Owner-local P1 workflow when ready.\n\n"
-        "## Advisor Q&A preparation\n\nWhy blocked? Canonical four-slot manifests and validation reports are absent.\n\n"
-        "## Suggested visual story\n\n1. Research question\n2. Current evidence boundary\n3. Next reversible action\n\n"
-        "## Literature used\n\n[[LITERATURE_INDEX]]\n",
+        {**common, "note_id": "CURRENT-ADVISOR-UPDATE", "note_type": "advisor_update", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "verification_needed", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "lifecycle": "draft", "snapshot_status": "draft", "supersedes": None, "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
+        _p1_advisor_body(model),
     )
 
     _add_literature_outputs(root, model, common, outputs)
     _add_history_outputs(common, outputs)
-    _add_system_outputs(common, outputs)
+    _add_system_outputs(model, common, outputs)
     return outputs
 
 
@@ -423,7 +632,7 @@ def _add_history_outputs(common: Mapping[str, Any], outputs: dict[Path, str]) ->
     )
 
 
-def _add_system_outputs(common: Mapping[str, Any], outputs: dict[Path, str]) -> None:
+def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], outputs: dict[Path, str]) -> None:
     outputs[VAULT_RELATIVE_PATH / "README.md"] = (
         "# myIS Research Report Vault\n\n"
         "This is a rebuildable narrative and knowledge projection. Canonical run facts remain in Git-tracked manifests and receipts. "
@@ -450,8 +659,10 @@ def _add_system_outputs(common: Mapping[str, Any], outputs: dict[Path, str]) -> 
     }
     outputs[VAULT_RELATIVE_PATH / "00_System/schemas/obsidian-note.v2.json"] = _json_text(note_schema)
     outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks/RAID.md"] = _note(
-        {**common, "note_id": "RAID", "note_type": "risk", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "blocked", "evidence_maturity": "non_scientific", "claim_level": "none", "raid_id": "RISK-P1-EVIDENCE-MATRIX", "raid_type": "risk", "raid_status": "open"},
-        "# RAID\n\n- Risk: P1 evidence matrix is incomplete.\n- Decision: D2 and D3 remain Owner-only.\n",
+        {**common, "note_id": "RAID", "note_type": "risk", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete" if _p1_measured(model) else "blocked", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "none", "raid_id": "RISK-P1-EVIDENCE-MATRIX", "raid_type": "risk", "raid_status": "closed" if _p1_measured(model) else "open"},
+        "# RAID\n\n"
+        + ("- Closed: P1 evidence matrix, package binding, and rigor review are complete.\n" if _p1_measured(model) else "- Risk: P1 evidence matrix is incomplete.\n")
+        + "- Decision: D2 and D3 remain Owner-only.\n",
     )
     outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks/Decisions.md"] = _note(
         {**common, "note_id": "DECISIONS", "note_type": "decision", "phase_id": "P3_FINAL", "task_id": "P3.1", "workflow_status": "waiting_gate", "evidence_maturity": "non_scientific", "claim_level": "none", "decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"], "authority": "owner"},

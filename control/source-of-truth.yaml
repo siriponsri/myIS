@@ -17,8 +17,11 @@ records:
   - id: raw_and_protected_bytes
     authority: MYIS_STORE
     projections: [hash_only]
+  - id: dapfam_p1_source_protocol
+    authority: control/assets/dapfam-p1-source.v1.json
+    projections: [harness, manifests, dashboard, brain, paper]
   - id: run_facts
-    authority: [campaigns/scope-autoindex-v1/manifests, MYIS_STORE]
+    authority: [campaigns/scope-autoindex-v1/requests, campaigns/scope-autoindex-v1/evidence, campaigns/scope-autoindex-v1/manifests, campaigns/scope-autoindex-v1/validation-reports, campaigns/scope-autoindex-v1/packages, MYIS_STORE]
     projections: [mlflow, projections/read-model, dashboard, brain, paper]
   - id: owner_decisions
     authority: [control/decisions/D1_START_CAMPAIGN.yaml, control/decisions/ledger.jsonl]

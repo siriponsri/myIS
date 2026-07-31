@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from ..dapfam_p1 import DapfamP1Error, load_package
 from ..kernel.manifest import manifest_round_trip
 from ..kernel.manifest_validation import ManifestValidationError, validate_validation_report
 from ..owner_local import OwnerLocalContractError, validate_receipt
@@ -39,8 +40,12 @@ PROJECTION_SOURCE_PATHS = (
     "control/source-of-truth.yaml",
     "control/decisions",
     "campaigns/scope-autoindex-v1/evidence",
+    "campaigns/scope-autoindex-v1/requests",
     "campaigns/scope-autoindex-v1/manifests",
     "campaigns/scope-autoindex-v1/validation-reports",
+    "campaigns/scope-autoindex-v1/packages",
+    "control/assets/dapfam-p1-source.v1.json",
+    "outputs/audits/rigor",
     "evidence/legacy-dapfam-inventory.v1.json",
     "schemas/read-model.v2.json",
     "src/myis_research/projections/read_model.py",
@@ -71,9 +76,14 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     )
     validation_reports = _load_validation_reports(root / "campaigns" / campaign_id / "validation-reports")
     p1_pairs = validated_p1_matrix(manifests, receipts, validation_reports)
+    package_review: dict[str, Any] = {}
+    if (root / "control/assets/dapfam-p1-source.v1.json").is_file() and p1_pairs:
+        package_review = _validated_p1_package_review(root, p1_pairs)
+        if not package_review:
+            p1_pairs = []
     paired_manifest_hashes = {str(pair["manifest"]["manifest_sha256"]) for pair in p1_pairs}
     paired_receipts = [pair["receipt"] for pair in p1_pairs]
-    mlflow_registration = _load_optional_json(root / "evidence" / "mlflow-p1-registration.v1.json")
+    mlflow_registration = _load_optional_json(root / "evidence" / "mlflow-p1-registration.v2.json")
     decisions = _load_jsonl(root / "control" / "decisions" / "ledger.jsonl")
     metrics: list[dict[str, Any]] = []
     runs: list[dict[str, Any]] = []
@@ -102,20 +112,36 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             total_estimated += float(estimate)
         runs.append({
             "run_id": run_id,
+            "manifest_sha256": manifest.get("manifest_sha256"),
             "experiment_id": experiment_id,
             "campaign_id": campaign_id,
             "stage": manifest.get("stage", "unknown"),
             "status": manifest.get("status", "unknown"),
             "arm": (manifest["method"].get("arm_id") or manifest["method"].get("arm")) if isinstance(manifest.get("method"), dict) else None,
-            "source": manifest.get("source", {}),
+            "source": manifest.get("inputs", {}).get("source", {}) if isinstance(manifest.get("inputs"), dict) else {},
             "owner_local_receipt_sha256": manifest.get("receipt_sha256"),
         })
         for artifact in manifest.get("artifacts", []) if isinstance(manifest.get("artifacts"), list) else []:
             if isinstance(artifact, dict) and artifact.get("sha256"):
                 evidence.append({"evidence_id": artifact.get("artifact_id", artifact.get("name", "artifact")), "sha256": artifact["sha256"], "run_id": run_id, "uri": artifact.get("uri")})
     datasets = _dataset_projection(root, paired_receipts)
-    if _registration_matches_p1_pair(mlflow_registration, p1_pairs):
-        evidence.append({"evidence_id": "mlflow-p1-registration", "sha256": _file_sha256(root / "evidence" / "mlflow-p1-registration.v1.json"), "run_id": str(mlflow_registration["source_run_id"]), "uri": "evidence/mlflow-p1-registration.v1.json"})
+    if package_review:
+        evidence.extend([
+            {
+                "evidence_id": "p1-four-slot-package",
+                "sha256": package_review["package_file_sha256"],
+                "run_id": package_review["package_id"],
+                "uri": package_review["package_uri"],
+            },
+            {
+                "evidence_id": "p1-rigor-review",
+                "sha256": package_review["review_sha256"],
+                "run_id": package_review["review_id"],
+                "uri": package_review["review_uri"],
+            },
+        ])
+    if _registration_matches_p1_pair(mlflow_registration, p1_pairs, package_review):
+        evidence.append({"evidence_id": "mlflow-p1-registration", "sha256": _file_sha256(root / "evidence" / "mlflow-p1-registration.v2.json"), "run_id": str(mlflow_registration.get("parent", {}).get("source_run_id", "p1-parent")), "uri": "evidence/mlflow-p1-registration.v2.json"})
     else:
         mlflow_registration = {}
     readiness = _publication_readiness(root, p1_pairs, decisions, legacy_disposition)
@@ -203,7 +229,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             if paired_receipts
             else ({"active_final_872_global_untouched": "not_claimable"} if legacy_disposition else {})
         ),
-        "mlflow_registration": {key: mlflow_registration.get(key) for key in ("schema_version", "source_manifest_sha256", "source_receipt_sha256", "dataset_lineage_sha256", "parent", "children") if key in mlflow_registration},
+        "mlflow_registration": {key: mlflow_registration.get(key) for key in ("schema_version", "package_sha256", "source_receipt_sha256", "dataset_lineage_sha256", "parent", "children") if key in mlflow_registration},
         "publication_readiness": readiness,
         "milestones": [
             {"milestone_id": phase["phase_id"], "status": phase["status"], "depends_on": ([phases[index - 1]["phase_id"]] if index else [])}
@@ -230,6 +256,11 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "metric_ids": [str(item.get("name", "")) for item in metrics] if p1_pairs else [],
             "claim_boundary": "train_selection_only" if p1_pairs else "no_measured_claim",
             "limitations": ["active_final_872_global_untouched_not_claimable"],
+            "package_sha256": package_review.get("package_sha256"),
+            "package_file_sha256": package_review.get("package_file_sha256"),
+            "rigor_review_sha256": package_review.get("review_sha256"),
+            "rigor_grade": package_review.get("grade"),
+            "rigor_mean_score": package_review.get("mean_score"),
         }],
         "interpretations": ([{
             "interpretation_id": "P1-CPU-BASELINE-INTERPRETATION",
@@ -618,16 +649,152 @@ def _metric_rows(metrics: list[Any], arm: str, split: str) -> list[dict[str, Any
     return rows
 
 
-def _registration_matches_p1_pair(registration: dict[str, Any], pairs: list[dict[str, dict[str, Any]]]) -> bool:
-    return any(
-        registration.get("source_manifest_sha256") == pair["manifest"]["manifest_sha256"]
-        and registration.get("source_receipt_sha256") == pair["receipt"]["receipt_sha256"]
-        and registration.get("source_run_id") == pair["manifest"]["run_id"]
-        for pair in pairs
-    )
+def _registration_matches_p1_pair(
+    registration: dict[str, Any],
+    pairs: list[dict[str, dict[str, Any]]],
+    package_review: dict[str, Any],
+) -> bool:
+    if registration.get("schema_version") == "myis.p1-mlflow-registration.v2":
+        children = registration.get("children")
+        if not isinstance(children, list) or len(children) != 4:
+            return False
+        expected = {
+            (pair["manifest"]["run_id"], pair["manifest"]["manifest_sha256"])
+            for pair in pairs
+        }
+        observed = {
+            (child.get("source_run_id"), child.get("source_manifest_sha256"))
+            for child in children if isinstance(child, dict)
+        }
+        receipt_hashes = {pair["receipt"]["receipt_sha256"] for pair in pairs}
+        return (
+            observed == expected
+            and receipt_hashes == {registration.get("source_receipt_sha256")}
+            and bool(package_review)
+            and registration.get("package_sha256") == package_review.get("package_sha256")
+        )
+    return False
+
+
+def _validated_p1_package_review(root: Path, pairs: list[dict[str, dict[str, Any]]]) -> dict[str, Any]:
+    """Require one hash-bound four-slot package and a clean artifact-only rigor review."""
+
+    manifest_hashes = {pair["manifest"]["manifest_sha256"] for pair in pairs}
+    receipt_hashes = {pair["receipt"]["receipt_sha256"] for pair in pairs}
+    if len(manifest_hashes) != 4 or len(receipt_hashes) != 1:
+        return {}
+    package_directory = root / "campaigns/scope-autoindex-v1/packages"
+    review_directory = root / "outputs/audits/rigor"
+    for package_path in sorted(package_directory.glob("*.package.json")) if package_directory.is_dir() else ():
+        try:
+            package = load_package(package_path, root)
+        except (DapfamP1Error, OSError, json.JSONDecodeError, ValueError):
+            continue
+        slots = package.get("slots")
+        if (
+            package.get("receipt_sha256") not in receipt_hashes
+            or not isinstance(slots, list)
+            or {slot.get("manifest_sha256") for slot in slots if isinstance(slot, dict)} != manifest_hashes
+        ):
+            continue
+        relative_package = package_path.relative_to(root).as_posix()
+        package_file_hash = _file_sha256(package_path)
+        for review_path in sorted(review_directory.glob("*.json")) if review_directory.is_dir() else ():
+            try:
+                review = json.loads(review_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            if not isinstance(review, dict) or review.get("schema_version") != "myis.rigor-review.v1":
+                continue
+            governance = review.get("governance")
+            findings = review.get("findings")
+            if (
+                review.get("review_status") == "complete"
+                and review.get("artifact_path") == relative_package
+                and review.get("artifact_sha256") == package_file_hash
+                and isinstance(governance, dict)
+                and governance.get("approval_valid") is True
+                and governance.get("split_isolation_valid") is True
+                and governance.get("gate_order_valid") is True
+                and governance.get("budget_valid") is True
+                and governance.get("manifest_integrity_valid") is True
+                and governance.get("blocking_findings") == []
+                and isinstance(findings, list)
+                and not any(isinstance(item, dict) and item.get("severity") == "critical" for item in findings)
+            ):
+                overall = review.get("overall") if isinstance(review.get("overall"), dict) else {}
+                return {
+                    "package_id": package["package_id"],
+                    "package_uri": relative_package,
+                    "package_sha256": package["package_sha256"],
+                    "package_file_sha256": package_file_hash,
+                    "review_id": str(review.get("review_id", review_path.stem)),
+                    "review_uri": review_path.relative_to(root).as_posix(),
+                    "review_sha256": _file_sha256(review_path),
+                    "grade": overall.get("grade"),
+                    "mean_score": overall.get("mean_score"),
+                }
+    return {}
 
 
 def _dataset_projection(root: Path, receipts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if receipts:
+        contract_path = root / "control/assets/dapfam-p1-source.v1.json"
+        try:
+            contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            contract = {}
+        if isinstance(contract, dict) and contract.get("schema_version") == "myis.dapfam-p1-source.v1":
+            receipt = receipts[0]
+            counts = receipt.get("aggregate_counts", {})
+            lineage = receipt.get("lineage_hashes", {})
+            return [
+                {
+                    "dataset_id": "DAPFAM-FAMILY-CORPUS",
+                    "role": "family-corpus",
+                    "representation": "one full TAC document per family",
+                    "classification": "measured-source",
+                    "counts": {"families": counts.get("families"), "documents": counts.get("r0_documents")},
+                    "sha256": lineage.get("corpus_sha256"),
+                    "protection": "owner-local-only",
+                },
+                {
+                    "dataset_id": "DAPFAM-QUERY-SET",
+                    "role": "query-set",
+                    "representation": "TAC train/selection queries",
+                    "classification": "measured-source",
+                    "counts": {"queries": counts.get("queries"), "train": counts.get("train_queries"), "selection": counts.get("selection_queries"), "final_closed": counts.get("final_queries")},
+                    "sha256": lineage.get("query_sha256"),
+                    "protection": "owner-local-only",
+                },
+                {
+                    "dataset_id": "DAPFAM-RELEVANCE-LABELS",
+                    "role": "relevance-labels",
+                    "representation": "positive family relations with released IN/OUT labels",
+                    "classification": "measured-source",
+                    "counts": {"positive": counts.get("positive_relations"), "in": counts.get("positive_in_relations"), "out": counts.get("positive_out_relations")},
+                    "sha256": lineage.get("qrels_sha256"),
+                    "protection": "owner-local-only",
+                },
+                {
+                    "dataset_id": "DAPFAM-R0-CANDIDATES",
+                    "role": "r0-candidate",
+                    "representation": "full TAC family document",
+                    "classification": "measured-derived",
+                    "counts": {"documents": counts.get("r0_documents")},
+                    "sha256": receipt.get("aggregate_hashes", {}).get("r0_index"),
+                    "protection": "external-derived-store",
+                },
+                {
+                    "dataset_id": "DAPFAM-R0W-CANDIDATES",
+                    "role": "r0-w-candidate",
+                    "representation": "non-overlapping 512-token full TAC windows with family MaxP",
+                    "classification": "measured-derived",
+                    "counts": {"windows": counts.get("r0w_windows")},
+                    "sha256": receipt.get("aggregate_hashes", {}).get("r0-w_index"),
+                    "protection": "external-derived-store",
+                },
+            ]
     inventory_path = root / "evidence" / "legacy-dapfam-inventory.v1.json"
     if not inventory_path.is_file():
         return []

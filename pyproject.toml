@@ -24,6 +24,7 @@ tracking = [
     "waitress==3.0.2; sys_platform == 'win32'",
 ]
 notebook = ["nbclient>=0.10", "nbformat>=5.10"]
+p1 = ["pyarrow==24.0.0"]
 test = [
     "httpx==0.28.1",
     "pytest>=8,<10",
@@ -36,6 +37,7 @@ myis-sessions = "myis_research.session_cli:main"
 myis-report = "myis_research.report_cli:main"
 myis-owner-local = "myis_research.owner_local_cli:main"
 myis-legacy-dapfam = "myis_research.legacy_dapfam_cli:main"
+myis-p1-dapfam = "myis_research.dapfam_p1_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

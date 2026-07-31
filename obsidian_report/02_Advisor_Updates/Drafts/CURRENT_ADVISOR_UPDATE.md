@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3"
-read_model_sha256: "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b"
-source_commit: "94e979449d11675c57432661b0972d3f32d6bb00"
+read_model_revision: "95c4b03e4d3eda6f6df23fe470b7a4203f336ca6ffb889462393fb112a60441d"
+read_model_sha256: "18bd7500c01e09a985c7d99a4879bf6c686a248b2262eb82eb3344583f334a51"
+source_commit: "fb55ce62df935d70245d39cf52a952552935f0a6"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,8 +11,8 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-07-31T01:17:04Z"
-updated_at: "2026-07-31T01:17:04Z"
+created_at: "2026-07-31T01:29:49Z"
+updated_at: "2026-07-31T01:29:49Z"
 note_id: "CURRENT-ADVISOR-UPDATE"
 note_type: "advisor_update"
 phase_id: "P1_CPU_BASELINE"
@@ -27,69 +27,43 @@ supersedes: null
 
 # Advisor Update
 
-Generated draft. Owner edits belong in a separate meeting note; this draft is rebuilt from the shared revision.
+Generated draft; Owner edits belong in a separate immutable meeting note
 
 ## One-paragraph summary
 
-P1 is blocked with evidence recovery in progress; no measured or final-split conclusion is available.
+P1 ยัง blocked เพราะ four-slot package และ validation evidence ยังไม่ครบ.
 
 ## Plain-language primer
 
-A measured claim requires a hash-bound manifest and validation evidence, not merely an aggregate receipt.
+R0 อ่าน TAC เต็มหนึ่งฉบับต่อ family; R0-W แบ่ง TAC เป็นช่วง 512 tokens แล้วเลือกคะแนนดีที่สุดของ family
 
 ## Current Phase/Task
 
-[[P1_CPU_BASELINE_MASTER_REPORT]] and [[P1.3]].
-
-## Evidence ledger
-
-- [[P1_CPU_BASELINE_RESULT]]
-
-## Main outputs
-
-The read model records a safe historical-invalid disposition.
+[[P1_CPU_BASELINE_MASTER_REPORT]] และ [[P1.3]]
 
 ## Measured result
 
-No validated measured result.
+ยังไม่มี validated measured result
 
-## Interpretation
+## Evidence ledger
 
-The current evidence blocks promotion, which is a valid governance outcome.
+ยังไม่มี canonical four-slot run matrix
 
 ## Gate/decision
 
-D2 and D3 remain Owner-only.
+D1 ครอบคลุม P1; D2 และ D3 ยังไม่ถูกเปิดหรือเปลี่ยนแปลง
 
 ## What we can say
 
-The control plane and safe aggregate receipt exist.
+รายงาน aggregate Recall@100 สำหรับ train/selection ภายใต้ fixed CPU protocol ได้
 
 ## What we must not say
 
-No measured-complete or final-split claim.
-
-## Risks and blockers
-
-[[RAID]]
-
-## Questions for advisor
-
-What evidence-recovery framing is most useful before a fresh Owner-local P1 run?
+ยังอ้าง final performance, statistical superiority หรือ legal conclusion ไม่ได้
 
 ## Recommended next action
 
-Review the recovery freeze, then authorize only the existing Owner-local P1 workflow when ready.
-
-## Advisor Q&A preparation
-
-Why blocked? Canonical four-slot manifests and validation reports are absent.
-
-## Suggested visual story
-
-1. Research question
-2. Current evidence boundary
-3. Next reversible action
+เริ่ม P2 SCOPE development แบบ CPU-only และ reversible; ขอ Owner เฉพาะเมื่อถึง D2 หรือจำเป็นต้องขยาย compute
 
 ## Literature used
 
