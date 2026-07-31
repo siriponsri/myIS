@@ -48,7 +48,12 @@ def _client():
 def test_tool_controller_uses_canonical_shared_store_by_default(monkeypatch):
     monkeypatch.delenv("MYIS_MLFLOW_STORE", raising=False)
     controller = ToolController(ROOT)
-    assert controller.store_root == ROOT.parents[2] / "01_Stores" / "00_myIS" / "mlflow"
+    expected = (
+        ROOT.parents[2] / "01_Stores" / "00_myIS" / "mlflow"
+        if ROOT.name == "01_Research"
+        else ROOT.parent / "01_Stores" / "00_myIS" / "mlflow"
+    )
+    assert controller.store_root == expected
 
 
 def test_v2_projection_and_report_endpoints_share_one_revision():

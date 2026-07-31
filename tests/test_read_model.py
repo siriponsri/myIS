@@ -313,9 +313,10 @@ def test_full_text_p1_requires_hash_bound_package_and_rigor_review(tmp_path: Pat
 def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
     repository_root = Path(__file__).resolve().parents[1]
     receipt_path = repository_root / "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json"
-    assert hashlib.sha256(receipt_path.read_bytes()).hexdigest() == (
-        "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766"
+    disposition = json.loads(
+        receipt_path.with_name(f"{receipt_path.stem}.disposition.json").read_text(encoding="utf-8")
     )
+    assert disposition["source_file_sha256"] == "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766"
     model = build_read_model(repository_root)
     assert model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
     assert model["runs"] == []

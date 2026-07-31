@@ -490,7 +490,11 @@ def _load_legacy_disposition(root: Path) -> dict[str, Any]:
         source.relative_to(root)
     except (OSError, ValueError):
         return {}
-    if source.is_symlink() or not source.is_file() or _file_sha256(source) != payload.get("source_file_sha256"):
+    if (
+        source.is_symlink()
+        or not source.is_file()
+        or not _legacy_file_commitment_matches(source, str(payload.get("source_file_sha256", "")))
+    ):
         return {}
     invalidation = payload.get("invalidation_evidence")
     if not isinstance(invalidation, dict) or set(invalidation) != {"uri", "sha256"}:
@@ -864,6 +868,18 @@ def _file_sha256(path: Path) -> str:
     if not path.is_file():
         return ""
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _legacy_file_commitment_matches(path: Path, expected: str) -> bool:
+    """Keep the historical Windows receipt bound across Git LF checkouts."""
+
+    if not path.is_file() or path.is_symlink():
+        return False
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() == expected:
+        return True
+    crlf = raw.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+    return hashlib.sha256(crlf).hexdigest() == expected
 
 
 def _load_yaml_like(path: Path) -> dict[str, Any]:
