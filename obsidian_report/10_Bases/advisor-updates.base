@@ -1,0 +1,14 @@
+filters:
+  and:
+    - 'managed_by == "myis-report"'
+groupBy:
+  property: snapshot_status
+views:
+  - type: table
+    name: Latest
+  - type: table
+    name: Drafts
+  - type: table
+    name: Presented Snapshots
+  - type: table
+    name: Corrections

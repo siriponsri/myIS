@@ -1,0 +1,93 @@
+{
+  "$id": "myis.obsidian-note.v2",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "claim_level": {
+      "enum": [
+        "confirmatory",
+        "descriptive",
+        "exploratory",
+        "none",
+        "publication_ready"
+      ]
+    },
+    "edit_policy": {
+      "const": "generated_do_not_edit"
+    },
+    "evidence_maturity": {
+      "enum": [
+        "confirmatory",
+        "dry_run",
+        "fixture",
+        "historical_exposed",
+        "measured_development",
+        "measured_selection",
+        "non_scientific",
+        "publication"
+      ]
+    },
+    "managed_by": {
+      "const": "myis-report"
+    },
+    "note_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "note_type": {
+      "enum": [
+        "advisor_update",
+        "decision",
+        "failed_attempt",
+        "glossary",
+        "history_report",
+        "home",
+        "literature_proxy",
+        "literature_synthesis",
+        "owner_note",
+        "phase_report",
+        "presentation",
+        "project_map",
+        "result_report",
+        "risk",
+        "task_report"
+      ]
+    },
+    "safe_to_present": {
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "myis.obsidian-note.v2"
+    },
+    "workflow_status": {
+      "enum": [
+        "blocked",
+        "complete",
+        "in_progress",
+        "ready",
+        "verification_needed",
+        "waiting_dependency",
+        "waiting_gate"
+      ]
+    }
+  },
+  "required": [
+    "claim_level",
+    "edit_policy",
+    "evidence_maturity",
+    "managed_by",
+    "note_id",
+    "note_type",
+    "projection_schema_version",
+    "read_model_revision",
+    "read_model_sha256",
+    "related_decision_ids",
+    "related_literature_ids",
+    "safe_to_present",
+    "schema_version",
+    "source_commit",
+    "source_manifest_sha256",
+    "source_run_ids",
+    "workflow_status"
+  ],
+  "type": "object"
+}

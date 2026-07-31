@@ -1,0 +1,12 @@
+{
+  "dashboard_snapshot_sha256": "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b",
+  "mlflow_archive_sha256": "ca3c48b9fc861236f6b4121a2612c9bdeb0bbbee1298d6f11ff1ad651fae29db",
+  "mlflow_run_id": "a104ccdf389b43d3b5c15c18c868fa51",
+  "obsidian_manifest_sha256": "37ad4662a852515bd84d15278b11de50d32578c519d63a75bb8e4e09e2ea5d0f",
+  "projection_schema_version": "myis.integrated-projection.v2",
+  "read_model_revision": "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3",
+  "read_model_sha256": "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b",
+  "schema_version": "myis.projection-sync-receipt.v2",
+  "source_commit": "94e979449d11675c57432661b0972d3f32d6bb00",
+  "status": "PASS"
+}

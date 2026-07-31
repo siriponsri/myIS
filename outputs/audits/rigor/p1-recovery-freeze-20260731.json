@@ -1,0 +1,81 @@
+{
+  "artifact": "P1 recovery freeze revision",
+  "artifact_path": "projections/read-model/read-model.v2.json",
+  "artifact_sha256": "65ca06bbd1dece81a52cc430f83e8a1faead76a9d025566bc20b06ddc0d2f962",
+  "boundary": "Artifact-only review of the P1 recovery freeze. No experiment, protected evaluator input, final split, provider payload, or external evidence was accessed.",
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": ["The freeze claims only blocked recovery status and binds that status to the missing four-slot manifest and validation-report matrix."],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": ["Promotion requires one accepted receipt plus exact R0/R0-W by train/selection manifests and validation reports, with focused regression coverage."],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": ["The revision claims no P1 performance, no P2 authorization, and no globally untouched final-872 state."],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": ["PLAN, campaign control, source-of-truth, Dashboard, MLflow archive, Obsidian, and Paper projection share the blocked state and one revision."],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": ["The original receipt bytes and historical claims are preserved; invalid and predecessor MLflow history is retained with explicit non-promotable disposition."],
+      "suggestions": [],
+      "weaknesses": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": ["The corrected macro family Recall@100, OR retrieval, lineage bindings, immutable manifest order, and projection promotion contract are covered by synthetic tests."],
+      "suggestions": ["A fresh protected Owner-local P1 run remains required before any empirical score can be assessed."],
+      "weaknesses": ["No valid P1 measured package exists by design at this freeze."]
+    }
+  },
+  "findings": [],
+  "governance": {
+    "approval_valid": true,
+    "blocking_findings": [],
+    "budget_valid": true,
+    "gate_order_valid": true,
+    "manifest_integrity_valid": true,
+    "split_isolation_valid": true
+  },
+  "overall": {
+    "grade": "Strong Accept",
+    "mean_score": 4.83,
+    "one_line_summary": "The recovery freeze is coherent, fail-closed, and ready for one fresh Owner-local P1 rerun without promoting historical invalid evidence.",
+    "strengths": [
+      "Legacy receipt bytes retain SHA-256 f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766.",
+      "The active read model contains zero promoted runs, metrics, and evidence.",
+      "Dashboard, generated MLflow archive, Obsidian, and Paper projections share one revision.",
+      "P2, D2, final-872, GPU, paid API, and provider execution remain closed."
+    ],
+    "weaknesses": ["A protected Owner-local rerun is still required to produce valid empirical evidence."]
+  },
+  "questions_for_owner": [],
+  "read_order": [
+    "control/execution-envelope.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "control/source-of-truth.yaml",
+    "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.disposition.json",
+    "outputs/audits/rigor/p1-legacy-dapfam-recovery-20260730.json",
+    "projections/read-model/read-model.v2.json",
+    "projections/sync-receipt.v2.json",
+    "mlflow/generated/archive-index.v2.json",
+    "obsidian_report/00_System/Generated/generated-manifest.json",
+    "evidence/mlflow-p1-recovery.v1.json"
+  ],
+  "review_id": "p1-recovery-freeze-20260731",
+  "review_status": "complete",
+  "schema_version": "myis.rigor-review.v1"
+}

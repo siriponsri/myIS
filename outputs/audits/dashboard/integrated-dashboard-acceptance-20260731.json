@@ -1,0 +1,135 @@
+{
+  "schema_version": "myis.integrated-dashboard-acceptance.v1",
+  "acceptance_id": "integrated-dashboard-acceptance-20260731",
+  "created_at_utc": "2026-07-31T01:20:39Z",
+  "status": "PASS",
+  "evidence_class": "implementation_validation",
+  "scientific_claim": false,
+  "source_commit": "94e979449d11675c57432661b0972d3f32d6bb00",
+  "read_model_revision": "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3",
+  "read_model_sha256": "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b",
+  "read_model_file_sha256": "65ca06bbd1dece81a52cc430f83e8a1faead76a9d025566bc20b06ddc0d2f962",
+  "canonical_state": "P1_BLOCKED_WITH_EVIDENCE",
+  "promoted_counts": {
+    "runs": 0,
+    "metrics": 0,
+    "evidence": 0
+  },
+  "cross_surface_binding": {
+    "dashboard_revision_match": true,
+    "mlflow_archive_revision_match": true,
+    "obsidian_manifest_revision_match": true,
+    "sync_receipt_revision_match": true,
+    "obsidian_manifest_file_count": 190,
+    "mlflow_projection_run_id": "a104ccdf389b43d3b5c15c18c868fa51"
+  },
+  "checks": [
+    {
+      "check_id": "full_pytest",
+      "status": "PASS",
+      "summary": "112 tests passed with one existing Starlette deprecation warning."
+    },
+    {
+      "check_id": "responsive_visual_qa",
+      "status": "PASS",
+      "summary": "1920x1080, 1366x768, 1024x768, and 390x844 layouts have no incoherent overlap, clipping, or page-level horizontal overflow."
+    },
+    {
+      "check_id": "browser_interaction",
+      "status": "PASS",
+      "summary": "Governance, report list/filter/detail/hash, tool status, ten-screen Owner/Advisor/Peer presentation, arrows, Escape, Print, and skip-link focus passed with zero console warnings or errors."
+    },
+    {
+      "check_id": "windows_launcher",
+      "status": "PASS",
+      "summary": "Explorer-compatible launch, exact child health token, malformed-port rejection, sequential reuse, concurrent single listener, unknown-owner preservation, child rollback, and browser-after-health passed."
+    },
+    {
+      "check_id": "mlflow_tool_action",
+      "status": "PASS",
+      "summary": "Dashboard started and opened the read-only viewer, a second action reused one PID, HTTP health and viewer returned 200, and stop removed the owned listener."
+    },
+    {
+      "check_id": "mlflow_store_immutability",
+      "status": "PASS",
+      "summary": "Viewer and Dashboard tool workflows preserved external database SHA-256 9965e5f5d024708ff935897235339d802a24fa31c81d21be4a191d25817270de."
+    },
+    {
+      "check_id": "obsidian_exact_note",
+      "status": "PASS",
+      "summary": "Dashboard opened fixed note_id HOME after manifest path, revision, and file hash validation."
+    },
+    {
+      "check_id": "projection_determinism",
+      "status": "PASS",
+      "summary": "Two real sync/check cycles reused one MLflow projection run and reported no read-model or report drift."
+    },
+    {
+      "check_id": "protected_boundary",
+      "status": "PASS",
+      "summary": "No protected P1 store, final split, query identifiers, qrels, membership, per-query outcomes, credentials, GPU, paid API, or provider payload was accessed or projected."
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "output/playwright/integrated-dashboard/dashboard-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "9d2a3bb1184c2d3374564f9ffa7ee891995e146aa116ce847f29b0e28517d66a"
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/dashboard-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "ec697320c740cf0d889ed1ae324ea6277f9afe45c3123c93cc1d59de8e2155bd"
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/dashboard-1024x768.png",
+      "width": 1024,
+      "height": 768,
+      "sha256": "6410dab2f18ee901f132bffb470c4489a3f257f151aa85a2c4ebe54a440147aa"
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/dashboard-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "0a3bafacf4e59320a1d28177580d61e92f6943a463b5bf6d71df6c0ed8c5b335"
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/current-desktop.png",
+      "sha256": "82ab658219878a58818df729311ce9050ec0545a6a9e2cf56a2600979b71661e"
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/current-mobile-390x844.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "09e668e96f4beeb01b68892d161f73add1994e938b3780497f025da75f647b7b"
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/current-mobile-gates.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "c466700cdc3afb6a0297d69fb87a18aa1fcc038a4636e92610a0dea224503afe"
+    }
+  ],
+  "launcher_migration": {
+    "active_user_launcher": "dashboard/open-dashboard.cmd",
+    "retired_active_paths": [
+      "projections/open-dashboard.cmd",
+      "projections/open-mlflow.cmd",
+      "projections/open-obsidian-report.cmd"
+    ],
+    "archive_root": "archive/p1-recovery-20260730/legacy-launchers",
+    "original_sha256": {
+      "projections/open-dashboard.cmd": "ac660d485ba23c1d0e31b6735a5e63cd223da6d5bec02431dbb4eea102228c53",
+      "projections/open-mlflow.cmd": "594374515359e1cd8b5e79b3d568a6347a7e22ff71aa89a20e14ef3966577949",
+      "projections/open-obsidian-report.cmd": "4ed90c80dc28d038de7d986557f3e859e1891b8d55b2d85f0e635b3f136e626f"
+    },
+    "rollback": "Restore only from reviewed Git history or the archived .cmd.txt source; retired launchers remain unsupported."
+  },
+  "known_factual_limitations": [
+    "No valid measured P1 package exists; no empirical score is claimed.",
+    "Advisor presented snapshot count is zero because no real meeting snapshot has been frozen.",
+    "The protected Owner-local P1 rerun remains the next evidence-producing action, outside this recovery freeze."
+  ]
+}

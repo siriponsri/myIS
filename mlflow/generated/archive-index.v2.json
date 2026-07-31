@@ -1,0 +1,14 @@
+{
+  "campaign_experiment": "myis-scope-autoindex-v1",
+  "dashboard_snapshot_sha256": "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b",
+  "evidence_ids": [],
+  "obsidian_manifest_sha256": "37ad4662a852515bd84d15278b11de50d32578c519d63a75bb8e4e09e2ea5d0f",
+  "projection_schema_version": "myis.integrated-projection.v2",
+  "read_model_revision": "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3",
+  "read_model_sha256": "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b",
+  "run_ids": [],
+  "schema_version": "myis.mlflow-archive-index.v2",
+  "source_commit": "94e979449d11675c57432661b0972d3f32d6bb00",
+  "status": "blocked",
+  "system_experiment": "myis-system"
+}

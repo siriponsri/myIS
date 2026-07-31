@@ -34,6 +34,9 @@ __pycache__/
 .understand-anything/
 .playwright-cli/
 .playwright-mcp/
+obsidian_report/.obsidian/workspace*.json
+obsidian_report/.obsidian/app.json
+obsidian_report/.obsidian/appearance.json
 .serena/
 .cache/
 .pytest_cache/

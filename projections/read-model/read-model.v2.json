@@ -1,0 +1,640 @@
+{
+  "advisor_updates": {
+    "draft_path": "obsidian_report/02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md",
+    "presented_immutable": true
+  },
+  "archive_contract": {
+    "active_experiments": [
+      "myis-scope-autoindex-v1",
+      "myis-system"
+    ],
+    "freeze_required_for_measured_runs": true,
+    "legacy_policy": "legacy_read_only",
+    "schema_version": "myis.mlflow-archive-contract.v2",
+    "scientific_experiment": "myis-scope-autoindex-v1",
+    "system_experiment": "myis-system",
+    "viewer": "sqlite_read_only",
+    "writer": "serialized_append_only"
+  },
+  "campaigns": [
+    {
+      "active_owner_decisions": [
+        "D2_OPEN_FINAL",
+        "D3_SUBMIT_RELEASE"
+      ],
+      "campaign_id": "scope-autoindex-v1",
+      "current_state": "P1_BLOCKED_WITH_EVIDENCE",
+      "primary_metric": "recall_at_100/out",
+      "standing_authorization": "D1_START_CAMPAIGN",
+      "status": "P1_BLOCKED_WITH_EVIDENCE",
+      "title": "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
+    }
+  ],
+  "cost": {
+    "actual": null,
+    "budget": 100.0,
+    "currency": "USD",
+    "estimated": 0.0
+  },
+  "datasets": [
+    {
+      "bytes": 3125138209,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "families": null,
+        "patents": null
+      },
+      "dataset_id": "DAPFAM-FAMILY-CORPUS",
+      "protection": "metadata-safe",
+      "representation": "patent family records",
+      "role": "family-corpus",
+      "sha256": "2d79ee7d0479565711889553d2da849fef5e3a7aa5014bf398a43c5becd0cab7"
+    },
+    {
+      "bytes": 158762269,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "queries": null
+      },
+      "dataset_id": "DAPFAM-QUERY-SET",
+      "protection": "owner-local-only",
+      "representation": "TAC query records",
+      "role": "query-set",
+      "sha256": "50a0e9c5673e9e3e0ae2558272dc824572554067bd1443d043016aedeb7fe3fa"
+    },
+    {
+      "bytes": 2194236,
+      "classification": "reusable-after-certification",
+      "dataset_id": "DAPFAM-RELEVANCE-LABELS",
+      "protection": "owner-local-only",
+      "representation": "family relevance labels",
+      "role": "relevance-labels",
+      "sha256": null
+    },
+    {
+      "bytes": 3114241891,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "documents": null
+      },
+      "dataset_id": "DAPFAM-R0-CANDIDATES",
+      "protection": "metadata-safe",
+      "representation": "one document per family candidate",
+      "role": "r0-candidate",
+      "sha256": "ed4ee8a98c89722d88d15ad83b398a125bec0e2bd4e7c79385613676b135e99e"
+    },
+    {
+      "bytes": 381979442,
+      "classification": "reusable-after-certification",
+      "counts": {
+        "passages": null
+      },
+      "dataset_id": "DAPFAM-R0W-CANDIDATES",
+      "protection": "metadata-safe",
+      "representation": "TAC512 passages with family MaxP",
+      "role": "r0-w-candidate",
+      "sha256": "877ab4c68bde5aff4178276180896024235658cee216c6584f27c80d83be4061"
+    },
+    {
+      "bytes": 3162706100,
+      "classification": "historical-reference",
+      "constraint": "reference only; not active R1 main",
+      "dataset_id": "DAPFAM-R1-REFERENCE",
+      "protection": "metadata-safe",
+      "representation": "section units",
+      "role": "r1-reference",
+      "sha256": "b661798f7946f3512d69c6cdc70430cef38e957f6bb2116f93b9e4a6a49f054d"
+    },
+    {
+      "bytes": 1172767750,
+      "classification": "incompatible",
+      "constraint": "exceeds four-unit DAPFAM limit; never active R1 main",
+      "dataset_id": "DAPFAM-INCOMPATIBLE",
+      "protection": "metadata-safe",
+      "representation": "element units",
+      "role": "incompatible",
+      "sha256": "e00d64fb7b8a2eda62d8728a0eda543b188b1f79e732b053af255fe1232cd095"
+    }
+  ],
+  "decisions": [],
+  "evidence": [],
+  "experiments": [],
+  "gates": [
+    {
+      "gate_id": "D2_OPEN_FINAL",
+      "status": "waiting_owner"
+    },
+    {
+      "gate_id": "D3_SUBMIT_RELEASE",
+      "status": "waiting_owner"
+    }
+  ],
+  "generated_at": "2026-07-31T01:17:04Z",
+  "historical_exposure": {
+    "active_final_872_global_untouched": "not_claimable"
+  },
+  "interpretations": [
+    {
+      "interpretation_id": "P1-CPU-BASELINE-INTERPRETATION",
+      "result_id": "P1-CPU-BASELINE",
+      "statement": "\u0e22\u0e31\u0e07\u0e2a\u0e23\u0e38\u0e1b\u0e1c\u0e25\u0e40\u0e0a\u0e34\u0e07\u0e27\u0e34\u0e17\u0e22\u0e32\u0e28\u0e32\u0e2a\u0e15\u0e23\u0e4c\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e08\u0e19\u0e01\u0e27\u0e48\u0e32 evidence matrix \u0e08\u0e30\u0e1c\u0e48\u0e32\u0e19",
+      "status": "blocked"
+    }
+  ],
+  "literature": {
+    "proxy_mode": true,
+    "registry": "evidence/literature/catalog/corpus_manifest.csv"
+  },
+  "metrics": [],
+  "milestones": [
+    {
+      "depends_on": [],
+      "milestone_id": "P0_FOUNDATION",
+      "status": "complete"
+    },
+    {
+      "depends_on": [
+        "P0_FOUNDATION"
+      ],
+      "milestone_id": "P1_CPU_BASELINE",
+      "status": "blocked"
+    },
+    {
+      "depends_on": [
+        "P1_CPU_BASELINE"
+      ],
+      "milestone_id": "P2_SCOPE_DEVELOPMENT",
+      "status": "blocked_until_p1"
+    },
+    {
+      "depends_on": [
+        "P2_SCOPE_DEVELOPMENT"
+      ],
+      "milestone_id": "P3_FINAL",
+      "status": "locked_until_D2"
+    },
+    {
+      "depends_on": [
+        "P3_FINAL"
+      ],
+      "milestone_id": "P4_PUBLICATION",
+      "status": "locked_until_D3"
+    }
+  ],
+  "mlflow_registration": {},
+  "outputs": [
+    {
+      "disposition_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.disposition.json",
+      "evidence_class": "historical_invalid",
+      "output_id": "P1-LEGACY-RECEIPT",
+      "phase_id": "P1_CPU_BASELINE",
+      "promotable": false,
+      "source_sha256": "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766",
+      "source_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.json",
+      "status": "historical_invalid_superseded",
+      "superseded_by": "fresh-owner-local-p1-rerun-pending",
+      "task_id": "P1.3"
+    }
+  ],
+  "owner_inbox": [
+    {
+      "action_id": "review-recovery-freeze",
+      "kind": "owner_command",
+      "label": "\u0e23\u0e2d Owner \u0e15\u0e23\u0e27\u0e08 recovery freeze \u0e41\u0e25\u0e30\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 invalidation"
+    },
+    {
+      "action_id": "fresh-owner-local-p1-rerun",
+      "kind": "owner_command",
+      "label": "\u0e23\u0e31\u0e19 P1 \u0e43\u0e2b\u0e21\u0e48\u0e41\u0e1a\u0e1a Owner-local \u0e40\u0e21\u0e37\u0e48\u0e2d Owner \u0e2a\u0e31\u0e48\u0e07\u0e2b\u0e25\u0e31\u0e07 review"
+    },
+    {
+      "action_id": "hold-before-p2",
+      "kind": "constraint",
+      "label": "\u0e2b\u0e49\u0e32\u0e21\u0e40\u0e23\u0e34\u0e48\u0e21 P2 \u0e08\u0e19\u0e01\u0e27\u0e48\u0e32 P1 rerun \u0e08\u0e30\u0e21\u0e35 receipt, manifests \u0e41\u0e25\u0e30 validation reports \u0e04\u0e23\u0e1a"
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": "P0_FOUNDATION",
+      "status": "complete",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P0_FOUNDATION",
+          "status": "complete",
+          "task_id": "P0.1",
+          "title": "Deterministic kernel and schema contracts"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P0_FOUNDATION",
+          "status": "complete",
+          "task_id": "P0.2",
+          "title": "Integrity preflight and protected boundary"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P0_FOUNDATION",
+          "status": "complete",
+          "task_id": "P0.3",
+          "title": "Projection contracts and migration closure"
+        }
+      ]
+    },
+    {
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "blocked",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P1_CPU_BASELINE",
+          "status": "blocked",
+          "task_id": "P1.1",
+          "title": "R0 flat BM25 fixture lane"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P1_CPU_BASELINE",
+          "status": "blocked",
+          "task_id": "P1.2",
+          "title": "R0-W window maxP fixture lane"
+        },
+        {
+          "evidence_ids": [],
+          "phase_id": "P1_CPU_BASELINE",
+          "status": "blocked",
+          "task_id": "P1.3",
+          "title": "Protected owner-local CPU handoff"
+        }
+      ]
+    },
+    {
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "status": "blocked_until_p1",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P2_SCOPE_DEVELOPMENT",
+          "status": "blocked_until_p1",
+          "task_id": "P2.1",
+          "title": "R1 SCOPE/AutoIndex development"
+        }
+      ]
+    },
+    {
+      "phase_id": "P3_FINAL",
+      "status": "locked_until_D2",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P3_FINAL",
+          "status": "locked_owner_D2",
+          "task_id": "P3.1",
+          "title": "Frozen final evaluation"
+        }
+      ]
+    },
+    {
+      "phase_id": "P4_PUBLICATION",
+      "status": "locked_until_D3",
+      "tasks": [
+        {
+          "evidence_ids": [],
+          "phase_id": "P4_PUBLICATION",
+          "status": "locked_owner_D3",
+          "task_id": "P4.1",
+          "title": "Manuscript and release package"
+        }
+      ]
+    }
+  ],
+  "presentation": {
+    "audiences": [
+      "owner",
+      "advisor",
+      "peer"
+    ],
+    "claim_boundary": "no_measured_claim",
+    "safe_result_ids": [
+      "P1-CPU-BASELINE"
+    ],
+    "screens": [
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "\u0e04\u0e33\u0e16\u0e32\u0e21\u0e2b\u0e25\u0e31\u0e01\u0e04\u0e37\u0e2d representation \u0e17\u0e35\u0e48\u0e22\u0e36\u0e14\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19\u0e08\u0e30\u0e0a\u0e48\u0e27\u0e22 family-level patent retrieval \u0e44\u0e14\u0e49\u0e2b\u0e23\u0e37\u0e2d\u0e44\u0e21\u0e48 \u0e40\u0e21\u0e37\u0e48\u0e2d retriever, evaluator \u0e41\u0e25\u0e30 budget \u0e04\u0e07\u0e17\u0e35\u0e48",
+        "order": 1,
+        "safe_to_present": true,
+        "screen_id": "shared-01-thesis",
+        "title_th": "myIS Research: SCOPE / AutoIndex",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "\u0e2a\u0e34\u0e17\u0e18\u0e34\u0e1a\u0e31\u0e15\u0e23\u0e22\u0e32\u0e27 \u0e43\u0e0a\u0e49\u0e16\u0e49\u0e2d\u0e22\u0e04\u0e33\u0e2b\u0e25\u0e32\u0e01\u0e2b\u0e25\u0e32\u0e22 \u0e41\u0e25\u0e30\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19\u0e2d\u0e32\u0e08\u0e2d\u0e22\u0e39\u0e48\u0e04\u0e19\u0e25\u0e30\u0e2a\u0e48\u0e27\u0e19\u0e02\u0e2d\u0e07\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23 \u0e01\u0e32\u0e23\u0e1b\u0e23\u0e30\u0e40\u0e21\u0e34\u0e19\u0e08\u0e36\u0e07\u0e15\u0e49\u0e2d\u0e07\u0e41\u0e22\u0e01 retrieval evidence \u0e2d\u0e2d\u0e01\u0e08\u0e32\u0e01\u0e02\u0e49\u0e2d\u0e2a\u0e23\u0e38\u0e1b\u0e17\u0e32\u0e07\u0e01\u0e0e\u0e2b\u0e21\u0e32\u0e22",
+        "order": 2,
+        "safe_to_present": true,
+        "screen_id": "shared-02-difficulty",
+        "title_th": "\u0e40\u0e2b\u0e15\u0e38\u0e43\u0e14\u0e01\u0e32\u0e23\u0e04\u0e49\u0e19 prior art \u0e08\u0e36\u0e07\u0e22\u0e32\u0e01",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "\u0e07\u0e32\u0e19\u0e1b\u0e31\u0e08\u0e08\u0e38\u0e1a\u0e31\u0e19\u0e40\u0e1b\u0e47\u0e19 CPU-only \u0e41\u0e25\u0e30 aggregate-only; \u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25 protected \u0e41\u0e25\u0e30 final confirmation \u0e22\u0e31\u0e07\u0e2d\u0e22\u0e39\u0e48\u0e43\u0e19 Owner-local boundary",
+        "order": 3,
+        "safe_to_present": true,
+        "screen_id": "shared-03-boundary",
+        "title_th": "\u0e02\u0e2d\u0e1a\u0e40\u0e02\u0e15\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e41\u0e25\u0e30\u0e01\u0e32\u0e23\u0e1b\u0e23\u0e30\u0e40\u0e21\u0e34\u0e19",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "\u0e1a\u0e17\u0e40\u0e23\u0e35\u0e22\u0e19\u0e08\u0e32\u0e01\u0e07\u0e32\u0e19\u0e40\u0e14\u0e34\u0e21\u0e0a\u0e35\u0e49\u0e43\u0e2b\u0e49\u0e15\u0e23\u0e27\u0e08 candidate exposure \u0e41\u0e25\u0e30 headroom \u0e01\u0e48\u0e2d\u0e19\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e04\u0e27\u0e32\u0e21\u0e0b\u0e31\u0e1a\u0e0b\u0e49\u0e2d\u0e19 \u0e1c\u0e25\u0e40\u0e14\u0e34\u0e21\u0e16\u0e39\u0e01\u0e40\u0e01\u0e47\u0e1a\u0e40\u0e1b\u0e47\u0e19 historical/exposed \u0e41\u0e25\u0e30\u0e44\u0e21\u0e48\u0e1b\u0e30\u0e1b\u0e19\u0e01\u0e31\u0e1a\u0e1c\u0e25\u0e1b\u0e31\u0e08\u0e08\u0e38\u0e1a\u0e31\u0e19",
+        "order": 4,
+        "safe_to_present": true,
+        "screen_id": "shared-04-history",
+        "title_th": "\u0e40\u0e2a\u0e49\u0e19\u0e17\u0e32\u0e07 A \u2192 B \u2192 D \u2192 SCOPE",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "Control files \u0e41\u0e25\u0e30 immutable receipts \u0e2a\u0e23\u0e49\u0e32\u0e07 shared read model \u0e2b\u0e19\u0e36\u0e48\u0e07\u0e04\u0e23\u0e31\u0e49\u0e07 \u0e41\u0e25\u0e49\u0e27 fan out \u0e44\u0e1b Dashboard, MLflow \u0e41\u0e25\u0e30 Obsidian \u0e14\u0e49\u0e27\u0e22 revision \u0e40\u0e14\u0e35\u0e22\u0e27\u0e01\u0e31\u0e19",
+        "order": 5,
+        "safe_to_present": true,
+        "screen_id": "shared-05-architecture",
+        "title_th": "\u0e23\u0e30\u0e1a\u0e1a\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e0a\u0e38\u0e14 \u0e2b\u0e25\u0e32\u0e22\u0e21\u0e38\u0e21\u0e21\u0e2d\u0e07",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "P0: complete, P1: blocked, P2: blocked_until_p1, P3: locked_until_D2, P4: locked_until_D3",
+        "order": 6,
+        "safe_to_present": true,
+        "screen_id": "shared-06-plan",
+        "title_th": "\u0e41\u0e1c\u0e19 P0\u2013P4",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "Task \u0e17\u0e35\u0e48\u0e40\u0e2a\u0e23\u0e47\u0e08\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 3/9; \u0e40\u0e01\u0e47\u0e1a legacy receipt \u0e44\u0e27\u0e49\u0e40\u0e1b\u0e47\u0e19 historical-invalid output",
+        "order": 7,
+        "safe_to_present": true,
+        "screen_id": "shared-07-delivered",
+        "title_th": "\u0e2a\u0e34\u0e48\u0e07\u0e17\u0e35\u0e48\u0e2a\u0e48\u0e07\u0e21\u0e2d\u0e1a\u0e41\u0e25\u0e49\u0e27",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "\u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35\u0e1c\u0e25 P1 \u0e17\u0e35\u0e48\u0e1c\u0e48\u0e32\u0e19 validation; \u0e2a\u0e16\u0e32\u0e19\u0e30\u0e17\u0e35\u0e48\u0e23\u0e32\u0e22\u0e07\u0e32\u0e19\u0e44\u0e14\u0e49\u0e04\u0e37\u0e2d blocked with evidence",
+        "order": 8,
+        "safe_to_present": true,
+        "screen_id": "shared-08-result",
+        "title_th": "\u0e1c\u0e25\u0e17\u0e35\u0e48\u0e15\u0e23\u0e27\u0e08\u0e2a\u0e2d\u0e1a\u0e41\u0e25\u0e49\u0e27\u0e25\u0e48\u0e32\u0e2a\u0e38\u0e14",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19\u0e1b\u0e31\u0e08\u0e08\u0e38\u0e1a\u0e31\u0e19\u0e23\u0e2d\u0e07\u0e23\u0e31\u0e1a\u0e40\u0e09\u0e1e\u0e32\u0e30\u0e2a\u0e16\u0e32\u0e19\u0e30 recovery \u0e02\u0e2d\u0e07 P1 \u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e23\u0e2d\u0e07\u0e23\u0e31\u0e1a measured claim, P2, final confirmation \u0e2b\u0e23\u0e37\u0e2d publication claim",
+        "order": 9,
+        "safe_to_present": true,
+        "screen_id": "shared-09-interpretation",
+        "title_th": "\u0e01\u0e32\u0e23\u0e41\u0e1b\u0e25\u0e1c\u0e25\u0e41\u0e25\u0e30\u0e02\u0e49\u0e2d\u0e08\u0e33\u0e01\u0e31\u0e14",
+        "visual_artifact_id": null
+      },
+      {
+        "audience": [
+          "owner",
+          "advisor",
+          "peer"
+        ],
+        "evidence_ids": [],
+        "message_th": "P1_BLOCKED_WITH_EVIDENCE. \u0e02\u0e31\u0e49\u0e19\u0e16\u0e31\u0e14\u0e44\u0e1b: \u0e23\u0e2d Owner \u0e15\u0e23\u0e27\u0e08 recovery freeze \u0e41\u0e25\u0e30\u0e2b\u0e25\u0e31\u0e01\u0e10\u0e32\u0e19 invalidation. D2 \u0e41\u0e25\u0e30 D3 \u0e22\u0e31\u0e07\u0e04\u0e07\u0e40\u0e1b\u0e47\u0e19 Owner-only decisions",
+        "order": 10,
+        "safe_to_present": true,
+        "screen_id": "shared-10-next",
+        "title_th": "\u0e2a\u0e16\u0e32\u0e19\u0e30\u0e41\u0e25\u0e30\u0e01\u0e32\u0e23\u0e15\u0e31\u0e14\u0e2a\u0e34\u0e19\u0e43\u0e08\u0e16\u0e31\u0e14\u0e44\u0e1b",
+        "visual_artifact_id": null
+      }
+    ]
+  },
+  "progress": {
+    "done": 3,
+    "in_process": 0,
+    "planned_or_blocked": 6,
+    "total": 9
+  },
+  "project": {
+    "campaign_id": "scope-autoindex-v1",
+    "current_phase": "P1_CPU_BASELINE",
+    "current_task": "P1.3",
+    "display_name": "myIS Research",
+    "program_id": "myis-research",
+    "state": "P1_BLOCKED_WITH_EVIDENCE"
+  },
+  "projection_health": {
+    "reason": "p1_evidence_matrix_missing",
+    "shared_revision_required": true,
+    "status": "blocked"
+  },
+  "projection_revision": "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3",
+  "projection_schema_version": "myis.integrated-projection.v2",
+  "publication_readiness": {
+    "checks": [
+      {
+        "id": "canonical_run_manifest",
+        "source": "campaigns/scope-autoindex-v1/manifests",
+        "status": "blocked"
+      },
+      {
+        "id": "owner_local_aggregate",
+        "source": "campaigns/scope-autoindex-v1/evidence",
+        "status": "blocked"
+      },
+      {
+        "id": "d2_open_final",
+        "source": "control/decisions/ledger.jsonl",
+        "status": "blocked"
+      },
+      {
+        "id": "live_venue_check",
+        "source": "Owner/live venue verification",
+        "status": "unknown"
+      },
+      {
+        "id": "prior_publication_status",
+        "source": "Owner publication declaration",
+        "status": "unknown"
+      },
+      {
+        "id": "paper_build_hash_closure",
+        "source": "03_Paper/publications/isai-nlp-2026",
+        "status": "blocked"
+      },
+      {
+        "id": "historical_final_872_exposure",
+        "source": "owner-local historical exposure audit",
+        "status": "blocked"
+      }
+    ],
+    "schema_version": "myis.publication-readiness.v1",
+    "status": "blocked"
+  },
+  "raid": [
+    {
+      "kind": "risk",
+      "raid_id": "RISK-P1-EVIDENCE-MATRIX",
+      "status": "open",
+      "summary": "P1 receipt \u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35 hash-matched validation reports \u0e41\u0e25\u0e30 four-slot manifests"
+    }
+  ],
+  "read_model_revision": "2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3",
+  "read_model_sha256": "267ab7b1d4651440186975f6bef2b95fa391a3bac0d6701f6837f308b4ef3e0b",
+  "reports": {
+    "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
+    "vault_id": "myis-obsidian-report",
+    "vault_path": "obsidian_report"
+  },
+  "resources": {
+    "actual_cost_usd": 0.0,
+    "budget_usd": 100.0,
+    "cpu_only": true,
+    "gpu": false,
+    "paid_api": false
+  },
+  "results": [
+    {
+      "claim_boundary": "no_measured_claim",
+      "evidence_maturity": "not_run",
+      "limitations": [
+        "active_final_872_global_untouched_not_claimable"
+      ],
+      "metric_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "result_id": "P1-CPU-BASELINE",
+      "task_id": "P1.3",
+      "validity": "blocked"
+    }
+  ],
+  "runs": [],
+  "schema_version": "myis.read-model.v2",
+  "source_commit": "94e979449d11675c57432661b0972d3f32d6bb00",
+  "tasks": [
+    {
+      "evidence_ids": [],
+      "phase_id": "P0_FOUNDATION",
+      "status": "complete",
+      "task_id": "P0.1",
+      "title": "Deterministic kernel and schema contracts"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P0_FOUNDATION",
+      "status": "complete",
+      "task_id": "P0.2",
+      "title": "Integrity preflight and protected boundary"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P0_FOUNDATION",
+      "status": "complete",
+      "task_id": "P0.3",
+      "title": "Projection contracts and migration closure"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "blocked",
+      "task_id": "P1.1",
+      "title": "R0 flat BM25 fixture lane"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "blocked",
+      "task_id": "P1.2",
+      "title": "R0-W window maxP fixture lane"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P1_CPU_BASELINE",
+      "status": "blocked",
+      "task_id": "P1.3",
+      "title": "Protected owner-local CPU handoff"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "status": "blocked_until_p1",
+      "task_id": "P2.1",
+      "title": "R1 SCOPE/AutoIndex development"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P3_FINAL",
+      "status": "locked_owner_D2",
+      "task_id": "P3.1",
+      "title": "Frozen final evaluation"
+    },
+    {
+      "evidence_ids": [],
+      "phase_id": "P4_PUBLICATION",
+      "status": "locked_owner_D3",
+      "task_id": "P4.1",
+      "title": "Manuscript and release package"
+    }
+  ],
+  "tools": {
+    "mlflow": {
+      "mode": "read_only_on_demand",
+      "port": 5000
+    },
+    "obsidian": {
+      "open_via_dashboard": true,
+      "vault_id": "myis-obsidian-report"
+    }
+  }
+}

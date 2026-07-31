@@ -1,0 +1,18 @@
+filters:
+  and:
+    - 'managed_by == "myis-report"'
+groupBy:
+  property: evidence_maturity
+views:
+  - type: table
+    name: Current Valid
+  - type: table
+    name: Selection
+  - type: table
+    name: Confirmation
+  - type: table
+    name: Negative or Null
+  - type: table
+    name: Historical Exposed
+  - type: table
+    name: Publication Ready

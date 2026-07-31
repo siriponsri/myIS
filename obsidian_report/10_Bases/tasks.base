@@ -1,0 +1,18 @@
+filters:
+  and:
+    - 'managed_by == "myis-report"'
+groupBy:
+  property: workflow_status
+views:
+  - type: table
+    name: Simple Board
+  - type: table
+    name: PM Detail
+  - type: table
+    name: By Phase
+  - type: table
+    name: Blocked
+  - type: table
+    name: Verification Needed
+  - type: table
+    name: Owner Actions

@@ -1,0 +1,18 @@
+filters:
+  and:
+    - 'managed_by == "myis-report"'
+groupBy:
+  property: literature_status
+views:
+  - type: table
+    name: By Theme
+  - type: table
+    name: By Status
+  - type: table
+    name: Cited
+  - type: table
+    name: Supports
+  - type: table
+    name: Challenges
+  - type: table
+    name: Missing Synthesis

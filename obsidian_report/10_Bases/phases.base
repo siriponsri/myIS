@@ -1,0 +1,12 @@
+filters:
+  and:
+    - 'managed_by == "myis-report"'
+groupBy:
+  property: phase_id
+views:
+  - type: table
+    name: P0-P4 Overview
+  - type: table
+    name: Current Phase
+  - type: table
+    name: Blocked Phases

@@ -1,11 +1,14 @@
 ---
-source: ../../read-model/read-model.v1.json
-source_sha256: c66fa096b90062dd602290c99644b57642ca49bb3bdad5318cfc01b66efd388b
+read_model_revision: 2bb50118006ff0a4ab8c3579bfec3251a8a053c7fb08793ba6ebb5d6d2b86be3
+managed_by: myis-report
 ---
 
 # Program Status
 
-- Campaign: `scope-autoindex-v1`
-- Phase status: **p1_cpu_measured_complete_waiting_review**
-- Runs: 3
-- Evidence pointers: 2
+State: **P1_BLOCKED_WITH_EVIDENCE**
+
+- **P0_FOUNDATION**: complete
+- **P1_CPU_BASELINE**: blocked
+- **P2_SCOPE_DEVELOPMENT**: blocked_until_p1
+- **P3_FINAL**: locked_until_D2
+- **P4_PUBLICATION**: locked_until_D3
