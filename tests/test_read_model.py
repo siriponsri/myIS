@@ -350,6 +350,34 @@ def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
     }]
 
 
+def test_checked_in_p1_raw_hash_bindings_are_checkout_stable() -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    source_path = repository_root / "control/assets/dapfam-p1-source.v1.json"
+    package_path = repository_root / (
+        "campaigns/scope-autoindex-v1/packages/"
+        "dapfam-p1-fulltext-c058a3aa7357c782.package.json"
+    )
+    review_path = repository_root / (
+        "outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json"
+    )
+    package = json.loads(package_path.read_text(encoding="utf-8"))
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+
+    assert hashlib.sha256(source_path.read_bytes()).hexdigest() == package["source_contract_sha256"]
+    assert hashlib.sha256(package_path.read_bytes()).hexdigest() == review["artifact_sha256"]
+
+    attributes = {
+        line.strip()
+        for line in (repository_root / ".gitattributes").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    assert {
+        "control/assets/dapfam-p1-source.v1.json -text",
+        "campaigns/scope-autoindex-v1/packages/*.json -text",
+        "outputs/audits/rigor/**/*.json -text",
+    } <= attributes
+
+
 def test_legacy_commitment_accepts_only_lf_crlf_checkout_variance(tmp_path: Path) -> None:
     path = tmp_path / "legacy.json"
     path.write_bytes(b'{"status":"historical-invalid"}\n')

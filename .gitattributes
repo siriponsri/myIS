@@ -6,3 +6,13 @@
 
 # Git Bash launchers must retain LF line endings on Windows.
 06_frontend/mlflow/*.sh text eol=lf
+
+# Canonical P1 JSON is hash-bound evidence. Preserve repository bytes on every
+# platform so clean Windows checkouts cannot invalidate raw SHA-256 bindings.
+control/assets/dapfam-p1-source.v1.json -text
+campaigns/scope-autoindex-v1/requests/*.json -text
+campaigns/scope-autoindex-v1/evidence/*.json -text
+campaigns/scope-autoindex-v1/manifests/*.json -text
+campaigns/scope-autoindex-v1/validation-reports/*.json -text
+campaigns/scope-autoindex-v1/packages/*.json -text
+outputs/audits/rigor/**/*.json -text
