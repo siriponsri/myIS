@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterator
 
 from ..identity import PROGRAM_ID, PROTOCOL_VERSION, RESEARCH_VERSION
+from .contract import DASHBOARD_API_CONTRACT
 
 
 class DashboardLauncherError(RuntimeError):
@@ -129,6 +130,7 @@ def _expected_health_payload(payload: Any, launch_token: str | None) -> bool:
         "program_id": PROGRAM_ID,
         "protocol_version": PROTOCOL_VERSION,
         "research_version": RESEARCH_VERSION,
+        "api_contract": DASHBOARD_API_CONTRACT,
     }
     if launch_token is not None:
         return payload == {**expected, "launch_token": launch_token}

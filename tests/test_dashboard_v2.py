@@ -3,6 +3,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from myis_research.dashboard.app import create_app
+from myis_research.dashboard.contract import DASHBOARD_API_CONTRACT
 
 
 def test_dashboard_presents_read_model_and_frontend():
@@ -101,12 +102,20 @@ def test_dashboard_rejects_invalid_host_origin_and_csrf():
     assert preview.status_code == 200
 
 
-def test_dashboard_health_includes_child_launch_token_only_when_configured():
+def test_dashboard_health_advertises_v2_contract_and_optional_child_token():
     root = Path(__file__).resolve().parents[1]
     headers = {"Host": "127.0.0.1:8765"}
-    response = TestClient(create_app(repository_root=root, test_mode=True, launch_token="child-token")).get("/healthz", headers=headers)
+    response = TestClient(create_app(repository_root=root, test_mode=True)).get("/healthz", headers=headers)
     assert response.status_code == 200
-    assert response.json()["launch_token"] == "child-token"
+    assert response.json()["api_contract"] == DASHBOARD_API_CONTRACT
+    assert "launch_token" not in response.json()
+
+    child_response = TestClient(
+        create_app(repository_root=root, test_mode=True, launch_token="child-token")
+    ).get("/healthz", headers=headers)
+    assert child_response.status_code == 200
+    assert child_response.json()["api_contract"] == DASHBOARD_API_CONTRACT
+    assert child_response.json()["launch_token"] == "child-token"
 
 
 def test_dashboard_presentation_is_a_ten_screen_shared_model_story():

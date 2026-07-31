@@ -53,5 +53,9 @@ This is the only user-facing start launcher. Start/open MLflow and Obsidian
 from **Research Tools** or from a hash-verified report. The MLflow viewer starts
 only on demand and never writes its external SQLite database.
 
+The launcher reuses a listener only when `/healthz` advertises the current
+`myis.dashboard-api.v2` contract. An older same-project Dashboard is treated as
+an unknown listener instead of being reused with an incompatible frontend.
+
 The `/api/v1` read routes are migration aliases only and return the active v2
 projection. No v1 read-model file or schema is active.

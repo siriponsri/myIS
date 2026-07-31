@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_VERSION, RESEARCH_VERSION
 from ..ledger import ImmutableJsonLedger, record_sha256
 from ..projections.read_model import build_read_model
+from .contract import DASHBOARD_API_CONTRACT
 from .security import LoopbackSecurityMiddleware, SessionStore
 from .reports import ReportCatalog, ReportCatalogError
 from .tools import ToolController, ToolControllerError
@@ -48,7 +49,13 @@ def create_app(
 
     @app.get("/healthz")
     def healthz() -> dict[str, str]:
-        payload = {"status": "ok", "program_id": PROGRAM_ID, "protocol_version": PROTOCOL_VERSION, "research_version": RESEARCH_VERSION}
+        payload = {
+            "status": "ok",
+            "program_id": PROGRAM_ID,
+            "protocol_version": PROTOCOL_VERSION,
+            "research_version": RESEARCH_VERSION,
+            "api_contract": DASHBOARD_API_CONTRACT,
+        }
         if launch_token is not None:
             payload["launch_token"] = launch_token
         return payload
