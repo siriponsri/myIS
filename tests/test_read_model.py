@@ -11,7 +11,11 @@ from myis_research.kernel.manifest import build_manifest
 from myis_research.kernel.manifest_validation import build_validation_report, capture_git_state
 from myis_research.kernel.canonical import canonical_sha256
 from myis_research.owner_local import build_receipt
-from myis_research.projections.read_model import build_read_model, write_read_model
+from myis_research.projections.read_model import (
+    _legacy_file_commitment_matches,
+    build_read_model,
+    write_read_model,
+)
 from myis_research.report_cli import validate_read_model
 
 
@@ -335,6 +339,14 @@ def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
         "promotable": False,
         "superseded_by": "fresh-owner-local-p1-rerun-pending",
     }]
+
+
+def test_legacy_commitment_accepts_only_lf_crlf_checkout_variance(tmp_path: Path) -> None:
+    path = tmp_path / "legacy.json"
+    path.write_bytes(b'{"status":"historical-invalid"}\n')
+    expected = hashlib.sha256(b'{"status":"historical-invalid"}\r\n').hexdigest()
+    assert _legacy_file_commitment_matches(path, expected)
+    assert not _legacy_file_commitment_matches(path, "0" * 64)
 
 
 def test_manifest_metrics_must_match_the_paired_receipt(tmp_path: Path) -> None:

@@ -504,7 +504,11 @@ def _load_legacy_disposition(root: Path) -> dict[str, Any]:
         audit.relative_to(root)
     except (OSError, ValueError):
         return {}
-    if audit.is_symlink() or not audit.is_file() or _file_sha256(audit) != invalidation.get("sha256"):
+    if (
+        audit.is_symlink()
+        or not audit.is_file()
+        or not _legacy_file_commitment_matches(audit, str(invalidation.get("sha256", "")))
+    ):
         return {}
     if not isinstance(payload.get("reason_codes"), list) or not payload["reason_codes"]:
         return {}
