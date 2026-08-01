@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "876971c17cc8c9bdf513f3c313aa6eb847837e924abda35c019ace4f516a5a96"
-read_model_sha256: "dca7fdf6c20e695c0ad7db5af875b9cdd29224f589a6416436be4d6460a5987c"
-source_commit: "5eea876331ab73fe46c91e9f22b5a83b57ce4331"
+read_model_revision: "2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5"
+read_model_sha256: "c87670909c0ea6b07c0ab3f1430a8a4a006b7a1fabdb860523bfb1ae629dbcfe"
+source_commit: "7351bd01b841d93c568ac2c8a243faefc2652d78"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,8 +11,8 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-01T09:22:48Z"
-updated_at: "2026-08-01T09:22:48Z"
+created_at: "2026-08-01T10:45:20Z"
+updated_at: "2026-08-01T10:45:20Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -30,11 +30,16 @@ P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible 
 
 **ready_planned_not_measured**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.
 
+## Official static review
+
+Round `3` verdict is **accept** with status `accepted_static_contract_review`. This is engineering provenance only; fixture pilot executed = `False`. See [[P2_OFFICIAL_REVIEW_AUDIT]].
+
 ## Budget and runtime
 
 | Check | Value |
 |---|---|
 | Status | ready_planned_not_measured |
+| Official static review | Round 3 accept / accepted_static_contract_review |
 | Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
 | Candidates | 0 / 32 |
 | Runtime | 259200 wall seconds; 10800 per candidate |
@@ -59,10 +64,10 @@ Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, pai
 
 ## Read-model binding
 
-Revision: `876971c17cc8c9bdf513f3c313aa6eb847837e924abda35c019ace4f516a5a96`
+Revision: `2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5`
 
 ## Next action
 
-Run the repository-only fixture/pilot preflight, then stop for Owner review before any measured request.
+The static contract is accepted. The next reversible action is a repository-only fixture/pilot preflight; measured P2 and selection remain closed.
 
-Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P1_CPU_BASELINE_RESULT]]
+Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[P1_CPU_BASELINE_RESULT]]

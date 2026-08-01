@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "876971c17cc8c9bdf513f3c313aa6eb847837e924abda35c019ace4f516a5a96"
-read_model_sha256: "dca7fdf6c20e695c0ad7db5af875b9cdd29224f589a6416436be4d6460a5987c"
-source_commit: "5eea876331ab73fe46c91e9f22b5a83b57ce4331"
+read_model_revision: "2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5"
+read_model_sha256: "c87670909c0ea6b07c0ab3f1430a8a4a006b7a1fabdb860523bfb1ae629dbcfe"
+source_commit: "7351bd01b841d93c568ac2c8a243faefc2652d78"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,8 +11,8 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-01T09:22:48Z"
-updated_at: "2026-08-01T09:22:48Z"
+created_at: "2026-08-01T10:45:20Z"
+updated_at: "2026-08-01T10:45:20Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -42,7 +42,8 @@ P1 CPU baseline ผ่าน four-slot manifest, validation reports, package bin
 
 ## สิ่งที่ Owner ต้องทำ
 
-- ตรวจ P1 evidence package ก่อนพิจารณาคำสั่ง P2 แยกต่างหาก
+- Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed
+- Do not start measured P2 or selection exposure from the static review verdict
 
 ## ขอบเขตที่ยังไม่แตะ
 
@@ -63,6 +64,7 @@ P1 CPU baseline ผ่าน four-slot manifest, validation reports, package bin
 | Check | Value |
 |---|---|
 | Status | ready_planned_not_measured |
+| Official static review | Round 3 accept / accepted_static_contract_review |
 | Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
 | Candidates | 0 / 32 |
 | Runtime | 259200 wall seconds; 10800 per candidate |
