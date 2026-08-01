@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
@@ -38,6 +39,52 @@ def _valid_result(**overrides: object) -> dict[str, object]:
     return payload
 
 
+def _assert_openai_value_shapes(schema: dict[str, object]) -> None:
+    definitions = schema.get("$defs", {})
+
+    def walk(node: object, path: str, *, root: bool = False) -> None:
+        assert isinstance(node, dict), f"{path} must be an object schema"
+        assert any(keyword in node for keyword in ("type", "$ref", "anyOf")), (
+            f"{path} must declare type, $ref, or anyOf"
+        )
+        if root:
+            assert node.get("type") == "object"
+            assert "anyOf" not in node
+        if "$ref" in node:
+            reference = node["$ref"]
+            assert isinstance(reference, str) and reference.startswith("#/$defs/")
+            assert reference.removeprefix("#/$defs/") in definitions
+        if "anyOf" in node:
+            branches = node["anyOf"]
+            assert isinstance(branches, list) and branches
+            for index, branch in enumerate(branches):
+                walk(branch, f"{path}.anyOf[{index}]")
+
+        declared_type = node.get("type")
+        declared_types = (
+            {declared_type}
+            if isinstance(declared_type, str)
+            else set(declared_type or [])
+        )
+        properties = node.get("properties")
+        if "object" in declared_types:
+            assert isinstance(properties, dict)
+            assert node.get("additionalProperties") is False
+            assert set(node.get("required", [])) == set(properties)
+        if isinstance(properties, dict):
+            for name, child in properties.items():
+                walk(child, f"{path}.properties.{name}")
+        if "array" in declared_types:
+            assert "items" in node
+            walk(node["items"], f"{path}.items")
+        nested_definitions = node.get("$defs")
+        if isinstance(nested_definitions, dict):
+            for name, child in nested_definitions.items():
+                walk(child, f"{path}.$defs.{name}")
+
+    walk(schema, "$", root=True)
+
+
 def test_official_result_schema_is_strict_and_protected_false() -> None:
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     validator = Draft202012Validator(schema)
@@ -48,6 +95,45 @@ def test_official_result_schema_is_strict_and_protected_false() -> None:
     assert list(validator.iter_errors(_valid_result(verdict="retry")))
     assert list(validator.iter_errors(_valid_result(extra_field="not allowed")))
     assert list(validator.iter_errors(_valid_result(round=4)))
+
+
+def test_official_schema_is_openai_structured_outputs_compatible() -> None:
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    _assert_openai_value_shapes(schema)
+    assert schema["properties"]["schema_version"] == {
+        "type": "string",
+        "const": "1.0",
+    }
+
+
+@pytest.mark.parametrize(
+    ("section", "node_name", "invalid_node", "expected_path"),
+    [
+        ("properties", "schema_version", {"const": "1.0"}, "properties.schema_version"),
+        (
+            "properties",
+            "verdict",
+            {"enum": ["accept", "revise", "blocked"]},
+            "properties.verdict",
+        ),
+        ("$defs", "stringList", {"enum": ["value"]}, "$defs.stringList"),
+    ],
+)
+def test_structured_outputs_audit_rejects_constraint_only_nodes(
+    section: str,
+    node_name: str,
+    invalid_node: dict[str, object],
+    expected_path: str,
+) -> None:
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    invalid_schema = deepcopy(schema)
+    invalid_schema[section][node_name] = invalid_node
+
+    with pytest.raises(
+        AssertionError,
+        match=rf"{re.escape(expected_path)} must declare type, \$ref, or anyOf",
+    ):
+        _assert_openai_value_shapes(invalid_schema)
 
 
 def test_invoke_script_has_isolated_profile_and_only_safe_flags() -> None:
@@ -82,6 +168,11 @@ def test_invoke_script_has_isolated_profile_and_only_safe_flags() -> None:
         assert forbidden not in lowered
     assert "[int]$TimeoutSeconds = 1800" in text
     assert text.index("if ($WhatIf)") < text.index("$process.Start()")
+    assert "Assert-StructuredOutputSchema -Schema $schemaObject" in text
+    assert text.index("Assert-StructuredOutputSchema -Schema $schemaObject") < text.index(
+        "if ($WhatIf)"
+    )
+    assert "const-only and enum-only nodes are invalid" in text
 
 
 def test_loop_is_bounded_hash_guarded_and_carries_no_transcript() -> None:
@@ -218,6 +309,25 @@ exit $exitCode
     return script
 
 
+def _copy_invoke_with_schema(
+    tmp_path: Path, schema: dict[str, object]
+) -> tuple[Path, Path]:
+    isolated_root = tmp_path / "isolated repository"
+    script_dir = isolated_root / "scripts/orchestrator"
+    schema_dir = isolated_root / "orchestration/schemas"
+    output_dir = isolated_root / "orchestration/results"
+    script_dir.mkdir(parents=True)
+    schema_dir.mkdir(parents=True)
+    output_dir.mkdir(parents=True)
+    isolated_invoke = script_dir / INVOKE.name
+    shutil.copy2(INVOKE, isolated_invoke)
+    (schema_dir / SCHEMA.name).write_text(
+        json.dumps(schema, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return isolated_invoke, output_dir
+
+
 def _mock_environment(tmp_path: Path, mock_bin: Path, **updates: str) -> dict[str, str]:
     environment = os.environ.copy()
     environment.update(
@@ -321,6 +431,57 @@ def test_whatif_validates_paths_without_invoking_codex(tmp_path: Path) -> None:
     assert not Path(environment["MOCK_CODEX_TRACE"]).exists()
     assert list(output.iterdir()) == []
     assert "PROTECTED_STORE_SENTINEL" not in completed.stdout + completed.stderr
+
+
+@pytest.mark.parametrize(
+    ("section", "node_name", "invalid_node", "expected_path"),
+    [
+        ("properties", "schema_version", {"const": "1.0"}, "$.properties.schema_version"),
+        (
+            "properties",
+            "verdict",
+            {"enum": ["accept", "revise", "blocked"]},
+            "$.properties.verdict",
+        ),
+        ("$defs", "stringList", {"enum": ["value"]}, "$.$defs.stringList"),
+    ],
+)
+@pytest.mark.skipif(os.name != "nt", reason="Windows-only mocked PowerShell execution")
+def test_whatif_rejects_constraint_only_nodes_before_codex_call(
+    tmp_path: Path,
+    section: str,
+    node_name: str,
+    invalid_node: dict[str, object],
+    expected_path: str,
+) -> None:
+    _require_windows_official_profile()
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    schema[section][node_name] = invalid_node
+    isolated_invoke, output = _copy_invoke_with_schema(tmp_path, schema)
+    mock_bin = tmp_path / "mock bin"
+    _make_mock_codex(mock_bin)
+    working = tmp_path / "working directory"
+    working.mkdir()
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("Read-only schema preflight.", encoding="utf-8")
+    environment = _mock_environment(tmp_path, mock_bin)
+
+    completed = _run_harness(
+        tmp_path,
+        isolated_invoke,
+        [
+            ("-PromptFile", prompt),
+            ("-WorkingDirectory", working),
+            ("-OutputDirectory", output),
+            ("-WhatIf", None),
+        ],
+        environment,
+    )
+    assert completed.returncode != 0
+    assert expected_path in completed.stderr
+    assert "const-only and enum-only nodes are invalid" in completed.stderr
+    assert not Path(environment["MOCK_CODEX_TRACE"]).exists()
+    assert list(output.iterdir()) == []
 
 
 @pytest.mark.skipif(os.name != "nt", reason="Windows-only mocked PowerShell execution")

@@ -30,8 +30,11 @@ scripts/orchestrator/invoke-official-research.ps1 `
 ```
 
 `-WhatIf` checks the executable, fixed Official profile and config, prompt,
-working directory, output directory, and JSON schema. It creates no artifact
-and does not start Codex.
+working directory, output directory, generic JSON syntax, and OpenAI Structured
+Outputs compatibility. The recursive schema preflight requires an explicit
+`type`, valid `$ref`, or `anyOf` for every value-producing node and enforces
+required object fields plus `additionalProperties=false`. It creates no
+artifact and does not start Codex.
 
 ## Run one Official review
 

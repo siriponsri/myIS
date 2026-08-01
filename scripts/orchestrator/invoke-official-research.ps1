@@ -50,6 +50,139 @@ function ConvertTo-SingleQuotedLiteral {
     return "'" + $Value.Replace("'", "''") + "'"
 }
 
+function Get-SchemaProperty {
+    param(
+        [Parameter(Mandatory = $true)]$Node,
+        [Parameter(Mandatory = $true)][string]$Name
+    )
+
+    return $Node.PSObject.Properties[$Name]
+}
+
+function Assert-StructuredOutputSchemaNode {
+    param(
+        [Parameter(Mandatory = $true)]$Node,
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)]$RootSchema,
+        [switch]$Root
+    )
+
+    if ($null -eq $Node -or $Node -isnot [psobject] -or $Node -is [string]) {
+        throw "Structured Outputs schema node '$Path' must be an object."
+    }
+
+    foreach ($unsupportedKeyword in @('allOf', 'not', 'dependentRequired', 'dependentSchemas', 'if', 'then', 'else')) {
+        if ($null -ne (Get-SchemaProperty -Node $Node -Name $unsupportedKeyword)) {
+            throw "Structured Outputs schema node '$Path' uses unsupported keyword '$unsupportedKeyword'."
+        }
+    }
+
+    $typeProperty = Get-SchemaProperty -Node $Node -Name 'type'
+    $refProperty = Get-SchemaProperty -Node $Node -Name '$ref'
+    $anyOfProperty = Get-SchemaProperty -Node $Node -Name 'anyOf'
+    if ($null -eq $typeProperty -and $null -eq $refProperty -and $null -eq $anyOfProperty) {
+        throw ("Structured Outputs schema node '{0}' must declare type, `$ref, or anyOf; const-only and enum-only nodes are invalid." -f $Path)
+    }
+
+    $declaredTypes = @()
+    if ($null -ne $typeProperty) {
+        if ($typeProperty.Value -is [string]) {
+            $declaredTypes = @($typeProperty.Value)
+        }
+        elseif ($typeProperty.Value -is [System.Collections.IEnumerable]) {
+            $declaredTypes = @($typeProperty.Value)
+        }
+        else {
+            throw "Structured Outputs schema node '$Path' has an invalid type declaration."
+        }
+        if ($declaredTypes.Count -eq 0) {
+            throw "Structured Outputs schema node '$Path' has an empty type declaration."
+        }
+        foreach ($declaredType in $declaredTypes) {
+            if ($declaredType -isnot [string] -or $declaredType -notin @('string', 'number', 'boolean', 'integer', 'object', 'array', 'null')) {
+                throw "Structured Outputs schema node '$Path' has unsupported type '$declaredType'."
+            }
+        }
+    }
+
+    if ($Root -and ($null -eq $typeProperty -or $declaredTypes.Count -ne 1 -or $declaredTypes[0] -ne 'object' -or $null -ne $anyOfProperty)) {
+        throw 'Structured Outputs schema root must declare type=object and must not use anyOf.'
+    }
+
+    if ($null -ne $refProperty) {
+        if ($refProperty.Value -isnot [string] -or $refProperty.Value -notmatch '^#/\$defs/[^/]+$') {
+            throw "Structured Outputs schema node '$Path' has an invalid or unsupported `$ref."
+        }
+        $definitionName = $refProperty.Value.Substring(8).Replace('~1', '/').Replace('~0', '~')
+        $definitionsProperty = Get-SchemaProperty -Node $RootSchema -Name '$defs'
+        if ($null -eq $definitionsProperty -or $null -eq $definitionsProperty.Value.PSObject.Properties[$definitionName]) {
+            throw "Structured Outputs schema node '$Path' references missing definition '$definitionName'."
+        }
+    }
+
+    if ($null -ne $anyOfProperty) {
+        $branches = @($anyOfProperty.Value)
+        if ($branches.Count -eq 0) {
+            throw "Structured Outputs schema node '$Path' has an empty anyOf."
+        }
+        for ($branchIndex = 0; $branchIndex -lt $branches.Count; $branchIndex++) {
+            Assert-StructuredOutputSchemaNode -Node $branches[$branchIndex] -Path "$Path.anyOf[$branchIndex]" -RootSchema $RootSchema
+        }
+    }
+
+    $propertiesProperty = Get-SchemaProperty -Node $Node -Name 'properties'
+    if ($declaredTypes -contains 'object') {
+        if ($null -eq $propertiesProperty) {
+            throw "Structured Outputs object schema node '$Path' must declare properties."
+        }
+        $additionalPropertiesProperty = Get-SchemaProperty -Node $Node -Name 'additionalProperties'
+        if ($null -eq $additionalPropertiesProperty -or $additionalPropertiesProperty.Value -isnot [bool] -or $additionalPropertiesProperty.Value) {
+            throw "Structured Outputs object schema node '$Path' must set additionalProperties=false."
+        }
+        $requiredProperty = Get-SchemaProperty -Node $Node -Name 'required'
+        if ($null -eq $requiredProperty -or $requiredProperty.Value -is [string]) {
+            throw "Structured Outputs object schema node '$Path' must require every property."
+        }
+        $propertyNames = @($propertiesProperty.Value.PSObject.Properties.Name)
+        $requiredNames = @($requiredProperty.Value)
+        $missingRequired = @($propertyNames | Where-Object { $_ -notin $requiredNames })
+        $unexpectedRequired = @($requiredNames | Where-Object { $_ -notin $propertyNames })
+        if ($requiredNames.Count -ne $propertyNames.Count -or $missingRequired.Count -ne 0 -or $unexpectedRequired.Count -ne 0) {
+            throw "Structured Outputs object schema node '$Path' must require exactly every declared property."
+        }
+    }
+    elseif ($null -ne $propertiesProperty) {
+        throw "Structured Outputs schema node '$Path' declares properties without type=object."
+    }
+
+    if ($null -ne $propertiesProperty) {
+        foreach ($property in $propertiesProperty.Value.PSObject.Properties) {
+            Assert-StructuredOutputSchemaNode -Node $property.Value -Path "$Path.properties.$($property.Name)" -RootSchema $RootSchema
+        }
+    }
+
+    if ($declaredTypes -contains 'array') {
+        $itemsProperty = Get-SchemaProperty -Node $Node -Name 'items'
+        if ($null -eq $itemsProperty) {
+            throw "Structured Outputs array schema node '$Path' must declare items."
+        }
+        Assert-StructuredOutputSchemaNode -Node $itemsProperty.Value -Path "$Path.items" -RootSchema $RootSchema
+    }
+
+    $definitionsProperty = Get-SchemaProperty -Node $Node -Name '$defs'
+    if ($null -ne $definitionsProperty) {
+        foreach ($definition in $definitionsProperty.Value.PSObject.Properties) {
+            Assert-StructuredOutputSchemaNode -Node $definition.Value -Path "$Path.`$defs.$($definition.Name)" -RootSchema $RootSchema
+        }
+    }
+}
+
+function Assert-StructuredOutputSchema {
+    param([Parameter(Mandatory = $true)]$Schema)
+
+    Assert-StructuredOutputSchemaNode -Node $Schema -Path '$' -RootSchema $Schema -Root
+}
+
 function Stop-ChildProcessTree {
     param([Parameter(Mandatory = $true)][System.Diagnostics.Process]$Process)
 
@@ -91,6 +224,7 @@ catch {
 if ($schemaObject.type -ne 'object') {
     throw "Output schema root must be an object schema: $resolvedSchema"
 }
+Assert-StructuredOutputSchema -Schema $schemaObject
 
 $prompt = Get-Content -Raw -Encoding UTF8 -LiteralPath $resolvedPrompt
 if ([string]::IsNullOrWhiteSpace($prompt)) {
