@@ -1,0 +1,136 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260801T092615Z-p2-round2-contract-repair-v1",
+  "run_id": null,
+  "goal_id": "P2_OFFICIAL_ROUND2_CONTRACT_REPAIR",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-01T09:26:15Z",
+  "scope": "Repair the three repository-safe P2 contract findings from Official Round 2, validate the complete aggregate-only artifact graph, and close Git without fixture-pilot, measured execution, or selection exposure.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml and control/execution-envelope-p2.yaml",
+      "scope": "reversible repository-local CPU-only P2 readiness and contract repair"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "cb340abd32ac2dd1a4a34109af46f4f05100946e",
+    "dirty_paths": [
+      "projections/sessions/20260801T092615Z-p2-round2-contract-repair-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Replaced scalar P2 train decision authority with a canonical train metric object and added an immutable pre-outcome baseline commitment bound through the artifact graph.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/p2/contracts.py",
+          "sha256": "030989a19427a241fce40229050a4a21aa06f463f5cf15485abc9e9e6f4bbbf1",
+          "locator": "validate_p2_train_metric, validate_p2_package_bundle, and _validate_prior_baseline_artifact"
+        },
+        {
+          "path": "src/myis_research/p2/state.py",
+          "sha256": "8a2349b4a30a34abbb01f166c17902c76ab5d688b0942a92e941ff89aae37781",
+          "locator": "Candidate, commit_baseline_expectation, record_train, record_baseline_reproduction, and build_shortlist"
+        },
+        {
+          "path": "schemas/p2-train-metric.v1.json",
+          "sha256": "7dde4dc4db206da9406dc63d51b4bdfbe6c01674adbd752c217af229d67ec6c8",
+          "locator": "complete canonical train metric schema"
+        },
+        {
+          "path": "schemas/p2-baseline-commitment.v1.json",
+          "sha256": "6fc517ce4c390a3311184a581b62ea833f14310ce96971a794ff0f1890709ab2",
+          "locator": "complete immutable baseline commitment schema"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added positive and fail-closed synthetic coverage for train semantics, prior P1 receipt resolution, commitment timing, cross-artifact reconciliation, and fixed-comparison invariants.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_p2_semantic_contracts.py",
+          "sha256": "cbefe317a54b588cfb905820d72933297a57b87e12015c99fa777a544d2bac60",
+          "locator": "synthetic package builder and Official Round 2 negative contract tests"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The shared projection remains planned and unmeasured with no candidate or selection promotion after the contract repair.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "0d4cc341198c3e670ce79156da8ddfa71a3b8e7f05b246e0cda393db300cfc59",
+          "locator": "p2_readiness.status, measured_runs, candidate_count, selection_accesses, resources, and claim_boundary"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "61cf8b34d5de89310cb367d53626ff054668f0cd7d90dc67d9df178c71748d3f",
+          "locator": "read_model_revision, read_model_sha256, mlflow_run_id, and status"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The repository-safe Official Round 2 required changes are implemented; Official Round 3 and measured P2 remain outside this session.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "da0de54d9b45272f4843cb147a6da7091dca20ffdc7ab42eb9b08ae427c60015",
+          "locator": "Official Round 2 P2 contract repair"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "official-round3-not-run",
+      "provenance": "agent-observed",
+      "summary": "Official Round 3 static review was not run and requires an explicit follow-up request.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-p2-not-started",
+      "provenance": "agent-observed",
+      "summary": "Fixture-pilot, measured P2, selection exposure, and final access remain outside this repository-safe repair session.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
