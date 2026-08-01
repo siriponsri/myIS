@@ -1,0 +1,67 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-readiness-20260801",
+  "artifact": "P2 R1 readiness control bundle",
+  "artifact_path": "control/execution-envelope-p2.yaml",
+  "artifact_sha256": "cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.0,
+    "one_line_summary": "P2 R1 is contract-ready for controlled preparation, remains unmeasured, and keeps final split and selection closed.",
+    "strengths": [
+      "The P2 envelope is separate from the hash-bound P1 envelope and binds R1, train_selection_only, CPU-only resources, and the selection freeze barrier.",
+      "The canonical budget profile p2-r1-primary-v1 is hash-bound and the read model reports zero candidates, measured runs, and selection accesses.",
+      "The schemas and deterministic state machine reject ties, enforce allocation limits, and prevent selection before a valid shortlist freeze."
+    ],
+    "weaknesses": [
+      "No measured P2 scientific evidence exists yet, so performance and cost claims are not assessable.",
+      "Execution still requires the Owner-local protected store and a future approved request; this review does not authorize execution."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {"score": 4, "strengths": ["The R1 contract targets the stated representation-development question with train/selection-only scope."], "weaknesses": ["No measured result exists yet."], "suggestions": ["Bind future candidate outcomes to the fixed evaluator and baseline comparison."]},
+    "D2_falsifiability": {"score": 4, "strengths": ["Strictly-greater selection, tie rejection, early stopping, and freeze prerequisites are explicit."], "weaknesses": [], "suggestions": ["Record future rejected candidates and stopping decisions in the governed run bundle."]},
+    "D3_scope_calibration": {"score": 5, "strengths": ["The envelope keeps final split closed, forbids protected payloads, and separates D2/D3 from readiness."], "weaknesses": [], "suggestions": []},
+    "D4_argument_coherence": {"score": 4, "strengths": ["Campaign, budget, envelope, schemas, state machine, and projections share the same phase, arm, and revision."], "weaknesses": [], "suggestions": ["Keep all future claims linked to validated aggregate evidence only."]},
+    "D5_exploration_integrity": {"score": 3, "strengths": ["The candidate ledger and freeze receipt contracts define the required exposure record."], "weaknesses": ["There are no candidate or failed-path records before execution."], "suggestions": ["Do not treat readiness fixtures or previews as measured exploration evidence."]},
+    "D6_methodological_rigor": {"score": 4, "strengths": ["Budget, hashes, deterministic allocation, resource restrictions, and the freeze barrier are structurally validated."], "weaknesses": ["Latency, cost, and retrieval outcomes are not yet assessable."], "suggestions": ["Run only after a separately validated request and protected-store preflight."]}
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D5_exploration_integrity",
+      "severity": "suggestion",
+      "target_artifact": "P2 R1 readiness control bundle",
+      "target_entity": "future candidate exposure",
+      "evidence_locator": "No P2 request, candidate ledger, shortlist freeze receipt, manifest, or selection receipt exists.",
+      "observation": "The readiness refactor defines these records but no scientific run has created them.",
+      "reasoning": "Readiness must remain distinct from measured evidence and cannot support a performance claim.",
+      "suggestion": "Preserve the zero-count state until an Owner-approved, CPU-only governed run is actually completed."
+    }
+  ],
+  "questions_for_owner": [
+    "Review the P2 readiness bundle before requesting any measured R1 run."
+  ],
+  "read_order": [
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-p2.yaml",
+    "control/budgets/p2-r1-primary-v1.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "schemas/p2-request.v1.json",
+    "schemas/p2-candidate-ledger.v1.json",
+    "schemas/p2-shortlist-freeze-receipt.v1.json",
+    "src/myis_research/p2/contracts.py",
+    "src/myis_research/p2/state.py",
+    "projections/read-model/read-model.v2.json"
+  ]
+}

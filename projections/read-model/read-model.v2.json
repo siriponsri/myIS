@@ -24,6 +24,7 @@
       ],
       "campaign_id": "scope-autoindex-v1",
       "current_state": "P1_CPU_MEASURED_COMPLETE",
+      "p2_status": "ready_planned_not_measured",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
       "status": "P1_CPU_MEASURED_COMPLETE",
@@ -185,7 +186,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-07-31T16:13:39Z",
+  "generated_at": "2026-08-01T04:46:02Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -199,6 +200,12 @@
       "result_id": "P1-CPU-BASELINE",
       "statement": "\u0e22\u0e31\u0e07\u0e2a\u0e23\u0e38\u0e1b\u0e1c\u0e25\u0e40\u0e0a\u0e34\u0e07\u0e27\u0e34\u0e17\u0e22\u0e32\u0e28\u0e32\u0e2a\u0e15\u0e23\u0e4c\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e08\u0e19\u0e01\u0e27\u0e48\u0e32 evidence matrix \u0e08\u0e30\u0e1c\u0e48\u0e32\u0e19",
       "status": "pending_review"
+    },
+    {
+      "interpretation_id": "P2-SCOPE-DEVELOPMENT-INTERPRETATION",
+      "result_id": "P2-SCOPE-DEVELOPMENT",
+      "statement": "P2 is contract-ready but has no measured result; fixture readiness does not authorize selection or final evaluation.",
+      "status": "pending_measurement"
     }
   ],
   "literature": {
@@ -393,7 +400,7 @@
         "P1_CPU_BASELINE"
       ],
       "milestone_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "depends_on": [
@@ -481,6 +488,61 @@
       "label": "\u0e15\u0e23\u0e27\u0e08 P1 evidence package \u0e01\u0e48\u0e2d\u0e19\u0e1e\u0e34\u0e08\u0e32\u0e23\u0e13\u0e32\u0e04\u0e33\u0e2a\u0e31\u0e48\u0e07 P2 \u0e41\u0e22\u0e01\u0e15\u0e48\u0e32\u0e07\u0e2b\u0e32\u0e01"
     }
   ],
+  "p2_readiness": {
+    "arm": "R1",
+    "artifacts": [],
+    "budget_profile_id": "p2-r1-primary-v1",
+    "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+    "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
+    "candidate_budget": {
+      "candidates_per_iteration": 4,
+      "frozen_controls": 4,
+      "max_adaptive_candidates": 20,
+      "max_adaptive_iterations": 5,
+      "max_candidates_total": 32,
+      "max_index_builds": 32,
+      "max_selection_finalists": 4,
+      "preregistered_patent_candidates": 8,
+      "selection_exposure_limit": 1
+    },
+    "candidate_count": 0,
+    "claim_boundary": "no_measured_claim",
+    "freeze_barrier": {
+      "candidate_ids_frozen": false,
+      "mutation_after_selection": "forbidden",
+      "required": true,
+      "selection_exposure_count": 0,
+      "selection_exposure_limit": 1,
+      "status": "not_started"
+    },
+    "invalid_artifact_count": 0,
+    "measured": false,
+    "measured_runs": 0,
+    "metrics": [],
+    "phase_id": "P2_SCOPE_DEVELOPMENT",
+    "resources": {
+      "gpu_budget_usd": 0,
+      "network_model_download": false,
+      "paid_api_budget_usd": 0,
+      "provider_fallback": false
+    },
+    "runtime": {
+      "max_wall_clock_seconds": 259200,
+      "per_candidate_timeout_seconds": 10800
+    },
+    "selection_accesses": 0,
+    "shortlist_count": 0,
+    "source": {
+      "execution_envelope": "control/execution-envelope-p2.yaml",
+      "profile": "control/budgets/p2-r1-primary-v1.yaml"
+    },
+    "status": "ready_planned_not_measured",
+    "stopping": {
+      "min_iterations_before_early_stop": 4,
+      "no_improvement_patience": 2,
+      "selection_rule": "strictly_greater_reject_ties"
+    }
+  },
   "phases": [
     {
       "phase_id": "P0_FOUNDATION",
@@ -544,12 +606,12 @@
     },
     {
       "phase_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "planned",
+      "status": "ready",
       "tasks": [
         {
           "evidence_ids": [],
           "phase_id": "P2_SCOPE_DEVELOPMENT",
-          "status": "planned",
+          "status": "ready",
           "task_id": "P2.1",
           "title": "R1 SCOPE/AutoIndex development"
         }
@@ -590,7 +652,8 @@
     ],
     "claim_boundary": "train_selection_only",
     "safe_result_ids": [
-      "P1-CPU-BASELINE"
+      "P1-CPU-BASELINE",
+      "P2-SCOPE-DEVELOPMENT"
     ],
     "screens": [
       {
@@ -670,7 +733,7 @@
           "peer"
         ],
         "evidence_ids": [],
-        "message_th": "P0: complete, P1: measured, P2: planned, P3: locked_until_D2, P4: locked_until_D3",
+        "message_th": "P0: complete, P1: measured, P2: ready, P3: locked_until_D2, P4: locked_until_D3",
         "order": 6,
         "safe_to_present": true,
         "screen_id": "shared-06-plan",
@@ -743,8 +806,8 @@
   },
   "project": {
     "campaign_id": "scope-autoindex-v1",
-    "current_phase": "P1_CPU_BASELINE",
-    "current_task": "P1.3",
+    "current_phase": "P2_SCOPE_DEVELOPMENT",
+    "current_task": "P2.1",
     "display_name": "myIS Research",
     "program_id": "myis-research",
     "state": "P1_CPU_MEASURED_COMPLETE"
@@ -754,7 +817,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5",
+  "projection_revision": "d74646c2c2bb30d0d6f9799beec4a5e8b840f4cc9b6d7ce52106f15eb47abd9c",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -798,8 +861,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5",
-  "read_model_sha256": "9ed1a20bba710370a552ed03768c005b39b90efb7238fb9a758eb098eb23589d",
+  "read_model_revision": "d74646c2c2bb30d0d6f9799beec4a5e8b840f4cc9b6d7ce52106f15eb47abd9c",
+  "read_model_sha256": "2e22de3375c15ec4345ddeeaf1df828a4d28022d88f57b57b7e717ffecc21fa6",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -811,6 +874,10 @@
     "cpu_only": true,
     "gpu": false,
     "latency_seconds": 10835.097119699998,
+    "p2_max_wall_clock_seconds": 259200,
+    "p2_measured_runs": 0,
+    "p2_per_candidate_timeout_seconds": 10800,
+    "p2_selection_accesses": 0,
     "paid_api": false
   },
   "results": [
@@ -843,6 +910,21 @@
       "rigor_review_sha256": "4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38",
       "task_id": "P1.3",
       "validity": "valid"
+    },
+    {
+      "budget_profile_id": "p2-r1-primary-v1",
+      "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+      "claim_boundary": "no_measured_claim",
+      "evidence_maturity": "non_scientific",
+      "limitations": [
+        "selection_accesses_remain_zero_until_validated_freeze"
+      ],
+      "metric_ids": [],
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "result_id": "P2-SCOPE-DEVELOPMENT",
+      "selection_exposure_count": 0,
+      "task_id": "P2.1",
+      "validity": "not_measured"
     }
   ],
   "runs": [
@@ -912,7 +994,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "6ca7a05a21c9e53fbc9a8c87ed310b5611cb8450",
+  "source_commit": "069a4c4f509cb94558742e4cd384fdce6730b9bd",
   "tasks": [
     {
       "evidence_ids": [],
@@ -965,7 +1047,7 @@
     {
       "evidence_ids": [],
       "phase_id": "P2_SCOPE_DEVELOPMENT",
-      "status": "planned",
+      "status": "ready",
       "task_id": "P2.1",
       "title": "R1 SCOPE/AutoIndex development"
     },

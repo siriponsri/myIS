@@ -1,6 +1,6 @@
 {
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "9ed1a20bba710370a552ed03768c005b39b90efb7238fb9a758eb098eb23589d",
+  "dashboard_snapshot_sha256": "2e22de3375c15ec4345ddeeaf1df828a4d28022d88f57b57b7e717ffecc21fa6",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -14,10 +14,19 @@
     "p1-rigor-review",
     "mlflow-p1-registration"
   ],
-  "obsidian_manifest_sha256": "1e3ccc7a67ab4ffaa903fa304631a61fe2c92df86aa74649b37d266cf0c222ad",
+  "obsidian_manifest_sha256": "cdd90ec52a05eab531b769a1d89956a013c11a24517bd5021822ef40d27f521c",
+  "p2_readiness": {
+    "budget_profile_id": "p2-r1-primary-v1",
+    "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+    "candidate_count": 0,
+    "freeze_status": "not_started",
+    "measured_runs": 0,
+    "selection_accesses": 0,
+    "status": "ready_planned_not_measured"
+  },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5",
-  "read_model_sha256": "9ed1a20bba710370a552ed03768c005b39b90efb7238fb9a758eb098eb23589d",
+  "read_model_revision": "d74646c2c2bb30d0d6f9799beec4a5e8b840f4cc9b6d7ce52106f15eb47abd9c",
+  "read_model_sha256": "2e22de3375c15ec4345ddeeaf1df828a4d28022d88f57b57b7e717ffecc21fa6",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -25,7 +34,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "6ca7a05a21c9e53fbc9a8c87ed310b5611cb8450",
+  "source_commit": "069a4c4f509cb94558742e4cd384fdce6730b9bd",
   "status": "current",
   "system_experiment": "myis-system"
 }

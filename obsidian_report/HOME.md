@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5"
-read_model_sha256: "9ed1a20bba710370a552ed03768c005b39b90efb7238fb9a758eb098eb23589d"
-source_commit: "6ca7a05a21c9e53fbc9a8c87ed310b5611cb8450"
+read_model_revision: "d74646c2c2bb30d0d6f9799beec4a5e8b840f4cc9b6d7ce52106f15eb47abd9c"
+read_model_sha256: "2e22de3375c15ec4345ddeeaf1df828a4d28022d88f57b57b7e717ffecc21fa6"
+source_commit: "069a4c4f509cb94558742e4cd384fdce6730b9bd"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,12 +11,12 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-07-31T16:13:39Z"
-updated_at: "2026-07-31T16:13:39Z"
+created_at: "2026-08-01T04:46:02Z"
+updated_at: "2026-08-01T04:46:02Z"
 note_id: "HOME"
 note_type: "home"
-phase_id: "P1_CPU_BASELINE"
-task_id: "P1.3"
+phase_id: "P2_SCOPE_DEVELOPMENT"
+task_id: "P2.1"
 workflow_status: "complete"
 evidence_maturity: "measured_selection"
 claim_level: "descriptive"
@@ -32,8 +32,8 @@ Can a patent-native grounded representation compiler improve family-level DAPFAM
 
 ## สถานะตอนนี้
 
-- Phase: `P1_CPU_BASELINE`
-- Task: `P1.3`
+- Phase: `P2_SCOPE_DEVELOPMENT`
+- Task: `P2.1`
 - State: **P1_CPU_MEASURED_COMPLETE**
 
 ## สิ่งที่ทำแล้ว
@@ -56,3 +56,17 @@ P1 CPU baseline ผ่าน four-slot manifest, validation reports, package bin
 - [[CURRENT_ADVISOR_UPDATE]]
 - [[LITERATURE_INDEX]]
 - [[RESEARCH_HISTORY_INDEX]]
+
+
+## P2 Readiness
+
+| Check | Value |
+|---|---|
+| Status | ready_planned_not_measured |
+| Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
+| Candidates | 0 / 32 |
+| Runtime | 259200 wall seconds; 10800 per candidate |
+| Freeze | not_started; selection 0/1 |
+| Resources | GPU 0 USD; paid API 0 USD; model download False |
+
+P2 remains planned and not measured; selection access is zero.

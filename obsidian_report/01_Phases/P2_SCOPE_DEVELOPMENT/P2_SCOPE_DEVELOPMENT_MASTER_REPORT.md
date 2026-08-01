@@ -1,18 +1,18 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5"
-read_model_sha256: "9ed1a20bba710370a552ed03768c005b39b90efb7238fb9a758eb098eb23589d"
-source_commit: "6ca7a05a21c9e53fbc9a8c87ed310b5611cb8450"
+read_model_revision: "d74646c2c2bb30d0d6f9799beec4a5e8b840f4cc9b6d7ce52106f15eb47abd9c"
+read_model_sha256: "2e22de3375c15ec4345ddeeaf1df828a4d28022d88f57b57b7e717ffecc21fa6"
+source_commit: "069a4c4f509cb94558742e4cd384fdce6730b9bd"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
-related_literature_ids: []
+related_literature_ids: ["U006","U011","U154"]
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-07-31T16:13:39Z"
-updated_at: "2026-07-31T16:13:39Z"
+created_at: "2026-08-01T04:46:02Z"
+updated_at: "2026-08-01T04:46:02Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -24,50 +24,45 @@ claim_level: "none"
 
 # P2_SCOPE_DEVELOPMENT
 
-Generated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.
+P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.
 
-## Summary for Owner
+## Status for Owner
 
-This report is a narrative projection of the shared read model, not a source of scientific truth.
+**ready_planned_not_measured**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.
 
-## Current status and gate
+## Budget and runtime
 
-**ready**. D2 and D3 remain Owner-only.
+| Check | Value |
+|---|---|
+| Status | ready_planned_not_measured |
+| Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
+| Candidates | 0 / 32 |
+| Runtime | 259200 wall seconds; 10800 per candidate |
+| Freeze | not_started; selection 0/1 |
+| Resources | GPU 0 USD; paid API 0 USD; model download False |
 
-## Task board
+## Why these methods
 
-| Task | Work | Status | Evidence |
-|---|---|---|---|
-| [[P2.1]] | R1 SCOPE/AutoIndex development | ready | not measured |
+`R0` uses one full TAC document per patent family and BM25 to isolate the representation question with a transparent lexical comparator; the DAPFAM protocol and patent-retrieval context are references U011 and U006 in [[LITERATURE_INDEX]]. `R0-W` keeps BM25 and family-level evaluation fixed but splits text into non-overlapping 512-token windows and uses family MaxP, testing whether passage granularity changes exposure (U154). `R1` is the planned patent-native SCOPE/AutoIndex representation-program search, evaluated with the same retriever/evaluator so any gain can be attributed to representation rather than a new dense model (U154 on the DAPFAM protocol U011). No dense model, LLM, paid API, or provider is part of this P2 arm.
 
-## Output
+## Internal freeze barrier
 
-Generated task records are available; no run output is promoted from historical-invalid evidence.
+Baseline reproduction, candidate generation, and train evaluation must pass before the immutable shortlist receipt. Selection may open once, only for that frozen shortlist. Ties reject; any baseline, train, or freeze validation failure stops before selection.
 
-## Measured results
+## Outputs and evidence
 
-[[P1_CPU_BASELINE_RESULT]]
+The canonical profile, P2 execution envelope, request schema, candidate ledger, freeze receipt, selection receipt, manifest, and package schemas are the source surfaces. No fixture or dashboard preview is scientific evidence.
 
-## Interpretation
+## What is measured
 
-No scientific interpretation is promoted without validated evidence.
+Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, paid API, network model download, and provider fallback = disabled.
 
-## What we can say
+## Read-model binding
 
-The control plane records the evidence boundary and blocks promotion safely.
+Revision: `d74646c2c2bb30d0d6f9799beec4a5e8b840f4cc9b6d7ce52106f15eb47abd9c`
 
-## What we must not say yet
+## Next action
 
-No P1 measured-complete, selection, or final-split claim.
+Run the repository-only fixture/pilot preflight, then stop for Owner review before any measured request.
 
-## Literature basis
-
-[[LITERATURE_INDEX]]
-
-## Decisions and RAID
-
-[[RAID]]
-
-## Evidence and audit details
-
-Read-model revision: `c94fb4ea49324cecc9d452a7c120fd54ec658a389dd77f6a441fef8864455cb5`
+Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P1_CPU_BASELINE_RESULT]]
