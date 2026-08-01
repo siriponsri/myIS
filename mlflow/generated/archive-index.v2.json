@@ -1,6 +1,6 @@
 {
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9",
+  "dashboard_snapshot_sha256": "23302f3b54e51c09cabdbaba4acee36027706d626b8ac0534cc897ee62d9ca8e",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -14,7 +14,19 @@
     "p1-rigor-review",
     "mlflow-p1-registration"
   ],
-  "obsidian_manifest_sha256": "53abab1d653303b0f1c376793f7503a2cf6f7083994171a9eb6c67d033717eb1",
+  "observatory": {
+    "evidence_class": "fixture",
+    "failed_child_count": 1,
+    "mlflow_run_id": "obs-mlflow-fixture-v1",
+    "receipt_sha256": "7b18c13386951652f0dc25ffa1a20499b5003418c63044ab62a19ce993745400",
+    "recovered_child_count": 1,
+    "registry_sha256": "79fa748b3f807071fbdeb42f871ecd0f2810d3f2837288fd87890e169a7abc7f",
+    "scientific_authority": false,
+    "status": "ready",
+    "validated_artifact_count": 5,
+    "validated_metric_count": 1
+  },
+  "obsidian_manifest_sha256": "88880d1b7c8661ec8602da9689dea8811e1e0f19be311cd0e5a8b40d1fa216ff",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v1",
     "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
@@ -52,8 +64,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146",
-  "read_model_sha256": "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9",
+  "read_model_revision": "f55deb4103ae1a09028890af175c01190eb6466d263cbb019b28fbd67804930c",
+  "read_model_sha256": "23302f3b54e51c09cabdbaba4acee36027706d626b8ac0534cc897ee62d9ca8e",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -61,7 +73,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "be543b83c05aee19f04aa73aacde42866b8333d8",
+  "source_commit": "fb4a9c7e938a0d8c5b9b2eac982291164fcbe4dc",
   "status": "current",
   "system_experiment": "myis-system"
 }

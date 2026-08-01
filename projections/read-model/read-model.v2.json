@@ -186,7 +186,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-01T12:44:19Z",
+  "generated_at": "2026-08-01T14:39:20Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -466,6 +466,65 @@
     },
     "schema_version": "myis.p1-mlflow-registration.v2",
     "source_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068"
+  },
+  "observatory": {
+    "artifact_type_counts": {
+      "failure": 1,
+      "metric": 1,
+      "output": 1,
+      "report": 1,
+      "request": 1
+    },
+    "claim_boundary": "engineering_provenance_only",
+    "evidence_class": "fixture",
+    "failed_child_count": 1,
+    "fixture_id": "observatory-fixture-v1",
+    "graph_edge_count": 32,
+    "graph_node_count": 22,
+    "integrity_status": "pass",
+    "measured_execution": false,
+    "mlflow_record_sha256": "ad6b33a460feb19d663080f4d8abb7d524ef09969647e6fde08bd39fa47bef25",
+    "mlflow_run_id": "obs-mlflow-fixture-v1",
+    "narrative": "Synthetic Observatory evidence is ready; measured P2 remains closed.",
+    "negative_check_count": 7,
+    "negative_checks_passed": true,
+    "next_action": "Review Observatory receipt before Owner-local measured preflight",
+    "package_sha256": "9df33d9215eaf60bc6e1601d93720cd3ea26ae19e5f5f3ce6abde9ce17509263",
+    "protected_data_accessed": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "receipt_sha256": "7b18c13386951652f0dc25ffa1a20499b5003418c63044ab62a19ce993745400",
+    "record_counts": {
+      "artifacts": 5,
+      "candidates": 2,
+      "configs": 1,
+      "decisions": 1,
+      "environments": 1,
+      "failures": 1,
+      "interpretations": 1,
+      "metrics": 1,
+      "prompts": 2,
+      "recoveries": 1,
+      "requests": 1,
+      "results": 1,
+      "runs": 3,
+      "schemas": 1
+    },
+    "recovered_child_count": 1,
+    "registry_sha256": "79fa748b3f807071fbdeb42f871ecd0f2810d3f2837288fd87890e169a7abc7f",
+    "run_status_counts": {
+      "failed": 1,
+      "succeeded": 2
+    },
+    "schema_version": "myis.observatory-projection.v1",
+    "scientific_authority": false,
+    "status": "ready",
+    "validated_artifact_count": 5,
+    "validated_metric_count": 1
   },
   "outputs": [
     {
@@ -915,7 +974,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146",
+  "projection_revision": "f55deb4103ae1a09028890af175c01190eb6466d263cbb019b28fbd67804930c",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -959,8 +1018,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146",
-  "read_model_sha256": "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9",
+  "read_model_revision": "f55deb4103ae1a09028890af175c01190eb6466d263cbb019b28fbd67804930c",
+  "read_model_sha256": "23302f3b54e51c09cabdbaba4acee36027706d626b8ac0534cc897ee62d9ca8e",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -1092,7 +1151,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "be543b83c05aee19f04aa73aacde42866b8333d8",
+  "source_commit": "fb4a9c7e938a0d8c5b9b2eac982291164fcbe4dc",
   "tasks": [
     {
       "evidence_ids": [],
