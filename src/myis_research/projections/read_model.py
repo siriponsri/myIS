@@ -218,12 +218,12 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         next_actions = [
             {
                 "action_id": "p2-fixture-pilot-available",
-                "label": "Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed.",
+                "label": "Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed",
                 "kind": "automatic_next",
             },
             {
                 "action_id": "hold-before-measured-p2",
-                "label": "Do not start measured P2 or selection exposure from the static review verdict.",
+                "label": "Do not start measured P2 or selection exposure from the static review verdict",
                 "kind": "constraint",
             },
         ]
