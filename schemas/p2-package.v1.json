@@ -4,7 +4,7 @@
   "title": "myIS P2 validated package",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "package_id", "request_id", "campaign_revision", "status", "request_uri", "request_sha256", "candidate_ledger_uri", "candidate_ledger_sha256", "baseline_reproduction_uri", "baseline_reproduction_sha256", "shortlist_freeze_uri", "shortlist_freeze_sha256", "selection_uri", "selection_sha256", "manifest_uri", "manifest_sha256", "budget_profile_id", "budget_profile_sha256", "candidate_count", "selection_exposure_count", "package_sha256"],
+  "required": ["schema_version", "package_id", "request_id", "campaign_revision", "status", "request_uri", "request_sha256", "candidate_ledger_uri", "candidate_ledger_sha256", "baseline_commitment_uri", "baseline_commitment_sha256", "baseline_reproduction_uri", "baseline_reproduction_sha256", "shortlist_freeze_uri", "shortlist_freeze_sha256", "selection_uri", "selection_sha256", "manifest_uri", "manifest_sha256", "budget_profile_id", "budget_profile_sha256", "candidate_count", "selection_exposure_count", "package_sha256"],
   "properties": {
     "schema_version": {"const": "myis.p2-package.v1"},
     "package_id": {"type": "string", "minLength": 1},
@@ -15,6 +15,8 @@
     "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "candidate_ledger_uri": {"type": "string", "minLength": 1},
     "candidate_ledger_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "baseline_commitment_uri": {"type": "string", "minLength": 1},
+    "baseline_commitment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "baseline_reproduction_uri": {"type": "string", "minLength": 1},
     "baseline_reproduction_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "shortlist_freeze_uri": {"type": "string", "minLength": 1},

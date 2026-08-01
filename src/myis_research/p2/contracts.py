@@ -22,6 +22,7 @@ from referencing import Registry, Resource
 from referencing.exceptions import Unresolvable
 
 from ..kernel.canonical import canonical_json, canonical_sha256, file_sha256
+from ..owner_local import OwnerLocalContractError, validate_receipt
 from ..protection import assert_aggregate_only, assert_path_not_protected
 
 
@@ -30,11 +31,13 @@ ENVELOPE_RELATIVE_PATH = Path("control/execution-envelope-p2.yaml")
 PROFILE_SCHEMA = "p2-budget-profile.v1.json"
 REQUEST_SCHEMA = "p2-request.v1.json"
 AGGREGATE_METRIC_SCHEMA = "p2-aggregate-metric.v1.json"
+TRAIN_METRIC_SCHEMA = "p2-train-metric.v1.json"
 SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 GIT_RE = re.compile(r"^(?:[a-f0-9]{40}|[a-f0-9]{64})$")
 P2_ARTIFACT_SCHEMAS = {
     "myis.p2-request.v1": "p2-request.v1.json",
     "myis.p2-candidate-ledger.v1": "p2-candidate-ledger.v1.json",
+    "myis.p2-baseline-commitment.v1": "p2-baseline-commitment.v1.json",
     "myis.p2-baseline-reproduction-receipt.v1": "p2-baseline-reproduction-receipt.v1.json",
     "myis.p2-shortlist-freeze-receipt.v1": "p2-shortlist-freeze-receipt.v1.json",
     "myis.p2-selection-receipt.v1": "p2-selection-receipt.v1.json",
@@ -43,12 +46,32 @@ P2_ARTIFACT_SCHEMAS = {
 }
 P2_HASH_FIELDS = {
     "myis.p2-candidate-ledger.v1": "ledger_sha256",
+    "myis.p2-baseline-commitment.v1": "commitment_sha256",
     "myis.p2-baseline-reproduction-receipt.v1": "receipt_sha256",
     "myis.p2-shortlist-freeze-receipt.v1": "receipt_sha256",
     "myis.p2-selection-receipt.v1": "receipt_sha256",
     "myis.p2-manifest.v1": "manifest_sha256",
     "myis.p2-package.v1": "package_sha256",
 }
+TRAIN_METRIC_COMPARISON_FIELDS = (
+    "schema_version",
+    "metric_name",
+    "data_role",
+    "scope",
+    "evidence_role",
+    "direction",
+    "n",
+    "denominator",
+    "dataset_lineage_sha256",
+    "config_sha256",
+    "retriever_sha256",
+    "evaluator_sha256",
+)
+TRAIN_METRIC_IDENTITY_FIELDS = (
+    "candidate_id",
+    "arm",
+    *TRAIN_METRIC_COMPARISON_FIELDS,
+)
 
 
 class P2ContractError(ValueError):
@@ -205,6 +228,12 @@ def validate_p2_artifact(
     elif schema_version == "myis.p2-candidate-ledger.v1":
         if payload["candidate_count"] != len(payload["candidates"]):
             raise P2ContractError("candidate_count does not match the candidates array")
+    elif schema_version == "myis.p2-baseline-commitment.v1":
+        _validate_safe_relative_uri(str(payload["prior_artifact_uri"]), "prior_artifact_uri")
+        validate_p2_train_metric(payload["expected_metric"])
+    elif schema_version == "myis.p2-baseline-reproduction-receipt.v1":
+        validate_p2_train_metric(payload["expected_metric"])
+        validate_p2_train_metric(payload["result"])
     elif schema_version == "myis.p2-shortlist-freeze-receipt.v1":
         if set(payload["candidate_ids"]) != set(payload["candidate_spec_hashes"]):
             raise P2ContractError("freeze candidate IDs and spec hashes do not correspond exactly")
@@ -240,10 +269,24 @@ def validate_p2_aggregate_metric(
     return dict(payload)
 
 
+def validate_p2_train_metric(payload: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate the canonical train/OUT primary decision metric."""
+
+    if not isinstance(payload, Mapping):
+        raise P2ContractError("P2 train metric must be a JSON object")
+    try:
+        assert_aggregate_only(payload)
+    except ValueError as error:
+        raise P2ContractError(str(error)) from error
+    _validate_schema(payload, TRAIN_METRIC_SCHEMA)
+    return dict(payload)
+
+
 def validate_p2_package_bundle(
     *,
     request: Mapping[str, Any],
     ledger: Mapping[str, Any],
+    commitment: Mapping[str, Any],
     baseline: Mapping[str, Any],
     freeze: Mapping[str, Any],
     selection: Mapping[str, Any] | None,
@@ -257,6 +300,7 @@ def validate_p2_package_bundle(
     artifacts = {
         "request": validate_p2_artifact(request, repository_root=root),
         "ledger": validate_p2_artifact(ledger, repository_root=root),
+        "commitment": validate_p2_artifact(commitment, repository_root=root),
         "baseline": validate_p2_artifact(baseline, repository_root=root),
         "freeze": validate_p2_artifact(freeze, repository_root=root),
         "manifest": validate_p2_artifact(manifest, repository_root=root),
@@ -267,6 +311,7 @@ def validate_p2_package_bundle(
     expected_versions = {
         "request": "myis.p2-request.v1",
         "ledger": "myis.p2-candidate-ledger.v1",
+        "commitment": "myis.p2-baseline-commitment.v1",
         "baseline": "myis.p2-baseline-reproduction-receipt.v1",
         "freeze": "myis.p2-shortlist-freeze-receipt.v1",
         "selection": "myis.p2-selection-receipt.v1",
@@ -277,6 +322,7 @@ def validate_p2_package_bundle(
         _require_semantic(row["schema_version"] == expected_versions[name], f"{name} artifact schema mismatch")
     request_row = artifacts["request"]
     ledger_row = artifacts["ledger"]
+    commitment_row = artifacts["commitment"]
     baseline_row = artifacts["baseline"]
     freeze_row = artifacts["freeze"]
     selection_row = artifacts.get("selection")
@@ -308,6 +354,12 @@ def validate_p2_package_bundle(
             _require_semantic(row["campaign_revision"] == campaign_revision, f"{name} campaign revision mismatch")
 
     candidates = list(ledger_row["candidates"])
+    baseline_matches = [
+        item
+        for item in candidates
+        if str(item["candidate_id"]) == str(commitment_row["baseline_candidate_id"])
+    ]
+    _require_semantic(len(baseline_matches) == 1, "baseline candidate must occur exactly once in the ledger")
     candidate_by_id = {str(item["candidate_id"]): item for item in candidates}
     _require_semantic(len(candidate_by_id) == len(candidates), "ledger candidate IDs must be unique")
     _require_semantic(ledger_row["candidate_count"] == len(candidates), "ledger candidate_count mismatch")
@@ -327,8 +379,28 @@ def validate_p2_package_bundle(
         "ledger candidate class and iteration mismatch",
     )
     _require_semantic(
-        all(item.get("status") in {"train_complete", "rejected", "frozen"} and item.get("train_score") is not None for item in candidates),
+        all(item["class"] == "frozen_control" or item["arm"] == "R1" for item in candidates),
+        "preregistered and adaptive candidates must use arm R1",
+    )
+    _require_semantic(
+        all(
+            item.get("status") in {"train_complete", "rejected", "frozen"}
+            and isinstance(item.get("train_metric"), Mapping)
+            for item in candidates
+        ),
         "complete ledger contains an incomplete train outcome",
+    )
+    train_metrics = [validate_p2_train_metric(item["train_metric"]) for item in candidates]
+    for candidate, metric in zip(candidates, train_metrics, strict=True):
+        _require_semantic(metric["candidate_id"] == candidate["candidate_id"], "train metric candidate ID differs from the ledger")
+        _require_semantic(metric["arm"] == candidate["arm"], "train metric arm differs from the ledger")
+    comparison_signatures = {
+        tuple(metric[field] for field in TRAIN_METRIC_COMPARISON_FIELDS)
+        for metric in train_metrics
+    }
+    _require_semantic(
+        len(comparison_signatures) == 1,
+        "all comparable train metrics must share metric identity, n, denominator, and lineage",
     )
     _require_semantic(
         sum(int(item.get("index_build_count", 0)) for item in candidates) <= profile.payload["limits"]["max_index_builds"],
@@ -336,13 +408,17 @@ def validate_p2_package_bundle(
     )
     frozen_control_ids = {str(item["candidate_id"]) for item in candidates if item["class"] == "frozen_control"}
     _require_semantic(frozen_control_ids == set(request_row["frozen_controls"]), "request frozen controls do not match the ledger")
+    _require_semantic(
+        ledger_row["baseline_commitment_sha256"] == commitment_row["commitment_sha256"],
+        "ledger baseline commitment reference mismatch",
+    )
 
     iterations = list(ledger_row["iterations"])
     iteration_numbers = [int(item["iteration"]) for item in iterations]
     _require_semantic(iteration_numbers == list(range(1, len(iterations) + 1)), "adaptive iterations must be consecutive")
     _require_semantic(len(iterations) in {4, 5}, "complete ledger must contain four or five adaptive iterations")
     seen_adaptive: set[str] = set()
-    iteration_scores: list[float] = []
+    iteration_metrics: list[dict[str, Any]] = []
     for record in iterations:
         member_ids = [str(item) for item in record["candidate_ids"]]
         expected_members = {
@@ -356,28 +432,64 @@ def validate_p2_package_bundle(
         seen_adaptive.update(member_ids)
         outcomes = [candidate_by_id[candidate_id] for candidate_id in member_ids]
         _require_semantic(all(item.get("status") in {"train_complete", "rejected", "frozen"} for item in outcomes), "adaptive iteration has incomplete train outcomes")
-        derived_score = max(float(item["train_score"]) for item in outcomes)
-        _require_semantic(float(record["best_score"]) == derived_score, "adaptive iteration score is not derived from train outcomes")
-        iteration_scores.append(derived_score)
+        derived_metric = max(
+            (item["train_metric"] for item in sorted(outcomes, key=lambda item: str(item["candidate_id"]))),
+            key=lambda metric: float(metric["value"]),
+        )
+        _require_semantic(record["best_metric"] == derived_metric, "adaptive iteration metric is not derived from train outcomes")
+        iteration_metrics.append(dict(derived_metric))
     _require_semantic(seen_adaptive == {str(item["candidate_id"]) for item in candidates if item["class"] == "adaptive_autoindex"}, "adaptive candidates are missing from iteration records")
     if len(iterations) < profile.payload["limits"]["max_adaptive_iterations"]:
-        _require_semantic(_early_stop_eligible(iteration_scores, profile.payload["stopping"]), "adaptive search stopped without valid early-stop evidence")
+        _require_semantic(_early_stop_eligible(iteration_metrics, profile.payload["stopping"]), "adaptive search stopped without valid early-stop evidence")
 
-    expected_metric = baseline_row["expected_metric"]
+    commitment_candidate = baseline_matches[0]
+    _require_semantic(commitment_candidate["class"] == "frozen_control", "baseline identity is not a frozen control in the ledger")
+    _require_semantic(commitment_candidate["arm"] == commitment_row["baseline_arm"], "baseline commitment arm differs from the ledger")
+    expected_metric = commitment_row["expected_metric"]
+    _require_semantic(expected_metric["candidate_id"] == commitment_row["baseline_candidate_id"], "baseline commitment metric candidate mismatch")
+    _require_semantic(expected_metric["arm"] == commitment_row["baseline_arm"], "baseline commitment metric arm mismatch")
+    _require_semantic(expected_metric["dataset_lineage_sha256"] in request_row["input_hashes"].values(), "baseline dataset lineage is not bound by the request")
+    request_scope_hashes = set(request_row["scope_hashes"].values())
+    for lineage_field in ("config_sha256", "retriever_sha256", "evaluator_sha256"):
+        _require_semantic(expected_metric[lineage_field] in request_scope_hashes, f"baseline {lineage_field} is not bound by the request")
+    _validate_prior_baseline_artifact(root, commitment_row)
+
+    _require_semantic(baseline_row["baseline_commitment_sha256"] == commitment_row["commitment_sha256"], "baseline reproduction commitment reference mismatch")
+    _require_semantic(baseline_row["baseline_id"] == commitment_row["baseline_candidate_id"], "baseline reproduction candidate differs from commitment")
+    _require_semantic(baseline_row["expected_metric"] == expected_metric, "baseline reproduction expectation differs from commitment")
+    _require_semantic(float(baseline_row["tolerance"]) == float(commitment_row["tolerance"]), "baseline reproduction tolerance differs from commitment")
     result_metric = baseline_row["result"]
-    baseline_candidate = candidate_by_id.get(str(baseline_row["baseline_id"]))
     _require_semantic(
-        baseline_candidate is not None and baseline_candidate["class"] == "frozen_control",
-        "baseline identity is not a frozen control in the ledger",
+        all(expected_metric[key] == result_metric[key] for key in TRAIN_METRIC_IDENTITY_FIELDS),
+        "baseline result identity differs from its expectation",
     )
-    metric_identity_fields = ("candidate_id", "name", "n", "scope", "split", "direction", "denominator", "evidence_role")
-    _require_semantic(all(expected_metric[key] == result_metric[key] for key in metric_identity_fields), "baseline result identity differs from its expectation")
+    _require_semantic(
+        result_metric == commitment_candidate["train_metric"],
+        "baseline reproduction result differs from the baseline candidate train metric",
+    )
     reproduced = abs(float(result_metric["value"]) - float(expected_metric["value"])) <= float(baseline_row["tolerance"])
     _require_semantic((baseline_row["status"] == "passed") == reproduced, "baseline status does not match expected metric and tolerance")
     _require_semantic(baseline_row["status"] == "passed", "complete package requires a passed baseline reproduction")
-    _require_semantic(baseline_row["dataset_lineage_sha256"] in request_row["input_hashes"].values(), "baseline dataset lineage is not bound by the request")
 
     freeze_ids = [str(item) for item in freeze_row["candidate_ids"]]
+    incumbent_value = float(commitment_candidate["train_metric"]["value"])
+    shortlist_groups: dict[float, list[str]] = {}
+    for candidate in candidates:
+        value = float(candidate["train_metric"]["value"])
+        if value > incumbent_value:
+            shortlist_groups.setdefault(value, []).append(str(candidate["candidate_id"]))
+    expected_freeze_ids: list[str] = []
+    for value in sorted(shortlist_groups, reverse=True):
+        group = shortlist_groups[value]
+        if len(group) != 1:
+            continue
+        if len(expected_freeze_ids) >= profile.payload["limits"]["max_selection_finalists"]:
+            break
+        expected_freeze_ids.append(group[0])
+    _require_semantic(
+        freeze_ids == expected_freeze_ids,
+        "freeze shortlist is not derived from canonical train metrics and the committed baseline",
+    )
     _require_semantic(set(freeze_ids).issubset(candidate_by_id), "freeze contains candidates outside the ledger")
     _require_semantic(set(freeze_row["candidate_spec_hashes"]) == set(freeze_ids), "freeze spec map membership mismatch")
     ledger_frozen_ids = {
@@ -390,10 +502,10 @@ def validate_p2_package_bundle(
         candidate = candidate_by_id[candidate_id]
         _require_semantic(freeze_row["candidate_spec_hashes"][candidate_id] == candidate["spec_sha256"], "freeze spec hash differs from the ledger")
         _require_semantic(candidate.get("status") == "frozen" and candidate.get("selection_eligible") is True, "freeze candidate is not marked eligible in the ledger")
+    _require_semantic(freeze_row["baseline_commitment_sha256"] == commitment_row["commitment_sha256"], "freeze baseline commitment reference mismatch")
     _require_semantic(freeze_row["baseline_reproduction_receipt_sha256"] == baseline_row["receipt_sha256"], "freeze baseline receipt reference mismatch")
     for lineage_field in ("config_sha256", "retriever_sha256", "evaluator_sha256"):
-        _require_semantic(freeze_row[lineage_field] == baseline_row[lineage_field], f"freeze {lineage_field} differs from baseline lineage")
-    request_scope_hashes = set(request_row["scope_hashes"].values())
+        _require_semantic(freeze_row[lineage_field] == expected_metric[lineage_field], f"freeze {lineage_field} differs from baseline lineage")
     for lineage_field in ("compiler_sha256", "config_sha256", "retriever_sha256", "evaluator_sha256"):
         _require_semantic(freeze_row[lineage_field] in request_scope_hashes, f"freeze {lineage_field} is not bound by the request")
 
@@ -417,6 +529,7 @@ def validate_p2_package_bundle(
     expected_manifest_refs = {
         "request_sha256": request_sha256,
         "candidate_ledger_sha256": ledger_row["ledger_sha256"],
+        "baseline_commitment_sha256": commitment_row["commitment_sha256"],
         "baseline_reproduction_receipt_sha256": baseline_row["receipt_sha256"],
         "shortlist_freeze_receipt_sha256": freeze_row["receipt_sha256"],
         "selection_receipt_sha256": selection_receipt_sha256,
@@ -435,6 +548,7 @@ def validate_p2_package_bundle(
     expected_package_refs = {
         "request_sha256": request_sha256,
         "candidate_ledger_sha256": ledger_row["ledger_sha256"],
+        "baseline_commitment_sha256": commitment_row["commitment_sha256"],
         "baseline_reproduction_sha256": baseline_row["receipt_sha256"],
         "shortlist_freeze_sha256": freeze_row["receipt_sha256"],
         "selection_sha256": selection_receipt_sha256,
@@ -449,6 +563,7 @@ def validate_p2_package_bundle(
     uri_fields = {
         "request": "request_uri",
         "ledger": "candidate_ledger_uri",
+        "commitment": "baseline_commitment_uri",
         "baseline": "baseline_reproduction_uri",
         "freeze": "shortlist_freeze_uri",
         "selection": "selection_uri",
@@ -486,17 +601,18 @@ def _require_semantic(condition: bool, message: str) -> None:
         raise P2ContractError(message)
 
 
-def _early_stop_eligible(scores: list[float], stopping: Mapping[str, Any]) -> bool:
+def _early_stop_eligible(metrics: list[Mapping[str, Any]], stopping: Mapping[str, Any]) -> bool:
     best: float | None = None
     no_improvement_streak = 0
-    for score in scores:
+    for metric in metrics:
+        score = float(metric["value"])
         if best is None or score > best:
             best = score
             no_improvement_streak = 0
         else:
             no_improvement_streak += 1
     return (
-        len(scores) >= int(stopping["min_iterations_before_early_stop"])
+        len(metrics) >= int(stopping["min_iterations_before_early_stop"])
         and no_improvement_streak >= int(stopping["no_improvement_patience"])
     )
 
@@ -513,6 +629,17 @@ def _validate_safe_relative_uri(value: str, field: str) -> Path:
 
 
 def _load_referenced_artifact(repository_root: Path, value: str, field: str) -> dict[str, Any]:
+    path = _resolve_referenced_artifact_path(repository_root, value, field)
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise P2ContractError(f"package {field} cannot be loaded") from error
+    if not isinstance(payload, dict):
+        raise P2ContractError(f"package {field} must reference a JSON object")
+    return payload
+
+
+def _resolve_referenced_artifact_path(repository_root: Path, value: str, field: str) -> Path:
     relative = _validate_safe_relative_uri(value, field)
     unresolved = repository_root / relative
     path = unresolved.resolve()
@@ -522,13 +649,66 @@ def _load_referenced_artifact(repository_root: Path, value: str, field: str) -> 
         raise P2ContractError(f"package {field} resolves outside the repository") from error
     if unresolved.is_symlink() or not path.is_file():
         raise P2ContractError(f"package {field} does not reference a regular artifact file")
+    return path
+
+
+def _validate_prior_baseline_artifact(
+    repository_root: Path,
+    commitment: Mapping[str, Any],
+) -> None:
+    path = _resolve_referenced_artifact_path(
+        repository_root,
+        str(commitment["prior_artifact_uri"]),
+        "prior_artifact_uri",
+    )
+    _require_semantic(
+        file_sha256(path) == commitment["prior_artifact_sha256"],
+        "baseline commitment prior artifact SHA-256 is stale",
+    )
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise P2ContractError(f"package {field} cannot be loaded") from error
+        raise P2ContractError("baseline commitment prior artifact cannot be loaded") from error
     if not isinstance(payload, dict):
-        raise P2ContractError(f"package {field} must reference a JSON object")
-    return payload
+        raise P2ContractError("baseline commitment prior artifact must be a JSON object")
+    try:
+        receipt = validate_receipt(payload)
+    except (OwnerLocalContractError, PermissionError, ValueError) as error:
+        raise P2ContractError("baseline commitment prior artifact is not a valid safe owner-local receipt") from error
+    _require_semantic(
+        receipt["decision_id"] == "P1_CPU_EXECUTION_ENVELOPE" and receipt["status"] == "accepted",
+        "baseline commitment prior artifact is not accepted P1 evidence",
+    )
+    index = int(commitment["metric_locator"]["metrics_index"])
+    metrics = receipt.get("metrics")
+    _require_semantic(
+        isinstance(metrics, list) and index < len(metrics) and isinstance(metrics[index], Mapping),
+        "baseline commitment metric locator is invalid",
+    )
+    prior_metric = metrics[index]
+    expected = commitment["expected_metric"]
+    prior_direction = "higher_is_better" if prior_metric.get("direction") == "maximize" else prior_metric.get("direction")
+    expected_bindings = {
+        "arm": prior_metric.get("arm"),
+        "metric_name": prior_metric.get("name"),
+        "data_role": prior_metric.get("split"),
+        "scope": prior_metric.get("scope"),
+        "evidence_role": prior_metric.get("evidence_role"),
+        "direction": prior_direction,
+        "value": prior_metric.get("value"),
+        "n": prior_metric.get("n"),
+        "denominator": prior_metric.get("denominator"),
+        "dataset_lineage_sha256": receipt.get("lineage_hashes", {}).get("dataset_sha256"),
+        "evaluator_sha256": receipt.get("lineage_hashes", {}).get("evaluator_sha256"),
+    }
+    _require_semantic(
+        commitment["baseline_arm"] == prior_metric.get("arm"),
+        "baseline commitment arm differs from prior P1 evidence",
+    )
+    _require_semantic(
+        all(expected[field] == value for field, value in expected_bindings.items()),
+        "baseline commitment expected metric differs from prior P1 evidence",
+    )
 
 
 def _validate_profile_invariants(payload: Mapping[str, Any]) -> None:

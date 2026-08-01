@@ -8,6 +8,7 @@ from .contracts import (
     validate_p2_aggregate_metric,
     validate_p2_artifact,
     validate_p2_package_bundle,
+    validate_p2_train_metric,
 )
 from .state import Candidate, P2RunStateMachine, P2StateError
 
@@ -22,4 +23,5 @@ __all__ = [
     "validate_p2_aggregate_metric",
     "validate_p2_artifact",
     "validate_p2_package_bundle",
+    "validate_p2_train_metric",
 ]

@@ -105,6 +105,21 @@ Any baseline, train, or freeze failure stops before selection; final-872 stays
 closed. A profile change after the first measured run creates a new campaign
 revision and cannot rewrite or reinterpret the previous result.
 
+Before the first candidate train outcome, the run must create one immutable
+baseline commitment. It binds the baseline candidate and arm to the
+repository-safe P1 aggregate receipt by raw file SHA-256 and exact metric-array
+index, then freezes the expected train/OUT primary Recall@100 metric and
+tolerance. Baseline reproduction must copy that commitment and its observed
+metric must equal the same candidate's train metric in the candidate ledger.
+
+Adaptive ranking, iteration improvement, early stopping, tie rejection, and
+shortlist construction use `myis.p2-train-metric.v1` objects rather than scalar
+scores. For this fixed train evaluation, all comparable candidates must share
+the metric identity, positive-query count `n`, denominator definition, and
+dataset/config/retriever/evaluator lineage. Only candidate ID, arm, and metric
+value may differ. Preregistered and adaptive candidates use `R1`; frozen
+controls may use `R0`, `R0-W`, or `R1`.
+
 ### Method rationale and literature
 
 `R0` is full-family BM25 to isolate representation effects; the DAPFAM

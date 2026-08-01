@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-train-metric:v1",
+  "title": "myIS P2 canonical train metric",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "candidate_id", "arm", "metric_name", "data_role", "scope", "evidence_role", "direction", "value", "n", "denominator", "dataset_lineage_sha256", "config_sha256", "retriever_sha256", "evaluator_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-train-metric.v1"},
+    "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "arm": {"enum": ["R0", "R0-W", "R1"]},
+    "metric_name": {"const": "recall_at_100"},
+    "data_role": {"const": "train"},
+    "scope": {"const": "OUT"},
+    "evidence_role": {"const": "primary"},
+    "direction": {"const": "higher_is_better"},
+    "value": {"type": "number", "minimum": 0, "maximum": 1},
+    "n": {"type": "integer", "minimum": 1},
+    "denominator": {"const": "macro_mean_per_query_relevant_families"},
+    "dataset_lineage_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "config_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "retriever_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evaluator_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

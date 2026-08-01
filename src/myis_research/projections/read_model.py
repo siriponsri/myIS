@@ -55,7 +55,9 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/p2-budget-profile.v1.json",
     "schemas/p2-request.v1.json",
     "schemas/p2-aggregate-metric.v1.json",
+    "schemas/p2-train-metric.v1.json",
     "schemas/p2-candidate-ledger.v1.json",
+    "schemas/p2-baseline-commitment.v1.json",
     "schemas/p2-baseline-reproduction-receipt.v1.json",
     "schemas/p2-shortlist-freeze-receipt.v1.json",
     "schemas/p2-selection-receipt.v1.json",
@@ -567,14 +569,16 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         try:
             request_payload = referenced("request_uri")
             ledger_payload = referenced("candidate_ledger_uri")
+            commitment_payload = referenced("baseline_commitment_uri")
             baseline_payload = referenced("baseline_reproduction_uri")
             freeze_payload = referenced("shortlist_freeze_uri")
             manifest_payload = referenced("manifest_uri")
-            if any(item is None for item in (request_payload, ledger_payload, baseline_payload, freeze_payload, manifest_payload)):
+            if any(item is None for item in (request_payload, ledger_payload, commitment_payload, baseline_payload, freeze_payload, manifest_payload)):
                 raise P2ContractError("complete P2 package is missing a required artifact reference")
             bundle = validate_p2_package_bundle(
                 request=request_payload,
                 ledger=ledger_payload,
+                commitment=commitment_payload,
                 baseline=baseline_payload,
                 freeze=freeze_payload,
                 selection=referenced("selection_uri"),
@@ -587,6 +591,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
             bundle = None
 
     ledger = bundle.get("ledger") if bundle else None
+    commitment = bundle.get("commitment") if bundle else None
     baseline = bundle.get("baseline") if bundle else None
     freeze = bundle.get("freeze") if bundle else None
     selection = bundle.get("selection") if bundle else None
@@ -612,6 +617,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
     for path, payload in valid:
         self_hash_field = {
             "myis.p2-candidate-ledger.v1": "ledger_sha256",
+            "myis.p2-baseline-commitment.v1": "commitment_sha256",
             "myis.p2-baseline-reproduction-receipt.v1": "receipt_sha256",
             "myis.p2-shortlist-freeze-receipt.v1": "receipt_sha256",
             "myis.p2-selection-receipt.v1": "receipt_sha256",
@@ -685,6 +691,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "source": {
             "profile": "control/budgets/p2-r1-primary-v1.yaml",
             "execution_envelope": "control/execution-envelope-p2.yaml",
+            "baseline_commitment_sha256": commitment.get("commitment_sha256") if commitment else None,
             "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
         },
     }
