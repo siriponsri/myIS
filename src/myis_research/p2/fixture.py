@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
 import shutil
 import subprocess
@@ -426,8 +426,12 @@ def _assert_fixture_extra_boundary(value: Any, *, path: str) -> None:
             raise P2FixtureError(f"fixture final split reference is forbidden at {path}")
         if _SECRET_VALUE.search(value):
             raise P2FixtureError(f"fixture credential-like value is forbidden at {path}")
-        candidate = Path(value)
-        if candidate.is_absolute() and any(
+        is_absolute = (
+            Path(value).is_absolute()
+            or PurePosixPath(value).is_absolute()
+            or PureWindowsPath(value).is_absolute()
+        )
+        if is_absolute and any(
             token in lowered
             for token in ("qrels", "membership", "query", "selection", "final", "credential", "secret")
         ):
