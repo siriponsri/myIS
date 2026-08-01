@@ -23,6 +23,7 @@ from ..p2 import (
     validate_p2_package_bundle,
 )
 from ..protection import assert_aggregate_only
+from ..observatory.projection import load_observatory_projection
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -58,6 +59,7 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/scope-autoindex-v1/packages",
     "orchestration/audits/p2-readiness",
     "outputs/fixtures/p2",
+    "outputs/observatory/fixture-v1",
     "control/assets/dapfam-p1-source.v1.json",
     "outputs/audits/rigor",
     "evidence/legacy-dapfam-inventory.v1.json",
@@ -73,7 +75,14 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/p2-selection-receipt.v1.json",
     "schemas/p2-manifest.v1.json",
     "schemas/p2-package.v1.json",
+    "schemas/observatory-registry.v1.json",
+    "schemas/observatory-run.v1.json",
+    "schemas/observatory-artifact.v1.json",
+    "schemas/observatory-prompt.v1.json",
+    "schemas/observatory-metric.v1.json",
+    "schemas/observatory-receipt.v1.json",
     "src/myis_research/p2",
+    "src/myis_research/observatory",
     "src/myis_research/p2_cli.py",
     "src/myis_research/projections/read_model.py",
     "src/myis_research/report_cli.py",
@@ -115,6 +124,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     validation_reports = _load_validation_reports(root / "campaigns" / campaign_id / "validation-reports")
     p1_pairs = validated_p1_matrix(manifests, receipts, validation_reports)
     p2_readiness = _p2_readiness_projection(root, campaign_config)
+    observatory = load_observatory_projection(root)
     package_review: dict[str, Any] = {}
     if (root / "control/assets/dapfam-p1-source.v1.json").is_file() and p1_pairs:
         package_review = _validated_p1_package_review(root, p1_pairs)
@@ -281,6 +291,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "p2_status": p2_readiness["status"],
         }],
         "p2_readiness": p2_readiness,
+        "observatory": observatory,
         "phases": phases,
         "tasks": tasks,
         "gates": [

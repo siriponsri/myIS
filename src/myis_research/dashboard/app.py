@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 from ..identity import DISPLAY_NAME, PROGRAM_ID, PROTOCOL_VERSION, RESEARCH_VERSION
 from ..ledger import ImmutableJsonLedger, record_sha256
 from ..projections.read_model import build_read_model
+from ..observatory import ObservatoryError, build_evidence_graph, load_observatory_registry
 from .contract import DASHBOARD_API_CONTRACT
 from .security import LoopbackSecurityMiddleware, SessionStore
 from .reports import ReportCatalog, ReportCatalogError
@@ -148,6 +149,30 @@ def create_app(
     def results(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         model = build_read_model(root)
         return {"schema_version": "myis.dashboard-results.v2", "read_model_revision": model["read_model_revision"], "results": model["results"], "interpretations": model["interpretations"]}
+
+    @app.get("/api/v2/observatory")
+    def observatory(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {"schema_version": "myis.dashboard-observatory.v1", "read_model_revision": model["read_model_revision"], "observatory": model.get("observatory", {})}
+
+    @app.get("/api/v2/observatory/registry")
+    def observatory_registry(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        try:
+            registry = load_observatory_registry(root)
+        except ObservatoryError as error:
+            raise HTTPException(404, str(error)) from error
+        return {"schema_version": "myis.dashboard-observatory-registry.v1", "read_model_revision": model["read_model_revision"], "registry": registry}
+
+    @app.get("/api/v2/observatory/graph")
+    def observatory_graph(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        try:
+            registry = load_observatory_registry(root)
+            graph = build_evidence_graph(registry)
+        except ObservatoryError as error:
+            raise HTTPException(404, str(error)) from error
+        return {"schema_version": "myis.dashboard-observatory-graph.v1", "read_model_revision": model["read_model_revision"], "graph": graph.as_dict()}
 
     @app.get("/api/v2/presentation/{audience}")
     def presentation_v2(audience: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
@@ -316,6 +341,7 @@ def _dashboard_projection(model: dict[str, Any]) -> dict[str, Any]:
         "runs": runs,
         "metrics": model.get("metrics", []),
         "p2_readiness": model.get("p2_readiness", {}),
+        "observatory": model.get("observatory", {}),
         "cost": model.get("cost", {}),
         "evidence": model.get("evidence", []),
         "datasets": model.get("datasets", []),

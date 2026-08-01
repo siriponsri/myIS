@@ -153,6 +153,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
     fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
     review_source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
+    observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -164,6 +165,18 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
         "run_ids": [item.get("run_id") for item in model.get("runs", [])],
         "evidence_ids": [item.get("evidence_id") for item in model.get("evidence", [])],
         "status": "blocked" if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "current",
+        "observatory": {
+            "status": observatory.get("status", "not_available"),
+            "evidence_class": observatory.get("evidence_class", "fixture"),
+            "scientific_authority": observatory.get("scientific_authority", False),
+            "registry_sha256": observatory.get("registry_sha256"),
+            "receipt_sha256": observatory.get("receipt_sha256"),
+            "mlflow_run_id": observatory.get("mlflow_run_id"),
+            "validated_artifact_count": observatory.get("validated_artifact_count", 0),
+            "validated_metric_count": observatory.get("validated_metric_count", 0),
+            "failed_child_count": observatory.get("failed_child_count", 0),
+            "recovered_child_count": observatory.get("recovered_child_count", 0),
+        },
         "p2_readiness": {
             "status": p2.get("status", "unknown"),
             "budget_profile_id": p2.get("budget_profile_id"),
@@ -897,6 +910,17 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         _p2_official_review_body(model),
     )
 
+    observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
+    observatory_hashes = [str(value) for value in (observatory.get("registry_sha256"), observatory.get("receipt_sha256")) if value]
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"] = _note(
+        {**common, "note_id": "OBSERVATORY-FIXTURE-RUN", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if observatory.get("status") == "ready" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "result_id": "obs-result-fixture", "current_scientific_authority": False, "source_run_ids": ["obs-run-parent"], "source_manifest_sha256": observatory_hashes},
+        _observatory_run_body(observatory),
+    )
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"] = _note(
+        {**common, "note_id": "OBSERVATORY-FAILURE-RECOVERY", "note_type": "failed_attempt", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if observatory.get("status") == "ready" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": ["obs-run-candidate-02"], "source_manifest_sha256": observatory_hashes},
+        _observatory_failure_body(observatory),
+    )
+
     outputs[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"] = _note(
         {**common, "note_id": "CURRENT-ADVISOR-UPDATE", "note_type": "advisor_update", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "verification_needed", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "lifecycle": "draft", "snapshot_status": "draft", "supersedes": None, "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
         _p1_advisor_body(model),
@@ -906,6 +930,35 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     _add_history_outputs(common, outputs)
     _add_system_outputs(model, common, outputs)
     return outputs
+
+
+def _observatory_run_body(observatory: Mapping[str, Any]) -> str:
+    counters = observatory.get("real_counters", {})
+    return (
+        "# Evidence Observatory Fixture Run\n\n"
+        "## Purpose\n\n"
+        "This note records the repository-only capture exercise. It is engineering evidence and cannot be promoted to a scientific result.\n\n"
+        "## What happened\n\n"
+        f"The registry is **{observatory.get('status', 'unavailable')}** with integrity **{observatory.get('integrity_status', 'unknown')}**. "
+        f"It contains `{observatory.get('record_counts', {}).get('runs', 0)}` runs, `{observatory.get('record_counts', {}).get('artifacts', 0)}` artifacts, and `{observatory.get('validated_metric_count', 0)}` validated synthetic metric.\n\n"
+        "## Boundary\n\n"
+        f"Evidence class: `{observatory.get('evidence_class', 'fixture')}`; scientific authority: `{observatory.get('scientific_authority', False)}`; claim boundary: `{observatory.get('claim_boundary', 'no_measured_claim')}`.\n\n"
+        f"Real P2 counters remain measured runs `{counters.get('measured_runs', 0)}`, candidates `{counters.get('candidate_count', 0)}`, shortlist `{counters.get('shortlist_count', 0)}`, selection `{counters.get('selection_accesses', 0)}`.\n\n"
+        "## Next action\n\n"
+        f"{observatory.get('next_action', 'Review the Observatory receipt before Owner-local measured preflight.')}\n"
+    )
+
+
+def _observatory_failure_body(observatory: Mapping[str, Any]) -> str:
+    return (
+        "# Observatory Failure and Recovery\n\n"
+        "The synthetic fixture intentionally retained one failed child and its recovery record. The failure did not change real counters or promote an incomplete metric.\n\n"
+        f"- Failed child records: `{observatory.get('failed_child_count', 0)}`\n"
+        f"- Recovery records: `{observatory.get('recovered_child_count', 0)}`\n"
+        f"- Negative checks passed: `{observatory.get('negative_checks_passed', False)}`\n\n"
+        "## Lesson\n\n"
+        "A failed branch remains useful evidence when the checkpoint, retry action, and claim boundary are recorded together. This is a capture-readiness lesson, not evidence about retrieval quality.\n"
+    )
 
 
 def _add_literature_outputs(root: Path, model: Mapping[str, Any], common: Mapping[str, Any], outputs: dict[Path, str]) -> None:
