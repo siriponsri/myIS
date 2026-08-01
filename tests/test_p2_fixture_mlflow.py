@@ -76,7 +76,8 @@ def test_fixture_mlflow_registration_is_aggregate_only(tmp_path: Path) -> None:
         enforce_repository_output=False,
     )
     mirror = FakeMirror()
-    registration = module.register(repository, tmp_path / "mlflow-store", mirror=mirror)
+    store = tmp_path / "mlflow-store"
+    registration = module.register(repository, store, mirror=mirror)
 
     spec, artifacts = mirror.calls[0]
     assert spec.experiment_name == "myis-system"
@@ -86,6 +87,8 @@ def test_fixture_mlflow_registration_is_aggregate_only(tmp_path: Path) -> None:
     assert len(artifacts) == 2
     assert registration["mlflow_run_id"] == "fixture-mlflow-run"
     assert registration["protected_artifacts_mirrored"] is False
+    assert json.loads((store / "store.json").read_text(encoding="utf-8"))["schema_version"] == "myis.mlflow-store.v2"
+    assert (store / "receipts").is_dir()
     unsigned = {key: value for key, value in registration.items() if key != "registration_sha256"}
     encoded = json.dumps(unsigned, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("utf-8")
     assert registration["registration_sha256"] == hashlib.sha256(encoded).hexdigest()

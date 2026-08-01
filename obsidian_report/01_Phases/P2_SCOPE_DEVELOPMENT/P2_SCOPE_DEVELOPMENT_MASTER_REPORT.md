@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5"
-read_model_sha256: "c87670909c0ea6b07c0ab3f1430a8a4a006b7a1fabdb860523bfb1ae629dbcfe"
-source_commit: "7351bd01b841d93c568ac2c8a243faefc2652d78"
+read_model_revision: "a00ca0a92caffffbfed2f86b004d748ed0c48b77b3e462ea8c3b931790b33940"
+read_model_sha256: "d67796c98bb6fec3f0a0c0a7918ca966f9e8add8a209a7114232d2495d43f91c"
+source_commit: "fc4409ebdf7989e2bc0019eef20e8b8cc50030d5"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,8 +11,8 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-01T10:45:20Z"
-updated_at: "2026-08-01T10:45:20Z"
+created_at: "2026-08-01T12:25:51Z"
+updated_at: "2026-08-01T12:25:51Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -32,7 +32,11 @@ P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible 
 
 ## Official static review
 
-Round `3` verdict is **accept** with status `accepted_static_contract_review`. This is engineering provenance only; fixture pilot executed = `False`. See [[P2_OFFICIAL_REVIEW_AUDIT]].
+Round `3` verdict is **accept** with status `accepted_static_contract_review`. This static review remains engineering provenance only. See [[P2_OFFICIAL_REVIEW_AUDIT]].
+
+## Repository-only fixture pilot
+
+Fixture status is **passed** with evidence class `fixture` and scientific authority `False`. Synthetic lifecycle counts are kept separate from real campaign counters. See [[P2_FIXTURE_PILOT]].
 
 ## Budget and runtime
 
@@ -40,11 +44,17 @@ Round `3` verdict is **accept** with status `accepted_static_contract_review`. T
 |---|---|
 | Status | ready_planned_not_measured |
 | Official static review | Round 3 accept / accepted_static_contract_review |
+| Fixture pilot | passed / fixture / scientific authority False |
+| Synthetic lifecycle | 32 candidates; 5 iterations; shortlist 4; fixture selection 1 |
 | Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
-| Candidates | 0 / 32 |
+| Real candidates | 0 / 32 |
+| Real shortlist | 0 / 4 |
 | Runtime | 259200 wall seconds; 10800 per candidate |
-| Freeze | not_started; selection 0/1 |
+| Real freeze / selection | not_started; 0/1 |
+| Protected access | False |
+| Scientific claim | no_measured_claim |
 | Resources | GPU 0 USD; paid API 0 USD; model download False |
+| Next step | Owner-local measured preflight |
 
 ## Why these methods
 
@@ -64,10 +74,10 @@ Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, pai
 
 ## Read-model binding
 
-Revision: `2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5`
+Revision: `a00ca0a92caffffbfed2f86b004d748ed0c48b77b3e462ea8c3b931790b33940`
 
 ## Next action
 
-The static contract is accepted. The next reversible action is a repository-only fixture/pilot preflight; measured P2 and selection remain closed.
+The static contract and repository-only fixture are complete. The next authorized action is Owner-local measured preflight; measured P2 and real selection remain closed until that separate action begins.
 
 Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[P1_CPU_BASELINE_RESULT]]

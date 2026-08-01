@@ -1,0 +1,63 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "p2-fixture-pilot-v1-receipt",
+      "classification": "fixture",
+      "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125"
+    },
+    {
+      "artifact_id": "p2-fixture-pilot-v1-package",
+      "classification": "fixture",
+      "sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9"
+    }
+  ],
+  "campaign_id": "scope-autoindex-v1",
+  "commitments": {
+    "artifacts_sha256": "ce2c8341a85d8e6ecd7bccec63c7daa9adfa71caebebe6510bcfc9152a290ec2",
+    "inputs_sha256": "6068a4a0c60b6f037e6ffd0ce1f2e02dcef64d7aad09def8c13c5322bb6fb47d",
+    "method_sha256": "1023fb7c69d061e931bc5f79cd42f6ff027601be8f605998bef362c964b1f956",
+    "metrics_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "resources_sha256": "92a877769208187f1c818fd63a3c36d877dfe1507df908819577544a1af6eeb4"
+  },
+  "created_at_utc": "2026-08-01T00:00:00Z",
+  "evidence_class": "fixture",
+  "experiment_id": "myis-system",
+  "git": {
+    "commit": "fc4409ebdf7989e2bc0019eef20e8b8cc50030d5",
+    "tracked_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tracked_worktree_state": "clean"
+  },
+  "inputs": {
+    "hashes": {
+      "dataset_lineage_sha256": "134cf557f759c67aea304dde841bc10dc89079467b6fc88f956c9137225e029d",
+      "execution_envelope_sha256": "cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247",
+      "profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+      "request_sha256": "8a8d8732e17ee45643cced839690d460f3d526b8ce9fd07191819a1a3d0c33c8"
+    }
+  },
+  "manifest_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+  "method": {
+    "claim_boundary": "no_measured_claim",
+    "deterministic_rerun": "passed",
+    "evidence_class": "fixture",
+    "fixture": true,
+    "measured_execution": false,
+    "protected_data_accessed": false,
+    "scientific_authority": false
+  },
+  "metrics": [],
+  "parent_run_id": null,
+  "receipt_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+  "request_sha256": "8a8d8732e17ee45643cced839690d460f3d526b8ce9fd07191819a1a3d0c33c8",
+  "resources": {
+    "cpu_only": true,
+    "gpu_used": false,
+    "network_model_download_used": false,
+    "paid_api_used": false,
+    "provider_fallback_used": false
+  },
+  "run_id": "p2-fixture-pilot-v1-run",
+  "schema_version": "myis.run-manifest.v2",
+  "stage": "fixture",
+  "status": "valid"
+}

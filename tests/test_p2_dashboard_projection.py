@@ -21,6 +21,17 @@ def test_dashboard_exposes_p2_readiness_without_metrics_or_selection() -> None:
     assert p2["measured_runs"] == 0
     assert p2["selection_accesses"] == 0
     assert p2["freeze_barrier"]["status"] == "not_started"
+    fixture = p2["fixture_pilot"]
+    assert fixture["executed"] is True
+    assert fixture["status"] == "passed"
+    assert fixture["evidence_class"] == "fixture"
+    assert fixture["scientific_authority"] is False
+    assert fixture["synthetic_candidates"] == 32
+    assert fixture["synthetic_iterations"] == 5
+    assert fixture["synthetic_shortlist"] == 4
+    assert fixture["fixture_selection_exposures"] == 1
+    assert fixture["protected_data_accessed"] is False
+    assert fixture["measured_execution_performed"] is False
     review = p2["official_review"]
     assert review["status"] == "accepted_static_contract_review"
     assert review["round_count"] == 3
@@ -41,3 +52,6 @@ def test_dashboard_frontend_mentions_p2_freeze_and_budget_state() -> None:
     assert "max_wall_clock_seconds" in source
     assert "network_model_download" in source
     assert "official_review" in source
+    assert "fixture_pilot" in source
+    assert "Real candidates" in source
+    assert "Owner-local measured preflight" in source

@@ -1,0 +1,55 @@
+{
+  "artifacts": {
+    "README.md": "4abf6a75dad02cae25ebf4af38443ae24bf2cab83b21cb86a5187268bfcb1c0a",
+    "p2-fixture-pilot-v1.execution-manifest.json": "7e05a3e9f020bacb15147e2cf019f488d4ec5b48ae9f304ca101ad5c23064d28",
+    "p2-fixture-pilot-v1.mlflow-registration.json": "071b33e2570db0a0d7c212bb61f3a7109eb6fafa230e918647a4455e09d7d2be",
+    "p2-fixture-pilot-v1.receipt.json": "a042e7c2efeb7126c25a545ce63c1a86017191844306d8719daac61473ed496f"
+  },
+  "candidate_count": 0,
+  "evidence_class": "fixture",
+  "execution_manifest_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+  "fixture_id": "p2-fixture-pilot-v1",
+  "fixture_package_sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
+  "fixture_receipt_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+  "fixture_selection_exposures": 1,
+  "measured_execution_performed": false,
+  "measured_runs": 0,
+  "mlflow_registration_sha256": "168cc116a6754fbb67d46039f60f0e0897312fdc1a0c6e5fc603cbac9f8e9be0",
+  "mlflow_run_id": "64d48729899745e1a18d6e386ba15187",
+  "next_authorized_action": "Owner-local measured preflight",
+  "official_review": {
+    "rounds": [
+      {
+        "round": 1,
+        "verdict": "revise"
+      },
+      {
+        "round": 2,
+        "verdict": "revise"
+      },
+      {
+        "round": 3,
+        "verdict": "accept"
+      }
+    ],
+    "runtime": {
+      "codex_cli_version": "0.146.0",
+      "measured_execution_performed": false,
+      "model": "gpt-5.6-sol",
+      "protected_data_accessed": false,
+      "provider": "openai",
+      "sandbox": "read-only"
+    },
+    "source": "orchestration/audits/p2-readiness/index.json"
+  },
+  "phase_id": "P2_SCOPE_DEVELOPMENT",
+  "protected_data_accessed": false,
+  "schema_version": "myis.p2-fixture-index.v1",
+  "scientific_authority": false,
+  "selection_accesses": 0,
+  "status": "passed",
+  "synthetic_candidates": 32,
+  "synthetic_iterations": 5,
+  "synthetic_shortlist": 4,
+  "task_id": "P2.1"
+}

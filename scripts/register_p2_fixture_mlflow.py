@@ -32,6 +32,12 @@ MANIFEST_PATH = Path(
 REGISTRATION_PATH = Path(
     "outputs/fixtures/p2/p2-fixture-pilot-v1.mlflow-registration.json"
 )
+STORE_METADATA = {
+    "schema_version": "myis.mlflow-store.v2",
+    "artifact_root": "artifacts",
+    "repository_program_id": "myis-research",
+    "created_by": "register_p2_fixture_mlflow.py",
+}
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -55,6 +61,21 @@ def _write_new_or_identical(path: Path, payload: dict[str, Any]) -> None:
         os.fsync(handle.fileno())
 
 
+def _ensure_store_metadata(store: Path) -> None:
+    (store / "artifacts").mkdir(parents=True, exist_ok=True)
+    (store / "receipts").mkdir(parents=True, exist_ok=True)
+    metadata_path = store / "store.json"
+    encoded = (json.dumps(STORE_METADATA, ensure_ascii=True, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    if metadata_path.exists():
+        if metadata_path.is_symlink() or not metadata_path.is_file():
+            raise P2FixtureError("isolated fixture MLflow store metadata path is invalid")
+        existing = _load_json(metadata_path)
+        if existing.get("schema_version") != "myis.mlflow-store.v2" or existing.get("artifact_root") != "artifacts":
+            raise P2FixtureError("isolated fixture MLflow store metadata is incompatible")
+        return
+    metadata_path.write_bytes(encoded)
+
+
 def register(
     repository_root: Path,
     store_root: Path,
@@ -65,6 +86,7 @@ def register(
     store = store_root.resolve()
     if store == root or root in store.parents:
         raise P2FixtureError("fixture MLflow store must be outside the Git repository")
+    _ensure_store_metadata(store)
 
     receipt_path = root / RECEIPT_PATH
     manifest_path = root / MANIFEST_PATH

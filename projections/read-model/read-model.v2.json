@@ -186,7 +186,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-01T10:45:20Z",
+  "generated_at": "2026-08-01T12:25:51Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -512,6 +512,28 @@
     },
     "candidate_count": 0,
     "claim_boundary": "no_measured_claim",
+    "fixture_pilot": {
+      "canonical_hashes_match": true,
+      "claim_boundary": "no_measured_claim",
+      "deterministic_rerun": "passed",
+      "evidence_class": "fixture",
+      "executed": true,
+      "execution_manifest_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+      "execution_manifest_uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json",
+      "fixture_package_sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
+      "fixture_selection_exposures": 1,
+      "measured_execution_performed": false,
+      "negative_check_count": 94,
+      "negative_checks_passed": true,
+      "protected_data_accessed": false,
+      "receipt_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+      "receipt_uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json",
+      "scientific_authority": false,
+      "status": "passed",
+      "synthetic_candidates": 32,
+      "synthetic_iterations": 5,
+      "synthetic_shortlist": 4
+    },
     "freeze_barrier": {
       "candidate_ids_frozen": false,
       "mutation_after_selection": "forbidden",
@@ -893,7 +915,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5",
+  "projection_revision": "a00ca0a92caffffbfed2f86b004d748ed0c48b77b3e462ea8c3b931790b33940",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -937,8 +959,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "2eeb0383cae5501f06e95d0091f5d36c4017e7a356021021ae4e7f8155ef81c5",
-  "read_model_sha256": "c87670909c0ea6b07c0ab3f1430a8a4a006b7a1fabdb860523bfb1ae629dbcfe",
+  "read_model_revision": "a00ca0a92caffffbfed2f86b004d748ed0c48b77b3e462ea8c3b931790b33940",
+  "read_model_sha256": "d67796c98bb6fec3f0a0c0a7918ca966f9e8add8a209a7114232d2495d43f91c",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -1070,7 +1092,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "7351bd01b841d93c568ac2c8a243faefc2652d78",
+  "source_commit": "fc4409ebdf7989e2bc0019eef20e8b8cc50030d5",
   "tasks": [
     {
       "evidence_ids": [],

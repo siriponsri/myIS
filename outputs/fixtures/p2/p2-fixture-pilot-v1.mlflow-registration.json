@@ -1,0 +1,21 @@
+{
+  "evidence_class": "fixture",
+  "execution_manifest_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+  "execution_manifest_uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json",
+  "experiment": "myis-system",
+  "fixture_id": "p2-fixture-pilot-v1",
+  "fixture_package_sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
+  "measured_execution": false,
+  "mirror_key": "f39ee9a3728ea5d02593c680fb51a4459f6a62b67150a12727eb456860e63537",
+  "mlflow_run_id": "64d48729899745e1a18d6e386ba15187",
+  "protected_artifacts_mirrored": false,
+  "protected_data_accessed": false,
+  "registration_sha256": "168cc116a6754fbb67d46039f60f0e0897312fdc1a0c6e5fc603cbac9f8e9be0",
+  "run_type": "fixture_pilot",
+  "schema_version": "myis.p2-fixture-mlflow-registration.v1",
+  "scientific_authority": false,
+  "source_receipt_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+  "source_receipt_uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json",
+  "status": "registered",
+  "store_external": true
+}

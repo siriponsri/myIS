@@ -19,6 +19,18 @@ def test_mlflow_archive_index_contains_only_p2_readiness_aggregates() -> None:
     assert p2["measured_runs"] == 0
     assert p2["selection_accesses"] == 0
     assert p2["freeze_status"] == "not_started"
+    fixture = p2["fixture_pilot"]
+    assert fixture["status"] == "passed"
+    assert fixture["evidence_class"] == "fixture"
+    assert fixture["scientific_authority"] is False
+    assert fixture["synthetic_candidates"] == 32
+    assert fixture["synthetic_iterations"] == 5
+    assert fixture["synthetic_shortlist"] == 4
+    assert fixture["fixture_selection_exposures"] == 1
+    assert len(fixture["receipt_sha256"]) == 64
+    assert len(fixture["execution_manifest_sha256"]) == 64
+    assert len(fixture["fixture_package_sha256"]) == 64
+    assert fixture["negative_checks_passed"] is True
     review = p2["official_review"]
     assert review["status"] == "accepted_static_contract_review"
     assert review["evidence_class"] == "static_contract_review"

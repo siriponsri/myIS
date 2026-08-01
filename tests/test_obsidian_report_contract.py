@@ -58,6 +58,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     phase_report = contents[ROOT / VAULT_RELATIVE_PATH / "01_Phases/P1_CPU_BASELINE/P1_CPU_BASELINE_MASTER_REPORT.md"]
     p2_task_report = contents[ROOT / VAULT_RELATIVE_PATH / "01_Phases/P2_SCOPE_DEVELOPMENT/Tasks/P2.1.md"]
     audit_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"]
+    fixture_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_FIXTURE_PILOT.md"]
     assert "## Output" in result_report
     assert "## Interpretation" in result_report
     assert "## Execution progress / observability" in result_report
@@ -69,6 +70,11 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "engineering provenance" in audit_report
     assert "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]]" in audit_report
     assert 'evidence_maturity: "non_scientific"' in p2_task_report
+    assert 'evidence_maturity: "fixture"' in fixture_report
+    assert "fixture status **passed**" in fixture_report
+    assert "`32` candidates" in fixture_report
+    assert "Owner-local measured preflight" in fixture_report
+    assert "Real candidates `0 / 32`" in fixture_report
 
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:

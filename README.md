@@ -100,10 +100,12 @@ Dashboard actions. Retired standalone launcher sources are archived under
   train/selection matrix, 12 aggregate metric rows, a validated package, and
   an artifact-only rigor review. The legacy receipt remains historical-invalid
   and is not promoted.
-- `P2_SCOPE_DEVELOPMENT`: ready but not started; AutoIndex is the main lineage
-  and SkillOpt remains conditional. Read the versioned budget and freeze
-  contract in `control/budgets/p2-r1-primary-v1.yaml` and
-  `control/execution-envelope-p2.yaml`; this phase is planned, not measured.
+- `P2_SCOPE_DEVELOPMENT`: repository-only fixture passed; measured P2 has not
+  started. AutoIndex is the main lineage and SkillOpt remains conditional.
+  Read the versioned budget and freeze contract in
+  `control/budgets/p2-r1-primary-v1.yaml` and
+  `control/execution-envelope-p2.yaml`; real candidates, shortlist, and
+  selection remain zero.
 - `P3_FINAL`: locked until `D2_OPEN_FINAL`.
 - `P4_PUBLICATION`: locked until `D3_SUBMIT_RELEASE`.
 
@@ -137,11 +139,19 @@ support, not legal advice.
 
 ## P2 readiness and provider boundary
 
-P2 is a deterministic CPU-only development lane. A measured request must bind
+P2 is a deterministic CPU-only development lane. The repository-only
+`p2-fixture-pilot-v1` passed with 32 synthetic candidates, five adaptive
+iterations, a four-item synthetic shortlist, one fixture-only selection
+exposure, deterministic rerun equality, and 94 fail-closed negative checks.
+This is engineering evidence only; measured runs and real counters remain
+zero. The fixture catalog is under `outputs/fixtures/p2/` and the generated
+history note is `obsidian_report/05_Research_History/P2_FIXTURE_PILOT.md`.
+
+A measured request must bind
 the versioned budget profile, campaign revision, execution envelope, Git
 commit, SCOPE/compiler/config/retriever/evaluator hashes, and the immutable
 shortlist-freeze receipt before the single selection exposure. Fixture/pilot
-runtime checks never open selection and do not create scientific metrics.
+runtime checks never open real selection and do not create scientific metrics.
 
 The generated beginner-readable P2 report is
 `obsidian_report/01_Phases/P2_SCOPE_DEVELOPMENT/P2_SCOPE_DEVELOPMENT_MASTER_REPORT.md`;

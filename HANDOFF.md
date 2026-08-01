@@ -1,19 +1,19 @@
 # Owner Handoff / สรุปสำหรับ Owner
 
-อัปเดตจาก canonical records และ measured evidence ณ 2026-07-31 เอกสารนี้ใช้เพื่อ
+อัปเดตจาก canonical records, fixture provenance และ measured evidence ณ 2026-08-01 เอกสารนี้ใช้เพื่อ
 orientation เท่านั้น หากขัดกับ control files, schemas, manifests, receipts หรือ
 measured evidence ให้ยึด `control/source-of-truth.yaml`
 
 ## สถานะตอนนี้
 
-- Phase: `P1_CPU_BASELINE`
-- Task: `P1.3`
-- Phase status: `complete`
-- Evidence state: `P1_CPU_MEASURED_COMPLETE`
-- Evidence class: measured train/selection, descriptive only
-- Source execution commit: `df9582c94bce5c32a65717b140f66dbe8fea87b2`
-- Request: `dapfam-p1-fulltext-c058a3aa7357c782`
-- `P2_SCOPE_DEVELOPMENT`: ready, not started
+- Phase: `P2_SCOPE_DEVELOPMENT`
+- Task: `P2.1`
+- Phase status: `ready_planned_not_measured`
+- Evidence class: fixture engineering provenance; scientific authority `false`
+- Source execution commit: `fc4409ebdf7989e2bc0019eef20e8b8cc50030d5`
+- Fixture: `p2-fixture-pilot-v1`, status `passed`
+- `P1_CPU_BASELINE`: `P1_CPU_MEASURED_COMPLETE`
+- `P2_SCOPE_DEVELOPMENT`: fixture passed; measured P2 not started
 - `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE`: `waiting_owner`
 - Standing authorization: `D1_START_CAMPAIGN`
 - GPU: ไม่ใช้และไม่ต้องเปิด Vast Instance สำหรับงานปิด P1 นี้
@@ -298,9 +298,29 @@ data, GPU, paid APIs, network model downloads, and provider switching remain
 untouched. Round 3 `accept` permits no automatic transition into measured P2
 or selection.
 
+## P2.1 repository-only fixture closeout (2026-08-01)
+
+The deterministic fixture pilot passed on synthetic repository-only inputs.
+It exercised 32 synthetic candidates, five adaptive iterations, a four-item
+synthetic shortlist, and one fixture-only selection exposure. Two independent
+temporary lifecycle runs produced matching canonical hashes, and all 94
+fail-closed negative checks rejected as required.
+
+The canonical request remained strictly `myis.p2-request.v1`; fixture metadata
+was recorded separately in the validated execution manifest and final fixture
+receipt. The receipt SHA-256 is
+`6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125`
+and the fixture package SHA-256 is
+`0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9`.
+The isolated aggregate-only MLflow run is
+`64d48729899745e1a18d6e386ba15187`.
+
+Measured runs, real candidates, real shortlist, and real selection accesses
+remain `0`. Protected data, measured stores, final-872, D2/D3, GPU, paid APIs,
+network model downloads, and provider fallback were not accessed. This is
+engineering evidence only and creates no scientific claim.
+
 ## Next action
 
-ถัดไปให้ Owner ตรวจ P2 readiness report และกำหนดรายการ frozen controls ทั้งสี่
-รายการก่อน measured campaign freeze จากนั้นจึงรัน fixture/pilot runtime แบบ
-ไม่แตะ selection. ห้ามแก้ budget profile หลัง measured run แรก; หากต้องแก้ให้
-ออก campaign revision ใหม่
+ขั้นถัดไปที่ได้รับอนุญาตคือ `Owner-local measured preflight` โดยต้องเริ่มเป็นงาน
+แยกต่างหาก ห้ามเริ่ม measured P2, real selection หรือ final evaluation อัตโนมัติ
