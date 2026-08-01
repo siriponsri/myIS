@@ -101,7 +101,9 @@ Dashboard actions. Retired standalone launcher sources are archived under
   an artifact-only rigor review. The legacy receipt remains historical-invalid
   and is not promoted.
 - `P2_SCOPE_DEVELOPMENT`: ready but not started; AutoIndex is the main lineage
-  and SkillOpt remains conditional.
+  and SkillOpt remains conditional. Read the versioned budget and freeze
+  contract in `control/budgets/p2-r1-primary-v1.yaml` and
+  `control/execution-envelope-p2.yaml`; this phase is planned, not measured.
 - `P3_FINAL`: locked until `D2_OPEN_FINAL`.
 - `P4_PUBLICATION`: locked until `D3_SUBMIT_RELEASE`.
 
@@ -132,6 +134,25 @@ No GPU, paid API, network model download, or final-split access was used for P1.
 The measured run stayed inside the Owner-local process and projected only
 validated aggregates, hashes, counts, and pointers. This system is decision
 support, not legal advice.
+
+## P2 readiness and provider boundary
+
+P2 is a deterministic CPU-only development lane. A measured request must bind
+the versioned budget profile, campaign revision, execution envelope, Git
+commit, SCOPE/compiler/config/retriever/evaluator hashes, and the immutable
+shortlist-freeze receipt before the single selection exposure. Fixture/pilot
+runtime checks never open selection and do not create scientific metrics.
+
+The generated beginner-readable P2 report is
+`obsidian_report/01_Phases/P2_SCOPE_DEVELOPMENT/P2_SCOPE_DEVELOPMENT_MASTER_REPORT.md`;
+the result note is
+`obsidian_report/03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md`. Both are
+projections of the shared read model, not a second source of scientific truth.
+
+Codex provider profiles are user-level engineering settings, not research
+configuration. See `docs/CODEX_PROVIDER_SWITCHING.md` for the manual,
+credential-free switching workflow. The repository never stores provider
+credentials and never treats a provider label as model lineage.
 
 ## Certified P1 datasets
 

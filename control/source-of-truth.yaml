@@ -9,8 +9,17 @@ records:
     authority: control/campaigns/scope-autoindex-v1.yaml
     projections: [campaigns, dashboard, paper]
   - id: execution_boundary
-    authority: control/execution-envelope.yaml
+    authority: [control/execution-envelope.yaml, control/execution-envelope-p2.yaml]
+    phase_mapping:
+      P0_FOUNDATION: control/execution-envelope.yaml
+      P1_CPU_BASELINE: control/execution-envelope.yaml
+      P2_SCOPE_DEVELOPMENT: control/execution-envelope-p2.yaml
+      P3_FINAL: control/execution-envelope.yaml
+      P4_PUBLICATION: control/execution-envelope.yaml
     projections: [harness, dashboard, mlflow, brain]
+  - id: p2_budget_profile
+    authority: control/budgets/p2-r1-primary-v1.yaml
+    projections: [harness, dashboard, mlflow, brain, paper]
   - id: schemas_and_kernel
     authority: [schemas, src/myis_research/kernel, src/myis_research/scope]
     projections: [harness, mlflow, reports]

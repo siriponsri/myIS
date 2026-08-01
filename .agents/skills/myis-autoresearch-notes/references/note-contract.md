@@ -2,11 +2,14 @@
 
 ## Required frontmatter
 
-`schema_version`, `note_id`, `note_type`, `track`, `phase`, `task`, `gate`,
-`status`, `evidence_level`, `git_commit`, `source_paths`, and `agent_generated`
-are required. `source_paths` must point to public repository documents or safe
-aggregate metadata. Protected markers such as `qrels`, `membership`, and
-`per_query` are rejected.
+Generated notes use `myis.obsidian-note.v2`. The shared report validator
+requires `schema_version`, `note_id`, `note_type`, `workflow_status`,
+`evidence_maturity`, `claim_level`, `safe_to_present`, `managed_by`,
+`edit_policy`, `read_model_revision`, `read_model_sha256`, `source_commit`,
+`projection_schema_version`, `source_run_ids`, `source_manifest_sha256`,
+`related_literature_ids`, and `related_decision_ids`. Source pointers must be
+public repository documents or safe aggregate metadata; protected markers such
+as `qrels`, `membership`, and `per_query` are rejected.
 
 ## Beginner closeout fields
 

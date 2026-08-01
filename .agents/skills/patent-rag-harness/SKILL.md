@@ -5,10 +5,10 @@ description: Govern myIS Research 1.0 patent retrieval, CrossRoute candidate exp
 
 # Patent RAG Harness for myIS Research
 
-Use this skill for family normalization, multi-route candidate generation,
-frozen-pool diagnostics, evidence tracing, DAPFAM evaluation, and the governed
-kernel around Track C/S. Read `AGENTS.md`, `PLAN.md`, the scientific/build plans,
-and the applicable Owner Gate first.
+Use this skill for family normalization, candidate generation, frozen-pool
+diagnostics, evidence tracing, DAPFAM evaluation, and the governed kernel
+around P2/R1. Read `AGENTS.md`, `PLAN.md`, the scientific/build plans, and the
+applicable canonical control records first.
 
 ## Identity and operating stance
 
@@ -30,35 +30,37 @@ metrics/statistics, manifests, redaction, protection, and immutable writes.
 
 ## Required workflow
 
-1. Verify Git state, identity, lock, active phase, and Owner Gate.
+1. Verify Git state, identity, lock, active phase, and applicable canonical
+   control records.
 2. Inspect only authorized corpus/query commitments and non-protected views.
-3. Reproduce protocol-matched B0/B1/B2 before a new C arm.
+3. Reproduce the protocol-matched P1 R0/R0-W baseline before R1 development.
 4. Audit OUT availability, exposure/oracle headroom, and prospective MDE/power.
 5. State one falsifiable hypothesis and exact editable surface.
 6. Build grounded TAC/claim/mechanism views with source-span IDs.
-7. Retrieve through declared lexical/dense routes under fixed budgets.
+7. Retrieve through the declared fixed lexical route under the versioned budget.
 8. Fuse and deduplicate at family level while retaining every component rank.
-9. Accept selection only on a strictly greater preregistered primary score.
-10. Freeze the pool before any Track C ranking diagnostic.
+9. Accept a development candidate only on a strictly greater preregistered
+   primary score; reject ties.
+10. Freeze the shortlist before the one allowed P2 selection exposure.
 11. Classify failures at the layer that failed and retain negative outcomes.
 12. Freeze all code/config/prompt/skill/model/environment/pool hashes before
     an external Owner confirmation request.
 
 ## Gate metrics and estimation
 
-- Track C primary: C1-C0 OUT Recall@100 against one local comparator.
+- P2/R1 primary: train OUT Recall@100 against the preregistered incumbent.
 - Ranking/headroom nDCG is a non-gating diagnostic on the identical frozen pool.
-- Track S primary: A3-A2 paired OUT Recall@100 on the untouched joint test.
+- Selection is a one-shot diagnostic on the frozen shortlist; it is not final
+  confirmation and does not open final-872.
 - Confirmation reports exact n, paired delta, deterministic 10,000-resample CI,
   rank-biserial effect, and W/L/T. MDE is design sensitivity only.
 - Holm applies only to each preregistered additional comparison family.
 
 ## Protected-data and split rules
 
-Freeze seed, membership hashes, qrels snapshot, and OUT-positive counts before
-development. C and S share planned IDs `250/125/872` but have separate evaluators,
-optimizers, budgets, manifests, artifacts, and firewalls. Confirmation data stay
-outside the workspace and network re-download is disabled during optimization.
+Freeze the seed and lineage commitments before development. P2 uses only the
+train and selection views; final-872 remains outside the workspace and network
+model download is disabled during optimization.
 
 ## Evidence package
 

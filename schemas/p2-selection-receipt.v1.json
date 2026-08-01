@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-selection-receipt:v1",
+  "title": "myIS P2 one-shot selection receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "candidate_ids", "shortlist_freeze_receipt_sha256", "selection_exposure_count", "status", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-selection-receipt.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "candidate_ids": {"type": "array", "maxItems": 4, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "shortlist_freeze_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "selection_exposure_count": {"const": 1},
+    "status": {"enum": ["accepted", "blocked"]},
+    "metrics": {"type": "array", "items": {"type": "object", "additionalProperties": false}},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

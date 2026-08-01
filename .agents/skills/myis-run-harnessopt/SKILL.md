@@ -5,11 +5,13 @@ description: Preflight, dry-run, execute, collect, and compare the approved myIS
 
 # Run myIS Research Track S HarnessOpt
 
-Read `AGENTS.md`, the active `PLAN.md`, `00_governance/OWNER_GATES.md`, the
+Read `AGENTS.md`, the active `PLAN.md`, and the applicable canonical control
+records. The historical `00_governance/OWNER_GATES.md` path is not active.
 Track S protocol, approval, run specification, split commitments, budget,
 module registry, and `references/harnessopt-contract.md` before any action.
 This skill does not authorize experiments, provider calls, GPU work, or
-confirmation evaluation.
+confirmation evaluation. It is not part of the P2/R1 readiness or measured
+path; do not run it for P2 and do not activate SkillOpt.
 
 ## Preserve the locked design
 

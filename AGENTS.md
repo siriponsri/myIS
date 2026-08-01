@@ -23,6 +23,10 @@ written.
   the active campaign.
 - Read `control/execution-envelope.yaml` before starting an experiment,
   measured run, or execution-policy change.
+- Read `control/execution-envelope-p2.yaml` and
+  `control/budgets/p2-r1-primary-v1.yaml` before changing P2 execution policy
+  or preparing a P2 request. The P1 envelope remains hash-bound historical
+  authorization and must not be overwritten.
 - Read `control/source-of-truth.yaml` before report sync, projection writes,
   publication work, or resolving conflicting facts.
 - Read schemas, manifests, receipts, and evidence files only when the active
@@ -41,13 +45,29 @@ Do not add micro-gates. Historical vocabulary remains under `archive/` only.
 ## Safety boundary
 
 - CPU-only, zero paid API, no GPU, no network model download, and no provider
-  fallback through P1.
+  fallback through P2 readiness and any approved deterministic R1 run.
 - Final split, qrels, membership, query IDs, per-query outcomes, credentials,
   and raw provider payloads stay in the Owner-local protected store.
 - Git, MLflow, Dashboard, Brain, Obsidian, and Paper receive only validated
   aggregates, hashes, counts, and pointers.
 - Never treat fixture evidence as measured evidence or a dashboard preview as
   authorization. This is decision support, not legal advice.
+
+## P2 lifecycle and freeze barrier
+
+- A P2 request must bind `budget_profile_id` and `budget_profile_sha256`; no
+  runtime may infer missing limits from a default.
+- One P2 scientific run proceeds through candidate generation, train
+  evaluation, deterministic shortlist, immutable shortlist-freeze receipt, and
+  at most one selection exposure.
+- The shortlist receipt must bind candidate IDs, SCOPE spec hashes,
+  compiler/config/retriever/evaluator hashes, campaign revision, and budget
+  profile hash before selection can open.
+- Baseline reproduction, train evaluation, or freeze validation failure stops
+  before selection. After selection exposure, candidate/spec/rule/search
+  mutation is forbidden.
+- Exact ties are rejected. A budget change after the first measured run needs a
+  new campaign revision and cannot reinterpret the old result.
 
 ## Engineering rules
 
@@ -63,6 +83,16 @@ Do not add micro-gates. Historical vocabulary remains under `archive/` only.
 - Preserve history. Archive before removing. Delete only exact, verified paths.
 - Before commit/push run tests, layout, report drift, MLflow doctor, Brain
   literature validation when touched, and `git diff --check`.
+
+## Provider-neutral rules
+
+- Agents may record a sanitized provider label for engineering provenance, but
+  may not login, logout, copy credentials, edit keyrings, or switch the active
+  provider without an explicit Owner action.
+- Provider-specific user configuration is not canonical project authority.
+- Any future LLM-in-the-loop measurement must freeze provider/model/revision,
+  instructions, hashes, budget, seed, Git commit, and request hash under a
+  separate execution contract. Provider switching is not scientific evidence.
 
 ## Token-efficient operations
 

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-package:v1",
+  "title": "myIS P2 validated package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "package_id", "status", "request_uri", "request_sha256", "candidate_ledger_uri", "candidate_ledger_sha256", "shortlist_freeze_uri", "shortlist_freeze_sha256", "manifest_uri", "manifest_sha256", "budget_profile_id", "budget_profile_sha256", "selection_exposure_count", "package_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-package.v1"},
+    "package_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["validated_structural", "negative_development", "blocked"]},
+    "request_uri": {"type": "string", "minLength": 1},
+    "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_ledger_uri": {"type": "string", "minLength": 1},
+    "candidate_ledger_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "shortlist_freeze_uri": {"type": "string", "minLength": 1},
+    "shortlist_freeze_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "selection_uri": {"type": ["string", "null"]},
+    "selection_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "manifest_uri": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "selection_exposure_count": {"type": "integer", "minimum": 0, "maximum": 1},
+    "package_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -36,6 +36,7 @@ myis-assets = "myis_research.asset_cli:main"
 myis-sessions = "myis_research.session_cli:main"
 myis-report = "myis_research.report_cli:main"
 myis-owner-local = "myis_research.owner_local_cli:main"
+myis-p2 = "myis_research.p2_cli:main"
 myis-legacy-dapfam = "myis_research.legacy_dapfam_cli:main"
 myis-p1-dapfam = "myis_research.dapfam_p1_cli:main"
 

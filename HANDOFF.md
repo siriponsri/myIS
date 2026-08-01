@@ -169,3 +169,58 @@ Owner สามารถเปิด `dashboard/open-dashboard.cmd` เพื่
 `D2_OPEN_FINAL` ส่วน `D3_SUBMIT_RELEASE` ยังคงปิดจนถึง Phase 4
 
 ระบบนี้เป็น decision support ไม่ใช่คำแนะนำทางกฎหมาย
+
+## P2 Readiness Refactor (2026-08-01)
+
+สถานะยังคงเป็น `P1_CPU_MEASURED_COMPLETE` และ
+`P2_SCOPE_DEVELOPMENT=ready/planned, not measured` โดยมี measured P2 runs และ
+selection accesses เท่ากับศูนย์ `final-872` ยังปิด และไม่ใช้ GPU, paid API,
+network model download หรือ provider fallback
+
+P2 profile คือ `p2-r1-primary-v1` ที่
+`control/budgets/p2-r1-primary-v1.yaml` ใช้ candidates สูงสุด 32 รายการ,
+adaptive สูงสุด 20 รายการ, 5 iterations, wall-clock 72 ชั่วโมง และ timeout
+ต่อ candidate 3 ชั่วโมง ทุก measured request ต้องมี profile ID และ SHA-256
+
+P2 ใช้ run เดียวและ hard freeze barrier: generate และ train ให้เสร็จก่อน,
+สร้าง immutable shortlist-freeze receipt แล้วจึงเปิด selection ได้ครั้งเดียว
+และเฉพาะ frozen shortlist เท่านั้น หาก baseline/train/freeze ไม่ผ่านให้หยุด
+ก่อน selection
+
+Canonical blocker audit อยู่ที่
+`outputs/audits/rigor/p2-readiness-20260801.json` ส่วน P1 envelope เดิมยังคง
+hash-bound และไม่ถูกเขียนทับ; P2 ใช้ `control/execution-envelope-p2.yaml`
+
+## P2 Readiness Refactor implementation closeout (2026-08-01)
+
+The approved readiness refactor is implemented. Canonical P2 budget/request,
+candidate-ledger, shortlist-freeze, selection, manifest, and package schemas
+are hash-bound; `myis-p2` exposes preflight and fixture-pilot only. The state
+machine enforces the 4/8/20 allocation, 32-candidate and index-build limits,
+strict-greater/tie-reject rule, early-stop rule, immutable freeze barrier, and
+one-shot selection boundary.
+
+The shared read model now reports P2 profile/hash, runtime, resource limits,
+freeze status, candidate/selection counts, and an explicit
+`ready_planned_not_measured` result. Dashboard, MLflow archive index, Obsidian,
+Brain, and Paper projections are regenerated from that same revision. P2
+measured runs and selection accesses remain `0`.
+
+Provider switching is documented with credential-free, process-scoped
+PowerShell launchers under `scripts/dev/`; no login, logout, credential copy,
+keyring access, or active-provider switch was performed.
+
+## Final verification (2026-08-01)
+
+- Full test suite: `149 passed` with one pre-existing Starlette/httpx deprecation warning.
+- Read-model: revision `37737829b02c78dc1b973fe95ff8c607c54e52c8b1c702e40cacfdf11dfa9e6e`, SHA-256 `1ebf16c8aff675d2636deb8a9b1de89986da28b2fec6a8cf690eb3a2ae005e63`.
+- Projection sync: `PASS`; latest aggregate-only MLflow run `0451604936c84ffea8f504d6d720c9ee`.
+- MLflow doctor: `PASS`; legacy experiments preserved and the store remains outside the Git worktree.
+- P2 baseline reproduction is an explicit state-machine gate; failure blocks shortlist and selection.
+
+## Next action
+
+ถัดไปให้ Owner ตรวจ P2 readiness report และกำหนดรายการ frozen controls ทั้งสี่
+รายการก่อน measured campaign freeze จากนั้นจึงรัน fixture/pilot runtime แบบ
+ไม่แตะ selection. ห้ามแก้ budget profile หลัง measured run แรก; หากต้องแก้ให้
+ออก campaign revision ใหม่

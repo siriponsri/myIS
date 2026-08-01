@@ -30,7 +30,7 @@ measured.
 |---|---|---|
 | `P0_FOUNDATION` | authority, schemas, deterministic kernel, protected boundary, projections | complete |
 | `P1_CPU_BASELINE` | `R0` flat BM25 and `R0-W` deterministic window/maxP CPU lane | complete with measured train/selection evidence |
-| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and selection | ready; not started |
+| `P2_SCOPE_DEVELOPMENT` | `R1` SCOPE/AutoIndex development and one-run selection | ready; planned, not measured |
 | `P3_FINAL` | one frozen final evaluation | requires `D2_OPEN_FINAL` |
 | `P4_PUBLICATION` | manuscript, package, and release | requires `D3_SUBMIT_RELEASE` |
 
@@ -85,6 +85,36 @@ flowchart LR
 - Selection rule: keep a candidate only on a strictly greater primary score;
   ties are rejected.
 - CPU first, zero paid API, no GPU, no fallback, and final split closed.
+
+### P2 versioned budget and internal freeze
+
+P2 uses the canonical profile `p2-r1-primary-v1` at
+`control/budgets/p2-r1-primary-v1.yaml`. Every measured request must include
+the profile ID and the SHA-256 of the parsed canonical profile. The profile
+allows 32 candidates total: four frozen controls, eight preregistered
+patent-native candidates, and at most twenty adaptive candidates across five
+iterations of four candidates each. The wall-clock ceiling is 259200 seconds
+and the per-candidate timeout is 10800 seconds; these are different limits and
+there is no `max_cpu_seconds` default.
+
+The P2 run has one hard internal barrier: generation and train evaluation must
+finish before the deterministic shortlist is frozen. The freeze receipt binds
+candidate IDs, SCOPE specs, compiler/config/retriever/evaluator hashes and the
+budget profile hash. Selection can expose only that frozen shortlist once.
+Any baseline, train, or freeze failure stops before selection; final-872 stays
+closed. A profile change after the first measured run creates a new campaign
+revision and cannot rewrite or reinterpret the previous result.
+
+### Method rationale and literature
+
+`R0` is full-family BM25 to isolate representation effects; the DAPFAM
+protocol and local P1 result are the comparator (`U011`, with the patent BM25
+context in `U006`). `R0-W` uses non-overlapping 512-token windows and family
+MaxP to test passage granularity while keeping the retriever/evaluator fixed;
+the AutoIndex digest records this BM25+MaxP lineage (`U154`). `R1` is a
+patent-native SCOPE representation-program search inspired by `U154`, measured
+on DAPFAM (`U011`). No dense model, LLM, paid API, or provider is part of this
+P2 measured arm, so a result is attributable to the representation surface.
 
 ## P1 legacy certification record
 

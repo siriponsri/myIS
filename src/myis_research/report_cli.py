@@ -148,6 +148,8 @@ def projection_report_contents(
 
 
 def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
+    p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
+    freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -159,6 +161,15 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
         "run_ids": [item.get("run_id") for item in model.get("runs", [])],
         "evidence_ids": [item.get("evidence_id") for item in model.get("evidence", [])],
         "status": "blocked" if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "current",
+        "p2_readiness": {
+            "status": p2.get("status", "unknown"),
+            "budget_profile_id": p2.get("budget_profile_id"),
+            "budget_profile_sha256": p2.get("budget_profile_sha256"),
+            "measured_runs": p2.get("measured_runs", 0),
+            "selection_accesses": p2.get("selection_accesses", 0),
+            "candidate_count": p2.get("candidate_count", 0),
+            "freeze_status": freeze.get("status", "not_started"),
+        },
     }
 
 
@@ -199,16 +210,25 @@ def _sync_mlflow_projection(
     schema_path = root / "schemas/read-model.v2.json"
     campaign_path = root / "control/campaigns/scope-autoindex-v1.yaml"
     envelope_path = root / "control/execution-envelope.yaml"
+    p2_envelope_path = root / "control/execution-envelope-p2.yaml"
+    p2_profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
     evaluator_path = root / "src/myis_research/report_cli.py"
     environment_path = root / "uv.lock"
-    for path in (schema_path, campaign_path, envelope_path, evaluator_path, environment_path):
+    for path in (schema_path, campaign_path, envelope_path, p2_envelope_path, p2_profile_path, evaluator_path, environment_path):
         if path.is_symlink() or not path.is_file():
             raise RuntimeError(f"MLflow projection source is missing or unsafe: {path.relative_to(root)}")
 
     schema_registry = RegistrySnapshot(
         schema_version=SCHEMA_REGISTRY_SCHEMA,
         registry_kind="schema",
-        items=({"id": "read-model.v2", "sha256": sha256(schema_path.read_bytes())},),
+        items=tuple(
+            [{"id": "read-model.v2", "sha256": sha256(schema_path.read_bytes())}]
+            + [
+                {"id": path.stem, "sha256": sha256(path.read_bytes())}
+                for path in sorted((root / "schemas").glob("p2-*.json"))
+                if path.is_file() and not path.is_symlink()
+            ]
+        ),
     )
     rule_registry = RegistrySnapshot(
         schema_version=RULE_REGISTRY_SCHEMA,
@@ -216,6 +236,8 @@ def _sync_mlflow_projection(
         items=(
             {"id": "scope-autoindex-v1", "sha256": sha256(campaign_path.read_bytes())},
             {"id": "execution-envelope", "sha256": sha256(envelope_path.read_bytes())},
+            {"id": "execution-envelope-p2", "sha256": sha256(p2_envelope_path.read_bytes())},
+            {"id": "p2-budget-profile", "sha256": sha256(p2_profile_path.read_bytes())},
         ),
     )
     no_metric_registry: dict[str, Any] = {
@@ -288,6 +310,96 @@ def _sync_mlflow_projection(
 
 def _p1_measured(model: Mapping[str, Any]) -> bool:
     return model.get("project", {}).get("state") == "P1_CPU_MEASURED_COMPLETE"
+
+
+def _p2_readiness(model: Mapping[str, Any]) -> Mapping[str, Any]:
+    value = model.get("p2_readiness", {})
+    return value if isinstance(value, Mapping) else {}
+
+
+def _p2_measured(model: Mapping[str, Any]) -> bool:
+    return bool(_p2_readiness(model).get("measured"))
+
+
+def _p2_readiness_table(model: Mapping[str, Any]) -> str:
+    p2 = _p2_readiness(model)
+    budget = p2.get("candidate_budget", {}) if isinstance(p2.get("candidate_budget"), Mapping) else {}
+    runtime = p2.get("runtime", {}) if isinstance(p2.get("runtime"), Mapping) else {}
+    freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
+    resources = p2.get("resources", {}) if isinstance(p2.get("resources"), Mapping) else {}
+    rows = [
+        ("Status", p2.get("status", "unknown")),
+        ("Profile", f"{p2.get('budget_profile_id', '-')} / {p2.get('budget_profile_sha256', '-') }"),
+        ("Candidates", f"{p2.get('candidate_count', 0)} / {budget.get('max_candidates_total', '-')}"),
+        ("Runtime", f"{runtime.get('max_wall_clock_seconds', '-')} wall seconds; {runtime.get('per_candidate_timeout_seconds', '-')} per candidate"),
+        ("Freeze", f"{freeze.get('status', 'not_started')}; selection {p2.get('selection_accesses', 0)}/{budget.get('selection_exposure_limit', 1)}"),
+        ("Resources", f"GPU {resources.get('gpu_budget_usd', 0)} USD; paid API {resources.get('paid_api_budget_usd', 0)} USD; model download {resources.get('network_model_download', False)}"),
+    ]
+    return "\n".join(["| Check | Value |", "|---|---|"] + [f"| {label} | {value} |" for label, value in rows])
+
+
+def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision: str) -> str:
+    p2 = _p2_readiness(model)
+    return (
+        "# P2_SCOPE_DEVELOPMENT\n\n"
+        "P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.\n\n"
+        "## Status for Owner\n\n"
+        f"**{p2.get('status', 'unknown')}**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.\n\n"
+        "## Budget and runtime\n\n"
+        f"{_p2_readiness_table(model)}\n\n"
+        "## Why these methods\n\n"
+        "`R0` uses one full TAC document per patent family and BM25 to isolate the representation question with a transparent lexical comparator; the DAPFAM protocol and patent-retrieval context are references U011 and U006 in [[LITERATURE_INDEX]]. `R0-W` keeps BM25 and family-level evaluation fixed but splits text into non-overlapping 512-token windows and uses family MaxP, testing whether passage granularity changes exposure (U154). `R1` is the planned patent-native SCOPE/AutoIndex representation-program search, evaluated with the same retriever/evaluator so any gain can be attributed to representation rather than a new dense model (U154 on the DAPFAM protocol U011). No dense model, LLM, paid API, or provider is part of this P2 arm.\n\n"
+        "## Internal freeze barrier\n\n"
+        "Baseline reproduction, candidate generation, and train evaluation must pass before the immutable shortlist receipt. Selection may open once, only for that frozen shortlist. Ties reject; any baseline, train, or freeze validation failure stops before selection.\n\n"
+        "## Outputs and evidence\n\n"
+        "The canonical profile, P2 execution envelope, request schema, candidate ledger, freeze receipt, selection receipt, manifest, and package schemas are the source surfaces. No fixture or dashboard preview is scientific evidence.\n\n"
+        "## What is measured\n\n"
+        "Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, paid API, network model download, and provider fallback = disabled.\n\n"
+        f"## Read-model binding\n\nRevision: `{revision}`\n\n"
+        "## Next action\n\nRun the repository-only fixture/pilot preflight, then stop for Owner review before any measured request.\n\n"
+        "Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P1_CPU_BASELINE_RESULT]]\n"
+    )
+
+
+def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
+    p2 = _p2_readiness(model)
+    return (
+        f"# {task.get('task_id')}: {task.get('title')}\n\n"
+        "## Objective\n\n"
+        "Prepare a deterministic R1 representation search while keeping the retriever and evaluator fixed.\n\n"
+        f"## Status\n\n**{p2.get('status', task.get('status', 'planned'))}**; this is not a measured result.\n\n"
+        "## Required contract\n\n"
+        "Every measured request binds `budget_profile_id` and `budget_profile_sha256`. Baseline reproduction must pass before the one-run hard barrier freezes candidate IDs, SCOPE/spec, compiler, config, retriever, evaluator, and budget hashes before selection.\n\n"
+        "## Current output\n\n"
+        f"{_p2_readiness_table(model)}\n\n"
+        "## Method rationale and papers\n\n"
+        "- `R0` is the simple full-family BM25 comparator: it answers how far a clear lexical baseline can go (U006, U011; see [[LITERATURE_INDEX]]).\n"
+        "- `R0-W` changes only the text unit: 512-token windows plus family MaxP, so the comparison isolates passage granularity (U154; see [[LITERATURE_INDEX]]).\n"
+        "- `R1` searches patent-native representation programs in the AutoIndex style while keeping retrieval/evaluation fixed; this is a planned development arm, not a measured claim yet (U154, U011; see [[LITERATURE_INDEX]]).\n\n"
+        "## Protected boundary\n\n"
+        "No protected qrels, query identifiers, split membership, per-query outcomes, credentials, raw provider payloads, GPU, paid API, or network model download.\n\n"
+        "## Next action\n\nRun fixture/pilot validation only; do not open selection.\n\n"
+        "Links: [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[LITERATURE_INDEX]]\n"
+    )
+
+
+def _p2_result_body(model: Mapping[str, Any]) -> str:
+    p2 = _p2_readiness(model)
+    return (
+        "# P2 SCOPE Development Result\n\n"
+        "## Result\n\n"
+        "P2 is ready/planned but not measured. This note deliberately contains no scientific metric.\n\n"
+        f"{_p2_readiness_table(model)}\n\n"
+        "## Method rationale and references\n\n"
+        "The baseline family BM25 arm (`R0`) establishes a transparent comparator (U006, U011; see [[LITERATURE_INDEX]]). The 512-token window/MaxP arm (`R0-W`) tests passage granularity without changing the evaluator (U154). The planned R1 arm follows AutoIndex-style representation-program search and keeps the same retrieval/evaluation boundary so the scientific contrast is representation, not provider or model substitution (U154, U011).\n\n"
+        "## Interpretation boundary\n\n"
+        "Readiness proves that the execution contract is explicit; it does not prove that R1 improves retrieval. A budget stop or no-improvement stop is a valid negative development outcome.\n\n"
+        "## Freeze rule\n\n"
+        "Baseline reproduction, train evaluation, and freeze validation must pass before selection. Selection is unavailable until a validated immutable shortlist-freeze receipt exists, and it may be exposed only once. Final-872 remains closed.\n\n"
+        "## Canonical sources\n\n"
+        "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `control/budgets/p2-r1-primary-v1.yaml` · `control/execution-envelope-p2.yaml`\n\n"
+        f"Claim boundary: `{p2.get('claim_boundary', 'no_measured_claim')}`\n"
+    )
 
 
 def _p1_run_ids(model: Mapping[str, Any]) -> list[str]:
@@ -567,7 +679,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     outputs: dict[Path, str] = {}
     outputs[VAULT_RELATIVE_PATH / "HOME.md"] = _note(
         {**common, "note_id": "HOME", "note_type": "home", "phase_id": project["current_phase"], "task_id": project["current_task"], "workflow_status": "blocked" if project["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "complete", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
-        _p1_home_body(model, next_lines),
+        _p1_home_body(model, next_lines) + "\n\n## P2 Readiness\n\n" + _p2_readiness_table(model) + "\n\nP2 remains planned and not measured; selection access is zero.\n",
     )
 
     for phase in model.get("phases", []):
@@ -577,7 +689,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
             for task in phase.get("tasks", [])
         ) or "| none | none | planned | none |"
-        phase_body = _p1_phase_body(model, phase, revision) if phase_id == "P1_CPU_BASELINE" else (
+        phase_body = _p1_phase_body(model, phase, revision) if phase_id == "P1_CPU_BASELINE" else _p2_phase_body(model, phase, revision) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
             f"# {phase_id}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
             "## Summary for Owner\n\nThis report is a narrative projection of the shared read model, not a source of scientific truth.\n\n"
             f"## Current status and gate\n\n**{_workflow_status(phase['status'])}**. D2 and D3 remain Owner-only.\n\n"
@@ -592,12 +704,12 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             f"## Evidence and audit details\n\nRead-model revision: `{revision}`\n"
         )
         outputs[phase_folder / f"{phase_id}_MASTER_REPORT.md"] = _note(
-            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(phase["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase["status"] in {"blocked", "planned", "blocked_until_p1", "locked_until_D2", "locked_until_D3"} else "measured_development", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else []},
+            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(phase["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model) else "non_scientific" if phase["status"] in {"blocked", "planned", "blocked_until_p1", "locked_until_D2", "locked_until_D3"} else "measured_development", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else [], "related_literature_ids": ["U006", "U011", "U154"] if phase_id == "P2_SCOPE_DEVELOPMENT" else common["related_literature_ids"]},
             phase_body,
         )
         for task in phase.get("tasks", []):
             task_id = str(task["task_id"])
-            body = _p1_task_body(model, phase_id, task) if phase_id == "P1_CPU_BASELINE" else (
+            body = _p1_task_body(model, phase_id, task) if phase_id == "P1_CPU_BASELINE" else _p2_task_body(model, task) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
                 f"# {task_id}: {task['title']}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
                 "## Objective / hypothesis\n\nDeliver the registry-defined task without crossing the protected-data boundary.\n\n"
                 f"## Status\n\n**{_workflow_status(task['status'])}**\n\n"
@@ -617,7 +729,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
                 f"## Owner notes\n\n[[80_Owner_Notes/README]]\n"
             )
             outputs[phase_folder / "Tasks" / f"{task_id}.md"] = _note(
-                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(task["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "measured_development" if task.get("evidence_ids") else "non_scientific", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else []},
+                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(task["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "measured_development" if task.get("evidence_ids") else "non_scientific", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else [], "related_literature_ids": ["U006", "U011", "U154"] if phase_id == "P2_SCOPE_DEVELOPMENT" else common["related_literature_ids"]},
                 body,
             )
 
@@ -625,6 +737,11 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"] = _note(
         {**common, "note_id": "P1-CPU-BASELINE-RESULT", "note_type": "result_report", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete" if _p1_measured(model) else "blocked", "evidence_maturity": "measured_selection" if _p1_measured(model) else "historical_exposed", "claim_level": "descriptive" if _p1_measured(model) else "none", "result_id": result.get("result_id", "P1-CPU-BASELINE"), "current_scientific_authority": _p1_measured(model), "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
         _p1_result_body(model),
+    )
+    p2_result = next((item for item in model.get("results", []) if item.get("result_id") == "P2-SCOPE-DEVELOPMENT"), {})
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md"] = _note(
+        {**common, "note_id": "P2-SCOPE-DEVELOPMENT-RESULT", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if _p2_measured(model) else "ready", "evidence_maturity": "measured_selection" if _p2_measured(model) else "non_scientific", "claim_level": "descriptive" if _p2_measured(model) else "none", "result_id": p2_result.get("result_id", "P2-SCOPE-DEVELOPMENT"), "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
+        _p2_result_body(model),
     )
 
     outputs[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"] = _note(
@@ -1064,6 +1181,7 @@ def _workflow_status(value: Any) -> str:
 
     mapping = {
         "planned": "ready",
+        "ready": "ready",
         "complete": "complete",
         "measured": "complete",
         "blocked": "blocked",

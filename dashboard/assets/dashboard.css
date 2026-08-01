@@ -253,6 +253,7 @@ code { font-family: var(--font-utility); overflow-wrap: anywhere; }
 .evidence-triad strong { display: block; margin: 6px 0 4px; overflow-wrap: anywhere; }
 .evidence-triad p { margin-bottom: 0; color: var(--muted); font-size: 0.78rem; }
 .readiness-summary { padding: 16px; }
+.p2-readiness { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
 .readiness-status { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
 .readiness-status strong { font-family: var(--font-display); font-size: 1.25rem; text-transform: capitalize; }
 .readiness-status span { color: var(--muted); font-size: 0.72rem; }

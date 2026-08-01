@@ -37,6 +37,11 @@ __pycache__/
 obsidian_report/.obsidian/workspace*.json
 obsidian_report/.obsidian/app.json
 obsidian_report/.obsidian/appearance.json
+obsidian_report/.obsidian/graph.json
+obsidian_report/*.canvas
+.codex/config.toml
+.codex/*.local.toml
+.codex/sessions/
 .serena/
 .cache/
 .pytest_cache/

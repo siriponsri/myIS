@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-candidate-ledger:v1",
+  "title": "myIS P2 candidate ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "budget_profile_id", "budget_profile_sha256", "candidate_count", "candidates", "ledger_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-candidate-ledger.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_count": {"type": "integer", "minimum": 0, "maximum": 32},
+    "candidates": {
+      "type": "array", "maxItems": 32, "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["candidate_id", "class", "iteration", "spec_sha256", "status"],
+        "properties": {
+          "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+          "class": {"enum": ["frozen_control", "preregistered_patent", "adaptive_autoindex"]},
+          "iteration": {"type": "integer", "minimum": 0, "maximum": 5},
+          "spec_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "compiler_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "config_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "retriever_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "evaluator_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "status": {"enum": ["generated", "train_complete", "failed", "rejected", "frozen"]},
+          "train_score": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "failure_reason": {"type": "string"},
+          "index_build_count": {"type": "integer", "minimum": 0, "maximum": 32},
+          "selection_eligible": {"type": "boolean"}
+        }
+      }
+    },
+    "ledger_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

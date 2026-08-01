@@ -9,7 +9,9 @@ Perform an artifact-only semantic review. Do not execute experiments, fetch exte
 
 ## Establish the review boundary
 
-1. Read `AGENTS.md`, `00_governance/OWNER_GATES.md`, and `PLAN.md`.
+1. Read `AGENTS.md`, `PLAN.md`, `control/source-of-truth.yaml`, and the
+   applicable control decision/envelope. The historical
+   `00_governance/OWNER_GATES.md` path is not active authority.
 2. Identify the package, claim set, dataset split, stage, and requested decision.
 3. Require structural validation before semantic scoring. If structural validation failed or is absent, mark the review `blocked_structural` and list the missing prerequisites.
 4. Verify that reading the package does not cross a protected-split boundary. Stop when authorization is absent or ambiguous.
@@ -74,8 +76,10 @@ Calibrate grades conservatively. A score of 5 requires unusually complete eviden
 ## Write without mutating evidence
 
 - Before an active run is finalized, write `validation_report.json` and let the harness validate it before writing `manifest.json` last.
-- For an already finalized bundle, write the review under `04_outputs/audits/rigor/<run_id>/rigor_review.json`; do not alter the bundle.
-- For a plan or non-run package, write a uniquely named review under `04_outputs/audits/rigor/`.
+- For an already finalized bundle, write the review under
+  `outputs/audits/rigor/<run_id>/rigor_review.json`; do not alter the bundle.
+- For a plan or non-run package, write a uniquely named review under
+  `outputs/audits/rigor/`.
 
 Do not alter Git state, write to the Brain, or present an approval recommendation as Owner approval.
 

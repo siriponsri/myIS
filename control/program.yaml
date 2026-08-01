@@ -32,6 +32,9 @@ defaults:
   primary_metric: recall_at_100/out
   cpu_first: true
   model_provider_fallback: false
+  p2_budget_profile_id: p2-r1-primary-v1
+  p2_budget_profile_required: true
+  p2_hidden_runtime_defaults: false
 
 protected_boundary:
   agent_access: aggregate_hash_count_only

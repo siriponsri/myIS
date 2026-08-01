@@ -10,9 +10,11 @@ from pathlib import Path
 from typing import Any
 
 from ..dapfam_p1 import DapfamP1Error, load_package
+from ..kernel.canonical import canonical_sha256
 from ..kernel.manifest import manifest_round_trip
 from ..kernel.manifest_validation import ManifestValidationError, validate_validation_report
 from ..owner_local import OwnerLocalContractError, validate_receipt
+from ..p2 import P2ContractError, validate_p2_artifact
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -37,6 +39,8 @@ PROJECTION_SOURCE_PATHS = (
     "control/program.yaml",
     "control/campaigns/scope-autoindex-v1.yaml",
     "control/execution-envelope.yaml",
+    "control/execution-envelope-p2.yaml",
+    "control/budgets/p2-r1-primary-v1.yaml",
     "control/source-of-truth.yaml",
     "control/decisions",
     "campaigns/scope-autoindex-v1/evidence",
@@ -48,9 +52,24 @@ PROJECTION_SOURCE_PATHS = (
     "outputs/audits/rigor",
     "evidence/legacy-dapfam-inventory.v1.json",
     "schemas/read-model.v2.json",
+    "schemas/p2-budget-profile.v1.json",
+    "schemas/p2-request.v1.json",
+    "schemas/p2-candidate-ledger.v1.json",
+    "schemas/p2-shortlist-freeze-receipt.v1.json",
+    "schemas/p2-selection-receipt.v1.json",
+    "schemas/p2-manifest.v1.json",
+    "schemas/p2-package.v1.json",
+    "src/myis_research/p2",
+    "src/myis_research/p2_cli.py",
     "src/myis_research/projections/read_model.py",
     "src/myis_research/report_cli.py",
 )
+
+P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
+P2_METRIC_FIELDS = frozenset({
+    "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
+    "scope", "split", "direction", "denominator", "evidence_role",
+})
 
 
 def canonical_json(value: Any) -> bytes:
@@ -76,6 +95,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     )
     validation_reports = _load_validation_reports(root / "campaigns" / campaign_id / "validation-reports")
     p1_pairs = validated_p1_matrix(manifests, receipts, validation_reports)
+    p2_readiness = _p2_readiness_projection(root, campaign_config)
     package_review: dict[str, Any] = {}
     if (root / "control/assets/dapfam-p1-source.v1.json").is_file() and p1_pairs:
         package_review = _validated_p1_package_review(root, p1_pairs)
@@ -155,6 +175,8 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         phase_status = str(phase.get("status", "planned"))
         if phase_id == "P1_CPU_BASELINE":
             phase_status = "measured" if p1_pairs else "blocked"
+        elif phase_id == "P2_SCOPE_DEVELOPMENT":
+            phase_status = "ready" if p2_readiness["status"] == "ready_planned_not_measured" else p2_readiness["status"]
         phase_row = {"phase_id": phase_id, "status": phase_status, "tasks": []}
         for task in phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []:
             if not isinstance(task, dict):
@@ -167,6 +189,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                         str(pair["receipt"]["request_id"])
                         for pair in p1_pairs
                     })
+            elif phase_id == "P2_SCOPE_DEVELOPMENT":
+                task_row["status"] = "ready" if p2_readiness["status"] == "ready_planned_not_measured" else p2_readiness["status"]
+                task_row["evidence_ids"] = [str(item["uri"]) for item in p2_readiness.get("artifacts", [])]
             phase_row["tasks"].append(task_row)
             tasks.append(task_row)
         phases.append(phase_row)
@@ -181,6 +206,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     ])
     result_state = "valid" if p1_pairs else "blocked"
     p1_latency = paired_receipts[0].get("latency_seconds") if paired_receipts else None
+    p2_metric_rows = [
+        {"run_id": "p2-r1-primary-v1", "phase_id": "P2_SCOPE_DEVELOPMENT", **item}
+        for item in p2_readiness.get("metrics", [])
+    ]
     body: dict[str, Any] = {
         "schema_version": READ_MODEL_SCHEMA,
         "projection_schema_version": PROJECTION_SCHEMA_VERSION,
@@ -190,8 +219,8 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "program_id": "myis-research",
             "display_name": "myIS Research",
             "campaign_id": campaign_id,
-            "current_phase": "P1_CPU_BASELINE",
-            "current_task": "P1.3",
+            "current_phase": "P2_SCOPE_DEVELOPMENT" if p1_pairs else "P1_CPU_BASELINE",
+            "current_task": "P2.1" if p1_pairs else "P1.3",
             "state": p1_state,
         },
         "projection_health": {
@@ -214,7 +243,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "standing_authorization": "D1_START_CAMPAIGN",
             "active_owner_decisions": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
             "current_state": p1_state,
+            "p2_status": p2_readiness["status"],
         }],
+        "p2_readiness": p2_readiness,
         "phases": phases,
         "tasks": tasks,
         "gates": [
@@ -223,7 +254,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         ],
         "experiments": sorted(experiments.values(), key=lambda item: item["experiment_id"]),
         "runs": sorted(runs, key=lambda item: item["run_id"]),
-        "metrics": metrics,
+        "metrics": metrics + p2_metric_rows,
         "cost": {"currency": "USD", "actual": total_actual if manifests else None, "estimated": total_estimated if manifests else 0.0, "budget": 100.0},
         "decisions": decisions,
         "evidence": evidence,
@@ -265,12 +296,29 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "rigor_review_sha256": package_review.get("review_sha256"),
             "rigor_grade": package_review.get("grade"),
             "rigor_mean_score": package_review.get("mean_score"),
+        }, {
+            "result_id": "P2-SCOPE-DEVELOPMENT",
+            "phase_id": "P2_SCOPE_DEVELOPMENT",
+            "task_id": "P2.1",
+            "validity": "valid" if p2_readiness["measured"] else "not_measured",
+            "evidence_maturity": "measured_selection" if p2_readiness["measured"] else "non_scientific",
+            "metric_ids": [str(item.get("name", "")) for item in p2_readiness.get("metrics", [])],
+            "claim_boundary": p2_readiness["claim_boundary"],
+            "limitations": ["selection_accesses_remain_zero_until_validated_freeze"],
+            "budget_profile_id": p2_readiness.get("budget_profile_id"),
+            "budget_profile_sha256": p2_readiness.get("budget_profile_sha256"),
+            "selection_exposure_count": p2_readiness.get("selection_accesses", 0),
         }],
         "interpretations": ([{
             "interpretation_id": "P1-CPU-BASELINE-INTERPRETATION",
             "result_id": "P1-CPU-BASELINE",
             "status": "pending_review" if p1_pairs else "blocked",
             "statement": "ยังสรุปผลเชิงวิทยาศาสตร์ไม่ได้จนกว่า evidence matrix จะผ่าน",
+        }, {
+            "interpretation_id": "P2-SCOPE-DEVELOPMENT-INTERPRETATION",
+            "result_id": "P2-SCOPE-DEVELOPMENT",
+            "status": "pending_measurement" if p2_readiness["status"] == "ready_planned_not_measured" else "blocked",
+            "statement": "P2 is contract-ready but has no measured result; fixture readiness does not authorize selection or final evaluation.",
         }]),
         "raid": ([{
             "raid_id": "RISK-P1-EVIDENCE-MATRIX",
@@ -289,10 +337,14 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                 if isinstance(p1_latency, (int, float)) and not isinstance(p1_latency, bool)
                 else None
             ),
+            "p2_measured_runs": p2_readiness["measured_runs"],
+            "p2_selection_accesses": p2_readiness["selection_accesses"],
+            "p2_max_wall_clock_seconds": p2_readiness["runtime"].get("max_wall_clock_seconds"),
+            "p2_per_candidate_timeout_seconds": p2_readiness["runtime"].get("per_candidate_timeout_seconds"),
         },
         "presentation": {
             "audiences": ["owner", "advisor", "peer"],
-            "safe_result_ids": ["P1-CPU-BASELINE"],
+            "safe_result_ids": ["P1-CPU-BASELINE", "P2-SCOPE-DEVELOPMENT"],
             "claim_boundary": "no_measured_claim" if not p1_pairs else "train_selection_only",
             "screens": _presentation_screens(
                 p1_state=p1_state,
@@ -433,6 +485,169 @@ def write_read_model(repository_root: Path, output: Path | None = None) -> Path:
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(build_read_model(root), ensure_ascii=True, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return target
+
+
+def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dict[str, Any]:
+    """Read only validated P2 control/artifact metadata.
+
+    A missing P2 package is a normal readiness state.  Invalid or incomplete
+    P2 JSON is never promoted into the shared read model; only a schema-valid,
+    self-hash-valid artifact contributes a pointer, count, or freeze state.
+    """
+
+    profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
+    profile: dict[str, Any] = {}
+    profile_sha256: str | None = None
+    try:
+        loaded = _load_yaml_like(profile_path)
+        if isinstance(loaded, dict) and loaded.get("schema_version") == "myis.p2-budget-profile.v1":
+            profile = loaded
+            profile_sha256 = canonical_sha256(profile)
+    except (OSError, ValueError, TypeError):
+        profile = {}
+
+    configured = campaign_config.get("p2_execution", {})
+    if not isinstance(configured, dict):
+        configured = {}
+    limits = profile.get("limits") if isinstance(profile.get("limits"), dict) else configured.get("candidate_allocation", {})
+    runtime = profile.get("runtime") if isinstance(profile.get("runtime"), dict) else configured.get("runtime", {})
+    allocation = profile.get("candidate_allocation") if isinstance(profile.get("candidate_allocation"), dict) else configured.get("candidate_allocation", {})
+    stopping = profile.get("stopping") if isinstance(profile.get("stopping"), dict) else configured.get("stopping", {})
+    resources = profile.get("resources") if isinstance(profile.get("resources"), dict) else {}
+
+    campaign_root = root / "campaigns/scope-autoindex-v1"
+    valid: list[tuple[Path, dict[str, Any]]] = []
+    invalid_count = 0
+    seen: set[Path] = set()
+    for directory_name in P2_ARTIFACT_DIRS:
+        directory = campaign_root / directory_name
+        if not directory.is_dir():
+            continue
+        for path in sorted(directory.glob("*.json")):
+            if path in seen or not any(token in path.stem.lower() for token in ("p2-", "p2_", ".p2")):
+                continue
+            seen.add(path)
+            try:
+                if path.is_symlink() or not path.is_file():
+                    continue
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                validated = validate_p2_artifact(payload)
+            except (OSError, UnicodeError, json.JSONDecodeError, P2ContractError, TypeError, ValueError):
+                invalid_count += 1
+                continue
+            if profile_sha256 and validated.get("budget_profile_sha256") not in {None, profile_sha256}:
+                invalid_count += 1
+                continue
+            valid.append((path, validated))
+
+    by_schema: dict[str, list[tuple[Path, dict[str, Any]]]] = {}
+    for path, payload in valid:
+        by_schema.setdefault(str(payload.get("schema_version")), []).append((path, payload))
+
+    def latest(schema_version: str) -> tuple[Path, dict[str, Any]] | None:
+        values = by_schema.get(schema_version, [])
+        return values[-1] if values else None
+
+    ledger = latest("myis.p2-candidate-ledger.v1")
+    freeze = latest("myis.p2-shortlist-freeze-receipt.v1")
+    selection = latest("myis.p2-selection-receipt.v1")
+    manifest = latest("myis.p2-manifest.v1")
+    package = latest("myis.p2-package.v1")
+    measured_manifest = (
+        manifest is not None
+        and manifest[1].get("evidence_class") == "train_selection_measured"
+        and manifest[1].get("status") in {"valid", "negative_development"}
+        and package is not None
+    )
+    freeze_valid = freeze is not None and freeze[1].get("status") == "validated_immutable" and freeze[1].get("selection_exposure_count") == 0
+    selection_count = 1 if selection is not None and selection[1].get("selection_exposure_count") == 1 else 0
+    if invalid_count:
+        status = "blocked_invalid_artifact"
+    elif measured_manifest:
+        status = "measured"
+    elif any(payload.get("evidence_class") == "fixture" for _, payload in (manifest and [manifest] or [])):
+        status = "fixture_only"
+    else:
+        status = "ready_planned_not_measured"
+
+    pointers: list[dict[str, Any]] = []
+    for path, payload in valid:
+        self_hash_field = {
+            "myis.p2-candidate-ledger.v1": "ledger_sha256",
+            "myis.p2-shortlist-freeze-receipt.v1": "receipt_sha256",
+            "myis.p2-selection-receipt.v1": "receipt_sha256",
+            "myis.p2-manifest.v1": "manifest_sha256",
+            "myis.p2-package.v1": "package_sha256",
+        }.get(str(payload.get("schema_version")))
+        pointers.append({
+            "schema_version": payload.get("schema_version"),
+            "uri": path.relative_to(root).as_posix(),
+            "sha256": str(payload.get(self_hash_field)) if self_hash_field else _file_sha256(path),
+        })
+
+    p2_metrics: list[dict[str, Any]] = []
+    if measured_manifest:
+        raw_metrics = manifest[1].get("metrics", [])
+        if isinstance(raw_metrics, list):
+            for item in raw_metrics:
+                if isinstance(item, dict) and set(item).issubset(P2_METRIC_FIELDS) and {"name", "value"} <= set(item):
+                    p2_metrics.append(dict(item))
+
+    return {
+        "status": status,
+        "phase_id": "P2_SCOPE_DEVELOPMENT",
+        "arm": "R1",
+        "campaign_revision": profile.get("campaign_revision") or configured.get("campaign_revision"),
+        "budget_profile_id": profile.get("profile_id") or configured.get("profile_id"),
+        "budget_profile_sha256": profile_sha256,
+        "measured": bool(measured_manifest),
+        "measured_runs": 1 if measured_manifest else 0,
+        "selection_accesses": selection_count,
+        "candidate_count": int(ledger[1].get("candidate_count", 0)) if ledger else 0,
+        "shortlist_count": len(freeze[1].get("candidate_ids", [])) if freeze else 0,
+        "candidate_budget": {
+            "max_candidates_total": limits.get("max_candidates_total"),
+            "max_adaptive_candidates": limits.get("max_adaptive_candidates"),
+            "max_adaptive_iterations": limits.get("max_adaptive_iterations"),
+            "candidates_per_iteration": limits.get("candidates_per_iteration"),
+            "max_index_builds": limits.get("max_index_builds"),
+            "max_selection_finalists": limits.get("max_selection_finalists"),
+            "selection_exposure_limit": limits.get("selection_exposure_limit"),
+            "frozen_controls": allocation.get("frozen_controls"),
+            "preregistered_patent_candidates": allocation.get("preregistered_patent_candidates"),
+        },
+        "runtime": {
+            "max_wall_clock_seconds": runtime.get("max_wall_clock_seconds"),
+            "per_candidate_timeout_seconds": runtime.get("per_candidate_timeout_seconds"),
+        },
+        "stopping": {
+            "min_iterations_before_early_stop": stopping.get("min_iterations_before_early_stop"),
+            "no_improvement_patience": stopping.get("no_improvement_patience"),
+            "selection_rule": stopping.get("selection_rule", "strictly_greater_reject_ties"),
+        },
+        "resources": {
+            "paid_api_budget_usd": resources.get("paid_api_budget_usd", 0),
+            "gpu_budget_usd": resources.get("gpu_budget_usd", 0),
+            "network_model_download": resources.get("network_model_download", False),
+            "provider_fallback": resources.get("provider_fallback", False),
+        },
+        "freeze_barrier": {
+            "required": True,
+            "status": "validated_immutable" if freeze_valid else "not_started" if freeze is None else "blocked",
+            "candidate_ids_frozen": bool(freeze_valid),
+            "selection_exposure_limit": limits.get("selection_exposure_limit", 1),
+            "selection_exposure_count": selection_count,
+            "mutation_after_selection": "forbidden",
+        },
+        "metrics": p2_metrics,
+        "artifacts": pointers,
+        "invalid_artifact_count": invalid_count,
+        "claim_boundary": "no_measured_claim" if not measured_manifest else "train_selection_development_only",
+        "source": {
+            "profile": "control/budgets/p2-r1-primary-v1.yaml",
+            "execution_envelope": "control/execution-envelope-p2.yaml",
+        },
+    }
 
 
 def _load_manifests(directory: Path) -> list[dict[str, Any]]:

@@ -9,7 +9,9 @@ Run this skill only as a post-task epilogue or as the pre-manifest finalization 
 
 ## Preserve authority
 
-- Treat `AGENTS.md`, `00_governance/OWNER_GATES.md`, and `PLAN.md` as governing authority.
+- Treat `AGENTS.md`, `PLAN.md`, `control/source-of-truth.yaml`, and the
+  applicable canonical control records as governing authority. The historical
+  `00_governance/OWNER_GATES.md` path is not active authority.
 - Treat validated canonical-results manifests and per-query artifacts as numeric truth. Treat MLflow as a searchable mirror and Brain notes as human-readable pointers.
 - Never infer a metric, approval, result, or user decision from silence.
 - Never open a protected split, start an experiment, or rerun a command while recording.
@@ -58,8 +60,10 @@ Read [references/session-record-schema.md](references/session-record-schema.md) 
 Choose the target without overwriting existing evidence:
 
 - During an active run before finalization: write `research_session.json` in that run bundle, then let normal validation and manifest finalization continue.
-- For a finalized run: write an external review capsule under `04_outputs/audits/research-sessions/<run_id>-<session_id>.json` and point to the immutable run.
-- For non-run work: write `04_outputs/audits/research-sessions/<session_id>.json`.
+- For a finalized run: write an external review capsule under
+  `outputs/audits/research-sessions/<run_id>-<session_id>.json` and point to the
+  immutable run.
+- For non-run work: write `outputs/audits/research-sessions/<session_id>.json`.
 
 Use UTC timestamps and collision-resistant IDs. Link artifacts by repository-relative path plus SHA-256. Store a brief paraphrase of prompts or decisions only when necessary; otherwise link the canonical artifact.
 

@@ -18,7 +18,7 @@ Gate records remain authoritative.
 3. Separate fixture, development, descriptive, and confirmation evidence.
    Never place qrels, protected IDs, membership, per-query outcomes, or
    credentials in a note.
-4. Write or regenerate a note under `07_obsidian_note/generated/` with a YAML
+4. Write or regenerate a generated note under `obsidian_report/` with a YAML
    frontmatter contract and a Thai-first body. Explain difficult English terms
    in plain Thai on first use.
 5. Close every implementation session with Phase, Task, Gate, status, checks,
@@ -30,13 +30,15 @@ Gate records remain authoritative.
 
 ## Note contract
 
-Generated notes must use `myis.research-note.v1`, contain only allowlisted source
+Generated notes must use `myis.obsidian-note.v2`, contain only allowlisted source
 paths, stay below 512 KiB, and expose pathless `obsidian://` links. Use the
-repository helper:
+repository report and asset validators (there is no separate
+`myis_research.notes` module in this project):
 
 ```powershell
-uv run --no-sync python -m myis_research.notes.cli build --repository-root .
-uv run --no-sync python -m myis_research.notes.cli validate --repository-root .
+uv run --no-sync myis-report build --repository-root .
+uv run --no-sync myis-report check --repository-root .
+uv run --no-sync myis-assets validate --mode quick
 ```
 
 See [note-contract.md](references/note-contract.md) for the field meanings and

@@ -34,6 +34,17 @@ jobs:
         run: |
           uv run --no-sync python scripts/validate_layout_v2.py
           uv run --no-sync myis-report check --read-model-only --repository-root .
+      - name: Validate P2 readiness contract without execution
+        run: |
+          uv run --no-sync pytest -q tests/test_p2_budget_contracts.py tests/test_p2_freeze_barrier.py tests/test_p2_cli.py tests/test_p2_dashboard_projection.py tests/test_p2_mlflow_projection.py tests/test_provider_switching_static.py
+          uv run --no-sync python -c "from pathlib import Path; from myis_research.p2.contracts import load_profile; p=load_profile(Path('.')); assert p.payload['limits']['max_candidates_total']==32; assert p.payload['runtime']['max_wall_clock_seconds']==259200; assert p.payload['runtime']['per_candidate_timeout_seconds']==10800"
+      - name: Keep P2 selection and protected stores closed
+        shell: bash
+        run: |
+          if rg -n 'final-872|D2_OPEN_FINAL|D3_SUBMIT_RELEASE' src/myis_research/p2_cli.py; then
+            echo 'P2 readiness CLI must not open final gates'
+            exit 1
+          fi
       - name: Reject archive runtime coupling
         shell: bash
         run: |

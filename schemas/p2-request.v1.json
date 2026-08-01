@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-request:v1",
+  "title": "myIS P2 train and one-shot selection request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "phase_id", "arm", "stage", "campaign_id", "campaign_revision", "budget_profile_id", "budget_profile_sha256", "execution_envelope_sha256", "git_commit", "scope_hashes", "input_hashes", "frozen_controls"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-request.v1"},
+    "request_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "arm": {"const": "R1"},
+    "stage": {"const": "train_selection"},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "campaign_revision": {"const": "scope-autoindex-v1-p2-r1-primary-v1"},
+    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "execution_envelope_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "git_commit": {"type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"},
+    "scope_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "input_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "frozen_controls": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  }
+}

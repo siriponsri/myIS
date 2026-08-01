@@ -315,6 +315,7 @@ def _dashboard_projection(model: dict[str, Any]) -> dict[str, Any]:
         "experiments": model.get("experiments", []),
         "runs": runs,
         "metrics": model.get("metrics", []),
+        "p2_readiness": model.get("p2_readiness", {}),
         "cost": model.get("cost", {}),
         "evidence": model.get("evidence", []),
         "datasets": model.get("datasets", []),
@@ -323,5 +324,9 @@ def _dashboard_projection(model: dict[str, Any]) -> dict[str, Any]:
         "done": done,
         "next": next_items,
         "waiting_owner": waiting_owner,
-        "waiting_command": [] if runs else ["P1_CPU_EXECUTION_ENVELOPE"],
+        "waiting_command": [] if runs else [
+            "P2_SCOPE_DEVELOPMENT_PRECHECK"
+            if model.get("project", {}).get("state") == "P1_CPU_MEASURED_COMPLETE"
+            else "P1_CPU_EXECUTION_ENVELOPE"
+        ],
     }

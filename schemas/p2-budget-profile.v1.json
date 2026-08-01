@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-budget-profile:v1",
+  "title": "myIS P2 versioned budget profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "phase_id", "arm", "campaign_id", "campaign_revision", "limits", "candidate_allocation", "runtime", "resources", "stopping", "immutability"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-budget-profile.v1"},
+    "profile_id": {"const": "p2-r1-primary-v1"},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "arm": {"const": "R1"},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "campaign_revision": {"const": "scope-autoindex-v1-p2-r1-primary-v1"},
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_candidates_total", "max_adaptive_candidates", "max_adaptive_iterations", "candidates_per_iteration", "max_index_builds", "max_selection_finalists", "selection_exposure_limit"],
+      "properties": {
+        "max_candidates_total": {"const": 32},
+        "max_adaptive_candidates": {"const": 20},
+        "max_adaptive_iterations": {"const": 5},
+        "candidates_per_iteration": {"const": 4},
+        "max_index_builds": {"const": 32},
+        "max_selection_finalists": {"const": 4},
+        "selection_exposure_limit": {"const": 1}
+      }
+    },
+    "candidate_allocation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["frozen_controls", "preregistered_patent_candidates", "adaptive_candidates"],
+      "properties": {
+        "frozen_controls": {"const": 4},
+        "preregistered_patent_candidates": {"const": 8},
+        "adaptive_candidates": {"const": 20}
+      }
+    },
+    "runtime": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_wall_clock_seconds", "per_candidate_timeout_seconds"],
+      "properties": {
+        "max_wall_clock_seconds": {"const": 259200},
+        "per_candidate_timeout_seconds": {"const": 10800}
+      }
+    },
+    "resources": {
+      "type": "object", "additionalProperties": false,
+      "required": ["paid_api_budget_usd", "gpu_budget_usd", "network_model_download", "provider_fallback"],
+      "properties": {
+        "paid_api_budget_usd": {"const": 0},
+        "gpu_budget_usd": {"const": 0},
+        "network_model_download": {"const": false},
+        "provider_fallback": {"const": false}
+      }
+    },
+    "stopping": {
+      "type": "object", "additionalProperties": false,
+      "required": ["min_iterations_before_early_stop", "no_improvement_patience", "selection_rule"],
+      "properties": {
+        "min_iterations_before_early_stop": {"const": 4},
+        "no_improvement_patience": {"const": 2},
+        "selection_rule": {"const": "strictly_greater_reject_ties"}
+      }
+    },
+    "immutability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["change_after_first_measured_run", "historical_results_reinterpretation"],
+      "properties": {
+        "change_after_first_measured_run": {"const": "new_campaign_revision_required"},
+        "historical_results_reinterpretation": {"const": "forbidden"}
+      }
+    }
+  }
+}
