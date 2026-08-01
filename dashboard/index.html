@@ -4,18 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>myIS Research Command Center</title>
+  <title>myIS Research Evidence Observatory</title>
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/dashboard.css">
 </head>
 <body>
+  <aside class="side-rail" aria-label="Research Observatory navigation">
+    <div class="rail-brand" aria-label="myIS Research">myIS</div>
+    <nav class="rail-nav" aria-label="Research views">
+      <button class="rail-item is-active" data-tab="overview" type="button" aria-label="Overview" title="Overview"><span class="rail-icon" aria-hidden="true">O</span><span class="rail-label">Overview</span></button>
+      <button class="rail-item" data-tab="flow" type="button" aria-label="Research flow" title="Research flow"><span class="rail-icon" aria-hidden="true">F</span><span class="rail-label">Flow</span></button>
+      <button class="rail-item" data-tab="experiments" type="button" aria-label="Experiments" title="Experiments"><span class="rail-icon" aria-hidden="true">E</span><span class="rail-label">Experiments</span></button>
+      <button class="rail-item" data-tab="artifacts" type="button" aria-label="Artifacts" title="Artifacts"><span class="rail-icon" aria-hidden="true">A</span><span class="rail-label">Artifacts</span></button>
+      <button class="rail-item" data-tab="prompts" type="button" aria-label="Prompts" title="Prompts"><span class="rail-icon" aria-hidden="true">P</span><span class="rail-label">Prompts</span></button>
+      <button class="rail-item" data-tab="metrics" type="button" aria-label="Metrics" title="Metrics"><span class="rail-icon" aria-hidden="true">M</span><span class="rail-label">Metrics</span></button>
+      <button class="rail-item" data-tab="graph" type="button" aria-label="Evidence graph" title="Evidence graph"><span class="rail-icon" aria-hidden="true">G</span><span class="rail-label">Graph</span></button>
+      <button class="rail-item" data-tab="results" type="button" aria-label="Results" title="Results"><span class="rail-icon" aria-hidden="true">R</span><span class="rail-label">Results</span></button>
+      <button class="rail-item" data-tab="governance" type="button" aria-label="Governance" title="Governance"><span class="rail-icon" aria-hidden="true">V</span><span class="rail-label">Governance</span></button>
+      <button class="rail-item" data-tab="reports" type="button" aria-label="Reports" title="Reports"><span class="rail-icon" aria-hidden="true">N</span><span class="rail-label">Reports</span></button>
+      <button class="rail-item" data-tab="presentation" type="button" aria-label="Presentation" title="Presentation"><span class="rail-icon" aria-hidden="true">S</span><span class="rail-label">Present</span></button>
+      <button class="rail-item" data-tab="tools" type="button" aria-label="Tools" title="Tools"><span class="rail-icon" aria-hidden="true">T</span><span class="rail-label">Tools</span></button>
+    </nav>
+    <div class="rail-footer"><span class="rail-status-dot" aria-hidden="true"></span><span>LOCAL</span></div>
+  </aside>
   <a class="skip-link" href="#main-content">ข้ามไปยังเนื้อหาหลัก</a>
   <header class="topbar">
     <div class="brand-lockup">
       <span class="brand-mark" aria-hidden="true">myIS</span>
       <div>
         <p id="breadcrumb" class="eyebrow">myIS / P1 / P1.3</p>
-        <h1>Research Command Center</h1>
+        <h1>Research Evidence Observatory</h1>
       </div>
     </div>
     <div class="topbar-actions">
@@ -56,8 +74,37 @@
       <button id="tab-presentation" class="tab" data-tab="presentation" type="button" role="tab" aria-selected="false" aria-controls="presentation">นำเสนอ</button>
     </nav>
 
+    <section id="experiments" class="panel" role="tabpanel" aria-label="Experiments" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Run explorer</p><h2>Experiments</h2></div><span class="section-note">Shared read-model bindings</span></div>
+      <div id="observatory-run-list" class="observatory-list"></div>
+    </section>
+
+    <section id="artifacts" class="panel" role="tabpanel" aria-label="Artifacts" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Validated outputs</p><h2>Artifacts</h2></div><span class="section-note">Hash-bound, aggregate-safe</span></div>
+      <div id="observatory-artifact-list" class="observatory-grid"></div>
+    </section>
+
+    <section id="prompts" class="panel" role="tabpanel" aria-label="Prompts" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Prompt lineage</p><h2>Prompts</h2></div><span class="section-note">Frozen versions and parent links</span></div>
+      <div id="observatory-prompt-list" class="observatory-grid"></div>
+    </section>
+
+    <section id="metrics" class="panel" role="tabpanel" aria-label="Metrics" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Validated aggregates</p><h2>Metrics</h2></div><span class="section-note">Fixture values are diagnostic only</span></div>
+      <div id="observatory-metric-list" class="observatory-grid"></div>
+    </section>
+
+    <section id="graph" class="panel" role="tabpanel" aria-label="Evidence Graph" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Lineage explorer</p><h2>Evidence Graph</h2></div><span id="observatory-graph-count" class="section-note"></span></div>
+      <div id="observatory-graph" class="graph-surface"></div>
+    </section>
+
     <section id="overview" class="panel is-visible" role="tabpanel" aria-labelledby="tab-overview">
       <div id="status-cards" class="card-grid"></div>
+      <section class="observatory-overview" aria-labelledby="observatory-overview-heading">
+        <div class="observatory-overview-heading"><div><p class="eyebrow">Research Evidence Observatory</p><h2 id="observatory-overview-heading">Evidence, not file inventory</h2></div><span id="observatory-boundary" class="evidence-badge">Not yet measured</span></div>
+        <div id="observatory-summary" class="observatory-summary"></div>
+      </section>
       <div class="overview-grid">
         <div class="overview-main">
           <section class="section-block" aria-labelledby="inbox-heading">
