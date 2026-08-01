@@ -4,10 +4,11 @@
   "title": "myIS P2 candidate ledger",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "request_id", "budget_profile_id", "budget_profile_sha256", "candidate_count", "candidates", "ledger_sha256"],
+  "required": ["schema_version", "request_id", "campaign_revision", "budget_profile_id", "budget_profile_sha256", "candidate_count", "candidates", "iterations", "ledger_sha256"],
   "properties": {
     "schema_version": {"const": "myis.p2-candidate-ledger.v1"},
     "request_id": {"type": "string", "minLength": 1},
+    "campaign_revision": {"type": "string", "minLength": 1},
     "budget_profile_id": {"const": "p2-r1-primary-v1"},
     "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "candidate_count": {"type": "integer", "minimum": 0, "maximum": 32},
@@ -29,6 +30,19 @@
           "failure_reason": {"type": "string"},
           "index_build_count": {"type": "integer", "minimum": 0, "maximum": 32},
           "selection_eligible": {"type": "boolean"}
+        }
+      }
+    },
+    "iterations": {
+      "type": "array", "minItems": 4, "maxItems": 5,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["iteration", "candidate_ids", "best_score", "status"],
+        "properties": {
+          "iteration": {"type": "integer", "minimum": 1, "maximum": 5},
+          "candidate_ids": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "best_score": {"type": "number", "minimum": 0, "maximum": 1},
+          "status": {"const": "completed"}
         }
       }
     },

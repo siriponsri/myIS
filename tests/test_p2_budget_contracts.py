@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from myis_research.kernel.canonical import file_sha256
+from myis_research.kernel.canonical import canonical_sha256, file_sha256
 from myis_research.p2.contracts import (
     P2ContractError,
     build_request,
@@ -63,19 +63,32 @@ def test_immutable_json_refuses_overwrite(tmp_path: Path) -> None:
 
 
 def test_p2_receipt_self_hash_is_verified() -> None:
+    profile = load_profile(ROOT)
     payload = {
         "schema_version": "myis.p2-selection-receipt.v1",
         "request_id": "p2-fixture-request",
-        "candidate_ids": [],
+        "campaign_revision": profile.payload["campaign_revision"],
+        "budget_profile_id": profile.profile_id,
+        "budget_profile_sha256": profile.sha256,
+        "candidate_ids": ["control-0"],
         "shortlist_freeze_receipt_sha256": "a" * 64,
         "selection_exposure_count": 1,
         "status": "accepted",
-        "metrics": [],
+        "metrics": [{
+            "candidate_id": "control-0",
+            "name": "recall_at_100",
+            "value": 0.5,
+            "n": 16,
+            "scope": "OUT",
+            "split": "selection",
+            "direction": "maximize",
+            "denominator": "macro_mean_per_query_relevant_families",
+            "evidence_role": "primary",
+        }],
     }
-    from myis_research.kernel.canonical import canonical_sha256
 
     payload["receipt_sha256"] = canonical_sha256(payload)
-    assert validate_p2_artifact(payload)["status"] == "accepted"
+    assert validate_p2_artifact(payload, repository_root=ROOT)["status"] == "accepted"
     payload["status"] = "blocked"
     with pytest.raises(P2ContractError, match="self-hash"):
-        validate_p2_artifact(payload)
+        validate_p2_artifact(payload, repository_root=ROOT)

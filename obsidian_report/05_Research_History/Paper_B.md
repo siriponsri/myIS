@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "c18a3146316b2b8358b11ff924f6814f4a8785e1514f537470cb678520238374"
-read_model_sha256: "03c4005f6db0df66f8057cd09db5c93a8c606cf9e8961818846f82c17b2a299e"
+read_model_revision: "9b764e3304770c10ab2258a841ade4eae600144928ece0549a35518f35ed9cad"
+read_model_sha256: "3cc96572c8522d21d2eaa66aef79bd9554903b22852f56ce8c60e9d344c71c93"
 source_commit: "cc38e26aaf032b51c5b8cf8c74c51b8317e4fcd4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []

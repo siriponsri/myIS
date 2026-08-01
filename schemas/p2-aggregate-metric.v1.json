@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-aggregate-metric:v1",
+  "title": "myIS P2 aggregate candidate metric",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidate_id", "name", "value", "n", "scope", "split", "direction", "denominator", "evidence_role"],
+  "properties": {
+    "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "name": {"const": "recall_at_100"},
+    "value": {"type": "number", "minimum": 0, "maximum": 1},
+    "n": {"type": "integer", "minimum": 1},
+    "scope": {"enum": ["ALL", "IN", "OUT"]},
+    "split": {"enum": ["train", "selection"]},
+    "direction": {"const": "maximize"},
+    "denominator": {"const": "macro_mean_per_query_relevant_families"},
+    "evidence_role": {"enum": ["primary", "secondary"]}
+  }
+}

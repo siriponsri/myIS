@@ -29,13 +29,26 @@ PROTECTED_PATH_PARTS = {
 }
 
 PROTECTED_PAYLOAD_KEYS = {
+    "query",
     "query_id",
     "query_ids",
+    "qrel",
     "confirmation_ids",
     "qrels",
+    "membership",
+    "memberships",
+    "dataset_membership",
+    "dataset_memberships",
+    "query_membership",
+    "query_memberships",
     "split_membership",
+    "per_query_outcome",
     "per_query",
     "per_query_outcomes",
+    "raw_payload",
+    "raw_payloads",
+    "raw_provider_payload",
+    "raw_provider_payloads",
     "protected_payload",
     "credentials",
     "api_key",
@@ -137,7 +150,7 @@ def assert_aggregate_only(value: Any, *, path: str = "$") -> None:
     if isinstance(value, Mapping):
         for raw_key, item in value.items():
             key = str(raw_key)
-            normalized = key.casefold()
+            normalized = key.casefold().replace("-", "_").replace(" ", "_")
             if normalized in PROTECTED_PAYLOAD_KEYS and not _is_hash_key(normalized):
                 raise ValueError(f"protected payload key is forbidden at {path}.{key}")
             assert_aggregate_only(item, path=f"{path}.{key}")

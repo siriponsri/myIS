@@ -14,7 +14,7 @@ from ..kernel.canonical import canonical_sha256
 from ..kernel.manifest import manifest_round_trip
 from ..kernel.manifest_validation import ManifestValidationError, validate_validation_report
 from ..owner_local import OwnerLocalContractError, validate_receipt
-from ..p2 import P2ContractError, validate_p2_artifact
+from ..p2 import P2ContractError, validate_p2_artifact, validate_p2_package_bundle
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -54,7 +54,9 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/read-model.v2.json",
     "schemas/p2-budget-profile.v1.json",
     "schemas/p2-request.v1.json",
+    "schemas/p2-aggregate-metric.v1.json",
     "schemas/p2-candidate-ledger.v1.json",
+    "schemas/p2-baseline-reproduction-receipt.v1.json",
     "schemas/p2-shortlist-freeze-receipt.v1.json",
     "schemas/p2-selection-receipt.v1.json",
     "schemas/p2-manifest.v1.json",
@@ -67,7 +69,7 @@ PROJECTION_SOURCE_PATHS = (
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
 P2_METRIC_FIELDS = frozenset({
-    "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
+    "candidate_id", "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
     "scope", "split", "direction", "denominator", "evidence_role",
 })
 
@@ -531,7 +533,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
                 if path.is_symlink() or not path.is_file():
                     continue
                 payload = json.loads(path.read_text(encoding="utf-8"))
-                validated = validate_p2_artifact(payload)
+                validated = validate_p2_artifact(payload, repository_root=root)
             except (OSError, UnicodeError, json.JSONDecodeError, P2ContractError, TypeError, ValueError):
                 invalid_count += 1
                 continue
@@ -548,24 +550,60 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         values = by_schema.get(schema_version, [])
         return values[-1] if values else None
 
-    ledger = latest("myis.p2-candidate-ledger.v1")
-    freeze = latest("myis.p2-shortlist-freeze-receipt.v1")
-    selection = latest("myis.p2-selection-receipt.v1")
-    manifest = latest("myis.p2-manifest.v1")
     package = latest("myis.p2-package.v1")
+    valid_by_uri = {path.relative_to(root).as_posix(): payload for path, payload in valid}
+    bundle: dict[str, dict[str, Any]] | None = None
+    if package is not None:
+        package_payload = package[1]
+
+        def referenced(field: str) -> dict[str, Any] | None:
+            value = package_payload.get(field)
+            if value is None:
+                return None
+            if not isinstance(value, str) or value not in valid_by_uri:
+                raise P2ContractError(f"package {field} does not reference a validated P2 artifact")
+            return valid_by_uri[value]
+
+        try:
+            request_payload = referenced("request_uri")
+            ledger_payload = referenced("candidate_ledger_uri")
+            baseline_payload = referenced("baseline_reproduction_uri")
+            freeze_payload = referenced("shortlist_freeze_uri")
+            manifest_payload = referenced("manifest_uri")
+            if any(item is None for item in (request_payload, ledger_payload, baseline_payload, freeze_payload, manifest_payload)):
+                raise P2ContractError("complete P2 package is missing a required artifact reference")
+            bundle = validate_p2_package_bundle(
+                request=request_payload,
+                ledger=ledger_payload,
+                baseline=baseline_payload,
+                freeze=freeze_payload,
+                selection=referenced("selection_uri"),
+                manifest=manifest_payload,
+                package=package_payload,
+                repository_root=root,
+            )
+        except (P2ContractError, TypeError, ValueError):
+            invalid_count += 1
+            bundle = None
+
+    ledger = bundle.get("ledger") if bundle else None
+    baseline = bundle.get("baseline") if bundle else None
+    freeze = bundle.get("freeze") if bundle else None
+    selection = bundle.get("selection") if bundle else None
+    manifest = bundle.get("manifest") if bundle else None
     measured_manifest = (
         manifest is not None
-        and manifest[1].get("evidence_class") == "train_selection_measured"
-        and manifest[1].get("status") in {"valid", "negative_development"}
-        and package is not None
+        and manifest.get("evidence_class") == "train_selection_measured"
+        and manifest.get("status") in {"valid", "negative_development"}
     )
-    freeze_valid = freeze is not None and freeze[1].get("status") == "validated_immutable" and freeze[1].get("selection_exposure_count") == 0
-    selection_count = 1 if selection is not None and selection[1].get("selection_exposure_count") == 1 else 0
+    fixture_manifest = manifest is not None and manifest.get("evidence_class") == "fixture"
+    freeze_valid = freeze is not None and freeze.get("status") == "validated_immutable" and freeze.get("selection_exposure_count") == 0
+    selection_count = 1 if selection is not None and selection.get("selection_exposure_count") == 1 else 0
     if invalid_count:
         status = "blocked_invalid_artifact"
     elif measured_manifest:
         status = "measured"
-    elif any(payload.get("evidence_class") == "fixture" for _, payload in (manifest and [manifest] or [])):
+    elif fixture_manifest:
         status = "fixture_only"
     else:
         status = "ready_planned_not_measured"
@@ -574,6 +612,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
     for path, payload in valid:
         self_hash_field = {
             "myis.p2-candidate-ledger.v1": "ledger_sha256",
+            "myis.p2-baseline-reproduction-receipt.v1": "receipt_sha256",
             "myis.p2-shortlist-freeze-receipt.v1": "receipt_sha256",
             "myis.p2-selection-receipt.v1": "receipt_sha256",
             "myis.p2-manifest.v1": "manifest_sha256",
@@ -587,7 +626,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
 
     p2_metrics: list[dict[str, Any]] = []
     if measured_manifest:
-        raw_metrics = manifest[1].get("metrics", [])
+        raw_metrics = manifest.get("metrics", [])
         if isinstance(raw_metrics, list):
             for item in raw_metrics:
                 if isinstance(item, dict) and set(item).issubset(P2_METRIC_FIELDS) and {"name", "value"} <= set(item):
@@ -603,8 +642,8 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "measured": bool(measured_manifest),
         "measured_runs": 1 if measured_manifest else 0,
         "selection_accesses": selection_count,
-        "candidate_count": int(ledger[1].get("candidate_count", 0)) if ledger else 0,
-        "shortlist_count": len(freeze[1].get("candidate_ids", [])) if freeze else 0,
+        "candidate_count": int(ledger.get("candidate_count", 0)) if ledger else 0,
+        "shortlist_count": len(freeze.get("candidate_ids", [])) if freeze else 0,
         "candidate_budget": {
             "max_candidates_total": limits.get("max_candidates_total"),
             "max_adaptive_candidates": limits.get("max_adaptive_candidates"),
@@ -646,6 +685,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "source": {
             "profile": "control/budgets/p2-r1-primary-v1.yaml",
             "execution_envelope": "control/execution-envelope-p2.yaml",
+            "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
         },
     }
 

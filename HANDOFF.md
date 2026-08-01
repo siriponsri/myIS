@@ -218,6 +218,31 @@ keyring access, or active-provider switch was performed.
 - MLflow doctor: `PASS`; legacy experiments preserved and the store remains outside the Git worktree.
 - P2 baseline reproduction is an explicit state-machine gate; failure blocks shortlist and selection.
 
+## Official Round 1 P2 contract repair (2026-08-01)
+
+The eight repository-safe findings in
+`orchestration/results/official-research-20260801T070313825Z-5daa6cb1.json`
+are repaired. P2 artifacts now receive recursive aggregate-only protection,
+share one explicit aggregate metric schema, and bind the canonical budget
+profile. Baseline reproduction is an immutable hash-bound receipt. Adaptive
+iterations require consecutive four-candidate membership and derive their
+scores from recorded train outcomes. A full package graph must pass semantic
+validation before the read model can promote fixture or measured evidence,
+and every frozen finalist requires exactly one selection aggregate.
+
+Local verification passed with `196` synthetic/unit tests, `44` focused P2
+tests, two stable report sync/check cycles, layout validation, fixture-pilot
+what-if, isolated aggregate-only MLflow doctor, Brain literature validation,
+and `git diff --check`. The isolated sync did not access the Owner MLflow
+store. `P2_SCOPE_DEVELOPMENT` remains `ready/planned, not measured` with
+`measured_runs=0`, `candidate_count=0`, and `selection_accesses=0` in canonical
+campaign state. D2/D3, final-872, protected data, GPU, paid APIs, downloads,
+and provider fallback remain untouched. Official Round 2 was not run.
+
+The next reversible action is Owner review of the repaired contract package
+or an explicitly requested Official Round 2 review. Do not start measured P2
+or selection exposure automatically.
+
 ## Next action
 
 ถัดไปให้ Owner ตรวจ P2 readiness report และกำหนดรายการ frozen controls ทั้งสี่

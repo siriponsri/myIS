@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-baseline-reproduction-receipt:v1",
+  "title": "myIS P2 immutable baseline reproduction receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "phase_id", "campaign_revision", "budget_profile_id", "budget_profile_sha256", "baseline_id", "expected_metric", "tolerance", "dataset_lineage_sha256", "config_sha256", "retriever_sha256", "evaluator_sha256", "result", "status", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-baseline-reproduction-receipt.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "campaign_revision": {"type": "string", "minLength": 1},
+    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "baseline_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "expected_metric": {"$ref": "urn:myis:research:schema:p2-aggregate-metric:v1"},
+    "tolerance": {"type": "number", "minimum": 0, "maximum": 1},
+    "dataset_lineage_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "config_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "retriever_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evaluator_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "result": {"$ref": "urn:myis:research:schema:p2-aggregate-metric:v1"},
+    "status": {"enum": ["passed", "failed"]},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

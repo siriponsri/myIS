@@ -4,10 +4,11 @@
   "title": "myIS P2 run manifest",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "run_id", "phase_id", "arm", "campaign_revision", "budget_profile_id", "budget_profile_sha256", "status", "evidence_class", "request_sha256", "shortlist_freeze_receipt_sha256", "selection_exposure_count", "manifest_sha256"],
+  "required": ["schema_version", "run_id", "request_id", "phase_id", "arm", "campaign_revision", "budget_profile_id", "budget_profile_sha256", "status", "evidence_class", "request_sha256", "candidate_ledger_sha256", "baseline_reproduction_receipt_sha256", "shortlist_freeze_receipt_sha256", "selection_receipt_sha256", "candidate_count", "candidate_ids", "selection_exposure_count", "metrics", "manifest_sha256"],
   "properties": {
     "schema_version": {"const": "myis.p2-manifest.v1"},
     "run_id": {"type": "string", "minLength": 1},
+    "request_id": {"type": "string", "minLength": 1},
     "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
     "arm": {"const": "R1"},
     "campaign_revision": {"type": "string", "minLength": 1},
@@ -16,10 +17,14 @@
     "status": {"enum": ["ready", "blocked", "valid", "negative_development"]},
     "evidence_class": {"enum": ["fixture", "train_selection_measured", "blocked"]},
     "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_ledger_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "baseline_reproduction_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "shortlist_freeze_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "selection_receipt_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "candidate_count": {"type": "integer", "minimum": 28, "maximum": 32},
+    "candidate_ids": {"type": "array", "maxItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "selection_exposure_count": {"type": "integer", "minimum": 0, "maximum": 1},
-    "metrics": {"type": "array", "items": {"type": "object", "additionalProperties": false}},
+    "metrics": {"type": "array", "maxItems": 4, "items": {"$ref": "urn:myis:research:schema:p2-aggregate-metric:v1"}},
     "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
   }
 }
