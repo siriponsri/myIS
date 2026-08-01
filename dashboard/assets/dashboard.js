@@ -222,14 +222,22 @@ function renderP2Readiness() {
   const runtime = p2.runtime || {};
   const freeze = p2.freeze_barrier || {};
   const review = p2.official_review || {};
+  const fixture = p2.fixture_pilot || {};
   const status = p2.status === "ready_planned_not_measured" ? "ready / planned; not measured" : p2.status || "unknown";
   const checks = [
     ["Official review", review.final_round ? `Round ${review.final_round} ${review.final_verdict || "unknown"} · ${review.evidence_class || "static_contract_review"}` : review.status || "not recorded"],
+    ["Fixture pilot", `${fixture.status || "not_executed"} / ${fixture.evidence_class || "fixture"}`],
+    ["Measured P2", p2.measured ? "started" : "not started"],
     ["Profile", `${p2.budget_profile_id || "-"} (${short(p2.budget_profile_sha256, 12)})`],
-    ["Candidates", `${p2.candidate_count || 0} / ${budget.max_candidates_total ?? "-"}`],
+    ["Real candidates", `${p2.candidate_count || 0} / ${budget.max_candidates_total ?? "-"}`],
+    ["Real shortlist", `${p2.shortlist_count || 0} / ${budget.max_selection_finalists ?? "-"}`],
+    ["Real selection", `${p2.selection_accesses || 0} / ${budget.selection_exposure_limit ?? 1}`],
     ["Runtime", `${runtime.max_wall_clock_seconds ?? "-"}s wall / ${runtime.per_candidate_timeout_seconds ?? "-"}s candidate`],
     ["Freeze barrier", `${freeze.status || "not_started"}; selection ${p2.selection_accesses || 0}/${budget.selection_exposure_limit ?? 1}`],
+    ["Protected access", fixture.protected_data_accessed ? "true" : "false"],
+    ["Scientific claim", fixture.claim_boundary || "no_measured_claim"],
     ["Resources", `GPU ${p2.resources?.gpu_budget_usd ?? 0} USD; paid API ${p2.resources?.paid_api_budget_usd ?? 0} USD; download ${p2.resources?.network_model_download ? "on" : "off"}`],
+    ["Next step", fixture.status === "passed" ? "Owner-local measured preflight" : "Repository-only fixture pilot"],
   ];
   const existing = document.querySelector("#readiness-summary .p2-readiness");
   const html = `<div class="p2-readiness"><div class="readiness-status"><strong>P2 ${escapeHtml(status)}</strong><span>${p2.measured_runs || 0} measured run / ${p2.selection_accesses || 0} selection access</span></div><ul class="readiness-list">${checks.map(([label, value]) => `<li><span>${escapeHtml(label)}</span><small>${escapeHtml(String(value))}</small></li>`).join("")}</ul></div>`;

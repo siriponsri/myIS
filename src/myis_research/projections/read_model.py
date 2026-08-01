@@ -14,7 +14,14 @@ from ..kernel.canonical import canonical_sha256
 from ..kernel.manifest import manifest_round_trip
 from ..kernel.manifest_validation import ManifestValidationError, validate_validation_report
 from ..owner_local import OwnerLocalContractError, validate_receipt
-from ..p2 import P2ContractError, validate_p2_artifact, validate_p2_package_bundle
+from ..p2 import (
+    P2ContractError,
+    P2FixtureError,
+    validate_fixture_execution_manifest,
+    validate_fixture_receipt,
+    validate_p2_artifact,
+    validate_p2_package_bundle,
+)
 from ..protection import assert_aggregate_only
 
 
@@ -50,6 +57,7 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/scope-autoindex-v1/validation-reports",
     "campaigns/scope-autoindex-v1/packages",
     "orchestration/audits/p2-readiness",
+    "outputs/fixtures/p2",
     "control/assets/dapfam-p1-source.v1.json",
     "outputs/audits/rigor",
     "evidence/legacy-dapfam-inventory.v1.json",
@@ -73,6 +81,10 @@ PROJECTION_SOURCE_PATHS = (
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
 P2_OFFICIAL_REVIEW_ROOT = Path("orchestration/audits/p2-readiness")
+P2_FIXTURE_RECEIPT_PATH = Path("outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json")
+P2_FIXTURE_MANIFEST_PATH = Path(
+    "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json"
+)
 P2_METRIC_FIELDS = frozenset({
     "candidate_id", "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
     "scope", "split", "direction", "denominator", "evidence_role",
@@ -692,6 +704,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
     """
 
     official_review = _p2_official_review_projection(root)
+    fixture_pilot = _p2_fixture_projection(root)
     profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
     profile: dict[str, Any] = {}
     profile_sha256: str | None = None
@@ -794,15 +807,23 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         and manifest.get("evidence_class") == "train_selection_measured"
         and manifest.get("status") in {"valid", "negative_development"}
     )
-    fixture_manifest = manifest is not None and manifest.get("evidence_class") == "fixture"
-    freeze_valid = freeze is not None and freeze.get("status") == "validated_immutable" and freeze.get("selection_exposure_count") == 0
-    selection_count = 1 if selection is not None and selection.get("selection_exposure_count") == 1 else 0
-    if invalid_count:
+    freeze_valid = (
+        bool(measured_manifest)
+        and freeze is not None
+        and freeze.get("status") == "validated_immutable"
+        and freeze.get("selection_exposure_count") == 0
+    )
+    selection_count = (
+        1
+        if measured_manifest
+        and selection is not None
+        and selection.get("selection_exposure_count") == 1
+        else 0
+    )
+    if invalid_count or fixture_pilot["status"] == "invalid":
         status = "blocked_invalid_artifact"
     elif measured_manifest:
         status = "measured"
-    elif fixture_manifest:
-        status = "fixture_only"
     else:
         status = "ready_planned_not_measured"
 
@@ -841,8 +862,8 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "measured": bool(measured_manifest),
         "measured_runs": 1 if measured_manifest else 0,
         "selection_accesses": selection_count,
-        "candidate_count": int(ledger.get("candidate_count", 0)) if ledger else 0,
-        "shortlist_count": len(freeze.get("candidate_ids", [])) if freeze else 0,
+        "candidate_count": int(ledger.get("candidate_count", 0)) if measured_manifest and ledger else 0,
+        "shortlist_count": len(freeze.get("candidate_ids", [])) if measured_manifest and freeze else 0,
         "candidate_budget": {
             "max_candidates_total": limits.get("max_candidates_total"),
             "max_adaptive_candidates": limits.get("max_adaptive_candidates"),
@@ -888,6 +909,78 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
             "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
         },
         "official_review": official_review,
+        "fixture_pilot": fixture_pilot,
+    }
+
+
+def _p2_fixture_projection(root: Path) -> dict[str, Any]:
+    """Project only validated aggregate fixture provenance, never synthetic ledgers."""
+
+    missing = {
+        "executed": False,
+        "status": "not_executed",
+        "evidence_class": "fixture",
+        "scientific_authority": False,
+        "claim_boundary": "no_measured_claim",
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+        "synthetic_candidates": 0,
+        "synthetic_iterations": 0,
+        "synthetic_shortlist": 0,
+        "fixture_selection_exposures": 0,
+        "receipt_uri": None,
+        "receipt_sha256": None,
+        "execution_manifest_uri": None,
+        "execution_manifest_sha256": None,
+        "fixture_package_sha256": None,
+        "deterministic_rerun": "not_run",
+        "canonical_hashes_match": False,
+        "negative_checks_passed": False,
+        "negative_check_count": 0,
+    }
+    receipt_path = root / P2_FIXTURE_RECEIPT_PATH
+    manifest_path = root / P2_FIXTURE_MANIFEST_PATH
+    if not receipt_path.exists() and not manifest_path.exists():
+        return missing
+    if not receipt_path.is_file() or receipt_path.is_symlink() or not manifest_path.is_file() or manifest_path.is_symlink():
+        return {**missing, "status": "invalid"}
+    try:
+        receipt_payload = json.loads(receipt_path.read_text(encoding="utf-8"))
+        receipt = validate_fixture_receipt(receipt_payload, repository_root=root)
+        manifest_payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest = validate_fixture_execution_manifest(manifest_payload, receipt=receipt)
+        assert_aggregate_only(receipt)
+        assert_aggregate_only(manifest)
+    except (
+        OSError,
+        UnicodeError,
+        json.JSONDecodeError,
+        P2FixtureError,
+        TypeError,
+        ValueError,
+    ):
+        return {**missing, "status": "invalid"}
+    return {
+        "executed": True,
+        "status": "passed",
+        "evidence_class": "fixture",
+        "scientific_authority": False,
+        "claim_boundary": "no_measured_claim",
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+        "synthetic_candidates": int(receipt["synthetic_candidates"]),
+        "synthetic_iterations": int(receipt["synthetic_adaptive_iterations"]),
+        "synthetic_shortlist": int(receipt["synthetic_shortlist_count"]),
+        "fixture_selection_exposures": int(receipt["fixture_selection_exposures"]),
+        "receipt_uri": P2_FIXTURE_RECEIPT_PATH.as_posix(),
+        "receipt_sha256": str(receipt["receipt_sha256"]),
+        "execution_manifest_uri": P2_FIXTURE_MANIFEST_PATH.as_posix(),
+        "execution_manifest_sha256": str(manifest["manifest_sha256"]),
+        "fixture_package_sha256": str(receipt["fixture_package_sha256"]),
+        "deterministic_rerun": str(receipt["deterministic_rerun"]),
+        "canonical_hashes_match": bool(receipt["canonical_hashes_match"]),
+        "negative_checks_passed": bool(receipt["negative_checks_passed"]),
+        "negative_check_count": int(receipt["negative_check_count"]),
     }
 
 

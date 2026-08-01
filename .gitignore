@@ -61,3 +61,6 @@ projections/dashboard-private/
 # Official Codex orchestration output is raw and local-only.
 orchestration/results/*
 !orchestration/results/.gitkeep
+
+# Owner-to-agent read-only communication channel.
+inbox/

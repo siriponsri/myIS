@@ -568,9 +568,10 @@ def test_package_semantics_resolve_each_declared_uri(tmp_path: Path) -> None:
 def test_read_model_promotes_only_a_complete_semantic_bundle(tmp_path: Path) -> None:
     bundle = _build_bundle(tmp_path)
     projection = _p2_readiness_projection(tmp_path, {})
-    assert projection["status"] == "fixture_only"
-    assert projection["candidate_count"] == 28
-    assert projection["selection_accesses"] == 1
+    assert projection["status"] == "ready_planned_not_measured"
+    assert projection["candidate_count"] == 0
+    assert projection["selection_accesses"] == 0
+    assert projection["fixture_pilot"]["status"] == "not_executed"
 
     _mutate(
         tmp_path,

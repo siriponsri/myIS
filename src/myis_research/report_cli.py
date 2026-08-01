@@ -151,6 +151,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
     freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
     review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
+    fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
     review_source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
@@ -171,6 +172,23 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "selection_accesses": p2.get("selection_accesses", 0),
             "candidate_count": p2.get("candidate_count", 0),
             "freeze_status": freeze.get("status", "not_started"),
+            "fixture_pilot": {
+                "executed": fixture.get("executed", False),
+                "status": fixture.get("status", "not_executed"),
+                "evidence_class": fixture.get("evidence_class", "fixture"),
+                "scientific_authority": fixture.get("scientific_authority", False),
+                "protected_data_accessed": fixture.get("protected_data_accessed", False),
+                "measured_execution_performed": fixture.get("measured_execution_performed", False),
+                "synthetic_candidates": fixture.get("synthetic_candidates", 0),
+                "synthetic_iterations": fixture.get("synthetic_iterations", 0),
+                "synthetic_shortlist": fixture.get("synthetic_shortlist", 0),
+                "fixture_selection_exposures": fixture.get("fixture_selection_exposures", 0),
+                "receipt_sha256": fixture.get("receipt_sha256"),
+                "execution_manifest_sha256": fixture.get("execution_manifest_sha256"),
+                "fixture_package_sha256": fixture.get("fixture_package_sha256"),
+                "deterministic_rerun": fixture.get("deterministic_rerun", "not_run"),
+                "negative_checks_passed": fixture.get("negative_checks_passed", False),
+            },
             "official_review": {
                 "status": review.get("status", "not_recorded"),
                 "evidence_class": review.get("evidence_class", "static_contract_review"),
@@ -334,6 +352,11 @@ def _p2_official_review(model: Mapping[str, Any]) -> Mapping[str, Any]:
     return value if isinstance(value, Mapping) else {}
 
 
+def _p2_fixture(model: Mapping[str, Any]) -> Mapping[str, Any]:
+    value = _p2_readiness(model).get("fixture_pilot", {})
+    return value if isinstance(value, Mapping) else {}
+
+
 def _p2_measured(model: Mapping[str, Any]) -> bool:
     return bool(_p2_readiness(model).get("measured"))
 
@@ -345,6 +368,7 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
     freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
     resources = p2.get("resources", {}) if isinstance(p2.get("resources"), Mapping) else {}
     review = _p2_official_review(model)
+    fixture = _p2_fixture(model)
     review_value = (
         f"Round {review.get('final_round')} {review.get('final_verdict')} / {review.get('status')}"
         if review.get("final_round") is not None
@@ -353,11 +377,27 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
     rows = [
         ("Status", p2.get("status", "unknown")),
         ("Official static review", review_value),
+        (
+            "Fixture pilot",
+            f"{fixture.get('status', 'not_executed')} / {fixture.get('evidence_class', 'fixture')} / "
+            f"scientific authority {fixture.get('scientific_authority', False)}",
+        ),
+        (
+            "Synthetic lifecycle",
+            f"{fixture.get('synthetic_candidates', 0)} candidates; "
+            f"{fixture.get('synthetic_iterations', 0)} iterations; "
+            f"shortlist {fixture.get('synthetic_shortlist', 0)}; "
+            f"fixture selection {fixture.get('fixture_selection_exposures', 0)}",
+        ),
         ("Profile", f"{p2.get('budget_profile_id', '-')} / {p2.get('budget_profile_sha256', '-') }"),
-        ("Candidates", f"{p2.get('candidate_count', 0)} / {budget.get('max_candidates_total', '-')}"),
+        ("Real candidates", f"{p2.get('candidate_count', 0)} / {budget.get('max_candidates_total', '-')}"),
+        ("Real shortlist", f"{p2.get('shortlist_count', 0)} / {budget.get('max_selection_finalists', '-')}"),
         ("Runtime", f"{runtime.get('max_wall_clock_seconds', '-')} wall seconds; {runtime.get('per_candidate_timeout_seconds', '-')} per candidate"),
-        ("Freeze", f"{freeze.get('status', 'not_started')}; selection {p2.get('selection_accesses', 0)}/{budget.get('selection_exposure_limit', 1)}"),
+        ("Real freeze / selection", f"{freeze.get('status', 'not_started')}; {p2.get('selection_accesses', 0)}/{budget.get('selection_exposure_limit', 1)}"),
+        ("Protected access", fixture.get("protected_data_accessed", False)),
+        ("Scientific claim", fixture.get("claim_boundary", "no_measured_claim")),
         ("Resources", f"GPU {resources.get('gpu_budget_usd', 0)} USD; paid API {resources.get('paid_api_budget_usd', 0)} USD; model download {resources.get('network_model_download', False)}"),
+        ("Next step", "Owner-local measured preflight" if fixture.get("status") == "passed" else "Repository-only fixture pilot"),
     ]
     return "\n".join(["| Check | Value |", "|---|---|"] + [f"| {label} | {value} |" for label, value in rows])
 
@@ -365,13 +405,16 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
 def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision: str) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
+    fixture = _p2_fixture(model)
     return (
         "# P2_SCOPE_DEVELOPMENT\n\n"
         "P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.\n\n"
         "## Status for Owner\n\n"
         f"**{p2.get('status', 'unknown')}**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.\n\n"
         "## Official static review\n\n"
-        f"Round `{review.get('final_round', '-')}` verdict is **{review.get('final_verdict', 'not_recorded')}** with status `{review.get('status', 'not_recorded')}`. This is engineering provenance only; fixture pilot executed = `{review.get('fixture_pilot_executed', False)}`. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
+        f"Round `{review.get('final_round', '-')}` verdict is **{review.get('final_verdict', 'not_recorded')}** with status `{review.get('status', 'not_recorded')}`. This static review remains engineering provenance only. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
+        "## Repository-only fixture pilot\n\n"
+        f"Fixture status is **{fixture.get('status', 'not_executed')}** with evidence class `{fixture.get('evidence_class', 'fixture')}` and scientific authority `{fixture.get('scientific_authority', False)}`. Synthetic lifecycle counts are kept separate from real campaign counters. See [[P2_FIXTURE_PILOT]].\n\n"
         "## Budget and runtime\n\n"
         f"{_p2_readiness_table(model)}\n\n"
         "## Why these methods\n\n"
@@ -383,7 +426,7 @@ def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision:
         "## What is measured\n\n"
         "Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, paid API, network model download, and provider fallback = disabled.\n\n"
         f"## Read-model binding\n\nRevision: `{revision}`\n\n"
-        "## Next action\n\nThe static contract is accepted. The next reversible action is a repository-only fixture/pilot preflight; measured P2 and selection remain closed.\n\n"
+        "## Next action\n\nThe static contract and repository-only fixture are complete. The next authorized action is Owner-local measured preflight; measured P2 and real selection remain closed until that separate action begins.\n\n"
         "Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[P1_CPU_BASELINE_RESULT]]\n"
     )
 
@@ -391,6 +434,7 @@ def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision:
 def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
+    fixture = _p2_fixture(model)
     return (
         f"# {task.get('task_id')}: {task.get('title')}\n\n"
         "## Objective\n\n"
@@ -401,14 +445,14 @@ def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
         "## Current output\n\n"
         f"{_p2_readiness_table(model)}\n\n"
         "## Official review evidence\n\n"
-        f"The bounded static review ended at Round `{review.get('final_round', '-')}` with verdict **{review.get('final_verdict', 'not_recorded')}**. It did not execute a fixture, measured run, or selection. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
+        f"The bounded static review ended at Round `{review.get('final_round', '-')}` with verdict **{review.get('final_verdict', 'not_recorded')}**. The later repository-only fixture status is `{fixture.get('status', 'not_executed')}` and remains separate from the static review. See [[P2_OFFICIAL_REVIEW_AUDIT]] and [[P2_FIXTURE_PILOT]].\n\n"
         "## Method rationale and papers\n\n"
         "- `R0` is the simple full-family BM25 comparator: it answers how far a clear lexical baseline can go (U006, U011; see [[LITERATURE_INDEX]]).\n"
         "- `R0-W` changes only the text unit: 512-token windows plus family MaxP, so the comparison isolates passage granularity (U154; see [[LITERATURE_INDEX]]).\n"
         "- `R1` searches patent-native representation programs in the AutoIndex style while keeping retrieval/evaluation fixed; this is a planned development arm, not a measured claim yet (U154, U011; see [[LITERATURE_INDEX]]).\n\n"
         "## Protected boundary\n\n"
         "No protected qrels, query identifiers, split membership, per-query outcomes, credentials, raw provider payloads, GPU, paid API, or network model download.\n\n"
-        "## Next action\n\nRun repository-only fixture/pilot validation only; do not open measured execution or selection.\n\n"
+        "## Next action\n\nOwner-local measured preflight is the next authorized action. Do not open measured execution or real selection automatically.\n\n"
         "Links: [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[LITERATURE_INDEX]]\n"
     )
 
@@ -416,11 +460,14 @@ def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
 def _p2_result_body(model: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
+    fixture = _p2_fixture(model)
     return (
         "# P2 SCOPE Development Result\n\n"
         "## Result\n\n"
         "P2 is ready/planned but not measured. This note deliberately contains no scientific metric.\n\n"
         f"{_p2_readiness_table(model)}\n\n"
+        "## Fixture evidence\n\n"
+        f"The repository-only synthetic fixture is `{fixture.get('status', 'not_executed')}`. It exercised `{fixture.get('synthetic_candidates', 0)}` synthetic candidates across `{fixture.get('synthetic_iterations', 0)}` adaptive iterations, froze `{fixture.get('synthetic_shortlist', 0)}` synthetic finalists, and used `{fixture.get('fixture_selection_exposures', 0)}` fixture-only selection exposure. This is engineering evidence, not retrieval-quality evidence.\n\n"
         "## Method rationale and references\n\n"
         "The baseline family BM25 arm (`R0`) establishes a transparent comparator (U006, U011; see [[LITERATURE_INDEX]]). The 512-token window/MaxP arm (`R0-W`) tests passage granularity without changing the evaluator (U154). The planned R1 arm follows AutoIndex-style representation-program search and keeps the same retrieval/evaluation boundary so the scientific contrast is representation, not provider or model substitution (U154, U011).\n\n"
         "## Interpretation boundary\n\n"
@@ -432,6 +479,30 @@ def _p2_result_body(model: Mapping[str, Any]) -> str:
         "## Canonical sources\n\n"
         "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `control/budgets/p2-r1-primary-v1.yaml` · `control/execution-envelope-p2.yaml`\n\n"
         f"Claim boundary: `{p2.get('claim_boundary', 'no_measured_claim')}`\n"
+    )
+
+
+def _p2_fixture_body(model: Mapping[str, Any]) -> str:
+    fixture = _p2_fixture(model)
+    return (
+        "# P2 Fixture Pilot / รายงาน fixture สังเคราะห์\n\n"
+        "## สถานะตอนนี้\n\n"
+        f"Phase `P2_SCOPE_DEVELOPMENT`, Task `P2.1`: fixture status **{fixture.get('status', 'not_executed')}**. หลักฐานชั้นนี้คือ `{fixture.get('evidence_class', 'fixture')}` และไม่มีอำนาจรองรับข้ออ้างทางวิทยาศาสตร์ (`scientific_authority = {fixture.get('scientific_authority', False)}`).\n\n"
+        "## สิ่งที่ทำแล้ว\n\n"
+        f"ทดสอบ lifecycle แบบสังเคราะห์ครบ `{fixture.get('synthetic_candidates', 0)}` candidates, `{fixture.get('synthetic_iterations', 0)}` adaptive iterations, shortlist `{fixture.get('synthetic_shortlist', 0)}` รายการ และ fixture-only selection exposure `{fixture.get('fixture_selection_exposures', 0)}` ครั้ง. Deterministic rerun = `{fixture.get('deterministic_rerun', 'not_run')}`; negative checks = `{fixture.get('negative_checks_passed', False)}`.\n\n"
+        "## สิ่งที่ไม่ได้ใช้\n\n"
+        f"Protected data accessed = `{fixture.get('protected_data_accessed', False)}` และ measured execution performed = `{fixture.get('measured_execution_performed', False)}`. ไม่ได้เปิด protected store, real selection, final-872, D2 หรือ D3.\n\n"
+        "## หลักฐานและ hash\n\n"
+        f"- Fixture receipt: `{fixture.get('receipt_uri')}` / `{fixture.get('receipt_sha256')}`\n"
+        f"- Execution manifest: `{fixture.get('execution_manifest_uri')}` / `{fixture.get('execution_manifest_sha256')}`\n"
+        f"- Fixture package SHA-256: `{fixture.get('fixture_package_sha256')}`\n\n"
+        "## ความหมายของผล\n\n"
+        "ผลนี้ยืนยันเชิงวิศวกรรมว่า accepted P2 lifecycle ทำงานสอดคล้องกันบน synthetic inputs เท่านั้น ไม่ได้วัด retrieval quality, ไม่ได้สร้าง measured candidate และไม่อนุญาต measured P2 หรือ selection.\n\n"
+        "## สิ่งที่ Owner ต้องทำ\n\n"
+        "ขั้นถัดไปที่ได้รับอนุญาตคือ `Owner-local measured preflight` และต้องเริ่มเป็นงานแยกต่างหาก.\n\n"
+        "## ขอบเขตที่ยังไม่แตะ\n\n"
+        "Real candidates `0 / 32`, real shortlist `0 / 4`, real selection `0 / 1`; final evaluation และ scientific claims ยังปิดอยู่.\n\n"
+        "Links: [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]]\n"
     )
 
 
@@ -810,6 +881,16 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         {**common, "note_id": "P2-SCOPE-DEVELOPMENT-RESULT", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if _p2_measured(model) else "ready", "evidence_maturity": "measured_selection" if _p2_measured(model) else "non_scientific", "claim_level": "descriptive" if _p2_measured(model) else "none", "result_id": p2_result.get("result_id", "P2-SCOPE-DEVELOPMENT"), "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
         _p2_result_body(model),
     )
+    fixture = _p2_fixture(model)
+    fixture_manifest_hashes = (
+        [str(fixture["execution_manifest_sha256"])]
+        if fixture.get("execution_manifest_sha256")
+        else []
+    )
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_FIXTURE_PILOT.md"] = _note(
+        {**common, "note_id": "P2-FIXTURE-PILOT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if fixture.get("status") == "passed" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": ["p2-fixture-pilot-v1"] if fixture.get("executed") else [], "source_manifest_sha256": fixture_manifest_hashes, "related_literature_ids": ["U006", "U011", "U154"]},
+        _p2_fixture_body(model),
+    )
     review = _p2_official_review(model)
     outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"] = _note(
         {**common, "note_id": "P2-OFFICIAL-REVIEW-AUDIT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if review.get("status") == "accepted_static_contract_review" else "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
@@ -966,6 +1047,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     phases = [row for row in model.get("phases", []) if isinstance(row, Mapping)]
     tasks = [row for row in model.get("tasks", []) if isinstance(row, Mapping)]
     p2_review = _p2_official_review(model)
+    p2_fixture = _p2_fixture(model)
 
     phase_lines: list[str] = []
     for phase in phases:
@@ -984,6 +1066,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"- Paid API used: `{model['resources']['paid_api']}`\n"
         f"- Actual cost USD: `{model['resources']['actual_cost_usd']}`\n\n"
         f"P2 official static review: Round `{p2_review.get('final_round', '-')}` / `{p2_review.get('final_verdict', 'not_recorded')}`; evidence class `{p2_review.get('evidence_class', 'static_contract_review')}`.\n\n"
+        f"P2 repository-only fixture: `{p2_fixture.get('status', 'not_executed')}`; evidence class `{p2_fixture.get('evidence_class', 'fixture')}`; scientific authority `{p2_fixture.get('scientific_authority', False)}`.\n\n"
         "D2 and D3 remain Owner-only. Final 872 is still closed.\n"
     )
     phase_task_body = (
@@ -1050,9 +1133,10 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"- P1 CPU baseline is `{state}` with four validated R0/R0-W train/selection slots.\n"
         f"- Package: `{result.get('package_sha256')}`; rigor: `{result.get('rigor_grade')}`.\n"
         f"- MLflow parent + children: `{1 + len(model.get('mlflow_registration', {}).get('children', []))}` runs.\n\n"
-        f"- P2 static review closed at Round `{p2_review.get('final_round', '-')}` with verdict `{p2_review.get('final_verdict', 'not_recorded')}`; no fixture or measured execution occurred.\n\n"
+        f"- P2 static review closed at Round `{p2_review.get('final_round', '-')}` with verdict `{p2_review.get('final_verdict', 'not_recorded')}`.\n"
+        f"- Repository-only P2 fixture is `{p2_fixture.get('status', 'not_executed')}` with `{p2_fixture.get('synthetic_candidates', 0)}` synthetic candidates and no measured execution.\n\n"
         "## Next automatic action\n\n"
-        "P2 is ready but not started. Keep work reversible and CPU-only until a separate P2 action begins; "
+        "P2 remains ready but not measured. The next authorized action is Owner-local measured preflight; "
         "D2 and D3 remain unchanged.\n"
     )
 
@@ -1127,7 +1211,9 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
                 body += (
                     f"- Official static review: Round `{p2_review.get('final_round', '-')}` "
                     f"verdict `{p2_review.get('final_verdict', 'not_recorded')}`; "
-                    f"fixture executed `{p2_review.get('fixture_pilot_executed', False)}`.\n"
+                    f"repository fixture `{p2_fixture.get('status', 'not_executed')}`.\n"
+                    f"- Fixture receipt: `{p2_fixture.get('receipt_uri')}` / `{p2_fixture.get('receipt_sha256')}`.\n"
+                    "- Real candidates, real shortlist, and real selection remain zero.\n"
                     "- Source: `orchestration/audits/p2-readiness/index.json`.\n"
                 )
         outputs[directory / f"phase-{phase_id}.md"] = (
@@ -1143,6 +1229,7 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         / "03_Paper/publications/isai-nlp-2026/provenance/publication-source-lock.json"
     ).resolve()
     readiness = model.get("publication_readiness", {})
+    fixture = _p2_fixture(model)
     lines = ["| Check | Status | Canonical source |", "|---|---|---|"]
     for check in readiness.get("checks", []):
         lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
@@ -1151,8 +1238,9 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"Program state: **{model['project']['state']}**\n\n"
         f"Publication status: **{readiness.get('status', 'unknown')}**\n\n"
         + "\n".join(lines)
-        + "\n\nP1 contains measured train/selection evidence only. D2 and D3 remain Owner-only, "
-        "and this projection does not authorize final evaluation or release.\n"
+        + "\n\nP1 contains measured train/selection evidence only. The P2 lifecycle passed a "
+        f"repository-only synthetic fixture (`{fixture.get('status', 'not_executed')}`), but measured P2 has not started and no P2 scientific claim is available. "
+        "AI-assisted static review and synthetic fixture provenance are archived. D2 and D3 remain Owner-only, and this projection does not authorize final evaluation or release.\n"
     )
     source_lock = {
         "schema_version": "myis.publication-source-lock.v2",
