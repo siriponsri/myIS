@@ -7,6 +7,3 @@
 | `APP-SPARSE-FTS-INDEXES` | retrieval_index | `reference_only` | P1_CPU_BASELINE | protected |
 | `BRAIN-CURATED-MEMORY` | memory_projection | `adapt` | P0_FOUNDATION, P1_CPU_BASELINE, P2_SCOPE_DEVELOPMENT, P3_FINAL, P4_PUBLICATION | no_protected_payloads |
 | `LIT-AUTOINDEX-U154` | literature | `reuse` | P0_FOUNDATION, P2_SCOPE_DEVELOPMENT, P4_PUBLICATION | none |
-
-`APP-DAPFAM-PROTECTED` is pinned by `dapfam-p1-source.v1.json`; measured P1
-uses the local Arrow cache only and forbids live fetch.

@@ -11,7 +11,6 @@ from myis_research.observatory.core import (
     EvidenceRegistry,
     ObservatoryError,
     build_artifact_record,
-    build_run_record,
     canonical_sha256,
     validate_registry,
 )

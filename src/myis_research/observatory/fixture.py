@@ -7,7 +7,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 from .core import (
     EvidenceRegistry,
@@ -20,7 +20,6 @@ from .core import (
     build_result_record,
     build_run_record,
     build_standard_record,
-    canonical_json,
     canonical_sha256,
     validate_registry,
 )
