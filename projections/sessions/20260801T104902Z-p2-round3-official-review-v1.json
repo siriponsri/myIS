@@ -1,0 +1,141 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260801T104902Z-p2-round3-official-review-v1",
+  "run_id": null,
+  "goal_id": "P2_OFFICIAL_ROUND3_REVIEW_CLOSEOUT",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-01T10:49:02Z",
+  "scope": "Archive the three-round P2 official static review, project its aggregate-safe engineering provenance to Dashboard, Obsidian, Brain, Paper, and MLflow, and close Git without fixture, measured execution, or selection exposure.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml and control/execution-envelope-p2.yaml",
+      "scope": "reversible repository-local CPU-only P2 readiness reporting and provenance projection"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "d141206e0dbe9a2f42801c0086b0b849c7b3b540",
+    "dirty_paths": [
+      "projections/sessions/20260801T104902Z-p2-round3-official-review-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Imported a byte-stable official review catalog and checksum tree recording Round 1 revise, Round 2 revise, and Round 3 accept with sanitized OpenAI runtime provenance.",
+      "evidence_refs": [
+        {
+          "path": "orchestration/audits/index.json",
+          "sha256": "4f5c905dd1836357bf381c9c1cbb6dd8859fe31853b45f42327bfb1007826ddd",
+          "locator": "review_runtime and audits[0].rounds"
+        },
+        {
+          "path": "orchestration/audits/SHA256SUMS.txt",
+          "sha256": "5f3d954db081f8d1929779cff30622aa7019d59f7e95c0f05fe03d2e3f70b87d",
+          "locator": "complete root checksum manifest"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added fail-closed audit validation and projected the accepted static review through the shared read model, Dashboard, Obsidian report, Brain generated reports, Paper readiness, and aggregate-only MLflow archive.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/projections/read_model.py",
+          "sha256": "3a3d5946dfb6be0105a06de61ea3977514c33cfbe8e73f6cdb4a25ee72831017",
+          "locator": "_p2_official_review_projection and p2_readiness.official_review"
+        },
+        {
+          "path": "src/myis_research/report_cli.py",
+          "sha256": "db1b9c1d8988812fa0055b144093f1aeb457b2e6681277522c5cc43bdc1059ea",
+          "locator": "_mlflow_archive_index, _p2_official_review_body, and generated projection writers"
+        },
+        {
+          "path": "obsidian_report/05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md",
+          "sha256": "a4b844e7f05d448ec8ae5b3363ba57e2bcb488828b3a288266f2454002770f84",
+          "locator": "complete generated official review note"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The shared projection records the final static verdict as accept while P2 remains ready and planned, with no fixture, measured run, candidate promotion, or selection access.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "bffffe550727e40af144db63bdb75ce80db071986c5906efa8b2556b38b8c7b5",
+          "locator": "p2_readiness.status, official_review, measured_runs, candidate_count, and selection_accesses"
+        },
+        {
+          "path": "mlflow/generated/archive-index.v2.json",
+          "sha256": "6a7c3e182f5eeea1a35e8d937fe369766a3548a91e149a24bc1a17940c8dfab6",
+          "locator": "p2_readiness.official_review and aggregate-only readiness counters"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "Round 3 accept is engineering provenance from a bounded read-only static review and is not scientific evidence or authorization for measured P2, selection, final evaluation, or release.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "7151f01f8286c474978c8482d1204f128df83a3ea1acc6da4174dda91ce4ba9b",
+          "locator": "Official Round 3 P2 static review"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "13011efa0d4df6002d68d0f67fd383b99d19836f60e570b385806838ff0c5224",
+          "locator": "shared revision, source commit, MLflow run ID, and PASS status"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "repository-only-fixture-not-run",
+      "provenance": "agent-observed",
+      "summary": "A repository-only fixture pilot remains a separate reversible next action and was not executed in this session.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-p2-remains-closed",
+      "provenance": "agent-observed",
+      "summary": "Measured P2, selection exposure, final evaluation, and release remain outside this static-review closeout.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
