@@ -1,0 +1,140 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260801T075745Z-p2-contract-repair-v1",
+  "run_id": null,
+  "goal_id": "P2_OFFICIAL_ROUND1_CONTRACT_REPAIR",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-01T07:57:45Z",
+  "scope": "Repair the eight repository-safe P2 contract and state-machine findings from Official Round 1, validate projections, and close Git without measured execution.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml and the P2 execution envelope",
+      "scope": "reversible repository-local CPU-only P2 readiness and contract repair"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "fa209a8187eb87e1951e50c954c9290081d8824c",
+    "dirty_paths": [
+      "projections/sessions/20260801T075745Z-p2-contract-repair-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Implemented recursive protected-payload rejection, canonical profile binding, immutable baseline evidence, adaptive iteration integrity, cross-artifact semantics, and complete selection outcomes.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/p2/contracts.py",
+          "sha256": "58490e97b136fa3e4e3415aeb47e6dd55c6ee57384d0e87691f74353d4f7fda1",
+          "locator": "validate_p2_artifact, validate_p2_aggregate_metric, and validate_p2_package_bundle"
+        },
+        {
+          "path": "src/myis_research/p2/state.py",
+          "sha256": "5a268324bb780a498f0e3e6e8f7747eda5dc1b61b0ded834d9d31f6ee1bf7ef7",
+          "locator": "P2RunStateMachine candidate, baseline, freeze, and selection lifecycle"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Projection promotion must consume a complete semantically validated package graph rather than independently valid artifact fragments.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/projections/read_model.py",
+          "sha256": "927297a8622489d6626fe0cdf846d724b9cea21877cff313f8fcc1fd2271f656",
+          "locator": "_p2_readiness_projection"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added synthetic positive and negative coverage for every Official Round 1 finding without using real DAPFAM inputs or protected identifiers.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_p2_semantic_contracts.py",
+          "sha256": "fa9e5a8238d5196ba6928b7aaf234980b0d9c7df71dab068aa3ec885f76ef5fd",
+          "locator": "synthetic artifact graph and negative contract tests"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The post-commit read model and generated reports passed drift checks after aggregate-only synchronization to an isolated non-Owner MLflow store.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "da0b61694bb817aab8170be97f3fdbe368956962a41727d49571a08bd40c1fa3",
+          "locator": "shared projection revision, hashes, status, and isolated MLflow run pointer"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P2 remains ready and planned but unmeasured; final access, Owner decisions, protected data, GPU, paid APIs, downloads, and provider fallback remain untouched.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "8e5317969a4e595b8686bf2358637995ea570a1291c770a02a30a55704114207",
+          "locator": "p2_readiness status, counters, resources, claim boundary, and gates"
+        },
+        {
+          "path": "HANDOFF.md",
+          "sha256": "079f713fa7457d4cba250a0d1a982f9041769b51997024e675dc700f3f04d53e",
+          "locator": "Official Round 1 P2 contract repair closeout"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "official-round2-not-run",
+      "provenance": "agent-observed",
+      "summary": "Official Round 2 remains unexecuted and requires an explicit follow-up request.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-p2-not-started",
+      "provenance": "agent-observed",
+      "summary": "Measured P2 and selection exposure remain outside this repository-safe repair session.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
