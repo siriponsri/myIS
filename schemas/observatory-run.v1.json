@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-run:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "request_id", "phase_id", "task_id", "status", "execution_class", "evidence_class", "scientific_authority", "claim_boundary", "request_sha256", "profile_sha256", "envelope_sha256", "environment_sha256", "config_sha256", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-run.v1"}, "record_id": {"type": "string"}, "request_id": {"type": "string"}, "phase_id": {"type": "string"}, "task_id": {"type": "string"}, "status": {"enum": ["planned", "running", "succeeded", "failed", "interrupted", "cancelled"]}, "execution_class": {"type": "string"}, "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "envelope_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "environment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "config_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

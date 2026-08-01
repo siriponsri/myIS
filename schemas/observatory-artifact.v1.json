@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-artifact:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "title", "artifact_type", "producing_run_id", "safe_uri", "size_bytes", "content_sha256", "evidence_class", "scientific_authority", "claim_boundary", "validation_status", "record_sha256"],
+  "properties": {"schema_version": {"const": "myis.observatory-artifact.v1"}, "record_id": {"type": "string"}, "title": {"type": "string"}, "artifact_type": {"type": "string"}, "producing_run_id": {"type": "string"}, "safe_uri": {"type": "string", "pattern": "^(git|owner-local|external-store|brain|mlflow)://[A-Za-z0-9._/-]+$"}, "size_bytes": {"type": "integer", "minimum": 0}, "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "validation_status": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

@@ -1,0 +1,511 @@
+{
+  "created_at": "2026-01-01T00:00:00Z",
+  "events": [
+    {
+      "details": {
+        "recovery_id": "obs-recovery-candidate-02"
+      },
+      "event_id": "obs-event-candidate-failed",
+      "event_sha256": "2d8638860be4cac3405656b52ef3c9e6351f40538c3838127519ba78fccf07cd",
+      "event_type": "candidate_failed",
+      "run_id": "obs-run-candidate-02",
+      "schema_version": "myis.observatory-event.v1",
+      "stage": "candidate_generation",
+      "status": "failed",
+      "timestamp": "2026-01-01T00:00:00Z"
+    },
+    {
+      "details": {
+        "artifact_count": 5,
+        "metric_count": 1
+      },
+      "event_id": "obs-event-receipt-closed",
+      "event_sha256": "2507564bd9c44397e569636f2147aeb6b7364ea981190bf05ca3beb68bedf92c",
+      "event_type": "receipt_closed",
+      "run_id": "obs-run-parent",
+      "schema_version": "myis.observatory-event.v1",
+      "stage": "post_run",
+      "status": "succeeded",
+      "timestamp": "2026-01-01T00:00:00Z"
+    },
+    {
+      "details": {},
+      "event_id": "obs-event-recovery-complete",
+      "event_sha256": "73150a11e60af02738f39e769fb9df739f5175a86555ba8828306ef25f78a1f2",
+      "event_type": "recovery_complete",
+      "run_id": "obs-run-candidate-02",
+      "schema_version": "myis.observatory-event.v1",
+      "stage": "post_run",
+      "status": "succeeded",
+      "timestamp": "2026-01-01T00:00:00Z"
+    },
+    {
+      "details": {},
+      "event_id": "obs-event-request-validated",
+      "event_sha256": "7af18ddf0049e5b802b6704ecc55f2fb8e6c0190fe8869b20a68347676c36e41",
+      "event_type": "request_validated",
+      "run_id": "obs-run-parent",
+      "schema_version": "myis.observatory-event.v1",
+      "stage": "pre_run",
+      "status": "passed",
+      "timestamp": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "records": {
+    "artifacts": [
+      {
+        "artifact_type": "failure",
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "6e1c142c46baf391804d2f64d3463097dc138c19638d2301e486dd60ca44f2e3",
+        "evidence_class": "fixture",
+        "parent_artifact_ids": [],
+        "producing_run_id": "obs-run-candidate-02",
+        "record_id": "obs-artifact-failure",
+        "record_sha256": "d22faf72ede906f80bfc9efdffb43995a2b13022307f1ad95cef6f3bb56de972",
+        "safe_uri": "git://outputs/observatory/fixture-v1/failure.json",
+        "schema_version": "myis.observatory-artifact.v1",
+        "scientific_authority": false,
+        "size_bytes": 28,
+        "summary": "Synthetic aggregate-safe failure artifact",
+        "title": "Sanitized failure note",
+        "validation_status": "validated"
+      },
+      {
+        "artifact_type": "metric",
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "3344663bce4e9a5e9ade6ba2513a5461dcfa823ad14b3f621c4d5034b4b1c257",
+        "evidence_class": "fixture",
+        "parent_artifact_ids": [],
+        "producing_run_id": "obs-run-candidate-01",
+        "record_id": "obs-artifact-metric-01",
+        "record_sha256": "d5e4866e453ce49174caddfada77e839d4bf46dee89f3ae9ec6b6304306af14f",
+        "safe_uri": "git://outputs/observatory/fixture-v1/metric-01.json",
+        "schema_version": "myis.observatory-artifact.v1",
+        "scientific_authority": false,
+        "size_bytes": 24,
+        "summary": "Synthetic aggregate-safe metric artifact",
+        "title": "Validated synthetic metric",
+        "validation_status": "validated"
+      },
+      {
+        "artifact_type": "output",
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "0574fe9abaa7803664f6f8bccad86b58d947c3cd0179e595167b9a8197342c78",
+        "evidence_class": "fixture",
+        "parent_artifact_ids": [],
+        "producing_run_id": "obs-run-candidate-01",
+        "record_id": "obs-artifact-output-01",
+        "record_sha256": "5420f250b3bf700105961bc09728aa064f395a89e7562a5de4bfe684f2b4fa19",
+        "safe_uri": "git://outputs/observatory/fixture-v1/candidate-01-output.json",
+        "schema_version": "myis.observatory-artifact.v1",
+        "scientific_authority": false,
+        "size_bytes": 17,
+        "summary": "Synthetic aggregate-safe output artifact",
+        "title": "Candidate 01 output",
+        "validation_status": "validated"
+      },
+      {
+        "artifact_type": "request",
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "a410a4db2ee9a529b44e6b94548f02f01bac90c4d31fce424e7e77becd70b8bf",
+        "evidence_class": "fixture",
+        "parent_artifact_ids": [],
+        "producing_run_id": "obs-run-parent",
+        "record_id": "obs-artifact-request",
+        "record_sha256": "87b7ff8b7ede12ecf4a8d83c60313000d0a2d76e8052895c6b9f8d7c49c13425",
+        "safe_uri": "git://outputs/observatory/fixture-v1/request.json",
+        "schema_version": "myis.observatory-artifact.v1",
+        "scientific_authority": false,
+        "size_bytes": 17,
+        "summary": "Synthetic aggregate-safe request artifact",
+        "title": "Request envelope",
+        "validation_status": "validated"
+      },
+      {
+        "artifact_type": "report",
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "bb4a023bf65d9355e0a0bbef744ea32e68905ec3f85320ee4ea25c9145a225d7",
+        "evidence_class": "fixture",
+        "parent_artifact_ids": [],
+        "producing_run_id": "obs-run-parent",
+        "record_id": "obs-artifact-summary",
+        "record_sha256": "4bdfd0c827933d6286c755cd63857a9262d915afc1f26da37df2b144f2b07606",
+        "safe_uri": "git://outputs/observatory/fixture-v1/RUN_SUMMARY.md",
+        "schema_version": "myis.observatory-artifact.v1",
+        "scientific_authority": false,
+        "size_bytes": 18,
+        "summary": "Synthetic aggregate-safe report artifact",
+        "title": "Human-readable run summary",
+        "validation_status": "validated"
+      }
+    ],
+    "candidates": [
+      {
+        "candidate_index": 1,
+        "claim_boundary": "engineering_provenance_only",
+        "evidence_class": "fixture",
+        "prompt_id": "obs-prompt-retrieval-v1",
+        "record_id": "obs-candidate-01",
+        "record_sha256": "37aa0d0eae57273dbe8c06c312f6eb3968e035ae6df42d8a62fdb270efc40576",
+        "recovery": false,
+        "run_id": "obs-run-parent",
+        "schema_version": "myis.observatory-candidate.v1",
+        "scientific_authority": false,
+        "status": "succeeded",
+        "summary": "Synthetic candidate completed successfully"
+      },
+      {
+        "candidate_index": 2,
+        "claim_boundary": "engineering_provenance_only",
+        "evidence_class": "fixture",
+        "prompt_id": "obs-prompt-retrieval-v2",
+        "record_id": "obs-candidate-02",
+        "record_sha256": "b26a0fb9dbbcb3f878c00f9fcbdcddd0da36f292c3e12bcaee5fb0c22ad1e035",
+        "recovery": true,
+        "run_id": "obs-run-parent",
+        "schema_version": "myis.observatory-candidate.v1",
+        "scientific_authority": false,
+        "status": "failed_recovered",
+        "summary": "Synthetic candidate failed and was recovered"
+      }
+    ],
+    "configs": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "config_id": "observatory-fixture",
+        "content_sha256": "d39cccac0e7292d435b124d11aaccfa3e7dc160abf9e16efa9d70f7b6fe48a20",
+        "cpu_only": true,
+        "evidence_class": "fixture",
+        "paid_api": false,
+        "record_id": "obs-config-fixture-v1",
+        "record_sha256": "2827a87c63bae155c8ca878aa7da7b3b865eef3539707b6b0eb1d5895f087c71",
+        "schema_version": "myis.observatory-config.v1",
+        "scientific_authority": false,
+        "summary": "Fixed synthetic capture configuration",
+        "version": "1"
+      }
+    ],
+    "decisions": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "evidence_class": "fixture",
+        "next_action": "Review Observatory receipt before Owner-local measured preflight",
+        "record_id": "obs-decision-next-owner",
+        "record_sha256": "de2a419ade6a5d47d98aa4030ad5b1e85f4063750d66c5502d5aa453e814844b",
+        "result_id": "obs-result-fixture",
+        "schema_version": "myis.observatory-decision.v1",
+        "scientific_authority": false,
+        "status": "waiting_owner",
+        "summary": "The next action remains reversible and does not start measured P2"
+      }
+    ],
+    "environments": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "dependency_lock_sha256": "5a29624d2b17e355c556598237e731611ae7ea5d580068f3b36e5d14624702e4",
+        "environment_lock_sha256": "4c1eb183d6b20fb78684ffb654b2736b73411fef3facaecddf534a939bd10d8c",
+        "evidence_class": "fixture",
+        "platform": "windows-cpu",
+        "record_id": "obs-environment-python311",
+        "record_sha256": "5820ac0ffaa6004b95eee7e30b39bc25c76154fe0cb8d15599b22e4e6d6196bb",
+        "runtime": "python-3.11",
+        "schema_version": "myis.observatory-environment.v1",
+        "scientific_authority": false,
+        "summary": "Sanitized local runtime lock"
+      }
+    ],
+    "failures": [
+      {
+        "checkpoint": "candidate-02-start",
+        "claim_boundary": "engineering_provenance_only",
+        "counters_changed": false,
+        "evidence_class": "fixture",
+        "partial_artifact_ids": [
+          "obs-artifact-failure"
+        ],
+        "reason": "synthetic timeout after checkpoint",
+        "record_id": "obs-failure-candidate-02",
+        "record_sha256": "f1c1018443ea185b4b04c3d2383810e614b9441439984b53d0ef562bef875a02",
+        "recovery_id": "obs-recovery-candidate-02",
+        "retryable": true,
+        "run_id": "obs-run-candidate-02",
+        "schema_version": "myis.observatory-failure.v1",
+        "scientific_authority": false,
+        "stage": "candidate_generation",
+        "summary": "Failure is retained without promoting a metric"
+      }
+    ],
+    "interpretations": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "does_not_support": "causal or scientific effectiveness",
+        "evidence_class": "fixture",
+        "record_id": "obs-interpretation-fixture",
+        "record_sha256": "70b8ddf8d6a0238c33ab7c84ec69422496784979f6973cd3d5c34658a744afec",
+        "result_id": "obs-result-fixture",
+        "schema_version": "myis.observatory-interpretation.v1",
+        "scientific_authority": false,
+        "status": "engineering_only",
+        "summary": "The capture layer preserved a failed child and a valid recovery path",
+        "supports": "observability readiness"
+      }
+    ],
+    "metrics": [
+      {
+        "candidate_id": "obs-candidate-01",
+        "claim_boundary": "engineering_provenance_only",
+        "cutoff": 10,
+        "data_role": "synthetic",
+        "denominator": "synthetic_items",
+        "direction": "maximize",
+        "evidence_class": "fixture",
+        "evidence_role": "diagnostic",
+        "n": 8,
+        "name": "recall_at_10",
+        "record_id": "obs-metric-candidate-01-recall",
+        "record_sha256": "7a51f2d9c366bab83f18dc438b64efecda2bc83837a226bf5466d114bd6b7d49",
+        "result_id": null,
+        "run_id": "obs-run-candidate-01",
+        "schema_version": "myis.observatory-metric.v1",
+        "scientific_authority": false,
+        "scope": "ALL",
+        "summary": "Synthetic diagnostic value; not scientific performance",
+        "uncertainty": {
+          "reason": "fixture_only",
+          "type": "none"
+        },
+        "value": 0.72
+      }
+    ],
+    "prompts": [
+      {
+        "candidate_ids": [
+          "obs-candidate-01"
+        ],
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "48aac0c2569cf036c46d5f2ccb4028025f178b33f7cece926075922785f663fc",
+        "evidence_class": "fixture",
+        "family": "retrieval",
+        "frozen": true,
+        "parent_prompt_id": null,
+        "record_id": "obs-prompt-retrieval-v1",
+        "record_sha256": "874acc09ff8db73d08d6d46439997a69080e1fe59ad3b44b5254ed65bb622106",
+        "role": "candidate_generation",
+        "schema_version": "myis.observatory-prompt.v1",
+        "scientific_authority": false,
+        "source_uri": "owner-local://prompts/retrieval-v1",
+        "summary": "Frozen synthetic retrieval instruction; full text remains outside Git",
+        "version": "1"
+      },
+      {
+        "candidate_ids": [
+          "obs-candidate-02"
+        ],
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "8f5dc2db2683e9729cd7e352eb96ad414c9fe7d0e89cb4bbc54aac4bf30bfc9e",
+        "evidence_class": "fixture",
+        "family": "retrieval",
+        "frozen": true,
+        "parent_prompt_id": "obs-prompt-retrieval-v1",
+        "record_id": "obs-prompt-retrieval-v2",
+        "record_sha256": "733dbc6e655f712eac7ad85f7068d6b8ff4e6d5d6939f609424fd41b76c0d66c",
+        "role": "candidate_generation",
+        "schema_version": "myis.observatory-prompt.v1",
+        "scientific_authority": false,
+        "source_uri": "owner-local://prompts/retrieval-v2",
+        "summary": "Lineage child of the first synthetic retrieval instruction",
+        "version": "2"
+      }
+    ],
+    "recoveries": [
+      {
+        "action": "retry_from_checkpoint",
+        "claim_boundary": "engineering_provenance_only",
+        "evidence_class": "fixture",
+        "failure_id": "obs-failure-candidate-02",
+        "metric_promotion": false,
+        "outcome": "recovered_as_engineering_evidence",
+        "record_id": "obs-recovery-candidate-02",
+        "record_sha256": "696280ab0fd7b6be83ff84fb3f47f00694c8298942d1c179c6b55aa108328c7e",
+        "run_id": "obs-run-candidate-02",
+        "schema_version": "myis.observatory-recovery.v1",
+        "scientific_authority": false,
+        "summary": "Recovery restarted the failed synthetic branch"
+      }
+    ],
+    "requests": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "envelope_sha256": "4efdc6e3f128df3362c01946874f4989231de99e737ab487a5958b040910961f",
+        "evidence_class": "fixture",
+        "measured_execution": false,
+        "phase_id": "P2_SCOPE_DEVELOPMENT",
+        "profile_sha256": "227da7444adc7481851272e23a4f7abbeb968eb16c94fd452490ed4808eac465",
+        "protected_data_accessed": false,
+        "record_id": "obs-request-fixture-v1",
+        "record_sha256": "d559a5bc3ef0ca7a9723646c358887f2a3b25cd106368adf599c9a6ba9ea805a",
+        "request_sha256": "eba8f8306e5cfcf86f0f5094277ab326dcdc10bc8cbf9609f9118a479ea45bd8",
+        "schema_version": "myis.observatory-request.v1",
+        "scientific_authority": false,
+        "summary": "Synthetic request used to exercise the evidence capture lifecycle",
+        "task_id": "P2.1"
+      }
+    ],
+    "results": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "does_not_support": "measured P2 performance or a publication claim",
+        "evidence_class": "fixture",
+        "evidence_maturity": "fixture",
+        "metric_ids": [
+          "obs-metric-candidate-01-recall"
+        ],
+        "output_artifact_ids": [
+          "obs-artifact-output-01"
+        ],
+        "record_id": "obs-result-fixture",
+        "record_sha256": "3bb5c5b3a4ba5d5f335c61b43906141f59881c6e3ad9da3659ac3e0514b9a2c3",
+        "run_id": "obs-run-parent",
+        "schema_version": "myis.observatory-result.v1",
+        "scientific_authority": false,
+        "summary": "Synthetic result demonstrates a complete aggregate-only evidence chain",
+        "supports": "capture, lineage, and validation behavior",
+        "validity": "valid_for_fixture"
+      }
+    ],
+    "runs": [
+      {
+        "artifact_ids": [],
+        "candidate_ids": [
+          "obs-candidate-01"
+        ],
+        "claim_boundary": "engineering_provenance_only",
+        "config_sha256": "d39cccac0e7292d435b124d11aaccfa3e7dc160abf9e16efa9d70f7b6fe48a20",
+        "cost_usd": 0.0,
+        "counters_after": {},
+        "counters_before": {},
+        "ended_at": "2026-01-01T00:00:05Z",
+        "envelope_sha256": "4efdc6e3f128df3362c01946874f4989231de99e737ab487a5958b040910961f",
+        "environment_sha256": "4c1eb183d6b20fb78684ffb654b2736b73411fef3facaecddf534a939bd10d8c",
+        "evidence_class": "fixture",
+        "execution_class": "fixture",
+        "exit_code": 0,
+        "git_commit": "0000000000000000000000000000000000000000",
+        "parent_run_id": "obs-run-parent",
+        "phase_id": "P2_SCOPE_DEVELOPMENT",
+        "profile_sha256": "227da7444adc7481851272e23a4f7abbeb968eb16c94fd452490ed4808eac465",
+        "prompt_ids": [
+          "obs-prompt-retrieval-v1"
+        ],
+        "record_id": "obs-run-candidate-01",
+        "record_sha256": "3710981eb97b3a0569eb3719b3d2a0a3b1b97fc58f0913470f33a6f17055af0e",
+        "request_id": "obs-request-fixture-v1",
+        "request_sha256": "eba8f8306e5cfcf86f0f5094277ab326dcdc10bc8cbf9609f9118a479ea45bd8",
+        "runtime_wall_seconds": 5,
+        "schema_version": "myis.observatory-run.v1",
+        "scientific_authority": false,
+        "started_at": "2026-01-01T00:00:00Z",
+        "status": "succeeded",
+        "summary": "Synthetic candidate branch completed",
+        "task_id": "P2.1"
+      },
+      {
+        "artifact_ids": [],
+        "candidate_ids": [
+          "obs-candidate-02"
+        ],
+        "claim_boundary": "engineering_provenance_only",
+        "config_sha256": "d39cccac0e7292d435b124d11aaccfa3e7dc160abf9e16efa9d70f7b6fe48a20",
+        "cost_usd": 0.0,
+        "counters_after": {},
+        "counters_before": {},
+        "ended_at": "2026-01-01T00:00:04Z",
+        "envelope_sha256": "4efdc6e3f128df3362c01946874f4989231de99e737ab487a5958b040910961f",
+        "environment_sha256": "4c1eb183d6b20fb78684ffb654b2736b73411fef3facaecddf534a939bd10d8c",
+        "evidence_class": "fixture",
+        "execution_class": "fixture",
+        "exit_code": 1,
+        "failure_class": "synthetic_timeout",
+        "git_commit": "0000000000000000000000000000000000000000",
+        "parent_run_id": "obs-run-parent",
+        "phase_id": "P2_SCOPE_DEVELOPMENT",
+        "profile_sha256": "227da7444adc7481851272e23a4f7abbeb968eb16c94fd452490ed4808eac465",
+        "prompt_ids": [
+          "obs-prompt-retrieval-v2"
+        ],
+        "record_id": "obs-run-candidate-02",
+        "record_sha256": "bc6e548ccbec60efb4db92fb66a7b25de8b925d95304f682d238739952c7fe96",
+        "request_id": "obs-request-fixture-v1",
+        "request_sha256": "eba8f8306e5cfcf86f0f5094277ab326dcdc10bc8cbf9609f9118a479ea45bd8",
+        "runtime_wall_seconds": 4,
+        "schema_version": "myis.observatory-run.v1",
+        "scientific_authority": false,
+        "started_at": "2026-01-01T00:00:00Z",
+        "status": "failed",
+        "summary": "Synthetic candidate branch failed before metric promotion",
+        "task_id": "P2.1"
+      },
+      {
+        "artifact_ids": [],
+        "candidate_ids": [
+          "obs-candidate-01",
+          "obs-candidate-02"
+        ],
+        "claim_boundary": "engineering_provenance_only",
+        "config_sha256": "d39cccac0e7292d435b124d11aaccfa3e7dc160abf9e16efa9d70f7b6fe48a20",
+        "cost_usd": 0.0,
+        "counters_after": {
+          "candidate_count": 0,
+          "measured_runs": 0,
+          "selection_accesses": 0
+        },
+        "counters_before": {
+          "candidate_count": 0,
+          "measured_runs": 0,
+          "selection_accesses": 0
+        },
+        "ended_at": "2026-01-01T00:00:10Z",
+        "envelope_sha256": "4efdc6e3f128df3362c01946874f4989231de99e737ab487a5958b040910961f",
+        "environment_sha256": "4c1eb183d6b20fb78684ffb654b2736b73411fef3facaecddf534a939bd10d8c",
+        "evidence_class": "fixture",
+        "execution_class": "fixture",
+        "exit_code": 0,
+        "git_commit": "0000000000000000000000000000000000000000",
+        "phase_id": "P2_SCOPE_DEVELOPMENT",
+        "profile_sha256": "227da7444adc7481851272e23a4f7abbeb968eb16c94fd452490ed4808eac465",
+        "prompt_ids": [
+          "obs-prompt-retrieval-v1",
+          "obs-prompt-retrieval-v2"
+        ],
+        "record_id": "obs-run-parent",
+        "record_sha256": "f0476b8ae5c9743f918e42ec7c30c5d251082f2fff7a8696a2d837c1b6166aba",
+        "request_id": "obs-request-fixture-v1",
+        "request_sha256": "eba8f8306e5cfcf86f0f5094277ab326dcdc10bc8cbf9609f9118a479ea45bd8",
+        "runtime_wall_seconds": 10,
+        "schema_version": "myis.observatory-run.v1",
+        "scientific_authority": false,
+        "started_at": "2026-01-01T00:00:00Z",
+        "status": "succeeded",
+        "summary": "Synthetic parent run captured two candidate branches",
+        "task_id": "P2.1"
+      }
+    ],
+    "schemas": [
+      {
+        "claim_boundary": "engineering_provenance_only",
+        "content_sha256": "97d464aa62b3e2cce48d30b838833d8724f41271e9fa80ff8f2f5ec316d08ab2",
+        "evidence_class": "fixture",
+        "record_id": "obs-schema-registry-v1",
+        "record_sha256": "b56a8b4b9b88e15146ebb126ca534abd166680aa4c2e172a6d4f9eda47eaab7f",
+        "schema_id": "observatory-registry",
+        "schema_version": "myis.observatory-schema.v1",
+        "scientific_authority": false,
+        "summary": "Observatory schema registry snapshot",
+        "version": "1"
+      }
+    ]
+  },
+  "registry_id": "observatory-fixture-v1",
+  "registry_sha256": "79fa748b3f807071fbdeb42f871ecd0f2810d3f2837288fd87890e169a7abc7f",
+  "schema_version": "myis.observatory-registry.v1"
+}

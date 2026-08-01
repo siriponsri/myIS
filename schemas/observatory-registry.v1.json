@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-registry:v1",
+  "title": "myIS repository-safe observatory registry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry_id", "created_at", "records", "events", "registry_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-registry.v1"},
+    "registry_id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,127}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "records": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "object"}}},
+    "events": {"type": "array", "items": {"type": "object"}},
+    "registry_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
