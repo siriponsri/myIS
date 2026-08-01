@@ -1,0 +1,165 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260801T124832Z-p2-fixture-pilot-v1",
+  "run_id": "p2-fixture-pilot-v1-run",
+  "goal_id": "P2_FIXTURE_PILOT_GOAL",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-01T12:48:32Z",
+  "scope": "Execute and close the repository-only deterministic P2.1 synthetic fixture, validate its fail-closed boundary, mirror aggregate-only provenance to isolated MLflow, synchronize Dashboard, Obsidian, Brain, and Paper, and stop before Owner-local measured preflight.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Standing D1 authorization plus the Owner-revised Section 7 interpretation in the current session",
+      "scope": "Repository-only reversible CPU fixture execution with canonical request metadata separated from fixture execution metadata"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "0c2dbcc3201e67407e974e8e7afeec34045d3a49",
+    "dirty_paths": [
+      "projections/sessions/20260801T124832Z-p2-fixture-pilot-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner-revised",
+      "summary": "The Owner required the canonical request to remain strictly myis.p2-request.v1 and directed fixture classification, scientific authority, measured execution, and protected-access flags to the execution manifest and final fixture receipt instead.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "The isolated P2 fixture completed two matching lifecycle runs with 32 synthetic candidates, five adaptive iterations, four frozen finalists, one fixture-only selection exposure, 94 rejected negative probes, and zero real counters.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json",
+          "sha256": "a042e7c2efeb7126c25a545ce63c1a86017191844306d8719daac61473ed496f",
+          "locator": "fixture_status, synthetic counts, deterministic_rerun, negative_check_count, and zero real counters"
+        },
+        {
+          "path": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json",
+          "sha256": "7e05a3e9f020bacb15147e2cf019f488d4ec5b48ae9f304ca101ad5c23064d28",
+          "locator": "stage, evidence_class, method fixture metadata, resources, and empty metrics"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The validated fixture receipt was projected through the shared read model to Dashboard, Obsidian, Brain, Paper, the MLflow archive index, and an isolated aggregate-only myis-system fixture run.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/p2/index.json",
+          "sha256": "78df4c38cabc8253cc2d902bbfd7e59df0bf1648d3220348d312d967e381e517",
+          "locator": "fixture catalog, official review runtime, artifact hashes, MLflow run ID, and next action"
+        },
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "14ea08c955ea36ceccd461344527b7060d620ad734419726d3b6d4001fc3e032",
+          "locator": "p2_readiness.fixture_pilot and measured_runs, candidate_count, shortlist_count, selection_accesses"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "02029029049267191e4a7aa83e4ecebb2cfff6faf4edffd679d9a94a68ab93a8",
+          "locator": "shared projection revision, aggregate MLflow run ID, and PASS status"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "GitHub Actions run 30700221344 exposed a Linux-only failure in the Windows absolute owner-path negative probe; the validator was repaired to apply both POSIX and Windows path semantics without changing accepted contracts.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/p2/fixture.py",
+          "sha256": "241a67beb3a16f6f3c98a3201e1e3ad3e2df8ea4bbf1eb4fe52814df45725608",
+          "locator": "_assert_fixture_extra_boundary cross-platform absolute path rejection"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "GitHub Actions run 30700394815 completed successfully for revision 0c2dbcc3201e67407e974e8e7afeec34045d3a49, including tests, layout and projection validation, P2 readiness checks, protected-store closure checks, archive decoupling, and whitespace validation.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The repository-only fixture pilot is engineering evidence that the accepted P2 lifecycle executes coherently on synthetic inputs. It is not measured scientific evidence and does not authorize measured P2 or selection.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "abf588ca04fe6e5f4cdd312023e887e3b2f1ef1166ae9f654334652e9d68ed4e",
+          "locator": "P2.1 repository-only fixture closeout and Next action"
+        },
+        {
+          "path": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json",
+          "sha256": "a042e7c2efeb7126c25a545ce63c1a86017191844306d8719daac61473ed496f",
+          "locator": "evidence_class, scientific_authority, measured_execution_performed, and protected_data_accessed"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/fixtures/p2/index.json",
+    "manifest": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json",
+    "mlflow_receipts": [
+      "outputs/fixtures/p2/p2-fixture-pilot-v1.mlflow-registration.json",
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-measured-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local measured preflight remains the next authorized action and was not run automatically.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-p2-not-started",
+      "provenance": "agent-observed",
+      "summary": "Measured P2 has not started and measured_runs remains zero.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "selection-remains-closed",
+      "provenance": "agent-observed",
+      "summary": "Real selection remains closed and selection_accesses remains zero.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "final-remains-closed",
+      "provenance": "agent-observed",
+      "summary": "Final evaluation remains closed; D2 and D3 were not changed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
