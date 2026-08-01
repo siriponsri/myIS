@@ -479,7 +479,8 @@ def test_whatif_rejects_constraint_only_nodes_before_codex_call(
     )
     assert completed.returncode != 0
     assert expected_path in completed.stderr
-    assert "const-only and enum-only nodes are invalid" in completed.stderr
+    # Windows PowerShell can wrap redirected error text in the middle of a token.
+    assert "const-onlyandenum-onlynodesareinvalid" in "".join(completed.stderr.split())
     assert not Path(environment["MOCK_CODEX_TRACE"]).exists()
     assert list(output.iterdir()) == []
 

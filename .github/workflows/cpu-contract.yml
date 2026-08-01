@@ -39,22 +39,8 @@ jobs:
           uv run --no-sync pytest -q tests/test_p2_budget_contracts.py tests/test_p2_freeze_barrier.py tests/test_p2_cli.py tests/test_p2_dashboard_projection.py tests/test_p2_mlflow_projection.py tests/test_provider_switching_static.py
           uv run --no-sync python -c "from pathlib import Path; from myis_research.p2.contracts import load_profile; p=load_profile(Path('.')); assert p.payload['limits']['max_candidates_total']==32; assert p.payload['runtime']['max_wall_clock_seconds']==259200; assert p.payload['runtime']['per_candidate_timeout_seconds']==10800"
       - name: Keep P2 selection and protected stores closed
-        shell: bash
-        run: |
-          if rg -n 'final-872|D2_OPEN_FINAL|D3_SUBMIT_RELEASE' src/myis_research/p2_cli.py; then
-            echo 'P2 readiness CLI must not open final gates'
-            exit 1
-          fi
+        run: uv run --no-sync python .github/scripts/check_policy.py --repository-root . p2-closure
       - name: Reject archive runtime coupling
-        shell: bash
-        run: |
-          if rg -n 'archive/old-layout|archive\\old-layout|01_evidence' src scripts dashboard --glob '*.py' --glob '*.sh' --glob '*.js' --glob '*.html'; then
-            echo 'archive coupling or retired active path found'
-            exit 1
-          fi
-          if rg -n 'G[0-8]|F1/G1|Track [CS]' src/myis_research/dashboard/app.py src/myis_research/mlflow_mirror.py dashboard/index.html dashboard/assets --glob '*.py' --glob '*.js' --glob '*.html' --glob '*.css'; then
-            echo 'retired gate vocabulary found in active dashboard or MLflow runtime'
-            exit 1
-          fi
+        run: uv run --no-sync python .github/scripts/check_policy.py --repository-root . archive-runtime
       - name: Check diff whitespace
         run: git diff --check
