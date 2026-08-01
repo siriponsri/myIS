@@ -1,0 +1,23 @@
+{
+  "schema_version": "myis.official-review-metadata.v1",
+  "round": 1,
+  "task_id": "p2-readiness-first-review",
+  "verdict": "revise",
+  "invoked_at_utc": "2026-08-01T07:03:13.825Z",
+  "reviewed_commit": "21593e46caaf7347cfaf113cb86d3b4b4dbf7ca3",
+  "provider": "openai",
+  "model": "gpt-5.6-sol",
+  "codex_cli_version": "0.146.0",
+  "sandbox": "read-only",
+  "approval": "never",
+  "reasoning_effort": "none",
+  "exit_code": 0,
+  "timeout": false,
+  "protected_data_accessed": false,
+  "measured_execution_performed": false,
+  "runtime_output_filename": "official-research-20260801T070313825Z-5daa6cb1.json",
+  "source_provenance": "exact_uploaded_runtime_result",
+  "source_note": "result.json preserves the uploaded Official Codex output bytes.",
+  "prompt_sha256": "543c71d611bbadcd9bd3ed6649b76f8efdee10e42bb94ab48a2fd54e0eb01d51",
+  "result_sha256": "e385f10b4f9419625ef3433dbe18398660b6c956a31da7d0c9ab0492b3bead28"
+}

@@ -21,6 +21,15 @@ def test_dashboard_exposes_p2_readiness_without_metrics_or_selection() -> None:
     assert p2["measured_runs"] == 0
     assert p2["selection_accesses"] == 0
     assert p2["freeze_barrier"]["status"] == "not_started"
+    review = p2["official_review"]
+    assert review["status"] == "accepted_static_contract_review"
+    assert review["round_count"] == 3
+    assert review["final_round"] == 3
+    assert review["final_verdict"] == "accept"
+    assert review["reviewed_commit"] == "81bb15bdf5753fb8c5b30d25aab51be1ec0b798f"
+    assert review["fixture_pilot_executed"] is False
+    assert review["protected_data_accessed"] is False
+    assert review["measured_execution_performed"] is False
     overview = client.get("/api/v2/overview", headers=HEADERS).json()
     assert overview["p2_readiness"] == p2
 
@@ -31,3 +40,4 @@ def test_dashboard_frontend_mentions_p2_freeze_and_budget_state() -> None:
     assert "selection_exposure_limit" in source
     assert "max_wall_clock_seconds" in source
     assert "network_model_download" in source
+    assert "official_review" in source

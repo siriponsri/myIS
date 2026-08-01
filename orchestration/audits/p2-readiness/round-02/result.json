@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "task_id": "p2-readiness-round2",
+  "round": 2,
+  "verdict": "revise",
+  "summary": "Round 1 repairs are substantially implemented for recursive aggregate-only rejection, canonical budget binding, adaptive iteration membership and stopping, package-graph validation, one-shot selection completeness, and negative synthetic coverage. Two material contract gaps remain: candidate train outcomes are still untyped scalar scores, and baseline reproduction is neither anchored to immutable prior baseline evidence nor reconciled with the baseline candidate's ledger score. Repository-only fixture/pilot execution should not yet be accepted as scientifically contract-safe.",
+  "major_risks": [
+    "Adaptive ranking, early stopping, and shortlist construction consume candidate-ledger `train_score` numbers without binding metric name, split, scope, denominator, evidence role, or n. A syntactically valid package could therefore make decisions using a metric other than the declared train/OUT Recall@100 primary contract.",
+    "The baseline gate accepts caller-supplied `expected_metric` and `tolerance` after train outcomes exist, without a hash reference to preregistered immutable P1 baseline evidence. Its observed result is also not required to equal the same candidate's ledger `train_score`, allowing mutually inconsistent baseline facts to pass package validation."
+  ],
+  "publication_opportunities": [
+    "After the remaining bindings are repaired, the package design provides a strong auditable basis for reporting deterministic adaptive search, a pre-selection freeze barrier, and complete aggregate-only selection evaluation."
+  ],
+  "required_changes": [
+    "Replace or supplement every candidate `train_score` with the canonical aggregate metric object, and require train/OUT/primary Recall@100 semantics with consistent denominator and n before deriving iteration best scores, early stopping, tie rejection, or shortlist membership. Add negative tests for wrong split, scope, evidence role, denominator, n, and metric identity.",
+    "Bind baseline expectation and tolerance before evaluation to an immutable prior baseline artifact using its repository-safe SHA-256 and precise metric locator. Package validation must resolve that reference and verify the expected metric and tolerance against it.",
+    "Require the baseline reproduction result value and metric identity to match the baseline candidate's recorded train outcome. Add a negative cross-artifact test where the receipt passes its embedded expectation but disagrees with the ledger."
+  ],
+  "optional_changes": [
+    "Constrain baseline reproduction explicitly to train/OUT/primary in semantic validation, rather than relying only on the general aggregate metric schema.",
+    "Document in the package contract whether all candidate train metrics must share the same n; if they must, validate that invariant across the complete ledger."
+  ],
+  "evidence_gaps": [
+    "No tests or fixture pilots were executed because the review was restricted to static inspection; passing claims in HANDOFF.md and the session capsule were treated as reported provenance only.",
+    "The fixture-pilot CLI implementation and projection implementation were outside the allowed inspection set, so their runtime safety could not be independently inspected; only the permitted P2 tests describing their expected behavior were reviewed.",
+    "Protected stores, raw data, queries, qrels, query IDs, membership, per-query outcomes, selection contents, final-872, and credentials were not accessed."
+  ],
+  "protected_data_accessed": false,
+  "measured_execution_performed": false,
+  "recommended_next_action": "Make the three repository-safe contract repairs above, add the corresponding negative synthetic tests, and request a focused static Round 3 review before any measured P2 run or selection exposure."
+}

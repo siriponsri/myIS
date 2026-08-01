@@ -1,0 +1,19 @@
+{
+  "schema_version": "myis.official-review-incident.v1",
+  "occurred_at_utc": "2026-08-01T06:04:25.152Z",
+  "task_id": "p2-readiness-first-review",
+  "stage": "structured_output_request_validation",
+  "exit_code": 1,
+  "timeout": false,
+  "provider": "openai",
+  "model": "gpt-5.6-sol",
+  "error_type": "invalid_request_error",
+  "error_code": "invalid_json_schema",
+  "message": "Invalid schema for response_format 'codex_output_schema': In context=('properties', 'schema_version'), schema must have a 'type' key.",
+  "result_file_created": false,
+  "resolution_commit": "21593e46caaf7347cfaf113cb86d3b4b4dbf7ca3",
+  "resolution_summary": "Added explicit type=string to schema_version and recursive Structured Outputs preflight. The successful Round 1 invocation followed after this repair.",
+  "protected_data_accessed": false,
+  "measured_execution_performed": false,
+  "sanitization_note": "Session ID, local absolute paths, CLIXML, and raw stderr were intentionally omitted."
+}

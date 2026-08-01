@@ -150,6 +150,8 @@ def projection_report_contents(
 def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
     freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
+    review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
+    review_source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -169,6 +171,16 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "selection_accesses": p2.get("selection_accesses", 0),
             "candidate_count": p2.get("candidate_count", 0),
             "freeze_status": freeze.get("status", "not_started"),
+            "official_review": {
+                "status": review.get("status", "not_recorded"),
+                "evidence_class": review.get("evidence_class", "static_contract_review"),
+                "final_round": review.get("final_round"),
+                "final_verdict": review.get("final_verdict"),
+                "reviewed_commit": review.get("reviewed_commit"),
+                "index_sha256": review_source.get("index_sha256"),
+                "protected_data_accessed": review.get("protected_data_accessed", False),
+                "measured_execution_performed": review.get("measured_execution_performed", False),
+            },
         },
     }
 
@@ -317,6 +329,11 @@ def _p2_readiness(model: Mapping[str, Any]) -> Mapping[str, Any]:
     return value if isinstance(value, Mapping) else {}
 
 
+def _p2_official_review(model: Mapping[str, Any]) -> Mapping[str, Any]:
+    value = _p2_readiness(model).get("official_review", {})
+    return value if isinstance(value, Mapping) else {}
+
+
 def _p2_measured(model: Mapping[str, Any]) -> bool:
     return bool(_p2_readiness(model).get("measured"))
 
@@ -327,8 +344,15 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
     runtime = p2.get("runtime", {}) if isinstance(p2.get("runtime"), Mapping) else {}
     freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
     resources = p2.get("resources", {}) if isinstance(p2.get("resources"), Mapping) else {}
+    review = _p2_official_review(model)
+    review_value = (
+        f"Round {review.get('final_round')} {review.get('final_verdict')} / {review.get('status')}"
+        if review.get("final_round") is not None
+        else review.get("status", "not_recorded")
+    )
     rows = [
         ("Status", p2.get("status", "unknown")),
+        ("Official static review", review_value),
         ("Profile", f"{p2.get('budget_profile_id', '-')} / {p2.get('budget_profile_sha256', '-') }"),
         ("Candidates", f"{p2.get('candidate_count', 0)} / {budget.get('max_candidates_total', '-')}"),
         ("Runtime", f"{runtime.get('max_wall_clock_seconds', '-')} wall seconds; {runtime.get('per_candidate_timeout_seconds', '-')} per candidate"),
@@ -340,11 +364,14 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
 
 def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision: str) -> str:
     p2 = _p2_readiness(model)
+    review = _p2_official_review(model)
     return (
         "# P2_SCOPE_DEVELOPMENT\n\n"
         "P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.\n\n"
         "## Status for Owner\n\n"
         f"**{p2.get('status', 'unknown')}**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.\n\n"
+        "## Official static review\n\n"
+        f"Round `{review.get('final_round', '-')}` verdict is **{review.get('final_verdict', 'not_recorded')}** with status `{review.get('status', 'not_recorded')}`. This is engineering provenance only; fixture pilot executed = `{review.get('fixture_pilot_executed', False)}`. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
         "## Budget and runtime\n\n"
         f"{_p2_readiness_table(model)}\n\n"
         "## Why these methods\n\n"
@@ -356,13 +383,14 @@ def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision:
         "## What is measured\n\n"
         "Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, paid API, network model download, and provider fallback = disabled.\n\n"
         f"## Read-model binding\n\nRevision: `{revision}`\n\n"
-        "## Next action\n\nRun the repository-only fixture/pilot preflight, then stop for Owner review before any measured request.\n\n"
-        "Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P1_CPU_BASELINE_RESULT]]\n"
+        "## Next action\n\nThe static contract is accepted. The next reversible action is a repository-only fixture/pilot preflight; measured P2 and selection remain closed.\n\n"
+        "Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[P1_CPU_BASELINE_RESULT]]\n"
     )
 
 
 def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
+    review = _p2_official_review(model)
     return (
         f"# {task.get('task_id')}: {task.get('title')}\n\n"
         "## Objective\n\n"
@@ -372,19 +400,22 @@ def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
         "Every measured request binds `budget_profile_id` and `budget_profile_sha256`. Baseline reproduction must pass before the one-run hard barrier freezes candidate IDs, SCOPE/spec, compiler, config, retriever, evaluator, and budget hashes before selection.\n\n"
         "## Current output\n\n"
         f"{_p2_readiness_table(model)}\n\n"
+        "## Official review evidence\n\n"
+        f"The bounded static review ended at Round `{review.get('final_round', '-')}` with verdict **{review.get('final_verdict', 'not_recorded')}**. It did not execute a fixture, measured run, or selection. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
         "## Method rationale and papers\n\n"
         "- `R0` is the simple full-family BM25 comparator: it answers how far a clear lexical baseline can go (U006, U011; see [[LITERATURE_INDEX]]).\n"
         "- `R0-W` changes only the text unit: 512-token windows plus family MaxP, so the comparison isolates passage granularity (U154; see [[LITERATURE_INDEX]]).\n"
         "- `R1` searches patent-native representation programs in the AutoIndex style while keeping retrieval/evaluation fixed; this is a planned development arm, not a measured claim yet (U154, U011; see [[LITERATURE_INDEX]]).\n\n"
         "## Protected boundary\n\n"
         "No protected qrels, query identifiers, split membership, per-query outcomes, credentials, raw provider payloads, GPU, paid API, or network model download.\n\n"
-        "## Next action\n\nRun fixture/pilot validation only; do not open selection.\n\n"
-        "Links: [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[LITERATURE_INDEX]]\n"
+        "## Next action\n\nRun repository-only fixture/pilot validation only; do not open measured execution or selection.\n\n"
+        "Links: [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[LITERATURE_INDEX]]\n"
     )
 
 
 def _p2_result_body(model: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
+    review = _p2_official_review(model)
     return (
         "# P2 SCOPE Development Result\n\n"
         "## Result\n\n"
@@ -394,11 +425,47 @@ def _p2_result_body(model: Mapping[str, Any]) -> str:
         "The baseline family BM25 arm (`R0`) establishes a transparent comparator (U006, U011; see [[LITERATURE_INDEX]]). The 512-token window/MaxP arm (`R0-W`) tests passage granularity without changing the evaluator (U154). The planned R1 arm follows AutoIndex-style representation-program search and keeps the same retrieval/evaluation boundary so the scientific contrast is representation, not provider or model substitution (U154, U011).\n\n"
         "## Interpretation boundary\n\n"
         "Readiness proves that the execution contract is explicit; it does not prove that R1 improves retrieval. A budget stop or no-improvement stop is a valid negative development outcome.\n\n"
+        "## Official review boundary\n\n"
+        f"Round `{review.get('final_round', '-')}` is **{review.get('final_verdict', 'not_recorded')}** for static contract safety. Evidence class is `{review.get('evidence_class', 'static_contract_review')}` and the claim boundary is `{review.get('claim_boundary', 'engineering_provenance_only')}`. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
         "## Freeze rule\n\n"
         "Baseline reproduction, train evaluation, and freeze validation must pass before selection. Selection is unavailable until a validated immutable shortlist-freeze receipt exists, and it may be exposed only once. Final-872 remains closed.\n\n"
         "## Canonical sources\n\n"
         "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `control/budgets/p2-r1-primary-v1.yaml` · `control/execution-envelope-p2.yaml`\n\n"
         f"Claim boundary: `{p2.get('claim_boundary', 'no_measured_claim')}`\n"
+    )
+
+
+def _p2_official_review_body(model: Mapping[str, Any]) -> str:
+    review = _p2_official_review(model)
+    source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
+    round_lines = ["| รอบ | Verdict | Commit ที่ตรวจ | Result SHA-256 |", "|---:|---|---|---|"]
+    for item in review.get("rounds", []):
+        if not isinstance(item, Mapping):
+            continue
+        round_lines.append(
+            f"| {item.get('round')} | `{item.get('verdict')}` | `{item.get('reviewed_commit')}` | `{item.get('result_sha256')}` |"
+        )
+    return (
+        "# P2 Official Review Audit\n\n"
+        "## สถานะตอนนี้\n\n"
+        f"Official static review จบที่ Round `{review.get('final_round', '-')}` ด้วย verdict **{review.get('final_verdict', 'not_recorded')}**. สถานะ projection คือ `{review.get('status', 'not_recorded')}` และหลักฐานเป็น engineering provenance เท่านั้น ไม่ใช่ผลการทดลองทางวิทยาศาสตร์\n\n"
+        "## สิ่งที่ทำแล้ว\n\n"
+        + "\n".join(round_lines)
+        + "\n\n"
+        f"Audit index: `{source.get('index_uri', '-')}` (`{source.get('index_sha256', '-')}`)\n\n"
+        f"Checksum manifest: `{source.get('checksums_uri', '-')}` (`{source.get('checksums_sha256', '-')}`)\n\n"
+        "ทุก round เป็น read-only static inspection; provider/model provenance ถูกเก็บแบบ sanitized และไม่มี credential หรือ raw runtime payload ใน projection นี้\n\n"
+        "## ความหมายของ accept\n\n"
+        "ผล accept ยืนยันว่า contract guards ที่อนุญาตให้อ่านผ่านการตรวจแบบ static รองรับ repository-only fixture pilot ได้ ไม่ได้ยืนยันว่า R1 ทำให้ Recall@100 ดีขึ้น และไม่ได้สร้าง measured P2 result\n\n"
+        "## สิ่งที่ Owner ต้องทำ\n\n"
+        "ไม่มี Owner decision ใหม่สำหรับการบันทึก audit นี้ ส่วน `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE` ยังรอ Owner ตามเดิม\n\n"
+        "## สิ่งที่จะขอจาก Owner\n\n"
+        "ไม่มีคำขอเปิด protected data, GPU, paid API หรือ provider fallback ขั้นถัดไปที่ย้อนกลับได้คือ repository-only fixture pilot แยกต่างหาก\n\n"
+        "## ทรัพยากร Phase ถัดไป\n\n"
+        "CPU-only, ค่า API 0 USD, GPU 0 USD, ไม่มี network model download และยังไม่เปิด selection\n\n"
+        "## ขอบเขตที่ยังไม่แตะ\n\n"
+        f"fixture pilot executed = `{review.get('fixture_pilot_executed', False)}`; protected data accessed = `{review.get('protected_data_accessed', False)}`; measured execution performed = `{review.get('measured_execution_performed', False)}`. Final-872, qrels, membership, query identifiers และ per-query outcomes ยังอยู่นอก projection\n\n"
+        "Links: [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[HOME]]\n"
     )
 
 
@@ -743,6 +810,11 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         {**common, "note_id": "P2-SCOPE-DEVELOPMENT-RESULT", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if _p2_measured(model) else "ready", "evidence_maturity": "measured_selection" if _p2_measured(model) else "non_scientific", "claim_level": "descriptive" if _p2_measured(model) else "none", "result_id": p2_result.get("result_id", "P2-SCOPE-DEVELOPMENT"), "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
         _p2_result_body(model),
     )
+    review = _p2_official_review(model)
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"] = _note(
+        {**common, "note_id": "P2-OFFICIAL-REVIEW-AUDIT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if review.get("status") == "accepted_static_contract_review" else "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
+        _p2_official_review_body(model),
+    )
 
     outputs[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"] = _note(
         {**common, "note_id": "CURRENT-ADVISOR-UPDATE", "note_type": "advisor_update", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "verification_needed", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "lifecycle": "draft", "snapshot_status": "draft", "supersedes": None, "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
@@ -893,6 +965,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     state = str(model["project"]["state"])
     phases = [row for row in model.get("phases", []) if isinstance(row, Mapping)]
     tasks = [row for row in model.get("tasks", []) if isinstance(row, Mapping)]
+    p2_review = _p2_official_review(model)
 
     phase_lines: list[str] = []
     for phase in phases:
@@ -910,6 +983,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"- GPU used: `{model['resources']['gpu']}`\n"
         f"- Paid API used: `{model['resources']['paid_api']}`\n"
         f"- Actual cost USD: `{model['resources']['actual_cost_usd']}`\n\n"
+        f"P2 official static review: Round `{p2_review.get('final_round', '-')}` / `{p2_review.get('final_verdict', 'not_recorded')}`; evidence class `{p2_review.get('evidence_class', 'static_contract_review')}`.\n\n"
         "D2 and D3 remain Owner-only. Final 872 is still closed.\n"
     )
     phase_task_body = (
@@ -976,6 +1050,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"- P1 CPU baseline is `{state}` with four validated R0/R0-W train/selection slots.\n"
         f"- Package: `{result.get('package_sha256')}`; rigor: `{result.get('rigor_grade')}`.\n"
         f"- MLflow parent + children: `{1 + len(model.get('mlflow_registration', {}).get('children', []))}` runs.\n\n"
+        f"- P2 static review closed at Round `{p2_review.get('final_round', '-')}` with verdict `{p2_review.get('final_verdict', 'not_recorded')}`; no fixture or measured execution occurred.\n\n"
         "## Next automatic action\n\n"
         "P2 is ready but not started. Keep work reversible and CPU-only until a separate P2 action begins; "
         "D2 and D3 remain unchanged.\n"
@@ -1048,6 +1123,13 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
                 f"- Read-model revision: `{revision}`\n"
                 "- Follow the canonical phase order and keep D2/D3 Owner-only.\n"
             )
+            if phase_id == "P2_SCOPE_DEVELOPMENT":
+                body += (
+                    f"- Official static review: Round `{p2_review.get('final_round', '-')}` "
+                    f"verdict `{p2_review.get('final_verdict', 'not_recorded')}`; "
+                    f"fixture executed `{p2_review.get('fixture_pilot_executed', False)}`.\n"
+                    "- Source: `orchestration/audits/p2-readiness/index.json`.\n"
+                )
         outputs[directory / f"phase-{phase_id}.md"] = (
             _projection_frontmatter(model, phase_id=phase_id) + body
         )

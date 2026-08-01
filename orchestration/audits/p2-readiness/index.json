@@ -1,0 +1,57 @@
+{
+  "schema_version": "myis.official-review-index.v1",
+  "audit_id": "p2-readiness-official-review-20260801",
+  "created_from": "user-provided runtime JSON and console transcript",
+  "phase": "P2_SCOPE_DEVELOPMENT",
+  "status_at_close": "ready_planned_not_measured",
+  "review_runtime": {
+    "provider": "openai",
+    "model": "gpt-5.6-sol",
+    "codex_cli_version": "0.146.0",
+    "sandbox": "read-only",
+    "protected_data_accessed": false,
+    "measured_execution_performed": false
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "task_id": "p2-readiness-first-review",
+      "verdict": "revise",
+      "reviewed_commit": "21593e46caaf7347cfaf113cb86d3b4b4dbf7ca3",
+      "prompt": "round-01/prompt.txt",
+      "result": "round-01/result.json",
+      "metadata": "round-01/metadata.json"
+    },
+    {
+      "round": 2,
+      "task_id": "p2-readiness-round2",
+      "verdict": "revise",
+      "reviewed_commit": "2c2a3cf01bf60cc60903be7d592b6b03f7fe1a8b",
+      "prompt": "round-02/prompt.txt",
+      "result": "round-02/result.json",
+      "metadata": "round-02/metadata.json"
+    },
+    {
+      "round": 3,
+      "task_id": "p2-readiness-round3",
+      "verdict": "accept",
+      "reviewed_commit": "81bb15bdf5753fb8c5b30d25aab51be1ec0b798f",
+      "prompt": "round-03/prompt.txt",
+      "result": "round-03/result.json",
+      "metadata": "round-03/metadata.json"
+    }
+  ],
+  "final_boundary": {
+    "fixture_pilot_executed": false,
+    "measured_runs": 0,
+    "candidate_count": 0,
+    "selection_accesses": 0,
+    "protected_data_accessed": false,
+    "measured_execution_performed": false
+  },
+  "notes": [
+    "Round 3 accept is a static contract-review verdict.",
+    "Repository-only fixture pilot remains a separate next action.",
+    "Measured P2 and selection exposure remain outside this audit."
+  ]
+}

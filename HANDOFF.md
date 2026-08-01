@@ -279,6 +279,25 @@ Official Round 3 was not run.
 The next reversible action is Owner review or an explicitly requested Official
 Round 3 static review. Do not start measured P2 or selection automatically.
 
+## Official Round 3 P2 static review (2026-08-01)
+
+Official Round 3 is complete with verdict `accept`. The three-round audit is
+preserved under `orchestration/audits/p2-readiness/` and the root catalog is
+under `orchestration/audits/`. Verdict history is Round 1 `revise`, Round 2
+`revise`, and Round 3 `accept`.
+
+This is engineering provenance from a bounded read-only static review, not
+scientific or measured evidence. The sanitized runtime record is provider
+`openai`, model `gpt-5.6-sol`, Codex CLI `0.146.0`, sandbox `read-only`.
+`protected_data_accessed=false`, `fixture_pilot_executed=false`, and
+`measured_execution_performed=false`; measured runs, candidates, and selection
+accesses remain `0`.
+
+P2 remains `ready_planned_not_measured`. D2/D3, final-872, protected stores and
+data, GPU, paid APIs, network model downloads, and provider switching remain
+untouched. Round 3 `accept` permits no automatic transition into measured P2
+or selection.
+
 ## Next action
 
 ถัดไปให้ Owner ตรวจ P2 readiness report และกำหนดรายการ frozen controls ทั้งสี่

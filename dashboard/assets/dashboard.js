@@ -221,8 +221,10 @@ function renderP2Readiness() {
   const budget = p2.candidate_budget || {};
   const runtime = p2.runtime || {};
   const freeze = p2.freeze_barrier || {};
+  const review = p2.official_review || {};
   const status = p2.status === "ready_planned_not_measured" ? "ready / planned; not measured" : p2.status || "unknown";
   const checks = [
+    ["Official review", review.final_round ? `Round ${review.final_round} ${review.final_verdict || "unknown"} · ${review.evidence_class || "static_contract_review"}` : review.status || "not recorded"],
     ["Profile", `${p2.budget_profile_id || "-"} (${short(p2.budget_profile_sha256, 12)})`],
     ["Candidates", `${p2.candidate_count || 0} / ${budget.max_candidates_total ?? "-"}`],
     ["Runtime", `${runtime.max_wall_clock_seconds ?? "-"}s wall / ${runtime.per_candidate_timeout_seconds ?? "-"}s candidate`],

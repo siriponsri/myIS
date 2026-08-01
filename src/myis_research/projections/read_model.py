@@ -15,6 +15,7 @@ from ..kernel.manifest import manifest_round_trip
 from ..kernel.manifest_validation import ManifestValidationError, validate_validation_report
 from ..owner_local import OwnerLocalContractError, validate_receipt
 from ..p2 import P2ContractError, validate_p2_artifact, validate_p2_package_bundle
+from ..protection import assert_aggregate_only
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -48,6 +49,7 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/scope-autoindex-v1/manifests",
     "campaigns/scope-autoindex-v1/validation-reports",
     "campaigns/scope-autoindex-v1/packages",
+    "orchestration/audits/p2-readiness",
     "control/assets/dapfam-p1-source.v1.json",
     "outputs/audits/rigor",
     "evidence/legacy-dapfam-inventory.v1.json",
@@ -70,6 +72,7 @@ PROJECTION_SOURCE_PATHS = (
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
+P2_OFFICIAL_REVIEW_ROOT = Path("orchestration/audits/p2-readiness")
 P2_METRIC_FIELDS = frozenset({
     "candidate_id", "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
     "scope", "split", "direction", "denominator", "evidence_role",
@@ -196,6 +199,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             elif phase_id == "P2_SCOPE_DEVELOPMENT":
                 task_row["status"] = "ready" if p2_readiness["status"] == "ready_planned_not_measured" else p2_readiness["status"]
                 task_row["evidence_ids"] = [str(item["uri"]) for item in p2_readiness.get("artifacts", [])]
+                official_review = p2_readiness.get("official_review", {})
+                if official_review.get("status") == "accepted_static_contract_review":
+                    task_row["evidence_ids"].append(str(official_review["source"]["index_uri"]))
             phase_row["tasks"].append(task_row)
             tasks.append(task_row)
         phases.append(phase_row)
@@ -208,6 +214,19 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     ] if not p1_pairs else [
         {"action_id": "review-p1", "label": "ตรวจ P1 evidence package ก่อนพิจารณาคำสั่ง P2 แยกต่างหาก", "kind": "owner_command"},
     ])
+    if p1_pairs and p2_readiness.get("official_review", {}).get("status") == "accepted_static_contract_review":
+        next_actions = [
+            {
+                "action_id": "p2-fixture-pilot-available",
+                "label": "Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed.",
+                "kind": "automatic_next",
+            },
+            {
+                "action_id": "hold-before-measured-p2",
+                "label": "Do not start measured P2 or selection exposure from the static review verdict.",
+                "kind": "constraint",
+            },
+        ]
     result_state = "valid" if p1_pairs else "blocked"
     p1_latency = paired_receipts[0].get("latency_seconds") if paired_receipts else None
     p2_metric_rows = [
@@ -491,6 +510,179 @@ def write_read_model(repository_root: Path, output: Path | None = None) -> Path:
     return target
 
 
+def _p2_official_review_projection(root: Path) -> dict[str, Any]:
+    """Validate and summarize the repository-safe three-round P2 static review."""
+
+    audit_root = root / P2_OFFICIAL_REVIEW_ROOT
+    missing = {
+        "status": "not_recorded",
+        "evidence_class": "static_contract_review",
+        "claim_boundary": "engineering_provenance_only",
+        "round_count": 0,
+        "final_round": None,
+        "final_verdict": None,
+        "reviewed_commit": None,
+        "fixture_pilot_contract_status": "not_reviewed",
+        "fixture_pilot_executed": False,
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+        "rounds": [],
+        "source": None,
+    }
+    if not audit_root.is_dir():
+        return missing
+
+    try:
+        resolved_root = audit_root.resolve()
+
+        def resolve_file(value: str) -> Path:
+            relative = Path(value)
+            if not value.strip() or relative.is_absolute() or ".." in relative.parts:
+                raise ValueError("audit reference must be repository-relative")
+            unresolved = audit_root / relative
+            target = unresolved.resolve()
+            target.relative_to(resolved_root)
+            if unresolved.is_symlink() or not target.is_file():
+                raise ValueError("audit reference must resolve to a regular file")
+            return target
+
+        checksums_path = resolve_file("SHA256SUMS.txt")
+        checksums: dict[str, str] = {}
+        json_payloads: dict[str, dict[str, Any]] = {}
+        for raw_line in checksums_path.read_text(encoding="utf-8").splitlines():
+            digest, separator, relative = raw_line.partition("  ")
+            if separator != "  " or len(digest) != 64 or any(character not in "0123456789abcdef" for character in digest):
+                raise ValueError("invalid audit checksum line")
+            path = resolve_file(relative)
+            if _file_sha256(path) != digest or relative in checksums:
+                raise ValueError("audit checksum mismatch")
+            checksums[relative] = digest
+            if path.suffix == ".json":
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                if not isinstance(payload, dict):
+                    raise ValueError("audit JSON must be an object")
+                assert_aggregate_only(payload)
+                json_payloads[relative] = payload
+
+        index = json_payloads.get("index.json")
+        if not index or index.get("schema_version") != "myis.official-review-index.v1":
+            raise ValueError("official review index is missing or invalid")
+        if index.get("phase") != "P2_SCOPE_DEVELOPMENT" or index.get("status_at_close") != "ready_planned_not_measured":
+            raise ValueError("official review boundary is invalid")
+        runtime = index.get("review_runtime")
+        expected_runtime = {
+            "provider": "openai",
+            "model": "gpt-5.6-sol",
+            "codex_cli_version": "0.146.0",
+            "sandbox": "read-only",
+            "protected_data_accessed": False,
+            "measured_execution_performed": False,
+        }
+        if not isinstance(runtime, dict) or any(runtime.get(field) != value for field, value in expected_runtime.items()):
+            raise ValueError("official review runtime provenance is invalid")
+        raw_rounds = index.get("rounds")
+        if not isinstance(raw_rounds, list) or [item.get("round") for item in raw_rounds if isinstance(item, dict)] != [1, 2, 3]:
+            raise ValueError("official review rounds must be exactly 1, 2, and 3")
+
+        rounds: list[dict[str, Any]] = []
+        for item in raw_rounds:
+            if not isinstance(item, dict):
+                raise ValueError("official review round must be an object")
+            round_number = int(item["round"])
+            metadata_relative = str(item["metadata"])
+            result_relative = str(item["result"])
+            prompt_relative = str(item["prompt"])
+            if any(relative not in checksums for relative in (metadata_relative, result_relative, prompt_relative)):
+                raise ValueError("official review reference is absent from checksum manifest")
+            metadata = json_payloads.get(metadata_relative)
+            result = json_payloads.get(result_relative)
+            if not metadata or not result:
+                raise ValueError("official review metadata or result is missing")
+            if metadata.get("schema_version") != "myis.official-review-metadata.v1" or result.get("schema_version") != "1.0":
+                raise ValueError("official review schema mismatch")
+            for field in ("round", "task_id", "verdict"):
+                if metadata.get(field) != item.get(field) or result.get(field) != item.get(field):
+                    raise ValueError("official review round identity mismatch")
+            if metadata.get("reviewed_commit") != item.get("reviewed_commit"):
+                raise ValueError("official review commit mismatch")
+            reviewed_commit = str(item["reviewed_commit"])
+            if len(reviewed_commit) != 40 or any(character not in "0123456789abcdef" for character in reviewed_commit):
+                raise ValueError("official review commit must be a Git SHA-1")
+            if metadata.get("prompt_sha256") != checksums[prompt_relative] or metadata.get("result_sha256") != checksums[result_relative]:
+                raise ValueError("official review metadata hash mismatch")
+            if metadata.get("protected_data_accessed") is not False or result.get("protected_data_accessed") is not False:
+                raise ValueError("official review crossed the protected-data boundary")
+            if metadata.get("measured_execution_performed") is not False or result.get("measured_execution_performed") is not False:
+                raise ValueError("official review performed measured execution")
+            rounds.append({
+                "round": round_number,
+                "task_id": str(item["task_id"]),
+                "verdict": str(item["verdict"]),
+                "reviewed_commit": reviewed_commit,
+                "invoked_at_utc": str(metadata.get("invoked_at_utc", "")),
+                "provider": str(metadata.get("provider", "")),
+                "model": str(metadata.get("model", "")),
+                "codex_cli_version": str(metadata.get("codex_cli_version", "")),
+                "sandbox": str(metadata.get("sandbox", "")),
+                "approval": str(metadata.get("approval", "")),
+                "source_provenance": str(metadata.get("source_provenance", "")),
+                "result_uri": f"{P2_OFFICIAL_REVIEW_ROOT.as_posix()}/{result_relative}",
+                "result_sha256": checksums[result_relative],
+            })
+
+        boundary = index.get("final_boundary")
+        if not isinstance(boundary, dict):
+            raise ValueError("official review final boundary is missing")
+        expected_boundary = {
+            "fixture_pilot_executed": False,
+            "measured_runs": 0,
+            "candidate_count": 0,
+            "selection_accesses": 0,
+            "protected_data_accessed": False,
+            "measured_execution_performed": False,
+        }
+        if any(boundary.get(field) != value for field, value in expected_boundary.items()):
+            raise ValueError("official review final boundary changed")
+        final_round = rounds[-1]
+        final_result = json_payloads[str(raw_rounds[-1]["result"])]
+        if final_round["verdict"] == "accept" and (
+            final_result.get("required_changes") != [] or final_result.get("major_risks") != []
+        ):
+            raise ValueError("accepted official review still contains blocking findings")
+
+        return {
+            "status": "accepted_static_contract_review" if final_round["verdict"] == "accept" else "revision_required",
+            "audit_id": str(index.get("audit_id", "")),
+            "evidence_class": "static_contract_review",
+            "claim_boundary": "engineering_provenance_only",
+            "round_count": len(rounds),
+            "final_round": final_round["round"],
+            "final_verdict": final_round["verdict"],
+            "reviewed_commit": final_round["reviewed_commit"],
+            "fixture_pilot_contract_status": (
+                "static_review_accepted_not_executed"
+                if final_round["verdict"] == "accept"
+                else "static_review_requires_revision"
+            ),
+            "fixture_pilot_executed": False,
+            "protected_data_accessed": False,
+            "measured_execution_performed": False,
+            "rounds": rounds,
+            "source": {
+                "index_uri": f"{P2_OFFICIAL_REVIEW_ROOT.as_posix()}/index.json",
+                "index_sha256": checksums["index.json"],
+                "checksums_uri": f"{P2_OFFICIAL_REVIEW_ROOT.as_posix()}/SHA256SUMS.txt",
+                "checksums_sha256": _file_sha256(checksums_path),
+            },
+        }
+    except (KeyError, OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {
+            **missing,
+            "status": "invalid_audit_bundle",
+            "fixture_pilot_contract_status": "blocked_invalid_audit",
+        }
+
+
 def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dict[str, Any]:
     """Read only validated P2 control/artifact metadata.
 
@@ -499,6 +691,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
     self-hash-valid artifact contributes a pointer, count, or freeze state.
     """
 
+    official_review = _p2_official_review_projection(root)
     profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
     profile: dict[str, Any] = {}
     profile_sha256: str | None = None
@@ -694,6 +887,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
             "baseline_commitment_sha256": commitment.get("commitment_sha256") if commitment else None,
             "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
         },
+        "official_review": official_review,
     }
 
 

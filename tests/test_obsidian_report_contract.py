@@ -56,11 +56,17 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert len(task_reports) == 9
     result_report = contents[ROOT / VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"]
     phase_report = contents[ROOT / VAULT_RELATIVE_PATH / "01_Phases/P1_CPU_BASELINE/P1_CPU_BASELINE_MASTER_REPORT.md"]
+    audit_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"]
     assert "## Output" in result_report
     assert "## Interpretation" in result_report
     assert "## Execution progress / observability" in result_report
     assert "## Execution progress / observability" in phase_report
     assert "P1_CPU_MEASURED_COMPLETE" in contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
+    assert "## สถานะตอนนี้" in audit_report
+    assert "Round `3`" in audit_report
+    assert "**accept**" in audit_report
+    assert "engineering provenance" in audit_report
+    assert "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]]" in audit_report
 
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:

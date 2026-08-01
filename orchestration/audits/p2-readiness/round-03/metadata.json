@@ -1,0 +1,23 @@
+{
+  "schema_version": "myis.official-review-metadata.v1",
+  "round": 3,
+  "task_id": "p2-readiness-round3",
+  "verdict": "accept",
+  "invoked_at_utc": "2026-08-01T09:57:23.679Z",
+  "reviewed_commit": "81bb15bdf5753fb8c5b30d25aab51be1ec0b798f",
+  "provider": "openai",
+  "model": "gpt-5.6-sol",
+  "codex_cli_version": "0.146.0",
+  "sandbox": "read-only",
+  "approval": "never",
+  "reasoning_effort": "none",
+  "exit_code": 0,
+  "timeout": false,
+  "protected_data_accessed": false,
+  "measured_execution_performed": false,
+  "runtime_output_filename": "official-research-20260801T095723679Z-86f62b6a.json",
+  "source_provenance": "reconstructed_from_user_console_transcript",
+  "source_note": "The original runtime JSON was not uploaded. result.json was reconstructed field-for-field from the user-provided PowerShell Format-List output; its archive hash is not claimed to be the original runtime file hash.",
+  "prompt_sha256": "95a31acdf96d0c6575a503bdcc7aecc39483ee0abf0c1dde6fa7e99aebb9aa1a",
+  "result_sha256": "5a66c48824095bba20991971d62c7ca2072502d21c8214b9f0f75ce217849de9"
+}

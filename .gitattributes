@@ -23,6 +23,10 @@ control/execution-envelope-p2.yaml -text
 control/budgets/p2-r1-primary-v1.yaml -text
 schemas/p2-*.json -text
 
+# Official review audit bundles are hash-bound engineering provenance. Preserve
+# every archived prompt, result, metadata file, catalog, and checksum byte.
+orchestration/audits/** -text
+
 # The generated vault manifest binds report bytes. Keep generated output exact,
 # while retaining normal text handling for Owner-authored and Obsidian-local files.
 obsidian_report/** -text

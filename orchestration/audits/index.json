@@ -1,0 +1,33 @@
+{
+  "schema_version": "myis.official-review-catalog.v1",
+  "catalog_id": "official-review-audits-20260801",
+  "phase": "P2_SCOPE_DEVELOPMENT",
+  "status": "ready_planned_not_measured",
+  "review_runtime": {
+    "provider": "openai",
+    "model": "gpt-5.6-sol",
+    "codex_cli_version": "0.146.0",
+    "sandbox": "read-only",
+    "protected_data_accessed": false,
+    "measured_execution_performed": false
+  },
+  "audits": [
+    {
+      "audit_id": "p2-readiness-official-review-20260801",
+      "phase": "P2_SCOPE_DEVELOPMENT",
+      "path": "p2-readiness/index.json",
+      "sha256": "6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80",
+      "checksums_path": "p2-readiness/SHA256SUMS.txt",
+      "checksums_sha256": "c8efbc5858b13a1f6ffbcc31ccfaaed54c89fcdbb2b532d1f925edea8309c67d",
+      "rounds": [
+        {"round": 1, "verdict": "revise"},
+        {"round": 2, "verdict": "revise"},
+        {"round": 3, "verdict": "accept"}
+      ],
+      "fixture_pilot_executed": false,
+      "measured_runs": 0,
+      "candidate_count": 0,
+      "selection_accesses": 0
+    }
+  ]
+}

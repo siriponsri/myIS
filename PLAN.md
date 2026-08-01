@@ -54,6 +54,19 @@ These bindings are machine-readable closeout anchors, not additional gates.
   artifacts. P2 is ready but not started; final-872 remains closed and globally
   untouched remains non-claimable.
 
+### Task P2.1 - SCOPE contract readiness and official static review
+
+- **Owner Decision:** none; the review does not authorize measured execution or selection exposure.
+- **Review record:** three bounded, read-only rounds are archived under
+  `orchestration/audits/p2-readiness/`: Round 1 `revise`, Round 2 `revise`,
+  and Round 3 `accept`. The sanitized engineering runtime provenance is
+  provider `openai`, model `gpt-5.6-sol`, Codex CLI `0.146.0`, sandbox
+  `read-only`.
+- **Boundary:** the Round 3 verdict is static contract-review evidence only.
+  Protected data was not accessed, fixture-pilot was not executed, measured
+  execution was not performed, and candidate/selection counts remain zero.
+  P2 therefore remains `ready_planned_not_measured`.
+
 ### Task P3.1 - Frozen final evaluation
 
 - **Owner Decision:** `D2_OPEN_FINAL`

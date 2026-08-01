@@ -1,0 +1,52 @@
+Task ID: p2-readiness-round3
+Round: 3
+
+Perform a focused static review only.
+
+Verify closure of the three Official Round 2 findings:
+
+1. Candidate train decisions use a canonical aggregate metric object bound to:
+   recall_at_100, train, OUT, primary, higher_is_better, n, denominator,
+   and required lineage hashes.
+
+2. Baseline expectation and tolerance are committed before train outcomes
+   and are bound to immutable repository-safe P1 baseline evidence by SHA-256
+   and precise metric locator.
+
+3. Baseline reproduction agrees with the baseline candidate metric in the
+   candidate ledger, including metric identity, value, n, denominator,
+   split, scope, evidence role, and tolerance.
+
+Allowed:
+- schemas/p2-*.json
+- src/myis_research/p2/
+- tests/test_p2_*.py
+- HANDOFF.md
+- projections/sessions/20260801T092615Z-p2-round2-contract-repair-v1.json
+
+Forbidden:
+- MYIS_STORE
+- MYIS_MLFLOW_STORE
+- raw DAPFAM data
+- queries, qrels, query IDs, membership
+- per-query outcomes
+- selection contents
+- final-872
+- credentials
+
+Do not modify files, run tests, execute fixtures, or execute P2.
+
+Return JSON matching the required schema.
+
+Set:
+- schema_version: "1.0"
+- task_id: "p2-readiness-round3"
+- round: 3
+- protected_data_accessed: false
+- measured_execution_performed: false
+
+Use verdict:
+- accept if the three Round 2 findings are closed and repository-only fixture
+  execution is contract-safe
+- revise only for a specific remaining defect
+- blocked only for a structural or protected-boundary failure

@@ -1,0 +1,53 @@
+Task ID: p2-readiness-round2
+Round: 2
+
+Act as an independent research-methodology and contract reviewer.
+
+Official Round 1 returned revise. The repository has now implemented repairs
+for protected aggregate-only validation, explicit metric contracts, canonical
+budget binding, immutable baseline evidence, adaptive-iteration integrity,
+cross-artifact package validation, complete one-shot selection outcomes, and
+negative synthetic tests.
+
+Review whether those Round 1 required changes are now correctly closed.
+
+Allowed:
+- AGENTS.md
+- PLAN.md
+- HANDOFF.md
+- control/source-of-truth.yaml
+- control/campaigns/scope-autoindex-v1.yaml
+- control/budgets/p2-r1-primary-v1.yaml
+- control/execution-envelope-p2.yaml
+- schemas/p2-*.json
+- src/myis_research/p2/
+- tests/test_p2_*.py
+- projections/sessions/20260801T075745Z-p2-contract-repair-v1.json
+
+Forbidden:
+- MYIS_STORE
+- MYIS_MLFLOW_STORE
+- raw DAPFAM corpus
+- queries, qrels, query IDs, membership
+- per-query outcomes
+- selection contents
+- final-872
+- credentials
+
+Do not modify files, run experiments, or execute P2.
+Static repository inspection only.
+
+Return JSON matching the required schema.
+
+Set:
+- schema_version: "1.0"
+- task_id: "p2-readiness-round2"
+- round: 2
+- protected_data_accessed: false
+- measured_execution_performed: false
+
+Use verdict:
+- accept only if the Round 1 required changes are substantively closed and
+  repository-only fixture/pilot execution is safe
+- revise for specific remaining repository-safe repairs
+- blocked only for a structural or protected-boundary blocker
