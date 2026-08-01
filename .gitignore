@@ -57,3 +57,7 @@ Desktop.ini
 # Generated migration inventory is local audit input; the compact migration map is tracked.
 archive/migration-manifests/*.json
 projections/dashboard-private/
+
+# Official Codex orchestration output is raw and local-only.
+orchestration/results/*
+!orchestration/results/.gitkeep

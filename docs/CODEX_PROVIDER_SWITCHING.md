@@ -39,6 +39,26 @@ The launchers never login, logout, copy credentials, edit keyrings, or run a
 network/authentication smoke test. They fail closed when the executable,
 profile, or config is missing. `-WhatIf` never starts Codex.
 
+## Bounded Official research worker
+
+`scripts/orchestrator/` provides a separate noninteractive lane for bounded
+read-only research review. `invoke-official-research.ps1` starts `codex exec`
+with a process-local Official `CODEX_HOME`, removes the two protected-store
+variables from the child environment, ignores user config, pins the read-only
+sandbox and output schema, and enforces a default 1,800-second timeout.
+
+`run-research-loop.ps1` defaults to two rounds and rejects values above three.
+It makes one call per round, hashes every exact prompt, validates every result,
+and carries only a bounded structured result subset into a revision round. Raw
+prompts, logs, and responses remain ignored under `orchestration/results/`;
+the console and loop summary expose only sanitized invocation metadata.
+
+This lane does not switch the active MaxPlus session, authenticate either
+profile, or create scientific evidence. Its rounds are not P2 candidates or
+adaptive iterations, and it cannot open protected stores, selection, D2, D3,
+or final-872. Usage and stop conditions are documented in
+`scripts/orchestrator/README.md`.
+
 ## Rollback
 
 Close the current session and start a new PowerShell process with the previous

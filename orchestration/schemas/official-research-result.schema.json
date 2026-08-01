@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis-research.local/schemas/official-research-result.schema.json",
+  "title": "Official Codex research result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "round",
+    "verdict",
+    "summary",
+    "major_risks",
+    "publication_opportunities",
+    "required_changes",
+    "optional_changes",
+    "evidence_gaps",
+    "protected_data_accessed",
+    "measured_execution_performed",
+    "recommended_next_action"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["accept", "revise", "blocked"]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "major_risks": {
+      "$ref": "#/$defs/stringList"
+    },
+    "publication_opportunities": {
+      "$ref": "#/$defs/stringList"
+    },
+    "required_changes": {
+      "$ref": "#/$defs/stringList"
+    },
+    "optional_changes": {
+      "$ref": "#/$defs/stringList"
+    },
+    "evidence_gaps": {
+      "$ref": "#/$defs/stringList"
+    },
+    "protected_data_accessed": {
+      "type": "boolean",
+      "const": false
+    },
+    "measured_execution_performed": {
+      "type": "boolean",
+      "const": false
+    },
+    "recommended_next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2000
+      }
+    }
+  }
+}
