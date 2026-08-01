@@ -243,6 +243,42 @@ The next reversible action is Owner review of the repaired contract package
 or an explicitly requested Official Round 2 review. Do not start measured P2
 or selection exposure automatically.
 
+## Official Round 2 P2 contract repair (2026-08-01)
+
+The three remaining findings in
+`orchestration/results/official-research-20260801T083801135Z-7e429bcf.json`
+are repaired without starting fixture-pilot, measured execution, or selection.
+Candidate decisions now use `myis.p2-train-metric.v1` objects with fixed
+train/OUT/primary Recall@100 semantics, shared `n`, denominator, and
+dataset/config/retriever/evaluator lineage. Scalar `train_score`,
+`best_score`, and caller-supplied shortlist thresholds are no longer P2
+decision authority.
+
+One `myis.p2-baseline-commitment.v1` artifact must be created after the four
+controls and eight preregistered candidates are registered but before the
+first train outcome. It binds the `R0-W` baseline to the repository-safe P1
+aggregate receipt by raw file SHA-256 and `metrics[8]`. Package validation
+resolves and validates that receipt, maps its `maximize` direction to the P2
+`higher_is_better` contract, and verifies the expected value, `n`, denominator,
+dataset lineage, and evaluator lineage. Baseline reproduction copies the
+committed expectation/tolerance and its observed metric must equal the same
+candidate's ledger train metric exactly.
+
+Verification passed with `70` focused P2 tests, `222` full tests, one positive
+synthetic package validation, two stable report sync/check cycles, layout
+validation, isolated MLflow doctor, Brain literature validation, Ruff, and
+`git diff --check`. The shared read-model revision is
+`876971c17cc8c9bdf513f3c313aa6eb847837e924abda35c019ace4f516a5a96`;
+the isolated aggregate-only MLflow run is
+`77f08ce884544c89985a8f753bea23bb`. P2 remains
+`ready_planned_not_measured` with `measured_runs=0`, `candidate_count=0`, and
+`selection_accesses=0`. D2/D3, final-872, protected stores/data, the P2 budget
+profile, GPU, paid APIs, downloads, and provider fallback remain untouched.
+Official Round 3 was not run.
+
+The next reversible action is Owner review or an explicitly requested Official
+Round 3 static review. Do not start measured P2 or selection automatically.
+
 ## Next action
 
 ถัดไปให้ Owner ตรวจ P2 readiness report และกำหนดรายการ frozen controls ทั้งสี่

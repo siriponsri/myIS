@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "7ee1c6cde26a369c94fe77300cafdcc172c0b16fa9f026941c360b790e409510"
-read_model_sha256: "895f0250d3dbe78d7fc42075bfd55cb79bf3fff3485889f4fa1595fe8c4c8620"
-source_commit: "543ee2428a6ff5b1c403914573908a78a380efad"
+read_model_revision: "876971c17cc8c9bdf513f3c313aa6eb847837e924abda35c019ace4f516a5a96"
+read_model_sha256: "dca7fdf6c20e695c0ad7db5af875b9cdd29224f589a6416436be4d6460a5987c"
+source_commit: "5eea876331ab73fe46c91e9f22b5a83b57ce4331"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,8 +11,8 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-01T07:54:27Z"
-updated_at: "2026-08-01T07:54:27Z"
+created_at: "2026-08-01T09:22:48Z"
+updated_at: "2026-08-01T09:22:48Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "P2_SCOPE_DEVELOPMENT"
