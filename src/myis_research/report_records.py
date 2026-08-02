@@ -233,7 +233,6 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     metrics = _metrics(model, phase_id, task_id)
     artifacts = _artifacts(root, model, phase_id)
     p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
-    fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
     failures = []
     if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("observatory", {}).get("failed_child_count", 0):
         failures.append({"failure_id": "obs-failure-candidate-02", "recovery_id": "obs-recovery-candidate-02", "status": "retained_and_recovered", "counters_changed": False})
