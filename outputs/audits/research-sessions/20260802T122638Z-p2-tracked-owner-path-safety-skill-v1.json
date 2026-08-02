@@ -1,0 +1,137 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260802T122638Z-p2-tracked-owner-path-safety-skill-v1",
+  "run_id": null,
+  "goal_id": "P2_PREFLIGHT_TRACKED_OWNER_PATH_SAFETY_V1",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-02T12:26:38Z",
+  "scope": "Close the tracked Owner-local absolute-path gap in the P2 preflight enablement package without changing scientific state.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260802T122638Z-p2-tracked-owner-path-safety-skill-v1.json",
+      "projections/sessions/20260802T122638Z-p2-tracked-owner-path-safety-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The expanded completion audit found current-owner absolute paths in an MLflow design example and the legacy P1 Owner-local launcher default.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json",
+          "sha256": "e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9",
+          "locator": "overall, governance.blocking_findings, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The repair removed inferred personal locations, required explicit Owner-local configuration, and expanded deterministic path-safety coverage to tracked artifact roots.",
+      "evidence_refs": [
+        {
+          "path": "mlflow/MLFLOW_DESIGN.md",
+          "sha256": "7737b7b47c05eb02ffab74347912d5b9aefe9348a1ebd2b27198d256820c6e71",
+          "locator": "External persistent store Windows example"
+        },
+        {
+          "path": "projections/run-legacy-p1.cmd",
+          "sha256": "a0fc380a4c5c4870e50c207947cae88b7ef0d3ee03e3b80d3463c323e76bb272",
+          "locator": "MYIS_LEGACY_DAPFAM_ROOT fail-closed guard"
+        },
+        {
+          "path": "tests/test_p2_preflight.py",
+          "sha256": "4b8a472e9ec6bcf13ff25b5a033273dd6dd40c52d795622a067c86a31428b16a",
+          "locator": "test_tracked_artifacts_do_not_embed_owner_local_absolute_paths"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The repaired package passed 294 full tests, two no-drift report checks, Dashboard/API, governance policies, MLflow doctor, Brain literature validation, Ruff, and whitespace validation.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json",
+          "sha256": "50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b",
+          "locator": "overall, dimensions.D6_methodological_rigor, and read_order"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P2 remains ready_planned_not_measured with preflight not_started, proposal not_adopted, zero real counters, and D2/D3 closed.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "6c872f72bed1a2ea0b48c1d836da33a919e872a2d014d9eeeb719090711a2fc1",
+          "locator": "p2_readiness, gates, read_model_revision, and read_model_sha256"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "b1b89e24787fb71d8ffd42db07ffd1cc1ad9f3eca89b97004afa7e31296409c5",
+          "locator": "status, read_model_revision, read_model_sha256, and mlflow_run_id"
+        },
+        {
+          "path": "projections/reports/task/task-p2-1.json",
+          "sha256": "748a696df64c0c2aafa643bcb4d9982202713e28f6b9c3efad5946908760aaa5",
+          "locator": "failure_recovery_references, governance_status, decision, and next_authorized_action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight remains the next authorized action and was not executed.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "candidate-proposal-not-adopted",
+      "provenance": "agent-observed",
+      "summary": "The four-control and eight-candidate proposal remains draft_owner_review and not_adopted.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-selection-final-closed",
+      "provenance": "agent-observed",
+      "summary": "Measured P2, real selection, final-872, D2_OPEN_FINAL, and D3_SUBMIT_RELEASE remain closed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 from types import SimpleNamespace
@@ -31,6 +32,20 @@ from myis_research.report_records import build_report_records
 
 ROOT = Path(__file__).resolve().parents[1]
 PROPOSAL_PATH = ROOT / "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
+TRACKED_ARTIFACT_ROOTS = (
+    "HANDOFF.md",
+    "PLAN.md",
+    "README.md",
+    "campaigns",
+    "control",
+    "outputs",
+    "projections",
+    "obsidian_report",
+    "mlflow",
+)
+OWNER_LOCAL_ABSOLUTE_PATH = re.compile(
+    r"(?<![A-Za-z])[A-Za-z]:[\\/]+|/(?:Users|home)/[^/\s\"'`]+"
+)
 
 
 def _self_hash(payload: dict[str, object], field: str) -> dict[str, object]:
@@ -890,6 +905,8 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             "p2-preflight-report-byte-audit-repair",
             "p2-preflight-projection-source-audit-initial",
             "p2-preflight-projection-source-audit-repair",
+            "p2-preflight-tracked-owner-path-audit-initial",
+            "p2-preflight-tracked-owner-path-audit-repair",
         } <= artifact_ids
         assert any(
             item.get("status") == "repaired_and_validated"
@@ -904,4 +921,39 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             == "p2-preflight-projection-source-hash-drift-repair-20260802"
             for item in record["failure_recovery_references"]
         )
+        assert any(
+            item.get("status") == "repaired_and_validated"
+            and item.get("counters_changed") is False
+            and item.get("recovery_id") == "p2-preflight-tracked-owner-path-repair-20260802"
+            for item in record["failure_recovery_references"]
+        )
         assert "no Owner-local preflight" in record["work_summary"]
+
+
+def test_tracked_artifacts_do_not_embed_owner_local_absolute_paths() -> None:
+    completed = subprocess.run(
+        ["git", "ls-files", "-z", "--", *TRACKED_ARTIFACT_ROOTS],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    )
+    excluded_prefixes = (
+        "obsidian_report/80_Owner_Notes/",
+        "obsidian_report/.obsidian/",
+    )
+    offenders: list[str] = []
+    for raw_path in completed.stdout.split(b"\0"):
+        if not raw_path:
+            continue
+        relative = raw_path.decode("utf-8").replace("\\", "/")
+        if relative.endswith(".canvas") or relative.startswith(excluded_prefixes):
+            continue
+        path = ROOT / relative
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            continue
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if OWNER_LOCAL_ABSOLUTE_PATH.search(line):
+                offenders.append(f"{relative}:{line_number}")
+    assert offenders == []

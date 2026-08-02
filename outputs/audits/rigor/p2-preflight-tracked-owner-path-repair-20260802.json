@@ -1,0 +1,119 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-tracked-owner-path-repair-20260802",
+  "artifact": "Repaired tracked artifact Owner-path safety contract",
+  "artifact_path": "tests/test_p2_preflight.py",
+  "artifact_sha256": "4b8a472e9ec6bcf13ff25b5a033273dd6dd40c52d795622a067c86a31428b16a",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.33,
+    "one_line_summary": "Personal absolute paths were removed from tracked artifacts, the legacy launcher now fails closed without an explicit Owner-local root, and a deterministic tracked-artifact regression prevents recurrence.",
+    "strengths": [
+      "The MLflow design uses a portable environment-variable example instead of a personal path.",
+      "The legacy P1 launcher no longer infers a protected data location and exits before execution when MYIS_LEGACY_DAPFAM_ROOT is absent.",
+      "The regression scans canonical and generated tracked artifact roots while excluding Owner-authored notes and local Obsidian state.",
+      "Focused P2 preflight tests passed 39 and the launcher fail-closed probe returned exit code 2 without protected access.",
+      "The full suite passed 294 tests; Dashboard/API passed 21 tests; two full report checks returned no drift.",
+      "Session, assets, advisor, layout, P2 closure, archive-runtime, MLflow doctor, Brain literature, Ruff, and whitespace validations passed."
+    ],
+    "weaknesses": [
+      "Source and test fixtures remain outside the artifact scan because they may intentionally contain unsafe-path examples used for negative testing."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The regression covers the tracked artifact roots named by the repository reporting and evidence contract."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": [
+        "Adding a Windows drive path or macOS/Linux home path to the scanned tracked artifacts now fails the deterministic suite with an exact file and line locator."
+      ],
+      "weaknesses": [
+        "Non-home POSIX absolute paths are not rejected by this specific Owner-path regression."
+      ],
+      "suggestions": [
+        "Continue relying on schema-specific repository-relative path validators for general absolute-path rejection."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The repair changes repository path safety only and preserves proposal, campaign, budget, gate, and counter state."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": [
+        "The no-Owner-path closeout claim is now supported by both direct repair and a repository-level regression."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The original contradiction remains preserved in a separate Weak Reject audit and is linked to this recovery."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "The repair combines explicit configuration, fail-closed execution behavior, tracked-file enumeration, focused tests, and a no-protected-access probe."
+      ],
+      "weaknesses": [
+        "Remote CI is recorded separately as Draft PR evidence and is not claimed by this local repair audit."
+      ],
+      "suggestions": [
+        "Retain the full validation sequence before requesting Owner review."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D2_falsifiability",
+      "severity": "suggestion",
+      "target_artifact": "Tracked artifact safety regression",
+      "target_entity": "artifact root coverage",
+      "evidence_locator": "tests/test_p2_preflight.py::test_tracked_artifacts_do_not_embed_owner_local_absolute_paths",
+      "observation": "The regression intentionally excludes source code, test fixtures, Owner Notes, Obsidian local state, and canvas files.",
+      "reasoning": "Those surfaces either contain negative-test examples or are explicitly Owner-authored/local and should not be interpreted as generated repository artifacts.",
+      "suggestion": "Keep the exclusions explicit and review any future expansion of generated artifact roots."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner scientific or gate decision is required; the next authorized action remains Owner-local P2 measured preflight."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json",
+    "mlflow/MLFLOW_DESIGN.md",
+    "projections/run-legacy-p1.cmd",
+    "projections/INDEX.md",
+    "tests/test_p2_preflight.py",
+    "focused P2 preflight pytest output",
+    "legacy launcher fail-closed probe output",
+    "full pytest output: 294 passed",
+    "two no-drift myis-report check outputs",
+    "Dashboard/API output: 21 passed",
+    "session, assets, advisor, layout, policy, MLflow doctor, Brain literature, Ruff, and whitespace validation outputs"
+  ]
+}

@@ -221,7 +221,7 @@ MYIS_MLFLOW_STORE
 ตัวอย่าง Windows:
 
 ```text
-C:\Users\Siripon Sri\Desktop\My_Research\01_Stores\00_myIS\mlflow
+%LOCALAPPDATA%\myIS\mlflow
 ```
 
 External tree:

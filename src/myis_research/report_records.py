@@ -21,6 +21,8 @@ P2_REPORT_BYTE_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-report-byte-dr
 P2_REPORT_BYTE_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json"
 P2_PROJECTION_SOURCE_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json"
 P2_PROJECTION_SOURCE_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json"
+P2_TRACKED_OWNER_PATH_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json"
+P2_TRACKED_OWNER_PATH_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -208,6 +210,18 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 P2_PROJECTION_SOURCE_REPAIR_AUDIT,
                 "Validates byte-stable raw source digests, proposal bindings, and P1 envelope provenance.",
             ),
+            (
+                "p2-preflight-tracked-owner-path-audit-initial",
+                "Initial P2 preflight tracked Owner-path audit",
+                P2_TRACKED_OWNER_PATH_INITIAL_AUDIT,
+                "Records the personal absolute paths found in two tracked artifacts after the completion audit expanded its safety scope.",
+            ),
+            (
+                "p2-preflight-tracked-owner-path-audit-repair",
+                "Repaired P2 preflight tracked Owner-path audit",
+                P2_TRACKED_OWNER_PATH_REPAIR_AUDIT,
+                "Validates portable path guidance, fail-closed legacy execution configuration, and tracked-artifact regression coverage.",
+            ),
         ):
             digest = _hash_file(root, uri)
             if digest:
@@ -345,6 +359,19 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "recovery_id": "p2-preflight-projection-source-hash-drift-repair-20260802",
                 "recovery_uri": P2_PROJECTION_SOURCE_REPAIR_AUDIT,
                 "recovery_sha256": source_repair_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
+        path_initial_sha256 = _hash_file(root, P2_TRACKED_OWNER_PATH_INITIAL_AUDIT)
+        path_repair_sha256 = _hash_file(root, P2_TRACKED_OWNER_PATH_REPAIR_AUDIT)
+        if path_initial_sha256 and path_repair_sha256:
+            failures.append({
+                "failure_id": "p2-preflight-tracked-owner-path-audit-20260802",
+                "failure_uri": P2_TRACKED_OWNER_PATH_INITIAL_AUDIT,
+                "failure_sha256": path_initial_sha256,
+                "recovery_id": "p2-preflight-tracked-owner-path-repair-20260802",
+                "recovery_uri": P2_TRACKED_OWNER_PATH_REPAIR_AUDIT,
+                "recovery_sha256": path_repair_sha256,
                 "status": "repaired_and_validated",
                 "counters_changed": False,
             })

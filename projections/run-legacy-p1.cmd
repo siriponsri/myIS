@@ -2,7 +2,10 @@
 setlocal
 set "RESEARCH_ROOT=%~dp0.."
 for %%I in ("%RESEARCH_ROOT%") do set "RESEARCH_ROOT=%%~fI"
-if "%MYIS_LEGACY_DAPFAM_ROOT%"=="" set "MYIS_LEGACY_DAPFAM_ROOT=C:\Users\Siripon Sri\Desktop\My_Research\00_Projects\00_myIS\00_App\is1-projects\shared\data"
+if "%MYIS_LEGACY_DAPFAM_ROOT%"=="" (
+  echo ERROR: MYIS_LEGACY_DAPFAM_ROOT must point to the Owner-local legacy DAPFAM data directory.
+  exit /b 2
+)
 if "%MYIS_P1_STORE%"=="" set "MYIS_P1_STORE=%LOCALAPPDATA%\myIS\p1-cpu-store"
 if "%MYIS_P1_EVIDENCE_ROOT%"=="" set "MYIS_P1_EVIDENCE_ROOT=%LOCALAPPDATA%\myIS\p1-evidence"
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssfffZ')"') do set "RUNSTAMP=%%I"

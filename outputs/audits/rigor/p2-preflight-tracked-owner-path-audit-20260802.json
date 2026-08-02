@@ -1,0 +1,150 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-tracked-owner-path-audit-20260802",
+  "artifact": "P2 preflight enablement and candidate-freeze proposal safety closeout",
+  "artifact_path": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+  "artifact_sha256": "5afce958d2a3ef80e80e621a3c8c333676f401d35d6acf5ff9207a31043c1aac",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": [
+      "F001"
+    ]
+  },
+  "overall": {
+    "grade": "Weak Reject",
+    "mean_score": 2.83,
+    "one_line_summary": "The P2 preflight and proposal contracts are complete, but two tracked artifacts retain absolute Owner-local paths and contradict the repository-safe closeout requirement.",
+    "strengths": [
+      "The preflight receipt, immutable validation, stale-state checks, zero-counter reporting states, and four-control/eight-candidate proposal are structurally and semantically validated.",
+      "Current main retains no measured P2 lifecycle artifact, no candidate registration, no shortlist or selection exposure, and no D2 or D3 approval."
+    ],
+    "weaknesses": [
+      "mlflow/MLFLOW_DESIGN.md contains an absolute personal MLflow store example.",
+      "projections/run-legacy-p1.cmd embeds an absolute personal legacy data root as an executable default.",
+      "The existing P2 tests reject absolute paths inside P2 JSON artifacts but do not scan the wider tracked artifact surface."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": [
+        "The tracked-file scan directly tests the explicit no-absolute-Owner-path requirement."
+      ],
+      "weaknesses": [
+        "The prior closeout relied on P2-object validation and did not cover existing tracked documentation and launchers."
+      ],
+      "suggestions": [
+        "Add a repository-safe tracked-artifact scan to the deterministic test suite."
+      ]
+    },
+    "D2_falsifiability": {
+      "score": 3,
+      "strengths": [
+        "The two violations are reproducible with git grep and have exact file and line locators."
+      ],
+      "weaknesses": [
+        "No checked-in regression currently fails when an Owner-local absolute path is added to a tracked artifact."
+      ],
+      "suggestions": [
+        "Encode platform-neutral Windows, macOS, Linux, and current-owner path patterns in a regression test."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": [
+        "The finding is limited to repository path safety and does not reinterpret P1 or claim measured P2 evidence."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": [
+        "P2 JSON artifacts themselves contain only repository-relative locators and path commitments."
+      ],
+      "weaknesses": [
+        "The closeout claim that tracked artifacts emit no Owner-local absolute paths is contradicted by two current tracked files."
+      ],
+      "suggestions": [
+        "Replace the personal defaults with environment-variable or generic external-store guidance and rerun the scan."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 2,
+      "strengths": [
+        "The completion audit retained the contradiction instead of treating passing P2-focused tests as sufficient."
+      ],
+      "weaknesses": [
+        "The absolute paths predated the P2 feature branch and escaped the original safety-check scope."
+      ],
+      "suggestions": [
+        "Preserve this audit and bind a separate recovery review after repair."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": [
+        "Focused tests, full CI, report drift checks, P2 closure policy, archive-runtime policy, and layout validation all pass."
+      ],
+      "weaknesses": [
+        "The safety scan did not cover the complete tracked artifact surface required by the objective."
+      ],
+      "suggestions": [
+        "Add the broader scan, rerun focused and full tests, and retain zero real counters."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "Tracked repository artifacts",
+      "target_entity": "absolute Owner-local path values",
+      "evidence_locator": "mlflow/MLFLOW_DESIGN.md:224 and projections/run-legacy-p1.cmd:5",
+      "observation": "Both files contain the current Owner's absolute Windows path; the launcher also uses it as the default protected data root.",
+      "reasoning": "The attached objective explicitly forbids absolute Owner-local paths in tracked artifacts, so the current repository state does not prove completion.",
+      "suggestion": "Use an environment-variable-based generic MLflow example, require MYIS_LEGACY_DAPFAM_ROOT explicitly, and verify the full tracked artifact surface."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D2_falsifiability",
+      "severity": "minor",
+      "target_artifact": "tests/test_p2_preflight.py",
+      "target_entity": "repository-safe path regression",
+      "evidence_locator": "Existing tests cover P2 receipt/proposal objects but no tracked-artifact scan.",
+      "observation": "Absolute paths outside the P2 JSON objects do not fail the deterministic suite.",
+      "reasoning": "A future generated launcher or documentation projection could reintroduce a personal path while P2-focused validation remains green.",
+      "suggestion": "Add a test over tracked artifact roots with explicit exclusions for Owner-authored notes and source/test fixtures."
+    }
+  ],
+  "questions_for_owner": [
+    "No new scientific or gate decision is required for this repository path-safety repair."
+  ],
+  "read_order": [
+    "P2 preflight enablement objective attachment",
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-p2.yaml",
+    "control/budgets/p2-r1-primary-v1.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "control/decisions/D1_START_CAMPAIGN.yaml",
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+    "schemas/p2-preflight-receipt.v1.json",
+    "schemas/p2-candidate-freeze-proposal.v1.json",
+    "src/myis_research/p2/preflight.py",
+    "src/myis_research/p2/contracts.py",
+    "tests/test_p2_preflight.py",
+    "projections/read-model/read-model.v2.json",
+    "mlflow/MLFLOW_DESIGN.md",
+    "projections/run-legacy-p1.cmd",
+    "GitHub Actions run 30746453126",
+    "tracked artifact unsafe-path scan"
+  ]
+}

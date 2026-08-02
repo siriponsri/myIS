@@ -18,7 +18,8 @@ unified health/security contract.
 
 `run-legacy-p1.cmd` is a protected Owner-local execution command, not a UI
 launcher. Never use it for launcher or interface acceptance and never run it
-during the recovery freeze.
+during the recovery freeze. It fails closed unless the Owner explicitly sets
+`MYIS_LEGACY_DAPFAM_ROOT` to the protected legacy DAPFAM data directory.
 
 Set `MYIS_DASHBOARD_PORT` before starting the unified Dashboard when a
 non-default loopback port is required. `MYIS_MLFLOW_STORE` is a maintenance
