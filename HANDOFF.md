@@ -354,3 +354,38 @@ freeze receipts, and real selection receipts remain untouched.
 
 ขั้นถัดไปที่ได้รับอนุญาตคือ `Owner-local measured preflight` โดยต้องเริ่มเป็นงาน
 แยกต่างหาก ห้ามเริ่ม measured P2, real selection หรือ final evaluation อัตโนมัติ
+
+## P2 preflight completion repair (2026-08-02)
+
+Completion audit `p2-preflight-completion-audit-20260802` initially returned
+`Weak Reject` with four blocking gaps: stale live authority, asymmetric
+store/worktree overlap, duplicate free-space accounting on one volume, and
+incomplete negative-path coverage. Repair commit
+`c13592c4ccba4235991459899801c022d6eb8623` closes those gaps and also requires
+exact receipt check/failure consistency, rejects unsafe immutable output
+traversal, and scans partial or invalid canonical P2 lifecycle artifacts.
+
+Post-repair audit `p2-preflight-completion-repair-20260802` returned `Accept`
+with no blocking findings. Focused preflight tests passed `38`; the full suite
+passed `292` with one pre-existing Starlette warning. Dashboard/report/policy
+focused tests passed `90`, Obsidian/preflight focused tests passed `47`, and
+report sync/check passed twice without drift. Layout, full assets, session
+audit, P2 closure policy, archive-runtime policy, repository-safe MLflow
+doctor, Brain literature validation (`154` notes, `0` errors), scoped Ruff,
+and `git diff --check` all passed.
+
+Generated projections were committed separately at
+`955e55d6620566edb3e11a8c9797cd1d42fc6f70`. The shared read-model revision is
+`b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957`
+with SHA-256
+`4bff54d2899142aa4df20dcc25e39fc4e725e1582442bbf2e1b751bb89695c8c`;
+the aggregate-only projection sync MLflow run is
+`491abbc0c7cf4e6d85bf7636a5c0d9e0`.
+
+Phase/task remains `P2_SCOPE_DEVELOPMENT / P2.1` with status
+`ready_planned_not_measured`, preflight `not_started`, proposal
+`draft_owner_review` and `not_adopted`, and all real measured-run, candidate,
+shortlist, and selection counters at `0`. No measured request, baseline
+commitment, protected store access, final-872, D2/D3, GPU, paid API, provider
+change, or protected payload access occurred. The exact next authorized action
+remains `Owner-local P2 measured preflight`.

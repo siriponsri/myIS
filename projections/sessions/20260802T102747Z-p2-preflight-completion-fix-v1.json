@@ -1,0 +1,151 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260802T102747Z-p2-preflight-completion-fix-v1",
+  "run_id": null,
+  "goal_id": "P2_PREFLIGHT_COMPLETION_FIX_V1",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-02T10:27:47Z",
+  "scope": "Audit, repair, validate, and close the repository-safe P2 Owner-local preflight completion contracts without starting measured P2 or accessing protected stores.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "955e55d6620566edb3e11a8c9797cd1d42fc6f70",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "outputs/audits/research-sessions/20260802T102747Z-p2-preflight-completion-fix-skill-v1.json",
+      "projections/sessions/20260802T102747Z-p2-preflight-completion-fix-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The initial completion audit returned Weak Reject with four blocking gaps in stale authority, worktree overlap, capacity accounting, and negative-path coverage.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json",
+          "sha256": "e981e8858d5aad55650f2afc24392b52116eda61c547da391a2667c63a90645e",
+          "locator": "overall.grade and governance.blocking_findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The implementation was repaired to revalidate live gates and lifecycle counters, reject symmetric store/worktree overlap, count free capacity once per volume, and harden immutable receipt diagnostics and paths.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/p2/contracts.py",
+          "sha256": "df68bb6b64262baaecc0ec7b382ae2ca107b97761761da8cb16e2ddc523da9c6",
+          "locator": "_validate_preflight_receipt_semantics and live authority validation"
+        },
+        {
+          "path": "src/myis_research/p2/preflight.py",
+          "sha256": "a45c207ceead5930deed5da7858f3096d5abca3c865eac2fa9e53bc51cf8c31f",
+          "locator": "store inspection, lifecycle counters, capacity aggregation, and immutable output handling"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The post-repair rigor review returned Accept with no blocking findings and retained the point-in-time preflight limitation.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json",
+          "sha256": "77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3",
+          "locator": "overall.grade, governance.blocking_findings, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Preflight completion requires comprehensive failure tests across mutable authority, lifecycle artifacts, store identity, path safety, capacity, immutable output, receipt consistency, and CLI projection states.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_p2_preflight.py",
+          "sha256": "12282668423ca99bb5ed9a44f9072fd94768cebcabd7075421d40808cdfb017f",
+          "locator": "focused positive, stale-state, path, store, receipt, and CLI regression cases"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P2 remains ready_planned_not_measured with preflight not_started, proposal not_adopted, no real measured lifecycle artifacts, and D2/D3 still waiting_owner.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "edff15c05826f244e32ab8423b381a9dbeeea872bf0dca08155dadab55606958",
+          "locator": "p2_readiness.status, preflight_status, candidate_proposal.adoption, measured_runs, candidate_count, shortlist_count, selection_accesses, and gates"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "All generated projections were refreshed from one read model and the aggregate-only sync receipt recorded PASS.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "785070392615af1f0d9552767c9ca9096b80a280b80ba20acf87a198786aeb02",
+          "locator": "status, source_commit, read_model_revision, read_model_sha256, and mlflow_run_id"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight remains the next authorized action and was not executed during this repair.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "candidate-proposal-not-adopted",
+      "provenance": "agent-observed",
+      "summary": "The four-control and eight-candidate proposal remains draft_owner_review and not_adopted.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-selection-final-closed",
+      "provenance": "agent-observed",
+      "summary": "Measured P2, real candidate registration, shortlist freeze, selection exposure, final-872, D2_OPEN_FINAL, and D3_SUBMIT_RELEASE remain closed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
