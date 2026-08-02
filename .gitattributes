@@ -35,3 +35,9 @@ obsidian_report/**/Owner_Notes/** text
 obsidian_report/80_Owner_Notes/** text
 obsidian_report/.obsidian/** text
 obsidian_report/*.canvas text
+
+# Full report checks compare generated projection bytes exactly. Preserve LF
+# bytes on Windows so a clean checkout matches the deterministic renderer.
+mlflow/generated/archive-index.v2.json -text
+projections/obsidian/generated/** -text
+projections/reports/** -text

@@ -102,7 +102,21 @@ def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
         "obsidian_report/80_Owner_Notes/** text",
         "obsidian_report/.obsidian/** text",
         "obsidian_report/*.canvas text",
+        "mlflow/generated/archive-index.v2.json -text",
+        "projections/obsidian/generated/** -text",
+        "projections/reports/** -text",
     } <= attributes
+
+
+def test_internal_projection_bytes_are_checkout_stable_and_current() -> None:
+    model = build_read_model(ROOT)
+    drift = [
+        path.relative_to(ROOT).as_posix()
+        for path, content in projection_report_contents(ROOT, model).items()
+        if path.is_relative_to(ROOT)
+        and (not path.is_file() or path.read_bytes() != content.encode("utf-8"))
+    ]
+    assert drift == []
 
 
 def test_projection_archive_identity_changes_when_generator_binding_changes() -> None:

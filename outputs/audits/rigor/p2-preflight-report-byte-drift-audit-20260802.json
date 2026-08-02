@@ -1,0 +1,143 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-report-byte-drift-audit-20260802",
+  "artifact": "Merged P2 preflight completion report projections",
+  "artifact_path": "projections/reports/task/task-p2-1.json",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": [
+      "F001"
+    ]
+  },
+  "overall": {
+    "grade": "Weak Reject",
+    "mean_score": 2.67,
+    "one_line_summary": "The P2 preflight implementation and read model remain valid, but a clean Windows checkout fails the required full report byte check for internal generated projections.",
+    "strengths": [
+      "The read model, P2 lifecycle state, proposal validation, focused tests, safety policies, and merged CI remained valid.",
+      "The drift was confined to generated projection line endings and did not alter scientific state or protected data."
+    ],
+    "weaknesses": [
+      "The full report check reported 17 internal projection paths as drifted after Git converted LF renderer output to CRLF on Windows checkout.",
+      "The existing CI used read-model-only drift validation and had no checked-in regression that compared all internal generated projection bytes."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": [
+        "The full report checker directly exposed the checkout-specific mismatch."
+      ],
+      "weaknesses": [
+        "CI evidence covered read-model equality but not the affected full internal report byte set."
+      ],
+      "suggestions": [
+        "Add a checkout-stability assertion for every internal output rendered by projection_report_contents."
+      ]
+    },
+    "D2_falsifiability": {
+      "score": 3,
+      "strengths": [
+        "The failure is reproducible with myis-report check on a clean Windows checkout."
+      ],
+      "weaknesses": [
+        "No test encoded the exact LF byte policy for the three affected generated-output roots."
+      ],
+      "suggestions": [
+        "Bind the affected paths in .gitattributes and assert the entries in tests."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": [
+        "The finding is limited to reporting reproducibility and makes no measured P2 claim."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": [
+        "Text-normalized content matched the deterministic renderer."
+      ],
+      "weaknesses": [
+        "The merged closeout claimed report checks passed while the authoritative full check failed on the current clean Windows checkout."
+      ],
+      "suggestions": [
+        "Repair raw-byte checkout policy and rerun the full check twice before closeout."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 2,
+      "strengths": [
+        "The completion audit retained the contradictory failure instead of accepting the green read-model-only CI result."
+      ],
+      "weaknesses": [
+        "The failure was discovered only after merge because local pre-merge files had not been rewritten by checkout."
+      ],
+      "suggestions": [
+        "Exercise a checkout-stable byte assertion in the normal full test suite."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 2,
+      "strengths": [
+        "The report renderer is deterministic and already compares exact bytes."
+      ],
+      "weaknesses": [
+        "Generated MLflow, compatibility, and phase/task report paths lacked an explicit no-normalization policy."
+      ],
+      "suggestions": [
+        "Preserve LF bytes for the affected roots and regenerate through one validated read-model object."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "Internal generated report projections",
+      "target_entity": "raw checkout bytes",
+      "evidence_locator": "myis-report check reported report_drift for mlflow/generated/archive-index.v2.json, projections/obsidian/generated/program-status.md, and 15 projections/reports JSON files",
+      "observation": "Git checkout converted deterministic LF output to CRLF because the affected generated roots had no explicit byte-preservation attributes.",
+      "reasoning": "The required full report check fails on the current clean Windows checkout, so cross-platform completion is not proven even though parsed content and read-model-only CI pass.",
+      "suggestion": "Add -text attributes for the affected generated roots, regenerate from one read model, and add a raw-byte regression over all internal projection outputs."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D1_evidence_relevance",
+      "severity": "minor",
+      "target_artifact": ".github/workflows/cpu-contract.yml",
+      "target_entity": "Validate active layout and projections step",
+      "evidence_locator": "The workflow runs myis-report check --read-model-only and relies on the full pytest suite for repository-local contracts.",
+      "observation": "The full suite had no regression that checked raw bytes for all repository-local generated projections.",
+      "reasoning": "A green CI run did not falsify the Windows-only byte drift.",
+      "suggestion": "Add a platform-independent internal projection byte test to the full pytest suite while retaining local full report checks for sibling projections."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner scientific or gate decision is required for this reporting-byte repair."
+  ],
+  "read_order": [
+    "P2 preflight enablement objective attachment",
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-p2.yaml",
+    "control/budgets/p2-r1-primary-v1.yaml",
+    "projections/read-model/read-model.v2.json",
+    "projections/reports/task/task-p2-1.json",
+    ".gitattributes",
+    "src/myis_research/report_cli.py",
+    "tests/test_obsidian_report_contract.py",
+    "myis-report check output on merged main",
+    "GitHub Actions run 30744038215"
+  ]
+}

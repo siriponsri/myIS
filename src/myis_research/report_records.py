@@ -17,6 +17,8 @@ REPORT_INDEX_SCHEMA = "myis.phase-task-report-index.v1"
 REPORT_ROOT = Path("projections/reports")
 P2_PREFLIGHT_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json"
 P2_PREFLIGHT_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json"
+P2_REPORT_BYTE_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json"
+P2_REPORT_BYTE_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -180,6 +182,18 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 P2_PREFLIGHT_REPAIR_AUDIT,
                 "Validates the fail-closed repair while preserving not-started preflight and zero measured counters.",
             ),
+            (
+                "p2-preflight-report-byte-audit-initial",
+                "Initial P2 preflight report byte-stability audit",
+                P2_REPORT_BYTE_INITIAL_AUDIT,
+                "Records the clean-Windows-checkout report drift discovered after merge.",
+            ),
+            (
+                "p2-preflight-report-byte-audit-repair",
+                "Repaired P2 preflight report byte-stability audit",
+                P2_REPORT_BYTE_REPAIR_AUDIT,
+                "Validates LF byte preservation and repository-local projection regression coverage.",
+            ),
         ):
             digest = _hash_file(root, uri)
             if digest:
@@ -294,6 +308,19 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "status": "repaired_and_validated",
                 "counters_changed": False,
             })
+        byte_initial_sha256 = _hash_file(root, P2_REPORT_BYTE_INITIAL_AUDIT)
+        byte_repair_sha256 = _hash_file(root, P2_REPORT_BYTE_REPAIR_AUDIT)
+        if byte_initial_sha256 and byte_repair_sha256:
+            failures.append({
+                "failure_id": "p2-preflight-report-byte-drift-audit-20260802",
+                "failure_uri": P2_REPORT_BYTE_INITIAL_AUDIT,
+                "failure_sha256": byte_initial_sha256,
+                "recovery_id": "p2-preflight-report-byte-drift-repair-20260802",
+                "recovery_uri": P2_REPORT_BYTE_REPAIR_AUDIT,
+                "recovery_sha256": byte_repair_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
     if scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
         result = "P1 measured train/selection evidence is complete within its declared development boundary."
@@ -304,7 +331,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
         output = f"Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is {preflight_status}, the candidate proposal is {proposal.get('adoption', 'not_adopted')}, and no measured P2 artifact exists."
         result = "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero."
-        interpretation = "The repair strengthens stale authority, worktree boundary, capacity, immutable receipt, and negative-test behavior. It does not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
+        interpretation = "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform report-byte stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
         decision_status = str(p2.get("preflight_status", "not_started"))
     elif phase_id == "P0_FOUNDATION":
         output = "Canonical control, schema, protected-boundary, and projection contracts."
@@ -371,7 +398,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         },
         "input_bindings": _bindings(root, model, phase_id),
         "work_summary": (
-            "The initial P2 preflight completion audit was preserved, its fail-closed findings were repaired, and an independent post-repair review was added without starting Owner-local preflight or measured execution."
+            "The initial P2 preflight completion and post-merge report-byte audits were preserved, both recovery chains were validated, and no Owner-local preflight or measured execution was started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
         ),
