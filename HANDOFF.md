@@ -389,3 +389,41 @@ shortlist, and selection counters at `0`. No measured request, baseline
 commitment, protected store access, final-872, D2/D3, GPU, paid API, provider
 change, or protected payload access occurred. The exact next authorized action
 remains `Owner-local P2 measured preflight`.
+
+## P2 report byte-stability recovery (2026-08-02)
+
+The post-merge completion audit found one additional reporting failure: a clean
+Windows checkout passed read-model-only CI but failed the full report check on
+17 internal generated paths. Text-normalized content matched the deterministic
+renderer; Git had converted LF output to CRLF because the MLflow archive,
+compatibility projection, and Phase/Task JSON roots lacked explicit byte
+preservation.
+
+Audit `p2-preflight-report-byte-drift-audit-20260802` retained the finding as
+`Weak Reject`. Repair commit `f192acb7a5d01227ef91b9594b6a63c312ce31dd`
+adds checkout-stable generated-output attributes, a regression over every
+repository-local projection byte stream, and the auditable failure/recovery
+binding. Post-repair audit `p2-preflight-report-byte-drift-repair-20260802`
+returned `Accept` with no blocking findings. Generated projection commit
+`9b614a582587175219b594a8355c149b458d15d8` binds the recovery to shared
+read-model revision
+`c68e57feb22f284e4ff9e98d87c6807c1993dfaa9cb9e5fc0467a28ef09c0f33`
+and SHA-256
+`54c1762501c339ca506ab48391074674d10105ccb024fa84bf88c04efe9b3aa0`;
+the aggregate-only projection sync MLflow run is
+`0bbdce0ae1d64a95966d7b4d6ab682bb`.
+
+Verification passed with `293` full tests, `48` focused Obsidian/preflight
+tests, two consecutive full report checks without drift, session audit,
+layout, P2 closure policy, archive-runtime policy, scoped Ruff, and
+`git diff --check`. The P2 Phase/Task records expose both byte-audit artifacts
+and one `repaired_and_validated` recovery with `counters_changed=false`.
+
+Phase/task remains `P2_SCOPE_DEVELOPMENT / P2.1`, status
+`ready_planned_not_measured`, evidence class engineering/fixture provenance,
+scientific authority `false`, preflight `not_started`, and proposal
+`draft_owner_review` / `not_adopted`. Measured runs, real candidates,
+shortlist, and selection accesses remain `0`. Protected stores and payloads,
+final-872, D2/D3, GPU, paid APIs, network downloads, and provider state were
+not accessed or changed. The exact next authorized action remains
+`Owner-local P2 measured preflight`.

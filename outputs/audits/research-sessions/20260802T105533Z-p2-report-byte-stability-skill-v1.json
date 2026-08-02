@@ -1,0 +1,156 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260802T105533Z-p2-report-byte-stability-skill-v1",
+  "run_id": null,
+  "goal_id": "P2_PREFLIGHT_REPORT_BYTE_STABILITY_V1",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-02T10:55:33Z",
+  "scope": "Audit and repair clean-Windows-checkout byte drift in the merged P2 preflight report projections without changing scientific state or accessing protected data.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "9b614a582587175219b594a8355c149b458d15d8",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "outputs/audits/research-sessions/20260802T105533Z-p2-report-byte-stability-skill-v1.json",
+      "projections/sessions/20260802T105533Z-p2-report-byte-stability-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The completion audit found that a clean Windows checkout failed the full report check even though the merged read-model-only CI run had passed.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json",
+          "sha256": "bdbcbfd23a8a1cfa2816485c87c04dd5391977a819d187b2b8bc30461e417eba",
+          "locator": "overall, governance.blocking_findings, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Text-normalized projection contents matched the renderer, isolating the failure to LF-to-CRLF checkout conversion in three generated-output roots.",
+      "evidence_refs": [
+        {
+          "path": ".gitattributes",
+          "sha256": "a92dfdb553fbb9fcd66f1001cf7df8d2fa4000e19befecdc597126b70c2058ab",
+          "locator": "generated projection byte-preservation rules"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The repair preserves raw LF bytes for the affected outputs and adds a regression over every repository-local projection rendered from the current read model.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_obsidian_report_contract.py",
+          "sha256": "f771e61f31265e3384c807e42b44d7a05b8fedd5c808f97c484fd678a9ffcbb9",
+          "locator": "test_internal_projection_bytes_are_checkout_stable_and_current"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The post-repair review returned Accept with no blocking findings and retained local sibling-projection checking as a closeout responsibility.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json",
+          "sha256": "cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996",
+          "locator": "overall.grade, governance.blocking_findings, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The P2 Phase and Task reports now retain the initial byte-drift finding and its repaired_and_validated recovery chain with counters_changed false.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/report_records.py",
+          "sha256": "7861b453bd0902ee966994ef3e456560a03520cb9cce01d6d462f3cebdadde4c",
+          "locator": "P2 report byte audit artifacts and failure_recovery_references"
+        },
+        {
+          "path": "projections/reports/task/task-p2-1.json",
+          "sha256": "6c170f18cf32fe462458bde357bab6343d127135eb93c1c0fb7b0554faccf1c9",
+          "locator": "artifact_references, failure_recovery_references, governance_status, and next_authorized_action"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P2 remains ready_planned_not_measured with preflight not_started, all real lifecycle counters at zero, and D2/D3 closed.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "590aad3f86b58f39761d0395eea4ab8a06e9f7ae4249c9ffe130c3ad718f8b30",
+          "locator": "p2_readiness status, preflight, counters, freeze barrier, proposal, resources, and gates"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "a5ccea9afeab9efa87883e44324f0fa6443c2e5813ffc9d01bc888db6f8c12b8",
+          "locator": "status, source_commit, read_model_revision, read_model_sha256, and mlflow_run_id"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight remains the next authorized action and was not executed during this reporting repair.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "candidate-proposal-not-adopted",
+      "provenance": "agent-observed",
+      "summary": "The four-control and eight-candidate proposal remains draft_owner_review and not_adopted.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-selection-final-closed",
+      "provenance": "agent-observed",
+      "summary": "Measured P2, candidate registration, shortlist freeze, selection exposure, final-872, D2_OPEN_FINAL, and D3_SUBMIT_RELEASE remain closed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
