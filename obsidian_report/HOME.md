@@ -1,13 +1,19 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "9b2edb07319c69be8d099d563a85527d4e4910624438c8fb38f3f5899ffcd962"
-read_model_sha256: "9224c7f5549d443b24fb942836af9a9d88a1df96aa9a1b37e2712c38fe378901"
+read_model_revision: "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217"
+read_model_sha256: "d82442621d78cb95478960a6fb89e2b6da7022243097881bf20add88746bd58d"
 source_commit: "2e841eeefcfd618cd85d0c902878c1cdc220ee76"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering"
+scientific_authority: false
+claim_boundary: "engineering_provenance_only"
+generated_from_revision: "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217"
+last_material_update: "2026-08-01T15:07:35Z"
+next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -42,8 +48,8 @@ P1 CPU baseline ผ่าน four-slot manifest, validation reports, package bin
 
 ## สิ่งที่ Owner ต้องทำ
 
-- Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed
-- Do not start measured P2 or selection exposure from the static review verdict
+- Owner-local P2 measured preflight
+- Do not start measured P2 or selection exposure automatically; preflight requires the Owner-local protected store
 
 ## ขอบเขตที่ยังไม่แตะ
 

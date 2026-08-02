@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-recovery:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "run_id", "failure_id", "action", "validation_after_recovery", "counters_before", "counters_after", "residual_risk", "evidence_class", "scientific_authority", "claim_boundary", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-recovery.v1"}, "record_id": {"type": "string"}, "run_id": {"type": "string"}, "failure_id": {"type": "string"}, "action": {"type": "string"}, "outcome": {"type": "string"}, "validation_after_recovery": {"type": "string"}, "counters_before": {"type": "object"}, "counters_after": {"type": "object"}, "residual_risk": {"type": "string"}, "metric_promotion": {"type": "boolean"}, "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "summary": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

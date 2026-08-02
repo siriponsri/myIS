@@ -1,0 +1,405 @@
+{
+  "artifact_references": [
+    {
+      "artifact_id": "p1-r0-selection-d9533ba623ce-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6",
+      "evidence_class": "train_selection_measured",
+      "explanation": "Binds one aggregate run slot to its immutable request and evaluator lineage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/scope-autoindex-v1/manifests/p1-r0-selection-d9533ba623ce.json",
+      "scientific_authority": true,
+      "title": "Validated aggregate manifest for p1-r0-selection-d9533ba623ce",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p1-r0-train-d9533ba623ce-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3",
+      "evidence_class": "train_selection_measured",
+      "explanation": "Binds one aggregate run slot to its immutable request and evaluator lineage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/scope-autoindex-v1/manifests/p1-r0-train-d9533ba623ce.json",
+      "scientific_authority": true,
+      "title": "Validated aggregate manifest for p1-r0-train-d9533ba623ce",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p1-r0ww-selection-d9533ba623ce-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58",
+      "evidence_class": "train_selection_measured",
+      "explanation": "Binds one aggregate run slot to its immutable request and evaluator lineage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/scope-autoindex-v1/manifests/p1-r0ww-selection-d9533ba623ce.json",
+      "scientific_authority": true,
+      "title": "Validated aggregate manifest for p1-r0ww-selection-d9533ba623ce",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p1-r0ww-train-d9533ba623ce-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1",
+      "evidence_class": "train_selection_measured",
+      "explanation": "Binds one aggregate run slot to its immutable request and evaluator lineage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/scope-autoindex-v1/manifests/p1-r0ww-train-d9533ba623ce.json",
+      "scientific_authority": true,
+      "title": "Validated aggregate manifest for p1-r0ww-train-d9533ba623ce",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p1-four-slot-package",
+      "artifact_type": "package",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c",
+      "evidence_class": "train_selection_measured",
+      "explanation": "Binds all four measured slots, manifests, and validation reports.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json",
+      "scientific_authority": true,
+      "title": "P1 four-slot package",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p1-rigor-review",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38",
+      "evidence_class": "train_selection_measured",
+      "explanation": "Records the independent artifact-only review without exposing protected payloads.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json",
+      "scientific_authority": true,
+      "title": "P1 artifact-only rigor review",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "train_selection_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "P1 measured train/selection evidence is complete within its declared development boundary.",
+    "status": "completed"
+  },
+  "evidence_class": "train_selection_measured",
+  "evidence_links": [
+    {
+      "artifact_id": "p1-r0-selection-d9533ba623ce-manifest",
+      "sha256": "6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6",
+      "uri": "campaigns/scope-autoindex-v1/manifests/p1-r0-selection-d9533ba623ce.json"
+    },
+    {
+      "artifact_id": "p1-r0-train-d9533ba623ce-manifest",
+      "sha256": "31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3",
+      "uri": "campaigns/scope-autoindex-v1/manifests/p1-r0-train-d9533ba623ce.json"
+    },
+    {
+      "artifact_id": "p1-r0ww-selection-d9533ba623ce-manifest",
+      "sha256": "8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58",
+      "uri": "campaigns/scope-autoindex-v1/manifests/p1-r0ww-selection-d9533ba623ce.json"
+    },
+    {
+      "artifact_id": "p1-r0ww-train-d9533ba623ce-manifest",
+      "sha256": "cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1",
+      "uri": "campaigns/scope-autoindex-v1/manifests/p1-r0ww-train-d9533ba623ce.json"
+    },
+    {
+      "artifact_id": "p1-four-slot-package",
+      "sha256": "f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c",
+      "uri": "campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json"
+    },
+    {
+      "artifact_id": "p1-rigor-review",
+      "sha256": "4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38",
+      "uri": "outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json"
+    }
+  ],
+  "failure_recovery_references": [],
+  "generated_at": "2026-08-01T15:07:35Z",
+  "generated_from_revision": "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217",
+  "git_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "train_selection_measured",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": true,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": true,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": true
+  },
+  "input_bindings": {
+    "campaign": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "execution_envelope": {
+      "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
+      "uri": "control/execution-envelope.yaml"
+    },
+    "git_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76",
+    "protected_payloads": "owner-local; aggregate hashes only in this report",
+    "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
+    "source_of_truth": {
+      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "uri": "control/source-of-truth.yaml"
+    }
+  },
+  "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
+  "last_material_update": "2026-08-01T15:07:35Z",
+  "metric_references": [
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 125,
+      "name": "recall_at_100",
+      "relevant_total": 2500,
+      "retrieved_relevant": 490,
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "scope": "ALL",
+      "split": "selection",
+      "value": 0.196
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 121,
+      "name": "recall_at_100",
+      "relevant_total": 2005,
+      "retrieved_relevant": 461,
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "scope": "IN",
+      "split": "selection",
+      "value": 0.233819891725
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 90,
+      "name": "recall_at_100",
+      "relevant_total": 495,
+      "retrieved_relevant": 29,
+      "run_id": "p1-r0-selection-d9533ba623ce",
+      "scope": "OUT",
+      "split": "selection",
+      "value": 0.062392548637
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 250,
+      "name": "recall_at_100",
+      "relevant_total": 5000,
+      "retrieved_relevant": 1081,
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "scope": "ALL",
+      "split": "train",
+      "value": 0.2162
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 247,
+      "name": "recall_at_100",
+      "relevant_total": 4062,
+      "retrieved_relevant": 1024,
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "scope": "IN",
+      "split": "train",
+      "value": 0.258622280076
+    },
+    {
+      "arm": "R0",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 179,
+      "name": "recall_at_100",
+      "relevant_total": 938,
+      "retrieved_relevant": 57,
+      "run_id": "p1-r0-train-d9533ba623ce",
+      "scope": "OUT",
+      "split": "train",
+      "value": 0.076057227485
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 125,
+      "name": "recall_at_100",
+      "relevant_total": 2500,
+      "retrieved_relevant": 535,
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "scope": "ALL",
+      "split": "selection",
+      "value": 0.214
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 121,
+      "name": "recall_at_100",
+      "relevant_total": 2005,
+      "retrieved_relevant": 501,
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "scope": "IN",
+      "split": "selection",
+      "value": 0.260759203902
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 90,
+      "name": "recall_at_100",
+      "relevant_total": 495,
+      "retrieved_relevant": 34,
+      "run_id": "p1-r0ww-selection-d9533ba623ce",
+      "scope": "OUT",
+      "split": "selection",
+      "value": 0.074661067156
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 250,
+      "name": "recall_at_100",
+      "relevant_total": 5000,
+      "retrieved_relevant": 1215,
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "scope": "ALL",
+      "split": "train",
+      "value": 0.243
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "secondary",
+      "n": 247,
+      "name": "recall_at_100",
+      "relevant_total": 4062,
+      "retrieved_relevant": 1150,
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "scope": "IN",
+      "split": "train",
+      "value": 0.287953506066
+    },
+    {
+      "arm": "R0-W",
+      "denominator": "macro_mean_per_query_relevant_families",
+      "direction": "maximize",
+      "evidence_role": "primary",
+      "n": 179,
+      "name": "recall_at_100",
+      "relevant_total": 938,
+      "retrieved_relevant": 65,
+      "run_id": "p1-r0ww-train-d9533ba623ce",
+      "scope": "OUT",
+      "split": "train",
+      "value": 0.085847360337
+    }
+  ],
+  "next_authorized_action": "Owner-local P2 measured preflight",
+  "objective": "Protected owner-local CPU evidence import",
+  "phase_id": "P1_CPU_BASELINE",
+  "report_id": "task-p1-3",
+  "report_sha256": "f3ed8fc40bef43d2d7f72858e8432b241398cafdce9b87f49688bd8831e58435",
+  "report_type": "task",
+  "result": {
+    "decision": "completed",
+    "output": "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics.",
+    "result": "P1 measured train/selection evidence is complete within its declared development boundary."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": true,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "P2_SCOPE_DEVELOPMENT",
+    "program_state": "P1_CPU_MEASURED_COMPLETE",
+    "task": "P2.1"
+  },
+  "status": "completed",
+  "supported_claims": [
+    {
+      "claim": "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics.",
+      "evidence": [
+        "p1-r0-selection-d9533ba623ce-manifest",
+        "p1-r0-train-d9533ba623ce-manifest",
+        "p1-r0ww-selection-d9533ba623ce-manifest",
+        "p1-r0ww-train-d9533ba623ce-manifest",
+        "p1-four-slot-package",
+        "p1-rigor-review"
+      ]
+    }
+  ],
+  "task_id": "P1.3",
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
+}

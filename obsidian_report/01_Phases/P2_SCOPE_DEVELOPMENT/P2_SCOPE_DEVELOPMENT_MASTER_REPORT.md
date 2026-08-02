@@ -1,13 +1,19 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "9b2edb07319c69be8d099d563a85527d4e4910624438c8fb38f3f5899ffcd962"
-read_model_sha256: "9224c7f5549d443b24fb942836af9a9d88a1df96aa9a1b37e2712c38fe378901"
+read_model_revision: "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217"
+read_model_sha256: "d82442621d78cb95478960a6fb89e2b6da7022243097881bf20add88746bd58d"
 source_commit: "2e841eeefcfd618cd85d0c902878c1cdc220ee76"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: ["U006","U011","U154"]
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering"
+scientific_authority: false
+claim_boundary: "engineering_provenance_only"
+generated_from_revision: "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217"
+last_material_update: "2026-08-01T15:07:35Z"
+next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -24,60 +30,114 @@ claim_level: "none"
 
 # P2_SCOPE_DEVELOPMENT
 
-P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.
+Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.
 
-## Status for Owner
+## Objective
 
-**ready_planned_not_measured**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.
+Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.
 
-## Official static review
+## Starting State
 
-Round `3` verdict is **accept** with status `accepted_static_contract_review`. This static review remains engineering provenance only. See [[P2_OFFICIAL_REVIEW_AUDIT]].
+- `phase`: P2_SCOPE_DEVELOPMENT
+- `task`: P2.1
+- `program_state`: P1_CPU_MEASURED_COMPLETE
+- `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
+- `claim_boundary`: No unsupported scientific claim
 
-## Repository-only fixture pilot
+## Inputs and Frozen Bindings
 
-Fixture status is **passed** with evidence class `fixture` and scientific authority `False`. Synthetic lifecycle counts are kept separate from real campaign counters. See [[P2_FIXTURE_PILOT]].
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea`
+- `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
+- `git_commit`: 2e841eeefcfd618cd85d0c902878c1cdc220ee76
+- `budget_profile`: `control/budgets/p2-r1-primary-v1.yaml`; SHA-256 `d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c`
+- `execution_envelope`: `control/execution-envelope-p2.yaml`; SHA-256 `cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247`
+- `campaign_revision`: scope-autoindex-v1-p2-r1-primary-v1
+- `static_review`: `orchestration/audits/p2-readiness/index.json`; SHA-256 `6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80`
+- `fixture_receipt`: `outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json`; SHA-256 `6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125`
+- `fixture_manifest`: `outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json`; SHA-256 `b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3`
+- `observatory_registry`: `outputs/observatory/fixture-v1/registry.json`; SHA-256 `51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1`
+- `observatory_receipt`: `outputs/observatory/fixture-v1/receipt.json`; SHA-256 `6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51`
 
-## Budget and runtime
+## Work Performed
 
-| Check | Value |
-|---|---|
-| Status | ready_planned_not_measured |
-| Official static review | Round 3 accept / accepted_static_contract_review |
-| Fixture pilot | passed / fixture / scientific authority False |
-| Synthetic lifecycle | 32 candidates; 5 iterations; shortlist 4; fixture selection 1 |
-| Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
-| Real candidates | 0 / 32 |
-| Real shortlist | 0 / 4 |
-| Runtime | 259200 wall seconds; 10800 per candidate |
-| Real freeze / selection | not_started; 0/1 |
-| Protected access | False |
-| Scientific claim | no_measured_claim |
-| Resources | GPU 0 USD; paid API 0 USD; model download False |
-| Next step | Owner-local measured preflight |
+This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct.
+Static review: Round `3` verdict **accept**. Repository-only fixture status **passed**; synthetic lifecycle counts are `32` candidates, `5` iterations, `4` finalists, and `1` fixture selection exposure(s).
 
-## Why these methods
+## Artifacts Produced
 
-`R0` uses one full TAC document per patent family and BM25 to isolate the representation question with a transparent lexical comparator; the DAPFAM protocol and patent-retrieval context are references U011 and U006 in [[LITERATURE_INDEX]]. `R0-W` keeps BM25 and family-level evaluation fixed but splits text into non-overlapping 512-token windows and uses family MaxP, testing whether passage granularity changes exposure (U154). `R1` is the planned patent-native SCOPE/AutoIndex representation-program search, evaluated with the same retriever/evaluator so any gain can be attributed to representation rather than a new dense model (U154 on the DAPFAM protocol U011). No dense model, LLM, paid API, or provider is part of this P2 arm.
+These references explain what each artifact is for; the bytes remain governed by canonical paths.
 
-## Internal freeze barrier
+| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
+|---|---|---|---|---|---|
+| P2 repository-only fixture receipt | `receipt` | `fixture` | `outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json` | `6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125` | `validated` |
+| P2 fixture execution manifest | `manifest` | `fixture` | `outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json` | `b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3` | `validated` |
+| P2 fixture package | `package` | `fixture` | `outputs/fixtures/p2/index.json` | `0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9` | `validated` |
+| Official P2 static review index | `review` | `static_contract_review` | `orchestration/audits/p2-readiness/index.json` | `6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80` | `validated` |
+| Aggregate-safe Observatory registry | `registry` | `fixture` | `outputs/observatory/fixture-v1/registry.json` | `51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1` | `validated` |
 
-Baseline reproduction, candidate generation, and train evaluation must pass before the immutable shortlist receipt. Selection may open once, only for that frozen shortlist. Ties reject; any baseline, train, or freeze validation failure stops before selection.
+## Metrics
 
-## Outputs and evidence
+| Metric | Split | Scope | Value | n | Denominator | Evidence |
+|---|---|---|---:|---:|---|---|
+| No measured metric is available | - | - | - | - | - | planned/fixture |
 
-The canonical profile, P2 execution envelope, request schema, candidate ledger, freeze receipt, selection receipt, manifest, and package schemas are the source surfaces. No fixture or dashboard preview is scientific evidence.
+Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
-## What is measured
+## Result
 
-Not measured. Current P2 measured runs = `0`; selection accesses = `0`; GPU, paid API, network model download, and provider fallback = disabled.
+**Output:** Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists.
 
-## Read-model binding
+**Result:** The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero.
 
-Revision: `9b2edb07319c69be8d099d563a85527d4e4910624438c8fb38f3f5899ffcd962`
+**Decision:** ready_for_owner_preflight
 
-## Next action
+## Interpretation
 
-The static contract and repository-only fixture are complete. The next authorized action is Owner-local measured preflight; measured P2 and real selection remain closed until that separate action begins.
+Synthetic lifecycle success validates capture behavior only. It does not compare R1 candidates or support a retrieval claim.
 
-Links: [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]] · [[P2_OFFICIAL_REVIEW_AUDIT]] · [[P1_CPU_BASELINE_RESULT]]
+## Supported Claims
+
+- Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, observatory-fixture-registry)
+
+## Unsupported Claims
+
+- Measured P2 improvement or candidate superiority before a real measured run.
+- Final-split generalization or publication release before D2 and D3.
+- Causal or legal conclusions from retrieval aggregates.
+
+## Failures and Recovery
+
+- obs-failure-candidate-02
+
+## Governance and Safety
+
+- `protected_data_accessed`: False
+- `measured_execution`: False
+- `gpu`: False
+- `paid_api`: False
+- `network_model_download`: False
+- `provider_fallback`: False
+- `d2`: waiting_owner
+- `d3`: waiting_owner
+- `final_split`: closed
+- `real_counters`: `inline`; SHA-256 `None`
+- `evidence_class`: fixture
+- `scientific_authority`: False
+
+## Decision
+
+Status: **ready_for_owner_preflight**. The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero.
+
+## Next Action
+
+Owner-local P2 measured preflight
+
+Measured P2, real selection, and final evaluation must not start automatically from this report.
+
+## Evidence Links
+
+- p2-fixture-receipt
+- p2-fixture-manifest
+- p2-fixture-package
+- p2-official-review-index
+- observatory-fixture-registry

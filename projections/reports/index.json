@@ -1,0 +1,121 @@
+{
+  "index_sha256": "693d2bc9336ef8ef408b27d1fd7363c639f238185656cbf49157d986a45b1a94",
+  "read_model_revision": "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217",
+  "read_model_sha256": "d82442621d78cb95478960a6fb89e2b6da7022243097881bf20add88746bd58d",
+  "reports": [
+    {
+      "phase_id": "P0_FOUNDATION",
+      "report_id": "phase-p0_foundation",
+      "report_type": "phase",
+      "sha256": "552fc1965be5f65c6364f4e5500059e147b6018c94f355867846b0bffcb04c4c",
+      "task_id": null,
+      "uri": "projections/reports/phase/phase-p0_foundation.json"
+    },
+    {
+      "phase_id": "P1_CPU_BASELINE",
+      "report_id": "phase-p1_cpu_baseline",
+      "report_type": "phase",
+      "sha256": "03ff92e1c76746979f07c550141c8c828f9658d1506a3b7c26a87caff9cec419",
+      "task_id": null,
+      "uri": "projections/reports/phase/phase-p1_cpu_baseline.json"
+    },
+    {
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "report_id": "phase-p2_scope_development",
+      "report_type": "phase",
+      "sha256": "025be0d447d7ce6bf683c6dc48f5bda611bceff30ad4bff4aee94baedf7a5373",
+      "task_id": null,
+      "uri": "projections/reports/phase/phase-p2_scope_development.json"
+    },
+    {
+      "phase_id": "P3_FINAL",
+      "report_id": "phase-p3_final",
+      "report_type": "phase",
+      "sha256": "dcbe4047a55e75c53cd7b47628a3580a2e31aafc23d481fdb4be169f350df2d5",
+      "task_id": null,
+      "uri": "projections/reports/phase/phase-p3_final.json"
+    },
+    {
+      "phase_id": "P4_PUBLICATION",
+      "report_id": "phase-p4_publication",
+      "report_type": "phase",
+      "sha256": "27c1c4c2d7915e64c52d802ee437298f76e27d5c9b33ce6356c88c8c8e60fba9",
+      "task_id": null,
+      "uri": "projections/reports/phase/phase-p4_publication.json"
+    },
+    {
+      "phase_id": "P0_FOUNDATION",
+      "report_id": "task-p0-1",
+      "report_type": "task",
+      "sha256": "8fb09d603a37e0f924fc1d4096eb483af25bfe4946a87003b981bf164406018b",
+      "task_id": "P0.1",
+      "uri": "projections/reports/task/task-p0-1.json"
+    },
+    {
+      "phase_id": "P0_FOUNDATION",
+      "report_id": "task-p0-2",
+      "report_type": "task",
+      "sha256": "b6cd67641ee81e02d777f0529f144d1375bd9bd9e8b1b1c9b054524a7820f5d2",
+      "task_id": "P0.2",
+      "uri": "projections/reports/task/task-p0-2.json"
+    },
+    {
+      "phase_id": "P0_FOUNDATION",
+      "report_id": "task-p0-3",
+      "report_type": "task",
+      "sha256": "8ad3a99979d4736d1af43878af712bdba56085ac77a6cd8822553ad23551f579",
+      "task_id": "P0.3",
+      "uri": "projections/reports/task/task-p0-3.json"
+    },
+    {
+      "phase_id": "P1_CPU_BASELINE",
+      "report_id": "task-p1-1",
+      "report_type": "task",
+      "sha256": "9eea07b0087852ab807524dc36db2fabd2060c3ec5bbc0a867767df98e8b4587",
+      "task_id": "P1.1",
+      "uri": "projections/reports/task/task-p1-1.json"
+    },
+    {
+      "phase_id": "P1_CPU_BASELINE",
+      "report_id": "task-p1-2",
+      "report_type": "task",
+      "sha256": "fd8b32077f979f204bd17b24a2278c2c609f2a6a0722f34a38cf77d4d831616a",
+      "task_id": "P1.2",
+      "uri": "projections/reports/task/task-p1-2.json"
+    },
+    {
+      "phase_id": "P1_CPU_BASELINE",
+      "report_id": "task-p1-3",
+      "report_type": "task",
+      "sha256": "f3ed8fc40bef43d2d7f72858e8432b241398cafdce9b87f49688bd8831e58435",
+      "task_id": "P1.3",
+      "uri": "projections/reports/task/task-p1-3.json"
+    },
+    {
+      "phase_id": "P2_SCOPE_DEVELOPMENT",
+      "report_id": "task-p2-1",
+      "report_type": "task",
+      "sha256": "d8d271249183efd24ffe7ba7aa807eb61ba0c3541a1499476b10a283133afda4",
+      "task_id": "P2.1",
+      "uri": "projections/reports/task/task-p2-1.json"
+    },
+    {
+      "phase_id": "P3_FINAL",
+      "report_id": "task-p3-1",
+      "report_type": "task",
+      "sha256": "5c363a4a7030b9f27211467fa0210e0b7ac85e06225fb85e18823521f9c4a568",
+      "task_id": "P3.1",
+      "uri": "projections/reports/task/task-p3-1.json"
+    },
+    {
+      "phase_id": "P4_PUBLICATION",
+      "report_id": "task-p4-1",
+      "report_type": "task",
+      "sha256": "3779ee8a6b16772edce6d554498a5eb0d6c105e538cb8f17af82ac59d12668e1",
+      "task_id": "P4.1",
+      "uri": "projections/reports/task/task-p4-1.json"
+    }
+  ],
+  "schema_version": "myis.phase-task-report-index.v1",
+  "source_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76"
+}

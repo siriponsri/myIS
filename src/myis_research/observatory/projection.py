@@ -59,6 +59,11 @@ def load_observatory_projection(root: Path) -> dict[str, Any]:
     lifecycle = Counter(str(item.get("status", "unknown")) for item in runs)
     artifact_types = Counter(str(item.get("artifact_type", "unknown")) for item in artifacts)
     negative_checks = receipt.get("negative_checks", {})
+    retention_classes = Counter(str(item.get("retention_class", "unspecified")) for item in artifacts)
+    lineage_complete = all(
+        all(key in item for key in ("producing_run_id", "producing_phase_id", "producing_task_id", "parent_artifact_hashes", "child_artifact_hashes"))
+        for item in artifacts
+    )
     return {
         "schema_version": PROJECTION_SCHEMA,
         "status": "ready",
@@ -78,6 +83,25 @@ def load_observatory_projection(root: Path) -> dict[str, Any]:
         "record_counts": {key: len(value) for key, value in sorted(records.items()) if isinstance(value, list)},
         "run_status_counts": dict(sorted(lifecycle.items())),
         "artifact_type_counts": dict(sorted(artifact_types.items())),
+        "retention_class_counts": dict(sorted(retention_classes.items())),
+        "artifact_lineage_status": "pass" if lineage_complete else "fail",
+        "prompt_binding_count": len(records.get("prompts", [])),
+        "config_binding_count": len(records.get("configs", [])),
+        "environment_binding_count": len(records.get("environments", [])),
+        "failure_records": [
+            {
+                key: item.get(key)
+                for key in ("record_id", "run_id", "stage", "failure_class", "last_valid_checkpoint", "counters_before", "counters_after", "protected_data_accessed", "recovery_id", "recovery_action", "validation_after_recovery", "residual_risk", "decision")
+            }
+            for item in failures if isinstance(item, dict)
+        ],
+        "recovery_records": [
+            {
+                key: item.get(key)
+                for key in ("record_id", "run_id", "failure_id", "action", "validation_after_recovery", "counters_before", "counters_after", "residual_risk", "metric_promotion")
+            }
+            for item in recoveries if isinstance(item, dict)
+        ],
         "validated_artifact_count": sum(item.get("validation_status") == "validated" for item in artifacts),
         "validated_metric_count": sum(1 for item in metrics if item.get("record_id")),
         "failed_child_count": len(failures),
@@ -86,7 +110,7 @@ def load_observatory_projection(root: Path) -> dict[str, Any]:
         "graph_edge_count": len(graph.edges),
         "negative_checks_passed": bool(negative_checks) and all(value == "PASS" for value in negative_checks.values()),
         "negative_check_count": len(negative_checks),
-        "next_action": receipt.get("next_action", "Review Observatory receipt before Owner-local measured preflight"),
+        "next_action": receipt.get("next_action", "Owner-local P2 measured preflight"),
         "narrative": "Synthetic Observatory evidence is ready; measured P2 remains closed.",
     }
 
@@ -115,6 +139,13 @@ def _missing_projection() -> dict[str, Any]:
         "validated_metric_count": 0,
         "failed_child_count": 0,
         "recovered_child_count": 0,
+        "retention_class_counts": {},
+        "artifact_lineage_status": "unknown",
+        "prompt_binding_count": 0,
+        "config_binding_count": 0,
+        "environment_binding_count": 0,
+        "failure_records": [],
+        "recovery_records": [],
         "graph_node_count": 0,
         "graph_edge_count": 0,
         "negative_checks_passed": False,

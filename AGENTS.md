@@ -140,6 +140,52 @@ URI, source SHA-256, evidence IDs, creation time, review time, and supersession
 pointer. Stale active context is archived; failed attempts remain searchable but
 cannot override run facts.
 
+## Mandatory reporting policy
+
+Every Phase and every Task MUST have one substantive generated Obsidian report.
+The report is created when the work starts, updated after each material state
+change, run, failure, or decision, and finalized or marked blocked when the
+work closes. A Phase report summarizes its Tasks; it does not replace them.
+Meaningful runs, material failures/recoveries, and Owner/governance decisions
+also receive a generated report when canonical evidence exists. Report sync
+must regenerate all generated notes from one validated read-model object and
+must fail closed on missing, contradictory, stale, protected, or fixture-as-
+measured state.
+
+Generated notes are reproducible and use `managed_by: myis-report` with
+`edit_policy: generated_do_not_edit`. Owner-authored notes live only under
+`obsidian_report/80_Owner_Notes/` (or the explicitly separated Owner area) and
+must never be overwritten by sync. Generated notes expose only aggregate-safe
+IDs, hashes, counts, safe pointers, and claim boundaries; qrels, membership,
+query IDs, rankings, per-query outcomes, secrets, absolute personal paths,
+provider payloads, and full protected prompts remain Owner-local.
+
+Every Phase and Task report carries lifecycle fields
+`status`, `evidence_class`, `scientific_authority`, `claim_boundary`,
+`generated_from_revision`, `last_material_update`, and
+`next_authorized_action`. Its canonical machine record and Markdown projection
+must agree and must contain the fifteen-section structure defined in
+[`docs/observatory/REPORTING_POLICY.md`](docs/observatory/REPORTING_POLICY.md):
+Objective; Starting State; Inputs and Frozen Bindings; Work Performed;
+Artifacts Produced; Metrics; Result; Interpretation; Supported Claims;
+Unsupported Claims; Failures and Recovery; Governance and Safety; Decision;
+Next Action; Evidence Links. Do not add a second numeric source of truth in
+prose.
+
+Before commit or push, run report schema/content validation, deterministic
+sync/check twice, artifact graph and checksum validation, protected/unsafe-path
+scans, session audit, Dashboard/API, repository-safe MLflow doctor, layout,
+assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
+The current state must agree everywhere: an accepted Round 3 is `accept`, a
+completed fixture is `passed`, measured P2 remains not started while all real
+counters are zero, real selection and the final split remain closed, and the
+next action is exactly `Owner-local P2 measured preflight`. A stale narrative
+is a validation failure, not a documentation preference.
+
+The authoritative report structure and machine-field contract are maintained
+in `docs/observatory/REPORTING_POLICY.md` and
+`schemas/phase-task-report.v1.json`.
+
 ## Closeout
 
 Report the exact phase, task, status, checks, changed files, untouched

@@ -21,4 +21,4 @@ This receipt proves capture, lineage, checksums, and fail-closed validation. It 
 
 ## Next action
 
-Review the Observatory receipt before Owner-local measured preflight. Measured P2 remains closed.
+Owner-local P2 measured preflight is the next authorized action. Measured P2 remains closed.

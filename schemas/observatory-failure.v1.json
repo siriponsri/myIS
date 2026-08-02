@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-failure:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "run_id", "phase_id", "task_id", "stage", "failure_class", "reason", "last_valid_checkpoint", "affected_artifact_ids", "counters_before", "counters_after", "protected_data_accessed", "recovery_action", "validation_after_recovery", "residual_risk", "decision", "evidence_class", "scientific_authority", "claim_boundary", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-failure.v1"}, "record_id": {"type": "string"}, "run_id": {"type": "string"}, "phase_id": {"type": "string"}, "task_id": {"type": "string"}, "stage": {"type": "string"}, "failure_class": {"type": "string"}, "reason": {"type": "string"}, "checkpoint": {"type": "string"}, "last_valid_checkpoint": {"type": "string"}, "retryable": {"type": "boolean"}, "affected_artifact_ids": {"type": "array", "items": {"type": "string"}}, "partial_artifact_ids": {"type": "array", "items": {"type": "string"}}, "counters_before": {"type": "object"}, "counters_after": {"type": "object"}, "counters_changed": {"type": "boolean"}, "protected_data_accessed": {"type": "boolean"}, "recovery_action": {"type": "string"}, "validation_after_recovery": {"type": "string"}, "residual_risk": {"type": "string"}, "decision": {"type": "string"}, "recovery_id": {"type": ["string", "null"]}, "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "summary": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

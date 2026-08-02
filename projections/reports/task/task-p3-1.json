@@ -1,0 +1,83 @@
+{
+  "artifact_references": [],
+  "claim_boundary": "unavailable",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "The phase remains planned and closed.",
+    "status": "waiting_owner"
+  },
+  "evidence_class": "planned",
+  "evidence_links": [],
+  "failure_recovery_references": [],
+  "generated_at": "2026-08-01T15:07:35Z",
+  "generated_from_revision": "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217",
+  "git_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "planned",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "campaign": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "git_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76",
+    "source_of_truth": {
+      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "uri": "control/source-of-truth.yaml"
+    }
+  },
+  "interpretation": "No interpretation is available before the required gate and evidence.",
+  "last_material_update": "2026-08-01T15:07:35Z",
+  "metric_references": [],
+  "next_authorized_action": "Owner-local P2 measured preflight",
+  "objective": "Frozen final evaluation",
+  "phase_id": "P3_FINAL",
+  "report_id": "task-p3-1",
+  "report_sha256": "5c363a4a7030b9f27211467fa0210e0b7ac85e06225fb85e18823521f9c4a568",
+  "report_type": "task",
+  "result": {
+    "decision": "waiting_owner",
+    "output": "No execution output is available because the phase is locked behind its Owner decision.",
+    "result": "The phase remains planned and closed."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "P2_SCOPE_DEVELOPMENT",
+    "program_state": "P1_CPU_MEASURED_COMPLETE",
+    "task": "P2.1"
+  },
+  "status": "planned",
+  "supported_claims": [
+    {
+      "claim": "No execution output is available because the phase is locked behind its Owner decision.",
+      "evidence": []
+    }
+  ],
+  "task_id": "P3.1",
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
+}

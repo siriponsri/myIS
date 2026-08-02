@@ -56,7 +56,8 @@ def main(argv: list[str] | None = None) -> int:
                 for asset in assets:
                     print(
                         f"{asset['asset_id']} | {asset['disposition']} | {asset['kind']} | "
-                        f"tasks={','.join(asset['task_ids'])} | copy={asset['copy_mode']}"
+                        f"tasks={','.join(asset.get('task_ids', asset.get('allowed_phases', [])))} | "
+                        f"copy={asset['copy_mode']}"
                     )
             return 0
         if args.command == "validate":

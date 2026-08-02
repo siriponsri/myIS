@@ -54,8 +54,8 @@ def build_fixture_registry() -> EvidenceRegistry:
     registry.add("configs", build_standard_record("config", "obs-config-fixture-v1", summary="Fixed synthetic capture configuration", config_id="observatory-fixture", version="1", content_sha256=config_hash, cpu_only=True, paid_api=False))
     registry.add("environments", build_standard_record("environment", "obs-environment-python311", summary="Sanitized local runtime lock", environment_lock_sha256=environment_hash, runtime="python-3.11", platform="windows-cpu", dependency_lock_sha256=_hash("dependency-lock")))
 
-    prompt_one = build_prompt_record("obs-prompt-retrieval-v1", version="1", family="retrieval", role="candidate_generation", content_sha256=_hash("prompt-retrieval-v1"), frozen=True, source_uri="owner-local://prompts/retrieval-v1", candidate_ids=("obs-candidate-01",), summary="Frozen synthetic retrieval instruction; full text remains outside Git")
-    prompt_two = build_prompt_record("obs-prompt-retrieval-v2", version="2", family="retrieval", role="candidate_generation", content_sha256=_hash("prompt-retrieval-v2"), frozen=True, source_uri="owner-local://prompts/retrieval-v2", candidate_ids=("obs-candidate-02",), parent_prompt_id="obs-prompt-retrieval-v1", summary="Lineage child of the first synthetic retrieval instruction")
+    prompt_one = build_prompt_record("obs-prompt-retrieval-v1", version="1", family="retrieval", role="candidate_generation", content_sha256=_hash("prompt-retrieval-v1"), frozen=True, source_uri="owner-local://prompts/retrieval-v1", candidate_ids=("obs-candidate-01",), model_id="deterministic-cpu-fixture", evaluator_id="fixture-evaluator-v1", summary="Frozen synthetic retrieval instruction; full text remains outside Git")
+    prompt_two = build_prompt_record("obs-prompt-retrieval-v2", version="2", family="retrieval", role="candidate_generation", content_sha256=_hash("prompt-retrieval-v2"), frozen=True, source_uri="owner-local://prompts/retrieval-v2", candidate_ids=("obs-candidate-02",), parent_prompt_id="obs-prompt-retrieval-v1", mutation_lineage=("obs-prompt-retrieval-v1",), model_id="deterministic-cpu-fixture", evaluator_id="fixture-evaluator-v1", summary="Lineage child of the first synthetic retrieval instruction")
     registry.add("prompts", prompt_one)
     registry.add("prompts", prompt_two)
 
@@ -86,8 +86,8 @@ def build_fixture_registry() -> EvidenceRegistry:
         registry.add("artifacts", artifact)
         artifact_ids.append(artifact_id)
 
-    failure = build_failure_record("obs-failure-candidate-02", run_id=child_two["record_id"], stage="candidate_generation", reason="synthetic timeout after checkpoint", checkpoint="candidate-02-start", retryable=True, partial_artifact_ids=("obs-artifact-failure",), recovery_id="obs-recovery-candidate-02", counters_changed=False, summary="Failure is retained without promoting a metric")
-    recovery = build_standard_record("recovery", "obs-recovery-candidate-02", summary="Recovery restarted the failed synthetic branch", run_id=child_two["record_id"], failure_id=failure["record_id"], action="retry_from_checkpoint", outcome="recovered_as_engineering_evidence", metric_promotion=False)
+    failure = build_failure_record("obs-failure-candidate-02", run_id=child_two["record_id"], stage="candidate_generation", reason="synthetic timeout after checkpoint", checkpoint="candidate-02-start", retryable=True, partial_artifact_ids=("obs-artifact-failure",), recovery_id="obs-recovery-candidate-02", counters_changed=False, failure_class="synthetic_timeout", counters_before={"measured_runs": 0, "candidate_count": 1, "shortlist_count": 0, "selection_accesses": 0}, counters_after={"measured_runs": 0, "candidate_count": 1, "shortlist_count": 0, "selection_accesses": 0}, protected_data_accessed=False, recovery_action="retry_from_checkpoint", validation_after_recovery="passed_without_metric_promotion", residual_risk="Synthetic branch remains non-scientific and cannot promote retrieval metrics", decision="retain_failure_and_recovery", summary="Failure is retained without promoting a metric")
+    recovery = build_standard_record("recovery", "obs-recovery-candidate-02", summary="Recovery restarted the failed synthetic branch", run_id=child_two["record_id"], failure_id=failure["record_id"], action="retry_from_checkpoint", outcome="recovered_as_engineering_evidence", metric_promotion=False, validation_after_recovery="passed", counters_before={"measured_runs": 0, "candidate_count": 1, "shortlist_count": 0, "selection_accesses": 0}, counters_after={"measured_runs": 0, "candidate_count": 1, "shortlist_count": 0, "selection_accesses": 0}, residual_risk="No scientific metric promotion")
     registry.add("failures", failure)
     registry.add("recoveries", recovery)
 
@@ -98,7 +98,7 @@ def build_fixture_registry() -> EvidenceRegistry:
     registry.add("results", result)
     interpretation = build_standard_record("interpretation", "obs-interpretation-fixture", summary="The capture layer preserved a failed child and a valid recovery path", result_id=result["record_id"], status="engineering_only", supports="observability readiness", does_not_support="causal or scientific effectiveness", evidence_class="fixture", scientific_authority=False, claim_boundary="engineering_provenance_only")
     registry.add("interpretations", interpretation)
-    decision = build_decision_record("obs-decision-next-owner", result_id=result["record_id"], status="waiting_owner", next_action="Review Observatory receipt before Owner-local measured preflight", evidence_class="fixture", scientific_authority=False, claim_boundary="engineering_provenance_only", summary="The next action remains reversible and does not start measured P2")
+    decision = build_decision_record("obs-decision-next-owner", result_id=result["record_id"], status="waiting_owner", next_action="Owner-local P2 measured preflight", evidence_class="fixture", scientific_authority=False, claim_boundary="engineering_provenance_only", summary="The next action remains reversible and does not start measured P2")
     registry.add("decisions", decision)
 
     registry.event("obs-event-request-validated", event_type="request_validated", run_id=parent_run["record_id"], stage="pre_run", status="passed")
@@ -217,7 +217,7 @@ def _summary(package: Mapping[str, Any]) -> str:
         "",
         "## Next action",
         "",
-        "Review the Observatory receipt before Owner-local measured preflight. Measured P2 remains closed.",
+        "Owner-local P2 measured preflight is the next authorized action. Measured P2 remains closed.",
         "",
     ])
 
@@ -244,7 +244,7 @@ def write_fixture(root: Path, output_dir: Path | None = None) -> dict[str, Path]
         "mlflow_run_id": package["mlflow"]["run_id"],
         "mlflow_record_sha256": package["mlflow"]["record_sha256"],
         "deterministic_rerun": "pass",
-        "next_action": "Review Observatory receipt before Owner-local measured preflight",
+        "next_action": "Owner-local P2 measured preflight",
     }
     receipt = {**unsigned_receipt, "receipt_sha256": canonical_sha256(unsigned_receipt)}
     receipt_text = json.dumps(receipt, ensure_ascii=True, indent=2, sort_keys=True) + "\n"

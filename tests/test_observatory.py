@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
@@ -24,6 +25,29 @@ from myis_research.observatory.graph import build_evidence_graph, validate_evide
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _rehash_registry(payload: dict[str, object]) -> None:
+    records = payload["records"]
+    assert isinstance(records, dict)
+    for items in records.values():
+        assert isinstance(items, list)
+        for record in items:
+            assert isinstance(record, dict)
+            if "record_sha256" in record:
+                record["record_sha256"] = canonical_sha256(
+                    {key: value for key, value in record.items() if key != "record_sha256"}
+                )
+    events = payload["events"]
+    assert isinstance(events, list)
+    for event in events:
+        assert isinstance(event, dict)
+        event["event_sha256"] = canonical_sha256(
+            {key: value for key, value in event.items() if key != "event_sha256"}
+        )
+    payload["registry_sha256"] = canonical_sha256(
+        {key: value for key, value in payload.items() if key != "registry_sha256"}
+    )
 
 
 def test_fixture_is_deterministic_and_graph_is_closed() -> None:
@@ -74,6 +98,67 @@ def test_capture_session_records_lifecycle_and_rejects_duplicate_start() -> None
     assert registry.records["runs"][0]["status"] == "succeeded"
     assert registry.records["runs"][0]["artifact_ids"] == ["obs-artifact-test"]
     validate_registry(registry.as_dict())
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (
+            lambda payload: payload["records"]["artifacts"][1].update(
+                {"safe_uri": payload["records"]["artifacts"][0]["safe_uri"]}
+            ),
+            "immutable artifact URI has conflicting hash",
+        ),
+        (
+            lambda payload: payload["records"]["artifacts"][0].update(
+                {"producing_run_id": "obs-run-missing"}
+            ),
+            "promoted artifact has no producing run",
+        ),
+        (
+            lambda payload: payload["records"]["artifacts"][0].update(
+                {"parent_artifact_ids": ["obs-artifact-missing"]}
+            ),
+            "artifact parent is missing",
+        ),
+    ],
+)
+def test_registry_rejects_artifact_uri_and_lineage_mutations(mutation, message: str) -> None:
+    payload = copy.deepcopy(build_fixture_registry().as_dict())
+    mutation(payload)
+    _rehash_registry(payload)
+    with pytest.raises(ObservatoryError, match=message):
+        validate_registry(payload)
+
+
+def test_prompt_records_bind_mutation_model_evaluator_and_candidate_lineage() -> None:
+    payload = build_fixture_registry().as_dict()
+    prompts = payload["records"]["prompts"]
+    parent, child = prompts
+    assert parent["candidate_ids"] == ["obs-candidate-01"]
+    assert parent["model_id"] == "deterministic-cpu-fixture"
+    assert parent["evaluator_id"] == "fixture-evaluator-v1"
+    assert child["parent_prompt_id"] == parent["record_id"]
+    assert parent["record_id"] in child["mutation_lineage"]
+    child["mutation_lineage"] = []
+    _rehash_registry(payload)
+    with pytest.raises(ObservatoryError, match="absent from mutation lineage"):
+        validate_registry(payload)
+
+
+def test_failure_recovery_records_bind_counters_and_validation() -> None:
+    payload = build_fixture_registry().as_dict()
+    failure = payload["records"]["failures"][0]
+    recovery = payload["records"]["recoveries"][0]
+    assert failure["counters_before"] == failure["counters_after"]
+    assert failure["counters_changed"] is False
+    assert failure["protected_data_accessed"] is False
+    assert recovery["failure_id"] == failure["record_id"]
+    assert recovery["validation_after_recovery"] == "passed"
+    failure["counters_changed"] = True
+    _rehash_registry(payload)
+    with pytest.raises(ObservatoryError, match="counters_changed disagrees"):
+        validate_registry(payload)
 
 
 @pytest.mark.parametrize("filename", [

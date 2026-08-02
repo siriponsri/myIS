@@ -3,6 +3,17 @@
   "$id": "urn:myis:research:schema:observatory-artifact:v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "record_id", "title", "artifact_type", "producing_run_id", "safe_uri", "size_bytes", "content_sha256", "evidence_class", "scientific_authority", "claim_boundary", "validation_status", "record_sha256"],
-  "properties": {"schema_version": {"const": "myis.observatory-artifact.v1"}, "record_id": {"type": "string"}, "title": {"type": "string"}, "artifact_type": {"type": "string"}, "producing_run_id": {"type": "string"}, "safe_uri": {"type": "string", "pattern": "^(git|owner-local|external-store|brain|mlflow)://[A-Za-z0-9._/-]+$"}, "size_bytes": {"type": "integer", "minimum": 0}, "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "validation_status": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+  "required": ["schema_version", "record_id", "title", "artifact_type", "producing_run_id", "producing_phase_id", "producing_task_id", "safe_uri", "size_bytes", "content_sha256", "evidence_class", "scientific_authority", "claim_boundary", "validation_status", "retention_class", "explanation", "parent_artifact_ids", "parent_artifact_hashes", "child_artifact_ids", "child_artifact_hashes", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-artifact.v1"},
+    "record_id": {"type": "string"}, "title": {"type": "string"}, "artifact_type": {"type": "string"},
+    "producing_run_id": {"type": "string"}, "producing_phase_id": {"type": "string"}, "producing_task_id": {"type": "string"},
+    "safe_uri": {"type": "string", "pattern": "^(git|owner-local|external-store|brain|mlflow)://[A-Za-z0-9._/-]+$"},
+    "size_bytes": {"type": "integer", "minimum": 0}, "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"},
+    "validation_status": {"type": "string"}, "retention_class": {"type": "string", "minLength": 1}, "explanation": {"type": "string", "minLength": 1},
+    "parent_artifact_ids": {"type": "array", "items": {"type": "string"}}, "parent_artifact_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "child_artifact_ids": {"type": "array", "items": {"type": "string"}}, "child_artifact_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "summary": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
 }

@@ -113,21 +113,28 @@ def build_run_record(run_id: str, *, request_id: str, phase_id: str, task_id: st
     return _base("myis.observatory-run.v1", run_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary=claim_boundary, summary=summary, request_id=_require_id(request_id, "request_id"), phase_id=phase_id, task_id=task_id, status=status, execution_class=execution_class, git_commit=git_commit, request_sha256=request_sha256, profile_sha256=profile_sha256, envelope_sha256=envelope_sha256, environment_sha256=environment_sha256, config_sha256=config_sha256, prompt_ids=sorted(set(prompt_ids)), candidate_ids=sorted(set(candidate_ids)), artifact_ids=sorted(set(artifact_ids)), counters_before=dict(counters_before or {}), counters_after=dict(counters_after or {}), started_at=started_at, ended_at=ended_at, exit_code=exit_code, **fields)
 
 
-def build_artifact_record(artifact_id: str, *, title: str, artifact_type: str, producing_run_id: str, safe_uri: str, size_bytes: int, content_sha256: str, evidence_class: str = "fixture", scientific_authority: bool = False, claim_boundary: str = "engineering_provenance_only", validation_status: str = "validated", parent_artifact_ids: Iterable[str] = (), summary: str, **fields: Any) -> dict[str, Any]:
+def build_artifact_record(artifact_id: str, *, title: str, artifact_type: str, producing_run_id: str, safe_uri: str, size_bytes: int, content_sha256: str, evidence_class: str = "fixture", scientific_authority: bool = False, claim_boundary: str = "engineering_provenance_only", validation_status: str = "validated", parent_artifact_ids: Iterable[str] = (), parent_artifact_hashes: Mapping[str, str] | None = None, child_artifact_ids: Iterable[str] = (), child_artifact_hashes: Mapping[str, str] | None = None, producing_phase_id: str = "P2_SCOPE_DEVELOPMENT", producing_task_id: str = "P2.1", retention_class: str = "repository_safe", explanation: str | None = None, summary: str, **fields: Any) -> dict[str, Any]:
     _require_id(producing_run_id, "producing_run_id")
     if not _SAFE_URI_RE.fullmatch(safe_uri) or ".." in safe_uri:
         raise ObservatoryError("safe_uri is not an allowlisted relative pointer")
     if not isinstance(size_bytes, int) or size_bytes < 0:
         raise ObservatoryError("size_bytes must be a non-negative integer")
     _require_hash(content_sha256, "content_sha256")
-    return _base("myis.observatory-artifact.v1", artifact_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary=claim_boundary, summary=summary, title=title, artifact_type=artifact_type, producing_run_id=producing_run_id, safe_uri=safe_uri, size_bytes=size_bytes, content_sha256=content_sha256, validation_status=validation_status, parent_artifact_ids=sorted(set(parent_artifact_ids)), **fields)
+    parent_ids = sorted(set(parent_artifact_ids))
+    child_ids = sorted(set(child_artifact_ids))
+    parent_hashes = dict(sorted((parent_artifact_hashes or {}).items()))
+    child_hashes = dict(sorted((child_artifact_hashes or {}).items()))
+    return _base("myis.observatory-artifact.v1", artifact_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary=claim_boundary, summary=summary, title=title, artifact_type=artifact_type, producing_run_id=producing_run_id, producing_phase_id=producing_phase_id, producing_task_id=producing_task_id, safe_uri=safe_uri, size_bytes=size_bytes, content_sha256=content_sha256, validation_status=validation_status, retention_class=retention_class, explanation=explanation or summary, parent_artifact_ids=parent_ids, parent_artifact_hashes=parent_hashes, child_artifact_ids=child_ids, child_artifact_hashes=child_hashes, **fields)
 
 
-def build_prompt_record(prompt_id: str, *, version: str, family: str, role: str, content_sha256: str, frozen: bool, source_uri: str, candidate_ids: Iterable[str] = (), parent_prompt_id: str | None = None, evidence_class: str = "fixture", scientific_authority: bool = False, summary: str, **fields: Any) -> dict[str, Any]:
+def build_prompt_record(prompt_id: str, *, version: str, family: str, role: str, content_sha256: str, frozen: bool, source_uri: str, candidate_ids: Iterable[str] = (), parent_prompt_id: str | None = None, mutation_lineage: Iterable[str] = (), model_id: str | None = None, evaluator_id: str | None = None, evidence_class: str = "fixture", scientific_authority: bool = False, summary: str, **fields: Any) -> dict[str, Any]:
     _require_hash(content_sha256, "content_sha256")
     if not _SAFE_URI_RE.fullmatch(source_uri) or ".." in source_uri:
         raise ObservatoryError("prompt source_uri is unsafe")
-    return _base("myis.observatory-prompt.v1", prompt_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary="engineering_provenance_only", summary=summary, version=version, family=family, role=role, content_sha256=content_sha256, frozen=bool(frozen), source_uri=source_uri, candidate_ids=sorted(set(candidate_ids)), parent_prompt_id=parent_prompt_id, **fields)
+    mutation_ids = sorted(set(mutation_lineage))
+    if parent_prompt_id and parent_prompt_id not in mutation_ids:
+        mutation_ids.insert(0, parent_prompt_id)
+    return _base("myis.observatory-prompt.v1", prompt_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary="engineering_provenance_only", summary=summary, version=version, family=family, role=role, content_sha256=content_sha256, frozen=bool(frozen), source_uri=source_uri, candidate_ids=sorted(set(candidate_ids)), parent_prompt_id=parent_prompt_id, mutation_lineage=mutation_ids, model_id=model_id, evaluator_id=evaluator_id, **fields)
 
 
 def build_metric_record(metric_id: str, *, name: str, cutoff: int, direction: str, data_role: str, scope: str, evidence_role: str, value: float, n: int, denominator: str, run_id: str, candidate_id: str | None = None, result_id: str | None = None, evidence_class: str = "fixture", scientific_authority: bool = False, claim_boundary: str = "engineering_provenance_only", uncertainty: Mapping[str, Any] | None = None, summary: str, **fields: Any) -> dict[str, Any]:
@@ -146,8 +153,12 @@ def build_decision_record(decision_id: str, *, result_id: str, status: str, next
     return _base("myis.observatory-decision.v1", decision_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary=claim_boundary, summary=summary, result_id=_require_id(result_id, "result_id"), status=status, next_action=next_action, **fields)
 
 
-def build_failure_record(failure_id: str, *, run_id: str, stage: str, reason: str, checkpoint: str, retryable: bool, partial_artifact_ids: Iterable[str], recovery_id: str | None, counters_changed: bool, evidence_class: str = "fixture", scientific_authority: bool = False, claim_boundary: str = "engineering_provenance_only", summary: str, **fields: Any) -> dict[str, Any]:
-    return _base("myis.observatory-failure.v1", failure_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary=claim_boundary, summary=summary, run_id=_require_id(run_id, "run_id"), stage=stage, reason=reason, checkpoint=checkpoint, retryable=bool(retryable), partial_artifact_ids=sorted(set(partial_artifact_ids)), recovery_id=recovery_id, counters_changed=bool(counters_changed), **fields)
+def build_failure_record(failure_id: str, *, run_id: str, stage: str, reason: str, checkpoint: str, retryable: bool, partial_artifact_ids: Iterable[str], recovery_id: str | None, counters_changed: bool, phase_id: str = "P2_SCOPE_DEVELOPMENT", task_id: str = "P2.1", failure_class: str = "runtime", counters_before: Mapping[str, int] | None = None, counters_after: Mapping[str, int] | None = None, protected_data_accessed: bool = False, recovery_action: str = "", validation_after_recovery: str = "pending", residual_risk: str = "", decision: str = "", evidence_class: str = "fixture", scientific_authority: bool = False, claim_boundary: str = "engineering_provenance_only", summary: str, **fields: Any) -> dict[str, Any]:
+    before = dict(counters_before or {})
+    after = dict(counters_after or {})
+    if bool(counters_changed) != (before != after):
+        raise ObservatoryError("failure counters_changed must agree with counters_before/counters_after")
+    return _base("myis.observatory-failure.v1", failure_id, evidence_class=evidence_class, scientific_authority=scientific_authority, claim_boundary=claim_boundary, summary=summary, run_id=_require_id(run_id, "run_id"), phase_id=phase_id, task_id=task_id, stage=stage, failure_class=failure_class, reason=reason, checkpoint=checkpoint, last_valid_checkpoint=checkpoint, retryable=bool(retryable), partial_artifact_ids=sorted(set(partial_artifact_ids)), affected_artifact_ids=sorted(set(partial_artifact_ids)), recovery_id=recovery_id, counters_changed=bool(counters_changed), counters_before=before, counters_after=after, protected_data_accessed=bool(protected_data_accessed), recovery_action=recovery_action, validation_after_recovery=validation_after_recovery, residual_risk=residual_risk, decision=decision, **fields)
 
 
 @dataclass
@@ -208,6 +219,8 @@ def validate_record(record: Mapping[str, Any]) -> None:
         raise ObservatoryError("record scientific_authority must be boolean")
     if record.get("claim_boundary") not in CLAIM_BOUNDARIES:
         raise ObservatoryError("record claim_boundary is invalid")
+    if record.get("evidence_class") == "fixture" and record.get("scientific_authority") is True:
+        raise ObservatoryError("fixture record cannot be scientifically authoritative")
     _safe_scan(record)
 
 
@@ -219,6 +232,8 @@ def validate_registry(registry: Mapping[str, Any]) -> None:
     if not isinstance(records, Mapping):
         raise ObservatoryError("registry records must be an object")
     ids: set[str] = set()
+    artifact_uri_hashes: dict[str, str] = {}
+    artifact_rows: list[Mapping[str, Any]] = []
     for kind, items in records.items():
         if not isinstance(kind, str) or not isinstance(items, list):
             raise ObservatoryError("registry record families are invalid")
@@ -228,6 +243,79 @@ def validate_registry(registry: Mapping[str, Any]) -> None:
             if item_id in ids:
                 raise ObservatoryError(f"duplicate registry ID: {item_id}")
             ids.add(item_id)
+            if kind == "artifacts":
+                artifact_rows.append(item)
+                uri = item.get("safe_uri")
+                digest = item.get("content_sha256")
+                if not isinstance(uri, str) or not _SAFE_URI_RE.fullmatch(uri) or ".." in uri:
+                    raise ObservatoryError(f"artifact safe_uri is unsafe: {item_id}")
+                previous = artifact_uri_hashes.get(uri)
+                if previous is not None and previous != digest:
+                    raise ObservatoryError(f"immutable artifact URI has conflicting hash: {uri}")
+                artifact_uri_hashes[uri] = str(digest)
+                if item.get("retention_class") in {None, ""} or item.get("explanation") in {None, ""}:
+                    raise ObservatoryError(f"artifact retention/explanation is missing: {item_id}")
+    artifact_by_id = {str(item.get("record_id")): item for item in artifact_rows}
+    run_ids = {str(item.get("record_id")) for item in records.get("runs", []) if isinstance(item, Mapping)}
+    for artifact in artifact_rows:
+        artifact_id = str(artifact.get("record_id"))
+        if str(artifact.get("producing_run_id")) not in run_ids:
+            raise ObservatoryError(f"promoted artifact has no producing run: {artifact_id}")
+        for parent_id in artifact.get("parent_artifact_ids", []) if isinstance(artifact.get("parent_artifact_ids"), list) else []:
+            if parent_id not in artifact_by_id:
+                raise ObservatoryError(f"artifact parent is missing: {artifact_id} -> {parent_id}")
+        for child_id in artifact.get("child_artifact_ids", []) if isinstance(artifact.get("child_artifact_ids"), list) else []:
+            if child_id not in artifact_by_id:
+                raise ObservatoryError(f"artifact child is missing: {artifact_id} -> {child_id}")
+        for parent_id, parent_hash in (artifact.get("parent_artifact_hashes", {}) or {}).items() if isinstance(artifact.get("parent_artifact_hashes", {}), Mapping) else []:
+            parent = artifact_by_id.get(str(parent_id))
+            if parent is None or parent.get("content_sha256") != parent_hash:
+                raise ObservatoryError(f"artifact parent hash binding is invalid: {artifact_id} -> {parent_id}")
+        for child_id, child_hash in (artifact.get("child_artifact_hashes", {}) or {}).items() if isinstance(artifact.get("child_artifact_hashes", {}), Mapping) else []:
+            child = artifact_by_id.get(str(child_id))
+            if child is None or child.get("content_sha256") != child_hash:
+                raise ObservatoryError(f"artifact child hash binding is invalid: {artifact_id} -> {child_id}")
+    prompt_ids = {str(item.get("record_id")) for item in records.get("prompts", []) if isinstance(item, Mapping)}
+    for prompt in records.get("prompts", []) if isinstance(records.get("prompts"), list) else []:
+        parent_id = prompt.get("parent_prompt_id")
+        if parent_id is not None and str(parent_id) not in prompt_ids:
+            raise ObservatoryError(f"prompt parent is missing: {prompt.get('record_id')}")
+        mutation_lineage = prompt.get("mutation_lineage", [])
+        if not isinstance(mutation_lineage, list) or any(not isinstance(item, str) for item in mutation_lineage):
+            raise ObservatoryError(f"prompt mutation lineage is invalid: {prompt.get('record_id')}")
+        if parent_id is not None and parent_id not in mutation_lineage:
+            raise ObservatoryError(f"prompt parent is absent from mutation lineage: {prompt.get('record_id')}")
+        if any(item not in prompt_ids for item in mutation_lineage):
+            raise ObservatoryError(f"prompt mutation lineage has a missing parent: {prompt.get('record_id')}")
+        candidate_ids = prompt.get("candidate_ids", [])
+        if not isinstance(candidate_ids, list) or any(not isinstance(item, str) for item in candidate_ids):
+            raise ObservatoryError(f"prompt candidate association is invalid: {prompt.get('record_id')}")
+        for binding in ("model_id", "evaluator_id"):
+            value = prompt.get(binding)
+            if value is not None and (not isinstance(value, str) or not value.strip()):
+                raise ObservatoryError(f"prompt {binding} binding is invalid: {prompt.get('record_id')}")
+    for metric in records.get("metrics", []) if isinstance(records.get("metrics"), list) else []:
+        if str(metric.get("run_id")) not in run_ids:
+            raise ObservatoryError(f"metric has no parent run: {metric.get('record_id')}")
+    recovery_ids = {str(item.get("record_id")) for item in records.get("recoveries", []) if isinstance(item, Mapping)}
+    failure_ids = {str(item.get("record_id")) for item in records.get("failures", []) if isinstance(item, Mapping)}
+    for failure in records.get("failures", []) if isinstance(records.get("failures"), list) else []:
+        before = failure.get("counters_before")
+        after = failure.get("counters_after")
+        if not isinstance(before, Mapping) or not isinstance(after, Mapping):
+            raise ObservatoryError(f"failure counters are invalid: {failure.get('record_id')}")
+        if bool(failure.get("counters_changed")) != (dict(before) != dict(after)):
+            raise ObservatoryError(f"failure counters_changed disagrees with counters: {failure.get('record_id')}")
+        recovery_id = failure.get("recovery_id")
+        if recovery_id is not None and str(recovery_id) not in recovery_ids:
+            raise ObservatoryError(f"failure recovery record is missing: {failure.get('record_id')}")
+    for recovery in records.get("recoveries", []) if isinstance(records.get("recoveries"), list) else []:
+        before = recovery.get("counters_before")
+        after = recovery.get("counters_after")
+        if not isinstance(before, Mapping) or not isinstance(after, Mapping):
+            raise ObservatoryError(f"recovery counters are invalid: {recovery.get('record_id')}")
+        if str(recovery.get("failure_id")) not in failure_ids:
+            raise ObservatoryError(f"recovery failure record is missing: {recovery.get('record_id')}")
     for event in registry.get("events", []):
         if not isinstance(event, Mapping) or _record_hash(event, "event_sha256") != event.get("event_sha256"):
             raise ObservatoryError("event hash mismatch")

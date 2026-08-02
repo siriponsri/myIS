@@ -1,0 +1,242 @@
+{
+  "artifact_references": [
+    {
+      "artifact_id": "p2-fixture-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+      "evidence_class": "fixture",
+      "explanation": "Proves the synthetic lifecycle and zero real counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json",
+      "scientific_authority": false,
+      "title": "P2 repository-only fixture receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-fixture-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+      "evidence_class": "fixture",
+      "explanation": "Separates fixture metadata from the canonical measured request.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json",
+      "scientific_authority": false,
+      "title": "P2 fixture execution manifest",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-fixture-package",
+      "artifact_type": "package",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
+      "evidence_class": "fixture",
+      "explanation": "Binds the deterministic fixture package and checksum closure.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/p2/index.json",
+      "scientific_authority": false,
+      "title": "P2 fixture package",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-official-review-index",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80",
+      "evidence_class": "static_contract_review",
+      "explanation": "Records Round 1 revise, Round 2 revise, and Round 3 accept as engineering provenance.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "orchestration/audits/p2-readiness/index.json",
+      "scientific_authority": false,
+      "title": "Official P2 static review index",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "observatory-fixture-registry",
+      "artifact_type": "registry",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+      "evidence_class": "fixture",
+      "explanation": "Captures prompts, configs, environments, failures, recovery, and safe lineage without protected content.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/observatory/fixture-v1/registry.json",
+      "scientific_authority": false,
+      "title": "Aggregate-safe Observatory registry",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "engineering_provenance_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero.",
+    "status": "ready_for_owner_preflight"
+  },
+  "evidence_class": "fixture",
+  "evidence_links": [
+    {
+      "artifact_id": "p2-fixture-receipt",
+      "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+      "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
+    },
+    {
+      "artifact_id": "p2-fixture-manifest",
+      "sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+      "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json"
+    },
+    {
+      "artifact_id": "p2-fixture-package",
+      "sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
+      "uri": "outputs/fixtures/p2/index.json"
+    },
+    {
+      "artifact_id": "p2-official-review-index",
+      "sha256": "6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80",
+      "uri": "orchestration/audits/p2-readiness/index.json"
+    },
+    {
+      "artifact_id": "observatory-fixture-registry",
+      "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+      "uri": "outputs/observatory/fixture-v1/registry.json"
+    }
+  ],
+  "failure_recovery_references": [
+    {
+      "counters_changed": false,
+      "failure_id": "obs-failure-candidate-02",
+      "recovery_id": "obs-recovery-candidate-02",
+      "status": "retained_and_recovered"
+    }
+  ],
+  "generated_at": "2026-08-01T15:07:35Z",
+  "generated_from_revision": "85e1128672c466c8cebc433a51a43f5d41c7128f3b83f8198dad76a26febe217",
+  "git_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "fixture",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "budget_profile": {
+      "sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+      "uri": "control/budgets/p2-r1-primary-v1.yaml"
+    },
+    "campaign": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
+    "execution_envelope": {
+      "sha256": "cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247",
+      "uri": "control/execution-envelope-p2.yaml"
+    },
+    "fixture_manifest": {
+      "sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+      "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json"
+    },
+    "fixture_receipt": {
+      "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+      "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
+    },
+    "git_commit": "2e841eeefcfd618cd85d0c902878c1cdc220ee76",
+    "observatory_receipt": {
+      "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
+      "uri": "outputs/observatory/fixture-v1/receipt.json"
+    },
+    "observatory_registry": {
+      "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+      "uri": "outputs/observatory/fixture-v1/registry.json"
+    },
+    "source_of_truth": {
+      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "uri": "control/source-of-truth.yaml"
+    },
+    "static_review": {
+      "sha256": "6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80",
+      "uri": "orchestration/audits/p2-readiness/index.json"
+    }
+  },
+  "interpretation": "Synthetic lifecycle success validates capture behavior only. It does not compare R1 candidates or support a retrieval claim.",
+  "last_material_update": "2026-08-01T15:07:35Z",
+  "metric_references": [],
+  "next_authorized_action": "Owner-local P2 measured preflight",
+  "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
+  "phase_id": "P2_SCOPE_DEVELOPMENT",
+  "report_id": "phase-p2_scope_development",
+  "report_sha256": "025be0d447d7ce6bf683c6dc48f5bda611bceff30ad4bff4aee94baedf7a5373",
+  "report_type": "phase",
+  "result": {
+    "decision": "ready_for_owner_preflight",
+    "output": "Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists.",
+    "result": "The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "P2_SCOPE_DEVELOPMENT",
+    "program_state": "P1_CPU_MEASURED_COMPLETE",
+    "task": "P2.1"
+  },
+  "status": "planned",
+  "supported_claims": [
+    {
+      "claim": "Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists.",
+      "evidence": [
+        "p2-fixture-receipt",
+        "p2-fixture-manifest",
+        "p2-fixture-package",
+        "p2-official-review-index",
+        "observatory-fixture-registry"
+      ]
+    }
+  ],
+  "task_id": null,
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
+}

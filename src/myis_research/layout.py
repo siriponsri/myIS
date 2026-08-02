@@ -11,7 +11,8 @@ REQUIRED = (
     "dashboard/index.html", "dashboard/mlflow/mlflow.sh", "projections/obsidian",
     "schemas/run-manifest.v2.json", "archive/INDEX.md",
 )
-FORBIDDEN_ACTIVE = ("00_governance", "01_evidence", "02_tracks", "03_experiments", "04_outputs", "05_code", "06_frontend", "07_obsidian_note", "inbox")
+# ``inbox`` is a governed specification input, not a legacy runtime tree.
+FORBIDDEN_ACTIVE = ("00_governance", "01_evidence", "02_tracks", "03_experiments", "04_outputs", "05_code", "06_frontend", "07_obsidian_note")
 
 
 def validate(root: Path) -> dict[str, object]:
