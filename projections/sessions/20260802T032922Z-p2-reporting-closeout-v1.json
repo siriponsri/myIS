@@ -1,0 +1,195 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260802T032922Z-p2-reporting-closeout-v1",
+  "run_id": null,
+  "goal_id": "P2_REPORTING_AND_ARTIFACT_CLOSEOUT_GOAL",
+  "started_at_utc": "2026-08-02T02:00:00Z",
+  "ended_at_utc": "2026-08-02T03:29:22Z",
+  "scope": "Complete the repository-safe P2 reporting, artifact capture, projection, validation, and research-memory closeout without starting Owner-local measured preflight or measured P2.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "04f314231206df96c11167bf916772cfd814d3e3",
+    "dirty_paths": [
+      "projections/sessions/20260802T032922Z-p2-reporting-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added the mandatory Phase and Task reporting policy, generated/manual note boundary, lifecycle fields, contradiction guards, and measured-preflight integration specification.",
+      "evidence_refs": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "df0b362a0d8e89c5a22507f42794f5c97145df9c6115b9035361fecde5da4f7f",
+          "locator": "Mandatory reporting policy"
+        },
+        {
+          "path": "docs/observatory/REPORTING_POLICY.md",
+          "sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
+          "locator": "report lifecycle and fifteen-section contract"
+        },
+        {
+          "path": "docs/observatory/MEASURED_PREFLIGHT_INTEGRATION.md",
+          "sha256": "fd7d445b24b88f33573f6426aa90d863afd368105536eba9b6528fb281127ecb",
+          "locator": "repository-safe integration path and measured-preflight prerequisite"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Added hash-bound machine-readable Phase and Task reports, generated report indexes, substantive Obsidian Phase/Task/Run/Decision/Review/Fixture notes, and a pending P2 measured template.",
+      "evidence_refs": [
+        {
+          "path": "schemas/phase-task-report.v1.json",
+          "sha256": "93ed08eed6027aa01f25fe42957b530a5b37d4aca5a26a33052718ada2859aec",
+          "locator": "required phase/task report fields and validation status"
+        },
+        {
+          "path": "src/myis_research/report_records.py",
+          "sha256": "a5384c5188da93d5294b909a7228750f8badc3b3b1b312da0e2a749f2882e04c",
+          "locator": "build_report_records, validate_report_record, and report_json_outputs"
+        },
+        {
+          "path": "projections/reports/index.json",
+          "sha256": "ea1e7ba4db99941d63c6aeb4b639492d9bea8c05356ec0fb9f85c5d4e79204c5",
+          "locator": "reports list and source read-model binding"
+        },
+        {
+          "path": "obsidian_report/03_Results/Current/P2_MEASURED_PENDING.md",
+          "sha256": "2f5935143ce252f5c6aa4892db87e3b9e396ce53869a98d6cc6fc70026472a0f",
+          "locator": "not_started status and unavailable measured fields"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Extended the Observatory registry with artifact lineage, prompt mutation and model/evaluator bindings, environment/config records, failure/recovery counters, and repository-safe projection metadata.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/observatory/core.py",
+          "sha256": "c3439517181741a8f40a70a62b06b89be9d19522215c4de4932711e18206528b",
+          "locator": "artifact, prompt, failure/recovery builders and validate_registry"
+        },
+        {
+          "path": "outputs/observatory/fixture-v1/registry.json",
+          "sha256": "8a579776c712f0936c45918cb410e882366a6e8934fd1a4fb19b4bf76230560e",
+          "locator": "records.artifacts, records.prompts, records.failures, records.recoveries, and registry_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The archive-runtime policy scan initially rejected the current layout declaration because its allowlist only covered the historical inbox-inclusive line; the scanner was repaired to allow the current governed-inbox declaration while retaining the historical negative test.",
+      "evidence_refs": [
+        {
+          "path": ".github/scripts/check_policy.py",
+          "sha256": "d5c23a9dda5b31135086f8f45f5086916555e85bf6f55c4b7ac4d48861803433",
+          "locator": "archive-runtime allowed_lines"
+        },
+        {
+          "path": "tests/test_observatory.py",
+          "sha256": "f440a554e77f6e9d07e39d005e4d0bf3bcdbee26d5423c14e696530d1f377b4e",
+          "locator": "fixture and artifact-lineage regression coverage"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The full synthetic test suite, focused report and Observatory tests, deterministic report sync/check cycles, schema and checksum validation, protected and unsafe-path scans, artifact graph validation, Dashboard/API tests, isolated MLflow doctor, session audit, layout, asset registry, Brain literature validation, scoped Ruff, and whitespace checks passed locally.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "77310498041ff731be960fffbcb3c13364741e3716970e4167faa0c56bcbcde2",
+          "locator": "status, read_model_revision, projection hashes, and aggregate MLflow run pointer"
+        },
+        {
+          "path": "tests/test_obsidian_report_contract.py",
+          "sha256": "eea8ed5dd8af961c9edbebeebc4582f2259c83d01ad803a79741648ac7996c0b",
+          "locator": "generated report, stale-state, pending-template, and projection contract tests"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The repository-safe reporting and artifact-capture system is complete for the current boundary. P2 remains ready_planned_not_measured; the fixture is passed engineering evidence only, measured runs and real counters remain zero, selection and the final split remain closed, and the next action is Owner-local P2 measured preflight.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "f84954d5f78659d3725611fb3acff18cb2063ae1ebc9dae3ce597f56d498ba7f",
+          "locator": "p2_readiness.status, fixture_pilot, measured_runs, candidate_count, shortlist_count, selection_accesses, and next_action"
+        },
+        {
+          "path": "obsidian_report/03_Results/Current/P2_MEASURED_PENDING.md",
+          "sha256": "2f5935143ce252f5c6aa4892db87e3b9e396ce53869a98d6cc6fc70026472a0f",
+          "locator": "pending measured-result boundary and next action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "projections/sync-receipt.v2.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "ci-green-required",
+      "provenance": "agent-observed",
+      "summary": "The closeout commit must be pushed and the existing Draft PR CI workflow must complete successfully before this goal is finally closed.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "owner-local-measured-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight remains the next authorized action and was not started automatically.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-p2-not-started",
+      "provenance": "agent-observed",
+      "summary": "Measured P2, candidate generation, shortlist freeze, and selection exposure remain unstarted with real counters at zero.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "final-remains-closed",
+      "provenance": "agent-observed",
+      "summary": "The final split remains closed and D2_OPEN_FINAL and D3_SUBMIT_RELEASE remain waiting for Owner action.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
