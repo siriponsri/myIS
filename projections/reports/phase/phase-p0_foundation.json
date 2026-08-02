@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "content_sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -23,7 +23,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "10be4295a3fb57b0680dbe74e2818c9f2a68aff19ce6db2e0c436cf0584c0af6",
+      "content_sha256": "0e31a28db2a4cc6eb9c170538c1c11de288a65e44dd3e9f3d74fb24ef1969a98",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,12 +65,12 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     },
     {
       "artifact_id": "schemas-read-model.v2.json",
-      "sha256": "10be4295a3fb57b0680dbe74e2818c9f2a68aff19ce6db2e0c436cf0584c0af6",
+      "sha256": "0e31a28db2a4cc6eb9c170538c1c11de288a65e44dd3e9f3d74fb24ef1969a98",
       "uri": "schemas/read-model.v2.json"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T09:30:06Z",
-  "generated_from_revision": "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03",
-  "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
+  "generated_at": "2026-08-02T10:23:41Z",
+  "generated_from_revision": "b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957",
+  "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
+    "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
     "source_of_truth": {
-      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T09:30:06Z",
+  "last_material_update": "2026-08-02T10:23:41Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "fb619aecad4e47c0677a7e9b24e4d43a7f8b547e3845c72c643cc87dff570b77",
+  "report_sha256": "5e28d9d2e396149839d1380888ab2d687f15ec0f9acf535cf23435b91de1b786",
   "report_type": "phase",
   "result": {
     "decision": "completed",

@@ -1,0 +1,153 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-completion-audit-20260802",
+  "artifact": "P2 Owner-local preflight enablement and candidate-freeze proposal",
+  "artifact_path": "src/myis_research/p2/preflight.py",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": false,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": ["F001", "F002", "F003", "F004"]
+  },
+  "overall": {
+    "grade": "Weak Reject",
+    "mean_score": 2.67,
+    "one_line_summary": "The repository-safe proposal and preflight receipt structure are sound, but stale-state and path-capacity checks are not yet strong enough to prove completion.",
+    "strengths": [
+      "The proposal validates as draft_owner_review and not_adopted with exactly four controls and eight preregistered candidates.",
+      "The receipt schema and writer use canonical JSON, SHA-256 self-binding, aggregate-only metadata, and exclusive immutable creation.",
+      "The current repository remains unmeasured with all real counters at zero and protected surfaces closed."
+    ],
+    "weaknesses": [
+      "A passed receipt is not revalidated against current gate and counter authority, so later canonical state changes can leave a stale pass projected as current.",
+      "The store boundary check is one-directional and can accept a store directory that contains a Git worktree.",
+      "Free space is summed per store path and can double-count one filesystem or volume.",
+      "The focused tests do not cover all required negative and stale-state cases."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": ["The checks target the requested bindings, gates, counters, stores, and proposal lineage."],
+      "weaknesses": ["Passing focused tests do not cover the full required failure surface."],
+      "suggestions": ["Add one negative test for every named preflight invariant and every stale authority source."]
+    },
+    "D2_falsifiability": {
+      "score": 2,
+      "strengths": ["The receipt exposes explicit check IDs and failure codes."],
+      "weaknesses": ["Current validation does not make a prior pass falsifiable after gate, counter, or artifact state changes."],
+      "suggestions": ["Recompute live authority snapshots during receipt validation and reject stale passes."]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": ["The implementation remains CPU-only, aggregate-only, unmeasured, and final-split closed."],
+      "weaknesses": ["The safe-to-measure projection depends on a receipt whose freshness is not fully proven."],
+      "suggestions": ["Keep passed_pending_owner distinct from execution authorization after freshness repair."]
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": ["Profile, envelope, campaign, and proposal hashes are linked coherently."],
+      "weaknesses": ["The projected current state can diverge from the canonical gate and counter state after receipt creation."],
+      "suggestions": ["Bind or recompute every mutable authority used to justify a pass."]
+    },
+    "D5_exploration_integrity": {
+      "score": 3,
+      "strengths": ["The proposal preserves ambiguity and does not register or hash-lock candidates."],
+      "weaknesses": ["Negative-path evidence is incomplete for the store and stale-state boundary."],
+      "suggestions": ["Retain the proposal as non-scientific engineering evidence until Owner review."]
+    },
+    "D6_methodological_rigor": {
+      "score": 2,
+      "strengths": ["Canonical schemas and deterministic self-hashes are implemented."],
+      "weaknesses": ["Worktree overlap and same-volume capacity accounting can overstate store safety."],
+      "suggestions": ["Use symmetric path-overlap checks and count free bytes once per filesystem or volume."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/contracts.py",
+      "target_entity": "_validate_preflight_receipt_semantics",
+      "evidence_locator": "The validator checks the receipt's stored gates and counters but does not reload current decision-ledger, campaign, read-model, or P2 artifact state.",
+      "observation": "A passed_pending_owner receipt can remain valid after D2/D3 or real candidate/counter state changes outside the campaign and envelope files.",
+      "reasoning": "The read model may project a stale pass as current readiness, violating fail-closed stale-state behavior.",
+      "suggestion": "Recompute live gate and counter snapshots during validation and reject a passed receipt when either snapshot differs or is no longer safe."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/preflight.py",
+      "target_entity": "_inspect_store",
+      "evidence_locator": "outside is calculated only as all(not _path_contains(worktree, store)).",
+      "observation": "A store path that is a parent of a Git worktree is classified outside even though the paths overlap.",
+      "reasoning": "The store boundary can include repository content and no longer proves separation from all worktrees.",
+      "suggestion": "Reject overlap in either direction between each store and every worktree."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/preflight.py",
+      "target_entity": "_store_snapshot aggregate free-space calculation",
+      "evidence_locator": "aggregate is the sum of free_space_bytes for both store records.",
+      "observation": "Two disjoint store paths on one filesystem or volume contribute the same available bytes twice.",
+      "reasoning": "The aggregate capacity check can pass even when actual available capacity is below the requested threshold.",
+      "suggestion": "Record a non-path filesystem identity internally and sum available bytes once per unique filesystem or volume."
+    },
+    {
+      "finding_id": "F004",
+      "dimension": "D1_evidence_relevance",
+      "severity": "major",
+      "target_artifact": "tests/test_p2_preflight.py",
+      "target_entity": "negative and stale-state coverage",
+      "evidence_locator": "The focused suite covers proposal validity, two proposal failures, one passing preflight, store overlap, stale campaign, missing check, and stale commit only.",
+      "observation": "There are no focused negative tests for missing store, file instead of directory, inside/containing worktree, symlink or junction, unwritable or uncleared sentinel, insufficient free space, stale envelope/profile/gate/counter, immutable overwrite, output escape, or failed-receipt consistency.",
+      "reasoning": "The explicit comprehensive-negative-test requirement is not proven by the current suite.",
+      "suggestion": "Add focused tests for every named invariant and verify read-model failure projection for stale receipts."
+    },
+    {
+      "finding_id": "F005",
+      "dimension": "D2_falsifiability",
+      "severity": "minor",
+      "target_artifact": "src/myis_research/p2/contracts.py",
+      "target_entity": "failed preflight receipt consistency",
+      "evidence_locator": "The failed branch requires any failed check or failure code but does not require failure_codes to equal the failed check IDs.",
+      "observation": "A self-hash-valid failed receipt can retain inconsistent diagnostic metadata.",
+      "reasoning": "This does not promote execution, but weakens the audit trail and stale-failure diagnosis.",
+      "suggestion": "Require exact sorted equality between failure_codes and failed check IDs and verify aggregate free-space consistency."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner decision is required for these engineering repairs; the five approval items already listed in the candidate proposal remain pending."
+  ],
+  "read_order": [
+    "Owner-provided objective attachment (session-local)",
+    "AGENTS.md",
+    "HANDOFF.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/decisions/D1_START_CAMPAIGN.yaml",
+    "control/execution-envelope-p2.yaml",
+    "control/budgets/p2-r1-primary-v1.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    ".agents/skills/myis-review-research-rigor/references/rigor-review-schema.md",
+    "outputs/audits/rigor/p2-readiness-20260801.json",
+    "schemas/p2-preflight-receipt.v1.json",
+    "schemas/p2-candidate-freeze-proposal.v1.json",
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+    "src/myis_research/p2/preflight.py",
+    "src/myis_research/p2/contracts.py",
+    "src/myis_research/p2_cli.py",
+    "src/myis_research/projections/read_model.py",
+    "tests/test_p2_preflight.py",
+    "projections/read-model/read-model.v2.json",
+    "GitHub PR 3 and contract CI metadata"
+  ]
+}

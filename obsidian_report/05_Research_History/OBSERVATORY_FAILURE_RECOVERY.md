@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03"
-read_model_sha256: "f1076cad0d68a748483d76a6f8ee62d96ad4a6679c4064b2a6b0b43033743d11"
-source_commit: "8b47d3350f99c33f55355b85bd39b222d4181a80"
+read_model_revision: "b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957"
+read_model_sha256: "4bff54d2899142aa4df20dcc25e39fc4e725e1582442bbf2e1b751bb89695c8c"
+source_commit: "c13592c4ccba4235991459899801c022d6eb8623"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["obs-run-candidate-02"]
 source_manifest_sha256: ["51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1","6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03"
-last_material_update: "2026-08-02T09:30:06Z"
+generated_from_revision: "b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957"
+last_material_update: "2026-08-02T10:23:41Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-02T09:30:06Z"
-updated_at: "2026-08-02T09:30:06Z"
+created_at: "2026-08-02T10:23:41Z"
+updated_at: "2026-08-02T10:23:41Z"
 note_id: "OBSERVATORY-FAILURE-RECOVERY"
 note_type: "failed_attempt"
 phase_id: "P2_SCOPE_DEVELOPMENT"

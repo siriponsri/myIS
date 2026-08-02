@@ -16,9 +16,11 @@ from ..kernel.canonical import canonical_sha256, file_sha256
 from ..protection import assert_path_not_protected
 from .contracts import (
     ENVELOPE_RELATIVE_PATH,
+    P2_ARTIFACT_SCHEMAS,
     P2ContractError,
     P2_PREFLIGHT_CHECK_IDS,
     load_p2_request,
+    validate_p2_artifact,
     validate_p2_preflight_receipt,
     write_immutable_json,
 )
@@ -29,6 +31,12 @@ P2_PREFLIGHT_RECEIPT_PATH = Path(
 )
 DEFAULT_REQUIRED_FREE_SPACE_BYTES = 1
 STORE_ENVIRONMENT = ("MYIS_STORE", "MYIS_MLFLOW_STORE")
+P2_COUNTER_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
+P2_LIFECYCLE_SCHEMAS = frozenset(P2_ARTIFACT_SCHEMAS) - {
+    "myis.p2-request.v1",
+    "myis.p2-preflight-receipt.v1",
+    "myis.p2-candidate-freeze-proposal.v1",
+}
 OWNER_APPROVAL_REQUIRED = [
     "Owner confirms both protected store identities and permits read-only metadata preflight.",
     "Owner approves the four frozen controls and eight preregistered candidate definitions.",
@@ -82,7 +90,6 @@ def run_p2_preflight(
     stores, overlap_ok, aggregate_free = _store_snapshot(
         root,
         worktrees,
-        required_space,
         check_stores=require_stores,
     )
     for name in STORE_ENVIRONMENT:
@@ -248,18 +255,25 @@ def write_preflight_receipt(repository_root: Path, output: Path, receipt: Mappin
     """Persist one immutable repository-safe preflight receipt."""
 
     root = Path(repository_root).resolve(strict=True)
-    target = Path(output) if Path(output).is_absolute() else root / Path(output)
-    target = target.resolve()
+    raw_target = Path(output) if Path(output).is_absolute() else root / Path(output)
+    lexical_target = Path(os.path.abspath(raw_target))
+    try:
+        relative_target = lexical_target.relative_to(root)
+    except ValueError as error:
+        raise P2ContractError("preflight receipt output must remain in the repository") from error
+    try:
+        assert_path_not_protected(relative_target.as_posix())
+    except PermissionError as error:
+        raise P2ContractError(str(error)) from error
+    if lexical_target.is_symlink() or any(
+        _is_link_or_junction(parent) for parent in _ancestors(lexical_target, root)
+    ):
+        raise P2ContractError("preflight receipt output cannot traverse a symlink or junction")
+    target = lexical_target.resolve(strict=False)
     try:
         target.relative_to(root)
     except ValueError as error:
         raise P2ContractError("preflight receipt output must remain in the repository") from error
-    try:
-        assert_path_not_protected(target.relative_to(root).as_posix())
-    except PermissionError as error:
-        raise P2ContractError(str(error)) from error
-    if target.is_symlink() or any(_is_link_or_junction(parent) for parent in _ancestors(target, root)):
-        raise P2ContractError("preflight receipt output cannot traverse a symlink or junction")
     validate_p2_preflight_receipt(receipt, repository_root=root)
     return write_immutable_json(target, receipt)
 
@@ -352,13 +366,22 @@ def _counter_snapshot(root: Path, profile: Mapping[str, Any]) -> tuple[dict[str,
             p2 = {}
     measured_runs = max(measured_runs, int(p2.get("measured_runs", 0) or 0))
     selection_accesses = max(selection_accesses, int(p2.get("selection_accesses", 0) or 0))
+    artifact_counters, artifacts_safe = _artifact_counter_snapshot(root)
     counters = {
-        "measured_runs": measured_runs,
-        "candidate_count": int(p2.get("candidate_count", 0) or 0),
-        "shortlist_count": int(p2.get("shortlist_count", 0) or 0),
-        "selection_accesses": selection_accesses,
-        "baseline_commitment_present": bool(p2.get("source", {}).get("baseline_commitment_sha256")) if isinstance(p2.get("source"), Mapping) else False,
-        "freeze_started": bool((p2.get("freeze_barrier") or {}).get("status") not in {None, "not_started"}) if isinstance(p2.get("freeze_barrier"), Mapping) else False,
+        "measured_runs": max(measured_runs, artifact_counters["measured_runs"]),
+        "candidate_count": max(int(p2.get("candidate_count", 0) or 0), artifact_counters["candidate_count"]),
+        "shortlist_count": max(int(p2.get("shortlist_count", 0) or 0), artifact_counters["shortlist_count"]),
+        "selection_accesses": max(selection_accesses, artifact_counters["selection_accesses"]),
+        "baseline_commitment_present": (
+            bool(p2.get("source", {}).get("baseline_commitment_sha256"))
+            if isinstance(p2.get("source"), Mapping)
+            else False
+        ) or artifact_counters["baseline_commitment_present"],
+        "freeze_started": (
+            bool((p2.get("freeze_barrier") or {}).get("status") not in {None, "not_started"})
+            if isinstance(p2.get("freeze_barrier"), Mapping)
+            else False
+        ) or artifact_counters["freeze_started"],
     }
     safe = counters == {
         "measured_runs": 0,
@@ -367,14 +390,79 @@ def _counter_snapshot(root: Path, profile: Mapping[str, Any]) -> tuple[dict[str,
         "selection_accesses": 0,
         "baseline_commitment_present": False,
         "freeze_started": False,
+    } and artifacts_safe
+    return counters, safe
+
+
+def _artifact_counter_snapshot(root: Path) -> tuple[dict[str, Any], bool]:
+    counters: dict[str, Any] = {
+        "measured_runs": 0,
+        "candidate_count": 0,
+        "shortlist_count": 0,
+        "selection_accesses": 0,
+        "baseline_commitment_present": False,
+        "freeze_started": False,
     }
+    safe = True
+    measured_run_ids: set[str] = set()
+    campaign_root = root / "campaigns/scope-autoindex-v1"
+    for directory_name in P2_COUNTER_ARTIFACT_DIRS:
+        directory = campaign_root / directory_name
+        if not directory.is_dir():
+            continue
+        for path in sorted(directory.glob("*.json")):
+            p2_named = any(token in path.stem.casefold() for token in ("p2-", "p2_", ".p2"))
+            if path.is_symlink() or not path.is_file():
+                safe = safe and not p2_named
+                continue
+            try:
+                payload = _json_file(path)
+            except (OSError, UnicodeError, ValueError):
+                safe = safe and not p2_named
+                continue
+            schema_version = str(payload.get("schema_version", ""))
+            if not schema_version.startswith("myis.p2-"):
+                continue
+            try:
+                artifact = validate_p2_artifact(payload, repository_root=root)
+            except (P2ContractError, TypeError, ValueError):
+                safe = False
+                continue
+            if schema_version not in P2_LIFECYCLE_SCHEMAS:
+                continue
+            safe = False
+            if schema_version == "myis.p2-candidate-ledger.v1":
+                counters["candidate_count"] = max(
+                    counters["candidate_count"], int(artifact.get("candidate_count", 0) or 0)
+                )
+            elif schema_version in {
+                "myis.p2-baseline-commitment.v1",
+                "myis.p2-baseline-reproduction-receipt.v1",
+            }:
+                counters["baseline_commitment_present"] = True
+            elif schema_version == "myis.p2-shortlist-freeze-receipt.v1":
+                counters["freeze_started"] = True
+                counters["shortlist_count"] = max(
+                    counters["shortlist_count"], len(artifact.get("candidate_ids", []))
+                )
+            elif schema_version == "myis.p2-selection-receipt.v1":
+                counters["selection_accesses"] = max(
+                    counters["selection_accesses"],
+                    int(artifact.get("selection_exposure_count", 0) or 0),
+                )
+            elif (
+                schema_version == "myis.p2-manifest.v1"
+                and artifact.get("evidence_class") == "train_selection_measured"
+                and artifact.get("status") in {"valid", "negative_development"}
+            ):
+                measured_run_ids.add(str(artifact.get("run_id", path.stem)))
+    counters["measured_runs"] = len(measured_run_ids)
     return counters, safe
 
 
 def _store_snapshot(
     root: Path,
     worktrees: list[Path],
-    required_space: int,
     *,
     check_stores: bool,
 ) -> tuple[dict[str, dict[str, Any]], bool, int]:
@@ -389,7 +477,20 @@ def _store_snapshot(
         stores[name] = _inspect_store(name, raw_paths[name], worktrees)
     paths = [path for path in raw_paths.values() if path is not None]
     overlap_ok = len(paths) == 2 and not _paths_overlap(paths[0], paths[1])
-    aggregate = sum(int(item.get("free_space_bytes", 0)) for item in stores.values())
+    free_space_by_filesystem: dict[str, int] = {}
+    for name, path in raw_paths.items():
+        store = stores[name]
+        if path is None or store.get("status") != "passed":
+            continue
+        identity = _filesystem_identity(path)
+        free_space = int(store.get("free_space_bytes", 0))
+        if identity in free_space_by_filesystem:
+            free_space_by_filesystem[identity] = min(
+                free_space_by_filesystem[identity], free_space
+            )
+        else:
+            free_space_by_filesystem[identity] = free_space
+    aggregate = sum(free_space_by_filesystem.values())
     return stores, overlap_ok, aggregate
 
 
@@ -414,7 +515,7 @@ def _inspect_store(name: str, value: Path | None, worktrees: list[Path]) -> dict
     exists = value.exists() or value.is_symlink()
     is_directory = exists and value.is_dir() and not unsafe
     resolved = value.resolve(strict=False)
-    outside = bool(worktrees) and all(not _path_contains(root, resolved) for root in worktrees)
+    outside = bool(worktrees) and all(not _paths_overlap(root, resolved) for root in worktrees)
     sentinel_created = False
     sentinel_cleaned = False
     free_space = 0
@@ -580,6 +681,16 @@ def _paths_overlap(first: Path, second: Path) -> bool:
     left = first.resolve(strict=False)
     right = second.resolve(strict=False)
     return _path_contains(left, right) or _path_contains(right, left)
+
+
+def _filesystem_identity(path: Path) -> str:
+    try:
+        resolved = path.resolve(strict=True)
+        device = int(resolved.stat().st_dev)
+        anchor = os.path.normcase(resolved.anchor)
+    except OSError:
+        return "unknown-filesystem"
+    return f"{device}:{anchor}"
 
 
 def _json_file(path: Path) -> dict[str, Any]:

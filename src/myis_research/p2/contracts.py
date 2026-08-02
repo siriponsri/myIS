@@ -302,7 +302,8 @@ def _validate_preflight_receipt_semantics(
         raise P2ContractError("preflight profile binding is stale")
     if payload["campaign_revision"] != profile.payload["campaign_revision"]:
         raise P2ContractError("preflight campaign revision is stale")
-    if payload["git_commit_exists"] and not _git_commit_exists(repository_root, str(payload["git_commit"])):
+    commit_exists = _git_commit_exists(repository_root, str(payload["git_commit"]))
+    if payload["git_commit_exists"] and not commit_exists:
         raise P2ContractError("preflight execution source commit is stale or missing")
     if not campaign_path.is_file() or file_sha256(campaign_path) != payload["campaign_sha256"]:
         raise P2ContractError("preflight campaign binding is stale")
@@ -313,6 +314,11 @@ def _validate_preflight_receipt_semantics(
     check_ids = [str(item["check_id"]) for item in checks]
     check_statuses = [str(item["status"]) for item in checks]
     failed_checks = [item for item in checks if item["status"] == "failed"]
+    failed_check_ids = sorted(str(item["check_id"]) for item in failed_checks)
+    if check_ids != list(P2_PREFLIGHT_CHECK_IDS):
+        raise P2ContractError("preflight receipt does not contain the exact required check set")
+    if list(payload["failure_codes"]) != failed_check_ids:
+        raise P2ContractError("preflight failure codes do not match the failed checks")
     stores = payload["stores"]
     counters = payload["counters"]
     gates = payload["gates"]
@@ -342,11 +348,40 @@ def _validate_preflight_receipt_semantics(
         and gates["D3_SUBMIT_RELEASE"] == "waiting_owner"
         and gates["final_split_open"] is False
     )
+    campaign_binding_ok = _current_campaign_binding(repository_root, profile.payload)
+    store_free_space_total = sum(int(value.get("free_space_bytes", 0)) for value in stores.values())
+    if payload["aggregate_free_space_bytes"] > store_free_space_total:
+        raise P2ContractError("preflight aggregate free-space value exceeds the store evidence")
+    boundary = payload["safe_path_boundary"]
+    outside_all_worktrees = all(
+        isinstance(value, Mapping) and value.get("outside_all_worktrees") is True
+        for value in stores.values()
+    )
+    if boundary["outside_all_worktrees"] is not outside_all_worktrees:
+        raise P2ContractError("preflight worktree boundary summary is inconsistent")
+    if payload["status"] != "not_started":
+        expected_check_statuses = {
+            "execution_source_commit": payload["git_commit_exists"],
+            "canonical_profile_binding": True,
+            "canonical_envelope_binding": True,
+            "canonical_campaign_binding": campaign_binding_ok,
+            "store_myis_store": stores["MYIS_STORE"].get("status") == "passed",
+            "store_myis_mlflow_store": stores["MYIS_MLFLOW_STORE"].get("status") == "passed",
+            "aggregate_free_space": payload["aggregate_free_space_bytes"] >= payload["required_free_space_bytes"],
+        }
+        for item in checks:
+            expected = expected_check_statuses.get(str(item["check_id"]))
+            if expected is not None and (item["status"] == "passed") is not expected:
+                raise P2ContractError(f"preflight check state is inconsistent: {item['check_id']}")
+        counter_check = next(item for item in checks if item["check_id"] == "counter_state")
+        if counter_check["status"] == "passed" and not zero_counters:
+            raise P2ContractError("preflight check state is inconsistent: counter_state")
+        gate_check = next(item for item in checks if item["check_id"] == "gate_state")
+        if gate_check["status"] == "passed" and not gates_safe:
+            raise P2ContractError("preflight check state is inconsistent: gate_state")
     if payload["status"] == "passed_pending_owner" and payload["aggregate_free_space_bytes"] < payload["required_free_space_bytes"]:
         raise P2ContractError("preflight aggregate free-space binding is insufficient")
     if payload["status"] == "passed_pending_owner":
-        if check_ids != list(P2_PREFLIGHT_CHECK_IDS):
-            raise P2ContractError("passed preflight does not contain the exact required check set")
         if check_statuses != ["passed"] * len(checks) or failed_checks:
             raise P2ContractError("passed preflight contains a failed or unrun check")
         if (
@@ -359,6 +394,13 @@ def _validate_preflight_receipt_semantics(
             raise P2ContractError("passed preflight does not prove the required zero-counter boundary")
         if payload["failure_codes"]:
             raise P2ContractError("passed preflight cannot contain failure codes")
+        current_gates, current_gates_safe, current_counters, current_counters_safe = _current_preflight_state(
+            repository_root
+        )
+        if current_gates != dict(gates) or not current_gates_safe:
+            raise P2ContractError("passed preflight gate state is stale")
+        if current_counters != dict(counters) or not current_counters_safe:
+            raise P2ContractError("passed preflight counter state is stale")
     elif payload["status"] == "failed":
         if not failed_checks and not payload["failure_codes"]:
             raise P2ContractError("failed preflight must retain a failure code")
@@ -367,9 +409,32 @@ def _validate_preflight_receipt_semantics(
             raise P2ContractError("not-started preflight must retain zero counters and no failure")
     if payload["measured_execution"] or payload["protected_data_accessed"] or payload["final_split_open"]:
         raise P2ContractError("preflight receipt crosses the measured or protected boundary")
-    boundary = payload["safe_path_boundary"]
     if boundary["all_worktrees_count"] < 1 or not boundary["path_overlap_checked"] or not boundary["unsafe_links_rejected"]:
         raise P2ContractError("preflight did not complete the worktree path safety checks")
+
+
+def _current_preflight_state(
+    repository_root: Path,
+) -> tuple[dict[str, Any], bool, dict[str, Any], bool]:
+    from .preflight import _counter_snapshot, _gate_snapshot
+
+    profile = load_profile(repository_root)
+    gates, gates_safe = _gate_snapshot(repository_root, profile.payload)
+    counters, counters_safe = _counter_snapshot(repository_root, profile.payload)
+    return gates, gates_safe, counters, counters_safe
+
+
+def _current_campaign_binding(
+    repository_root: Path,
+    profile: Mapping[str, Any],
+) -> bool:
+    from .preflight import _campaign_binding_ok
+
+    return _campaign_binding_ok(
+        repository_root,
+        profile,
+        repository_root / "control/campaigns/scope-autoindex-v1.yaml",
+    )
 
 
 def _validate_candidate_freeze_proposal_semantics(
