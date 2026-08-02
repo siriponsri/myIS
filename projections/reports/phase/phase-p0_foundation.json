@@ -23,7 +23,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "0e31a28db2a4cc6eb9c170538c1c11de288a65e44dd3e9f3d74fb24ef1969a98",
+      "content_sha256": "06a7717ad73b9257301b590f93cb54ea81b1d2eb45d3b543f5ba6732f24f3872",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -41,7 +41,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "f7384dd3191ae70d09efbe2336f1457e62945d3b808b5846f96379917175e02b",
+      "content_sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -70,19 +70,19 @@
     },
     {
       "artifact_id": "schemas-read-model.v2.json",
-      "sha256": "0e31a28db2a4cc6eb9c170538c1c11de288a65e44dd3e9f3d74fb24ef1969a98",
+      "sha256": "06a7717ad73b9257301b590f93cb54ea81b1d2eb45d3b543f5ba6732f24f3872",
       "uri": "schemas/read-model.v2.json"
     },
     {
       "artifact_id": "docs-observatory-REPORTING_POLICY.md",
-      "sha256": "f7384dd3191ae70d09efbe2336f1457e62945d3b808b5846f96379917175e02b",
+      "sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
       "uri": "docs/observatory/REPORTING_POLICY.md"
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T10:53:42Z",
-  "generated_from_revision": "c68e57feb22f284e4ff9e98d87c6807c1993dfaa9cb9e5fc0467a28ef09c0f33",
-  "git_commit": "f192acb7a5d01227ef91b9594b6a63c312ce31dd",
+  "generated_at": "2026-08-02T11:28:15Z",
+  "generated_from_revision": "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3",
+  "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "f192acb7a5d01227ef91b9594b6a63c312ce31dd",
+    "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
     "source_of_truth": {
       "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T10:53:42Z",
+  "last_material_update": "2026-08-02T11:28:15Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "e2ad75c7fbabb91da9cf2b3b4f3d7ade55f10d749603ddd716cff864345946f5",
+  "report_sha256": "d593639ee7d8e5f1ddc6a75a664934461c521fac343789a914fc3e8e3fee02b8",
   "report_type": "phase",
   "result": {
     "decision": "completed",

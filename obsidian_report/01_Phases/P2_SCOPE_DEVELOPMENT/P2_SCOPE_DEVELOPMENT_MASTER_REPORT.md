@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "c68e57feb22f284e4ff9e98d87c6807c1993dfaa9cb9e5fc0467a28ef09c0f33"
-read_model_sha256: "54c1762501c339ca506ab48391074674d10105ccb024fa84bf88c04efe9b3aa0"
-source_commit: "f192acb7a5d01227ef91b9594b6a63c312ce31dd"
+read_model_revision: "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3"
+read_model_sha256: "4ff3b80ba623058c14ba2561abf9cb2dbc524b7b6cfa6d655547b581aeb09f3a"
+source_commit: "c2102180da46e7338a6ab41de2a921f3a61e70a1"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "c68e57feb22f284e4ff9e98d87c6807c1993dfaa9cb9e5fc0467a28ef09c0f33"
-last_material_update: "2026-08-02T10:53:42Z"
+generated_from_revision: "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3"
+last_material_update: "2026-08-02T11:28:15Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-02T10:53:42Z"
-updated_at: "2026-08-02T10:53:42Z"
+created_at: "2026-08-02T11:28:15Z"
+updated_at: "2026-08-02T11:28:15Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -48,7 +48,7 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: f192acb7a5d01227ef91b9594b6a63c312ce31dd
+- `git_commit`: c2102180da46e7338a6ab41de2a921f3a61e70a1
 - `budget_profile`: `control/budgets/p2-r1-primary-v1.yaml`; SHA-256 `d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c`
 - `execution_envelope`: `control/execution-envelope-p2.yaml`; SHA-256 `cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247`
 - `campaign_revision`: scope-autoindex-v1-p2-r1-primary-v1
@@ -62,7 +62,7 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 ## Work Performed
 
-The initial P2 preflight completion and post-merge report-byte audits were preserved, both recovery chains were validated, and no Owner-local preflight or measured execution was started.
+The initial P2 preflight completion, report-byte, and projection source-hash audits were preserved, all recovery chains were validated, and no Owner-local preflight or measured execution was started.
 Static review: Round `3` verdict **accept**. Repository-only fixture status **passed**; synthetic lifecycle counts are `32` candidates, `5` iterations, `4` finalists, and `1` fixture selection exposure(s).
 
 ## Artifacts Produced
@@ -80,6 +80,8 @@ These references explain what each artifact is for; the bytes remain governed by
 | Repaired P2 preflight completion audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-completion-repair-20260802.json` | `77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3` | `validated` |
 | Initial P2 preflight report byte-stability audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json` | `bdbcbfd23a8a1cfa2816485c87c04dd5391977a819d187b2b8bc30461e417eba` | `validated` |
 | Repaired P2 preflight report byte-stability audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json` | `cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996` | `validated` |
+| Initial P2 preflight projection source-hash audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json` | `97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca` | `validated` |
+| Repaired P2 preflight projection source-hash audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json` | `842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107` | `validated` |
 | Aggregate-safe Observatory registry | `registry` | `fixture` | `outputs/observatory/fixture-v1/registry.json` | `51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1` | `validated` |
 
 ## Metrics
@@ -100,11 +102,11 @@ Fixture values are synthetic engineering diagnostics and are never reported as m
 
 ## Interpretation
 
-The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform report-byte stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.
+The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform output and source-hash stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.
 
 ## Supported Claims
 
-- Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, p2-candidate-freeze-proposal, p2-preflight-completion-audit-initial, p2-preflight-completion-audit-repair, p2-preflight-report-byte-audit-initial, p2-preflight-report-byte-audit-repair, observatory-fixture-registry)
+- Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, p2-candidate-freeze-proposal, p2-preflight-completion-audit-initial, p2-preflight-completion-audit-repair, p2-preflight-report-byte-audit-initial, p2-preflight-report-byte-audit-repair, p2-preflight-projection-source-audit-initial, p2-preflight-projection-source-audit-repair, observatory-fixture-registry)
 
 ## Unsupported Claims
 
@@ -117,6 +119,7 @@ The repairs strengthen stale authority, worktree boundary, capacity, immutable r
 - obs-failure-candidate-02
 - p2-preflight-completion-audit-20260802
 - p2-preflight-report-byte-drift-audit-20260802
+- p2-preflight-projection-source-hash-drift-audit-20260802
 
 ## Governance and Safety
 
@@ -156,4 +159,6 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - p2-preflight-completion-audit-repair
 - p2-preflight-report-byte-audit-initial
 - p2-preflight-report-byte-audit-repair
+- p2-preflight-projection-source-audit-initial
+- p2-preflight-projection-source-audit-repair
 - observatory-fixture-registry
