@@ -97,6 +97,7 @@ def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
     }
     assert {
         "control/source-of-truth.yaml -text whitespace=cr-at-eol",
+        "control/execution-envelope.yaml -text",
         "obsidian_report/** -text",
         "obsidian_report/**/Owner_Notes/** text",
         "obsidian_report/80_Owner_Notes/** text",

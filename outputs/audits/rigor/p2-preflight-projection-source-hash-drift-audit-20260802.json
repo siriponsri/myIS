@@ -13,7 +13,8 @@
     "manifest_integrity_valid": false,
     "blocking_findings": [
       "F001",
-      "F002"
+      "F002",
+      "F003"
     ]
   },
   "overall": {
@@ -27,6 +28,7 @@
     "weaknesses": [
       "Two P0 contract files and 153 literature digests lacked explicit byte-preservation attributes while their raw SHA-256 values were projected.",
       "Five additional proposal inputs lacked byte-preservation attributes, so a clean Windows clone rejected the otherwise valid LF-bound proposal.",
+      "The historical P1 execution envelope also lacked byte preservation while its raw digest was embedded in four P1 reports.",
       "The prior repair governed generated output bytes but not every raw-hashed source byte."
     ]
   },
@@ -125,6 +127,17 @@
       "observation": "PLAN.md, the campaign control, D1 decision, SCOPE schema, and SCOPE compiler were converted to CRLF in a clean Windows clone, making the proposal fail closed as blocked_invalid_artifact.",
       "reasoning": "The proposal binds committed LF bytes, so every bound input must preserve those bytes across checkout platforms.",
       "suggestion": "Add no-normalization attributes for the five additional inputs; U154 is already covered by the literature digest root."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "P1 generated phase and task reports",
+      "target_entity": "execution_envelope input binding",
+      "evidence_locator": "Paired clean Windows and LF clones at commit c589380",
+      "observation": "The raw SHA-256 of control/execution-envelope.yaml differed across clean checkouts and propagated into 11 generated files.",
+      "reasoning": "The P1 envelope is hash-bound historical authorization and its bytes must remain stable without changing its content or authority.",
+      "suggestion": "Preserve the committed LF bytes for control/execution-envelope.yaml and leave the historical envelope content untouched."
     }
   ],
   "questions_for_owner": [
