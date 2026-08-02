@@ -12,19 +12,21 @@
     "budget_valid": true,
     "manifest_integrity_valid": false,
     "blocking_findings": [
-      "F001"
+      "F001",
+      "F002"
     ]
   },
   "overall": {
     "grade": "Weak Reject",
     "mean_score": 2.0,
-    "one_line_summary": "PR CI showed that generated P0 and literature projections embedded Windows-only raw source hashes even after output bytes were stabilized.",
+    "one_line_summary": "PR CI and paired clean clones showed that projected source hashes and proposal source bindings still depended on checkout line-ending policy.",
     "strengths": [
       "The repository-local byte regression exposed the contradiction before merge.",
       "The read-model revision, proposal status, and zero measured P2 counters remained correct in the clean Linux checkout."
     ],
     "weaknesses": [
       "Two P0 contract files and 153 literature digests lacked explicit byte-preservation attributes while their raw SHA-256 values were projected.",
+      "Five additional proposal inputs lacked byte-preservation attributes, so a clean Windows clone rejected the otherwise valid LF-bound proposal.",
       "The prior repair governed generated output bytes but not every raw-hashed source byte."
     ]
   },
@@ -32,7 +34,8 @@
     "D1_evidence_relevance": {
       "score": 3,
       "strengths": [
-        "GitHub Actions run 30744974241 and a standalone LF checkout reproduced the same 164-file drift set."
+        "GitHub Actions run 30744974241 and a standalone LF checkout reproduced the same 164-file drift set.",
+        "Paired Windows and LF clean clones isolated a second proposal-validation mismatch."
       ],
       "weaknesses": [
         "The earlier evidence stopped at generated-output roots."
@@ -62,7 +65,7 @@
         "The affected chain included all P0 reports, 153 literature proxies, the generated manifest, MLflow archive index, and P0 report records."
       ],
       "suggestions": [
-        "Change only the three source roots that feed the mismatched hashes."
+        "Change only the source roots and proposal inputs that feed the mismatched hashes."
       ]
     },
     "D4_argument_coherence": {
@@ -93,7 +96,7 @@
         "The renderer and read model remained deterministic."
       ],
       "weaknesses": [
-        "Raw digest inputs were allowed to vary by checkout line-ending policy."
+        "Raw digest inputs and raw-hash proposal bindings were allowed to vary by checkout line-ending policy."
       ],
       "suggestions": [
         "Preserve committed LF bytes, regenerate once from the validated read model, and rerun the full check twice."
@@ -111,6 +114,17 @@
       "observation": "The P0 read-model schema and reporting-policy hashes plus U001-U153 digest hashes differed between Windows CRLF working bytes and committed LF bytes.",
       "reasoning": "Generated files that expose raw source digests are not checkout-stable unless the source bytes are governed as strictly as the outputs.",
       "suggestion": "Add no-normalization attributes for schemas/read-model.v2.json, docs/observatory/REPORTING_POLICY.md, and evidence/literature/digests, normalize them to LF, and regenerate the projection graph."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D2_falsifiability",
+      "severity": "major",
+      "target_artifact": "P2 candidate freeze proposal",
+      "target_entity": "source_bindings",
+      "evidence_locator": "Paired clean Windows and LF clones at commit 890b8e0",
+      "observation": "PLAN.md, the campaign control, D1 decision, SCOPE schema, and SCOPE compiler were converted to CRLF in a clean Windows clone, making the proposal fail closed as blocked_invalid_artifact.",
+      "reasoning": "The proposal binds committed LF bytes, so every bound input must preserve those bytes across checkout platforms.",
+      "suggestion": "Add no-normalization attributes for the five additional inputs; U154 is already covered by the literature digest root."
     }
   ],
   "questions_for_owner": [
@@ -119,6 +133,8 @@
   "read_order": [
     "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json",
     ".gitattributes",
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+    "src/myis_research/p2/contracts.py",
     "src/myis_research/report_records.py",
     "src/myis_research/report_cli.py",
     "tests/test_obsidian_report_contract.py",

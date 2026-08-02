@@ -108,6 +108,11 @@ def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
         "schemas/read-model.v2.json -text",
         "docs/observatory/REPORTING_POLICY.md -text",
         "evidence/literature/digests/** -text",
+        "PLAN.md -text",
+        "control/campaigns/scope-autoindex-v1.yaml -text",
+        "control/decisions/D1_START_CAMPAIGN.yaml -text",
+        "schemas/scope-dsl.v1.json -text",
+        "src/myis_research/scope/compiler.py -text",
     } <= attributes
 
 

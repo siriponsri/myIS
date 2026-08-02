@@ -47,3 +47,11 @@ projections/reports/** -text
 schemas/read-model.v2.json -text
 docs/observatory/REPORTING_POLICY.md -text
 evidence/literature/digests/** -text
+
+# The P2 candidate proposal binds these inputs by raw SHA-256. Preserve the
+# committed LF bytes so clean Windows checkouts validate the same proposal.
+PLAN.md -text
+control/campaigns/scope-autoindex-v1.yaml -text
+control/decisions/D1_START_CAMPAIGN.yaml -text
+schemas/scope-dsl.v1.json -text
+src/myis_research/scope/compiler.py -text
