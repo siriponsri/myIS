@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T03:39:36Z",
-  "generated_from_revision": "c277f328111325ef4b8d5ce3582c28858b8dff41ca83adf4a8c4c87d77e1cf27",
-  "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
+  "generated_at": "2026-08-02T09:30:06Z",
+  "generated_from_revision": "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03",
+  "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
+    "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
     "source_of_truth": {
       "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T03:39:36Z",
+  "last_material_update": "2026-08-02T09:30:06Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "c9f18b4abf2ac324df836ee985edf6f07f83292445d679ff5fb7eedb9d4608da",
+  "report_sha256": "f68c412664da667cbc5d958003ff0e46fd373e6c6fde54821751ee623d2b29d9",
   "report_type": "task",
   "result": {
     "decision": "completed",

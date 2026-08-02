@@ -156,9 +156,9 @@
       "status": "retained_and_recovered"
     }
   ],
-  "generated_at": "2026-08-02T03:39:36Z",
-  "generated_from_revision": "c277f328111325ef4b8d5ce3582c28858b8dff41ca83adf4a8c4c87d77e1cf27",
-  "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
+  "generated_at": "2026-08-02T09:30:06Z",
+  "generated_from_revision": "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03",
+  "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -206,7 +206,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
+    "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -229,14 +229,14 @@
     }
   },
   "interpretation": "Preflight state records repository and Owner-local boundary checks only. It does not compare R1 candidates or support a retrieval claim.",
-  "last_material_update": "2026-08-02T03:39:36Z",
+  "last_material_update": "2026-08-02T09:30:06Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "a6c67a0327a99ad015d8bbc74192f02991b7de976714d7fcd573d466c26b3c63",
+  "report_sha256": "13dc9944daa5c1bab18166d0646cd7f9e2848fbe7cce211b04552a0d5e565edf",
   "report_type": "task",
   "result": {
     "decision": "not_started",
