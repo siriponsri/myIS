@@ -105,6 +105,9 @@ def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
         "mlflow/generated/archive-index.v2.json -text",
         "projections/obsidian/generated/** -text",
         "projections/reports/** -text",
+        "schemas/read-model.v2.json -text",
+        "docs/observatory/REPORTING_POLICY.md -text",
+        "evidence/literature/digests/** -text",
     } <= attributes
 
 

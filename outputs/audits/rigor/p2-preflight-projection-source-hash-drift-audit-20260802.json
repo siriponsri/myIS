@@ -1,0 +1,127 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-projection-source-hash-drift-audit-20260802",
+  "artifact": "P2 preflight projection source-hash portability",
+  "artifact_path": ".gitattributes",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": [
+      "F001"
+    ]
+  },
+  "overall": {
+    "grade": "Weak Reject",
+    "mean_score": 2.0,
+    "one_line_summary": "PR CI showed that generated P0 and literature projections embedded Windows-only raw source hashes even after output bytes were stabilized.",
+    "strengths": [
+      "The repository-local byte regression exposed the contradiction before merge.",
+      "The read-model revision, proposal status, and zero measured P2 counters remained correct in the clean Linux checkout."
+    ],
+    "weaknesses": [
+      "Two P0 contract files and 153 literature digests lacked explicit byte-preservation attributes while their raw SHA-256 values were projected.",
+      "The prior repair governed generated output bytes but not every raw-hashed source byte."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": [
+        "GitHub Actions run 30744974241 and a standalone LF checkout reproduced the same 164-file drift set."
+      ],
+      "weaknesses": [
+        "The earlier evidence stopped at generated-output roots."
+      ],
+      "suggestions": [
+        "Extend byte-stability checks to every source whose raw digest is emitted into a projection."
+      ]
+    },
+    "D2_falsifiability": {
+      "score": 3,
+      "strengths": [
+        "The failing test identified exact files and byte differences."
+      ],
+      "weaknesses": [
+        "Local Windows validation could not falsify source-hash portability while CRLF working bytes remained present."
+      ],
+      "suggestions": [
+        "Require both current-worktree and standalone-LF-checkout validation."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 2,
+      "strengths": [
+        "The failure was isolated to repository-safe report provenance."
+      ],
+      "weaknesses": [
+        "The affected chain included all P0 reports, 153 literature proxies, the generated manifest, MLflow archive index, and P0 report records."
+      ],
+      "suggestions": [
+        "Change only the three source roots that feed the mismatched hashes."
+      ]
+    },
+    "D4_argument_coherence": {
+      "score": 1,
+      "strengths": [],
+      "weaknesses": [
+        "The prior cross-platform completion claim was contradicted by the PR contract job."
+      ],
+      "suggestions": [
+        "Keep the PR unmerged until the full contract job and clean-clone regression pass."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 2,
+      "strengths": [
+        "The failed CI result was retained and diagnosed rather than bypassed."
+      ],
+      "weaknesses": [
+        "Source digest portability had not been included in the initial failure model."
+      ],
+      "suggestions": [
+        "Preserve this finding as a second failure/recovery chain."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 1,
+      "strengths": [
+        "The renderer and read model remained deterministic."
+      ],
+      "weaknesses": [
+        "Raw digest inputs were allowed to vary by checkout line-ending policy."
+      ],
+      "suggestions": [
+        "Preserve committed LF bytes, regenerate once from the validated read model, and rerun the full check twice."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "Internal generated report projections",
+      "target_entity": "raw source digest bindings",
+      "evidence_locator": "GitHub Actions run 30744974241 and test_internal_projection_bytes_are_checkout_stable_and_current",
+      "observation": "The P0 read-model schema and reporting-policy hashes plus U001-U153 digest hashes differed between Windows CRLF working bytes and committed LF bytes.",
+      "reasoning": "Generated files that expose raw source digests are not checkout-stable unless the source bytes are governed as strictly as the outputs.",
+      "suggestion": "Add no-normalization attributes for schemas/read-model.v2.json, docs/observatory/REPORTING_POLICY.md, and evidence/literature/digests, normalize them to LF, and regenerate the projection graph."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner scientific or gate decision is required for this reporting-source byte repair."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json",
+    ".gitattributes",
+    "src/myis_research/report_records.py",
+    "src/myis_research/report_cli.py",
+    "tests/test_obsidian_report_contract.py",
+    "GitHub Actions run 30744974241"
+  ]
+}

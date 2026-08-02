@@ -41,3 +41,9 @@ obsidian_report/*.canvas text
 mlflow/generated/archive-index.v2.json -text
 projections/obsidian/generated/** -text
 projections/reports/** -text
+
+# Report projections expose raw SHA-256 values for these canonical sources.
+# Preserve committed LF bytes so those hashes are portable across checkouts.
+schemas/read-model.v2.json -text
+docs/observatory/REPORTING_POLICY.md -text
+evidence/literature/digests/** -text
