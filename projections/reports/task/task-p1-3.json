@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-02T03:39:36Z",
-  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "generated_from_revision": "c277f328111325ef4b8d5ce3582c28858b8dff41ca83adf4a8c4c87d77e1cf27",
   "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
@@ -184,7 +184,7 @@
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -364,7 +364,7 @@
   "objective": "Protected owner-local CPU evidence import",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-3",
-  "report_sha256": "4cc5f74badb60e1bae871d13472657dcb8d224d918212f4b6b20da6678609e0a",
+  "report_sha256": "9e2aa53058fd8e74bb0d329e81a66aab3291488af0a672f4259a69a0517131c9",
   "report_type": "task",
   "result": {
     "decision": "completed",

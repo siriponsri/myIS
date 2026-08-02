@@ -3,6 +3,8 @@
 from .contracts import (
     P2BudgetProfile,
     P2ContractError,
+    validate_p2_candidate_freeze_proposal,
+    validate_p2_preflight_receipt,
     load_p2_request,
     load_profile,
     validate_p2_aggregate_metric,
@@ -21,11 +23,22 @@ from .fixture import (
     validate_fixture_execution_manifest,
     validate_fixture_receipt,
 )
+from .preflight import (
+    DEFAULT_REQUIRED_FREE_SPACE_BYTES,
+    OWNER_APPROVAL_REQUIRED,
+    P2_PREFLIGHT_RECEIPT_PATH,
+    build_preflight_receipt,
+    preflight_what_if,
+    run_p2_preflight,
+    write_preflight_receipt,
+)
 
 __all__ = [
     "Candidate",
     "P2BudgetProfile",
     "P2ContractError",
+    "validate_p2_candidate_freeze_proposal",
+    "validate_p2_preflight_receipt",
     "P2RunStateMachine",
     "P2StateError",
     "P2FixtureError",
@@ -42,4 +55,11 @@ __all__ = [
     "validate_fixture_receipt",
     "validate_p2_package_bundle",
     "validate_p2_train_metric",
+    "DEFAULT_REQUIRED_FREE_SPACE_BYTES",
+    "OWNER_APPROVAL_REQUIRED",
+    "P2_PREFLIGHT_RECEIPT_PATH",
+    "build_preflight_receipt",
+    "preflight_what_if",
+    "run_p2_preflight",
+    "write_preflight_receipt",
 ]

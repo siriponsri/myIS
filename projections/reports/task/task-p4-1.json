@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-02T03:39:36Z",
-  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "generated_from_revision": "c277f328111325ef4b8d5ce3582c28858b8dff41ca83adf4a8c4c87d77e1cf27",
   "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
@@ -38,7 +38,7 @@
     },
     "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
     "source_of_truth": {
-      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -49,7 +49,7 @@
   "objective": "Manuscript and release package",
   "phase_id": "P4_PUBLICATION",
   "report_id": "task-p4-1",
-  "report_sha256": "267d94931d201d3af020ad153e0759446b9fd6dcf8523bdef413a967aa4cce07",
+  "report_sha256": "fe1a1c49a2864207dc5bac13ebd016b55bfecf831a55a6106afabc90ddbdc16e",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

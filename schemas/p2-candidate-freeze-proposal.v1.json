@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-candidate-freeze-proposal:v1",
+  "title": "myIS P2 repository-safe candidate freeze proposal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "proposal_id", "phase_id", "arm", "campaign_id",
+    "campaign_revision", "budget_profile_id", "budget_profile_sha256",
+    "status", "adoption", "source_bindings", "lineage_requirements",
+    "frozen_controls", "preregistered_candidates", "owner_approval_required",
+    "protected_surfaces_untouched", "proposal_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.p2-candidate-freeze-proposal.v1"},
+    "proposal_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "arm": {"const": "R1"},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "campaign_revision": {"type": "string", "minLength": 1},
+    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"const": "draft_owner_review"},
+    "adoption": {"const": "not_adopted"},
+    "source_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "lineage_requirements": {"$ref": "#/$defs/lineage"},
+    "frozen_controls": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "preregistered_candidates": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "owner_approval_required": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "protected_surfaces_untouched": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "proposal_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "uri", "sha256"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "minLength": 1},
+        "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "compiler", "config", "retriever", "evaluator"],
+      "properties": {
+        "dataset": {"$ref": "#/$defs/lineage_item"},
+        "compiler": {"$ref": "#/$defs/lineage_item"},
+        "config": {"$ref": "#/$defs/lineage_item"},
+        "retriever": {"$ref": "#/$defs/lineage_item"},
+        "evaluator": {"$ref": "#/$defs/lineage_item"}
+      }
+    },
+    "lineage_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "proposed_sha256", "source_locations"],
+      "properties": {
+        "required": {"const": true},
+        "proposed_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "source_locations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id", "candidate_class", "arm", "definition_status",
+        "purpose", "hypothesis", "spec", "config", "retriever", "evaluator",
+        "registered", "hash_locked", "owner_approval_required"
+      ],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "candidate_class": {"enum": ["frozen_control", "preregistered_patent"]},
+        "arm": {"enum": ["R0", "R0-W", "R1"]},
+        "definition_status": {"const": "proposed_pending_owner"},
+        "purpose": {"type": "string", "minLength": 1},
+        "hypothesis": {"type": "string", "minLength": 1},
+        "spec": {"$ref": "#/$defs/lineage_item"},
+        "config": {"$ref": "#/$defs/lineage_item"},
+        "retriever": {"$ref": "#/$defs/lineage_item"},
+        "evaluator": {"$ref": "#/$defs/lineage_item"},
+        "registered": {"const": false},
+        "hash_locked": {"const": false},
+        "owner_approval_required": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

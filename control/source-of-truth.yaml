@@ -20,6 +20,10 @@ records:
   - id: p2_budget_profile
     authority: control/budgets/p2-r1-primary-v1.yaml
     projections: [harness, dashboard, mlflow, brain, paper]
+  - id: p2_readiness_records
+    authority: [campaigns/scope-autoindex-v1/proposals, campaigns/scope-autoindex-v1/preflight]
+    projections: [harness, projections/read-model, dashboard, brain, paper]
+    restrictions: [proposal_is_not_adoption, preflight_is_not_measured_execution, aggregate_hash_count_only]
   - id: schemas_and_kernel
     authority: [schemas, src/myis_research/kernel, src/myis_research/scope]
     projections: [harness, mlflow, reports]

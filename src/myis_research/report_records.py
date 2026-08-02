@@ -153,6 +153,18 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 content_sha256=str(source.get("index_sha256")) if source.get("index_sha256") else None,
                 explanation="Records Round 1 revise, Round 2 revise, and Round 3 accept as engineering provenance.",
             ))
+        proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+        if proposal.get("status") == "draft_owner_review" and proposal.get("validated") is True:
+            result.append(_artifact(
+                artifact_id="p2-candidate-freeze-proposal",
+                title="P2 four-control and eight-candidate freeze proposal",
+                artifact_type="proposal",
+                evidence_class="engineering",
+                scientific_authority=False,
+                safe_uri=str(proposal.get("proposal_uri")),
+                content_sha256=str(proposal.get("proposal_sha256")),
+                explanation="Records an unadopted Owner-review draft; it does not register or hash-lock measured candidates.",
+            ))
         observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
         if observatory.get("status") == "ready":
             result.append(_artifact(
@@ -215,6 +227,10 @@ def _bindings(root: Path, model: Mapping[str, Any], phase_id: str) -> dict[str, 
         bindings["fixture_manifest"] = {"uri": fixture.get("execution_manifest_uri"), "sha256": fixture.get("execution_manifest_sha256")}
         bindings["observatory_registry"] = {"uri": "outputs/observatory/fixture-v1/registry.json", "sha256": observatory.get("registry_sha256")}
         bindings["observatory_receipt"] = {"uri": "outputs/observatory/fixture-v1/receipt.json", "sha256": observatory.get("receipt_sha256")}
+        preflight = p2.get("preflight", {}) if isinstance(p2.get("preflight"), Mapping) else {}
+        bindings["preflight_receipt"] = {"uri": preflight.get("receipt_uri"), "sha256": preflight.get("receipt_sha256")}
+        proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+        bindings["candidate_freeze_proposal"] = {"uri": proposal.get("proposal_uri"), "sha256": proposal.get("proposal_sha256")}
     return bindings
 
 
@@ -242,10 +258,12 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         interpretation = "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions."
         decision_status = "completed"
     elif phase_id == "P2_SCOPE_DEVELOPMENT":
-        output = "Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists."
-        result = "The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero."
-        interpretation = "Synthetic lifecycle success validates capture behavior only. It does not compare R1 candidates or support a retrieval claim."
-        decision_status = "ready_for_owner_preflight"
+        preflight_status = str(p2.get("preflight_status", "not_started"))
+        proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+        output = f"Static review and repository-only fixture provenance are retained; P2 preflight state is {preflight_status}, the candidate proposal is {proposal.get('adoption', 'not_adopted')}, and no measured P2 artifact exists."
+        result = "The reporting and capture lifecycle remains non-scientific while measured runs, real candidates, freeze, and selection remain zero."
+        interpretation = "Preflight state records repository and Owner-local boundary checks only. It does not compare R1 candidates or support a retrieval claim."
+        decision_status = str(p2.get("preflight_status", "not_started"))
     elif phase_id == "P0_FOUNDATION":
         output = "Canonical control, schema, protected-boundary, and projection contracts."
         result = "The foundation records the authority and safety boundary required by later phases."
@@ -281,6 +299,12 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "evidence_class": evidence_class,
         "scientific_authority": scientific,
     }
+    if phase_id == "P2_SCOPE_DEVELOPMENT":
+        governance["preflight_status"] = str(p2.get("preflight_status", "not_started"))
+        governance["preflight_safe_to_measure"] = bool(
+            isinstance(p2.get("preflight"), Mapping)
+            and p2.get("preflight", {}).get("safe_to_measure") is True
+        )
     record = {
         "schema_version": REPORT_SCHEMA,
         "report_id": report_id,
@@ -318,6 +342,8 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "evidence_links": [{"artifact_id": item["artifact_id"], "uri": item["safe_uri"], "sha256": item.get("content_sha256")} for item in artifacts],
         "validation_status": "validated",
     }
+    if phase_id == "P2_SCOPE_DEVELOPMENT":
+        record["preflight_status"] = str(p2.get("preflight_status", "not_started"))
     record["report_sha256"] = sha256(canonical_json(record))
     return record
 

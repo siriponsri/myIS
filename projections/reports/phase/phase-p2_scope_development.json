@@ -73,6 +73,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-candidate-freeze-proposal",
+      "artifact_type": "proposal",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "38156c8dbcdaf56ad0593b6afad118f83ac23b438ab1ecae6debc9968b9339b8",
+      "evidence_class": "engineering",
+      "explanation": "Records an unadopted Owner-review draft; it does not register or hash-lock measured candidates.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+      "scientific_authority": false,
+      "title": "P2 four-control and eight-candidate freeze proposal",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -94,8 +112,8 @@
   "claim_boundary": "engineering_provenance_only",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero.",
-    "status": "ready_for_owner_preflight"
+    "reason": "The reporting and capture lifecycle remains non-scientific while measured runs, real candidates, freeze, and selection remain zero.",
+    "status": "not_started"
   },
   "evidence_class": "fixture",
   "evidence_links": [
@@ -120,6 +138,11 @@
       "uri": "orchestration/audits/p2-readiness/index.json"
     },
     {
+      "artifact_id": "p2-candidate-freeze-proposal",
+      "sha256": "38156c8dbcdaf56ad0593b6afad118f83ac23b438ab1ecae6debc9968b9339b8",
+      "uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -134,7 +157,7 @@
     }
   ],
   "generated_at": "2026-08-02T03:39:36Z",
-  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "generated_from_revision": "c277f328111325ef4b8d5ce3582c28858b8dff41ca83adf4a8c4c87d77e1cf27",
   "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
@@ -145,6 +168,8 @@
     "measured_execution": false,
     "network_model_download": false,
     "paid_api": false,
+    "preflight_safe_to_measure": false,
+    "preflight_status": "not_started",
     "protected_data_accessed": false,
     "provider_fallback": false,
     "real_counters": {
@@ -165,6 +190,10 @@
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
     "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
+    "candidate_freeze_proposal": {
+      "sha256": "38156c8dbcdaf56ad0593b6afad118f83ac23b438ab1ecae6debc9968b9339b8",
+      "uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
+    },
     "execution_envelope": {
       "sha256": "cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247",
       "uri": "control/execution-envelope-p2.yaml"
@@ -186,8 +215,12 @@
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
     },
+    "preflight_receipt": {
+      "sha256": null,
+      "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
+    },
     "source_of_truth": {
-      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -195,19 +228,20 @@
       "uri": "orchestration/audits/p2-readiness/index.json"
     }
   },
-  "interpretation": "Synthetic lifecycle success validates capture behavior only. It does not compare R1 candidates or support a retrieval claim.",
+  "interpretation": "Preflight state records repository and Owner-local boundary checks only. It does not compare R1 candidates or support a retrieval claim.",
   "last_material_update": "2026-08-02T03:39:36Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
+  "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "78e8963f3dfbf8d01844d2a154cd3b8c05f921b655cf729762a885aada98906c",
+  "report_sha256": "3e01d9f5ac7588f4a59eec0889bf97227df89ea4fcdbd42819b77a5cbfe50a5a",
   "report_type": "phase",
   "result": {
-    "decision": "ready_for_owner_preflight",
-    "output": "Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists.",
-    "result": "The reporting and capture lifecycle is ready while measured runs, real candidates, freeze, and selection remain zero."
+    "decision": "not_started",
+    "output": "Static review and repository-only fixture provenance are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists.",
+    "result": "The reporting and capture lifecycle remains non-scientific while measured runs, real candidates, freeze, and selection remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -221,12 +255,13 @@
   "status": "planned",
   "supported_claims": [
     {
-      "claim": "Static review Round 3 accepted and the repository-only fixture passed; no measured P2 artifact exists.",
+      "claim": "Static review and repository-only fixture provenance are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists.",
       "evidence": [
         "p2-fixture-receipt",
         "p2-fixture-manifest",
         "p2-fixture-package",
         "p2-official-review-index",
+        "p2-candidate-freeze-proposal",
         "observatory-fixture-registry"
       ]
     }

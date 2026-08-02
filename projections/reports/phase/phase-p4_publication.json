@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-02T03:39:36Z",
-  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "generated_from_revision": "c277f328111325ef4b8d5ce3582c28858b8dff41ca83adf4a8c4c87d77e1cf27",
   "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
@@ -38,7 +38,7 @@
     },
     "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
     "source_of_truth": {
-      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -49,7 +49,7 @@
   "objective": "Deliver the P4_PUBLICATION research phase with an auditable evidence boundary.",
   "phase_id": "P4_PUBLICATION",
   "report_id": "phase-p4_publication",
-  "report_sha256": "539abedcc0e34d1c32ffd6153f68a4e322e3795fdf94f84e751a4791001925d7",
+  "report_sha256": "d3c9906d4c47df8aec35b869b58b7faeb26d2c1fdcd05b63dd2116eb059fdb6b",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",
