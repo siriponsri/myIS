@@ -184,7 +184,7 @@
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -364,7 +364,7 @@
   "objective": "Protected owner-local CPU evidence import",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-3",
-  "report_sha256": "148411d454c0123f337c3d485701c056d748e2003748f77396d8e2d15408fb1a",
+  "report_sha256": "61798f543c82b1da233f5110e7f4ab415c18a8c8e701539075c3fa24bbc589cf",
   "report_type": "task",
   "result": {
     "decision": "completed",

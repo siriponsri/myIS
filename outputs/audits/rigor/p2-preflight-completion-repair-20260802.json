@@ -1,0 +1,104 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-completion-repair-20260802",
+  "artifact": "Repaired P2 Owner-local preflight enablement",
+  "artifact_path": "src/myis_research/p2/preflight.py",
+  "artifact_sha256": "1f601d6062ed45b9e0de3804632c02b279461ea34171bfccd2fccb4fc83d88c8",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.33,
+    "one_line_summary": "The repaired preflight layer now fails closed on stale authority, symmetric worktree overlap, unsafe stores, and same-volume capacity while preserving zero measured counters.",
+    "strengths": [
+      "Passed receipts are revalidated against current D1/D2/D3 and lifecycle counter authority before projection.",
+      "Store paths are rejected when they are inside a worktree or contain one, and symlink, junction, sentinel, overlap, and directory checks are covered.",
+      "Aggregate free space is counted once per filesystem or volume and cannot exceed the per-store evidence retained in the receipt.",
+      "The CLI exposes not_started, failed, and passed_pending_owner without emitting absolute Owner-local paths.",
+      "The candidate proposal remains draft_owner_review and not_adopted with exactly four controls, eight preregistered candidates, and five explicit Owner approval items."
+    ],
+    "weaknesses": [
+      "The preflight receipt is point-in-time engineering evidence and must be rerun before a future measured request if the environment changes.",
+      "No measured P2 result, real candidate registration, shortlist, selection exposure, or final-split evidence exists."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": ["Focused tests directly exercise every named preflight and proposal invariant."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["Each failure maps to an exact check ID and failure-code set, and stale passes become invalid."],
+      "weaknesses": ["Filesystem capacity remains a point-in-time observation."],
+      "suggestions": ["Rerun preflight immediately before any separately authorized measured request."]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": ["The repair stays repository-safe, CPU-only, unmeasured, and final-split closed."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": ["Receipt, live authority, read model, report state, and candidate proposal now form a fail-closed chain."],
+      "weaknesses": ["Owner approval of the proposed scientific definitions remains intentionally pending."],
+      "suggestions": ["Do not adopt or hash-lock candidates until the listed ambiguities are resolved."]
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": ["The initial Weak Reject review is preserved and linked as the observed failure that motivated repair."],
+      "weaknesses": ["This package contains engineering validation only, not retrieval exploration."],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": ["Focused and full synthetic suites passed, with negative coverage for path, store, binding, gate, counter, receipt, and CLI states."],
+      "weaknesses": ["Actual Owner-local stores and protected payloads were intentionally not accessed."],
+      "suggestions": ["Keep the next action limited to Owner-local measured preflight."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D5_exploration_integrity",
+      "severity": "suggestion",
+      "target_artifact": "P2 Owner-local preflight enablement",
+      "target_entity": "future point-in-time receipt",
+      "evidence_locator": "src/myis_research/p2/contracts.py::_validate_preflight_receipt_semantics",
+      "observation": "A passed receipt is revalidated against mutable repository authority but cannot re-open path identities because absolute Owner-local paths are deliberately absent.",
+      "reasoning": "Environmental capacity and store identity remain time-sensitive even though the repository projection is fail-closed for gate and counter changes.",
+      "suggestion": "Rerun the Owner-local preflight immediately before a separately authorized measured request and do not treat an older pass as perpetual authorization."
+    }
+  ],
+  "questions_for_owner": [
+    "Approve or return the exact four-control and eight-candidate proposal.",
+    "Resolve source-field, span, normalization, aggregation, and adapter-limit semantics for every proposed candidate.",
+    "Approve concrete SCOPE spec, config, compiler, retriever, and evaluator hashes before registration.",
+    "Confirm the fixed DAPFAM train/selection protocol and CPU-only zero-cost boundary.",
+    "Request creation of a separate measured request only after proposal acceptance; D2 and D3 remain closed."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json",
+    "src/myis_research/p2/preflight.py",
+    "src/myis_research/p2/contracts.py",
+    "src/myis_research/p2_cli.py",
+    "tests/test_p2_preflight.py",
+    "schemas/p2-preflight-receipt.v1.json",
+    "schemas/p2-candidate-freeze-proposal.v1.json",
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+    "focused pytest output: tests/test_p2_preflight.py",
+    "full pytest output",
+    "scoped Ruff output",
+    "projection and report regression output"
+  ]
+}

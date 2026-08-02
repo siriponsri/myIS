@@ -38,7 +38,7 @@
     },
     "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
     "source_of_truth": {
-      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -49,7 +49,7 @@
   "objective": "Manuscript and release package",
   "phase_id": "P4_PUBLICATION",
   "report_id": "task-p4-1",
-  "report_sha256": "3647c5159acac4fea3ac692595f02edca35316b4b7a778c64715ca6075bb376a",
+  "report_sha256": "fd1d23a19b214c23bff10ce5303192cab83dabfaf441e7eb3a19b57b99d6f897",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

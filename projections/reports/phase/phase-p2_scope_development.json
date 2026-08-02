@@ -91,6 +91,42 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-preflight-completion-audit-initial",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e981e8858d5aad55650f2afc24392b52116eda61c547da391a2667c63a90645e",
+      "evidence_class": "engineering",
+      "explanation": "Records the stale-state, worktree-overlap, capacity-accounting, and negative-test gaps found before repair.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json",
+      "scientific_authority": false,
+      "title": "Initial P2 preflight completion audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-preflight-completion-audit-repair",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3",
+      "evidence_class": "engineering",
+      "explanation": "Validates the fail-closed repair while preserving not-started preflight and zero measured counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json",
+      "scientific_authority": false,
+      "title": "Repaired P2 preflight completion audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -112,7 +148,7 @@
   "claim_boundary": "engineering_provenance_only",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "The reporting and capture lifecycle remains non-scientific while measured runs, real candidates, freeze, and selection remain zero.",
+    "reason": "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero.",
     "status": "not_started"
   },
   "evidence_class": "fixture",
@@ -143,6 +179,16 @@
       "uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
     },
     {
+      "artifact_id": "p2-preflight-completion-audit-initial",
+      "sha256": "e981e8858d5aad55650f2afc24392b52116eda61c547da391a2667c63a90645e",
+      "uri": "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json"
+    },
+    {
+      "artifact_id": "p2-preflight-completion-audit-repair",
+      "sha256": "77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3",
+      "uri": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -154,6 +200,16 @@
       "failure_id": "obs-failure-candidate-02",
       "recovery_id": "obs-recovery-candidate-02",
       "status": "retained_and_recovered"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-preflight-completion-audit-20260802",
+      "failure_sha256": "e981e8858d5aad55650f2afc24392b52116eda61c547da391a2667c63a90645e",
+      "failure_uri": "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json",
+      "recovery_id": "p2-preflight-completion-repair-20260802",
+      "recovery_sha256": "77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3",
+      "recovery_uri": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json",
+      "status": "repaired_and_validated"
     }
   ],
   "generated_at": "2026-08-02T09:30:06Z",
@@ -220,7 +276,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -228,7 +284,7 @@
       "uri": "orchestration/audits/p2-readiness/index.json"
     }
   },
-  "interpretation": "Preflight state records repository and Owner-local boundary checks only. It does not compare R1 candidates or support a retrieval claim.",
+  "interpretation": "The repair strengthens stale authority, worktree boundary, capacity, immutable receipt, and negative-test behavior. It does not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "last_material_update": "2026-08-02T09:30:06Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
@@ -236,12 +292,12 @@
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "c9748c53d9355daa8d55e59628b97e99c77706adae774762a69f1bea30f0ff89",
+  "report_sha256": "d993fe74e67096cc27e78c26d4b3f607a91998c5f2c4b844c196221b184a1c4c",
   "report_type": "phase",
   "result": {
     "decision": "not_started",
-    "output": "Static review and repository-only fixture provenance are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists.",
-    "result": "The reporting and capture lifecycle remains non-scientific while measured runs, real candidates, freeze, and selection remain zero."
+    "output": "Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists.",
+    "result": "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -255,13 +311,15 @@
   "status": "planned",
   "supported_claims": [
     {
-      "claim": "Static review and repository-only fixture provenance are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists.",
+      "claim": "Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists.",
       "evidence": [
         "p2-fixture-receipt",
         "p2-fixture-manifest",
         "p2-fixture-package",
         "p2-official-review-index",
         "p2-candidate-freeze-proposal",
+        "p2-preflight-completion-audit-initial",
+        "p2-preflight-completion-audit-repair",
         "observatory-fixture-registry"
       ]
     }
@@ -273,5 +331,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
+  "work_summary": "The initial P2 preflight completion audit was preserved, its fail-closed findings were repaired, and an independent post-repair review was added without starting Owner-local preflight or measured execution."
 }

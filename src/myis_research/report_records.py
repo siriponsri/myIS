@@ -15,6 +15,8 @@ from .projections.read_model import canonical_json, sha256
 REPORT_SCHEMA = "myis.phase-task-report.v1"
 REPORT_INDEX_SCHEMA = "myis.phase-task-report-index.v1"
 REPORT_ROOT = Path("projections/reports")
+P2_PREFLIGHT_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json"
+P2_PREFLIGHT_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -165,6 +167,32 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 content_sha256=str(proposal.get("proposal_sha256")),
                 explanation="Records an unadopted Owner-review draft; it does not register or hash-lock measured candidates.",
             ))
+        for artifact_id, title, uri, explanation in (
+            (
+                "p2-preflight-completion-audit-initial",
+                "Initial P2 preflight completion audit",
+                P2_PREFLIGHT_INITIAL_AUDIT,
+                "Records the stale-state, worktree-overlap, capacity-accounting, and negative-test gaps found before repair.",
+            ),
+            (
+                "p2-preflight-completion-audit-repair",
+                "Repaired P2 preflight completion audit",
+                P2_PREFLIGHT_REPAIR_AUDIT,
+                "Validates the fail-closed repair while preserving not-started preflight and zero measured counters.",
+            ),
+        ):
+            digest = _hash_file(root, uri)
+            if digest:
+                result.append(_artifact(
+                    artifact_id=artifact_id,
+                    title=title,
+                    artifact_type="review",
+                    evidence_class="engineering",
+                    scientific_authority=False,
+                    safe_uri=uri,
+                    content_sha256=digest,
+                    explanation=explanation,
+                ))
         observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
         if observatory.get("status") == "ready":
             result.append(_artifact(
@@ -252,6 +280,20 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     failures = []
     if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("observatory", {}).get("failed_child_count", 0):
         failures.append({"failure_id": "obs-failure-candidate-02", "recovery_id": "obs-recovery-candidate-02", "status": "retained_and_recovered", "counters_changed": False})
+    if phase_id == "P2_SCOPE_DEVELOPMENT":
+        initial_audit_sha256 = _hash_file(root, P2_PREFLIGHT_INITIAL_AUDIT)
+        repair_audit_sha256 = _hash_file(root, P2_PREFLIGHT_REPAIR_AUDIT)
+        if initial_audit_sha256 and repair_audit_sha256:
+            failures.append({
+                "failure_id": "p2-preflight-completion-audit-20260802",
+                "failure_uri": P2_PREFLIGHT_INITIAL_AUDIT,
+                "failure_sha256": initial_audit_sha256,
+                "recovery_id": "p2-preflight-completion-repair-20260802",
+                "recovery_uri": P2_PREFLIGHT_REPAIR_AUDIT,
+                "recovery_sha256": repair_audit_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
     if scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
         result = "P1 measured train/selection evidence is complete within its declared development boundary."
@@ -260,9 +302,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     elif phase_id == "P2_SCOPE_DEVELOPMENT":
         preflight_status = str(p2.get("preflight_status", "not_started"))
         proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
-        output = f"Static review and repository-only fixture provenance are retained; P2 preflight state is {preflight_status}, the candidate proposal is {proposal.get('adoption', 'not_adopted')}, and no measured P2 artifact exists."
-        result = "The reporting and capture lifecycle remains non-scientific while measured runs, real candidates, freeze, and selection remain zero."
-        interpretation = "Preflight state records repository and Owner-local boundary checks only. It does not compare R1 candidates or support a retrieval claim."
+        output = f"Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is {preflight_status}, the candidate proposal is {proposal.get('adoption', 'not_adopted')}, and no measured P2 artifact exists."
+        result = "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero."
+        interpretation = "The repair strengthens stale authority, worktree boundary, capacity, immutable receipt, and negative-test behavior. It does not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
         decision_status = str(p2.get("preflight_status", "not_started"))
     elif phase_id == "P0_FOUNDATION":
         output = "Canonical control, schema, protected-boundary, and projection contracts."
@@ -328,7 +370,11 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             "claim_boundary": "No unsupported scientific claim",
         },
         "input_bindings": _bindings(root, model, phase_id),
-        "work_summary": "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct.",
+        "work_summary": (
+            "The initial P2 preflight completion audit was preserved, its fail-closed findings were repaired, and an independent post-repair review was added without starting Owner-local preflight or measured execution."
+            if phase_id == "P2_SCOPE_DEVELOPMENT"
+            else "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
+        ),
         "artifact_references": artifacts,
         "metric_references": metrics,
         "result": {"output": output, "result": result, "decision": decision_status},

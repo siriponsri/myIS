@@ -96,6 +96,7 @@ def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
         if line.strip() and not line.lstrip().startswith("#")
     }
     assert {
+        "control/source-of-truth.yaml -text whitespace=cr-at-eol",
         "obsidian_report/** -text",
         "obsidian_report/**/Owner_Notes/** text",
         "obsidian_report/80_Owner_Notes/** text",

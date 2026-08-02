@@ -46,7 +46,7 @@ Deliver the P3_FINAL research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
 - `git_commit`: 8b47d3350f99c33f55355b85bd39b222d4181a80
 

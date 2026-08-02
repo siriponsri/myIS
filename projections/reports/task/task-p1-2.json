@@ -184,7 +184,7 @@
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e",
+      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -280,7 +280,7 @@
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "ccfa7a2bb7b38437439d069477932f20d4eaf2db3ebda576a30348c22b7e634f",
+  "report_sha256": "c16e378de67e02f9e2fe60948bfb22970ca9d75718f7949ea38efb791c40fcf2",
   "report_type": "task",
   "result": {
     "decision": "completed",
