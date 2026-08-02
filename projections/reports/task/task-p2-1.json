@@ -127,6 +127,78 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-preflight-report-byte-audit-initial",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "bdbcbfd23a8a1cfa2816485c87c04dd5391977a819d187b2b8bc30461e417eba",
+      "evidence_class": "engineering",
+      "explanation": "Records the clean-Windows-checkout report drift discovered after merge.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json",
+      "scientific_authority": false,
+      "title": "Initial P2 preflight report byte-stability audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-preflight-report-byte-audit-repair",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996",
+      "evidence_class": "engineering",
+      "explanation": "Validates LF byte preservation and repository-local projection regression coverage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json",
+      "scientific_authority": false,
+      "title": "Repaired P2 preflight report byte-stability audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-preflight-projection-source-audit-initial",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca",
+      "evidence_class": "engineering",
+      "explanation": "Records raw source digest and proposal-binding drift across clean Windows and LF checkouts.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json",
+      "scientific_authority": false,
+      "title": "Initial P2 preflight projection source-hash audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-preflight-projection-source-audit-repair",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107",
+      "evidence_class": "engineering",
+      "explanation": "Validates byte-stable raw source digests, proposal bindings, and P1 envelope provenance.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json",
+      "scientific_authority": false,
+      "title": "Repaired P2 preflight projection source-hash audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -189,6 +261,26 @@
       "uri": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json"
     },
     {
+      "artifact_id": "p2-preflight-report-byte-audit-initial",
+      "sha256": "bdbcbfd23a8a1cfa2816485c87c04dd5391977a819d187b2b8bc30461e417eba",
+      "uri": "outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json"
+    },
+    {
+      "artifact_id": "p2-preflight-report-byte-audit-repair",
+      "sha256": "cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996",
+      "uri": "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json"
+    },
+    {
+      "artifact_id": "p2-preflight-projection-source-audit-initial",
+      "sha256": "97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca",
+      "uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json"
+    },
+    {
+      "artifact_id": "p2-preflight-projection-source-audit-repair",
+      "sha256": "842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107",
+      "uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -210,11 +302,31 @@
       "recovery_sha256": "77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3",
       "recovery_uri": "outputs/audits/rigor/p2-preflight-completion-repair-20260802.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-preflight-report-byte-drift-audit-20260802",
+      "failure_sha256": "bdbcbfd23a8a1cfa2816485c87c04dd5391977a819d187b2b8bc30461e417eba",
+      "failure_uri": "outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json",
+      "recovery_id": "p2-preflight-report-byte-drift-repair-20260802",
+      "recovery_sha256": "cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996",
+      "recovery_uri": "outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-preflight-projection-source-hash-drift-audit-20260802",
+      "failure_sha256": "97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca",
+      "failure_uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json",
+      "recovery_id": "p2-preflight-projection-source-hash-drift-repair-20260802",
+      "recovery_sha256": "842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107",
+      "recovery_uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json",
+      "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-02T10:23:41Z",
-  "generated_from_revision": "b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957",
-  "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
+  "generated_at": "2026-08-02T11:28:15Z",
+  "generated_from_revision": "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3",
+  "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -262,7 +374,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
+    "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -284,15 +396,15 @@
       "uri": "orchestration/audits/p2-readiness/index.json"
     }
   },
-  "interpretation": "The repair strengthens stale authority, worktree boundary, capacity, immutable receipt, and negative-test behavior. It does not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-02T10:23:41Z",
+  "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform output and source-hash stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
+  "last_material_update": "2026-08-02T11:28:15Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "971077d0aaf35657b2ae34fac9e4771ea82ed35892280c0dead68e0ce05cbb80",
+  "report_sha256": "cfd0d9cdeb1084e199dcb260156189b6623e3a490873981340a1f18dde2ae714",
   "report_type": "task",
   "result": {
     "decision": "not_started",
@@ -320,6 +432,10 @@
         "p2-candidate-freeze-proposal",
         "p2-preflight-completion-audit-initial",
         "p2-preflight-completion-audit-repair",
+        "p2-preflight-report-byte-audit-initial",
+        "p2-preflight-report-byte-audit-repair",
+        "p2-preflight-projection-source-audit-initial",
+        "p2-preflight-projection-source-audit-repair",
         "observatory-fixture-registry"
       ]
     }
@@ -331,5 +447,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The initial P2 preflight completion audit was preserved, its fail-closed findings were repaired, and an independent post-repair review was added without starting Owner-local preflight or measured execution."
+  "work_summary": "The initial P2 preflight completion, report-byte, and projection source-hash audits were preserved, all recovery chains were validated, and no Owner-local preflight or measured execution was started."
 }

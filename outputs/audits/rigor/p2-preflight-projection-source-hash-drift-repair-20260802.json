@@ -1,0 +1,112 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-preflight-projection-source-hash-drift-repair-20260802",
+  "artifact": "Repaired P2 preflight projection source-hash portability",
+  "artifact_path": ".gitattributes",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.67,
+    "one_line_summary": "Byte-preserving source policies make the read model, P2 proposal, and all 225 repository-local rendered outputs identical in clean Windows and LF checkouts.",
+    "strengths": [
+      "Paired clean clones produced identical read models and zero rendered byte differences.",
+      "Both clones retained P2 status ready_planned_not_measured and proposal status draft_owner_review.",
+      "The repair preserves committed LF source bytes without changing historical P1 authorization or scientific state."
+    ],
+    "weaknesses": [
+      "Sibling Brain and Paper projections remain integrated-workspace closeout checks because standalone clones do not contain those repositories."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The validation compares the exact clean-checkout modes that produced the contradictory results."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "Removing any required source attribute reintroduces model, proposal, or rendered-byte divergence."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The repair changes checkout byte policy only and leaves all P2 measured counters at zero."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": [
+        "The portability claim is now supported by equal read models, valid proposal state, and zero output-byte differences."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "All three discovered failure layers remain recorded with their recovery rather than being overwritten."
+      ],
+      "weaknesses": [
+        "The complete source-hash surface was discovered iteratively through clean-clone falsification."
+      ],
+      "suggestions": [
+        "Retain paired clean-clone validation for future raw-hash projection changes."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "The repair covers generated outputs, projected source digests, proposal source bindings, and the P1 envelope input."
+      ],
+      "weaknesses": [
+        "The final integrated report sync and full repository checks remain required before merge."
+      ],
+      "suggestions": [
+        "Regenerate from one validated read-model object and run the full check twice."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "Pre-merge portability verification",
+      "target_entity": "paired clean clones",
+      "evidence_locator": "clean Windows and LF clones after commit 41e2610",
+      "observation": "Both clones produced the same read-model revision, valid P2 proposal state, and byte-identical repository-local outputs.",
+      "reasoning": "The paired clone check directly exercises checkout normalization rather than inferring portability from one workspace.",
+      "suggestion": "Keep the byte attribute assertions and the repository-local projection regression in the normal test suite."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner scientific or gate decision is required; the next authorized action remains Owner-local P2 measured preflight."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json",
+    ".gitattributes",
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
+    "src/myis_research/report_records.py",
+    "tests/test_obsidian_report_contract.py",
+    "tests/test_p2_preflight.py",
+    "paired clean Windows and LF clone output"
+  ]
+}

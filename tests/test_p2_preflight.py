@@ -874,7 +874,7 @@ def test_p2_cli_exposes_not_started_failed_and_passed_states_without_paths(
     assert str(second.resolve()) not in encoded
 
 
-def test_p2_phase_and_task_reports_bind_initial_and_repair_audits() -> None:
+def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits() -> None:
     records = build_report_records(ROOT, build_read_model(ROOT))
     p2_records = [
         record for record in records if record["phase_id"] == "P2_SCOPE_DEVELOPMENT"
@@ -886,10 +886,22 @@ def test_p2_phase_and_task_reports_bind_initial_and_repair_audits() -> None:
         assert {
             "p2-preflight-completion-audit-initial",
             "p2-preflight-completion-audit-repair",
+            "p2-preflight-report-byte-audit-initial",
+            "p2-preflight-report-byte-audit-repair",
+            "p2-preflight-projection-source-audit-initial",
+            "p2-preflight-projection-source-audit-repair",
         } <= artifact_ids
         assert any(
             item.get("status") == "repaired_and_validated"
             and item.get("counters_changed") is False
+            and item.get("recovery_id") == "p2-preflight-report-byte-drift-repair-20260802"
             for item in record["failure_recovery_references"]
         )
-        assert "without starting Owner-local preflight" in record["work_summary"]
+        assert any(
+            item.get("status") == "repaired_and_validated"
+            and item.get("counters_changed") is False
+            and item.get("recovery_id")
+            == "p2-preflight-projection-source-hash-drift-repair-20260802"
+            for item in record["failure_recovery_references"]
+        )
+        assert "no Owner-local preflight" in record["work_summary"]

@@ -20,6 +20,7 @@ campaigns/scope-autoindex-v1/reports/*.json -text
 outputs/audits/rigor/**/*.json -text
 evidence/mlflow-p1-registration.v2.json -text
 control/source-of-truth.yaml -text whitespace=cr-at-eol
+control/execution-envelope.yaml -text
 control/execution-envelope-p2.yaml -text
 control/budgets/p2-r1-primary-v1.yaml -text
 schemas/p2-*.json -text
@@ -35,3 +36,23 @@ obsidian_report/**/Owner_Notes/** text
 obsidian_report/80_Owner_Notes/** text
 obsidian_report/.obsidian/** text
 obsidian_report/*.canvas text
+
+# Full report checks compare generated projection bytes exactly. Preserve LF
+# bytes on Windows so a clean checkout matches the deterministic renderer.
+mlflow/generated/archive-index.v2.json -text
+projections/obsidian/generated/** -text
+projections/reports/** -text
+
+# Report projections expose raw SHA-256 values for these canonical sources.
+# Preserve committed LF bytes so those hashes are portable across checkouts.
+schemas/read-model.v2.json -text
+docs/observatory/REPORTING_POLICY.md -text
+evidence/literature/digests/** -text
+
+# The P2 candidate proposal binds these inputs by raw SHA-256. Preserve the
+# committed LF bytes so clean Windows checkouts validate the same proposal.
+PLAN.md -text
+control/campaigns/scope-autoindex-v1.yaml -text
+control/decisions/D1_START_CAMPAIGN.yaml -text
+schemas/scope-dsl.v1.json -text
+src/myis_research/scope/compiler.py -text
