@@ -10,10 +10,12 @@ from __future__ import annotations
 import json
 import os
 import re
+import subprocess
 from dataclasses import dataclass
 from functools import lru_cache
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Mapping
+from urllib.parse import urlsplit
 
 import yaml
 from jsonschema import Draft202012Validator
@@ -36,6 +38,8 @@ SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 GIT_RE = re.compile(r"^(?:[a-f0-9]{40}|[a-f0-9]{64})$")
 P2_ARTIFACT_SCHEMAS = {
     "myis.p2-request.v1": "p2-request.v1.json",
+    "myis.p2-preflight-receipt.v1": "p2-preflight-receipt.v1.json",
+    "myis.p2-candidate-freeze-proposal.v1": "p2-candidate-freeze-proposal.v1.json",
     "myis.p2-candidate-ledger.v1": "p2-candidate-ledger.v1.json",
     "myis.p2-baseline-commitment.v1": "p2-baseline-commitment.v1.json",
     "myis.p2-baseline-reproduction-receipt.v1": "p2-baseline-reproduction-receipt.v1.json",
@@ -45,6 +49,8 @@ P2_ARTIFACT_SCHEMAS = {
     "myis.p2-package.v1": "p2-package.v1.json",
 }
 P2_HASH_FIELDS = {
+    "myis.p2-preflight-receipt.v1": "receipt_sha256",
+    "myis.p2-candidate-freeze-proposal.v1": "proposal_sha256",
     "myis.p2-candidate-ledger.v1": "ledger_sha256",
     "myis.p2-baseline-commitment.v1": "commitment_sha256",
     "myis.p2-baseline-reproduction-receipt.v1": "receipt_sha256",
@@ -53,6 +59,18 @@ P2_HASH_FIELDS = {
     "myis.p2-manifest.v1": "manifest_sha256",
     "myis.p2-package.v1": "package_sha256",
 }
+P2_PREFLIGHT_CHECK_IDS = (
+    "execution_source_commit",
+    "canonical_profile_binding",
+    "canonical_envelope_binding",
+    "canonical_campaign_binding",
+    "gate_state",
+    "counter_state",
+    "store_myis_store",
+    "store_myis_mlflow_store",
+    "store_path_overlap",
+    "aggregate_free_space",
+)
 TRAIN_METRIC_COMPARISON_FIELDS = (
     "schema_version",
     "metric_name",
@@ -225,6 +243,10 @@ def validate_p2_artifact(
             raise P2ContractError("request execution envelope hash is stale or missing")
         if payload["campaign_id"] != profile.payload["campaign_id"]:
             raise P2ContractError("request campaign_id does not match the canonical profile")
+    elif schema_version == "myis.p2-preflight-receipt.v1":
+        _validate_preflight_receipt_semantics(payload, root)
+    elif schema_version == "myis.p2-candidate-freeze-proposal.v1":
+        _validate_candidate_freeze_proposal_semantics(payload, root)
     elif schema_version == "myis.p2-candidate-ledger.v1":
         if payload["candidate_count"] != len(payload["candidates"]):
             raise P2ContractError("candidate_count does not match the candidates array")
@@ -244,6 +266,200 @@ def validate_p2_artifact(
         for metric in payload["metrics"]:
             validate_p2_aggregate_metric(metric, selection=True)
     return dict(payload)
+
+
+def validate_p2_preflight_receipt(
+    payload: Mapping[str, Any],
+    *,
+    repository_root: Path | None = None,
+) -> dict[str, Any]:
+    """Validate the immutable, aggregate-only P2 preflight receipt."""
+
+    return validate_p2_artifact(payload, repository_root=repository_root)
+
+
+def validate_p2_candidate_freeze_proposal(
+    payload: Mapping[str, Any],
+    *,
+    repository_root: Path | None = None,
+) -> dict[str, Any]:
+    """Validate a repository-safe proposal without registering candidates."""
+
+    return validate_p2_artifact(payload, repository_root=repository_root)
+
+
+def _validate_preflight_receipt_semantics(
+    payload: Mapping[str, Any],
+    repository_root: Path,
+) -> None:
+    """Apply the state and binding rules that JSON Schema cannot express."""
+
+    _reject_absolute_paths(payload)
+    profile = load_profile(repository_root)
+    campaign_path = repository_root / "control/campaigns/scope-autoindex-v1.yaml"
+    envelope_path = repository_root / ENVELOPE_RELATIVE_PATH
+    if payload["budget_profile_id"] != profile.profile_id or payload["budget_profile_sha256"] != profile.sha256:
+        raise P2ContractError("preflight profile binding is stale")
+    if payload["campaign_revision"] != profile.payload["campaign_revision"]:
+        raise P2ContractError("preflight campaign revision is stale")
+    if payload["git_commit_exists"] and not _git_commit_exists(repository_root, str(payload["git_commit"])):
+        raise P2ContractError("preflight execution source commit is stale or missing")
+    if not campaign_path.is_file() or file_sha256(campaign_path) != payload["campaign_sha256"]:
+        raise P2ContractError("preflight campaign binding is stale")
+    if not envelope_path.is_file() or file_sha256(envelope_path) != payload["execution_envelope_sha256"]:
+        raise P2ContractError("preflight execution envelope binding is stale")
+
+    checks = list(payload["checks"])
+    check_ids = [str(item["check_id"]) for item in checks]
+    check_statuses = [str(item["status"]) for item in checks]
+    failed_checks = [item for item in checks if item["status"] == "failed"]
+    stores = payload["stores"]
+    counters = payload["counters"]
+    gates = payload["gates"]
+    zero_counters = counters == {
+        "measured_runs": 0,
+        "candidate_count": 0,
+        "shortlist_count": 0,
+        "selection_accesses": 0,
+        "baseline_commitment_present": False,
+        "freeze_started": False,
+    }
+    stores_passed = all(
+        isinstance(value, Mapping)
+        and value.get("status") == "passed"
+        and value.get("configured") is True
+        and value.get("exists") is True
+        and value.get("is_directory") is True
+        and value.get("outside_all_worktrees") is True
+        and value.get("unsafe_link_or_junction") is False
+        and value.get("writable_sentinel_created") is True
+        and value.get("writable_sentinel_cleaned") is True
+        for value in stores.values()
+    )
+    gates_safe = (
+        gates["D1_START_CAMPAIGN"] == "active"
+        and gates["D2_OPEN_FINAL"] == "waiting_owner"
+        and gates["D3_SUBMIT_RELEASE"] == "waiting_owner"
+        and gates["final_split_open"] is False
+    )
+    if payload["status"] == "passed_pending_owner" and payload["aggregate_free_space_bytes"] < payload["required_free_space_bytes"]:
+        raise P2ContractError("preflight aggregate free-space binding is insufficient")
+    if payload["status"] == "passed_pending_owner":
+        if check_ids != list(P2_PREFLIGHT_CHECK_IDS):
+            raise P2ContractError("passed preflight does not contain the exact required check set")
+        if check_statuses != ["passed"] * len(checks) or failed_checks:
+            raise P2ContractError("passed preflight contains a failed or unrun check")
+        if (
+            not payload["git_commit_exists"]
+            or not zero_counters
+            or not stores_passed
+            or not gates_safe
+            or not payload["safe_path_boundary"]["outside_all_worktrees"]
+        ):
+            raise P2ContractError("passed preflight does not prove the required zero-counter boundary")
+        if payload["failure_codes"]:
+            raise P2ContractError("passed preflight cannot contain failure codes")
+    elif payload["status"] == "failed":
+        if not failed_checks and not payload["failure_codes"]:
+            raise P2ContractError("failed preflight must retain a failure code")
+    elif payload["status"] == "not_started":
+        if payload["failure_codes"] or not zero_counters:
+            raise P2ContractError("not-started preflight must retain zero counters and no failure")
+    if payload["measured_execution"] or payload["protected_data_accessed"] or payload["final_split_open"]:
+        raise P2ContractError("preflight receipt crosses the measured or protected boundary")
+    boundary = payload["safe_path_boundary"]
+    if boundary["all_worktrees_count"] < 1 or not boundary["path_overlap_checked"] or not boundary["unsafe_links_rejected"]:
+        raise P2ContractError("preflight did not complete the worktree path safety checks")
+
+
+def _validate_candidate_freeze_proposal_semantics(
+    payload: Mapping[str, Any],
+    repository_root: Path,
+) -> None:
+    _reject_absolute_paths(payload)
+    profile = load_profile(repository_root)
+    if payload["budget_profile_id"] != profile.profile_id or payload["budget_profile_sha256"] != profile.sha256:
+        raise P2ContractError("candidate proposal profile binding is stale")
+    if payload["campaign_revision"] != profile.payload["campaign_revision"]:
+        raise P2ContractError("candidate proposal campaign revision is stale")
+    controls = list(payload["frozen_controls"])
+    candidates = list(payload["preregistered_candidates"])
+    rows = controls + candidates
+    identifiers = [str(item["candidate_id"]) for item in rows]
+    if len(controls) != 4 or len(candidates) != 8 or len(set(identifiers)) != 12:
+        raise P2ContractError("candidate proposal must contain exactly four controls and eight candidates")
+    if any(item["candidate_class"] != "frozen_control" for item in controls):
+        raise P2ContractError("frozen control proposal class is invalid")
+    if any(item["candidate_class"] != "preregistered_patent" for item in candidates):
+        raise P2ContractError("preregistered proposal class is invalid")
+    for item in rows:
+        if item["registered"] is not False or item["hash_locked"] is not False:
+            raise P2ContractError("candidate proposal cannot register or hash-lock a candidate")
+        for lineage_name in ("spec", "config", "retriever", "evaluator"):
+            lineage = item[lineage_name]
+            if lineage["required"] is not True or not lineage["source_locations"]:
+                raise P2ContractError(f"candidate proposal {lineage_name} lineage is incomplete")
+    for source in payload["source_bindings"]:
+        uri = str(source["uri"])
+        path = _resolve_proposal_locator(repository_root, uri, "proposal source uri")
+        if file_sha256(path) != source["sha256"]:
+            raise P2ContractError("candidate proposal source binding is stale")
+    for lineage_name, lineage in payload["lineage_requirements"].items():
+        for locator in lineage["source_locations"]:
+            _resolve_proposal_locator(
+                repository_root,
+                str(locator),
+                f"proposal {lineage_name} source location",
+            )
+    for item in rows:
+        for lineage_name in ("spec", "config", "retriever", "evaluator"):
+            for locator in item[lineage_name]["source_locations"]:
+                _resolve_proposal_locator(
+                    repository_root,
+                    str(locator),
+                    f"proposal candidate {lineage_name} source location",
+                )
+
+
+def _reject_absolute_paths(value: Any, *, path: str = "$") -> None:
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            _reject_absolute_paths(item, path=f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            _reject_absolute_paths(item, path=f"{path}[{index}]")
+    elif isinstance(value, str):
+        if Path(value).is_absolute() or PurePosixPath(value).is_absolute() or PureWindowsPath(value).is_absolute():
+            raise P2ContractError(f"absolute path is forbidden in repository-safe P2 artifact at {path}")
+
+
+def _resolve_proposal_locator(repository_root: Path, value: str, field: str) -> Path:
+    parsed = urlsplit(value)
+    if parsed.scheme or parsed.netloc or parsed.query or not parsed.path:
+        raise P2ContractError(f"{field} must be a repository-relative file locator")
+    relative = _validate_safe_relative_uri(parsed.path, field)
+    unresolved = repository_root / relative
+    resolved = unresolved.resolve()
+    try:
+        resolved.relative_to(repository_root)
+    except ValueError as error:
+        raise P2ContractError(f"{field} resolves outside the repository") from error
+    if unresolved.is_symlink() or not resolved.is_file():
+        raise P2ContractError(f"{field} does not reference a regular repository file")
+    return resolved
+
+
+def _git_commit_exists(repository_root: Path, commit: str) -> bool:
+    try:
+        completed = subprocess.run(
+            ["git", "cat-file", "-e", f"{commit}^{{commit}}"],
+            cwd=repository_root,
+            check=False,
+            capture_output=True,
+        )
+    except OSError:
+        return False
+    return completed.returncode == 0
 
 
 def validate_p2_aggregate_metric(

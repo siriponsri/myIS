@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 
-from .p2.contracts import P2ContractError, load_p2_request
+from .p2.contracts import P2ContractError
 from .p2.fixture import (
     DEFAULT_RECEIPT_PATH,
     P2FixtureError,
     fixture_what_if,
     run_fixture_pilot,
 )
+from .p2.preflight import preflight_what_if, run_p2_preflight
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -24,6 +24,8 @@ def main(argv: list[str] | None = None) -> int:
     preflight.add_argument("--repository-root", type=Path, default=Path.cwd())
     preflight.add_argument("--require-stores", action="store_true")
     preflight.add_argument("--what-if", action="store_true")
+    preflight.add_argument("--output", type=Path)
+    preflight.add_argument("--required-free-space-bytes", type=int)
     fixture = subparsers.add_parser("fixture-pilot")
     fixture.add_argument("--repository-root", type=Path, default=Path.cwd())
     fixture.add_argument("--output", type=Path)
@@ -46,32 +48,20 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, ensure_ascii=True, sort_keys=True))
         return 0
     try:
-        request, profile = load_p2_request(
-            args.request,
-            root,
-            require_store=args.require_stores,
-        )
+        if args.what_if:
+            payload = preflight_what_if(args.request, root)
+        else:
+            payload = run_p2_preflight(
+                args.request,
+                root,
+                output=args.output,
+                require_stores=True,
+                required_free_space_bytes=args.required_free_space_bytes,
+            )
     except P2ContractError as error:
         parser.exit(3, f"P2 preflight blocked: {error}\n")
-    stores = {name: bool(os.environ.get(name)) for name in ("MYIS_STORE", "MYIS_MLFLOW_STORE")}
-    payload = {
-        "status": "ready_for_owner_preflight",
-        "command": args.command,
-        "what_if": bool(args.what_if),
-        "phase_id": request["phase_id"],
-        "arm": request["arm"],
-        "budget_profile_id": profile.profile_id,
-        "budget_profile_sha256": profile.sha256,
-        "runtime": profile.payload["runtime"],
-        "resources": profile.payload["resources"],
-        "runtime_pilot_status": "preflight_only",
-        "selection_access": 0,
-        "stores_configured": stores,
-        "repository_root": str(root),
-        "measured_execution": False,
-    }
     print(json.dumps(payload, ensure_ascii=True, sort_keys=True))
-    return 0
+    return 0 if payload.get("status") in {"not_started", "passed_pending_owner"} else 3
 
 
 if __name__ == "__main__":

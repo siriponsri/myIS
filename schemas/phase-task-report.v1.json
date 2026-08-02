@@ -22,6 +22,7 @@
     "phase_id": {"enum": ["P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"]},
     "task_id": {"type": ["string", "null"]},
     "status": {"enum": ["planned", "active", "blocked", "completed", "superseded"]},
+    "preflight_status": {"enum": ["not_started", "passed_pending_owner", "failed"]},
     "evidence_class": {"type": "string", "minLength": 1},
     "scientific_authority": {"type": "boolean"},
     "claim_boundary": {"type": "string", "minLength": 1},

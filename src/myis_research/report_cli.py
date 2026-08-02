@@ -392,6 +392,7 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
     resources = p2.get("resources", {}) if isinstance(p2.get("resources"), Mapping) else {}
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
+    proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
     review_value = (
         f"Round {review.get('final_round')} {review.get('final_verdict')} / {review.get('status')}"
         if review.get("final_round") is not None
@@ -399,6 +400,13 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
     )
     rows = [
         ("Status", p2.get("status", "unknown")),
+        ("Owner-local preflight", p2.get("preflight_status", "not_started")),
+        (
+            "Candidate proposal",
+            f"{proposal.get('status', 'not_created')} / {proposal.get('adoption', 'not_adopted')}; "
+            f"{proposal.get('frozen_controls', 0)} controls + {proposal.get('preregistered_candidates', 0)} candidates; "
+            f"registered {proposal.get('registered_candidates', 0)}, hash-locked {proposal.get('hash_locked_candidates', 0)}",
+        ),
         ("Official static review", review_value),
         (
             "Fixture pilot",
@@ -420,7 +428,7 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
         ("Protected access", fixture.get("protected_data_accessed", False)),
         ("Scientific claim", fixture.get("claim_boundary", "no_measured_claim")),
         ("Resources", f"GPU {resources.get('gpu_budget_usd', 0)} USD; paid API {resources.get('paid_api_budget_usd', 0)} USD; model download {resources.get('network_model_download', False)}"),
-        ("Next step", "Owner-local measured preflight" if fixture.get("status") == "passed" else "Repository-only fixture pilot"),
+        ("Next step", "Owner review of preflight and candidate-freeze proposal" if p2.get("preflight_status") == "passed_pending_owner" else "Owner-local measured preflight" if fixture.get("status") == "passed" else "Repository-only fixture pilot"),
     ]
     return "\n".join(["| Check | Value |", "|---|---|"] + [f"| {label} | {value} |" for label, value in rows])
 
@@ -429,11 +437,14 @@ def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
+    proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
     return (
         "# P2_SCOPE_DEVELOPMENT\n\n"
         "P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.\n\n"
         "## Status for Owner\n\n"
         f"**{p2.get('status', 'unknown')}**. P1 remains `P1_CPU_MEASURED_COMPLETE`; P3 and P4 remain locked.\n\n"
+        f"Owner-local preflight state is **{p2.get('preflight_status', 'not_started')}**; it does not change measured counters (runs `{p2.get('measured_runs', 0)}`, candidates `{p2.get('candidate_count', 0)}`, selection accesses `{p2.get('selection_accesses', 0)}`).\n\n"
+        f"The repository-safe candidate proposal is **{proposal.get('status', 'not_created')} / {proposal.get('adoption', 'not_adopted')}** with `{proposal.get('frozen_controls', 0)}` controls and `{proposal.get('preregistered_candidates', 0)}` preregistered candidates; registered count is `{proposal.get('registered_candidates', 0)}` and hash-locked count is `{proposal.get('hash_locked_candidates', 0)}`.\n\n"
         "## Official static review\n\n"
         f"Round `{review.get('final_round', '-')}` verdict is **{review.get('final_verdict', 'not_recorded')}** with status `{review.get('status', 'not_recorded')}`. This static review remains engineering provenance only. See [[P2_OFFICIAL_REVIEW_AUDIT]].\n\n"
         "## Repository-only fixture pilot\n\n"
@@ -458,11 +469,14 @@ def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
+    proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
     return (
         f"# {task.get('task_id')}: {task.get('title')}\n\n"
         "## Objective\n\n"
         "Prepare a deterministic R1 representation search while keeping the retriever and evaluator fixed.\n\n"
         f"## Status\n\n**{p2.get('status', task.get('status', 'planned'))}**; this is not a measured result.\n\n"
+        f"Owner-local preflight state: **{p2.get('preflight_status', 'not_started')}**.\n\n"
+        f"Candidate proposal: **{proposal.get('status', 'not_created')} / {proposal.get('adoption', 'not_adopted')}**; `{proposal.get('frozen_controls', 0)}` controls + `{proposal.get('preregistered_candidates', 0)}` candidates, with no registered or hash-locked measured candidate.\n\n"
         "## Required contract\n\n"
         "Every measured request binds `budget_profile_id` and `budget_profile_sha256`. Baseline reproduction must pass before the one-run hard barrier freezes candidate IDs, SCOPE/spec, compiler, config, retriever, evaluator, and budget hashes before selection.\n\n"
         "## Current output\n\n"
@@ -488,6 +502,7 @@ def _p2_result_body(model: Mapping[str, Any]) -> str:
         "# P2 SCOPE Development Result\n\n"
         "## Result\n\n"
         "P2 is ready/planned but not measured. This note deliberately contains no scientific metric.\n\n"
+        f"Owner-local preflight state is **{p2.get('preflight_status', 'not_started')}** and remains separate from measured execution.\n\n"
         f"{_p2_readiness_table(model)}\n\n"
         "## Fixture evidence\n\n"
         f"The repository-only synthetic fixture is `{fixture.get('status', 'not_executed')}`. It exercised `{fixture.get('synthetic_candidates', 0)}` synthetic candidates across `{fixture.get('synthetic_iterations', 0)}` adaptive iterations, froze `{fixture.get('synthetic_shortlist', 0)}` synthetic finalists, and used `{fixture.get('fixture_selection_exposures', 0)}` fixture-only selection exposure. This is engineering evidence, not retrieval-quality evidence.\n\n"
@@ -1359,8 +1374,10 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     state = str(model["project"]["state"])
     phases = [row for row in model.get("phases", []) if isinstance(row, Mapping)]
     tasks = [row for row in model.get("tasks", []) if isinstance(row, Mapping)]
+    p2 = _p2_readiness(model)
     p2_review = _p2_official_review(model)
     p2_fixture = _p2_fixture(model)
+    p2_proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
 
     phase_lines: list[str] = []
     for phase in phases:
@@ -1380,6 +1397,8 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"- Actual cost USD: `{model['resources']['actual_cost_usd']}`\n\n"
         f"P2 official static review: Round `{p2_review.get('final_round', '-')}` / `{p2_review.get('final_verdict', 'not_recorded')}`; evidence class `{p2_review.get('evidence_class', 'static_contract_review')}`.\n\n"
         f"P2 repository-only fixture: `{p2_fixture.get('status', 'not_executed')}`; evidence class `{p2_fixture.get('evidence_class', 'fixture')}`; scientific authority `{p2_fixture.get('scientific_authority', False)}`.\n\n"
+        f"P2 Owner-local preflight: `{p2.get('preflight_status', 'not_started')}`; measured runs `{p2.get('measured_runs', 0)}`, real candidates `{p2.get('candidate_count', 0)}`, shortlist `{p2.get('shortlist_count', 0)}`, selection accesses `{p2.get('selection_accesses', 0)}`.\n\n"
+        f"P2 candidate proposal: `{p2_proposal.get('status', 'not_created')}` / `{p2_proposal.get('adoption', 'not_adopted')}`; controls `{p2_proposal.get('frozen_controls', 0)}`, preregistered candidates `{p2_proposal.get('preregistered_candidates', 0)}`, registered `{p2_proposal.get('registered_candidates', 0)}`, hash-locked `{p2_proposal.get('hash_locked_candidates', 0)}`.\n\n"
         "D2 and D3 remain Owner-only. Final 872 is still closed.\n"
     )
     phase_task_body = (
@@ -1448,6 +1467,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"- MLflow parent + children: `{1 + len(model.get('mlflow_registration', {}).get('children', []))}` runs.\n\n"
         f"- P2 static review closed at Round `{p2_review.get('final_round', '-')}` with verdict `{p2_review.get('final_verdict', 'not_recorded')}`.\n"
         f"- Repository-only P2 fixture is `{p2_fixture.get('status', 'not_executed')}` with `{p2_fixture.get('synthetic_candidates', 0)}` synthetic candidates and no measured execution.\n\n"
+        f"- Owner-local P2 preflight is `{p2.get('preflight_status', 'not_started')}`; the candidate proposal is `{p2_proposal.get('adoption', 'not_adopted')}` with no registered or hash-locked measured candidates.\n\n"
         "## Next automatic action\n\n"
         "P2 remains ready but not measured. The next authorized action is Owner-local measured preflight; "
         "D2 and D3 remain unchanged.\n"

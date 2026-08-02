@@ -7,7 +7,7 @@ import json
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from ..dapfam_p1 import DapfamP1Error, load_package
 from ..kernel.canonical import canonical_sha256
@@ -20,7 +20,9 @@ from ..p2 import (
     validate_fixture_execution_manifest,
     validate_fixture_receipt,
     validate_p2_artifact,
+    validate_p2_candidate_freeze_proposal,
     validate_p2_package_bundle,
+    validate_p2_preflight_receipt,
 )
 from ..protection import assert_aggregate_only
 from ..observatory.projection import load_observatory_projection
@@ -57,6 +59,8 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/scope-autoindex-v1/manifests",
     "campaigns/scope-autoindex-v1/validation-reports",
     "campaigns/scope-autoindex-v1/packages",
+    "campaigns/scope-autoindex-v1/proposals",
+    "campaigns/scope-autoindex-v1/preflight",
     "orchestration/audits/p2-readiness",
     "outputs/fixtures/p2",
     "outputs/observatory/fixture-v1",
@@ -75,6 +79,8 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/p2-selection-receipt.v1.json",
     "schemas/p2-manifest.v1.json",
     "schemas/p2-package.v1.json",
+    "schemas/p2-preflight-receipt.v1.json",
+    "schemas/p2-candidate-freeze-proposal.v1.json",
     "schemas/observatory-registry.v1.json",
     "schemas/observatory-run.v1.json",
     "schemas/observatory-artifact.v1.json",
@@ -92,6 +98,7 @@ PROJECTION_SOURCE_PATHS = (
     "src/myis_research/p2",
     "src/myis_research/observatory",
     "src/myis_research/p2_cli.py",
+    "src/myis_research/p2/preflight.py",
     "src/myis_research/projections/read_model.py",
     "src/myis_research/report_cli.py",
     "src/myis_research/report_records.py",
@@ -102,6 +109,12 @@ P2_OFFICIAL_REVIEW_ROOT = Path("orchestration/audits/p2-readiness")
 P2_FIXTURE_RECEIPT_PATH = Path("outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json")
 P2_FIXTURE_MANIFEST_PATH = Path(
     "outputs/fixtures/p2/p2-fixture-pilot-v1.execution-manifest.json"
+)
+P2_PREFLIGHT_RECEIPT_PATH = Path(
+    "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
+)
+P2_CANDIDATE_PROPOSAL_PATH = Path(
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
 )
 P2_METRIC_FIELDS = frozenset({
     "candidate_id", "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
@@ -211,11 +224,15 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             continue
         phase_id = str(phase.get("id", ""))
         phase_status = str(phase.get("status", "planned"))
+        phase_preflight_status: str | None = None
         if phase_id == "P1_CPU_BASELINE":
             phase_status = "measured" if p1_pairs else "blocked"
         elif phase_id == "P2_SCOPE_DEVELOPMENT":
             phase_status = "ready" if p2_readiness["status"] == "ready_planned_not_measured" else p2_readiness["status"]
+            phase_preflight_status = str(p2_readiness.get("preflight_status", "not_started"))
         phase_row = {"phase_id": phase_id, "status": phase_status, "tasks": []}
+        if phase_preflight_status is not None:
+            phase_row["preflight_status"] = phase_preflight_status
         for task in phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []:
             if not isinstance(task, dict):
                 continue
@@ -229,6 +246,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     })
             elif phase_id == "P2_SCOPE_DEVELOPMENT":
                 task_row["status"] = "ready" if p2_readiness["status"] == "ready_planned_not_measured" else p2_readiness["status"]
+                task_row["preflight_status"] = str(p2_readiness.get("preflight_status", "not_started"))
                 task_row["evidence_ids"] = [str(item["uri"]) for item in p2_readiness.get("artifacts", [])]
                 official_review = p2_readiness.get("official_review", {})
                 if official_review.get("status") == "accepted_static_contract_review":
@@ -317,6 +335,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "active_owner_decisions": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
             "current_state": p1_state,
             "p2_status": p2_readiness["status"],
+            "p2_preflight_status": p2_readiness.get("preflight_status", "not_started"),
         }],
         "p2_readiness": p2_readiness,
         "observatory": observatory,
@@ -382,6 +401,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "budget_profile_id": p2_readiness.get("budget_profile_id"),
             "budget_profile_sha256": p2_readiness.get("budget_profile_sha256"),
             "selection_exposure_count": p2_readiness.get("selection_accesses", 0),
+            "preflight_status": p2_readiness.get("preflight_status", "not_started"),
         }],
         "interpretations": ([{
             "interpretation_id": "P1-CPU-BASELINE-INTERPRETATION",
@@ -391,7 +411,13 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         }, {
             "interpretation_id": "P2-SCOPE-DEVELOPMENT-INTERPRETATION",
             "result_id": "P2-SCOPE-DEVELOPMENT",
-            "status": "pending_measurement" if p2_readiness["status"] == "ready_planned_not_measured" else "blocked",
+            "status": (
+                "pending_measurement"
+                if p2_readiness.get("preflight_status") == "not_started"
+                else "pending_owner"
+                if p2_readiness.get("preflight_status") == "passed_pending_owner"
+                else "blocked"
+            ),
             "statement": "P2 is contract-ready but has no measured result; fixture readiness does not authorize selection or final evaluation.",
         }]),
         "raid": ([{
@@ -744,6 +770,8 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
 
     official_review = _p2_official_review_projection(root)
     fixture_pilot = _p2_fixture_projection(root)
+    preflight = _p2_preflight_projection(root)
+    candidate_proposal = _p2_candidate_proposal_projection(root)
     profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
     profile: dict[str, Any] = {}
     profile_sha256: str | None = None
@@ -766,7 +794,7 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
 
     campaign_root = root / "campaigns/scope-autoindex-v1"
     valid: list[tuple[Path, dict[str, Any]]] = []
-    invalid_count = 0
+    invalid_count = 1 if candidate_proposal["status"] == "invalid" else 0
     seen: set[Path] = set()
     for directory_name in P2_ARTIFACT_DIRS:
         directory = campaign_root / directory_name
@@ -867,6 +895,12 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         status = "ready_planned_not_measured"
 
     pointers: list[dict[str, Any]] = []
+    if candidate_proposal["validated"]:
+        pointers.append({
+            "schema_version": "myis.p2-candidate-freeze-proposal.v1",
+            "uri": candidate_proposal["proposal_uri"],
+            "sha256": candidate_proposal["proposal_sha256"],
+        })
     for path, payload in valid:
         self_hash_field = {
             "myis.p2-candidate-ledger.v1": "ledger_sha256",
@@ -895,6 +929,9 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
 
     return {
         "status": status,
+        "preflight_status": preflight["status"],
+        "preflight": preflight,
+        "candidate_proposal": candidate_proposal,
         "phase_id": "P2_SCOPE_DEVELOPMENT",
         "arm": "R1",
         "campaign_revision": profile.get("campaign_revision") or configured.get("campaign_revision"),
@@ -955,6 +992,107 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         },
         "official_review": official_review,
         "fixture_pilot": fixture_pilot,
+    }
+
+
+def _p2_candidate_proposal_projection(root: Path) -> dict[str, Any]:
+    """Project an Owner-review draft without promoting it into the measured ledger."""
+
+    missing = {
+        "status": "not_created",
+        "adoption": "not_adopted",
+        "proposal_uri": P2_CANDIDATE_PROPOSAL_PATH.as_posix(),
+        "proposal_sha256": None,
+        "validated": False,
+        "frozen_controls": 0,
+        "preregistered_candidates": 0,
+        "registered_candidates": 0,
+        "hash_locked_candidates": 0,
+        "scientific_authority": False,
+    }
+    path = root / P2_CANDIDATE_PROPOSAL_PATH
+    if not path.exists():
+        return missing
+    if path.is_symlink() or not path.is_file():
+        return {**missing, "status": "invalid"}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        proposal = validate_p2_candidate_freeze_proposal(payload, repository_root=root)
+    except (OSError, UnicodeError, json.JSONDecodeError, P2ContractError, TypeError, ValueError):
+        return {**missing, "status": "invalid"}
+    controls = proposal.get("frozen_controls", [])
+    candidates = proposal.get("preregistered_candidates", [])
+    rows = [item for item in [*controls, *candidates] if isinstance(item, Mapping)]
+    return {
+        "status": str(proposal.get("status", "invalid")),
+        "adoption": str(proposal.get("adoption", "not_adopted")),
+        "proposal_uri": P2_CANDIDATE_PROPOSAL_PATH.as_posix(),
+        "proposal_sha256": str(proposal.get("proposal_sha256")),
+        "validated": True,
+        "frozen_controls": len(controls),
+        "preregistered_candidates": len(candidates),
+        "registered_candidates": sum(1 for item in rows if item.get("registered") is True),
+        "hash_locked_candidates": sum(1 for item in rows if item.get("hash_locked") is True),
+        "scientific_authority": False,
+    }
+
+
+def _p2_preflight_projection(root: Path) -> dict[str, Any]:
+    """Project only the validated preflight state; never infer readiness from a preview."""
+
+    missing = {
+        "status": "not_started",
+        "receipt_uri": P2_PREFLIGHT_RECEIPT_PATH.as_posix(),
+        "receipt_sha256": None,
+        "validated": False,
+        "checks_passed": 0,
+        "checks_failed": 0,
+        "failure_codes": [],
+        "measured_runs": 0,
+        "candidate_count": 0,
+        "shortlist_count": 0,
+        "selection_accesses": 0,
+        "safe_to_measure": False,
+        "owner_approval_required": [
+            "Owner confirms both protected store identities and permits read-only metadata preflight.",
+            "Owner approves the four frozen controls and eight preregistered candidate definitions.",
+            "Owner resolves any ambiguous SCOPE view, field, normalization, or aggregation definition before adoption.",
+            "Owner approves the concrete compiler, config, retriever, and evaluator SHA-256 bindings before a measured request.",
+            "Owner explicitly requests measured P2; this preflight does not create a request, baseline commitment, or selection exposure.",
+        ],
+    }
+    path = root / P2_PREFLIGHT_RECEIPT_PATH
+    if not path.exists():
+        return missing
+    if path.is_symlink() or not path.is_file():
+        return {**missing, "status": "failed"}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        receipt = validate_p2_preflight_receipt(payload, repository_root=root)
+    except (OSError, UnicodeError, json.JSONDecodeError, P2ContractError, TypeError, ValueError):
+        return {**missing, "status": "failed"}
+    checks = receipt.get("checks", [])
+    counters = receipt.get("counters", {})
+    status = str(receipt.get("status", "failed"))
+    if status not in {"not_started", "passed_pending_owner", "failed"}:
+        status = "failed"
+    safe_to_measure = status == "passed_pending_owner" and all(
+        item.get("status") == "passed" for item in checks if isinstance(item, Mapping)
+    )
+    return {
+        "status": status,
+        "receipt_uri": P2_PREFLIGHT_RECEIPT_PATH.as_posix(),
+        "receipt_sha256": str(receipt.get("receipt_sha256")),
+        "validated": True,
+        "checks_passed": sum(1 for item in checks if isinstance(item, Mapping) and item.get("status") == "passed"),
+        "checks_failed": sum(1 for item in checks if isinstance(item, Mapping) and item.get("status") == "failed"),
+        "failure_codes": [str(item) for item in receipt.get("failure_codes", [])],
+        "measured_runs": int(counters.get("measured_runs", 0)),
+        "candidate_count": int(counters.get("candidate_count", 0)),
+        "shortlist_count": int(counters.get("shortlist_count", 0)),
+        "selection_accesses": int(counters.get("selection_accesses", 0)),
+        "safe_to_measure": safe_to_measure,
+        "owner_approval_required": [str(item) for item in receipt.get("owner_approval_required", [])],
     }
 
 

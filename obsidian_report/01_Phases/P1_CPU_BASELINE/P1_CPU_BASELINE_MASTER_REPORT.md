@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235"
-read_model_sha256: "4b97ba86af1bf81eab0072c4b2d95dc46adb1fe03c06ebbd029c6d25c20e7333"
-source_commit: "0ef52e929994fbd69baa180ffe55f9c7092745c7"
+read_model_revision: "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03"
+read_model_sha256: "f1076cad0d68a748483d76a6f8ee62d96ad4a6679c4064b2a6b0b43033743d11"
+source_commit: "8b47d3350f99c33f55355b85bd39b222d4181a80"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235"
-last_material_update: "2026-08-02T03:39:36Z"
+generated_from_revision: "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03"
+last_material_update: "2026-08-02T09:30:06Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-02T03:39:36Z"
-updated_at: "2026-08-02T03:39:36Z"
+created_at: "2026-08-02T09:30:06Z"
+updated_at: "2026-08-02T09:30:06Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -46,9 +46,9 @@ Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `fef08a3f9082e0324839c9f04f09e66782331b8015f5857877fccceb9b6e4d6e`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 0ef52e929994fbd69baa180ffe55f9c7092745c7
+- `git_commit`: 8b47d3350f99c33f55355b85bd39b222d4181a80
 - `execution_envelope`: `control/execution-envelope.yaml`; SHA-256 `e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af`
 - `request_id`: dapfam-p1-fulltext-c058a3aa7357c782
 - `protected_payloads`: owner-local; aggregate hashes only in this report

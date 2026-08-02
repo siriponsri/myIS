@@ -24,6 +24,7 @@
       "properties": {
         "phase_id": {"enum": ["P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"]},
         "status": {"type": "string"},
+        "preflight_status": {"enum": ["not_started", "passed_pending_owner", "failed"]},
         "tasks": {"type": "array", "items": {"$ref": "#/$defs/task"}}
       }
     },
@@ -36,6 +37,7 @@
         "phase_id": {"type": "string"},
         "title": {"type": "string"},
         "status": {"type": "string"},
+        "preflight_status": {"enum": ["not_started", "passed_pending_owner", "failed"]},
         "evidence_ids": {"type": "array", "items": {"type": "string"}}
       }
     },

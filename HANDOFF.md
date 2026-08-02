@@ -320,6 +320,36 @@ remain `0`. Protected data, measured stores, final-872, D2/D3, GPU, paid APIs,
 network model downloads, and provider fallback were not accessed. This is
 engineering evidence only and creates no scientific claim.
 
+## P2 Owner-local preflight and candidate proposal (2026-08-02)
+
+Implementation commit `8b47d3350f99c33f55355b85bd39b222d4181a80`
+adds the repository-safe P2 preflight receipt/schema, read-only preflight
+runner and CLI, fail-closed validation, projection/report state, and an exact
+four-control/eight-candidate Owner-review proposal.
+
+The proposal self-hash is
+`38156c8dbcdaf56ad0593b6afad118f83ac23b438ab1ecae6debc9968b9339b8`.
+It remains `draft_owner_review` and `not_adopted`; all proposed entries retain
+`registered=false` and `hash_locked=false`. The Owner-local preflight was not
+executed, so `preflight_status=not_started`. Measured runs, real candidates,
+real shortlist, and real selection accesses remain `0`.
+
+The full deterministic suite passed with `262` tests. Report sync/check,
+read-model-only drift, report schema/content validation, layout, full asset
+validation, session audit, P2 closure and archive-runtime policies,
+repository-safe MLflow doctor, Brain literature validation, scoped Ruff, and
+`git diff --check` also passed. The final shared read-model revision is
+`30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03`
+with SHA-256
+`f1076cad0d68a748483d76a6f8ee62d96ad4a6679c4064b2a6b0b43033743d11`;
+the aggregate-only projection sync MLflow run is
+`6dea0156a4134f7c8576f2f5a54f2cce`.
+
+Protected store contents, qrels, membership, query IDs, rankings, per-query
+outcomes, final-872, D2/D3, GPU, paid APIs, network model downloads, provider
+state, measured requests, candidate ledgers, baseline commitments, shortlist
+freeze receipts, and real selection receipts remain untouched.
+
 ## Next action
 
 ขั้นถัดไปที่ได้รับอนุญาตคือ `Owner-local measured preflight` โดยต้องเริ่มเป็นงาน
