@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T09:30:06Z",
-  "generated_from_revision": "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03",
-  "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
+  "generated_at": "2026-08-02T10:23:41Z",
+  "generated_from_revision": "b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957",
+  "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
+    "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
     "source_of_truth": {
       "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T09:30:06Z",
+  "last_material_update": "2026-08-02T10:23:41Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "5a5464c8d4ec8b64e9a1bc8de849f6563fd5f9b8f19c2d33d25db5af0c389981",
+  "report_sha256": "0f84ec07c6fa40218b50b2542b25a7a26772b2d8d196b91782ec35ce4c2b4723",
   "report_type": "task",
   "result": {
     "decision": "completed",

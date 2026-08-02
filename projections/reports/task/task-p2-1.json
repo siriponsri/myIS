@@ -212,9 +212,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-02T09:30:06Z",
-  "generated_from_revision": "30c34be047b367a19d18bc8ccb4625ab6c82270394b66a468d22499eaf8d7f03",
-  "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
+  "generated_at": "2026-08-02T10:23:41Z",
+  "generated_from_revision": "b205e5a9ede542334d955e96b0913763261bdf8fec1619f2c2e5645093025957",
+  "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -262,7 +262,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "8b47d3350f99c33f55355b85bd39b222d4181a80",
+    "git_commit": "c13592c4ccba4235991459899801c022d6eb8623",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -285,14 +285,14 @@
     }
   },
   "interpretation": "The repair strengthens stale authority, worktree boundary, capacity, immutable receipt, and negative-test behavior. It does not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-02T09:30:06Z",
+  "last_material_update": "2026-08-02T10:23:41Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "93812800d012a808cb22836c9374d233f34134a5038eb675e7cb474aae5f22bc",
+  "report_sha256": "971077d0aaf35657b2ae34fac9e4771ea82ed35892280c0dead68e0ce05cbb80",
   "report_type": "task",
   "result": {
     "decision": "not_started",
