@@ -1,0 +1,17 @@
+{
+  "evidence_class": "fixture",
+  "fixture_id": "observatory-fixture-v1",
+  "measured_execution": false,
+  "package_sha256": "56b9fcac16b57055607de4bf9adcc4698f940638c33b2fbc093d8379c865610d",
+  "protected_data_accessed": false,
+  "real_counters": {
+    "candidate_count": 0,
+    "measured_runs": 0,
+    "selection_accesses": 0,
+    "shortlist_count": 0
+  },
+  "receipt_sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
+  "registry_sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+  "schema_version": "myis.observatory-index.v1",
+  "scientific_authority": false
+}

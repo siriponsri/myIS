@@ -27,6 +27,7 @@ from .mlflow_archive import (
 from .mlflow_mirror import default_store as default_mlflow_store
 from .progress import DEFAULT_HEARTBEAT_SECONDS
 from .projections.read_model import build_read_model, canonical_json, sha256, write_read_model
+from .report_records import build_report_records, report_json_outputs
 
 
 READ_MODEL_RELATIVE_PATH = Path("projections/read-model/read-model.v2.json")
@@ -50,7 +51,7 @@ _SNAPSHOT_ID_RE = re.compile(r"^[A-Z0-9][A-Z0-9-]{2,63}$")
 _ALLOWED_NOTE_TYPES = frozenset({
     "home", "project_map", "phase_report", "task_report", "result_report",
     "advisor_update", "literature_proxy", "literature_synthesis", "history_report",
-    "decision", "risk", "failed_attempt", "presentation", "glossary", "owner_note",
+    "run_report", "decision", "risk", "failed_attempt", "presentation", "glossary", "owner_note",
 })
 _ALLOWED_WORKFLOW_STATUSES = frozenset({
     "waiting_dependency", "ready", "in_progress", "verification_needed",
@@ -59,6 +60,7 @@ _ALLOWED_WORKFLOW_STATUSES = frozenset({
 _ALLOWED_EVIDENCE_MATURITY = frozenset({
     "non_scientific", "fixture", "dry_run", "measured_development",
     "measured_selection", "confirmatory", "publication", "historical_exposed",
+    "planned", "engineering", "train_selection_measured", "static_contract_review",
 })
 _ALLOWED_CLAIM_LEVELS = frozenset({
     "none", "descriptive", "exploratory", "confirmatory", "publication_ready",
@@ -69,6 +71,8 @@ _REQUIRED_NOTE_PROPERTIES = frozenset({
     "read_model_revision", "read_model_sha256", "source_commit",
     "projection_schema_version", "source_run_ids", "source_manifest_sha256",
     "related_literature_ids", "related_decision_ids",
+    "evidence_class", "scientific_authority", "claim_boundary",
+    "generated_from_revision", "last_material_update", "next_authorized_action",
 })
 
 
@@ -108,7 +112,7 @@ def projection_report_contents(
     model_sha = str(model["read_model_sha256"])
     source_commit = str(model["source_commit"])
     vault_contents = _obsidian_vault_contents(root, model)
-    _validate_generated_contents(vault_contents)
+    _validate_generated_contents(vault_contents, model)
     manifest = _generated_manifest(model, vault_contents)
     manifest_text = _json_text(manifest)
 
@@ -144,6 +148,7 @@ def projection_report_contents(
     }
     _validate_external_projection_contents(external_outputs)
     outputs.update(external_outputs)
+    outputs.update(report_json_outputs(root, model))
     return outputs
 
 
@@ -153,6 +158,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
     fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
     review_source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
+    observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -164,6 +170,23 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
         "run_ids": [item.get("run_id") for item in model.get("runs", [])],
         "evidence_ids": [item.get("evidence_id") for item in model.get("evidence", [])],
         "status": "blocked" if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "current",
+        "observatory": {
+            "status": observatory.get("status", "not_available"),
+            "evidence_class": observatory.get("evidence_class", "fixture"),
+            "scientific_authority": observatory.get("scientific_authority", False),
+            "registry_sha256": observatory.get("registry_sha256"),
+            "receipt_sha256": observatory.get("receipt_sha256"),
+            "mlflow_run_id": observatory.get("mlflow_run_id"),
+            "validated_artifact_count": observatory.get("validated_artifact_count", 0),
+            "validated_metric_count": observatory.get("validated_metric_count", 0),
+            "failed_child_count": observatory.get("failed_child_count", 0),
+            "recovered_child_count": observatory.get("recovered_child_count", 0),
+            "artifact_lineage_status": observatory.get("artifact_lineage_status", "unknown"),
+            "retention_class_counts": observatory.get("retention_class_counts", {}),
+            "prompt_binding_count": observatory.get("prompt_binding_count", 0),
+            "config_binding_count": observatory.get("config_binding_count", 0),
+            "environment_binding_count": observatory.get("environment_binding_count", 0),
+        },
         "p2_readiness": {
             "status": p2.get("status", "unknown"),
             "budget_profile_id": p2.get("budget_profile_id"),
@@ -791,8 +814,127 @@ def _p1_advisor_body(model: Mapping[str, Any]) -> str:
     )
 
 
+def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any]) -> str:
+    """Render the canonical fifteen-section Phase/Task report contract."""
+
+    def bullets(values: Any, fallback: str = "- None recorded.") -> str:
+        if not isinstance(values, list) or not values:
+            return fallback
+        lines = []
+        for value in values:
+            if isinstance(value, Mapping):
+                claim = value.get("claim") or value.get("artifact_id") or value.get("failure_id") or value.get("uri") or value
+                evidence = value.get("evidence")
+                suffix = f" (evidence: {', '.join(map(str, evidence))})" if isinstance(evidence, list) and evidence else ""
+                lines.append(f"- {claim}{suffix}")
+            else:
+                lines.append(f"- {value}")
+        return "\n".join(lines)
+
+    def binding_lines(value: Any) -> str:
+        if not isinstance(value, Mapping):
+            return "- None recorded."
+        lines = []
+        for key, item in value.items():
+            if isinstance(item, Mapping):
+                lines.append(f"- `{key}`: `{item.get('uri', 'inline')}`; SHA-256 `{item.get('sha256')}`")
+            else:
+                lines.append(f"- `{key}`: {item}")
+        return "\n".join(lines) or "- None recorded."
+
+    artifacts = record.get("artifact_references", [])
+    artifact_rows = [
+        "| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |",
+        "|---|---|---|---|---|---|",
+    ]
+    for item in artifacts if isinstance(artifacts, list) else []:
+        if not isinstance(item, Mapping):
+            continue
+        artifact_rows.append(
+            f"| {item.get('title', item.get('artifact_id'))} | `{item.get('artifact_type')}` | `{item.get('evidence_class')}` | `{item.get('safe_uri')}` | `{item.get('content_sha256')}` | `{item.get('validation_status')}` |"
+        )
+    if len(artifact_rows) == 2:
+        artifact_rows.append("| None | - | - | - | - | - |")
+
+    metrics = record.get("metric_references", [])
+    metric_rows = ["| Metric | Split | Scope | Value | n | Denominator | Evidence |", "|---|---|---|---:|---:|---|---|"]
+    for metric in metrics if isinstance(metrics, list) else []:
+        if not isinstance(metric, Mapping):
+            continue
+        metric_rows.append(
+            f"| `{metric.get('name')}`@{metric.get('cutoff', 100)} | `{metric.get('split')}` | `{metric.get('scope')}` | `{metric.get('value')}` | `{metric.get('n')}` | `{metric.get('denominator')}` | `{record.get('evidence_class')}` |"
+        )
+    if len(metric_rows) == 2:
+        metric_rows.append("| No measured metric is available | - | - | - | - | - | planned/fixture |")
+
+    governance = record.get("governance_status", {})
+    governance_lines = binding_lines(governance)
+    result = record.get("result", {}) if isinstance(record.get("result"), Mapping) else {}
+    phase_id = str(record.get("phase_id"))
+    progress_note = (
+        "\n### Execution progress / observability\n\n"
+        "Aggregate progress is reported without item identifiers or outcomes. "
+        "A future non-TTY measured runner must emit only stage, processed/total, elapsed time, and capped ETA."
+        if phase_id == "P1_CPU_BASELINE" else ""
+    )
+    p2_note = ""
+    if phase_id == "P2_SCOPE_DEVELOPMENT":
+        p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
+        fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
+        review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
+        p2_note = (
+            f"\nStatic review: Round `{review.get('final_round', '-')}` verdict **{review.get('final_verdict', 'not_recorded')}**. "
+            f"Repository-only fixture status **{fixture.get('status', 'not_executed')}**; synthetic lifecycle counts are "
+            f"`{fixture.get('synthetic_candidates', 0)}` candidates, `{fixture.get('synthetic_iterations', 0)}` iterations, "
+            f"`{fixture.get('synthetic_shortlist', 0)}` finalists, and `{fixture.get('fixture_selection_exposures', 0)}` fixture selection exposure(s)."
+        )
+    failures = record.get("failure_recovery_references", [])
+    artifact_markdown = "\n".join(artifact_rows)
+    metric_markdown = "\n".join(metric_rows)
+    return (
+        f"# {record.get('phase_id')}{(' / ' + str(record.get('task_id'))) if record.get('task_id') else ''}\n\n"
+        "Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.\n\n"
+        "## Objective\n\n"
+        f"{record.get('objective')}\n\n"
+        "## Starting State\n\n"
+        f"{binding_lines(record.get('starting_state'))}\n\n"
+        "## Inputs and Frozen Bindings\n\n"
+        f"{binding_lines(record.get('input_bindings'))}\n\n"
+        "## Work Performed\n\n"
+        f"{record.get('work_summary')}{progress_note}{p2_note}\n\n"
+        "## Artifacts Produced\n\n"
+        "These references explain what each artifact is for; the bytes remain governed by canonical paths.\n\n"
+        f"{artifact_markdown}\n\n"
+        "## Metrics\n\n"
+        f"{metric_markdown}\n\n"
+        "Fixture values are synthetic engineering diagnostics and are never reported as measured performance.\n\n"
+        "## Result\n\n"
+        f"**Output:** {result.get('output', 'No output recorded.')}\n\n"
+        f"**Result:** {result.get('result', 'No result recorded.')}\n\n"
+        f"**Decision:** {result.get('decision', 'No decision recorded.')}\n\n"
+        "## Interpretation\n\n"
+        f"{record.get('interpretation')}\n\n"
+        "## Supported Claims\n\n"
+        f"{bullets(record.get('supported_claims'))}\n\n"
+        "## Unsupported Claims\n\n"
+        f"{bullets(record.get('unsupported_claims'))}\n\n"
+        "## Failures and Recovery\n\n"
+        f"{bullets(failures, '- No material failure is recorded for this Phase or Task.')}\n\n"
+        "## Governance and Safety\n\n"
+        f"{governance_lines}\n\n"
+        "## Decision\n\n"
+        f"Status: **{record.get('decision', {}).get('status', record.get('status'))}**. {record.get('decision', {}).get('reason', '')}\n\n"
+        "## Next Action\n\n"
+        f"{record.get('next_authorized_action')}\n\n"
+        "Measured P2, real selection, and final evaluation must not start automatically from this report.\n\n"
+        "## Evidence Links\n\n"
+        f"{bullets(record.get('evidence_links'))}\n"
+    )
+
+
 def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
     revision = str(model["read_model_revision"])
+    report_records = {str(item["report_id"]): item for item in build_report_records(root, model)}
     common = {
         "schema_version": "myis.obsidian-note.v2",
         "read_model_revision": revision,
@@ -803,6 +945,12 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "source_manifest_sha256": [],
         "related_literature_ids": [],
         "related_decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
+        "evidence_class": "engineering",
+        "scientific_authority": False,
+        "claim_boundary": "engineering_provenance_only",
+        "generated_from_revision": revision,
+        "last_material_update": model["generated_at"],
+        "next_authorized_action": "Owner-local P2 measured preflight",
         "managed_by": "myis-report",
         "edit_policy": "generated_do_not_edit",
         "safe_to_present": True,
@@ -827,7 +975,8 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
             for task in phase.get("tasks", [])
         ) or "| none | none | planned | none |"
-        phase_body = _p1_phase_body(model, phase, revision) if phase_id == "P1_CPU_BASELINE" else _p2_phase_body(model, phase, revision) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
+        phase_record = report_records.get(f"phase-{phase_id.lower()}")
+        phase_body = _structured_report_body(phase_record, model) if phase_record else (_p1_phase_body(model, phase, revision) if phase_id == "P1_CPU_BASELINE" else _p2_phase_body(model, phase, revision) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
             f"# {phase_id}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
             "## Summary for Owner\n\nThis report is a narrative projection of the shared read model, not a source of scientific truth.\n\n"
             f"## Current status and gate\n\n**{_workflow_status(phase['status'])}**. D2 and D3 remain Owner-only.\n\n"
@@ -840,14 +989,15 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "## Literature basis\n\n[[LITERATURE_INDEX]]\n\n"
             "## Decisions and RAID\n\n[[RAID]]\n\n"
             f"## Evidence and audit details\n\nRead-model revision: `{revision}`\n"
-        )
+        ))
         outputs[phase_folder / f"{phase_id}_MASTER_REPORT.md"] = _note(
             {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(phase["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model) else "non_scientific" if phase["status"] in {"blocked", "planned", "blocked_until_p1", "locked_until_D2", "locked_until_D3"} else "measured_development", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else [], "related_literature_ids": ["U006", "U011", "U154"] if phase_id == "P2_SCOPE_DEVELOPMENT" else common["related_literature_ids"]},
             phase_body,
         )
         for task in phase.get("tasks", []):
             task_id = str(task["task_id"])
-            body = _p1_task_body(model, phase_id, task) if phase_id == "P1_CPU_BASELINE" else _p2_task_body(model, task) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
+            task_record = report_records.get(f"task-{task_id.lower().replace('.', '-')}")
+            body = _structured_report_body(task_record, model) if task_record else (_p1_task_body(model, phase_id, task) if phase_id == "P1_CPU_BASELINE" else _p2_task_body(model, task) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
                 f"# {task_id}: {task['title']}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
                 "## Objective / hypothesis\n\nDeliver the registry-defined task without crossing the protected-data boundary.\n\n"
                 f"## Status\n\n**{_workflow_status(task['status'])}**\n\n"
@@ -865,7 +1015,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
                 f"## Dependencies\n\n[[{phase_id}_MASTER_REPORT]]\n\n"
                 "## Next action\n\nFollow the Owner-inbox item in [[HOME]].\n\n"
                 f"## Owner notes\n\n[[80_Owner_Notes/README]]\n"
-            )
+            ))
             outputs[phase_folder / "Tasks" / f"{task_id}.md"] = _note(
                 {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(task["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model) else "measured_development" if task.get("evidence_ids") else "non_scientific", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else [], "related_literature_ids": ["U006", "U011", "U154"] if phase_id == "P2_SCOPE_DEVELOPMENT" else common["related_literature_ids"]},
                 body,
@@ -897,6 +1047,82 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         _p2_official_review_body(model),
     )
 
+    # Preserve each bounded review round as its own generated history note.
+    for round_item in review.get("rounds", []) if isinstance(review.get("rounds"), list) else []:
+        if not isinstance(round_item, Mapping):
+            continue
+        round_number = str(round_item.get("round", ""))
+        if not round_number.isdigit():
+            continue
+        result_sha = str(round_item.get("result_sha256", ""))
+        round_verdict = str(round_item.get("verdict", "not_recorded"))
+        round_body = (
+            f"# P2 Official Review Round {round_number}\n\n"
+            "## Scope\n\n"
+            "This note records one read-only static contract-review round. It is engineering provenance and does not authorize measured execution.\n\n"
+            f"## Verdict\n\nRound `{round_number}` verdict: **{round_verdict}**. Reviewed commit: `{round_item.get('reviewed_commit', '-')}`. Result SHA-256: `{result_sha}`.\n\n"
+            "## Boundary\n\nProtected data, final split, real candidates, selection, and measured P2 remained untouched. A later accepted round supersedes only the review disposition, not the historical record of this round.\n\n"
+            "## Links\n\n[[P2_OFFICIAL_REVIEW_AUDIT]] · [[P2.1]] · [[HOME]]\n"
+        )
+        outputs[VAULT_RELATIVE_PATH / f"05_Research_History/P2_OFFICIAL_REVIEW_ROUND_{round_number}.md"] = _note(
+            {**common, "note_id": f"P2-OFFICIAL-REVIEW-ROUND-{round_number}", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete", "evidence_maturity": "static_contract_review", "claim_level": "none", "source_run_ids": [], "source_manifest_sha256": [result_sha] if result_sha else [], "related_literature_ids": ["U006", "U011", "U154"], "review_round": int(round_number), "verdict": round_verdict},
+            round_body,
+        )
+
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P2_MEASURED_PENDING.md"] = _note(
+        {**common, "note_id": "P2-MEASURED-PENDING", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "ready", "evidence_maturity": "planned", "claim_level": "none", "result_id": "P2-MEASURED-PENDING", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
+        "# P2 Measured Result Template\n\n"
+        "This validated template is pending Owner-local execution. It contains no fixture metrics and no measured result.\n\n"
+        "- status = `not_started`\n"
+        "- evidence_class = `planned`\n"
+        "- scientific_authority = `false`\n"
+        "- measured results = `unavailable`\n"
+        "- baseline commitment = `unavailable`\n"
+        "- candidate results = `unavailable`\n"
+        "- shortlist = `unavailable`\n"
+        "- selection result = `unavailable`\n"
+        "- final claim = `unavailable`\n"
+        "- next action = `Owner-local P2 measured preflight`\n\n"
+        "Do not populate this template from the repository-only fixture.\n\n"
+        "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2.1]] · [[HOME]]\n",
+    )
+
+    observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
+    observatory_hashes = [str(value) for value in (observatory.get("registry_sha256"), observatory.get("receipt_sha256")) if value]
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"] = _note(
+        {**common, "note_id": "OBSERVATORY-FIXTURE-RUN", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if observatory.get("status") == "ready" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "result_id": "obs-result-fixture", "current_scientific_authority": False, "source_run_ids": ["obs-run-parent"], "source_manifest_sha256": observatory_hashes},
+        _observatory_run_body(observatory),
+    )
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"] = _note(
+        {**common, "note_id": "OBSERVATORY-FAILURE-RECOVERY", "note_type": "failed_attempt", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if observatory.get("status") == "ready" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": ["obs-run-candidate-02"], "source_manifest_sha256": observatory_hashes},
+        _observatory_failure_body(observatory),
+    )
+
+    for run in model.get("runs", []) if isinstance(model.get("runs"), list) else []:
+        if not isinstance(run, Mapping):
+            continue
+        run_id = str(run.get("run_id", ""))
+        if not run_id:
+            continue
+        run_metrics = [item for item in model.get("metrics", []) if isinstance(item, Mapping) and item.get("run_id") == run_id]
+        metric_lines = "\n".join(
+            f"- `{item.get('name')}` / split `{item.get('split')}` / scope `{item.get('scope')}`: `{item.get('value')}` (n=`{item.get('n')}`)"
+            for item in run_metrics
+        ) or "- No aggregate metric is recorded for this run."
+        run_body = (
+            f"# Run Report: {run_id}\n\n"
+            "## Purpose\n\nThis report describes one validated aggregate run slot and its immutable manifest binding.\n\n"
+            f"## Status\n\nArm `{run.get('arm', '-')}`; stage `{run.get('stage', '-')}`; status `{run.get('status', '-')}`.\n\n"
+            f"## Output\n\nManifest SHA-256: `{run.get('manifest_sha256')}`. The safe projection retains aggregate values only.\n\n"
+            "## Aggregate metrics\n\n" + metric_lines + "\n\n"
+            "## Interpretation boundary\n\nThis run supports only the declared train/selection aggregate description. It does not expose per-query outcomes or establish final-split generalization.\n\n"
+            "## Links\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] · [[P1.3]] · [[P1_CPU_BASELINE_RESULT]]\n"
+        )
+        outputs[VAULT_RELATIVE_PATH / "03_Runs" / f"{run_id}.md"] = _note(
+            {**common, "note_id": f"RUN-{run_id}", "note_type": "run_report", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete", "evidence_maturity": "measured_selection", "claim_level": "descriptive", "current_scientific_authority": True, "source_run_ids": [run_id], "source_manifest_sha256": [str(run.get("manifest_sha256"))] if run.get("manifest_sha256") else [], "related_literature_ids": [], "related_decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"]},
+            run_body,
+        )
+
     outputs[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"] = _note(
         {**common, "note_id": "CURRENT-ADVISOR-UPDATE", "note_type": "advisor_update", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "verification_needed", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "lifecycle": "draft", "snapshot_status": "draft", "supersedes": None, "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
         _p1_advisor_body(model),
@@ -906,6 +1132,51 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     _add_history_outputs(common, outputs)
     _add_system_outputs(model, common, outputs)
     return outputs
+
+
+def _observatory_run_body(observatory: Mapping[str, Any]) -> str:
+    counters = observatory.get("real_counters", {})
+    return (
+        "# Evidence Observatory Fixture Run\n\n"
+        "## Purpose\n\n"
+        "This note records the repository-only capture exercise. It is engineering evidence and cannot be promoted to a scientific result.\n\n"
+        "## What happened\n\n"
+        f"The registry is **{observatory.get('status', 'unavailable')}** with integrity **{observatory.get('integrity_status', 'unknown')}**. "
+        f"It contains `{observatory.get('record_counts', {}).get('runs', 0)}` runs, `{observatory.get('record_counts', {}).get('artifacts', 0)}` artifacts, and `{observatory.get('validated_metric_count', 0)}` validated synthetic metric.\n\n"
+        f"Artifact lineage validation is **{observatory.get('artifact_lineage_status', 'unknown')}** with retention classes `{observatory.get('retention_class_counts', {})}`. "
+        f"Prompt/config/environment bindings: `{observatory.get('prompt_binding_count', 0)}` / `{observatory.get('config_binding_count', 0)}` / `{observatory.get('environment_binding_count', 0)}`.\n\n"
+        "## Boundary\n\n"
+        f"Evidence class: `{observatory.get('evidence_class', 'fixture')}`; scientific authority: `{observatory.get('scientific_authority', False)}`; claim boundary: `{observatory.get('claim_boundary', 'no_measured_claim')}`.\n\n"
+        f"Real P2 counters remain measured runs `{counters.get('measured_runs', 0)}`, candidates `{counters.get('candidate_count', 0)}`, shortlist `{counters.get('shortlist_count', 0)}`, selection `{counters.get('selection_accesses', 0)}`.\n\n"
+        "## Next action\n\n"
+        f"{observatory.get('next_action', 'Owner-local P2 measured preflight')}\n"
+    )
+
+
+def _observatory_failure_body(observatory: Mapping[str, Any]) -> str:
+    failures = observatory.get("failure_records", []) if isinstance(observatory.get("failure_records"), list) else []
+    recoveries = observatory.get("recovery_records", []) if isinstance(observatory.get("recovery_records"), list) else []
+    detail_lines = []
+    for failure in failures:
+        detail_lines.append(
+            f"- Failure `{failure.get('record_id')}` at `{failure.get('stage')}` / class `{failure.get('failure_class')}`; checkpoint `{failure.get('last_valid_checkpoint')}`; counters before/after `{failure.get('counters_before')}` -> `{failure.get('counters_after')}`; protected data accessed `{failure.get('protected_data_accessed')}`."
+        )
+    for recovery in recoveries:
+        detail_lines.append(
+            f"- Recovery `{recovery.get('record_id')}` for `{recovery.get('failure_id')}`: `{recovery.get('action')}`; validation `{recovery.get('validation_after_recovery')}`; metric promotion `{recovery.get('metric_promotion')}`; residual risk `{recovery.get('residual_risk')}`."
+        )
+    return (
+        "# Observatory Failure and Recovery\n\n"
+        "The synthetic fixture intentionally retained one failed child and its recovery record. The failure did not change real counters or promote an incomplete metric.\n\n"
+        f"- Failed child records: `{observatory.get('failed_child_count', 0)}`\n"
+        f"- Recovery records: `{observatory.get('recovered_child_count', 0)}`\n"
+        f"- Negative checks passed: `{observatory.get('negative_checks_passed', False)}`\n\n"
+        "## Captured lineage\n\n"
+        + ("\n".join(detail_lines) if detail_lines else "- No material failure/recovery record is available.")
+        + "\n\n"
+        "## Lesson\n\n"
+        "A failed branch remains useful evidence when the checkpoint, retry action, and claim boundary are recorded together. This is a capture-readiness lesson, not evidence about retrieval quality.\n"
+    )
 
 
 def _add_literature_outputs(root: Path, model: Mapping[str, Any], common: Mapping[str, Any], outputs: dict[Path, str]) -> None:
@@ -981,6 +1252,12 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
             "workflow_status": {"enum": sorted(_ALLOWED_WORKFLOW_STATUSES)},
             "evidence_maturity": {"enum": sorted(_ALLOWED_EVIDENCE_MATURITY)},
             "claim_level": {"enum": sorted(_ALLOWED_CLAIM_LEVELS)},
+            "claim_boundary": {"type": "string", "minLength": 1},
+            "evidence_class": {"type": "string", "minLength": 1},
+            "scientific_authority": {"type": "boolean"},
+            "generated_from_revision": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "last_material_update": {"type": "string", "format": "date-time"},
+            "next_authorized_action": {"type": "string", "minLength": 1},
             "safe_to_present": {"type": "boolean"},
             "managed_by": {"const": "myis-report"},
             "edit_policy": {"const": "generated_do_not_edit"},
@@ -997,6 +1274,16 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
         {**common, "note_id": "DECISIONS", "note_type": "decision", "phase_id": "P3_FINAL", "task_id": "P3.1", "workflow_status": "waiting_gate", "evidence_maturity": "non_scientific", "claim_level": "none", "decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"], "authority": "owner"},
         "# Owner Decisions\n\n- `D2_OPEN_FINAL`: waiting for Owner.\n- `D3_SUBMIT_RELEASE`: waiting for Owner.\n\nThis vault can display but cannot approve either decision.\n",
     )
+    decision_sources = {
+        "D1_START_CAMPAIGN": ("control/decisions/D1_START_CAMPAIGN.yaml", "active", "standing campaign authorization; it does not open D2, D3, final split, or selection"),
+        "D2_OPEN_FINAL": ("control/decisions/ledger.jsonl", "waiting_owner", "Owner-only decision required before P3 final evaluation"),
+        "D3_SUBMIT_RELEASE": ("control/decisions/ledger.jsonl", "waiting_owner", "Owner-only decision required before P4 publication and release"),
+    }
+    for decision_id, (source_uri, status, explanation) in decision_sources.items():
+        outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks" / f"{decision_id}.md"] = _note(
+            {**common, "note_id": f"DECISION-{decision_id}", "note_type": "decision", "phase_id": "P0_FOUNDATION" if decision_id == "D1_START_CAMPAIGN" else "P3_FINAL" if decision_id == "D2_OPEN_FINAL" else "P4_PUBLICATION", "task_id": "P0.3" if decision_id == "D1_START_CAMPAIGN" else "P3.1" if decision_id == "D2_OPEN_FINAL" else "P4.1", "workflow_status": "complete" if decision_id == "D1_START_CAMPAIGN" else "waiting_gate", "evidence_maturity": "engineering", "claim_level": "none", "decision_id": decision_id, "decision_status": status, "authority": "owner", "source_uri": source_uri},
+            f"# Decision {decision_id}\n\n**Status:** `{status}`\n\n{explanation}.\n\nCanonical source: `{source_uri}`. Generated notes cannot approve or mutate Owner decisions.\n\n[[Decisions]] · [[HOME]]\n",
+        )
     outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks/Failed_Attempts.md"] = _note(
         {**common, "note_id": "FAILED-ATTEMPTS", "note_type": "failed_attempt", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "none", "retry_allowed": True},
         "# Historical Invalid Attempt\n\n## What was tried\n\nA legacy aggregate P1 receipt was retained.\n\n## Failure category\n\nIt lacks the hash-bound four-slot manifest and validation-report matrix required for promotion.\n\n## Lesson\n\nHistorical aggregate evidence remains traceable but cannot override canonical run facts.\n\n## Retry\n\nA fresh Owner-local CPU P1 run may proceed only through the existing approved envelope.\n",
@@ -1020,6 +1307,32 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
     )
     outputs[VAULT_RELATIVE_PATH / "00_System/Generated/README.md"] = (
         "# Generated files\n\nFiles listed in `generated-manifest.json` are managed by `myis-report`.\n"
+    )
+    report_links = ["# Generated Report Index", "", "All report notes are generated from one validated read-model revision.", "", "## Phase and Task reports", ""]
+    for phase in model.get("phases", []) if isinstance(model.get("phases"), list) else []:
+        phase_id = str(phase.get("phase_id"))
+        report_links.append(f"- [[{phase_id}_MASTER_REPORT]]")
+        for task in phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []:
+            report_links.append(f"  - [[{task.get('task_id')}]]")
+    report_links.extend(["", "## Run, decision, and pending reports", "", "- [[P2_MEASURED_PENDING]]"])
+    for target, relative in (
+        ("P2_OFFICIAL_REVIEW_AUDIT", "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"),
+        ("P2_OFFICIAL_REVIEW_ROUND_1", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_1.md"),
+        ("P2_OFFICIAL_REVIEW_ROUND_2", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_2.md"),
+        ("P2_OFFICIAL_REVIEW_ROUND_3", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_3.md"),
+        ("P2_FIXTURE_PILOT", "05_Research_History/P2_FIXTURE_PILOT.md"),
+        ("OBSERVATORY_FIXTURE_RUN", "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"),
+        ("OBSERVATORY_FAILURE_RECOVERY", "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"),
+        ("D1_START_CAMPAIGN", "06_Decisions_Risks/D1_START_CAMPAIGN.md"),
+        ("D2_OPEN_FINAL", "06_Decisions_Risks/D2_OPEN_FINAL.md"),
+        ("D3_SUBMIT_RELEASE", "06_Decisions_Risks/D3_SUBMIT_RELEASE.md"),
+    ):
+        if VAULT_RELATIVE_PATH / relative in outputs:
+            report_links.append(f"- [[{target}]]")
+    report_links.extend(["", "Source: [[HOME]]", ""])
+    outputs[VAULT_RELATIVE_PATH / "00_System/Generated/REPORT_INDEX.md"] = _note(
+        {**common, "note_id": "REPORT-INDEX", "note_type": "project_map", "phase_id": model.get("project", {}).get("current_phase"), "task_id": model.get("project", {}).get("current_task"), "workflow_status": "complete", "evidence_maturity": "engineering", "claim_level": "none", "report_index": "projections/reports/index.json"},
+        "\n".join(report_links),
     )
 
 
@@ -1385,7 +1698,7 @@ def _json_text(value: Mapping[str, Any]) -> str:
     return json.dumps(value, ensure_ascii=True, indent=2, sort_keys=True) + "\n"
 
 
-def _validate_generated_contents(contents: Mapping[Path, str]) -> None:
+def _validate_generated_contents(contents: Mapping[Path, str], model: Mapping[str, Any] | None = None) -> None:
     seen_note_ids: set[str] = set()
     known_links = {relative.stem for relative in contents if relative.suffix.lower() == ".md"}
     known_links.add("README")
@@ -1432,10 +1745,34 @@ def _validate_generated_contents(contents: Mapping[Path, str]) -> None:
                     or not properties.get("source_manifest_sha256")
                 ):
                     raise ValueError(f"promoted result is missing measured authority bindings: {relative}")
+            if properties.get("generated_from_revision") != properties.get("read_model_revision"):
+                raise ValueError(f"generated report revision binding mismatch: {relative}")
+            if not str(properties.get("last_material_update", "")).strip():
+                raise ValueError(f"generated report lifecycle timestamp is missing: {relative}")
+            if not str(properties.get("next_authorized_action", "")).strip():
+                raise ValueError(f"generated report next action is missing: {relative}")
         for target in _WIKILINK_RE.findall(content):
             target_name = Path(target.replace("\\", "/")).name
             if target_name not in known_links and not target.startswith("80_Owner_Notes/"):
                 raise ValueError(f"unresolved wikilink {target}: {relative}")
+    if model is not None:
+        p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
+        fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
+        review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
+        if fixture.get("status") == "passed":
+            for content in contents.values():
+                lowered = content.lower()
+                if "fixture remains not executed" in lowered or "which remains not executed" in lowered:
+                    raise ValueError("stale fixture narrative contradicts validated fixture status")
+        if review.get("final_verdict") == "accept":
+            for content in contents.values():
+                lowered = content.lower()
+                if "official review" in lowered and "pending" in lowered:
+                    raise ValueError("stale official review narrative contradicts accepted review")
+        if int(p2.get("measured_runs", 0) or 0) == 0:
+            for content in contents.values():
+                if re.search(r"measured\s+p2[^\n]*(started|running|complete)", content, re.IGNORECASE):
+                    raise ValueError("measured P2 narrative contradicts zero measured runs")
 
 
 def _owner_file_hashes(vault_root: Path) -> dict[str, str]:

@@ -1,18 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146"
-read_model_sha256: "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9"
-source_commit: "be543b83c05aee19f04aa73aacde42866b8333d8"
+read_model_revision: "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235"
+read_model_sha256: "4b97ba86af1bf81eab0072c4b2d95dc46adb1fe03c06ebbd029c6d25c20e7333"
+source_commit: "0ef52e929994fbd69baa180ffe55f9c7092745c7"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering"
+scientific_authority: false
+claim_boundary: "engineering_provenance_only"
+generated_from_revision: "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235"
+last_material_update: "2026-08-02T03:39:36Z"
+next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-01T12:44:19Z"
-updated_at: "2026-08-01T12:44:19Z"
+created_at: "2026-08-02T03:39:36Z"
+updated_at: "2026-08-02T03:39:36Z"
 note_id: "P4_PUBLICATION-MASTER"
 note_type: "phase_report"
 phase_id: "P4_PUBLICATION"
@@ -24,50 +30,97 @@ claim_level: "none"
 
 # P4_PUBLICATION
 
-Generated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.
+Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.
 
-## Summary for Owner
+## Objective
 
-This report is a narrative projection of the shared read model, not a source of scientific truth.
+Deliver the P4_PUBLICATION research phase with an auditable evidence boundary.
 
-## Current status and gate
+## Starting State
 
-**waiting_gate**. D2 and D3 remain Owner-only.
+- `phase`: P2_SCOPE_DEVELOPMENT
+- `task`: P2.1
+- `program_state`: P1_CPU_MEASURED_COMPLETE
+- `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
+- `claim_boundary`: No unsupported scientific claim
 
-## Task board
+## Inputs and Frozen Bindings
 
-| Task | Work | Status | Evidence |
-|---|---|---|---|
-| [[P4.1]] | Manuscript and release package | waiting_gate | not measured |
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea`
+- `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
+- `git_commit`: 0ef52e929994fbd69baa180ffe55f9c7092745c7
 
-## Output
+## Work Performed
 
-Generated task records are available; no run output is promoted from historical-invalid evidence.
+This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct.
 
-## Measured results
+## Artifacts Produced
 
-[[P1_CPU_BASELINE_RESULT]]
+These references explain what each artifact is for; the bytes remain governed by canonical paths.
+
+| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
+|---|---|---|---|---|---|
+| None | - | - | - | - | - |
+
+## Metrics
+
+| Metric | Split | Scope | Value | n | Denominator | Evidence |
+|---|---|---|---:|---:|---|---|
+| No measured metric is available | - | - | - | - | - | planned/fixture |
+
+Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
+
+## Result
+
+**Output:** No execution output is available because the phase is locked behind its Owner decision.
+
+**Result:** The phase remains planned and closed.
+
+**Decision:** waiting_owner
 
 ## Interpretation
 
-No scientific interpretation is promoted without validated evidence.
+No interpretation is available before the required gate and evidence.
 
-## What we can say
+## Supported Claims
 
-The control plane records the evidence boundary and blocks promotion safely.
+- No execution output is available because the phase is locked behind its Owner decision.
 
-## What we must not say yet
+## Unsupported Claims
 
-No P1 measured-complete, selection, or final-split claim.
+- Measured P2 improvement or candidate superiority before a real measured run.
+- Final-split generalization or publication release before D2 and D3.
+- Causal or legal conclusions from retrieval aggregates.
 
-## Literature basis
+## Failures and Recovery
 
-[[LITERATURE_INDEX]]
+- No material failure is recorded for this Phase or Task.
 
-## Decisions and RAID
+## Governance and Safety
 
-[[RAID]]
+- `protected_data_accessed`: False
+- `measured_execution`: False
+- `gpu`: False
+- `paid_api`: False
+- `network_model_download`: False
+- `provider_fallback`: False
+- `d2`: waiting_owner
+- `d3`: waiting_owner
+- `final_split`: closed
+- `real_counters`: `inline`; SHA-256 `None`
+- `evidence_class`: planned
+- `scientific_authority`: False
 
-## Evidence and audit details
+## Decision
 
-Read-model revision: `2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146`
+Status: **waiting_owner**. The phase remains planned and closed.
+
+## Next Action
+
+Owner-local P2 measured preflight
+
+Measured P2, real selection, and final evaluation must not start automatically from this report.
+
+## Evidence Links
+
+- None recorded.

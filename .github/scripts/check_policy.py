@@ -38,6 +38,10 @@ POLICIES = {
                 {
                     (
                         "src/myis_research/layout.py",
+                        'FORBIDDEN_ACTIVE = ("00_governance", "01_evidence", "02_tracks", "03_experiments", "04_outputs", "05_code", "06_frontend", "07_obsidian_note")',
+                    ),
+                    (
+                        "src/myis_research/layout.py",
                         'FORBIDDEN_ACTIVE = ("00_governance", "01_evidence", "02_tracks", "03_experiments", "04_outputs", "05_code", "06_frontend", "07_obsidian_note", "inbox")',
                     ),
                 }

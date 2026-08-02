@@ -1,0 +1,158 @@
+{
+  "artifact_references": [
+    {
+      "artifact_id": "control-source-of-truth.yaml",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "evidence_class": "engineering",
+      "explanation": "Defines the canonical boundary used to build and validate projections.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/source-of-truth.yaml",
+      "scientific_authority": false,
+      "title": "Source-of-truth contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "schemas-read-model.v2.json",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5bed773b66e8c8942b360d480e80d745ff4222417d645166548506973adf541c",
+      "evidence_class": "engineering",
+      "explanation": "Defines the canonical boundary used to build and validate projections.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/read-model.v2.json",
+      "scientific_authority": false,
+      "title": "Shared read-model schema",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "docs-observatory-REPORTING_POLICY.md",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
+      "evidence_class": "engineering",
+      "explanation": "Defines the canonical boundary used to build and validate projections.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/observatory/REPORTING_POLICY.md",
+      "scientific_authority": false,
+      "title": "Reporting policy",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "engineering_provenance_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "The foundation records the authority and safety boundary required by later phases.",
+    "status": "completed"
+  },
+  "evidence_class": "engineering",
+  "evidence_links": [
+    {
+      "artifact_id": "control-source-of-truth.yaml",
+      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "uri": "control/source-of-truth.yaml"
+    },
+    {
+      "artifact_id": "schemas-read-model.v2.json",
+      "sha256": "5bed773b66e8c8942b360d480e80d745ff4222417d645166548506973adf541c",
+      "uri": "schemas/read-model.v2.json"
+    },
+    {
+      "artifact_id": "docs-observatory-REPORTING_POLICY.md",
+      "sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
+      "uri": "docs/observatory/REPORTING_POLICY.md"
+    }
+  ],
+  "failure_recovery_references": [],
+  "generated_at": "2026-08-02T03:39:36Z",
+  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "engineering",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "campaign": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
+    "source_of_truth": {
+      "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
+      "uri": "control/source-of-truth.yaml"
+    }
+  },
+  "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
+  "last_material_update": "2026-08-02T03:39:36Z",
+  "metric_references": [],
+  "next_authorized_action": "Owner-local P2 measured preflight",
+  "objective": "Integrity preflight and protected boundary",
+  "phase_id": "P0_FOUNDATION",
+  "report_id": "task-p0-2",
+  "report_sha256": "0b79ea22a5bc448ea7e918d09564aebc9cb7ada377a7e6965dcf75ef4887b134",
+  "report_type": "task",
+  "result": {
+    "decision": "completed",
+    "output": "Canonical control, schema, protected-boundary, and projection contracts.",
+    "result": "The foundation records the authority and safety boundary required by later phases."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "P2_SCOPE_DEVELOPMENT",
+    "program_state": "P1_CPU_MEASURED_COMPLETE",
+    "task": "P2.1"
+  },
+  "status": "completed",
+  "supported_claims": [
+    {
+      "claim": "Canonical control, schema, protected-boundary, and projection contracts.",
+      "evidence": [
+        "control-source-of-truth.yaml",
+        "schemas-read-model.v2.json",
+        "docs-observatory-REPORTING_POLICY.md"
+      ]
+    }
+  ],
+  "task_id": "P0.2",
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
+}

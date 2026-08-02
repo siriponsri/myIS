@@ -2,6 +2,8 @@ const state = {
   tab: "overview",
   model: null,
   dashboard: null,
+  observatoryRegistry: null,
+  observatoryGraph: null,
   presentation: null,
   csrf: "",
   reports: null,
@@ -75,6 +77,8 @@ async function refresh() {
     ]);
     state.selectedTaskId ||= state.model?.project?.current_task || state.model?.tasks?.[0]?.task_id || null;
     state.selectedPhaseId ||= state.model?.project?.current_phase || state.model?.phases?.[0]?.phase_id || null;
+    state.observatoryRegistry = null;
+    state.observatoryGraph = null;
     renderAll();
     $("sync-state").textContent = `อัปเดต ${new Date().toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}`;
     clearMessage();
@@ -102,6 +106,28 @@ function selectTab(tab, updateLocation = true) {
   if (tab === "reports") loadReports();
   if (tab === "tools") loadTools();
   if (tab === "presentation") loadPresentation();
+  if (["experiments", "artifacts", "prompts", "metrics", "graph"].includes(tab)) loadObservatoryDetails();
+}
+
+async function loadObservatoryDetails() {
+  if (state.observatoryRegistry && state.observatoryGraph) {
+    renderObservatoryDetails();
+    return;
+  }
+  try {
+    const [registryResponse, graphResponse] = await Promise.all([
+      fetchJson("/api/v2/observatory/registry"),
+      fetchJson("/api/v2/observatory/graph"),
+    ]);
+    state.observatoryRegistry = registryResponse.registry;
+    state.observatoryGraph = graphResponse.graph;
+    renderObservatoryDetails();
+  } catch (error) {
+    ["observatory-run-list", "observatory-artifact-list", "observatory-prompt-list", "observatory-metric-list", "observatory-graph"].forEach((id) => {
+      const target = $(id);
+      if (target) target.innerHTML = `<div class="empty-state">Observatory detail unavailable: ${escapeHtml(error.message)}</div>`;
+    });
+  }
 }
 
 function handleTabKeydown(event) {
@@ -146,6 +172,8 @@ function renderAll() {
   $("revision").textContent = state.model?.read_model_revision ? short(state.model.read_model_revision, 16) : "ยังไม่โหลด";
   renderRibbon();
   renderStatusCards();
+  renderObservatorySummary();
+  renderObservatoryDetails();
   renderInbox();
   renderLatestEvidence();
   renderReadiness();
@@ -186,6 +214,56 @@ function renderStatusCards() {
     card("Promoted evidence", `${state.model?.runs?.length || 0} runs`, `${state.model?.metrics?.length || 0} metrics`, "E"),
     card("Projection", health.status || "unknown", resources.cpu_only ? "CPU-only" : "ตรวจ execution envelope", "H"),
   ].join("");
+}
+
+function observatoryRecords(kind) {
+  return state.observatoryRegistry?.records?.[kind] || [];
+}
+
+function renderObservatorySummary() {
+  const target = $("observatory-summary");
+  if (!target) return;
+  const obs = state.model?.observatory || {};
+  const counters = obs.real_counters || {};
+  const boundary = $("observatory-boundary");
+  if (boundary) {
+    boundary.textContent = obs.scientific_authority ? "Scientific evidence" : obs.status === "ready" ? "Engineering evidence" : "Not yet measured";
+    boundary.className = `evidence-badge ${obs.scientific_authority ? "is-scientific" : ""}`;
+  }
+  const counts = obs.record_counts || {};
+  target.innerHTML = `
+    <div class="observatory-kpis">
+      <article class="observatory-kpi kpi-peach"><span>Lifecycle</span><strong>${escapeHtml(String(counts.runs || 0))}</strong><small>runs captured</small></article>
+      <article class="observatory-kpi kpi-mint"><span>Artifacts</span><strong>${escapeHtml(String(obs.validated_artifact_count || 0))}</strong><small>validated pointers</small></article>
+      <article class="observatory-kpi kpi-blue"><span>Failure / recovery</span><strong>${escapeHtml(String(obs.failed_child_count || 0))} / ${escapeHtml(String(obs.recovered_child_count || 0))}</strong><small>child branches</small></article>
+      <article class="observatory-kpi kpi-lilac"><span>Integrity</span><strong>${escapeHtml(obs.integrity_status || "unknown")}</strong><small>${escapeHtml(String(obs.negative_check_count || 0))} negative checks</small></article>
+      <article class="observatory-kpi kpi-ink"><span>Real P2 counters</span><strong>${escapeHtml(String(counters.measured_runs || 0))}</strong><small>measured runs; selection ${escapeHtml(String(counters.selection_accesses || 0))}</small></article>
+    </div>
+    <div class="observatory-story"><div><span class="story-label">Claim boundary</span><strong>${escapeHtml(obs.claim_boundary || "no_measured_claim")}</strong></div><p>${escapeHtml(obs.narrative || "No validated Observatory fixture is available.")}</p><span class="story-next">Next: ${escapeHtml(obs.next_action || "Review the Observatory receipt")}</span></div>`;
+}
+
+function renderObservatoryDetails() {
+  const runs = observatoryRecords("runs");
+  const artifacts = observatoryRecords("artifacts");
+  const prompts = observatoryRecords("prompts");
+  const metrics = observatoryRecords("metrics");
+  const runTarget = $("observatory-run-list");
+  if (runTarget) runTarget.innerHTML = runs.map((run) => `<article class="observatory-row"><div><span class="row-kicker">${escapeHtml(run.execution_class || "run")}</span><h3>${escapeHtml(run.summary || run.record_id)}</h3><p><code>${escapeHtml(run.record_id)}</code> · ${escapeHtml(run.phase_id || "-")} · ${escapeHtml(run.task_id || "-")}</p></div><div class="row-meta"><span class="status-chip ${run.status === "succeeded" ? "is-good" : run.status === "failed" ? "is-warning" : ""}">${escapeHtml(run.status || "unknown")}</span><small>authority: ${run.scientific_authority ? "scientific" : "engineering"}</small></div></article>`).join("") || `<div class="empty-state">No validated run records</div>`;
+  const artifactTarget = $("observatory-artifact-list");
+  if (artifactTarget) artifactTarget.innerHTML = artifacts.map((artifact) => `<article class="observatory-card"><div class="card-topline"><span class="artifact-kind">${escapeHtml(artifact.artifact_type || "artifact")}</span><span class="status-chip is-good">${escapeHtml(artifact.validation_status || "unknown")}</span></div><h3>${escapeHtml(artifact.title || artifact.record_id)}</h3><p>${escapeHtml(artifact.summary || "Aggregate-safe artifact")}</p><dl><div><dt>Produced by</dt><dd><code>${escapeHtml(artifact.producing_run_id || "-")}</code></dd></div><div><dt>Size</dt><dd>${escapeHtml(String(artifact.size_bytes ?? 0))} bytes</dd></div><div><dt>Hash</dt><dd><code>${escapeHtml(short(artifact.content_sha256, 16))}</code></dd></div></dl></article>`).join("") || `<div class="empty-state">No validated artifact records</div>`;
+  const promptTarget = $("observatory-prompt-list");
+  if (promptTarget) promptTarget.innerHTML = prompts.map((prompt) => `<article class="observatory-card"><div class="card-topline"><span class="artifact-kind">${escapeHtml(prompt.family || "prompt")}</span><span class="status-chip ${prompt.frozen ? "is-good" : ""}">${prompt.frozen ? "frozen" : "mutable"}</span></div><h3>${escapeHtml(prompt.role || prompt.record_id)} <span class="version-tag">v${escapeHtml(prompt.version || "-")}</span></h3><p>${escapeHtml(prompt.summary || "Prompt lineage record")}</p><div class="lineage-chip">${prompt.parent_prompt_id ? `parent ${escapeHtml(prompt.parent_prompt_id)}` : "root prompt"}</div><code>${escapeHtml(short(prompt.content_sha256, 16))}</code></article>`).join("") || `<div class="empty-state">No prompt lineage records</div>`;
+  const metricTarget = $("observatory-metric-list");
+  if (metricTarget) metricTarget.innerHTML = metrics.map((metric) => `<article class="observatory-card metric-observatory-card"><div class="card-topline"><span class="artifact-kind">${escapeHtml(metric.name || "metric")} @${escapeHtml(String(metric.cutoff || "-"))}</span><span class="status-chip">fixture</span></div><strong class="metric-value">${escapeHtml(String(metric.value ?? "-"))}</strong><p>${escapeHtml(metric.scope || "-")} · ${escapeHtml(metric.data_role || "-")} · n=${escapeHtml(String(metric.n ?? "-"))}</p><small>${escapeHtml(metric.denominator || "aggregate denominator")} · not a scientific claim</small></article>`).join("") || `<div class="empty-state">No validated metric records</div>`;
+  const graphTarget = $("observatory-graph");
+  const graph = state.observatoryGraph;
+  if (graphTarget) {
+    if (!graph) graphTarget.innerHTML = `<div class="empty-state">Open Evidence Graph to load lineage detail</div>`;
+    else {
+      $("observatory-graph-count").textContent = `${graph.nodes?.length || 0} nodes · ${graph.edges?.length || 0} edges`;
+      graphTarget.innerHTML = `<div class="graph-flow">${(graph.nodes || []).map((node) => `<div class="graph-node graph-${escapeHtml(node.kind || "record")}"><span>${escapeHtml(node.kind || "record")}</span><strong>${escapeHtml(node.label || node.id)}</strong><code>${escapeHtml(short(node.id, 18))}</code></div>`).join("")}</div><div class="graph-edge-list">${(graph.edges || []).slice(0, 16).map((edge) => `<div><code>${escapeHtml(short(edge.source, 16))}</code><span>${escapeHtml(edge.relation || "binds")}</span><code>${escapeHtml(short(edge.target, 16))}</code></div>`).join("")}</div>`;
+    }
+  }
 }
 
 function renderInbox() {

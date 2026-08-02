@@ -133,3 +133,19 @@ def test_dashboard_presentation_is_a_ten_screen_shared_model_story():
         assert len(screens) == 10
         assert [screen["order"] for screen in screens] == list(range(1, 11))
         assert all(audience in screen["audience"] and screen["safe_to_present"] for screen in screens)
+
+
+def test_dashboard_exposes_observatory_summary_registry_and_graph():
+    root = Path(__file__).resolve().parents[1]
+    client = TestClient(create_app(repository_root=root, test_mode=True))
+    headers = {"Origin": "http://127.0.0.1:8765", "Host": "127.0.0.1:8765"}
+    assert client.get("/api/v1/session", headers=headers).status_code == 200
+    summary = client.get("/api/v2/observatory", headers=headers)
+    registry = client.get("/api/v2/observatory/registry", headers=headers)
+    graph = client.get("/api/v2/observatory/graph", headers=headers)
+    assert summary.status_code == registry.status_code == graph.status_code == 200
+    assert summary.json()["observatory"]["evidence_class"] == "fixture"
+    assert summary.json()["observatory"]["scientific_authority"] is False
+    assert registry.json()["registry"]["registry_sha256"] == summary.json()["observatory"]["registry_sha256"]
+    assert graph.json()["graph"]["nodes"]
+    assert graph.json()["graph"]["edges"]

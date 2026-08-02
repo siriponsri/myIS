@@ -1,0 +1,56 @@
+{
+  "artifacts": [
+    {
+      "name": "RUN_SUMMARY.md",
+      "sha256": "5518e320b2f8223da2262cccebde258ef8d7ed30dc55b867f8f94150c9482676",
+      "uri": "git://outputs/observatory/fixture-v1/RUN_SUMMARY.md"
+    },
+    {
+      "name": "registry.json",
+      "sha256": "8a579776c712f0936c45918cb410e882366a6e8934fd1a4fb19b4bf76230560e",
+      "uri": "git://outputs/observatory/fixture-v1/registry.json"
+    }
+  ],
+  "experiment": "myis-system",
+  "lineage": {
+    "config_sha256": "d39cccac0e7292d435b124d11aaccfa3e7dc160abf9e16efa9d70f7b6fe48a20",
+    "environment_sha256": "4c1eb183d6b20fb78684ffb654b2736b73411fef3facaecddf534a939bd10d8c",
+    "parent_run_id": "obs-run-parent",
+    "prompt_ids": [
+      "obs-prompt-retrieval-v1",
+      "obs-prompt-retrieval-v2"
+    ],
+    "request_id": "obs-request-fixture-v1"
+  },
+  "metrics": {
+    "artifacts.validated_count": 5,
+    "lifecycle.failed_children": 1,
+    "lifecycle.recovered_children": 1,
+    "lifecycle.runs": 3,
+    "negative_checks.passed_count": 7
+  },
+  "params": {
+    "adaptive_iteration": 0,
+    "candidate_budget": 0,
+    "cpu_only": true,
+    "seed": 7,
+    "timeout_seconds": 5
+  },
+  "record_sha256": "4b9c39f5c7ae004273769aa648e92dcb6c077ec34936d4947991a5f7e9f9c5d1",
+  "run_id": "obs-mlflow-fixture-v1",
+  "run_name": "Observatory fixture / aggregate evidence",
+  "schema_version": "myis.observatory-mlflow-run.v1",
+  "status": "FINISHED",
+  "summary": "A browsable aggregate-only MLflow detail for the synthetic Observatory lifecycle.",
+  "tags": {
+    "claim_boundary": "engineering_provenance_only",
+    "evidence_class": "fixture",
+    "measured_execution": "false",
+    "observatory_schema_version": "myis.observatory-registry.v1",
+    "phase": "P2_SCOPE_DEVELOPMENT",
+    "protected_data_accessed": "false",
+    "registry_sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+    "scientific_authority": "false",
+    "task": "P2.1"
+  }
+}

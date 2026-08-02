@@ -1,6 +1,6 @@
 {
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9",
+  "dashboard_snapshot_sha256": "4b97ba86af1bf81eab0072c4b2d95dc46adb1fe03c06ebbd029c6d25c20e7333",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -14,7 +14,26 @@
     "p1-rigor-review",
     "mlflow-p1-registration"
   ],
-  "obsidian_manifest_sha256": "53abab1d653303b0f1c376793f7503a2cf6f7083994171a9eb6c67d033717eb1",
+  "observatory": {
+    "artifact_lineage_status": "pass",
+    "config_binding_count": 1,
+    "environment_binding_count": 1,
+    "evidence_class": "fixture",
+    "failed_child_count": 1,
+    "mlflow_run_id": "obs-mlflow-fixture-v1",
+    "prompt_binding_count": 2,
+    "receipt_sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
+    "recovered_child_count": 1,
+    "registry_sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+    "retention_class_counts": {
+      "repository_safe": 5
+    },
+    "scientific_authority": false,
+    "status": "ready",
+    "validated_artifact_count": 5,
+    "validated_metric_count": 1
+  },
+  "obsidian_manifest_sha256": "eed5d17a4568b44fe69e3b2ddc515c6bf84a8926e9b6986db8ea0b7e6bfa2033",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v1",
     "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
@@ -52,8 +71,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146",
-  "read_model_sha256": "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9",
+  "read_model_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "read_model_sha256": "4b97ba86af1bf81eab0072c4b2d95dc46adb1fe03c06ebbd029c6d25c20e7333",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -61,7 +80,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "be543b83c05aee19f04aa73aacde42866b8333d8",
+  "source_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "status": "current",
   "system_experiment": "myis-system"
 }

@@ -2,6 +2,10 @@
   "$id": "myis.obsidian-note.v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "properties": {
+    "claim_boundary": {
+      "minLength": 1,
+      "type": "string"
+    },
     "claim_level": {
       "enum": [
         "confirmatory",
@@ -14,20 +18,40 @@
     "edit_policy": {
       "const": "generated_do_not_edit"
     },
+    "evidence_class": {
+      "minLength": 1,
+      "type": "string"
+    },
     "evidence_maturity": {
       "enum": [
         "confirmatory",
         "dry_run",
+        "engineering",
         "fixture",
         "historical_exposed",
         "measured_development",
         "measured_selection",
         "non_scientific",
-        "publication"
+        "planned",
+        "publication",
+        "static_contract_review",
+        "train_selection_measured"
       ]
+    },
+    "generated_from_revision": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "last_material_update": {
+      "format": "date-time",
+      "type": "string"
     },
     "managed_by": {
       "const": "myis-report"
+    },
+    "next_authorized_action": {
+      "minLength": 1,
+      "type": "string"
     },
     "note_id": {
       "minLength": 1,
@@ -49,6 +73,7 @@
         "project_map",
         "result_report",
         "risk",
+        "run_report",
         "task_report"
       ]
     },
@@ -57,6 +82,9 @@
     },
     "schema_version": {
       "const": "myis.obsidian-note.v2"
+    },
+    "scientific_authority": {
+      "type": "boolean"
     },
     "workflow_status": {
       "enum": [
@@ -71,10 +99,15 @@
     }
   },
   "required": [
+    "claim_boundary",
     "claim_level",
     "edit_policy",
+    "evidence_class",
     "evidence_maturity",
+    "generated_from_revision",
+    "last_material_update",
     "managed_by",
+    "next_authorized_action",
     "note_id",
     "note_type",
     "projection_schema_version",
@@ -84,6 +117,7 @@
     "related_literature_ids",
     "safe_to_present",
     "schema_version",
+    "scientific_authority",
     "source_commit",
     "source_manifest_sha256",
     "source_run_ids",

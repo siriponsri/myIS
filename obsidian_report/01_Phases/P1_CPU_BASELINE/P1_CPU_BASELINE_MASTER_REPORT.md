@@ -1,18 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146"
-read_model_sha256: "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9"
-source_commit: "be543b83c05aee19f04aa73aacde42866b8333d8"
+read_model_revision: "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235"
+read_model_sha256: "4b97ba86af1bf81eab0072c4b2d95dc46adb1fe03c06ebbd029c6d25c20e7333"
+source_commit: "0ef52e929994fbd69baa180ffe55f9c7092745c7"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering"
+scientific_authority: false
+claim_boundary: "engineering_provenance_only"
+generated_from_revision: "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235"
+last_material_update: "2026-08-02T03:39:36Z"
+next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-01T12:44:19Z"
-updated_at: "2026-08-01T12:44:19Z"
+created_at: "2026-08-02T03:39:36Z"
+updated_at: "2026-08-02T03:39:36Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -22,102 +28,126 @@ evidence_maturity: "measured_selection"
 claim_level: "descriptive"
 ---
 
-# Phase 1: P1_CPU_BASELINE
+# P1_CPU_BASELINE
 
-รายงาน Phase นี้แยกผล baseline แบบเอกสารเต็มและแบบ window ก่อนเริ่ม SCOPE development
+Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.
 
-## สถานะตอนนี้
+## Objective
 
-**complete (measured train/selection)**. ใช้ standing authorization `D1_START_CAMPAIGN`; ไม่ได้ร้องขอหรือเปลี่ยน `D2_OPEN_FINAL` และ `D3_SUBMIT_RELEASE`
+Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.
 
-## ขอบเขตและ protocol
+## Starting State
 
-- Dataset: pinned DAPFAM revision; evaluation unit เป็น patent family
-- Query/corpus view: full TAC = title + abstract + claims; ไม่ใช้ description
-- R0: หนึ่งเอกสาร TAC ต่อ family
-- R0-W: window TAC แบบไม่ซ้อน 512 tokens และรวมผลด้วย family MaxP
-- Retriever: deterministic SQLite FTS5 BM25, OR query, top 100 unique families
-- Split ที่วัด: train 250 และ selection 125; final 872 ยังปิด
-- Compute: CPU-only, zero paid API, zero GPU, zero network model download
+- `phase`: P2_SCOPE_DEVELOPMENT
+- `task`: P2.1
+- `program_state`: P1_CPU_MEASURED_COMPLETE
+- `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
+- `claim_boundary`: No unsupported scientific claim
 
-## Dataset projections
+## Inputs and Frozen Bindings
 
-| Dataset view | Representation | Safe aggregate counts |
-|---|---|---|
-| DAPFAM-FAMILY-CORPUS | one full TAC document per family | documents=45336, families=45336 |
-| DAPFAM-QUERY-SET | TAC train/selection queries | final_closed=872, queries=1247, selection=125, train=250 |
-| DAPFAM-RELEVANCE-LABELS | positive family relations with released IN/OUT labels | in=19736, out=5193, positive=24929 |
-| DAPFAM-R0-CANDIDATES | full TAC family document | documents=45336 |
-| DAPFAM-R0W-CANDIDATES | non-overlapping 512-token full TAC windows with family MaxP | windows=127019 |
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea`
+- `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
+- `git_commit`: 0ef52e929994fbd69baa180ffe55f9c7092745c7
+- `execution_envelope`: `control/execution-envelope.yaml`; SHA-256 `e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af`
+- `request_id`: dapfam-p1-fulltext-c058a3aa7357c782
+- `protected_payloads`: owner-local; aggregate hashes only in this report
 
-## Task board
+## Work Performed
 
-| Task | Work | Status | Evidence |
-|---|---|---|---|
-| [[P1.1]] | R0 flat BM25 measured CPU baseline | complete | dapfam-p1-fulltext-c058a3aa7357c782 |
-| [[P1.2]] | R0-W window MaxP measured CPU baseline | complete | dapfam-p1-fulltext-c058a3aa7357c782 |
-| [[P1.3]] | Protected owner-local CPU evidence import | complete | dapfam-p1-fulltext-c058a3aa7357c782 |
+This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct.
+### Execution progress / observability
 
-## Execution progress / observability
+Aggregate progress is reported without item identifiers or outcomes. A future non-TTY measured runner must emit only stage, processed/total, elapsed time, and capped ETA.
 
-- Accepted measured run elapsed: `10835.097` seconds (`3.01` hours).
-- The accepted source run predates the progress contract and records aggregate completion plus total latency only.
-- The current runner shows a TTY progress bar and emits privacy-safe JSON heartbeats every `120` seconds for non-TTY execution.
-- Heartbeats contain only stage, processed/total, elapsed time, and bounded ETA; no item identifiers or outcomes are emitted.
+## Artifacts Produced
 
-## Measured results
+These references explain what each artifact is for; the bytes remain governed by canonical paths.
 
-| Arm | Split | Scope | Metric | Value | n | Retrieved relevant | Relevant total |
-|---|---|---|---|---:|---:|---:|---:|
-| R0 | train | ALL | recall_at_100 | 0.216200 | 250 | 1081 | 5000 |
-| R0 | train | IN | recall_at_100 | 0.258622 | 247 | 1024 | 4062 |
-| R0 | train | OUT | recall_at_100 | 0.076057 | 179 | 57 | 938 |
-| R0 | selection | ALL | recall_at_100 | 0.196000 | 125 | 490 | 2500 |
-| R0 | selection | IN | recall_at_100 | 0.233820 | 121 | 461 | 2005 |
-| R0 | selection | OUT | recall_at_100 | 0.062393 | 90 | 29 | 495 |
-| R0-W | train | ALL | recall_at_100 | 0.243000 | 250 | 1215 | 5000 |
-| R0-W | train | IN | recall_at_100 | 0.287954 | 247 | 1150 | 4062 |
-| R0-W | train | OUT | recall_at_100 | 0.085847 | 179 | 65 | 938 |
-| R0-W | selection | ALL | recall_at_100 | 0.214000 | 125 | 535 | 2500 |
-| R0-W | selection | IN | recall_at_100 | 0.260759 | 121 | 501 | 2005 |
-| R0-W | selection | OUT | recall_at_100 | 0.074661 | 90 | 34 | 495 |
+| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
+|---|---|---|---|---|---|
+| Validated aggregate manifest for p1-r0-selection-d9533ba623ce | `manifest` | `train_selection_measured` | `campaigns/scope-autoindex-v1/manifests/p1-r0-selection-d9533ba623ce.json` | `6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6` | `validated` |
+| Validated aggregate manifest for p1-r0-train-d9533ba623ce | `manifest` | `train_selection_measured` | `campaigns/scope-autoindex-v1/manifests/p1-r0-train-d9533ba623ce.json` | `31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3` | `validated` |
+| Validated aggregate manifest for p1-r0ww-selection-d9533ba623ce | `manifest` | `train_selection_measured` | `campaigns/scope-autoindex-v1/manifests/p1-r0ww-selection-d9533ba623ce.json` | `8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58` | `validated` |
+| Validated aggregate manifest for p1-r0ww-train-d9533ba623ce | `manifest` | `train_selection_measured` | `campaigns/scope-autoindex-v1/manifests/p1-r0ww-train-d9533ba623ce.json` | `cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1` | `validated` |
+| P1 four-slot package | `package` | `train_selection_measured` | `campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json` | `f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c` | `validated` |
+| P1 artifact-only rigor review | `review` | `train_selection_measured` | `outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json` | `4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38` | `validated` |
 
+## Metrics
+
+| Metric | Split | Scope | Value | n | Denominator | Evidence |
+|---|---|---|---:|---:|---|---|
+| `recall_at_100`@100 | `selection` | `ALL` | `0.196` | `125` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `selection` | `IN` | `0.233819891725` | `121` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `selection` | `OUT` | `0.062392548637` | `90` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `train` | `ALL` | `0.2162` | `250` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `train` | `IN` | `0.258622280076` | `247` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `train` | `OUT` | `0.076057227485` | `179` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `selection` | `ALL` | `0.214` | `125` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `selection` | `IN` | `0.260759203902` | `121` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `selection` | `OUT` | `0.074661067156` | `90` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `train` | `ALL` | `0.243` | `250` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `train` | `IN` | `0.287953506066` | `247` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+| `recall_at_100`@100 | `train` | `OUT` | `0.085847360337` | `179` | `macro_mean_per_query_relevant_families` | `train_selection_measured` |
+
+Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
+
+## Result
+
+**Output:** Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics.
+
+**Result:** P1 measured train/selection evidence is complete within its declared development boundary.
+
+**Decision:** completed
 
 ## Interpretation
 
-บน selection/OUT ค่า R0-W สูงกว่า R0 โดย observed delta = `+0.012269`. นี่เป็น descriptive development evidence เท่านั้น ไม่ใช่ผลยืนยันเชิงสถิติและไม่ใช่ final-split claim
+The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.
 
-## Checks และ evidence chain
+## Supported Claims
 
-| Arm | Split | Run ID | Manifest SHA-256 |
-|---|---|---|---|
-| R0 | selection | `p1-r0-selection-d9533ba623ce` | `6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6` |
-| R0 | train | `p1-r0-train-d9533ba623ce` | `31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3` |
-| R0-W | selection | `p1-r0ww-selection-d9533ba623ce` | `8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58` |
-| R0-W | train | `p1-r0ww-train-d9533ba623ce` | `cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1` |
+- Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics. (evidence: p1-r0-selection-d9533ba623ce-manifest, p1-r0-train-d9533ba623ce-manifest, p1-r0ww-selection-d9533ba623ce-manifest, p1-r0ww-train-d9533ba623ce-manifest, p1-four-slot-package, p1-rigor-review)
 
-- `p1-four-slot-package`: `f505e5d0834cbb41776b084071a7e71e21856aa11d3371e6b0c96db5379b266c` at `campaigns/scope-autoindex-v1/packages/dapfam-p1-fulltext-c058a3aa7357c782.package.json`
+## Unsupported Claims
 
-- `p1-rigor-review`: `4328a6e52b207d211da1cd87f94d702a90d6ebb7e72d72b31417389f13d0fd38` at `outputs/audits/rigor/dapfam-p1-fulltext-c058a3aa7357c782/rigor_review.json`
+- Measured P2 improvement or candidate superiority before a real measured run.
+- Final-split generalization or publication release before D2 and D3.
+- Causal or legal conclusions from retrieval aggregates.
 
-- `mlflow-p1-registration`: `efb9fd9be3297ec0f220af93f48a69a13b1142b3435caedd1ad578c1ea8ed395` at `evidence/mlflow-p1-registration.v2.json`
+## Failures and Recovery
 
-## สิ่งที่พูดได้
+- No material failure is recorded for this Phase or Task.
 
-ผล Recall@100 ที่แสดงเป็น aggregate development evidence สำหรับ train/selection ภายใต้ protocol ที่ระบุ
+## Governance and Safety
 
-## สิ่งที่ยังพูดไม่ได้
+- `protected_data_accessed`: True
+- `measured_execution`: True
+- `gpu`: False
+- `paid_api`: False
+- `network_model_download`: False
+- `provider_fallback`: False
+- `d2`: waiting_owner
+- `d3`: waiting_owner
+- `final_split`: closed
+- `real_counters`: `inline`; SHA-256 `None`
+- `evidence_class`: train_selection_measured
+- `scientific_authority`: True
 
-ห้ามสรุป final performance, statistical superiority, legal novelty, infringement, validity หรือ freedom to operate จากผลนี้
+## Decision
 
-## สิ่งที่ Owner ต้องทำ
+Status: **completed**. P1 measured train/selection evidence is complete within its declared development boundary.
 
-ไม่ต้องตัดสินใจ Gate เพื่อปิด P1. การเริ่ม P2 เป็น next automatic CPU-only action; D2/D3 ยังเป็น Owner-only
+## Next Action
 
-## ขอบเขตที่ยังไม่แตะ
+Owner-local P2 measured preflight
 
-Final split content, protected labels, per-query outcomes, credentials, paid API, GPU และ provider payload ยังคงอยู่นอก projection
+Measured P2, real selection, and final evaluation must not start automatically from this report.
 
-## Evidence revision
+## Evidence Links
 
-Read-model revision: `2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146`
+- p1-r0-selection-d9533ba623ce-manifest
+- p1-r0-train-d9533ba623ce-manifest
+- p1-r0ww-selection-d9533ba623ce-manifest
+- p1-r0ww-train-d9533ba623ce-manifest
+- p1-four-slot-package
+- p1-rigor-review

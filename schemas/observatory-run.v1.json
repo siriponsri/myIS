@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-run:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "request_id", "phase_id", "task_id", "status", "execution_class", "evidence_class", "scientific_authority", "claim_boundary", "request_sha256", "profile_sha256", "envelope_sha256", "environment_sha256", "config_sha256", "prompt_ids", "candidate_ids", "artifact_ids", "counters_before", "counters_after", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-run.v1"}, "record_id": {"type": "string"}, "request_id": {"type": "string"}, "phase_id": {"type": "string"}, "task_id": {"type": "string"}, "status": {"enum": ["planned", "running", "succeeded", "failed", "interrupted", "cancelled"]}, "execution_class": {"type": "string"}, "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "git_commit": {"type": "string"}, "parent_run_id": {"type": ["string", "null"]}, "failure_class": {"type": ["string", "null"]}, "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "envelope_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "environment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "config_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "prompt_ids": {"type": "array", "items": {"type": "string"}}, "candidate_ids": {"type": "array", "items": {"type": "string"}}, "artifact_ids": {"type": "array", "items": {"type": "string"}}, "counters_before": {"type": "object"}, "counters_after": {"type": "object"}, "started_at": {"type": "string", "format": "date-time"}, "ended_at": {"type": ["string", "null"], "format": "date-time"}, "exit_code": {"type": ["integer", "null"]}, "runtime_wall_seconds": {"type": "number", "minimum": 0}, "cost_usd": {"type": "number", "minimum": 0}, "summary": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -59,6 +59,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     p2_task_report = contents[ROOT / VAULT_RELATIVE_PATH / "01_Phases/P2_SCOPE_DEVELOPMENT/Tasks/P2.1.md"]
     audit_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"]
     fixture_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_FIXTURE_PILOT.md"]
+    pending_report = contents[ROOT / VAULT_RELATIVE_PATH / "03_Results/Current/P2_MEASURED_PENDING.md"]
     assert "## Output" in result_report
     assert "## Interpretation" in result_report
     assert "## Execution progress / observability" in result_report
@@ -75,6 +76,9 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "`32` candidates" in fixture_report
     assert "Owner-local measured preflight" in fixture_report
     assert "Real candidates `0 / 32`" in fixture_report
+    assert "`32`" not in pending_report
+    assert "`0.72`" not in pending_report
+    assert "measured results = `unavailable`" in pending_report
 
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
@@ -222,6 +226,35 @@ def test_generated_content_rejects_unsafe_protected_and_unknown_properties() -> 
     }
     with pytest.raises(ValueError, match="protected or remote generated content"):
         _validate_generated_contents(protected)
+
+
+def test_generated_content_rejects_stale_fixture_review_and_measured_state() -> None:
+    model = build_read_model(ROOT)
+    contents = {
+        path.relative_to(ROOT): content
+        for path, content in projection_report_contents(ROOT, model).items()
+        if path.is_relative_to(ROOT / VAULT_RELATIVE_PATH)
+    }
+    stale_fixture = dict(contents)
+    stale_fixture[VAULT_RELATIVE_PATH / "05_Research_History/P2_FIXTURE_PILOT.md"] += (
+        "\nFixture remains not executed.\n"
+    )
+    with pytest.raises(ValueError, match="stale fixture narrative"):
+        _validate_generated_contents(stale_fixture, model)
+
+    stale_review = dict(contents)
+    stale_review[VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"] += (
+        "\nOfficial review pending.\n"
+    )
+    with pytest.raises(ValueError, match="stale official review narrative"):
+        _validate_generated_contents(stale_review, model)
+
+    stale_measured = dict(contents)
+    stale_measured[VAULT_RELATIVE_PATH / "03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md"] += (
+        "\nMeasured P2 started.\n"
+    )
+    with pytest.raises(ValueError, match="measured P2 narrative"):
+        _validate_generated_contents(stale_measured, model)
 
 
 def test_advisor_snapshot_is_immutable_and_correction_is_append_only(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

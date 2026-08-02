@@ -186,7 +186,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-01T12:44:19Z",
+  "generated_at": "2026-08-02T03:39:36Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -467,6 +467,122 @@
     "schema_version": "myis.p1-mlflow-registration.v2",
     "source_receipt_sha256": "d9533ba623ce8a390931b002be478606ed77ded7202a78a7f4575eba3cc8a068"
   },
+  "observatory": {
+    "artifact_lineage_status": "pass",
+    "artifact_type_counts": {
+      "failure": 1,
+      "metric": 1,
+      "output": 1,
+      "report": 1,
+      "request": 1
+    },
+    "claim_boundary": "engineering_provenance_only",
+    "config_binding_count": 1,
+    "environment_binding_count": 1,
+    "evidence_class": "fixture",
+    "failed_child_count": 1,
+    "failure_records": [
+      {
+        "counters_after": {
+          "candidate_count": 1,
+          "measured_runs": 0,
+          "selection_accesses": 0,
+          "shortlist_count": 0
+        },
+        "counters_before": {
+          "candidate_count": 1,
+          "measured_runs": 0,
+          "selection_accesses": 0,
+          "shortlist_count": 0
+        },
+        "decision": "retain_failure_and_recovery",
+        "failure_class": "synthetic_timeout",
+        "last_valid_checkpoint": "candidate-02-start",
+        "protected_data_accessed": false,
+        "record_id": "obs-failure-candidate-02",
+        "recovery_action": "retry_from_checkpoint",
+        "recovery_id": "obs-recovery-candidate-02",
+        "residual_risk": "Synthetic branch remains non-scientific and cannot promote retrieval metrics",
+        "run_id": "obs-run-candidate-02",
+        "stage": "candidate_generation",
+        "validation_after_recovery": "passed_without_metric_promotion"
+      }
+    ],
+    "fixture_id": "observatory-fixture-v1",
+    "graph_edge_count": 32,
+    "graph_node_count": 22,
+    "integrity_status": "pass",
+    "measured_execution": false,
+    "mlflow_record_sha256": "4b9c39f5c7ae004273769aa648e92dcb6c077ec34936d4947991a5f7e9f9c5d1",
+    "mlflow_run_id": "obs-mlflow-fixture-v1",
+    "narrative": "Synthetic Observatory evidence is ready; measured P2 remains closed.",
+    "negative_check_count": 7,
+    "negative_checks_passed": true,
+    "next_action": "Owner-local P2 measured preflight",
+    "package_sha256": "56b9fcac16b57055607de4bf9adcc4698f940638c33b2fbc093d8379c865610d",
+    "prompt_binding_count": 2,
+    "protected_data_accessed": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "receipt_sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
+    "record_counts": {
+      "artifacts": 5,
+      "candidates": 2,
+      "configs": 1,
+      "decisions": 1,
+      "environments": 1,
+      "failures": 1,
+      "interpretations": 1,
+      "metrics": 1,
+      "prompts": 2,
+      "recoveries": 1,
+      "requests": 1,
+      "results": 1,
+      "runs": 3,
+      "schemas": 1
+    },
+    "recovered_child_count": 1,
+    "recovery_records": [
+      {
+        "action": "retry_from_checkpoint",
+        "counters_after": {
+          "candidate_count": 1,
+          "measured_runs": 0,
+          "selection_accesses": 0,
+          "shortlist_count": 0
+        },
+        "counters_before": {
+          "candidate_count": 1,
+          "measured_runs": 0,
+          "selection_accesses": 0,
+          "shortlist_count": 0
+        },
+        "failure_id": "obs-failure-candidate-02",
+        "metric_promotion": false,
+        "record_id": "obs-recovery-candidate-02",
+        "residual_risk": "No scientific metric promotion",
+        "run_id": "obs-run-candidate-02",
+        "validation_after_recovery": "passed"
+      }
+    ],
+    "registry_sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+    "retention_class_counts": {
+      "repository_safe": 5
+    },
+    "run_status_counts": {
+      "failed": 1,
+      "succeeded": 2
+    },
+    "schema_version": "myis.observatory-projection.v1",
+    "scientific_authority": false,
+    "status": "ready",
+    "validated_artifact_count": 5,
+    "validated_metric_count": 1
+  },
   "outputs": [
     {
       "disposition_uri": "campaigns/scope-autoindex-v1/evidence/legacy-p1-receipt.v2.disposition.json",
@@ -483,14 +599,14 @@
   ],
   "owner_inbox": [
     {
-      "action_id": "p2-fixture-pilot-available",
-      "kind": "automatic_next",
-      "label": "Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed"
+      "action_id": "owner-local-p2-measured-preflight",
+      "kind": "owner_command",
+      "label": "Owner-local P2 measured preflight"
     },
     {
       "action_id": "hold-before-measured-p2",
       "kind": "constraint",
-      "label": "Do not start measured P2 or selection exposure from the static review verdict"
+      "label": "Do not start measured P2 or selection exposure automatically; preflight requires the Owner-local protected store"
     }
   ],
   "p2_readiness": {
@@ -630,6 +746,10 @@
       "baseline_commitment_sha256": null,
       "baseline_reproduction_receipt_sha256": null,
       "execution_envelope": "control/execution-envelope-p2.yaml",
+      "fixture_manifest_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
+      "fixture_package_sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
+      "fixture_receipt_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
+      "official_review_index_sha256": "6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80",
       "profile": "control/budgets/p2-r1-primary-v1.yaml"
     },
     "status": "ready_planned_not_measured",
@@ -887,7 +1007,7 @@
           "peer"
         ],
         "evidence_ids": [],
-        "message_th": "P1_CPU_MEASURED_COMPLETE. \u0e02\u0e31\u0e49\u0e19\u0e16\u0e31\u0e14\u0e44\u0e1b: Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed. D2 \u0e41\u0e25\u0e30 D3 \u0e22\u0e31\u0e07\u0e04\u0e07\u0e40\u0e1b\u0e47\u0e19 Owner-only decisions",
+        "message_th": "P1_CPU_MEASURED_COMPLETE. \u0e02\u0e31\u0e49\u0e19\u0e16\u0e31\u0e14\u0e44\u0e1b: Owner-local P2 measured preflight. D2 \u0e41\u0e25\u0e30 D3 \u0e22\u0e31\u0e07\u0e04\u0e07\u0e40\u0e1b\u0e47\u0e19 Owner-only decisions",
         "order": 10,
         "safe_to_present": true,
         "screen_id": "shared-10-next",
@@ -915,7 +1035,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146",
+  "projection_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -959,8 +1079,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "2be6b1dc61b4c0d94e9269d9406c230e6c8e1c25c38a661f37162707923aa146",
-  "read_model_sha256": "972d9be25a18265558c6de7f3a6f705101912e3a0adec6d78a1adae7cb1e4fe9",
+  "read_model_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "read_model_sha256": "4b97ba86af1bf81eab0072c4b2d95dc46adb1fe03c06ebbd029c6d25c20e7333",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -1092,7 +1212,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "be543b83c05aee19f04aa73aacde42866b8333d8",
+  "source_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "tasks": [
     {
       "evidence_ids": [],

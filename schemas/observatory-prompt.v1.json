@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:observatory-prompt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "version", "family", "role", "content_sha256", "frozen", "source_uri", "candidate_ids", "parent_prompt_id", "mutation_lineage", "model_id", "evaluator_id", "evidence_class", "scientific_authority", "claim_boundary", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.observatory-prompt.v1"}, "record_id": {"type": "string"}, "version": {"type": "string"}, "family": {"type": "string"}, "role": {"type": "string"},
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "frozen": {"type": "boolean"}, "source_uri": {"type": "string"},
+    "candidate_ids": {"type": "array", "items": {"type": "string"}}, "parent_prompt_id": {"type": ["string", "null"]}, "mutation_lineage": {"type": "array", "items": {"type": "string"}},
+    "model_id": {"type": ["string", "null"]}, "evaluator_id": {"type": ["string", "null"]}, "summary": {"type": "string"},
+    "evidence_class": {"type": "string"}, "scientific_authority": {"type": "boolean"}, "claim_boundary": {"type": "string"}, "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

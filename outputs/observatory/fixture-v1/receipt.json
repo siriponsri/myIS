@@ -1,0 +1,30 @@
+{
+  "deterministic_rerun": "pass",
+  "evidence_class": "fixture",
+  "fixture_id": "observatory-fixture-v1",
+  "measured_execution": false,
+  "mlflow_record_sha256": "4b9c39f5c7ae004273769aa648e92dcb6c077ec34936d4947991a5f7e9f9c5d1",
+  "mlflow_run_id": "obs-mlflow-fixture-v1",
+  "negative_checks": {
+    "duplicate_id": "PASS",
+    "fixture_as_measured": "PASS",
+    "graph_validation": "PASS",
+    "hash_mismatch": "PASS",
+    "orphan_result": "PASS",
+    "protected_field": "PASS",
+    "unsafe_absolute_path": "PASS"
+  },
+  "next_action": "Owner-local P2 measured preflight",
+  "package_sha256": "56b9fcac16b57055607de4bf9adcc4698f940638c33b2fbc093d8379c865610d",
+  "protected_data_accessed": false,
+  "real_counters": {
+    "candidate_count": 0,
+    "measured_runs": 0,
+    "selection_accesses": 0,
+    "shortlist_count": 0
+  },
+  "receipt_sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
+  "registry_sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
+  "schema_version": "myis.observatory-receipt.v1",
+  "scientific_authority": false
+}

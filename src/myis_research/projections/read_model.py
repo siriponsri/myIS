@@ -23,6 +23,7 @@ from ..p2 import (
     validate_p2_package_bundle,
 )
 from ..protection import assert_aggregate_only
+from ..observatory.projection import load_observatory_projection
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -58,6 +59,7 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/scope-autoindex-v1/packages",
     "orchestration/audits/p2-readiness",
     "outputs/fixtures/p2",
+    "outputs/observatory/fixture-v1",
     "control/assets/dapfam-p1-source.v1.json",
     "outputs/audits/rigor",
     "evidence/legacy-dapfam-inventory.v1.json",
@@ -73,10 +75,26 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/p2-selection-receipt.v1.json",
     "schemas/p2-manifest.v1.json",
     "schemas/p2-package.v1.json",
+    "schemas/observatory-registry.v1.json",
+    "schemas/observatory-run.v1.json",
+    "schemas/observatory-artifact.v1.json",
+    "schemas/observatory-prompt.v1.json",
+    "schemas/observatory-metric.v1.json",
+    "schemas/observatory-receipt.v1.json",
+    "schemas/observatory-config.v1.json",
+    "schemas/observatory-environment.v1.json",
+    "schemas/observatory-failure.v1.json",
+    "schemas/observatory-recovery.v1.json",
+    "schemas/observatory-decision.v1.json",
+    "schemas/phase-task-report.v1.json",
+    "docs/observatory/REPORTING_POLICY.md",
+    "docs/observatory/MEASURED_PREFLIGHT_INTEGRATION.md",
     "src/myis_research/p2",
+    "src/myis_research/observatory",
     "src/myis_research/p2_cli.py",
     "src/myis_research/projections/read_model.py",
     "src/myis_research/report_cli.py",
+    "src/myis_research/report_records.py",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -115,6 +133,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     validation_reports = _load_validation_reports(root / "campaigns" / campaign_id / "validation-reports")
     p1_pairs = validated_p1_matrix(manifests, receipts, validation_reports)
     p2_readiness = _p2_readiness_projection(root, campaign_config)
+    observatory = load_observatory_projection(root)
     package_review: dict[str, Any] = {}
     if (root / "control/assets/dapfam-p1-source.v1.json").is_file() and p1_pairs:
         package_review = _validated_p1_package_review(root, p1_pairs)
@@ -226,19 +245,38 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     ] if not p1_pairs else [
         {"action_id": "review-p1", "label": "ตรวจ P1 evidence package ก่อนพิจารณาคำสั่ง P2 แยกต่างหาก", "kind": "owner_command"},
     ])
+    fixture_status = str(
+        p2_readiness.get("fixture_pilot", {}).get("status", "not_executed")
+        if isinstance(p2_readiness.get("fixture_pilot"), dict)
+        else "not_executed"
+    )
     if p1_pairs and p2_readiness.get("official_review", {}).get("status") == "accepted_static_contract_review":
-        next_actions = [
-            {
-                "action_id": "p2-fixture-pilot-available",
-                "label": "Official Round 3 accepted the static contract; the next reversible action is a repository-only fixture pilot, which remains not executed",
-                "kind": "automatic_next",
-            },
-            {
-                "action_id": "hold-before-measured-p2",
-                "label": "Do not start measured P2 or selection exposure from the static review verdict",
-                "kind": "constraint",
-            },
-        ]
+        if fixture_status == "passed":
+            next_actions = [
+                {
+                    "action_id": "owner-local-p2-measured-preflight",
+                    "label": "Owner-local P2 measured preflight",
+                    "kind": "owner_command",
+                },
+                {
+                    "action_id": "hold-before-measured-p2",
+                    "label": "Do not start measured P2 or selection exposure automatically; preflight requires the Owner-local protected store",
+                    "kind": "constraint",
+                },
+            ]
+        else:
+            next_actions = [
+                {
+                    "action_id": "p2-fixture-pilot",
+                    "label": "Run the repository-only P2 fixture pilot before Owner-local measured preflight",
+                    "kind": "automatic_next",
+                },
+                {
+                    "action_id": "hold-before-measured-p2",
+                    "label": "Do not start measured P2 or selection exposure from the static review verdict",
+                    "kind": "constraint",
+                },
+            ]
     result_state = "valid" if p1_pairs else "blocked"
     p1_latency = paired_receipts[0].get("latency_seconds") if paired_receipts else None
     p2_metric_rows = [
@@ -281,6 +319,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "p2_status": p2_readiness["status"],
         }],
         "p2_readiness": p2_readiness,
+        "observatory": observatory,
         "phases": phases,
         "tasks": tasks,
         "gates": [
@@ -852,6 +891,8 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
                 if isinstance(item, dict) and set(item).issubset(P2_METRIC_FIELDS) and {"name", "value"} <= set(item):
                     p2_metrics.append(dict(item))
 
+    review_source = official_review.get("source") if isinstance(official_review.get("source"), dict) else {}
+
     return {
         "status": status,
         "phase_id": "P2_SCOPE_DEVELOPMENT",
@@ -907,6 +948,10 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
             "execution_envelope": "control/execution-envelope-p2.yaml",
             "baseline_commitment_sha256": commitment.get("commitment_sha256") if commitment else None,
             "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
+            "official_review_index_sha256": review_source.get("index_sha256"),
+            "fixture_receipt_sha256": fixture_pilot.get("receipt_sha256"),
+            "fixture_manifest_sha256": fixture_pilot.get("execution_manifest_sha256"),
+            "fixture_package_sha256": fixture_pilot.get("fixture_package_sha256"),
         },
         "official_review": official_review,
         "fixture_pilot": fixture_pilot,
