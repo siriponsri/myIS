@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027"
-read_model_sha256: "4a6a568184af94a04f5b67eaea810bfbf2581694b735317d03aad3349fd5683d"
-source_commit: "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d"
+read_model_revision: "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0"
+read_model_sha256: "bfae45cdf823b16e4c67835230208e08511131178446c16ef863b6a772dd3d80"
+source_commit: "69e0f9139a597e43cc8e3f54525f3723c201aca4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027"
-last_material_update: "2026-08-02T12:19:09Z"
+generated_from_revision: "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0"
+last_material_update: "2026-08-02T12:25:48Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-02T12:19:09Z"
-updated_at: "2026-08-02T12:19:09Z"
+created_at: "2026-08-02T12:25:48Z"
+updated_at: "2026-08-02T12:25:48Z"
 note_id: "P0_FOUNDATION-MASTER"
 note_type: "phase_report"
 phase_id: "P0_FOUNDATION"
@@ -48,7 +48,7 @@ Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: f3d179fb7b997850b388e8aa08cda4c5b7b36d3d
+- `git_commit`: 69e0f9139a597e43cc8e3f54525f3723c201aca4
 
 ## Work Performed
 

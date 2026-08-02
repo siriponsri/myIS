@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T12:19:09Z",
-  "generated_from_revision": "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027",
-  "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
+  "generated_at": "2026-08-02T12:25:48Z",
+  "generated_from_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
+  "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
+    "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
     "source_of_truth": {
       "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T12:19:09Z",
+  "last_material_update": "2026-08-02T12:25:48Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Deterministic kernel and schema contracts",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-1",
-  "report_sha256": "3c4c6710f590ef150e56d7c1e38fd4044309dfb80b707a7f09c3dcdc8e7a1960",
+  "report_sha256": "82c1281e40b54c2bd6d0e5a6a3aae77d7a1ab8170078f6f790a856f8bd60e718",
   "report_type": "task",
   "result": {
     "decision": "completed",

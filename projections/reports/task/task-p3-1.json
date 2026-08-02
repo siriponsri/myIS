@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T12:19:09Z",
-  "generated_from_revision": "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027",
-  "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
+  "generated_at": "2026-08-02T12:25:48Z",
+  "generated_from_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
+  "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -36,20 +36,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
+    "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
     "source_of_truth": {
       "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
-  "last_material_update": "2026-08-02T12:19:09Z",
+  "last_material_update": "2026-08-02T12:25:48Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "4b30f065f3db6742b9ec6ccc6bd30fd3eb434c9462201f1f6ae2a6db9ad69a99",
+  "report_sha256": "5e170e82c693d9c63d3b507e7d143ef524314636ca02cb29fd7b60901178f3a9",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",
