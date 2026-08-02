@@ -70,13 +70,13 @@
       "managed_by": "myis-report",
       "note_id": "P2_SCOPE_DEVELOPMENT-MASTER",
       "relative_path": "01_Phases/P2_SCOPE_DEVELOPMENT/P2_SCOPE_DEVELOPMENT_MASTER_REPORT.md",
-      "sha256": "9cb3758ba5b9b10073b2aa7af0205d96b0f5dd3e214cd9da744529b017c31eb1"
+      "sha256": "17736619b39218c0491a3225b485397319f481e80439c29ec816de2eff2edf0d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2.1",
       "relative_path": "01_Phases/P2_SCOPE_DEVELOPMENT/Tasks/P2.1.md",
-      "sha256": "9a7a3ab187fcba604f851c0dfbb4e7f19f6b220539e5a4c3d904d54477ebaeb7"
+      "sha256": "7245b060c17c46a94f587b866c5faf713e40bc0c46c745749ba4f6e8eb1a1ab3"
     },
     {
       "managed_by": "myis-report",
@@ -1243,7 +1243,7 @@
       "sha256": "1917e97cafd8c4159e57f7fb2fdad28c4d5cfdc4242fe43593c15c6671d8ee51"
     }
   ],
-  "manifest_sha256": "08ed505c4ec053de80a89901cf24c87473d32e5aaeec8c06ae3c77488efee5ba",
+  "manifest_sha256": "81b10d71542648793cb6bd98516564765a8d7e9baac8c34edc55d8a7c9196a31",
   "projection_schema_version": "myis.integrated-projection.v2",
   "read_model_revision": "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3",
   "read_model_sha256": "4ff3b80ba623058c14ba2561abf9cb2dbc524b7b6cfa6d655547b581aeb09f3a",

@@ -199,6 +199,42 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-preflight-tracked-owner-path-audit-initial",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9",
+      "evidence_class": "engineering",
+      "explanation": "Records the personal absolute paths found in two tracked artifacts after the completion audit expanded its safety scope.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json",
+      "scientific_authority": false,
+      "title": "Initial P2 preflight tracked Owner-path audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-preflight-tracked-owner-path-audit-repair",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3",
+      "evidence_class": "engineering",
+      "explanation": "Validates portable path guidance, fail-closed legacy execution configuration, and tracked-artifact regression coverage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json",
+      "scientific_authority": false,
+      "title": "Repaired P2 preflight tracked Owner-path audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -281,6 +317,16 @@
       "uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json"
     },
     {
+      "artifact_id": "p2-preflight-tracked-owner-path-audit-initial",
+      "sha256": "e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9",
+      "uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json"
+    },
+    {
+      "artifact_id": "p2-preflight-tracked-owner-path-audit-repair",
+      "sha256": "30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3",
+      "uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -321,6 +367,16 @@
       "recovery_id": "p2-preflight-projection-source-hash-drift-repair-20260802",
       "recovery_sha256": "842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107",
       "recovery_uri": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-preflight-tracked-owner-path-audit-20260802",
+      "failure_sha256": "e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9",
+      "failure_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json",
+      "recovery_id": "p2-preflight-tracked-owner-path-repair-20260802",
+      "recovery_sha256": "30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3",
+      "recovery_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json",
       "status": "repaired_and_validated"
     }
   ],
@@ -404,7 +460,7 @@
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "cfd0d9cdeb1084e199dcb260156189b6623e3a490873981340a1f18dde2ae714",
+  "report_sha256": "bbf42997181c659141c90448f08f3ae8ba3a189b05711055dabc9b5a150bfc19",
   "report_type": "task",
   "result": {
     "decision": "not_started",
@@ -436,6 +492,8 @@
         "p2-preflight-report-byte-audit-repair",
         "p2-preflight-projection-source-audit-initial",
         "p2-preflight-projection-source-audit-repair",
+        "p2-preflight-tracked-owner-path-audit-initial",
+        "p2-preflight-tracked-owner-path-audit-repair",
         "observatory-fixture-registry"
       ]
     }

@@ -82,6 +82,8 @@ These references explain what each artifact is for; the bytes remain governed by
 | Repaired P2 preflight report byte-stability audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json` | `cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996` | `validated` |
 | Initial P2 preflight projection source-hash audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json` | `97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca` | `validated` |
 | Repaired P2 preflight projection source-hash audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json` | `842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107` | `validated` |
+| Initial P2 preflight tracked Owner-path audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json` | `e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9` | `validated` |
+| Repaired P2 preflight tracked Owner-path audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json` | `30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3` | `validated` |
 | Aggregate-safe Observatory registry | `registry` | `fixture` | `outputs/observatory/fixture-v1/registry.json` | `51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1` | `validated` |
 
 ## Metrics
@@ -106,7 +108,7 @@ The repairs strengthen stale authority, worktree boundary, capacity, immutable r
 
 ## Supported Claims
 
-- Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, p2-candidate-freeze-proposal, p2-preflight-completion-audit-initial, p2-preflight-completion-audit-repair, p2-preflight-report-byte-audit-initial, p2-preflight-report-byte-audit-repair, p2-preflight-projection-source-audit-initial, p2-preflight-projection-source-audit-repair, observatory-fixture-registry)
+- Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, p2-candidate-freeze-proposal, p2-preflight-completion-audit-initial, p2-preflight-completion-audit-repair, p2-preflight-report-byte-audit-initial, p2-preflight-report-byte-audit-repair, p2-preflight-projection-source-audit-initial, p2-preflight-projection-source-audit-repair, p2-preflight-tracked-owner-path-audit-initial, p2-preflight-tracked-owner-path-audit-repair, observatory-fixture-registry)
 
 ## Unsupported Claims
 
@@ -120,6 +122,7 @@ The repairs strengthen stale authority, worktree boundary, capacity, immutable r
 - p2-preflight-completion-audit-20260802
 - p2-preflight-report-byte-drift-audit-20260802
 - p2-preflight-projection-source-hash-drift-audit-20260802
+- p2-preflight-tracked-owner-path-audit-20260802
 
 ## Governance and Safety
 
@@ -161,4 +164,6 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - p2-preflight-report-byte-audit-repair
 - p2-preflight-projection-source-audit-initial
 - p2-preflight-projection-source-audit-repair
+- p2-preflight-tracked-owner-path-audit-initial
+- p2-preflight-tracked-owner-path-audit-repair
 - observatory-fixture-registry

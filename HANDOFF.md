@@ -473,3 +473,36 @@ shortlist, and selection accesses remain `0`. Protected stores and payloads,
 final-872, D2/D3, GPU, paid APIs, network model downloads, and provider state
 were not accessed or changed. The exact next authorized action remains
 `Owner-local P2 measured preflight`.
+
+## P2 tracked Owner-path safety recovery (2026-08-02)
+
+The completion audit expanded the repository-safe path scan beyond P2 JSON
+objects and found two tracked personal absolute paths: an MLflow store example
+and the default legacy DAPFAM root in the Owner-local P1 launcher. Audit
+`p2-preflight-tracked-owner-path-audit-20260802` retained the contradiction as
+`Weak Reject` with one blocking finding.
+
+The repair replaces the MLflow example with `%LOCALAPPDATA%`, makes the legacy
+launcher fail closed unless the Owner explicitly sets
+`MYIS_LEGACY_DAPFAM_ROOT`, and adds a deterministic tracked-artifact scan that
+excludes Owner Notes and local Obsidian state. Recovery audit
+`p2-preflight-tracked-owner-path-repair-20260802` returned `Accept` with no
+blocking findings. The launcher fail-closed probe returned exit code `2`
+before any data access.
+
+Verification passed with `294` full tests, `39` focused P2 preflight tests,
+`21` focused Dashboard/API tests, two consecutive full report checks without
+drift, session audit, advisor validation, layout, full assets/map, P2 closure
+and archive-runtime policies, repository-safe MLflow doctor, Brain literature
+validation (`154` notes, `0` errors), scoped Ruff, and `git diff --check`.
+The aggregate-only projection sync MLflow run is
+`0c81d60e46a44a3d87f7d6961686d39d`.
+
+Phase/task remains `P2_SCOPE_DEVELOPMENT / P2.1`, status
+`ready_planned_not_measured`, evidence class engineering/fixture provenance,
+scientific authority `false`, preflight `not_started`, and proposal
+`draft_owner_review` / `not_adopted`. Measured runs, real candidates,
+shortlist, and selection accesses remain `0`. Protected stores and payloads,
+final-872, D2/D3, GPU, paid APIs, network model downloads, and provider state
+were not accessed or changed. The exact next authorized action remains
+`Owner-local P2 measured preflight`.
