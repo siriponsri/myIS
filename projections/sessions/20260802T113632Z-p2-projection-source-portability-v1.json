@@ -1,0 +1,133 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260802T113632Z-p2-projection-source-portability-v1",
+  "run_id": null,
+  "goal_id": "P2_PREFLIGHT_PROJECTION_SOURCE_PORTABILITY_V1",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-02T11:36:32Z",
+  "scope": "Repair cross-platform raw source-hash drift in P2 preflight report projections and prepare the validated repair for merge without changing scientific state.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "3b5c7474de243d42ee79089644db22e23f951d92",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "outputs/audits/research-sessions/20260802T113632Z-p2-projection-source-portability-skill-v1.json",
+      "projections/sessions/20260802T113632Z-p2-projection-source-portability-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "PR contract CI rejected 164 generated files although the read-model revision and P2 proposal state were correct.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json",
+          "sha256": "97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca",
+          "locator": "overall, governance.blocking_findings, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "Paired clean checkouts expanded the repair to projected source digests, proposal bindings, and the historical P1 envelope digest.",
+      "evidence_refs": [
+        {
+          "path": ".gitattributes",
+          "sha256": "29b9dd13fe2f8f2d60b6c58ce815b566f2cdb5553bcf97d38bcb6dddaaac8482",
+          "locator": "generated output, projected source, proposal binding, and P1 envelope byte rules"
+        },
+        {
+          "path": "tests/test_obsidian_report_contract.py",
+          "sha256": "3630f2401edee1efceae8e48c5df27ac88bb2fc998f53fca77daba1fb0a7cd1e",
+          "locator": "checkout byte-stability tests"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Clean Windows and LF clones retained the planned P2 state and rendered all 225 repository-local outputs with zero byte differences.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json",
+          "sha256": "842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107",
+          "locator": "overall, dimensions.D2_falsifiability, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "After governed sync and two no-drift checks, P2 remains ready_planned_not_measured with preflight not_started, proposal not_adopted, zero real counters, and D2/D3 closed.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "f80daa87a7303a8b1894c393c8cb88eee5ee4f2c6e67e467fa2cb6a3642b599e",
+          "locator": "p2_readiness, gates, read_model_revision, and read_model_sha256"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "7bea39720d55fece3855eb0923e3cee85bab61f4667da29ee16c7a545f795643",
+          "locator": "status, source_commit, read_model_revision, read_model_sha256, and mlflow_run_id"
+        },
+        {
+          "path": "projections/reports/task/task-p2-1.json",
+          "sha256": "2ab6cd7c2a7e9b6d6c61da6447428c3e1b2f80f27f2b07fc6415340c06a4e2e5",
+          "locator": "failure_recovery_references, governance_status, decision, and next_authorized_action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight remains the next authorized action and was not executed.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "candidate-proposal-not-adopted",
+      "provenance": "agent-observed",
+      "summary": "The four-control and eight-candidate proposal remains draft_owner_review and not_adopted.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "measured-selection-final-closed",
+      "provenance": "agent-observed",
+      "summary": "Measured P2, real selection, final-872, D2_OPEN_FINAL, and D3_SUBMIT_RELEASE remain closed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

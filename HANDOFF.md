@@ -427,3 +427,49 @@ shortlist, and selection accesses remain `0`. Protected stores and payloads,
 final-872, D2/D3, GPU, paid APIs, network downloads, and provider state were
 not accessed or changed. The exact next authorized action remains
 `Owner-local P2 measured preflight`.
+
+## P2 projection source-hash portability recovery (2026-08-02)
+
+PR #5 exposed a second portability layer after generated output bytes were
+stabilized. The Linux contract job reproduced drift in `164` repository-local
+files because P0 contract and literature digest hashes were computed from
+checkout-dependent source bytes. Paired clean Windows and LF clones then
+identified two additional raw-hash surfaces: the P2 proposal source bindings
+and the historical P1 execution envelope.
+
+Audit `p2-preflight-projection-source-hash-drift-audit-20260802` retained the
+contradiction as `Weak Reject` with three blocking findings. Commits
+`890b8e02ce6063969a6bf460032815ea0799e3fd`,
+`c5893809edbba2de717b28bd5d28b1b246d7a4d0`, and
+`41e2610001e21f47165f99dad5f347e3bc6da23b` preserve committed LF bytes for
+every raw-hashed source found by the audit. Recovery audit
+`p2-preflight-projection-source-hash-drift-repair-20260802` returned `Accept`
+with no blocking findings. Commit
+`c2102180da46e7338a6ab41de2a921f3a61e70a1` binds the failure/recovery chain
+into the P2 Phase and Task reports, and projection commit
+`3b5c7474de243d42ee79089644db22e23f951d92` refreshes the shared graph.
+
+Clean Windows and LF clones produced identical read models and all `225`
+repository-local rendered outputs had byte diff `0`; the checkout regression
+passed `3` tests in each clone. Verification also passed with `293` full tests,
+`48` focused Obsidian/preflight tests, `21` focused Dashboard/API tests, two
+consecutive full report checks without drift, session audit, advisor
+validation, layout, full assets/map, P2 closure and archive-runtime policies,
+repository-safe MLflow doctor, Brain literature validation (`154` notes,
+`0` errors), scoped Ruff, unsafe-path scan, and `git diff --check`.
+
+The shared read-model revision is
+`964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3`
+with SHA-256
+`4ff3b80ba623058c14ba2561abf9cb2dbc524b7b6cfa6d655547b581aeb09f3a`;
+the aggregate-only projection sync MLflow run is
+`eeb9bae6422b41528e324c625ba343c6`.
+
+Phase/task remains `P2_SCOPE_DEVELOPMENT / P2.1`, status
+`ready_planned_not_measured`, evidence class engineering/fixture provenance,
+scientific authority `false`, preflight `not_started`, and proposal
+`draft_owner_review` / `not_adopted`. Measured runs, real candidates,
+shortlist, and selection accesses remain `0`. Protected stores and payloads,
+final-872, D2/D3, GPU, paid APIs, network model downloads, and provider state
+were not accessed or changed. The exact next authorized action remains
+`Owner-local P2 measured preflight`.
