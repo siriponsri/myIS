@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3"
-read_model_sha256: "4ff3b80ba623058c14ba2561abf9cb2dbc524b7b6cfa6d655547b581aeb09f3a"
-source_commit: "c2102180da46e7338a6ab41de2a921f3a61e70a1"
+read_model_revision: "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027"
+read_model_sha256: "4a6a568184af94a04f5b67eaea810bfbf2581694b735317d03aad3349fd5683d"
+source_commit: "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3"
-last_material_update: "2026-08-02T11:28:15Z"
+generated_from_revision: "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027"
+last_material_update: "2026-08-02T12:19:09Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-02T11:28:15Z"
-updated_at: "2026-08-02T11:28:15Z"
+created_at: "2026-08-02T12:19:09Z"
+updated_at: "2026-08-02T12:19:09Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -48,7 +48,7 @@ Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: c2102180da46e7338a6ab41de2a921f3a61e70a1
+- `git_commit`: f3d179fb7b997850b388e8aa08cda4c5b7b36d3d
 - `execution_envelope`: `control/execution-envelope.yaml`; SHA-256 `e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af`
 - `request_id`: dapfam-p1-fulltext-c058a3aa7357c782
 - `protected_payloads`: owner-local; aggregate hashes only in this report

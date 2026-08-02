@@ -221,7 +221,7 @@
       "artifact_type": "review",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3",
+      "content_sha256": "50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b",
       "evidence_class": "engineering",
       "explanation": "Validates portable path guidance, fail-closed legacy execution configuration, and tracked-artifact regression coverage.",
       "parent_artifact_hashes": {},
@@ -323,7 +323,7 @@
     },
     {
       "artifact_id": "p2-preflight-tracked-owner-path-audit-repair",
-      "sha256": "30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3",
+      "sha256": "50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b",
       "uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json"
     },
     {
@@ -375,14 +375,14 @@
       "failure_sha256": "e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9",
       "failure_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json",
       "recovery_id": "p2-preflight-tracked-owner-path-repair-20260802",
-      "recovery_sha256": "30e216dcfd65503fdeee7f6f9a085d9e5473fa7879d00a4de8964fd5acee56e3",
+      "recovery_sha256": "50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b",
       "recovery_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json",
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-02T11:28:15Z",
-  "generated_from_revision": "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3",
-  "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
+  "generated_at": "2026-08-02T12:19:09Z",
+  "generated_from_revision": "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027",
+  "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -430,7 +430,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
+    "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -453,14 +453,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform output and source-hash stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-02T11:28:15Z",
+  "last_material_update": "2026-08-02T12:19:09Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "bbf42997181c659141c90448f08f3ae8ba3a189b05711055dabc9b5a150bfc19",
+  "report_sha256": "58844b1fc18510d7976789b8eefb058e57a2b4b4bd85436614b0c782523c60dc",
   "report_type": "task",
   "result": {
     "decision": "not_started",

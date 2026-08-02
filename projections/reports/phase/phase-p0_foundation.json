@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T11:28:15Z",
-  "generated_from_revision": "964f0aeb17e043c96596c262515fd5c6b611b484416e36ba99b10d0903c1a7d3",
-  "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
+  "generated_at": "2026-08-02T12:19:09Z",
+  "generated_from_revision": "1a12fcf5e21dad9a0f09c64c715285c736b284051ff31c521b8beb5ac388c027",
+  "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "c2102180da46e7338a6ab41de2a921f3a61e70a1",
+    "git_commit": "f3d179fb7b997850b388e8aa08cda4c5b7b36d3d",
     "source_of_truth": {
       "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T11:28:15Z",
+  "last_material_update": "2026-08-02T12:19:09Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "d593639ee7d8e5f1ddc6a75a664934461c521fac343789a914fc3e8e3fee02b8",
+  "report_sha256": "51a543a61b8b4644c3177ca6c30dd73942692924fd7cb05a5339f562d3eead20",
   "report_type": "phase",
   "result": {
     "decision": "completed",
