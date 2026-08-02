@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T03:28:18Z",
-  "generated_from_revision": "4db575f7b7b635d61154a444133f726b239760aeaf3062a5b036553f8f0a9f09",
-  "git_commit": "04f314231206df96c11167bf916772cfd814d3e3",
+  "generated_at": "2026-08-02T03:39:36Z",
+  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "04f314231206df96c11167bf916772cfd814d3e3",
+    "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
     "source_of_truth": {
       "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T03:28:18Z",
+  "last_material_update": "2026-08-02T03:39:36Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "19653bdd9b6e299e50ed724000ba55c74c8660d76c40bfb0abaf456fb8cb1ff3",
+  "report_sha256": "77089d860f869ad5128e2e4d5f58d619487f718d240a2d3aabc380d8a271003b",
   "report_type": "phase",
   "result": {
     "decision": "completed",

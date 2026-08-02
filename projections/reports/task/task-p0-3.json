@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T03:28:18Z",
-  "generated_from_revision": "4db575f7b7b635d61154a444133f726b239760aeaf3062a5b036553f8f0a9f09",
-  "git_commit": "04f314231206df96c11167bf916772cfd814d3e3",
+  "generated_at": "2026-08-02T03:39:36Z",
+  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "04f314231206df96c11167bf916772cfd814d3e3",
+    "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
     "source_of_truth": {
       "sha256": "d6f008577e3150e5b60d0d95b0eb947cf796a2dc0fc19c8af17543ef5f9f97ea",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T03:28:18Z",
+  "last_material_update": "2026-08-02T03:39:36Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "81c4121a4393122e978e14741b8324c86c62b42aee96373764d62165122da1df",
+  "report_sha256": "f6754797bdc0d34c4107c83ad45413736cfb1d8e045079dcb0becd346a03ba8f",
   "report_type": "task",
   "result": {
     "decision": "completed",

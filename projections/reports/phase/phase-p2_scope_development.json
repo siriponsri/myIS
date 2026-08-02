@@ -133,9 +133,9 @@
       "status": "retained_and_recovered"
     }
   ],
-  "generated_at": "2026-08-02T03:28:18Z",
-  "generated_from_revision": "4db575f7b7b635d61154a444133f726b239760aeaf3062a5b036553f8f0a9f09",
-  "git_commit": "04f314231206df96c11167bf916772cfd814d3e3",
+  "generated_at": "2026-08-02T03:39:36Z",
+  "generated_from_revision": "11a5bd31e7dbb9f1be3d0f8b728c58381fd347dfd64248a669bef58dd7d86235",
+  "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -177,7 +177,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "04f314231206df96c11167bf916772cfd814d3e3",
+    "git_commit": "0ef52e929994fbd69baa180ffe55f9c7092745c7",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -196,13 +196,13 @@
     }
   },
   "interpretation": "Synthetic lifecycle success validates capture behavior only. It does not compare R1 candidates or support a retrieval claim.",
-  "last_material_update": "2026-08-02T03:28:18Z",
+  "last_material_update": "2026-08-02T03:39:36Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "3f72ece7ef1f498608a87089a1273ee9c9c51a4b598a0a83f0b4a4651c6bc8d4",
+  "report_sha256": "78e8963f3dfbf8d01844d2a154cd3b8c05f921b655cf729762a885aada98906c",
   "report_type": "phase",
   "result": {
     "decision": "ready_for_owner_preflight",
