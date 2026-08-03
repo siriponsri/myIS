@@ -37,7 +37,8 @@ jobs:
       - name: Validate P2 readiness contract without execution
         run: |
           uv run --no-sync pytest -q tests/test_p2_budget_contracts.py tests/test_p2_freeze_barrier.py tests/test_p2_cli.py tests/test_p2_dashboard_projection.py tests/test_p2_mlflow_projection.py tests/test_provider_switching_static.py
-          uv run --no-sync python -c "from pathlib import Path; from myis_research.p2.contracts import load_profile; p=load_profile(Path('.')); assert p.payload['limits']['max_candidates_total']==32; assert p.payload['runtime']['max_wall_clock_seconds']==259200; assert p.payload['runtime']['per_candidate_timeout_seconds']==10800"
+          uv run --no-sync python -c "from pathlib import Path; from myis_research.p2.contracts import load_profile; from myis_research.p2.measured_contracts import load_profile_uri; p=load_profile(Path('.')); assert p.payload['limits']['max_candidates_total']==32; assert p.payload['runtime']['max_wall_clock_seconds']==259200; assert p.payload['runtime']['per_candidate_timeout_seconds']==10800; v2,_=load_profile_uri(Path('.'), 'control/budgets/p2-r1-primary-v2.yaml'); assert v2['limits']['max_candidates_total']==32; assert v2['runtime']['max_wall_clock_seconds']==432000; assert v2['runtime']['measurement_budget_seconds']==345600; assert v2['runtime']['overhead_reserve_seconds']==86400; assert v2['runtime']['per_candidate_timeout_seconds']==10800"
+          uv run --no-sync python scripts/build_p2_measured_controls.py --repository-root . --check
       - name: Keep P2 selection and protected stores closed
         run: uv run --no-sync python .github/scripts/check_policy.py --repository-root . p2-closure
       - name: Reject archive runtime coupling

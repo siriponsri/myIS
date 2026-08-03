@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-candidate-result:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "candidate_id", "arm", "candidate_class", "iteration", "data_role", "spec_sha256", "index_sha256", "index_lineage_sha256", "index_build_count", "deterministic_replay", "runtime_seconds", "metric", "result_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-candidate-result.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "arm": {"enum": ["R0", "R0-W", "R1"]},
+    "candidate_class": {"enum": ["frozen_control", "preregistered_patent", "adaptive_autoindex"]},
+    "iteration": {"type": "integer", "minimum": 0, "maximum": 5},
+    "data_role": {"enum": ["train", "selection"]},
+    "spec_sha256": {"$ref": "#/$defs/hash"},
+    "index_sha256": {"$ref": "#/$defs/hash"},
+    "index_lineage_sha256": {"$ref": "#/$defs/hash"},
+    "index_build_count": {"type": "integer", "minimum": 0, "maximum": 1},
+    "deterministic_replay": {"const": true},
+    "runtime_seconds": {"type": "number", "minimum": 0},
+    "metric": {"type": "object"},
+    "result_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

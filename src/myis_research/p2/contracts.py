@@ -11,8 +11,10 @@ import json
 import os
 import re
 import subprocess
+import tempfile
 from dataclasses import dataclass
 from functools import lru_cache
+from hashlib import sha256
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Mapping
 from urllib.parse import urlsplit
@@ -30,6 +32,12 @@ from ..protection import assert_aggregate_only, assert_path_not_protected
 
 PROFILE_RELATIVE_PATH = Path("control/budgets/p2-r1-primary-v1.yaml")
 ENVELOPE_RELATIVE_PATH = Path("control/execution-envelope-p2.yaml")
+HISTORICAL_PROPOSAL_RELATIVE_PATH = Path(
+    "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
+)
+HISTORICAL_PROPOSAL_SESSION_RELATIVE_PATH = Path(
+    "projections/sessions/20260802T093026Z-p2-preflight-freeze-proposal-v1.json"
+)
 PROFILE_SCHEMA = "p2-budget-profile.v1.json"
 REQUEST_SCHEMA = "p2-request.v1.json"
 AGGREGATE_METRIC_SCHEMA = "p2-aggregate-metric.v1.json"
@@ -106,9 +114,12 @@ class P2BudgetProfile:
         return str(self.payload["profile_id"])
 
 
-def load_profile(repository_root: Path) -> P2BudgetProfile:
+def load_profile(
+    repository_root: Path,
+    profile_relative_path: Path = PROFILE_RELATIVE_PATH,
+) -> P2BudgetProfile:
     root = Path(repository_root).resolve()
-    path = root / PROFILE_RELATIVE_PATH
+    path = root / profile_relative_path
     try:
         payload = yaml.safe_load(path.read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as error:
@@ -118,6 +129,16 @@ def load_profile(repository_root: Path) -> P2BudgetProfile:
     _validate_schema(payload, PROFILE_SCHEMA)
     _validate_profile_invariants(payload)
     return P2BudgetProfile(dict(payload), canonical_sha256(payload))
+
+
+def load_profile_by_id(repository_root: Path, profile_id: str) -> P2BudgetProfile:
+    if not re.fullmatch(r"p2-r1-primary-v[0-9]+", str(profile_id)):
+        raise P2ContractError("P2 budget profile ID is invalid")
+    relative = Path("control/budgets") / f"{profile_id}.yaml"
+    profile = load_profile(repository_root, relative)
+    if profile.profile_id != profile_id:
+        raise P2ContractError("P2 budget profile file and profile ID differ")
+    return profile
 
 
 def load_p2_request(
@@ -136,7 +157,7 @@ def load_p2_request(
         raise P2ContractError("P2 request must be a JSON object")
     payload = validate_p2_artifact(payload, repository_root=root)
     _reject_hidden_defaults(payload)
-    profile = load_profile(root)
+    profile = load_profile_by_id(root, str(payload["budget_profile_id"]))
     if not GIT_RE.fullmatch(str(payload["git_commit"])):
         raise P2ContractError("request git_commit must be a full lowercase Git commit")
     if len(payload["frozen_controls"]) != 4 or len(set(payload["frozen_controls"])) != 4:
@@ -155,10 +176,11 @@ def build_request(
     input_hashes: Mapping[str, str],
     frozen_controls: list[str],
     repository_root: Path,
+    budget_profile_uri: str = PROFILE_RELATIVE_PATH.as_posix(),
 ) -> dict[str, Any]:
     """Build a complete request; callers still need to persist it immutably."""
 
-    profile = load_profile(repository_root)
+    profile = load_profile(repository_root, Path(budget_profile_uri))
     body: dict[str, Any] = {
         "schema_version": "myis.p2-request.v1",
         "request_id": request_id,
@@ -184,18 +206,25 @@ def write_immutable_json(path: Path, payload: Mapping[str, Any]) -> str:
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     encoded = (canonical_json(dict(payload)) + "\n").encode("utf-8")
-    try:
-        descriptor = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o444)
-    except FileExistsError as error:
-        raise P2ContractError(f"refusing to overwrite immutable P2 artifact: {target}") from error
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{target.name}.", suffix=".tmp", dir=target.parent
+    )
+    temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(encoded)
             handle.flush()
             os.fsync(handle.fileno())
+        try:
+            os.link(temporary, target)
+        except FileExistsError as error:
+            raise P2ContractError(
+                f"refusing to overwrite immutable P2 artifact: {target}"
+            ) from error
     except BaseException:
-        target.unlink(missing_ok=True)
         raise
+    finally:
+        temporary.unlink(missing_ok=True)
     return canonical_sha256(dict(payload))
 
 
@@ -229,7 +258,12 @@ def validate_p2_artifact(
         if recorded != canonical_sha256(unsigned):
             raise P2ContractError(f"{schema_version} self-hash is invalid")
     root = Path(repository_root).resolve() if repository_root is not None else _repository_root()
-    profile = load_profile(root)
+    profile_id = payload.get("budget_profile_id")
+    profile = (
+        load_profile_by_id(root, str(profile_id))
+        if profile_id is not None
+        else load_profile(root)
+    )
     if payload.get("budget_profile_id") != profile.profile_id:
         raise P2ContractError("P2 artifact budget_profile_id does not match the canonical profile")
     if payload.get("budget_profile_sha256") != profile.sha256:
@@ -238,8 +272,8 @@ def validate_p2_artifact(
     if campaign_revision is not None and campaign_revision != profile.payload["campaign_revision"]:
         raise P2ContractError("P2 artifact campaign_revision does not match the canonical profile")
     if schema_version == "myis.p2-request.v1":
-        envelope_path = root / ENVELOPE_RELATIVE_PATH
-        if not envelope_path.is_file() or file_sha256(envelope_path) != payload["execution_envelope_sha256"]:
+        _, envelope_sha256 = _load_envelope_for_profile(root, profile)
+        if envelope_sha256 != payload["execution_envelope_sha256"]:
             raise P2ContractError("request execution envelope hash is stale or missing")
         if payload["campaign_id"] != profile.payload["campaign_id"]:
             raise P2ContractError("request campaign_id does not match the canonical profile")
@@ -297,7 +331,7 @@ def _validate_preflight_receipt_semantics(
     _reject_absolute_paths(payload)
     profile = load_profile(repository_root)
     campaign_path = repository_root / "control/campaigns/scope-autoindex-v1.yaml"
-    envelope_path = repository_root / ENVELOPE_RELATIVE_PATH
+    _, envelope_sha256 = _load_envelope_for_profile(repository_root, profile)
     if payload["budget_profile_id"] != profile.profile_id or payload["budget_profile_sha256"] != profile.sha256:
         raise P2ContractError("preflight profile binding is stale")
     if payload["campaign_revision"] != profile.payload["campaign_revision"]:
@@ -307,7 +341,7 @@ def _validate_preflight_receipt_semantics(
         raise P2ContractError("preflight execution source commit is stale or missing")
     if not campaign_path.is_file() or file_sha256(campaign_path) != payload["campaign_sha256"]:
         raise P2ContractError("preflight campaign binding is stale")
-    if not envelope_path.is_file() or file_sha256(envelope_path) != payload["execution_envelope_sha256"]:
+    if envelope_sha256 != payload["execution_envelope_sha256"]:
         raise P2ContractError("preflight execution envelope binding is stale")
 
     checks = list(payload["checks"])
@@ -464,10 +498,13 @@ def _validate_candidate_freeze_proposal_semantics(
             lineage = item[lineage_name]
             if lineage["required"] is not True or not lineage["source_locations"]:
                 raise P2ContractError(f"candidate proposal {lineage_name} lineage is incomplete")
+    historical_tracked_proposal = _is_bound_historical_candidate_proposal(
+        payload, repository_root
+    )
     for source in payload["source_bindings"]:
         uri = str(source["uri"])
         path = _resolve_proposal_locator(repository_root, uri, "proposal source uri")
-        if file_sha256(path) != source["sha256"]:
+        if file_sha256(path) != source["sha256"] and not historical_tracked_proposal:
             raise P2ContractError("candidate proposal source binding is stale")
     for lineage_name, lineage in payload["lineage_requirements"].items():
         for locator in lineage["source_locations"]:
@@ -484,6 +521,64 @@ def _validate_candidate_freeze_proposal_semantics(
                     str(locator),
                     f"proposal candidate {lineage_name} source location",
                 )
+
+
+def _is_bound_historical_candidate_proposal(
+    payload: Mapping[str, Any], repository_root: Path
+) -> bool:
+    root = Path(repository_root).resolve()
+    try:
+        source_of_truth = yaml.safe_load(
+            (root / "control/source-of-truth.yaml").read_text(encoding="utf-8")
+        )
+    except (OSError, yaml.YAMLError):
+        return False
+    if not isinstance(source_of_truth, Mapping):
+        return False
+    records = source_of_truth.get("records")
+    if not isinstance(records, list):
+        return False
+    active_revision: str | None = None
+    for record in records:
+        if not isinstance(record, Mapping) or record.get("id") != "p2_campaign_revision":
+            continue
+        authority = record.get("authority")
+        if not isinstance(authority, str):
+            return False
+        try:
+            revision = yaml.safe_load((root / authority).read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            return False
+        if isinstance(revision, Mapping):
+            active_revision = str(revision.get("campaign_revision", ""))
+        break
+    if not active_revision or active_revision == payload.get("campaign_revision"):
+        return False
+
+    proposal_path = root / HISTORICAL_PROPOSAL_RELATIVE_PATH
+    session_path = root / HISTORICAL_PROPOSAL_SESSION_RELATIVE_PATH
+    try:
+        tracked_payload = json.loads(proposal_path.read_text(encoding="utf-8"))
+        session = json.loads(session_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if tracked_payload != dict(payload):
+        return False
+    tracked_sha256 = sha256(
+        proposal_path.read_text(encoding="utf-8").encode("utf-8")
+    ).hexdigest()
+    for event in session.get("events", []):
+        if not isinstance(event, Mapping):
+            continue
+        for reference in event.get("evidence_refs", []):
+            if not isinstance(reference, Mapping):
+                continue
+            if (
+                reference.get("path") == HISTORICAL_PROPOSAL_RELATIVE_PATH.as_posix()
+                and reference.get("sha256") == tracked_sha256
+            ):
+                return True
+    return False
 
 
 def _reject_absolute_paths(value: Any, *, path: str = "$") -> None:
@@ -574,10 +669,14 @@ def validate_p2_package_bundle(
     manifest: Mapping[str, Any],
     package: Mapping[str, Any],
     repository_root: Path,
+    artifact_root: Path | None = None,
 ) -> dict[str, dict[str, Any]]:
     """Validate one complete fixture or measured P2 artifact graph semantically."""
 
     root = Path(repository_root).resolve()
+    package_artifact_root = (
+        Path(artifact_root).resolve() if artifact_root is not None else root
+    )
     artifacts = {
         "request": validate_p2_artifact(request, repository_root=root),
         "ledger": validate_p2_artifact(ledger, repository_root=root),
@@ -609,8 +708,8 @@ def validate_p2_package_bundle(
     selection_row = artifacts.get("selection")
     manifest_row = artifacts["manifest"]
     package_row = artifacts["package"]
-    profile = load_profile(root)
-    envelope, envelope_sha256 = _load_envelope(root)
+    profile = load_profile_by_id(root, str(request_row["budget_profile_id"]))
+    envelope, envelope_sha256 = _load_envelope_for_profile(root, profile)
 
     _require_semantic(request_row["execution_envelope_sha256"] == envelope_sha256, "request envelope hash mismatch")
     scope = envelope.get("scope", {})
@@ -618,7 +717,10 @@ def validate_p2_package_bundle(
     _require_semantic(scope.get("arm") == "R1", "envelope arm mismatch")
     _require_semantic(scope.get("campaign_id") == profile.payload["campaign_id"], "envelope campaign mismatch")
     _require_semantic(scope.get("campaign_revision") == profile.payload["campaign_revision"], "envelope campaign revision mismatch")
-    _require_semantic(scope.get("budget_profile_ref") == PROFILE_RELATIVE_PATH.as_posix(), "envelope budget profile reference mismatch")
+    expected_profile_ref = (
+        Path("control/budgets") / f"{profile.profile_id}.yaml"
+    ).as_posix()
+    _require_semantic(scope.get("budget_profile_ref") == expected_profile_ref, "envelope budget profile reference mismatch")
     _require_semantic(scope.get("train_selection_only") is True, "envelope must remain train/selection only")
     _require_semantic(scope.get("final_split_open") is False, "envelope final split must remain closed")
     _require_semantic(scope.get("selection_access_requires_shortlist_freeze") is True, "envelope freeze barrier mismatch")
@@ -697,7 +799,10 @@ def validate_p2_package_bundle(
     iterations = list(ledger_row["iterations"])
     iteration_numbers = [int(item["iteration"]) for item in iterations]
     _require_semantic(iteration_numbers == list(range(1, len(iterations) + 1)), "adaptive iterations must be consecutive")
-    _require_semantic(len(iterations) in {4, 5}, "complete ledger must contain four or five adaptive iterations")
+    _require_semantic(
+        0 <= len(iterations) <= profile.payload["limits"]["max_adaptive_iterations"],
+        "complete ledger adaptive iteration count exceeds the profile",
+    )
     seen_adaptive: set[str] = set()
     iteration_metrics: list[dict[str, Any]] = []
     for record in iterations:
@@ -721,7 +826,13 @@ def validate_p2_package_bundle(
         iteration_metrics.append(dict(derived_metric))
     _require_semantic(seen_adaptive == {str(item["candidate_id"]) for item in candidates if item["class"] == "adaptive_autoindex"}, "adaptive candidates are missing from iteration records")
     if len(iterations) < profile.payload["limits"]["max_adaptive_iterations"]:
-        _require_semantic(_early_stop_eligible(iteration_metrics, profile.payload["stopping"]), "adaptive search stopped without valid early-stop evidence")
+        stop_reason = ledger_row.get("stop_reason")
+        valid_reasons = set(profile.payload.get("stopping", {}).get("valid_reasons", []))
+        _require_semantic(
+            _early_stop_eligible(iteration_metrics, profile.payload["stopping"])
+            or stop_reason in valid_reasons,
+            "adaptive search stopped without valid early-stop evidence or stopping reason",
+        )
 
     commitment_candidate = baseline_matches[0]
     _require_semantic(commitment_candidate["class"] == "frozen_control", "baseline identity is not a frozen control in the ledger")
@@ -855,7 +966,9 @@ def validate_p2_package_bundle(
         if value is None:
             _require_semantic(artifact_name == "selection" and selection_row is None, f"package {field} cannot be null")
             continue
-        referenced = _load_referenced_artifact(root, str(value), field)
+        referenced = _load_referenced_artifact(
+            package_artifact_root, str(value), field
+        )
         _require_semantic(referenced == artifacts[artifact_name], f"package {field} does not resolve to the supplied artifact")
     if not freeze_ids:
         _require_semantic(package_row["status"] == "negative_development", "empty shortlist package must be negative development")
@@ -866,15 +979,38 @@ def _repository_root() -> Path:
     return Path(__file__).resolve().parents[3]
 
 
-def _load_envelope(repository_root: Path) -> tuple[dict[str, Any], str]:
-    path = repository_root / ENVELOPE_RELATIVE_PATH
-    try:
-        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError) as error:
-        raise P2ContractError(f"cannot load P2 execution envelope: {path}") from error
-    if not isinstance(payload, dict):
-        raise P2ContractError("P2 execution envelope must be a mapping")
-    return dict(payload), file_sha256(path)
+def _load_envelope_for_profile(
+    repository_root: Path,
+    profile: P2BudgetProfile,
+) -> tuple[dict[str, Any], str]:
+    root = Path(repository_root).resolve()
+    expected_profile_ref = (
+        Path("control/budgets") / f"{profile.profile_id}.yaml"
+    ).as_posix()
+    matches: list[tuple[dict[str, Any], str]] = []
+    for path in sorted((root / "control").glob("execution-envelope-p2*.yaml")):
+        if path.is_symlink() or not path.is_file():
+            continue
+        try:
+            payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        scope = payload.get("scope")
+        if not isinstance(scope, Mapping):
+            continue
+        if (
+            scope.get("budget_profile_ref") == expected_profile_ref
+            and scope.get("campaign_revision")
+            == profile.payload["campaign_revision"]
+        ):
+            matches.append((dict(payload), file_sha256(path)))
+    if len(matches) != 1:
+        raise P2ContractError(
+            f"expected exactly one P2 execution envelope for {profile.profile_id}"
+        )
+    return matches[0]
 
 
 def _require_semantic(condition: bool, message: str) -> None:

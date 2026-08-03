@@ -52,6 +52,12 @@ PROJECTION_SOURCE_PATHS = (
     "control/execution-envelope.yaml",
     "control/execution-envelope-p2.yaml",
     "control/budgets/p2-r1-primary-v1.yaml",
+    "control/execution-envelope-p2-v2.yaml",
+    "control/budgets/p2-r1-primary-v2.yaml",
+    "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "archive/p2-runtime-resilience-v1-interrupted",
+    "orchestration/autoresearch/p2-runtime-resilience-v2",
     "control/source-of-truth.yaml",
     "control/decisions",
     "campaigns/scope-autoindex-v1/evidence",
@@ -298,7 +304,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     result_state = "valid" if p1_pairs else "blocked"
     p1_latency = paired_receipts[0].get("latency_seconds") if paired_receipts else None
     p2_metric_rows = [
-        {"run_id": "p2-r1-primary-v1", "phase_id": "P2_SCOPE_DEVELOPMENT", **item}
+        {"run_id": str(p2_readiness.get("budget_profile_id", "p2-r1-primary")), "phase_id": "P2_SCOPE_DEVELOPMENT", **item}
         for item in p2_readiness.get("metrics", [])
     ]
     body: dict[str, Any] = {
@@ -772,7 +778,8 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
     fixture_pilot = _p2_fixture_projection(root)
     preflight = _p2_preflight_projection(root)
     candidate_proposal = _p2_candidate_proposal_projection(root)
-    profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
+    active_sources = _active_p2_sources(root)
+    profile_path = root / active_sources["profile"]
     profile: dict[str, Any] = {}
     profile_sha256: str | None = None
     try:
@@ -811,6 +818,9 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
                 validated = validate_p2_artifact(payload, repository_root=root)
             except (OSError, UnicodeError, json.JSONDecodeError, P2ContractError, TypeError, ValueError):
                 invalid_count += 1
+                continue
+            artifact_revision = validated.get("campaign_revision")
+            if artifact_revision not in {None, profile.get("campaign_revision")}:
                 continue
             if profile_sha256 and validated.get("budget_profile_sha256") not in {None, profile_sha256}:
                 invalid_count += 1
@@ -955,18 +965,24 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         },
         "runtime": {
             "max_wall_clock_seconds": runtime.get("max_wall_clock_seconds"),
+            "measurement_budget_seconds": runtime.get("measurement_budget_seconds"),
+            "overhead_reserve_seconds": runtime.get("overhead_reserve_seconds"),
             "per_candidate_timeout_seconds": runtime.get("per_candidate_timeout_seconds"),
+            "prevent_system_sleep": runtime.get("prevent_system_sleep", False),
         },
         "stopping": {
             "min_iterations_before_early_stop": stopping.get("min_iterations_before_early_stop"),
             "no_improvement_patience": stopping.get("no_improvement_patience"),
             "selection_rule": stopping.get("selection_rule", "strictly_greater_reject_ties"),
+            "whole_batch_admission": stopping.get("whole_batch_admission", False),
+            "valid_reasons": stopping.get("valid_reasons", []),
         },
         "resources": {
             "paid_api_budget_usd": resources.get("paid_api_budget_usd", 0),
             "gpu_budget_usd": resources.get("gpu_budget_usd", 0),
             "network_model_download": resources.get("network_model_download", False),
             "provider_fallback": resources.get("provider_fallback", False),
+            "proposer_mode": resources.get("proposer_mode", "disabled"),
         },
         "freeze_barrier": {
             "required": True,
@@ -981,8 +997,9 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "invalid_artifact_count": invalid_count,
         "claim_boundary": "no_measured_claim" if not measured_manifest else "train_selection_development_only",
         "source": {
-            "profile": "control/budgets/p2-r1-primary-v1.yaml",
-            "execution_envelope": "control/execution-envelope-p2.yaml",
+            "profile": active_sources["profile"],
+            "execution_envelope": active_sources["execution_envelope"],
+            "campaign_revision": active_sources.get("campaign_revision"),
             "baseline_commitment_sha256": commitment.get("commitment_sha256") if commitment else None,
             "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
             "official_review_index_sha256": review_source.get("index_sha256"),
@@ -993,6 +1010,48 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "official_review": official_review,
         "fixture_pilot": fixture_pilot,
     }
+
+
+def _active_p2_sources(root: Path) -> dict[str, str]:
+    legacy = {
+        "profile": "control/budgets/p2-r1-primary-v1.yaml",
+        "execution_envelope": "control/execution-envelope-p2.yaml",
+    }
+    source_path = root / "control/source-of-truth.yaml"
+    if not source_path.is_file() or source_path.is_symlink():
+        return legacy
+    source = _load_yaml_like(source_path)
+    records = source.get("records", []) if isinstance(source, dict) else []
+    by_id = {
+        str(item.get("id")): item
+        for item in records
+        if isinstance(item, dict) and item.get("id")
+    }
+    profile = by_id.get("p2_budget_profile", {}).get("authority")
+    execution = by_id.get("execution_boundary", {}).get("phase_mapping", {}).get(
+        "P2_SCOPE_DEVELOPMENT"
+    )
+    revision = by_id.get("p2_campaign_revision", {}).get("authority")
+    if (
+        "p2_budget_profile" not in by_id
+        and "p2_campaign_revision" not in by_id
+        and execution is None
+    ):
+        return legacy
+    values = {
+        "profile": profile,
+        "execution_envelope": execution,
+        "campaign_revision": revision,
+    }
+    for label, uri in values.items():
+        if uri is None and label == "campaign_revision":
+            continue
+        if not isinstance(uri, str) or not uri or Path(uri).is_absolute() or ".." in Path(uri).parts:
+            raise ValueError(f"active P2 {label} source is not repository-relative")
+        path = root / uri
+        if path.is_symlink() or not path.is_file():
+            raise ValueError(f"active P2 {label} source is missing or unsafe")
+    return {key: str(value) for key, value in values.items() if value is not None}
 
 
 def _p2_candidate_proposal_projection(root: Path) -> dict[str, Any]:
@@ -1017,7 +1076,18 @@ def _p2_candidate_proposal_projection(root: Path) -> dict[str, Any]:
         return {**missing, "status": "invalid"}
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-        proposal = validate_p2_candidate_freeze_proposal(payload, repository_root=root)
+        active = _active_p2_sources(root)
+        active_profile = _load_yaml_like(root / active["profile"])
+        historical = payload.get("campaign_revision") != active_profile.get("campaign_revision")
+        if historical:
+            recorded_hash = str(payload.get("proposal_sha256", ""))
+            unsigned = {key: value for key, value in payload.items() if key != "proposal_sha256"}
+            assert_aggregate_only(payload)
+            if recorded_hash != canonical_sha256(unsigned):
+                raise P2ContractError("historical candidate proposal self-hash is invalid")
+            proposal = payload
+        else:
+            proposal = validate_p2_candidate_freeze_proposal(payload, repository_root=root)
     except (OSError, UnicodeError, json.JSONDecodeError, P2ContractError, TypeError, ValueError):
         return {**missing, "status": "invalid"}
     controls = proposal.get("frozen_controls", [])
@@ -1029,6 +1099,7 @@ def _p2_candidate_proposal_projection(root: Path) -> dict[str, Any]:
         "proposal_uri": P2_CANDIDATE_PROPOSAL_PATH.as_posix(),
         "proposal_sha256": str(proposal.get("proposal_sha256")),
         "validated": True,
+        "historical_superseded": historical,
         "frozen_controls": len(controls),
         "preregistered_candidates": len(candidates),
         "registered_candidates": sum(1 for item in rows if item.get("registered") is True),

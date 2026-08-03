@@ -619,9 +619,9 @@
         "uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
       }
     ],
-    "budget_profile_id": "p2-r1-primary-v1",
-    "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
-    "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
+    "budget_profile_id": "p2-r1-primary-v2",
+    "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
+    "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v2",
     "candidate_budget": {
       "candidates_per_iteration": 4,
       "frozen_controls": 4,
@@ -638,6 +638,7 @@
       "adoption": "not_adopted",
       "frozen_controls": 4,
       "hash_locked_candidates": 0,
+      "historical_superseded": true,
       "preregistered_candidates": 8,
       "proposal_sha256": "38156c8dbcdaf56ad0593b6afad118f83ac23b438ab1ecae6debc9968b9339b8",
       "proposal_uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json",
@@ -775,29 +776,41 @@
       "gpu_budget_usd": 0,
       "network_model_download": false,
       "paid_api_budget_usd": 0,
+      "proposer_mode": "hybrid_codex_ephemeral",
       "provider_fallback": false
     },
     "runtime": {
-      "max_wall_clock_seconds": 259200,
-      "per_candidate_timeout_seconds": 10800
+      "max_wall_clock_seconds": 432000,
+      "measurement_budget_seconds": 345600,
+      "overhead_reserve_seconds": 86400,
+      "per_candidate_timeout_seconds": 10800,
+      "prevent_system_sleep": true
     },
     "selection_accesses": 0,
     "shortlist_count": 0,
     "source": {
       "baseline_commitment_sha256": null,
       "baseline_reproduction_receipt_sha256": null,
-      "execution_envelope": "control/execution-envelope-p2.yaml",
+      "campaign_revision": "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml",
+      "execution_envelope": "control/execution-envelope-p2-v2.yaml",
       "fixture_manifest_sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
       "fixture_package_sha256": "0f8376e5ff2713fd56484ef8f8df8a36a56defadfcc6faefa18c7e2f5ff8fea9",
       "fixture_receipt_sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "official_review_index_sha256": "6c6c6a3cead0bb76fed1e750bc20b883bf2762f1eb5c2aa2a3511e890e708f80",
-      "profile": "control/budgets/p2-r1-primary-v1.yaml"
+      "profile": "control/budgets/p2-r1-primary-v2.yaml"
     },
     "status": "ready_planned_not_measured",
     "stopping": {
       "min_iterations_before_early_stop": 4,
       "no_improvement_patience": 2,
-      "selection_rule": "strictly_greater_reject_ties"
+      "selection_rule": "strictly_greater_reject_ties",
+      "valid_reasons": [
+        "wall_clock_exhausted",
+        "development_impact_gate",
+        "no_grounded_hypotheses",
+        "owner_stop_after_checkpoint"
+      ],
+      "whole_batch_admission": true
     }
   },
   "phases": [
@@ -1079,7 +1092,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
+  "projection_revision": "12b9a3d91577b9e46f3bf48d5e534ecc2a5d563081d7fa536fc13cc4e409fe34",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1123,8 +1136,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
-  "read_model_sha256": "bfae45cdf823b16e4c67835230208e08511131178446c16ef863b6a772dd3d80",
+  "read_model_revision": "12b9a3d91577b9e46f3bf48d5e534ecc2a5d563081d7fa536fc13cc4e409fe34",
+  "read_model_sha256": "a68f81f7a8e96c29e44181606bbbc6fb17cd5040f7576efe9b74158e0900fe95",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -1136,7 +1149,7 @@
     "cpu_only": true,
     "gpu": false,
     "latency_seconds": 10835.097119699998,
-    "p2_max_wall_clock_seconds": 259200,
+    "p2_max_wall_clock_seconds": 432000,
     "p2_measured_runs": 0,
     "p2_per_candidate_timeout_seconds": 10800,
     "p2_selection_accesses": 0,
@@ -1174,8 +1187,8 @@
       "validity": "valid"
     },
     {
-      "budget_profile_id": "p2-r1-primary-v1",
-      "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+      "budget_profile_id": "p2-r1-primary-v2",
+      "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
       "claim_boundary": "no_measured_claim",
       "evidence_maturity": "non_scientific",
       "limitations": [

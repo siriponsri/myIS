@@ -474,6 +474,55 @@ final-872, D2/D3, GPU, paid APIs, network model downloads, and provider state
 were not accessed or changed. The exact next authorized action remains
 `Owner-local P2 measured preflight`.
 
+## P2 runtime resilience v2 closeout (2026-08-03)
+
+The interrupted v1 implementation is retained under
+`archive/p2-runtime-resilience-v1-interrupted/` with a sanitized patch and
+SHA-256 manifest. Its Windows PID liveness probe was unsafe and the attempt had
+no tracked continuity ledger, so it is historical and superseded.
+
+Future P2 measured requests use campaign revision
+`scope-autoindex-v1-p2-r1-primary-v2`, budget profile
+`control/budgets/p2-r1-primary-v2.yaml`, execution envelope
+`control/execution-envelope-p2-v2.yaml`, and tracked runbook
+`control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md`. The profile permits 32
+candidates, a 432000-second wall clock, a 345600-second measurement budget, an
+86400-second overhead reserve, and a 10800-second per-candidate timeout.
+
+The measured runtime now uses an OS-held advisory lock, process creation
+identity, an immutable hash-chained event journal, a rebuildable state snapshot,
+detached `start|resume|status|verify|stop-after-checkpoint` supervision,
+checkpointed candidate execution, partial-index quarantine, one infrastructure
+retry, terminal scientific failure semantics, selection compare-and-swap, and
+allowlisted worker/candidate/proposer environments. Start and resume require
+explicit Owner-local store and cache roots.
+
+The first repository-wide retry retained `309 passed / 15 failed` and exposed
+three compatibility defects. A later detached synthetic soak found a sanitized
+environment bootstrap defect; the child now receives only the resolved package
+source root. The first full-suite closeout command was terminated by its
+120-second command timeout, then the identical command passed with a longer
+ceiling. The recovered closeout passed `328` full tests,
+`49` graph/Dashboard/safety tests, `31` focused runtime tests, `20`
+compatibility tests, two consecutive zero-drift report checks, and a disposable
+clean-checkout regression with `4` tests plus a read-model-only PASS. Session,
+advisor, layout, full assets/map, P2 closure, archive-runtime, measured-control,
+unsafe-path, repository-safe MLflow doctor, Brain literature (`154` notes,
+`0` errors), scoped Ruff, and
+`git diff --check` also passed. Recovery audit
+`p2-runtime-resilience-v2-recovery-20260803` returned `Accept` with no blocking
+finding.
+
+`AGENTS.md` now requires every agent-contract update to create or update a
+linked Brain pointer in the same session. Brain YOLO mode is effective for
+aggregate-safe pointer memory immediately after acquiring the serial-writer
+lease; it does not bypass Owner gates, protected-data rules, deletion approval,
+measured authorization, or commit/push authority.
+
+This is engineering preparation only. Measured P2, real candidates, shortlist,
+selection, final-872, D2, and D3 remain closed with real counters at zero. The
+next authorized action remains exactly `Owner-local P2 measured preflight`.
+
 ## P2 tracked Owner-path safety recovery (2026-08-02)
 
 The completion audit expanded the repository-safe path scan beyond P2 JSON

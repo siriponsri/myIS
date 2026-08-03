@@ -58,6 +58,7 @@ class P2RunStateMachine:
         self.no_improvement_streak = 0
         self.early_stop_eligible = False
         self.total_index_builds = 0
+        self.stop_reason: str | None = None
 
     def register_candidate(self, candidate: Candidate) -> None:
         self._require_state("candidate_generation")
@@ -203,10 +204,12 @@ class P2RunStateMachine:
             raise P2StateError("train outcomes require an immutable baseline commitment")
         row = self.candidates[candidate_id]
         if self.state == "candidate_generation":
-            if row["class"] != "adaptive_autoindex":
-                raise P2StateError("only active adaptive candidates can train during generation")
-            if row["iteration"] in self.completed_iterations:
+            if row["class"] == "adaptive_autoindex" and row["iteration"] in self.completed_iterations:
                 raise P2StateError("completed iteration outcomes are immutable")
+            if row["class"] != "adaptive_autoindex" and not self._base_allocation_complete():
+                raise P2StateError(
+                    "base train outcomes require all frozen and preregistered candidates"
+                )
         if status not in {"train_complete", "failed"}:
             raise P2StateError("train status must be complete or failed")
         if index_build_count < 0 or index_build_count > self.profile["limits"]["max_index_builds"]:
@@ -280,6 +283,9 @@ class P2RunStateMachine:
         return self.early_stop_eligible
 
     def finish_generation(self) -> None:
+        self.finish_generation_with_reason()
+
+    def finish_generation_with_reason(self, stop_reason: str | None = None) -> None:
         self._require_state("candidate_generation")
         if not self._base_allocation_complete():
             raise P2StateError("generation requires all frozen controls and preregistered candidates")
@@ -292,11 +298,16 @@ class P2RunStateMachine:
         if adaptive_ids != completed_ids:
             raise P2StateError("every adaptive candidate must belong to one completed iteration")
         maximum_iterations = self.profile["limits"]["max_adaptive_iterations"]
-        if len(self.completed_iterations) < maximum_iterations and not self.early_stop_eligible:
-            raise P2StateError("generation can stop early only after valid completed iterations")
+        if len(self.completed_iterations) < maximum_iterations:
+            valid_reasons = set(self.profile.get("stopping", {}).get("valid_reasons", []))
+            if stop_reason is None and not self.early_stop_eligible:
+                raise P2StateError("generation can stop early only after valid completed iterations")
+            if stop_reason is not None and stop_reason not in valid_reasons:
+                raise P2StateError("generation stop reason is not allowed by the profile")
         if any(item["status"] == "failed" for item in self._adaptive_candidates()):
             self.state = "blocked"
             raise P2StateError("adaptive train failure blocks shortlist and selection")
+        self.stop_reason = stop_reason
         self.state = "train_evaluation"
 
     def record_baseline_reproduction(
@@ -306,7 +317,10 @@ class P2RunStateMachine:
     ) -> dict[str, Any]:
         """Record one immutable hash-bound baseline reproduction receipt."""
 
-        self._require_state("train_evaluation")
+        if self.state not in {"candidate_generation", "train_evaluation"}:
+            raise P2StateError(
+                "baseline reproduction requires candidate generation or train evaluation"
+            )
         if self.baseline_commitment is None:
             raise P2StateError("baseline reproduction requires an immutable baseline commitment")
         if self.baseline_reproduction_receipt is not None:
@@ -536,6 +550,8 @@ class P2RunStateMachine:
             "candidates": [deepcopy(self.candidates[candidate_id]) for candidate_id in sorted(self.candidates)],
             "iterations": [deepcopy(self.iteration_records[index]) for index in sorted(self.iteration_records)],
         }
+        if self.stop_reason is not None:
+            body["stop_reason"] = self.stop_reason
         body["ledger_sha256"] = canonical_sha256(body)
         return body
 
@@ -557,6 +573,7 @@ class P2RunStateMachine:
             "best_iteration_metric": deepcopy(self.best_iteration_metric),
             "no_improvement_streak": self.no_improvement_streak,
             "early_stop_eligible": self.early_stop_eligible,
+            "stop_reason": self.stop_reason,
             "total_index_builds": self.total_index_builds,
             "baseline_reproduction_status": baseline_status,
             "baseline_commitment_sha256": (

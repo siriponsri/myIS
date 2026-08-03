@@ -23,10 +23,13 @@ written.
   the active campaign.
 - Read `control/execution-envelope.yaml` before starting an experiment,
   measured run, or execution-policy change.
-- Read `control/execution-envelope-p2.yaml` and
-  `control/budgets/p2-r1-primary-v1.yaml` before changing P2 execution policy
-  or preparing a P2 request. The P1 envelope remains hash-bound historical
-  authorization and must not be overwritten.
+- Read `control/execution-envelope-p2.yaml`,
+  `control/execution-envelope-p2-v2.yaml`,
+  `control/budgets/p2-r1-primary-v1.yaml`,
+  `control/budgets/p2-r1-primary-v2.yaml`, and
+  `control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md` before changing P2
+  execution policy or preparing a P2 request. The P1 and P2-v1 envelopes
+  remain hash-bound historical authorization and must not be overwritten.
 - Read `control/source-of-truth.yaml` before report sync, projection writes,
   publication work, or resolving conflicting facts.
 - Read schemas, manifests, receipts, and evidence files only when the active
@@ -83,12 +86,20 @@ Do not add micro-gates. Historical vocabulary remains under `archive/` only.
 - Preserve history. Archive before removing. Delete only exact, verified paths.
 - Before commit/push run tests, layout, report drift, MLflow doctor, Brain
   literature validation when touched, and `git diff --check`.
+- Before a long-running worker or implementation begins, create a tracked
+  runbook plus append-only ledger/checkpoint. Chat state and ignored inbox
+  files are launchers only and cannot be the sole execution plan.
+- On Windows, never use `os.kill(pid, 0)` as a liveness probe. Long-running
+  measured workers use an OS-held advisory lock and process creation identity.
 
 ## Provider-neutral rules
 
 - Agents may record a sanitized provider label for engineering provenance, but
   may not login, logout, copy credentials, edit keyrings, or switch the active
   provider without an explicit Owner action.
+- Never print, archive, or pass through a complete inherited shell environment.
+  Long-running workers, candidate subprocesses, and proposer subprocesses use
+  explicit environment allowlists. Credential rotation remains an Owner action.
 - Provider-specific user configuration is not canonical project authority.
 - Any future LLM-in-the-loop measurement must freeze provider/model/revision,
   instructions, hashes, budget, seed, Git commit, and request hash under a
@@ -139,6 +150,21 @@ Brain memory is pointer-only and has five kinds: `decision`, `evidence`,
 URI, source SHA-256, evidence IDs, creation time, review time, and supersession
 pointer. Stale active context is archived; failed attempts remain searchable but
 cannot override run facts.
+
+### Brain synchronization and YOLO mode
+
+Any change to this `AGENTS.md` MUST update or create the corresponding
+pointer-only Brain note in the same session, with a link back to this file and
+the canonical source. If the Brain serial-writer lease cannot be acquired or
+validated, stop before commit or push and report the blocker.
+
+Brain YOLO mode is effective immediately for safe pointer-only memory work:
+after acquiring the Brain serial-writer lease, an agent may write/update the
+required Brain note without another confirmation prompt. YOLO mode is limited
+to aggregate-safe status, decisions, lessons, failed-attempt summaries, hashes,
+and repository-relative pointers. It never bypasses Owner decisions, the
+protected-data boundary, credential rules, deletion approval, serial-writer
+lease, measured execution gates, or commit/push authorization.
 
 ## Mandatory reporting policy
 

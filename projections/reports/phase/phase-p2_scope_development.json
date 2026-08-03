@@ -91,6 +91,96 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-runtime-v1-interrupted-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b3abc149587fcaa326ac769c9b8b4c1d2220be538a19d6db5cc860aac27ce79b",
+      "evidence_class": "engineering",
+      "explanation": "Binds the sanitized failed-attempt patch and records that no measured counters changed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/p2-runtime-resilience-v1-interrupted/manifest.json",
+      "scientific_authority": false,
+      "title": "Interrupted P2 runtime v1 archive manifest",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+      "evidence_class": "engineering",
+      "explanation": "Provides the tracked detached-supervisor, journal, resume, proposer, and closeout contract.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+      "scientific_authority": false,
+      "title": "P2 measured autoresearch v2 runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-profile",
+      "artifact_type": "budget",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "51adef9f638e227b98a9d8fce17abc6ca18f3a4861503abcb9c6c345514b9773",
+      "evidence_class": "engineering",
+      "explanation": "Freezes the 120-hour wall clock, 24-hour overhead reserve, and whole-batch admission rule.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/budgets/p2-r1-primary-v2.yaml",
+      "scientific_authority": false,
+      "title": "P2 R1 primary v2 budget profile",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-envelope",
+      "artifact_type": "control",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d",
+      "evidence_class": "engineering",
+      "explanation": "Preserves v1 history and authorizes only Owner-local reversible CPU execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/execution-envelope-p2-v2.yaml",
+      "scientific_authority": false,
+      "title": "P2 R1 primary v2 execution envelope",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-revision",
+      "artifact_type": "control",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822",
+      "evidence_class": "engineering",
+      "explanation": "Records the additive runtime-resilience revision before the first measured run.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml",
+      "scientific_authority": false,
+      "title": "P2 R1 primary v2 campaign revision",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "p2-preflight-completion-audit-initial",
       "artifact_type": "review",
       "child_artifact_hashes": {},
@@ -235,6 +325,42 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v1-interruption-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2",
+      "evidence_class": "engineering",
+      "explanation": "Retains the unsafe Windows PID-probe and continuity failure as engineering evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json",
+      "scientific_authority": false,
+      "title": "Interrupted P2 runtime v1 failure audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-recovery-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
+      "evidence_class": "engineering",
+      "explanation": "Validates advisory locking, hash-chained recovery, detached supervision, proposer isolation, and zero measured counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 recovery audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -287,6 +413,31 @@
       "uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
     },
     {
+      "artifact_id": "p2-runtime-v1-interrupted-manifest",
+      "sha256": "b3abc149587fcaa326ac769c9b8b4c1d2220be538a19d6db5cc860aac27ce79b",
+      "uri": "archive/p2-runtime-resilience-v1-interrupted/manifest.json"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-runbook",
+      "sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+      "uri": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-profile",
+      "sha256": "51adef9f638e227b98a9d8fce17abc6ca18f3a4861503abcb9c6c345514b9773",
+      "uri": "control/budgets/p2-r1-primary-v2.yaml"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-envelope",
+      "sha256": "dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d",
+      "uri": "control/execution-envelope-p2-v2.yaml"
+    },
+    {
+      "artifact_id": "p2-runtime-v2-revision",
+      "sha256": "5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822",
+      "uri": "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml"
+    },
+    {
       "artifact_id": "p2-preflight-completion-audit-initial",
       "sha256": "e981e8858d5aad55650f2afc24392b52116eda61c547da391a2667c63a90645e",
       "uri": "outputs/audits/rigor/p2-preflight-completion-audit-20260802.json"
@@ -325,6 +476,16 @@
       "artifact_id": "p2-preflight-tracked-owner-path-audit-repair",
       "sha256": "50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b",
       "uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v1-interruption-audit",
+      "sha256": "165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-recovery-audit",
+      "sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json"
     },
     {
       "artifact_id": "observatory-fixture-registry",
@@ -378,10 +539,20 @@
       "recovery_sha256": "50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b",
       "recovery_uri": "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-runtime-resilience-v1-interruption-20260803",
+      "failure_sha256": "165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2",
+      "failure_uri": "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json",
+      "recovery_id": "p2-runtime-resilience-v2-recovery-20260803",
+      "recovery_sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
+      "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
+      "status": "repaired_and_validated"
     }
   ],
   "generated_at": "2026-08-02T12:25:48Z",
-  "generated_from_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
+  "generated_from_revision": "12b9a3d91577b9e46f3bf48d5e534ecc2a5d563081d7fa536fc13cc4e409fe34",
   "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
   "governance_status": {
     "d2": "waiting_owner",
@@ -406,21 +577,25 @@
   },
   "input_bindings": {
     "budget_profile": {
-      "sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
-      "uri": "control/budgets/p2-r1-primary-v1.yaml"
+      "sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
+      "uri": "control/budgets/p2-r1-primary-v2.yaml"
     },
     "campaign": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
+    "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v2",
+    "campaign_revision_record": {
+      "sha256": "5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822",
+      "uri": "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml"
+    },
     "candidate_freeze_proposal": {
       "sha256": "38156c8dbcdaf56ad0593b6afad118f83ac23b438ab1ecae6debc9968b9339b8",
       "uri": "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
     },
     "execution_envelope": {
-      "sha256": "cd067a0e91f980451e045a6e728e0b8176e695e05e7659c6bad18c18b2465247",
-      "uri": "control/execution-envelope-p2.yaml"
+      "sha256": "dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d",
+      "uri": "control/execution-envelope-p2-v2.yaml"
     },
     "fixture_manifest": {
       "sha256": "b7a8906c32643b4f7c3d0b1d107875410dcbb70005734c60d0e1b3e4bea29cf3",
@@ -444,7 +619,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
+      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -452,7 +627,7 @@
       "uri": "orchestration/audits/p2-readiness/index.json"
     }
   },
-  "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform output and source-hash stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
+  "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "last_material_update": "2026-08-02T12:25:48Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
@@ -460,7 +635,7 @@
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "dc8846b58cf322be172f27b2b9a1b311216a6606869f6502a543d13cb430fa64",
+  "report_sha256": "794edf3bda2ebebeefc4156ae861ece72cdbdb4a157fd19307fb39bf42a7b511",
   "report_type": "phase",
   "result": {
     "decision": "not_started",
@@ -486,6 +661,11 @@
         "p2-fixture-package",
         "p2-official-review-index",
         "p2-candidate-freeze-proposal",
+        "p2-runtime-v1-interrupted-manifest",
+        "p2-runtime-v2-runbook",
+        "p2-runtime-v2-profile",
+        "p2-runtime-v2-envelope",
+        "p2-runtime-v2-revision",
         "p2-preflight-completion-audit-initial",
         "p2-preflight-completion-audit-repair",
         "p2-preflight-report-byte-audit-initial",
@@ -494,6 +674,8 @@
         "p2-preflight-projection-source-audit-repair",
         "p2-preflight-tracked-owner-path-audit-initial",
         "p2-preflight-tracked-owner-path-audit-repair",
+        "p2-runtime-resilience-v1-interruption-audit",
+        "p2-runtime-resilience-v2-recovery-audit",
         "observatory-fixture-registry"
       ]
     }
@@ -505,5 +687,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The initial P2 preflight completion, report-byte, and projection source-hash audits were preserved, all recovery chains were validated, and no Owner-local preflight or measured execution was started."
+  "work_summary": "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
 }

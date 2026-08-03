@@ -263,8 +263,9 @@ def _sync_mlflow_projection(
     schema_path = root / "schemas/read-model.v2.json"
     campaign_path = root / "control/campaigns/scope-autoindex-v1.yaml"
     envelope_path = root / "control/execution-envelope.yaml"
-    p2_envelope_path = root / "control/execution-envelope-p2.yaml"
-    p2_profile_path = root / "control/budgets/p2-r1-primary-v1.yaml"
+    p2_source = model.get("p2_readiness", {}).get("source", {})
+    p2_envelope_path = root / str(p2_source.get("execution_envelope", ""))
+    p2_profile_path = root / str(p2_source.get("profile", ""))
     evaluator_path = root / "src/myis_research/report_cli.py"
     environment_path = root / "uv.lock"
     for path in (schema_path, campaign_path, envelope_path, p2_envelope_path, p2_profile_path, evaluator_path, environment_path):
@@ -498,6 +499,7 @@ def _p2_result_body(model: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
+    source = p2.get("source", {}) if isinstance(p2.get("source"), Mapping) else {}
     return (
         "# P2 SCOPE Development Result\n\n"
         "## Result\n\n"
@@ -515,7 +517,7 @@ def _p2_result_body(model: Mapping[str, Any]) -> str:
         "## Freeze rule\n\n"
         "Baseline reproduction, train evaluation, and freeze validation must pass before selection. Selection is unavailable until a validated immutable shortlist-freeze receipt exists, and it may be exposed only once. Final-872 remains closed.\n\n"
         "## Canonical sources\n\n"
-        "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `control/budgets/p2-r1-primary-v1.yaml` · `control/execution-envelope-p2.yaml`\n\n"
+        f"[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `{source.get('profile', '-')}` · `{source.get('execution_envelope', '-')}`\n\n"
         f"Claim boundary: `{p2.get('claim_boundary', 'no_measured_claim')}`\n"
     )
 

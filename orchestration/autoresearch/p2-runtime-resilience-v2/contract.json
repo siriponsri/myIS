@@ -1,0 +1,35 @@
+{
+  "objective": "Make P2 measured runtime resilient, detached, resumable, profile-v2 bound, and aggregate-safe without starting measured execution.",
+  "success_metric": "all focused and repository closeout checks pass while real P2 counters remain zero",
+  "metric_direction": "maximize",
+  "baseline": "interrupted v1 attempt with unsafe Windows PID probe and no tracked continuity ledger",
+  "validation_boundary": "synthetic fixtures and repository-safe metadata only; final, qrels, membership, query IDs, rankings, credentials, and provider payloads remain closed",
+  "allowed_changes": [
+    "P2 runtime source",
+    "P2 schemas and tests",
+    "P2 control profile/envelope/campaign revision",
+    "tracked runbook and generated reporting inputs"
+  ],
+  "forbidden_changes": [
+    "protected Owner-local data",
+    "P1 historical envelope bytes",
+    "D2_OPEN_FINAL",
+    "D3_SUBMIT_RELEASE",
+    "GPU",
+    "paid API",
+    "network model download",
+    "provider switch"
+  ],
+  "commands": {
+    "smoke": "uv run --no-sync pytest -q tests/test_p2_measured_state.py tests/test_p2_measured_contracts.py",
+    "evaluate": "uv run --no-sync pytest -q",
+    "full_run": "not authorized; this repair does not start measured P2"
+  },
+  "budgets": {
+    "max_trials": 5,
+    "max_wall_time": "one implementation session",
+    "max_compute_cost": 0
+  },
+  "artifacts_dir": "orchestration/autoresearch/p2-runtime-resilience-v2/artifacts",
+  "ledger_path": "orchestration/autoresearch/p2-runtime-resilience-v2/ledger.jsonl"
+}

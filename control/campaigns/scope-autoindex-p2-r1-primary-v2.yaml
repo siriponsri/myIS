@@ -1,0 +1,29 @@
+schema_version: myis.p2-campaign-revision.v1
+campaign_id: scope-autoindex-v1
+campaign_revision: scope-autoindex-v1-p2-r1-primary-v2
+status: ready_planned_not_measured
+supersedes_revision: scope-autoindex-v1-p2-r1-primary-v1
+supersession_reason: runtime_resilience_and_durable_supervision_before_first_measured_run
+budget_profile_ref: control/budgets/p2-r1-primary-v2.yaml
+execution_envelope_ref: control/execution-envelope-p2-v2.yaml
+runbook_ref: control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md
+scientific_state:
+  measured_runs: 0
+  candidate_count: 0
+  shortlist_count: 0
+  selection_accesses: 0
+  final_split_open: false
+runtime_contract:
+  detached_supervisor: required
+  durable_hash_chained_journal: required
+  os_advisory_lock: required
+  checkpoint_resume: required
+  proposer_mode: hybrid_codex_ephemeral
+  proposer_attempts_per_batch: 2
+  proposer_failure_stage: awaiting_proposer_recovery
+  whole_batch_admission: true
+governance:
+  standing_authorization: D1_START_CAMPAIGN
+  owner_decisions_unchanged: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  evidence_class: engineering
+  scientific_authority: false

@@ -1,6 +1,6 @@
 {
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "bfae45cdf823b16e4c67835230208e08511131178446c16ef863b6a772dd3d80",
+  "dashboard_snapshot_sha256": "a68f81f7a8e96c29e44181606bbbc6fb17cd5040f7576efe9b74158e0900fe95",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -33,10 +33,10 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "e84d5c51a0c893ac6bac3966a8f8c9c5b95f18773c61da9b45192ce52c7b6668",
+  "obsidian_manifest_sha256": "364acaca4bc85e000632c64628056447a3db71c10cd2187cec8119d00ea26998",
   "p2_readiness": {
-    "budget_profile_id": "p2-r1-primary-v1",
-    "budget_profile_sha256": "d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c",
+    "budget_profile_id": "p2-r1-primary-v2",
+    "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
     "candidate_count": 0,
     "fixture_pilot": {
       "deterministic_rerun": "passed",
@@ -71,8 +71,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
-  "read_model_sha256": "bfae45cdf823b16e4c67835230208e08511131178446c16ef863b6a772dd3d80",
+  "read_model_revision": "12b9a3d91577b9e46f3bf48d5e534ecc2a5d563081d7fa536fc13cc4e409fe34",
+  "read_model_sha256": "a68f81f7a8e96c29e44181606bbbc6fb17cd5040f7576efe9b74158e0900fe95",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",

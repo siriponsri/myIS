@@ -32,6 +32,21 @@ from .preflight import (
     run_p2_preflight,
     write_preflight_receipt,
 )
+from .measured_contracts import (
+    BASE_CANDIDATE_IDS,
+    BASE_CONTROL_IDS,
+    assert_single_axis_pair,
+    build_measured_request,
+    can_admit_adaptive_batch,
+    committed_blob_sha256,
+    git_identity,
+    load_measured_request,
+    load_profile_uri,
+    scientific_payload,
+    scientific_payload_sha256,
+    validate_stop_reason,
+    validate_measured_artifact,
+)
 
 __all__ = [
     "Candidate",
@@ -62,4 +77,17 @@ __all__ = [
     "preflight_what_if",
     "run_p2_preflight",
     "write_preflight_receipt",
+    "BASE_CANDIDATE_IDS",
+    "BASE_CONTROL_IDS",
+    "assert_single_axis_pair",
+    "build_measured_request",
+    "can_admit_adaptive_batch",
+    "committed_blob_sha256",
+    "git_identity",
+    "load_measured_request",
+    "load_profile_uri",
+    "scientific_payload",
+    "scientific_payload_sha256",
+    "validate_stop_reason",
+    "validate_measured_artifact",
 ]

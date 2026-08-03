@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-proposer-contract:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "status", "input_schema", "output_schema", "batch_size", "allowed_input", "forbidden_input", "environment_removed", "command", "provider_identity_frozen_at_preflight", "attempts_per_batch", "retry_limit", "measured_execution_performed", "protected_data_accessed", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-proposer-contract.v1"},
+    "contract_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "status": {"const": "adopted_hash_locked"},
+    "input_schema": {"const": "myis.p2-adaptive-feedback.v1"},
+    "output_schema": {"const": "myis.p2-scope-candidate-batch.v1"},
+    "batch_size": {"const": 4},
+    "allowed_input": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "forbidden_input": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "environment_removed": {
+      "type": "array",
+      "contains": {"const": "MYIS_STORE"},
+      "minContains": 1,
+      "allOf": [{"contains": {"const": "MYIS_MLFLOW_STORE"}, "minContains": 1}]
+    },
+    "command": {"const": ["codex", "exec", "--ephemeral", "--sandbox", "read-only", "--output-schema"]},
+    "provider_identity_frozen_at_preflight": {"const": true},
+    "attempts_per_batch": {"const": 2},
+    "retry_limit": {"type": "integer", "minimum": 0, "maximum": 1},
+    "measured_execution_performed": {"const": false},
+    "protected_data_accessed": {"const": false},
+    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -29,6 +29,10 @@ schemas/p2-*.json -text
 # every archived prompt, result, metadata file, catalog, and checksum byte.
 orchestration/audits/** -text
 
+# Archived unified diffs preserve their context markers and terminal layout.
+# Those marker-only lines are patch syntax, not repository whitespace defects.
+archive/p2-runtime-resilience-v1-interrupted/*.patch -text whitespace=-blank-at-eol,-blank-at-eof
+
 # The generated vault manifest binds report bytes. Keep generated output exact,
 # while retaining normal text handling for Owner-authored and Obsidian-local files.
 obsidian_report/** -text

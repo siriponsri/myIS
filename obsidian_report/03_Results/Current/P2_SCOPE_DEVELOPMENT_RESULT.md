@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0"
-read_model_sha256: "bfae45cdf823b16e4c67835230208e08511131178446c16ef863b6a772dd3d80"
+read_model_revision: "12b9a3d91577b9e46f3bf48d5e534ecc2a5d563081d7fa536fc13cc4e409fe34"
+read_model_sha256: "a68f81f7a8e96c29e44181606bbbc6fb17cd5040f7576efe9b74158e0900fe95"
 source_commit: "69e0f9139a597e43cc8e3f54525f3723c201aca4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0"
+generated_from_revision: "12b9a3d91577b9e46f3bf48d5e534ecc2a5d563081d7fa536fc13cc4e409fe34"
 last_material_update: "2026-08-02T12:25:48Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
@@ -46,10 +46,10 @@ Owner-local preflight state is **not_started** and remains separate from measure
 | Official static review | Round 3 accept / accepted_static_contract_review |
 | Fixture pilot | passed / fixture / scientific authority False |
 | Synthetic lifecycle | 32 candidates; 5 iterations; shortlist 4; fixture selection 1 |
-| Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
+| Profile | p2-r1-primary-v2 / 9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324 |
 | Real candidates | 0 / 32 |
 | Real shortlist | 0 / 4 |
-| Runtime | 259200 wall seconds; 10800 per candidate |
+| Runtime | 432000 wall seconds; 10800 per candidate |
 | Real freeze / selection | not_started; 0/1 |
 | Protected access | False |
 | Scientific claim | no_measured_claim |
@@ -78,6 +78,6 @@ Baseline reproduction, train evaluation, and freeze validation must pass before 
 
 ## Canonical sources
 
-[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `control/budgets/p2-r1-primary-v1.yaml` · `control/execution-envelope-p2.yaml`
+[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · `control/budgets/p2-r1-primary-v2.yaml` · `control/execution-envelope-p2-v2.yaml`
 
 Claim boundary: `no_measured_claim`

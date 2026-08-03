@@ -25,9 +25,9 @@
     "selection_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
     "manifest_uri": {"type": "string", "minLength": 1},
     "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_id": {"type": "string", "pattern": "^p2-r1-primary-v[0-9]+$"},
     "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "candidate_count": {"type": "integer", "minimum": 28, "maximum": 32},
+    "candidate_count": {"type": "integer", "minimum": 12, "maximum": 32},
     "selection_exposure_count": {"type": "integer", "minimum": 0, "maximum": 1},
     "package_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
   }
