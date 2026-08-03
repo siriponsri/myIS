@@ -451,6 +451,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v2-independent-verifier-accept-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+      "evidence_class": "engineering",
+      "explanation": "Validates that the committed portability, reporting, and rigor-semantics repairs close every prior verifier finding.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 independent verifier ACCEPT audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -603,6 +621,11 @@
       "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v2-independent-verifier-accept-audit",
+      "sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -690,13 +713,15 @@
       "failure_id": "p2-runtime-resilience-v2-independent-verifier-revise-20260803",
       "failure_sha256": "37988c60e6daa2e564afd4b0a21169a67a112537ed612c4e2e08375bff7d2bbb",
       "failure_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json",
-      "recovery_id": null,
-      "status": "open_pending_independent_accept"
+      "recovery_id": "p2-runtime-resilience-v2-independent-verifier-accept-20260803",
+      "recovery_sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+      "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json",
+      "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-03T15:30:31Z",
-  "generated_from_revision": "0711cfa307602b5367b1769aa6e0aef757ca4a9d3254f58f47f4a52d834f185f",
-  "git_commit": "9a462753db463a8dc93684eff9e75eb1477bd833",
+  "generated_at": "2026-08-03T15:43:42Z",
+  "generated_from_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
+  "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -748,7 +773,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "9a462753db463a8dc93684eff9e75eb1477bd833",
+    "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -771,14 +796,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-03T15:30:31Z",
+  "last_material_update": "2026-08-03T15:43:42Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "02b45db347419c0ef5915747a2e8a98b12aff77cd495322faad4f475ae12b2e3",
+  "report_sha256": "dee9c1ca4086dda5a4ca7cfabca3956ab796db2fb72961aece80647d3865220b",
   "report_type": "task",
   "result": {
     "decision": "not_started",
@@ -824,6 +849,7 @@
         "p2-runtime-resilience-v2-clean-checkout-failure-audit",
         "p2-runtime-resilience-v2-clean-checkout-repair-audit",
         "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+        "p2-runtime-resilience-v2-independent-verifier-accept-audit",
         "observatory-fixture-registry"
       ]
     }
