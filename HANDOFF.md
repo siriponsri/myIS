@@ -519,6 +519,26 @@ aggregate-safe pointer memory immediately after acquiring the serial-writer
 lease; it does not bypass Owner gates, protected-data rules, deletion approval,
 measured authorization, or commit/push authority.
 
+Cross-session capsule
+`20260803T133528Z-p2-runtime-resilience-v2-closeout-v1` validates against
+implementation commit `831872ff1720117e2d44c115e15e7cba0a4bb236` with six
+events, ten immutable references, and three explicit open threads. The
+identical audit/projection bytes have SHA-256
+`c34dbf628c641d211dac4f1a36039f11bba40b7674e2bc394e8e6bdf146870f1`.
+
+Post-capsule verification passed the full suite again with `328` tests in
+`252.40` seconds, two stable report cycles at revision
+`5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f`,
+read-model SHA-256
+`d64276b9c262f42d76cafacb5fced247d589359e70deaa5d8d560de77a789707`,
+and repository-safe MLflow doctor with 38 archive runs and 452 safe artifacts.
+Scoped Ruff over every Python path changed by this branch passed. A broader
+repository-wide Ruff invocation exposed eight pre-existing findings in
+unrelated legacy/P1 files; they remain explicit lint debt and were not mixed
+into this repair. The Observatory fixture `--check` command also materialized
+seven generated fixture files; those command-created changes were restored to
+their committed bytes because this closeout does not refresh fixture evidence.
+
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The
 next authorized action remains exactly `Owner-local P2 measured preflight`.
