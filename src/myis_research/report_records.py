@@ -25,6 +25,7 @@ P2_TRACKED_OWNER_PATH_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-tracked
 P2_TRACKED_OWNER_PATH_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json"
 P2_RUNTIME_INTERRUPTION_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json"
 P2_RUNTIME_RECOVERY_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json"
+P2_RUNTIME_LINUX_CI_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -255,6 +256,12 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 P2_RUNTIME_RECOVERY_AUDIT,
                 "Validates advisory locking, hash-chained recovery, detached supervision, proposer isolation, and zero measured counters.",
             ),
+            (
+                "p2-runtime-resilience-v2-linux-ci-failure-audit",
+                "P2 runtime resilience v2 Linux CI failure audit",
+                P2_RUNTIME_LINUX_CI_FAILURE_AUDIT,
+                "Retains the post-merge POSIX permission-mode regression and blocks cleanup until a green repair CI run exists.",
+            ),
         ):
             digest = _hash_file(root, uri)
             if digest:
@@ -424,6 +431,16 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "recovery_uri": P2_RUNTIME_RECOVERY_AUDIT,
                 "recovery_sha256": runtime_repair_sha256,
                 "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
+        linux_ci_failure_sha256 = _hash_file(root, P2_RUNTIME_LINUX_CI_FAILURE_AUDIT)
+        if linux_ci_failure_sha256:
+            failures.append({
+                "failure_id": "p2-runtime-resilience-v2-linux-ci-failure-20260803",
+                "failure_uri": P2_RUNTIME_LINUX_CI_FAILURE_AUDIT,
+                "failure_sha256": linux_ci_failure_sha256,
+                "recovery_id": None,
+                "status": "open_pending_ci_repair",
                 "counters_changed": False,
             })
     if scientific:

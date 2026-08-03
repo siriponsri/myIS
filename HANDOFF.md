@@ -539,6 +539,16 @@ into this repair. The Observatory fixture `--check` command also materialized
 seven generated fixture files; those command-created changes were restored to
 their committed bytes because this closeout does not refresh fixture evidence.
 
+PR `#7` was merged as `1b7f468290960a699f75af374b868947d768a1be`
+before its Linux CPU contract completed. Run `30820701732` then reported one
+failure after 318 passes and 9 platform skips: the journal tamper test changed
+the event to owner-write-only with `stat.S_IWRITE`, so POSIX failed while
+reading the event before the intended hash-mismatch assertion. The follow-up
+repair uses owner read and write permission, passed the focused regression and
+the full local suite with 328 tests, and remains blocked from cleanup until a
+fresh Linux CI run is green. Failure audit
+`p2-runtime-resilience-v2-linux-ci-failure-20260803` preserves this state.
+
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The
 next authorized action remains exactly `Owner-local P2 measured preflight`.
