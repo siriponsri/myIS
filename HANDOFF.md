@@ -576,8 +576,8 @@ validation at revision
 and SHA-256
 `06f7bd023dcc014f8d377c53d7229467c57d02cfce6f6dd07f00efb25709e9f4`.
 Audit `p2-runtime-resilience-v2-clean-checkout-repair-20260803` closes the
-portability failure. A new independent verdict and final validation matrix are
-still required before merge and cleanup.
+portability failure. That recovery did not by itself close the separate
+independent-review and final-validation requirements.
 
 A fresh independent read-only verifier then reviewed committed tip
 `0046f7d394d429391511cd4c22a4468058388b63` and tree
@@ -589,6 +589,23 @@ worktree remained clean. Audit
 `p2-runtime-resilience-v2-independent-verifier-accept-20260803` pairs this
 recovery with the retained `REVISE` record. The remaining integration gate is
 a fresh green CI run on the pushed final branch head before merge and cleanup.
+
+Post-acceptance local verification passed the full suite with `328` tests and
+one pre-existing Starlette deprecation warning, `23` focused runtime tests,
+`15` Dashboard/API and MLflow projection tests, and `56` graph/report/safety
+tests. P2 closure, archive-runtime isolation, measured-control checksum,
+layout, full assets and map, session audit, scoped Ruff, protected and unsafe
+path regressions, report drift, and `git diff --check` passed. Brain literature
+validation retained 154 unique notes with zero errors. Repository-safe MLflow
+doctor initially stopped because no store was specified, then passed read-only
+against the governed external v2 store with 42 archive runs, 42 receipts, 500
+safe artifacts, no archive failure, and an unchanged SQLite database. The
+shared read-model revision is
+`9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc`
+with SHA-256
+`a9060a69278260a32fad9e6efd7209fcac38df81b739ef014e3b49da25d302f6`.
+The branch still requires its final session capsule, push, and fresh green CI
+before merge or cleanup.
 
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The
