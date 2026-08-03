@@ -361,6 +361,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v2-linux-ci-failure-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "870f99d0c12734e90fb7321fd79c6dd1c796cff611f141b1c8ed1a47fc39e75f",
+      "evidence_class": "engineering",
+      "explanation": "Retains the post-merge POSIX permission-mode regression and blocks cleanup until a green repair CI run exists.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 Linux CI failure audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -488,6 +506,11 @@
       "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v2-linux-ci-failure-audit",
+      "sha256": "870f99d0c12734e90fb7321fd79c6dd1c796cff611f141b1c8ed1a47fc39e75f",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -549,11 +572,19 @@
       "recovery_sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
       "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-runtime-resilience-v2-linux-ci-failure-20260803",
+      "failure_sha256": "870f99d0c12734e90fb7321fd79c6dd1c796cff611f141b1c8ed1a47fc39e75f",
+      "failure_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+      "recovery_id": null,
+      "status": "open_pending_ci_repair"
     }
   ],
-  "generated_at": "2026-08-03T13:31:30Z",
-  "generated_from_revision": "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f",
-  "git_commit": "831872ff1720117e2d44c115e15e7cba0a4bb236",
+  "generated_at": "2026-08-03T14:22:49Z",
+  "generated_from_revision": "2ae21b4e955b93781df387518cd5b5d2119454890fcdb4cc9e2da8c2dbfee6db",
+  "git_commit": "a57b6115a7449ff5507fc99c2c056409124c6b1f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -605,7 +636,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "831872ff1720117e2d44c115e15e7cba0a4bb236",
+    "git_commit": "a57b6115a7449ff5507fc99c2c056409124c6b1f",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -628,14 +659,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-03T13:31:30Z",
+  "last_material_update": "2026-08-03T14:22:49Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "607ecb011d64221953b6a829bd085582c73fe85efb8e006c68424105e6400242",
+  "report_sha256": "9b053840953953136269337589f9eec9fd32084c51c155fa7b4d8004134d2954",
   "report_type": "task",
   "result": {
     "decision": "not_started",
@@ -676,6 +707,7 @@
         "p2-preflight-tracked-owner-path-audit-repair",
         "p2-runtime-resilience-v1-interruption-audit",
         "p2-runtime-resilience-v2-recovery-audit",
+        "p2-runtime-resilience-v2-linux-ci-failure-audit",
         "observatory-fixture-registry"
       ]
     }

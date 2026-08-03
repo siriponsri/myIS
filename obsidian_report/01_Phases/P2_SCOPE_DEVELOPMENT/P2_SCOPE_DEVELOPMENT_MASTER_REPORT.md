@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f"
-read_model_sha256: "d64276b9c262f42d76cafacb5fced247d589359e70deaa5d8d560de77a789707"
-source_commit: "831872ff1720117e2d44c115e15e7cba0a4bb236"
+read_model_revision: "2ae21b4e955b93781df387518cd5b5d2119454890fcdb4cc9e2da8c2dbfee6db"
+read_model_sha256: "cb26266289a563a859fc4692199dc1d229f800cb4f194a42a06fa380c8582522"
+source_commit: "a57b6115a7449ff5507fc99c2c056409124c6b1f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f"
-last_material_update: "2026-08-03T13:31:30Z"
+generated_from_revision: "2ae21b4e955b93781df387518cd5b5d2119454890fcdb4cc9e2da8c2dbfee6db"
+last_material_update: "2026-08-03T14:22:49Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-03T13:31:30Z"
-updated_at: "2026-08-03T13:31:30Z"
+created_at: "2026-08-03T14:22:49Z"
+updated_at: "2026-08-03T14:22:49Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -48,7 +48,7 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 831872ff1720117e2d44c115e15e7cba0a4bb236
+- `git_commit`: a57b6115a7449ff5507fc99c2c056409124c6b1f
 - `budget_profile`: `control/budgets/p2-r1-primary-v2.yaml`; SHA-256 `9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324`
 - `execution_envelope`: `control/execution-envelope-p2-v2.yaml`; SHA-256 `dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d`
 - `campaign_revision_record`: `control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml`; SHA-256 `5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822`
@@ -92,6 +92,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | Repaired P2 preflight tracked Owner-path audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json` | `50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b` | `validated` |
 | Interrupted P2 runtime v1 failure audit | `review` | `engineering` | `outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json` | `165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2` | `validated` |
 | P2 runtime resilience v2 recovery audit | `review` | `engineering` | `outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json` | `c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83` | `validated` |
+| P2 runtime resilience v2 Linux CI failure audit | `review` | `engineering` | `outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json` | `870f99d0c12734e90fb7321fd79c6dd1c796cff611f141b1c8ed1a47fc39e75f` | `validated` |
 | Aggregate-safe Observatory registry | `registry` | `fixture` | `outputs/observatory/fixture-v1/registry.json` | `51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1` | `validated` |
 
 ## Metrics
@@ -116,7 +117,7 @@ The repairs strengthen stale authority, worktree boundary, capacity, immutable r
 
 ## Supported Claims
 
-- Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, p2-candidate-freeze-proposal, p2-runtime-v1-interrupted-manifest, p2-runtime-v2-runbook, p2-runtime-v2-profile, p2-runtime-v2-envelope, p2-runtime-v2-revision, p2-preflight-completion-audit-initial, p2-preflight-completion-audit-repair, p2-preflight-report-byte-audit-initial, p2-preflight-report-byte-audit-repair, p2-preflight-projection-source-audit-initial, p2-preflight-projection-source-audit-repair, p2-preflight-tracked-owner-path-audit-initial, p2-preflight-tracked-owner-path-audit-repair, p2-runtime-resilience-v1-interruption-audit, p2-runtime-resilience-v2-recovery-audit, observatory-fixture-registry)
+- Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is not_started, the candidate proposal is not_adopted, and no measured P2 artifact exists. (evidence: p2-fixture-receipt, p2-fixture-manifest, p2-fixture-package, p2-official-review-index, p2-candidate-freeze-proposal, p2-runtime-v1-interrupted-manifest, p2-runtime-v2-runbook, p2-runtime-v2-profile, p2-runtime-v2-envelope, p2-runtime-v2-revision, p2-preflight-completion-audit-initial, p2-preflight-completion-audit-repair, p2-preflight-report-byte-audit-initial, p2-preflight-report-byte-audit-repair, p2-preflight-projection-source-audit-initial, p2-preflight-projection-source-audit-repair, p2-preflight-tracked-owner-path-audit-initial, p2-preflight-tracked-owner-path-audit-repair, p2-runtime-resilience-v1-interruption-audit, p2-runtime-resilience-v2-recovery-audit, p2-runtime-resilience-v2-linux-ci-failure-audit, observatory-fixture-registry)
 
 ## Unsupported Claims
 
@@ -132,6 +133,7 @@ The repairs strengthen stale authority, worktree boundary, capacity, immutable r
 - p2-preflight-projection-source-hash-drift-audit-20260802
 - p2-preflight-tracked-owner-path-audit-20260802
 - p2-runtime-resilience-v1-interruption-20260803
+- p2-runtime-resilience-v2-linux-ci-failure-20260803
 
 ## Governance and Safety
 
@@ -182,4 +184,5 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - p2-preflight-tracked-owner-path-audit-repair
 - p2-runtime-resilience-v1-interruption-audit
 - p2-runtime-resilience-v2-recovery-audit
+- p2-runtime-resilience-v2-linux-ci-failure-audit
 - observatory-fixture-registry
