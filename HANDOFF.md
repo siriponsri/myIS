@@ -565,9 +565,19 @@ returned `REVISE`. It confirmed the clean-checkout blocker, identified stale
 post-CI report state, and found invalid grade/severity semantics in the initial
 Linux failure audit. Audit
 `p2-runtime-resilience-v2-independent-verifier-revise-20260803` retains that
-verdict. The audit semantics and Linux recovery state are repaired, but a new
-independent verdict is still required after the clean-checkout repair is
-committed and verified.
+verdict. The audit semantics and Linux recovery state are repaired.
+
+Commit `9119fba0f111791a65cf208a203ef58c8145a8d5` then added exact byte
+preservation and synchronized projections. A fresh detached checkout created
+its own lockfile-bound environment, retained LF bytes for all five raw-hashed
+sources, passed all four portability regressions, and passed read-model-only
+validation at revision
+`d2b84e42b519465cad663a9f1ee02a0c61fdbc474f330bbbbb8f75721e7c1f4c`
+and SHA-256
+`06f7bd023dcc014f8d377c53d7229467c57d02cfce6f6dd07f00efb25709e9f4`.
+Audit `p2-runtime-resilience-v2-clean-checkout-repair-20260803` closes the
+portability failure. A new independent verdict and final validation matrix are
+still required before merge and cleanup.
 
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The

@@ -28,6 +28,7 @@ P2_RUNTIME_RECOVERY_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-recov
 P2_RUNTIME_LINUX_CI_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json"
 P2_RUNTIME_LINUX_CI_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json"
 P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json"
+P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json"
 P2_RUNTIME_INDEPENDENT_REVISE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
@@ -278,6 +279,12 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 "Retains the checkout-dependent raw-hash drift and blocks cleanup until a committed disposable checkout passes.",
             ),
             (
+                "p2-runtime-resilience-v2-clean-checkout-repair-audit",
+                "P2 runtime resilience v2 clean-checkout repair audit",
+                P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT,
+                "Validates checkout-stable raw hashes, projection bytes, and read-model identity from a fresh committed worktree.",
+            ),
+            (
                 "p2-runtime-resilience-v2-independent-verifier-revise-audit",
                 "P2 runtime resilience v2 independent verifier REVISE audit",
                 P2_RUNTIME_INDEPENDENT_REVISE_AUDIT,
@@ -468,13 +475,26 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "counters_changed": False,
             })
         clean_checkout_failure_sha256 = _hash_file(root, P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT)
-        if clean_checkout_failure_sha256:
+        clean_checkout_repair_sha256 = _hash_file(root, P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT)
+        if clean_checkout_failure_sha256 and clean_checkout_repair_sha256:
             failures.append({
                 "failure_id": "p2-runtime-resilience-v2-clean-checkout-drift-20260803",
                 "failure_uri": P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT,
                 "failure_sha256": clean_checkout_failure_sha256,
+                "recovery_id": "p2-runtime-resilience-v2-clean-checkout-repair-20260803",
+                "recovery_uri": P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT,
+                "recovery_sha256": clean_checkout_repair_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
+        independent_revise_sha256 = _hash_file(root, P2_RUNTIME_INDEPENDENT_REVISE_AUDIT)
+        if independent_revise_sha256:
+            failures.append({
+                "failure_id": "p2-runtime-resilience-v2-independent-verifier-revise-20260803",
+                "failure_uri": P2_RUNTIME_INDEPENDENT_REVISE_AUDIT,
+                "failure_sha256": independent_revise_sha256,
                 "recovery_id": None,
-                "status": "open_pending_clean_checkout_repair",
+                "status": "open_pending_independent_accept",
                 "counters_changed": False,
             })
     if scientific:
