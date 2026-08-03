@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-03T14:22:49Z",
-  "generated_from_revision": "2ae21b4e955b93781df387518cd5b5d2119454890fcdb4cc9e2da8c2dbfee6db",
-  "git_commit": "a57b6115a7449ff5507fc99c2c056409124c6b1f",
+  "generated_at": "2026-08-03T15:12:00Z",
+  "generated_from_revision": "d2b84e42b519465cad663a9f1ee02a0c61fdbc474f330bbbbb8f75721e7c1f4c",
+  "git_commit": "f3dd8a2693406647a8cfd97f93e38b302e00a95f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -36,20 +36,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "a57b6115a7449ff5507fc99c2c056409124c6b1f",
+    "git_commit": "f3dd8a2693406647a8cfd97f93e38b302e00a95f",
     "source_of_truth": {
       "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
-  "last_material_update": "2026-08-03T14:22:49Z",
+  "last_material_update": "2026-08-03T15:12:00Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "1218e706942d3aa9da9b8579376bd8cb81ad367a0bc92138b9bd599e381ab59b",
+  "report_sha256": "2cc4d7e8d40a24f729ff3ae6ebc14fef71f46cb777a80911f8a074ee08fa3a00",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",
