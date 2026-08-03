@@ -30,6 +30,7 @@ P2_RUNTIME_LINUX_CI_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v
 P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json"
 P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json"
 P2_RUNTIME_INDEPENDENT_REVISE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
+P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -290,6 +291,12 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 P2_RUNTIME_INDEPENDENT_REVISE_AUDIT,
                 "Retains the read-only verifier rejection and its portability, stale-state, and rigor-schema findings.",
             ),
+            (
+                "p2-runtime-resilience-v2-independent-verifier-accept-audit",
+                "P2 runtime resilience v2 independent verifier ACCEPT audit",
+                P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT,
+                "Validates that the committed portability, reporting, and rigor-semantics repairs close every prior verifier finding.",
+            ),
         ):
             digest = _hash_file(root, uri)
             if digest:
@@ -488,13 +495,16 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "counters_changed": False,
             })
         independent_revise_sha256 = _hash_file(root, P2_RUNTIME_INDEPENDENT_REVISE_AUDIT)
-        if independent_revise_sha256:
+        independent_accept_sha256 = _hash_file(root, P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT)
+        if independent_revise_sha256 and independent_accept_sha256:
             failures.append({
                 "failure_id": "p2-runtime-resilience-v2-independent-verifier-revise-20260803",
                 "failure_uri": P2_RUNTIME_INDEPENDENT_REVISE_AUDIT,
                 "failure_sha256": independent_revise_sha256,
-                "recovery_id": None,
-                "status": "open_pending_independent_accept",
+                "recovery_id": "p2-runtime-resilience-v2-independent-verifier-accept-20260803",
+                "recovery_uri": P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT,
+                "recovery_sha256": independent_accept_sha256,
+                "status": "repaired_and_validated",
                 "counters_changed": False,
             })
     if scientific:

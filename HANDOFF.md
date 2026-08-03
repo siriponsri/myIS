@@ -579,6 +579,17 @@ Audit `p2-runtime-resilience-v2-clean-checkout-repair-20260803` closes the
 portability failure. A new independent verdict and final validation matrix are
 still required before merge and cleanup.
 
+A fresh independent read-only verifier then reviewed committed tip
+`0046f7d394d429391511cd4c22a4468058388b63` and tree
+`fa958ab5d3919ea23508fc06994f8070b7ccfc8c`, returned `ACCEPT`, and reported
+no critical, major, or minor findings. It reran the four portability tests, the
+Phase/Task recovery-binding regression, read-model-only validation, P2 closure
+policy, measured-control check, and `git diff --check`; all passed and the
+worktree remained clean. Audit
+`p2-runtime-resilience-v2-independent-verifier-accept-20260803` pairs this
+recovery with the retained `REVISE` record. The remaining integration gate is
+a fresh green CI run on the pushed final branch head before merge and cleanup.
+
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The
 next authorized action remains exactly `Owner-local P2 measured preflight`.

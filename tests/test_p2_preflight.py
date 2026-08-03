@@ -912,6 +912,7 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             "p2-runtime-resilience-v2-clean-checkout-failure-audit",
             "p2-runtime-resilience-v2-clean-checkout-repair-audit",
             "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+            "p2-runtime-resilience-v2-independent-verifier-accept-audit",
         } <= artifact_ids
         assert any(
             item.get("status") == "repaired_and_validated"
@@ -949,10 +950,12 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             for item in record["failure_recovery_references"]
         )
         assert any(
-            item.get("status") == "open_pending_independent_accept"
+            item.get("status") == "repaired_and_validated"
             and item.get("counters_changed") is False
             and item.get("failure_id")
             == "p2-runtime-resilience-v2-independent-verifier-revise-20260803"
+            and item.get("recovery_id")
+            == "p2-runtime-resilience-v2-independent-verifier-accept-20260803"
             for item in record["failure_recovery_references"]
         )
         assert "no Owner-local preflight" in record["work_summary"]

@@ -1,0 +1,113 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-independent-verifier-accept-20260803",
+  "artifact": "Independent read-only verification of runtime resilience v2 recovery tip 0046f7d",
+  "artifact_path": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+  "artifact_sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Strong Accept",
+    "mean_score": 4.83,
+    "one_line_summary": "A fresh independent read-only review accepted committed tip 0046f7d with every prior portability, reporting, and rigor-semantics finding closed.",
+    "strengths": [
+      "All five runtime-v2 raw-hashed sources retain exact -text attributes and committed LF bytes.",
+      "Linux and clean-checkout failures are paired with hash-matching validated recoveries while the original failures remain preserved.",
+      "Phase, Task, read model, and sync receipt agree on zero measured counters, closed gates, and the exact next action."
+    ],
+    "weaknesses": [
+      "The accepted local tip remained four commits ahead of the remote PR head and still required push plus fresh CI before merge."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The verifier inspected the committed repair bytes, exact hashes, failure-recovery chains, and generated state relevant to every prior finding."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "Four portability regressions, one report-binding regression, read-model drift validation, and policy checks independently exercise the claimed recovery."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The verdict is limited to engineering closeout and makes no measured retrieval or scientific claim."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": [
+        "Each prior REVISE finding maps to an exact committed repair, matching recovery hash, and passing regression."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": [
+        "The prior REVISE verdict, Linux failure, and clean-checkout failure remain retained and searchable."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "The review confirmed committed-tree identity, report hashes, closure policy, measured controls, and workspace cleanliness without editing files."
+      ],
+      "weaknesses": [
+        "Fresh remote CI on the pushed head remained a procedural prerequisite for merge."
+      ],
+      "suggestions": [
+        "Push the final branch state and require a new green CPU contract before merge and worktree cleanup."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "PR 8 integration",
+      "target_entity": "remote head and post-push CI",
+      "evidence_locator": "local tip 0046f7d versus remote PR head 063f9d0 at review time",
+      "observation": "The accepted committed tip had not yet been pushed to the open PR.",
+      "reasoning": "Local acceptance cannot substitute for the repository's required Linux CPU contract on the final remote bytes.",
+      "suggestion": "Wait for a fresh successful CI run on the pushed final head before merge."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner gate is required; measured P2 remains not started."
+  ],
+  "read_order": [
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "git tree fa958ab5d3919ea23508fc06994f8070b7ccfc8c",
+    ".gitattributes",
+    "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json",
+    "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+    "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json",
+    "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json",
+    "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json",
+    "projections/reports/phase/phase-p2_scope_development.json",
+    "projections/reports/task/task-p2-1.json",
+    "projections/read-model/read-model.v2.json",
+    "projections/sync-receipt.v2.json"
+  ]
+}
