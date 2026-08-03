@@ -1,0 +1,112 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-clean-checkout-drift-20260803",
+  "artifact": "Runtime resilience v2 clean-checkout raw-hash drift",
+  "artifact_path": ".gitattributes",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "F001"
+    ]
+  },
+  "overall": {
+    "grade": "Reject",
+    "mean_score": 3.83,
+    "one_line_summary": "A detached clean Windows checkout of committed repair bytes changed five raw-hashed runtime-v2 sources from LF to CRLF and produced seven deterministic P2 report drifts.",
+    "strengths": [
+      "Three of four clean-checkout portability and path regressions passed.",
+      "The failing projection test identified every drifted repository-local output.",
+      "Direct diff and SHA-256 comparison isolated the defect to five newly added raw-hashed sources."
+    ],
+    "weaknesses": [
+      "The new runbook, profile, envelope, campaign revision, and archive manifest lacked explicit byte-preservation attributes.",
+      "The source worktree passed because its files retained LF bytes, while a fresh Windows checkout normalized them to CRLF.",
+      "Cleanup and measured-worktree creation remain blocked until a fresh committed checkout passes."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The detached worktree tested the exact committed bytes and deterministic renderer used for closeout."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "A fresh checkout after adding -text must reproduce the source SHA-256 values and pass all four regressions."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The defect affects engineering provenance bytes only and changes no measured counter or scientific conclusion."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 3,
+      "strengths": [
+        "The seven report drifts resolve to five exact raw-hash binding changes."
+      ],
+      "weaknesses": [
+        "Source-worktree report checks alone could not establish checkout portability."
+      ],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The failed disposable-checkout result is retained before cleanup."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 1,
+      "strengths": [],
+      "weaknesses": [
+        "The committed repair did not yet satisfy the explicit clean-checkout acceptance criterion."
+      ],
+      "suggestions": [
+        "Apply -text only to the five raw-hashed v2 sources and rerun the detached checkout regression on a new committed tip."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": ".gitattributes",
+      "target_entity": "runtime resilience v2 raw-hash sources",
+      "evidence_locator": "detached clean checkout 063f9d0; test_internal_projection_bytes_are_checkout_stable_and_current",
+      "observation": "Five sources had no text attribute and received CRLF checkout normalization on Windows.",
+      "reasoning": "Reports expose their raw SHA-256 values, so checkout-dependent line endings make the committed projection non-reproducible.",
+      "suggestion": "Mark the five exact sources -text and validate from a fresh detached checkout."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner gate is required; the repair is repository-only byte preservation."
+  ],
+  "read_order": [
+    ".gitattributes",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "control/budgets/p2-r1-primary-v2.yaml",
+    "control/execution-envelope-p2-v2.yaml",
+    "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml",
+    "archive/p2-runtime-resilience-v1-interrupted/manifest.json",
+    "tests/test_obsidian_report_contract.py"
+  ]
+}

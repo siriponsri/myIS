@@ -10,14 +10,14 @@
     "split_isolation_valid": true,
     "gate_order_valid": true,
     "budget_valid": true,
-    "manifest_integrity_valid": false,
+    "manifest_integrity_valid": true,
     "blocking_findings": [
       "F001"
     ]
   },
   "overall": {
-    "grade": "Weak Reject",
-    "mean_score": 2.83,
+    "grade": "Reject",
+    "mean_score": 3.67,
     "one_line_summary": "PR 7 was merged before its Linux CPU contract completed; the immutable-journal tamper test then made the event write-only on POSIX and failed before reaching the intended hash-mismatch assertion.",
     "strengths": [
       "The journal still rejected the tampered event rather than accepting corrupted state.",
@@ -90,7 +90,7 @@
     {
       "finding_id": "F001",
       "dimension": "D6_methodological_rigor",
-      "severity": "blocking",
+      "severity": "major",
       "target_artifact": "Linux CPU contract",
       "target_entity": "immutable journal tamper regression",
       "evidence_locator": "GitHub Actions run 30820701732, job 91709606963",

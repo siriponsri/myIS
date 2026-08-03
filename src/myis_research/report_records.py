@@ -26,6 +26,9 @@ P2_TRACKED_OWNER_PATH_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-tracked-
 P2_RUNTIME_INTERRUPTION_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json"
 P2_RUNTIME_RECOVERY_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json"
 P2_RUNTIME_LINUX_CI_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json"
+P2_RUNTIME_LINUX_CI_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json"
+P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json"
+P2_RUNTIME_INDEPENDENT_REVISE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -262,6 +265,24 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 P2_RUNTIME_LINUX_CI_FAILURE_AUDIT,
                 "Retains the post-merge POSIX permission-mode regression and blocks cleanup until a green repair CI run exists.",
             ),
+            (
+                "p2-runtime-resilience-v2-linux-ci-repair-audit",
+                "P2 runtime resilience v2 Linux CI repair audit",
+                P2_RUNTIME_LINUX_CI_REPAIR_AUDIT,
+                "Validates the portable tamper test with focused, full local, and green Linux CI evidence.",
+            ),
+            (
+                "p2-runtime-resilience-v2-clean-checkout-failure-audit",
+                "P2 runtime resilience v2 clean-checkout failure audit",
+                P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT,
+                "Retains the checkout-dependent raw-hash drift and blocks cleanup until a committed disposable checkout passes.",
+            ),
+            (
+                "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+                "P2 runtime resilience v2 independent verifier REVISE audit",
+                P2_RUNTIME_INDEPENDENT_REVISE_AUDIT,
+                "Retains the read-only verifier rejection and its portability, stale-state, and rigor-schema findings.",
+            ),
         ):
             digest = _hash_file(root, uri)
             if digest:
@@ -434,13 +455,26 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "counters_changed": False,
             })
         linux_ci_failure_sha256 = _hash_file(root, P2_RUNTIME_LINUX_CI_FAILURE_AUDIT)
-        if linux_ci_failure_sha256:
+        linux_ci_repair_sha256 = _hash_file(root, P2_RUNTIME_LINUX_CI_REPAIR_AUDIT)
+        if linux_ci_failure_sha256 and linux_ci_repair_sha256:
             failures.append({
                 "failure_id": "p2-runtime-resilience-v2-linux-ci-failure-20260803",
                 "failure_uri": P2_RUNTIME_LINUX_CI_FAILURE_AUDIT,
                 "failure_sha256": linux_ci_failure_sha256,
+                "recovery_id": "p2-runtime-resilience-v2-linux-ci-repair-20260803",
+                "recovery_uri": P2_RUNTIME_LINUX_CI_REPAIR_AUDIT,
+                "recovery_sha256": linux_ci_repair_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
+        clean_checkout_failure_sha256 = _hash_file(root, P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT)
+        if clean_checkout_failure_sha256:
+            failures.append({
+                "failure_id": "p2-runtime-resilience-v2-clean-checkout-drift-20260803",
+                "failure_uri": P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT,
+                "failure_sha256": clean_checkout_failure_sha256,
                 "recovery_id": None,
-                "status": "open_pending_ci_repair",
+                "status": "open_pending_clean_checkout_repair",
                 "counters_changed": False,
             })
     if scientific:

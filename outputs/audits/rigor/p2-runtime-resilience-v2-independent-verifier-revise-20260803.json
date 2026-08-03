@@ -1,0 +1,134 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-independent-verifier-revise-20260803",
+  "artifact": "Independent read-only verification of committed repair tip 063f9d0",
+  "artifact_path": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+  "artifact_sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "F001",
+      "F002"
+    ]
+  },
+  "overall": {
+    "grade": "Reject",
+    "mean_score": 4.17,
+    "one_line_summary": "The fresh read-only verifier rejected merge and cleanup because committed 063f9d0 failed clean-checkout portability, projected stale CI state, and used inconsistent rigor grading.",
+    "strengths": [
+      "PR 8 Linux CI passed 319 tests with 9 platform skips.",
+      "All real P2 counters remained zero and preflight, D2, D3, and final evaluation remained closed.",
+      "The verifier did not edit files, access protected stores, or run measured/preflight commands."
+    ],
+    "weaknesses": [
+      "One of four detached clean-checkout regressions failed with seven P2 projection drifts.",
+      "Phase, Task, and HANDOFF state had not yet recorded the green Linux recovery.",
+      "The initial failure audit used a grade and finding severity outside the rigor contract."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The verifier inspected committed bytes, the relevant diff, reports, controls, CI, and a fresh checkout."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "The portability failure identifies exact files, hashes, outputs, and a repeatable test."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The verdict remains engineering-only and preserves all scientific boundaries."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": [
+        "Each finding links a concrete source to its downstream report or audit contradiction."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": [
+        "The verifier surfaced new blockers after CI green rather than treating green CI as sufficient closeout evidence."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 1,
+      "strengths": [],
+      "weaknesses": [
+        "A required committed clean-checkout regression failed, so merge and cleanup were not justified."
+      ],
+      "suggestions": [
+        "Repair byte preservation, update recovery reporting, rerun committed clean-checkout tests, and obtain a fresh independent verdict."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": ".gitattributes",
+      "target_entity": "five raw-hashed runtime-v2 sources",
+      "evidence_locator": "detached clean checkout 063f9d0; 1 failed, 3 passed",
+      "observation": "Five new hash-bound files checked out with different CRLF bytes and caused seven report drifts.",
+      "reasoning": "The committed projection was not reproducible from a clean Windows checkout.",
+      "suggestion": "Add exact -text rules and rerun from a fresh committed checkout."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "P2 Phase and Task reports",
+      "target_entity": "Linux CI recovery state",
+      "evidence_locator": "PR 8 run 30823016515 versus open_pending_ci_repair",
+      "observation": "The reports still described CI recovery as pending after the repair CI passed.",
+      "reasoning": "Cross-session state would direct later work from stale evidence.",
+      "suggestion": "Add a recovery audit and regenerate every projection from one read model."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D4_argument_coherence",
+      "severity": "minor",
+      "target_artifact": "p2-runtime-resilience-v2-linux-ci-failure-20260803",
+      "target_entity": "grade and severity vocabulary",
+      "evidence_locator": "overall.grade, dimensions.D6.score, findings[0].severity",
+      "observation": "D6 equaled 1 while the grade was Weak Reject, and severity used blocking.",
+      "reasoning": "The rigor schema requires Reject for any dimension score of 1 and only permits critical, major, minor, or suggestion severities.",
+      "suggestion": "Correct the review semantics and retain the correction in Git history."
+    }
+  ],
+  "questions_for_owner": [
+    "No Owner gate decision is required for the repository-only repairs."
+  ],
+  "read_order": [
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "git diff 1b7f468..063f9d0",
+    "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+    "projections/reports/phase/phase-p2_scope_development.json",
+    "projections/reports/task/task-p2-1.json",
+    "HANDOFF.md",
+    "GitHub Actions run 30823016515",
+    "detached clean-checkout regression at 063f9d0"
+  ]
+}

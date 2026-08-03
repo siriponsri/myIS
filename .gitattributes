@@ -33,6 +33,14 @@ orchestration/audits/** -text
 # Those marker-only lines are patch syntax, not repository whitespace defects.
 archive/p2-runtime-resilience-v1-interrupted/*.patch -text whitespace=-blank-at-eol,-blank-at-eof
 
+# Runtime resilience v2 reports bind these canonical sources by raw SHA-256.
+# Preserve committed bytes so clean Windows and POSIX checkouts agree.
+archive/p2-runtime-resilience-v1-interrupted/manifest.json -text
+control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md -text
+control/budgets/p2-r1-primary-v2.yaml -text
+control/execution-envelope-p2-v2.yaml -text
+control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml -text
+
 # The generated vault manifest binds report bytes. Keep generated output exact,
 # while retaining normal text handling for Owner-authored and Obsidian-local files.
 obsidian_report/** -text
