@@ -1,5 +1,5 @@
 ---
-read_model_revision: d2b84e42b519465cad663a9f1ee02a0c61fdbc474f330bbbbb8f75721e7c1f4c
+read_model_revision: 0711cfa307602b5367b1769aa6e0aef757ca4a9d3254f58f47f4a52d834f185f
 managed_by: myis-report
 ---
 
