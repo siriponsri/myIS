@@ -1,0 +1,198 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260803T160347Z-p2-runtime-resilience-v2-integration-closeout-v1",
+  "run_id": null,
+  "goal_id": "P2_RUNTIME_RESILIENCE_V2_INTEGRATION_CLOSEOUT",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-03T16:03:47Z",
+  "scope": "Repair, independently verify, validate, report, and prepare integration of P2 Runtime Resilience v2 without starting Owner-local preflight or measured execution.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "8923bfe1827568fed0a25148699d1e978174c77e",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260803T160347Z-p2-runtime-resilience-v2-integration-closeout-v1.json",
+      "projections/sessions/20260803T160347Z-p2-runtime-resilience-v2-integration-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner required a fresh post-manual-merge review, detailed report and artifact retention, cross-session Brain knowledge, same-session Brain synchronization for AGENTS.md changes, Brain YOLO mode within safety controls, commit and push, and exact worktree cleanup only after successful closeout.",
+      "evidence_refs": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "b7c986f2bafbb245402409c094814408f8ac9e74c41860b553635ebc5932560b",
+          "locator": "Memory lifecycle; mandatory Brain synchronization and Brain YOLO boundary"
+        },
+        {
+          "path": "HANDOFF.md",
+          "sha256": "fafc50743ae446e476138a319a771c39e4fcb67d28bccaf4d6e1e7a0bdea7cc2",
+          "locator": "P2 runtime resilience v2 closeout and remaining integration gate"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "PR 7 was merged before its Linux contract completed; the journal tamper test then made the event write-only on POSIX and failed before reaching the intended hash-mismatch assertion.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+          "sha256": "fd941f7070f25fd71b7ba78ce1043cfc68eb757eb4ee7a9b8206c0579e780b1c",
+          "locator": "overall, dimensions D1-D6, finding F001, and read_order"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Explicit owner read and write permission restored portable journal tamper testing; focused and full local tests and the first PR 8 Linux contract passed without changing production journal behavior.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json",
+          "sha256": "2d7a2234e40334cec2680257167df49d3fd92c87cf74b5853d9b5e8d5e406140",
+          "locator": "overall, dimensions D1-D6, finding F001, and read_order"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The first detached checkout exposed seven generated report drifts from five raw-hashed sources lacking exact byte policy, and an independent verifier returned REVISE for portability, stale reporting, and invalid rigor semantics.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json",
+          "sha256": "f96773ad051e7427d7d125deb54c9cc2c2f3788b04524d4a657ccbf9e4a01ca8",
+          "locator": "overall, dimensions D1-D6, finding F001, and read_order"
+        },
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json",
+          "sha256": "37988c60e6daa2e564afd4b0a21169a67a112537ed612c4e2e08375bff7d2bbb",
+          "locator": "overall, findings F001-F003, and read_order"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "Exact -text attributes, paired failure-recovery reporting, regenerated projections, and a fresh lockfile-bound checkout closed the byte-portability failure; a second independent read-only review returned ACCEPT with no critical, major, or minor finding.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json",
+          "sha256": "1ec9c92a8415536c4de1f1816c0293a88aadda01b5eb3bb56fa495bb7222ee38",
+          "locator": "overall, dimensions D1-D6, finding F001, and read_order"
+        },
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json",
+          "sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+          "locator": "overall, dimensions D1-D6, finding F001, and read_order"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Post-acceptance verification passed 328 full tests, 23 focused runtime tests, 15 Dashboard/API and MLflow projection tests, 56 graph/report/safety tests, and every required policy, layout, asset, session, MLflow, Brain literature, Ruff, path, report-drift, and whitespace check.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "fafc50743ae446e476138a319a771c39e4fcb67d28bccaf4d6e1e7a0bdea7cc2",
+          "locator": "P2 runtime resilience v2 closeout; post-acceptance local verification"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0007",
+      "sequence": 7,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Repository-safe MLflow doctor must receive an explicit governed external store pointer; absence of that pointer correctly blocks rather than guessing a path, while an explicit read-only invocation verifies the database without mutating it.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "fafc50743ae446e476138a319a771c39e4fcb67d28bccaf4d6e1e7a0bdea7cc2",
+          "locator": "P2 runtime resilience v2 closeout; repository-safe MLflow doctor recovery"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0008",
+      "sequence": 8,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P2 remains ready and planned but not measured; all real counters are zero, Owner-local preflight is not started, D2 and D3 remain waiting for the Owner, the final split is closed, and the next authorized action is Owner-local P2 measured preflight.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "cc498af4ae18bff75ad837c50c768cd786efe63e2df60dde6c8aad4e5cf0cb83",
+          "locator": "current_state, p2_readiness, measured counters, and gates"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "f1aa733d40b57ab76c31bfe23e7c6eb821d5c69598317aec9f61d8b237a5107c",
+          "locator": "status, read_model_revision, and read_model_sha256"
+        },
+        {
+          "path": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+          "sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+          "locator": "Authority and boundary; Owner-local preflight handoff"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "progress": "orchestration/autoresearch/p2-runtime-resilience-v2/ledger.jsonl",
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json",
+    "manifest": "archive/p2-runtime-resilience-v1-interrupted/manifest.json",
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "final-push-ci-merge",
+      "provenance": "agent-observed",
+      "summary": "Push the final branch head, require a fresh green Linux CPU contract, and merge PR 8 only after that run passes.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "main-goal-and-worktree-transition",
+      "provenance": "owner",
+      "summary": "After merge, synchronize primary main, preserve the prior ignored goal bytes, install the v2 goal with embedded runbook and final hashes, create a fresh measured worktree, and remove only obsolete P2 worktrees and branches.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "owner-local-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight was not run and remains the exact next authorized action in a separate session.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

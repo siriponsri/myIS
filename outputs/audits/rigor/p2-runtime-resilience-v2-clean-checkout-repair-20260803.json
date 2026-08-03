@@ -1,0 +1,112 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-clean-checkout-repair-20260803",
+  "artifact": "Runtime resilience v2 clean-checkout raw-hash repair",
+  "artifact_path": ".gitattributes",
+  "artifact_sha256": "2e3a461787c721cdd6073e9bf10de858cdfbc6cea1cde010cf4091f58111a283",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Strong Accept",
+    "mean_score": 4.67,
+    "one_line_summary": "A fresh detached checkout of committed tip 9119fba preserved all five runtime-v2 raw-hashed sources and passed the four portability regressions plus read-model-only validation.",
+    "strengths": [
+      "All five sources checked out as committed LF bytes with the explicit -text policy.",
+      "The clean checkout passed all four raw-hash, projection-byte, P1-binding, and unsafe-path regressions.",
+      "Read-model-only validation reproduced revision d2b84e42b519465cad663a9f1ee02a0c61fdbc474f330bbbbb8f75721e7c1f4c with no drift."
+    ],
+    "weaknesses": [
+      "The separate independent REVISE verdict remains open until a new reviewer evaluates the committed recovery tip."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The verification used a newly materialized checkout of the exact committed repair and generated projections."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "The same four tests that exposed the original seven-file drift now pass together."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The result supports only checkout portability and changes no measured counter or scientific conclusion."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": [
+        "Exact source attributes, committed projection bytes, passing regressions, and a matching read model form one traceable recovery chain."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The initial failed checkout and independent rejection remain retained rather than overwritten."
+      ],
+      "weaknesses": [
+        "The missing source attributes were discovered only after the first detached checkout failed."
+      ],
+      "suggestions": [
+        "Keep the clean-checkout regression in every future raw-hash projection closeout."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "The fresh checkout used its own lockfile-bound environment and imported the committed source tree."
+      ],
+      "weaknesses": [
+        "Full repository validation and an independent verdict remain required before merge and cleanup."
+      ],
+      "suggestions": [
+        "Run the final validation matrix and obtain a new independent review on the committed recovery tip."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "Runtime resilience v2 final closeout",
+      "target_entity": "independent verification and final validation",
+      "evidence_locator": "clean checkout 9119fba; 4 passed; read-model-only PASS",
+      "observation": "Checkout portability is repaired while final merge evidence is not yet complete.",
+      "reasoning": "A portability recovery is necessary but does not replace independent review, the full validation matrix, or post-push CI.",
+      "suggestion": "Keep cleanup blocked until those independent checks pass."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner gate is required; measured P2 remains not started."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json",
+    ".gitattributes",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "tests/test_obsidian_report_contract.py",
+    "tests/test_read_model.py",
+    "tests/test_p2_preflight.py",
+    "detached clean checkout at commit 9119fba0f111791a65cf208a203ef58c8145a8d5"
+  ]
+}

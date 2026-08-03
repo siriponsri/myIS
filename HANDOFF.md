@@ -539,6 +539,74 @@ into this repair. The Observatory fixture `--check` command also materialized
 seven generated fixture files; those command-created changes were restored to
 their committed bytes because this closeout does not refresh fixture evidence.
 
+PR `#7` was merged as `1b7f468290960a699f75af374b868947d768a1be`
+before its Linux CPU contract completed. Run `30820701732` then reported one
+failure after 318 passes and 9 platform skips: the journal tamper test changed
+the event to owner-write-only with `stat.S_IWRITE`, so POSIX failed while
+reading the event before the intended hash-mismatch assertion. The follow-up
+repair uses owner read and write permission and passed the focused regression,
+the full local suite with 328 tests, and PR `#8` Linux run `30823016515` with
+319 tests and 9 platform skips. Paired audits
+`p2-runtime-resilience-v2-linux-ci-failure-20260803` and
+`p2-runtime-resilience-v2-linux-ci-repair-20260803` preserve the failure and
+recovery without changing any measured counter.
+
+The first detached clean-checkout verification of committed repair tip
+`063f9d0fa08126b62073759ee6db8d4943e15479` passed three of four regressions
+but found seven P2 report drifts. Five new raw-hashed sources lacked explicit
+byte preservation and received CRLF normalization on Windows: the v2 runbook,
+budget profile, execution envelope, campaign revision, and interrupted archive
+manifest. Audit `p2-runtime-resilience-v2-clean-checkout-drift-20260803`
+retains the failure; cleanup remains blocked until a new committed checkout
+passes all four regressions and read-model-only validation.
+
+A fresh independent read-only verifier reviewed committed tip `063f9d0` and
+returned `REVISE`. It confirmed the clean-checkout blocker, identified stale
+post-CI report state, and found invalid grade/severity semantics in the initial
+Linux failure audit. Audit
+`p2-runtime-resilience-v2-independent-verifier-revise-20260803` retains that
+verdict. The audit semantics and Linux recovery state are repaired.
+
+Commit `9119fba0f111791a65cf208a203ef58c8145a8d5` then added exact byte
+preservation and synchronized projections. A fresh detached checkout created
+its own lockfile-bound environment, retained LF bytes for all five raw-hashed
+sources, passed all four portability regressions, and passed read-model-only
+validation at revision
+`d2b84e42b519465cad663a9f1ee02a0c61fdbc474f330bbbbb8f75721e7c1f4c`
+and SHA-256
+`06f7bd023dcc014f8d377c53d7229467c57d02cfce6f6dd07f00efb25709e9f4`.
+Audit `p2-runtime-resilience-v2-clean-checkout-repair-20260803` closes the
+portability failure. That recovery did not by itself close the separate
+independent-review and final-validation requirements.
+
+A fresh independent read-only verifier then reviewed committed tip
+`0046f7d394d429391511cd4c22a4468058388b63` and tree
+`fa958ab5d3919ea23508fc06994f8070b7ccfc8c`, returned `ACCEPT`, and reported
+no critical, major, or minor findings. It reran the four portability tests, the
+Phase/Task recovery-binding regression, read-model-only validation, P2 closure
+policy, measured-control check, and `git diff --check`; all passed and the
+worktree remained clean. Audit
+`p2-runtime-resilience-v2-independent-verifier-accept-20260803` pairs this
+recovery with the retained `REVISE` record. The remaining integration gate is
+a fresh green CI run on the pushed final branch head before merge and cleanup.
+
+Post-acceptance local verification passed the full suite with `328` tests and
+one pre-existing Starlette deprecation warning, `23` focused runtime tests,
+`15` Dashboard/API and MLflow projection tests, and `56` graph/report/safety
+tests. P2 closure, archive-runtime isolation, measured-control checksum,
+layout, full assets and map, session audit, scoped Ruff, protected and unsafe
+path regressions, report drift, and `git diff --check` passed. Brain literature
+validation retained 154 unique notes with zero errors. Repository-safe MLflow
+doctor initially stopped because no store was specified, then passed read-only
+against the governed external v2 store with 42 archive runs, 42 receipts, 500
+safe artifacts, no archive failure, and an unchanged SQLite database. The
+shared read-model revision is
+`9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc`
+with SHA-256
+`a9060a69278260a32fad9e6efd7209fcac38df81b739ef014e3b49da25d302f6`.
+The branch still requires its final session capsule, push, and fresh green CI
+before merge or cleanup.
+
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The
 next authorized action remains exactly `Owner-local P2 measured preflight`.

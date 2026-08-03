@@ -907,6 +907,12 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             "p2-preflight-projection-source-audit-repair",
             "p2-preflight-tracked-owner-path-audit-initial",
             "p2-preflight-tracked-owner-path-audit-repair",
+            "p2-runtime-resilience-v2-linux-ci-failure-audit",
+            "p2-runtime-resilience-v2-linux-ci-repair-audit",
+            "p2-runtime-resilience-v2-clean-checkout-failure-audit",
+            "p2-runtime-resilience-v2-clean-checkout-repair-audit",
+            "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+            "p2-runtime-resilience-v2-independent-verifier-accept-audit",
         } <= artifact_ids
         assert any(
             item.get("status") == "repaired_and_validated"
@@ -925,6 +931,31 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             item.get("status") == "repaired_and_validated"
             and item.get("counters_changed") is False
             and item.get("recovery_id") == "p2-preflight-tracked-owner-path-repair-20260802"
+            for item in record["failure_recovery_references"]
+        )
+        assert any(
+            item.get("status") == "repaired_and_validated"
+            and item.get("counters_changed") is False
+            and item.get("recovery_id")
+            == "p2-runtime-resilience-v2-linux-ci-repair-20260803"
+            for item in record["failure_recovery_references"]
+        )
+        assert any(
+            item.get("status") == "repaired_and_validated"
+            and item.get("counters_changed") is False
+            and item.get("failure_id")
+            == "p2-runtime-resilience-v2-clean-checkout-drift-20260803"
+            and item.get("recovery_id")
+            == "p2-runtime-resilience-v2-clean-checkout-repair-20260803"
+            for item in record["failure_recovery_references"]
+        )
+        assert any(
+            item.get("status") == "repaired_and_validated"
+            and item.get("counters_changed") is False
+            and item.get("failure_id")
+            == "p2-runtime-resilience-v2-independent-verifier-revise-20260803"
+            and item.get("recovery_id")
+            == "p2-runtime-resilience-v2-independent-verifier-accept-20260803"
             for item in record["failure_recovery_references"]
         )
         assert "no Owner-local preflight" in record["work_summary"]

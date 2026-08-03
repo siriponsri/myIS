@@ -1,0 +1,111 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-linux-ci-failure-20260803",
+  "artifact": "PR 7 post-merge Linux CPU contract failure",
+  "artifact_path": "tests/test_p2_measured_state.py",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "F001"
+    ]
+  },
+  "overall": {
+    "grade": "Reject",
+    "mean_score": 3.67,
+    "one_line_summary": "PR 7 was merged before its Linux CPU contract completed; the immutable-journal tamper test then made the event write-only on POSIX and failed before reaching the intended hash-mismatch assertion.",
+    "strengths": [
+      "The journal still rejected the tampered event rather than accepting corrupted state.",
+      "The CI run retained 318 passing tests and 9 platform skips before reporting the single focused failure.",
+      "The failure log and merged commit remain immutable and externally addressable."
+    ],
+    "weaknesses": [
+      "The merged main branch did not satisfy the required green-CI condition.",
+      "The test used stat.S_IWRITE alone, which removes read permission on POSIX while behaving differently on Windows.",
+      "The observed error was an unreadable-event error rather than the intended event-hash validation error."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The GitHub Actions failure exercises the exact journal tamper regression on Linux."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": [
+        "A POSIX rerun can distinguish permission failure from the expected event-hash failure."
+      ],
+      "weaknesses": [
+        "The original Windows-only closeout did not falsify the POSIX permission behavior."
+      ],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The issue is classified as an engineering test portability defect and not a scientific result."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 3,
+      "strengths": [
+        "The expected and actual error paths identify the permission-mode mismatch directly."
+      ],
+      "weaknesses": [
+        "A green local Windows suite was insufficient evidence for a green cross-platform contract."
+      ],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The failed post-merge run is retained instead of being rerun or described away."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 1,
+      "strengths": [],
+      "weaknesses": [
+        "Main remained red after merge and therefore could not authorize cleanup or measured-worktree creation."
+      ],
+      "suggestions": [
+        "Repair the test permission mode, require a fresh green Linux CI run, and retain the repair as a separate audit."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "Linux CPU contract",
+      "target_entity": "immutable journal tamper regression",
+      "evidence_locator": "GitHub Actions run 30820701732, job 91709606963",
+      "observation": "The test changed the event mode to owner-write-only before asking the verifier to read it.",
+      "reasoning": "POSIX correctly rejected the read before journal hash validation, so the assertion could not observe the intended invariant.",
+      "suggestion": "Use owner read and write permission for the deliberate tamper, then require the verifier to reject the changed payload by event hash."
+    }
+  ],
+  "questions_for_owner": [
+    "No new scientific gate is required; this is a repository-only cross-platform repair."
+  ],
+  "read_order": [
+    "GitHub Actions run 30820701732",
+    "tests/test_p2_measured_state.py",
+    "src/myis_research/p2/measured_state.py",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md"
+  ]
+}

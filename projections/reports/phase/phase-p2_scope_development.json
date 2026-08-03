@@ -361,6 +361,114 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v2-linux-ci-failure-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "fd941f7070f25fd71b7ba78ce1043cfc68eb757eb4ee7a9b8206c0579e780b1c",
+      "evidence_class": "engineering",
+      "explanation": "Retains the post-merge POSIX permission-mode regression and blocks cleanup until a green repair CI run exists.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 Linux CI failure audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-linux-ci-repair-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2d7a2234e40334cec2680257167df49d3fd92c87cf74b5853d9b5e8d5e406140",
+      "evidence_class": "engineering",
+      "explanation": "Validates the portable tamper test with focused, full local, and green Linux CI evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 Linux CI repair audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-clean-checkout-failure-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f96773ad051e7427d7d125deb54c9cc2c2f3788b04524d4a657ccbf9e4a01ca8",
+      "evidence_class": "engineering",
+      "explanation": "Retains the checkout-dependent raw-hash drift and blocks cleanup until a committed disposable checkout passes.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 clean-checkout failure audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-clean-checkout-repair-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "1ec9c92a8415536c4de1f1816c0293a88aadda01b5eb3bb56fa495bb7222ee38",
+      "evidence_class": "engineering",
+      "explanation": "Validates checkout-stable raw hashes, projection bytes, and read-model identity from a fresh committed worktree.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 clean-checkout repair audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "37988c60e6daa2e564afd4b0a21169a67a112537ed612c4e2e08375bff7d2bbb",
+      "evidence_class": "engineering",
+      "explanation": "Retains the read-only verifier rejection and its portability, stale-state, and rigor-schema findings.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 independent verifier REVISE audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-independent-verifier-accept-audit",
+      "artifact_type": "review",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+      "evidence_class": "engineering",
+      "explanation": "Validates that the committed portability, reporting, and rigor-semantics repairs close every prior verifier finding.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json",
+      "scientific_authority": false,
+      "title": "P2 runtime resilience v2 independent verifier ACCEPT audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "artifact_type": "registry",
       "child_artifact_hashes": {},
@@ -488,6 +596,36 @@
       "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json"
     },
     {
+      "artifact_id": "p2-runtime-resilience-v2-linux-ci-failure-audit",
+      "sha256": "fd941f7070f25fd71b7ba78ce1043cfc68eb757eb4ee7a9b8206c0579e780b1c",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-linux-ci-repair-audit",
+      "sha256": "2d7a2234e40334cec2680257167df49d3fd92c87cf74b5853d9b5e8d5e406140",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-clean-checkout-failure-audit",
+      "sha256": "f96773ad051e7427d7d125deb54c9cc2c2f3788b04524d4a657ccbf9e4a01ca8",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-clean-checkout-repair-audit",
+      "sha256": "1ec9c92a8415536c4de1f1816c0293a88aadda01b5eb3bb56fa495bb7222ee38",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+      "sha256": "37988c60e6daa2e564afd4b0a21169a67a112537ed612c4e2e08375bff7d2bbb",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
+    },
+    {
+      "artifact_id": "p2-runtime-resilience-v2-independent-verifier-accept-audit",
+      "sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+      "uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json"
+    },
+    {
       "artifact_id": "observatory-fixture-registry",
       "sha256": "51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1",
       "uri": "outputs/observatory/fixture-v1/registry.json"
@@ -549,11 +687,41 @@
       "recovery_sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
       "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-runtime-resilience-v2-linux-ci-failure-20260803",
+      "failure_sha256": "fd941f7070f25fd71b7ba78ce1043cfc68eb757eb4ee7a9b8206c0579e780b1c",
+      "failure_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+      "recovery_id": "p2-runtime-resilience-v2-linux-ci-repair-20260803",
+      "recovery_sha256": "2d7a2234e40334cec2680257167df49d3fd92c87cf74b5853d9b5e8d5e406140",
+      "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-runtime-resilience-v2-clean-checkout-drift-20260803",
+      "failure_sha256": "f96773ad051e7427d7d125deb54c9cc2c2f3788b04524d4a657ccbf9e4a01ca8",
+      "failure_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json",
+      "recovery_id": "p2-runtime-resilience-v2-clean-checkout-repair-20260803",
+      "recovery_sha256": "1ec9c92a8415536c4de1f1816c0293a88aadda01b5eb3bb56fa495bb7222ee38",
+      "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "p2-runtime-resilience-v2-independent-verifier-revise-20260803",
+      "failure_sha256": "37988c60e6daa2e564afd4b0a21169a67a112537ed612c4e2e08375bff7d2bbb",
+      "failure_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json",
+      "recovery_id": "p2-runtime-resilience-v2-independent-verifier-accept-20260803",
+      "recovery_sha256": "27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a",
+      "recovery_uri": "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json",
+      "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-03T13:31:30Z",
-  "generated_from_revision": "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f",
-  "git_commit": "831872ff1720117e2d44c115e15e7cba0a4bb236",
+  "generated_at": "2026-08-03T15:43:42Z",
+  "generated_from_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
+  "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -605,7 +773,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "831872ff1720117e2d44c115e15e7cba0a4bb236",
+    "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -628,14 +796,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-03T13:31:30Z",
+  "last_material_update": "2026-08-03T15:43:42Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "7d5eedb4aad4e82d4b409df9113cb252dab1f04f5137043023a3483936cdd4fa",
+  "report_sha256": "4d8a45f632bc9d73fe3d01101e576001034201cbbc6bf9799b0146284a639a9b",
   "report_type": "phase",
   "result": {
     "decision": "not_started",
@@ -676,6 +844,12 @@
         "p2-preflight-tracked-owner-path-audit-repair",
         "p2-runtime-resilience-v1-interruption-audit",
         "p2-runtime-resilience-v2-recovery-audit",
+        "p2-runtime-resilience-v2-linux-ci-failure-audit",
+        "p2-runtime-resilience-v2-linux-ci-repair-audit",
+        "p2-runtime-resilience-v2-clean-checkout-failure-audit",
+        "p2-runtime-resilience-v2-clean-checkout-repair-audit",
+        "p2-runtime-resilience-v2-independent-verifier-revise-audit",
+        "p2-runtime-resilience-v2-independent-verifier-accept-audit",
         "observatory-fixture-registry"
       ]
     }

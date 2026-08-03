@@ -113,7 +113,7 @@ def test_measured_journal_is_hash_chained_rebuildable_and_immutable(tmp_path: Pa
     event = tmp_path / "run" / "journal" / "00000000000000000002.json"
     payload = json.loads(event.read_text(encoding="utf-8"))
     payload["event_type"] = "tampered"
-    os.chmod(event, stat.S_IWRITE)
+    os.chmod(event, stat.S_IRUSR | stat.S_IWUSR)
     event.write_text(json.dumps(payload), encoding="utf-8")
     with pytest.raises(MeasuredStateError, match="event hash"):
         journal.verify()

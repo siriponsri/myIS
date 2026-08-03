@@ -1,0 +1,104 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-linux-ci-repair-20260803",
+  "artifact": "Runtime resilience v2 Linux journal-test repair",
+  "artifact_path": "tests/test_p2_measured_state.py",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Strong Accept",
+    "mean_score": 4.67,
+    "one_line_summary": "Explicit owner read and write permission preserves the journal tamper test's intended hash-mismatch path on Windows and POSIX; PR 8 Linux CPU contract passed.",
+    "strengths": [
+      "The production journal remains unchanged and continues to fail closed on unreadable or hash-invalid events.",
+      "The focused local regression passed and the full local suite passed 328 tests.",
+      "GitHub Actions run 30823016515 passed 319 tests with 9 platform skips and all subsequent contract steps."
+    ],
+    "weaknesses": [
+      "The green CI run does not by itself close the separately discovered clean-checkout raw-hash drift."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The repair and CI exercise the exact failing tamper assertion."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "The test now distinguishes an event-hash failure from an unreadable-file failure on POSIX."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The evidence supports only a cross-platform engineering repair and no scientific claim."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": [
+        "The failing permission mode, one-line fix, expected exception, and green Linux result form one traceable chain."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The failed PR 7 run and successful PR 8 run are both retained."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": [
+        "Focused, full local, and Linux CI suites agree after the repair."
+      ],
+      "weaknesses": [
+        "A separate clean-checkout finding remains open."
+      ],
+      "suggestions": []
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "Runtime resilience v2 final closeout",
+      "target_entity": "clean-checkout portability",
+      "evidence_locator": "p2-runtime-resilience-v2-clean-checkout-drift-20260803",
+      "observation": "Linux CI is green while the independent clean-checkout issue remains separately tracked.",
+      "reasoning": "The two failures have distinct causes and must not be collapsed into one recovery claim.",
+      "suggestion": "Close the raw-hash portability audit before merge and cleanup."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner gate is required; measured P2 remains not started."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json",
+    "tests/test_p2_measured_state.py",
+    "src/myis_research/p2/measured_state.py",
+    "GitHub Actions run 30823016515",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md"
+  ]
+}
