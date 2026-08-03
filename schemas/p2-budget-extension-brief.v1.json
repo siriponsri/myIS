@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-budget-extension-brief:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "brief_id", "request_id", "campaign_revision", "binding_hashes", "completed_batch_hashes", "consumption", "best_train", "matched_ablation", "no_improvement_streak", "failures", "remaining_hypothesis_families", "shortlist_freeze_started", "selection_exposures", "recommended_profile", "larger_profile", "owner_response", "next_revision_uri", "protected_data_accessed", "brief_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-budget-extension-brief.v1"},
+    "brief_id": {"type": "string"},
+    "request_id": {"type": "string"},
+    "campaign_revision": {"type": "string"},
+    "binding_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "completed_batch_hashes": {"type": "array", "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "consumption": {"type": "object"},
+    "best_train": {"type": ["object", "null"]},
+    "matched_ablation": {"type": ["object", "null"]},
+    "no_improvement_streak": {"type": "integer", "minimum": 0},
+    "failures": {"type": "array", "items": {"type": "string"}},
+    "remaining_hypothesis_families": {"type": "array", "items": {"type": "string"}},
+    "shortlist_freeze_started": {"const": false},
+    "selection_exposures": {"const": 0},
+    "recommended_profile": {"type": "object"},
+    "larger_profile": {"type": "object"},
+    "owner_response": {"enum": ["pending", "recommended", "larger", "stop", "exact_alternative"]},
+    "next_revision_uri": {"type": ["string", "null"]},
+    "protected_data_accessed": {"const": false},
+    "brief_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

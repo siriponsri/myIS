@@ -17,10 +17,16 @@ def test_dashboard_exposes_p2_readiness_without_metrics_or_selection() -> None:
     snapshot = client.get("/api/v2/snapshot", headers=HEADERS).json()
     p2 = snapshot["p2_readiness"]
     assert p2["status"] == "ready_planned_not_measured"
-    assert p2["budget_profile_id"] == "p2-r1-primary-v1"
+    assert p2["budget_profile_id"] == "p2-r1-primary-v2"
+    assert p2["runtime"]["max_wall_clock_seconds"] == 432000
+    assert p2["runtime"]["overhead_reserve_seconds"] == 86400
+    assert p2["stopping"]["whole_batch_admission"] is True
+    assert p2["resources"]["proposer_mode"] == "hybrid_codex_ephemeral"
+    assert p2["source"]["execution_envelope"] == "control/execution-envelope-p2-v2.yaml"
     assert p2["measured_runs"] == 0
     assert p2["selection_accesses"] == 0
     assert p2["freeze_barrier"]["status"] == "not_started"
+    assert p2["candidate_proposal"]["historical_superseded"] is True
     fixture = p2["fixture_pilot"]
     assert fixture["executed"] is True
     assert fixture["status"] == "passed"

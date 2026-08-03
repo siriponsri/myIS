@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-measured-request:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "phase_id", "arm", "stage", "campaign_id", "campaign_revision", "budget_profile_id", "budget_profile_uri", "budget_profile_sha256", "execution_envelope_id", "execution_envelope_uri", "execution_envelope_sha256", "base_candidate_set_id", "base_candidate_set_uri", "base_candidate_set_sha256", "adaptive_policy_id", "adaptive_policy_uri", "adaptive_policy_sha256", "proposer_contract_id", "proposer_contract_uri", "proposer_contract_sha256", "proposer_identity", "execution_source_commit", "execution_source_tree", "worktree_clean", "input_hashes", "scope_hashes", "global_counters", "protected_boundary"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-measured-request.v1"},
+    "request_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "arm": {"const": "R1"},
+    "stage": {"const": "train_selection"},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "campaign_revision": {"type": "string", "minLength": 1},
+    "budget_profile_id": {"type": "string", "minLength": 1},
+    "budget_profile_uri": {"$ref": "#/$defs/uri"},
+    "budget_profile_sha256": {"$ref": "#/$defs/hash"},
+    "execution_envelope_id": {"type": "string", "minLength": 1},
+    "execution_envelope_uri": {"$ref": "#/$defs/uri"},
+    "execution_envelope_sha256": {"$ref": "#/$defs/hash"},
+    "base_candidate_set_id": {"type": "string", "minLength": 1},
+    "base_candidate_set_uri": {"$ref": "#/$defs/uri"},
+    "base_candidate_set_sha256": {"$ref": "#/$defs/hash"},
+    "adaptive_policy_id": {"type": "string", "minLength": 1},
+    "adaptive_policy_uri": {"$ref": "#/$defs/uri"},
+    "adaptive_policy_sha256": {"$ref": "#/$defs/hash"},
+    "proposer_contract_id": {"type": "string", "minLength": 1},
+    "proposer_contract_uri": {"$ref": "#/$defs/uri"},
+    "proposer_contract_sha256": {"$ref": "#/$defs/hash"},
+    "proposer_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "revision", "effort", "tool_version", "instructions_sha256", "output_schema_sha256", "seed", "fallback"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 1},
+        "effort": {"type": "string", "minLength": 1},
+        "tool_version": {"type": "string", "minLength": 1},
+        "instructions_sha256": {"$ref": "#/$defs/hash"},
+        "output_schema_sha256": {"$ref": "#/$defs/hash"},
+        "seed": {"type": "integer", "minimum": 0},
+        "fallback": {"const": false}
+      }
+    },
+    "execution_source_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "execution_source_tree": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "worktree_clean": {"const": true},
+    "input_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/hash"}},
+    "scope_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/hash"}},
+    "global_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_runs", "candidate_count", "shortlist_count", "selection_accesses"],
+      "properties": {
+        "measured_runs": {"const": 0},
+        "candidate_count": {"const": 0},
+        "shortlist_count": {"const": 0},
+        "selection_accesses": {"const": 0}
+      }
+    },
+    "protected_boundary": {"type": "object"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"}
+  }
+}

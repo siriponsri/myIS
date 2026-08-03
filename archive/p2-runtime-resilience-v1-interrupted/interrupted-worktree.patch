@@ -1,0 +1,2003 @@
+# Sanitized interrupted patch archive
+
+source_branch: codex/p2-measured-autoresearch-closeout-v1
+superseded_by_branch: codex/p2-runtime-resilience-v2
+recorded_date: 2026-08-03
+evidence_class: engineering_failed_attempt
+scientific_authority: false
+measured_execution_started: false
+protected_surfaces_included: false
+
+## Tracked diff
+
+diff --git a/src/myis_research/p2/__init__.py b/src/myis_research/p2/__init__.py
+index 6070624a087c5c404b37721c364a0ed6721e921a..23a7785da00870091b3d9ea4fcffd8761dc6739f 100644
+--- a/src/myis_research/p2/__init__.py
++++ b/src/myis_research/p2/__init__.py
+@@ -32,6 +32,19 @@ from .preflight import (
+     run_p2_preflight,
+     write_preflight_receipt,
+ )
++from .measured_contracts import (
++    BASE_CANDIDATE_IDS,
++    BASE_CONTROL_IDS,
++    assert_single_axis_pair,
++    build_measured_request,
++    committed_blob_sha256,
++    git_identity,
++    load_measured_request,
++    load_profile_uri,
++    scientific_payload,
++    scientific_payload_sha256,
++    validate_measured_artifact,
++)
+ 
+ __all__ = [
+     "Candidate",
+@@ -62,4 +75,15 @@ __all__ = [
+     "preflight_what_if",
+     "run_p2_preflight",
+     "write_preflight_receipt",
++    "BASE_CANDIDATE_IDS",
++    "BASE_CONTROL_IDS",
++    "assert_single_axis_pair",
++    "build_measured_request",
++    "committed_blob_sha256",
++    "git_identity",
++    "load_measured_request",
++    "load_profile_uri",
++    "scientific_payload",
++    "scientific_payload_sha256",
++    "validate_measured_artifact",
+ ]
+diff --git a/src/myis_research/scope/compiler.py b/src/myis_research/scope/compiler.py
+index ff3885d06898f672d67efc787e2b41c13b741b51..a1d12b20c05a86fe494480beac776fc99a22d0e1 100644
+--- a/src/myis_research/scope/compiler.py
++++ b/src/myis_research/scope/compiler.py
+@@ -3,10 +3,12 @@
+ from __future__ import annotations
+ 
+ from dataclasses import dataclass
++import re
+ from typing import Any, Iterable, Mapping
+ 
+ from ..kernel.canonical import sha256_hex
+ from ..kernel.errors import FailureCategory, KernelContractError
++from ..kernel.p1 import tokenize
+ from .adapters import DapfamAdapter, FinePatentsAdapter
+ from .models import ScopeSpec, parse_scope_spec
+ 
+@@ -79,37 +81,41 @@ def compile_scope(
+                     f"record is missing source fields for view {view.view_id!r}: {missing_fields}",
+                     FailureCategory.PROVENANCE,
+                 )
+-            parts = [str(row[field]).strip() for field in view.source_fields if str(row.get(field, "")).strip()]
+-            text = "\n\n".join(parts)
+-            if view.searchable and not text:
++            descriptors = _compile_view_descriptors(parsed, view.view_id, view.kind, view.source_fields, row)
++            if view.searchable and not descriptors:
+                 raise KernelContractError(
+                     f"searchable view {view.view_id!r} produced empty text", FailureCategory.PROVENANCE
+                 )
+-            source_span = f"{view.span_scheme}:" + ",".join(view.source_fields)
+-            source_fields_hash = sha256_hex({field: row.get(field) for field in view.source_fields})
+             mapped_official = tuple(str(item) for item in row.get("official_passage_ids", ()) or ())
+-            semantic = {
+-                "family_id": family_id,
+-                "publication_id": publication_id,
+-                "view_id": view.view_id,
+-                "source_span": source_span,
+-                "source_hash": source_fields_hash,
+-                "text": text,
+-            }
+-            units.append(
+-                CompiledUnit(
+-                    unit_id="unit-" + sha256_hex(semantic)[:24],
+-                    view_id=view.view_id,
+-                    family_id=family_id,
+-                    publication_id=publication_id,
+-                    text=text,
+-                    source_fields=view.source_fields,
+-                    source_span=source_span,
+-                    source_hash=source_fields_hash,
+-                    searchable=view.searchable,
+-                    official_passage_ids=mapped_official,
++            for descriptor in descriptors:
++                source_fields = tuple(descriptor["source_fields"])
++                source_span = f"{view.span_scheme}:{descriptor['source_span']}"
++                source_fields_hash = sha256_hex({
++                    "fields": {field: row.get(field) for field in source_fields},
++                    "source_span": source_span,
++                })
++                semantic = {
++                    "family_id": family_id,
++                    "publication_id": publication_id,
++                    "view_id": view.view_id,
++                    "source_span": source_span,
++                    "source_hash": source_fields_hash,
++                    "text": descriptor["text"],
++                }
++                units.append(
++                    CompiledUnit(
++                        unit_id="unit-" + sha256_hex(semantic)[:24],
++                        view_id=view.view_id,
++                        family_id=family_id,
++                        publication_id=publication_id,
++                        text=str(descriptor["text"]),
++                        source_fields=source_fields,
++                        source_span=source_span,
++                        source_hash=source_fields_hash,
++                        searchable=view.searchable,
++                        official_passage_ids=mapped_official,
++                    )
+                 )
+-            )
+     units.sort(key=lambda unit: (unit.family_id, unit.publication_id, unit.view_id, unit.unit_id))
+     if isinstance(resolved, DapfamAdapter):
+         resolved.validate_units([unit.as_dict() for unit in units])
+@@ -121,6 +127,125 @@ def compile_scope(
+     return CompiledScope(parsed.spec_id, parsed.compiler_api_version, source_hash, output_hash, tuple(units))
+ 
+ 
++def _compile_view_descriptors(
++    spec: ScopeSpec,
++    view_id: str,
++    view_kind: str,
++    source_fields: tuple[str, ...],
++    row: Mapping[str, Any],
++) -> list[dict[str, Any]]:
++    policy_root = spec.graph.get("unitization", {})
++    policy = policy_root.get(view_id, {}) if isinstance(policy_root, Mapping) else {}
++    if not isinstance(policy, Mapping) or not policy:
++        parts = [str(row[field]).strip() for field in source_fields if str(row.get(field, "")).strip()]
++        return [{
++            "text": "\n\n".join(parts),
++            "source_fields": source_fields,
++            "source_span": ",".join(source_fields),
++        }] if parts else []
++
++    mode = str(policy.get("mode", "joined_document"))
++    max_units = int(policy.get("max_units", 4))
++    if max_units < 1 or max_units > 4:
++        raise KernelContractError("SCOPE unitization max_units must be between one and four", FailureCategory.CONSTRAINT)
++    if mode == "joined_document":
++        return _joined_descriptor(source_fields, row)
++    if mode == "field_sections":
++        descriptors = [
++            {"text": str(row[field]).strip(), "source_fields": (field,), "source_span": field}
++            for field in source_fields
++            if str(row.get(field, "")).strip()
++        ]
++        return _bounded_descriptors(descriptors, max_units)
++    if mode == "claim_elements":
++        if view_kind != "claim":
++            raise KernelContractError("claim_elements unitization requires a claim view", FailureCategory.SCHEMA)
++        descriptors: list[dict[str, Any]] = []
++        for field in source_fields:
++            text = str(row.get(field, "")).strip()
++            for index, (start, end, claim) in enumerate(_claim_spans(text)):
++                descriptors.append({
++                    "text": claim,
++                    "source_fields": (field,),
++                    "source_span": f"{field}:claim:{index:06d}:char:{start}-{end}",
++                })
++        return _bounded_descriptors(descriptors, max_units)
++    if mode == "token_passages":
++        if view_kind != "passage":
++            raise KernelContractError("token_passages unitization requires a passage view", FailureCategory.SCHEMA)
++        window = int(policy.get("window_tokens", 0))
++        stride = int(policy.get("stride_tokens", window))
++        if window <= 0 or stride <= 0:
++            raise KernelContractError("passage window and stride must be positive", FailureCategory.CONSTRAINT)
++        joined = "\n\n".join(
++            str(row[field]).strip() for field in source_fields if str(row.get(field, "")).strip()
++        )
++        tokens = tokenize(joined)
++        descriptors = [
++            {
++                "text": " ".join(tokens[start : start + window]),
++                "source_fields": source_fields,
++                "source_span": f"tokens:{start}-{min(start + window, len(tokens))}",
++            }
++            for start in range(0, len(tokens), stride)
++            if tokens[start : start + window]
++        ]
++        return _bounded_descriptors(descriptors, max_units)
++    if mode == "multiview":
++        groups = policy.get("source_field_groups")
++        if not isinstance(groups, list) or not groups:
++            raise KernelContractError("multiview requires source_field_groups", FailureCategory.SCHEMA)
++        allowed = set(source_fields)
++        descriptors = []
++        for index, group in enumerate(groups):
++            if not isinstance(group, list) or not group or any(str(field) not in allowed for field in group):
++                raise KernelContractError("multiview source_field_groups must reference declared fields", FailureCategory.SCHEMA)
++            normalized = tuple(str(field) for field in group)
++            parts = [str(row[field]).strip() for field in normalized if str(row.get(field, "")).strip()]
++            if parts:
++                descriptors.append({
++                    "text": "\n\n".join(parts),
++                    "source_fields": normalized,
++                    "source_span": f"view:{index:02d}:" + ",".join(normalized),
++                })
++        return _bounded_descriptors(descriptors, max_units)
++    raise KernelContractError(f"unsupported SCOPE unitization mode: {mode!r}", FailureCategory.SCHEMA)
++
++
++def _joined_descriptor(source_fields: tuple[str, ...], row: Mapping[str, Any]) -> list[dict[str, Any]]:
++    parts = [str(row[field]).strip() for field in source_fields if str(row.get(field, "")).strip()]
++    if not parts:
++        return []
++    return [{"text": "\n\n".join(parts), "source_fields": source_fields, "source_span": ",".join(source_fields)}]
++
++
++def _bounded_descriptors(descriptors: list[dict[str, Any]], max_units: int) -> list[dict[str, Any]]:
++    if len(descriptors) <= max_units:
++        return descriptors
++    first_count = (max_units + 1) // 2
++    last_count = max_units - first_count
++    selected = descriptors[:first_count]
++    if last_count:
++        selected.extend(descriptors[-last_count:])
++    return selected
++
++
++def _claim_spans(text: str) -> list[tuple[int, int, str]]:
++    if not text:
++        return []
++    starts = [match.start() for match in re.finditer(r"(?m)(?=^\s*\d+[\.)]\s+)", text)]
++    if not starts:
++        paragraphs = list(re.finditer(r"[^\n]+(?:\n(?!\s*\d+[\.)]\s+)[^\n]+)*", text))
++        return [(match.start(), match.end(), match.group(0).strip()) for match in paragraphs if match.group(0).strip()]
++    spans: list[tuple[int, int, str]] = []
++    for index, start in enumerate(starts):
++        end = starts[index + 1] if index + 1 < len(starts) else len(text)
++        claim = text[start:end].strip()
++        if claim:
++            spans.append((start, end, claim))
++    return spans
++
++
+ def _resolve_adapter(adapter: str | DapfamAdapter | FinePatentsAdapter) -> DapfamAdapter | FinePatentsAdapter:
+     if isinstance(adapter, (DapfamAdapter, FinePatentsAdapter)):
+         return adapter
+diff --git a/tests/test_kernel_scope.py b/tests/test_kernel_scope.py
+index 6e6c40cbaea832fa1dc7cd557cf58407bb1fb260..b81fb805ab56f842d0ed3d7d9ca7281baf3fbe80 100644
+--- a/tests/test_kernel_scope.py
++++ b/tests/test_kernel_scope.py
+@@ -136,3 +136,76 @@ def test_scope_schema_rejects_unknown_fields_and_global_four_unit_field() -> Non
+     payload["constraints"]["max_searchable_units_per_record"] = 4
+     with pytest.raises(Exception):
+         parse_scope_spec(payload)
++
++
++def test_p2_passage_unitization_is_bounded_and_reversed_input_stable() -> None:
++    payload = scope_spec(views=[{
++        "view_id": "passages",
++        "kind": "passage",
++        "source_fields": ["title", "abstract"],
++        "family_field": "family_id",
++        "publication_field": "publication_id",
++        "span_scheme": "token-v1",
++        "compiler_version": "1.0.0",
++        "normalization_version": "1.0.0",
++        "aggregation": "family_maxp",
++    }])
++    payload["graph"] = {"unitization": {"passages": {
++        "mode": "token_passages",
++        "window_tokens": 3,
++        "stride_tokens": 3,
++        "max_units": 4,
++        "overflow_policy": "first_last_balanced",
++    }}}
++    rows = [
++        {"family_id": "f2", "publication_id": "f2", "title": "one two", "abstract": "three four five six seven eight nine ten eleven twelve thirteen"},
++        {"family_id": "f1", "publication_id": "f1", "title": "alpha beta", "abstract": "gamma delta epsilon zeta eta theta iota kappa lambda mu nu"},
++    ]
++    first = compile_scope(payload, rows)
++    second = compile_scope(payload, list(reversed(rows)))
++    assert first.as_dict() == second.as_dict()
++    assert len(first.units) == 8
++    assert all("tokens:" in unit.source_span for unit in first.units)
++    assert {unit.publication_id for unit in first.units} == {"f1", "f2"}
++
++
++def test_p2_claim_elements_retain_first_and_last_source_regions() -> None:
++    payload = scope_spec(views=[{
++        "view_id": "claims",
++        "kind": "claim",
++        "source_fields": ["claims_text"],
++        "family_field": "family_id",
++        "publication_field": "publication_id",
++        "span_scheme": "claim-v1",
++        "compiler_version": "1.0.0",
++        "normalization_version": "1.0.0",
++        "aggregation": "family_maxp",
++    }])
++    payload["fields"].append({"field_id": "claims_text", "source": "claims_text", "role": "text"})
++    payload["graph"] = {"unitization": {"claims": {
++        "mode": "claim_elements",
++        "max_units": 4,
++        "overflow_policy": "first_last_balanced",
++    }}}
++    claims = "\n".join(f"{index}. claim text {index}" for index in range(1, 7))
++    compiled = compile_scope(payload, [{
++        "family_id": "family-1",
++        "publication_id": "family-1",
++        "title": "unused",
++        "abstract": "unused",
++        "claims_text": claims,
++    }])
++    assert [unit.text.split()[0] for unit in compiled.units] == ["1.", "2.", "5.", "6."]
++    assert len(compiled.units) == 4
++
++
++def test_p2_multiview_rejects_undeclared_source_fields() -> None:
++    payload = scope_spec()
++    payload["graph"] = {"unitization": {"tac": {
++        "mode": "multiview",
++        "max_units": 4,
++        "source_field_groups": [["title"], ["claims_text"]],
++    }}}
++    with pytest.raises(KernelContractError) as error:
++        compile_scope(payload, [{"family_id": "f1", "publication_id": "p1", "title": "text", "abstract": "more"}])
++    assert error.value.category is FailureCategory.SCHEMA
+warning: in the working copy of 'src/myis_research/p2/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/test_kernel_scope.py', LF will be replaced by CRLF the next time Git touches it
+
+diff --git a/schemas/p2-adaptive-feedback.v1.json b/schemas/p2-adaptive-feedback.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-adaptive-feedback.v1.json
+@@ -0,0 +1,23 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-adaptive-feedback:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "feedback_id", "request_id", "campaign_revision", "iteration", "lineage_hashes", "aggregate_candidates", "failure_categories", "remaining_axes", "budget_counters", "selection_exposures", "protected_data_accessed", "feedback_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-adaptive-feedback.v1"},
++    "feedback_id": {"type": "string"},
++    "request_id": {"type": "string"},
++    "campaign_revision": {"type": "string"},
++    "iteration": {"type": "integer", "minimum": 1},
++    "lineage_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
++    "aggregate_candidates": {"type": "array", "items": {"type": "object"}},
++    "failure_categories": {"type": "array", "items": {"type": "string"}},
++    "remaining_axes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
++    "budget_counters": {"type": "object"},
++    "selection_exposures": {"const": 0},
++    "protected_data_accessed": {"const": false},
++    "feedback_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
++  }
++}
++
+
+diff --git a/schemas/p2-adaptive-policy.v1.json b/schemas/p2-adaptive-policy.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-adaptive-policy.v1.json
+@@ -0,0 +1,23 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-adaptive-policy:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "policy_id", "campaign_revision", "status", "candidates_per_iteration", "batch_roles", "allowed_axes", "forbidden_axes", "candidate_id_pattern", "scientific_identity_exclusions", "admission", "stopping", "policy_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-adaptive-policy.v1"},
++    "policy_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
++    "campaign_revision": {"type": "string", "minLength": 1},
++    "status": {"const": "adopted_hash_locked"},
++    "candidates_per_iteration": {"const": 4},
++    "batch_roles": {"const": ["exploit", "matched_ablation", "orthogonal", "diversity"]},
++    "allowed_axes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
++    "forbidden_axes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
++    "candidate_id_pattern": {"type": "string", "minLength": 1},
++    "scientific_identity_exclusions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
++    "admission": {"type": "object"},
++    "stopping": {"type": "object"},
++    "policy_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
++  }
++}
++
+
+diff --git a/schemas/p2-base-candidate-set.v1.json b/schemas/p2-base-candidate-set.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-base-candidate-set.v1.json
+@@ -0,0 +1,73 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-base-candidate-set:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "candidate_set_id", "phase_id", "campaign_id", "campaign_revision", "status", "adoption_authority", "source_contract_uri", "source_contract_sha256", "compiler_uri", "compiler_sha256", "adapter_rule", "frozen_controls", "preregistered_candidates", "protected_boundary", "candidate_set_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-base-candidate-set.v1"},
++    "candidate_set_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
++    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
++    "campaign_id": {"const": "scope-autoindex-v1"},
++    "campaign_revision": {"type": "string", "minLength": 1},
++    "status": {"const": "adopted_hash_locked"},
++    "adoption_authority": {"const": "D1_START_CAMPAIGN_plus_owner_authored_goal"},
++    "source_contract_uri": {"$ref": "#/$defs/uri"},
++    "source_contract_sha256": {"$ref": "#/$defs/hash"},
++    "compiler_uri": {"$ref": "#/$defs/uri"},
++    "compiler_sha256": {"$ref": "#/$defs/hash"},
++    "adapter_rule": {
++      "type": "object",
++      "additionalProperties": false,
++      "required": ["family_id_source", "publication_id_source", "max_searchable_units_per_family", "overflow_policy"],
++      "properties": {
++        "family_id_source": {"const": "relevant_id"},
++        "publication_id_source": {"const": "relevant_id"},
++        "max_searchable_units_per_family": {"const": 4},
++        "overflow_policy": {"const": "first_last_balanced_with_explicit_offsets"}
++      }
++    },
++    "frozen_controls": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/candidate"}},
++    "preregistered_candidates": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"$ref": "#/$defs/candidate"}},
++    "protected_boundary": {"$ref": "#/$defs/boundary"},
++    "candidate_set_sha256": {"$ref": "#/$defs/hash"}
++  },
++  "$defs": {
++    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
++    "uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"},
++    "candidate": {
++      "type": "object",
++      "additionalProperties": false,
++      "required": ["candidate_id", "candidate_class", "arm", "role", "hypothesis", "declared_axis", "matched_ablation_id", "scope_spec", "spec_sha256", "scientific_payload_sha256", "axis_values", "retrieval"],
++      "properties": {
++        "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
++        "candidate_class": {"enum": ["frozen_control", "preregistered_patent"]},
++        "arm": {"enum": ["R0", "R0-W", "R1"]},
++        "role": {"enum": ["baseline", "control", "candidate", "matched_ablation"]},
++        "hypothesis": {"type": "string", "minLength": 1},
++        "declared_axis": {"type": "string", "minLength": 1},
++        "matched_ablation_id": {"type": ["string", "null"]},
++        "scope_spec": {"type": "object"},
++        "spec_sha256": {"$ref": "#/$defs/hash"},
++        "scientific_payload_sha256": {"$ref": "#/$defs/hash"},
++        "axis_values": {"type": "object", "minProperties": 1},
++        "retrieval": {"type": "object"}
++      }
++    },
++    "boundary": {
++      "type": "object",
++      "additionalProperties": false,
++      "required": ["final_split_open", "d2_open_final", "d3_submit_release", "gpu", "paid_api", "network_model_download", "provider_fallback"],
++      "properties": {
++        "final_split_open": {"const": false},
++        "d2_open_final": {"const": false},
++        "d3_submit_release": {"const": false},
++        "gpu": {"const": false},
++        "paid_api": {"const": false},
++        "network_model_download": {"const": false},
++        "provider_fallback": {"const": false}
++      }
++    }
++  }
++}
++
+
+diff --git a/schemas/p2-budget-extension-brief.v1.json b/schemas/p2-budget-extension-brief.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-budget-extension-brief.v1.json
+@@ -0,0 +1,30 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-budget-extension-brief:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "brief_id", "request_id", "campaign_revision", "binding_hashes", "completed_batch_hashes", "consumption", "best_train", "matched_ablation", "no_improvement_streak", "failures", "remaining_hypothesis_families", "shortlist_freeze_started", "selection_exposures", "recommended_profile", "larger_profile", "owner_response", "next_revision_uri", "protected_data_accessed", "brief_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-budget-extension-brief.v1"},
++    "brief_id": {"type": "string"},
++    "request_id": {"type": "string"},
++    "campaign_revision": {"type": "string"},
++    "binding_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
++    "completed_batch_hashes": {"type": "array", "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
++    "consumption": {"type": "object"},
++    "best_train": {"type": ["object", "null"]},
++    "matched_ablation": {"type": ["object", "null"]},
++    "no_improvement_streak": {"type": "integer", "minimum": 0},
++    "failures": {"type": "array", "items": {"type": "string"}},
++    "remaining_hypothesis_families": {"type": "array", "items": {"type": "string"}},
++    "shortlist_freeze_started": {"const": false},
++    "selection_exposures": {"const": 0},
++    "recommended_profile": {"type": "object"},
++    "larger_profile": {"type": "object"},
++    "owner_response": {"enum": ["pending", "recommended", "larger", "stop", "exact_alternative"]},
++    "next_revision_uri": {"type": ["string", "null"]},
++    "protected_data_accessed": {"const": false},
++    "brief_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
++  }
++}
++
+
+diff --git a/schemas/p2-measured-request.v1.json b/schemas/p2-measured-request.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-measured-request.v1.json
+@@ -0,0 +1,53 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-measured-request:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "request_id", "phase_id", "arm", "stage", "campaign_id", "campaign_revision", "budget_profile_id", "budget_profile_uri", "budget_profile_sha256", "execution_envelope_id", "execution_envelope_uri", "execution_envelope_sha256", "base_candidate_set_id", "base_candidate_set_uri", "base_candidate_set_sha256", "adaptive_policy_id", "adaptive_policy_uri", "adaptive_policy_sha256", "proposer_contract_id", "proposer_contract_uri", "proposer_contract_sha256", "execution_source_commit", "execution_source_tree", "worktree_clean", "input_hashes", "scope_hashes", "global_counters", "protected_boundary"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-measured-request.v1"},
++    "request_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
++    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
++    "arm": {"const": "R1"},
++    "stage": {"const": "train_selection"},
++    "campaign_id": {"const": "scope-autoindex-v1"},
++    "campaign_revision": {"type": "string", "minLength": 1},
++    "budget_profile_id": {"type": "string", "minLength": 1},
++    "budget_profile_uri": {"$ref": "#/$defs/uri"},
++    "budget_profile_sha256": {"$ref": "#/$defs/hash"},
++    "execution_envelope_id": {"type": "string", "minLength": 1},
++    "execution_envelope_uri": {"$ref": "#/$defs/uri"},
++    "execution_envelope_sha256": {"$ref": "#/$defs/hash"},
++    "base_candidate_set_id": {"type": "string", "minLength": 1},
++    "base_candidate_set_uri": {"$ref": "#/$defs/uri"},
++    "base_candidate_set_sha256": {"$ref": "#/$defs/hash"},
++    "adaptive_policy_id": {"type": "string", "minLength": 1},
++    "adaptive_policy_uri": {"$ref": "#/$defs/uri"},
++    "adaptive_policy_sha256": {"$ref": "#/$defs/hash"},
++    "proposer_contract_id": {"type": "string", "minLength": 1},
++    "proposer_contract_uri": {"$ref": "#/$defs/uri"},
++    "proposer_contract_sha256": {"$ref": "#/$defs/hash"},
++    "execution_source_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
++    "execution_source_tree": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
++    "worktree_clean": {"const": true},
++    "input_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/hash"}},
++    "scope_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/hash"}},
++    "global_counters": {
++      "type": "object",
++      "additionalProperties": false,
++      "required": ["measured_runs", "candidate_count", "shortlist_count", "selection_accesses"],
++      "properties": {
++        "measured_runs": {"const": 0},
++        "candidate_count": {"const": 0},
++        "shortlist_count": {"const": 0},
++        "selection_accesses": {"const": 0}
++      }
++    },
++    "protected_boundary": {"type": "object"}
++  },
++  "$defs": {
++    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
++    "uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"}
++  }
++}
++
+
+diff --git a/schemas/p2-proposer-contract.v1.json b/schemas/p2-proposer-contract.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-proposer-contract.v1.json
+@@ -0,0 +1,23 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-proposer-contract:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "contract_id", "status", "input_schema", "output_schema", "batch_size", "allowed_input", "forbidden_input", "environment_removed", "retry_limit", "measured_execution_performed", "protected_data_accessed", "contract_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-proposer-contract.v1"},
++    "contract_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
++    "status": {"const": "adopted_hash_locked"},
++    "input_schema": {"const": "myis.p2-adaptive-feedback.v1"},
++    "output_schema": {"const": "myis.p2-scope-candidate-batch.v1"},
++    "batch_size": {"const": 4},
++    "allowed_input": {"type": "array", "minItems": 1, "items": {"type": "string"}},
++    "forbidden_input": {"type": "array", "minItems": 1, "items": {"type": "string"}},
++    "environment_removed": {"const": ["MYIS_STORE", "MYIS_MLFLOW_STORE"]},
++    "retry_limit": {"type": "integer", "minimum": 0, "maximum": 1},
++    "measured_execution_performed": {"const": false},
++    "protected_data_accessed": {"const": false},
++    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
++  }
++}
++
+
+diff --git a/schemas/p2-proposer-invocation.v1.json b/schemas/p2-proposer-invocation.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-proposer-invocation.v1.json
+@@ -0,0 +1,26 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-proposer-invocation:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "invocation_id", "contract_sha256", "prompt_sha256", "feedback_sha256", "output_schema_sha256", "provider", "model", "tool_version", "output_sha256", "retry_count", "environment_removed", "protected_data_accessed", "measured_execution_performed", "invocation_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-proposer-invocation.v1"},
++    "invocation_id": {"type": "string"},
++    "contract_sha256": {"$ref": "#/$defs/hash"},
++    "prompt_sha256": {"$ref": "#/$defs/hash"},
++    "feedback_sha256": {"$ref": "#/$defs/hash"},
++    "output_schema_sha256": {"$ref": "#/$defs/hash"},
++    "provider": {"type": "string", "minLength": 1},
++    "model": {"type": "string", "minLength": 1},
++    "tool_version": {"type": "string", "minLength": 1},
++    "output_sha256": {"$ref": "#/$defs/hash"},
++    "retry_count": {"type": "integer", "minimum": 0, "maximum": 1},
++    "environment_removed": {"const": ["MYIS_STORE", "MYIS_MLFLOW_STORE"]},
++    "protected_data_accessed": {"const": false},
++    "measured_execution_performed": {"const": false},
++    "invocation_sha256": {"$ref": "#/$defs/hash"}
++  },
++  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
++}
++
+
+diff --git a/schemas/p2-scope-candidate-batch.v1.json b/schemas/p2-scope-candidate-batch.v1.json
+new file mode 100644
+--- /dev/null
++++ b/schemas/p2-scope-candidate-batch.v1.json
+@@ -0,0 +1,40 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:myis:research:schema:p2-scope-candidate-batch:v1",
++  "type": "object",
++  "additionalProperties": false,
++  "required": ["schema_version", "batch_id", "request_id", "campaign_revision", "iteration", "feedback_sha256", "proposer_invocation_sha256", "status", "candidates", "batch_sha256"],
++  "properties": {
++    "schema_version": {"const": "myis.p2-scope-candidate-batch.v1"},
++    "batch_id": {"type": "string"},
++    "request_id": {"type": "string"},
++    "campaign_revision": {"type": "string"},
++    "iteration": {"type": "integer", "minimum": 1},
++    "feedback_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
++    "proposer_invocation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
++    "status": {"const": "frozen_before_measurement"},
++    "candidates": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/candidate"}},
++    "batch_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
++  },
++  "$defs": {
++    "candidate": {
++      "type": "object",
++      "additionalProperties": false,
++      "required": ["candidate_id", "parent_candidate_id", "hypothesis_id", "hypothesis", "role", "declared_axis", "matched_ablation_id", "scope_spec", "spec_sha256", "scientific_payload_sha256", "axis_values"],
++      "properties": {
++        "candidate_id": {"type": "string"},
++        "parent_candidate_id": {"type": "string"},
++        "hypothesis_id": {"type": "string"},
++        "hypothesis": {"type": "string", "minLength": 1},
++        "role": {"enum": ["exploit", "matched_ablation", "orthogonal", "diversity"]},
++        "declared_axis": {"type": "string"},
++        "matched_ablation_id": {"type": ["string", "null"]},
++        "scope_spec": {"type": "object"},
++        "spec_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
++        "scientific_payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
++        "axis_values": {"type": "object", "minProperties": 1}
++      }
++    }
++  }
++}
++
+
+diff --git a/src/myis_research/p2/base_candidates.py b/src/myis_research/p2/base_candidates.py
+new file mode 100644
+--- /dev/null
++++ b/src/myis_research/p2/base_candidates.py
+@@ -0,0 +1,262 @@
++"""Deterministic builders for the adopted P2 base search contract."""
++
++from __future__ import annotations
++
++from copy import deepcopy
++from pathlib import Path
++from typing import Any, Mapping
++
++from ..kernel.canonical import canonical_sha256, file_sha256
++from .measured_contracts import committed_blob_sha256, scientific_payload_sha256
++
++
++SOURCE_CONTRACT_URI = "control/assets/dapfam-p1-source.v1.json"
++COMPILER_URI = "src/myis_research/scope/compiler.py"
++BASE_SET_URI = "control/p2/p2-base-candidate-set-r1-v1.json"
++ADAPTIVE_POLICY_URI = "control/p2/p2-adaptive-policy-r1-v1.json"
++PROPOSER_CONTRACT_URI = "control/p2/p2-proposer-contract-r1-v1.json"
++CAMPAIGN_REVISION = "scope-autoindex-v1-p2-r1-primary-v1"
++
++
++def build_base_candidate_set(repository_root: Path, *, committed_hashes: bool = True) -> dict[str, Any]:
++    root = Path(repository_root).resolve()
++    hash_reader = committed_blob_sha256 if committed_hashes else _working_sha256
++    controls = [
++        _candidate(
++            "p2-control-r0-flat-bm25", "frozen_control", "R0", "baseline",
++            "Full TAC family document reproduces the flat P1 lexical baseline.",
++            "unitization", None, _scope_spec("r0-flat", 1, "document", ("title_en", "abstract_en", "claims_text"), "joined_document"),
++            _axes(fields="title_abstract_claims", unitization="document", span=0, stride=0, composition="single", duplicate="family_first"),
++            aggregation="family_first",
++        ),
++        _candidate(
++            "p2-control-r0-window-maxp", "frozen_control", "R0-W", "control",
++            "Non-overlapping 512-token full TAC windows reproduce the P1 incumbent.",
++            "unitization", "p2-control-r0-flat-bm25", _scope_spec("r0-window", 2, "passage", ("title_en", "abstract_en", "claims_text"), "token_passages", window_tokens=512, stride_tokens=512),
++            _axes(fields="title_abstract_claims", unitization="passage", span=512, stride=512, composition="single", duplicate="family_maxp"),
++            aggregation="family_maxp",
++        ),
++        _candidate(
++            "p2-control-r1-document-grounded", "frozen_control", "R1", "control",
++            "A grounded one-unit R1 document isolates representation metadata from retrieval changes.",
++            "unitization", "p2-control-r1-passage-maxp", _scope_spec("r1-doc-control", 3, "document", ("title_en", "abstract_en", "claims_text"), "joined_document"),
++            _axes(fields="title_abstract_claims", unitization="document", span=0, stride=0, composition="single", duplicate="family_first"),
++            aggregation="family_first",
++        ),
++        _candidate(
++            "p2-control-r1-passage-maxp", "frozen_control", "R1", "matched_ablation",
++            "A grounded 512-token R1 passage view tests the unitization axis against the document control.",
++            "unitization", "p2-control-r1-document-grounded", _scope_spec("r1-passage-control", 4, "passage", ("title_en", "abstract_en", "claims_text"), "token_passages", window_tokens=512, stride_tokens=512),
++            _axes(fields="title_abstract_claims", unitization="passage", span=512, stride=512, composition="single", duplicate="family_maxp"),
++            aggregation="family_maxp",
++        ),
++    ]
++    candidates = [
++        _candidate("p2-r1-tac-document", "preregistered_patent", "R1", "candidate", "A canonical grounded TAC document may retain useful family evidence.", "unitization", "p2-control-r1-passage-maxp", _scope_spec("r1-tac-doc", 5, "document", ("title_en", "abstract_en", "claims_text"), "joined_document"), _axes(fields="title_abstract_claims", unitization="document", span=0, stride=0, composition="single", duplicate="family_first"), aggregation="family_first"),
++        _candidate("p2-r1-title-abstract", "preregistered_patent", "R1", "candidate", "Removing claim boilerplate may improve lexical exposure for descriptive patent concepts.", "source_fields", "p2-r1-tac-document", _scope_spec("r1-title-abstract", 6, "document", ("title_en", "abstract_en"), "joined_document"), _axes(fields="title_abstract", unitization="document", span=0, stride=0, composition="single", duplicate="family_first"), aggregation="family_first"),
++        _candidate("p2-r1-claim-view", "preregistered_patent", "R1", "candidate", "A claims-only document may concentrate limitation-bearing language.", "source_fields", "p2-r1-tac-document", _scope_spec("r1-claim-view", 7, "claim", ("claims_text",), "joined_document"), _axes(fields="claims", unitization="document", span=0, stride=0, composition="single", duplicate="family_first"), aggregation="family_first"),
++        _candidate("p2-r1-section-view", "preregistered_patent", "R1", "candidate", "Separate title, abstract, and claims units may expose matches hidden by document length.", "unitization", "p2-r1-tac-document", _scope_spec("r1-section-view", 8, "section", ("title_en", "abstract_en", "claims_text"), "field_sections"), _axes(fields="title_abstract_claims", unitization="section", span=0, stride=0, composition="single", duplicate="family_maxp"), aggregation="family_maxp"),
++        _candidate("p2-r1-claim-element-view", "preregistered_patent", "R1", "candidate", "Deterministic claim elements may expose limitation matches more directly than a claims document.", "unitization", "p2-r1-claim-view", _scope_spec("r1-claim-elements", 9, "claim", ("claims_text",), "claim_elements"), _axes(fields="claims", unitization="claim_element", span=0, stride=0, composition="single", duplicate="family_maxp"), aggregation="family_maxp"),
++        _candidate("p2-r1-passage-256-maxp", "preregistered_patent", "R1", "candidate", "Short 256-token passages may increase local lexical exposure.", "passage_span", "p2-r1-passage-512-maxp", _scope_spec("r1-passage-256", 10, "passage", ("title_en", "abstract_en", "claims_text"), "token_passages", window_tokens=256, stride_tokens=256), _axes(fields="title_abstract_claims", unitization="passage", span=256, stride=256, composition="single", duplicate="family_maxp"), aggregation="family_maxp"),
++        _candidate("p2-r1-passage-512-maxp", "preregistered_patent", "R1", "matched_ablation", "The P1-aligned 512-token passage span is the matched span ablation.", "passage_span", "p2-r1-passage-256-maxp", _scope_spec("r1-passage-512", 11, "passage", ("title_en", "abstract_en", "claims_text"), "token_passages", window_tokens=512, stride_tokens=512), _axes(fields="title_abstract_claims", unitization="passage", span=512, stride=512, composition="single", duplicate="family_maxp"), aggregation="family_maxp"),
++        _candidate("p2-r1-multiview-maxp", "preregistered_patent", "R1", "candidate", "A title-abstract view plus a claims view may preserve complementary evidence within the four-unit limit.", "view_composition", "p2-r1-section-view", _scope_spec("r1-multiview", 12, "section", ("title_en", "abstract_en", "claims_text"), "multiview", field_groups=(("title_en", "abstract_en"), ("claims_text",))), _axes(fields="title_abstract_claims", unitization="section", span=0, stride=0, composition="title_abstract_plus_claims", duplicate="family_maxp"), aggregation="family_maxp"),
++    ]
++    body: dict[str, Any] = {
++        "schema_version": "myis.p2-base-candidate-set.v1",
++        "candidate_set_id": "p2-base-candidate-set-r1-v1",
++        "phase_id": "P2_SCOPE_DEVELOPMENT",
++        "campaign_id": "scope-autoindex-v1",
++        "campaign_revision": CAMPAIGN_REVISION,
++        "status": "adopted_hash_locked",
++        "adoption_authority": "D1_START_CAMPAIGN_plus_owner_authored_goal",
++        "source_contract_uri": SOURCE_CONTRACT_URI,
++        "source_contract_sha256": hash_reader(root, SOURCE_CONTRACT_URI),
++        "compiler_uri": COMPILER_URI,
++        "compiler_sha256": hash_reader(root, COMPILER_URI),
++        "adapter_rule": {
++            "family_id_source": "relevant_id",
++            "publication_id_source": "relevant_id",
++            "max_searchable_units_per_family": 4,
++            "overflow_policy": "first_last_balanced_with_explicit_offsets",
++        },
++        "frozen_controls": controls,
++        "preregistered_candidates": candidates,
++        "protected_boundary": _boundary(),
++    }
++    body["candidate_set_sha256"] = canonical_sha256(body)
++    return body
++
++
++def build_adaptive_policy() -> dict[str, Any]:
++    body: dict[str, Any] = {
++        "schema_version": "myis.p2-adaptive-policy.v1",
++        "policy_id": "p2-adaptive-policy-r1-v1",
++        "campaign_revision": CAMPAIGN_REVISION,
++        "status": "adopted_hash_locked",
++        "candidates_per_iteration": 4,
++        "batch_roles": ["exploit", "matched_ablation", "orthogonal", "diversity"],
++        "allowed_axes": ["source_fields", "unitization", "passage_span", "passage_stride", "view_composition", "duplicate_handling", "normalization"],
++        "forbidden_axes": ["query_view", "qrels", "split_membership", "per_query_outcomes", "selection_feedback", "evaluator", "metric", "top_k", "retriever_family", "tie_policy", "dense_model", "llm_summary", "external_data", "paid_api", "gpu", "network_download", "compiler_code"],
++        "candidate_id_pattern": "^p2-r1-r[0-9]{2}-i[0-9]{2}-c0[1-4]$",
++        "scientific_identity_exclusions": ["spec_id", "parent_spec_id", "hypothesis_id", "description", "created_at", "artifact_uri"],
++        "admission": {
++            "full_batch_frozen_before_measurement": True,
++            "schema_valid": True,
++            "grounded_source_fields_only": True,
++            "compiler_determinism_required": True,
++            "matched_ablation_single_axis_required": True,
++            "independent_verifier_required": True,
++        },
++        "stopping": {
++            "minimum_completed_iterations": 4,
++            "no_improvement_patience": 2,
++            "ties_are_improvement": False,
++            "development_impact_gate_may_stop": True,
++            "wall_time_admission_required": True,
++        },
++    }
++    body["policy_sha256"] = canonical_sha256(body)
++    return body
++
++
++def build_proposer_contract() -> dict[str, Any]:
++    body: dict[str, Any] = {
++        "schema_version": "myis.p2-proposer-contract.v1",
++        "contract_id": "p2-proposer-contract-r1-v1",
++        "status": "adopted_hash_locked",
++        "input_schema": "myis.p2-adaptive-feedback.v1",
++        "output_schema": "myis.p2-scope-candidate-batch.v1",
++        "batch_size": 4,
++        "allowed_input": ["aggregate_train_metrics", "aggregate_deltas", "failure_categories", "remaining_axes", "budget_counters", "lineage_hashes", "literature_pointers"],
++        "forbidden_input": ["query_ids", "qrels", "membership", "rankings", "per_query_outcomes", "raw_corpus_text", "raw_query_text", "selection", "final_872", "credentials", "owner_store_paths"],
++        "environment_removed": ["MYIS_STORE", "MYIS_MLFLOW_STORE"],
++        "retry_limit": 1,
++        "measured_execution_performed": False,
++        "protected_data_accessed": False,
++    }
++    body["contract_sha256"] = canonical_sha256(body)
++    return body
++
++
++def _candidate(
++    candidate_id: str,
++    candidate_class: str,
++    arm: str,
++    role: str,
++    hypothesis: str,
++    declared_axis: str,
++    matched_ablation_id: str | None,
++    scope_spec: Mapping[str, Any],
++    axis_values: Mapping[str, Any],
++    *,
++    aggregation: str,
++) -> dict[str, Any]:
++    spec = deepcopy(dict(scope_spec))
++    return {
++        "candidate_id": candidate_id,
++        "candidate_class": candidate_class,
++        "arm": arm,
++        "role": role,
++        "hypothesis": hypothesis,
++        "declared_axis": declared_axis,
++        "matched_ablation_id": matched_ablation_id,
++        "scope_spec": spec,
++        "spec_sha256": canonical_sha256(spec),
++        "scientific_payload_sha256": scientific_payload_sha256(spec),
++        "axis_values": dict(axis_values),
++        "retrieval": {
++            "scorer": "sqlite_fts5_bm25_v1",
++            "query_operator": "OR",
++            "top_k": 100,
++            "family_aggregation": aggregation,
++            "fts_tokenizer": "unicode61 remove_diacritics 2",
++            "lexical_tokenizer": "python-re-unicode-word-casefold-v1",
++        },
++    }
++
++
++def _scope_spec(
++    suffix: str,
++    hypothesis_number: int,
++    kind: str,
++    source_fields: tuple[str, ...],
++    mode: str,
++    *,
++    window_tokens: int | None = None,
++    stride_tokens: int | None = None,
++    field_groups: tuple[tuple[str, ...], ...] | None = None,
++) -> dict[str, Any]:
++    policy: dict[str, Any] = {"mode": mode, "max_units": 4, "overflow_policy": "first_last_balanced"}
++    if window_tokens is not None:
++        policy["window_tokens"] = window_tokens
++    if stride_tokens is not None:
++        policy["stride_tokens"] = stride_tokens
++    if field_groups is not None:
++        policy["source_field_groups"] = [list(group) for group in field_groups]
++    aggregation = "family_first" if mode == "joined_document" else "family_maxp"
++    return {
++        "schema_version": "myis.scope-dsl.v1",
++        "spec_id": f"spec-{suffix}-v01",
++        "parent_spec_id": None,
++        "hypothesis_id": f"hyp-i00-{hypothesis_number:03d}",
++        "compiler_api_version": "1.1.0",
++        "description": {"title": suffix, "purpose": "P2 frozen base candidate"},
++        "fields": [
++            {"field_id": "family_id", "source": "relevant_id", "role": "identity"},
++            {"field_id": "publication_id", "source": "relevant_id", "role": "identity"},
++            {"field_id": "title_en", "source": "title_en", "role": "text"},
++            {"field_id": "abstract_en", "source": "abstract_en", "role": "text"},
++            {"field_id": "claims_text", "source": "claims_text", "role": "text"},
++        ],
++        "claims": {"claim_boundary": "retrieval_evidence_only", "source": "claims_text"},
++        "graph": {"unitization": {"primary": policy}},
++        "views": [{
++            "view_id": "primary",
++            "kind": kind,
++            "source_fields": list(source_fields),
++            "family_field": "family_id",
++            "publication_field": "publication_id",
++            "span_scheme": "dapfam-source-offset-v1",
++            "compiler_version": "1.1.0",
++            "normalization_version": "1.0.0",
++            "searchable": True,
++            "aggregation": aggregation,
++            "deterministic_order": "source",
++        }],
++        "aggregation": {"unit": "family", "rule": aggregation, "tie_policy": "lexical_unit_id"},
++        "constraints": {
++            "require_source_grounding": True,
++            "abstractive_summaries": False,
++            "query_specific_vocabulary": False,
++            "adapter_limits": {"dapfam": 4},
++        },
++    }
++
++
++def _axes(*, fields: str, unitization: str, span: int, stride: int, composition: str, duplicate: str) -> dict[str, Any]:
++    return {
++        "source_fields": fields,
++        "unitization": unitization,
++        "passage_span": span,
++        "passage_stride": stride,
++        "view_composition": composition,
++        "duplicate_handling": duplicate,
++        "normalization": "python-re-unicode-word-casefold-v1",
++    }
++
++
++def _boundary() -> dict[str, bool]:
++    return {
++        "final_split_open": False,
++        "d2_open_final": False,
++        "d3_submit_release": False,
++        "gpu": False,
++        "paid_api": False,
++        "network_model_download": False,
++        "provider_fallback": False,
++    }
++
++
++def _working_sha256(repository_root: Path, uri: str) -> str:
++    return file_sha256(Path(repository_root) / uri)
++
+
+diff --git a/src/myis_research/p2/measured_contracts.py b/src/myis_research/p2/measured_contracts.py
+new file mode 100644
+--- /dev/null
++++ b/src/myis_research/p2/measured_contracts.py
+@@ -0,0 +1,476 @@
++"""Profile-resolved contracts for Owner-local P2 measured execution."""
++
++from __future__ import annotations
++
++from copy import deepcopy
++import hashlib
++import json
++import re
++import subprocess
++from pathlib import Path, PurePosixPath, PureWindowsPath
++from typing import Any, Mapping
++
++import yaml
++from jsonschema import Draft202012Validator
++from jsonschema.exceptions import ValidationError
++
++from ..kernel.canonical import canonical_sha256, file_sha256
++from ..protection import assert_aggregate_only
++from ..scope import compile_scope, parse_scope_spec
++from .contracts import P2ContractError
++
++
++BASE_CONTROL_IDS = (
++    "p2-control-r0-flat-bm25",
++    "p2-control-r0-window-maxp",
++    "p2-control-r1-document-grounded",
++    "p2-control-r1-passage-maxp",
++)
++BASE_CANDIDATE_IDS = (
++    "p2-r1-tac-document",
++    "p2-r1-title-abstract",
++    "p2-r1-claim-view",
++    "p2-r1-section-view",
++    "p2-r1-claim-element-view",
++    "p2-r1-passage-256-maxp",
++    "p2-r1-passage-512-maxp",
++    "p2-r1-multiview-maxp",
++)
++BATCH_ROLES = ("exploit", "matched_ablation", "orthogonal", "diversity")
++SELF_HASH_FIELDS = {
++    "myis.p2-base-candidate-set.v1": "candidate_set_sha256",
++    "myis.p2-adaptive-policy.v1": "policy_sha256",
++    "myis.p2-proposer-contract.v1": "contract_sha256",
++    "myis.p2-adaptive-feedback.v1": "feedback_sha256",
++    "myis.p2-scope-candidate-batch.v1": "batch_sha256",
++    "myis.p2-proposer-invocation.v1": "invocation_sha256",
++    "myis.p2-budget-extension-brief.v1": "brief_sha256",
++}
++SCHEMA_FILES = {
++    "myis.p2-base-candidate-set.v1": "p2-base-candidate-set.v1.json",
++    "myis.p2-adaptive-policy.v1": "p2-adaptive-policy.v1.json",
++    "myis.p2-proposer-contract.v1": "p2-proposer-contract.v1.json",
++    "myis.p2-measured-request.v1": "p2-measured-request.v1.json",
++    "myis.p2-adaptive-feedback.v1": "p2-adaptive-feedback.v1.json",
++    "myis.p2-scope-candidate-batch.v1": "p2-scope-candidate-batch.v1.json",
++    "myis.p2-proposer-invocation.v1": "p2-proposer-invocation.v1.json",
++    "myis.p2-budget-extension-brief.v1": "p2-budget-extension-brief.v1.json",
++}
++IDENTITY_ONLY_SPEC_FIELDS = frozenset({
++    "spec_id",
++    "parent_spec_id",
++    "hypothesis_id",
++    "description",
++    "created_at",
++    "artifact_uri",
++})
++SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
++COMMIT_RE = re.compile(r"^[a-f0-9]{40}$")
++
++
++def validate_measured_artifact(payload: Mapping[str, Any], repository_root: Path) -> dict[str, Any]:
++    if not isinstance(payload, Mapping):
++        raise P2ContractError("measured P2 artifact must be a JSON object")
++    value = dict(payload)
++    schema_version = str(value.get("schema_version", ""))
++    schema_file = SCHEMA_FILES.get(schema_version)
++    if schema_file is None:
++        raise P2ContractError(f"unsupported measured P2 schema: {schema_version!r}")
++    try:
++        assert_aggregate_only(value)
++    except ValueError as error:
++        raise P2ContractError(str(error)) from error
++    schema = _json_file(Path(repository_root) / "schemas" / schema_file)
++    try:
++        Draft202012Validator(schema).validate(value)
++    except ValidationError as error:
++        path = "/".join(str(item) for item in error.absolute_path)
++        raise P2ContractError(f"{schema_version} JSON Schema validation failed at {path or '$'}: {error.message}") from error
++    hash_field = SELF_HASH_FIELDS.get(schema_version)
++    if hash_field is not None:
++        unsigned = {key: item for key, item in value.items() if key != hash_field}
++        if value.get(hash_field) != canonical_sha256(unsigned):
++            raise P2ContractError(f"{schema_version} self-hash is invalid")
++    if schema_version == "myis.p2-base-candidate-set.v1":
++        _validate_base_candidate_set_semantics(value)
++    elif schema_version == "myis.p2-adaptive-policy.v1":
++        _validate_policy_semantics(value)
++    elif schema_version == "myis.p2-scope-candidate-batch.v1":
++        _validate_batch_semantics(value)
++    return value
++
++
++def load_measured_request(
++    request_path: Path,
++    repository_root: Path,
++    *,
++    require_current_git: bool = True,
++) -> dict[str, Any]:
++    root = Path(repository_root).resolve()
++    request = validate_measured_artifact(_json_file(Path(request_path)), root)
++    if request["schema_version"] != "myis.p2-measured-request.v1":
++        raise P2ContractError("measured runner requires myis.p2-measured-request.v1")
++    profile, profile_hash = load_profile_uri(root, request["budget_profile_uri"])
++    envelope, envelope_hash = load_envelope_uri(root, request["execution_envelope_uri"])
++    base_set = load_referenced_measured_artifact(root, request["base_candidate_set_uri"])
++    policy = load_referenced_measured_artifact(root, request["adaptive_policy_uri"])
++    proposer = load_referenced_measured_artifact(root, request["proposer_contract_uri"])
++    bindings = (
++        (request["budget_profile_id"], profile["profile_id"], "budget profile ID"),
++        (request["budget_profile_sha256"], profile_hash, "budget profile hash"),
++        (request["execution_envelope_id"], envelope["envelope_id"], "execution envelope ID"),
++        (request["execution_envelope_sha256"], envelope_hash, "execution envelope hash"),
++        (request["base_candidate_set_id"], base_set["candidate_set_id"], "base candidate set ID"),
++        (request["base_candidate_set_sha256"], base_set["candidate_set_sha256"], "base candidate set hash"),
++        (request["adaptive_policy_id"], policy["policy_id"], "adaptive policy ID"),
++        (request["adaptive_policy_sha256"], policy["policy_sha256"], "adaptive policy hash"),
++        (request["proposer_contract_id"], proposer["contract_id"], "proposer contract ID"),
++        (request["proposer_contract_sha256"], proposer["contract_sha256"], "proposer contract hash"),
++    )
++    for recorded, observed, label in bindings:
++        if recorded != observed:
++            raise P2ContractError(f"measured request {label} mismatch")
++    revision = str(profile["campaign_revision"])
++    if any(str(item.get("campaign_revision", revision)) != revision for item in (request, envelope, base_set, policy)):
++        raise P2ContractError("profile-resolved artifacts disagree on campaign revision")
++    _validate_profile_resources(profile)
++    _validate_profile_allocation(profile)
++    _validate_envelope(envelope, profile, request["budget_profile_uri"])
++    if require_current_git:
++        identity = git_identity(root)
++        if request["execution_source_commit"] != identity["commit"]:
++            raise P2ContractError("measured request execution-source commit is stale")
++        if request["execution_source_tree"] != identity["tree"]:
++            raise P2ContractError("measured request execution-source tree is stale")
++        if not identity["worktree_clean"]:
++            raise P2ContractError("measured execution requires a clean worktree")
++    return {
++        **request,
++        "_resolved": {
++            "profile": profile,
++            "envelope": envelope,
++            "base_candidate_set": base_set,
++            "adaptive_policy": policy,
++            "proposer_contract": proposer,
++        },
++    }
++
++
++def build_measured_request(
++    *,
++    repository_root: Path,
++    request_id: str,
++    budget_profile_uri: str,
++    execution_envelope_uri: str,
++    base_candidate_set_uri: str,
++    adaptive_policy_uri: str,
++    proposer_contract_uri: str,
++    input_hashes: Mapping[str, str],
++    scope_hashes: Mapping[str, str],
++    global_counters: Mapping[str, int],
++) -> dict[str, Any]:
++    root = Path(repository_root).resolve()
++    identity = git_identity(root)
++    if not identity["worktree_clean"]:
++        raise P2ContractError("cannot create a measured request from a dirty worktree")
++    profile, profile_hash = load_profile_uri(root, budget_profile_uri)
++    envelope, envelope_hash = load_envelope_uri(root, execution_envelope_uri)
++    base_set = load_referenced_measured_artifact(root, base_candidate_set_uri)
++    policy = load_referenced_measured_artifact(root, adaptive_policy_uri)
++    proposer = load_referenced_measured_artifact(root, proposer_contract_uri)
++    request = {
++        "schema_version": "myis.p2-measured-request.v1",
++        "request_id": request_id,
++        "phase_id": "P2_SCOPE_DEVELOPMENT",
++        "arm": "R1",
++        "stage": "train_selection",
++        "campaign_id": "scope-autoindex-v1",
++        "campaign_revision": profile["campaign_revision"],
++        "budget_profile_id": profile["profile_id"],
++        "budget_profile_uri": budget_profile_uri,
++        "budget_profile_sha256": profile_hash,
++        "execution_envelope_id": envelope["envelope_id"],
++        "execution_envelope_uri": execution_envelope_uri,
++        "execution_envelope_sha256": envelope_hash,
++        "base_candidate_set_id": base_set["candidate_set_id"],
++        "base_candidate_set_uri": base_candidate_set_uri,
++        "base_candidate_set_sha256": base_set["candidate_set_sha256"],
++        "adaptive_policy_id": policy["policy_id"],
++        "adaptive_policy_uri": adaptive_policy_uri,
++        "adaptive_policy_sha256": policy["policy_sha256"],
++        "proposer_contract_id": proposer["contract_id"],
++        "proposer_contract_uri": proposer_contract_uri,
++        "proposer_contract_sha256": proposer["contract_sha256"],
++        "execution_source_commit": identity["commit"],
++        "execution_source_tree": identity["tree"],
++        "worktree_clean": True,
++        "input_hashes": dict(sorted(input_hashes.items())),
++        "scope_hashes": dict(sorted(scope_hashes.items())),
++        "global_counters": dict(global_counters),
++        "protected_boundary": {
++            "output_mode": "aggregate_hash_count_only",
++            "train_selection_only": True,
++            "final_split_open": False,
++            "d2_open_final": False,
++            "d3_submit_release": False,
++            "gpu": False,
++            "paid_api": False,
++            "network_model_download": False,
++            "provider_fallback": False,
++        },
++    }
++    return validate_measured_artifact(request, root)
++
++
++def load_profile_uri(repository_root: Path, uri: str) -> tuple[dict[str, Any], str]:
++    path = resolve_safe_uri(repository_root, uri)
++    try:
++        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
++    except (OSError, yaml.YAMLError) as error:
++        raise P2ContractError(f"cannot load measured budget profile: {uri}") from error
++    if not isinstance(payload, dict):
++        raise P2ContractError("measured budget profile must be a mapping")
++    schema = _json_file(Path(repository_root) / "schemas" / "p2-budget-profile.v1.json")
++    try:
++        Draft202012Validator(schema).validate(payload)
++    except ValidationError as error:
++        raise P2ContractError(f"measured budget profile failed schema validation: {error.message}") from error
++    _validate_profile_resources(payload)
++    _validate_profile_allocation(payload)
++    return dict(payload), canonical_sha256(payload)
++
++
++def load_envelope_uri(repository_root: Path, uri: str) -> tuple[dict[str, Any], str]:
++    path = resolve_safe_uri(repository_root, uri)
++    try:
++        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
++    except (OSError, yaml.YAMLError) as error:
++        raise P2ContractError(f"cannot load measured execution envelope: {uri}") from error
++    if not isinstance(payload, dict):
++        raise P2ContractError("measured execution envelope must be a mapping")
++    return dict(payload), file_sha256(path)
++
++
++def load_referenced_measured_artifact(repository_root: Path, uri: str) -> dict[str, Any]:
++    path = resolve_safe_uri(repository_root, uri)
++    return validate_measured_artifact(_json_file(path), repository_root)
++
++
++def scientific_payload(scope_spec: Mapping[str, Any]) -> dict[str, Any]:
++    return {
++        key: deepcopy(value)
++        for key, value in scope_spec.items()
++        if key not in IDENTITY_ONLY_SPEC_FIELDS
++    }
++
++
++def scientific_payload_sha256(scope_spec: Mapping[str, Any]) -> str:
++    return canonical_sha256(scientific_payload(scope_spec))
++
++
++def assert_single_axis_pair(
++    candidate: Mapping[str, Any],
++    ablation: Mapping[str, Any],
++    declared_axis: str,
++) -> None:
++    candidate_axes = dict(candidate.get("axis_values", {}))
++    ablation_axes = dict(ablation.get("axis_values", {}))
++    if set(candidate_axes) != set(ablation_axes):
++        raise P2ContractError("matched ablation axis sets differ")
++    changed = [key for key in candidate_axes if candidate_axes[key] != ablation_axes[key]]
++    if changed != [declared_axis]:
++        raise P2ContractError("matched ablation must differ on exactly the declared scientific axis")
++    if scientific_payload_sha256(candidate["scope_spec"]) == scientific_payload_sha256(ablation["scope_spec"]):
++        raise P2ContractError("matched ablation scientific payload did not change")
++
++
++def git_identity(repository_root: Path) -> dict[str, Any]:
++    root = Path(repository_root).resolve()
++    commit = _git(root, "rev-parse", "HEAD")
++    tree = _git(root, "rev-parse", "HEAD^{tree}")
++    status = _git(root, "status", "--porcelain", allow_empty=True)
++    if not COMMIT_RE.fullmatch(commit) or not COMMIT_RE.fullmatch(tree):
++        raise P2ContractError("cannot resolve full Git execution identity")
++    return {"commit": commit, "tree": tree, "worktree_clean": not status}
++
++
++def committed_blob_sha256(repository_root: Path, uri: str, revision: str = "HEAD") -> str:
++    relative = resolve_safe_uri(repository_root, uri).relative_to(Path(repository_root).resolve()).as_posix()
++    try:
++        completed = subprocess.run(
++            ["git", "show", f"{revision}:{relative}"],
++            cwd=repository_root,
++            check=True,
++            capture_output=True,
++        )
++    except (OSError, subprocess.CalledProcessError) as error:
++        raise P2ContractError(f"cannot read committed bytes for {relative}") from error
++    return hashlib.sha256(completed.stdout).hexdigest()
++
++
++def resolve_safe_uri(repository_root: Path, uri: str) -> Path:
++    value = str(uri)
++    pure_posix = PurePosixPath(value)
++    pure_windows = PureWindowsPath(value)
++    if (
++        not value
++        or pure_posix.is_absolute()
++        or pure_windows.is_absolute()
++        or pure_windows.drive
++        or ".." in pure_posix.parts
++        or "\\" in value
++    ):
++        raise P2ContractError(f"unsafe repository-relative URI: {value!r}")
++    root = Path(repository_root).resolve()
++    path = (root / Path(*pure_posix.parts)).resolve()
++    try:
++        path.relative_to(root)
++    except ValueError as error:
++        raise P2ContractError(f"repository-relative URI escaped the repository: {value!r}") from error
++    if path.is_symlink() or not path.is_file():
++        raise P2ContractError(f"referenced measured artifact must be a regular file: {value}")
++    return path
++
++
++def _validate_base_candidate_set_semantics(payload: Mapping[str, Any]) -> None:
++    controls = list(payload["frozen_controls"])
++    candidates = list(payload["preregistered_candidates"])
++    if tuple(item["candidate_id"] for item in controls) != BASE_CONTROL_IDS:
++        raise P2ContractError("base candidate set frozen control IDs/order are not canonical")
++    if tuple(item["candidate_id"] for item in candidates) != BASE_CANDIDATE_IDS:
++        raise P2ContractError("base candidate set preregistered IDs/order are not canonical")
++    if [item["arm"] for item in controls] != ["R0", "R0-W", "R1", "R1"]:
++        raise P2ContractError("base candidate set frozen control arms are invalid")
++    if any(item["arm"] != "R1" for item in candidates):
++        raise P2ContractError("all preregistered candidates must use R1")
++    rows = [*controls, *candidates]
++    identifiers = [str(item["candidate_id"]) for item in rows]
++    if len(identifiers) != len(set(identifiers)):
++        raise P2ContractError("base candidate IDs must be unique")
++    fixture_records = (
++        {"family_id": "family-b", "publication_id": "family-b", "title_en": "B title", "abstract_en": "B abstract evidence", "claims_text": "1. first claim\n2. second claim\n3. third claim\n4. fourth claim\n5. fifth claim"},
++        {"family_id": "family-a", "publication_id": "family-a", "title_en": "A title", "abstract_en": "A abstract evidence", "claims_text": "1. alpha claim\n2. beta claim\n3. gamma claim\n4. delta claim\n5. epsilon claim"},
++    )
++    for item in rows:
++        spec = item["scope_spec"]
++        parse_scope_spec(spec)
++        if item["spec_sha256"] != canonical_sha256(spec):
++            raise P2ContractError(f"candidate {item['candidate_id']} spec hash mismatch")
++        if item["scientific_payload_sha256"] != scientific_payload_sha256(spec):
++            raise P2ContractError(f"candidate {item['candidate_id']} scientific payload hash mismatch")
++        first = compile_scope(spec, fixture_records)
++        second = compile_scope(spec, reversed(fixture_records))
++        if first.as_dict() != second.as_dict():
++            raise P2ContractError(f"candidate {item['candidate_id']} compiler output is order-dependent")
++        per_family: dict[str, int] = {}
++        for unit in first.units:
++            per_family[unit.family_id] = per_family.get(unit.family_id, 0) + int(unit.searchable)
++        if any(count > 4 for count in per_family.values()):
++            raise P2ContractError(f"candidate {item['candidate_id']} exceeds the four-unit limit")
++
++
++def _validate_policy_semantics(payload: Mapping[str, Any]) -> None:
++    if tuple(payload["batch_roles"]) != BATCH_ROLES:
++        raise P2ContractError("adaptive policy batch roles/order are not canonical")
++    if set(payload["allowed_axes"]) & set(payload["forbidden_axes"]):
++        raise P2ContractError("adaptive policy allowed and forbidden axes overlap")
++    if payload["candidates_per_iteration"] != 4:
++        raise P2ContractError("adaptive policy requires four candidates per iteration")
++
++
++def _validate_batch_semantics(payload: Mapping[str, Any]) -> None:
++    candidates = list(payload["candidates"])
++    if tuple(item["role"] for item in candidates) != BATCH_ROLES:
++        raise P2ContractError("adaptive batch roles/order are invalid")
++    iteration = int(payload["iteration"])
++    expected_prefix = f"p2-r1-r{_revision_number(payload['campaign_revision']):02d}-i{iteration:02d}-c"
++    expected_ids = tuple(f"{expected_prefix}{index:02d}" for index in range(1, 5))
++    if tuple(item["candidate_id"] for item in candidates) != expected_ids:
++        raise P2ContractError("adaptive candidate IDs are not stable consecutive batch IDs")
++    for item in candidates:
++        parse_scope_spec(item["scope_spec"])
++        if item["spec_sha256"] != canonical_sha256(item["scope_spec"]):
++            raise P2ContractError("adaptive candidate spec hash mismatch")
++        if item["scientific_payload_sha256"] != scientific_payload_sha256(item["scope_spec"]):
++            raise P2ContractError("adaptive candidate scientific payload hash mismatch")
++    exploit = candidates[0]
++    ablation = candidates[1]
++    if exploit["matched_ablation_id"] != ablation["candidate_id"]:
++        raise P2ContractError("exploit candidate must bind the batch matched ablation")
++    if ablation["matched_ablation_id"] != exploit["candidate_id"]:
++        raise P2ContractError("matched ablation must bind the exploit candidate")
++    assert_single_axis_pair(exploit, ablation, str(exploit["declared_axis"]))
++
++
++def _validate_profile_resources(profile: Mapping[str, Any]) -> None:
++    resources = profile.get("resources", {})
++    if resources.get("paid_api_budget_usd") != 0 or resources.get("gpu_budget_usd") != 0:
++        raise P2ContractError("P2 measured profile must remain zero-cost CPU-only")
++    if resources.get("network_model_download") is not False or resources.get("provider_fallback") is not False:
++        raise P2ContractError("P2 measured profile forbids downloads and provider fallback")
++
++
++def _validate_profile_allocation(profile: Mapping[str, Any]) -> None:
++    allocation = profile.get("candidate_allocation", {})
++    limits = profile.get("limits", {})
++    if allocation.get("frozen_controls") != 4 or allocation.get("preregistered_patent_candidates") != 8:
++        raise P2ContractError("every measured revision requires four controls and eight preregistered candidates")
++    adaptive = int(allocation.get("adaptive_candidates", -1))
++    if adaptive < 0 or adaptive % 4:
++        raise P2ContractError("adaptive allocation must be a nonnegative multiple of four")
++    if limits.get("candidates_per_iteration") != 4:
++        raise P2ContractError("measured profile candidates_per_iteration must equal four")
++    if limits.get("max_candidates_total") != 12 + adaptive:
++        raise P2ContractError("measured profile candidate total does not match its allocation")
++    if limits.get("max_adaptive_candidates") != adaptive:
++        raise P2ContractError("measured profile adaptive limit does not match its allocation")
++    if limits.get("max_adaptive_iterations") != adaptive // 4:
++        raise P2ContractError("measured profile iteration limit does not match its allocation")
++    if limits.get("max_index_builds") < limits.get("max_candidates_total"):
++        raise P2ContractError("measured profile index-build limit is too small")
++    if limits.get("selection_exposure_limit") != 1:
++        raise P2ContractError("measured profile selection exposure limit must equal one")
++
++
++def _validate_envelope(envelope: Mapping[str, Any], profile: Mapping[str, Any], profile_uri: str) -> None:
++    scope = envelope.get("scope", {})
++    resources = envelope.get("resources", {})
++    if scope.get("phase_id") != "P2_SCOPE_DEVELOPMENT" or scope.get("arm") != "R1":
++        raise P2ContractError("measured envelope phase/arm mismatch")
++    if scope.get("campaign_revision") != profile.get("campaign_revision"):
++        raise P2ContractError("measured envelope campaign revision mismatch")
++    if scope.get("budget_profile_ref") != profile_uri:
++        raise P2ContractError("measured envelope budget profile reference mismatch")
++    if scope.get("train_selection_only") is not True or scope.get("final_split_open") is not False:
++        raise P2ContractError("measured envelope must remain train/selection only")
++    if scope.get("selection_access_requires_shortlist_freeze") is not True:
++        raise P2ContractError("measured envelope must require shortlist freeze")
++    if any(resources.get(key) is not False for key in ("gpu", "paid_api", "network_model_download", "provider_fallback")):
++        raise P2ContractError("measured envelope resource boundary mismatch")
++
++
++def _revision_number(campaign_revision: str) -> int:
++    match = re.search(r"-v(\d+)$", str(campaign_revision))
++    return int(match.group(1)) if match else 1
++
++
++def _json_file(path: Path) -> dict[str, Any]:
++    try:
++        value = json.loads(Path(path).read_text(encoding="utf-8"))
++    except (OSError, json.JSONDecodeError) as error:
++        raise P2ContractError(f"cannot load JSON artifact: {path}") from error
++    if not isinstance(value, dict):
++        raise P2ContractError(f"JSON artifact must be an object: {path}")
++    return value
++
++
++def _git(root: Path, *args: str, allow_empty: bool = False) -> str:
++    try:
++        completed = subprocess.run(["git", *args], cwd=root, check=True, capture_output=True, text=True)
++    except (OSError, subprocess.CalledProcessError) as error:
++        raise P2ContractError(f"Git command failed: {' '.join(args)}") from error
++    value = completed.stdout.strip()
++    if not value and not allow_empty:
++        raise P2ContractError(f"Git command returned no value: {' '.join(args)}")
++    return value
++
+
+diff --git a/src/myis_research/p2/measured_state.py b/src/myis_research/p2/measured_state.py
+new file mode 100644
+--- /dev/null
++++ b/src/myis_research/p2/measured_state.py
+@@ -0,0 +1,326 @@
++"""Owner-local durable state and single-writer primitives for measured P2."""
++
++from __future__ import annotations
++
++from contextlib import AbstractContextManager
++from copy import deepcopy
++from datetime import datetime, timezone
++import json
++import os
++from pathlib import Path
++import socket
++import tempfile
++import time
++from typing import Any, Mapping
++
++from ..kernel.canonical import canonical_json, canonical_sha256, file_sha256
++from .contracts import P2ContractError, write_immutable_json
++
++
++STATE_SCHEMA = "myis.p2-measured-state.v1"
++LEASE_SCHEMA = "myis.p2-exclusive-writer-lease.v1"
++SELECTION_COUNTER_SCHEMA = "myis.p2-global-selection-counter.v1"
++
++
++class MeasuredStateError(P2ContractError):
++    """Raised when durable measured state cannot advance safely."""
++
++
++class ExclusiveWriterLease(AbstractContextManager["ExclusiveWriterLease"]):
++    def __init__(
++        self,
++        run_root: Path,
++        *,
++        run_id: str,
++        request_sha256: str,
++        recover_stale: bool = False,
++        verifier_receipt: Path | None = None,
++    ) -> None:
++        self.run_root = Path(run_root).resolve()
++        self.path = self.run_root / "exclusive-writer.json"
++        self.run_id = run_id
++        self.request_sha256 = request_sha256
++        self.recover_stale = recover_stale
++        self.verifier_receipt = Path(verifier_receipt).resolve() if verifier_receipt is not None else None
++        self.acquired = False
++        self.payload: dict[str, Any] | None = None
++
++    def __enter__(self) -> "ExclusiveWriterLease":
++        self.run_root.mkdir(parents=True, exist_ok=True)
++        if self.path.exists():
++            self._recover_or_reject()
++        payload = {
++            "schema_version": LEASE_SCHEMA,
++            "run_id": self.run_id,
++            "request_sha256": self.request_sha256,
++            "host": socket.gethostname(),
++            "pid": os.getpid(),
++            "process_start_time_utc": _utc_now(),
++            "lease_heartbeat_utc": _utc_now(),
++            "status": "active",
++        }
++        payload["lease_sha256"] = canonical_sha256(payload)
++        try:
++            _write_exclusive_mutable_json(self.path, payload)
++        except FileExistsError as error:
++            raise MeasuredStateError("another measured writer acquired the lease") from error
++        self.payload = payload
++        self.acquired = True
++        return self
++
++    def heartbeat(self) -> None:
++        if not self.acquired or self.payload is None:
++            raise MeasuredStateError("cannot heartbeat an inactive measured lease")
++        payload = {**self.payload, "lease_heartbeat_utc": _utc_now()}
++        payload.pop("lease_sha256", None)
++        payload["lease_sha256"] = canonical_sha256(payload)
++        atomic_write_json(self.path, payload)
++        self.payload = payload
++
++    def __exit__(self, exc_type: object, exc: object, traceback: object) -> None:
++        if not self.acquired:
++            return
++        if self.payload is None:
++            raise MeasuredStateError("measured lease payload disappeared")
++        payload = {
++            **self.payload,
++            "lease_heartbeat_utc": _utc_now(),
++            "status": "closed_cleanly" if exc is None else "closed_after_failure",
++            "closed_at_utc": _utc_now(),
++        }
++        payload.pop("lease_sha256", None)
++        payload["lease_sha256"] = canonical_sha256(payload)
++        archive = self.run_root / "lease-history" / f"lease-{int(time.time_ns())}.json"
++        write_immutable_json(archive, payload)
++        self.path.unlink(missing_ok=False)
++        self.acquired = False
++
++    def _recover_or_reject(self) -> None:
++        existing = _json_file(self.path)
++        if existing.get("schema_version") != LEASE_SCHEMA:
++            raise MeasuredStateError("existing measured lease is malformed")
++        host = str(existing.get("host", ""))
++        pid = int(existing.get("pid", -1))
++        if host == socket.gethostname() and _pid_is_alive(pid):
++            raise MeasuredStateError("measured run already has an active writer")
++        if not self.recover_stale:
++            raise MeasuredStateError("stale measured lease requires explicit verified recovery")
++        if self.verifier_receipt is None or not self.verifier_receipt.is_file() or self.verifier_receipt.is_symlink():
++            raise MeasuredStateError("stale-lock recovery requires an independent verifier receipt")
++        verifier_sha256 = file_sha256(self.verifier_receipt)
++        recovery = {
++            "schema_version": "myis.p2-stale-lease-recovery.v1",
++            "run_id": self.run_id,
++            "request_sha256": self.request_sha256,
++            "stale_lease_sha256": canonical_sha256(existing),
++            "recorded_host": host,
++            "recorded_pid": pid,
++            "recorded_process_active": False,
++            "verifier_receipt_sha256": verifier_sha256,
++            "recovered_at_utc": _utc_now(),
++        }
++        recovery["recovery_sha256"] = canonical_sha256(recovery)
++        recovery_path = self.run_root / "recoveries" / f"stale-lease-{int(time.time_ns())}.json"
++        write_immutable_json(recovery_path, recovery)
++        stale_path = self.run_root / "lease-history" / f"stale-{int(time.time_ns())}.json"
++        stale_path.parent.mkdir(parents=True, exist_ok=True)
++        os.replace(self.path, stale_path)
++
++
++class MeasuredRunJournal:
++    def __init__(self, run_root: Path) -> None:
++        self.run_root = Path(run_root).resolve()
++        self.state_path = self.run_root / "state.json"
++        self.artifact_root = self.run_root / "artifacts"
++        self.protected_root = self.run_root / "protected"
++
++    def initialize(
++        self,
++        *,
++        run_id: str,
++        request: Mapping[str, Any],
++        owner_paths: Mapping[str, str],
++    ) -> dict[str, Any]:
++        if self.state_path.exists():
++            raise MeasuredStateError("measured run state already exists; use resume")
++        self.artifact_root.mkdir(parents=True, exist_ok=True)
++        self.protected_root.mkdir(parents=True, exist_ok=True)
++        request_payload = dict(request)
++        request_payload.pop("_resolved", None)
++        request_sha256 = canonical_sha256(request_payload)
++        write_immutable_json(self.artifact_root / "request.json", request_payload)
++        owner_binding = {
++            "schema_version": "myis.p2-owner-path-binding.v1",
++            "run_id": run_id,
++            "request_sha256": request_sha256,
++            "paths": dict(owner_paths),
++            "created_at_utc": _utc_now(),
++        }
++        owner_binding["binding_sha256"] = canonical_sha256(owner_binding)
++        write_immutable_json(self.run_root / "owner-paths.json", owner_binding)
++        state = {
++            "schema_version": STATE_SCHEMA,
++            "run_id": run_id,
++            "request_id": request_payload["request_id"],
++            "request_sha256": request_sha256,
++            "campaign_revision": request_payload["campaign_revision"],
++            "stage": "initialized",
++            "started_at_utc": _utc_now(),
++            "updated_at_utc": _utc_now(),
++            "base_registered": False,
++            "baseline_commitment_sha256": None,
++            "baseline_reproduction_sha256": None,
++            "candidates": {},
++            "adaptive_batches": [],
++            "completed_iterations": [],
++            "shortlist_freeze_sha256": None,
++            "shortlist_ids": [],
++            "selection_exposure_count": 0,
++            "selection_receipt_sha256": None,
++            "total_index_builds": 0,
++            "total_runtime_seconds": 0.0,
++            "failure": None,
++        }
++        return self.save(state)
++
++    def load(self) -> dict[str, Any]:
++        if not self.state_path.is_file() or self.state_path.is_symlink():
++            raise MeasuredStateError("measured run state is missing")
++        state = _json_file(self.state_path)
++        recorded = str(state.get("state_sha256", ""))
++        unsigned = {key: value for key, value in state.items() if key != "state_sha256"}
++        if state.get("schema_version") != STATE_SCHEMA or recorded != canonical_sha256(unsigned):
++            raise MeasuredStateError("measured run state hash is invalid")
++        return state
++
++    def save(self, state: Mapping[str, Any]) -> dict[str, Any]:
++        payload = deepcopy(dict(state))
++        payload["updated_at_utc"] = _utc_now()
++        payload.pop("state_sha256", None)
++        payload["state_sha256"] = canonical_sha256(payload)
++        atomic_write_json(self.state_path, payload)
++        return payload
++
++    def write_artifact(self, name: str, payload: Mapping[str, Any]) -> tuple[Path, str]:
++        if not name or Path(name).name != name or not name.endswith(".json"):
++            raise MeasuredStateError("measured artifact name must be one safe JSON filename")
++        path = self.artifact_root / name
++        sha256 = write_immutable_json(path, payload)
++        return path, sha256
++
++    def verify(self) -> dict[str, Any]:
++        state = self.load()
++        artifacts: dict[str, str] = {}
++        for path in sorted(self.artifact_root.glob("*.json")):
++            if path.is_symlink() or not path.is_file():
++                raise MeasuredStateError("measured artifact root contains an unsafe entry")
++            artifacts[path.name] = file_sha256(path)
++        return {
++            "schema_version": "myis.p2-owner-run-verification.v1",
++            "run_id": state["run_id"],
++            "request_sha256": state["request_sha256"],
++            "stage": state["stage"],
++            "state_sha256": state["state_sha256"],
++            "artifact_hashes": artifacts,
++            "selection_exposure_count": state["selection_exposure_count"],
++            "status": "passed",
++        }
++
++
++def compare_and_swap_selection_counter(
++    owner_store: Path,
++    *,
++    request_id: str,
++    freeze_sha256: str,
++) -> dict[str, Any]:
++    root = Path(owner_store).resolve()
++    counter_path = root / "p2" / "global-selection-counter.json"
++    lock_path = counter_path.with_suffix(".lock")
++    counter_path.parent.mkdir(parents=True, exist_ok=True)
++    try:
++        descriptor = os.open(lock_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
++    except FileExistsError as error:
++        raise MeasuredStateError("global selection counter is locked by another writer") from error
++    try:
++        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
++            handle.write(f"{os.getpid()}\n")
++            handle.flush()
++            os.fsync(handle.fileno())
++        if counter_path.exists():
++            current = _json_file(counter_path)
++            if current.get("schema_version") != SELECTION_COUNTER_SCHEMA:
++                raise MeasuredStateError("global selection counter is malformed")
++            count = int(current.get("selection_exposure_count", -1))
++        else:
++            count = 0
++        if count != 0:
++            raise MeasuredStateError("global selection exposure was already consumed")
++        updated = {
++            "schema_version": SELECTION_COUNTER_SCHEMA,
++            "selection_exposure_count": 1,
++            "request_id": request_id,
++            "shortlist_freeze_sha256": freeze_sha256,
++            "advanced_at_utc": _utc_now(),
++        }
++        updated["counter_sha256"] = canonical_sha256(updated)
++        atomic_write_json(counter_path, updated)
++        return updated
++    finally:
++        lock_path.unlink(missing_ok=True)
++
++
++def atomic_write_json(path: Path, payload: Mapping[str, Any]) -> None:
++    target = Path(path)
++    target.parent.mkdir(parents=True, exist_ok=True)
++    encoded = (canonical_json(dict(payload)) + "\n").encode("utf-8")
++    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{target.name}.", suffix=".tmp", dir=target.parent)
++    temporary = Path(temporary_name)
++    try:
++        with os.fdopen(descriptor, "wb") as handle:
++            handle.write(encoded)
++            handle.flush()
++            os.fsync(handle.fileno())
++        os.replace(temporary, target)
++    except BaseException:
++        temporary.unlink(missing_ok=True)
++        raise
++
++
++def _write_exclusive_mutable_json(path: Path, payload: Mapping[str, Any]) -> None:
++    target = Path(path)
++    target.parent.mkdir(parents=True, exist_ok=True)
++    encoded = (canonical_json(dict(payload)) + "\n").encode("utf-8")
++    descriptor = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
++    try:
++        with os.fdopen(descriptor, "wb") as handle:
++            handle.write(encoded)
++            handle.flush()
++            os.fsync(handle.fileno())
++    except BaseException:
++        target.unlink(missing_ok=True)
++        raise
++
++
++def _pid_is_alive(pid: int) -> bool:
++    if pid <= 0:
++        return False
++    try:
++        os.kill(pid, 0)
++    except OSError:
++        return False
++    return True
++
++
++def _json_file(path: Path) -> dict[str, Any]:
++    try:
++        value = json.loads(Path(path).read_text(encoding="utf-8"))
++    except (OSError, json.JSONDecodeError) as error:
++        raise MeasuredStateError(f"cannot read measured JSON state: {path}") from error
++    if not isinstance(value, dict):
++        raise MeasuredStateError(f"measured JSON state must be an object: {path}")
++    return value
++
++
++def _utc_now() -> str:
++    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
++
+
+diff --git a/tests/test_p2_measured_contracts.py b/tests/test_p2_measured_contracts.py
+new file mode 100644
+--- /dev/null
++++ b/tests/test_p2_measured_contracts.py
+@@ -0,0 +1,120 @@
++from __future__ import annotations
++
++from copy import deepcopy
++import json
++from pathlib import Path
++
++import pytest
++
++from myis_research.kernel.canonical import canonical_sha256
++from myis_research.p2 import P2ContractError, validate_measured_artifact
++from myis_research.p2.base_candidates import (
++    build_adaptive_policy,
++    build_base_candidate_set,
++    build_proposer_contract,
++)
++from myis_research.p2.measured_contracts import scientific_payload_sha256
++
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++def _rehash(payload: dict, field: str) -> dict:
++    payload.pop(field, None)
++    payload[field] = canonical_sha256(payload)
++    return payload
++
++
++def test_adopted_base_candidate_set_is_exact_hash_locked_and_deterministic() -> None:
++    first = build_base_candidate_set(ROOT, committed_hashes=False)
++    second = build_base_candidate_set(ROOT, committed_hashes=False)
++    assert first == second
++    validated = validate_measured_artifact(first, ROOT)
++    assert validated["status"] == "adopted_hash_locked"
++    assert len(validated["frozen_controls"]) == 4
++    assert len(validated["preregistered_candidates"]) == 8
++    assert validated["adapter_rule"]["publication_id_source"] == "relevant_id"
++    assert all(item["spec_sha256"] == canonical_sha256(item["scope_spec"]) for item in [*validated["frozen_controls"], *validated["preregistered_candidates"]])
++
++
++def test_adaptive_policy_and_proposer_contract_are_repository_safe() -> None:
++    policy = validate_measured_artifact(build_adaptive_policy(), ROOT)
++    proposer = validate_measured_artifact(build_proposer_contract(), ROOT)
++    assert policy["batch_roles"] == ["exploit", "matched_ablation", "orthogonal", "diversity"]
++    assert proposer["environment_removed"] == ["MYIS_STORE", "MYIS_MLFLOW_STORE"]
++    assert proposer["protected_data_accessed"] is False
++
++
++def test_adaptive_batch_requires_exact_ids_roles_and_single_axis_ablation() -> None:
++    base = build_base_candidate_set(ROOT, committed_hashes=False)
++    source = deepcopy(base["preregistered_candidates"][0])
++    ablation_source = deepcopy(base["preregistered_candidates"][1])
++    candidates = []
++    definitions = (
++        ("p2-r1-r01-i01-c01", "exploit", source, "p2-r1-r01-i01-c02", "source_fields"),
++        ("p2-r1-r01-i01-c02", "matched_ablation", ablation_source, "p2-r1-r01-i01-c01", "source_fields"),
++        ("p2-r1-r01-i01-c03", "orthogonal", base["preregistered_candidates"][4], None, "unitization"),
++        ("p2-r1-r01-i01-c04", "diversity", base["preregistered_candidates"][7], None, "view_composition"),
++    )
++    for index, (candidate_id, role, definition, matched, axis) in enumerate(definitions, start=1):
++        spec = deepcopy(definition["scope_spec"])
++        spec["spec_id"] = f"spec-r01-i01-c{index:02d}-v01"
++        spec["hypothesis_id"] = f"hyp-i01-{index:03d}"
++        candidates.append({
++            "candidate_id": candidate_id,
++            "parent_candidate_id": definition["candidate_id"],
++            "hypothesis_id": spec["hypothesis_id"],
++            "hypothesis": definition["hypothesis"],
++            "role": role,
++            "declared_axis": axis,
++            "matched_ablation_id": matched,
++            "scope_spec": spec,
++            "spec_sha256": canonical_sha256(spec),
++            "scientific_payload_sha256": scientific_payload_sha256(spec),
++            "axis_values": definition["axis_values"],
++        })
++    batch = _rehash({
++        "schema_version": "myis.p2-scope-candidate-batch.v1",
++        "batch_id": "p2-r1-r01-i01",
++        "request_id": "p2-measured-test",
++        "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
++        "iteration": 1,
++        "feedback_sha256": "a" * 64,
++        "proposer_invocation_sha256": "b" * 64,
++        "status": "frozen_before_measurement",
++        "candidates": candidates,
++    }, "batch_sha256")
++    assert validate_measured_artifact(batch, ROOT)["batch_sha256"] == batch["batch_sha256"]
++
++    invalid = deepcopy(batch)
++    invalid["candidates"][1]["axis_values"]["unitization"] = "claim_element"
++    _rehash(invalid, "batch_sha256")
++    with pytest.raises(P2ContractError, match="exactly the declared"):
++        validate_measured_artifact(invalid, ROOT)
++
++
++def test_measured_contract_rejects_protected_feedback_keys() -> None:
++    feedback = {
++        "schema_version": "myis.p2-adaptive-feedback.v1",
++        "feedback_id": "feedback-i01",
++        "request_id": "request-1",
++        "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
++        "iteration": 1,
++        "lineage_hashes": {"dataset_sha256": "a" * 64},
++        "aggregate_candidates": [],
++        "failure_categories": [],
++        "remaining_axes": ["unitization"],
++        "budget_counters": {"candidates": 12},
++        "selection_exposures": 0,
++        "protected_data_accessed": False,
++        "query_ids": ["forbidden"],
++    }
++    _rehash(feedback, "feedback_sha256")
++    with pytest.raises(P2ContractError, match="protected payload key"):
++        validate_measured_artifact(feedback, ROOT)
++
++
++def test_measured_schemas_are_valid_json() -> None:
++    for path in sorted((ROOT / "schemas").glob("p2-*.v1.json")):
++        json.loads(path.read_text(encoding="utf-8"))
++
+
+diff --git a/tests/test_p2_measured_state.py b/tests/test_p2_measured_state.py
+new file mode 100644
+--- /dev/null
++++ b/tests/test_p2_measured_state.py
+@@ -0,0 +1,103 @@
++from __future__ import annotations
++
++import json
++import os
++from pathlib import Path
++import socket
++
++import pytest
++
++from myis_research.kernel.canonical import canonical_sha256
++from myis_research.p2.measured_state import (
++    ExclusiveWriterLease,
++    MeasuredRunJournal,
++    MeasuredStateError,
++    compare_and_swap_selection_counter,
++)
++
++
++def _request() -> dict:
++    return {
++        "schema_version": "myis.p2-measured-request.v1",
++        "request_id": "p2-measured-state-test",
++        "campaign_revision": "scope-autoindex-v1-p2-r1-primary-v1",
++    }
++
++
++def test_measured_journal_is_atomic_hash_bound_and_immutable(tmp_path: Path) -> None:
++    journal = MeasuredRunJournal(tmp_path / "run")
++    state = journal.initialize(
++        run_id="run-1",
++        request=_request(),
++        owner_paths={"cache_root": str(tmp_path / "cache"), "index_root": str(tmp_path / "index")},
++    )
++    assert journal.load() == state
++    state["stage"] = "base_train"
++    saved = journal.save(state)
++    assert journal.load()["stage"] == "base_train"
++    _, artifact_hash = journal.write_artifact("baseline-commitment.json", {"status": "committed"})
++    assert len(artifact_hash) == 64
++    with pytest.raises(Exception, match="overwrite"):
++        journal.write_artifact("baseline-commitment.json", {"status": "changed"})
++    verification = journal.verify()
++    assert verification["status"] == "passed"
++    assert verification["state_sha256"] == saved["state_sha256"]
++
++
++def test_exclusive_writer_rejects_concurrent_writer_and_closes_cleanly(tmp_path: Path) -> None:
++    run_root = tmp_path / "run"
++    with ExclusiveWriterLease(run_root, run_id="run-1", request_sha256="a" * 64) as lease:
++        lease.heartbeat()
++        with pytest.raises(MeasuredStateError, match="active writer"):
++            with ExclusiveWriterLease(run_root, run_id="run-1", request_sha256="a" * 64):
++                pass
++    assert not (run_root / "exclusive-writer.json").exists()
++    assert len(list((run_root / "lease-history").glob("lease-*.json"))) == 1
++
++
++def test_stale_lock_recovery_requires_independent_receipt(tmp_path: Path) -> None:
++    run_root = tmp_path / "run"
++    run_root.mkdir()
++    stale = {
++        "schema_version": "myis.p2-exclusive-writer-lease.v1",
++        "run_id": "run-1",
++        "request_sha256": "a" * 64,
++        "host": socket.gethostname(),
++        "pid": 99999999,
++        "process_start_time_utc": "2026-01-01T00:00:00Z",
++        "lease_heartbeat_utc": "2026-01-01T00:00:00Z",
++        "status": "active",
++    }
++    stale["lease_sha256"] = canonical_sha256(stale)
++    (run_root / "exclusive-writer.json").write_text(json.dumps(stale), encoding="utf-8")
++    with pytest.raises(MeasuredStateError, match="verified recovery"):
++        with ExclusiveWriterLease(run_root, run_id="run-1", request_sha256="a" * 64):
++            pass
++    verifier = tmp_path / "verifier.json"
++    verifier.write_text('{"status":"passed"}\n', encoding="utf-8")
++    with ExclusiveWriterLease(
++        run_root,
++        run_id="run-1",
++        request_sha256="a" * 64,
++        recover_stale=True,
++        verifier_receipt=verifier,
++    ):
++        pass
++    assert len(list((run_root / "recoveries").glob("stale-lease-*.json"))) == 1
++
++
++def test_global_selection_counter_is_compare_and_swap(tmp_path: Path) -> None:
++    first = compare_and_swap_selection_counter(
++        tmp_path,
++        request_id="request-1",
++        freeze_sha256="f" * 64,
++    )
++    assert first["selection_exposure_count"] == 1
++    with pytest.raises(MeasuredStateError, match="already consumed"):
++        compare_and_swap_selection_counter(
++            tmp_path,
++            request_id="request-2",
++            freeze_sha256="e" * 64,
++        )
++    assert not (tmp_path / "p2" / "global-selection-counter.lock").exists()
++
+

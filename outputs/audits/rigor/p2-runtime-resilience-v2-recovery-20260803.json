@@ -1,0 +1,132 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v2-recovery-20260803",
+  "artifact": "P2 measured runtime resilience and autoresearch v2 repair",
+  "artifact_path": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+  "artifact_sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.5,
+    "one_line_summary": "The Windows-unsafe PID probe and chat-only continuity defect are replaced by an OS-held single-writer lease, durable journal, detached supervisor, checkpointed execution, profile-v2 controls, and aggregate-safe proposer isolation without starting measured P2.",
+    "strengths": [
+      "Windows liveness uses process creation identity and never sends signal zero.",
+      "The worker holds an OS advisory lock for its lifetime while lease metadata remains observational.",
+      "Every material transition is hash-chained and state.json is rebuildable from immutable events.",
+      "Accepted candidate results are idempotent, partial indexes are quarantined, infrastructure failures retry once within budget, and scientific failures are terminal after one attempt.",
+      "The detached supervisor requires explicit Owner-local store and cache roots, writes logs beneath the Owner-local run root, acknowledges checkpoint stops, and clears the temporary stop reason on resume.",
+      "Candidate and proposer subprocesses use environment allowlists that remove protected-store and credential-like variables.",
+      "The profile-v2 synthetic lifecycle completed 32 candidates, five adaptive batches, shortlist freeze, one selection compare-and-swap, and package validation without protected data.",
+      "Focused runtime tests passed 31, compatibility regressions passed 20, the full repository suite passed 328, graph/Dashboard/safety tests passed 49, and the disposable clean-checkout regression passed 4 with a drift-free read-model check."
+    ],
+    "weaknesses": [
+      "Reboot recovery still requires an explicit resume command; the runtime does not install an automatic restart service.",
+      "Detached soak and lifecycle evidence are synthetic engineering checks, not a protected Owner-local measurement.",
+      "The first repository-wide retry exposed 15 compatibility failures after 309 passes; those failures are retained in the autoresearch ledger and were repaired with focused regressions before final closeout.",
+      "A detached synthetic worker initially exited because the sanitized child environment could not import the package from a temporary repository; the launcher now bootstraps only its resolved package source root.",
+      "The first full-suite verification command exceeded the 120-second command timeout and was terminated as an infrastructure interruption; the identical suite was rerun with a 900-second ceiling and passed."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "Tests exercise the exact Windows liveness, lock, crash-release, journal, resume, proposer, candidate timeout, selection counter, and detached-worker surfaces changed by the repair."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 5,
+      "strengths": [
+        "Lock contention, stale metadata, PID reuse, child identity, atomic immutable writes, proposer failure, retry exhaustion, scientific failure, index budget, and selection reconciliation each have deterministic negative tests."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "All evidence is engineering or synthetic; measured runs, real candidates, shortlist, selection, final data, D2, and D3 remain closed and zero."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 5,
+      "strengths": [
+        "The lock is authoritative, the journal is authoritative, state is a snapshot, and every resume decision checks immutable bindings and active-child identity before work continues."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "The interrupted v1 patch, failure audit, autoresearch contract, failed full-suite retry, compatibility recovery, and verification commands remain preserved rather than overwritten."
+      ],
+      "weaknesses": [
+        "The v1 attempt began before its continuity ledger existed."
+      ],
+      "suggestions": [
+        "Keep the tracked runbook and append-only ledger as prerequisites for future long-running implementation or measured execution."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": [
+        "The repair combines bounded controls, deterministic generators, schema validation, focused multi-process tests, full synthetic lifecycle coverage, 328 passing repository tests, projection checks, safety scans, and clean-checkout validation."
+      ],
+      "weaknesses": [
+        "No protected Owner-local P2 preflight or measured run was authorized or performed."
+      ],
+      "suggestions": [
+        "The next action remains the reversible CPU-only Owner-local P2 measured preflight."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "suggestion",
+      "target_artifact": "Owner-local P2 measured preflight",
+      "target_entity": "detached supervisor startup and resume",
+      "evidence_locator": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+      "observation": "Repository-safe tests validate the runtime contract, but protected input hashes and actual Owner-local capacity remain unverified until preflight.",
+      "reasoning": "Synthetic engineering evidence cannot establish protected-store readiness or a scientific result.",
+      "suggestion": "Run only the canonical Owner-local preflight next; do not open measured execution or selection unless every bound check passes."
+    }
+  ],
+  "questions_for_owner": [
+    "No new Owner gate decision is required; the next authorized action remains Owner-local P2 measured preflight."
+  ],
+  "read_order": [
+    "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json",
+    "archive/p2-runtime-resilience-v1-interrupted/manifest.json",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "control/budgets/p2-r1-primary-v2.yaml",
+    "control/execution-envelope-p2-v2.yaml",
+    "src/myis_research/p2/measured_state.py",
+    "src/myis_research/p2/measured_executor.py",
+    "src/myis_research/p2/measured_supervisor.py",
+    "src/myis_research/p2/runtime_environment.py",
+    "orchestration/autoresearch/p2-runtime-resilience-v2/ledger.jsonl",
+    "focused runtime pytest output: 31 passed",
+    "compatibility pytest output: 20 passed",
+    "full repository pytest output: 328 passed",
+    "report and Dashboard/API pytest output: 18 passed",
+    "graph, Dashboard, checksum, and safety pytest output: 49 passed",
+    "clean-checkout pytest output: 4 passed with read-model drift false",
+    "repository-safe MLflow doctor output: PASS",
+    "session, advisor, layout, assets, policy, unsafe-path, controls, Brain literature, Ruff, and whitespace validation outputs"
+  ]
+}

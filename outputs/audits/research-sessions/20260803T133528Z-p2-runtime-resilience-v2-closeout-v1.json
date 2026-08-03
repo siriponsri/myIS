@@ -1,0 +1,165 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260803T133528Z-p2-runtime-resilience-v2-closeout-v1",
+  "run_id": null,
+  "goal_id": "P2_RUNTIME_RESILIENCE_V2_CLOSEOUT",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-03T13:35:28Z",
+  "scope": "Implement, verify, report, and prepare integration of P2 Runtime Resilience and Autoresearch v2 without starting measured execution.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "831872ff1720117e2d44c115e15e7cba0a4bb236",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260803T133528Z-p2-runtime-resilience-v2-closeout-v1.json",
+      "projections/sessions/20260803T133528Z-p2-runtime-resilience-v2-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner required every Research AGENTS.md update to update Brain in the same session and enabled immediate Brain YOLO mode within the existing safety boundary.",
+      "evidence_refs": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "b7c986f2bafbb245402409c094814408f8ac9e74c41860b553635ebc5932560b",
+          "locator": "Memory lifecycle; Brain synchronization and YOLO mode"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The interrupted v1 attempt used an unsafe Windows PID liveness probe and lacked a tracked continuity ledger before implementation.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json",
+          "sha256": "165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2",
+          "locator": "overall, findings F001-F002, and read_order"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The v2 repair replaced file-existence and signal-zero authority with an OS-held lease, durable journal, detached supervision, checkpointed retries, profile-resolved controls, and isolated proposer execution.",
+      "evidence_refs": [
+        {
+          "path": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+          "sha256": "3df07c623acebf6c65f5177fdf1ba60fef9f657cbbcb7a9ece2d0c9246ce2355",
+          "locator": "Durable authority; Stage order and checkpoints; Hybrid Codex proposer"
+        },
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
+          "sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
+          "locator": "overall, dimensions D1-D6, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "A detached child launched against a temporary repository needs the resolved package source root after environment sanitization; inheriting the parent environment would violate the isolation contract.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/p2/measured_supervisor.py",
+          "sha256": "9b547858a95afca1a4b207ea1d4f82e23fc92bd7a60152215522cc318545e321",
+          "locator": "start_detached_worker child_environment bootstrap"
+        },
+        {
+          "path": "tests/test_p2_measured_supervisor.py",
+          "sha256": "1bdc134cbc3381917f0020de5291c83467e441a56a83ed0bf689e1985ca9ecd1",
+          "locator": "detached synthetic soak and owner-local path regressions"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Verification passed 31 focused runtime tests, 328 full repository tests, 49 graph and Dashboard safety tests, four clean-checkout tests, two no-drift report cycles, and the required policy, layout, asset, session, MLflow, Brain literature, Ruff, path, and whitespace checks.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
+          "sha256": "c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83",
+          "locator": "overall.strengths, overall.weaknesses, dimensions.D6_methodological_rigor, and read_order"
+        },
+        {
+          "path": "HANDOFF.md",
+          "sha256": "ab3926368404b3452a022a5d96652171c48852738ae953515185061bbe8b7f6c",
+          "locator": "P2 runtime resilience v2 closeout"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "P2 remains ready and planned but not measured; measured counters are zero, real selection and final evaluation remain closed, and the next authorized action is Owner-local P2 measured preflight.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "9a9fd7aeeea1d8e15c1d6a92e56fc2c907b46e8adef26a1eee6e4894d94519e7",
+          "locator": "p2_readiness, gates, and current_state"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "ba9f59fa40e9cc8383346c83dfdc343360701af4c33fd7700331eea0c669ce3d",
+          "locator": "status, read_model_revision, and read_model_sha256"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "progress": "orchestration/autoresearch/p2-runtime-resilience-v2/ledger.jsonl",
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json",
+    "manifest": "archive/p2-runtime-resilience-v1-interrupted/manifest.json",
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "integration-push-pr-ci-merge",
+      "provenance": "agent-observed",
+      "summary": "The implementation commit still requires remote push, PR CI verification, and merge to main.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "main-inbox-launcher",
+      "provenance": "owner",
+      "summary": "After merge, preserve the old ignored goal bytes and create the new main inbox launcher bound to the final commit, tree, and runbook hash.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "owner-local-preflight-not-run",
+      "provenance": "agent-observed",
+      "summary": "Owner-local P2 measured preflight was not run and remains the exact next authorized action.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

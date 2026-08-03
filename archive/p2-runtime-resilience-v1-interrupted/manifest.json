@@ -1,0 +1,26 @@
+{
+  "schema_version": "myis.interrupted-patch-manifest.v1",
+  "archive_id": "p2-runtime-resilience-v1-interrupted-20260803",
+  "source_branch": "codex/p2-measured-autoresearch-closeout-v1",
+  "superseded_by_branch": "codex/p2-runtime-resilience-v2",
+  "source_git_commit": "26c62dfb0d7c31f3351d3318917b2d7d967d95b4",
+  "recorded_at_utc": "2026-08-03T09:48:39Z",
+  "evidence_class": "engineering_failed_attempt",
+  "scientific_authority": false,
+  "measured_execution_started": false,
+  "real_counters_changed": false,
+  "protected_surfaces_included": false,
+  "artifacts": [
+    {
+      "path": "archive/p2-runtime-resilience-v1-interrupted/interrupted-worktree.patch",
+      "sha256": "ac7ee0310e972c4b2412ebfa98c89fdcb685bfac1ea7e545adb8ca301e77701f",
+      "size_bytes": 96555,
+      "content": "sanitized tracked diff plus repository-relative untracked source, schema, and test bytes"
+    }
+  ],
+  "supersession": {
+    "old_goal_state": "no_active_goal_record",
+    "disposition": "historical_superseded",
+    "reason": "Windows os.kill(pid, 0) liveness probing terminated the pytest caller before durable runtime resilience was implemented."
+  }
+}

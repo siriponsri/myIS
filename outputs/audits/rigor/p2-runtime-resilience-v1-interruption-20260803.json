@@ -1,0 +1,135 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-runtime-resilience-v1-interruption-20260803",
+  "artifact": "Interrupted P2 measured autoresearch v1 implementation attempt",
+  "artifact_path": "archive/p2-runtime-resilience-v1-interrupted/interrupted-worktree.patch",
+  "artifact_sha256": "ac7ee0310e972c4b2412ebfa98c89fdcb685bfac1ea7e545adb8ca301e77701f",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": false,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "F001",
+      "F002"
+    ]
+  },
+  "overall": {
+    "grade": "Weak Reject",
+    "mean_score": 2.5,
+    "one_line_summary": "The attempt produced useful P2 scaffolding but used an unsafe Windows PID probe and had no tracked continuity ledger before implementation.",
+    "strengths": [
+      "The interrupted bytes are preserved with a repository-safe SHA-256 commitment.",
+      "No measured P2 run, candidate evaluation, shortlist freeze, selection exposure, D2, or D3 action occurred."
+    ],
+    "weaknesses": [
+      "os.kill(pid, 0) is unsafe for this Windows runtime and terminated the pytest process.",
+      "The long execution plan existed only outside the tracked worktree, leaving no durable checkpoint or launcher binding."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": [
+        "The failure was reproduced at the measured-state liveness path."
+      ],
+      "weaknesses": [
+        "The test process terminated before normal assertion output."
+      ],
+      "suggestions": [
+        "Replace PID probing with an OS-held advisory lock."
+      ]
+    },
+    "D2_falsifiability": {
+      "score": 3,
+      "strengths": [
+        "The focused state test identifies the failing runtime surface."
+      ],
+      "weaknesses": [
+        "No Windows non-termination regression existed."
+      ],
+      "suggestions": [
+        "Add process-liveness and crash-release regressions."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": [
+        "The failure is classified as engineering-only."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": [
+        "The intended lease metadata was hash-bound."
+      ],
+      "weaknesses": [
+        "Mutable file existence and PID liveness were treated as lock authority."
+      ],
+      "suggestions": [
+        "Make the OS lock authoritative and metadata observational."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 2,
+      "strengths": [
+        "The interrupted worktree is retained rather than discarded."
+      ],
+      "weaknesses": [
+        "No ledger existed before the attempt."
+      ],
+      "suggestions": [
+        "Track contract and trial ledger from the start of v2."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 1,
+      "strengths": [
+        "Scientific counters remained zero."
+      ],
+      "weaknesses": [
+        "The focused test could not complete and no full closeout validation was possible."
+      ],
+      "suggestions": [
+        "Implement v2 and rerun the full validation sequence."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/measured_state.py",
+      "target_entity": "_pid_is_alive",
+      "evidence_locator": "_pid_is_alive uses os.kill(pid, 0)",
+      "observation": "The Windows runtime interprets the signal-zero call in a way that terminates the pytest caller.",
+      "reasoning": "A liveness probe must never mutate or terminate the process it is inspecting.",
+      "suggestion": "Use an OS advisory lock held for the writer lifetime and process creation identity only as metadata."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D5_exploration_integrity",
+      "severity": "major",
+      "target_artifact": "Interrupted execution continuity",
+      "target_entity": "tracked runbook and ledger",
+      "evidence_locator": "archive manifest supersession record",
+      "observation": "The detailed goal was not tracked in the worktree and no ledger/checkpoint preceded edits.",
+      "reasoning": "A long-running repair must remain resumable after chat or process loss.",
+      "suggestion": "Track the runbook, contract, launcher binding, immutable events, and material-state reports."
+    }
+  ],
+  "questions_for_owner": [
+    "No Owner gate decision is required for this engineering recovery."
+  ],
+  "read_order": [
+    "archive/p2-runtime-resilience-v1-interrupted/manifest.json",
+    "archive/p2-runtime-resilience-v1-interrupted/interrupted-worktree.patch",
+    "src/myis_research/p2/measured_state.py",
+    "tests/test_p2_measured_state.py"
+  ]
+}

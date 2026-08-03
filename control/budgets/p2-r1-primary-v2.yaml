@@ -1,0 +1,43 @@
+schema_version: myis.p2-budget-profile.v1
+profile_id: p2-r1-primary-v2
+phase_id: P2_SCOPE_DEVELOPMENT
+arm: R1
+campaign_id: scope-autoindex-v1
+campaign_revision: scope-autoindex-v1-p2-r1-primary-v2
+limits:
+  max_candidates_total: 32
+  max_adaptive_candidates: 20
+  max_adaptive_iterations: 5
+  candidates_per_iteration: 4
+  max_index_builds: 32
+  max_selection_finalists: 4
+  selection_exposure_limit: 1
+candidate_allocation:
+  frozen_controls: 4
+  preregistered_patent_candidates: 8
+  adaptive_candidates: 20
+runtime:
+  max_wall_clock_seconds: 432000
+  measurement_budget_seconds: 345600
+  overhead_reserve_seconds: 86400
+  per_candidate_timeout_seconds: 10800
+  prevent_system_sleep: true
+resources:
+  paid_api_budget_usd: 0
+  gpu_budget_usd: 0
+  network_model_download: false
+  provider_fallback: false
+  proposer_mode: hybrid_codex_ephemeral
+stopping:
+  min_iterations_before_early_stop: 4
+  no_improvement_patience: 2
+  selection_rule: strictly_greater_reject_ties
+  whole_batch_admission: true
+  valid_reasons:
+    - wall_clock_exhausted
+    - development_impact_gate
+    - no_grounded_hypotheses
+    - owner_stop_after_checkpoint
+immutability:
+  change_after_first_measured_run: new_campaign_revision_required
+  historical_results_reinterpretation: forbidden

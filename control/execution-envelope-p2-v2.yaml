@@ -1,0 +1,49 @@
+schema_version: myis.execution-envelope.v2
+envelope_id: envelope-p2-r1-primary-v2
+status: ready_planned
+parent_envelope:
+  path: control/execution-envelope-p2.yaml
+  purpose: preserve_p2_v1_readiness_hash_boundary
+authority:
+  standing_decision: D1_START_CAMPAIGN
+  active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  standing_authorization: owner_local_reversible_cpu_only
+scope:
+  phase_id: P2_SCOPE_DEVELOPMENT
+  arm: R1
+  campaign_id: scope-autoindex-v1
+  campaign_revision: scope-autoindex-v1-p2-r1-primary-v2
+  budget_profile_ref: control/budgets/p2-r1-primary-v2.yaml
+  train_selection_only: true
+  final_split_open: false
+  selection_access_requires_shortlist_freeze: true
+  detached_supervisor_required: true
+  durable_event_journal_required: true
+  resume_verification_required: true
+resources:
+  cpu_only: true
+  gpu: false
+  paid_api: false
+  network_model_download: false
+  provider_fallback: false
+  protected_store_required: true
+  proposer:
+    mode: hybrid_codex_ephemeral
+    provider_model_revision_frozen_at_preflight: true
+    fallback: forbidden
+protected_boundary:
+  output_mode: aggregate_hash_count_only
+  qrels: forbidden
+  membership: forbidden
+  query_ids: forbidden
+  per_query_outcomes: forbidden
+  raw_provider_payloads: forbidden
+  credentials: forbidden
+prohibited_actions:
+  - D2_OPEN_FINAL
+  - D3_SUBMIT_RELEASE
+  - gpu_execution
+  - paid_api
+  - external_release
+  - selection_without_validated_shortlist_freeze
+  - provider_fallback

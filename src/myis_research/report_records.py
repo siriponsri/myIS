@@ -23,6 +23,8 @@ P2_PROJECTION_SOURCE_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-projecti
 P2_PROJECTION_SOURCE_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json"
 P2_TRACKED_OWNER_PATH_INITIAL_AUDIT = "outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json"
 P2_TRACKED_OWNER_PATH_REPAIR_AUDIT = "outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json"
+P2_RUNTIME_INTERRUPTION_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json"
+P2_RUNTIME_RECOVERY_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -173,6 +175,25 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 content_sha256=str(proposal.get("proposal_sha256")),
                 explanation="Records an unadopted Owner-review draft; it does not register or hash-lock measured candidates.",
             ))
+        for artifact_id, title, artifact_type, uri, explanation in (
+            ("p2-runtime-v1-interrupted-manifest", "Interrupted P2 runtime v1 archive manifest", "manifest", "archive/p2-runtime-resilience-v1-interrupted/manifest.json", "Binds the sanitized failed-attempt patch and records that no measured counters changed."),
+            ("p2-runtime-v2-runbook", "P2 measured autoresearch v2 runbook", "runbook", "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md", "Provides the tracked detached-supervisor, journal, resume, proposer, and closeout contract."),
+            ("p2-runtime-v2-profile", "P2 R1 primary v2 budget profile", "budget", "control/budgets/p2-r1-primary-v2.yaml", "Freezes the 120-hour wall clock, 24-hour overhead reserve, and whole-batch admission rule."),
+            ("p2-runtime-v2-envelope", "P2 R1 primary v2 execution envelope", "control", "control/execution-envelope-p2-v2.yaml", "Preserves v1 history and authorizes only Owner-local reversible CPU execution."),
+            ("p2-runtime-v2-revision", "P2 R1 primary v2 campaign revision", "control", "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml", "Records the additive runtime-resilience revision before the first measured run."),
+        ):
+            digest = _hash_file(root, uri)
+            if digest:
+                result.append(_artifact(
+                    artifact_id=artifact_id,
+                    title=title,
+                    artifact_type=artifact_type,
+                    evidence_class="engineering",
+                    scientific_authority=False,
+                    safe_uri=uri,
+                    content_sha256=digest,
+                    explanation=explanation,
+                ))
         for artifact_id, title, uri, explanation in (
             (
                 "p2-preflight-completion-audit-initial",
@@ -221,6 +242,18 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 "Repaired P2 preflight tracked Owner-path audit",
                 P2_TRACKED_OWNER_PATH_REPAIR_AUDIT,
                 "Validates portable path guidance, fail-closed legacy execution configuration, and tracked-artifact regression coverage.",
+            ),
+            (
+                "p2-runtime-resilience-v1-interruption-audit",
+                "Interrupted P2 runtime v1 failure audit",
+                P2_RUNTIME_INTERRUPTION_AUDIT,
+                "Retains the unsafe Windows PID-probe and continuity failure as engineering evidence.",
+            ),
+            (
+                "p2-runtime-resilience-v2-recovery-audit",
+                "P2 runtime resilience v2 recovery audit",
+                P2_RUNTIME_RECOVERY_AUDIT,
+                "Validates advisory locking, hash-chained recovery, detached supervision, proposer isolation, and zero measured counters.",
             ),
         ):
             digest = _hash_file(root, uri)
@@ -289,8 +322,13 @@ def _bindings(root: Path, model: Mapping[str, Any], phase_id: str) -> dict[str, 
         review_source = official_review.get("source", {}) if isinstance(official_review.get("source"), Mapping) else {}
         fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
         observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
-        bindings["budget_profile"] = {"uri": "control/budgets/p2-r1-primary-v1.yaml", "sha256": p2.get("budget_profile_sha256")}
-        bindings["execution_envelope"] = {"uri": "control/execution-envelope-p2.yaml", "sha256": _hash_file(root, "control/execution-envelope-p2.yaml")}
+        source = p2.get("source", {}) if isinstance(p2.get("source"), Mapping) else {}
+        profile_uri = str(source.get("profile", ""))
+        envelope_uri = str(source.get("execution_envelope", ""))
+        revision_uri = str(source.get("campaign_revision", ""))
+        bindings["budget_profile"] = {"uri": profile_uri, "sha256": p2.get("budget_profile_sha256")}
+        bindings["execution_envelope"] = {"uri": envelope_uri, "sha256": _hash_file(root, envelope_uri)}
+        bindings["campaign_revision_record"] = {"uri": revision_uri, "sha256": _hash_file(root, revision_uri)}
         bindings["campaign_revision"] = p2.get("campaign_revision")
         bindings["static_review"] = {"uri": "orchestration/audits/p2-readiness/index.json", "sha256": review_source.get("index_sha256")}
         bindings["fixture_receipt"] = {"uri": fixture.get("receipt_uri"), "sha256": fixture.get("receipt_sha256")}
@@ -375,6 +413,19 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "status": "repaired_and_validated",
                 "counters_changed": False,
             })
+        runtime_initial_sha256 = _hash_file(root, P2_RUNTIME_INTERRUPTION_AUDIT)
+        runtime_repair_sha256 = _hash_file(root, P2_RUNTIME_RECOVERY_AUDIT)
+        if runtime_initial_sha256 and runtime_repair_sha256:
+            failures.append({
+                "failure_id": "p2-runtime-resilience-v1-interruption-20260803",
+                "failure_uri": P2_RUNTIME_INTERRUPTION_AUDIT,
+                "failure_sha256": runtime_initial_sha256,
+                "recovery_id": "p2-runtime-resilience-v2-recovery-20260803",
+                "recovery_uri": P2_RUNTIME_RECOVERY_AUDIT,
+                "recovery_sha256": runtime_repair_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
     if scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
         result = "P1 measured train/selection evidence is complete within its declared development boundary."
@@ -385,7 +436,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
         output = f"Static review, repository-only fixture provenance, and the repaired fail-closed preflight contract are retained; P2 preflight state is {preflight_status}, the candidate proposal is {proposal.get('adoption', 'not_adopted')}, and no measured P2 artifact exists."
         result = "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero."
-        interpretation = "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, negative-test behavior, and cross-platform output and source-hash stability. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
+        interpretation = "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
         decision_status = str(p2.get("preflight_status", "not_started"))
     elif phase_id == "P0_FOUNDATION":
         output = "Canonical control, schema, protected-boundary, and projection contracts."
@@ -452,7 +503,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         },
         "input_bindings": _bindings(root, model, phase_id),
         "work_summary": (
-            "The initial P2 preflight completion, report-byte, and projection source-hash audits were preserved, all recovery chains were validated, and no Owner-local preflight or measured execution was started."
+            "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
         ),

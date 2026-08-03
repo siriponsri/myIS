@@ -136,3 +136,76 @@ def test_scope_schema_rejects_unknown_fields_and_global_four_unit_field() -> Non
     payload["constraints"]["max_searchable_units_per_record"] = 4
     with pytest.raises(Exception):
         parse_scope_spec(payload)
+
+
+def test_p2_passage_unitization_is_bounded_and_reversed_input_stable() -> None:
+    payload = scope_spec(views=[{
+        "view_id": "passages",
+        "kind": "passage",
+        "source_fields": ["title", "abstract"],
+        "family_field": "family_id",
+        "publication_field": "publication_id",
+        "span_scheme": "token-v1",
+        "compiler_version": "1.0.0",
+        "normalization_version": "1.0.0",
+        "aggregation": "family_maxp",
+    }])
+    payload["graph"] = {"unitization": {"passages": {
+        "mode": "token_passages",
+        "window_tokens": 3,
+        "stride_tokens": 3,
+        "max_units": 4,
+        "overflow_policy": "first_last_balanced",
+    }}}
+    rows = [
+        {"family_id": "f2", "publication_id": "f2", "title": "one two", "abstract": "three four five six seven eight nine ten eleven twelve thirteen"},
+        {"family_id": "f1", "publication_id": "f1", "title": "alpha beta", "abstract": "gamma delta epsilon zeta eta theta iota kappa lambda mu nu"},
+    ]
+    first = compile_scope(payload, rows)
+    second = compile_scope(payload, list(reversed(rows)))
+    assert first.as_dict() == second.as_dict()
+    assert len(first.units) == 8
+    assert all("tokens:" in unit.source_span for unit in first.units)
+    assert {unit.publication_id for unit in first.units} == {"f1", "f2"}
+
+
+def test_p2_claim_elements_retain_first_and_last_source_regions() -> None:
+    payload = scope_spec(views=[{
+        "view_id": "claims",
+        "kind": "claim",
+        "source_fields": ["claims_text"],
+        "family_field": "family_id",
+        "publication_field": "publication_id",
+        "span_scheme": "claim-v1",
+        "compiler_version": "1.0.0",
+        "normalization_version": "1.0.0",
+        "aggregation": "family_maxp",
+    }])
+    payload["fields"].append({"field_id": "claims_text", "source": "claims_text", "role": "text"})
+    payload["graph"] = {"unitization": {"claims": {
+        "mode": "claim_elements",
+        "max_units": 4,
+        "overflow_policy": "first_last_balanced",
+    }}}
+    claims = "\n".join(f"{index}. claim text {index}" for index in range(1, 7))
+    compiled = compile_scope(payload, [{
+        "family_id": "family-1",
+        "publication_id": "family-1",
+        "title": "unused",
+        "abstract": "unused",
+        "claims_text": claims,
+    }])
+    assert [unit.text.split()[0] for unit in compiled.units] == ["1.", "2.", "5.", "6."]
+    assert len(compiled.units) == 4
+
+
+def test_p2_multiview_rejects_undeclared_source_fields() -> None:
+    payload = scope_spec()
+    payload["graph"] = {"unitization": {"tac": {
+        "mode": "multiview",
+        "max_units": 4,
+        "source_field_groups": [["title"], ["claims_text"]],
+    }}}
+    with pytest.raises(KernelContractError) as error:
+        compile_scope(payload, [{"family_id": "f1", "publication_id": "p1", "title": "text", "abstract": "more"}])
+    assert error.value.category is FailureCategory.SCHEMA

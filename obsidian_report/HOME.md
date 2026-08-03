@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0"
-read_model_sha256: "bfae45cdf823b16e4c67835230208e08511131178446c16ef863b6a772dd3d80"
-source_commit: "69e0f9139a597e43cc8e3f54525f3723c201aca4"
+read_model_revision: "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f"
+read_model_sha256: "d64276b9c262f42d76cafacb5fced247d589359e70deaa5d8d560de77a789707"
+source_commit: "831872ff1720117e2d44c115e15e7cba0a4bb236"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0"
-last_material_update: "2026-08-02T12:25:48Z"
+generated_from_revision: "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f"
+last_material_update: "2026-08-03T13:31:30Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-02T12:25:48Z"
-updated_at: "2026-08-02T12:25:48Z"
+created_at: "2026-08-03T13:31:30Z"
+updated_at: "2026-08-03T13:31:30Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -75,10 +75,10 @@ P1 CPU baseline ผ่าน four-slot manifest, validation reports, package bin
 | Official static review | Round 3 accept / accepted_static_contract_review |
 | Fixture pilot | passed / fixture / scientific authority False |
 | Synthetic lifecycle | 32 candidates; 5 iterations; shortlist 4; fixture selection 1 |
-| Profile | p2-r1-primary-v1 / d5d9d48d8a754168b257367493b8e65fbfcfefc1901408c96336e524c6308e4c |
+| Profile | p2-r1-primary-v2 / 9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324 |
 | Real candidates | 0 / 32 |
 | Real shortlist | 0 / 4 |
-| Runtime | 259200 wall seconds; 10800 per candidate |
+| Runtime | 432000 wall seconds; 10800 per candidate |
 | Real freeze / selection | not_started; 0/1 |
 | Protected access | False |
 | Scientific claim | no_measured_claim |

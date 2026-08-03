@@ -10,7 +10,7 @@
     "request_id": {"type": "string", "minLength": 1},
     "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
     "campaign_revision": {"type": "string", "minLength": 1},
-    "budget_profile_id": {"const": "p2-r1-primary-v1"},
+    "budget_profile_id": {"type": "string", "pattern": "^p2-r1-primary-v[0-9]+$"},
     "budget_profile_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "baseline_commitment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "baseline_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},

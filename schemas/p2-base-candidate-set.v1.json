@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-base-candidate-set:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "candidate_set_id", "phase_id", "campaign_id", "campaign_revision", "status", "adoption_authority", "source_contract_uri", "source_contract_sha256", "compiler_uri", "compiler_sha256", "adapter_rule", "frozen_controls", "preregistered_candidates", "protected_boundary", "candidate_set_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-base-candidate-set.v1"},
+    "candidate_set_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "campaign_revision": {"type": "string", "minLength": 1},
+    "status": {"const": "adopted_hash_locked"},
+    "adoption_authority": {"const": "D1_START_CAMPAIGN_plus_owner_authored_goal"},
+    "source_contract_uri": {"$ref": "#/$defs/uri"},
+    "source_contract_sha256": {"$ref": "#/$defs/hash"},
+    "compiler_uri": {"$ref": "#/$defs/uri"},
+    "compiler_sha256": {"$ref": "#/$defs/hash"},
+    "adapter_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family_id_source", "publication_id_source", "max_searchable_units_per_family", "overflow_policy"],
+      "properties": {
+        "family_id_source": {"const": "relevant_id"},
+        "publication_id_source": {"const": "relevant_id"},
+        "max_searchable_units_per_family": {"const": 4},
+        "overflow_policy": {"const": "first_last_balanced_with_explicit_offsets"}
+      }
+    },
+    "frozen_controls": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/candidate"}},
+    "preregistered_candidates": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"$ref": "#/$defs/candidate"}},
+    "protected_boundary": {"$ref": "#/$defs/boundary"},
+    "candidate_set_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "candidate_class", "arm", "role", "hypothesis", "declared_axis", "matched_ablation_id", "scope_spec", "spec_sha256", "scientific_payload_sha256", "axis_values", "retrieval"],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "candidate_class": {"enum": ["frozen_control", "preregistered_patent"]},
+        "arm": {"enum": ["R0", "R0-W", "R1"]},
+        "role": {"enum": ["baseline", "control", "candidate", "matched_ablation"]},
+        "hypothesis": {"type": "string", "minLength": 1},
+        "declared_axis": {"type": "string", "minLength": 1},
+        "matched_ablation_id": {"type": ["string", "null"]},
+        "scope_spec": {"type": "object"},
+        "spec_sha256": {"$ref": "#/$defs/hash"},
+        "scientific_payload_sha256": {"$ref": "#/$defs/hash"},
+        "axis_values": {"type": "object", "minProperties": 1},
+        "retrieval": {"type": "object"}
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["final_split_open", "d2_open_final", "d3_submit_release", "gpu", "paid_api", "network_model_download", "provider_fallback"],
+      "properties": {
+        "final_split_open": {"const": false},
+        "d2_open_final": {"const": false},
+        "d3_submit_release": {"const": false},
+        "gpu": {"const": false},
+        "paid_api": {"const": false},
+        "network_model_download": {"const": false},
+        "provider_fallback": {"const": false}
+      }
+    }
+  }
+}

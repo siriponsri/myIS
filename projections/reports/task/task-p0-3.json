@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
+      "content_sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
+      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-02T12:25:48Z",
-  "generated_from_revision": "a05ccc5a07a125e415cd3927607e3e4d9fbbf6efe0393dc8b73adb7c6aee0cf0",
-  "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
+  "generated_at": "2026-08-03T13:31:30Z",
+  "generated_from_revision": "5f5277c8ec1d5a80834469743994be33147331784060e2595a5e74376e0a646f",
+  "git_commit": "831872ff1720117e2d44c115e15e7cba0a4bb236",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -107,20 +107,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "69e0f9139a597e43cc8e3f54525f3723c201aca4",
+    "git_commit": "831872ff1720117e2d44c115e15e7cba0a4bb236",
     "source_of_truth": {
-      "sha256": "31c0e0209485b82f59f89781d0da9d1e71ea3cefc453e1c7966bd9faa19aa62e",
+      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-02T12:25:48Z",
+  "last_material_update": "2026-08-03T13:31:30Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "4b44bb2cf5be6b2657bb670b92116450e3dbac927eb7314c7515037810efab40",
+  "report_sha256": "2cadc355e4aa10ab3ec0a389ed1b294f5a421f71e3497d00697aca1251c8903c",
   "report_type": "task",
   "result": {
     "decision": "completed",

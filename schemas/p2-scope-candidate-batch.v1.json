@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-scope-candidate-batch:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "batch_id", "request_id", "campaign_revision", "iteration", "feedback_sha256", "proposer_invocation_sha256", "status", "candidates", "batch_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-scope-candidate-batch.v1"},
+    "batch_id": {"type": "string"},
+    "request_id": {"type": "string"},
+    "campaign_revision": {"type": "string"},
+    "iteration": {"type": "integer", "minimum": 1},
+    "feedback_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "proposer_invocation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"const": "frozen_before_measurement"},
+    "candidates": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/candidate"}},
+    "batch_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "parent_candidate_id", "hypothesis_id", "hypothesis", "role", "declared_axis", "matched_ablation_id", "scope_spec", "spec_sha256", "scientific_payload_sha256", "axis_values"],
+      "properties": {
+        "candidate_id": {"type": "string"},
+        "parent_candidate_id": {"type": "string"},
+        "hypothesis_id": {"type": "string"},
+        "hypothesis": {"type": "string", "minLength": 1},
+        "role": {"enum": ["exploit", "matched_ablation", "orthogonal", "diversity"]},
+        "declared_axis": {"type": "string"},
+        "matched_ablation_id": {"type": ["string", "null"]},
+        "scope_spec": {"type": "object"},
+        "spec_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "scientific_payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "axis_values": {"type": "object", "minProperties": 1}
+      }
+    }
+  }
+}
