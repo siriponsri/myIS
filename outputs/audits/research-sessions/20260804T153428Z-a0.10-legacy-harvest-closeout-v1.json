@@ -1,0 +1,217 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260804T153428Z-a0.10-legacy-harvest-closeout-v1",
+  "run_id": null,
+  "goal_id": "A0.10_LEGACY_CODE_HARVEST_AND_PHASE_SCAFFOLDING",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-04T15:34:28Z",
+  "scope": "Adopt Goal U, harvest reusable legacy code into tested ArmIndex scaffolding, audit duplicate and unused files, consolidate output roots, repair independent-review findings, and close the synthetic-only A0.10 engineering task.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "13d57b2ea38608b749b5de9c0fd44fa60c7843eb",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260804T153428Z-a0.10-legacy-harvest-closeout-v1.json",
+      "projections/sessions/20260804T153428Z-a0.10-legacy-harvest-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner added Goal U as canonical Task A0.10 and authorized the legacy-code harvest, duplicate and unused-file audit, output-root consolidation, and exact-path cleanup within the existing protected-data boundary.",
+      "evidence_refs": [
+        {
+          "path": "control/migrations/armindex-a0.10-amendment.v1.yaml",
+          "sha256": "e36e007a84c947ceacf85f40f9b7c76204966c3d2ba6b7e30a4d1db6c41ec148",
+          "locator": "task_id, purpose, owner_additions, safety_boundary, and acceptance"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The harvest reviewed 26 provenance-bound components, adopted or refactored 9, rejected 5, and delivered typed contracts plus thin ArmIndex scaffolding without making the legacy repository active authority.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json",
+          "sha256": "46fa064f0ed3f73352028ca3443096e33244c0cc68898cafdb02c59fc2328eaf",
+          "locator": "source_repositories, components, dispositions, and ledger_sha256"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+          "sha256": "07349eacb3e8b2c878e977a00a3cd9c45c1264a2d34427b7bc55e7f32c2a31a2",
+          "locator": "status, components.reviewed/adopted/rejected, resource_counters, and receipt_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "A disposable synthetic ARM-01 BM25 vertical slice compiled, indexed, searched, aggregated, and emitted validated manifest and receipt commitments while all real measured, Selection, and Final counters remained zero.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/armindex/a0.10/vertical-slice-v1/manifest.json",
+          "sha256": "262788d2fb8cd3ece9be2b209f955832fc00b6460c4a33a626d8c209efd20b3e",
+          "locator": "fixture_id, backend, artifact commitments, safety, and manifest_sha256"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+          "sha256": "07349eacb3e8b2c878e977a00a3cd9c45c1264a2d34427b7bc55e7f32c2a31a2",
+          "locator": "fixture_status, fixture_receipt_uri, fixture_receipt_sha256, and counters"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The repository audit moved 12 tracked dashboard images byte-for-byte from output to outputs, removed 49 verified regenerable cache files totaling 485,308 bytes, and found no tracked source duplicate safe to delete.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json",
+          "sha256": "1fcae4ac1966706194df7d76d730516f62507eeb246103495eafa65bb959045b",
+          "locator": "duplicate_audit.safe_tracked_source_duplicates_deleted, unused_path_cleanup, and output_root_consolidation"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The first independent rigor review returned REVISE with a Weak Accept mean score of 3.5 and three findings: next-action drift, incomplete receipt-bound projection evidence, and non-reproducible ThaiPha-Lex source verification.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json",
+          "sha256": "a69df70559a949c1f7b1d60c02b4f6461215f2724297068dd21cab8cc0900353",
+          "locator": "decision, overall.grade, overall.mean_score, and findings"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The recovery unified the exact A0.8 handoff, bound one source receipt to all six projection sinks, and verified all 14 ThaiPha-Lex ledger components from Git objects; the second independent review returned ACCEPT with mean score 4.33 and all three findings resolved.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-accept-20260804.json",
+          "sha256": "4049ac9ccfaed94378484cdc7641eb8ee82dc0089a0b41db4421d40b78d73ce4",
+          "locator": "decision, overall.mean_score, resolved_findings, and structural_validation"
+        },
+        {
+          "path": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json",
+          "sha256": "417e9559d102dca6d34c50c771310b91a9511d143276df94e5a706fb1c2753ab",
+          "locator": "verified_from_git_object_database, verified_component_count, components, and receipt_sha256"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "03ded54f302aac7347d5067c3b1cd0670bfd969e761b0eae7bdfdfb867da365e",
+          "locator": "source_receipt_uri, source_receipt_sha256, projection_events, and status"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0007",
+      "sequence": 7,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Raw SHA-256 commitments over canonical ArmIndex controls, schemas, ledgers, receipts, and migration records require explicit byte-preservation attributes so clean Windows and POSIX checkouts validate the same evidence.",
+      "evidence_refs": [
+        {
+          "path": ".gitattributes",
+          "sha256": "99f7b81a671a1d8aaeb0f2a126f97d1748de032acd13959322cf900ba1d5a59b",
+          "locator": "ArmIndex schemas, ledgers, receipts, migration controls, and migration records byte-preservation rules"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0008",
+      "sequence": 8,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Final recorded verification passed 377 tests plus Ruff, layout, assets, policy scans, session audit, ArmIndex validation and disposable fixture, MLflow doctor, Brain literature validation, deterministic report sync/check, and whitespace checks.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "13d9d618ba0a5e430363e649bbe42f094b9c42b743370d7b043ae33c6c201e91",
+          "locator": "Done; final closeout verification summary"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0009",
+      "sequence": 9,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "A0.10 is complete as engineering migration evidence with scientific authority false; A0 remains in progress, all ArmIndex measured, Selection, and Final counters remain zero, and the next authorized task is synthetic-only A0.8 while A1 stays locked until A0.9 closeout.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "999a5763d5b1b44c717656bf39fa2031b99ca92173e546a7f6720e49df2170ee",
+          "locator": "Active campaign, A0 task map, safety boundary, and Next authorized action"
+        },
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "9afcdf4dd97ec6fac5f4561e520b926d7f01d9f9529089cf757683debc17ce24",
+          "locator": "armindex.legacy_code_harvest, armindex.counters, phase/task status, and next_command"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+          "sha256": "07349eacb3e8b2c878e977a00a3cd9c45c1264a2d34427b7bc55e7f32c2a31a2",
+          "locator": "status, evidence_class, scientific_authority, counters, and next_authorized_action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": "PLAN.md",
+    "progress": "HANDOFF.md",
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-accept-20260804.json",
+    "manifest": "outputs/fixtures/armindex/a0.10/vertical-slice-v1/manifest.json",
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "a0-8-synthetic-feasibility-fixtures",
+      "provenance": "agent-observed",
+      "summary": "Execute A0.8 compute and storage feasibility fixtures using synthetic fixtures only, without protected data, measured retrieval, model download, GPU, paid APIs, Selection, or Final.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "a0-9-before-a1",
+      "provenance": "agent-observed",
+      "summary": "Complete A0.9 validation, safety, and closeout before opening A1 baseline and multi-arm screening work.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "external-release-license-decision",
+      "provenance": "agent-observed",
+      "summary": "The root software license still requires an Owner legal decision before external release; it does not block the current engineering migration.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
