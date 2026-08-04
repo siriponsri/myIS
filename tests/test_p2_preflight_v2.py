@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import shutil
 import subprocess
+import tempfile
 
 import pytest
 
@@ -226,89 +228,93 @@ def test_clean_clone_cli_preflight_reaches_passed_pending_owner(
     ).stdout:
         pytest.skip("clean committed checkout required for the end-to-end binding test")
 
-    clone = tmp_path / "repository"
-    subprocess.run(
-        ["git", "clone", "--quiet", "--no-hardlinks", str(ROOT), str(clone)],
-        check=True,
-        capture_output=True,
-    )
-    scope_hashes = current_scope_hashes(clone)
-    request = build_measured_request(
-        repository_root=clone,
-        request_id="p2-v2-clean-clone-preflight",
-        budget_profile_uri=PROFILE_URI,
-        execution_envelope_uri=ENVELOPE_URI,
-        base_candidate_set_uri=BASE_SET_URI,
-        adaptive_policy_uri=POLICY_URI,
-        proposer_contract_uri=PROPOSER_URI,
-        proposer_identity={
-            "provider": "sanitized-test-provider",
-            "model": "test-model",
-            "revision": "test-revision",
-            "effort": "test",
-            "tool_version": "test",
-            "instructions_sha256": "1" * 64,
-            "output_schema_sha256": "2" * 64,
-            "seed": 0,
-            "fallback": False,
-        },
-        input_hashes={"dataset_lineage_sha256": "3" * 64},
-        scope_hashes=scope_hashes,
-        global_counters={
+    clone_parent = Path(tempfile.mkdtemp(prefix="p2v2-"))
+    clone = clone_parent / "repository"
+    try:
+        subprocess.run(
+            ["git", "clone", "--quiet", "--no-hardlinks", str(ROOT), str(clone)],
+            check=True,
+            capture_output=True,
+        )
+        scope_hashes = current_scope_hashes(clone)
+        request = build_measured_request(
+            repository_root=clone,
+            request_id="p2-v2-clean-clone-preflight",
+            budget_profile_uri=PROFILE_URI,
+            execution_envelope_uri=ENVELOPE_URI,
+            base_candidate_set_uri=BASE_SET_URI,
+            adaptive_policy_uri=POLICY_URI,
+            proposer_contract_uri=PROPOSER_URI,
+            proposer_identity={
+                "provider": "sanitized-test-provider",
+                "model": "test-model",
+                "revision": "test-revision",
+                "effort": "test",
+                "tool_version": "test",
+                "instructions_sha256": "1" * 64,
+                "output_schema_sha256": "2" * 64,
+                "seed": 0,
+                "fallback": False,
+            },
+            input_hashes={"dataset_lineage_sha256": "3" * 64},
+            scope_hashes=scope_hashes,
+            global_counters={
+                "measured_runs": 0,
+                "candidate_count": 0,
+                "shortlist_count": 0,
+                "selection_accesses": 0,
+            },
+        )
+        request_path = tmp_path / "owner-local-preflight-request.json"
+        request_path.write_text(json.dumps(request, sort_keys=True) + "\n", encoding="utf-8")
+        first = tmp_path / "owner-store"
+        second = tmp_path / "mlflow-store"
+        first.mkdir()
+        second.mkdir()
+        monkeypatch.setenv("MYIS_STORE", str(first.resolve()))
+        monkeypatch.setenv("MYIS_MLFLOW_STORE", str(second.resolve()))
+
+        exit_code = p2_main([
+            "preflight",
+            "--request",
+            str(request_path),
+            "--repository-root",
+            str(clone),
+            "--require-stores",
+            "--required-free-space-bytes",
+            "0",
+        ])
+        encoded = capsys.readouterr().out
+        receipt = json.loads(encoded)
+
+        assert exit_code == 0
+        assert receipt["status"] == "passed_pending_owner"
+        assert receipt["schema_version"] == "myis.p2-preflight-receipt.v2"
+        assert all(item["status"] == "passed" for item in receipt["checks"])
+        assert receipt["request_schema_version"] == "myis.p2-measured-request.v1"
+        assert receipt["request_sha256"] == canonical_sha256(request)
+        assert receipt["git_commit"] == request["execution_source_commit"]
+        assert receipt["git_tree"] == request["execution_source_tree"]
+        assert receipt["evaluator_compatibility_sha256"] == scope_hashes["evaluator_compatibility_sha256"]
+        assert receipt["execution_envelope_sha256"] == request["execution_envelope_sha256"]
+        assert receipt["safe_path_boundary"]["stores_disjoint"] is True
+        assert receipt["measured_execution"] is False
+        assert receipt["protected_data_accessed"] is False
+        assert receipt["counters"] == {
             "measured_runs": 0,
             "candidate_count": 0,
             "shortlist_count": 0,
             "selection_accesses": 0,
-        },
-    )
-    request_path = tmp_path / "owner-local-preflight-request.json"
-    request_path.write_text(json.dumps(request, sort_keys=True) + "\n", encoding="utf-8")
-    first = tmp_path / "owner-store"
-    second = tmp_path / "mlflow-store"
-    first.mkdir()
-    second.mkdir()
-    monkeypatch.setenv("MYIS_STORE", str(first.resolve()))
-    monkeypatch.setenv("MYIS_MLFLOW_STORE", str(second.resolve()))
-
-    exit_code = p2_main([
-        "preflight",
-        "--request",
-        str(request_path),
-        "--repository-root",
-        str(clone),
-        "--require-stores",
-        "--required-free-space-bytes",
-        "0",
-    ])
-    encoded = capsys.readouterr().out
-    receipt = json.loads(encoded)
-
-    assert exit_code == 0
-    assert receipt["status"] == "passed_pending_owner"
-    assert receipt["schema_version"] == "myis.p2-preflight-receipt.v2"
-    assert all(item["status"] == "passed" for item in receipt["checks"])
-    assert receipt["request_schema_version"] == "myis.p2-measured-request.v1"
-    assert receipt["request_sha256"] == canonical_sha256(request)
-    assert receipt["git_commit"] == request["execution_source_commit"]
-    assert receipt["git_tree"] == request["execution_source_tree"]
-    assert receipt["evaluator_compatibility_sha256"] == scope_hashes["evaluator_compatibility_sha256"]
-    assert receipt["execution_envelope_sha256"] == request["execution_envelope_sha256"]
-    assert receipt["safe_path_boundary"]["stores_disjoint"] is True
-    assert receipt["measured_execution"] is False
-    assert receipt["protected_data_accessed"] is False
-    assert receipt["counters"] == {
-        "measured_runs": 0,
-        "candidate_count": 0,
-        "shortlist_count": 0,
-        "selection_accesses": 0,
-        "baseline_commitment_present": False,
-        "freeze_started": False,
-    }
-    assert receipt["gates"]["D2_OPEN_FINAL"] == "waiting_owner"
-    assert receipt["gates"]["D3_SUBMIT_RELEASE"] == "waiting_owner"
-    assert receipt["final_split_open"] is False
-    assert str(first.resolve()) not in encoded
-    assert str(second.resolve()) not in encoded
-    assert validate_p2_preflight_receipt(receipt, repository_root=clone) == receipt
-    assert not (clone / "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json").exists()
-    assert not any((clone / "campaigns/scope-autoindex-v1/requests").glob("*p2-v2-clean-clone*"))
+            "baseline_commitment_present": False,
+            "freeze_started": False,
+        }
+        assert receipt["gates"]["D2_OPEN_FINAL"] == "waiting_owner"
+        assert receipt["gates"]["D3_SUBMIT_RELEASE"] == "waiting_owner"
+        assert receipt["final_split_open"] is False
+        assert str(first.resolve()) not in encoded
+        assert str(second.resolve()) not in encoded
+        assert validate_p2_preflight_receipt(receipt, repository_root=clone) == receipt
+        assert not (clone / "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json").exists()
+        assert not any((clone / "campaigns/scope-autoindex-v1/requests").glob("*p2-v2-clean-clone*"))
+    finally:
+        shutil.rmtree(clone_parent, ignore_errors=False)
