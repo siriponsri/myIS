@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "4a52dc6161c65227c066477dc02f997b98ab6184e03692b872ff2bf54f22fed1"
-read_model_sha256: "16918ffad461541309d82827f0dd1fe0de3b0834d49b17af1f1047408563f446"
-source_commit: "9b297bd305ceaff9c0f6a2df4f04627eb66aab11"
+read_model_revision: "291fc1a9ac4684b0f3b2f833faddd8ba684919f1501d9f0a249ec1577dcd1efb"
+read_model_sha256: "62e08d21297cc7ef560ce05906c2677124b51573a7be3d7b137a6de6df8871a0"
+source_commit: "0e0fca2100631843795f63e15d4a85ecc3312835"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "4a52dc6161c65227c066477dc02f997b98ab6184e03692b872ff2bf54f22fed1"
-last_material_update: "2026-08-03T15:43:42Z"
+generated_from_revision: "291fc1a9ac4684b0f3b2f833faddd8ba684919f1501d9f0a249ec1577dcd1efb"
+last_material_update: "2026-08-04T08:10:39Z"
 next_authorized_action: "Owner-local P2 measured preflight"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-03T15:43:42Z"
-updated_at: "2026-08-03T15:43:42Z"
+created_at: "2026-08-04T08:10:39Z"
+updated_at: "2026-08-04T08:10:39Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -48,7 +48,7 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `c6872ffaecd82e117acbcba5822346c5e438dc9b5f7b83972416dcff9d8c0ce7`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 9b297bd305ceaff9c0f6a2df4f04627eb66aab11
+- `git_commit`: 0e0fca2100631843795f63e15d4a85ecc3312835
 - `budget_profile`: `control/budgets/p2-r1-primary-v2.yaml`; SHA-256 `9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324`
 - `execution_envelope`: `control/execution-envelope-p2-v2.yaml`; SHA-256 `dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d`
 - `campaign_revision_record`: `control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml`; SHA-256 `5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822`
@@ -90,7 +90,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | Repaired P2 preflight projection source-hash audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json` | `842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107` | `validated` |
 | Initial P2 preflight tracked Owner-path audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json` | `e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9` | `validated` |
 | Repaired P2 preflight tracked Owner-path audit | `review` | `engineering` | `outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json` | `50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b` | `validated` |
-| P2 v2 Owner-local preflight blocker audit | `review` | `engineering` | `outputs/audits/rigor/p2-v2-owner-local-preflight-blockers-20260804.json` | `75553963f748e5ec4f3ea75eda515d8791361409a2ba6228beb8c87e7afa3293` | `validated` |
+| P2 v2 Owner-local preflight blocker audit | `review` | `engineering` | `outputs/audits/rigor/p2-v2-owner-local-preflight-blockers-20260804.json` | `32254bfc8e387948d702b5f64739baf4e7bf48840c9da91bc0bab3d4f1790411` | `validated` |
 | Interrupted P2 runtime v1 failure audit | `review` | `engineering` | `outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json` | `165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2` | `validated` |
 | P2 runtime resilience v2 recovery audit | `review` | `engineering` | `outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json` | `c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83` | `validated` |
 | P2 runtime resilience v2 Linux CI failure audit | `review` | `engineering` | `outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json` | `fd941f7070f25fd71b7ba78ce1043cfc68eb757eb4ee7a9b8206c0579e780b1c` | `validated` |

@@ -187,7 +187,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-03T15:43:42Z",
+  "generated_at": "2026-08-04T08:10:39Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -778,10 +778,10 @@
         "F003"
       ],
       "classification": "A_byte_hash_drift_scientifically_identical_semantics",
-      "repair_status": "implemented_pending_clean_commit_verification",
+      "repair_status": "independently_verified",
       "review_id": "p2-v2-owner-local-preflight-blockers-20260804",
       "scientific_authority": false,
-      "source_sha256": "75553963f748e5ec4f3ea75eda515d8791361409a2ba6228beb8c87e7afa3293",
+      "source_sha256": "32254bfc8e387948d702b5f64739baf4e7bf48840c9da91bc0bab3d4f1790411",
       "source_uri": "outputs/audits/rigor/p2-v2-owner-local-preflight-blockers-20260804.json",
       "status": "validated"
     },
@@ -1106,7 +1106,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "4a52dc6161c65227c066477dc02f997b98ab6184e03692b872ff2bf54f22fed1",
+  "projection_revision": "291fc1a9ac4684b0f3b2f833faddd8ba684919f1501d9f0a249ec1577dcd1efb",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1150,8 +1150,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "4a52dc6161c65227c066477dc02f997b98ab6184e03692b872ff2bf54f22fed1",
-  "read_model_sha256": "16918ffad461541309d82827f0dd1fe0de3b0834d49b17af1f1047408563f446",
+  "read_model_revision": "291fc1a9ac4684b0f3b2f833faddd8ba684919f1501d9f0a249ec1577dcd1efb",
+  "read_model_sha256": "62e08d21297cc7ef560ce05906c2677124b51573a7be3d7b137a6de6df8871a0",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -1284,7 +1284,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+  "source_commit": "0e0fca2100631843795f63e15d4a85ecc3312835",
   "tasks": [
     {
       "evidence_ids": [],

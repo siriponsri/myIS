@@ -6,7 +6,7 @@ Audit the blocked P2 v2 Owner-local preflight and define the smallest repair tha
 
 ## Starting State
 
-The reviewed revision is commit `abb8e1981c652fc14c3a9b779b99372e1a401b2a`, tree `ffa06896a1dc3b7a99cde3939a617ed33665b2be`. All four Git worktrees were clean. No P2 request or preflight receipt existed; measured runs, real candidates, shortlist entries, and selection accesses were all zero. Final-872 was closed and D2/D3 were waiting for the Owner.
+The reviewed repair tip is commit `0e0fca2100631843795f63e15d4a85ecc3312835`, tree `6a75023478ecfe65a9fd12a3d3f68225a96a5c48`. All four Git worktrees were clean. No real P2 request or preflight receipt exists; measured runs, real candidates, shortlist entries, and selection accesses remain zero. Final-872 is closed and D2/D3 are waiting for the Owner.
 
 ## Inputs and Frozen Bindings
 
@@ -37,7 +37,7 @@ This Markdown audit and `outputs/audits/rigor/p2-v2-owner-local-preflight-blocke
 
 ## Result
 
-Repair status: `implemented_pending_clean_commit_verification`. The explicit type-A compatibility manifest, active-v2 resolver, measured-request registry dispatch, and preflight receipt v2 are implemented. Focused verification passed `46` tests; the clean-commit E2E remains intentionally pending until the implementation is committed.
+Repair status: `independently_verified`. The explicit type-A compatibility manifest, active-v2 resolver, measured-request registry dispatch, v2 receipt, and raw-byte envelope binding are committed. `tests/test_p2_preflight_v2.py` passes `8` tests, including the clean-clone CLI regression from the exact repair commit. The synthetic regression reaches `passed_pending_owner` without creating a real request or receipt.
 
 | Blocker | Evidence | Root cause | Confidence |
 |---|---|---|---|
@@ -64,7 +64,7 @@ The evaluator mismatch is classification A, not B relocation and not C semantic 
 
 ## Failures and Recovery
 
-Direct evaluator equality fails, active campaign binding selects v1, and the shared registry rejects the measured request. Recovery requires a versioned compatibility proof, fail-closed active resolver, measured-request registry dispatch, and preflight receipt v2. Any proof mismatch changes the decision to baseline reproduction under a new campaign revision.
+Direct evaluator equality failed, active campaign binding selected v1, and the shared registry rejected the measured request. The committed recovery adds a versioned compatibility proof, fail-closed active resolver, measured-request registry dispatch, v2 receipt, and a regression fixing raw file SHA-256 agreement between request construction and receipt validation. Any proof mismatch still changes the decision to baseline reproduction under a new campaign revision.
 
 The first managed report sync failed closed with an immutable aggregate-only `sync_deferred` receipt because the worktree venv did not contain the locked MLflow extra. The governed store passed read-only doctor validation and no archive receipt was created. Recovery installed `uv.lock` with `--all-extras`; retry uses a new projection revision and preserves the deferred receipt.
 
@@ -78,7 +78,7 @@ Implement the type-A compatibility path. Do not alias evaluator hashes, rewrite 
 
 ## Next Action
 
-Commit the repository repair, run the synthetic v2 preflight from that clean commit, and independently verify `passed_pending_owner` while the real request and all measured counters remain absent or zero.
+Keep the repair commit immutable, have the Owner review the generated preflight evidence, and then perform the separate Owner-local P2 measured preflight. The synthetic clean-clone proof is not a measured request or authorization.
 
 ## Evidence Links
 
