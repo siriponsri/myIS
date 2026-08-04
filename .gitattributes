@@ -78,3 +78,12 @@ docs/research/MODEL_SELECTION_V02.md -text
 control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md -text
 docs/research/DEEP_RESEARCH_EVIDENCE_V02.md -text whitespace=-trailing-space
 docs/operations/OWNER_RUNBOOK_TH.md -text
+
+# ArmIndex schemas, ledgers, and receipts carry raw SHA-256 commitments. Keep
+# their committed LF bytes stable in clean Windows and POSIX checkouts.
+schemas/armindex/*.json -text
+control/armindex/*.json -text
+campaigns/armindex-multiretriever-v2/evidence/*.json -text
+outputs/fixtures/armindex/**/*.json -text
+outputs/audits/repository/*.json -text
+outputs/audits/dashboard/*.json -text
