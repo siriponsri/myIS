@@ -2,12 +2,22 @@ schema_version: myis.source-of-truth.v2
 active_control_plane: 01_Research
 projection_contract: projections/read-model/read-model.v2.json
 records:
+  - id: active_armindex_program
+    authority: control/program.yaml
+    active_campaign: campaigns/armindex-multiretriever-v2
+    projections: [dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [migration_only, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_protocol
+    authority: control/campaigns/armindex-multiretriever-v2.yaml
+    projections: [projections/read-model, dashboard, brain, paper, mlflow]
+    restrictions: [synthetic_fixtures_only_during_migration, no_model_download]
   - id: control
     authority: control/program.yaml
     projections: [dashboard, brain, paper, mlflow]
   - id: protocol
     authority: control/campaigns/scope-autoindex-v1.yaml
     projections: [campaigns, dashboard, paper]
+    status: historical_read_only
   - id: execution_boundary
     authority: [control/execution-envelope.yaml, control/execution-envelope-p2.yaml, control/execution-envelope-p2-v2.yaml]
     phase_mapping:
@@ -28,7 +38,7 @@ records:
     projections: [harness, projections/read-model, dashboard, brain, paper]
     restrictions: [proposal_is_not_adoption, preflight_is_not_measured_execution, aggregate_hash_count_only]
   - id: schemas_and_kernel
-    authority: [schemas, src/myis_research/kernel, src/myis_research/scope]
+    authority: [schemas, schemas/armindex, src/myis_research/kernel, src/myis_research/scope, src/myis_research/armindex]
     projections: [harness, mlflow, reports]
   - id: raw_and_protected_bytes
     authority: MYIS_STORE

@@ -75,8 +75,8 @@ async function refresh() {
       fetchJson(`/api/v2/presentation/${state.audience}`),
       fetchJson("/api/v2/tools"),
     ]);
-    state.selectedTaskId ||= state.model?.project?.current_task || state.model?.tasks?.[0]?.task_id || null;
-    state.selectedPhaseId ||= state.model?.project?.current_phase || state.model?.phases?.[0]?.phase_id || null;
+    state.selectedTaskId ||= activeTasks()[0]?.task_id || null;
+    state.selectedPhaseId ||= state.model?.armindex?.current_phase || activePhases()[0]?.phase_id || null;
     state.observatoryRegistry = null;
     state.observatoryGraph = null;
     renderAll();
@@ -165,10 +165,11 @@ function setResultFilter(filter) {
 
 function renderAll() {
   const project = state.model?.project || {};
-  const campaign = state.model?.campaigns?.[0] || {};
-  $("campaign-title").textContent = campaign.title || "SCOPE / AutoIndex";
-  $("campaign-status").textContent = `${project.state || campaign.status || "preparation"} · Phase ${project.current_phase || "-"} · Task ${project.current_task || "-"}`;
-  $("breadcrumb").textContent = `myIS / ${shortPhase(project.current_phase)} / ${project.current_task || "-"}`;
+  const campaign = activeCampaign();
+  const currentPhase = state.model?.armindex?.current_phase || project.active_phase;
+  $("campaign-title").textContent = campaign.title || "ArmIndex";
+  $("campaign-status").textContent = `${state.model?.armindex?.status || campaign.status || "migration"} · Phase ${currentPhase || "-"} · measured runs ${state.model?.armindex?.counters?.measured_runs || 0}`;
+  $("breadcrumb").textContent = `myIS / ArmIndex / ${shortPhase(currentPhase)}`;
   $("revision").textContent = state.model?.read_model_revision ? short(state.model.read_model_revision, 16) : "ยังไม่โหลด";
   renderRibbon();
   renderStatusCards();
@@ -189,8 +190,8 @@ function renderAll() {
 }
 
 function renderRibbon() {
-  const current = state.model?.project?.current_phase;
-  $("phase-ribbon").innerHTML = (state.model?.phases || []).map((phase) => {
+  const current = state.model?.armindex?.current_phase;
+  $("phase-ribbon").innerHTML = activePhases().map((phase) => {
     const tone = statusTone(phase.status);
     const selected = phase.phase_id === state.selectedPhaseId;
     return `<button type="button" class="phase-ribbon-item ${phase.phase_id === current ? "is-current" : ""} ${tone === "ready" ? "is-done" : ""} ${selected ? "is-selected" : ""}" data-phase-id="${escapeHtml(phase.phase_id)}" aria-pressed="${selected}"><span class="phase-ribbon-id">${escapeHtml(shortPhase(phase.phase_id))}</span><span class="phase-ribbon-label">${escapeHtml(phaseTitle(phase.phase_id))}</span><span class="phase-ribbon-status">${escapeHtml(phase.status || "planned")}</span></button>`;
@@ -204,14 +205,14 @@ function renderRibbon() {
 }
 
 function renderStatusCards() {
-  const tasks = state.model?.tasks || [];
+  const tasks = activeTasks();
   const done = tasks.filter((task) => ["complete", "measured"].includes(task.status)).length;
   const health = state.model?.projection_health || {};
   const resources = state.model?.resources || {};
   $("status-cards").innerHTML = [
-    card("Current Phase", shortPhase(state.model?.project?.current_phase), phaseTitle(state.model?.project?.current_phase), "P"),
+    card("Current Phase", shortPhase(state.model?.armindex?.current_phase), phaseTitle(state.model?.armindex?.current_phase), "A"),
     card("Task evidence", `${done}/${tasks.length}`, "เสร็จพร้อมหลักฐาน", "T"),
-    card("Promoted evidence", `${state.model?.runs?.length || 0} runs`, `${state.model?.metrics?.length || 0} metrics`, "E"),
+    card("ArmIndex evidence", `${state.model?.armindex?.counters?.measured_runs || 0} runs`, "migration only", "E"),
     card("Projection", health.status || "unknown", resources.cpu_only ? "CPU-only" : "ตรวจ execution envelope", "H"),
   ].join("");
 }
@@ -237,7 +238,7 @@ function renderObservatorySummary() {
       <article class="observatory-kpi kpi-mint"><span>Artifacts</span><strong>${escapeHtml(String(obs.validated_artifact_count || 0))}</strong><small>validated pointers</small></article>
       <article class="observatory-kpi kpi-blue"><span>Failure / recovery</span><strong>${escapeHtml(String(obs.failed_child_count || 0))} / ${escapeHtml(String(obs.recovered_child_count || 0))}</strong><small>child branches</small></article>
       <article class="observatory-kpi kpi-lilac"><span>Integrity</span><strong>${escapeHtml(obs.integrity_status || "unknown")}</strong><small>${escapeHtml(String(obs.negative_check_count || 0))} negative checks</small></article>
-      <article class="observatory-kpi kpi-ink"><span>Real P2 counters</span><strong>${escapeHtml(String(counters.measured_runs || 0))}</strong><small>measured runs; selection ${escapeHtml(String(counters.selection_accesses || 0))}</small></article>
+      <article class="observatory-kpi kpi-ink"><span>ArmIndex counters</span><strong>${escapeHtml(String(state.model?.armindex?.counters?.measured_runs || 0))}</strong><small>measured runs; selection ${escapeHtml(String(state.model?.armindex?.counters?.selection_accesses || 0))}</small></article>
     </div>
     <div class="observatory-story"><div><span class="story-label">Claim boundary</span><strong>${escapeHtml(obs.claim_boundary || "no_measured_claim")}</strong></div><p>${escapeHtml(obs.narrative || "No validated Observatory fixture is available.")}</p><span class="story-next">Next: ${escapeHtml(obs.next_action || "Review the Observatory receipt")}</span></div>`;
 }
@@ -318,7 +319,7 @@ function renderP2Readiness() {
     ["Next step", fixture.status === "passed" ? "Owner-local measured preflight" : "Repository-only fixture pilot"],
   ];
   const existing = document.querySelector("#readiness-summary .p2-readiness");
-  const html = `<div class="p2-readiness"><div class="readiness-status"><strong>P2 ${escapeHtml(status)}</strong><span>${p2.measured_runs || 0} measured run / ${p2.selection_accesses || 0} selection access</span></div><ul class="readiness-list">${checks.map(([label, value]) => `<li><span>${escapeHtml(label)}</span><small>${escapeHtml(String(value))}</small></li>`).join("")}</ul></div>`;
+  const html = `<div class="p2-readiness"><div class="readiness-status"><strong>Historical SCOPE P2 · ${escapeHtml(status)}</strong><span>${p2.measured_runs || 0} measured run / ${p2.selection_accesses || 0} selection access</span></div><ul class="readiness-list">${checks.map(([label, value]) => `<li><span>${escapeHtml(label)}</span><small>${escapeHtml(String(value))}</small></li>`).join("")}</ul></div>`;
   if (existing) existing.outerHTML = html; else $("readiness-summary").insertAdjacentHTML("beforeend", html);
 }
 
@@ -328,18 +329,18 @@ function renderOverviewRisks() {
 }
 
 function renderFlow() {
-  const tasks = (state.model?.tasks || []).filter((task) => matchesSearch(task.task_id, task.title, task.phase_id, task.status));
+  const tasks = activeTasks().filter((task) => matchesSearch(task.task_id, task.title, task.phase_id, task.status));
   const lanes = state.boardMode === "pm"
     ? [["Not ready", ["waiting_dependency"]], ["Ready", ["ready", "executable", "planned"]], ["In progress", ["in_progress"]], ["Verification", ["verification_needed"]], ["Waiting / blocked", ["waiting_owner", "waiting_external_data", "blocked", "blocked_until_p1", "locked_owner_D2", "locked_owner_D3"]], ["Done", ["complete", "measured"]]]
     : [["Planned", ["waiting_dependency", "ready", "executable", "planned", "waiting_owner", "waiting_external_data", "blocked", "blocked_until_p1", "locked_owner_D2", "locked_owner_D3"]], ["In process", ["in_progress", "verification_needed"]], ["Done", ["complete", "measured"]]];
   const board = lanes.map(([label, statuses]) => ({ label, tasks: tasks.filter((task) => statuses.includes(task.status)) }));
-  const wip = (state.model?.tasks || []).filter((task) => ["in_progress", "verification_needed"].includes(task.status)).length;
+  const wip = activeTasks().filter((task) => ["in_progress", "verification_needed"].includes(task.status)).length;
   $("board-summary").textContent = `${state.boardMode === "pm" ? "PM detail" : "Simple"}: ${tasks.length} tasks · WIP ${wip}/3`;
   $("phase-flow").className = `board-lanes board-${state.boardMode}`;
   $("phase-flow").innerHTML = board.map((lane) => `<section class="board-lane"><header><h3>${escapeHtml(lane.label)}</h3><span>${lane.tasks.length}</span></header><div class="task-list">${lane.tasks.map(taskCard).join("") || `<p class="muted empty-lane">ไม่มี Task</p>`}</div></section>`).join("");
   document.querySelectorAll("[data-task-id]").forEach((button) => button.addEventListener("click", () => {
     state.selectedTaskId = button.dataset.taskId;
-    state.selectedPhaseId = (state.model?.tasks || []).find((item) => item.task_id === state.selectedTaskId)?.phase_id || state.selectedPhaseId;
+    state.selectedPhaseId = activeTasks().find((item) => item.task_id === state.selectedTaskId)?.phase_id || state.selectedPhaseId;
     renderFlow();
     renderRibbon();
   }));
@@ -353,7 +354,7 @@ function taskCard(task) {
 }
 
 function renderTaskDetail() {
-  const tasks = state.model?.tasks || [];
+  const tasks = activeTasks();
   const task = tasks.find((item) => item.task_id === state.selectedTaskId) || tasks[0];
   if (!task) {
     $("task-detail").innerHTML = `<p class="muted">ไม่มี Task detail</p>`;
@@ -368,7 +369,7 @@ function renderTaskDetail() {
 }
 
 function renderPhaseDetail() {
-  const phases = state.model?.phases || [];
+  const phases = activePhases();
   const phase = phases.find((item) => item.phase_id === state.selectedPhaseId) || phases[0];
   if (!phase) {
     $("phase-detail").innerHTML = `<div class="empty-state">ไม่มี Phase record</div>`;
@@ -377,13 +378,25 @@ function renderPhaseDetail() {
   state.selectedPhaseId = phase.phase_id;
   const done = (phase.tasks || []).filter((task) => ["complete", "measured"].includes(task.status)).length;
   const milestone = (state.model?.milestones || []).find((item) => item.milestone_id === phase.phase_id) || {};
-  const gate = phase.phase_id === "P3_FINAL" ? "D2_OPEN_FINAL" : phase.phase_id === "P4_PUBLICATION" ? "D3_SUBMIT_RELEASE" : "No Owner gate";
+  const gate = phase.phase_id === "A5_FINAL_CONFIRMATION" ? "D2_OPEN_FINAL" : phase.phase_id === "A6_PUBLICATION_AND_RELEASE" ? "D3_SUBMIT_RELEASE" : "No Owner gate";
   $("phase-detail").innerHTML = `<div class="phase-detail-grid"><div><span class="detail-label">Phase</span><strong>${escapeHtml(shortPhase(phase.phase_id))} · ${escapeHtml(phaseTitle(phase.phase_id))}</strong></div><div><span class="detail-label">สถานะ</span><strong>${escapeHtml(phase.status || "planned")}</strong></div><div><span class="detail-label">Task evidence</span><strong>${done}/${(phase.tasks || []).length}</strong></div><div><span class="detail-label">Dependency</span><strong>${escapeHtml((milestone.depends_on || []).map(shortPhase).join(", ") || "None")}</strong></div><div><span class="detail-label">Gate</span><strong>${escapeHtml(gate)}</strong></div></div>`;
 }
 
 function renderMilestones() {
-  const milestones = state.model?.milestones || [];
-  $("milestone-timeline").innerHTML = milestones.map((item, index) => `<article class="milestone ${item.milestone_id === state.model?.project?.current_phase ? "is-current" : ""}"><span class="milestone-index">${index + 1}</span><div><strong>${escapeHtml(shortPhase(item.milestone_id))} · ${escapeHtml(phaseTitle(item.milestone_id))}</strong><p>${escapeHtml(item.status || "planned")} · depends on ${escapeHtml((item.depends_on || []).map(shortPhase).join(", ") || "none")}</p></div></article>`).join("") || `<div class="empty-state">ยังไม่มี milestone registry</div>`;
+  const phases = activePhases();
+  $("milestone-timeline").innerHTML = phases.map((item, index) => `<article class="milestone ${item.phase_id === state.model?.armindex?.current_phase ? "is-current" : ""}"><span class="milestone-index">${index + 1}</span><div><strong>${escapeHtml(shortPhase(item.phase_id))} · ${escapeHtml(phaseTitle(item.phase_id))}</strong><p>${escapeHtml(item.status || "planned")} · depends on ${index ? escapeHtml(shortPhase(phases[index - 1].phase_id)) : "none"}</p></div></article>`).join("") || `<div class="empty-state">ยังไม่มี milestone registry</div>`;
+}
+
+function activeCampaign() {
+  return (state.model?.campaigns || []).find((item) => item.authority_status === "active") || {};
+}
+
+function activePhases() {
+  return state.model?.armindex?.phases || [];
+}
+
+function activeTasks() {
+  return activePhases().flatMap((phase) => (phase.tasks || []).map((task) => ({ ...task, phase_id: phase.phase_id, evidence_ids: task.evidence_ids || [] })));
 }
 
 function renderOutputsResults() {
@@ -584,7 +597,7 @@ function card(label, value, detail, icon) {
 }
 
 function phaseTitle(id) {
-  return ({ P0_FOUNDATION: "Foundation", P1_CPU_BASELINE: "CPU baseline", P2_SCOPE_DEVELOPMENT: "SCOPE development", P3_FINAL: "Final confirmation", P4_PUBLICATION: "Publication" })[id] || id || "-";
+  return ({ A0_MIGRATION_FOUNDATION: "Migration foundation", A1_BASELINES_AND_MULTI_ARM_SCREENING: "Baselines and screening", A2_PER_ARM_AUTOINDEX: "Per-arm AutoIndex", A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT: "Transfer and HarnessOpt", A4_PRODUCTION_TRANSFER_AND_SELECTION: "Production and Selection", A5_FINAL_CONFIRMATION: "Final confirmation", A6_PUBLICATION_AND_RELEASE: "Publication and release", P0_FOUNDATION: "Historical foundation", P1_CPU_BASELINE: "Historical CPU baseline", P2_SCOPE_DEVELOPMENT: "Historical SCOPE development", P3_FINAL: "Historical final", P4_PUBLICATION: "Historical publication" })[id] || id || "-";
 }
 
 function shortPhase(id) {
@@ -604,8 +617,8 @@ function simpleStatus(status) {
 }
 
 function gateName(task) {
-  if (task.status === "locked_owner_D2" || task.phase_id === "P3_FINAL") return "รอ D2_OPEN_FINAL";
-  if (task.status === "locked_owner_D3" || task.phase_id === "P4_PUBLICATION") return "รอ D3_SUBMIT_RELEASE";
+  if (task.status === "locked_owner_D2" || task.phase_id === "A5_FINAL_CONFIRMATION") return "รอ D2_OPEN_FINAL";
+  if (task.status === "locked_owner_D3" || task.phase_id === "A6_PUBLICATION_AND_RELEASE") return "รอ D3_SUBMIT_RELEASE";
   return "รอ Owner review";
 }
 

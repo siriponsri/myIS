@@ -1,0 +1,22 @@
+schema_version: myis.armindex-migration-decision.v1
+decision_id: armindex-main-migration-20260804
+authority: owner_goal_armindex_migration
+authority_archive_uri: inbox/archive/armindex-migration-20260804/GOAL.md
+authority_sha256: b1660cff996c5520496f6579e4787fb3501bfce136c24c6bb84afee37d967894
+effective_date: 2026-08-04
+repository: https://github.com/siriponsri/myIS
+target_branch: main
+active_campaign: armindex-multiretriever-v2
+supersedes_active_direction: scope-autoindex-v1
+historical_campaign_disposition: historical_read_only
+history_rewritten: false
+owner_gates: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+migration_boundaries:
+  measured_retrieval: false
+  selection: false
+  final: false
+  gpu_scientific_run: false
+  paid_api: false
+  model_download: false
+  model_weight_modification: false
+license_decision: owner_follow_up_required

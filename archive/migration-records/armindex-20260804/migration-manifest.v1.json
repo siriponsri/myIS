@@ -1,0 +1,39 @@
+{
+  "schema_version": "myis.armindex-migration-manifest.v1",
+  "migration_id": "armindex-main-migration-20260804",
+  "starting_commit": "abb8e1981c652fc14c3a9b779b99372e1a401b2a",
+  "starting_tree": "ffa06896a1dc3b7a99cde3939a617ed33665b2be",
+  "safety_branch": "archive/pre-armindex-migration-20260804",
+  "safety_branch_commit": "abb8e1981c652fc14c3a9b779b99372e1a401b2a",
+  "history_rewritten": false,
+  "new_repository_created": false,
+  "license_decision": "owner_follow_up_required",
+  "source_inputs": [
+    {"old_path": "inbox/GOAL.md", "canonical_path": "control/migrations/armindex-migration-decision.v1.yaml", "archive_path": "inbox/archive/armindex-migration-20260804/GOAL.md", "disposition": "adopted_and_archived", "source_sha256": "b1660cff996c5520496f6579e4787fb3501bfce136c24c6bb84afee37d967894", "reason": "migration authority adopted into canonical control records"},
+    {"old_path": "inbox/PLAN_V02_NEW.md", "canonical_path": "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md", "archive_path": "inbox/archive/armindex-migration-20260804/PLAN_V02_NEW.md", "disposition": "byte_identical_adoption", "source_sha256": "0a8c57068fded108fa49abdafd27fcf55802cde264083369374406e5799f5dec", "reason": "detailed active research plan"},
+    {"old_path": "inbox/MODEL_SELECTION_V02_NEW.md", "canonical_path": "docs/research/MODEL_SELECTION_V02.md", "archive_path": "inbox/archive/armindex-migration-20260804/MODEL_SELECTION_V02_NEW.md", "disposition": "byte_identical_adoption", "source_sha256": "0e6fb266e6d2fabd975c4d8fb6c36d9c0a3959e9efc77515dda49d297ed617ce", "reason": "model selection authority"},
+    {"old_path": "inbox/AUTOINDEX_HARNESSOPT_CONTRACT.md", "canonical_path": "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md", "archive_path": "inbox/archive/armindex-migration-20260804/AUTOINDEX_HARNESSOPT_CONTRACT.md", "disposition": "byte_identical_adoption", "source_sha256": "882d08758fdd4fe64ccf1941e2cf426527a894b54c4c50bfbbb1d382c9c53d7e", "reason": "active AutoIndex and HarnessOpt contract"},
+    {"old_path": "inbox/OWNER_RUNBOOK_TH_V02_NEW.md", "canonical_path": "docs/operations/OWNER_RUNBOOK_TH.md", "archive_path": "inbox/archive/armindex-migration-20260804/OWNER_RUNBOOK_TH_V02_NEW.md", "disposition": "byte_identical_adoption", "source_sha256": "0a467ebac9a9c69b6ccca86cb09342760eccbe5df5fc3605dd9053274acc266a", "reason": "Thai low-code Owner runbook"},
+    {"old_path": "inbox/DEEP_RESEARCH_EVIDENCE_V02_NEW.md", "canonical_path": "docs/research/DEEP_RESEARCH_EVIDENCE_V02.md", "archive_path": "inbox/archive/armindex-migration-20260804/DEEP_RESEARCH_EVIDENCE_V02_NEW.md", "disposition": "byte_identical_adoption", "source_sha256": "f4c198fd9f4177d50c5cc37280533b645118bc868cc1e7ff6b5741fa96ed7493", "reason": "evidence and source review"}
+  ],
+  "historical_paths": [
+    {"old_path": "control/campaigns/scope-autoindex-v1.yaml", "new_path": "control/campaigns/scope-autoindex-v1.yaml", "disposition": "retained_historical_read_only", "reason": "preserve original SCOPE authority and hashes"},
+    {"old_path": "campaigns/scope-autoindex-v1", "new_path": "campaigns/scope-autoindex-v1", "disposition": "retained_historical_read_only", "reason": "preserve P1 measured and P2 engineering evidence in place"},
+    {"old_path": "src/myis_research/scope", "new_path": "src/myis_research/scope", "disposition": "retained_compatibility", "reason": "historical imports and compiler lineage"},
+    {"old_path": "schemas/scope-dsl.v1.json", "new_path": "schemas/scope-dsl.v1.json", "disposition": "retained_compatibility", "reason": "historical object readability"},
+    {"old_path": "projections/reports/phase/phase-p1_cpu_baseline.json", "new_path": "projections/reports/phase/phase-p1_cpu_baseline.json", "disposition": "retained_historical_projection", "reason": "measured P1 evidence remains accessible"}
+  ],
+  "active_paths": [
+    {"old_path": null, "new_path": "control/campaigns/armindex-multiretriever-v2.yaml", "disposition": "created_active_authority", "reason": "seven-phase, five-arm campaign"},
+    {"old_path": null, "new_path": "src/myis_research/armindex", "disposition": "created_active_subsystem", "reason": "new semantics without breaking stable package imports"},
+    {"old_path": null, "new_path": "schemas/armindex", "disposition": "created_versioned_contracts", "reason": "active objects cannot reuse historical SCOPE schemas"},
+    {"old_path": "projections/read-model/read-model.v2.json", "new_path": "projections/read-model/read-model.v2.json#armindex", "disposition": "extended_single_read_model", "reason": "one projection pipeline and one numeric authority"},
+    {"old_path": "dashboard", "new_path": "dashboard", "disposition": "refactored_projection", "reason": "active ArmIndex labels with historical SCOPE separation"},
+    {"old_path": "mlflow", "new_path": "mlflow", "disposition": "append_only_migration", "reason": "new active experiment while retaining historical experiments"}
+  ],
+  "rollback": {
+    "branch": "archive/pre-armindex-migration-20260804",
+    "commit": "abb8e1981c652fc14c3a9b779b99372e1a401b2a",
+    "instruction": "Create a new review branch from the safety pointer; never force-push or rewrite main."
+  }
+}

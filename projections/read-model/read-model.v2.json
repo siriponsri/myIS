@@ -5,16 +5,258 @@
   },
   "archive_contract": {
     "active_experiments": [
-      "myis-scope-autoindex-v1",
+      "myis-armindex-multiretriever-v2",
       "myis-system"
     ],
     "freeze_required_for_measured_runs": true,
+    "historical_experiments": [
+      "myis-scope-autoindex-v1"
+    ],
     "legacy_policy": "legacy_read_only",
     "schema_version": "myis.mlflow-archive-contract.v2",
-    "scientific_experiment": "myis-scope-autoindex-v1",
+    "scientific_experiment": "myis-armindex-multiretriever-v2",
     "system_experiment": "myis-system",
     "viewer": "sqlite_read_only",
     "writer": "serialized_append_only"
+  },
+  "armindex": {
+    "arms": [
+      {
+        "adapter_status": "declared_pending_fixture_lock",
+        "arm_id": "ARM-01",
+        "commercial_status": "commercial_capable",
+        "license": "Apache-2.0",
+        "model_id": "lexical/bm25s",
+        "representation_status": "not_started",
+        "role": "lexical_anchor_cpu_fallback"
+      },
+      {
+        "adapter_status": "declared_pending_fixture_lock",
+        "arm_id": "ARM-02",
+        "commercial_status": "commercial_capable",
+        "license": "MIT",
+        "model_id": "BAAI/bge-m3",
+        "representation_status": "not_started",
+        "role": "multilingual_dense_anchor"
+      },
+      {
+        "adapter_status": "declared_pending_fixture_lock",
+        "arm_id": "ARM-03",
+        "commercial_status": "research_non_commercial",
+        "license": "CC-BY-NC-SA-4.0",
+        "model_id": "datalyes/patembed-large",
+        "representation_status": "not_started",
+        "role": "research_champion_candidate"
+      },
+      {
+        "adapter_status": "declared_pending_fixture_lock",
+        "arm_id": "ARM-04",
+        "commercial_status": "commercial_capable",
+        "license": "Apache-2.0",
+        "model_id": "Snowflake/snowflake-arctic-embed-m-v2.0",
+        "representation_status": "not_started",
+        "role": "long_context_dense"
+      },
+      {
+        "adapter_status": "declared_pending_fixture_lock",
+        "arm_id": "ARM-05",
+        "commercial_status": "commercial_capable",
+        "license": "Apache-2.0",
+        "model_id": "Qwen/Qwen3-Embedding-0.6B",
+        "representation_status": "not_started",
+        "role": "instruction_aware_dense"
+      }
+    ],
+    "budget": {
+      "actual": 0.0,
+      "currency": "USD",
+      "hard_stop": 100.0,
+      "migration_profile": "armindex-migration-v2"
+    },
+    "campaign_id": "armindex-multiretriever-v2",
+    "champions": {
+      "commercial": null,
+      "research": null
+    },
+    "complementarity": {
+      "evaluated_arm_sets": 0,
+      "status": "not_started"
+    },
+    "counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "current_phase": "A0_MIGRATION_FOUNDATION",
+    "gates": [
+      {
+        "gate_id": "D2_OPEN_FINAL",
+        "status": "waiting_owner"
+      },
+      {
+        "gate_id": "D3_SUBMIT_RELEASE",
+        "status": "waiting_owner"
+      }
+    ],
+    "harnessopt": {
+      "candidate_count": 0,
+      "forbidden_mutations": [
+        "arbitrary_python",
+        "final_feedback",
+        "in_out_label",
+        "ipc_cpc_out_shortcut",
+        "llm_runtime_reasoning",
+        "model_mutation",
+        "per_query_correctness_history",
+        "qrels",
+        "query_rewriting",
+        "representation_mutation",
+        "selection_feedback"
+      ],
+      "status": "not_started"
+    },
+    "historical_campaigns": [
+      {
+        "campaign_id": "scope-autoindex-v1",
+        "p1_measured_evidence": "preserved_by_pointer",
+        "p2_measured_runs": 0,
+        "status": "historical_read_only"
+      }
+    ],
+    "next_command": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+    "phases": [
+      {
+        "phase_id": "A0_MIGRATION_FOUNDATION",
+        "purpose": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
+        "status": "in_progress",
+        "tasks": [
+          {
+            "status": "complete",
+            "task_id": "A0.1",
+            "title": "Repository and authority migration"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.2",
+            "title": "Model and representation contract freeze"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.3",
+            "title": "Projection and Research Brain migration"
+          },
+          {
+            "status": "planned",
+            "task_id": "A0.4",
+            "title": "Synthetic compute-feasibility fixtures"
+          }
+        ]
+      },
+      {
+        "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+        "purpose": "Reproduce controls and screen the five adapters with common programs.",
+        "status": "locked_until_A0_closeout",
+        "tasks": [
+          {
+            "status": "planned",
+            "task_id": "A1.1",
+            "title": "Adapter fixture validation"
+          },
+          {
+            "status": "planned",
+            "task_id": "A1.2",
+            "title": "Common multi-arm screen"
+          }
+        ]
+      },
+      {
+        "phase_id": "A2_PER_ARM_AUTOINDEX",
+        "purpose": "Search and freeze one representation program per promoted arm.",
+        "status": "locked_until_A1",
+        "tasks": [
+          {
+            "status": "planned",
+            "task_id": "A2.1",
+            "title": "Per-arm AutoIndex"
+          }
+        ]
+      },
+      {
+        "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+        "purpose": "Analyze transfer, complementarity, and production-constrained harnesses.",
+        "status": "locked_until_A2",
+        "tasks": [
+          {
+            "status": "planned",
+            "task_id": "A3.1",
+            "title": "Cross-arm transfer matrix"
+          },
+          {
+            "status": "planned",
+            "task_id": "A3.2",
+            "title": "Complementarity and HarnessOpt"
+          }
+        ]
+      },
+      {
+        "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+        "purpose": "Freeze FAST/BALANCED/DEEP profiles and expose Selection once.",
+        "status": "locked_until_A3",
+        "tasks": [
+          {
+            "status": "planned",
+            "task_id": "A4.1",
+            "title": "Production profiles and legal transfer"
+          }
+        ]
+      },
+      {
+        "phase_id": "A5_FINAL_CONFIRMATION",
+        "purpose": "Run one frozen confirmation only after D2_OPEN_FINAL.",
+        "status": "locked_owner_D2",
+        "tasks": [
+          {
+            "status": "locked_owner_D2",
+            "task_id": "A5.1",
+            "title": "Frozen final evaluation"
+          }
+        ]
+      },
+      {
+        "phase_id": "A6_PUBLICATION_AND_RELEASE",
+        "purpose": "Build publication and release artifacts only after D3_SUBMIT_RELEASE.",
+        "status": "locked_owner_D3",
+        "tasks": [
+          {
+            "status": "locked_owner_D3",
+            "task_id": "A6.1",
+            "title": "Manuscript and release package"
+          }
+        ]
+      }
+    ],
+    "production_profiles": [
+      {
+        "profile_id": "FAST",
+        "status": "contract_only"
+      },
+      {
+        "profile_id": "BALANCED",
+        "status": "contract_only"
+      },
+      {
+        "profile_id": "DEEP",
+        "status": "contract_only"
+      }
+    ],
+    "representation_programs": [],
+    "schema_version": "myis.armindex-read-model.v1",
+    "status": "active_migration",
+    "transfer": {
+      "matrix_entries": 0,
+      "status": "not_started"
+    }
   },
   "campaigns": [
     {
@@ -22,6 +264,7 @@
         "D2_OPEN_FINAL",
         "D3_SUBMIT_RELEASE"
       ],
+      "authority_status": "historical_read_only",
       "campaign_id": "scope-autoindex-v1",
       "current_state": "P1_CPU_MEASURED_COMPLETE",
       "p2_preflight_status": "not_started",
@@ -30,6 +273,19 @@
       "standing_authorization": "D1_START_CAMPAIGN",
       "status": "P1_CPU_MEASURED_COMPLETE",
       "title": "Learning Grounded Evidence Compilers for Cross-Domain Patent Retrieval"
+    },
+    {
+      "active_owner_decisions": [
+        "D2_OPEN_FINAL",
+        "D3_SUBMIT_RELEASE"
+      ],
+      "authority_status": "active",
+      "campaign_id": "armindex-multiretriever-v2",
+      "current_state": "A0_MIGRATION_FOUNDATION",
+      "primary_metric": "recall_at_100/out",
+      "standing_authorization": "D1_START_CAMPAIGN",
+      "status": "active_migration",
+      "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
   "cost": {
@@ -1080,6 +1336,9 @@
     "total": 9
   },
   "project": {
+    "active_campaign_id": "armindex-multiretriever-v2",
+    "active_direction": "ArmIndex",
+    "active_phase": "A0_MIGRATION_FOUNDATION",
     "campaign_id": "scope-autoindex-v1",
     "current_phase": "P2_SCOPE_DEVELOPMENT",
     "current_task": "P2.1",
@@ -1092,7 +1351,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
+  "projection_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1136,8 +1395,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
-  "read_model_sha256": "a9060a69278260a32fad9e6efd7209fcac38df81b739ef014e3b49da25d302f6",
+  "read_model_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
+  "read_model_sha256": "f64306d71195c5ec15cecf35a174a1075642bf6d673ca24705229673c7e31119",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

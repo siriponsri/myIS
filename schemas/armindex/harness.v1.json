@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:harness:v1",
+  "title": "ArmIndex deterministic HarnessOpt configuration v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "harness_id", "profile", "arm_ids", "invocation_order", "depth_by_arm", "fusion", "early_stop", "fallback_arm_id", "max_cost_per_query_usd", "max_p95_latency_ms", "runtime_features", "harness_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-harness.v1"},
+    "harness_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "profile": {"enum": ["FAST", "BALANCED", "DEEP"]},
+    "arm_ids": {"type": "array", "minItems": 1, "maxItems": 5, "uniqueItems": true, "items": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]}},
+    "invocation_order": {"type": "array", "minItems": 1, "maxItems": 5, "uniqueItems": true, "items": {"type": "string"}},
+    "depth_by_arm": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "integer", "minimum": 1, "maximum": 2000}},
+    "fusion": {"enum": ["rrf_60", "normalized_score_sum", "lexicographic_union"]},
+    "early_stop": {"type": "object"},
+    "fallback_arm_id": {"const": "ARM-01"},
+    "max_cost_per_query_usd": {"type": "number", "minimum": 0},
+    "max_p95_latency_ms": {"type": "number", "exclusiveMinimum": 0},
+    "runtime_features": {"type": "array", "uniqueItems": true, "items": {"enum": ["query_length", "token_count", "script", "language_hint", "system_load", "cache_state"]}},
+    "harness_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

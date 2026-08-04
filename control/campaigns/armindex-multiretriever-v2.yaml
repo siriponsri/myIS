@@ -1,0 +1,98 @@
+campaign:
+  id: armindex-multiretriever-v2
+  title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
+  status: active_migration
+  evidence_class: engineering_migration
+  scientific_authority: false
+  claim_boundary: infrastructure_migration_only
+  migration_measured_runs: 0
+  selection_accesses: 0
+  final_accesses: 0
+  standing_authorization: D1_START_CAMPAIGN
+  active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  historical_campaigns: [scope-autoindex-v1]
+
+protocol:
+  dataset_id: dapfam
+  evaluation_unit: patent_family
+  primary_metric: recall_at_100/out
+  secondary_metrics: [ndcg_at_100/out, ndcg_at_10/out]
+  operational_metrics: [latency_p50_ms, latency_p95_ms, latency_p99_ms, throughput_qps, cost_per_query_usd, index_size_bytes, ram_bytes, vram_bytes]
+  split_roles: {train: 250, selection: 125, final: 872}
+  selection_rule: lexicographic_recall_ndcg_latency_cost_simplicity
+  final_split_open: false
+  measured_execution_allowed: false
+  model_download_allowed: false
+
+arms:
+  - {id: ARM-01, model_id: lexical/bm25s, method: bm25, license: Apache-2.0, commercial_status: commercial_capable, role: lexical_anchor_cpu_fallback}
+  - {id: ARM-02, model_id: BAAI/bge-m3, method: dense_embedding, license: MIT, commercial_status: commercial_capable, role: multilingual_dense_anchor}
+  - {id: ARM-03, model_id: datalyes/patembed-large, method: patent_dense_embedding, license: CC-BY-NC-SA-4.0, commercial_status: research_non_commercial, role: research_champion_candidate}
+  - {id: ARM-04, model_id: Snowflake/snowflake-arctic-embed-m-v2.0, method: dense_embedding, license: Apache-2.0, commercial_status: commercial_capable, role: long_context_dense}
+  - {id: ARM-05, model_id: Qwen/Qwen3-Embedding-0.6B, method: instruction_dense_embedding, license: Apache-2.0, commercial_status: commercial_capable, role: instruction_aware_dense}
+
+contracts:
+  model_adapter_lock: schemas/armindex/model-adapter-lock.v1.json
+  representation_program: schemas/armindex/representation-program.v1.json
+  harness: schemas/armindex/harness.v1.json
+  terminal_receipts: schemas/armindex/research-flow-terminal.v1.json
+  mlflow_migration_receipt: schemas/armindex/mlflow-migration-receipt.v1.json
+  migration_read_model: schemas/armindex/read-model.v1.json
+  budget_profile: control/budgets/armindex-migration-v2.yaml
+
+phases:
+  - id: A0_MIGRATION_FOUNDATION
+    purpose: Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.
+    status: in_progress
+    measured_retrieval: false
+    tasks:
+      - {id: A0.1, title: Repository and authority migration, status: complete}
+      - {id: A0.2, title: Model and representation contract freeze, status: complete}
+      - {id: A0.3, title: Projection and Research Brain migration, status: complete}
+      - {id: A0.4, title: Synthetic compute-feasibility fixtures, status: planned}
+  - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
+    purpose: Reproduce controls and screen the five adapters with common programs.
+    status: locked_until_A0_closeout
+    measured_retrieval: false
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: planned}, {id: A1.2, title: Common multi-arm screen, status: planned}]
+  - id: A2_PER_ARM_AUTOINDEX
+    purpose: Search and freeze one representation program per promoted arm.
+    status: locked_until_A1
+    measured_retrieval: false
+    tasks: [{id: A2.1, title: Per-arm AutoIndex, status: planned}]
+  - id: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
+    purpose: Analyze transfer, complementarity, and production-constrained harnesses.
+    status: locked_until_A2
+    measured_retrieval: false
+    tasks: [{id: A3.1, title: Cross-arm transfer matrix, status: planned}, {id: A3.2, title: Complementarity and HarnessOpt, status: planned}]
+  - id: A4_PRODUCTION_TRANSFER_AND_SELECTION
+    purpose: Freeze FAST/BALANCED/DEEP profiles and expose Selection once.
+    status: locked_until_A3
+    measured_retrieval: false
+    selection_exposure_limit: 1
+    tasks: [{id: A4.1, title: Production profiles and legal transfer, status: planned}]
+  - id: A5_FINAL_CONFIRMATION
+    purpose: Run one frozen confirmation only after D2_OPEN_FINAL.
+    status: locked_owner_D2
+    measured_retrieval: false
+    tasks: [{id: A5.1, title: Frozen final evaluation, status: locked_owner_D2}]
+  - id: A6_PUBLICATION_AND_RELEASE
+    purpose: Build publication and release artifacts only after D3_SUBMIT_RELEASE.
+    status: locked_owner_D3
+    measured_retrieval: false
+    tasks: [{id: A6.1, title: Manuscript and release package, status: locked_owner_D3}]
+
+gates:
+  owner: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  automatic: [repository_integrity, protected_data, model_lock, budget, arm_promotion, transfer_validity, harnessopt_stop, production_pareto, shortlist_freeze, one_shot_selection]
+  selection_accesses: 0
+  final_accesses: 0
+
+budget:
+  profile_id: armindex-migration-v2
+  currency: USD
+  migration_cost_actual_usd: 0
+  hard_stop_usd: 100
+  cpu_only: true
+  paid_api: false
+  gpu_scientific_run: false

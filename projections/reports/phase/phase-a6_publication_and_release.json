@@ -1,0 +1,97 @@
+{
+  "artifact_references": [],
+  "claim_boundary": "engineering_provenance_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "A6_PUBLICATION_AND_RELEASE is planned; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "planned"
+  },
+  "evidence_class": "engineering",
+  "evidence_links": [],
+  "failure_recovery_references": [],
+  "generated_at": "2026-08-03T15:43:42Z",
+  "generated_from_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
+  "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "engineering",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "armindex_schema_root": {
+      "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "uri": "schemas/armindex"
+    },
+    "campaign": {
+      "sha256": "ade99df23119e209e7e9e203a6dd5d147c024f3f4289935a8a1b4e2424b81232",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
+    },
+    "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+    "historical_scope": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "status": "historical_read_only",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "migration_budget": {
+      "sha256": "48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec",
+      "uri": "control/budgets/armindex-migration-v2.yaml"
+    },
+    "source_of_truth": {
+      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "uri": "control/source-of-truth.yaml"
+    }
+  },
+  "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
+  "last_material_update": "2026-08-03T15:43:42Z",
+  "metric_references": [],
+  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+  "objective": "Build publication and release artifacts only after D3_SUBMIT_RELEASE.",
+  "phase_id": "A6_PUBLICATION_AND_RELEASE",
+  "report_id": "phase-a6_publication_and_release",
+  "report_sha256": "41c1172f40824876e41c82ad861aeb0645299fd779f83b5edd31c63a65c41305",
+  "report_type": "phase",
+  "result": {
+    "decision": "planned",
+    "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
+    "result": "A6_PUBLICATION_AND_RELEASE is planned; ArmIndex measured runs, Selection, and Final counters remain zero."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "A0_MIGRATION_FOUNDATION",
+    "program_state": "active_migration",
+    "task": "A0.3"
+  },
+  "status": "planned",
+  "supported_claims": [
+    {
+      "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
+      "evidence": []
+    }
+  ],
+  "task_id": null,
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."
+}

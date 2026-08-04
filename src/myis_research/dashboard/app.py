@@ -119,36 +119,44 @@ def create_app(
     @app.get("/api/v1/presentation-topics")
     def presentation(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         model = build_read_model(root)
-        campaign = model.get("campaigns", [{}])[0]
-        return {"schema_version": "myis.presentation.v3", "title": campaign.get("title", "SCOPE / AutoIndex"), "sections": [
-            {"id": "question", "title_th": "โจทย์วิจัย", "title_en": "Research question", "body": "Can a grounded AutoIndex-style representation compiler improve family-level patent retrieval with a fixed retriever?"},
-            {"id": "flow", "title_th": "ลำดับการทำงาน", "title_en": "Execution flow", "body": "P0 Foundation → P1 CPU baseline → P2 SCOPE development → P3 Final → P4 Publication"},
+        return {"schema_version": "myis.presentation.v3", "title": "ArmIndex", "sections": [
+            {"id": "question", "title_th": "โจทย์วิจัย", "title_en": "Research question", "body": "Can retriever-conditioned representation programs and a deterministic multi-arm harness improve structured-document retrieval under explicit quality, latency, and cost constraints?"},
+            {"id": "flow", "title_th": "ลำดับการทำงาน", "title_en": "Execution flow", "body": "A0 Migration → A1 Screening → A2 Per-arm AutoIndex → A3 Transfer and HarnessOpt → A4 Production and Selection → A5 Final → A6 Publication"},
             {"id": "status", "title_th": "สถานะจากข้อมูลจริง", "title_en": "Evidence status", "body": {"phase": _current_phase(model), "runs": len(model.get("runs", [])), "metrics": len(model.get("metrics", [])), "readiness": model.get("publication_readiness", {}).get("status", "blocked")}},
         ]}
 
     @app.get("/api/v2/board")
     def board(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         model = build_read_model(root)
+        armindex_tasks = [task for phase in model.get("armindex", {}).get("phases", []) for task in phase.get("tasks", [])]
         return {
             "schema_version": "myis.dashboard-board.v2",
             "read_model_revision": model["read_model_revision"],
-            "tasks": model["tasks"],
+            "tasks": armindex_tasks,
             "wip_limit": 3,
-            "wip_count": sum(item.get("status") == "in_progress" for item in model["tasks"]),
+            "wip_count": sum(item.get("status") == "in_progress" for item in armindex_tasks),
         }
 
     @app.get("/api/v2/phases/{phase_id}")
     def phase_detail(phase_id: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         model = build_read_model(root)
-        phase = next((item for item in model["phases"] if item.get("phase_id") == phase_id), None)
+        active_phases = model.get("armindex", {}).get("phases", [])
+        phase = next((item for item in active_phases if item.get("phase_id") == phase_id), None)
         if phase is None:
-            raise HTTPException(404, "phase_id is not in the active P0-P4 registry")
+            phase = next((item for item in model["phases"] if item.get("phase_id") == phase_id), None)
+        if phase is None:
+            raise HTTPException(404, "phase_id is not in the active A0-A6 or historical P0-P4 registry")
         return {"schema_version": "myis.dashboard-phase.v2", "read_model_revision": model["read_model_revision"], "phase": phase}
 
     @app.get("/api/v2/results")
     def results(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         model = build_read_model(root)
         return {"schema_version": "myis.dashboard-results.v2", "read_model_revision": model["read_model_revision"], "results": model["results"], "interpretations": model["interpretations"]}
+
+    @app.get("/api/v2/armindex")
+    def armindex(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        model = build_read_model(root)
+        return {"schema_version": "myis.dashboard-armindex.v1", "read_model_revision": model["read_model_revision"], "armindex": model["armindex"]}
 
     @app.get("/api/v2/observatory")
     def observatory(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
@@ -241,8 +249,8 @@ def create_app(
         return _tool_action(lambda: tools.open_obsidian(str(body.get("note_id", "HOME"))))
 
     @app.get("/api/v2/reports")
-    def report_list(note_type: str | None = None, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        return _report_action(lambda: reports.list(note_type=note_type))
+    def report_list(note_type: str | None = None, campaign: str | None = None, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
+        return _report_action(lambda: reports.list(note_type=note_type, campaign=campaign))
 
     @app.get("/api/v2/reports/{note_id}")
     def report_detail(note_id: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
@@ -269,7 +277,7 @@ def create_app(
         if body.get("status") not in {"approved", "deferred", "rejected"}:
             raise HTTPException(422, "status must be approved, deferred, or rejected")
         token = secrets.token_urlsafe(32)
-        record = {"schema_version": "myis.decision-record.v2", "decision_id": decision_id, "status": body["status"], "campaign_id": "scope-autoindex-v1", "scope": body.get("scope", {}), "rationale": str(body.get("rationale", "")), "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"), "prior_record_hash": ledger.head()}
+        record = {"schema_version": "myis.decision-record.v2", "decision_id": decision_id, "status": body["status"], "campaign_id": "armindex-multiretriever-v2", "scope": body.get("scope", {}), "rationale": str(body.get("rationale", "")), "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"), "prior_record_hash": ledger.head()}
         record["record_sha256"] = record_sha256(record)
         previews[token] = record
         return {"preview_token": token, "record": record, "expires_in_seconds": 300}
@@ -315,6 +323,9 @@ def _frontend(root: Path, relative: str) -> Path:
 
 
 def _current_phase(model: dict[str, Any]) -> str:
+    armindex = model.get("armindex", {})
+    if isinstance(armindex, dict) and armindex.get("current_phase"):
+        return str(armindex["current_phase"])
     phases = model.get("phases", [])
     for phase in phases:
         if phase.get("status") not in {"complete", "measured"}:
@@ -324,23 +335,26 @@ def _current_phase(model: dict[str, Any]) -> str:
 
 def _dashboard_projection(model: dict[str, Any]) -> dict[str, Any]:
     runs = model.get("runs", [])
-    tasks = model.get("tasks", [])
+    armindex = model.get("armindex", {})
+    phases = armindex.get("phases", []) if isinstance(armindex, dict) else []
+    tasks = [task for phase in phases for task in phase.get("tasks", [])]
     done = [f"{task.get('task_id')} {task.get('title')}" for task in tasks if task.get("status") in {"complete", "measured"}]
     next_items = [f"{task.get('task_id')} {task.get('title')}" for task in tasks if task.get("status") in {"executable", "in_progress", "planned"}][:4]
     waiting_owner = [gate.get("gate_id") for gate in model.get("gates", []) if gate.get("status") == "waiting_owner"]
     return {
         "schema_version": "myis.dashboard-projection.v3",
         "projection_revision": model.get("projection_revision"),
-        "campaign": (model.get("campaigns") or [{}])[0],
+        "campaign": next((item for item in model.get("campaigns", []) if item.get("authority_status") == "active"), {}),
         "standing_authorization": "D1_START_CAMPAIGN",
         "current_phase": _current_phase(model),
-        "phases": model.get("phases", []),
+        "phases": phases,
         "tasks": tasks,
         "gates": model.get("gates", []),
         "experiments": model.get("experiments", []),
         "runs": runs,
         "metrics": model.get("metrics", []),
         "p2_readiness": model.get("p2_readiness", {}),
+        "armindex": armindex,
         "observatory": model.get("observatory", {}),
         "cost": model.get("cost", {}),
         "evidence": model.get("evidence", []),
@@ -350,9 +364,6 @@ def _dashboard_projection(model: dict[str, Any]) -> dict[str, Any]:
         "done": done,
         "next": next_items,
         "waiting_owner": waiting_owner,
-        "waiting_command": [] if runs else [
-            "P2_SCOPE_DEVELOPMENT_PRECHECK"
-            if model.get("project", {}).get("state") == "P1_CPU_MEASURED_COMPLETE"
-            else "P1_CPU_EXECUTION_ENVELOPE"
-        ],
+        "waiting_command": [],
+        "historical": {"scope_p2": model.get("p2_readiness", {}), "p1_runs": len(runs)},
     }

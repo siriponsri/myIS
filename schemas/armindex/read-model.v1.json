@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:read-model:v1",
+  "title": "ArmIndex active projection fragment v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "campaign_id", "status", "current_phase", "phases", "arms", "representation_programs", "transfer", "complementarity", "harnessopt", "production_profiles", "champions", "counters", "gates", "budget", "historical_campaigns", "next_command"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-read-model.v1"},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "status": {"type": "string"},
+    "current_phase": {"pattern": "^A[0-6]_[A-Z_]+$"},
+    "phases": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "object"}},
+    "arms": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"type": "object"}},
+    "representation_programs": {"type": "array", "items": {"type": "object"}},
+    "transfer": {"type": "object"},
+    "complementarity": {"type": "object"},
+    "harnessopt": {"type": "object"},
+    "production_profiles": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object"}},
+    "champions": {"type": "object"},
+    "counters": {"type": "object"},
+    "gates": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "object"}},
+    "budget": {"type": "object"},
+    "historical_campaigns": {"type": "array", "items": {"type": "object"}},
+    "next_command": {"type": "string", "minLength": 1}
+  }
+}

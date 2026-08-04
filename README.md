@@ -1,187 +1,200 @@
-# myIS Research
+<p align="center">
+  <img src="docs/assets/armindex-wordmark.png" alt="ArmIndex" width="720">
+</p>
 
-`01_Research` is the Git repository and active control plane for the SCOPE /
-AutoIndex campaign. The workspace is intentionally small: control, campaigns,
-deterministic source, tests, evidence pointers, projections, Dashboard, and
-archive.
+# ArmIndex
 
-## System at a glance
+Retriever-conditioned representation search and production-aware
+multi-retriever optimization for structured document retrieval.
+
+ArmIndex is the active research-engineering direction of the existing myIS
+repository. It asks a practical question: should one document representation
+serve every retriever, or should each retrieval arm receive a representation
+program matched to its behavior? It then studies whether complementary arms
+can be combined without paying the latency and cost of an always-on union.
+
+## What ArmIndex does
+
+- searches executable representation programs independently for frozen retrievers;
+- measures how programs transfer across retrievers;
+- identifies arms that recover complementary relevant families;
+- optimizes deterministic arm selection, depth, fusion, caching, and stopping;
+- freezes `FAST`, `BALANCED`, and `DEEP` production profiles.
+
+ArmIndex does not train or modify model weights. It optimizes the representation
+and deterministic retrieval harness around immutable model adapters.
+
+## Architecture
 
 ```mermaid
-flowchart TB
-  subgraph Canonical[Canonical facts]
-    C[control/program.yaml]
-    P[control/campaigns/scope-autoindex-v1.yaml]
-    M[campaign manifests]
-    R[aggregate receipts]
-  end
-  C --> H[Harness]
-  P --> H
-  H --> M --> R
-  R --> ML[MLflow mirror]
-  R --> RG[Report generator]
-  ML --> RG
-  RG --> O[Obsidian / Brain]
-  RG --> D[Interactive Dashboard]
-  RG --> PP[Paper projection]
+flowchart LR
+    SD[Structured documents] --> RC[Representation compiler]
+    RC --> B[ARM-01<br/>BM25]
+    RC --> G[ARM-02<br/>BGE-M3]
+    RC --> P[ARM-03<br/>PatEmbed]
+    RC --> S[ARM-04<br/>Snowflake]
+    RC --> Q[ARM-05<br/>Qwen]
+    B --> AI[Per-arm AutoIndex]
+    G --> AI
+    P --> AI
+    S --> AI
+    Q --> AI
+    AI --> TC[Transfer and complementarity]
+    TC --> HO[HarnessOpt]
+    HO --> F[FAST]
+    HO --> BA[BALANCED]
+    HO --> D[DEEP]
 ```
 
-### Single source of truth
+The scientific control plane fans one validated read model out to MLflow,
+the Internal Research Brain, Obsidian reports, the Dashboard, and Paper
+readiness. Those systems are projections, not independent sources of truth.
 
-| Fact | Canonical source | Projections |
-|---|---|---|
-| Identity, phases, Owner decisions | `control/` | all views |
-| Run, metric, cost, and artifact facts | validated manifests and receipts | MLflow, Dashboard, Brain, Paper |
-| Human interpretation | `02_Brain/memory` with source pointers | Obsidian |
-| Publication prose | `03_Paper` | release package |
+## Research questions
 
-Dashboard is presentation only. It never recalculates metrics or opens a phase.
-`D1_START_CAMPAIGN` is already recorded as one standing authorization; only
-`D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` can be previewed and confirmed later.
+1. Does retriever-conditioned representation search improve OUT Recall@100?
+2. Which representation decisions transfer across lexical and dense arms?
+3. Which arms contribute genuinely complementary family retrieval?
+4. Can HarnessOpt improve the quality-latency-cost frontier over fixed unions?
+5. Can a frozen commercial-capable profile transfer to legal structured retrieval?
 
-![myIS Research execution flow](dashboard/diagrams/research-program.svg)
+## Retrieval arms
 
-## Projection contract
+| Arm | Exact model or engine | Role | Declared license | Intended status |
+|---|---|---|---|---|
+| `ARM-01` | `bm25s` | lexical anchor, rare terminology, CPU fallback | Apache-2.0 | commercial-capable |
+| `ARM-02` | `BAAI/bge-m3` | multilingual dense anchor | MIT | commercial-capable |
+| `ARM-03` | `datalyes/patembed-large` | patent-specific research arm | CC BY-NC-SA 4.0 | research/non-commercial |
+| `ARM-04` | `Snowflake/snowflake-arctic-embed-m-v2.0` | multilingual long-context dense arm | Apache-2.0 | commercial-capable |
+| `ARM-05` | `Qwen/Qwen3-Embedding-0.6B` | instruction-aware multilingual dense arm | Apache-2.0 | commercial-capable |
+
+Every adapter requires an immutable revision, tokenizer hash, prompt/prefix,
+pooling, normalization, dimension, truncation, precision, and license snapshot
+before measurement. The model selection record is the authority for planned
+adapter semantics; Phase A0 must verify upstream metadata before locking it.
+
+## Metrics
+
+- Primary: OUT Recall@100
+- Secondary: OUT nDCG@100 and OUT nDCG@10
+- Operational: p50/p95/p99 latency, throughput, cost/query, index size, RAM, VRAM, and charged USD
+
+No ArmIndex benchmark result exists yet. The repository does not claim a win,
+state of the art, or production readiness.
+
+## Research and commercial champions
+
+The research champion may include PatEmbed-large within its non-commercial
+license boundary. The commercial-capable champion is selected separately from
+BM25, BGE-M3, Snowflake, and Qwen arms. This prevents a strong research result
+from being presented as a deployable commercial default.
+
+## Use cases
+
+- patent prior-art candidate retrieval;
+- legal research RAG;
+- contract and policy retrieval;
+- SOP and regulatory document search;
+- enterprise structured-document retrieval.
+
+These are target domains, not claims that the current implementation has been
+validated for legal decisions or production deployment.
+
+## Repository structure
 
 ```text
-Owner-local harness -> manifest/aggregate receipt -> MLflow mirror
-                                           \-> report generator
-                                                \-> read-model.v2.json
-                                                     \-> Dashboard
-                                                     \-> Obsidian / Brain
-                                                     \-> Paper readiness
+control/                 canonical program, campaign, model, budget, and gate records
+campaigns/               immutable campaign artifacts and migration state
+schemas/armindex/        versioned ArmIndex contracts
+src/myis_research/       stable package namespace plus the ArmIndex subsystem
+tests/                   synthetic, integration, projection, and safety tests
+projections/             shared read model and generated projection receipts
+obsidian_report/         generated research reports; never canonical metrics
+dashboard/               local read-only control and evidence interface
+mlflow/                  governed external-store mirror contracts and indexes
+archive/                 preserved historical material and migration receipts
+docs/                    architecture, research, product, operations, and governance
 ```
 
-The read model is rebuilt from canonical files. A changed Dashboard, MLflow
-store, or Obsidian note can therefore be deleted and regenerated without
-changing scientific facts.
+## Development setup
 
-## MLflow archive
-
-The active v2 archive uses `myis-scope-autoindex-v1` for scientific records
-and `myis-system` for maintenance records. The six `myis-research-*`
-experiments are preserved as `legacy_read_only` history. Every v2 archive run
-is hash-bound to its shared read-model revision, freeze bundle, metric and
-schema/rule registries, manifest/receipt pointers, lifecycle state, and safe
-artifacts. The SQLite/artifact store remains external to Git and the viewer is
-read-only; maintenance supports local backup and a non-destructive rebuild plan.
-
-## Target tree
-
-```text
-01_Research/
-  control/       # authority, campaign, decisions, migration, assets
-  campaigns/     # manifests and aggregate receipts
-  src/           # deterministic kernel, SCOPE, harness, projections
-  schemas/       # versioned contracts
-  evidence/      # hashes, literature, known-missing receipts
-  projections/   # shared read model and rebuildable compatibility projections
-  dashboard/     # presentation UI and local MLflow viewer
-  scripts/       # validators, report sync, MLflow bootstrap/doctor
-  archive/       # immutable historical source and migration pointers
-```
-
-## Owner view
-
-Open `dashboard/open-dashboard.cmd` for the unified interactive dashboard. The
-Dashboard is the only user-facing start entry point. It separates **done**,
-**next**, and **waiting for Owner**, and provides Execution, Results, Evidence,
-Governance, Reports, Research Tools, and a ten-screen Presentation view.
-MLflow and the canonical Obsidian reporting vault are opened from fixed
-Dashboard actions. Retired standalone launcher sources are archived under
-`archive/p1-recovery-20260730/legacy-launchers/` for rollback inspection only.
-
-## Active research
-
-- `P0_FOUNDATION`: deterministic kernel, strict SCOPE/FiNE adapters, integrity
-  preflight, owner-local boundary, and projections; complete.
-- `P1_CPU_BASELINE`: `P1_CPU_MEASURED_COMPLETE`. Fresh CPU request
-  `dapfam-p1-fulltext-c058a3aa7357c782` produced the complete R0/R0-W by
-  train/selection matrix, 12 aggregate metric rows, a validated package, and
-  an artifact-only rigor review. The legacy receipt remains historical-invalid
-  and is not promoted.
-- `P2_SCOPE_DEVELOPMENT`: repository-only fixture passed; measured P2 has not
-  started. AutoIndex is the main lineage and SkillOpt remains conditional.
-  Read the versioned budget and freeze contract in
-  `control/budgets/p2-r1-primary-v1.yaml` and
-  `control/execution-envelope-p2.yaml`; real candidates, shortlist, and
-  selection remain zero.
-- `P3_FINAL`: locked until `D2_OPEN_FINAL`.
-- `P4_PUBLICATION`: locked until `D3_SUBMIT_RELEASE`.
-
-## Literature
-
-AutoIndex (`arXiv:2607.18603`, U154, Tier A) is stored canonically under
-`evidence/literature/` and referenced by Brain. The PDF is not copied into the
-Brain vault. The digest routes to Candidate Exposure, Prompt and Skill
-Optimization, and Document Representation and Indexing.
-
-## Checks
-
-For the next Owner action, read [`HANDOFF.md`](HANDOFF.md). It is the
-beginner-readable closeout and does not replace canonical control records.
+ArmIndex measured execution is not enabled during migration. These commands
+exercise the current repository without downloading models or opening protected
+data:
 
 ```powershell
+uv sync --locked --all-extras
 uv run --no-sync pytest -q
-uv run --no-sync myis-report sync --repository-root .
 uv run --no-sync myis-report check --repository-root .
-uv run --no-sync myis-report advisor-validate --repository-root .
 uv run --no-sync python scripts/validate_layout_v2.py
-uv run --no-sync python scripts/mlflow_doctor.py --repository-root . --store-root $env:MYIS_MLFLOW_STORE
-uv run --no-sync pytest -q tests/test_dashboard_launcher.py tests/test_projection_launchers.py
-git diff --check
 ```
 
-No GPU, paid API, network model download, or final-split access was used for P1.
-The measured run stayed inside the Owner-local process and projected only
-validated aggregates, hashes, counts, and pointers. This system is decision
-support, not legal advice.
+Open the local Dashboard with `dashboard/open-dashboard.cmd`. The Dashboard
+does not start MLflow automatically.
 
-## P2 readiness and provider boundary
+## Current status
 
-P2 is a deterministic CPU-only development lane. The repository-only
-`p2-fixture-pilot-v1` passed with 32 synthetic candidates, five adaptive
-iterations, a four-item synthetic shortlist, one fixture-only selection
-exposure, deterministic rerun equality, and 94 fail-closed negative checks.
-This is engineering evidence only; measured runs and real counters remain
-zero. The fixture catalog is under `outputs/fixtures/p2/` and the generated
-history note is `obsidian_report/05_Research_History/P2_FIXTURE_PILOT.md`.
+- Repository infrastructure was migrated in place on the existing Git history.
+- Historical measured P1 R0/R0-W evidence is preserved without reinterpretation.
+- The active ArmIndex campaign is at `A0_MIGRATION_FOUNDATION`; Task `A0.4` synthetic feasibility fixtures are next.
+- ArmIndex measured runs, Selection exposures, and Final exposures are zero.
+- Final-872 is closed; `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` remain the only Owner gates.
+- Production and benchmark validation are pending.
 
-A measured request must bind
-the versioned budget profile, campaign revision, execution envelope, Git
-commit, SCOPE/compiler/config/retriever/evaluator hashes, and the immutable
-shortlist-freeze receipt before the single selection exposure. Fixture/pilot
-runtime checks never open real selection and do not create scientific metrics.
+## Reproducibility and governance
 
-The generated beginner-readable P2 report is
-`obsidian_report/01_Phases/P2_SCOPE_DEVELOPMENT/P2_SCOPE_DEVELOPMENT_MASTER_REPORT.md`;
-the result note is
-`obsidian_report/03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md`. Both are
-projections of the shared read model, not a second source of scientific truth.
+Model revisions, adapters, representation programs, evaluators, split hashes,
+budgets, and harnesses are frozen through canonical JSON and SHA-256 receipts.
+Protected qrels and split membership stay Owner-local. Selection is exposed at
+most once after a deterministic shortlist freeze; Final requires
+`D2_OPEN_FINAL`. Every run consumes an append-only budget ledger.
 
-Codex provider profiles are user-level engineering settings, not research
-configuration. See `docs/CODEX_PROVIDER_SWITCHING.md` for the manual,
-credential-free switching workflow. The repository never stores provider
-credentials and never treats a provider label as model lineage.
+## Production profiles
 
-## Certified P1 datasets
+| Profile | Intended behavior | Current state |
+|---|---|---|
+| `FAST` | BM25 plus at most one commercial dense arm, bounded synchronous path | contract only |
+| `BALANCED` | two or three commercial arms under a frozen latency budget | contract only |
+| `DEEP` | full selected harness; asynchronous execution permitted | contract only |
 
-The Dashboard reads the generated dataset registry from the validated P1
-package, manifests, and aggregate receipt. It shows logical identifier, representation,
-classification, byte count, safe hash, and aggregate count, but never exposes
-an Owner-local source path. The active roles
-are `family-corpus`, `r0-candidate` (`chunks_doc`), and `r0-w-candidate`
-(TAC512 passages). `chunks_section` is reference-only and `chunks_element` is
-incompatible with the four-unit DAPFAM limit. Queries and relevance labels are
-marked owner-local-only; no query IDs, qrels rows, membership, or per-query
-outcomes are projected.
+## Security and privacy
 
-The validated P1 package is mirrored to MLflow as one parent and four child
-runs without protected artifacts. Dashboard, the generated MLflow archive,
-Obsidian phase/task notes, Brain reports, and Paper readiness are rebuilt from
-the same `projections/read-model/read-model.v2.json` revision, so a projection
-can be regenerated without changing evidence.
+Protected query IDs, family IDs, qrels, rankings, memberships, raw patent
+payloads, credentials, and personal absolute paths are prohibited from Git and
+all projections. Data and persistent MLflow stores remain Owner-local;
+repository artifacts are aggregate-only and content-hash bound. See
+[`SECURITY.md`](SECURITY.md) and the
+[`data boundary`](docs/governance/DATA_AND_EVIDENCE_BOUNDARY.md).
 
-The active projection contract is v2. Legacy `/api/v1` read routes remain only
-as tested migration aliases and return v2 data; archived v1 files are never
-loaded as current facts.
+## Roadmap
+
+The seven-phase roadmap runs from A0 migration through A6 publication. See
+[`docs/ROADMAP.md`](docs/ROADMAP.md) and the canonical [`PLAN.md`](PLAN.md).
+
+## Documentation
+
+- [Architecture](docs/architecture/ARCHITECTURE.md)
+- [Research protocol](docs/research/RESEARCH_PROTOCOL.md)
+- [Model selection](docs/research/MODEL_SELECTION_V02.md)
+- [Productization boundary](docs/product/PRODUCTIZATION.md)
+- [Production profiles](docs/product/PRODUCTION_PROFILES.md)
+- [Operations runbook](docs/operations/RUNBOOK.md)
+- [Thai Owner runbook](docs/operations/OWNER_RUNBOOK_TH.md)
+- [Model and license policy](docs/governance/MODEL_AND_LICENSE_POLICY.md)
+- [Contributing](CONTRIBUTING.md)
+
+## Citation
+
+Use [`CITATION.cff`](CITATION.cff). Cite measured ArmIndex findings only after
+the corresponding immutable receipt and publication record exist.
+
+## License
+
+Repository license decision pending. Model licenses are separate from the
+repository software license and must be checked per frozen adapter. See
+[`LICENSE_DECISION_REQUIRED.md`](docs/governance/LICENSE_DECISION_REQUIRED.md).
+
+## Disclaimer
+
+ArmIndex is research decision support. It is not legal advice and does not
+determine novelty, patent validity, infringement, or freedom to operate.

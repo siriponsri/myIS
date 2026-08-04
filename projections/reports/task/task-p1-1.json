@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-03T15:43:42Z",
-  "generated_from_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
+  "generated_from_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
   "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
   "governance_status": {
     "d2": "waiting_owner",
@@ -165,6 +165,7 @@
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
+      "final_accesses": 0,
       "measured_runs": 0,
       "selection_accesses": 0,
       "shortlist_count": 0
@@ -184,7 +185,7 @@
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
+      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -276,11 +277,11 @@
       "value": 0.076057227485
     }
   ],
-  "next_authorized_action": "Owner-local P2 measured preflight",
+  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
   "objective": "R0 flat BM25 measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-1",
-  "report_sha256": "6a5650fbb95d777a47cdbe3ce9f4c75565704f120eb9c20383670f35024e1571",
+  "report_sha256": "b7291ab160932b63c1ca0ea7a4930bd3529e6b644fe427626d470052ed2b6fa4",
   "report_type": "task",
   "result": {
     "decision": "completed",

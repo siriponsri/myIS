@@ -2,10 +2,16 @@
   "schema_version": "myis.mlflow-legacy-experiment-map.v2",
   "policy": "legacy_read_only",
   "active_experiments": [
-    "myis-scope-autoindex-v1",
+    "myis-armindex-multiretriever-v2",
     "myis-system"
   ],
   "experiments": [
+    {
+      "name": "myis-scope-autoindex-v1",
+      "status": "legacy_read_only",
+      "replacement": "myis-armindex-multiretriever-v2",
+      "reason": "superseded SCOPE campaign with retained P1 measured and P2 engineering history"
+    },
     {
       "name": "myis-research-bootstrap",
       "status": "legacy_read_only",

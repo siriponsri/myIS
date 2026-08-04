@@ -18,7 +18,6 @@ from myis_research.mlflow_mirror import (
     DISPLAY_NAME,
     EXPERIMENTS,
     MLflowMirror,
-    MirrorReceipt,
     MirrorSpec,
     MirrorStage,
     PROGRAM_ID,
@@ -73,18 +72,18 @@ def bootstrap(store_root: Path | None = None, *, repository_root: Path | None = 
     root = (repository_root or _repository_root()).resolve(strict=True)
     store = default_store(store_root)
     git_commit = _git_commit(root)
-    source = root / "control" / "campaigns" / "scope-autoindex-v1.yaml"
+    source = root / "control" / "campaigns" / "armindex-multiretriever-v2.yaml"
     source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
     receipt = MLflowMirror(store).sync(
         MirrorSpec(
-            stage=MirrorStage.P0_FOUNDATION,
+            stage=MirrorStage.A0_MIGRATION_FOUNDATION,
             experiment_name=SYSTEM_EXPERIMENT,
             run_name=f"myis-system-bootstrap-{git_commit[:12]}",
             git_commit=git_commit,
             canonical_source_sha256=source_hash,
-            phase=MirrorStage.P0_FOUNDATION.value,
+            phase=MirrorStage.A0_MIGRATION_FOUNDATION.value,
             data_role="bootstrap",
-            campaign_id="scope-autoindex-v1",
+            campaign_id="armindex-multiretriever-v2",
             decision_id="D1_START_CAMPAIGN",
             tags={"scientific_run": "false", "dataset_access": "none"},
             parameters={

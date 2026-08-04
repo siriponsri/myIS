@@ -11,8 +11,8 @@ assets:
     kind: protected_dataset
     disposition: reuse
     copy_mode: pointer
-    allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE, P2_SCOPE_DEVELOPMENT]
-    allowed_arms: [R0, R0-W, R1]
+    allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE, P2_SCOPE_DEVELOPMENT, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX, A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT, A4_PRODUCTION_TRANSFER_AND_SELECTION, A5_FINAL_CONFIRMATION]
+    allowed_arms: [R0, R0-W, R1, ARM-01, ARM-02, ARM-03, ARM-04, ARM-05]
     protected_data_level: owner_local_only
     allowed_use: owner-local integrity, retrieval, and aggregate evaluation
     forbidden_use: copy qrels, membership, query IDs, or per-query outcomes into Git, Brain, MLflow, Dashboard, or Paper
@@ -30,8 +30,8 @@ assets:
     kind: source_code
     disposition: adapt
     copy_mode: preport
-    allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE]
-    allowed_arms: [R0, R0-W]
+    allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE, A0_MIGRATION_FOUNDATION, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX]
+    allowed_arms: [R0, R0-W, ARM-01, ARM-02, ARM-03, ARM-04, ARM-05]
     protected_data_level: none
     allowed_use: deterministic fixture and owner-local text rendering
   - asset_id: APP-SPARSE-FTS-INDEXES
@@ -39,8 +39,8 @@ assets:
     kind: retrieval_index
     disposition: reference_only
     copy_mode: pointer
-    allowed_phases: [P1_CPU_BASELINE]
-    allowed_arms: [R0, R0-W]
+    allowed_phases: [P1_CPU_BASELINE, A1_BASELINES_AND_MULTI_ARM_SCREENING]
+    allowed_arms: [R0, R0-W, ARM-01]
     protected_data_level: protected
     allowed_use: read-only schema and corpus-hash compatibility checks
   - asset_id: LIT-AUTOINDEX-U154
@@ -48,8 +48,8 @@ assets:
     kind: literature
     disposition: reuse
     copy_mode: pointer
-    allowed_phases: [P0_FOUNDATION, P2_SCOPE_DEVELOPMENT, P4_PUBLICATION]
-    allowed_arms: [R1]
+    allowed_phases: [P0_FOUNDATION, P2_SCOPE_DEVELOPMENT, P4_PUBLICATION, A0_MIGRATION_FOUNDATION, A2_PER_ARM_AUTOINDEX, A6_PUBLICATION_AND_RELEASE]
+    allowed_arms: [R1, ARM-01, ARM-02, ARM-03, ARM-04, ARM-05]
     protected_data_level: none
     canonical_path: evidence/literature/source/U154_autoindex_learning_representation_programs_for_retrieval.pdf
     digest_path: evidence/literature/digests/U154_autoindex_learning_representation_programs_for_retrieval_digest.md
@@ -58,7 +58,7 @@ assets:
     kind: memory_projection
     disposition: adapt
     copy_mode: pointer
-    allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE, P2_SCOPE_DEVELOPMENT, P3_FINAL, P4_PUBLICATION]
+    allowed_phases: [P0_FOUNDATION, P1_CPU_BASELINE, P2_SCOPE_DEVELOPMENT, P3_FINAL, P4_PUBLICATION, A0_MIGRATION_FOUNDATION, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX, A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT, A4_PRODUCTION_TRANSFER_AND_SELECTION, A5_FINAL_CONFIRMATION, A6_PUBLICATION_AND_RELEASE]
     protected_data_level: no_protected_payloads
     allowed_use: decisions, evidence pointers, lessons, failed attempts, active context
     forbidden_use: overriding canonical run facts or copying metrics into manually edited notes

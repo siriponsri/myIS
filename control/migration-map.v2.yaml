@@ -1,26 +1,37 @@
 schema_version: myis.migration-map.v2
 status: active-cutover
-active_root: 01_Research
+active_root: campaigns/armindex-multiretriever
+active_campaign_authority: control/campaigns/armindex-multiretriever-v2.yaml
 single_source_of_truth: control-records + validated-manifests + aggregate-receipts
 active_runtime_paths:
   - control
-  - campaigns
+  - campaigns/armindex-multiretriever
   - schemas
-  - src
+  - schemas/armindex
+  - src/myis_research/armindex
   - scripts
   - evidence
   - projections
   - dashboard
+historical_runtime_paths:
+  - control/campaigns/scope-autoindex-v1.yaml
+  - campaigns/scope-autoindex-v1
+  - src/myis_research/scope
+  - schemas/scope-dsl.v1.json
 rules:
   keep: immutable evidence, approvals, manifests, session capsules, provenance
   merge: duplicate status, dashboard, Obsidian and publication facts into read-model projections
-  rewrite: plans, decisions, MLflow tags, report generation and dashboard state to P0-P4/D2-D3
-  archive: legacy C/S governance, old layout, Paper D and inbox input
+  rewrite: plans, instructions, MLflow tags, report generation and dashboard state to ArmIndex A0-A6/D2-D3
+  archive: legacy C/S governance, old layout, Paper D and adopted inbox staging inputs
   remove: only exact generated/cache paths with zero references and no unique evidence
-  owner_decisions: [D1_START_CAMPAIGN, D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
   standing_decision: D1_START_CAMPAIGN
   micro_gates: false
+  historical_scope_status: read_only
+  historical_execution_requires_frozen_contract: true
 verification:
   layout_validator: scripts/validate_layout_v2.py
   migration_inventory: archive/INDEX.md
+  armindex_manifest: archive/migration-records/armindex-20260804/migration-manifest.v1.json
+  armindex_receipt: archive/migration-records/armindex-20260804/migration-receipt.v1.json
   cleanup_manifest: control/cleanup/cleanup-manifest.v1.json

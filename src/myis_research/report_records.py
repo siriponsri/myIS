@@ -64,6 +64,10 @@ def _lifecycle(value: Any) -> str:
 
 
 def _next_action(model: Mapping[str, Any]) -> str:
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    next_command = str(armindex.get("next_command", "")).strip()
+    if next_command:
+        return next_command
     inbox = model.get("owner_inbox", [])
     if isinstance(inbox, list) and inbox and isinstance(inbox[0], Mapping):
         label = str(inbox[0].get("label", "")).strip()
@@ -329,6 +333,18 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
             ("docs/observatory/REPORTING_POLICY.md", "Reporting policy"),
         ):
             result.append(_artifact(artifact_id=relative.replace("/", "-"), title=title, artifact_type="schema", evidence_class="engineering", scientific_authority=False, safe_uri=relative, content_sha256=_hash_file(root, relative), explanation="Defines the canonical boundary used to build and validate projections."))
+    elif phase_id == "A0_MIGRATION_FOUNDATION":
+        for relative, title, artifact_type in (
+            ("control/campaigns/armindex-multiretriever-v2.yaml", "Active ArmIndex campaign", "control"),
+            ("control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md", "ArmIndex AutoIndex and HarnessOpt contract", "contract"),
+            ("archive/migration-records/armindex-20260804/migration-manifest.v1.json", "ArmIndex migration manifest", "manifest"),
+            ("archive/migration-records/armindex-20260804/migration-receipt.v1.json", "ArmIndex migration receipt", "receipt"),
+            ("archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json", "ArmIndex MLflow migration receipt", "receipt"),
+            ("schemas/armindex/read-model.v1.json", "ArmIndex read-model fragment schema", "schema"),
+        ):
+            digest = _hash_file(root, relative)
+            if digest:
+                result.append(_artifact(artifact_id=relative.replace("/", "-"), title=title, artifact_type=artifact_type, evidence_class="engineering", scientific_authority=False, safe_uri=relative, content_sha256=digest, explanation="Binds the in-place ArmIndex migration without creating scientific evidence."))
     return result
 
 
@@ -381,6 +397,11 @@ def _bindings(root: Path, model: Mapping[str, Any], phase_id: str) -> dict[str, 
         bindings["preflight_receipt"] = {"uri": preflight.get("receipt_uri"), "sha256": preflight.get("receipt_sha256")}
         proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
         bindings["candidate_freeze_proposal"] = {"uri": proposal.get("proposal_uri"), "sha256": proposal.get("proposal_sha256")}
+    elif phase_id.startswith("A"):
+        bindings["campaign"] = {"uri": "control/campaigns/armindex-multiretriever-v2.yaml", "sha256": _hash_file(root, "control/campaigns/armindex-multiretriever-v2.yaml")}
+        bindings["migration_budget"] = {"uri": "control/budgets/armindex-migration-v2.yaml", "sha256": _hash_file(root, "control/budgets/armindex-migration-v2.yaml")}
+        bindings["armindex_schema_root"] = {"uri": "schemas/armindex", "sha256": _hash_file(root, "schemas/armindex/read-model.v1.json")}
+        bindings["historical_scope"] = {"uri": "control/campaigns/scope-autoindex-v1.yaml", "sha256": _hash_file(root, "control/campaigns/scope-autoindex-v1.yaml"), "status": "historical_read_only"}
     return bindings
 
 
@@ -391,11 +412,13 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     report_id = (f"task-{task_id.lower().replace('.', '-')}") if task_id else f"phase-{phase_id.lower()}"
     status = _lifecycle(task.get("status") if task else phase.get("status"))
     scientific = phase_id == "P1_CPU_BASELINE"
-    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering" if phase_id == "P0_FOUNDATION" else "planned"
-    claim_boundary = "train_selection_only" if scientific else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} else "unavailable"
+    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
+    claim_boundary = "train_selection_only" if scientific else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} or phase_id.startswith("A") else "unavailable"
     objective = str(task.get("title")) if task else f"Deliver the {phase_id} research phase with an auditable evidence boundary."
     if phase_id == "P2_SCOPE_DEVELOPMENT":
         objective = "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2."
+    elif phase_id.startswith("A"):
+        objective = str(task.get("title")) if task else str(phase.get("purpose", f"Deliver {phase_id} under the ArmIndex contract."))
     metrics = _metrics(model, phase_id, task_id)
     artifacts = _artifacts(root, model, phase_id)
     p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
@@ -524,6 +547,12 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         result = "The foundation records the authority and safety boundary required by later phases."
         interpretation = "Engineering controls are available; no scientific metric follows from this phase."
         decision_status = "completed"
+    elif phase_id.startswith("A"):
+        armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+        output = "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer."
+        result = f"{phase_id} is {status}; ArmIndex measured runs, Selection, and Final counters remain zero."
+        interpretation = "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim."
+        decision_status = status
     else:
         output = "No execution output is available because the phase is locked behind its Owner decision."
         result = "The phase remains planned and closed."
@@ -535,6 +564,8 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "Final-split generalization or publication release before D2 and D3.",
         "Causal or legal conclusions from retrieval aggregates.",
     ]
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    armindex_counters = armindex.get("counters", {}) if isinstance(armindex.get("counters"), Mapping) else {}
     governance = {
         "protected_data_accessed": scientific,
         "measured_execution": scientific,
@@ -546,10 +577,11 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "d3": "waiting_owner",
         "final_split": "closed",
         "real_counters": {
-            "measured_runs": int(p2.get("measured_runs", 0)),
-            "candidate_count": int(p2.get("candidate_count", 0)),
-            "shortlist_count": int(p2.get("shortlist_count", 0)),
-            "selection_accesses": int(p2.get("selection_accesses", 0)),
+            "measured_runs": int(armindex_counters.get("measured_runs", 0)) if phase_id.startswith("A") else int(p2.get("measured_runs", 0)),
+            "candidate_count": int(armindex_counters.get("candidate_count", 0)) if phase_id.startswith("A") else int(p2.get("candidate_count", 0)),
+            "shortlist_count": 0 if phase_id.startswith("A") else int(p2.get("shortlist_count", 0)),
+            "selection_accesses": int(armindex_counters.get("selection_accesses", 0)) if phase_id.startswith("A") else int(p2.get("selection_accesses", 0)),
+            "final_accesses": int(armindex_counters.get("final_accesses", 0)) if phase_id.startswith("A") else 0,
         },
         "evidence_class": evidence_class,
         "scientific_authority": scientific,
@@ -576,9 +608,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "git_commit": str(model.get("source_commit", "0" * 40)),
         "objective": objective,
         "starting_state": {
-            "phase": model.get("project", {}).get("current_phase"),
-            "task": model.get("project", {}).get("current_task"),
-            "program_state": model.get("project", {}).get("state"),
+            "phase": armindex.get("current_phase") if phase_id.startswith("A") else model.get("project", {}).get("current_phase"),
+            "task": "A0.3" if phase_id.startswith("A") else model.get("project", {}).get("current_task"),
+            "program_state": armindex.get("status") if phase_id.startswith("A") else model.get("project", {}).get("state"),
             "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
             "claim_boundary": "No unsupported scientific claim",
         },
@@ -586,6 +618,8 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "work_summary": (
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
+            else "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."
+            if phase_id.startswith("A")
             else "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."
         ),
         "artifact_references": artifacts,
@@ -610,6 +644,14 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
 def build_report_records(root: Path, model: Mapping[str, Any]) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     for phase in model.get("phases", []):
+        if not isinstance(phase, Mapping):
+            continue
+        records.append(_record_for(root, model, phase=phase, task=None))
+        for task in phase.get("tasks", []):
+            if isinstance(task, Mapping):
+                records.append(_record_for(root, model, phase=phase, task=task))
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    for phase in armindex.get("phases", []):
         if not isinstance(phase, Mapping):
             continue
         records.append(_record_for(root, model, phase=phase, task=None))

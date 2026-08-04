@@ -68,3 +68,13 @@ control/campaigns/scope-autoindex-v1.yaml -text
 control/decisions/D1_START_CAMPAIGN.yaml -text
 schemas/scope-dsl.v1.json -text
 src/myis_research/scope/compiler.py -text
+
+# ArmIndex migration inputs and their adopted canonical copies are bound by
+# raw SHA-256. Preserve exact source bytes across Windows/POSIX checkouts.
+inbox/archive/armindex-migration-20260804/** -text
+inbox/archive/armindex-migration-20260804/DEEP_RESEARCH_EVIDENCE_V02_NEW.md -text whitespace=-trailing-space
+docs/research/ARMINDEX_RESEARCH_PLAN_V02.md -text
+docs/research/MODEL_SELECTION_V02.md -text
+control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md -text
+docs/research/DEEP_RESEARCH_EVIDENCE_V02.md -text whitespace=-trailing-space
+docs/operations/OWNER_RUNBOOK_TH.md -text

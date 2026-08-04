@@ -5,13 +5,13 @@ documents:
     kind: plan
     path: PLAN.md
   - content_id: research-protocol
-    title: Full research track protocol
+    title: ArmIndex research protocol
     kind: process
-    path: FULL_RESEARCH_TRACK_PLAN.md
+    path: docs/research/RESEARCH_PROTOCOL.md
   - content_id: harness-contract
-    title: Local harness build contract
+    title: AutoIndex and HarnessOpt contract
     kind: harness
-    path: LOCAL_RESEARCH_HARNESS_BUILD_PLAN.md
+    path: control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md
   - content_id: agent-contract
     title: Agent contract
     kind: harness
@@ -29,8 +29,12 @@ documents:
     kind: tools
     path: control/source-of-truth.yaml
   - content_id: tool-bootstrap
-    title: Tool bootstrap status
+    title: Active ArmIndex campaign
     kind: tools
+    path: control/campaigns/armindex-multiretriever-v2.yaml
+  - content_id: historical-scope-campaign
+    title: Historical SCOPE campaign
+    kind: history
     path: control/campaigns/scope-autoindex-v1.yaml
   - content_id: tool-lock
     title: Pinned tool registry
@@ -64,4 +68,4 @@ flows:
 tools:
   source: pyproject.toml
 presentation:
-  source: control/campaigns/scope-autoindex-v1.yaml
+  source: control/campaigns/armindex-multiretriever-v2.yaml

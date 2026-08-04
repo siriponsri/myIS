@@ -39,16 +39,21 @@ written.
 
 ## Active vocabulary
 
-Use only `P0_FOUNDATION`, `P1_CPU_BASELINE`, `P2_SCOPE_DEVELOPMENT`,
-`P3_FINAL`, and `P4_PUBLICATION`. Use arms `R0`, `R0-W`, and `R1`.
-`D1_START_CAMPAIGN` is the one-time standing campaign authorization;
+Use only `A0_MIGRATION_FOUNDATION`,
+`A1_BASELINES_AND_MULTI_ARM_SCREENING`, `A2_PER_ARM_AUTOINDEX`,
+`A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`,
+`A4_PRODUCTION_TRANSFER_AND_SELECTION`, `A5_FINAL_CONFIRMATION`, and
+`A6_PUBLICATION_AND_RELEASE` for active work. Use arms `ARM-01` through
+`ARM-05`. `D1_START_CAMPAIGN` is the one-time standing campaign authorization;
 `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` are the only writable Owner decisions.
-Do not add micro-gates. Historical vocabulary remains under `archive/` only.
+Do not add micro-gates. The P0-P4 phases and `R0`, `R0-W`, and `R1` arms remain
+readable only as historical SCOPE/P1/P2 vocabulary and evidence lineage.
 
 ## Safety boundary
 
 - CPU-only, zero paid API, no GPU, no network model download, and no provider
-  fallback through P2 readiness and any approved deterministic R1 run.
+  fallback through A0 migration and any separately approved deterministic
+  ArmIndex run.
 - Final split, qrels, membership, query IDs, per-query outcomes, credentials,
   and raw provider payloads stay in the Owner-local protected store.
 - Git, MLflow, Dashboard, Brain, Obsidian, and Paper receive only validated
@@ -56,8 +61,10 @@ Do not add micro-gates. Historical vocabulary remains under `archive/` only.
 - Never treat fixture evidence as measured evidence or a dashboard preview as
   authorization. This is decision support, not legal advice.
 
-## P2 lifecycle and freeze barrier
+## Historical P2 lifecycle and freeze barrier
 
+- These rules remain binding for any historical P2 request or continuation and
+  do not authorize new P2 execution.
 - A P2 request must bind `budget_profile_id` and `budget_profile_sha256`; no
   runtime may infer missing limits from a default.
 - One P2 scientific run proceeds through candidate generation, train
@@ -202,11 +209,13 @@ Before commit or push, run report schema/content validation, deterministic
 sync/check twice, artifact graph and checksum validation, protected/unsafe-path
 scans, session audit, Dashboard/API, repository-safe MLflow doctor, layout,
 assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
-The current state must agree everywhere: an accepted Round 3 is `accept`, a
-completed fixture is `passed`, measured P2 remains not started while all real
-counters are zero, real selection and the final split remain closed, and the
-next action is exactly `Owner-local P2 measured preflight`. A stale narrative
-is a validation failure, not a documentation preference.
+The current state must agree everywhere: ArmIndex is the active campaign,
+SCOPE is historical read-only, measured ArmIndex counters remain zero,
+Selection and Final remain closed, and the next action is exactly the
+synthetic-only A0 compute-feasibility fixture and preflight in `HANDOFF.md`.
+Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
+fixture is `passed`, and measured P2 was not started. A stale narrative is a
+validation failure, not a documentation preference.
 
 The authoritative report structure and machine-field contract are maintained
 in `docs/observatory/REPORTING_POLICY.md` and

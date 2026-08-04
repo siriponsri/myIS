@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-03T15:43:42Z",
-  "generated_from_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
+  "generated_from_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
   "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
   "governance_status": {
     "d2": "waiting_owner",
@@ -25,6 +25,7 @@
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
+      "final_accesses": 0,
       "measured_runs": 0,
       "selection_accesses": 0,
       "shortlist_count": 0
@@ -38,18 +39,18 @@
     },
     "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
     "source_of_truth": {
-      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
+      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "last_material_update": "2026-08-03T15:43:42Z",
   "metric_references": [],
-  "next_authorized_action": "Owner-local P2 measured preflight",
+  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "e9ddd69ab8c4dad61582818e3df41f1e96e7e8f3b63398f008fcae0abb8c2888",
+  "report_sha256": "8c8e2972e0bca0f063f10301209038c60d1559443ae720f666e6aa2f125ac49e",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

@@ -1,0 +1,98 @@
+---
+schema_version: "myis.obsidian-note.v2"
+read_model_revision: "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428"
+read_model_sha256: "f64306d71195c5ec15cecf35a174a1075642bf6d673ca24705229673c7e31119"
+source_commit: "9b297bd305ceaff9c0f6a2df4f04627eb66aab11"
+projection_schema_version: "myis.integrated-projection.v2"
+source_run_ids: []
+source_manifest_sha256: []
+related_literature_ids: []
+related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering"
+scientific_authority: false
+claim_boundary: "engineering_provenance_only"
+generated_from_revision: "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428"
+last_material_update: "2026-08-03T15:43:42Z"
+next_authorized_action: "Complete ArmIndex A0 migration closeout; no measured retrieval"
+managed_by: "myis-report"
+edit_policy: "generated_do_not_edit"
+safe_to_present: true
+created_at: "2026-08-03T15:43:42Z"
+updated_at: "2026-08-03T15:43:42Z"
+note_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT-MASTER"
+note_type: "phase_report"
+phase_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+task_id: null
+workflow_status: "verification_needed"
+evidence_maturity: "non_scientific"
+claim_level: "none"
+---
+
+# A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
+
+## Objective
+
+Analyze transfer, complementarity, and production-constrained harnesses.
+
+## Starting State
+
+ArmIndex measured counters are zero and historical SCOPE evidence is read-only.
+
+## Inputs and Frozen Bindings
+
+`control/campaigns/armindex-multiretriever-v2.yaml`, versioned ArmIndex schemas, and the shared read-model revision.
+
+## Work Performed
+
+The generated projection records the canonical phase/task state; it performs no measurement.
+
+## Artifacts Produced
+
+Generated phase and task reports with canonical source pointers.
+
+## Metrics
+
+No ArmIndex scientific metric is available. Measured run count is `0`.
+
+## Result
+
+Status: **locked_until_A2**.
+
+## Interpretation
+
+This is engineering migration state, not scientific evidence.
+
+## Supported Claims
+
+The phase registry and migration boundary are implemented and inspectable.
+
+## Unsupported Claims
+
+No retrieval gain, champion, production readiness, Selection, or Final claim.
+
+## Failures and Recovery
+
+No active failure is projected; failures remain append-only when present.
+
+## Governance and Safety
+
+Protected data remains Owner-local; D2 and D3 are the only Owner gates.
+
+## Decision
+
+Continue automatically only within the canonical phase and budget contract.
+
+## Next Action
+
+/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.
+
+## Evidence Links
+
+[[ARM_INDEX_HOME]] · [[ARMINDEX_MIGRATION_RESULT]] · [[SCOPE_HISTORY_INDEX]]
+
+## Tasks
+
+| Task | Work | Status |
+|---|---|---|
+| [[A3.1]] | Cross-arm transfer matrix | planned |
+| [[A3.2]] | Complementarity and HarnessOpt | planned |

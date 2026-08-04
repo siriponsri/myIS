@@ -34,15 +34,29 @@ class ReportCatalog:
         self.vault_root = (self.repository_root / "obsidian_report").resolve(strict=True)
         self.vault_root.relative_to(self.repository_root)
 
-    def list(self, *, note_type: str | None = None) -> dict[str, Any]:
+    def list(self, *, note_type: str | None = None, campaign: str | None = None) -> dict[str, Any]:
         if note_type is not None and note_type not in _REPORT_NOTE_TYPES:
             raise ReportCatalogError("note_type is not allowlisted")
+        if campaign not in {None, "historical", "armindex"}:
+            raise ReportCatalogError("campaign is not allowlisted")
         manifest = self._manifest()
         reports = []
         for entry in manifest["files"]:
             report = self._entry(entry, include_content=False)
-            if note_type is None or report["note_type"] == note_type:
-                reports.append(report)
+            if note_type is not None and report["note_type"] != note_type:
+                continue
+            phase_id = str(report.get("phase_id") or "")
+            if campaign == "armindex" and not phase_id.startswith("A"):
+                continue
+            if campaign == "historical" and not phase_id.startswith("P"):
+                continue
+            # Preserve the historical phase/task filter contract; active
+            # reports are available through the explicit ArmIndex campaign filter.
+            if campaign is None and note_type == "phase_report" and not phase_id.startswith("P"):
+                continue
+            if campaign is None and note_type == "task_report" and phase_id.startswith("A"):
+                continue
+            reports.append(report)
         return {
             "schema_version": "myis.dashboard-report-catalog.v2",
             "read_model_revision": manifest["read_model_revision"],

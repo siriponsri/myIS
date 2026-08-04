@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:model-adapter-lock:v1",
+  "title": "ArmIndex immutable model adapter lock v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "arm_id", "model_id", "resolved_model_sha", "tokenizer_sha256", "adapter_sha256", "input_format", "pooling", "normalization", "dimension", "max_input_tokens", "precision", "similarity", "license", "commercial_status", "network_required", "lock_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-model-adapter-lock.v1"},
+    "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+    "model_id": {"type": "string", "minLength": 1},
+    "resolved_model_sha": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+    "tokenizer_sha256": {"$ref": "#/$defs/sha"},
+    "adapter_sha256": {"$ref": "#/$defs/sha"},
+    "input_format": {"type": "object"},
+    "pooling": {"type": "string", "minLength": 1},
+    "normalization": {"type": "string", "minLength": 1},
+    "dimension": {"type": "integer", "minimum": 1},
+    "max_input_tokens": {"type": "integer", "minimum": 1},
+    "precision": {"enum": ["lexical", "fp32", "bf16", "fp16"]},
+    "similarity": {"type": "string", "minLength": 1},
+    "license": {"type": "string", "minLength": 1},
+    "commercial_status": {"enum": ["commercial_capable", "research_non_commercial"]},
+    "network_required": {"const": false},
+    "lock_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

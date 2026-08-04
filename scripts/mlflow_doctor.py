@@ -34,7 +34,8 @@ def _hash(path: Path) -> str:
 def doctor(repository_root: Path, store_root: Path | None = None) -> dict[str, object]:
     root = repository_root.resolve()
     checks: dict[str, bool] = {
-        "campaign_control": (root / "control/campaigns/scope-autoindex-v1.yaml").is_file(),
+        "campaign_control": (root / "control/campaigns/armindex-multiretriever-v2.yaml").is_file(),
+        "historical_campaign_control": (root / "control/campaigns/scope-autoindex-v1.yaml").is_file(),
         "legacy_mapping": _legacy_mapping_valid(root),
         "archive_independent": not any(
             "archive/" in path.as_posix().replace("\\", "/")

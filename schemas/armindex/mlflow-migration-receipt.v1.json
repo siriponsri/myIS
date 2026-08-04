@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:mlflow-migration-receipt:v1",
+  "title": "ArmIndex MLflow migration receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "migration_id",
+    "status",
+    "evidence_class",
+    "scientific_authority",
+    "claim_boundary",
+    "store_uri",
+    "active_experiment",
+    "historical_experiment",
+    "governed_experiment_count",
+    "legacy_experiment_count",
+    "archive_counts",
+    "doctor_checks",
+    "protected_artifacts_mirrored",
+    "migration_scientific_metrics_logged",
+    "dataset_access",
+    "validated_implementation_commit",
+    "recorded_at_utc",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-mlflow-migration-receipt.v1"},
+    "migration_id": {"const": "armindex-main-migration-20260804"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "engineering_migration"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"const": "infrastructure_migration_only"},
+    "store_uri": {"const": "external-store://myis/mlflow"},
+    "active_experiment": {"const": "myis-armindex-multiretriever-v2"},
+    "historical_experiment": {"const": "myis-scope-autoindex-v1"},
+    "governed_experiment_count": {"type": "integer", "minimum": 9},
+    "legacy_experiment_count": {"const": 7},
+    "archive_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipts", "runs", "artifacts"],
+      "properties": {
+        "receipts": {"type": "integer", "minimum": 0},
+        "runs": {"type": "integer", "minimum": 0},
+        "artifacts": {"type": "integer", "minimum": 0}
+      }
+    },
+    "doctor_checks": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"const": true}
+    },
+    "protected_artifacts_mirrored": {"const": false},
+    "migration_scientific_metrics_logged": {"const": false},
+    "dataset_access": {"const": "none"},
+    "validated_implementation_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "recorded_at_utc": {"type": "string", "format": "date-time"},
+    "receipt_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

@@ -967,7 +967,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "claim_boundary": "engineering_provenance_only",
         "generated_from_revision": revision,
         "last_material_update": model["generated_at"],
-        "next_authorized_action": "Owner-local P2 measured preflight",
+        "next_authorized_action": "Complete ArmIndex A0 migration closeout; no measured retrieval",
         "managed_by": "myis-report",
         "edit_policy": "generated_do_not_edit",
         "safe_to_present": True,
@@ -983,6 +983,90 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     outputs[VAULT_RELATIVE_PATH / "HOME.md"] = _note(
         {**common, "note_id": "HOME", "note_type": "home", "phase_id": project["current_phase"], "task_id": project["current_task"], "workflow_status": "blocked" if project["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "complete", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
         _p1_home_body(model, next_lines) + "\n\n## P2 Readiness\n\n" + _p2_readiness_table(model) + "\n\nP2 remains planned and not measured; selection access is zero.\n",
+    )
+
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    armindex_phases = [row for row in armindex.get("phases", []) if isinstance(row, Mapping)]
+    arm_rows = "\n".join(
+        f"| `{row.get('arm_id')}` | `{row.get('model_id')}` | {row.get('adapter_status')} | {row.get('representation_status')} | {row.get('commercial_status')} |"
+        for row in armindex.get("arms", [])
+        if isinstance(row, Mapping)
+    )
+    armindex_home = (
+        "# ArmIndex Home\n\n"
+        "ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readable but is not current ArmIndex evidence.\n\n"
+        f"## Campaign and phase status\n\n- Campaign: `{armindex.get('campaign_id')}`\n- Phase: `{armindex.get('current_phase')}`\n- Status: `{armindex.get('status')}`\n\n"
+        "## Retrieval arms\n\n| Arm | Model | Adapter | Representation | Commercial status |\n|---|---|---|---|---|\n"
+        + arm_rows
+        + "\n\n## Optimization status\n\n"
+        f"- Transfer: `{armindex.get('transfer', {}).get('status', 'not_started')}`\n"
+        f"- Complementarity: `{armindex.get('complementarity', {}).get('status', 'not_started')}`\n"
+        f"- HarnessOpt: `{armindex.get('harnessopt', {}).get('status', 'not_started')}`\n"
+        f"- Research champion: `{armindex.get('champions', {}).get('research')}`\n"
+        f"- Commercial champion: `{armindex.get('champions', {}).get('commercial')}`\n\n"
+        "## Integrity and gates\n\n"
+        f"- Measured runs: `{armindex.get('counters', {}).get('measured_runs', 0)}`\n"
+        f"- Selection exposures: `{armindex.get('counters', {}).get('selection_accesses', 0)}`\n"
+        f"- Final exposures: `{armindex.get('counters', {}).get('final_accesses', 0)}`\n"
+        "- D2 and D3 remain Owner-only.\n- Final remains closed.\n\n"
+        f"## Next command\n\n`{armindex.get('next_command', '')}`\n\n"
+        "## Historical evidence\n\n[[SCOPE_HISTORY_INDEX]] · [[P1_CPU_BASELINE_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]]\n"
+    )
+    outputs[VAULT_RELATIVE_PATH / "00_Home/ARM_INDEX_HOME.md"] = _note(
+        {**common, "note_id": "ARM-INDEX-HOME", "note_type": "home", "phase_id": armindex.get("current_phase"), "task_id": "A0.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none"},
+        armindex_home,
+    )
+    outputs[VAULT_RELATIVE_PATH / "00_Home/MOC.md"] = _note(
+        {**common, "note_id": "ARM-INDEX-MOC", "note_type": "home", "phase_id": armindex.get("current_phase"), "task_id": "A0.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none"},
+        "# ArmIndex MOC\n\n- [[ARM_INDEX_HOME]]\n" + "\n".join(f"- [[{phase.get('phase_id')}_REPORT]]" for phase in armindex_phases) + "\n- [[ARMINDEX_MIGRATION_RESULT]]\n- [[SCOPE_HISTORY_INDEX]]\n- [[Decisions]]\n- [[Failed_Attempts]]\n",
+    )
+    for phase in armindex_phases:
+        phase_id = str(phase["phase_id"])
+        phase_folder = VAULT_RELATIVE_PATH / "01_Phases" / "ArmIndex" / phase_id
+        task_table = "\n".join(
+            f"| [[{task.get('task_id')}]] | {task.get('title')} | {task.get('status')} |"
+            for task in phase.get("tasks", [])
+            if isinstance(task, Mapping)
+        ) or "| none | none | planned |"
+        body = (
+            f"# {phase_id}\n\n"
+            f"## Objective\n\n{phase.get('purpose')}\n\n"
+            "## Starting State\n\nArmIndex measured counters are zero and historical SCOPE evidence is read-only.\n\n"
+            "## Inputs and Frozen Bindings\n\n`control/campaigns/armindex-multiretriever-v2.yaml`, versioned ArmIndex schemas, and the shared read-model revision.\n\n"
+            "## Work Performed\n\nThe generated projection records the canonical phase/task state; it performs no measurement.\n\n"
+            "## Artifacts Produced\n\nGenerated phase and task reports with canonical source pointers.\n\n"
+            "## Metrics\n\nNo ArmIndex scientific metric is available. Measured run count is `0`.\n\n"
+            f"## Result\n\nStatus: **{phase.get('status')}**.\n\n"
+            "## Interpretation\n\nThis is engineering migration state, not scientific evidence.\n\n"
+            "## Supported Claims\n\nThe phase registry and migration boundary are implemented and inspectable.\n\n"
+            "## Unsupported Claims\n\nNo retrieval gain, champion, production readiness, Selection, or Final claim.\n\n"
+            "## Failures and Recovery\n\nNo active failure is projected; failures remain append-only when present.\n\n"
+            "## Governance and Safety\n\nProtected data remains Owner-local; D2 and D3 are the only Owner gates.\n\n"
+            "## Decision\n\nContinue automatically only within the canonical phase and budget contract.\n\n"
+            f"## Next Action\n\n{armindex.get('next_command')}\n\n"
+            "## Evidence Links\n\n[[ARM_INDEX_HOME]] · [[ARMINDEX_MIGRATION_RESULT]] · [[SCOPE_HISTORY_INDEX]]\n\n"
+            "## Tasks\n\n| Task | Work | Status |\n|---|---|---|\n" + task_table + "\n"
+        )
+        outputs[phase_folder / f"{phase_id}_REPORT.md"] = _note(
+            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(str(phase.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none"},
+            body,
+        )
+        for task in phase.get("tasks", []):
+            if not isinstance(task, Mapping):
+                continue
+            task_id = str(task["task_id"])
+            task_body = body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
+            outputs[VAULT_RELATIVE_PATH / "02_Tasks" / "ArmIndex" / phase_id / f"{task_id}.md"] = _note(
+                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(str(task.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none"},
+                task_body,
+            )
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md"] = _note(
+        {**common, "note_id": "ARMINDEX-MIGRATION-RESULT", "note_type": "result_report", "phase_id": "A0_MIGRATION_FOUNDATION", "task_id": "A0.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "result_id": "ARMINDEX-MIGRATION", "current_scientific_authority": False},
+        "# ArmIndex Migration Result\n\nThe infrastructure migration is represented in the shared read model. ArmIndex measured runs, Selection exposures, and Final exposures remain zero. No champion or benchmark result exists.\n\n[[ARM_INDEX_HOME]]\n",
+    )
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/SCOPE/SCOPE_HISTORY_INDEX.md"] = _note(
+        {**common, "note_id": "SCOPE-HISTORY-INDEX", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "descriptive"},
+        "# Historical SCOPE Campaign\n\n`scope-autoindex-v1` is historical and read-only. Its P1 measured evidence and P2 engineering evidence retain their original paths, hashes, counters, and claim boundaries.\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2_FIXTURE_PILOT]]\n",
     )
 
     for phase in model.get("phases", []):
@@ -1380,6 +1464,8 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     p2_review = _p2_official_review(model)
     p2_fixture = _p2_fixture(model)
     p2_proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    armindex_phases = [row for row in armindex.get("phases", []) if isinstance(row, Mapping)]
 
     phase_lines: list[str] = []
     for phase in phases:
@@ -1390,7 +1476,9 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
             )
     status_body = (
         "# Program Status / สถานะโครงการ\n\n"
-        f"State: **{state}**\n\n"
+        f"Active campaign: **{armindex.get('campaign_id', 'armindex-multiretriever-v2')}**\n\n"
+        f"Active phase: **{armindex.get('current_phase', 'A0_MIGRATION_FOUNDATION')}**\n\n"
+        f"Historical SCOPE state: **{state}**\n\n"
         + "\n".join(f"- **{phase['phase_id']}**: {phase['status']}" for phase in phases)
         + "\n\n## Resource boundary\n\n"
         f"- CPU-only: `{model['resources']['cpu_only']}`\n"
@@ -1476,7 +1564,7 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     )
 
     moc_body = (
-        "# myIS Research MOC\n\n"
+        "# ArmIndex Research MOC\n\n"
         "- [[program-status]]\n- [[phase-task-status]]\n- [[datasets]]\n"
         "- [[experiments]]\n- [[publication-readiness]]\n- [[weekly-summary]]\n\n"
         "## Phase reports / รายงานราย Phase\n\n"
@@ -1495,6 +1583,18 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         directory / "publication-readiness.md": common + readiness_body,
         directory / "weekly-summary.md": common + weekly_body,
     }
+    for phase in armindex_phases:
+        phase_id = str(phase["phase_id"])
+        task_lines = "\n".join(
+            f"- `{task.get('task_id')}` **{task.get('status')}**: {task.get('title')}"
+            for task in phase.get("tasks", [])
+            if isinstance(task, Mapping)
+        ) or "- No task rows"
+        outputs[directory / "armindex" / f"phase-{phase_id}.md"] = _projection_frontmatter(model, phase_id=phase_id) + (
+            f"# {phase_id}\n\nStatus: **{phase.get('status')}**\n\n{phase.get('purpose')}\n\n## Tasks\n\n{task_lines}\n\n"
+            f"Measured ArmIndex runs: `{armindex.get('counters', {}).get('measured_runs', 0)}`. Selection: `{armindex.get('counters', {}).get('selection_accesses', 0)}`. Final: `{armindex.get('counters', {}).get('final_accesses', 0)}`.\n\n"
+            f"Next: {armindex.get('next_command', '')}\n"
+        )
     for phase in phases:
         phase_id = str(phase["phase_id"])
         task_rows = [task for task in tasks if task.get("phase_id") == phase_id]
@@ -1570,17 +1670,20 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
     body = (
         "# Publication Readiness\n\n"
-        f"Program state: **{model['project']['state']}**\n\n"
+        f"Active campaign: **{model.get('armindex', {}).get('campaign_id', 'armindex-multiretriever-v2')}**\n\n"
+        f"Active state: **{model.get('armindex', {}).get('status', 'migration')}**\n\n"
+        f"Historical P1 state: **{model['project']['state']}**\n\n"
         f"Publication status: **{readiness.get('status', 'unknown')}**\n\n"
         + "\n".join(lines)
-        + "\n\nP1 contains measured train/selection evidence only. The P2 lifecycle passed a "
+        + "\n\nArmIndex is in infrastructure migration with zero measured runs, Selection exposures, and Final exposures. P1 contains historical measured train/selection evidence only. The historical P2 lifecycle passed a "
         f"repository-only synthetic fixture (`{fixture.get('status', 'not_executed')}`), but measured P2 has not started and no P2 scientific claim is available. "
         "AI-assisted static review and synthetic fixture provenance are archived. D2 and D3 remain Owner-only, and this projection does not authorize final evaluation or release.\n"
     )
     source_lock = {
         "schema_version": "myis.publication-source-lock.v2",
         "research_repository": "../01_Research",
-        "campaign_id": model["project"]["campaign_id"],
+        "campaign_id": model.get("armindex", {}).get("campaign_id", "armindex-multiretriever-v2"),
+        "historical_campaign_id": model["project"]["campaign_id"],
         "read_model_path": "../01_Research/projections/read-model/read-model.v2.json",
         "read_model_revision": model["read_model_revision"],
         "read_model_sha256": model["read_model_sha256"],
@@ -1815,7 +1918,12 @@ def _ensure_owner_boundary(vault_root: Path) -> None:
     readme = owner_root / "README.md"
     if not readme.exists():
         readme.write_text("# Owner Notes\n\nFiles in this directory are never generated or overwritten by `myis-report`.\n", encoding="utf-8")
-    for phase in ("P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"):
+    for phase in (
+        "P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION",
+        "A0_MIGRATION_FOUNDATION", "A1_BASELINES_AND_MULTI_ARM_SCREENING", "A2_PER_ARM_AUTOINDEX",
+        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT", "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+        "A5_FINAL_CONFIRMATION", "A6_PUBLICATION_AND_RELEASE",
+    ):
         (vault_root / "01_Phases" / phase / "Owner_Notes").mkdir(parents=True, exist_ok=True)
 
 

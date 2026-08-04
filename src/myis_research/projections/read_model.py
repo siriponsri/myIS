@@ -26,6 +26,7 @@ from ..p2 import (
 )
 from ..protection import assert_aggregate_only
 from ..observatory.projection import load_observatory_projection
+from ..armindex import ArmIndexContractError, build_armindex_projection
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -108,6 +109,12 @@ PROJECTION_SOURCE_PATHS = (
     "src/myis_research/projections/read_model.py",
     "src/myis_research/report_cli.py",
     "src/myis_research/report_records.py",
+    "control/campaigns/armindex-multiretriever-v2.yaml",
+    "control/budgets/armindex-migration-v2.yaml",
+    "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+    "schemas/armindex",
+    "src/myis_research/armindex",
+    "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -139,6 +146,10 @@ def sha256(value: bytes) -> str:
 def build_read_model(repository_root: Path) -> dict[str, Any]:
     root = repository_root.resolve()
     campaign_id = "scope-autoindex-v1"
+    try:
+        armindex = build_armindex_projection(root)
+    except ArmIndexContractError:
+        armindex = _empty_armindex_projection()
     campaign_config = _load_yaml_like(root / "control" / "campaigns" / f"{campaign_id}.yaml")
     legacy_disposition = _load_legacy_disposition(root)
     manifests = _load_manifests(root / "campaigns" / campaign_id / "manifests")
@@ -316,6 +327,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "program_id": "myis-research",
             "display_name": "myIS Research",
             "campaign_id": campaign_id,
+            "active_campaign_id": armindex["campaign_id"],
+            "active_direction": "ArmIndex",
+            "active_phase": armindex["current_phase"],
             "current_phase": "P2_SCOPE_DEVELOPMENT" if p1_pairs else "P1_CPU_BASELINE",
             "current_task": "P2.1" if p1_pairs else "P1.3",
             "state": p1_state,
@@ -334,6 +348,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         },
         "campaigns": [{
             "campaign_id": campaign_id,
+            "authority_status": "historical_read_only",
             "status": campaign_config.get("campaign", {}).get("status", "preparation"),
             "title": campaign_config.get("campaign", {}).get("title", campaign_id),
             "primary_metric": campaign_config.get("protocol", {}).get("primary_metric", "recall_at_100/out"),
@@ -342,7 +357,17 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "current_state": p1_state,
             "p2_status": p2_readiness["status"],
             "p2_preflight_status": p2_readiness.get("preflight_status", "not_started"),
+        }, {
+            "campaign_id": armindex["campaign_id"],
+            "status": armindex["status"],
+            "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization",
+            "primary_metric": "recall_at_100/out",
+            "standing_authorization": "D1_START_CAMPAIGN",
+            "active_owner_decisions": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
+            "current_state": "A0_MIGRATION_FOUNDATION",
+            "authority_status": "active",
         }],
+        "armindex": armindex,
         "p2_readiness": p2_readiness,
         "observatory": observatory,
         "phases": phases,
@@ -474,10 +499,11 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         },
         "archive_contract": {
             "schema_version": "myis.mlflow-archive-contract.v2",
-            "active_experiments": ["myis-scope-autoindex-v1", "myis-system"],
-            "scientific_experiment": "myis-scope-autoindex-v1",
+            "active_experiments": ["myis-armindex-multiretriever-v2", "myis-system"],
+            "scientific_experiment": "myis-armindex-multiretriever-v2",
             "system_experiment": "myis-system",
             "legacy_policy": "legacy_read_only",
+            "historical_experiments": ["myis-scope-autoindex-v1"],
             "writer": "serialized_append_only",
             "viewer": "sqlite_read_only",
             "freeze_required_for_measured_runs": True,
@@ -488,6 +514,39 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     body["projection_revision"] = body["read_model_revision"]
     body["read_model_sha256"] = sha256(canonical_json(body))
     return body
+
+
+def _empty_armindex_projection() -> dict[str, Any]:
+    """Return a fail-closed fragment for unit fixtures without ArmIndex control files."""
+
+    phase_ids = (
+        "A0_MIGRATION_FOUNDATION",
+        "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+        "A2_PER_ARM_AUTOINDEX",
+        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+        "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+        "A5_FINAL_CONFIRMATION",
+        "A6_PUBLICATION_AND_RELEASE",
+    )
+    return {
+        "schema_version": "myis.armindex-read-model.v1",
+        "campaign_id": "armindex-multiretriever-v2",
+        "status": "control_missing_fail_closed",
+        "current_phase": "A0_MIGRATION_FOUNDATION",
+        "phases": [{"phase_id": phase_id, "purpose": "control unavailable", "status": "blocked", "tasks": []} for phase_id in phase_ids],
+        "arms": [{"arm_id": f"ARM-{index:02d}", "model_id": "unresolved", "role": "unresolved", "license": "unresolved", "commercial_status": "unresolved", "adapter_status": "blocked", "representation_status": "not_started"} for index in range(1, 6)],
+        "representation_programs": [],
+        "transfer": {"status": "not_started", "matrix_entries": 0},
+        "complementarity": {"status": "not_started", "evaluated_arm_sets": 0},
+        "harnessopt": {"status": "not_started", "candidate_count": 0, "forbidden_mutations": []},
+        "production_profiles": [{"profile_id": profile, "status": "contract_only"} for profile in ("FAST", "BALANCED", "DEEP")],
+        "champions": {"research": None, "commercial": None},
+        "counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+        "gates": [{"gate_id": gate, "status": "waiting_owner"} for gate in ("D2_OPEN_FINAL", "D3_SUBMIT_RELEASE")],
+        "budget": {"currency": "USD", "actual": 0.0, "hard_stop": 100.0, "migration_profile": "armindex-migration-v2"},
+        "historical_campaigns": [{"campaign_id": "scope-autoindex-v1", "status": "historical_read_only", "p1_measured_evidence": "preserved_by_pointer", "p2_measured_runs": 0}],
+        "next_command": "Resolve missing ArmIndex control files before any execution.",
+    }
 
 
 def _presentation_screens(

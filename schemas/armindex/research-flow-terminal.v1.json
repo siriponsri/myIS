@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:research-flow-terminal:v1",
+  "title": "ArmIndex Research Flow terminal receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "campaign_id", "phase_id", "task_id", "research_flow_id", "terminal_state", "evidence_ids", "counters", "protected_data_accessed", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-research-flow-terminal.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"pattern": "^A[0-6]_[A-Z_]+$"},
+    "task_id": {"pattern": "^A[0-6]\\.[0-9]+$"},
+    "research_flow_id": {"pattern": "^RF-[A-Z][A-Z0-9-]*$"},
+    "terminal_state": {"enum": ["FREEZE_ARM_PROGRAM", "STOP_WITH_EVIDENCE_FLAT_REPRESENTATION_SURFACE", "BLOCKED_INVALID_ARM_OR_PROGRAM", "FREEZE_HARNESSOPT_CHAMPION", "FREEZE_FIXED_UNION", "FREEZE_BEST_SINGLE_ARM", "STOP_WITH_EVIDENCE_HARNESS_NO_GAIN", "BLOCKED_HARNESS_INTEGRITY", "FREEZE_THREE_PROFILES", "FREEZE_REDUCED_PROFILE_SET", "BLOCKED_PRODUCTION_VALIDATION"]},
+    "evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "counters": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "protected_data_accessed": {"type": "boolean"},
+    "receipt_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

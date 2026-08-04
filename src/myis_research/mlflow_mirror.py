@@ -33,6 +33,7 @@ TRACK_C_EXPERIMENT = "myis-research-track-c"
 TRACK_S_EXPERIMENT = "myis-research-track-s"
 JOINT_EXPERIMENT = "myis-research-joint"
 PUBLICATION_EXPERIMENT = "myis-research-publication"
+SCOPE_AUTOINDEX_EXPERIMENT = "myis-scope-autoindex-v1"
 # These six experiments are retained for historical inspection only.  New v2
 # archive records use the campaign/system pair below.
 LEGACY_EXPERIMENTS = (
@@ -42,11 +43,12 @@ LEGACY_EXPERIMENTS = (
     TRACK_S_EXPERIMENT,
     JOINT_EXPERIMENT,
     PUBLICATION_EXPERIMENT,
+    SCOPE_AUTOINDEX_EXPERIMENT,
 )
-CAMPAIGN_EXPERIMENT = "myis-scope-autoindex-v1"
-SCOPE_AUTOINDEX_EXPERIMENT = CAMPAIGN_EXPERIMENT
+CAMPAIGN_EXPERIMENT = SCOPE_AUTOINDEX_EXPERIMENT
+ARMINDEX_EXPERIMENT = "myis-armindex-multiretriever-v2"
 SYSTEM_EXPERIMENT = "myis-system"
-V2_EXPERIMENTS = (CAMPAIGN_EXPERIMENT, SYSTEM_EXPERIMENT)
+V2_EXPERIMENTS = (ARMINDEX_EXPERIMENT, SYSTEM_EXPERIMENT)
 EXPERIMENTS = (
     *LEGACY_EXPERIMENTS,
     *V2_EXPERIMENTS,
@@ -130,6 +132,62 @@ def scope_run_tags(*, campaign_id: str, experiment_id: str, run_id: str,
     return values
 
 
+def armindex_run_tags(
+    *,
+    phase_id: str,
+    task_id: str,
+    research_flow_id: str,
+    run_id: str,
+    parent_run_id: str | None,
+    arm_id: str | None = None,
+    model_id: str | None = None,
+    resolved_model_sha: str | None = None,
+    representation_program_id: str | None = None,
+    representation_program_sha: str | None = None,
+    harness_id: str | None = None,
+    harness_sha: str | None = None,
+    data_role: str = "fixture",
+    status: str = "planned",
+    evidence_role: str = "engineering",
+    commercial_status: str = "not_applicable",
+    failure_category: str = "none",
+    stop_reason: str = "none",
+) -> dict[str, str]:
+    """Build aggregate-safe tags for the active ArmIndex hierarchy."""
+
+    tags = {
+        "campaign_id": "armindex-multiretriever-v2",
+        "phase_id": phase_id,
+        "task_id": task_id,
+        "research_flow_id": research_flow_id,
+        "run_id": run_id,
+        "data_role": data_role,
+        "status": status,
+        "evidence_role": evidence_role,
+        "commercial_status": commercial_status,
+        "failure_category": failure_category,
+        "stop_reason": stop_reason,
+        "projection_schema_version": "myis.armindex-mlflow.v1",
+    }
+    optional = {
+        "parent_run_id": parent_run_id,
+        "arm_id": arm_id,
+        "model_id": model_id,
+        "resolved_model_sha": resolved_model_sha,
+        "representation_program_id": representation_program_id,
+        "representation_program_sha": representation_program_sha,
+        "harness_id": harness_id,
+        "harness_sha": harness_sha,
+    }
+    tags.update({key: str(value) for key, value in optional.items() if value})
+    for key in ("representation_program_sha", "harness_sha"):
+        if key in tags and not _SHA256_RE.fullmatch(tags[key]):
+            raise MirrorValidationError(f"{key} must be SHA-256")
+    if resolved_model_sha and not re.fullmatch(r"[a-f0-9]{40,64}", resolved_model_sha):
+        raise MirrorValidationError("resolved_model_sha must be a frozen revision")
+    return tags
+
+
 class MirrorValidationError(ValueError):
     """Raised when an attempted mirror crosses an allowlisted boundary."""
 
@@ -151,6 +209,13 @@ class MirrorStage(StrEnum):
     P2_SCOPE_DEVELOPMENT = "P2_SCOPE_DEVELOPMENT"
     P3_FINAL = "P3_FINAL"
     P4_PUBLICATION = "P4_PUBLICATION"
+    A0_MIGRATION_FOUNDATION = "A0_MIGRATION_FOUNDATION"
+    A1_BASELINES_AND_MULTI_ARM_SCREENING = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    A2_PER_ARM_AUTOINDEX = "A2_PER_ARM_AUTOINDEX"
+    A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT = "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+    A4_PRODUCTION_TRANSFER_AND_SELECTION = "A4_PRODUCTION_TRANSFER_AND_SELECTION"
+    A5_FINAL_CONFIRMATION = "A5_FINAL_CONFIRMATION"
+    A6_PUBLICATION_AND_RELEASE = "A6_PUBLICATION_AND_RELEASE"
 
     @property
     def experiment_name(self) -> str:
@@ -160,6 +225,13 @@ class MirrorStage(StrEnum):
             MirrorStage.P2_SCOPE_DEVELOPMENT: CAMPAIGN_EXPERIMENT,
             MirrorStage.P3_FINAL: CAMPAIGN_EXPERIMENT,
             MirrorStage.P4_PUBLICATION: CAMPAIGN_EXPERIMENT,
+            MirrorStage.A0_MIGRATION_FOUNDATION: SYSTEM_EXPERIMENT,
+            MirrorStage.A1_BASELINES_AND_MULTI_ARM_SCREENING: ARMINDEX_EXPERIMENT,
+            MirrorStage.A2_PER_ARM_AUTOINDEX: ARMINDEX_EXPERIMENT,
+            MirrorStage.A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT: ARMINDEX_EXPERIMENT,
+            MirrorStage.A4_PRODUCTION_TRANSFER_AND_SELECTION: ARMINDEX_EXPERIMENT,
+            MirrorStage.A5_FINAL_CONFIRMATION: ARMINDEX_EXPERIMENT,
+            MirrorStage.A6_PUBLICATION_AND_RELEASE: ARMINDEX_EXPERIMENT,
         }[self]
 
 
@@ -194,9 +266,9 @@ class ProjectionLineage:
             raise MirrorValidationError("projection lineage Linear issue IDs must be unique")
         if len(self.linear_issue_ids) != len(self.task_ids):
             raise MirrorValidationError("projection lineage requires one Linear issue ID per Task ID")
-        if any(not re.fullmatch(r"P[0-4]_[A-Z_]+", value) for value in self.phase_ids):
+        if any(not re.fullmatch(r"(?:P[0-4]|A[0-6])_[A-Z_]+", value) for value in self.phase_ids):
             raise MirrorValidationError("projection lineage contains an invalid Phase ID")
-        if any(not re.fullmatch(r"P[0-4]\.[0-9]+", value) for value in self.task_ids):
+        if any(not re.fullmatch(r"(?:P[0-4]|A[0-6])\.[0-9]+", value) for value in self.task_ids):
             raise MirrorValidationError("projection lineage contains an invalid Task ID")
         if any(value not in {"D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"} for value in self.gate_ids):
             raise MirrorValidationError("projection lineage contains an invalid Gate ID")

@@ -7,7 +7,7 @@ Research API and never becomes a source of metrics, evidence, or approval.
 ## Views
 
 - Overview: current phase/task, up to three next actions, projection health,
-  P0-P4 phase spine, cost, readiness, and Owner inbox.
+  A0-A6 ArmIndex phase spine, five arms, cost, readiness, and Owner inbox.
 - Execution: Simple and PM boards, task detail, dependencies, WIP, phase
   detail, milestone timeline, and RAID state.
 - Results: separate Output, Result, and Interpretation registries with evidence
@@ -27,7 +27,7 @@ Research API and never becomes a source of metrics, evidence, or approval.
 
 ```mermaid
 flowchart LR
-    H[CPU harness] --> R[validated run manifest]
+    H[ArmIndex harness] --> R[validated run manifest]
     R --> M[MLflow additive mirror]
     R --> G[report generator]
     M --> G
@@ -57,5 +57,6 @@ The launcher reuses a listener only when `/healthz` advertises the current
 `myis.dashboard-api.v2` contract. An older same-project Dashboard is treated as
 an unknown listener instead of being reused with an incompatible frontend.
 
-The `/api/v1` read routes are migration aliases only and return the active v2
-projection. No v1 read-model file or schema is active.
+The `/api/v1` read routes are compatibility aliases. The v2 shared read model
+contains one versioned `armindex` fragment while retaining historical SCOPE/P1
+records. `/api/v2/armindex` exposes only the active ArmIndex state.

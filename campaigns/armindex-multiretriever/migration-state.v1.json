@@ -1,0 +1,23 @@
+{
+  "schema_version": "myis.armindex-migration-state.v1",
+  "campaign_id": "armindex-multiretriever-v2",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "task_id": "A0.3",
+  "status": "migration_complete",
+  "evidence_class": "engineering_migration",
+  "scientific_authority": false,
+  "claim_boundary": "infrastructure_migration_only",
+  "measured_runs": 0,
+  "candidate_count": 0,
+  "selection_accesses": 0,
+  "final_accesses": 0,
+  "charged_usd": 0,
+  "gpu_scientific_runs": 0,
+  "paid_api_calls": 0,
+  "model_downloads": 0,
+  "model_weight_modifications": 0,
+  "d2_open_final": "waiting_owner",
+  "d3_submit_release": "waiting_owner",
+  "final_split": "closed",
+  "historical_scope": "read_only"
+}

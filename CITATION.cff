@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Please cite the versioned ArmIndex artifact and its linked publication when available."
+title: "ArmIndex: Retriever-Conditioned Representation Search and Harness Optimization"
+type: software
+version: 0.2.0
+date-released: 2026-08-04
+repository-code: "https://github.com/siriponsri/myIS"
+authors:
+  - family-names: "Sri"
+    given-names: "Siripon"
+keywords:
+  - information retrieval
+  - structured documents
+  - patent retrieval
+  - retrieval-augmented generation
+  - multi-retriever optimization
