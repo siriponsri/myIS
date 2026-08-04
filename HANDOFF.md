@@ -587,8 +587,9 @@ Phase/Task recovery-binding regression, read-model-only validation, P2 closure
 policy, measured-control check, and `git diff --check`; all passed and the
 worktree remained clean. Audit
 `p2-runtime-resilience-v2-independent-verifier-accept-20260803` pairs this
-recovery with the retained `REVISE` record. The remaining integration gate is
-a fresh green CI run on the pushed final branch head before merge and cleanup.
+recovery with the retained `REVISE` record. The final integration CI run
+`30863254706` passed, and the repair was merged to `main` as
+`66ca3187dac1e000d850f69ae304d77e319484dc`.
 
 Post-acceptance local verification passed the full suite with `328` tests and
 one pre-existing Starlette deprecation warning, `23` focused runtime tests,
@@ -604,8 +605,14 @@ shared read-model revision is
 `9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc`
 with SHA-256
 `a9060a69278260a32fad9e6efd7209fcac38df81b739ef014e3b49da25d302f6`.
-The branch still requires its final session capsule, push, and fresh green CI
-before merge or cleanup.
+The final session capsule is
+`20260803T160347Z-p2-runtime-resilience-v2-integration-closeout-v1` with
+SHA-256 `7001de936e71b57c039d122c0e0c9e9570ed5b8b93b5bc35c83a5adbfeeb9b4f`.
+The old closeout branch/worktree was removed after merge. The Owner-local goal
+launcher is `inbox/P2_MEASURED_AUTORESEARCH_CLOSEOUT_GOAL.md`, with the old
+pre-v2 bytes preserved under `inbox/archive/`; the next measured worktree is
+`01_Research-p2-measured-autoresearch-v2` on branch
+`codex/p2-measured-autoresearch-v2`, created from clean `main`.
 
 This is engineering preparation only. Measured P2, real candidates, shortlist,
 selection, final-872, D2, and D3 remain closed with real counters at zero. The
