@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-03T15:43:42Z",
-  "generated_from_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
-  "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+  "generated_at": "2026-08-04T11:45:08Z",
+  "generated_from_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
+  "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+    "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -797,14 +797,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-03T15:43:42Z",
+  "last_material_update": "2026-08-04T11:45:08Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "28fff06175d8396bbc4d0f5a236035d1f16d10e4f90714843b8b6ca97b58e999",
+  "report_sha256": "6307b1414ceac4d859b7d7b82c5295b33e6c36f29657121c3cfacb1b45438df4",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

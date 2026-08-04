@@ -1,0 +1,91 @@
+{
+  "schema_version": "myis.repository-hygiene-audit.v1",
+  "audit_id": "armindex-migration-repository-hygiene-20260804",
+  "recorded_at_utc": "2026-08-04T11:59:13.295Z",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "task_id": "A0.3",
+  "status": "PASS",
+  "evidence_class": "engineering_migration",
+  "scientific_authority": false,
+  "claim_boundary": "repository_hygiene_only",
+  "baseline_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "scope": {
+    "tracked_research_files": 1285,
+    "migration_added_files": 84,
+    "candidate_files_checked": 33,
+    "duplicate_groups": 6,
+    "material_duplicate_groups": 4,
+    "empty_tracked_files": 1,
+    "initial_cache_directories_removed": 16,
+    "post_validation_cache_directories_removed": 13
+  },
+  "actions": [
+    {
+      "path": "docs/research/ARMINDEX_IMPLEMENTATION_PLAN.md",
+      "sha256": "bab8574246987f3d8490dd6bc16b58e8856927a272132b6f6e5bfbd4d71505a8",
+      "action": "archive",
+      "archive_uri": "archive/migration-records/armindex-20260804/ARMINDEX_IMPLEMENTATION_PLAN.md",
+      "reason": "historical migration checkpoint, not active research authority"
+    },
+    {
+      "path": "scripts/build_migration_manifest.py",
+      "sha256": "925c7dbb3ea34f992d2886536381c42f81c6e7a5b8e6db5b3bdfdf0a0cc48aff",
+      "action": "archive",
+      "archive_uri": "archive/legacy-tools/build_migration_manifest.py",
+      "reason": "no active caller and output contract permits personal absolute roots"
+    },
+    {
+      "path": "docs/product/USE_CASES.md",
+      "action": "retain_and_link",
+      "reference_uri": "README.md",
+      "reason": "distinct public use-case boundary with no measured or production claim"
+    },
+    {
+      "path": "Research and Brain ignored tool caches",
+      "action": "remove_regenerable_caches",
+      "removed_directory_operations": 29,
+      "reason": "Python, pytest, and Ruff caches are not evidence and are regenerated automatically"
+    }
+  ],
+  "retained_duplicates": [
+    {
+      "class": "directory_placeholders",
+      "reason": "distinct empty directory identities"
+    },
+    {
+      "class": "skill_upstream_licenses",
+      "reason": "license notice must remain colocated with each adapted skill"
+    },
+    {
+      "class": "active_and_historical_alias_catalogs",
+      "reason": "active lookup and immutable historical snapshot have separate authority roles"
+    }
+  ],
+  "retained_candidates": [
+    {
+      "path": "schemas/armindex/latency-cost-receipt.v1.json",
+      "reason": "future ArmIndex operational receipt contract covered by the canonical schema root"
+    },
+    {
+      "path": "src/myis_research/armindex/brain.py",
+      "reason": "directly exercised by ArmIndex contract tests"
+    },
+    {
+      "path": "scripts/cleanup.py",
+      "reason": "fail-closed exact-path cleanup executor retained as a safety utility"
+    },
+    {
+      "path": "control/decisions/ledger.jsonl",
+      "reason": "intentionally empty append-only Owner decision ledger"
+    }
+  ],
+  "checks": {
+    "active_runtime_references_to_archived_files": 0,
+    "tracked_python_cache_files": 0,
+    "protected_surfaces_opened": false,
+    "protected_payloads_copied": false,
+    "historical_evidence_deleted": false,
+    "duplicate_evidence_reinterpreted": false
+  },
+  "audit_sha256": "34047128914f40951657aff47ff0930a5f6234dd101f65991cd9cabfe4ff7823"
+}

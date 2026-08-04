@@ -178,6 +178,7 @@ The seven-phase roadmap runs from A0 migration through A6 publication. See
 - [Model selection](docs/research/MODEL_SELECTION_V02.md)
 - [Productization boundary](docs/product/PRODUCTIZATION.md)
 - [Production profiles](docs/product/PRODUCTION_PROFILES.md)
+- [Use cases](docs/product/USE_CASES.md)
 - [Operations runbook](docs/operations/RUNBOOK.md)
 - [Thai Owner runbook](docs/operations/OWNER_RUNBOOK_TH.md)
 - [Model and license policy](docs/governance/MODEL_AND_LICENSE_POLICY.md)

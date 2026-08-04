@@ -1,7 +1,7 @@
 {
   "schema_version": "myis.armindex-migration-receipt.v1",
   "migration_id": "armindex-main-migration-20260804",
-  "status": "validation_complete_pending_commit",
+  "status": "implementation_committed_pending_clean_checkout",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "task_id": "A0.3",
   "evidence_class": "engineering_migration",
@@ -33,12 +33,13 @@
     "markdown_links": {"status": "PASS", "files": 26},
     "session_audit": {"status": "PASS", "unresolved_invalid": 0},
     "brain_literature": {"status": "PASS", "notes": 154},
-    "mlflow_doctor": {"status": "PASS", "archive_receipts": 49, "archive_runs": 49, "archive_artifacts": 584},
+    "mlflow_doctor": {"status": "PASS", "archive_receipts": 50, "archive_runs": 50, "archive_artifacts": 596},
+    "repository_hygiene": {"status": "PASS", "tracked_files": 1285, "duplicate_groups": 6, "archived_files": 2, "removed_cache_directory_operations": 29},
     "independent_verifier": {"status": "PASS", "checks": 9},
-    "clean_checkout": {"status": "PENDING_COMMIT"},
+    "clean_checkout": {"status": "PENDING_CLOSEOUT"},
     "git_diff_check": {"status": "PASS"}
   },
-  "final_commit": null,
-  "final_tree": null,
-  "receipt_sha256": "99f762022d35fcb001261a9bc0be5364d7ac29e9e7c06580fb739587273b2665"
+  "final_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "final_tree": "082ff0d1433c06f858847a1f3c3469592c3ec0ac",
+  "receipt_sha256": "2fd6ac4a60d434af2f17c4e824dd789a837cd7541d904192b414629383ff6c8f"
 }

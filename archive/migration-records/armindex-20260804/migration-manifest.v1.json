@@ -8,6 +8,11 @@
   "history_rewritten": false,
   "new_repository_created": false,
   "license_decision": "owner_follow_up_required",
+  "implementation_checkpoint": {
+    "uri": "archive/migration-records/armindex-20260804/ARMINDEX_IMPLEMENTATION_PLAN.md",
+    "sha256": "bab8574246987f3d8490dd6bc16b58e8856927a272132b6f6e5bfbd4d71505a8",
+    "disposition": "archived_after_closeout_hygiene_audit"
+  },
   "source_inputs": [
     {"old_path": "inbox/GOAL.md", "canonical_path": "control/migrations/armindex-migration-decision.v1.yaml", "archive_path": "inbox/archive/armindex-migration-20260804/GOAL.md", "disposition": "adopted_and_archived", "source_sha256": "b1660cff996c5520496f6579e4787fb3501bfce136c24c6bb84afee37d967894", "reason": "migration authority adopted into canonical control records"},
     {"old_path": "inbox/PLAN_V02_NEW.md", "canonical_path": "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md", "archive_path": "inbox/archive/armindex-migration-20260804/PLAN_V02_NEW.md", "disposition": "byte_identical_adoption", "source_sha256": "0a8c57068fded108fa49abdafd27fcf55802cde264083369374406e5799f5dec", "reason": "detailed active research plan"},

@@ -1,0 +1,42 @@
+{
+  "schema_version": "myis.armindex-mlflow-migration-receipt.v1",
+  "migration_id": "armindex-main-migration-20260804",
+  "status": "PASS",
+  "evidence_class": "engineering_migration",
+  "scientific_authority": false,
+  "claim_boundary": "infrastructure_migration_only",
+  "store_uri": "external-store://myis/mlflow",
+  "active_experiment": "myis-armindex-multiretriever-v2",
+  "historical_experiment": "myis-scope-autoindex-v1",
+  "governed_experiment_count": 9,
+  "legacy_experiment_count": 7,
+  "archive_counts": {
+    "receipts": 50,
+    "runs": 50,
+    "artifacts": 596
+  },
+  "doctor_checks": {
+    "archive_independent": true,
+    "archive_lineage": true,
+    "artifact_root": true,
+    "backup_ready": true,
+    "campaign_control": true,
+    "database_exists": true,
+    "historical_campaign_control": true,
+    "legacy_experiments_preserved": true,
+    "legacy_mapping": true,
+    "required_tables": true,
+    "sqlite_header": true,
+    "sqlite_read_only": true,
+    "store_configured": true,
+    "store_external": true,
+    "store_metadata": true,
+    "v2_experiments_present": true
+  },
+  "protected_artifacts_mirrored": false,
+  "migration_scientific_metrics_logged": false,
+  "dataset_access": "none",
+  "validated_implementation_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "recorded_at_utc": "2026-08-04T12:02:14.910Z",
+  "receipt_sha256": "b794848854c45f0397211293f8fcebbdc6c91f7889085eac05a1b0b6cb072f65"
+}

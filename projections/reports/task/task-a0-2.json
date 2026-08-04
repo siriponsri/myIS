@@ -41,7 +41,7 @@
       "artifact_type": "manifest",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "25636f81bf1b962684be25723f9efbf9423eaa55d36d26f4a6170313816b595a",
+      "content_sha256": "e64372bd6b6e746f92a028749375661b3e0c0b34900b418c6602d6425f62d435",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -59,7 +59,7 @@
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "10c25ac640e8f5b18189c7637f69fbaebaeab790cb71d2f1a8cc8ad90153e2a8",
+      "content_sha256": "576efe28a33b5e7cbbce352444fb9373ab0b5d886bef2a3a2a4cc491adbd3cac",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -70,6 +70,24 @@
       "safe_uri": "archive/migration-records/armindex-20260804/migration-receipt.v1.json",
       "scientific_authority": false,
       "title": "ArmIndex migration receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ff2c94d587fbf0577ebacfbdb1f626450ca1c494bb9a9a042aad7fe412b212c7",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex MLflow migration receipt",
       "validation_status": "validated"
     },
     {
@@ -111,13 +129,18 @@
     },
     {
       "artifact_id": "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
-      "sha256": "25636f81bf1b962684be25723f9efbf9423eaa55d36d26f4a6170313816b595a",
+      "sha256": "e64372bd6b6e746f92a028749375661b3e0c0b34900b418c6602d6425f62d435",
       "uri": "archive/migration-records/armindex-20260804/migration-manifest.v1.json"
     },
     {
       "artifact_id": "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
-      "sha256": "10c25ac640e8f5b18189c7637f69fbaebaeab790cb71d2f1a8cc8ad90153e2a8",
+      "sha256": "576efe28a33b5e7cbbce352444fb9373ab0b5d886bef2a3a2a4cc491adbd3cac",
       "uri": "archive/migration-records/armindex-20260804/migration-receipt.v1.json"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+      "sha256": "ff2c94d587fbf0577ebacfbdb1f626450ca1c494bb9a9a042aad7fe412b212c7",
+      "uri": "archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json"
     },
     {
       "artifact_id": "schemas-armindex-read-model.v1.json",
@@ -126,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-03T15:43:42Z",
-  "generated_from_revision": "ab4f9d9dde9c71bd9eb66402c151935a5f57341e3344c841f3cb20c8fd816428",
-  "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+  "generated_at": "2026-08-04T11:45:08Z",
+  "generated_from_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
+  "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -158,7 +181,7 @@
       "sha256": "ade99df23119e209e7e9e203a6dd5d147c024f3f4289935a8a1b4e2424b81232",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
+    "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -174,13 +197,13 @@
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-03T15:43:42Z",
+  "last_material_update": "2026-08-04T11:45:08Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
   "objective": "Model and representation contract freeze",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-2",
-  "report_sha256": "c3469671a720688399bc65ab41e4a2beef12d352e7180531438fe4279eebe88c",
+  "report_sha256": "dd9231f859ba4eedf2afde6edb2b9baf8db26f080decd77778a4dd7a0b8c81fd",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -205,6 +228,7 @@
         "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
         "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
         "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+        "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
         "schemas-armindex-read-model.v1.json"
       ]
     }
