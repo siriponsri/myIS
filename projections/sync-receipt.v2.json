@@ -1,12 +1,12 @@
 {
-  "dashboard_snapshot_sha256": "62e08d21297cc7ef560ce05906c2677124b51573a7be3d7b137a6de6df8871a0",
-  "mlflow_archive_sha256": "191133f7f7fd315c5ab9711f303ce6aaa57860ba2a522f05038cf96167f708e6",
-  "mlflow_run_id": "ac0b78b153b942b79aa185504ac895b8",
-  "obsidian_manifest_sha256": "cc2a89048e964ef90ae12fb326961868909f5fe71885984e8d7e8b6c73674237",
+  "dashboard_snapshot_sha256": "db8ea8a3640484b193f983cea622586db29820e6f6000b0ecaf9f8ae39616726",
+  "mlflow_archive_sha256": "3faee770d26ecd37a8baad201a919cf7a61f093612e7122bf996ee16cf5e6ace",
+  "mlflow_run_id": "23c9c6fe26884f6982ae68793f59be41",
+  "obsidian_manifest_sha256": "55c954b4fd338d02893e4c47d3120ba63ed213d6d8396c94cf35b29709664526",
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "291fc1a9ac4684b0f3b2f833faddd8ba684919f1501d9f0a249ec1577dcd1efb",
-  "read_model_sha256": "62e08d21297cc7ef560ce05906c2677124b51573a7be3d7b137a6de6df8871a0",
+  "read_model_revision": "01ed21696ccc52de2913985fb2625c1e314d3c01da4a126f07379d73fc8d3971",
+  "read_model_sha256": "db8ea8a3640484b193f983cea622586db29820e6f6000b0ecaf9f8ae39616726",
   "schema_version": "myis.projection-sync-receipt.v2",
-  "source_commit": "0e0fca2100631843795f63e15d4a85ecc3312835",
+  "source_commit": "b340e94785b3fd5e78913c54ae6d065ce34f9252",
   "status": "PASS"
 }

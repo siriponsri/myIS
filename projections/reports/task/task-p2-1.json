@@ -742,9 +742,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-04T08:10:39Z",
-  "generated_from_revision": "291fc1a9ac4684b0f3b2f833faddd8ba684919f1501d9f0a249ec1577dcd1efb",
-  "git_commit": "0e0fca2100631843795f63e15d4a85ecc3312835",
+  "generated_at": "2026-08-04T08:30:02Z",
+  "generated_from_revision": "01ed21696ccc52de2913985fb2625c1e314d3c01da4a126f07379d73fc8d3971",
+  "git_commit": "b340e94785b3fd5e78913c54ae6d065ce34f9252",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -796,7 +796,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "0e0fca2100631843795f63e15d4a85ecc3312835",
+    "git_commit": "b340e94785b3fd5e78913c54ae6d065ce34f9252",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -819,14 +819,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-04T08:10:39Z",
+  "last_material_update": "2026-08-04T08:30:02Z",
   "metric_references": [],
   "next_authorized_action": "Owner-local P2 measured preflight",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "0d45627d3c4beeac8835c22c61da1a79dcc380de5724f5a811a001803f0be0e5",
+  "report_sha256": "38b5fc81b5326f62aaa8a42b6dd1ba8be09ac2ea3a5bd3ca79a5ddb5c565af3e",
   "report_type": "task",
   "result": {
     "decision": "not_started",
