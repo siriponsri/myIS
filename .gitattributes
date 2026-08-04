@@ -83,7 +83,12 @@ docs/operations/OWNER_RUNBOOK_TH.md -text
 # their committed LF bytes stable in clean Windows and POSIX checkouts.
 schemas/armindex/*.json -text
 control/armindex/*.json -text
+control/campaigns/armindex-multiretriever-v2.yaml -text
+control/budgets/armindex-migration-v2.yaml -text
+control/migrations/armindex-*.yaml -text
+control/migration-map.v2.yaml -text
 campaigns/armindex-multiretriever-v2/evidence/*.json -text
+archive/migration-records/armindex-20260804/** -text
 outputs/fixtures/armindex/**/*.json -text
 outputs/audits/repository/*.json -text
 outputs/audits/dashboard/*.json -text
