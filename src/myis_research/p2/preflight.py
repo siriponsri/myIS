@@ -220,7 +220,9 @@ def _run_measured_p2_preflight(
         profile_ok,
         "profile_matches" if profile_ok else "profile_mismatch",
     ))
-    envelope_sha256 = canonical_sha256(envelope)
+    # The measured-request contract binds the envelope's committed file bytes.
+    # Keep the receipt on that same raw-byte hash rather than a YAML semantic hash.
+    envelope_sha256 = file_sha256(root / active["execution_envelope"])
     envelope_ok = (
         request["execution_envelope_uri"] == active["execution_envelope"]
         and request["execution_envelope_id"] == envelope["envelope_id"]
