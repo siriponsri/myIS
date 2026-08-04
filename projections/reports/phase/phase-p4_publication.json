@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T12:12:14Z",
-  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
-  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "generated_at": "2026-08-04T15:19:53Z",
+  "generated_from_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,20 +37,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+    "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
     "source_of_truth": {
       "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
-  "last_material_update": "2026-08-04T12:12:14Z",
+  "last_material_update": "2026-08-04T15:19:53Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "Deliver the P4_PUBLICATION research phase with an auditable evidence boundary.",
   "phase_id": "P4_PUBLICATION",
   "report_id": "phase-p4_publication",
-  "report_sha256": "77d83373a9970f89682f649b63bc8c4d2b03c3bf6fe44292c995f7a254e45705",
+  "report_sha256": "474c18c4320e9f34e3952234178394f9f9e901395ed62b51bd7fbcfec386ce7f",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

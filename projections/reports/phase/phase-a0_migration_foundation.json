@@ -298,9 +298,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-04T12:12:14Z",
-  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
-  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "generated_at": "2026-08-04T15:19:53Z",
+  "generated_from_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -330,7 +330,7 @@
       "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+    "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -346,13 +346,13 @@
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-04T12:12:14Z",
+  "last_material_update": "2026-08-04T15:19:53Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "0843d69e7e5d143e9be906ea0833f6567a4d42df84f468158f9623dadd79aecc",
+  "report_sha256": "72502d8f3f643333ebb0e2c24e52e234b3c2a1fcda4c669bcdd7ef68b663a7be",
   "report_type": "phase",
   "result": {
     "decision": "active",

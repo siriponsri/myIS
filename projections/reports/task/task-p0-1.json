@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T12:12:14Z",
-  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
-  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "generated_at": "2026-08-04T15:19:53Z",
+  "generated_from_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,20 +108,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+    "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
     "source_of_truth": {
       "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-04T12:12:14Z",
+  "last_material_update": "2026-08-04T15:19:53Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "Deterministic kernel and schema contracts",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-1",
-  "report_sha256": "a127e6414948c694e825107f8bd4ec5d69b5af45ee20623dd3b953044533aaa7",
+  "report_sha256": "811abdebbf0dea02e380f37bcc4a2bbca42cdff3403925d467f58d4ffe3b8b29",
   "report_type": "task",
   "result": {
     "decision": "completed",

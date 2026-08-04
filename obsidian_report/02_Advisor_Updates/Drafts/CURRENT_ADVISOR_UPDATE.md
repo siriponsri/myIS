@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb"
-read_model_sha256: "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529"
-source_commit: "551bee74eee0dbcf6ad815e78d474d8e707878f4"
+read_model_revision: "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32"
+read_model_sha256: "ead7c278c2215ed79a7102376e7b8728693167a86ba633578bfbf821cc16ad29"
+source_commit: "07227c57cdcdaf91efbc3416e8127074e99229fb"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb"
-last_material_update: "2026-08-04T12:12:14Z"
+generated_from_revision: "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32"
+last_material_update: "2026-08-04T15:19:53Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-04T12:12:14Z"
-updated_at: "2026-08-04T12:12:14Z"
+created_at: "2026-08-04T15:19:53Z"
+updated_at: "2026-08-04T15:19:53Z"
 note_id: "CURRENT-ADVISOR-UPDATE"
 note_type: "advisor_update"
 phase_id: "P1_CPU_BASELINE"
