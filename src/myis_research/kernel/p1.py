@@ -56,7 +56,7 @@ class BM25Index:
             raise ValueError("document IDs must be unique")
 
     def rank(self, query: str, *, limit: int | None = None) -> list[tuple[str, str, float]]:
-        query_terms = set(tokenize(query))
+        query_terms = tuple(sorted(set(tokenize(query))))
         if not query_terms or not self.documents:
             return []
         scores: dict[int, float] = defaultdict(float)
@@ -116,7 +116,9 @@ def evaluate_baseline(
     )
     if ranker is None:
         index = BM25Index(indexed_rows)
-        ranker = lambda text: index.rank(text)
+
+        def ranker(text: str) -> Sequence[tuple[str, str, float]]:
+            return index.rank(text)
     scopes = ("ALL", "IN", "OUT")
     recall_sums: dict[str, float] = {scope: 0.0 for scope in scopes}
     retrieved_relevant: dict[str, int] = {scope: 0 for scope in scopes}

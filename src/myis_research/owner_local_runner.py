@@ -8,7 +8,7 @@ import os
 import sqlite3
 import time
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence
 
 from .kernel.canonical import canonical_sha256, file_sha256
 from .kernel.integrity import run_integrity_preflight

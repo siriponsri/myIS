@@ -2,7 +2,10 @@ schema_version: myis.armindex-migration-decision.v1
 decision_id: armindex-main-migration-20260804
 authority: owner_goal_armindex_migration
 authority_archive_uri: inbox/archive/armindex-migration-20260804/GOAL.md
-authority_sha256: b1660cff996c5520496f6579e4787fb3501bfce136c24c6bb84afee37d967894
+authority_sha256: cd8458ec4773992c146ddee204835724918cc4c54e70893ed5e85af718faea8f
+initial_authority_sha256: b1660cff996c5520496f6579e4787fb3501bfce136c24c6bb84afee37d967894
+amendments:
+  - control/migrations/armindex-a0.10-amendment.v1.yaml
 effective_date: 2026-08-04
 repository: https://github.com/siriponsri/myIS
 target_branch: main

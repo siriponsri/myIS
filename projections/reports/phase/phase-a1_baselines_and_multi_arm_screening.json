@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T11:45:08Z",
-  "generated_from_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
-  "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "generated_at": "2026-08-04T12:12:14Z",
+  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -38,10 +38,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "ade99df23119e209e7e9e203a6dd5d147c024f3f4289935a8a1b4e2424b81232",
+      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,18 +52,18 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-04T11:45:08Z",
+  "last_material_update": "2026-08-04T12:12:14Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "ca16abe84426375189aafde02c1bcb729b026e16feddfdca51748e701f9a478c",
+  "report_sha256": "da4ee29c54a50c8e7cdf1f76ee9098843d16a337b296ed3388ac4337c6818369",
   "report_type": "phase",
   "result": {
     "decision": "planned",
@@ -77,7 +77,7 @@
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A0_MIGRATION_FOUNDATION",
     "program_state": "active_migration",
-    "task": "A0.3"
+    "task": null
   },
   "status": "planned",
   "supported_claims": [

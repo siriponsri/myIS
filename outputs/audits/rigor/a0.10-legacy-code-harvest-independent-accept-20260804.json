@@ -1,0 +1,123 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a0.10-legacy-code-harvest-independent-accept-20260804",
+  "reviewed_at_utc": "2026-08-04T15:04:30Z",
+  "artifact": "A0.10 legacy code harvest and phase-ready scaffolding repaired package",
+  "artifact_path": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+  "artifact_sha256": "07349eacb3e8b2c878e977a00a3cd9c45c1264a2d34427b7bc55e7f32c2a31a2",
+  "review_status": "complete",
+  "decision": "ACCEPT",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.33,
+    "one_line_summary": "All three prior closeout findings are repaired with one exact A0.8 handoff, a six-sink receipt-bound projection lifecycle, and complete Git-object verification for all ThaiPha-Lex ledger components.",
+    "strengths": [
+      "The exact synthetic-only A0.8 command now flows from one code constant and agrees with PLAN, HANDOFF, receipt, read model, and generated reports.",
+      "The cross-projection sync receipt binds one validated A0.10 source receipt to MLflow, read model, Brain, Obsidian, Dashboard, and Paper artifacts.",
+      "The ThaiPha-Lex verification receipt binds all 14 ledger components to commit, tree, Git blob, path, SHA-256, and disposition without copying source bytes.",
+      "All real ArmIndex, Selection, Final, GPU, paid API, and model-download counters remain zero."
+    ],
+    "weaknesses": [
+      "The package is engineering evidence only and does not exercise dense retrievers or support retrieval-quality claims.",
+      "External release still requires the separate Owner license decision already recorded in the repository handoff."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": ["Every claimed migration action is now backed by a receipt, validated projection, test, or exact source commitment."],
+      "weaknesses": ["No scientific retrieval evidence is in scope."],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["Schema, self-hash, file-hash, mutation rejection, exact next-action, source coverage, and lifecycle-event checks are independently executable."],
+      "weaknesses": ["Replaying external source verification requires access to the pinned ThaiPha-Lex Git object database."],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": ["The package consistently labels fixture and engineering evidence as non-scientific and preserves every protected and measured boundary."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": ["Goal U, A0.10 controls, receipts, projections, report status, and the exact A0.8 handoff now form one traceable chain."],
+      "weaknesses": ["A0 remains in progress because A0.8 and A0.9 are intentionally not completed by this package."],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": ["Adopt, wrap, refactor, reference, archive, reject, retained duplicates, cache cleanup, the REVISE review, and its recovery remain append-only and visible."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": ["The repaired package passes focused tests, Ruff, report sync/check, exact six-event lifecycle validation, source verification coverage, and structural checks."],
+      "weaknesses": ["Clean-checkout and full-suite verification remain closeout checks rather than evidence of scientific performance."],
+      "suggestions": []
+    }
+  },
+  "findings": [],
+  "resolved_findings": [
+    {
+      "finding_id": "F001",
+      "prior_review": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json",
+      "status": "resolved",
+      "evidence_locator": "src/myis_research/armindex/constants.py; PLAN.md:130; projections/sync-receipt.v2.json:source_receipt_sha256"
+    },
+    {
+      "finding_id": "F002",
+      "prior_review": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json",
+      "status": "resolved",
+      "evidence_locator": "projections/sync-receipt.v2.json:projection_events; mlflow/generated/archive-index.v2.json:armindex_legacy_code_harvest"
+    },
+    {
+      "finding_id": "F003",
+      "prior_review": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json",
+      "status": "resolved",
+      "evidence_locator": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json:components"
+    }
+  ],
+  "structural_validation": {
+    "focused_tests": "20 passed",
+    "ruff": "PASS",
+    "report_sync": "PASS; 301 reports",
+    "report_check": "PASS; zero drift",
+    "projection_event_count": 6,
+    "source_components_verified": 14
+  },
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/migrations/armindex-a0.10-amendment.v1.yaml",
+    "inbox/archive/armindex-migration-20260804/GOAL.md",
+    "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json",
+    "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+    "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json",
+    "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json",
+    "projections/read-model/read-model.v2.json",
+    "projections/sync-receipt.v2.json",
+    "mlflow/generated/archive-index.v2.json",
+    "../02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md",
+    "obsidian_report/02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.10.md",
+    "../03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md",
+    "tests/test_armindex_harvest_ledger.py",
+    "tests/test_read_model.py",
+    "tests/test_obsidian_report_contract.py"
+  ],
+  "protected_surfaces_accessed": false,
+  "measured_execution_performed": false
+}

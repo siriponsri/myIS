@@ -15,6 +15,7 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
+- Current task: `A0.10_LEGACY_CODE_HARVEST_AND_PHASE_SCAFFOLDING` (complete)
 - Current phase: `A0_MIGRATION_FOUNDATION`
 - Current evidence class: engineering migration; scientific authority `false`
 - ArmIndex measured runs: `0`
@@ -66,6 +67,27 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 No Sprint, Stage, Work Package, or micro-phase is canonical.
 
+### A0 task map
+
+| Task | Purpose | Status |
+|---|---|---|
+| `A0.1` | Repository and evidence migration | complete |
+| `A0.2` | Canonical authority and professional documentation | complete |
+| `A0.3` | Brain, read-model, and Obsidian migration | complete |
+| `A0.4` | MLflow and Dashboard migration | complete |
+| `A0.5` | Phase, Research Flow, and Owner-gate migration | complete |
+| `A0.6` | Scientific contracts and schemas | complete |
+| `A0.7` | Model/arm declarations and license registry | complete |
+| `A0.8` | Compute and storage feasibility fixtures | planned |
+| `A0.9` | Validation, safety, and closeout | planned |
+| `A0.10` | Legacy code harvest and phase-ready scaffolding | complete |
+
+Task `A0.10` was a synthetic-only engineering task. It audited provenance,
+built typed contracts and thin runnable scaffolding, and emitted aggregate-safe
+receipts. It did not access protected benchmark state, start measured
+retrieval, download model weights, use paid APIs or GPU scientific compute, or
+open Selection or Final.
+
 ## Historical evidence
 
 P1 R0/R0-W measured evidence is preserved at its original paths and is not an
@@ -105,6 +127,8 @@ scientific work, paid APIs, Selection, or Final.
 
 ## Next authorized action
 
-Execute Task `A0.4` with synthetic compute-feasibility fixtures and preflight;
-do not begin a measured campaign, download model weights, open Selection, or
-open Final. The exact next command is frozen in `HANDOFF.md`.
+```text
+/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.
+```
+
+A1 remains locked until Task `A0.9` validation and closeout.

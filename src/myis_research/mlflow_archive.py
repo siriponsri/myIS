@@ -22,7 +22,6 @@ from .mlflow_mirror import (
     MLflowMirror,
     MirrorArtifact,
     MirrorKind,
-    MirrorReceipt,
     MirrorSpec,
     MirrorStage,
 )
@@ -319,8 +318,16 @@ class MLflowEvidenceArchive:
             receipt = ArchiveReceipt(**json.loads(receipt_path.read_text(encoding="utf-8")))
             self._verify_store_artifacts(receipt.mlflow_run_id, artifacts, run)
             return receipt
-        stage = MirrorStage.P0_FOUNDATION if run.run_kind in {"projection_sync", "system_check"} else MirrorStage.P1_CPU_BASELINE
-        experiment_name = SYSTEM_EXPERIMENT if stage == MirrorStage.P0_FOUNDATION else CAMPAIGN_EXPERIMENT
+        if run.phase_id.startswith("A"):
+            try:
+                stage = MirrorStage(run.phase_id)
+            except ValueError as error:
+                raise ArchiveContractError("unknown ArmIndex archive phase") from error
+            campaign_id = "armindex-multiretriever-v2"
+        else:
+            stage = MirrorStage.P0_FOUNDATION if run.run_kind in {"projection_sync", "system_check"} else MirrorStage.P1_CPU_BASELINE
+            campaign_id = ACTIVE_CAMPAIGN
+        experiment_name = stage.experiment_name
         mirror_receipt = self.mirror.sync(
             MirrorSpec(
                 stage=stage,
@@ -328,7 +335,7 @@ class MLflowEvidenceArchive:
                 run_name=f"{run.task_id} | {run.run_id}",
                 git_commit=run.git_commit,
                 canonical_source_sha256=record["archive_record_sha256"],
-                campaign_id=ACTIVE_CAMPAIGN,
+                campaign_id=campaign_id,
                 run_id=run.run_id,
                 phase=stage.value,
                 data_role="archive",

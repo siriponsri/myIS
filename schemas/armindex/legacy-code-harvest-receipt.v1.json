@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:legacy-code-harvest-receipt:v1",
+  "title": "ArmIndex A0.10 legacy code-harvest receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "campaign_id", "phase_id", "task_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "protected_data_accessed", "measured_execution_performed", "ledger_uri", "ledger_sha256", "fixture_status", "fixture_receipt_uri", "fixture_receipt_sha256", "repository_hygiene_audit_uri", "repository_hygiene_audit_sha256", "output_root_relocation_receipt_uri", "output_root_relocation_receipt_sha256", "source_verification_receipt_uri", "source_verification_receipt_sha256", "components", "counters", "resource_counters", "projection_events", "next_authorized_action", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-legacy-code-harvest-receipt.v1"},
+    "receipt_id": {"const": "a0.10-legacy-code-harvest-v1"},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"const": "A0_MIGRATION_FOUNDATION"},
+    "task_id": {"const": "A0.10"},
+    "status": {"enum": ["not_started", "in_progress", "complete", "blocked"]},
+    "evidence_class": {"const": "engineering_fixture"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"const": "synthetic_engineering_scaffolding_only"},
+    "protected_data_accessed": {"const": false},
+    "measured_execution_performed": {"const": false},
+    "ledger_uri": {"const": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json"},
+    "ledger_sha256": {"$ref": "#/$defs/sha"},
+    "fixture_status": {"enum": ["not_started", "passed", "failed"]},
+    "fixture_receipt_uri": {"type": ["string", "null"]},
+    "fixture_receipt_sha256": {"anyOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]},
+    "repository_hygiene_audit_uri": {"const": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json"},
+    "repository_hygiene_audit_sha256": {"$ref": "#/$defs/sha"},
+    "output_root_relocation_receipt_uri": {"const": "outputs/audits/dashboard/output-root-relocation-20260804.json"},
+    "output_root_relocation_receipt_sha256": {"$ref": "#/$defs/sha"},
+    "source_verification_receipt_uri": {"const": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"},
+    "source_verification_receipt_sha256": {"$ref": "#/$defs/sha"},
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewed", "adopted", "rejected"],
+      "properties": {
+        "reviewed": {"type": "integer", "minimum": 0},
+        "adopted": {"type": "integer", "minimum": 0},
+        "rejected": {"type": "integer", "minimum": 0}
+      }
+    },
+    "counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_runs", "selection_accesses", "final_accesses"],
+      "properties": {
+        "measured_runs": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0}
+      }
+    },
+    "resource_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["charged_usd", "gpu_scientific_runs", "paid_api_calls", "model_downloads", "model_weight_modifications"],
+      "properties": {
+        "charged_usd": {"const": 0},
+        "gpu_scientific_runs": {"const": 0},
+        "paid_api_calls": {"const": 0},
+        "model_downloads": {"const": 0},
+        "model_weight_modifications": {"const": 0}
+      }
+    },
+    "projection_events": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"enum": ["mlflow_safe_mirror", "read_model_rebuild", "brain_projection", "obsidian_report", "dashboard_projection", "paper_readiness"]}
+    },
+    "next_authorized_action": {"type": "string", "minLength": 1},
+    "receipt_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

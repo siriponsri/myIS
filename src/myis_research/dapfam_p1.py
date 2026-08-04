@@ -6,7 +6,6 @@ import hashlib
 import json
 import os
 import sqlite3
-import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path

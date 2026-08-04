@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T11:45:08Z",
-  "generated_from_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
-  "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "generated_at": "2026-08-04T12:12:14Z",
+  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,16 +181,16 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
-  "last_material_update": "2026-08-04T11:45:08Z",
+  "last_material_update": "2026-08-04T12:12:14Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -277,11 +277,11 @@
       "value": 0.076057227485
     }
   ],
-  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "R0 flat BM25 measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-1",
-  "report_sha256": "88dce3b5612c637ccbe897c01e68a45c617b5a90b64fcff36d6871274ad5c21a",
+  "report_sha256": "6b6b1137cfdac3bcb63ccbee583d0aa811c8c862548f33f19ea9ea879fc1fd4f",
   "report_type": "task",
   "result": {
     "decision": "completed",

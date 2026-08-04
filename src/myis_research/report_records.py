@@ -31,6 +31,8 @@ P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resil
 P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json"
 P2_RUNTIME_INDEPENDENT_REVISE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
 P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json"
+A010_RIGOR_REVISE_AUDIT = "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json"
+A010_RIGOR_ACCEPT_AUDIT = "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-accept-20260804.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -114,7 +116,12 @@ def _artifact(
     }
 
 
-def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict[str, Any]]:
+def _artifacts(
+    root: Path,
+    model: Mapping[str, Any],
+    phase_id: str,
+    task_id: str | None = None,
+) -> list[dict[str, Any]]:
     result: list[dict[str, Any]] = []
     p1 = phase_id == "P1_CPU_BASELINE"
     if p1:
@@ -345,6 +352,31 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
             digest = _hash_file(root, relative)
             if digest:
                 result.append(_artifact(artifact_id=relative.replace("/", "-"), title=title, artifact_type=artifact_type, evidence_class="engineering", scientific_authority=False, safe_uri=relative, content_sha256=digest, explanation="Binds the in-place ArmIndex migration without creating scientific evidence."))
+        harvest = model.get("armindex", {}).get("legacy_code_harvest", {})
+        if task_id in {None, "A0.10"} and isinstance(harvest, Mapping) and harvest.get("validated"):
+            for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                ("a010-legacy-code-harvest-ledger", "A0.10 legacy code-harvest ledger", "ledger", "ledger_uri", "ledger_sha256", "Records reviewed components and immutable source commitments without copying legacy code."),
+                ("a010-legacy-code-harvest-receipt", "A0.10 legacy code-harvest receipt", "receipt", "receipt_uri", "receipt_sha256", "Binds the validated audit, source ledger, and safe migration boundary before projection."),
+                ("a010-synthetic-vertical-slice-receipt", "A0.10 synthetic vertical-slice receipt", "receipt", "fixture_receipt_uri", "fixture_receipt_sha256", "Records a synthetic-only integration check and never represents measured retrieval."),
+                ("a010-repository-hygiene-audit", "A0.10 repository hygiene audit", "audit", "repository_hygiene_audit_uri", "repository_hygiene_audit_sha256", "Records exact-content duplicate review and deletion of verified regenerable caches without removing tracked source."),
+                ("a010-output-root-relocation-receipt", "A0.10 output-root relocation receipt", "receipt", "output_root_relocation_receipt_uri", "output_root_relocation_receipt_sha256", "Binds the byte-preserving relocation from the retired output root to canonical outputs."),
+                ("a010-source-verification-receipt", "A0.10 ThaiPha-Lex source verification receipt", "receipt", "source_verification_receipt_uri", "source_verification_receipt_sha256", "Binds every ThaiPha-Lex ledger component to a pinned Git blob and independently verified SHA-256 without copying source bytes."),
+            ):
+                uri = harvest.get(uri_key)
+                digest = harvest.get(sha_key)
+                if uri and digest:
+                    result.append(_artifact(
+                        artifact_id=artifact_id,
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="engineering",
+                        scientific_authority=False,
+                        safe_uri=str(uri),
+                        content_sha256=str(digest),
+                        explanation=explanation,
+                        producing_phase_id="A0_MIGRATION_FOUNDATION",
+                        producing_task_id="A0.10",
+                    ))
     return result
 
 
@@ -364,7 +396,12 @@ def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> li
     return selected
 
 
-def _bindings(root: Path, model: Mapping[str, Any], phase_id: str) -> dict[str, Any]:
+def _bindings(
+    root: Path,
+    model: Mapping[str, Any],
+    phase_id: str,
+    task_id: str | None = None,
+) -> dict[str, Any]:
     bindings: dict[str, Any] = {
         "source_of_truth": {"uri": "control/source-of-truth.yaml", "sha256": _hash_file(root, "control/source-of-truth.yaml")},
         "campaign": {"uri": "control/campaigns/scope-autoindex-v1.yaml", "sha256": _hash_file(root, "control/campaigns/scope-autoindex-v1.yaml")},
@@ -402,6 +439,32 @@ def _bindings(root: Path, model: Mapping[str, Any], phase_id: str) -> dict[str, 
         bindings["migration_budget"] = {"uri": "control/budgets/armindex-migration-v2.yaml", "sha256": _hash_file(root, "control/budgets/armindex-migration-v2.yaml")}
         bindings["armindex_schema_root"] = {"uri": "schemas/armindex", "sha256": _hash_file(root, "schemas/armindex/read-model.v1.json")}
         bindings["historical_scope"] = {"uri": "control/campaigns/scope-autoindex-v1.yaml", "sha256": _hash_file(root, "control/campaigns/scope-autoindex-v1.yaml"), "status": "historical_read_only"}
+        harvest = model.get("armindex", {}).get("legacy_code_harvest", {})
+        if task_id == "A0.10" and isinstance(harvest, Mapping):
+            bindings["legacy_code_harvest_ledger"] = {
+                "uri": harvest.get("ledger_uri"),
+                "sha256": harvest.get("ledger_sha256"),
+            }
+            bindings["legacy_code_harvest_receipt"] = {
+                "uri": harvest.get("receipt_uri"),
+                "sha256": harvest.get("receipt_sha256"),
+            }
+            bindings["synthetic_vertical_slice_receipt"] = {
+                "uri": harvest.get("fixture_receipt_uri"),
+                "sha256": harvest.get("fixture_receipt_sha256"),
+            }
+            bindings["repository_hygiene_audit"] = {
+                "uri": harvest.get("repository_hygiene_audit_uri"),
+                "sha256": harvest.get("repository_hygiene_audit_sha256"),
+            }
+            bindings["output_root_relocation_receipt"] = {
+                "uri": harvest.get("output_root_relocation_receipt_uri"),
+                "sha256": harvest.get("output_root_relocation_receipt_sha256"),
+            }
+            bindings["source_verification_receipt"] = {
+                "uri": harvest.get("source_verification_receipt_uri"),
+                "sha256": harvest.get("source_verification_receipt_sha256"),
+            }
     return bindings
 
 
@@ -420,9 +483,23 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     elif phase_id.startswith("A"):
         objective = str(task.get("title")) if task else str(phase.get("purpose", f"Deliver {phase_id} under the ArmIndex contract."))
     metrics = _metrics(model, phase_id, task_id)
-    artifacts = _artifacts(root, model, phase_id)
+    artifacts = _artifacts(root, model, phase_id, task_id)
     p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
     failures = []
+    if phase_id == "A0_MIGRATION_FOUNDATION" and task_id in {None, "A0.10"}:
+        revise_sha256 = _hash_file(root, A010_RIGOR_REVISE_AUDIT)
+        accept_sha256 = _hash_file(root, A010_RIGOR_ACCEPT_AUDIT)
+        if revise_sha256 and accept_sha256:
+            failures.append({
+                "failure_id": "a0.10-legacy-code-harvest-independent-revise-20260804",
+                "failure_uri": A010_RIGOR_REVISE_AUDIT,
+                "failure_sha256": revise_sha256,
+                "recovery_id": "a0.10-legacy-code-harvest-independent-accept-20260804",
+                "recovery_uri": A010_RIGOR_ACCEPT_AUDIT,
+                "recovery_sha256": accept_sha256,
+                "status": "repaired_and_validated",
+                "counters_changed": False,
+            })
     if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("observatory", {}).get("failed_child_count", 0):
         failures.append({"failure_id": "obs-failure-candidate-02", "recovery_id": "obs-recovery-candidate-02", "status": "retained_and_recovered", "counters_changed": False})
     if phase_id == "P2_SCOPE_DEVELOPMENT":
@@ -547,6 +624,16 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         result = "The foundation records the authority and safety boundary required by later phases."
         interpretation = "Engineering controls are available; no scientific metric follows from this phase."
         decision_status = "completed"
+    elif phase_id.startswith("A") and task_id == "A0.10":
+        harvest = model.get("armindex", {}).get("legacy_code_harvest", {})
+        status_label = str(harvest.get("status", "not_started")) if isinstance(harvest, Mapping) else "not_started"
+        reviewed = int(harvest.get("components_reviewed", 0)) if isinstance(harvest, Mapping) else 0
+        adopted = int(harvest.get("components_adopted", 0)) if isinstance(harvest, Mapping) else 0
+        fixture_status = str(harvest.get("fixture_status", "not_started")) if isinstance(harvest, Mapping) else "not_started"
+        output = f"Receipt-first legacy code-harvest audit status is {status_label}; {reviewed} reviewed component(s) and {adopted} adopted component(s), repository hygiene, and output-root consolidation are represented by aggregate-safe commitments."
+        result = f"A0.10 is {status}; synthetic vertical-slice status is {fixture_status}; measured ArmIndex, Selection, and Final counters remain zero."
+        interpretation = "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation."
+        decision_status = status
     elif phase_id.startswith("A"):
         armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
         output = "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer."
@@ -609,15 +696,17 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "objective": objective,
         "starting_state": {
             "phase": armindex.get("current_phase") if phase_id.startswith("A") else model.get("project", {}).get("current_phase"),
-            "task": "A0.3" if phase_id.startswith("A") else model.get("project", {}).get("current_task"),
+            "task": task_id if phase_id.startswith("A") else model.get("project", {}).get("current_task"),
             "program_state": armindex.get("status") if phase_id.startswith("A") else model.get("project", {}).get("state"),
             "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
             "claim_boundary": "No unsupported scientific claim",
         },
-        "input_bindings": _bindings(root, model, phase_id),
+        "input_bindings": _bindings(root, model, phase_id, task_id),
         "work_summary": (
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
+            else "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
+            if phase_id.startswith("A") and task_id == "A0.10"
             else "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."
             if phase_id.startswith("A")
             else "This report is generated from validated canonical records; planning, implementation, review, fixture, measured execution, and reporting are kept distinct."

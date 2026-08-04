@@ -2,6 +2,10 @@ layout_id: myis-research-v2
 repository_role: active_control_plane
 branch: main
 active_campaign_root: campaigns/armindex-multiretriever-v2
+output_roots:
+  canonical: outputs
+  retired:
+    - output
 historical_campaign_roots:
   - campaigns/scope-autoindex-v1
 legacy_roots:

@@ -15,6 +15,7 @@ from urllib.parse import urlparse
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError
 
+from .armindex.constants import A0_8_NEXT_AUTHORIZED_ACTION
 from .mlflow_archive import (
     ACTIVE_CAMPAIGN,
     ArchiveRun,
@@ -123,12 +124,25 @@ def projection_report_contents(
     }
     archive_text = _json_text(archive)
 
+    external_outputs = {
+        **_brain_report_contents(root, model),
+        **_paper_report_contents(root, model),
+        **_compatibility_report_contents(root, model),
+    }
+    _validate_external_projection_contents(external_outputs)
     outputs = {
         root / relative: content for relative, content in vault_contents.items()
     }
     outputs[root / GENERATED_MANIFEST_RELATIVE_PATH] = manifest_text
     outputs[root / "mlflow/generated/archive-index.v2.json"] = archive_text
     if mlflow_run_id is not None:
+        lifecycle = _a010_projection_lifecycle(
+            root,
+            model,
+            archive_text=archive_text,
+            obsidian_manifest_sha256=str(manifest["manifest_sha256"]),
+            external_outputs=external_outputs,
+        )
         outputs[root / SYNC_RECEIPT_RELATIVE_PATH] = _json_text({
             "schema_version": "myis.projection-sync-receipt.v2",
             "projection_schema_version": model["projection_schema_version"],
@@ -139,14 +153,9 @@ def projection_report_contents(
             "mlflow_archive_sha256": sha256(archive_text.encode("utf-8")),
             "dashboard_snapshot_sha256": model_sha,
             "obsidian_manifest_sha256": manifest["manifest_sha256"],
+            **lifecycle,
             "status": "PASS",
         })
-    external_outputs = {
-        **_brain_report_contents(root, model),
-        **_paper_report_contents(root, model),
-        **_compatibility_report_contents(root, model),
-    }
-    _validate_external_projection_contents(external_outputs)
     outputs.update(external_outputs)
     outputs.update(report_json_outputs(root, model))
     return outputs
@@ -159,6 +168,8 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
     review_source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
     observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -170,6 +181,18 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
         "run_ids": [item.get("run_id") for item in model.get("runs", [])],
         "evidence_ids": [item.get("evidence_id") for item in model.get("evidence", [])],
         "status": "blocked" if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "current",
+        "armindex_legacy_code_harvest": {
+            "status": harvest.get("status", "not_started"),
+            "evidence_class": harvest.get("evidence_class", "engineering"),
+            "scientific_authority": harvest.get("scientific_authority", False),
+            "source_receipt_uri": harvest.get("receipt_uri"),
+            "source_receipt_sha256": harvest.get("receipt_sha256"),
+            "source_verification_receipt_uri": harvest.get("source_verification_receipt_uri"),
+            "source_verification_receipt_sha256": harvest.get("source_verification_receipt_sha256"),
+            "measured_runs": harvest.get("measured_runs", 0),
+            "selection_accesses": harvest.get("selection_accesses", 0),
+            "final_accesses": harvest.get("final_accesses", 0),
+        },
         "observatory": {
             "status": observatory.get("status", "not_available"),
             "evidence_class": observatory.get("evidence_class", "fixture"),
@@ -221,6 +244,70 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
                 "index_sha256": review_source.get("index_sha256"),
                 "protected_data_accessed": review.get("protected_data_accessed", False),
                 "measured_execution_performed": review.get("measured_execution_performed", False),
+            },
+        },
+    }
+
+
+def _a010_projection_lifecycle(
+    root: Path,
+    model: Mapping[str, Any],
+    *,
+    archive_text: str,
+    obsidian_manifest_sha256: str,
+    external_outputs: Mapping[Path, str],
+) -> dict[str, Any]:
+    """Bind every A0.10 projection sink to one validated source receipt."""
+
+    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
+    source_uri = harvest.get("receipt_uri")
+    source_sha256 = harvest.get("receipt_sha256")
+    if (
+        harvest.get("validated") is not True
+        or not isinstance(source_uri, str)
+        or not isinstance(source_sha256, str)
+        or not _SHA256_RE.fullmatch(source_sha256)
+    ):
+        raise ValueError("A0.10 projection lifecycle requires a validated source receipt")
+    brain_path = (root.parent / "02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md").resolve()
+    paper_path = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
+    if brain_path not in external_outputs or paper_path not in external_outputs:
+        raise ValueError("A0.10 external projection lifecycle is incomplete")
+    read_model_sha256 = str(model["read_model_sha256"])
+    return {
+        "source_receipt_uri": source_uri,
+        "source_receipt_sha256": source_sha256,
+        "projection_events": {
+            "mlflow_safe_mirror": {
+                "status": "mirrored",
+                "artifact_uri": "mlflow/generated/archive-index.v2.json",
+                "artifact_sha256": sha256(archive_text.encode("utf-8")),
+            },
+            "read_model_rebuild": {
+                "status": "projected",
+                "artifact_uri": "projections/read-model/read-model.v2.json",
+                "artifact_sha256": read_model_sha256,
+            },
+            "brain_projection": {
+                "status": "projected",
+                "artifact_uri": "../02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md",
+                "artifact_sha256": sha256(external_outputs[brain_path].encode("utf-8")),
+            },
+            "obsidian_report": {
+                "status": "projected",
+                "artifact_uri": "obsidian_report/00_System/Generated/generated-manifest.json",
+                "artifact_sha256": obsidian_manifest_sha256,
+            },
+            "dashboard_projection": {
+                "status": "projected",
+                "artifact_uri": "projections/read-model/read-model.v2.json",
+                "artifact_sha256": read_model_sha256,
+            },
+            "paper_readiness": {
+                "status": "projected",
+                "artifact_uri": "../03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md",
+                "artifact_sha256": sha256(external_outputs[paper_path].encode("utf-8")),
             },
         },
     }
@@ -840,6 +927,16 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         lines = []
         for value in values:
             if isinstance(value, Mapping):
+                if value.get("failure_id"):
+                    recovery = value.get("recovery_id", "no recovery recorded")
+                    lines.append(
+                        f"- `{value['failure_id']}` -> `{recovery}`; status "
+                        f"`{value.get('status', 'unknown')}`; counters changed "
+                        f"`{value.get('counters_changed', False)}`; failure "
+                        f"`{value.get('failure_uri', 'not recorded')}` / `{value.get('failure_sha256')}`; "
+                        f"recovery `{value.get('recovery_uri', 'not recorded')}` / `{value.get('recovery_sha256')}`"
+                    )
+                    continue
                 claim = value.get("claim") or value.get("artifact_id") or value.get("failure_id") or value.get("uri") or value
                 evidence = value.get("evidence")
                 suffix = f" (evidence: {', '.join(map(str, evidence))})" if isinstance(evidence, list) and evidence else ""
@@ -967,7 +1064,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "claim_boundary": "engineering_provenance_only",
         "generated_from_revision": revision,
         "last_material_update": model["generated_at"],
-        "next_authorized_action": "Complete ArmIndex A0 migration closeout; no measured retrieval",
+        "next_authorized_action": A0_8_NEXT_AUTHORIZED_ACTION,
         "managed_by": "myis-report",
         "edit_policy": "generated_do_not_edit",
         "safe_to_present": True,
@@ -1023,6 +1120,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     for phase in armindex_phases:
         phase_id = str(phase["phase_id"])
         phase_folder = VAULT_RELATIVE_PATH / "01_Phases" / "ArmIndex" / phase_id
+        phase_record = report_records.get(f"phase-{phase_id.lower()}")
         task_table = "\n".join(
             f"| [[{task.get('task_id')}]] | {task.get('title')} | {task.get('status')} |"
             for task in phase.get("tasks", [])
@@ -1048,16 +1146,21 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "## Tasks\n\n| Task | Work | Status |\n|---|---|---|\n" + task_table + "\n"
         )
         outputs[phase_folder / f"{phase_id}_REPORT.md"] = _note(
-            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(str(phase.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none"},
+            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(str(phase.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none", "next_authorized_action": phase_record.get("next_authorized_action", common["next_authorized_action"]) if phase_record else common["next_authorized_action"]},
             body,
         )
         for task in phase.get("tasks", []):
             if not isinstance(task, Mapping):
                 continue
             task_id = str(task["task_id"])
-            task_body = body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
+            task_record = report_records.get(f"task-{task_id.lower().replace('.', '-')}")
+            task_body = (
+                _structured_report_body(task_record, model)
+                if task_id == "A0.10" and task_record is not None
+                else body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
+            )
             outputs[VAULT_RELATIVE_PATH / "02_Tasks" / "ArmIndex" / phase_id / f"{task_id}.md"] = _note(
-                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(str(task.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none"},
+                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(str(task.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none", "next_authorized_action": task_record.get("next_authorized_action", common["next_authorized_action"]) if task_record else common["next_authorized_action"]},
                 task_body,
             )
     outputs[VAULT_RELATIVE_PATH / "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md"] = _note(
@@ -1590,10 +1693,23 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
             for task in phase.get("tasks", [])
             if isinstance(task, Mapping)
         ) or "- No task rows"
+        harvest_note = ""
+        if phase_id == "A0_MIGRATION_FOUNDATION":
+            harvest = armindex.get("legacy_code_harvest", {})
+            if isinstance(harvest, Mapping):
+                harvest_note = (
+                    "\n## A0.10 Legacy Code Harvest\n\n"
+                    f"Status: `{harvest.get('status', 'not_started')}`; validated: `{harvest.get('validated', False)}`; "
+                    f"reviewed/adopted/rejected: `{harvest.get('components_reviewed', 0)}`/"
+                    f"`{harvest.get('components_adopted', 0)}`/`{harvest.get('components_rejected', 0)}`.\n\n"
+                    f"Ledger: `{harvest.get('ledger_uri')}` / `{harvest.get('ledger_sha256')}`.\n\n"
+                    f"Receipt: `{harvest.get('receipt_uri')}` / `{harvest.get('receipt_sha256')}`.\n"
+                )
         outputs[directory / "armindex" / f"phase-{phase_id}.md"] = _projection_frontmatter(model, phase_id=phase_id) + (
             f"# {phase_id}\n\nStatus: **{phase.get('status')}**\n\n{phase.get('purpose')}\n\n## Tasks\n\n{task_lines}\n\n"
             f"Measured ArmIndex runs: `{armindex.get('counters', {}).get('measured_runs', 0)}`. Selection: `{armindex.get('counters', {}).get('selection_accesses', 0)}`. Final: `{armindex.get('counters', {}).get('final_accesses', 0)}`.\n\n"
             f"Next: {armindex.get('next_command', '')}\n"
+            + harvest_note
         )
     for phase in phases:
         phase_id = str(phase["phase_id"])
@@ -1665,6 +1781,9 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     ).resolve()
     readiness = model.get("publication_readiness", {})
     fixture = _p2_fixture(model)
+    harvest = model.get("armindex", {}).get("legacy_code_harvest", {})
+    if not isinstance(harvest, Mapping):
+        harvest = {}
     lines = ["| Check | Status | Canonical source |", "|---|---|---|"]
     for check in readiness.get("checks", []):
         lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
@@ -1677,7 +1796,10 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         + "\n".join(lines)
         + "\n\nArmIndex is in infrastructure migration with zero measured runs, Selection exposures, and Final exposures. P1 contains historical measured train/selection evidence only. The historical P2 lifecycle passed a "
         f"repository-only synthetic fixture (`{fixture.get('status', 'not_executed')}`), but measured P2 has not started and no P2 scientific claim is available. "
-        "AI-assisted static review and synthetic fixture provenance are archived. D2 and D3 remain Owner-only, and this projection does not authorize final evaluation or release.\n"
+        "AI-assisted static review and synthetic fixture provenance are archived. D2 and D3 remain Owner-only, and this projection does not authorize final evaluation or release.\n\n"
+        "## A0.10 engineering provenance\n\n"
+        f"Source receipt: `{harvest.get('receipt_uri')}` / `{harvest.get('receipt_sha256')}`. "
+        "This receipt is engineering evidence only and supports no retrieval-quality or publication claim.\n"
     )
     source_lock = {
         "schema_version": "myis.publication-source-lock.v2",
@@ -2085,7 +2207,8 @@ def _validate_sync_receipt(root: Path, model: Mapping[str, Any]) -> str | None:
         "schema_version", "projection_schema_version", "read_model_revision",
         "read_model_sha256", "source_commit", "mlflow_run_id",
         "mlflow_archive_sha256", "dashboard_snapshot_sha256",
-        "obsidian_manifest_sha256", "status",
+        "obsidian_manifest_sha256", "source_receipt_uri", "source_receipt_sha256",
+        "projection_events", "status",
     }
     if set(receipt) != required or receipt.get("schema_version") != "myis.projection-sync-receipt.v2" or receipt.get("status") != "PASS":
         return "cross-projection receipt contract is invalid"
@@ -2098,6 +2221,18 @@ def _validate_sync_receipt(root: Path, model: Mapping[str, Any]) -> str | None:
         "obsidian_manifest_sha256": manifest.get("manifest_sha256"),
         "mlflow_archive_sha256": sha256(archive_text.encode("utf-8")),
     }
+    external_outputs = {
+        **_brain_report_contents(root, model),
+        **_paper_report_contents(root, model),
+        **_compatibility_report_contents(root, model),
+    }
+    expected.update(_a010_projection_lifecycle(
+        root,
+        model,
+        archive_text=archive_text,
+        obsidian_manifest_sha256=str(manifest.get("manifest_sha256")),
+        external_outputs=external_outputs,
+    ))
     if any(receipt.get(key) != value for key, value in expected.items()):
         return "cross-projection receipt does not match the shared revision"
     if not isinstance(receipt.get("mlflow_run_id"), str) or not re.fullmatch(r"[A-Za-z0-9]{16,64}", receipt["mlflow_run_id"]):

@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "content_sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T11:45:08Z",
-  "generated_from_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
-  "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "generated_at": "2026-08-04T12:12:14Z",
+  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,20 +108,20 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
     "source_of_truth": {
-      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-04T11:45:08Z",
+  "last_material_update": "2026-08-04T12:12:14Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "e95e0de8ef0c1f71cca3181982e92f2714ee741c1d9b3427e49e2efeeea5c30a",
+  "report_sha256": "423517e0a282b408ceb6e4de8f473d9da659dcff4f763cad10e70dddd42532c7",
   "report_type": "task",
   "result": {
     "decision": "completed",

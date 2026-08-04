@@ -3,6 +3,8 @@ status: active-cutover
 active_root: campaigns/armindex-multiretriever
 active_campaign_authority: control/campaigns/armindex-multiretriever-v2.yaml
 single_source_of_truth: control-records + validated-manifests + aggregate-receipts
+canonical_output_root: outputs
+retired_output_roots: [output]
 active_runtime_paths:
   - control
   - campaigns/armindex-multiretriever
@@ -12,6 +14,7 @@ active_runtime_paths:
   - scripts
   - evidence
   - projections
+  - outputs
   - dashboard
 historical_runtime_paths:
   - control/campaigns/scope-autoindex-v1.yaml

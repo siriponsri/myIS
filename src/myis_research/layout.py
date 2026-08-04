@@ -12,7 +12,17 @@ REQUIRED = (
     "schemas/run-manifest.v2.json", "archive/INDEX.md",
 )
 # ``inbox`` is a governed specification input, not a legacy runtime tree.
-FORBIDDEN_ACTIVE = ("00_governance", "01_evidence", "02_tracks", "03_experiments", "04_outputs", "05_code", "06_frontend", "07_obsidian_note")
+FORBIDDEN_ACTIVE = (
+    "00_governance",
+    "01_evidence",
+    "02_tracks",
+    "03_experiments",
+    "04_outputs",
+    "05_code",
+    "06_frontend",
+    "07_obsidian_note",
+    "output",
+)
 
 
 def validate(root: Path) -> dict[str, object]:

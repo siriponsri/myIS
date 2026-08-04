@@ -1,0 +1,250 @@
+{
+  "$defs": {
+    "AggregateMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "denominator": {
+          "minLength": 1,
+          "title": "Denominator",
+          "type": "string"
+        },
+        "direction": {
+          "const": "maximize",
+          "title": "Direction",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "evidence_role": {
+          "enum": [
+            "primary",
+            "secondary",
+            "fixture_only"
+          ],
+          "title": "Evidence Role",
+          "type": "string"
+        },
+        "metric_id": {
+          "minLength": 1,
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "name": {
+          "enum": [
+            "recall_at_100",
+            "ndcg_at_100",
+            "ndcg_at_10"
+          ],
+          "title": "Name",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "sample_count": {
+          "minimum": 1,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "myis.armindex-aggregate-metric.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "scope": {
+          "enum": [
+            "ALL",
+            "IN",
+            "OUT",
+            "SYNTHETIC"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "value": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "metric_id",
+        "name",
+        "value",
+        "sample_count",
+        "scope",
+        "direction",
+        "denominator",
+        "evidence_role"
+      ],
+      "title": "AggregateMetric",
+      "type": "object"
+    },
+    "EvaluationRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "data_role": {
+          "const": "synthetic_fixture",
+          "title": "Data Role",
+          "type": "string"
+        },
+        "evaluator_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Evaluator Sha256",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "metric_names": {
+          "items": {
+            "enum": [
+              "recall_at_100",
+              "ndcg_at_100",
+              "ndcg_at_10"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Metric Names",
+          "type": "array"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "ranking_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Ranking Sha256S",
+          "type": "array"
+        },
+        "request_id": {
+          "minLength": 1,
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "myis.armindex-evaluation-request.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "synthetic_relevance": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "minProperties": 1,
+          "title": "Synthetic Relevance",
+          "type": "object"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "request_id",
+        "ranking_sha256s",
+        "metric_names",
+        "synthetic_relevance",
+        "data_role",
+        "evaluator_sha256"
+      ],
+      "title": "EvaluationRequest",
+      "type": "object"
+    }
+  },
+  "$id": "urn:myis:armindex:evaluation-contracts:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/EvaluationRequest"
+    },
+    {
+      "$ref": "#/$defs/AggregateMetric"
+    }
+  ],
+  "title": "ArmIndex evaluation contracts.v1"
+}

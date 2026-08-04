@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1"
-read_model_sha256: "77f2332d9d0d4c9382ba76f56829297e2e469fdeabfc923867ec205d44a8616e"
-source_commit: "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b"
+read_model_revision: "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb"
+read_model_sha256: "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529"
+source_commit: "551bee74eee0dbcf6ad815e78d474d8e707878f4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1"
-last_material_update: "2026-08-04T11:45:08Z"
-next_authorized_action: "Complete ArmIndex A0 migration closeout; no measured retrieval"
+generated_from_revision: "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb"
+last_material_update: "2026-08-04T12:12:14Z"
+next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-04T11:45:08Z"
-updated_at: "2026-08-04T11:45:08Z"
+created_at: "2026-08-04T12:12:14Z"
+updated_at: "2026-08-04T12:12:14Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -46,9 +46,9 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b
+- `git_commit`: 551bee74eee0dbcf6ad815e78d474d8e707878f4
 - `budget_profile`: `control/budgets/p2-r1-primary-v2.yaml`; SHA-256 `9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324`
 - `execution_envelope`: `control/execution-envelope-p2-v2.yaml`; SHA-256 `dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d`
 - `campaign_revision_record`: `control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml`; SHA-256 `5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822`
@@ -132,15 +132,15 @@ The repairs strengthen stale authority, worktree boundary, capacity, immutable r
 
 ## Failures and Recovery
 
-- obs-failure-candidate-02
-- p2-preflight-completion-audit-20260802
-- p2-preflight-report-byte-drift-audit-20260802
-- p2-preflight-projection-source-hash-drift-audit-20260802
-- p2-preflight-tracked-owner-path-audit-20260802
-- p2-runtime-resilience-v1-interruption-20260803
-- p2-runtime-resilience-v2-linux-ci-failure-20260803
-- p2-runtime-resilience-v2-clean-checkout-drift-20260803
-- p2-runtime-resilience-v2-independent-verifier-revise-20260803
+- `obs-failure-candidate-02` -> `obs-recovery-candidate-02`; status `retained_and_recovered`; counters changed `False`; failure `not recorded` / `None`; recovery `not recorded` / `None`
+- `p2-preflight-completion-audit-20260802` -> `p2-preflight-completion-repair-20260802`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-preflight-completion-audit-20260802.json` / `e981e8858d5aad55650f2afc24392b52116eda61c547da391a2667c63a90645e`; recovery `outputs/audits/rigor/p2-preflight-completion-repair-20260802.json` / `77ccb0dab9ddec3f2f1f9a2b82e326a30010b07ceb40618d5592f8ef91b94ae3`
+- `p2-preflight-report-byte-drift-audit-20260802` -> `p2-preflight-report-byte-drift-repair-20260802`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-preflight-report-byte-drift-audit-20260802.json` / `bdbcbfd23a8a1cfa2816485c87c04dd5391977a819d187b2b8bc30461e417eba`; recovery `outputs/audits/rigor/p2-preflight-report-byte-drift-repair-20260802.json` / `cf659ff88945d295b27c103c33de251045739e8e48f0e9161917e8cc9b628996`
+- `p2-preflight-projection-source-hash-drift-audit-20260802` -> `p2-preflight-projection-source-hash-drift-repair-20260802`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-audit-20260802.json` / `97a4b9bd59f136e64ed04c140d5401bdbd81b2000ca61cfc2db334645e3255ca`; recovery `outputs/audits/rigor/p2-preflight-projection-source-hash-drift-repair-20260802.json` / `842f20e196f2abd968f69eed69f4a1eb1929328827abb144af63cc832fe72107`
+- `p2-preflight-tracked-owner-path-audit-20260802` -> `p2-preflight-tracked-owner-path-repair-20260802`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-preflight-tracked-owner-path-audit-20260802.json` / `e67dfd54389afaf8baf62002d45a4312fe2eba42f7adbfedb763fb291be92ea9`; recovery `outputs/audits/rigor/p2-preflight-tracked-owner-path-repair-20260802.json` / `50ac2b16640e44bd3630030789d9ba8fe3d4238953498090c160379617c1ea6b`
+- `p2-runtime-resilience-v1-interruption-20260803` -> `p2-runtime-resilience-v2-recovery-20260803`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-runtime-resilience-v1-interruption-20260803.json` / `165915e86ae2517a552a3fd83121458d718e6e1ab3b5e4f70d762541577ec5b2`; recovery `outputs/audits/rigor/p2-runtime-resilience-v2-recovery-20260803.json` / `c3a9b07d4a91729a3de56ecab5daee079b76e644fef9132140deabe674285e83`
+- `p2-runtime-resilience-v2-linux-ci-failure-20260803` -> `p2-runtime-resilience-v2-linux-ci-repair-20260803`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-failure-20260803.json` / `fd941f7070f25fd71b7ba78ce1043cfc68eb757eb4ee7a9b8206c0579e780b1c`; recovery `outputs/audits/rigor/p2-runtime-resilience-v2-linux-ci-repair-20260803.json` / `2d7a2234e40334cec2680257167df49d3fd92c87cf74b5853d9b5e8d5e406140`
+- `p2-runtime-resilience-v2-clean-checkout-drift-20260803` -> `p2-runtime-resilience-v2-clean-checkout-repair-20260803`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-drift-20260803.json` / `f96773ad051e7427d7d125deb54c9cc2c2f3788b04524d4a657ccbf9e4a01ca8`; recovery `outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json` / `1ec9c92a8415536c4de1f1816c0293a88aadda01b5eb3bb56fa495bb7222ee38`
+- `p2-runtime-resilience-v2-independent-verifier-revise-20260803` -> `p2-runtime-resilience-v2-independent-verifier-accept-20260803`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json` / `37988c60e6daa2e564afd4b0a21169a67a112537ed612c4e2e08375bff7d2bbb`; recovery `outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json` / `27116270b75a9662b4c132f8a2e110919c1d989b0e03e792f2ef2c7e84856d5a`
 
 ## Governance and Safety
 
@@ -165,7 +165,7 @@ Status: **not_started**. The minimum preflight enablement is validated as engine
 
 ## Next Action
 
-/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.
+/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

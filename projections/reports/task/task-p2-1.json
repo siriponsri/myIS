@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-04T11:45:08Z",
-  "generated_from_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
-  "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "generated_at": "2026-08-04T12:12:14Z",
+  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -788,7 +788,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "af9da71498b8057618b657550f13cdfe95e12af7ef53cfd255012499dd62439b",
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -797,14 +797,14 @@
     }
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
-  "last_material_update": "2026-08-04T11:45:08Z",
+  "last_material_update": "2026-08-04T12:12:14Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "f02a11e16d5e6fc089953cde3f45c6adee6d1c131b6bba00ce8df450d5785b00",
+  "report_sha256": "4ad2f329505cec3386d0a22fec803f66cdc9dc29bb0809981cba55e01a5bfa89",
   "report_type": "task",
   "result": {
     "decision": "not_started",

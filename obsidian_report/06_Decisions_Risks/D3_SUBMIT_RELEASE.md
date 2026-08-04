@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1"
-read_model_sha256: "77f2332d9d0d4c9382ba76f56829297e2e469fdeabfc923867ec205d44a8616e"
-source_commit: "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b"
+read_model_revision: "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb"
+read_model_sha256: "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529"
+source_commit: "551bee74eee0dbcf6ad815e78d474d8e707878f4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1"
-last_material_update: "2026-08-04T11:45:08Z"
-next_authorized_action: "Complete ArmIndex A0 migration closeout; no measured retrieval"
+generated_from_revision: "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb"
+last_material_update: "2026-08-04T12:12:14Z"
+next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-04T11:45:08Z"
-updated_at: "2026-08-04T11:45:08Z"
+created_at: "2026-08-04T12:12:14Z"
+updated_at: "2026-08-04T12:12:14Z"
 note_id: "DECISION-D3_SUBMIT_RELEASE"
 note_type: "decision"
 phase_id: "P4_PUBLICATION"

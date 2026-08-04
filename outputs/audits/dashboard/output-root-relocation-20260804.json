@@ -1,0 +1,145 @@
+{
+  "schema_version": "myis.output-root-relocation.v1",
+  "receipt_id": "output-root-relocation-20260804",
+  "recorded_at_utc": "2026-08-04T12:22:12.051Z",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "task_id": "A0.10",
+  "status": "PASS",
+  "evidence_class": "engineering_migration",
+  "scientific_authority": false,
+  "claim_boundary": "repository_path_consolidation_only",
+  "baseline_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "baseline_tree": "63d868aa445bac8314d606998e73e6e0781f063e",
+  "source_root": "output",
+  "canonical_root": "outputs",
+  "relocations": [
+    {
+      "old_path": "output/playwright/dashboard-desktop.png",
+      "new_path": "outputs/audits/dashboard/screenshots/legacy-dashboard/dashboard-desktop.png",
+      "sha256": "f296d19193339ee38dbaee2b8ff3bb1f9e401704c873ca0fe721f4fec44e9daf",
+      "bytes": 209149,
+      "historical_reference_count": 0
+    },
+    {
+      "old_path": "output/playwright/dashboard-evidence.png",
+      "new_path": "outputs/audits/dashboard/screenshots/legacy-dashboard/dashboard-evidence.png",
+      "sha256": "2007b3bd614398d21f7d6a7c939e7b0d653d67b105bf4aa5f202547cab3ec61d",
+      "bytes": 83016,
+      "historical_reference_count": 0
+    },
+    {
+      "old_path": "output/playwright/dashboard-flow.png",
+      "new_path": "outputs/audits/dashboard/screenshots/legacy-dashboard/dashboard-flow.png",
+      "sha256": "62ec5de275ea3758a45d0980d9a0d51091f3afbb5dead759da65f85b6dbd2fa4",
+      "bytes": 103287,
+      "historical_reference_count": 0
+    },
+    {
+      "old_path": "output/playwright/dashboard-mobile.png",
+      "new_path": "outputs/audits/dashboard/screenshots/legacy-dashboard/dashboard-mobile.png",
+      "sha256": "3022405e285bc10ff6eafc95586504303f453f05f54b7a426b3f5aae4e406993",
+      "bytes": 196910,
+      "historical_reference_count": 0
+    },
+    {
+      "old_path": "output/playwright/dashboard-presentation.png",
+      "new_path": "outputs/audits/dashboard/screenshots/legacy-dashboard/dashboard-presentation.png",
+      "sha256": "d79d6f4d8f1d5a7b8bceb367d9a49ae103846346e8cebde700325b60d332b28d",
+      "bytes": 81417,
+      "historical_reference_count": 0
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/current-desktop.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/current-desktop.png",
+      "sha256": "82ab658219878a58818df729311ce9050ec0545a6a9e2cf56a2600979b71661e",
+      "bytes": 124903,
+      "historical_reference_count": 2
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/current-mobile-390x844.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/current-mobile-390x844.png",
+      "sha256": "09e668e96f4beeb01b68892d161f73add1994e938b3780497f025da75f647b7b",
+      "bytes": 100870,
+      "historical_reference_count": 2
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/current-mobile-gates.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/current-mobile-gates.png",
+      "sha256": "c466700cdc3afb6a0297d69fb87a18aa1fcc038a4636e92610a0dea224503afe",
+      "bytes": 92023,
+      "historical_reference_count": 2
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/dashboard-1024x768.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/dashboard-1024x768.png",
+      "sha256": "6410dab2f18ee901f132bffb470c4489a3f257f151aa85a2c4ebe54a440147aa",
+      "bytes": 78211,
+      "historical_reference_count": 2
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/dashboard-1366x768.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/dashboard-1366x768.png",
+      "sha256": "ec697320c740cf0d889ed1ae324ea6277f9afe45c3123c93cc1d59de8e2155bd",
+      "bytes": 78964,
+      "historical_reference_count": 2
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/dashboard-1920x1080.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/dashboard-1920x1080.png",
+      "sha256": "9d2a3bb1184c2d3374564f9ffa7ee891995e146aa116ce847f29b0e28517d66a",
+      "bytes": 118631,
+      "historical_reference_count": 2
+    },
+    {
+      "old_path": "output/playwright/integrated-dashboard/dashboard-390x844.png",
+      "new_path": "outputs/audits/dashboard/screenshots/integrated-dashboard/dashboard-390x844.png",
+      "sha256": "0a3bafacf4e59320a1d28177580d61e92f6943a463b5bf6d71df6c0ed8c5b335",
+      "bytes": 41913,
+      "historical_reference_count": 2
+    }
+  ],
+  "historical_reference_handling": {
+    "source_records_modified": false,
+    "reason": "Immutable historical records retain their recorded paths; this receipt is the authoritative relocation map.",
+    "records": [
+      {
+        "path": "outputs/audits/dashboard/integrated-dashboard-acceptance-20260731.json",
+        "sha256": "fd11ec9ed9a5af95c927a6d8433dc321d84114b871924cd33798eb9f30d075c0"
+      },
+      {
+        "path": "projections/sessions/20260731T013207Z-integrated-control-center-closeout-v1.json",
+        "sha256": "6f51021df310bef1a57a0d5bbb2290908d4e5940371144804f3ff47895c6636d"
+      }
+    ]
+  },
+  "removed_paths": [
+    {
+      "path": "output/playwright/integrated-dashboard/.playwright-cli",
+      "action": "delete",
+      "classification": "ignored_regenerable_tool_cache",
+      "tracked": false,
+      "file_count": 30,
+      "bytes": 850163,
+      "unique_evidence": false
+    },
+    {
+      "path": "output/playwright/integrated-dashboard/output",
+      "action": "delete",
+      "classification": "empty_nested_tool_output_directories",
+      "tracked": false,
+      "file_count": 0,
+      "bytes": 0,
+      "unique_evidence": false
+    }
+  ],
+  "checks": {
+    "tracked_files_relocated": 12,
+    "relocated_bytes": 1309294,
+    "sha256_unchanged": true,
+    "legacy_root_absent": true,
+    "historical_records_unchanged": true,
+    "protected_surfaces_opened": false,
+    "scientific_execution_performed": false
+  },
+  "receipt_sha256": "e3657aac29709d631ab42f472ad2849904aa9a5fde92f640c1caf80792be40d8"
+}

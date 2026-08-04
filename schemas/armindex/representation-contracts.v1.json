@@ -1,0 +1,514 @@
+{
+  "$defs": {
+    "CompiledRepresentation": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_lock_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adapter Lock Sha256"
+        },
+        "arm_id": {
+          "enum": [
+            "ARM-01",
+            "ARM-02",
+            "ARM-03",
+            "ARM-04",
+            "ARM-05"
+          ],
+          "title": "Arm Id",
+          "type": "string"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "compiled_id": {
+          "minLength": 1,
+          "title": "Compiled Id",
+          "type": "string"
+        },
+        "compiled_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Compiled Sha256",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "estimated_storage_bytes": {
+          "minimum": 0,
+          "title": "Estimated Storage Bytes",
+          "type": "integer"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "logical_program_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Logical Program Sha256",
+          "type": "string"
+        },
+        "omitted_span_count": {
+          "minimum": 0,
+          "title": "Omitted Span Count",
+          "type": "integer"
+        },
+        "program_id": {
+          "minLength": 1,
+          "title": "Program Id",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "myis.armindex-compiled-representation.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "truncation_count": {
+          "minimum": 0,
+          "title": "Truncation Count",
+          "type": "integer"
+        },
+        "unit_count": {
+          "minimum": 0,
+          "title": "Unit Count",
+          "type": "integer"
+        },
+        "units": {
+          "items": {
+            "$ref": "#/$defs/SearchableUnit"
+          },
+          "title": "Units",
+          "type": "array"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "compiled_id",
+        "program_id",
+        "logical_program_sha256",
+        "arm_id",
+        "units",
+        "unit_count",
+        "estimated_storage_bytes",
+        "truncation_count",
+        "omitted_span_count",
+        "compiled_sha256"
+      ],
+      "title": "CompiledRepresentation",
+      "type": "object"
+    },
+    "RepresentationProgram": {
+      "additionalProperties": false,
+      "properties": {
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "duplicate_policy": {
+          "enum": [
+            "family_content_hash_first",
+            "preserve_all"
+          ],
+          "title": "Duplicate Policy",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "family_aggregation": {
+          "enum": [
+            "maxp",
+            "top_m",
+            "single_unit"
+          ],
+          "title": "Family Aggregation",
+          "type": "string"
+        },
+        "family_top_m": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Family Top M"
+        },
+        "field_labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Field Labels",
+          "type": "object"
+        },
+        "field_order": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Field Order",
+          "type": "array"
+        },
+        "normalization": {
+          "enum": [
+            "unicode_nfkc_whitespace",
+            "unicode_nfkc_whitespace_lower"
+          ],
+          "title": "Normalization",
+          "type": "string"
+        },
+        "passage_overlap": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Passage Overlap",
+          "type": "integer"
+        },
+        "passage_size": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Passage Size"
+        },
+        "program_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]+$",
+          "title": "Program Id",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "myis.armindex-representation-program.v2",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "source_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Fields",
+          "type": "array"
+        },
+        "unit_kind": {
+          "enum": [
+            "document",
+            "section",
+            "claim",
+            "passage"
+          ],
+          "title": "Unit Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "program_id",
+        "source_fields",
+        "field_order",
+        "field_labels",
+        "unit_kind",
+        "normalization",
+        "duplicate_policy",
+        "family_aggregation"
+      ],
+      "title": "RepresentationProgram",
+      "type": "object"
+    },
+    "SearchableUnit": {
+      "additionalProperties": false,
+      "properties": {
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "content_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Content Sha256",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "family_id": {
+          "minLength": 1,
+          "title": "Family Id",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "publication_id": {
+          "minLength": 1,
+          "title": "Publication Id",
+          "type": "string"
+        },
+        "representation_program_id": {
+          "minLength": 1,
+          "title": "Representation Program Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "myis.armindex-searchable-unit.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "source_spans": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Source Spans",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "unit_id": {
+          "minLength": 1,
+          "title": "Unit Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "unit_id",
+        "family_id",
+        "publication_id",
+        "representation_program_id",
+        "text",
+        "source_spans",
+        "content_sha256"
+      ],
+      "title": "SearchableUnit",
+      "type": "object"
+    },
+    "SourceSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "end_offset": {
+          "exclusiveMinimum": 0,
+          "title": "End Offset",
+          "type": "integer"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "field_name": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Field Name",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "myis.armindex-source-span.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "start_offset": {
+          "minimum": 0,
+          "title": "Start Offset",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "source_id",
+        "field_name",
+        "start_offset",
+        "end_offset",
+        "source_sha256"
+      ],
+      "title": "SourceSpan",
+      "type": "object"
+    }
+  },
+  "$id": "urn:myis:armindex:representation-contracts:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/RepresentationProgram"
+    },
+    {
+      "$ref": "#/$defs/CompiledRepresentation"
+    }
+  ],
+  "title": "ArmIndex representation contracts.v1"
+}

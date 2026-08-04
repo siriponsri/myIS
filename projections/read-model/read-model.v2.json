@@ -25,7 +25,7 @@
         "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-01",
         "commercial_status": "commercial_capable",
-        "license": "Apache-2.0",
+        "license": "MIT",
         "model_id": "lexical/bm25s",
         "representation_status": "not_started",
         "role": "lexical_anchor_cpu_fallback"
@@ -124,7 +124,33 @@
         "status": "historical_read_only"
       }
     ],
-    "next_command": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+    "legacy_code_harvest": {
+      "claim_boundary": "engineering_provenance_only",
+      "components_adopted": 9,
+      "components_rejected": 5,
+      "components_reviewed": 26,
+      "evidence_class": "engineering",
+      "final_accesses": 0,
+      "fixture_receipt_sha256": "d4e7e99b2f00e21f4d9afe0e6616f07929652f7d5578957a906737981da43dd6",
+      "fixture_receipt_uri": "outputs/fixtures/armindex/a0.10/vertical-slice-v1/receipt.json",
+      "fixture_status": "passed",
+      "ledger_sha256": "46fa064f0ed3f73352028ca3443096e33244c0cc68898cafdb02c59fc2328eaf",
+      "ledger_uri": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json",
+      "measured_runs": 0,
+      "output_root_relocation_receipt_sha256": "b98afb03be1e9a7d5dd75dbb421218b6b46b72376ad1f7e392450c93051ddf46",
+      "output_root_relocation_receipt_uri": "outputs/audits/dashboard/output-root-relocation-20260804.json",
+      "receipt_sha256": "dc824eea4bad0c552cc59198883284e8984108ef45b4b099e5d7b1058252bdcc",
+      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+      "repository_hygiene_audit_sha256": "1fcae4ac1966706194df7d76d730516f62507eeb246103495eafa65bb959045b",
+      "repository_hygiene_audit_uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json",
+      "scientific_authority": false,
+      "selection_accesses": 0,
+      "source_verification_receipt_sha256": "417e9559d102dca6d34c50c771310b91a9511d143276df94e5a706fb1c2753ab",
+      "source_verification_receipt_uri": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json",
+      "status": "complete",
+      "validated": true
+    },
+    "next_command": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
     "phases": [
       {
         "phase_id": "A0_MIGRATION_FOUNDATION",
@@ -134,22 +160,52 @@
           {
             "status": "complete",
             "task_id": "A0.1",
-            "title": "Repository and authority migration"
+            "title": "Repository and evidence migration"
           },
           {
             "status": "complete",
             "task_id": "A0.2",
-            "title": "Model and representation contract freeze"
+            "title": "Canonical authority and professional documentation"
           },
           {
             "status": "complete",
             "task_id": "A0.3",
-            "title": "Projection and Research Brain migration"
+            "title": "Brain, read-model, and Obsidian migration"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.4",
+            "title": "MLflow and Dashboard migration"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.5",
+            "title": "Phase, Research Flow, and Owner-gate migration"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.6",
+            "title": "Scientific contracts and schemas"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.7",
+            "title": "Model and arm declarations and license registry"
           },
           {
             "status": "planned",
-            "task_id": "A0.4",
-            "title": "Synthetic compute-feasibility fixtures"
+            "task_id": "A0.8",
+            "title": "Compute and storage feasibility fixtures"
+          },
+          {
+            "status": "planned",
+            "task_id": "A0.9",
+            "title": "Validation, safety, and closeout"
+          },
+          {
+            "status": "complete",
+            "task_id": "A0.10",
+            "title": "Legacy code harvest and phase-ready scaffolding"
           }
         ]
       },
@@ -443,7 +499,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-04T11:45:08Z",
+  "generated_at": "2026-08-04T12:12:14Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -1351,7 +1407,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
+  "projection_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1395,8 +1451,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
-  "read_model_sha256": "77f2332d9d0d4c9382ba76f56829297e2e469fdeabfc923867ec205d44a8616e",
+  "read_model_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "read_model_sha256": "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -1529,7 +1585,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "source_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
   "tasks": [
     {
       "evidence_ids": [],

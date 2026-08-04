@@ -25,7 +25,7 @@ protocol:
   model_download_allowed: false
 
 arms:
-  - {id: ARM-01, model_id: lexical/bm25s, method: bm25, license: Apache-2.0, commercial_status: commercial_capable, role: lexical_anchor_cpu_fallback}
+  - {id: ARM-01, model_id: lexical/bm25s, method: bm25, license: MIT, commercial_status: commercial_capable, role: lexical_anchor_cpu_fallback}
   - {id: ARM-02, model_id: BAAI/bge-m3, method: dense_embedding, license: MIT, commercial_status: commercial_capable, role: multilingual_dense_anchor}
   - {id: ARM-03, model_id: datalyes/patembed-large, method: patent_dense_embedding, license: CC-BY-NC-SA-4.0, commercial_status: research_non_commercial, role: research_champion_candidate}
   - {id: ARM-04, model_id: Snowflake/snowflake-arctic-embed-m-v2.0, method: dense_embedding, license: Apache-2.0, commercial_status: commercial_capable, role: long_context_dense}
@@ -46,10 +46,16 @@ phases:
     status: in_progress
     measured_retrieval: false
     tasks:
-      - {id: A0.1, title: Repository and authority migration, status: complete}
-      - {id: A0.2, title: Model and representation contract freeze, status: complete}
-      - {id: A0.3, title: Projection and Research Brain migration, status: complete}
-      - {id: A0.4, title: Synthetic compute-feasibility fixtures, status: planned}
+      - {id: A0.1, title: Repository and evidence migration, status: complete}
+      - {id: A0.2, title: Canonical authority and professional documentation, status: complete}
+      - {id: A0.3, title: "Brain, read-model, and Obsidian migration", status: complete}
+      - {id: A0.4, title: MLflow and Dashboard migration, status: complete}
+      - {id: A0.5, title: "Phase, Research Flow, and Owner-gate migration", status: complete}
+      - {id: A0.6, title: Scientific contracts and schemas, status: complete}
+      - {id: A0.7, title: Model and arm declarations and license registry, status: complete}
+      - {id: A0.8, title: Compute and storage feasibility fixtures, status: planned}
+      - {id: A0.9, title: "Validation, safety, and closeout", status: planned}
+      - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
     status: locked_until_A0_closeout

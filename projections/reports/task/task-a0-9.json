@@ -1,0 +1,244 @@
+{
+  "artifact_references": [
+    {
+      "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
+      "artifact_type": "control",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/campaigns/armindex-multiretriever-v2.yaml",
+      "scientific_authority": false,
+      "title": "Active ArmIndex campaign",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "882d08758fdd4fe64ccf1941e2cf426527a894b54c4c50bfbbb1d382c9c53d7e",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+      "scientific_authority": false,
+      "title": "ArmIndex AutoIndex and HarnessOpt contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e64372bd6b6e746f92a028749375661b3e0c0b34900b418c6602d6425f62d435",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/migration-manifest.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex migration manifest",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "576efe28a33b5e7cbbce352444fb9373ab0b5d886bef2a3a2a4cc491adbd3cac",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/migration-receipt.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex migration receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ff2c94d587fbf0577ebacfbdb1f626450ca1c494bb9a9a042aad7fe412b212c7",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex MLflow migration receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "schemas-armindex-read-model.v1.json",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/read-model.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex read-model fragment schema",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "engineering_provenance_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "A0_MIGRATION_FOUNDATION is planned; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "planned"
+  },
+  "evidence_class": "engineering",
+  "evidence_links": [
+    {
+      "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
+      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
+    },
+    {
+      "artifact_id": "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+      "sha256": "882d08758fdd4fe64ccf1941e2cf426527a894b54c4c50bfbbb1d382c9c53d7e",
+      "uri": "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
+      "sha256": "e64372bd6b6e746f92a028749375661b3e0c0b34900b418c6602d6425f62d435",
+      "uri": "archive/migration-records/armindex-20260804/migration-manifest.v1.json"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+      "sha256": "576efe28a33b5e7cbbce352444fb9373ab0b5d886bef2a3a2a4cc491adbd3cac",
+      "uri": "archive/migration-records/armindex-20260804/migration-receipt.v1.json"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+      "sha256": "ff2c94d587fbf0577ebacfbdb1f626450ca1c494bb9a9a042aad7fe412b212c7",
+      "uri": "archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json"
+    },
+    {
+      "artifact_id": "schemas-armindex-read-model.v1.json",
+      "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "uri": "schemas/armindex/read-model.v1.json"
+    }
+  ],
+  "failure_recovery_references": [],
+  "generated_at": "2026-08-04T12:12:14Z",
+  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "engineering",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "armindex_schema_root": {
+      "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "uri": "schemas/armindex"
+    },
+    "campaign": {
+      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
+    },
+    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+    "historical_scope": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "status": "historical_read_only",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "migration_budget": {
+      "sha256": "48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec",
+      "uri": "control/budgets/armindex-migration-v2.yaml"
+    },
+    "source_of_truth": {
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "uri": "control/source-of-truth.yaml"
+    }
+  },
+  "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
+  "last_material_update": "2026-08-04T12:12:14Z",
+  "metric_references": [],
+  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+  "objective": "Validation, safety, and closeout",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "report_id": "task-a0-9",
+  "report_sha256": "f314245030cd46ead99010872a7af52f61ce199782104de20605adb8c11b0a90",
+  "report_type": "task",
+  "result": {
+    "decision": "planned",
+    "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
+    "result": "A0_MIGRATION_FOUNDATION is planned; ArmIndex measured runs, Selection, and Final counters remain zero."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "A0_MIGRATION_FOUNDATION",
+    "program_state": "active_migration",
+    "task": "A0.9"
+  },
+  "status": "planned",
+  "supported_claims": [
+    {
+      "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
+      "evidence": [
+        "control-campaigns-armindex-multiretriever-v2.yaml",
+        "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+        "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
+        "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+        "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+        "schemas-armindex-read-model.v1.json"
+      ]
+    }
+  ],
+  "task_id": "A0.9",
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."
+}

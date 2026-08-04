@@ -10,8 +10,15 @@ import pytest
 from myis_research.kernel.manifest import build_manifest
 from myis_research.kernel.manifest_validation import build_validation_report, capture_git_state
 from myis_research.kernel.canonical import canonical_sha256
+from myis_research.armindex.constants import A0_8_NEXT_AUTHORIZED_ACTION
 from myis_research.owner_local import build_receipt
 from myis_research.projections.read_model import (
+    A010_LEGACY_CODE_HARVEST_LEDGER_PATH,
+    A010_LEGACY_CODE_HARVEST_RECEIPT_PATH,
+    A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH,
+    A010_REPOSITORY_HYGIENE_AUDIT_PATH,
+    A010_SOURCE_VERIFICATION_RECEIPT_PATH,
+    _a010_legacy_code_harvest_projection,
     _legacy_file_commitment_matches,
     build_read_model,
     write_read_model,
@@ -41,6 +48,111 @@ def test_read_model_validation_rejects_unknown_field_and_non_object(tmp_path: Pa
         validate_read_model({**model, "source_path": "protected"})
     with pytest.raises(ValueError, match="JSON object"):
         validate_read_model([])  # type: ignore[arg-type]
+
+
+def _write_a010_harvest_pair(tmp_path: Path) -> tuple[Path, Path]:
+    ledger_path = tmp_path / A010_LEGACY_CODE_HARVEST_LEDGER_PATH
+    receipt_path = tmp_path / A010_LEGACY_CODE_HARVEST_RECEIPT_PATH
+    ledger_path.parent.mkdir(parents=True)
+    receipt_path.parent.mkdir(parents=True)
+    ledger = {
+        "schema_version": "myis.armindex-legacy-code-harvest-ledger.v1",
+        "ledger_id": "a0.10-fixture",
+        "source_repositories": [{
+            "repository": "ThaiPha-Lex",
+            "remote": "https://github.com/siriponsri/thaipha-lex.git",
+            "commit": "a" * 40,
+            "tree": "b" * 40,
+        }],
+        "components": [],
+    }
+    ledger["ledger_sha256"] = canonical_sha256(ledger)
+    ledger_path.write_text(json.dumps(ledger, sort_keys=True), encoding="utf-8")
+    ledger_sha256 = hashlib.sha256(ledger_path.read_bytes()).hexdigest()
+    supporting = (
+        (
+            A010_REPOSITORY_HYGIENE_AUDIT_PATH,
+            "myis.repository-hygiene-audit.v1",
+            "audit_sha256",
+        ),
+        (
+            A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH,
+            "myis.output-root-relocation.v1",
+            "receipt_sha256",
+        ),
+        (
+            A010_SOURCE_VERIFICATION_RECEIPT_PATH,
+            "myis.source-verification-receipt.v1",
+            "receipt_sha256",
+        ),
+    )
+    supporting_hashes: dict[Path, str] = {}
+    for relative, schema_version, self_hash_key in supporting:
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "schema_version": schema_version,
+            "status": "PASS",
+            "scientific_authority": False,
+        }
+        if relative == A010_SOURCE_VERIFICATION_RECEIPT_PATH:
+            payload.update({
+                "source_remote": "https://github.com/siriponsri/thaipha-lex.git",
+                "source_commit": "a" * 40,
+                "source_tree": "b" * 40,
+                "verified_from_git_object_database": True,
+                "verified_component_count": 0,
+                "components": [],
+            })
+        payload[self_hash_key] = canonical_sha256(payload)
+        path.write_text(json.dumps(payload, sort_keys=True), encoding="utf-8")
+        supporting_hashes[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+    receipt = {
+        "schema_version": "myis.armindex-legacy-code-harvest-receipt.v1",
+        "receipt_id": "a0.10-fixture",
+        "campaign_id": "armindex-multiretriever-v2",
+        "phase_id": "A0_MIGRATION_FOUNDATION",
+        "task_id": "A0.10",
+        "status": "in_progress",
+        "ledger_uri": A010_LEGACY_CODE_HARVEST_LEDGER_PATH.as_posix(),
+        "ledger_sha256": ledger_sha256,
+        "scientific_authority": False,
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+        "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
+        "components": {"reviewed": 2, "adopted": 1, "rejected": 1},
+        "fixture_status": "not_started",
+        "fixture_receipt_uri": None,
+        "fixture_receipt_sha256": None,
+        "repository_hygiene_audit_uri": A010_REPOSITORY_HYGIENE_AUDIT_PATH.as_posix(),
+        "repository_hygiene_audit_sha256": supporting_hashes[A010_REPOSITORY_HYGIENE_AUDIT_PATH],
+        "output_root_relocation_receipt_uri": A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH.as_posix(),
+        "output_root_relocation_receipt_sha256": supporting_hashes[A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH],
+        "source_verification_receipt_uri": A010_SOURCE_VERIFICATION_RECEIPT_PATH.as_posix(),
+        "source_verification_receipt_sha256": supporting_hashes[A010_SOURCE_VERIFICATION_RECEIPT_PATH],
+        "next_authorized_action": A0_8_NEXT_AUTHORIZED_ACTION,
+    }
+    receipt["receipt_sha256"] = canonical_sha256(receipt)
+    receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+    return ledger_path, receipt_path
+
+
+def test_a010_harvest_projection_is_receipt_first_and_fails_closed(tmp_path: Path) -> None:
+    assert _a010_legacy_code_harvest_projection(tmp_path)["status"] == "not_started"
+    _, receipt_path = _write_a010_harvest_pair(tmp_path)
+    projection = _a010_legacy_code_harvest_projection(tmp_path)
+    assert projection["validated"] is True
+    assert projection["components_reviewed"] == 2
+    assert projection["components_adopted"] == 1
+    assert projection["repository_hygiene_audit_sha256"] is not None
+    assert projection["output_root_relocation_receipt_sha256"] is not None
+    assert projection["source_verification_receipt_sha256"] is not None
+    assert projection["measured_runs"] == 0
+
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["counters"]["measured_runs"] = 1
+    receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+    assert _a010_legacy_code_harvest_projection(tmp_path)["status"] == "invalid"
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

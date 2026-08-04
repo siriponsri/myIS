@@ -12,7 +12,7 @@
 
 | Arm | Exact repository / implementation | Core mode | Research role | Commercial status |
 |---|---|---|---|---|
-| ARM-01 | `bm25s` BM25 | lexical | anchor, rare terms, CPU fallback | allowed subject to package license snapshot |
+| ARM-01 | `bm25s` BM25 | lexical | anchor, rare terms, CPU fallback | MIT; commercial-capable subject to package snapshot |
 | ARM-02 | `BAAI/bge-m3` | dense only | multilingual long-context generic dense arm | MIT, commercial-capable |
 | ARM-03 | `datalyes/patembed-large` | dense | patent-domain research anchor | CC BY-NC-SA 4.0, non-commercial |
 | ARM-04 | `Snowflake/snowflake-arctic-embed-m-v2.0` | dense | DAPFAM-aligned comparator and complement | Apache-2.0, commercial-capable |

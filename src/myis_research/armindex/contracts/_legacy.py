@@ -1,4 +1,4 @@
-"""Versioned ArmIndex contracts that never resolve or download model weights."""
+"""Compatibility validators for the initial ArmIndex migration contracts."""
 
 from __future__ import annotations
 
@@ -11,6 +11,8 @@ from typing import Any, Iterable, Mapping
 
 import yaml
 from jsonschema import Draft202012Validator
+
+from ..constants import A0_8_NEXT_AUTHORIZED_ACTION
 
 
 CAMPAIGN_ID = "armindex-multiretriever-v2"
@@ -265,7 +267,7 @@ def build_armindex_projection(root: Path) -> dict[str, Any]:
         "gates": [{"gate_id": gate, "status": "waiting_owner"} for gate in OWNER_GATES],
         "budget": {"currency": "USD", "actual": 0.0, "hard_stop": 100.0, "migration_profile": "armindex-migration-v2"},
         "historical_campaigns": [{"campaign_id": "scope-autoindex-v1", "status": "historical_read_only", "p1_measured_evidence": "preserved_by_pointer", "p2_measured_runs": 0}],
-        "next_command": "/goal Execute ArmIndex A0 compute-feasibility fixtures and preflight from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not start measured retrieval, download model weights, open Selection, or open Final.",
+        "next_command": A0_8_NEXT_AUTHORIZED_ACTION,
     }
     _validate_schema(root, "read-model.v1.json", projection)
     return projection

@@ -5,8 +5,10 @@ import json
 from pathlib import Path
 
 import pytest
+import yaml
 
-from myis_research.projections.read_model import build_read_model
+from myis_research.projections.read_model import build_read_model, canonical_json, sha256
+from myis_research.report_records import build_report_records
 from myis_research.report_cli import (
     VAULT_RELATIVE_PATH,
     _check,
@@ -79,6 +81,79 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "`32`" not in pending_report
     assert "`0.72`" not in pending_report
     assert "measured results = `unavailable`" in pending_report
+
+
+def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contract() -> None:
+    model = build_read_model(ROOT)
+    armindex = dict(model["armindex"])
+    phases = [dict(phase) for phase in armindex["phases"]]
+    a0 = next(phase for phase in phases if phase["phase_id"] == "A0_MIGRATION_FOUNDATION")
+    a0["tasks"] = [
+        *[task for task in a0["tasks"] if task["task_id"] != "A0.10"],
+        {"task_id": "A0.10", "title": "Legacy code harvest and phase-ready scaffolding", "status": "in_progress"},
+    ]
+    armindex["phases"] = phases
+    armindex["legacy_code_harvest"] = {
+        "status": "in_progress",
+        "validated": True,
+        "ledger_uri": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json",
+        "ledger_sha256": "a" * 64,
+        "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+        "receipt_sha256": "b" * 64,
+        "fixture_status": "not_started",
+        "fixture_receipt_uri": None,
+        "fixture_receipt_sha256": None,
+        "repository_hygiene_audit_uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json",
+        "repository_hygiene_audit_sha256": "c" * 64,
+        "output_root_relocation_receipt_uri": "outputs/audits/dashboard/output-root-relocation-20260804.json",
+        "output_root_relocation_receipt_sha256": "d" * 64,
+        "source_verification_receipt_uri": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json",
+        "source_verification_receipt_sha256": "e" * 64,
+        "components_reviewed": 3,
+        "components_adopted": 1,
+        "components_rejected": 2,
+        "measured_runs": 0,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+    }
+    model = {**model, "armindex": armindex}
+    model.pop("read_model_revision")
+    model.pop("projection_revision")
+    model.pop("read_model_sha256")
+    revision_body = {
+        key: value
+        for key, value in model.items()
+        if key != "generated_at"
+    }
+    model["read_model_revision"] = sha256(canonical_json(revision_body))
+    model["projection_revision"] = model["read_model_revision"]
+    model["read_model_sha256"] = sha256(canonical_json(model))
+
+    outputs = projection_report_contents(ROOT, model)
+    task_path = ROOT / VAULT_RELATIVE_PATH / "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.10.md"
+    task_report = outputs[task_path]
+    task_record = next(
+        record
+        for record in build_report_records(ROOT, model)
+        if record["report_id"] == "task-a0-10"
+    )
+    frontmatter = yaml.safe_load(task_report.split("---", 2)[1])
+    assert frontmatter["next_authorized_action"] == task_record["next_authorized_action"]
+    for heading in (
+        "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",
+        "Artifacts Produced", "Metrics", "Result", "Interpretation", "Supported Claims",
+        "Unsupported Claims", "Failures and Recovery", "Governance and Safety", "Decision",
+        "Next Action", "Evidence Links",
+    ):
+        assert f"## {heading}" in task_report
+    assert "a0.10-legacy-code-harvest.receipt.v1.json" in task_report
+    assert "repository-hygiene-a0.10-20260804.json" in task_report
+    assert "output-root-relocation-20260804.json" in task_report
+    assert "thaipha-lex-source-verification-a0.10-20260804.json" in task_report
+    assert "a0.10-legacy-code-harvest-independent-revise-20260804" in task_report
+    assert "a0.10-legacy-code-harvest-independent-accept-20260804" in task_report
+    assert "repaired_and_validated" in task_report
+    assert "Measured P2, real selection, and final evaluation" in task_report
 
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:

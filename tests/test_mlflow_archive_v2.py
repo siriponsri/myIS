@@ -15,7 +15,6 @@ from myis_research.mlflow_archive import (
     ArchiveContractError,
     ArchiveRun,
     FreezeBundle,
-    METRIC_SCHEMA,
     MLflowEvidenceArchive,
     MetricDefinition,
     RegistrySnapshot,
@@ -117,6 +116,25 @@ def test_v2_archive_writes_hash_bound_safe_artifacts_and_is_idempotent(tmp_path:
     assert len(mirror.calls) == 1
     staged = next((tmp_path / "staging").glob("*/freeze/bundle.json"))
     assert json.loads(staged.read_text(encoding="utf-8"))["schema_version"] == "myis.freeze-bundle.v2"
+
+
+def test_archive_uses_armindex_a0_stage_and_campaign_for_receipt_driven_closeout(tmp_path: Path) -> None:
+    mirror = FakeMirror()
+    archive = MLflowEvidenceArchive(tmp_path, mirror=mirror)  # type: ignore[arg-type]
+    run = replace(
+        _run(),
+        run_id="a010-receipt-sync",
+        phase_id="A0_MIGRATION_FOUNDATION",
+        task_id="A0.10",
+        run_kind="phase_closeout",
+    )
+    archive.sync(run, archive_index=_index(), schema_registry=_registry(SCHEMA_REGISTRY_SCHEMA, "schema"), rule_registry=_registry(RULE_REGISTRY_SCHEMA, "rule"))
+    spec, _ = mirror.calls[0]
+    assert isinstance(spec, MirrorSpec)
+    assert spec.stage == MirrorStage.A0_MIGRATION_FOUNDATION
+    assert spec.campaign_id == "armindex-multiretriever-v2"
+    assert spec.experiment_name == "myis-system"
+    spec.validate(())
 
 
 def test_v2_archive_rejects_unshared_revision_and_invalid_metric_contract(tmp_path: Path) -> None:

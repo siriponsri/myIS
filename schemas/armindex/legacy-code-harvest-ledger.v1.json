@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:legacy-code-harvest-ledger:v1",
+  "title": "ArmIndex A0.10 legacy code-harvest ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "ledger_id", "campaign_id", "phase_id", "task_id", "evidence_class", "scientific_authority", "protected_data_accessed", "source_repositories", "components", "ledger_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-legacy-code-harvest-ledger.v1"},
+    "ledger_id": {"const": "a0.10-legacy-code-harvest-v1"},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"const": "A0_MIGRATION_FOUNDATION"},
+    "task_id": {"const": "A0.10"},
+    "evidence_class": {"const": "engineering"},
+    "scientific_authority": {"const": false},
+    "protected_data_accessed": {"const": false},
+    "source_repositories": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repository", "remote", "commit", "tree", "license_status"],
+        "properties": {
+          "repository": {"enum": ["myIS", "ThaiPha-Lex"]},
+          "remote": {"type": "string", "minLength": 1},
+          "commit": {"$ref": "#/$defs/commit"},
+          "tree": {"$ref": "#/$defs/commit"},
+          "license_status": {"enum": ["reuse_permitted", "review_required"]}
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/component"}
+    },
+    "ledger_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_id", "source_repository", "source_commit", "source_path", "source_sha256", "capability", "disposition", "reason", "target_path", "dependency_status", "evidence_risk", "license_status", "tests_available", "migration_test"],
+      "properties": {
+        "component_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "source_repository": {"enum": ["myIS", "ThaiPha-Lex"]},
+        "source_commit": {"$ref": "#/$defs/commit"},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_sha256": {"$ref": "#/$defs/sha"},
+        "capability": {"type": "string", "minLength": 1},
+        "disposition": {"enum": ["adopt", "refactor", "wrap", "reference", "archive", "reject"]},
+        "reason": {"type": "string", "minLength": 1},
+        "target_path": {"type": ["string", "null"]},
+        "dependency_status": {"enum": ["compatible", "upgrade", "replace", "blocked"]},
+        "evidence_risk": {"type": "string", "minLength": 1},
+        "license_status": {"enum": ["reuse_permitted", "review_required"]},
+        "tests_available": {"type": "array", "items": {"type": "string"}},
+        "migration_test": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

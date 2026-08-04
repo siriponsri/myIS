@@ -1,0 +1,772 @@
+{
+  "$defs": {
+    "AggregateReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Aggregate Counts",
+          "type": "object"
+        },
+        "aggregate_metric_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aggregate Metric Sha256S",
+          "type": "array"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "cost_receipt_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Cost Receipt Sha256",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "final_accesses": {
+          "const": 0,
+          "title": "Final Accesses",
+          "type": "integer"
+        },
+        "measured_execution": {
+          "const": false,
+          "title": "Measured Execution",
+          "type": "boolean"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "receipt_id": {
+          "minLength": 1,
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Manifest Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "myis.armindex-aggregate-receipt.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "selection_accesses": {
+          "const": 0,
+          "title": "Selection Accesses",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "receipt_id",
+        "run_id",
+        "run_manifest_sha256",
+        "status",
+        "aggregate_metric_sha256s",
+        "aggregate_counts",
+        "cost_receipt_sha256",
+        "measured_execution",
+        "selection_accesses",
+        "final_accesses"
+      ],
+      "title": "AggregateReceipt",
+      "type": "object"
+    },
+    "BrainProjectionEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "memory_kind": {
+          "enum": [
+            "decision",
+            "evidence",
+            "lesson",
+            "failed_attempt",
+            "active_context"
+          ],
+          "title": "Memory Kind",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "myis.armindex-brain-projection-event.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "source_receipt_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Receipt Sha256",
+          "type": "string"
+        },
+        "source_receipt_uri": {
+          "minLength": 1,
+          "title": "Source Receipt Uri",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "projected",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "event_id",
+        "source_receipt_uri",
+        "source_receipt_sha256",
+        "memory_kind",
+        "status"
+      ],
+      "title": "BrainProjectionEvent",
+      "type": "object"
+    },
+    "CostReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "arm_ids": {
+          "items": {
+            "enum": [
+              "ARM-01",
+              "ARM-02",
+              "ARM-03",
+              "ARM-04",
+              "ARM-05"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Arm Ids",
+          "type": "array"
+        },
+        "charged_usd": {
+          "minimum": 0,
+          "title": "Charged Usd",
+          "type": "number"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "cost_per_query_usd": {
+          "minimum": 0,
+          "title": "Cost Per Query Usd",
+          "type": "number"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "index_size_bytes": {
+          "minimum": 0,
+          "title": "Index Size Bytes",
+          "type": "integer"
+        },
+        "latency_p50_ms": {
+          "minimum": 0,
+          "title": "Latency P50 Ms",
+          "type": "number"
+        },
+        "latency_p95_ms": {
+          "minimum": 0,
+          "title": "Latency P95 Ms",
+          "type": "number"
+        },
+        "latency_p99_ms": {
+          "minimum": 0,
+          "title": "Latency P99 Ms",
+          "type": "number"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "ram_bytes": {
+          "minimum": 0,
+          "title": "Ram Bytes",
+          "type": "integer"
+        },
+        "receipt_id": {
+          "minLength": 1,
+          "title": "Receipt Id",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Manifest Sha256",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 1,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "myis.armindex-cost-receipt.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "throughput_qps": {
+          "minimum": 0,
+          "title": "Throughput Qps",
+          "type": "number"
+        },
+        "vram_bytes": {
+          "minimum": 0,
+          "title": "Vram Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "receipt_id",
+        "run_id",
+        "arm_ids",
+        "sample_count",
+        "latency_p50_ms",
+        "latency_p95_ms",
+        "latency_p99_ms",
+        "throughput_qps",
+        "cost_per_query_usd",
+        "charged_usd",
+        "index_size_bytes",
+        "ram_bytes",
+        "vram_bytes",
+        "run_manifest_sha256"
+      ],
+      "title": "CostReceipt",
+      "type": "object"
+    },
+    "MLflowMirrorEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "allowlisted_tags": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Allowlisted Tags",
+          "type": "object"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "experiment_name": {
+          "enum": [
+            "myis-armindex-multiretriever-v2",
+            "myis-system"
+          ],
+          "title": "Experiment Name",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "myis.armindex-mlflow-mirror-event.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "source_receipt_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Receipt Sha256",
+          "type": "string"
+        },
+        "source_receipt_uri": {
+          "minLength": 1,
+          "title": "Source Receipt Uri",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "mirrored",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "event_id",
+        "source_receipt_uri",
+        "source_receipt_sha256",
+        "experiment_name",
+        "allowlisted_tags",
+        "status"
+      ],
+      "title": "MLflowMirrorEvent",
+      "type": "object"
+    },
+    "PhaseCloseoutEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate_receipt_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Aggregate Receipt Sha256",
+          "type": "string"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "next_authorized_action": {
+          "minLength": 1,
+          "title": "Next Authorized Action",
+          "type": "string"
+        },
+        "phase_id": {
+          "pattern": "^A[0-6]_[A-Z0-9_]+$",
+          "title": "Phase Id",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "myis.armindex-phase-closeout-event.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "task_id": {
+          "pattern": "^A[0-6]\\.[0-9]+$",
+          "title": "Task Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "event_id",
+        "phase_id",
+        "task_id",
+        "aggregate_receipt_sha256",
+        "status",
+        "next_authorized_action"
+      ],
+      "title": "PhaseCloseoutEvent",
+      "type": "object"
+    },
+    "RunManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Artifact Sha256S",
+          "type": "array"
+        },
+        "campaign_id": {
+          "const": "armindex-multiretriever-v2",
+          "title": "Campaign Id",
+          "type": "string"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "final_accesses": {
+          "const": 0,
+          "title": "Final Accesses",
+          "type": "integer"
+        },
+        "git_commit": {
+          "pattern": "^[a-f0-9]{40,64}$",
+          "title": "Git Commit",
+          "type": "string"
+        },
+        "git_tree": {
+          "pattern": "^[a-f0-9]{40,64}$",
+          "title": "Git Tree",
+          "type": "string"
+        },
+        "input_hashes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "minProperties": 1,
+          "title": "Input Hashes",
+          "type": "object"
+        },
+        "measured_execution": {
+          "const": false,
+          "title": "Measured Execution",
+          "type": "boolean"
+        },
+        "method_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Method Sha256",
+          "type": "string"
+        },
+        "phase_id": {
+          "pattern": "^A[0-6]_[A-Z0-9_]+$",
+          "title": "Phase Id",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "resources_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Resources Sha256",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "myis.armindex-run-manifest.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "selection_accesses": {
+          "const": 0,
+          "title": "Selection Accesses",
+          "type": "integer"
+        },
+        "stage": {
+          "const": "fixture",
+          "title": "Stage",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "invalid",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "task_id": {
+          "pattern": "^A[0-6]\\.[0-9]+$",
+          "title": "Task Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "run_id",
+        "campaign_id",
+        "phase_id",
+        "task_id",
+        "stage",
+        "status",
+        "git_commit",
+        "git_tree",
+        "input_hashes",
+        "method_sha256",
+        "resources_sha256",
+        "artifact_sha256s",
+        "measured_execution",
+        "selection_accesses",
+        "final_accesses"
+      ],
+      "title": "RunManifest",
+      "type": "object"
+    }
+  },
+  "$id": "urn:myis:armindex:evidence-lifecycle-contracts:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/RunManifest"
+    },
+    {
+      "$ref": "#/$defs/AggregateReceipt"
+    },
+    {
+      "$ref": "#/$defs/CostReceipt"
+    },
+    {
+      "$ref": "#/$defs/PhaseCloseoutEvent"
+    },
+    {
+      "$ref": "#/$defs/BrainProjectionEvent"
+    },
+    {
+      "$ref": "#/$defs/MLflowMirrorEvent"
+    }
+  ],
+  "title": "ArmIndex evidence lifecycle contracts.v1"
+}

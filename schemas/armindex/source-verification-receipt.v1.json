@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:source-verification-receipt:v1",
+  "title": "ArmIndex external source verification receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "status", "phase_id", "task_id",
+    "evidence_class", "scientific_authority", "source_repository", "source_remote",
+    "source_commit", "source_tree", "verification_method", "verified_from_git_object_database",
+    "verified_component_count", "components", "source_bytes_archived",
+    "protected_surfaces_accessed", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.source-verification-receipt.v1"},
+    "receipt_id": {"const": "thaipha-lex-source-verification-a0.10-20260804"},
+    "status": {"const": "PASS"},
+    "phase_id": {"const": "A0_MIGRATION_FOUNDATION"},
+    "task_id": {"const": "A0.10"},
+    "evidence_class": {"const": "engineering_provenance"},
+    "scientific_authority": {"const": false},
+    "source_repository": {"const": "ThaiPha-Lex"},
+    "source_remote": {"const": "https://github.com/siriponsri/thaipha-lex.git"},
+    "source_commit": {"$ref": "#/$defs/git"},
+    "source_tree": {"$ref": "#/$defs/git"},
+    "verification_method": {"const": "git_cat_file_blob_sha256"},
+    "verified_from_git_object_database": {"const": true},
+    "verified_component_count": {"const": 14},
+    "components": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["component_id", "source_path", "git_blob", "source_sha256", "disposition"],
+        "properties": {
+          "component_id": {"type": "string", "pattern": "^thaipha-[a-z0-9-]+$"},
+          "source_path": {"type": "string", "minLength": 1},
+          "git_blob": {"$ref": "#/$defs/git"},
+          "source_sha256": {"$ref": "#/$defs/sha"},
+          "disposition": {"enum": ["adopt", "refactor", "wrap", "reference", "archive", "reject"]}
+        }
+      }
+    },
+    "source_bytes_archived": {"const": false},
+    "protected_surfaces_accessed": {"const": false},
+    "receipt_sha256": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {
+    "git": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

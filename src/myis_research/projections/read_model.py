@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,6 +28,7 @@ from ..p2 import (
 from ..protection import assert_aggregate_only
 from ..observatory.projection import load_observatory_projection
 from ..armindex import ArmIndexContractError, build_armindex_projection
+from ..armindex.constants import A0_8_NEXT_AUTHORIZED_ACTION
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -115,6 +117,8 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/armindex",
     "src/myis_research/armindex",
     "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md",
+    "control/armindex",
+    "campaigns/armindex-multiretriever-v2/evidence",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -133,6 +137,22 @@ P2_METRIC_FIELDS = frozenset({
     "candidate_id", "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
     "scope", "split", "direction", "denominator", "evidence_role",
 })
+A010_LEGACY_CODE_HARVEST_LEDGER_PATH = Path(
+    "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json"
+)
+A010_LEGACY_CODE_HARVEST_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a0.10-legacy-code-harvest.receipt.v1.json"
+)
+A010_REPOSITORY_HYGIENE_AUDIT_PATH = Path(
+    "outputs/audits/repository/repository-hygiene-a0.10-20260804.json"
+)
+A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH = Path(
+    "outputs/audits/dashboard/output-root-relocation-20260804.json"
+)
+A010_SOURCE_VERIFICATION_RECEIPT_PATH = Path(
+    "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"
+)
 
 
 def canonical_json(value: Any) -> bytes:
@@ -150,6 +170,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         armindex = build_armindex_projection(root)
     except ArmIndexContractError:
         armindex = _empty_armindex_projection()
+    armindex = {
+        **armindex,
+        "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
+    }
     campaign_config = _load_yaml_like(root / "control" / "campaigns" / f"{campaign_id}.yaml")
     legacy_disposition = _load_legacy_disposition(root)
     manifests = _load_manifests(root / "campaigns" / campaign_id / "manifests")
@@ -546,6 +570,223 @@ def _empty_armindex_projection() -> dict[str, Any]:
         "budget": {"currency": "USD", "actual": 0.0, "hard_stop": 100.0, "migration_profile": "armindex-migration-v2"},
         "historical_campaigns": [{"campaign_id": "scope-autoindex-v1", "status": "historical_read_only", "p1_measured_evidence": "preserved_by_pointer", "p2_measured_runs": 0}],
         "next_command": "Resolve missing ArmIndex control files before any execution.",
+    }
+
+
+def _a010_legacy_code_harvest_projection(root: Path) -> dict[str, Any]:
+    """Load only a validated, aggregate-safe A0.10 ledger/receipt pair."""
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "evidence_class": "engineering",
+        "scientific_authority": False,
+        "claim_boundary": "engineering_provenance_only",
+        "ledger_uri": A010_LEGACY_CODE_HARVEST_LEDGER_PATH.as_posix(),
+        "ledger_sha256": None,
+        "receipt_uri": A010_LEGACY_CODE_HARVEST_RECEIPT_PATH.as_posix(),
+        "receipt_sha256": None,
+        "fixture_status": "not_started",
+        "fixture_receipt_uri": None,
+        "fixture_receipt_sha256": None,
+        "repository_hygiene_audit_uri": A010_REPOSITORY_HYGIENE_AUDIT_PATH.as_posix(),
+        "repository_hygiene_audit_sha256": None,
+        "output_root_relocation_receipt_uri": A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH.as_posix(),
+        "output_root_relocation_receipt_sha256": None,
+        "source_verification_receipt_uri": A010_SOURCE_VERIFICATION_RECEIPT_PATH.as_posix(),
+        "source_verification_receipt_sha256": None,
+        "components_reviewed": 0,
+        "components_adopted": 0,
+        "components_rejected": 0,
+        "measured_runs": 0,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+    }
+    ledger_path = root / A010_LEGACY_CODE_HARVEST_LEDGER_PATH
+    receipt_path = root / A010_LEGACY_CODE_HARVEST_RECEIPT_PATH
+    if not ledger_path.exists() and not receipt_path.exists():
+        return missing
+    if (
+        not ledger_path.is_file()
+        or ledger_path.is_symlink()
+        or not receipt_path.is_file()
+        or receipt_path.is_symlink()
+    ):
+        return {**missing, "status": "invalid"}
+    try:
+        ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        if not isinstance(ledger, Mapping) or not isinstance(receipt, Mapping):
+            raise ValueError("A0.10 ledger and receipt must be objects")
+        assert_aggregate_only(ledger)
+        assert_aggregate_only(receipt)
+        ledger_hash = _file_sha256(ledger_path)
+        if str(ledger.get("ledger_sha256", "")) != canonical_sha256(
+            {key: value for key, value in ledger.items() if key != "ledger_sha256"}
+        ):
+            raise ValueError("A0.10 ledger self-hash is invalid")
+        if str(receipt.get("receipt_sha256", "")) != canonical_sha256(
+            {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+        ):
+            raise ValueError("A0.10 receipt self-hash is invalid")
+        if (
+            receipt.get("schema_version") != "myis.armindex-legacy-code-harvest-receipt.v1"
+            or ledger.get("schema_version") != "myis.armindex-legacy-code-harvest-ledger.v1"
+            or receipt.get("campaign_id") != "armindex-multiretriever-v2"
+            or receipt.get("phase_id") != "A0_MIGRATION_FOUNDATION"
+            or receipt.get("task_id") != "A0.10"
+            or receipt.get("ledger_uri") != A010_LEGACY_CODE_HARVEST_LEDGER_PATH.as_posix()
+            or receipt.get("ledger_sha256") != ledger_hash
+        ):
+            raise ValueError("A0.10 receipt bindings are invalid")
+        if receipt.get("scientific_authority") is not False or receipt.get("protected_data_accessed") is not False:
+            raise ValueError("A0.10 receipt crosses a protected or scientific boundary")
+        if receipt.get("measured_execution_performed") is not False:
+            raise ValueError("A0.10 receipt cannot report measured execution")
+        if receipt.get("next_authorized_action") != A0_8_NEXT_AUTHORIZED_ACTION:
+            raise ValueError("A0.10 next authorized action is not canonical")
+        counters = receipt.get("counters")
+        if not isinstance(counters, Mapping) or any(
+            counters.get(key) != 0
+            for key in ("measured_runs", "selection_accesses", "final_accesses")
+        ):
+            raise ValueError("A0.10 receipt counters must remain zero")
+        components = receipt.get("components")
+        if not isinstance(components, Mapping):
+            raise ValueError("A0.10 receipt component aggregates are missing")
+        component_counts = {
+            key: int(components.get(key, 0))
+            for key in ("reviewed", "adopted", "rejected")
+        }
+        if any(value < 0 for value in component_counts.values()):
+            raise ValueError("A0.10 component aggregate cannot be negative")
+        fixture_uri = receipt.get("fixture_receipt_uri")
+        fixture_sha = receipt.get("fixture_receipt_sha256")
+        if (fixture_uri is None) != (fixture_sha is None):
+            raise ValueError("A0.10 fixture receipt binding is incomplete")
+        if fixture_uri is not None:
+            if not isinstance(fixture_uri, str) or not isinstance(fixture_sha, str):
+                raise ValueError("A0.10 fixture receipt binding is invalid")
+            fixture_path = (root / fixture_uri).resolve()
+            fixture_path.relative_to(root.resolve())
+            if fixture_path.is_symlink() or not fixture_path.is_file() or _file_sha256(fixture_path) != fixture_sha:
+                raise ValueError("A0.10 fixture receipt commitment is invalid")
+        status = str(receipt.get("status", "invalid"))
+        if status not in {"not_started", "in_progress", "complete", "blocked"}:
+            raise ValueError("A0.10 receipt status is invalid")
+        fixture_status = str(receipt.get("fixture_status", "not_started"))
+        if fixture_status not in {"not_started", "passed", "failed"}:
+            raise ValueError("A0.10 fixture status is invalid")
+        if fixture_status == "passed" and fixture_uri is None:
+            raise ValueError("passed A0.10 fixture requires a committed receipt")
+        supporting_artifacts = (
+            (
+                "repository_hygiene_audit_uri",
+                "repository_hygiene_audit_sha256",
+                A010_REPOSITORY_HYGIENE_AUDIT_PATH,
+                "myis.repository-hygiene-audit.v1",
+                "audit_sha256",
+            ),
+            (
+                "output_root_relocation_receipt_uri",
+                "output_root_relocation_receipt_sha256",
+                A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH,
+                "myis.output-root-relocation.v1",
+                "receipt_sha256",
+            ),
+            (
+                "source_verification_receipt_uri",
+                "source_verification_receipt_sha256",
+                A010_SOURCE_VERIFICATION_RECEIPT_PATH,
+                "myis.source-verification-receipt.v1",
+                "receipt_sha256",
+            ),
+        )
+        loaded_supporting: dict[Path, Mapping[str, Any]] = {}
+        for uri_key, sha_key, expected_path, schema_version, self_hash_key in supporting_artifacts:
+            uri = receipt.get(uri_key)
+            digest = receipt.get(sha_key)
+            if uri != expected_path.as_posix() or not isinstance(digest, str):
+                raise ValueError(f"A0.10 supporting artifact binding is invalid: {uri_key}")
+            artifact_path = (root / expected_path).resolve()
+            artifact_path.relative_to(root.resolve())
+            if artifact_path.is_symlink() or not artifact_path.is_file() or _file_sha256(artifact_path) != digest:
+                raise ValueError(f"A0.10 supporting artifact commitment is invalid: {uri_key}")
+            artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+            if (
+                not isinstance(artifact, Mapping)
+                or artifact.get("schema_version") != schema_version
+                or artifact.get("status") != "PASS"
+                or artifact.get("scientific_authority") is not False
+                or artifact.get(self_hash_key) != canonical_sha256(
+                    {key: value for key, value in artifact.items() if key != self_hash_key}
+                )
+            ):
+                raise ValueError(f"A0.10 supporting artifact content is invalid: {uri_key}")
+            assert_aggregate_only(artifact)
+            loaded_supporting[expected_path] = artifact
+
+        source_verification = loaded_supporting[A010_SOURCE_VERIFICATION_RECEIPT_PATH]
+        repositories = ledger.get("source_repositories")
+        components = ledger.get("components")
+        if not isinstance(repositories, list) or not isinstance(components, list):
+            raise ValueError("A0.10 ledger source provenance is incomplete")
+        thaipha_repository = next(
+            (item for item in repositories if isinstance(item, Mapping) and item.get("repository") == "ThaiPha-Lex"),
+            None,
+        )
+        thaipha_components = {
+            str(item.get("component_id")): item
+            for item in components
+            if isinstance(item, Mapping) and item.get("source_repository") == "ThaiPha-Lex"
+        }
+        verified_components = source_verification.get("components")
+        if (
+            not isinstance(thaipha_repository, Mapping)
+            or source_verification.get("source_commit") != thaipha_repository.get("commit")
+            or source_verification.get("source_tree") != thaipha_repository.get("tree")
+            or source_verification.get("source_remote") != thaipha_repository.get("remote")
+            or source_verification.get("verified_from_git_object_database") is not True
+            or not isinstance(verified_components, list)
+            or source_verification.get("verified_component_count") != len(thaipha_components)
+        ):
+            raise ValueError("A0.10 source verification receipt identity is invalid")
+        verified_by_id = {
+            str(item.get("component_id")): item
+            for item in verified_components
+            if isinstance(item, Mapping)
+        }
+        if set(verified_by_id) != set(thaipha_components):
+            raise ValueError("A0.10 source verification coverage is incomplete")
+        for component_id, source in thaipha_components.items():
+            verified = verified_by_id[component_id]
+            if (
+                verified.get("source_path") != source.get("source_path")
+                or verified.get("source_sha256") != source.get("source_sha256")
+                or verified.get("disposition") != source.get("disposition")
+                or not re.fullmatch(r"[a-f0-9]{40}", str(verified.get("git_blob", "")))
+            ):
+                raise ValueError("A0.10 source verification component binding is invalid")
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {**missing, "status": "invalid"}
+    return {
+        **missing,
+        "status": status,
+        "validated": True,
+        "ledger_sha256": ledger_hash,
+        "receipt_sha256": str(receipt["receipt_sha256"]),
+        "fixture_status": fixture_status,
+        "fixture_receipt_uri": fixture_uri,
+        "fixture_receipt_sha256": fixture_sha,
+        "repository_hygiene_audit_sha256": str(receipt["repository_hygiene_audit_sha256"]),
+        "output_root_relocation_receipt_sha256": str(receipt["output_root_relocation_receipt_sha256"]),
+        "source_verification_receipt_sha256": str(receipt["source_verification_receipt_sha256"]),
+        "components_reviewed": component_counts["reviewed"],
+        "components_adopted": component_counts["adopted"],
+        "components_rejected": component_counts["rejected"],
+        "measured_runs": int(counters["measured_runs"]),
+        "selection_accesses": int(counters["selection_accesses"]),
+        "final_accesses": int(counters["final_accesses"]),
     }
 
 

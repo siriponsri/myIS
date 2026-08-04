@@ -545,23 +545,24 @@ Owner input only for missing protected roots, unavailable provider, irreconcilab
 
 Each Phase is one `/goal`. Canonical levels are Phase and Task only.
 
-### Phase 0 — Create and freeze ArmIndex
+### A0_MIGRATION_FOUNDATION - Create and freeze ArmIndex
 
 ```text
-/goal Execute Phase 0 of PLAN_V02_NEW.md only. Create the additive armindex-multiretriever-v2 campaign, preserve all historical evidence, freeze the evaluation, model, representation, budget, and protected-data contracts, run compute-feasibility fixtures, and stop with a Phase 0 completion card. Do not run measured retrieval, Selection, or Final.
+/goal Execute A0_MIGRATION_FOUNDATION from the canonical PLAN and campaign. Preserve historical evidence, freeze contracts, harvest reusable code with provenance, run synthetic-only feasibility fixtures, and stop with an A0 completion receipt. Do not run measured retrieval, access protected data, download model weights, use paid APIs or GPU scientific compute, open Selection, or open Final.
 ```
 
 | Task | Work | Output | Completion |
 |---|---|---|---|
-| P0.1 | inventory P1/SCOPE/CrossFAM/code/indexes | migration matrix | all classified |
-| P0.2 | create additive campaign/source-of-truth | controls | history unchanged |
-| P0.3 | freeze REP-DEV/HARNESS-DEV | split commitment | invariants validate |
-| P0.4 | freeze evaluator/family/metrics/ties | evaluation lock | complete |
-| P0.5 | resolve five arms and licenses | model lock | full SHAs |
-| P0.6 | freeze representation DSL/compiler | schemas/fixtures | deterministic |
-| P0.7 | freeze HarnessOpt DSL/boundary | contract | forbidden changes fail |
-| P0.8 | run cost/storage/throughput pilot | feasibility report | total <=100 |
-| P0.9 | validate journal/resume/reports/shutdown | receipt | no measured access |
+| A0.1 | repository and evidence migration | migration matrix | history unchanged |
+| A0.2 | canonical authority and professional documentation | controls and plans | authority validates |
+| A0.3 | Brain, read-model, and Obsidian migration | shared projections | one read model |
+| A0.4 | MLflow and Dashboard migration | safe mirrors | aggregate-only |
+| A0.5 | phase, Research Flow, and Owner-gate migration | lifecycle registry | D2/D3 only |
+| A0.6 | scientific contracts and schemas | versioned contracts | schema-valid |
+| A0.7 | model/arm declarations and license registry | arm registry | truthful unresolved locks |
+| A0.8 | compute and storage feasibility fixtures | synthetic report | zero measured counters |
+| A0.9 | validation, safety, and closeout | closeout receipt | all checks pass |
+| A0.10 | legacy code harvest and phase-ready scaffolding | provenance ledger and runnable slice | A1 can start without redesign |
 
 ### Phase 1 — Repair and reproduce protocol baselines
 

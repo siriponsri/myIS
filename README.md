@@ -62,7 +62,7 @@ readiness. Those systems are projections, not independent sources of truth.
 
 | Arm | Exact model or engine | Role | Declared license | Intended status |
 |---|---|---|---|---|
-| `ARM-01` | `bm25s` | lexical anchor, rare terminology, CPU fallback | Apache-2.0 | commercial-capable |
+| `ARM-01` | `bm25s` | lexical anchor, rare terminology, CPU fallback | MIT | commercial-capable |
 | `ARM-02` | `BAAI/bge-m3` | multilingual dense anchor | MIT | commercial-capable |
 | `ARM-03` | `datalyes/patembed-large` | patent-specific research arm | CC BY-NC-SA 4.0 | research/non-commercial |
 | `ARM-04` | `Snowflake/snowflake-arctic-embed-m-v2.0` | multilingual long-context dense arm | Apache-2.0 | commercial-capable |
@@ -112,6 +112,7 @@ projections/             shared read model and generated projection receipts
 obsidian_report/         generated research reports; never canonical metrics
 dashboard/               local read-only control and evidence interface
 mlflow/                  governed external-store mirror contracts and indexes
+outputs/                 canonical generated evidence, audits, fixtures, and screenshots
 archive/                 preserved historical material and migration receipts
 docs/                    architecture, research, product, operations, and governance
 ```
@@ -124,6 +125,8 @@ data:
 
 ```powershell
 uv sync --locked --all-extras
+uv run --no-sync myis-armindex validate --repository-root .
+uv run --no-sync myis-armindex fixture --repository-root .
 uv run --no-sync pytest -q
 uv run --no-sync myis-report check --repository-root .
 uv run --no-sync python scripts/validate_layout_v2.py
@@ -136,7 +139,7 @@ does not start MLflow automatically.
 
 - Repository infrastructure was migrated in place on the existing Git history.
 - Historical measured P1 R0/R0-W evidence is preserved without reinterpretation.
-- The active ArmIndex campaign is at `A0_MIGRATION_FOUNDATION`; Task `A0.4` synthetic feasibility fixtures are next.
+- The active ArmIndex campaign is at `A0_MIGRATION_FOUNDATION`; Task `A0.10` legacy-code harvest and phase-ready scaffolding is complete, and A0.8/A0.9 remain planned.
 - ArmIndex measured runs, Selection exposures, and Final exposures are zero.
 - Final-872 is closed; `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` remain the only Owner gates.
 - Production and benchmark validation are pending.

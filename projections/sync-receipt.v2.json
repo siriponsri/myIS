@@ -1,12 +1,46 @@
 {
-  "dashboard_snapshot_sha256": "77f2332d9d0d4c9382ba76f56829297e2e469fdeabfc923867ec205d44a8616e",
-  "mlflow_archive_sha256": "65b515e5fa8bb4352d0b51683427baed0d9490c2d13485a28659d0f9cb93275e",
-  "mlflow_run_id": "92bb8b6d892a4c2c9fa887603018dec1",
-  "obsidian_manifest_sha256": "7c943b1f81f1db0983735303698a627f89f15bd67b57a5a08fc34fe3b5606a30",
+  "dashboard_snapshot_sha256": "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529",
+  "mlflow_archive_sha256": "9db27b4174a06abd306f38dbe525f067c14edfcae4d296b9cbeef17458422211",
+  "mlflow_run_id": "dad8928f8feb4eaaad5a7bb7f88ccf27",
+  "obsidian_manifest_sha256": "bc13df05236e7766b698e02a96d18cf00a819ba3c2c154dfe1ad05135e630d5c",
+  "projection_events": {
+    "brain_projection": {
+      "artifact_sha256": "dd965907dae48c98f82a0f69e677d7a9a5c1a9c22efa1347dea813bee96f7192",
+      "artifact_uri": "../02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md",
+      "status": "projected"
+    },
+    "dashboard_projection": {
+      "artifact_sha256": "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529",
+      "artifact_uri": "projections/read-model/read-model.v2.json",
+      "status": "projected"
+    },
+    "mlflow_safe_mirror": {
+      "artifact_sha256": "9db27b4174a06abd306f38dbe525f067c14edfcae4d296b9cbeef17458422211",
+      "artifact_uri": "mlflow/generated/archive-index.v2.json",
+      "status": "mirrored"
+    },
+    "obsidian_report": {
+      "artifact_sha256": "bc13df05236e7766b698e02a96d18cf00a819ba3c2c154dfe1ad05135e630d5c",
+      "artifact_uri": "obsidian_report/00_System/Generated/generated-manifest.json",
+      "status": "projected"
+    },
+    "paper_readiness": {
+      "artifact_sha256": "158f28fdb38f928a7b2ef0981a34684f52b7c9f8e21773789c7c9bec739ec815",
+      "artifact_uri": "../03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md",
+      "status": "projected"
+    },
+    "read_model_rebuild": {
+      "artifact_sha256": "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529",
+      "artifact_uri": "projections/read-model/read-model.v2.json",
+      "status": "projected"
+    }
+  },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "41f630ca63b920fcea48cdfa79f7885589ea032ccc93c57c9ef9b8603ee051e1",
-  "read_model_sha256": "77f2332d9d0d4c9382ba76f56829297e2e469fdeabfc923867ec205d44a8616e",
+  "read_model_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "read_model_sha256": "9b497c1aa4cc2a216a8743d45c38b5d02e70309ac61952ef78720701c9bc3529",
   "schema_version": "myis.projection-sync-receipt.v2",
-  "source_commit": "9d9d1c99d9ed76e04fe5f0e229d85e182dd9421b",
+  "source_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "source_receipt_sha256": "dc824eea4bad0c552cc59198883284e8984108ef45b4b099e5d7b1058252bdcc",
+  "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
   "status": "PASS"
 }

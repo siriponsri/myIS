@@ -1,0 +1,39 @@
+schema_version: myis.armindex-goal-amendment.v1
+amendment_id: armindex-a0.10-legacy-code-harvest-20260804
+status: adopted
+effective_date: 2026-08-04
+campaign_id: armindex-multiretriever-v2
+phase_id: A0_MIGRATION_FOUNDATION
+task_id: A0.10
+task_title: Legacy code harvest and phase-ready scaffolding
+authority_archive_uri: inbox/archive/armindex-migration-20260804/GOAL.md
+previous_authority_sha256: b1660cff996c5520496f6579e4787fb3501bfce136c24c6bb84afee37d967894
+authority_sha256: cd8458ec4773992c146ddee204835724918cc4c54e70893ed5e85af718faea8f
+adopted_sections:
+  - U. LEGACY CODE HARVEST AND PHASE-READY SCAFFOLDING
+  - A0_MIGRATION_FOUNDATION required task map A0.1-A0.10
+canonical_authorities:
+  - PLAN.md
+  - control/campaigns/armindex-multiretriever-v2.yaml
+  - control/source-of-truth.yaml
+  - schemas/armindex
+  - campaigns/armindex-multiretriever
+boundaries:
+  evidence_class: engineering_fixture
+  scientific_authority: false
+  measured_retrieval: false
+  protected_data_access: false
+  model_download: false
+  gpu_scientific_run: false
+  paid_api: false
+  selection: false
+  final: false
+  model_weight_modification: false
+owner_authorizations:
+  repository_duplicate_and_unused_audit: true
+  merge_output_root_into_outputs: true
+  archive_or_delete_verified_unused_paths: true
+history_policy:
+  prior_migration_manifest: archive/migration-records/armindex-20260804/migration-manifest.v1.json
+  prior_migration_receipt: archive/migration-records/armindex-20260804/migration-receipt.v1.json
+  mutate_prior_receipts: false

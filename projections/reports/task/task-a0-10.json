@@ -1,0 +1,423 @@
+{
+  "artifact_references": [
+    {
+      "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
+      "artifact_type": "control",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/campaigns/armindex-multiretriever-v2.yaml",
+      "scientific_authority": false,
+      "title": "Active ArmIndex campaign",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "882d08758fdd4fe64ccf1941e2cf426527a894b54c4c50bfbbb1d382c9c53d7e",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+      "scientific_authority": false,
+      "title": "ArmIndex AutoIndex and HarnessOpt contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e64372bd6b6e746f92a028749375661b3e0c0b34900b418c6602d6425f62d435",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/migration-manifest.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex migration manifest",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "576efe28a33b5e7cbbce352444fb9373ab0b5d886bef2a3a2a4cc491adbd3cac",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/migration-receipt.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex migration receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ff2c94d587fbf0577ebacfbdb1f626450ca1c494bb9a9a042aad7fe412b212c7",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex MLflow migration receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "schemas-armindex-read-model.v1.json",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "evidence_class": "engineering",
+      "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "",
+      "producing_task_id": "",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/read-model.v1.json",
+      "scientific_authority": false,
+      "title": "ArmIndex read-model fragment schema",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a010-legacy-code-harvest-ledger",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "46fa064f0ed3f73352028ca3443096e33244c0cc68898cafdb02c59fc2328eaf",
+      "evidence_class": "engineering",
+      "explanation": "Records reviewed components and immutable source commitments without copying legacy code.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.10",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json",
+      "scientific_authority": false,
+      "title": "A0.10 legacy code-harvest ledger",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a010-legacy-code-harvest-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "dc824eea4bad0c552cc59198883284e8984108ef45b4b099e5d7b1058252bdcc",
+      "evidence_class": "engineering",
+      "explanation": "Binds the validated audit, source ledger, and safe migration boundary before projection.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.10",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json",
+      "scientific_authority": false,
+      "title": "A0.10 legacy code-harvest receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a010-synthetic-vertical-slice-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d4e7e99b2f00e21f4d9afe0e6616f07929652f7d5578957a906737981da43dd6",
+      "evidence_class": "engineering",
+      "explanation": "Records a synthetic-only integration check and never represents measured retrieval.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.10",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a0.10/vertical-slice-v1/receipt.json",
+      "scientific_authority": false,
+      "title": "A0.10 synthetic vertical-slice receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a010-repository-hygiene-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "1fcae4ac1966706194df7d76d730516f62507eeb246103495eafa65bb959045b",
+      "evidence_class": "engineering",
+      "explanation": "Records exact-content duplicate review and deletion of verified regenerable caches without removing tracked source.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.10",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json",
+      "scientific_authority": false,
+      "title": "A0.10 repository hygiene audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a010-output-root-relocation-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b98afb03be1e9a7d5dd75dbb421218b6b46b72376ad1f7e392450c93051ddf46",
+      "evidence_class": "engineering",
+      "explanation": "Binds the byte-preserving relocation from the retired output root to canonical outputs.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.10",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/dashboard/output-root-relocation-20260804.json",
+      "scientific_authority": false,
+      "title": "A0.10 output-root relocation receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a010-source-verification-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "417e9559d102dca6d34c50c771310b91a9511d143276df94e5a706fb1c2753ab",
+      "evidence_class": "engineering",
+      "explanation": "Binds every ThaiPha-Lex ledger component to a pinned Git blob and independently verified SHA-256 without copying source bytes.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.10",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json",
+      "scientific_authority": false,
+      "title": "A0.10 ThaiPha-Lex source verification receipt",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "engineering_provenance_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "A0.10 is completed; synthetic vertical-slice status is passed; measured ArmIndex, Selection, and Final counters remain zero.",
+    "status": "completed"
+  },
+  "evidence_class": "engineering",
+  "evidence_links": [
+    {
+      "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
+      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
+    },
+    {
+      "artifact_id": "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+      "sha256": "882d08758fdd4fe64ccf1941e2cf426527a894b54c4c50bfbbb1d382c9c53d7e",
+      "uri": "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
+      "sha256": "e64372bd6b6e746f92a028749375661b3e0c0b34900b418c6602d6425f62d435",
+      "uri": "archive/migration-records/armindex-20260804/migration-manifest.v1.json"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+      "sha256": "576efe28a33b5e7cbbce352444fb9373ab0b5d886bef2a3a2a4cc491adbd3cac",
+      "uri": "archive/migration-records/armindex-20260804/migration-receipt.v1.json"
+    },
+    {
+      "artifact_id": "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+      "sha256": "ff2c94d587fbf0577ebacfbdb1f626450ca1c494bb9a9a042aad7fe412b212c7",
+      "uri": "archive/migration-records/armindex-20260804/mlflow-migration-receipt.v1.json"
+    },
+    {
+      "artifact_id": "schemas-armindex-read-model.v1.json",
+      "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "uri": "schemas/armindex/read-model.v1.json"
+    },
+    {
+      "artifact_id": "a010-legacy-code-harvest-ledger",
+      "sha256": "46fa064f0ed3f73352028ca3443096e33244c0cc68898cafdb02c59fc2328eaf",
+      "uri": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json"
+    },
+    {
+      "artifact_id": "a010-legacy-code-harvest-receipt",
+      "sha256": "dc824eea4bad0c552cc59198883284e8984108ef45b4b099e5d7b1058252bdcc",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json"
+    },
+    {
+      "artifact_id": "a010-synthetic-vertical-slice-receipt",
+      "sha256": "d4e7e99b2f00e21f4d9afe0e6616f07929652f7d5578957a906737981da43dd6",
+      "uri": "outputs/fixtures/armindex/a0.10/vertical-slice-v1/receipt.json"
+    },
+    {
+      "artifact_id": "a010-repository-hygiene-audit",
+      "sha256": "1fcae4ac1966706194df7d76d730516f62507eeb246103495eafa65bb959045b",
+      "uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json"
+    },
+    {
+      "artifact_id": "a010-output-root-relocation-receipt",
+      "sha256": "b98afb03be1e9a7d5dd75dbb421218b6b46b72376ad1f7e392450c93051ddf46",
+      "uri": "outputs/audits/dashboard/output-root-relocation-20260804.json"
+    },
+    {
+      "artifact_id": "a010-source-verification-receipt",
+      "sha256": "417e9559d102dca6d34c50c771310b91a9511d143276df94e5a706fb1c2753ab",
+      "uri": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"
+    }
+  ],
+  "failure_recovery_references": [
+    {
+      "counters_changed": false,
+      "failure_id": "a0.10-legacy-code-harvest-independent-revise-20260804",
+      "failure_sha256": "a69df70559a949c1f7b1d60c02b4f6461215f2724297068dd21cab8cc0900353",
+      "failure_uri": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json",
+      "recovery_id": "a0.10-legacy-code-harvest-independent-accept-20260804",
+      "recovery_sha256": "4049ac9ccfaed94378484cdc7641eb8ee82dc0089a0b41db4421d40b78d73ce4",
+      "recovery_uri": "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-accept-20260804.json",
+      "status": "repaired_and_validated"
+    }
+  ],
+  "generated_at": "2026-08-04T12:12:14Z",
+  "generated_from_revision": "11f82d6ed2fa0f617a415379e8b37e2f7a339c5a191f0121a60fd4e8fe5215eb",
+  "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "engineering",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "armindex_schema_root": {
+      "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "uri": "schemas/armindex"
+    },
+    "campaign": {
+      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
+    },
+    "git_commit": "551bee74eee0dbcf6ad815e78d474d8e707878f4",
+    "historical_scope": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "status": "historical_read_only",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "legacy_code_harvest_ledger": {
+      "sha256": "46fa064f0ed3f73352028ca3443096e33244c0cc68898cafdb02c59fc2328eaf",
+      "uri": "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json"
+    },
+    "legacy_code_harvest_receipt": {
+      "sha256": "dc824eea4bad0c552cc59198883284e8984108ef45b4b099e5d7b1058252bdcc",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a0.10-legacy-code-harvest.receipt.v1.json"
+    },
+    "migration_budget": {
+      "sha256": "48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec",
+      "uri": "control/budgets/armindex-migration-v2.yaml"
+    },
+    "output_root_relocation_receipt": {
+      "sha256": "b98afb03be1e9a7d5dd75dbb421218b6b46b72376ad1f7e392450c93051ddf46",
+      "uri": "outputs/audits/dashboard/output-root-relocation-20260804.json"
+    },
+    "repository_hygiene_audit": {
+      "sha256": "1fcae4ac1966706194df7d76d730516f62507eeb246103495eafa65bb959045b",
+      "uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json"
+    },
+    "source_of_truth": {
+      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "uri": "control/source-of-truth.yaml"
+    },
+    "source_verification_receipt": {
+      "sha256": "417e9559d102dca6d34c50c771310b91a9511d143276df94e5a706fb1c2753ab",
+      "uri": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"
+    },
+    "synthetic_vertical_slice_receipt": {
+      "sha256": "d4e7e99b2f00e21f4d9afe0e6616f07929652f7d5578957a906737981da43dd6",
+      "uri": "outputs/fixtures/armindex/a0.10/vertical-slice-v1/receipt.json"
+    }
+  },
+  "interpretation": "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation.",
+  "last_material_update": "2026-08-04T12:12:14Z",
+  "metric_references": [],
+  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+  "objective": "Legacy code harvest and phase-ready scaffolding",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "report_id": "task-a0-10",
+  "report_sha256": "3c95fc9f0f897e050ee5ac931feb752214711ff87a10ff04d81aa918c0475902",
+  "report_type": "task",
+  "result": {
+    "decision": "completed",
+    "output": "Receipt-first legacy code-harvest audit status is complete; 26 reviewed component(s) and 9 adopted component(s), repository hygiene, and output-root consolidation are represented by aggregate-safe commitments.",
+    "result": "A0.10 is completed; synthetic vertical-slice status is passed; measured ArmIndex, Selection, and Final counters remain zero."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "A0_MIGRATION_FOUNDATION",
+    "program_state": "active_migration",
+    "task": "A0.10"
+  },
+  "status": "completed",
+  "supported_claims": [
+    {
+      "claim": "Receipt-first legacy code-harvest audit status is complete; 26 reviewed component(s) and 9 adopted component(s), repository hygiene, and output-root consolidation are represented by aggregate-safe commitments.",
+      "evidence": [
+        "control-campaigns-armindex-multiretriever-v2.yaml",
+        "control-plans-ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
+        "archive-migration-records-armindex-20260804-migration-manifest.v1.json",
+        "archive-migration-records-armindex-20260804-migration-receipt.v1.json",
+        "archive-migration-records-armindex-20260804-mlflow-migration-receipt.v1.json",
+        "schemas-armindex-read-model.v1.json",
+        "a010-legacy-code-harvest-ledger",
+        "a010-legacy-code-harvest-receipt",
+        "a010-synthetic-vertical-slice-receipt",
+        "a010-repository-hygiene-audit",
+        "a010-output-root-relocation-receipt",
+        "a010-source-verification-receipt"
+      ]
+    }
+  ],
+  "task_id": "A0.10",
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
+}

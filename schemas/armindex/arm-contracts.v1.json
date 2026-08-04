@@ -1,0 +1,342 @@
+{
+  "$defs": {
+    "ArmAdapterLock": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Adapter Sha256",
+          "type": "string"
+        },
+        "arm_id": {
+          "enum": [
+            "ARM-01",
+            "ARM-02",
+            "ARM-03",
+            "ARM-04",
+            "ARM-05"
+          ],
+          "title": "Arm Id",
+          "type": "string"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "dimension": {
+          "minimum": 1,
+          "title": "Dimension",
+          "type": "integer"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "input_format": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Input Format",
+          "type": "object"
+        },
+        "maximum_input_length": {
+          "minimum": 1,
+          "title": "Maximum Input Length",
+          "type": "integer"
+        },
+        "model_id": {
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "network_required": {
+          "const": false,
+          "title": "Network Required",
+          "type": "boolean"
+        },
+        "normalization": {
+          "minLength": 1,
+          "title": "Normalization",
+          "type": "string"
+        },
+        "pooling": {
+          "minLength": 1,
+          "title": "Pooling",
+          "type": "string"
+        },
+        "precision": {
+          "enum": [
+            "lexical",
+            "fp32",
+            "bf16",
+            "fp16"
+          ],
+          "title": "Precision",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "resolved_model_sha": {
+          "pattern": "^[a-f0-9]{40,64}$",
+          "title": "Resolved Model Sha",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "myis.armindex-arm-adapter-lock.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        },
+        "similarity": {
+          "minLength": 1,
+          "title": "Similarity",
+          "type": "string"
+        },
+        "tokenizer_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Tokenizer Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "arm_id",
+        "model_id",
+        "resolved_model_sha",
+        "tokenizer_sha256",
+        "adapter_sha256",
+        "input_format",
+        "pooling",
+        "normalization",
+        "dimension",
+        "maximum_input_length",
+        "precision",
+        "similarity",
+        "network_required"
+      ],
+      "title": "ArmAdapterLock",
+      "type": "object"
+    },
+    "ArmCapabilities": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_supported": {
+          "title": "Batch Supported",
+          "type": "boolean"
+        },
+        "cpu_supported": {
+          "title": "Cpu Supported",
+          "type": "boolean"
+        },
+        "embedding_dimension": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Embedding Dimension"
+        },
+        "gpu_supported": {
+          "title": "Gpu Supported",
+          "type": "boolean"
+        },
+        "index_type": {
+          "minLength": 1,
+          "title": "Index Type",
+          "type": "string"
+        },
+        "maximum_input_length": {
+          "minimum": 1,
+          "title": "Maximum Input Length",
+          "type": "integer"
+        },
+        "method": {
+          "enum": [
+            "lexical",
+            "dense",
+            "sparse",
+            "multivector"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "multilingual": {
+          "title": "Multilingual",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "method",
+        "maximum_input_length",
+        "multilingual",
+        "cpu_supported",
+        "gpu_supported",
+        "batch_supported",
+        "index_type"
+      ],
+      "title": "ArmCapabilities",
+      "type": "object"
+    },
+    "ArmSpecification": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_status": {
+          "enum": [
+            "fixture_ready",
+            "metadata_declared",
+            "revision_unresolved",
+            "model_not_downloaded"
+          ],
+          "title": "Adapter Status",
+          "type": "string"
+        },
+        "arm_id": {
+          "enum": [
+            "ARM-01",
+            "ARM-02",
+            "ARM-03",
+            "ARM-04",
+            "ARM-05"
+          ],
+          "title": "Arm Id",
+          "type": "string"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/ArmCapabilities"
+        },
+        "commercial_status": {
+          "enum": [
+            "commercial_capable",
+            "research_non_commercial",
+            "mixed",
+            "not_applicable"
+          ],
+          "title": "Commercial Status",
+          "type": "string"
+        },
+        "contract_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{1,127}$",
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Contract Sha256",
+          "type": "string"
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture",
+            "engineering",
+            "aggregate_evidence",
+            "contract_only"
+          ],
+          "title": "Evidence Class",
+          "type": "string"
+        },
+        "license_id": {
+          "minLength": 1,
+          "title": "License Id",
+          "type": "string"
+        },
+        "measured_use_allowed": {
+          "const": false,
+          "title": "Measured Use Allowed",
+          "type": "boolean"
+        },
+        "model_id": {
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "protected_data_accessed": {
+          "const": false,
+          "title": "Protected Data Accessed",
+          "type": "boolean"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "myis.armindex-arm-specification.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scientific_authority": {
+          "title": "Scientific Authority",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "contract_id",
+        "evidence_class",
+        "scientific_authority",
+        "commercial_status",
+        "protected_data_accessed",
+        "contract_sha256",
+        "schema_version",
+        "arm_id",
+        "model_id",
+        "role",
+        "license_id",
+        "capabilities",
+        "adapter_status",
+        "measured_use_allowed"
+      ],
+      "title": "ArmSpecification",
+      "type": "object"
+    }
+  },
+  "$id": "urn:myis:armindex:arm-contracts:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/ArmSpecification"
+    },
+    {
+      "$ref": "#/$defs/ArmAdapterLock"
+    }
+  ],
+  "title": "ArmIndex arm contracts.v1"
+}

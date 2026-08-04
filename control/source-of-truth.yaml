@@ -11,6 +11,10 @@ records:
     authority: control/campaigns/armindex-multiretriever-v2.yaml
     projections: [projections/read-model, dashboard, brain, paper, mlflow]
     restrictions: [synthetic_fixtures_only_during_migration, no_model_download]
+  - id: armindex_a0_10_goal_amendment
+    authority: control/migrations/armindex-a0.10-amendment.v1.yaml
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_fixture_only, no_protected_data, measured_counters_zero]
   - id: control
     authority: control/program.yaml
     projections: [dashboard, brain, paper, mlflow]
