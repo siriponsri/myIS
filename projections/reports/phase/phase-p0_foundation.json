@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
+      "content_sha256": "c6872ffaecd82e117acbcba5822346c5e438dc9b5f7b83972416dcff9d8c0ce7",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
+      "sha256": "c6872ffaecd82e117acbcba5822346c5e438dc9b5f7b83972416dcff9d8c0ce7",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-03T15:43:42Z",
-  "generated_from_revision": "9d3cc0fde637b5d1b35608d7fa4d7aa50a2aa76d3172136d735e70bcf7833fbc",
+  "generated_from_revision": "4a52dc6161c65227c066477dc02f997b98ab6184e03692b872ff2bf54f22fed1",
   "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
   "governance_status": {
     "d2": "waiting_owner",
@@ -109,7 +109,7 @@
     },
     "git_commit": "9b297bd305ceaff9c0f6a2df4f04627eb66aab11",
     "source_of_truth": {
-      "sha256": "32811320d036a60999b7c6df28f47f3af9b10506bdfea30e9f83fc749f15a53a",
+      "sha256": "c6872ffaecd82e117acbcba5822346c5e438dc9b5f7b83972416dcff9d8c0ce7",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -120,7 +120,7 @@
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "345bf360f2da6b858132a90de42c8fb9059583a69460af309946154c53f3be10",
+  "report_sha256": "bff7a647cf34b70cd6100faf7c273abbcef0664df80ee5768acd57e3a5211452",
   "report_type": "phase",
   "result": {
     "decision": "completed",

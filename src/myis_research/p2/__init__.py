@@ -28,6 +28,7 @@ from .preflight import (
     OWNER_APPROVAL_REQUIRED,
     P2_PREFLIGHT_RECEIPT_PATH,
     build_preflight_receipt,
+    build_preflight_receipt_v2,
     preflight_what_if,
     run_p2_preflight,
     write_preflight_receipt,
@@ -46,6 +47,12 @@ from .measured_contracts import (
     scientific_payload_sha256,
     validate_stop_reason,
     validate_measured_artifact,
+    validate_measured_request_payload,
+)
+from .active_binding import active_p2_source_uris
+from .evaluator_compatibility import (
+    build_evaluator_compatibility_evidence,
+    load_evaluator_compatibility,
 )
 
 __all__ = [
@@ -74,6 +81,7 @@ __all__ = [
     "OWNER_APPROVAL_REQUIRED",
     "P2_PREFLIGHT_RECEIPT_PATH",
     "build_preflight_receipt",
+    "build_preflight_receipt_v2",
     "preflight_what_if",
     "run_p2_preflight",
     "write_preflight_receipt",
@@ -90,4 +98,8 @@ __all__ = [
     "scientific_payload_sha256",
     "validate_stop_reason",
     "validate_measured_artifact",
+    "validate_measured_request_payload",
+    "active_p2_source_uris",
+    "build_evaluator_compatibility_evidence",
+    "load_evaluator_compatibility",
 ]

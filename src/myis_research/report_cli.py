@@ -580,6 +580,36 @@ def _p2_official_review_body(model: Mapping[str, Any]) -> str:
     )
 
 
+def _p2_preflight_repair_audit_body(model: Mapping[str, Any]) -> str:
+    p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
+    audit = p2.get("preflight_repair_audit", {}) if isinstance(p2.get("preflight_repair_audit"), Mapping) else {}
+    findings = audit.get("blocking_findings", []) if isinstance(audit.get("blocking_findings"), list) else []
+    return (
+        "# P2 v2 Owner-local Preflight Blocker Audit\n\n"
+        "## Objective\n\nตรวจสอบและกำหนดขอบเขตการซ่อม P2 v2 Owner-local preflight โดยไม่เปลี่ยน P1 lineage หรือเริ่ม measured work.\n\n"
+        "## Starting State\n\n"
+        f"Canonical audit status `{audit.get('status', 'not_recorded')}`; preflight `{p2.get('preflight_status', 'not_started')}`; measured execution remains closed.\n\n"
+        "## Inputs and Frozen Bindings\n\n"
+        f"Active profile `{p2.get('source', {}).get('profile', '-')}`, envelope `{p2.get('source', {}).get('execution_envelope', '-')}`, campaign revision `{p2.get('source', {}).get('campaign_revision', '-')}`, and compatibility classification `{audit.get('classification', '-')}`.\n\n"
+        "## Work Performed\n\nTraced evaluator bytes and semantics, active v2 source selection, shared request validation, receipt bindings, tests, and reporting policy.\n\n"
+        "## Artifacts Produced\n\n"
+        f"Canonical audit `{audit.get('source_uri', '-')}` with SHA-256 `{audit.get('source_sha256', '-')}`. This note is a generated projection, not a second authority.\n\n"
+        "## Metrics\n\n"
+        f"Real measured runs `{p2.get('measured_runs', 0)}`; candidates `{p2.get('candidate_count', 0)}`; shortlist `{p2.get('shortlist_count', 0)}`; selection accesses `{p2.get('selection_accesses', 0)}`.\n\n"
+        "## Result\n\n"
+        f"Audit findings `{', '.join(str(item) for item in findings) or 'none'}`; repair state `{audit.get('repair_status', 'unknown')}`.\n\n"
+        "## Interpretation\n\nThe evaluator difference is type A observer instrumentation drift only when the committed compatibility proof reproduces. This is engineering evidence and does not establish retrieval improvement.\n\n"
+        "## Supported Claims\n\nThe repair audit can establish contract compatibility, active v2 binding, and zero-counter preflight readiness only.\n\n"
+        "## Unsupported Claims\n\nNo R1 quality improvement, selection result, final-split result, confirmation, or publication claim is supported.\n\n"
+        "## Failures and Recovery\n\nAny evaluator proof mismatch, v1 fallback, stale commit/tree, mixed control revision, or nonzero counter fails closed and requires a new compatibility decision or campaign revision.\n\n"
+        "## Governance and Safety\n\nProtected data was not accessed. CPU-only, zero paid API, no GPU, no network model download, and no provider fallback remain mandatory; D2/D3 remain Owner-only.\n\n"
+        "## Decision\n\nUse explicit hash-pair compatibility. Never alias hashes, rewrite the accepted P1 receipt, or infer historical v1 controls.\n\n"
+        "## Next Action\n\nOwner-local P2 measured preflight on an immutable request bound to the final clean repair commit and tree.\n\n"
+        "## Evidence Links\n\n"
+        f"`{audit.get('source_uri', '-')}` · [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2.1]] · [[P2_SCOPE_DEVELOPMENT_RESULT]]\n"
+    )
+
+
 def _p1_run_ids(model: Mapping[str, Any]) -> list[str]:
     return sorted(str(row["run_id"]) for row in model.get("runs", []) if row.get("campaign_id") == "scope-autoindex-v1")
 
@@ -1063,6 +1093,12 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         {**common, "note_id": "P2-OFFICIAL-REVIEW-AUDIT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if review.get("status") == "accepted_static_contract_review" else "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
         _p2_official_review_body(model),
     )
+    p2_readiness = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
+    repair_audit = p2_readiness.get("preflight_repair_audit", {}) if isinstance(p2_readiness.get("preflight_repair_audit"), Mapping) else {}
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_V2_OWNER_LOCAL_PREFLIGHT_BLOCKER_AUDIT.md"] = _note(
+        {**common, "note_id": "P2-V2-OWNER-LOCAL-PREFLIGHT-BLOCKER-AUDIT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if repair_audit.get("status") == "validated" else "blocked", "evidence_maturity": "engineering", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [str(repair_audit.get("source_sha256"))] if repair_audit.get("source_sha256") else [], "related_literature_ids": []},
+        _p2_preflight_repair_audit_body(model),
+    )
 
     # Preserve each bounded review round as its own generated history note.
     for round_item in review.get("rounds", []) if isinstance(review.get("rounds"), list) else []:
@@ -1338,6 +1374,7 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
         ("P2_OFFICIAL_REVIEW_ROUND_2", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_2.md"),
         ("P2_OFFICIAL_REVIEW_ROUND_3", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_3.md"),
         ("P2_FIXTURE_PILOT", "05_Research_History/P2_FIXTURE_PILOT.md"),
+        ("P2_V2_OWNER_LOCAL_PREFLIGHT_BLOCKER_AUDIT", "05_Research_History/P2_V2_OWNER_LOCAL_PREFLIGHT_BLOCKER_AUDIT.md"),
         ("OBSERVATORY_FIXTURE_RUN", "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"),
         ("OBSERVATORY_FAILURE_RECOVERY", "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"),
         ("D1_START_CAMPAIGN", "06_Decisions_Risks/D1_START_CAMPAIGN.md"),

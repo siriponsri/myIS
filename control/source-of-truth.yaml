@@ -23,6 +23,10 @@ records:
   - id: p2_campaign_revision
     authority: control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml
     projections: [harness, projections/read-model, dashboard, mlflow, brain, paper]
+  - id: p2_evaluator_compatibility
+    authority: control/p2/p2-evaluator-compatibility-v1.json
+    projections: [harness, projections/read-model, reports]
+    restrictions: [explicit_hash_pair_only, no_hash_alias, no_lineage_rewrite]
   - id: p2_readiness_records
     authority: [campaigns/scope-autoindex-v1/proposals, campaigns/scope-autoindex-v1/preflight]
     projections: [harness, projections/read-model, dashboard, brain, paper]

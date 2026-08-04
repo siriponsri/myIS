@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import shutil
 
 import pytest
 
@@ -59,6 +60,8 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     p2_task_report = contents[ROOT / VAULT_RELATIVE_PATH / "01_Phases/P2_SCOPE_DEVELOPMENT/Tasks/P2.1.md"]
     audit_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"]
     fixture_report = contents[ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_FIXTURE_PILOT.md"]
+    preflight_audit_path = ROOT / VAULT_RELATIVE_PATH / "05_Research_History/P2_V2_OWNER_LOCAL_PREFLIGHT_BLOCKER_AUDIT.md"
+    preflight_audit = contents[preflight_audit_path]
     pending_report = contents[ROOT / VAULT_RELATIVE_PATH / "03_Results/Current/P2_MEASURED_PENDING.md"]
     assert "## Output" in result_report
     assert "## Interpretation" in result_report
@@ -79,6 +82,19 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "`32`" not in pending_report
     assert "`0.72`" not in pending_report
     assert "measured results = `unavailable`" in pending_report
+    assert 'managed_by: "myis-report"' in preflight_audit
+    assert 'edit_policy: "generated_do_not_edit"' in preflight_audit
+    for heading in (
+        "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",
+        "Artifacts Produced", "Metrics", "Result", "Interpretation", "Supported Claims",
+        "Unsupported Claims", "Failures and Recovery", "Governance and Safety", "Decision",
+        "Next Action", "Evidence Links",
+    ):
+        assert f"## {heading}" in preflight_audit
+    assert "[[P2_V2_OWNER_LOCAL_PREFLIGHT_BLOCKER_AUDIT]]" in contents[
+        ROOT / VAULT_RELATIVE_PATH / "00_System/Generated/REPORT_INDEX.md"
+    ]
+    assert not any("80_Owner_Notes" in path.as_posix() for path in contents)
 
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
@@ -201,13 +217,14 @@ def test_two_syncs_are_idempotent_and_preserve_owner_files(tmp_path: Path) -> No
     # Use the real safe repository metadata while redirecting only the vault writes.
     repo = tmp_path / "repo"
     repo.mkdir()
-    for relative in ("control", "campaigns", "evidence", "schemas"):
+    for relative in ("control", "campaigns", "evidence", "schemas", "src"):
         source = ROOT / relative
         if source.exists():
-            # Symlinks keep the fixture small and are not part of the output vault.
-            (repo / relative).symlink_to(source, target_is_directory=True)
-    # The builder also uses these source files to calculate a source commit fallback.
-    (repo / "src").symlink_to(ROOT / "src", target_is_directory=True)
+            shutil.copytree(
+                source,
+                repo / relative,
+                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+            )
     owner = repo / VAULT_RELATIVE_PATH / "80_Owner_Notes" / "meeting.md"
     owner.parent.mkdir(parents=True)
     owner.write_bytes(b"owner bytes must remain exact\n")

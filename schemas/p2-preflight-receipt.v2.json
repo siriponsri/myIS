@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-preflight-receipt:v2",
+  "title": "myIS P2 Owner-local measured preflight receipt v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "request_id", "request_schema_version", "request_sha256",
+    "phase_id", "arm", "campaign_id", "campaign_revision", "campaign_revision_uri", "campaign_sha256",
+    "budget_profile_id", "budget_profile_uri", "budget_profile_sha256",
+    "execution_envelope_id", "execution_envelope_uri", "execution_envelope_sha256",
+    "evaluator_compatibility_uri", "evaluator_compatibility_sha256",
+    "scope_hashes",
+    "git_commit", "git_tree", "git_commit_exists", "git_tree_matches", "worktree_clean",
+    "created_at_utc", "status", "checks", "stores", "safe_path_boundary", "counters", "gates",
+    "required_free_space_bytes", "aggregate_free_space_bytes", "measured_execution",
+    "protected_data_accessed", "final_split_open", "absolute_owner_local_paths_emitted",
+    "failure_codes", "owner_approval_required", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.p2-preflight-receipt.v2"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "request_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "request_schema_version": {"const": "myis.p2-measured-request.v1"},
+    "request_sha256": {"$ref": "#/$defs/hash"},
+    "phase_id": {"const": "P2_SCOPE_DEVELOPMENT"},
+    "arm": {"const": "R1"},
+    "campaign_id": {"const": "scope-autoindex-v1"},
+    "campaign_revision": {"type": "string", "minLength": 1},
+    "campaign_revision_uri": {"$ref": "#/$defs/uri"},
+    "campaign_sha256": {"$ref": "#/$defs/hash"},
+    "budget_profile_id": {"type": "string", "minLength": 1},
+    "budget_profile_uri": {"$ref": "#/$defs/uri"},
+    "budget_profile_sha256": {"$ref": "#/$defs/hash"},
+    "execution_envelope_id": {"type": "string", "minLength": 1},
+    "execution_envelope_uri": {"$ref": "#/$defs/uri"},
+    "execution_envelope_sha256": {"$ref": "#/$defs/hash"},
+    "evaluator_compatibility_uri": {"$ref": "#/$defs/uri"},
+    "evaluator_compatibility_sha256": {"$ref": "#/$defs/hash"},
+    "scope_hashes": {"type": "object", "minProperties": 5, "additionalProperties": {"$ref": "#/$defs/hash"}},
+    "git_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "git_tree": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "git_commit_exists": {"type": "boolean"},
+    "git_tree_matches": {"type": "boolean"},
+    "worktree_clean": {"type": "boolean"},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["not_started", "passed_pending_owner", "failed"]},
+    "checks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/check"}},
+    "stores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["MYIS_STORE", "MYIS_MLFLOW_STORE"],
+      "properties": {"MYIS_STORE": {"$ref": "#/$defs/store"}, "MYIS_MLFLOW_STORE": {"$ref": "#/$defs/store"}}
+    },
+    "safe_path_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["all_worktrees_count", "outside_all_worktrees", "stores_disjoint", "path_overlap_checked", "unsafe_links_rejected"],
+      "properties": {
+        "all_worktrees_count": {"type": "integer", "minimum": 1},
+        "outside_all_worktrees": {"type": "boolean"},
+        "stores_disjoint": {"type": "boolean"},
+        "path_overlap_checked": {"type": "boolean"},
+        "unsafe_links_rejected": {"type": "boolean"}
+      }
+    },
+    "counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_runs", "candidate_count", "shortlist_count", "selection_accesses", "baseline_commitment_present", "freeze_started"],
+      "properties": {
+        "measured_runs": {"type": "integer", "minimum": 0},
+        "candidate_count": {"type": "integer", "minimum": 0},
+        "shortlist_count": {"type": "integer", "minimum": 0},
+        "selection_accesses": {"type": "integer", "minimum": 0},
+        "baseline_commitment_present": {"type": "boolean"},
+        "freeze_started": {"type": "boolean"}
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["D1_START_CAMPAIGN", "D2_OPEN_FINAL", "D3_SUBMIT_RELEASE", "final_split_open"],
+      "properties": {
+        "D1_START_CAMPAIGN": {"type": "string", "minLength": 1},
+        "D2_OPEN_FINAL": {"type": "string", "minLength": 1},
+        "D3_SUBMIT_RELEASE": {"type": "string", "minLength": 1},
+        "final_split_open": {"type": "boolean"}
+      }
+    },
+    "required_free_space_bytes": {"type": "integer", "minimum": 0},
+    "aggregate_free_space_bytes": {"type": "integer", "minimum": 0},
+    "measured_execution": {"const": false},
+    "protected_data_accessed": {"const": false},
+    "final_split_open": {"const": false},
+    "absolute_owner_local_paths_emitted": {"const": false},
+    "failure_codes": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "owner_approval_required": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"},
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "status", "detail"],
+      "properties": {
+        "check_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "status": {"enum": ["passed", "failed", "not_run"]},
+        "detail": {"type": "string", "minLength": 1}
+      }
+    },
+    "store": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["configured", "exists", "is_directory", "outside_all_worktrees", "unsafe_link_or_junction", "writable_sentinel_created", "writable_sentinel_cleaned", "free_space_bytes", "path_commitment_sha256", "status"],
+      "properties": {
+        "configured": {"type": "boolean"},
+        "exists": {"type": "boolean"},
+        "is_directory": {"type": "boolean"},
+        "outside_all_worktrees": {"type": "boolean"},
+        "unsafe_link_or_junction": {"type": "boolean"},
+        "writable_sentinel_created": {"type": "boolean"},
+        "writable_sentinel_cleaned": {"type": "boolean"},
+        "free_space_bytes": {"type": "integer", "minimum": 0},
+        "path_commitment_sha256": {"$ref": "#/$defs/hash"},
+        "status": {"enum": ["passed", "failed", "not_configured", "not_run"]}
+      }
+    }
+  }
+}

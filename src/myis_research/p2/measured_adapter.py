@@ -30,7 +30,12 @@ from ..kernel.p1 import evaluate_baseline
 from ..owner_local import validate_receipt
 from ..scope import compile_scope
 from .contracts import P2ContractError, write_immutable_json
-from .measured_contracts import load_measured_request, validate_measured_artifact
+from .evaluator_compatibility import load_evaluator_compatibility
+from .measured_contracts import (
+    committed_blob_sha256,
+    load_measured_request,
+    validate_measured_artifact,
+)
 from .measured_state import atomic_write_json
 
 
@@ -57,13 +62,28 @@ def p2_retrieval_config_sha256() -> str:
     return canonical_sha256(P2_RETRIEVAL_CONFIG)
 
 
-def current_scope_hashes(repository_root: Path) -> dict[str, str]:
+def current_scope_hashes(
+    repository_root: Path,
+    *,
+    revision: str = "HEAD",
+) -> dict[str, str]:
     root = Path(repository_root).resolve()
+    compatibility = load_evaluator_compatibility(
+        root,
+        execution_revision=revision,
+    )
     return {
-        "compiler_sha256": file_sha256(root / "src/myis_research/scope/compiler.py"),
+        "compiler_sha256": committed_blob_sha256(
+            root, "src/myis_research/scope/compiler.py", revision
+        ),
         "config_sha256": p2_retrieval_config_sha256(),
-        "retriever_sha256": file_sha256(root / "src/myis_research/p2/measured_adapter.py"),
-        "evaluator_sha256": file_sha256(root / "src/myis_research/kernel/p1.py"),
+        "retriever_sha256": committed_blob_sha256(
+            root, "src/myis_research/p2/measured_adapter.py", revision
+        ),
+        "evaluator_sha256": committed_blob_sha256(
+            root, "src/myis_research/kernel/p1.py", revision
+        ),
+        "evaluator_compatibility_sha256": compatibility["compatibility_sha256"],
     }
 
 
@@ -86,7 +106,10 @@ def validate_owner_inputs(
         raise P2MeasurementAdapterError(
             "measured request dataset lineage is missing or stale"
         )
-    expected_scope = current_scope_hashes(root)
+    expected_scope = current_scope_hashes(
+        root,
+        revision=str(request["execution_source_commit"]),
+    )
     request_scope = dict(request["scope_hashes"])
     for key, value in expected_scope.items():
         if request_scope.get(key) != value:
@@ -122,9 +145,18 @@ def baseline_expectation(
             "accepted P1 baseline receipt lacks the frozen metric binding"
         ) from error
     scope_hashes = dict(request["scope_hashes"])
-    if scope_hashes.get("evaluator_sha256") != prior_evaluator:
+    compatibility = load_evaluator_compatibility(
+        root,
+        execution_revision=str(request["execution_source_commit"]),
+        expected_sha256=scope_hashes.get("evaluator_compatibility_sha256"),
+    )
+    if compatibility["baseline"]["evaluator_sha256"] != prior_evaluator:
         raise P2MeasurementAdapterError(
-            "P2 evaluator hash differs from the accepted P1 baseline"
+            "P2 evaluator compatibility proof does not bind the accepted P1 baseline"
+        )
+    if scope_hashes.get("evaluator_sha256") != compatibility["current"]["evaluator_sha256"]:
+        raise P2MeasurementAdapterError(
+            "P2 evaluator hash differs from the validated compatibility proof"
         )
     metric = {
         "schema_version": "myis.p2-train-metric.v1",

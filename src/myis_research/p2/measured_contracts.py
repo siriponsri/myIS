@@ -22,6 +22,7 @@ from .contracts import (
     validate_p2_aggregate_metric,
     validate_p2_train_metric,
 )
+from .active_binding import active_p2_source_uris
 
 
 BASE_CONTROL_IDS = (
@@ -131,9 +132,30 @@ def load_measured_request(
     require_current_git: bool = True,
 ) -> dict[str, Any]:
     root = Path(repository_root).resolve()
-    request = validate_measured_artifact(_json_file(Path(request_path)), root)
+    return validate_measured_request_payload(
+        _json_file(Path(request_path)),
+        root,
+        require_current_git=require_current_git,
+    )
+
+
+def validate_measured_request_payload(
+    payload: Mapping[str, Any],
+    repository_root: Path,
+    *,
+    require_current_git: bool = True,
+) -> dict[str, Any]:
+    """Validate one measured request and resolve every active v2 binding."""
+
+    root = Path(repository_root).resolve()
+    request = validate_measured_artifact(payload, root)
     if request["schema_version"] != "myis.p2-measured-request.v1":
         raise P2ContractError("measured runner requires myis.p2-measured-request.v1")
+    active = active_p2_source_uris(root)
+    if request["budget_profile_uri"] != active["profile"]:
+        raise P2ContractError("measured request does not bind the active P2 budget profile")
+    if request["execution_envelope_uri"] != active["execution_envelope"]:
+        raise P2ContractError("measured request does not bind the active P2 execution envelope")
     profile, profile_hash = load_profile_uri(root, request["budget_profile_uri"])
     envelope, envelope_hash = load_envelope_uri(root, request["execution_envelope_uri"])
     base_set = load_referenced_measured_artifact(root, request["base_candidate_set_uri"])
@@ -157,6 +179,15 @@ def load_measured_request(
     revision = str(profile["campaign_revision"])
     if any(str(item.get("campaign_revision", revision)) != revision for item in (request, envelope, base_set, policy)):
         raise P2ContractError("profile-resolved artifacts disagree on campaign revision")
+    campaign = _yaml_file(resolve_safe_uri(root, active["campaign_revision"]))
+    if (
+        campaign.get("campaign_id") != request["campaign_id"]
+        or campaign.get("campaign_revision") != revision
+        or campaign.get("budget_profile_ref") != active["profile"]
+        or campaign.get("execution_envelope_ref") != active["execution_envelope"]
+        or campaign.get("status") != "ready_planned_not_measured"
+    ):
+        raise P2ContractError("active P2 campaign revision binding is invalid")
     _validate_profile_resources(profile)
     _validate_profile_allocation(profile)
     _validate_envelope(envelope, profile, request["budget_profile_uri"])
@@ -165,6 +196,7 @@ def load_measured_request(
         "config_sha256",
         "retriever_sha256",
         "evaluator_sha256",
+        "evaluator_compatibility_sha256",
     }
     if not required_scope_hashes.issubset(request["scope_hashes"]):
         raise P2ContractError("measured request is missing required scope hashes")
@@ -172,6 +204,25 @@ def load_measured_request(
         raise P2ContractError("measured request compiler hash differs from the base set")
     if "dataset_lineage_sha256" not in request["input_hashes"]:
         raise P2ContractError("measured request is missing dataset lineage")
+    execution_commit = str(request["execution_source_commit"])
+    execution_tree = _git(root, "show", "-s", "--format=%T", execution_commit)
+    if execution_tree != request["execution_source_tree"]:
+        raise P2ContractError("measured request execution-source tree does not match its commit")
+    from .evaluator_compatibility import load_evaluator_compatibility
+
+    compatibility = load_evaluator_compatibility(
+        root,
+        execution_revision=execution_commit,
+        expected_sha256=request["scope_hashes"]["evaluator_compatibility_sha256"],
+    )
+    if request["scope_hashes"]["evaluator_sha256"] != compatibility["current"]["evaluator_sha256"]:
+        raise P2ContractError("measured request evaluator hash differs from the compatibility proof")
+    from .measured_adapter import current_scope_hashes
+
+    expected_scope_hashes = current_scope_hashes(root, revision=execution_commit)
+    for field, expected in expected_scope_hashes.items():
+        if request["scope_hashes"].get(field) != expected:
+            raise P2ContractError(f"measured request scope hash is stale: {field}")
     if require_current_git:
         identity = git_identity(root)
         if request["execution_source_commit"] != identity["commit"]:
@@ -188,6 +239,9 @@ def load_measured_request(
             "base_candidate_set": base_set,
             "adaptive_policy": policy,
             "proposer_contract": proposer,
+            "campaign_revision": campaign,
+            "active_sources": active,
+            "evaluator_compatibility": compatibility,
         },
     }
 
@@ -257,7 +311,12 @@ def build_measured_request(
             "provider_fallback": False,
         },
     }
-    return validate_measured_artifact(request, root)
+    validated = validate_measured_request_payload(
+        request,
+        root,
+        require_current_git=True,
+    )
+    return {key: value for key, value in validated.items() if key != "_resolved"}
 
 
 def load_profile_uri(repository_root: Path, uri: str) -> tuple[dict[str, Any], str]:
@@ -548,6 +607,16 @@ def _json_file(path: Path) -> dict[str, Any]:
         raise P2ContractError(f"cannot load JSON artifact: {path}") from error
     if not isinstance(value, dict):
         raise P2ContractError(f"JSON artifact must be an object: {path}")
+    return value
+
+
+def _yaml_file(path: Path) -> dict[str, Any]:
+    try:
+        value = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, yaml.YAMLError) as error:
+        raise P2ContractError(f"cannot load YAML artifact: {path}") from error
+    if not isinstance(value, dict):
+        raise P2ContractError(f"YAML artifact must be a mapping: {path}")
     return value
 
 

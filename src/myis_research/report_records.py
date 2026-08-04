@@ -31,6 +31,7 @@ P2_RUNTIME_CLEAN_CHECKOUT_FAILURE_AUDIT = "outputs/audits/rigor/p2-runtime-resil
 P2_RUNTIME_CLEAN_CHECKOUT_REPAIR_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-clean-checkout-repair-20260803.json"
 P2_RUNTIME_INDEPENDENT_REVISE_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-revise-20260803.json"
 P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json"
+P2_V2_PREFLIGHT_BLOCKER_AUDIT = "outputs/audits/rigor/p2-v2-owner-local-preflight-blockers-20260804.json"
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -248,6 +249,12 @@ def _artifacts(root: Path, model: Mapping[str, Any], phase_id: str) -> list[dict
                 "Repaired P2 preflight tracked Owner-path audit",
                 P2_TRACKED_OWNER_PATH_REPAIR_AUDIT,
                 "Validates portable path guidance, fail-closed legacy execution configuration, and tracked-artifact regression coverage.",
+            ),
+            (
+                "p2-v2-owner-local-preflight-blocker-audit",
+                "P2 v2 Owner-local preflight blocker audit",
+                P2_V2_PREFLIGHT_BLOCKER_AUDIT,
+                "Classifies evaluator drift, records the active-v2 binding and registry defects, and preserves the zero-counter engineering boundary.",
             ),
             (
                 "p2-runtime-resilience-v1-interruption-audit",

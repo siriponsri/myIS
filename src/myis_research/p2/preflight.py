@@ -19,11 +19,13 @@ from .contracts import (
     P2_ARTIFACT_SCHEMAS,
     P2ContractError,
     P2_PREFLIGHT_CHECK_IDS,
+    P2_PREFLIGHT_V2_CHECK_IDS,
     load_p2_request,
     validate_p2_artifact,
     validate_p2_preflight_receipt,
     write_immutable_json,
 )
+from .measured_contracts import git_identity, load_measured_request
 
 
 P2_PREFLIGHT_RECEIPT_PATH = Path(
@@ -34,7 +36,9 @@ STORE_ENVIRONMENT = ("MYIS_STORE", "MYIS_MLFLOW_STORE")
 P2_COUNTER_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
 P2_LIFECYCLE_SCHEMAS = frozenset(P2_ARTIFACT_SCHEMAS) - {
     "myis.p2-request.v1",
+    "myis.p2-measured-request.v1",
     "myis.p2-preflight-receipt.v1",
+    "myis.p2-preflight-receipt.v2",
     "myis.p2-candidate-freeze-proposal.v1",
 }
 OWNER_APPROVAL_REQUIRED = [
@@ -53,10 +57,25 @@ def run_p2_preflight(
     output: Path | None = None,
     require_stores: bool = True,
     required_free_space_bytes: int | None = None,
+    allow_historical_request: bool = False,
 ) -> dict[str, Any]:
     """Run the repository-boundary checks without opening protected payloads."""
 
     root = Path(repository_root).resolve(strict=True)
+    raw_request = _json_file(Path(request_path))
+    schema_version = str(raw_request.get("schema_version", ""))
+    if schema_version == "myis.p2-measured-request.v1":
+        return _run_measured_p2_preflight(
+            request_path=Path(request_path),
+            repository_root=root,
+            output=output,
+            require_stores=require_stores,
+            required_free_space_bytes=required_free_space_bytes,
+        )
+    if not allow_historical_request:
+        raise P2ContractError(
+            "active P2 preflight requires myis.p2-measured-request.v1; historical v1 fallback is forbidden"
+        )
     request, profile = load_p2_request(Path(request_path), root, require_store=False)
     envelope_path = root / ENVELOPE_RELATIVE_PATH
     campaign_path = root / "control/campaigns/scope-autoindex-v1.yaml"
@@ -139,8 +158,247 @@ def run_p2_preflight(
     return receipt
 
 
-def preflight_what_if(request_path: Path, repository_root: Path) -> dict[str, Any]:
+def _run_measured_p2_preflight(
+    *,
+    request_path: Path,
+    repository_root: Path,
+    output: Path | None,
+    require_stores: bool,
+    required_free_space_bytes: int | None,
+) -> dict[str, Any]:
+    """Run the active v2 checks against one measured-request contract."""
+
+    root = Path(repository_root).resolve(strict=True)
+    measured = load_measured_request(
+        request_path,
+        root,
+        require_current_git=False,
+    )
+    resolved = measured["_resolved"]
+    request = {key: value for key, value in measured.items() if key != "_resolved"}
+    profile = resolved["profile"]
+    envelope = resolved["envelope"]
+    campaign = resolved["campaign_revision"]
+    active = resolved["active_sources"]
+    compatibility = resolved["evaluator_compatibility"]
+    required_space = _required_free_space(required_free_space_bytes)
+    checks: list[dict[str, str]] = []
+
+    identity = git_identity(root)
+    commit_exists = _git_commit_exists(root, request["execution_source_commit"])
+    commit_matches = commit_exists and identity["commit"] == request["execution_source_commit"]
+    checks.append(_check(
+        "execution_source_commit",
+        commit_matches,
+        "commit_matches" if commit_matches else "commit_missing_or_not_checked_out",
+    ))
+    committed_tree = _tree_for_commit(root, request["execution_source_commit"])
+    tree_matches = (
+        committed_tree == request["execution_source_tree"]
+        and identity["tree"] == request["execution_source_tree"]
+    )
+    checks.append(_check(
+        "execution_source_tree",
+        tree_matches,
+        "tree_matches" if tree_matches else "tree_mismatch",
+    ))
+    worktree_clean = identity["worktree_clean"] and request["worktree_clean"] is True
+    checks.append(_check(
+        "worktree_clean",
+        worktree_clean,
+        "worktree_clean" if worktree_clean else "worktree_dirty",
+    ))
+
+    profile_ok = (
+        request["budget_profile_uri"] == active["profile"]
+        and request["budget_profile_id"] == profile["profile_id"]
+        and request["budget_profile_sha256"] == canonical_sha256(profile)
+        and request["campaign_revision"] == profile["campaign_revision"]
+    )
+    checks.append(_check(
+        "canonical_profile_binding",
+        profile_ok,
+        "profile_matches" if profile_ok else "profile_mismatch",
+    ))
+    envelope_sha256 = canonical_sha256(envelope)
+    envelope_ok = (
+        request["execution_envelope_uri"] == active["execution_envelope"]
+        and request["execution_envelope_id"] == envelope["envelope_id"]
+        and request["execution_envelope_sha256"] == envelope_sha256
+        and envelope.get("scope", {}).get("campaign_revision")
+        == profile["campaign_revision"]
+    )
+    checks.append(_check(
+        "canonical_envelope_binding",
+        envelope_ok,
+        "envelope_matches" if envelope_ok else "envelope_mismatch",
+    ))
+    campaign_path = root / active["campaign_revision"]
+    campaign_sha256 = file_sha256(campaign_path)
+    campaign_ok = (
+        campaign.get("campaign_id") == request["campaign_id"]
+        and campaign.get("campaign_revision") == request["campaign_revision"]
+        and campaign.get("budget_profile_ref") == active["profile"]
+        and campaign.get("execution_envelope_ref") == active["execution_envelope"]
+        and campaign.get("status") == "ready_planned_not_measured"
+    )
+    checks.append(_check(
+        "canonical_campaign_binding",
+        campaign_ok,
+        "campaign_matches" if campaign_ok else "campaign_mismatch",
+    ))
+    from .measured_adapter import current_scope_hashes
+
+    expected_scope_hashes = current_scope_hashes(
+        root,
+        revision=(request["execution_source_commit"] if commit_exists else "HEAD"),
+    )
+    scope_ok = all(
+        request["scope_hashes"].get(key) == value
+        for key, value in expected_scope_hashes.items()
+    )
+    checks.append(_check(
+        "canonical_scope_hashes",
+        scope_ok,
+        "scope_hashes_match" if scope_ok else "scope_hash_mismatch",
+    ))
+    compatibility_ok = (
+        request["scope_hashes"].get("evaluator_compatibility_sha256")
+        == compatibility["compatibility_sha256"]
+        and request["scope_hashes"].get("evaluator_sha256")
+        == compatibility["current"]["evaluator_sha256"]
+        and compatibility["current"]["evaluator_sha256"]
+        != compatibility["baseline"]["evaluator_sha256"]
+    )
+    checks.append(_check(
+        "evaluator_compatibility",
+        compatibility_ok,
+        "compatibility_proved" if compatibility_ok else "compatibility_invalid",
+    ))
+
+    gate_snapshot, gate_ok = _gate_snapshot(root, profile)
+    checks.append(_check(
+        "gate_state",
+        gate_ok,
+        "owner_gates_closed" if gate_ok else "gate_state_not_safe",
+    ))
+    counter_snapshot, counter_ok = _counter_snapshot(root, profile)
+    checks.append(_check(
+        "counter_state",
+        counter_ok,
+        "real_counters_zero" if counter_ok else "real_counters_nonzero",
+    ))
+
+    pre_store_ok = all(item["status"] == "passed" for item in checks)
+    worktrees = _git_worktree_roots(root)
+    stores, overlap_ok, aggregate_free = _store_snapshot(
+        root,
+        worktrees,
+        check_stores=require_stores and pre_store_ok,
+    )
+    outside_all_worktrees = all(
+        bool(item.get("outside_all_worktrees")) for item in stores.values()
+    )
+    for name in STORE_ENVIRONMENT:
+        checks.append(_check(
+            f"store_{name.casefold()}",
+            stores[name]["status"] == "passed",
+            stores[name]["status"],
+        ))
+    paths_safe = overlap_ok and outside_all_worktrees
+    checks.append(_check(
+        "store_path_overlap",
+        paths_safe,
+        "paths_disjoint_outside_worktrees" if paths_safe else "paths_overlap_or_enter_worktree",
+    ))
+    free_ok = aggregate_free >= required_space
+    checks.append(_check(
+        "aggregate_free_space",
+        free_ok,
+        "sufficient" if free_ok else "insufficient",
+    ))
+    if [item["check_id"] for item in checks] != list(P2_PREFLIGHT_V2_CHECK_IDS):
+        raise P2ContractError("P2 measured preflight emitted an unexpected check set")
+    status = (
+        "passed_pending_owner"
+        if all(item["status"] == "passed" for item in checks)
+        else "failed"
+    )
+    receipt = build_preflight_receipt_v2(
+        request=request,
+        profile=profile,
+        envelope=envelope,
+        active_sources=active,
+        request_sha256=canonical_sha256(request),
+        campaign_sha256=campaign_sha256,
+        envelope_sha256=envelope_sha256,
+        compatibility_sha256=compatibility["compatibility_sha256"],
+        commit_exists=commit_exists,
+        tree_matches=committed_tree == request["execution_source_tree"],
+        status=status,
+        checks=checks,
+        stores=stores,
+        worktree_count=len(worktrees),
+        outside_all_worktrees=outside_all_worktrees,
+        stores_disjoint=overlap_ok,
+        overlap_checked=True,
+        counters=counter_snapshot,
+        gates=gate_snapshot,
+        required_free_space_bytes=required_space,
+        aggregate_free_space_bytes=aggregate_free,
+        failure_codes=[item["check_id"] for item in checks if item["status"] == "failed"],
+        repository_root=root,
+    )
+    if output is not None:
+        write_preflight_receipt(root, output, receipt)
+    return receipt
+
+
+def preflight_what_if(
+    request_path: Path,
+    repository_root: Path,
+    *,
+    allow_historical_request: bool = False,
+) -> dict[str, Any]:
     """Describe a preflight without touching either Owner-local store."""
+
+    root = Path(repository_root).resolve(strict=True)
+    raw_request = _json_file(Path(request_path))
+    if raw_request.get("schema_version") != "myis.p2-measured-request.v1":
+        if allow_historical_request:
+            return _historical_preflight_what_if(request_path, root)
+        raise P2ContractError(
+            "active P2 preflight requires myis.p2-measured-request.v1; historical v1 fallback is forbidden"
+        )
+    measured = load_measured_request(
+        Path(request_path), root, require_current_git=False
+    )
+    resolved = measured["_resolved"]
+    profile_payload = resolved["profile"]
+    return {
+        "schema_version": "myis.p2-preflight-what-if.v1",
+        "status": "not_started",
+        "preflight_status": "not_started",
+        "request_id": measured["request_id"],
+        "phase_id": measured["phase_id"],
+        "arm": measured["arm"],
+        "budget_profile_id": profile_payload["profile_id"],
+        "budget_profile_sha256": measured["budget_profile_sha256"],
+        "stores_checked": False,
+        "protected_data_accessed": False,
+        "measured_execution": False,
+        "counters": {
+            "measured_runs": 0,
+            "candidate_count": 0,
+            "shortlist_count": 0,
+            "selection_accesses": 0,
+        },
+        "next_authorized_action": "Owner-local P2 measured preflight",
+    }
+
+
+def _historical_preflight_what_if(request_path: Path, repository_root: Path) -> dict[str, Any]:
+    """Retain the v1 preview implementation for explicit historical callers."""
 
     root = Path(repository_root).resolve(strict=True)
     request, profile = load_p2_request(Path(request_path), root, require_store=False)
@@ -249,6 +507,111 @@ def build_preflight_receipt(
         body,
         repository_root=Path(repository_root).resolve() if repository_root is not None else _repository_root_from_profile(profile),
     )
+
+
+def build_preflight_receipt_v2(
+    *,
+    request: Mapping[str, Any],
+    profile: Mapping[str, Any],
+    envelope: Mapping[str, Any],
+    active_sources: Mapping[str, str],
+    request_sha256: str,
+    campaign_sha256: str,
+    envelope_sha256: str,
+    compatibility_sha256: str,
+    commit_exists: bool,
+    tree_matches: bool,
+    status: str,
+    checks: list[Mapping[str, Any]],
+    stores: Mapping[str, Mapping[str, Any]],
+    worktree_count: int,
+    outside_all_worktrees: bool,
+    stores_disjoint: bool,
+    overlap_checked: bool,
+    counters: Mapping[str, Any],
+    gates: Mapping[str, Any],
+    required_free_space_bytes: int,
+    aggregate_free_space_bytes: int,
+    failure_codes: list[str],
+    repository_root: Path,
+) -> dict[str, Any]:
+    """Build the active measured-request preflight receipt."""
+
+    if status not in {"not_started", "passed_pending_owner", "failed"}:
+        raise P2ContractError("unsupported P2 preflight v2 status")
+    check_map = {str(item["check_id"]): str(item["status"]) for item in checks}
+    body: dict[str, Any] = {
+        "schema_version": "myis.p2-preflight-receipt.v2",
+        "receipt_id": f"p2-preflight-{request['request_id']}",
+        "request_id": str(request["request_id"]),
+        "request_schema_version": str(request["schema_version"]),
+        "request_sha256": request_sha256,
+        "phase_id": "P2_SCOPE_DEVELOPMENT",
+        "arm": "R1",
+        "campaign_id": str(request["campaign_id"]),
+        "campaign_revision": str(profile["campaign_revision"]),
+        "campaign_revision_uri": str(active_sources["campaign_revision"]),
+        "campaign_sha256": campaign_sha256,
+        "budget_profile_id": str(profile["profile_id"]),
+        "budget_profile_uri": str(active_sources["profile"]),
+        "budget_profile_sha256": canonical_sha256(dict(profile)),
+        "execution_envelope_id": str(envelope["envelope_id"]),
+        "execution_envelope_uri": str(active_sources["execution_envelope"]),
+        "execution_envelope_sha256": envelope_sha256,
+        "evaluator_compatibility_uri": str(active_sources["evaluator_compatibility"]),
+        "evaluator_compatibility_sha256": compatibility_sha256,
+        "scope_hashes": dict(sorted(request["scope_hashes"].items())),
+        "git_commit": str(request["execution_source_commit"]),
+        "git_tree": str(request["execution_source_tree"]),
+        "git_commit_exists": bool(commit_exists),
+        "git_tree_matches": bool(tree_matches),
+        "worktree_clean": check_map.get("worktree_clean") == "passed",
+        "created_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "status": status,
+        "checks": [
+            {
+                "check_id": str(item["check_id"]),
+                "status": str(item["status"]),
+                "detail": str(item["detail"]),
+            }
+            for item in checks
+        ],
+        "stores": {
+            name: dict(stores.get(name, _not_run_store()))
+            for name in STORE_ENVIRONMENT
+        },
+        "safe_path_boundary": {
+            "all_worktrees_count": max(1, int(worktree_count)),
+            "outside_all_worktrees": bool(outside_all_worktrees),
+            "stores_disjoint": bool(stores_disjoint),
+            "path_overlap_checked": bool(overlap_checked),
+            "unsafe_links_rejected": True,
+        },
+        "counters": {
+            "measured_runs": int(counters.get("measured_runs", 0)),
+            "candidate_count": int(counters.get("candidate_count", 0)),
+            "shortlist_count": int(counters.get("shortlist_count", 0)),
+            "selection_accesses": int(counters.get("selection_accesses", 0)),
+            "baseline_commitment_present": bool(counters.get("baseline_commitment_present", False)),
+            "freeze_started": bool(counters.get("freeze_started", False)),
+        },
+        "gates": {
+            "D1_START_CAMPAIGN": str(gates.get("D1_START_CAMPAIGN", "unknown")),
+            "D2_OPEN_FINAL": str(gates.get("D2_OPEN_FINAL", "unknown")),
+            "D3_SUBMIT_RELEASE": str(gates.get("D3_SUBMIT_RELEASE", "unknown")),
+            "final_split_open": bool(gates.get("final_split_open", False)),
+        },
+        "required_free_space_bytes": max(0, int(required_free_space_bytes)),
+        "aggregate_free_space_bytes": max(0, int(aggregate_free_space_bytes)),
+        "measured_execution": False,
+        "protected_data_accessed": False,
+        "final_split_open": False,
+        "absolute_owner_local_paths_emitted": False,
+        "failure_codes": sorted(str(item) for item in failure_codes),
+        "owner_approval_required": list(OWNER_APPROVAL_REQUIRED),
+    }
+    body["receipt_sha256"] = canonical_sha256(body)
+    return validate_p2_preflight_receipt(body, repository_root=repository_root)
 
 
 def write_preflight_receipt(repository_root: Path, output: Path, receipt: Mapping[str, Any]) -> str:
@@ -613,6 +976,21 @@ def _git_commit_exists(root: Path, commit: str) -> bool:
     except OSError:
         return False
     return completed.returncode == 0
+
+
+def _tree_for_commit(root: Path, commit: str) -> str | None:
+    try:
+        completed = subprocess.run(
+            ["git", "show", "-s", "--format=%T", commit],
+            cwd=root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    value = completed.stdout.strip()
+    return value if len(value) == 40 and all(char in "0123456789abcdef" for char in value) else None
 
 
 def _required_free_space(value: int | None) -> int:

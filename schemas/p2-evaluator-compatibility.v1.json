@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:p2-evaluator-compatibility:v1",
+  "title": "myIS P2 evaluator compatibility proof v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "compatibility_id", "classification", "baseline", "current", "allowed_difference", "proof", "claim_boundary", "compatibility_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.p2-evaluator-compatibility.v1"},
+    "compatibility_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "classification": {"const": "A_byte_hash_drift_scientifically_identical_semantics"},
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "source_commit", "evaluator_sha256", "accepted_receipt_uri", "accepted_receipt_sha256"],
+      "properties": {
+        "uri": {"const": "src/myis_research/kernel/p1.py"},
+        "source_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "evaluator_sha256": {"$ref": "#/$defs/hash"},
+        "accepted_receipt_uri": {"const": "campaigns/scope-autoindex-v1/evidence/dapfam-p1-fulltext-c058a3aa7357c782.receipt.json"},
+        "accepted_receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "current": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "revision_policy", "evaluator_sha256"],
+      "properties": {
+        "uri": {"const": "src/myis_research/kernel/p1.py"},
+        "revision_policy": {"const": "request_execution_source_commit"},
+        "evaluator_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "allowed_difference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["optional_parameter", "callback_sites", "scientific_outputs_affected", "raising_callback_behavior"],
+      "properties": {
+        "optional_parameter": {"const": "progress_sink"},
+        "callback_sites": {"const": 2},
+        "scientific_outputs_affected": {"const": false},
+        "raising_callback_behavior": {"const": "fail_before_authoritative_result"}
+      }
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_diff_sha256", "normalized_ast_sha256", "differential_case_count", "differential_proof_sha256", "independent_verification", "verification_test_uri"],
+      "properties": {
+        "source_diff_sha256": {"$ref": "#/$defs/hash"},
+        "normalized_ast_sha256": {"$ref": "#/$defs/hash"},
+        "differential_case_count": {"const": 4},
+        "differential_proof_sha256": {"$ref": "#/$defs/hash"},
+        "independent_verification": {"const": "runtime_reproduction_required"},
+        "verification_test_uri": {"const": "tests/test_p2_preflight_v2.py"}
+      }
+    },
+    "claim_boundary": {"const": "P1 evaluator scientific outputs only; no P2 result or baseline reproduction claim"},
+    "compatibility_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"}
+  }
+}

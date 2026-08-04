@@ -49,14 +49,24 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     try:
         if args.what_if:
-            payload = preflight_what_if(args.request, root)
+            payload = preflight_what_if(
+                args.request,
+                root,
+                allow_historical_request=False,
+            )
         else:
+            if not args.require_stores:
+                parser.exit(
+                    3,
+                    "P2 preflight blocked: --require-stores is required before Owner-local store checks\n",
+                )
             payload = run_p2_preflight(
                 args.request,
                 root,
                 output=args.output,
-                require_stores=True,
+                require_stores=args.require_stores,
                 required_free_space_bytes=args.required_free_space_bytes,
+                allow_historical_request=False,
             )
     except P2ContractError as error:
         parser.exit(3, f"P2 preflight blocked: {error}\n")

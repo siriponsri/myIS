@@ -15,7 +15,7 @@ import myis_research.p2.preflight as preflight_module
 from myis_research.p2 import (
     P2_PREFLIGHT_RECEIPT_PATH,
     P2ContractError,
-    run_p2_preflight,
+    run_p2_preflight as _run_p2_preflight,
     validate_p2_candidate_freeze_proposal,
     validate_p2_preflight_receipt,
     write_preflight_receipt,
@@ -46,6 +46,13 @@ TRACKED_ARTIFACT_ROOTS = (
 OWNER_LOCAL_ABSOLUTE_PATH = re.compile(
     r"(?<![A-Za-z])[A-Za-z]:[\\/]+|/(?:Users|home)/[^/\s\"'`]+"
 )
+
+
+def run_p2_preflight(*args, **kwargs):
+    """Exercise the preserved v1 path explicitly in historical tests."""
+
+    kwargs.setdefault("allow_historical_request", True)
+    return _run_p2_preflight(*args, **kwargs)
 
 
 def _self_hash(payload: dict[str, object], field: str) -> dict[str, object]:
@@ -843,7 +850,11 @@ def test_preflight_what_if_remains_not_started_and_does_not_inspect_stores(
         lambda *args, **kwargs: pytest.fail("what-if inspected an Owner-local store"),
     )
 
-    payload = preflight_module.preflight_what_if(_request_path(tmp_path), ROOT)
+    payload = preflight_module.preflight_what_if(
+        _request_path(tmp_path),
+        ROOT,
+        allow_historical_request=True,
+    )
 
     assert payload["status"] == "not_started"
     assert payload["stores_checked"] is False
@@ -851,9 +862,8 @@ def test_preflight_what_if_remains_not_started_and_does_not_inspect_stores(
     assert payload["protected_data_accessed"] is False
 
 
-def test_p2_cli_exposes_not_started_failed_and_passed_states_without_paths(
+def test_p2_cli_rejects_historical_v1_request_without_fallback(
     tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     request_path = _request_path(tmp_path)
@@ -865,28 +875,10 @@ def test_p2_cli_exposes_not_started_failed_and_passed_states_without_paths(
         str(ROOT),
     ]
 
-    assert p2_main([*base_args, "--what-if"]) == 0
-    preview = json.loads(capsys.readouterr().out)
-    assert preview["status"] == "not_started"
-
-    monkeypatch.delenv("MYIS_STORE", raising=False)
-    monkeypatch.delenv("MYIS_MLFLOW_STORE", raising=False)
-    assert p2_main([*base_args, "--required-free-space-bytes", "0"]) == 3
-    failed = json.loads(capsys.readouterr().out)
-    assert failed["status"] == "failed"
-
-    first = tmp_path / "cli-myis-store"
-    second = tmp_path / "cli-myis-mlflow-store"
-    first.mkdir()
-    second.mkdir()
-    monkeypatch.setenv("MYIS_STORE", str(first.resolve()))
-    monkeypatch.setenv("MYIS_MLFLOW_STORE", str(second.resolve()))
-    assert p2_main([*base_args, "--required-free-space-bytes", "0"]) == 0
-    encoded = capsys.readouterr().out
-    passed = json.loads(encoded)
-    assert passed["status"] == "passed_pending_owner"
-    assert str(first.resolve()) not in encoded
-    assert str(second.resolve()) not in encoded
+    with pytest.raises(SystemExit) as error:
+        p2_main([*base_args, "--what-if"])
+    assert error.value.code == 3
+    assert "historical v1 fallback is forbidden" in capsys.readouterr().err
 
 
 def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits() -> None:
@@ -907,6 +899,7 @@ def test_p2_phase_and_task_reports_bind_completion_and_portability_repair_audits
             "p2-preflight-projection-source-audit-repair",
             "p2-preflight-tracked-owner-path-audit-initial",
             "p2-preflight-tracked-owner-path-audit-repair",
+            "p2-v2-owner-local-preflight-blocker-audit",
             "p2-runtime-resilience-v2-linux-ci-failure-audit",
             "p2-runtime-resilience-v2-linux-ci-repair-audit",
             "p2-runtime-resilience-v2-clean-checkout-failure-audit",

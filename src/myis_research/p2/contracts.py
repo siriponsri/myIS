@@ -46,7 +46,9 @@ SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 GIT_RE = re.compile(r"^(?:[a-f0-9]{40}|[a-f0-9]{64})$")
 P2_ARTIFACT_SCHEMAS = {
     "myis.p2-request.v1": "p2-request.v1.json",
+    "myis.p2-measured-request.v1": "p2-measured-request.v1.json",
     "myis.p2-preflight-receipt.v1": "p2-preflight-receipt.v1.json",
+    "myis.p2-preflight-receipt.v2": "p2-preflight-receipt.v2.json",
     "myis.p2-candidate-freeze-proposal.v1": "p2-candidate-freeze-proposal.v1.json",
     "myis.p2-candidate-ledger.v1": "p2-candidate-ledger.v1.json",
     "myis.p2-baseline-commitment.v1": "p2-baseline-commitment.v1.json",
@@ -58,6 +60,7 @@ P2_ARTIFACT_SCHEMAS = {
 }
 P2_HASH_FIELDS = {
     "myis.p2-preflight-receipt.v1": "receipt_sha256",
+    "myis.p2-preflight-receipt.v2": "receipt_sha256",
     "myis.p2-candidate-freeze-proposal.v1": "proposal_sha256",
     "myis.p2-candidate-ledger.v1": "ledger_sha256",
     "myis.p2-baseline-commitment.v1": "commitment_sha256",
@@ -72,6 +75,22 @@ P2_PREFLIGHT_CHECK_IDS = (
     "canonical_profile_binding",
     "canonical_envelope_binding",
     "canonical_campaign_binding",
+    "gate_state",
+    "counter_state",
+    "store_myis_store",
+    "store_myis_mlflow_store",
+    "store_path_overlap",
+    "aggregate_free_space",
+)
+P2_PREFLIGHT_V2_CHECK_IDS = (
+    "execution_source_commit",
+    "execution_source_tree",
+    "worktree_clean",
+    "canonical_profile_binding",
+    "canonical_envelope_binding",
+    "canonical_campaign_binding",
+    "canonical_scope_hashes",
+    "evaluator_compatibility",
     "gate_state",
     "counter_state",
     "store_myis_store",
@@ -258,6 +277,15 @@ def validate_p2_artifact(
         if recorded != canonical_sha256(unsigned):
             raise P2ContractError(f"{schema_version} self-hash is invalid")
     root = Path(repository_root).resolve() if repository_root is not None else _repository_root()
+    if schema_version == "myis.p2-measured-request.v1":
+        from .measured_contracts import validate_measured_request_payload
+
+        measured = validate_measured_request_payload(
+            payload,
+            root,
+            require_current_git=False,
+        )
+        return {key: value for key, value in measured.items() if key != "_resolved"}
     profile_id = payload.get("budget_profile_id")
     profile = (
         load_profile_by_id(root, str(profile_id))
@@ -279,6 +307,8 @@ def validate_p2_artifact(
             raise P2ContractError("request campaign_id does not match the canonical profile")
     elif schema_version == "myis.p2-preflight-receipt.v1":
         _validate_preflight_receipt_semantics(payload, root)
+    elif schema_version == "myis.p2-preflight-receipt.v2":
+        _validate_preflight_receipt_v2_semantics(payload, root)
     elif schema_version == "myis.p2-candidate-freeze-proposal.v1":
         _validate_candidate_freeze_proposal_semantics(payload, root)
     elif schema_version == "myis.p2-candidate-ledger.v1":
@@ -445,6 +475,214 @@ def _validate_preflight_receipt_semantics(
         raise P2ContractError("preflight receipt crosses the measured or protected boundary")
     if boundary["all_worktrees_count"] < 1 or not boundary["path_overlap_checked"] or not boundary["unsafe_links_rejected"]:
         raise P2ContractError("preflight did not complete the worktree path safety checks")
+
+
+def _validate_preflight_receipt_v2_semantics(
+    payload: Mapping[str, Any],
+    repository_root: Path,
+) -> None:
+    """Validate the active measured-request/tree/compatibility receipt bindings."""
+
+    from .active_binding import active_p2_source_uris
+    from .evaluator_compatibility import load_evaluator_compatibility
+    from .measured_contracts import git_identity, load_envelope_uri, load_profile_uri
+    from .measured_adapter import current_scope_hashes
+    from .preflight import _counter_snapshot, _gate_snapshot
+
+    _reject_absolute_paths(payload)
+    active = active_p2_source_uris(repository_root)
+    profile, profile_sha256 = load_profile_uri(repository_root, active["profile"])
+    envelope, envelope_sha256 = load_envelope_uri(
+        repository_root, active["execution_envelope"]
+    )
+    campaign_path = repository_root / active["campaign_revision"]
+    try:
+        campaign = yaml.safe_load(campaign_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, yaml.YAMLError) as error:
+        raise P2ContractError("cannot load active P2 campaign revision") from error
+    if not isinstance(campaign, Mapping):
+        raise P2ContractError("active P2 campaign revision must be a mapping")
+    expected_bindings = {
+        "request_schema_version": "myis.p2-measured-request.v1",
+        "campaign_id": profile["campaign_id"],
+        "campaign_revision": profile["campaign_revision"],
+        "campaign_revision_uri": active["campaign_revision"],
+        "campaign_sha256": file_sha256(campaign_path),
+        "budget_profile_id": profile["profile_id"],
+        "budget_profile_uri": active["profile"],
+        "budget_profile_sha256": profile_sha256,
+        "execution_envelope_id": envelope["envelope_id"],
+        "execution_envelope_uri": active["execution_envelope"],
+        "execution_envelope_sha256": envelope_sha256,
+        "evaluator_compatibility_uri": active["evaluator_compatibility"],
+    }
+    for field, expected in expected_bindings.items():
+        if payload[field] != expected:
+            raise P2ContractError(f"preflight v2 {field} binding is stale")
+    commit = str(payload["git_commit"])
+    commit_exists = _git_commit_exists(repository_root, commit)
+    compatibility = load_evaluator_compatibility(
+        repository_root,
+        execution_revision=(commit if commit_exists else "HEAD"),
+        expected_sha256=str(payload["evaluator_compatibility_sha256"]),
+    )
+    if compatibility["current"]["evaluator_sha256"] == compatibility["baseline"]["evaluator_sha256"]:
+        raise P2ContractError("preflight v2 compatibility proof aliases evaluator hashes")
+    if (
+        campaign.get("campaign_revision") != profile["campaign_revision"]
+        or campaign.get("budget_profile_ref") != active["profile"]
+        or campaign.get("execution_envelope_ref") != active["execution_envelope"]
+        or campaign.get("status") != "ready_planned_not_measured"
+    ):
+        raise P2ContractError("preflight v2 campaign revision is not active and unmeasured")
+
+    observed_tree = _git_tree_for_commit(repository_root, commit) if commit_exists else None
+    tree_matches = observed_tree == payload["git_tree"]
+    expected_scope_hashes = current_scope_hashes(
+        repository_root,
+        revision=(commit if commit_exists else "HEAD"),
+    )
+    scope_hashes_match = all(
+        payload["scope_hashes"].get(key) == value
+        for key, value in expected_scope_hashes.items()
+    )
+    if payload["git_commit_exists"] is not commit_exists:
+        raise P2ContractError("preflight v2 commit-existence evidence is inconsistent")
+    if payload["git_tree_matches"] is not tree_matches:
+        raise P2ContractError("preflight v2 tree evidence is inconsistent")
+
+    checks = list(payload["checks"])
+    check_ids = [str(item["check_id"]) for item in checks]
+    failed_checks = [item for item in checks if item["status"] == "failed"]
+    failed_ids = sorted(str(item["check_id"]) for item in failed_checks)
+    if check_ids != list(P2_PREFLIGHT_V2_CHECK_IDS):
+        raise P2ContractError("preflight v2 receipt does not contain the exact required check set")
+    if list(payload["failure_codes"]) != failed_ids:
+        raise P2ContractError("preflight v2 failure codes do not match the failed checks")
+
+    stores = payload["stores"]
+    counters = payload["counters"]
+    gates = payload["gates"]
+    zero_counters = counters == {
+        "measured_runs": 0,
+        "candidate_count": 0,
+        "shortlist_count": 0,
+        "selection_accesses": 0,
+        "baseline_commitment_present": False,
+        "freeze_started": False,
+    }
+    gates_safe = (
+        gates["D1_START_CAMPAIGN"] == "active"
+        and gates["D2_OPEN_FINAL"] == "waiting_owner"
+        and gates["D3_SUBMIT_RELEASE"] == "waiting_owner"
+        and gates["final_split_open"] is False
+    )
+    stores_passed = all(
+        isinstance(value, Mapping)
+        and value.get("status") == "passed"
+        and value.get("configured") is True
+        and value.get("exists") is True
+        and value.get("is_directory") is True
+        and value.get("outside_all_worktrees") is True
+        and value.get("unsafe_link_or_junction") is False
+        and value.get("writable_sentinel_created") is True
+        and value.get("writable_sentinel_cleaned") is True
+        for value in stores.values()
+    )
+    total_free = sum(int(value.get("free_space_bytes", 0)) for value in stores.values())
+    if payload["aggregate_free_space_bytes"] > total_free:
+        raise P2ContractError("preflight v2 aggregate free-space exceeds store evidence")
+    boundary = payload["safe_path_boundary"]
+    outside = all(
+        isinstance(value, Mapping) and value.get("outside_all_worktrees") is True
+        for value in stores.values()
+    )
+    if boundary["outside_all_worktrees"] is not outside:
+        raise P2ContractError("preflight v2 worktree boundary summary is inconsistent")
+
+    expected_checks = {
+        "execution_source_commit": commit_exists,
+        "execution_source_tree": tree_matches,
+        "worktree_clean": payload["worktree_clean"],
+        "canonical_profile_binding": True,
+        "canonical_envelope_binding": True,
+        "canonical_campaign_binding": True,
+        "canonical_scope_hashes": scope_hashes_match,
+        "evaluator_compatibility": True,
+        "gate_state": gates_safe,
+        "counter_state": zero_counters,
+        "store_myis_store": stores["MYIS_STORE"].get("status") == "passed",
+        "store_myis_mlflow_store": stores["MYIS_MLFLOW_STORE"].get("status") == "passed",
+        "store_path_overlap": (
+            boundary["outside_all_worktrees"]
+            and boundary["stores_disjoint"]
+            and boundary["path_overlap_checked"]
+        ),
+        "aggregate_free_space": (
+            payload["aggregate_free_space_bytes"]
+            >= payload["required_free_space_bytes"]
+        ),
+    }
+    if payload["status"] != "not_started":
+        for item in checks:
+            expected = expected_checks[str(item["check_id"])]
+            if (item["status"] == "passed") is not expected:
+                raise P2ContractError(
+                    f"preflight v2 check state is inconsistent: {item['check_id']}"
+                )
+    if payload["status"] == "passed_pending_owner":
+        if any(item["status"] != "passed" for item in checks) or payload["failure_codes"]:
+            raise P2ContractError("passed preflight v2 contains a failed check")
+        identity = git_identity(repository_root)
+        if (
+            identity["commit"] != commit
+            or identity["tree"] != payload["git_tree"]
+            or not identity["worktree_clean"]
+            or not payload["worktree_clean"]
+            or not zero_counters
+            or not gates_safe
+            or not stores_passed
+            or not boundary["outside_all_worktrees"]
+            or not boundary["stores_disjoint"]
+        ):
+            raise P2ContractError("passed preflight v2 is stale or crosses a safety boundary")
+        current_gates, current_gates_safe = _gate_snapshot(repository_root, profile)
+        current_counters, current_counters_safe = _counter_snapshot(
+            repository_root, profile
+        )
+        if current_gates != dict(gates) or not current_gates_safe:
+            raise P2ContractError("passed preflight v2 gate state is stale")
+        if current_counters != dict(counters) or not current_counters_safe:
+            raise P2ContractError("passed preflight v2 counter state is stale")
+    elif payload["status"] == "failed":
+        if not failed_checks:
+            raise P2ContractError("failed preflight v2 must retain a failure code")
+    elif payload["status"] == "not_started":
+        if payload["failure_codes"] or not zero_counters:
+            raise P2ContractError("not-started preflight v2 must retain zero counters")
+    if payload["measured_execution"] or payload["protected_data_accessed"] or payload["final_split_open"]:
+        raise P2ContractError("preflight v2 crosses the measured or protected boundary")
+    if (
+        boundary["all_worktrees_count"] < 1
+        or not boundary["path_overlap_checked"]
+        or not boundary["unsafe_links_rejected"]
+    ):
+        raise P2ContractError("preflight v2 did not complete worktree path checks")
+
+
+def _git_tree_for_commit(repository_root: Path, commit: str) -> str | None:
+    try:
+        completed = subprocess.run(
+            ["git", "show", "-s", "--format=%T", commit],
+            cwd=repository_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    value = completed.stdout.strip()
+    return value if re.fullmatch(r"[a-f0-9]{40}", value) else None
 
 
 def _current_preflight_state(
@@ -844,7 +1082,7 @@ def validate_p2_package_bundle(
     request_scope_hashes = set(request_row["scope_hashes"].values())
     for lineage_field in ("config_sha256", "retriever_sha256", "evaluator_sha256"):
         _require_semantic(expected_metric[lineage_field] in request_scope_hashes, f"baseline {lineage_field} is not bound by the request")
-    _validate_prior_baseline_artifact(root, commitment_row)
+    _validate_prior_baseline_artifact(root, commitment_row, request_row)
 
     _require_semantic(baseline_row["baseline_commitment_sha256"] == commitment_row["commitment_sha256"], "baseline reproduction commitment reference mismatch")
     _require_semantic(baseline_row["baseline_id"] == commitment_row["baseline_candidate_id"], "baseline reproduction candidate differs from commitment")
@@ -1072,6 +1310,7 @@ def _resolve_referenced_artifact_path(repository_root: Path, value: str, field: 
 def _validate_prior_baseline_artifact(
     repository_root: Path,
     commitment: Mapping[str, Any],
+    request: Mapping[str, Any],
 ) -> None:
     path = _resolve_referenced_artifact_path(
         repository_root,
@@ -1122,10 +1361,46 @@ def _validate_prior_baseline_artifact(
         commitment["baseline_arm"] == prior_metric.get("arm"),
         "baseline commitment arm differs from prior P1 evidence",
     )
-    _require_semantic(
-        all(expected[field] == value for field, value in expected_bindings.items()),
-        "baseline commitment expected metric differs from prior P1 evidence",
-    )
+    mismatched_fields = [
+        field
+        for field, value in expected_bindings.items()
+        if expected[field] != value
+    ]
+    if mismatched_fields == ["evaluator_sha256"]:
+        from .evaluator_compatibility import load_evaluator_compatibility
+
+        try:
+            execution_revision = request.get(
+                "execution_source_commit", request.get("git_commit")
+            )
+            compatibility_sha256 = request["scope_hashes"][
+                "evaluator_compatibility_sha256"
+            ]
+            compatibility = load_evaluator_compatibility(
+                repository_root,
+                execution_revision=str(execution_revision),
+                expected_sha256=str(compatibility_sha256),
+            )
+        except (KeyError, TypeError, P2ContractError):
+            compatibility = None
+        compatible_pair = (
+            request.get("schema_version")
+            in {"myis.p2-measured-request.v1", "myis.p2-request.v1"}
+            and compatibility is not None
+            and expected["evaluator_sha256"]
+            == compatibility["current"]["evaluator_sha256"]
+            and expected_bindings["evaluator_sha256"]
+            == compatibility["baseline"]["evaluator_sha256"]
+        )
+        _require_semantic(
+            compatible_pair,
+            "baseline evaluator pair is not bound by the compatibility proof",
+        )
+    else:
+        _require_semantic(
+            not mismatched_fields,
+            "baseline commitment expected metric differs from prior P1 evidence",
+        )
 
 
 def _validate_profile_invariants(payload: Mapping[str, Any]) -> None:

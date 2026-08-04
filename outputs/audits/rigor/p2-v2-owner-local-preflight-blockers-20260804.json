@@ -1,0 +1,146 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "p2-v2-owner-local-preflight-blockers-20260804",
+  "artifact": "P2 v2 Owner-local preflight contracts and evaluator lineage",
+  "artifact_path": "src/myis_research/p2/preflight.py",
+  "artifact_sha256": "6498982143c0d6ab5329ea125974e5fba06a495999139efa8487511852c707b8",
+  "review_status": "complete",
+  "reviewed_commit": "abb8e1981c652fc14c3a9b779b99372e1a401b2a",
+  "reviewed_tree": "ffa06896a1dc3b7a99cde3939a617ed33665b2be",
+  "repair_status": "implemented_pending_clean_commit_verification",
+  "repair_evidence": {
+    "option": "A_explicit_hash_pair_compatibility",
+    "compatibility_manifest_uri": "control/p2/p2-evaluator-compatibility-v1.json",
+    "compatibility_manifest_sha256": "f459a54c598d15f3d6617471ff0a524b3324ab7262b7ecc49fbff812f150c19f",
+    "request_schema_registered": "myis.p2-measured-request.v1",
+    "receipt_schema_added": "myis.p2-preflight-receipt.v2",
+    "focused_tests": "46_passed_1_clean_commit_e2e_skipped",
+    "independent_verification": "pending_clean_commit",
+    "report_sync_failure": "locked_mlflow_extra_missing_sync_deferred",
+    "report_sync_recovery": "uv_sync_locked_all_extras_completed_retry_pending",
+    "measured_state_changed": false
+  },
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": false,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": ["F001", "F002", "F003"],
+    "protected_data_accessed": false,
+    "measured_execution_performed": false,
+    "final_split_open": false,
+    "owner_decisions": {"D2_OPEN_FINAL": "waiting_owner", "D3_SUBMIT_RELEASE": "waiting_owner"}
+  },
+  "current_state": {
+    "preflight": "not_started_blocked",
+    "request": "absent",
+    "preflight_receipt": "absent",
+    "worktrees_clean": 4,
+    "worktrees_total": 4,
+    "measured_runs": 0,
+    "candidate_count": 0,
+    "shortlist_count": 0,
+    "selection_accesses": 0,
+    "final_872": "closed_not_claimable"
+  },
+  "overall": {
+    "grade": "Weak Reject",
+    "mean_score": 2.83,
+    "one_line_summary": "P2 v2 cannot reach passed_pending_owner because evaluator compatibility is unproved, active preflight resolves v1 controls, and the shared artifact registry rejects the measured-request schema.",
+    "strengths": [
+      "The active v2 profile, envelope, campaign revision, base candidates, adaptive policy, and proposer contract are committed before the first measured run.",
+      "The repository remains clean and all real lifecycle counters remain zero.",
+      "The evaluator diff is limited to optional progress instrumentation and has no observed scientific-output difference in four deterministic differential cases."
+    ],
+    "weaknesses": [
+      "No canonical compatibility manifest currently permits the evaluator byte drift.",
+      "The preflight implementation hard-codes the historical v1 profile and protocol campaign binding.",
+      "The shared registry cannot validate myis.p2-measured-request.v1 and the v1 receipt omits required v2 request/tree/compatibility bindings."
+    ]
+  },
+  "evaluator_analysis": {
+    "classification": "A_byte_hash_drift_scientifically_identical_semantics",
+    "accepted_p1_evaluator_sha256": "6dd3b1d203304c3e8ef9e1aa049b82ae99ce60c1cd3af78cf99f76874db6346d",
+    "accepted_p1_source_commit": "947d9a132f2272774dcd8b4ab6e831e0734ec7d3",
+    "current_committed_evaluator_sha256": "018149dd2a0e62ed95b86534281ef53801329ee8270d8936504803cf996285dd",
+    "current_windows_worktree_sha256": "0adc1e9aad65883d8f664af453ef8fab52a0523a16556f6bebc205fc322911a5",
+    "source_diff_sha256": "50976ed8f885a4acd073340467fdc95fcaf13132a59006aa5fc56d01a2fc7336",
+    "normalized_ast_sha256": "5c8c662f054b8c35e1369c2be0390219bcbf088b3b67dcf5e08d040ed75541c8",
+    "differential_case_count": 4,
+    "differential_proof_sha256": "b5513848bf86f03fd1c4a26a8828a04bfd05bb1e50840076805de3100900eb6b",
+    "exact_behavioral_difference": [
+      "evaluate_baseline accepts an optional progress_sink callable.",
+      "The callable is invoked once for each query, including queries without positive relevance.",
+      "A raising progress sink aborts evaluation before an authoritative result is returned.",
+      "Scoring, family ranking, lexical tie-breaking, metrics, protected rows, and scientific commitments are unchanged."
+    ],
+    "confidence": "high_scientific_medium_operational_until_independent_verification"
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {"score": 3, "strengths": ["The audit traces code, controls, receipts, schemas, tests, and report policy."], "weaknesses": ["The local test extra was initially unavailable and independent verification has not yet closed the repair."], "suggestions": ["Run the compatibility verifier and the exact v2 preflight regression from a clean committed checkout."]},
+    "D2_falsifiability": {"score": 3, "strengths": ["Each blocker has an exact failing condition and negative-test target."], "weaknesses": ["The current preflight cannot express evaluator compatibility failure separately."], "suggestions": ["Add an exact evaluator_compatibility check and v2 receipt binding."]},
+    "D3_scope_calibration": {"score": 4, "strengths": ["Claims remain engineering-only and train/selection-only."], "weaknesses": ["No passed preflight may be claimed on the reviewed commit."], "suggestions": ["Keep synthetic preflight proof distinct from a real Owner-local receipt."]},
+    "D4_argument_coherence": {"score": 2, "strengths": ["Source-of-truth already identifies the active v2 controls."], "weaknesses": ["Runtime preflight and read-model code can still select v1."], "suggestions": ["Use one fail-closed active-source resolver in every consumer."]},
+    "D5_exploration_integrity": {"score": 3, "strengths": ["The evaluator was compared by source diff, AST normalization, and differential cases."], "weaknesses": ["The proof is not yet a versioned canonical contract."], "suggestions": ["Bind the proof rather than aliasing the old evaluator hash."]},
+    "D6_methodological_rigor": {"score": 2, "strengths": ["The v2 measured request already binds commit, tree, controls, and zero counters."], "weaknesses": ["The shared validator and receipt contract do not carry those bindings end to end."], "suggestions": ["Register the request through lazy dispatch and issue a versioned v2 receipt."]}
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/measured_adapter.py",
+      "target_entity": "baseline_expectation",
+      "evidence_locator": "The current evaluator hash is compared directly with lineage_hashes.evaluator_sha256 in the accepted P1 receipt.",
+      "observation": "P1 binds 6dd3b1d2... while the current committed evaluator is 018149dd...; the only source changes are progress_sink instrumentation.",
+      "reasoning": "Direct equality correctly fails closed, but there is no explicit compatibility proof through which scientifically identical instrumentation drift can be accepted.",
+      "suggestion": "Add and independently validate a hash-bound type-A evaluator compatibility manifest; never alias either hash or rewrite the P1 receipt."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/preflight.py",
+      "target_entity": "_campaign_binding_ok",
+      "evidence_locator": "The function requires control/budgets/p2-r1-primary-v1.yaml while source-of-truth selects p2-r1-primary-v2.",
+      "observation": "An active v2 request cannot satisfy the hard-coded v1 campaign binding.",
+      "reasoning": "Using v1 as fallback would mix campaign revisions and invalidate lineage.",
+      "suggestion": "Resolve the profile, envelope, revision, and compatibility authority from source-of-truth and fail closed on absence or disagreement."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/p2/contracts.py",
+      "target_entity": "P2_ARTIFACT_SCHEMAS and validate_p2_artifact",
+      "evidence_locator": "The registry contains myis.p2-request.v1 but not myis.p2-measured-request.v1; measured_contracts.py maintains a separate registry.",
+      "observation": "The active request cannot traverse the shared preflight/report validation path.",
+      "reasoning": "Duplicated registries create inconsistent lifecycle counting and schema authority.",
+      "suggestion": "Register measured requests in the shared registry and dispatch lazily to one measured semantic validator to avoid circular imports."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "HANDOFF.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/campaigns/scope-autoindex-v1.yaml",
+    "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml",
+    "control/execution-envelope-p2.yaml",
+    "control/execution-envelope-p2-v2.yaml",
+    "control/budgets/p2-r1-primary-v1.yaml",
+    "control/budgets/p2-r1-primary-v2.yaml",
+    "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
+    "campaigns/scope-autoindex-v1/evidence/dapfam-p1-fulltext-c058a3aa7357c782.receipt.json",
+    "src/myis_research/kernel/p1.py at 947d9a132f2272774dcd8b4ab6e831e0734ec7d3 and abb8e1981c652fc14c3a9b779b99372e1a401b2a",
+    "src/myis_research/p2/contracts.py",
+    "src/myis_research/p2/measured_contracts.py",
+    "src/myis_research/p2/preflight.py",
+    "src/myis_research/p2/measured_adapter.py",
+    "schemas/p2-measured-request.v1.json",
+    "schemas/p2-preflight-receipt.v1.json",
+    "docs/observatory/REPORTING_POLICY.md"
+  ]
+}

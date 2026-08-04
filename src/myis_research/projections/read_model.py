@@ -24,6 +24,7 @@ from ..p2 import (
     validate_p2_package_bundle,
     validate_p2_preflight_receipt,
 )
+from ..p2.active_binding import active_p2_source_uris
 from ..protection import assert_aggregate_only
 from ..observatory.projection import load_observatory_projection
 
@@ -55,6 +56,7 @@ PROJECTION_SOURCE_PATHS = (
     "control/execution-envelope-p2-v2.yaml",
     "control/budgets/p2-r1-primary-v2.yaml",
     "control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml",
+    "control/p2/p2-evaluator-compatibility-v1.json",
     "control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md",
     "archive/p2-runtime-resilience-v1-interrupted",
     "orchestration/autoresearch/p2-runtime-resilience-v2",
@@ -86,6 +88,9 @@ PROJECTION_SOURCE_PATHS = (
     "schemas/p2-manifest.v1.json",
     "schemas/p2-package.v1.json",
     "schemas/p2-preflight-receipt.v1.json",
+    "schemas/p2-preflight-receipt.v2.json",
+    "schemas/p2-measured-request.v1.json",
+    "schemas/p2-evaluator-compatibility.v1.json",
     "schemas/p2-candidate-freeze-proposal.v1.json",
     "schemas/observatory-registry.v1.json",
     "schemas/observatory-run.v1.json",
@@ -121,6 +126,9 @@ P2_PREFLIGHT_RECEIPT_PATH = Path(
 )
 P2_CANDIDATE_PROPOSAL_PATH = Path(
     "campaigns/scope-autoindex-v1/proposals/p2-candidate-freeze-proposal.v1.json"
+)
+P2_PREFLIGHT_BLOCKER_AUDIT_PATH = Path(
+    "outputs/audits/rigor/p2-v2-owner-local-preflight-blockers-20260804.json"
 )
 P2_METRIC_FIELDS = frozenset({
     "candidate_id", "arm", "name", "value", "n", "retrieved_relevant", "relevant_total",
@@ -778,12 +786,13 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
     fixture_pilot = _p2_fixture_projection(root)
     preflight = _p2_preflight_projection(root)
     candidate_proposal = _p2_candidate_proposal_projection(root)
+    repair_audit = _p2_preflight_repair_audit_projection(root)
     active_sources = _active_p2_sources(root)
-    profile_path = root / active_sources["profile"]
+    profile_path = root / active_sources["profile"] if active_sources else None
     profile: dict[str, Any] = {}
     profile_sha256: str | None = None
     try:
-        loaded = _load_yaml_like(profile_path)
+        loaded = _load_yaml_like(profile_path) if profile_path is not None else None
         if isinstance(loaded, dict) and loaded.get("schema_version") == "myis.p2-budget-profile.v1":
             profile = loaded
             profile_sha256 = canonical_sha256(profile)
@@ -820,7 +829,10 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
                 invalid_count += 1
                 continue
             artifact_revision = validated.get("campaign_revision")
-            if artifact_revision not in {None, profile.get("campaign_revision")}:
+            if profile.get("campaign_revision") and artifact_revision not in {
+                None,
+                profile.get("campaign_revision"),
+            }:
                 continue
             if profile_sha256 and validated.get("budget_profile_sha256") not in {None, profile_sha256}:
                 invalid_count += 1
@@ -997,8 +1009,8 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         "invalid_artifact_count": invalid_count,
         "claim_boundary": "no_measured_claim" if not measured_manifest else "train_selection_development_only",
         "source": {
-            "profile": active_sources["profile"],
-            "execution_envelope": active_sources["execution_envelope"],
+            "profile": active_sources.get("profile"),
+            "execution_envelope": active_sources.get("execution_envelope"),
             "campaign_revision": active_sources.get("campaign_revision"),
             "baseline_commitment_sha256": commitment.get("commitment_sha256") if commitment else None,
             "baseline_reproduction_receipt_sha256": baseline.get("receipt_sha256") if baseline else None,
@@ -1009,49 +1021,70 @@ def _p2_readiness_projection(root: Path, campaign_config: dict[str, Any]) -> dic
         },
         "official_review": official_review,
         "fixture_pilot": fixture_pilot,
+        "preflight_repair_audit": repair_audit,
     }
 
 
 def _active_p2_sources(root: Path) -> dict[str, str]:
-    legacy = {
-        "profile": "control/budgets/p2-r1-primary-v1.yaml",
-        "execution_envelope": "control/execution-envelope-p2.yaml",
-    }
+    # Minimal synthetic read-model roots may omit the control plane entirely.
+    # Once a source-of-truth file exists, all active P2 bindings remain fail-closed.
     source_path = root / "control/source-of-truth.yaml"
-    if not source_path.is_file() or source_path.is_symlink():
-        return legacy
-    source = _load_yaml_like(source_path)
-    records = source.get("records", []) if isinstance(source, dict) else []
-    by_id = {
-        str(item.get("id")): item
-        for item in records
-        if isinstance(item, dict) and item.get("id")
+    if not source_path.exists() and not source_path.is_symlink():
+        return {}
+    return active_p2_source_uris(root)
+
+
+def _p2_preflight_repair_audit_projection(root: Path) -> dict[str, Any]:
+    missing = {
+        "status": "not_recorded",
+        "review_id": None,
+        "repair_status": None,
+        "classification": None,
+        "blocking_findings": [],
+        "source_uri": P2_PREFLIGHT_BLOCKER_AUDIT_PATH.as_posix(),
+        "source_sha256": None,
+        "scientific_authority": False,
     }
-    profile = by_id.get("p2_budget_profile", {}).get("authority")
-    execution = by_id.get("execution_boundary", {}).get("phase_mapping", {}).get(
-        "P2_SCOPE_DEVELOPMENT"
-    )
-    revision = by_id.get("p2_campaign_revision", {}).get("authority")
-    if (
-        "p2_budget_profile" not in by_id
-        and "p2_campaign_revision" not in by_id
-        and execution is None
-    ):
-        return legacy
-    values = {
-        "profile": profile,
-        "execution_envelope": execution,
-        "campaign_revision": revision,
-    }
-    for label, uri in values.items():
-        if uri is None and label == "campaign_revision":
-            continue
-        if not isinstance(uri, str) or not uri or Path(uri).is_absolute() or ".." in Path(uri).parts:
-            raise ValueError(f"active P2 {label} source is not repository-relative")
-        path = root / uri
-        if path.is_symlink() or not path.is_file():
-            raise ValueError(f"active P2 {label} source is missing or unsafe")
-    return {key: str(value) for key, value in values.items() if value is not None}
+    path = root / P2_PREFLIGHT_BLOCKER_AUDIT_PATH
+    if path.is_symlink() or not path.is_file():
+        return missing
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("audit must be an object")
+        assert_aggregate_only(payload)
+        governance = payload.get("governance")
+        state = payload.get("current_state")
+        evaluator = payload.get("evaluator_analysis")
+        findings = payload.get("findings")
+        if (
+            payload.get("schema_version") != "myis.rigor-review.v1"
+            or payload.get("review_id") != "p2-v2-owner-local-preflight-blockers-20260804"
+            or payload.get("review_status") != "complete"
+            or not isinstance(governance, dict)
+            or governance.get("protected_data_accessed") is not False
+            or governance.get("measured_execution_performed") is not False
+            or governance.get("final_split_open") is not False
+            or not isinstance(state, dict)
+            or any(int(state.get(field, -1)) != 0 for field in ("measured_runs", "candidate_count", "shortlist_count", "selection_accesses"))
+            or not isinstance(evaluator, dict)
+            or evaluator.get("classification") != "A_byte_hash_drift_scientifically_identical_semantics"
+            or not isinstance(findings, list)
+            or [item.get("finding_id") for item in findings if isinstance(item, dict)] != ["F001", "F002", "F003"]
+        ):
+            raise ValueError("audit contract is inconsistent")
+        return {
+            "status": "validated",
+            "review_id": payload["review_id"],
+            "repair_status": str(payload.get("repair_status", "unknown")),
+            "classification": evaluator["classification"],
+            "blocking_findings": list(governance.get("blocking_findings", [])),
+            "source_uri": P2_PREFLIGHT_BLOCKER_AUDIT_PATH.as_posix(),
+            "source_sha256": _file_sha256(path),
+            "scientific_authority": False,
+        }
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {**missing, "status": "invalid"}
 
 
 def _p2_candidate_proposal_projection(root: Path) -> dict[str, Any]:
