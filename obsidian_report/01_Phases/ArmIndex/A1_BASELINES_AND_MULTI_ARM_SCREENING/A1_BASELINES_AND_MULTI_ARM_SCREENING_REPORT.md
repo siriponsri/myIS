@@ -1,34 +1,36 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6"
-read_model_sha256: "d0d5025a60398ac34f3258989c2fb66ebc5385a7dec82c2b9a0b73697a78c217"
-source_commit: "b0be7bd6bc2d929277e2f190ad3ab91844639fb9"
+read_model_revision: "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f"
+read_model_sha256: "9ca928a32ed2f2f0062fff7cada2a1548cdf19d2969b2a50071550a5b668b409"
+source_commit: "800a50baba209ffdc78551d78f9c8e5e8044428a"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "engineering"
+evidence_class: "engineering_fixture"
 scientific_authority: false
-claim_boundary: "engineering_provenance_only"
-generated_from_revision: "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6"
-last_material_update: "2026-08-05T11:47:54Z"
-next_authorized_action: "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it."
+claim_boundary: "synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity"
+generated_from_revision: "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f"
+last_material_update: "2026-08-05T13:42:17Z"
+next_authorized_action: "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-05T11:47:54Z"
-updated_at: "2026-08-05T11:47:54Z"
+created_at: "2026-08-05T13:42:17Z"
+updated_at: "2026-08-05T13:42:17Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
 task_id: null
-workflow_status: "verification_needed"
-evidence_maturity: "non_scientific"
+workflow_status: "in_progress"
+evidence_maturity: "fixture"
 claim_level: "none"
 ---
 
 # A1_BASELINES_AND_MULTI_ARM_SCREENING
+
+Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.
 
 ## Objective
 
@@ -36,63 +38,124 @@ Reproduce controls and screen the five adapters with common programs.
 
 ## Starting State
 
-ArmIndex measured counters are zero and historical SCOPE evidence is read-only.
+- `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
+- `task`: None
+- `program_state`: a1_1_complete_a1_2_contract_locked
+- `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
+- `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-`control/campaigns/armindex-multiretriever-v2.yaml`, versioned ArmIndex schemas, and the shared read-model revision.
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93`
+- `git_commit`: 800a50baba209ffdc78551d78f9c8e5e8044428a
+- `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
+- `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
+- `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
+- `a11_task_receipt`: `campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json`; SHA-256 `56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83`
+- `a11_fixture_manifest`: `outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json`; SHA-256 `2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17`
+- `a11_fixture_receipt`: `outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json`; SHA-256 `b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24`
+- `a12_gpu_proposal`: `campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json`; SHA-256 `2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a`
 
 ## Work Performed
 
-The generated projection records the canonical phase/task state; it performs no measurement.
+The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute.
+
+### A1.2 resource planning boundary
+
+The proposal remains `proposal_not_adopted_execution_locked`. It specifies `1` GPU with at least `24` GiB VRAM; preferred classes are RTX_4090_24GB, RTX_3090_24GB, L4_24GB, A10_24GB. A100/H100 required: `False`. The planning range is `8-16` GPU hours and `10-20` elapsed hours. Raw compute is estimated at USD `2.4-12.8`; hard stops are USD `5` for parity/pilot, USD `18` for the common screen, USD `23` for A1, and USD `100` for the campaign.
+
+Owner prerequisites:
+
+- make_owner_local_protected_root_available_to_the_runner
+- prestage_frozen_model_artifacts_without_agent_credential_access
+- ensure_Vast_or_equivalent_account_credit_and_credentials_are_available
+- intervene_only_if_provider_unavailable_hashes_conflict_or_budget_must_increase
 
 ## Artifacts Produced
 
-Generated phase and task reports with canonical source pointers.
+These references explain what each artifact is for; the bytes remain governed by canonical paths.
+
+| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
+|---|---|---|---|---|---|
+| A1.1 adapter fixture task receipt | `receipt` | `engineering_fixture` | `campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json` | `56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83` | `validated` |
+| A1.1 adapter fixture manifest | `manifest` | `engineering_fixture` | `outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json` | `2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17` | `validated` |
+| A1.1 ARM-01 CPU fixture receipt | `receipt` | `engineering_fixture` | `outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json` | `b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24` | `validated` |
+| A1.1 adapter fixture runbook | `runbook` | `engineering_fixture` | `control/runbooks/A1_1_ADAPTER_FIXTURE_VALIDATION.md` | `7438a48fa675dd61f6fef45262024d2a134356bca101c42dc640ff98ea37adab` | `validated` |
+| A1.1 append-only execution ledger | `ledger` | `engineering_fixture` | `control/armindex/a1.1-adapter-fixture-validation-ledger.v1.jsonl` | `9356a5e11f58f96936f155960bf8d908b380b2d95001500248cb303bc47ec2b1` | `validated` |
+| A1.2 GPU, elapsed-time, and budget proposal | `proposal` | `planning_estimate` | `campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json` | `2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a` | `validated` |
 
 ## Metrics
 
-No ArmIndex scientific metric is available. Measured run count is `0`.
+| Metric | Split | Scope | Value | n | Denominator | Evidence |
+|---|---|---|---:|---:|---|---|
+| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_fixture` |
+| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_fixture` |
+| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_fixture` |
+| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_fixture` |
+| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `engineering_fixture` |
+| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `engineering_fixture` |
+| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `engineering_fixture` |
+| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `engineering_fixture` |
+
+Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-Status: **ready_synthetic_fixture_only**.
+**Output:** A receipt-bound synthetic adapter fixture validates 5 declared arms, executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks 4 dense arms before model or network access.
+
+**Result:** A1.1 is active; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero.
+
+**Decision:** active
 
 ## Interpretation
 
-This is engineering migration state, not scientific evidence.
+The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.
 
 ## Supported Claims
 
-The phase registry and migration boundary are implemented and inspectable.
+- A receipt-bound synthetic adapter fixture validates 5 declared arms, executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks 4 dense arms before model or network access. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal)
 
 ## Unsupported Claims
 
-No retrieval gain, champion, production readiness, Selection, or Final claim.
+- Measured P2 improvement or candidate superiority before a real measured run.
+- Final-split generalization or publication release before D2 and D3.
+- Causal or legal conclusions from retrieval aggregates.
 
 ## Failures and Recovery
 
-No active failure is projected; failures remain append-only when present.
+- No material failure is recorded for this Phase or Task.
 
 ## Governance and Safety
 
-Protected data remains Owner-local; D2 and D3 are the only Owner gates.
+- `protected_data_accessed`: False
+- `measured_execution`: False
+- `gpu`: False
+- `paid_api`: False
+- `network_model_download`: False
+- `provider_fallback`: False
+- `d2`: waiting_owner
+- `d3`: waiting_owner
+- `final_split`: closed
+- `real_counters`: `inline`; SHA-256 `None`
+- `evidence_class`: engineering_fixture
+- `scientific_authority`: False
 
 ## Decision
 
-Continue automatically only within the canonical phase and budget contract.
+Status: **active**. A1.1 is active; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero.
 
 ## Next Action
 
-/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.
+/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.
+
+Measured P2, real selection, and final evaluation must not start automatically from this report.
 
 ## Evidence Links
 
-[[ARM_INDEX_HOME]] · [[ARMINDEX_MIGRATION_RESULT]] · [[SCOPE_HISTORY_INDEX]]
-
-## Tasks
-
-| Task | Work | Status |
-|---|---|---|
-| [[A1.1]] | Adapter fixture validation | ready |
-| [[A1.2]] | Common multi-arm screen | locked_until_A1_1_fixture |
+- a11-adapter-task-receipt
+- a11-adapter-fixture-manifest
+- a11-adapter-fixture-receipt
+- a11-adapter-runbook
+- a11-adapter-ledger
+- a12-gpu-execution-proposal

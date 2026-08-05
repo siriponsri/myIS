@@ -1,0 +1,150 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260805T134428Z-a1.1-adapter-fixture-closeout-v1",
+  "run_id": null,
+  "goal_id": "019fcefe-6705-7971-aed4-6d64d9341850",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-05T13:44:28Z",
+  "scope": "Complete A1.1 adapter-fixture validation with a synthetic ARM-01 CPU compile-index-search-evaluate path, detailed English Phase and Task reporting, Brain pointers, and a non-authorizing A1.2 resource proposal without opening measured retrieval, GPU execution, Selection, or Final.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml and the Owner instruction to complete ARM-01 on CPU within the active goal.",
+      "scope": "Synthetic, offline, aggregate-safe A1.1 engineering work plus documentation, report, Brain, validation, commit, and push closeout; D2_OPEN_FINAL and D3_SUBMIT_RELEASE remain closed."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "800a50baba209ffdc78551d78f9c8e5e8044428a",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260805T134428Z-a1.1-adapter-fixture-closeout-v1.json",
+      "projections/sessions/20260805T134428Z-a1.1-adapter-fixture-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner extended the active goal to complete ARM-01 on CPU, update canonical controls, code, documentation, Brain, and detailed English Obsidian reports for every Phase and Task, permit verified archival of genuinely unused reports, and commit and push after validation.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "The bounded A1.1 engineering fixture registered five arms and completed the ARM-01 synthetic CPU compile-index-search-evaluate path while four dense arms failed closed before model or network access.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+          "sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+          "locator": "status, checks, cpu_observation, real_counters, resource_counters, safety, and receipt_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "A1.1 is complete as engineering-fixture evidence only; scientific authority remains false and measured, charged-resource, Selection, and Final counters remain zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json",
+          "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
+          "locator": "status, evidence_class, scientific_authority, claim_boundary, checks, counters, resource_counters, projection_events, and receipt_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The governed reporting contract now requires detailed technical English and the fifteen-section structure for every registered Phase and Task; archival remains a pointer-preserving verified move available only for explicitly superseded and unreferenced generated reports.",
+      "evidence_refs": [
+        {
+          "path": "docs/observatory/REPORTING_POLICY.md",
+          "sha256": "a04ed73e9131310727d4c8f21db835ef12525e1bb224c9de2fcec42001e35b41",
+          "locator": "Mandatory coverage and lifecycle; Report retention and archives; Required report body"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "action",
+      "provenance": "agent-proposed",
+      "summary": "The A1.2 planning proposal recommends one 24 GiB GPU, 8-16 reservation hours, 10-20 hours end to end, a raw compute estimate of USD 2.40-12.80, and explicit pilot, screen, A1, and campaign hard stops; it does not authorize execution.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json",
+          "sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
+          "locator": "status, proposed_gpu_spec, time_estimate, budget_estimate, admission_requirements, owner_needs, and proposal_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The next authorized action is reversible offline scaffolding for the versioned A1.2 execution contract, hash-bound budget profile, frozen model and adapter locks, Owner-local launch checklist, and automatic shutdown plan before any GPU reservation.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "9d82703e7a4455190a26424ac828990226a31962c78b778ff3548b2ae7ed067d",
+          "locator": "Active campaign; A1 task map; Next authorized action"
+        },
+        {
+          "path": "HANDOFF.md",
+          "sha256": "f5560eab40cd49a92cd553f60e2e1726fcbebe2cabe4c8b6c1d4d46eeff26384",
+          "locator": "Current state; Boundaries; Blockers; Active authorized action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": "control/runbooks/A1_1_ADAPTER_FIXTURE_VALIDATION.md",
+    "progress": "control/armindex/a1.1-adapter-fixture-validation-ledger.v1.jsonl",
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json",
+    "metrics": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+    "runtime": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+    "per_query_metrics": null,
+    "validation_report": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json",
+    "manifest": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json",
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "A1.2-CONTRACT-SCAFFOLD",
+      "provenance": "agent-proposed",
+      "summary": "Prepare and validate the A1.2 execution contract, hash-bound budget profile, frozen offline artifact locks, launch checklist, and automatic shutdown plan before reserving GPU capacity.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "A1.2-OWNER-LAUNCH-INPUTS",
+      "provenance": "agent-proposed",
+      "summary": "Before a future measured launch, the Owner must make the protected root available to the runner, pre-stage frozen model artifacts, and provide provider credit and credentials without transferring them to the agent workspace.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "RELEASE-LICENSE-DECISION",
+      "provenance": "agent-observed",
+      "summary": "The root software-license decision remains an Owner legal follow-up before external release and does not block the A1.2 offline scaffold.",
+      "blocking_gate": "D3_SUBMIT_RELEASE"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

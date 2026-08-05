@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "content_sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -41,7 +41,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
+      "content_sha256": "a04ed73e9131310727d4c8f21db835ef12525e1bb224c9de2fcec42001e35b41",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -75,14 +75,14 @@
     },
     {
       "artifact_id": "docs-observatory-REPORTING_POLICY.md",
-      "sha256": "a4ec556817ebc70b2c63da843689a6aaa08581fbb0616491984e65a38cf560a1",
+      "sha256": "a04ed73e9131310727d4c8f21db835ef12525e1bb224c9de2fcec42001e35b41",
       "uri": "docs/observatory/REPORTING_POLICY.md"
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T11:47:54Z",
-  "generated_from_revision": "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6",
-  "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+  "generated_at": "2026-08-05T13:42:17Z",
+  "generated_from_revision": "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f",
+  "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,20 +108,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+    "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
     "source_of_truth": {
-      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
-  "last_material_update": "2026-08-05T11:47:54Z",
+  "language": "en",
+  "last_material_update": "2026-08-05T13:42:17Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
+  "next_authorized_action": "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.",
   "objective": "Deterministic kernel and schema contracts",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-1",
-  "report_sha256": "3b02803a02e18570b0b8e831baab82f4f8a71d6387ec95d4c09c8845ac905b1d",
+  "report_sha256": "c927ad7b147ed2eecffa3a04dfeefb273b082001ecb2dc9edd28367937d4847f",
   "report_type": "task",
   "result": {
     "decision": "completed",

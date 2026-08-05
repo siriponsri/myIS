@@ -3,15 +3,15 @@
   "claim_boundary": "engineering_provenance_only",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT is planned; ArmIndex measured runs, Selection, and Final counters remain zero.",
-    "status": "planned"
+    "reason": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "blocked"
   },
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T11:47:54Z",
-  "generated_from_revision": "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6",
-  "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+  "generated_at": "2026-08-05T13:42:17Z",
+  "generated_from_revision": "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f",
+  "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -38,10 +38,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
+      "sha256": "0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+    "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,23 +52,24 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-05T11:47:54Z",
+  "language": "en",
+  "last_material_update": "2026-08-05T13:42:17Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
+  "next_authorized_action": "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.",
   "objective": "Analyze transfer, complementarity, and production-constrained harnesses.",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "phase-a3_transfer_complementarity_and_harnessopt",
-  "report_sha256": "05e1b05d8ac3581cc2dfd4d881e467976bf5db9187b00df0fec941a4efa19f73",
+  "report_sha256": "2722ac727d8951fe7bde618cc9f3499049bc468f76488cc8b6601d40d2b2b339",
   "report_type": "phase",
   "result": {
-    "decision": "planned",
+    "decision": "blocked",
     "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-    "result": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT is planned; ArmIndex measured runs, Selection, and Final counters remain zero."
+    "result": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT is blocked; ArmIndex measured runs, Selection, and Final counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -76,10 +77,10 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a0_complete_a1_fixture_ready",
+    "program_state": "a1_1_complete_a1_2_contract_locked",
     "task": null
   },
-  "status": "planned",
+  "status": "blocked",
   "supported_claims": [
     {
       "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",

@@ -1,21 +1,161 @@
 {
-  "artifact_references": [],
-  "claim_boundary": "engineering_provenance_only",
+  "artifact_references": [
+    {
+      "artifact_id": "a11-adapter-task-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Closes A1.1 against the validated five-arm scaffold, ARM-01 CPU path, reporting contract, and zero real counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json",
+      "scientific_authority": false,
+      "title": "A1.1 adapter fixture task receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a11-adapter-fixture-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Freezes the five adapter declarations, synthetic representation commitments, ARM-01 fixture backend, and fail-closed dense-arm boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json",
+      "scientific_authority": false,
+      "title": "A1.1 adapter fixture manifest",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a11-adapter-fixture-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Records aggregate compile, index, search, evaluation, throughput, and Python-allocation observations from synthetic CPU execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "scientific_authority": false,
+      "title": "A1.1 ARM-01 CPU fixture receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a11-adapter-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "7438a48fa675dd61f6fef45262024d2a134356bca101c42dc640ff98ea37adab",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Defines the synthetic-only acceptance, detailed English report requirement, archive controls, and pre-GPU boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A1_1_ADAPTER_FIXTURE_VALIDATION.md",
+      "scientific_authority": false,
+      "title": "A1.1 adapter fixture runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a11-adapter-ledger",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "9356a5e11f58f96936f155960bf8d908b380b2d95001500248cb303bc47ec2b1",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Binds task start, fixture execution, resource proposal, and ready-to-close state through a canonical hash chain.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.1-adapter-fixture-validation-ledger.v1.jsonl",
+      "scientific_authority": false,
+      "title": "A1.1 append-only execution ledger",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-gpu-execution-proposal",
+      "artifact_type": "proposal",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
+      "evidence_class": "planning_estimate",
+      "explanation": "Provides bounded owner-managed GPU planning assumptions and hard stops without adopting an execution contract or launching compute.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 GPU, elapsed-time, and budget proposal",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1_BASELINES_AND_MULTI_ARM_SCREENING is planned; ArmIndex measured runs, Selection, and Final counters remain zero.",
-    "status": "planned"
+    "reason": "A1.1 is active; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero.",
+    "status": "active"
   },
-  "evidence_class": "engineering",
-  "evidence_links": [],
+  "evidence_class": "engineering_fixture",
+  "evidence_links": [
+    {
+      "artifact_id": "a11-adapter-task-receipt",
+      "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json"
+    },
+    {
+      "artifact_id": "a11-adapter-fixture-manifest",
+      "sha256": "2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17",
+      "uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json"
+    },
+    {
+      "artifact_id": "a11-adapter-fixture-receipt",
+      "sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json"
+    },
+    {
+      "artifact_id": "a11-adapter-runbook",
+      "sha256": "7438a48fa675dd61f6fef45262024d2a134356bca101c42dc640ff98ea37adab",
+      "uri": "control/runbooks/A1_1_ADAPTER_FIXTURE_VALIDATION.md"
+    },
+    {
+      "artifact_id": "a11-adapter-ledger",
+      "sha256": "9356a5e11f58f96936f155960bf8d908b380b2d95001500248cb303bc47ec2b1",
+      "uri": "control/armindex/a1.1-adapter-fixture-validation-ledger.v1.jsonl"
+    },
+    {
+      "artifact_id": "a12-gpu-execution-proposal",
+      "sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
+      "uri": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json"
+    }
+  ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T11:47:54Z",
-  "generated_from_revision": "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6",
-  "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+  "generated_at": "2026-08-05T13:42:17Z",
+  "generated_from_revision": "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f",
+  "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering",
+    "evidence_class": "engineering_fixture",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -33,15 +173,32 @@
     "scientific_authority": false
   },
   "input_bindings": {
+    "a11_fixture_manifest": {
+      "sha256": "2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17",
+      "uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json"
+    },
+    "a11_fixture_receipt": {
+      "sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json"
+    },
+    "a11_task_receipt": {
+      "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json"
+    },
+    "a12_gpu_proposal": {
+      "sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
+      "status": "proposal_not_adopted_execution_locked",
+      "uri": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json"
+    },
     "armindex_schema_root": {
       "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
+      "sha256": "0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+    "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,23 +209,113 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "fd8ebce49e2973bfcef1f67624f3c7f93807fc4192ed29de1947e8e71dc72299",
+      "sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-05T11:47:54Z",
-  "metric_references": [],
-  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
+  "interpretation": "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.",
+  "language": "en",
+  "last_material_update": "2026-08-05T13:42:17Z",
+  "metric_references": [
+    {
+      "cutoff": 100,
+      "denominator": "host_observed_fixed_synthetic_adapter_workload",
+      "n": 11,
+      "name": "fixture_compile_latency_p50_ms",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 3.2813
+    },
+    {
+      "cutoff": 100,
+      "denominator": "host_observed_fixed_synthetic_adapter_workload",
+      "n": 11,
+      "name": "fixture_index_build_latency_p50_ms",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 0.8286
+    },
+    {
+      "cutoff": 100,
+      "denominator": "host_observed_fixed_synthetic_adapter_workload",
+      "n": 11,
+      "name": "fixture_search_workload_latency_p50_ms",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 0.7241
+    },
+    {
+      "cutoff": 100,
+      "denominator": "host_observed_fixed_synthetic_adapter_workload",
+      "n": 22,
+      "name": "fixture_search_throughput_qps",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 2449.58858
+    },
+    {
+      "cutoff": 100,
+      "denominator": "tracemalloc_peak_for_fixed_synthetic_adapter_workload",
+      "n": 11,
+      "name": "fixture_peak_python_allocation_bytes",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 111702
+    },
+    {
+      "cutoff": 100,
+      "denominator": "macro_mean_relevant_families",
+      "n": 2,
+      "name": "fixture_recall_at_100",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 1.0
+    },
+    {
+      "cutoff": 100,
+      "denominator": "macro_mean_graded_family_relevance",
+      "n": 2,
+      "name": "fixture_ndcg_at_100",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 1.0
+    },
+    {
+      "cutoff": 10,
+      "denominator": "macro_mean_graded_family_relevance",
+      "n": 2,
+      "name": "fixture_ndcg_at_10",
+      "scope": "A1.1",
+      "source_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+      "source_uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "split": "synthetic",
+      "value": 1.0
+    }
+  ],
+  "next_authorized_action": "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "7ddcbc0e92fe1ff65a9ad1d7e9aa7c6b429529253b6d09d67b990abd6af2931b",
+  "report_sha256": "cc08d3b3e762ed78dcb1219386de4e701eddcc38f762113e16c001c5ace109d5",
   "report_type": "phase",
   "result": {
-    "decision": "planned",
-    "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-    "result": "A1_BASELINES_AND_MULTI_ARM_SCREENING is planned; ArmIndex measured runs, Selection, and Final counters remain zero."
+    "decision": "active",
+    "output": "A receipt-bound synthetic adapter fixture validates 5 declared arms, executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks 4 dense arms before model or network access.",
+    "result": "A1.1 is active; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -76,14 +323,21 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a0_complete_a1_fixture_ready",
+    "program_state": "a1_1_complete_a1_2_contract_locked",
     "task": null
   },
-  "status": "planned",
+  "status": "active",
   "supported_claims": [
     {
-      "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-      "evidence": []
+      "claim": "A receipt-bound synthetic adapter fixture validates 5 declared arms, executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks 4 dense arms before model or network access.",
+      "evidence": [
+        "a11-adapter-task-receipt",
+        "a11-adapter-fixture-manifest",
+        "a11-adapter-fixture-receipt",
+        "a11-adapter-runbook",
+        "a11-adapter-ledger",
+        "a12-gpu-execution-proposal"
+      ]
     }
   ],
   "task_id": null,
@@ -93,5 +347,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."
+  "work_summary": "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
 }

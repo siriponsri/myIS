@@ -12,6 +12,24 @@
     "validation_audit_sha256": "4e7c09af6c186060bed36b90b5e997171bfc67b9c0d7606fb7522c7394733f1a",
     "validation_check_count": 15
   },
+  "armindex_a1_adapter_fixture": {
+    "dense_arms_blocked": 4,
+    "evidence_class": "engineering_fixture",
+    "final_accesses": 0,
+    "fixture_manifest_sha256": "2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17",
+    "fixture_receipt_sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24",
+    "fixture_status": "passed",
+    "gpu_proposal_sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
+    "gpu_proposal_status": "proposal_not_adopted_execution_locked",
+    "measured_runs": 0,
+    "registered_arms": 5,
+    "runnable_cpu_arms": 1,
+    "scientific_authority": false,
+    "selection_accesses": 0,
+    "source_receipt_sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json",
+    "status": "complete"
+  },
   "armindex_compute_storage_feasibility": {
     "evidence_class": "engineering_fixture",
     "final_accesses": 0,
@@ -39,7 +57,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "d0d5025a60398ac34f3258989c2fb66ebc5385a7dec82c2b9a0b73697a78c217",
+  "dashboard_snapshot_sha256": "9ca928a32ed2f2f0062fff7cada2a1548cdf19d2969b2a50071550a5b668b409",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -72,7 +90,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "eb5e05ce7b8281f2710b8efe23444e2ca8e8041cb209058b8257388caa2a64e4",
+  "obsidian_manifest_sha256": "156f144baa2e707135b26b66fefd3e78620af8eab648206af38c18867e2f19a9",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -110,8 +128,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6",
-  "read_model_sha256": "d0d5025a60398ac34f3258989c2fb66ebc5385a7dec82c2b9a0b73697a78c217",
+  "read_model_revision": "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f",
+  "read_model_sha256": "9ca928a32ed2f2f0062fff7cada2a1548cdf19d2969b2a50071550a5b668b409",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -119,7 +137,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
+  "source_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
   "status": "current",
   "system_experiment": "myis-system"
 }
