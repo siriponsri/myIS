@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T15:37:19Z",
-  "generated_from_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
-  "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+  "generated_at": "2026-08-05T15:46:35Z",
+  "generated_from_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
+  "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,7 +108,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+    "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
     "source_of_truth": {
       "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
       "uri": "control/source-of-truth.yaml"
@@ -116,13 +116,13 @@
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:37:19Z",
+  "last_material_update": "2026-08-05T15:46:35Z",
   "metric_references": [],
   "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "1f07b0ad6671d34e4a6bb1efbcb46987c7f091b2b96fa69a7e9293b85c5110ef",
+  "report_sha256": "3679f51224d97bd75c44938a70b2a9888e30f1e23f972457cc3af0aa23970481",
   "report_type": "phase",
   "result": {
     "decision": "completed",

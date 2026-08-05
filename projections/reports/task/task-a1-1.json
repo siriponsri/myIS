@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T15:37:19Z",
-  "generated_from_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
-  "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+  "generated_at": "2026-08-05T15:46:35Z",
+  "generated_from_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
+  "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -190,9 +190,9 @@
       "uri": "control/budgets/a1.2-common-screen-v1.json"
     },
     "a12_closeout_validation_audit": {
-      "check_count": 15,
-      "recovery_count": 5,
-      "sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "check_count": 16,
+      "recovery_count": 6,
+      "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
       "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
     },
     "a12_execution_contract": {
@@ -226,7 +226,7 @@
       "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+    "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -243,7 +243,7 @@
   },
   "interpretation": "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:37:19Z",
+  "last_material_update": "2026-08-05T15:46:35Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -338,7 +338,7 @@
   "objective": "Adapter fixture validation",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-1",
-  "report_sha256": "7c3ee230943111974e39fb6f186d77201dd7294878ccd3591c1ce9e0ca02effc",
+  "report_sha256": "25c8bed4519b1dddc431083216096fa44196a27e06c369d92a9f2280e54df555",
   "report_type": "task",
   "result": {
     "decision": "completed",

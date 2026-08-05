@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T15:37:19Z",
-  "generated_from_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
-  "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+  "generated_at": "2026-08-05T15:46:35Z",
+  "generated_from_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
+  "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+    "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -198,13 +198,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:37:19Z",
+  "last_material_update": "2026-08-05T15:46:35Z",
   "metric_references": [],
   "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
   "objective": "Canonical authority and professional documentation",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-2",
-  "report_sha256": "149b1bd0218fe87cdf852e113e717345855681de757085ae7cd960fc32cfa350",
+  "report_sha256": "091d6db5e3d53490137e7b013ab7b854aa27a3d298691a2a3220380f553ffc7a",
   "report_type": "task",
   "result": {
     "decision": "completed",

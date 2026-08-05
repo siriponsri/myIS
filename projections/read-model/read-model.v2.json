@@ -45,9 +45,9 @@
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
       "claim_boundary": "offline_scaffold_only_no_measured_retrieval_claim",
-      "closeout_validation_audit_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "closeout_validation_audit_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
-      "closeout_validation_check_count": 15,
+      "closeout_validation_check_count": 16,
       "closeout_validation_recoveries": [
         {
           "counters_changed": false,
@@ -88,9 +88,17 @@
           "recovery_id": "a1.2-single-read-model-recovery-projection-20260805",
           "recovery_summary": "Failure and recovery records now flow through the one validated read-model object shared by every projection writer.",
           "status": "repaired_and_validated"
+        },
+        {
+          "counters_changed": false,
+          "failure_id": "a1.2-stale-projection-source-receipt-20260805",
+          "failure_summary": "The first post-commit sync receipt still selected the completed A1.1 adapter receipt as its latest ArmIndex source.",
+          "recovery_id": "a1.2-latest-validated-source-selector-20260805",
+          "recovery_summary": "The sync receipt and MLflow archive now bind the validated A1.2 scaffold receipt and closeout audit while keeping launch and measured execution false.",
+          "status": "repaired_and_validated"
         }
       ],
-      "closeout_validation_recovery_count": 5,
+      "closeout_validation_recovery_count": 6,
       "dense_artifact_manifests_pending": 4,
       "evidence_class": "engineering_contract_scaffold",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
@@ -998,7 +1006,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-05T15:37:19Z",
+  "generated_at": "2026-08-05T15:46:35Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -1906,7 +1914,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
+  "projection_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1950,8 +1958,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
-  "read_model_sha256": "db9938b0671f9142b1a8d57709da8a9989d47315d72f1beecd389980795ab231",
+  "read_model_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
+  "read_model_sha256": "004c227ac9746c898d9856ed45f0d64a6989baf53be16e84cfc582b9de477cf5",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2084,7 +2092,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
+  "source_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
   "tasks": [
     {
       "evidence_ids": [],
