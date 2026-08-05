@@ -1,0 +1,124 @@
+{
+  "schema_version": "myis.armindex-a0-validation-audit.v1",
+  "audit_id": "a0.9-validation-safety-closeout-20260805",
+  "campaign_id": "armindex-multiretriever-v2",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "task_id": "A0.9",
+  "status": "PASS",
+  "completed_at_utc": "2026-08-05T11:14:30Z",
+  "source_commit": "67ccdfe6b847dc155b598820db9d8c0ea4cd521b",
+  "evidence_class": "engineering_validation",
+  "scientific_authority": false,
+  "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
+  "protected_data_accessed": false,
+  "measured_execution_performed": false,
+  "checks": {
+    "armindex_contract_validation": {
+      "status": "PASS",
+      "registered_arms": 5,
+      "runnable_fixture_arms": 1,
+      "unresolved_dense_arms": 4
+    },
+    "asset_registry_full_validation": {
+      "status": "PASS",
+      "asset_count": 5,
+      "errors": 0
+    },
+    "asset_registry_task_query": {
+      "status": "PASS",
+      "task_id": "A0.9",
+      "returned_asset_count": 3
+    },
+    "asset_map_drift": {
+      "status": "PASS",
+      "drift": false
+    },
+    "dashboard_api_policy_pytest": {
+      "status": "PASS",
+      "passed": 66,
+      "warnings": 1
+    },
+    "disposable_a010_vertical_slice": {
+      "status": "PASS",
+      "output_persisted": false,
+      "measured_execution": false
+    },
+    "disposable_a08_feasibility_fixture": {
+      "status": "PASS",
+      "output_persisted": false,
+      "measured_execution": false
+    },
+    "full_pytest": {
+      "status": "PASS",
+      "passed": 387,
+      "warnings": 1
+    },
+    "layout_validation": {
+      "status": "PASS",
+      "missing": 0,
+      "stale_active_roots": 0
+    },
+    "mlflow_doctor": {
+      "status": "PASS",
+      "archive_receipts": 57,
+      "archive_runs": 57,
+      "archive_artifacts": 680,
+      "archive_failures": 0,
+      "sqlite_read_only": true
+    },
+    "report_preclose_drift_check": {
+      "status": "PASS",
+      "drift": false,
+      "read_model_drift": false
+    },
+    "scoped_ruff": {
+      "status": "PASS",
+      "errors": 0
+    },
+    "session_capsule_audit": {
+      "status": "PASS",
+      "unresolved_invalid_count": 0
+    },
+    "targeted_armindex_pytest": {
+      "status": "PASS",
+      "passed": 44,
+      "warnings": 0
+    },
+    "whitespace_check": {
+      "status": "PASS",
+      "errors": 0
+    }
+  },
+  "safety": {
+    "cpu_only": true,
+    "network_model_download": false,
+    "paid_api_used": false,
+    "gpu_used": false,
+    "provider_switched": false,
+    "protected_app_payload_opened": false,
+    "selection_opened": false,
+    "final_opened": false
+  },
+  "counters": {
+    "measured_runs": 0,
+    "candidate_count": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "resource_counters": {
+    "charged_usd": 0,
+    "gpu_scientific_runs": 0,
+    "paid_api_calls": 0,
+    "model_downloads": 0,
+    "model_weight_modifications": 0
+  },
+  "post_receipt_requirements": [
+    "two deterministic report sync and check cycles",
+    "Brain pointer note under a validated serial-writer lease",
+    "research session capsule validation",
+    "clean-checkout regression",
+    "final full test and policy validation before push"
+  ],
+  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
+  "audit_sha256": "73981d7b2cf73539d2e283f9c03b517eee961873d7af38d7f825a41501dfa341"
+}

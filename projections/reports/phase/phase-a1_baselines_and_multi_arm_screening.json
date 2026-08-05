@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-04T15:19:53Z",
-  "generated_from_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "generated_from_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
   "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -38,7 +38,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
@@ -59,11 +59,11 @@
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "last_material_update": "2026-08-04T15:19:53Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "a9440522769807a07591788c45711e683b167b98df693548ebd42d697932319e",
+  "report_sha256": "4dc336bfbbc5d80f93c1ad36ca71f021be3fdcfddf51e96d8d0b2917e4e99c9d",
   "report_type": "phase",
   "result": {
     "decision": "planned",
@@ -75,8 +75,8 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A0_MIGRATION_FOUNDATION",
-    "program_state": "active_migration",
+    "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "program_state": "a0_complete_a1_fixture_ready",
     "task": null
   },
   "status": "planned",

@@ -11,6 +11,7 @@ import yaml
 
 from .arms import ArmRegistry
 from .contracts import grouped_json_schemas, load_campaign
+from .feasibility import run_compute_storage_feasibility_fixture
 from .fixture import run_synthetic_fixture
 
 
@@ -24,6 +25,13 @@ def _parser() -> argparse.ArgumentParser:
     fixture = commands.add_parser("fixture", help="run the disposable synthetic ARM-01 slice")
     fixture.add_argument("--repository-root", type=Path, default=Path.cwd())
     fixture.add_argument("--output", type=Path)
+    feasibility = commands.add_parser(
+        "feasibility-fixture",
+        help="run the synthetic-only A0.8 CPU compute and storage fixture",
+    )
+    feasibility.add_argument("--repository-root", type=Path, default=Path.cwd())
+    feasibility.add_argument("--output", type=Path)
+    feasibility.add_argument("--repetitions", type=int, default=11)
     return parser
 
 
@@ -33,12 +41,24 @@ def main(argv: Sequence[str] | None = None) -> int:
     campaign = load_campaign(root)
 
     if args.command == "status":
+        current_phase = next(
+            (phase for phase in campaign["phases"] if phase.get("status") != "complete"),
+            campaign["phases"][-1],
+        )
+        current_task = next(
+            (
+                task
+                for task in current_phase.get("tasks", [])
+                if task.get("status") not in {"complete", "locked_owner_D2", "locked_owner_D3"}
+            ),
+            current_phase.get("tasks", [{}])[-1],
+        )
         payload = {
             "schema_version": "myis.armindex-cli-status.v1",
             "campaign_id": campaign["campaign"]["id"],
             "campaign_status": campaign["campaign"]["status"],
-            "current_phase": "A0_MIGRATION_FOUNDATION",
-            "current_task": "A0.10",
+            "current_phase": current_phase["id"],
+            "current_task": current_task.get("id"),
             "evidence_class": campaign["campaign"]["evidence_class"],
             "scientific_authority": False,
             "measured_runs": campaign["campaign"]["migration_measured_runs"],
@@ -70,8 +90,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             "scientific_authority": False,
             "measured_execution": False,
         }
-    else:
+    elif args.command == "fixture":
         artifacts = run_synthetic_fixture(args.output)
+        payload = artifacts.summary()
+    else:
+        artifacts = run_compute_storage_feasibility_fixture(
+            args.output,
+            repetitions=args.repetitions,
+        )
         payload = artifacts.summary()
 
     print(yaml.safe_dump(payload, allow_unicode=False, sort_keys=True), end="")

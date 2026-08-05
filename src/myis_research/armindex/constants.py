@@ -6,3 +6,20 @@ A0_8_NEXT_AUTHORIZED_ACTION = (
     "access protected data, start measured retrieval, download model weights, use GPU or paid "
     "APIs, open Selection, or open Final."
 )
+
+A0_9_NEXT_AUTHORIZED_ACTION = (
+    "/goal Execute A0.9_VALIDATION_SAFETY_AND_CLOSEOUT from the canonical PLAN and "
+    "control/campaigns/armindex-multiretriever-v2.yaml. Validate the synthetic-only A0 "
+    "migration, close A0 if all gates pass, and keep A1 locked until that closeout receipt "
+    "is complete. Do not access protected data, start measured retrieval, download model "
+    "weights, use GPU or paid APIs, open Selection, or open Final."
+)
+
+A1_1_NEXT_AUTHORIZED_ACTION = (
+    "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and "
+    "control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only "
+    "synthetic/offline adapter fixtures on CPU. Do not access protected data, start "
+    "measured retrieval, download model weights, use GPU or paid APIs, switch providers, "
+    "open Selection, or open Final. Keep A1 measured screening closed until a separate "
+    "execution contract authorizes it."
+)

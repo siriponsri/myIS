@@ -15,9 +15,9 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A0.10_LEGACY_CODE_HARVEST_AND_PHASE_SCAFFOLDING` (complete)
-- Current phase: `A0_MIGRATION_FOUNDATION`
-- Current evidence class: engineering migration; scientific authority `false`
+- Current task: `A1.1_ADAPTER_FIXTURE_VALIDATION` (ready; synthetic/offline only)
+- Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
+- Current evidence class: engineering scaffolding; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -57,8 +57,8 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 | Phase | Purpose | Migration state |
 |---|---|---|
-| `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | in progress |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | not started |
+| `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | ready for synthetic/offline A1.1 fixture only |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -78,8 +78,8 @@ No Sprint, Stage, Work Package, or micro-phase is canonical.
 | `A0.5` | Phase, Research Flow, and Owner-gate migration | complete |
 | `A0.6` | Scientific contracts and schemas | complete |
 | `A0.7` | Model/arm declarations and license registry | complete |
-| `A0.8` | Compute and storage feasibility fixtures | planned |
-| `A0.9` | Validation, safety, and closeout | planned |
+| `A0.8` | Compute and storage feasibility fixtures | complete |
+| `A0.9` | Validation, safety, and closeout | complete |
 | `A0.10` | Legacy code harvest and phase-ready scaffolding | complete |
 
 Task `A0.10` was a synthetic-only engineering task. It audited provenance,
@@ -87,6 +87,14 @@ built typed contracts and thin runnable scaffolding, and emitted aggregate-safe
 receipts. It did not access protected benchmark state, start measured
 retrieval, download model weights, use paid APIs or GPU scientific compute, or
 open Selection or Final.
+
+Task `A0.8` followed
+[`control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md`](control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md).
+It closed a CPU-only fixture scaffold for compute, Python memory, and
+deterministic storage characterization. Task `A0.9` then validated the A0
+controls, fixtures, projections, and safety boundary and emitted the hash-bound
+phase closeout receipt. Existing App sparse indexes remain protected,
+reference-only A1 assets and were not opened or used by A0.
 
 ## Historical evidence
 
@@ -128,7 +136,9 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.
+/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.
 ```
 
-A1 remains locked until Task `A0.9` validation and closeout.
+A1.1 may begin only as synthetic/offline adapter-fixture scaffolding. Measured
+retrieval, model download, dense-arm execution, and A1.2 remain closed until a
+separate A1 execution contract authorizes them.

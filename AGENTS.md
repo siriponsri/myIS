@@ -210,9 +210,9 @@ sync/check twice, artifact graph and checksum validation, protected/unsafe-path
 scans, session audit, Dashboard/API, repository-safe MLflow doctor, layout,
 assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
 The current state must agree everywhere: ArmIndex is the active campaign,
-SCOPE is historical read-only, measured ArmIndex counters remain zero,
-Selection and Final remain closed, and the next action is exactly the
-synthetic-only A0 compute-feasibility fixture and preflight in `HANDOFF.md`.
+SCOPE is historical read-only, all A0 Tasks are complete, measured ArmIndex
+counters remain zero, Selection and Final remain closed, and the next action is
+exactly the synthetic/offline A1.1 adapter-fixture scaffold in `HANDOFF.md`.
 Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
 fixture is `passed`, and measured P2 was not started. A stale narrative is a
 validation failure, not a documentation preference.

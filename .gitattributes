@@ -92,3 +92,16 @@ archive/migration-records/armindex-20260804/** -text
 outputs/fixtures/armindex/**/*.json -text
 outputs/audits/repository/*.json -text
 outputs/audits/dashboard/*.json -text
+
+# A0 feasibility and phase-closeout evidence binds these files by raw SHA-256.
+# Preserve bytes for clean-checkout validation and the pointer-only Brain note.
+AGENTS.md -text whitespace=cr-at-eol
+HANDOFF.md -text
+control/program.yaml -text whitespace=cr-at-eol
+control/runbooks/A0_*.md -text
+control/armindex/*.jsonl -text
+outputs/audits/armindex/*.json -text
+outputs/audits/research-sessions/*.json -text
+projections/read-model/** -text
+projections/sessions/** -text
+projections/sync-receipt.v2.json -text

@@ -82,13 +82,194 @@
       "evaluated_arm_sets": 0,
       "status": "not_started"
     },
+    "compute_storage_feasibility": {
+      "asset_observation": {
+        "app_data_root_present": true,
+        "asset_id": "APP-SPARSE-FTS-INDEXES",
+        "next_eligible_phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+        "protected_payload_opened": false,
+        "registry_disposition": "protected_reference_only_not_allowed_in_A0",
+        "source_bytes_copied": false,
+        "top_level_directory_count": 4,
+        "top_level_regular_file_bytes": 34960,
+        "top_level_regular_file_count": 1,
+        "used_by_fixture": false
+      },
+      "claim_boundary": "synthetic_host_feasibility_only_no_production_projection",
+      "evidence_class": "engineering_fixture",
+      "final_accesses": 0,
+      "fixture_manifest_sha256": "6500c576252b3cde0b29bd51218425b179f3654ba549e1debf30d946fefdbc6d",
+      "fixture_manifest_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json",
+      "fixture_receipt_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "fixture_receipt_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "fixture_status": "passed",
+      "host": {
+        "logical_cpu_count": 12,
+        "machine": "AMD64",
+        "operating_system": "Windows",
+        "python_implementation": "CPython",
+        "python_version": "3.11.9"
+      },
+      "ledger_sha256": "29a998b734c843dbd4df1a88d4076542181df597cddfe6571a7c364fce8ae962",
+      "ledger_uri": "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl",
+      "measured_runs": 0,
+      "next_authorized_action": "/goal Execute A0.9_VALIDATION_SAFETY_AND_CLOSEOUT from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Validate the synthetic-only A0 migration, close A0 if all gates pass, and keep A1 locked until that closeout receipt is complete. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+      "observations": [
+        {
+          "latency_ms": {
+            "compile": {
+              "p50": 3.0148,
+              "p95": 3.9386,
+              "p99": 3.9386
+            },
+            "index_build": {
+              "p50": 0.8469,
+              "p95": 0.911,
+              "p99": 0.911
+            },
+            "search_workload": {
+              "p50": 0.6556,
+              "p95": 0.7072,
+              "p99": 0.7072
+            }
+          },
+          "peak_python_allocation_bytes": 124802,
+          "profile_sha256": "f66cbf01046da72992f60d1e1d5c88a1c9b66a3392ee3b8039ea1d2c793bfa74",
+          "repetitions": 11,
+          "scale_factor": 1,
+          "search_calls": 22,
+          "search_throughput_qps": 3047.851265,
+          "synthetic_document_count": 4
+        },
+        {
+          "latency_ms": {
+            "compile": {
+              "p50": 23.1675,
+              "p95": 25.6839,
+              "p99": 25.6839
+            },
+            "index_build": {
+              "p50": 5.2755,
+              "p95": 6.1208,
+              "p99": 6.1208
+            },
+            "search_workload": {
+              "p50": 3.394,
+              "p95": 4.6905,
+              "p99": 4.6905
+            }
+          },
+          "peak_python_allocation_bytes": 751729,
+          "profile_sha256": "3d41d1de0925091bb7b9f697ad13a1f0fa6bba42e2d5e7015c549fff238ad8c2",
+          "repetitions": 11,
+          "scale_factor": 8,
+          "search_calls": 22,
+          "search_throughput_qps": 559.830626,
+          "synthetic_document_count": 32
+        },
+        {
+          "latency_ms": {
+            "compile": {
+              "p50": 92.5391,
+              "p95": 128.1169,
+              "p99": 128.1169
+            },
+            "index_build": {
+              "p50": 20.9904,
+              "p95": 21.7115,
+              "p99": 21.7115
+            },
+            "search_workload": {
+              "p50": 13.7252,
+              "p95": 17.4586,
+              "p99": 17.4586
+            }
+          },
+          "peak_python_allocation_bytes": 2727977,
+          "profile_sha256": "2d33591d4fa1da7df7a4567907f1759b6c13542297eb4cdeaed345fba6c76bc6",
+          "repetitions": 11,
+          "scale_factor": 32,
+          "search_calls": 22,
+          "search_throughput_qps": 143.88875,
+          "synthetic_document_count": 128
+        }
+      ],
+      "profiles": [
+        {
+          "compiled_payload_bytes": 6443,
+          "compiled_representation_sha256": "d50a1caad9fc3a883ca68437561be298a1b168247626f80e289e892480cc35e0",
+          "compiled_text_bytes": 776,
+          "compiled_unit_count": 11,
+          "estimated_token_count": 108,
+          "fixture_index_sha256": "1fc65495cd401780299952dbb33c343667382cddc8b8694951d6134e91ee6892",
+          "logical_program_sha256": "d7df78e0af7a4cb69b139eeff851ba14e362165a6393631dfb3b1fa9c304b0f5",
+          "portable_sparse_payload_bytes": 6561,
+          "portable_sparse_payload_sha256": "09f30dab6a6ba484e8c1f63a4799aab70b51c8c65fa67f3005943ac0c47f7794",
+          "profile_sha256": "f66cbf01046da72992f60d1e1d5c88a1c9b66a3392ee3b8039ea1d2c793bfa74",
+          "ranking_commitment": "d06b2c4c5460e61fa137e4366bd6b8dcfbfed7bf2211695ead6abbae1d588b4c",
+          "scale_factor": 1,
+          "source_sha256": "c54da9c9ddd543891e36df0b10a8f13e2df7dd376540cecd51ddd1434bf8d3bf",
+          "source_utf8_bytes": 693,
+          "synthetic_document_count": 4,
+          "synthetic_family_count": 3
+        },
+        {
+          "compiled_payload_bytes": 48157,
+          "compiled_representation_sha256": "81bde11328706eadafeb5b7cec44f18eb73bbc5f9ff300b861a8375bc20fac68",
+          "compiled_text_bytes": 6208,
+          "compiled_unit_count": 88,
+          "estimated_token_count": 864,
+          "fixture_index_sha256": "fed55d0d3f3f47c683a3b2bbada4b6c702c68e4cf8b9673b5ed353bc339acf4b",
+          "logical_program_sha256": "d7df78e0af7a4cb69b139eeff851ba14e362165a6393631dfb3b1fa9c304b0f5",
+          "portable_sparse_payload_bytes": 40471,
+          "portable_sparse_payload_sha256": "2aae991efa7dec048a1db6b19e603e760214d425aa7227d8d30d0846dd6f1162",
+          "profile_sha256": "3d41d1de0925091bb7b9f697ad13a1f0fa6bba42e2d5e7015c549fff238ad8c2",
+          "ranking_commitment": "35810eb47df47fce5278b44e215f557f305476f2f86dfb8b2fd1e1eb3196b995",
+          "scale_factor": 8,
+          "source_sha256": "0104c55ac4fa18751bb88675c724badd8928d1d52b1eef8cb2976ce8f663aae9",
+          "source_utf8_bytes": 5544,
+          "synthetic_document_count": 32,
+          "synthetic_family_count": 24
+        },
+        {
+          "compiled_payload_bytes": 191268,
+          "compiled_representation_sha256": "6bc9fb8bd93c5fec514cad88be6230f6db16a25ac5731071f295233262f80816",
+          "compiled_text_bytes": 24924,
+          "compiled_unit_count": 352,
+          "estimated_token_count": 3456,
+          "fixture_index_sha256": "b0423d7bf1dd685c1854043dfa9ca0f7a74abca593edb7b1305dc0a164fb6c46",
+          "logical_program_sha256": "d7df78e0af7a4cb69b139eeff851ba14e362165a6393631dfb3b1fa9c304b0f5",
+          "portable_sparse_payload_bytes": 156846,
+          "portable_sparse_payload_sha256": "ecd3578aae67b0e589e400852fbae43a0eec7caa851cfc263f4755807c828829",
+          "profile_sha256": "2d33591d4fa1da7df7a4567907f1759b6c13542297eb4cdeaed345fba6c76bc6",
+          "ranking_commitment": "b61271cec5d9ad6164d50601f6856013ba6e048b679b5779cb030ef9d1cb5859",
+          "scale_factor": 32,
+          "source_sha256": "c5379a3a91a4c764e771884faf5cac568387ce97b905ddd81a4b575bced61c73",
+          "source_utf8_bytes": 22268,
+          "synthetic_document_count": 128,
+          "synthetic_family_count": 96
+        }
+      ],
+      "runbook_sha256": "a52289b44f154f82418bc4dfbfcd8f32f697e70fca732d59e5b7bcbe809d47d6",
+      "runbook_uri": "control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md",
+      "runtime": {
+        "process_cpu_time_seconds": 0.578125,
+        "wall_time_seconds": 1.9010039
+      },
+      "scientific_authority": false,
+      "selection_accesses": 0,
+      "status": "complete",
+      "task_receipt_sha256": "730c019a0bc5dd27f5014e0938ce3f0691ebb7aa9421d2585494472d7d4a6ac5",
+      "task_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.8-compute-storage-feasibility.receipt.v1.json",
+      "validated": true
+    },
     "counters": {
       "candidate_count": 0,
       "final_accesses": 0,
       "measured_runs": 0,
       "selection_accesses": 0
     },
-    "current_phase": "A0_MIGRATION_FOUNDATION",
+    "current_phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
     "gates": [
       {
         "gate_id": "D2_OPEN_FINAL",
@@ -150,12 +331,34 @@
       "status": "complete",
       "validated": true
     },
-    "next_command": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+    "next_command": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
+    "phase_closeout": {
+      "candidate_count": 0,
+      "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
+      "completed_task_count": 10,
+      "evidence_class": "engineering_validation",
+      "final_accesses": 0,
+      "ledger_sha256": "23cb341b65f8c811e2be444cbb2fb125abe3135ed81f6168269e848c3b406586",
+      "ledger_uri": "control/armindex/a0.9-validation-safety-closeout-ledger.v1.jsonl",
+      "measured_runs": 0,
+      "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
+      "receipt_sha256": "95614c498657a41f82fae9cf8f69b042773382cd714f91814524574b534a3a05",
+      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json",
+      "runbook_sha256": "f655cd80c67ac839d78416c062a3a701d31449af25be1539d9507183bbaf737e",
+      "runbook_uri": "control/runbooks/A0_9_VALIDATION_SAFETY_CLOSEOUT.md",
+      "scientific_authority": false,
+      "selection_accesses": 0,
+      "status": "complete",
+      "validated": true,
+      "validation_audit_sha256": "4e7c09af6c186060bed36b90b5e997171bfc67b9c0d7606fb7522c7394733f1a",
+      "validation_audit_uri": "outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json",
+      "validation_check_count": 15
+    },
     "phases": [
       {
         "phase_id": "A0_MIGRATION_FOUNDATION",
         "purpose": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
-        "status": "in_progress",
+        "status": "complete",
         "tasks": [
           {
             "status": "complete",
@@ -193,12 +396,12 @@
             "title": "Model and arm declarations and license registry"
           },
           {
-            "status": "planned",
+            "status": "complete",
             "task_id": "A0.8",
             "title": "Compute and storage feasibility fixtures"
           },
           {
-            "status": "planned",
+            "status": "complete",
             "task_id": "A0.9",
             "title": "Validation, safety, and closeout"
           },
@@ -212,15 +415,15 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "locked_until_A0_closeout",
+        "status": "ready_synthetic_fixture_only",
         "tasks": [
           {
-            "status": "planned",
+            "status": "ready",
             "task_id": "A1.1",
             "title": "Adapter fixture validation"
           },
           {
-            "status": "planned",
+            "status": "locked_until_A1_1_fixture",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -308,7 +511,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "active_migration",
+    "status": "a0_complete_a1_fixture_ready",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -340,7 +543,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "active_migration",
+      "status": "a0_complete_a1_fixture_ready",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -1394,7 +1597,7 @@
   "project": {
     "active_campaign_id": "armindex-multiretriever-v2",
     "active_direction": "ArmIndex",
-    "active_phase": "A0_MIGRATION_FOUNDATION",
+    "active_phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
     "campaign_id": "scope-autoindex-v1",
     "current_phase": "P2_SCOPE_DEVELOPMENT",
     "current_task": "P2.1",
@@ -1407,7 +1610,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "projection_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1451,8 +1654,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
-  "read_model_sha256": "ead7c278c2215ed79a7102376e7b8728693167a86ba633578bfbf821cc16ad29",
+  "read_model_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
+  "read_model_sha256": "031a07f945e9bc8e93bb35511787a98e4524ce4c88702aa04b78a57cf8a90527",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

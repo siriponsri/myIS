@@ -12,7 +12,7 @@ from typing import Any, Iterable, Mapping
 import yaml
 from jsonschema import Draft202012Validator
 
-from ..constants import A0_8_NEXT_AUTHORIZED_ACTION
+from ..constants import A0_8_NEXT_AUTHORIZED_ACTION, A1_1_NEXT_AUTHORIZED_ACTION
 
 
 CAMPAIGN_ID = "armindex-multiretriever-v2"
@@ -239,11 +239,15 @@ def build_armindex_projection(root: Path) -> dict[str, Any]:
         }
         for item in config["phases"]
     ]
+    current_phase = next(
+        (item["id"] for item in config["phases"] if item.get("status") != "complete"),
+        "A6_PUBLICATION_AND_RELEASE",
+    )
     projection = {
         "schema_version": "myis.armindex-read-model.v1",
         "campaign_id": CAMPAIGN_ID,
         "status": campaign["status"],
-        "current_phase": "A0_MIGRATION_FOUNDATION",
+        "current_phase": current_phase,
         "phases": phases,
         "arms": [
             {
@@ -267,7 +271,11 @@ def build_armindex_projection(root: Path) -> dict[str, Any]:
         "gates": [{"gate_id": gate, "status": "waiting_owner"} for gate in OWNER_GATES],
         "budget": {"currency": "USD", "actual": 0.0, "hard_stop": 100.0, "migration_profile": "armindex-migration-v2"},
         "historical_campaigns": [{"campaign_id": "scope-autoindex-v1", "status": "historical_read_only", "p1_measured_evidence": "preserved_by_pointer", "p2_measured_runs": 0}],
-        "next_command": A0_8_NEXT_AUTHORIZED_ACTION,
+        "next_command": (
+            A1_1_NEXT_AUTHORIZED_ACTION
+            if config["phases"][0].get("status") == "complete"
+            else A0_8_NEXT_AUTHORIZED_ACTION
+        ),
     }
     _validate_schema(root, "read-model.v1.json", projection)
     return projection

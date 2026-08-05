@@ -28,7 +28,13 @@ from ..p2 import (
 from ..protection import assert_aggregate_only
 from ..observatory.projection import load_observatory_projection
 from ..armindex import ArmIndexContractError, build_armindex_projection
-from ..armindex.constants import A0_8_NEXT_AUTHORIZED_ACTION
+from ..armindex.constants import (
+    A0_8_NEXT_AUTHORIZED_ACTION,
+    A0_9_NEXT_AUTHORIZED_ACTION,
+    A1_1_NEXT_AUTHORIZED_ACTION,
+)
+from ..armindex.contracts import parse_contract
+from ..armindex.feasibility import validate_compute_storage_artifacts
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -153,6 +159,26 @@ A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH = Path(
 A010_SOURCE_VERIFICATION_RECEIPT_PATH = Path(
     "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"
 )
+A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
+A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
+A08_FIXTURE_MANIFEST_PATH = Path(
+    "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json"
+)
+A08_FIXTURE_RECEIPT_PATH = Path(
+    "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json"
+)
+A08_TASK_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a0.8-compute-storage-feasibility.receipt.v1.json"
+)
+A09_RUNBOOK_PATH = Path("control/runbooks/A0_9_VALIDATION_SAFETY_CLOSEOUT.md")
+A09_LEDGER_PATH = Path("control/armindex/a0.9-validation-safety-closeout-ledger.v1.jsonl")
+A09_VALIDATION_AUDIT_PATH = Path(
+    "outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json"
+)
+A09_PHASE_CLOSEOUT_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json"
+)
 
 
 def canonical_json(value: Any) -> bytes:
@@ -170,10 +196,22 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         armindex = build_armindex_projection(root)
     except ArmIndexContractError:
         armindex = _empty_armindex_projection()
+    feasibility = _a08_compute_storage_feasibility_projection(root)
+    closeout = _a09_phase_closeout_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
+        "compute_storage_feasibility": feasibility,
+        "phase_closeout": closeout,
     }
+    if closeout.get("validated") is True and closeout.get("status") == "complete":
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = A1_1_NEXT_AUTHORIZED_ACTION
+    elif feasibility.get("validated") is True and feasibility.get("status") == "complete":
+        if armindex.get("current_phase") != "A0_MIGRATION_FOUNDATION":
+            armindex["status"] = "a0_closeout_invalid_fail_closed"
+            armindex["current_phase"] = "A0_MIGRATION_FOUNDATION"
+        armindex["next_command"] = A0_9_NEXT_AUTHORIZED_ACTION
     campaign_config = _load_yaml_like(root / "control" / "campaigns" / f"{campaign_id}.yaml")
     legacy_disposition = _load_legacy_disposition(root)
     manifests = _load_manifests(root / "campaigns" / campaign_id / "manifests")
@@ -788,6 +826,354 @@ def _a010_legacy_code_harvest_projection(root: Path) -> dict[str, Any]:
         "selection_accesses": int(counters["selection_accesses"]),
         "final_accesses": int(counters["final_accesses"]),
     }
+
+
+def _a08_compute_storage_feasibility_projection(root: Path) -> dict[str, Any]:
+    """Load one receipt-bound, aggregate-safe A0.8 feasibility result."""
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "fixture_status": "not_started",
+        "evidence_class": "engineering_fixture",
+        "scientific_authority": False,
+        "claim_boundary": "synthetic_host_feasibility_only_no_production_projection",
+        "task_receipt_uri": A08_TASK_RECEIPT_PATH.as_posix(),
+        "task_receipt_sha256": None,
+        "fixture_manifest_uri": A08_FIXTURE_MANIFEST_PATH.as_posix(),
+        "fixture_manifest_sha256": None,
+        "fixture_receipt_uri": A08_FIXTURE_RECEIPT_PATH.as_posix(),
+        "fixture_receipt_sha256": None,
+        "runbook_uri": A08_RUNBOOK_PATH.as_posix(),
+        "runbook_sha256": None,
+        "ledger_uri": A08_LEDGER_PATH.as_posix(),
+        "ledger_sha256": None,
+        "profiles": [],
+        "observations": [],
+        "host": {},
+        "runtime": {},
+        "asset_observation": {},
+        "measured_runs": 0,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+        "next_authorized_action": A0_8_NEXT_AUTHORIZED_ACTION,
+    }
+    task_path = root / A08_TASK_RECEIPT_PATH
+    if not task_path.is_file():
+        return missing
+    invalid = {**missing, "status": "invalid"}
+    try:
+        task_receipt = json.loads(task_path.read_text(encoding="utf-8"))
+        manifest_path = root / A08_FIXTURE_MANIFEST_PATH
+        fixture_receipt_path = root / A08_FIXTURE_RECEIPT_PATH
+        runbook_path = root / A08_RUNBOOK_PATH
+        ledger_path = root / A08_LEDGER_PATH
+        manifest = json.loads(manifest_path.read_text(encoding="ascii"))
+        fixture_receipt = json.loads(fixture_receipt_path.read_text(encoding="ascii"))
+        if not isinstance(task_receipt, Mapping):
+            raise ValueError("A0.8 task receipt must be an object")
+        validate_compute_storage_artifacts(manifest, fixture_receipt)
+        task_unsigned = {
+            key: value for key, value in task_receipt.items() if key != "receipt_sha256"
+        }
+        if task_receipt.get("receipt_sha256") != canonical_sha256(task_unsigned):
+            raise ValueError("A0.8 task receipt self-hash is invalid")
+        expected_files = (
+            ("runbook_uri", "runbook_sha256", A08_RUNBOOK_PATH, runbook_path),
+            ("ledger_uri", "ledger_sha256", A08_LEDGER_PATH, ledger_path),
+            (
+                "fixture_manifest_uri",
+                "fixture_manifest_sha256",
+                A08_FIXTURE_MANIFEST_PATH,
+                manifest_path,
+            ),
+            (
+                "fixture_receipt_uri",
+                "fixture_receipt_sha256",
+                A08_FIXTURE_RECEIPT_PATH,
+                fixture_receipt_path,
+            ),
+        )
+        for uri_key, sha_key, expected_path, actual_path in expected_files:
+            if task_receipt.get(uri_key) != expected_path.as_posix():
+                raise ValueError(f"A0.8 task receipt path is invalid: {uri_key}")
+            if task_receipt.get(sha_key) != _file_sha256(actual_path):
+                raise ValueError(f"A0.8 task receipt commitment is invalid: {sha_key}")
+        if task_receipt.get("fixture_manifest_self_sha256") != manifest.get("manifest_sha256"):
+            raise ValueError("A0.8 manifest self-hash binding is invalid")
+        if task_receipt.get("fixture_receipt_self_sha256") != fixture_receipt.get(
+            "receipt_sha256"
+        ):
+            raise ValueError("A0.8 fixture receipt self-hash binding is invalid")
+        if (
+            task_receipt.get("schema_version")
+            != "myis.armindex-compute-storage-task-receipt.v1"
+            or task_receipt.get("campaign_id") != "armindex-multiretriever-v2"
+            or task_receipt.get("phase_id") != "A0_MIGRATION_FOUNDATION"
+            or task_receipt.get("task_id") != "A0.8"
+            or task_receipt.get("status") != "complete"
+            or task_receipt.get("fixture_status") != "passed"
+        ):
+            raise ValueError("A0.8 task receipt identity or status is invalid")
+        if (
+            task_receipt.get("scientific_authority") is not False
+            or task_receipt.get("protected_data_accessed") is not False
+            or task_receipt.get("measured_execution_performed") is not False
+        ):
+            raise ValueError("A0.8 task receipt crosses the engineering evidence boundary")
+        if task_receipt.get("next_authorized_action") != A0_9_NEXT_AUTHORIZED_ACTION:
+            raise ValueError("A0.8 next authorized action is not canonical")
+        counters = task_receipt.get("counters", {})
+        resources = task_receipt.get("resource_counters", {})
+        if not isinstance(counters, Mapping) or any(value != 0 for value in counters.values()):
+            raise ValueError("A0.8 task receipt real counters must remain zero")
+        if not isinstance(resources, Mapping) or any(value != 0 for value in resources.values()):
+            raise ValueError("A0.8 task receipt resource counters must remain zero")
+        asset = task_receipt.get("asset_observation", {})
+        if (
+            not isinstance(asset, Mapping)
+            or asset.get("asset_id") != "APP-SPARSE-FTS-INDEXES"
+            or asset.get("registry_disposition")
+            != "protected_reference_only_not_allowed_in_A0"
+            or asset.get("protected_payload_opened") is not False
+            or asset.get("source_bytes_copied") is not False
+        ):
+            raise ValueError("A0.8 App asset observation is unsafe or incomplete")
+        _validate_a08_ledger(ledger_path)
+        assert_aggregate_only(task_receipt)
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return invalid
+    return {
+        **missing,
+        "status": "complete",
+        "validated": True,
+        "fixture_status": "passed",
+        "task_receipt_sha256": _file_sha256(task_path),
+        "fixture_manifest_sha256": _file_sha256(manifest_path),
+        "fixture_receipt_sha256": _file_sha256(fixture_receipt_path),
+        "runbook_sha256": _file_sha256(runbook_path),
+        "ledger_sha256": _file_sha256(ledger_path),
+        "profiles": list(manifest["profiles"]),
+        "observations": list(fixture_receipt["observations"]),
+        "host": dict(fixture_receipt["host"]),
+        "runtime": dict(fixture_receipt["runtime"]),
+        "asset_observation": dict(task_receipt["asset_observation"]),
+        "measured_runs": int(task_receipt["counters"]["measured_runs"]),
+        "selection_accesses": int(task_receipt["counters"]["selection_accesses"]),
+        "final_accesses": int(task_receipt["counters"]["final_accesses"]),
+        "next_authorized_action": A0_9_NEXT_AUTHORIZED_ACTION,
+    }
+
+
+def _validate_a08_ledger(path: Path) -> None:
+    entries = [
+        json.loads(line)
+        for line in path.read_text(encoding="ascii").splitlines()
+        if line
+    ]
+    if len(entries) < 2:
+        raise ValueError("A0.8 execution ledger is incomplete")
+    previous = "0" * 64
+    for sequence, entry in enumerate(entries, start=1):
+        if not isinstance(entry, Mapping):
+            raise ValueError("A0.8 execution ledger entry must be an object")
+        unsigned = {key: value for key, value in entry.items() if key != "entry_sha256"}
+        if entry.get("sequence") != sequence or entry.get("previous_entry_sha256") != previous:
+            raise ValueError("A0.8 execution ledger sequence or chain is invalid")
+        if entry.get("entry_sha256") != canonical_sha256(unsigned):
+            raise ValueError("A0.8 execution ledger self-hash is invalid")
+        assert_aggregate_only(entry)
+        previous = str(entry["entry_sha256"])
+
+
+def _a09_phase_closeout_projection(root: Path) -> dict[str, Any]:
+    """Load the A0 closeout only after every receipt and safety binding validates."""
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "evidence_class": "engineering_validation",
+        "scientific_authority": False,
+        "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
+        "receipt_uri": A09_PHASE_CLOSEOUT_RECEIPT_PATH.as_posix(),
+        "receipt_sha256": None,
+        "validation_audit_uri": A09_VALIDATION_AUDIT_PATH.as_posix(),
+        "validation_audit_sha256": None,
+        "runbook_uri": A09_RUNBOOK_PATH.as_posix(),
+        "runbook_sha256": None,
+        "ledger_uri": A09_LEDGER_PATH.as_posix(),
+        "ledger_sha256": None,
+        "completed_task_count": 0,
+        "validation_check_count": 0,
+        "measured_runs": 0,
+        "candidate_count": 0,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+        "next_authorized_action": A0_9_NEXT_AUTHORIZED_ACTION,
+    }
+    receipt_path = root / A09_PHASE_CLOSEOUT_RECEIPT_PATH
+    if not receipt_path.is_file():
+        return missing
+    invalid = {**missing, "status": "invalid"}
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="ascii"))
+        audit_path = root / A09_VALIDATION_AUDIT_PATH
+        audit = json.loads(audit_path.read_text(encoding="ascii"))
+        runbook_path = root / A09_RUNBOOK_PATH
+        ledger_path = root / A09_LEDGER_PATH
+        a08_path = root / A08_TASK_RECEIPT_PATH
+        a010_path = root / A010_LEGACY_CODE_HARVEST_RECEIPT_PATH
+        campaign_path = root / "control/campaigns/armindex-multiretriever-v2.yaml"
+        program_path = root / "control/program.yaml"
+        plan_path = root / "PLAN.md"
+        if not isinstance(receipt, Mapping) or not isinstance(audit, Mapping):
+            raise ValueError("A0 closeout receipt and audit must be objects")
+        receipt_unsigned = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+        audit_unsigned = {key: value for key, value in audit.items() if key != "audit_sha256"}
+        if receipt.get("receipt_sha256") != canonical_sha256(receipt_unsigned):
+            raise ValueError("A0 closeout receipt self-hash is invalid")
+        if audit.get("audit_sha256") != canonical_sha256(audit_unsigned):
+            raise ValueError("A0.9 validation audit self-hash is invalid")
+        expected_files = (
+            ("runbook_uri", "runbook_sha256", A09_RUNBOOK_PATH, runbook_path),
+            ("ledger_uri", "ledger_sha256", A09_LEDGER_PATH, ledger_path),
+            (
+                "validation_audit_uri",
+                "validation_audit_sha256",
+                A09_VALIDATION_AUDIT_PATH,
+                audit_path,
+            ),
+            ("a08_receipt_uri", "a08_receipt_sha256", A08_TASK_RECEIPT_PATH, a08_path),
+            (
+                "a010_receipt_uri",
+                "a010_receipt_sha256",
+                A010_LEGACY_CODE_HARVEST_RECEIPT_PATH,
+                a010_path,
+            ),
+            (
+                "campaign_uri",
+                "campaign_sha256",
+                Path("control/campaigns/armindex-multiretriever-v2.yaml"),
+                campaign_path,
+            ),
+            ("program_uri", "program_sha256", Path("control/program.yaml"), program_path),
+            ("plan_uri", "plan_sha256", Path("PLAN.md"), plan_path),
+        )
+        for uri_key, sha_key, expected_path, actual_path in expected_files:
+            if receipt.get(uri_key) != expected_path.as_posix():
+                raise ValueError(f"A0 closeout path is invalid: {uri_key}")
+            if receipt.get(sha_key) != _file_sha256(actual_path):
+                raise ValueError(f"A0 closeout commitment is invalid: {sha_key}")
+        if (
+            receipt.get("schema_version") != "myis.armindex-phase-closeout-receipt.v1"
+            or receipt.get("campaign_id") != "armindex-multiretriever-v2"
+            or receipt.get("phase_id") != "A0_MIGRATION_FOUNDATION"
+            or receipt.get("task_id") != "A0.9"
+            or receipt.get("status") != "complete"
+            or receipt.get("scientific_authority") is not False
+            or receipt.get("protected_data_accessed") is not False
+            or receipt.get("measured_execution_performed") is not False
+        ):
+            raise ValueError("A0 closeout identity, status, or authority is invalid")
+        if receipt.get("next_authorized_action") != A1_1_NEXT_AUTHORIZED_ACTION:
+            raise ValueError("A0 closeout next authorized action is not canonical")
+        counters = receipt.get("counters", {})
+        resources = receipt.get("resource_counters", {})
+        if not isinstance(counters, Mapping) or any(value != 0 for value in counters.values()):
+            raise ValueError("A0 closeout counters must remain zero")
+        if not isinstance(resources, Mapping) or any(value != 0 for value in resources.values()):
+            raise ValueError("A0 closeout resource counters must remain zero")
+        expected_tasks = {f"A0.{index}" for index in range(1, 11)}
+        tasks = receipt.get("tasks", [])
+        if (
+            not isinstance(tasks, list)
+            or {str(item.get("task_id")) for item in tasks if isinstance(item, Mapping)}
+            != expected_tasks
+            or any(item.get("status") != "complete" for item in tasks if isinstance(item, Mapping))
+        ):
+            raise ValueError("A0 closeout task coverage is incomplete")
+        checks = audit.get("checks", {})
+        if (
+            audit.get("schema_version") != "myis.armindex-a0-validation-audit.v1"
+            or audit.get("status") != "PASS"
+            or audit.get("scientific_authority") is not False
+            or audit.get("protected_data_accessed") is not False
+            or audit.get("measured_execution_performed") is not False
+            or not isinstance(checks, Mapping)
+            or not checks
+            or any(
+                not isinstance(check, Mapping) or check.get("status") != "PASS"
+                for check in checks.values()
+            )
+        ):
+            raise ValueError("A0.9 validation matrix is incomplete or failed")
+        event = parse_contract(receipt.get("closeout_event", {}))
+        if (
+            event.schema_version != "myis.armindex-phase-closeout-event.v1"
+            or event.phase_id != "A0_MIGRATION_FOUNDATION"
+            or event.task_id != "A0.9"
+            or event.status != "completed"
+            or event.aggregate_receipt_sha256 != _file_sha256(audit_path)
+            or event.next_authorized_action != A1_1_NEXT_AUTHORIZED_ACTION
+        ):
+            raise ValueError("A0 typed closeout event is invalid")
+        campaign = _load_yaml_like(campaign_path)
+        program = _load_yaml_like(program_path)
+        a0_phase = next(item for item in campaign.get("phases", []) if item.get("id") == "A0_MIGRATION_FOUNDATION")
+        a1_phase = next(item for item in campaign.get("phases", []) if item.get("id") == "A1_BASELINES_AND_MULTI_ARM_SCREENING")
+        registry = program.get("active_phase_registry", {})
+        if (
+            a0_phase.get("status") != "complete"
+            or any(item.get("status") != "complete" for item in a0_phase.get("tasks", []))
+            or a1_phase.get("status") != "ready_synthetic_fixture_only"
+            or registry.get("current_phase") != "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+            or registry.get("current_task") != "A1.1"
+        ):
+            raise ValueError("A0/A1 canonical transition state is inconsistent")
+        _validate_a09_ledger(ledger_path, audit_sha256=_file_sha256(audit_path))
+        assert_aggregate_only(receipt)
+        assert_aggregate_only(audit)
+    except (OSError, UnicodeError, json.JSONDecodeError, StopIteration, TypeError, ValueError):
+        return invalid
+    return {
+        **missing,
+        "status": "complete",
+        "validated": True,
+        "receipt_sha256": _file_sha256(receipt_path),
+        "validation_audit_sha256": _file_sha256(audit_path),
+        "runbook_sha256": _file_sha256(runbook_path),
+        "ledger_sha256": _file_sha256(ledger_path),
+        "completed_task_count": len(tasks),
+        "validation_check_count": len(checks),
+        "measured_runs": int(counters["measured_runs"]),
+        "candidate_count": int(counters["candidate_count"]),
+        "selection_accesses": int(counters["selection_accesses"]),
+        "final_accesses": int(counters["final_accesses"]),
+        "next_authorized_action": A1_1_NEXT_AUTHORIZED_ACTION,
+    }
+
+
+def _validate_a09_ledger(path: Path, *, audit_sha256: str) -> None:
+    entries = [json.loads(line) for line in path.read_text(encoding="ascii").splitlines() if line]
+    if len(entries) < 2:
+        raise ValueError("A0.9 execution ledger is incomplete")
+    previous = "0" * 64
+    for sequence, entry in enumerate(entries, start=1):
+        if not isinstance(entry, Mapping):
+            raise ValueError("A0.9 execution ledger entry must be an object")
+        unsigned = {key: value for key, value in entry.items() if key != "entry_sha256"}
+        if (
+            entry.get("ledger_id") != "a0.9-validation-safety-closeout-v1"
+            or entry.get("sequence") != sequence
+            or entry.get("previous_entry_sha256") != previous
+            or entry.get("entry_sha256") != canonical_sha256(unsigned)
+        ):
+            raise ValueError("A0.9 execution ledger sequence or chain is invalid")
+        assert_aggregate_only(entry)
+        previous = str(entry["entry_sha256"])
+    final = entries[-1]
+    if final.get("status") != "complete" or final.get("validation_audit_sha256") != audit_sha256:
+        raise ValueError("A0.9 execution ledger does not close against the validation audit")
 
 
 def _presentation_screens(

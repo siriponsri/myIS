@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "content_sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -215,19 +215,181 @@
       "scientific_authority": false,
       "title": "A0.10 ThaiPha-Lex source verification receipt",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a08-compute-storage-task-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "730c019a0bc5dd27f5014e0938ce3f0691ebb7aa9421d2585494472d7d4a6ac5",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Closes A0.8 against a validated synthetic-only CPU fixture and zero real counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.8",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.8-compute-storage-feasibility.receipt.v1.json",
+      "scientific_authority": false,
+      "title": "A0.8 compute and storage task receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a08-compute-storage-fixture-manifest",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6500c576252b3cde0b29bd51218425b179f3654ba549e1debf30d946fefdbc6d",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Freezes the synthetic scale profiles, storage commitments, method, and safety boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.8",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json",
+      "scientific_authority": false,
+      "title": "A0.8 synthetic feasibility manifest",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a08-compute-storage-fixture-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Records host-observed CPU, Python allocation, and deterministic storage diagnostics without scientific authority.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.8",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "scientific_authority": false,
+      "title": "A0.8 synthetic feasibility receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a08-compute-storage-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a52289b44f154f82418bc4dfbfcd8f32f697e70fca732d59e5b7bcbe809d47d6",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Defines the bounded CPU-only scaffold, acceptance checks, and protected App asset boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.8",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md",
+      "scientific_authority": false,
+      "title": "A0.8 compute and storage runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a08-compute-storage-ledger",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "29a998b734c843dbd4df1a88d4076542181df597cddfe6571a7c364fce8ae962",
+      "evidence_class": "engineering_fixture",
+      "explanation": "Retains the hash-chained task start and fixture-run checkpoints.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.8",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl",
+      "scientific_authority": false,
+      "title": "A0.8 append-only execution ledger",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a09-phase-closeout-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "95614c498657a41f82fae9cf8f69b042773382cd714f91814524574b534a3a05",
+      "evidence_class": "engineering",
+      "explanation": "Closes every A0 task only after hash-bound validation and preserves zero measured counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.9",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json",
+      "scientific_authority": false,
+      "title": "A0 phase closeout receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a09-validation-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "4e7c09af6c186060bed36b90b5e997171bfc67b9c0d7606fb7522c7394733f1a",
+      "evidence_class": "engineering",
+      "explanation": "Records the CPU-only validation matrix and untouched protected surfaces.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.9",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json",
+      "scientific_authority": false,
+      "title": "A0.9 validation and safety audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a09-closeout-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f655cd80c67ac839d78416c062a3a701d31449af25be1539d9507183bbaf737e",
+      "evidence_class": "engineering",
+      "explanation": "Defines the fail-closed acceptance and the synthetic-only A1.1 handoff.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.9",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A0_9_VALIDATION_SAFETY_CLOSEOUT.md",
+      "scientific_authority": false,
+      "title": "A0.9 validation and closeout runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a09-closeout-ledger",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "23cb341b65f8c811e2be444cbb2fb125abe3135ed81f6168269e848c3b406586",
+      "evidence_class": "engineering",
+      "explanation": "Binds task start and completion to the validated audit through a hash chain.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A0_MIGRATION_FOUNDATION",
+      "producing_task_id": "A0.9",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a0.9-validation-safety-closeout-ledger.v1.jsonl",
+      "scientific_authority": false,
+      "title": "A0.9 append-only closeout ledger",
+      "validation_status": "validated"
     }
   ],
   "claim_boundary": "engineering_provenance_only",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A0_MIGRATION_FOUNDATION is active; ArmIndex measured runs, Selection, and Final counters remain zero.",
-    "status": "active"
+    "reason": "A0_MIGRATION_FOUNDATION is completed; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "completed"
   },
   "evidence_class": "engineering",
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -284,6 +446,51 @@
       "artifact_id": "a010-source-verification-receipt",
       "sha256": "417e9559d102dca6d34c50c771310b91a9511d143276df94e5a706fb1c2753ab",
       "uri": "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"
+    },
+    {
+      "artifact_id": "a08-compute-storage-task-receipt",
+      "sha256": "730c019a0bc5dd27f5014e0938ce3f0691ebb7aa9421d2585494472d7d4a6ac5",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a0.8-compute-storage-feasibility.receipt.v1.json"
+    },
+    {
+      "artifact_id": "a08-compute-storage-fixture-manifest",
+      "sha256": "6500c576252b3cde0b29bd51218425b179f3654ba549e1debf30d946fefdbc6d",
+      "uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json"
+    },
+    {
+      "artifact_id": "a08-compute-storage-fixture-receipt",
+      "sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json"
+    },
+    {
+      "artifact_id": "a08-compute-storage-runbook",
+      "sha256": "a52289b44f154f82418bc4dfbfcd8f32f697e70fca732d59e5b7bcbe809d47d6",
+      "uri": "control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md"
+    },
+    {
+      "artifact_id": "a08-compute-storage-ledger",
+      "sha256": "29a998b734c843dbd4df1a88d4076542181df597cddfe6571a7c364fce8ae962",
+      "uri": "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl"
+    },
+    {
+      "artifact_id": "a09-phase-closeout-receipt",
+      "sha256": "95614c498657a41f82fae9cf8f69b042773382cd714f91814524574b534a3a05",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json"
+    },
+    {
+      "artifact_id": "a09-validation-audit",
+      "sha256": "4e7c09af6c186060bed36b90b5e997171bfc67b9c0d7606fb7522c7394733f1a",
+      "uri": "outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json"
+    },
+    {
+      "artifact_id": "a09-closeout-runbook",
+      "sha256": "f655cd80c67ac839d78416c062a3a701d31449af25be1539d9507183bbaf737e",
+      "uri": "control/runbooks/A0_9_VALIDATION_SAFETY_CLOSEOUT.md"
+    },
+    {
+      "artifact_id": "a09-closeout-ledger",
+      "sha256": "23cb341b65f8c811e2be444cbb2fb125abe3135ed81f6168269e848c3b406586",
+      "uri": "control/armindex/a0.9-validation-safety-closeout-ledger.v1.jsonl"
     }
   ],
   "failure_recovery_references": [
@@ -299,7 +506,7 @@
     }
   ],
   "generated_at": "2026-08-04T15:19:53Z",
-  "generated_from_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "generated_from_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
   "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -327,7 +534,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
@@ -347,28 +554,95 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "last_material_update": "2026-08-04T15:19:53Z",
-  "metric_references": [],
-  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+  "metric_references": [
+    {
+      "cutoff": 32,
+      "denominator": "host_observed_synthetic_scale_32_documents_128",
+      "n": 11,
+      "name": "fixture_compile_latency_p50_ms",
+      "scope": "A0.8",
+      "source_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "source_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "split": "synthetic",
+      "value": 92.5391
+    },
+    {
+      "cutoff": 32,
+      "denominator": "host_observed_synthetic_scale_32_documents_128",
+      "n": 11,
+      "name": "fixture_index_build_latency_p50_ms",
+      "scope": "A0.8",
+      "source_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "source_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "split": "synthetic",
+      "value": 20.9904
+    },
+    {
+      "cutoff": 32,
+      "denominator": "host_observed_synthetic_scale_32_documents_128",
+      "n": 11,
+      "name": "fixture_search_workload_latency_p50_ms",
+      "scope": "A0.8",
+      "source_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "source_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "split": "synthetic",
+      "value": 13.7252
+    },
+    {
+      "cutoff": 32,
+      "denominator": "host_observed_synthetic_scale_32_documents_128",
+      "n": 22,
+      "name": "fixture_search_throughput_qps",
+      "scope": "A0.8",
+      "source_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "source_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "split": "synthetic",
+      "value": 143.88875
+    },
+    {
+      "cutoff": 32,
+      "denominator": "host_observed_synthetic_scale_32_documents_128",
+      "n": 11,
+      "name": "fixture_peak_python_allocation_bytes",
+      "scope": "A0.8",
+      "source_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+      "source_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+      "split": "synthetic",
+      "value": 2727977
+    },
+    {
+      "cutoff": 32,
+      "denominator": "host_observed_synthetic_scale_32_documents_128",
+      "n": 352,
+      "name": "fixture_portable_sparse_payload_bytes",
+      "scope": "A0.8",
+      "source_sha256": "6500c576252b3cde0b29bd51218425b179f3654ba549e1debf30d946fefdbc6d",
+      "source_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json",
+      "split": "synthetic",
+      "value": 156846
+    }
+  ],
+  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "72502d8f3f643333ebb0e2c24e52e234b3c2a1fcda4c669bcdd7ef68b663a7be",
+  "report_sha256": "116650271ae779326dea36c9b29f855eeeed9da608cd16e227e609ce541a2735",
   "report_type": "phase",
   "result": {
-    "decision": "active",
+    "decision": "completed",
     "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-    "result": "A0_MIGRATION_FOUNDATION is active; ArmIndex measured runs, Selection, and Final counters remain zero."
+    "result": "A0_MIGRATION_FOUNDATION is completed; ArmIndex measured runs, Selection, and Final counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A0_MIGRATION_FOUNDATION",
-    "program_state": "active_migration",
+    "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "program_state": "a0_complete_a1_fixture_ready",
     "task": null
   },
-  "status": "active",
+  "status": "completed",
   "supported_claims": [
     {
       "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
@@ -384,7 +658,16 @@
         "a010-synthetic-vertical-slice-receipt",
         "a010-repository-hygiene-audit",
         "a010-output-root-relocation-receipt",
-        "a010-source-verification-receipt"
+        "a010-source-verification-receipt",
+        "a08-compute-storage-task-receipt",
+        "a08-compute-storage-fixture-manifest",
+        "a08-compute-storage-fixture-receipt",
+        "a08-compute-storage-runbook",
+        "a08-compute-storage-ledger",
+        "a09-phase-closeout-receipt",
+        "a09-validation-audit",
+        "a09-closeout-runbook",
+        "a09-closeout-ledger"
       ]
     }
   ],

@@ -170,6 +170,8 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
     armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
     harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
+    feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
+    closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -192,6 +194,33 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "measured_runs": harvest.get("measured_runs", 0),
             "selection_accesses": harvest.get("selection_accesses", 0),
             "final_accesses": harvest.get("final_accesses", 0),
+        },
+        "armindex_compute_storage_feasibility": {
+            "status": feasibility.get("status", "not_started"),
+            "fixture_status": feasibility.get("fixture_status", "not_started"),
+            "evidence_class": feasibility.get("evidence_class", "engineering_fixture"),
+            "scientific_authority": feasibility.get("scientific_authority", False),
+            "source_receipt_uri": feasibility.get("task_receipt_uri"),
+            "source_receipt_sha256": feasibility.get("task_receipt_sha256"),
+            "fixture_manifest_sha256": feasibility.get("fixture_manifest_sha256"),
+            "fixture_receipt_sha256": feasibility.get("fixture_receipt_sha256"),
+            "profile_count": len(feasibility.get("profiles", [])),
+            "measured_runs": feasibility.get("measured_runs", 0),
+            "selection_accesses": feasibility.get("selection_accesses", 0),
+            "final_accesses": feasibility.get("final_accesses", 0),
+        },
+        "armindex_a0_phase_closeout": {
+            "status": closeout.get("status", "not_started"),
+            "evidence_class": closeout.get("evidence_class", "engineering_validation"),
+            "scientific_authority": closeout.get("scientific_authority", False),
+            "source_receipt_uri": closeout.get("receipt_uri"),
+            "source_receipt_sha256": closeout.get("receipt_sha256"),
+            "validation_audit_sha256": closeout.get("validation_audit_sha256"),
+            "completed_task_count": closeout.get("completed_task_count", 0),
+            "validation_check_count": closeout.get("validation_check_count", 0),
+            "measured_runs": closeout.get("measured_runs", 0),
+            "selection_accesses": closeout.get("selection_accesses", 0),
+            "final_accesses": closeout.get("final_accesses", 0),
         },
         "observatory": {
             "status": observatory.get("status", "not_available"),
@@ -257,23 +286,35 @@ def _a010_projection_lifecycle(
     obsidian_manifest_sha256: str,
     external_outputs: Mapping[Path, str],
 ) -> dict[str, Any]:
-    """Bind every A0.10 projection sink to one validated source receipt."""
+    """Bind every projection sink to the latest validated ArmIndex task receipt."""
 
     armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
     harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
-    source_uri = harvest.get("receipt_uri")
-    source_sha256 = harvest.get("receipt_sha256")
+    feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
+    closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
+    if closeout.get("validated") is True and closeout.get("status") == "complete":
+        source_uri = closeout.get("receipt_uri")
+        source_sha256 = closeout.get("receipt_sha256")
+        source_validated = True
+    elif feasibility.get("validated") is True and feasibility.get("status") == "complete":
+        source_uri = feasibility.get("task_receipt_uri")
+        source_sha256 = feasibility.get("task_receipt_sha256")
+        source_validated = True
+    else:
+        source_uri = harvest.get("receipt_uri")
+        source_sha256 = harvest.get("receipt_sha256")
+        source_validated = harvest.get("validated") is True
     if (
-        harvest.get("validated") is not True
+        source_validated is not True
         or not isinstance(source_uri, str)
         or not isinstance(source_sha256, str)
         or not _SHA256_RE.fullmatch(source_sha256)
     ):
-        raise ValueError("A0.10 projection lifecycle requires a validated source receipt")
+        raise ValueError("ArmIndex projection lifecycle requires a validated source receipt")
     brain_path = (root.parent / "02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md").resolve()
     paper_path = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
     if brain_path not in external_outputs or paper_path not in external_outputs:
-        raise ValueError("A0.10 external projection lifecycle is incomplete")
+        raise ValueError("ArmIndex external projection lifecycle is incomplete")
     read_model_sha256 = str(model["read_model_sha256"])
     return {
         "source_receipt_uri": source_uri,
@@ -1156,7 +1197,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             task_record = report_records.get(f"task-{task_id.lower().replace('.', '-')}")
             task_body = (
                 _structured_report_body(task_record, model)
-                if task_id == "A0.10" and task_record is not None
+                if task_id in {"A0.8", "A0.9", "A0.10"} and task_record is not None
                 else body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
             )
             outputs[VAULT_RELATIVE_PATH / "02_Tasks" / "ArmIndex" / phase_id / f"{task_id}.md"] = _note(
@@ -1912,6 +1953,7 @@ def _workflow_status(value: Any) -> str:
     mapping = {
         "planned": "ready",
         "ready": "ready",
+        "active": "in_progress",
         "complete": "complete",
         "measured": "complete",
         "blocked": "blocked",

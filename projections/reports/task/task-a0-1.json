@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "content_sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -119,7 +119,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-04T15:19:53Z",
-  "generated_from_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
+  "generated_from_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
   "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -178,7 +178,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "a8a831d260f4b2141da51e4d53cd793465a09d233f7b652fa5726ac192be5b00",
+      "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
@@ -199,11 +199,11 @@
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "last_material_update": "2026-08-04T15:19:53Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+  "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
   "objective": "Repository and evidence migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-1",
-  "report_sha256": "1aaefb11285e6505d9242db630df87673ecd29760c250c36bad49c462982e87d",
+  "report_sha256": "00f41d0af74041881a21efb557ab44cbf01384f952ac0b28a3dffebd3388de6a",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -215,8 +215,8 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A0_MIGRATION_FOUNDATION",
-    "program_state": "active_migration",
+    "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "program_state": "a0_complete_a1_fixture_ready",
     "task": "A0.1"
   },
   "status": "completed",

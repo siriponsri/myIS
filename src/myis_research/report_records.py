@@ -377,10 +377,167 @@ def _artifacts(
                         producing_phase_id="A0_MIGRATION_FOUNDATION",
                         producing_task_id="A0.10",
                     ))
+        feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
+        if (
+            task_id in {None, "A0.8"}
+            and isinstance(feasibility, Mapping)
+            and feasibility.get("validated") is True
+        ):
+            for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                (
+                    "a08-compute-storage-task-receipt",
+                    "A0.8 compute and storage task receipt",
+                    "receipt",
+                    "task_receipt_uri",
+                    "task_receipt_sha256",
+                    "Closes A0.8 against a validated synthetic-only CPU fixture and zero real counters.",
+                ),
+                (
+                    "a08-compute-storage-fixture-manifest",
+                    "A0.8 synthetic feasibility manifest",
+                    "manifest",
+                    "fixture_manifest_uri",
+                    "fixture_manifest_sha256",
+                    "Freezes the synthetic scale profiles, storage commitments, method, and safety boundary.",
+                ),
+                (
+                    "a08-compute-storage-fixture-receipt",
+                    "A0.8 synthetic feasibility receipt",
+                    "receipt",
+                    "fixture_receipt_uri",
+                    "fixture_receipt_sha256",
+                    "Records host-observed CPU, Python allocation, and deterministic storage diagnostics without scientific authority.",
+                ),
+                (
+                    "a08-compute-storage-runbook",
+                    "A0.8 compute and storage runbook",
+                    "runbook",
+                    "runbook_uri",
+                    "runbook_sha256",
+                    "Defines the bounded CPU-only scaffold, acceptance checks, and protected App asset boundary.",
+                ),
+                (
+                    "a08-compute-storage-ledger",
+                    "A0.8 append-only execution ledger",
+                    "ledger",
+                    "ledger_uri",
+                    "ledger_sha256",
+                    "Retains the hash-chained task start and fixture-run checkpoints.",
+                ),
+            ):
+                uri = feasibility.get(uri_key)
+                digest = feasibility.get(sha_key)
+                if uri and digest:
+                    result.append(_artifact(
+                        artifact_id=artifact_id,
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="engineering_fixture",
+                        scientific_authority=False,
+                        safe_uri=str(uri),
+                        content_sha256=str(digest),
+                        explanation=explanation,
+                        producing_phase_id="A0_MIGRATION_FOUNDATION",
+                        producing_task_id="A0.8",
+                    ))
+        closeout = model.get("armindex", {}).get("phase_closeout", {})
+        if (
+            task_id in {None, "A0.9"}
+            and isinstance(closeout, Mapping)
+            and closeout.get("validated") is True
+        ):
+            for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                ("a09-phase-closeout-receipt", "A0 phase closeout receipt", "receipt", "receipt_uri", "receipt_sha256", "Closes every A0 task only after hash-bound validation and preserves zero measured counters."),
+                ("a09-validation-audit", "A0.9 validation and safety audit", "audit", "validation_audit_uri", "validation_audit_sha256", "Records the CPU-only validation matrix and untouched protected surfaces."),
+                ("a09-closeout-runbook", "A0.9 validation and closeout runbook", "runbook", "runbook_uri", "runbook_sha256", "Defines the fail-closed acceptance and the synthetic-only A1.1 handoff."),
+                ("a09-closeout-ledger", "A0.9 append-only closeout ledger", "ledger", "ledger_uri", "ledger_sha256", "Binds task start and completion to the validated audit through a hash chain."),
+            ):
+                uri = closeout.get(uri_key)
+                digest = closeout.get(sha_key)
+                if uri and digest:
+                    result.append(_artifact(
+                        artifact_id=artifact_id,
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="engineering",
+                        scientific_authority=False,
+                        safe_uri=str(uri),
+                        content_sha256=str(digest),
+                        explanation=explanation,
+                        producing_phase_id="A0_MIGRATION_FOUNDATION",
+                        producing_task_id="A0.9",
+                    ))
     return result
 
 
 def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> list[dict[str, Any]]:
+    if phase_id == "A0_MIGRATION_FOUNDATION" and task_id in {None, "A0.8"}:
+        feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
+        if not isinstance(feasibility, Mapping) or feasibility.get("validated") is not True:
+            return []
+        profiles = feasibility.get("profiles", [])
+        observations = feasibility.get("observations", [])
+        if not isinstance(profiles, list) or not profiles or not isinstance(observations, list):
+            return []
+        profile = profiles[-1]
+        observation = observations[-1]
+        if not isinstance(profile, Mapping) or not isinstance(observation, Mapping):
+            return []
+        repetitions = int(observation.get("repetitions", 0))
+        denominator = (
+            f"host_observed_synthetic_scale_{profile.get('scale_factor')}_"
+            f"documents_{profile.get('synthetic_document_count')}"
+        )
+        rows = []
+        for operation in ("compile", "index_build", "search_workload"):
+            latency = observation.get("latency_ms", {}).get(operation, {})
+            rows.append({
+                "name": f"fixture_{operation}_latency_p50_ms",
+                "cutoff": profile.get("scale_factor"),
+                "split": "synthetic",
+                "scope": "A0.8",
+                "value": latency.get("p50"),
+                "n": repetitions,
+                "denominator": denominator,
+                "source_uri": feasibility.get("fixture_receipt_uri"),
+                "source_sha256": feasibility.get("fixture_receipt_sha256"),
+            })
+        rows.extend((
+            {
+                "name": "fixture_search_throughput_qps",
+                "cutoff": profile.get("scale_factor"),
+                "split": "synthetic",
+                "scope": "A0.8",
+                "value": observation.get("search_throughput_qps"),
+                "n": observation.get("search_calls"),
+                "denominator": denominator,
+                "source_uri": feasibility.get("fixture_receipt_uri"),
+                "source_sha256": feasibility.get("fixture_receipt_sha256"),
+            },
+            {
+                "name": "fixture_peak_python_allocation_bytes",
+                "cutoff": profile.get("scale_factor"),
+                "split": "synthetic",
+                "scope": "A0.8",
+                "value": observation.get("peak_python_allocation_bytes"),
+                "n": repetitions,
+                "denominator": denominator,
+                "source_uri": feasibility.get("fixture_receipt_uri"),
+                "source_sha256": feasibility.get("fixture_receipt_sha256"),
+            },
+            {
+                "name": "fixture_portable_sparse_payload_bytes",
+                "cutoff": profile.get("scale_factor"),
+                "split": "synthetic",
+                "scope": "A0.8",
+                "value": profile.get("portable_sparse_payload_bytes"),
+                "n": profile.get("compiled_unit_count"),
+                "denominator": denominator,
+                "source_uri": feasibility.get("fixture_manifest_uri"),
+                "source_sha256": feasibility.get("fixture_manifest_sha256"),
+            },
+        ))
+        return rows
     if phase_id != "P1_CPU_BASELINE":
         return []
     selected = []
@@ -464,6 +621,30 @@ def _bindings(
             bindings["source_verification_receipt"] = {
                 "uri": harvest.get("source_verification_receipt_uri"),
                 "sha256": harvest.get("source_verification_receipt_sha256"),
+            }
+        feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
+        if task_id == "A0.8" and isinstance(feasibility, Mapping):
+            bindings["compute_storage_task_receipt"] = {
+                "uri": feasibility.get("task_receipt_uri"),
+                "sha256": feasibility.get("task_receipt_sha256"),
+            }
+            bindings["compute_storage_fixture_manifest"] = {
+                "uri": feasibility.get("fixture_manifest_uri"),
+                "sha256": feasibility.get("fixture_manifest_sha256"),
+            }
+            bindings["compute_storage_fixture_receipt"] = {
+                "uri": feasibility.get("fixture_receipt_uri"),
+                "sha256": feasibility.get("fixture_receipt_sha256"),
+            }
+        closeout = model.get("armindex", {}).get("phase_closeout", {})
+        if task_id == "A0.9" and isinstance(closeout, Mapping):
+            bindings["a0_phase_closeout_receipt"] = {
+                "uri": closeout.get("receipt_uri"),
+                "sha256": closeout.get("receipt_sha256"),
+            }
+            bindings["a0_validation_audit"] = {
+                "uri": closeout.get("validation_audit_uri"),
+                "sha256": closeout.get("validation_audit_sha256"),
             }
     return bindings
 
@@ -624,6 +805,25 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         result = "The foundation records the authority and safety boundary required by later phases."
         interpretation = "Engineering controls are available; no scientific metric follows from this phase."
         decision_status = "completed"
+    elif phase_id.startswith("A") and task_id == "A0.8":
+        feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
+        fixture_status = (
+            str(feasibility.get("fixture_status", "not_started"))
+            if isinstance(feasibility, Mapping)
+            else "not_started"
+        )
+        output = "A receipt-bound synthetic CPU fixture records bounded compile, index-build, search, Python-allocation, and deterministic storage diagnostics."
+        result = f"A0.8 is {status}; synthetic feasibility status is {fixture_status}; measured ArmIndex, Selection, and Final counters remain zero."
+        interpretation = "The fixture proves that the A0.8 scaffold executes within its bounded synthetic CPU scope on the observed host. It does not estimate production bm25s capacity, retrieval quality, or dense-arm readiness."
+        decision_status = status
+    elif phase_id.startswith("A") and task_id == "A0.9":
+        closeout = model.get("armindex", {}).get("phase_closeout", {})
+        completed_tasks = int(closeout.get("completed_task_count", 0)) if isinstance(closeout, Mapping) else 0
+        validation_checks = int(closeout.get("validation_check_count", 0)) if isinstance(closeout, Mapping) else 0
+        output = f"A hash-bound phase receipt closes {completed_tasks} A0 tasks after {validation_checks} validation groups passed under the CPU-only engineering boundary."
+        result = f"A0.9 is {status}; A0 is complete; measured ArmIndex, candidate, Selection, and Final counters remain zero."
+        interpretation = "The closeout establishes repository and safety readiness for a synthetic/offline A1.1 adapter fixture scaffold. It does not authorize measured retrieval, model download, dense execution, or a scientific claim."
+        decision_status = status
     elif phase_id.startswith("A") and task_id == "A0.10":
         harvest = model.get("armindex", {}).get("legacy_code_harvest", {})
         status_label = str(harvest.get("status", "not_started")) if isinstance(harvest, Mapping) else "not_started"

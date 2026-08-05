@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: active_migration
-  evidence_class: engineering_migration
+  status: a0_complete_a1_fixture_ready
+  evidence_class: engineering_scaffolding
   scientific_authority: false
-  claim_boundary: infrastructure_migration_only
+  claim_boundary: synthetic_offline_adapter_fixture_only
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -43,7 +43,7 @@ contracts:
 phases:
   - id: A0_MIGRATION_FOUNDATION
     purpose: Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.
-    status: in_progress
+    status: complete
     measured_retrieval: false
     tasks:
       - {id: A0.1, title: Repository and evidence migration, status: complete}
@@ -53,14 +53,14 @@ phases:
       - {id: A0.5, title: "Phase, Research Flow, and Owner-gate migration", status: complete}
       - {id: A0.6, title: Scientific contracts and schemas, status: complete}
       - {id: A0.7, title: Model and arm declarations and license registry, status: complete}
-      - {id: A0.8, title: Compute and storage feasibility fixtures, status: planned}
-      - {id: A0.9, title: "Validation, safety, and closeout", status: planned}
+      - {id: A0.8, title: Compute and storage feasibility fixtures, status: complete}
+      - {id: A0.9, title: "Validation, safety, and closeout", status: complete}
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: locked_until_A0_closeout
+    status: ready_synthetic_fixture_only
     measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: planned}, {id: A1.2, title: Common multi-arm screen, status: planned}]
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: ready}, {id: A1.2, title: Common multi-arm screen, status: locked_until_A1_1_fixture}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
     status: locked_until_A1

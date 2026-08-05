@@ -1,4 +1,31 @@
 {
+  "armindex_a0_phase_closeout": {
+    "completed_task_count": 10,
+    "evidence_class": "engineering_validation",
+    "final_accesses": 0,
+    "measured_runs": 0,
+    "scientific_authority": false,
+    "selection_accesses": 0,
+    "source_receipt_sha256": "95614c498657a41f82fae9cf8f69b042773382cd714f91814524574b534a3a05",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json",
+    "status": "complete",
+    "validation_audit_sha256": "4e7c09af6c186060bed36b90b5e997171bfc67b9c0d7606fb7522c7394733f1a",
+    "validation_check_count": 15
+  },
+  "armindex_compute_storage_feasibility": {
+    "evidence_class": "engineering_fixture",
+    "final_accesses": 0,
+    "fixture_manifest_sha256": "6500c576252b3cde0b29bd51218425b179f3654ba549e1debf30d946fefdbc6d",
+    "fixture_receipt_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+    "fixture_status": "passed",
+    "measured_runs": 0,
+    "profile_count": 3,
+    "scientific_authority": false,
+    "selection_accesses": 0,
+    "source_receipt_sha256": "730c019a0bc5dd27f5014e0938ce3f0691ebb7aa9421d2585494472d7d4a6ac5",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a0.8-compute-storage-feasibility.receipt.v1.json",
+    "status": "complete"
+  },
   "armindex_legacy_code_harvest": {
     "evidence_class": "engineering",
     "final_accesses": 0,
@@ -12,7 +39,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "ead7c278c2215ed79a7102376e7b8728693167a86ba633578bfbf821cc16ad29",
+  "dashboard_snapshot_sha256": "031a07f945e9bc8e93bb35511787a98e4524ce4c88702aa04b78a57cf8a90527",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -45,7 +72,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "d3be1edc6530b7898cb22e14a007a6359cca019c90a4b43eeae472c73f53aa3b",
+  "obsidian_manifest_sha256": "f6274b541b5e23369f629951f884842d62fddca1f93c021a187e0f41ec43755b",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -83,8 +110,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "43f27b8c58a33e5b0263923cdb7ade49c323108193d3dfc8037edea1e90cef32",
-  "read_model_sha256": "ead7c278c2215ed79a7102376e7b8728693167a86ba633578bfbf821cc16ad29",
+  "read_model_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
+  "read_model_sha256": "031a07f945e9bc8e93bb35511787a98e4524ce4c88702aa04b78a57cf8a90527",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",

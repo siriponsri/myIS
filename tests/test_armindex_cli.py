@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_status_is_aggregate_safe(capsys) -> None:
     assert main(["status", "--repository-root", str(ROOT)]) == 0
     payload = yaml.safe_load(capsys.readouterr().out)
-    assert payload["current_task"] == "A0.10"
+    assert payload["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    assert payload["current_task"] == "A1.1"
     assert payload["scientific_authority"] is False
     assert payload["measured_runs"] == 0
     assert payload["selection_accesses"] == 0
@@ -43,4 +44,25 @@ def test_fixture_defaults_to_disposable_output(capsys) -> None:
     assert payload["output_persisted"] is False
     assert payload["protected_data_accessed"] is False
     assert payload["measured_execution"] is False
+    assert set(payload["real_counters"].values()) == {0}
+
+
+def test_feasibility_fixture_defaults_to_disposable_cpu_output(capsys) -> None:
+    assert main(
+        [
+            "feasibility-fixture",
+            "--repository-root",
+            str(ROOT),
+            "--repetitions",
+            "3",
+        ]
+    ) == 0
+    payload = yaml.safe_load(capsys.readouterr().out)
+    assert payload["status"] == "PASS"
+    assert payload["output_persisted"] is False
+    assert payload["protected_data_accessed"] is False
+    assert payload["measured_execution"] is False
+    assert payload["cpu_only"] is True
+    assert payload["largest_synthetic_document_count"] == 128
+    assert payload["largest_peak_python_allocation_bytes"] > 0
     assert set(payload["real_counters"].values()) == {0}

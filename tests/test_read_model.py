@@ -10,7 +10,11 @@ import pytest
 from myis_research.kernel.manifest import build_manifest
 from myis_research.kernel.manifest_validation import build_validation_report, capture_git_state
 from myis_research.kernel.canonical import canonical_sha256
-from myis_research.armindex.constants import A0_8_NEXT_AUTHORIZED_ACTION
+from myis_research.armindex.constants import (
+    A0_8_NEXT_AUTHORIZED_ACTION,
+    A0_9_NEXT_AUTHORIZED_ACTION,
+    A1_1_NEXT_AUTHORIZED_ACTION,
+)
 from myis_research.owner_local import build_receipt
 from myis_research.projections.read_model import (
     A010_LEGACY_CODE_HARVEST_LEDGER_PATH,
@@ -18,12 +22,17 @@ from myis_research.projections.read_model import (
     A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH,
     A010_REPOSITORY_HYGIENE_AUDIT_PATH,
     A010_SOURCE_VERIFICATION_RECEIPT_PATH,
+    _a08_compute_storage_feasibility_projection,
+    _a09_phase_closeout_projection,
     _a010_legacy_code_harvest_projection,
     _legacy_file_commitment_matches,
     build_read_model,
     write_read_model,
 )
 from myis_research.report_cli import validate_read_model
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_empty_campaign_read_model_is_safe(tmp_path: Path) -> None:
@@ -153,6 +162,38 @@ def test_a010_harvest_projection_is_receipt_first_and_fails_closed(tmp_path: Pat
     receipt["counters"]["measured_runs"] = 1
     receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
     assert _a010_legacy_code_harvest_projection(tmp_path)["status"] == "invalid"
+
+
+def test_a08_feasibility_projection_is_receipt_bound_and_zero_counter() -> None:
+    projection = _a08_compute_storage_feasibility_projection(ROOT)
+
+    assert projection["status"] == "complete"
+    assert projection["validated"] is True
+    assert projection["fixture_status"] == "passed"
+    assert len(projection["profiles"]) == 3
+    assert len(projection["observations"]) == 3
+    assert projection["measured_runs"] == 0
+    assert projection["selection_accesses"] == 0
+    assert projection["final_accesses"] == 0
+    assert projection["next_authorized_action"] == A0_9_NEXT_AUTHORIZED_ACTION
+
+
+def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> None:
+    projection = _a09_phase_closeout_projection(ROOT)
+
+    assert projection["status"] == "complete"
+    assert projection["validated"] is True
+    assert projection["completed_task_count"] == 10
+    assert projection["validation_check_count"] == 15
+    assert projection["measured_runs"] == 0
+    assert projection["candidate_count"] == 0
+    assert projection["selection_accesses"] == 0
+    assert projection["final_accesses"] == 0
+    assert projection["next_authorized_action"] == A1_1_NEXT_AUTHORIZED_ACTION
+
+    model = build_read_model(ROOT)
+    assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    assert model["armindex"]["next_command"] == A1_1_NEXT_AUTHORIZED_ACTION
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

@@ -139,7 +139,7 @@ does not start MLflow automatically.
 
 - Repository infrastructure was migrated in place on the existing Git history.
 - Historical measured P1 R0/R0-W evidence is preserved without reinterpretation.
-- The active ArmIndex campaign is at `A0_MIGRATION_FOUNDATION`; Task `A0.10` legacy-code harvest and phase-ready scaffolding is complete, and A0.8/A0.9 remain planned.
+- Every Task in `A0_MIGRATION_FOUNDATION` is complete; the active ArmIndex campaign is ready only for synthetic/offline Task `A1.1` adapter-fixture scaffolding.
 - ArmIndex measured runs, Selection exposures, and Final exposures are zero.
 - Final-872 is closed; `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` remain the only Owner gates.
 - Production and benchmark validation are pending.

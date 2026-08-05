@@ -1,0 +1,67 @@
+{
+  "schema_version": "myis.armindex-compute-storage-task-receipt.v1",
+  "receipt_id": "a0.8-compute-storage-feasibility-v1",
+  "campaign_id": "armindex-multiretriever-v2",
+  "phase_id": "A0_MIGRATION_FOUNDATION",
+  "task_id": "A0.8",
+  "status": "complete",
+  "completed_at_utc": "2026-08-05T10:35:47Z",
+  "evidence_class": "engineering_fixture",
+  "scientific_authority": false,
+  "claim_boundary": "synthetic_host_feasibility_only_no_production_projection",
+  "protected_data_accessed": false,
+  "measured_execution_performed": false,
+  "runbook_uri": "control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md",
+  "runbook_sha256": "a52289b44f154f82418bc4dfbfcd8f32f697e70fca732d59e5b7bcbe809d47d6",
+  "ledger_uri": "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl",
+  "ledger_sha256": "29a998b734c843dbd4df1a88d4076542181df597cddfe6571a7c364fce8ae962",
+  "fixture_status": "passed",
+  "fixture_manifest_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json",
+  "fixture_manifest_sha256": "6500c576252b3cde0b29bd51218425b179f3654ba549e1debf30d946fefdbc6d",
+  "fixture_manifest_self_sha256": "f61e2b8c506a880c134b5f5d35570211207a768e4c9902a83253ceaa01444b61",
+  "fixture_receipt_uri": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+  "fixture_receipt_sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+  "fixture_receipt_self_sha256": "74ddd625eb2ffd14c7b8285f49a148b3aaa73cd25b4a865fb5f97a6c3d64ed92",
+  "asset_observation": {
+    "asset_id": "APP-SPARSE-FTS-INDEXES",
+    "registry_disposition": "protected_reference_only_not_allowed_in_A0",
+    "app_data_root_present": true,
+    "top_level_directory_count": 4,
+    "top_level_regular_file_count": 1,
+    "top_level_regular_file_bytes": 34960,
+    "protected_payload_opened": false,
+    "source_bytes_copied": false,
+    "used_by_fixture": false,
+    "next_eligible_phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+  },
+  "checks": {
+    "asset_registry_quick_validation": "PASS",
+    "focused_pytest": {"status": "PASS", "passed": 26},
+    "scoped_ruff": "PASS",
+    "fixture_artifact_validation": "PASS",
+    "dense_arms_fail_closed": "PASS"
+  },
+  "counters": {
+    "measured_runs": 0,
+    "candidate_count": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "resource_counters": {
+    "charged_usd": 0,
+    "gpu_scientific_runs": 0,
+    "paid_api_calls": 0,
+    "model_downloads": 0,
+    "model_weight_modifications": 0
+  },
+  "projection_events": [
+    "mlflow_safe_mirror",
+    "read_model_rebuild",
+    "brain_projection",
+    "obsidian_report",
+    "dashboard_projection",
+    "paper_readiness"
+  ],
+  "next_authorized_action": "/goal Execute A0.9_VALIDATION_SAFETY_AND_CLOSEOUT from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Validate the synthetic-only A0 migration, close A0 if all gates pass, and keep A1 locked until that closeout receipt is complete. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final.",
+  "receipt_sha256": "7c42f835b131d6539e50f66f0ac727575c44cfa641b1ad2855836335f46b2fce"
+}
