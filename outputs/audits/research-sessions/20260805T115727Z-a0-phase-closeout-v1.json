@@ -1,0 +1,154 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260805T115727Z-a0-phase-closeout-v1",
+  "run_id": null,
+  "goal_id": "019fcefe-6705-7971-aed4-6d64d9341850",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-05T11:57:27Z",
+  "scope": "Complete the synthetic CPU A0.8 fixture, close A0.9 validation and safety, close every A0 task, synchronize governed projections, and prepare the auditable A0 phase closeout without opening measured retrieval, Selection, or Final.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "standing campaign authorization recorded in control/decisions/D1_START_CAMPAIGN.yaml",
+      "scope": "Standing campaign authorization within the CPU-local, aggregate-safe boundary; D2_OPEN_FINAL and D3_SUBMIT_RELEASE remain closed."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "ab3483b5275d61e7cb83a69c34eba393c878a2c4",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260805T115727Z-a0-phase-closeout-v1.json",
+      "projections/sessions/20260805T115727Z-a0-phase-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner directed completion of the active goal and closure of every A0 task, explicitly including A0.9, and authorized immediate commit and push after successful closeout.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "A0.8 completed a bounded synthetic CPU compute and storage feasibility fixture with status PASS while measured, candidate, Selection, and Final counters remained zero.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/armindex/a0.8/compute-storage-v1/receipt.json",
+          "sha256": "a8034adc381a4545182114486ea2fd2c18155fca31cf2a201e75c023364155cf",
+          "locator": "status, aggregate_counts, observations, real_counters, resource_counters, safety, and receipt_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The hash-bound A0 phase receipt marks A0.1 through A0.10 complete, including A0.9, with engineering-validation evidence only and all measured, candidate, Selection, and Final counters at zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json",
+          "sha256": "95614c498657a41f82fae9cf8f69b042773382cd714f91814524574b534a3a05",
+          "locator": "status, evidence_class, scientific_authority, tasks, checks, counters, resource_counters, closeout_event, and receipt_sha256"
+        },
+        {
+          "path": "outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json",
+          "sha256": "4e7c09af6c186060bed36b90b5e997171bfc67b9c0d7606fb7522c7394733f1a",
+          "locator": "status, checks, safety, counters, resource_counters, post_receipt_requirements, and audit_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Two deterministic report sync and check cycles were byte-stable and bound one validated read model to the A0 closeout receipt and all governed projection sinks.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "1396193b95ba954bf05a8a194a788e1d0734060cc1a08bef338380eced9f2a4f",
+          "locator": "status, source_commit, read_model_revision, source_receipt_uri, source_receipt_sha256, mlflow_run_id, and projection_events"
+        },
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "e447f61e2d95a8da4aa6065f55163e8d0b43c67b1bc3dde48e87f295ab85d31a",
+          "locator": "revision, armindex phase closeout, task status, counters, projection health, and next command"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Final repository checks and a detached clean-worktree regression passed after the projection-only commit; the required pointer-only Brain closeout note was committed under a validated writer lease.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "174f051429d2d13a22ee35f8003034f8b2dedd96c443abcd1c6534d952a04662",
+          "locator": "Done; final post-closeout verification and Brain pointer-note summary"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The current phase is A1_BASELINES_AND_MULTI_ARM_SCREENING and only the synthetic, offline CPU A1.1 adapter-fixture scaffold is authorized next; measured retrieval, model download, dense execution, A1.2, Selection, and Final remain closed.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "f8827ebd7e8a262e480796ef6f20877c82482238b07e94ad8c01ddc8d8bebbbc",
+          "locator": "Active campaign, Active phases, A0 task map, Safety boundary, and Next authorized action"
+        },
+        {
+          "path": "HANDOFF.md",
+          "sha256": "174f051429d2d13a22ee35f8003034f8b2dedd96c443abcd1c6534d952a04662",
+          "locator": "Current state, Boundaries, and Active authorized action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": "PLAN.md",
+    "progress": "HANDOFF.md",
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json",
+    "manifest": "outputs/fixtures/armindex/a0.8/compute-storage-v1/manifest.json",
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "a1-1-synthetic-adapter-fixture",
+      "provenance": "agent-observed",
+      "summary": "Begin only the synthetic and offline CPU A1.1 adapter-fixture scaffold under a separate goal; measured screening remains closed.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "external-release-license-decision",
+      "provenance": "agent-observed",
+      "summary": "The root software license requires an Owner legal decision before external release; this does not block the completed A0 engineering closeout.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
