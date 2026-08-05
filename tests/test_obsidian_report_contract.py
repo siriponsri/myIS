@@ -186,8 +186,15 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         / "02_Tasks/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2.md"
     ]
     assert "A1.2 closeout validation audit" in a12_report
-    assert "passed `15` validation groups" in a12_report
-    assert "`5` bounded failure/recovery records" in a12_report
+    assert "passed `16` validation groups" in a12_report
+    assert "`6` bounded failure/recovery records" in a12_report
+
+    sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
+    assert sync_receipt["source_receipt_uri"].endswith("a1.2-contract-scaffold.receipt.v1.json")
+    mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
+    assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
+        "a1_2_contract_scaffold_complete_launch_locked"
+    )
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",

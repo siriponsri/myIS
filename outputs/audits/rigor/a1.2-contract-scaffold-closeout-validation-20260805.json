@@ -8,7 +8,7 @@
   "evidence_class": "engineering_validation",
   "scientific_authority": false,
   "claim_boundary": "offline_scaffold_and_synthetic_arm01_cpu_validation_only_no_measured_retrieval_claim",
-  "check_count": 15,
+  "check_count": 16,
   "check_groups": [
     {"check_id": "a1_2_scaffold_validation", "status": "PASS", "observed_count": 16, "unit": "hash_bound_scaffold_files"},
     {"check_id": "arm01_bm25s_rank_parity", "status": "PASS", "observed_count": 7, "unit": "focused_tests"},
@@ -24,6 +24,7 @@
     {"check_id": "scoped_ruff_correctness", "status": "PASS", "observed_count": 4, "unit": "rule_families", "rules": ["E4", "E7", "E9", "F"]},
     {"check_id": "brain_literature_validation", "status": "PASS", "observed_count": 154, "unit": "unique_literature_notes"},
     {"check_id": "clean_checkout_byte_policy", "status": "PASS", "observed_count": 9, "unit": "representative_hash_bound_paths"},
+    {"check_id": "latest_validated_projection_source", "status": "PASS", "observed_count": 2, "unit": "sync_and_mlflow_projection_bindings"},
     {"check_id": "git_diff_check", "status": "PASS", "observed_count": 1, "unit": "repository_worktree"}
   ],
   "failures_and_recoveries": [
@@ -66,6 +67,14 @@
       "failure_summary": "The first closeout-audit report integration reopened the audit from the filesystem and failed in a temporary projection checkout.",
       "recovery_summary": "Failure and recovery records now flow through the one validated read-model object shared by every projection writer.",
       "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-stale-projection-source-receipt-20260805",
+      "recovery_id": "a1.2-latest-validated-source-selector-20260805",
+      "status": "repaired_and_validated",
+      "failure_summary": "The first post-commit sync receipt still selected the completed A1.1 adapter receipt as its latest ArmIndex source.",
+      "recovery_summary": "The sync receipt and MLflow archive now bind the validated A1.2 scaffold receipt and closeout audit while keeping launch and measured execution false.",
+      "counters_changed": false
     }
   ],
   "safety": {
@@ -82,5 +91,5 @@
   "resource_counters": {"charged_usd": 0, "gpu_scientific_runs": 0, "paid_api_calls": 0, "model_downloads": 0, "provider_switches": 0},
   "untouched_surfaces": ["owner_local_protected_store", "final_split", "qrels", "membership", "query_ids", "per_query_outcomes", "credentials", "raw_provider_payloads"],
   "post_audit_obligations": ["deterministic_report_sync_twice", "report_drift_check", "research_session_capsule", "scoped_brain_commit_and_lease_release", "research_commit_and_push", "remote_state_verification"],
-  "audit_sha256": "9ec228853bd8c51853974905d97a0c4d6c022f46f8e81e31f98c81ed7d29ea4a"
+  "audit_sha256": "dd798c013c13eba79356865071accdb63ba2f84d2d7d307620d9befd4c0c36f6"
 }

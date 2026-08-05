@@ -173,6 +173,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
     closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
     adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
+    scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -240,6 +241,19 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "measured_runs": adapter.get("measured_runs", 0),
             "selection_accesses": adapter.get("selection_accesses", 0),
             "final_accesses": adapter.get("final_accesses", 0),
+        },
+        "armindex_a1_2_contract_scaffold": {
+            "status": scaffold.get("status", "not_started"),
+            "evidence_class": scaffold.get("evidence_class", "engineering_contract_scaffold"),
+            "scientific_authority": scaffold.get("scientific_authority", False),
+            "source_receipt_uri": scaffold.get("receipt_uri"),
+            "source_receipt_sha256": scaffold.get("receipt_sha256"),
+            "closeout_validation_audit_sha256": scaffold.get("closeout_validation_audit_sha256"),
+            "model_lock_count": scaffold.get("model_lock_count", 0),
+            "launch_ready": scaffold.get("launch_ready", False),
+            "measured_execution": scaffold.get("measured_execution", False),
+            "real_counters": scaffold.get("real_counters", {}),
+            "resource_counters": scaffold.get("resource_counters", {}),
         },
         "observatory": {
             "status": observatory.get("status", "not_available"),
@@ -312,7 +326,16 @@ def _a010_projection_lifecycle(
     feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
     closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
     adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
-    if adapter.get("validated") is True and adapter.get("status") == "complete":
+    scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
+    if (
+        scaffold.get("validated") is True
+        and scaffold.get("status") == "a1_2_contract_scaffold_complete_launch_locked"
+    ):
+        source_uri = scaffold.get("receipt_uri")
+        source_sha256 = scaffold.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif adapter.get("validated") is True and adapter.get("status") == "complete":
         source_uri = adapter.get("task_receipt_uri")
         source_sha256 = adapter.get("task_receipt_sha256")
         source_validated = True
