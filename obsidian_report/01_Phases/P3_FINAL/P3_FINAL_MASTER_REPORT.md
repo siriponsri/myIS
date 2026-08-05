@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40"
-read_model_sha256: "004c227ac9746c898d9856ed45f0d64a6989baf53be16e84cfc582b9de477cf5"
-source_commit: "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e"
+read_model_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
+read_model_sha256: "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a"
+source_commit: "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40"
-last_material_update: "2026-08-05T15:46:35Z"
+generated_from_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
+last_material_update: "2026-08-05T15:56:15Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-05T15:46:35Z"
-updated_at: "2026-08-05T15:46:35Z"
+created_at: "2026-08-05T15:56:15Z"
+updated_at: "2026-08-05T15:56:15Z"
 note_id: "P3_FINAL-MASTER"
 note_type: "phase_report"
 phase_id: "P3_FINAL"
@@ -48,7 +48,7 @@ Deliver the P3_FINAL research phase with an auditable evidence boundary.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e
+- `git_commit`: 1149f9e63ac6174a3ce4bc5a553d793b7d707b0b
 
 ## Work Performed
 

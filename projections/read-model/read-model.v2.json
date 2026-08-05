@@ -45,9 +45,9 @@
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
       "claim_boundary": "offline_scaffold_only_no_measured_retrieval_claim",
-      "closeout_validation_audit_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "closeout_validation_audit_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
-      "closeout_validation_check_count": 16,
+      "closeout_validation_check_count": 17,
       "closeout_validation_recoveries": [
         {
           "counters_changed": false,
@@ -96,9 +96,17 @@
           "recovery_id": "a1.2-latest-validated-source-selector-20260805",
           "recovery_summary": "The sync receipt and MLflow archive now bind the validated A1.2 scaffold receipt and closeout audit while keeping launch and measured execution false.",
           "status": "repaired_and_validated"
+        },
+        {
+          "counters_changed": false,
+          "failure_id": "a1.2-volatile-mlflow-archive-counts-in-audit-20260805",
+          "failure_summary": "The first immutable closeout audit copied additive MLflow archive counts that increased during later deterministic report syncs.",
+          "recovery_id": "a1.2-stable-mlflow-doctor-audit-contract-20260805",
+          "recovery_summary": "The audit now records the stable doctor check result without freezing volatile archive counts; append-only MLflow receipts remain authoritative in the external store.",
+          "status": "repaired_and_validated"
         }
       ],
-      "closeout_validation_recovery_count": 6,
+      "closeout_validation_recovery_count": 7,
       "dense_artifact_manifests_pending": 4,
       "evidence_class": "engineering_contract_scaffold",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
@@ -1006,7 +1014,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-05T15:46:35Z",
+  "generated_at": "2026-08-05T15:56:15Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -1914,7 +1922,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
+  "projection_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1958,8 +1966,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
-  "read_model_sha256": "004c227ac9746c898d9856ed45f0d64a6989baf53be16e84cfc582b9de477cf5",
+  "read_model_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "read_model_sha256": "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2092,7 +2100,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+  "source_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "tasks": [
     {
       "evidence_ids": [],

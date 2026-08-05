@@ -311,7 +311,7 @@
       "artifact_type": "audit",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "content_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "evidence_class": "engineering_contract_scaffold",
       "explanation": "Records the aggregate-safe validation matrix, recovered infrastructure failures, zero scientific counters, and untouched protected surfaces.",
       "parent_artifact_hashes": {},
@@ -420,7 +420,7 @@
     },
     {
       "artifact_id": "a12-closeout-validation-audit",
-      "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
     }
   ],
@@ -428,67 +428,77 @@
     {
       "counters_changed": false,
       "failure_id": "a1.2-unsynced-console-entrypoint-20260805",
-      "failure_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "recovery_id": "a1.2-module-cli-validation-20260805",
-      "recovery_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "repaired_and_validated"
     },
     {
       "counters_changed": false,
       "failure_id": "a1.2-mlflow-v2-experiment-missing-20260805",
-      "failure_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "recovery_id": "a1.2-zero-data-mlflow-bootstrap-20260805",
-      "recovery_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "repaired_and_validated"
     },
     {
       "counters_changed": false,
       "failure_id": "a1.2-full-suite-runner-timeout-20260805",
-      "failure_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "recovery_id": "a1.2-full-suite-extended-timeout-pass-20260805",
-      "recovery_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "repaired_and_validated"
     },
     {
       "counters_changed": false,
       "failure_id": "a1.2-extended-style-profile-debt-20260805",
-      "failure_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "recovery_id": "a1.2-scoped-correctness-ruff-pass-20260805",
-      "recovery_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "bounded_and_validated"
     },
     {
       "counters_changed": false,
       "failure_id": "a1.2-report-builder-second-source-read-20260805",
-      "failure_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "recovery_id": "a1.2-single-read-model-recovery-projection-20260805",
-      "recovery_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "repaired_and_validated"
     },
     {
       "counters_changed": false,
       "failure_id": "a1.2-stale-projection-source-receipt-20260805",
-      "failure_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "recovery_id": "a1.2-latest-validated-source-selector-20260805",
-      "recovery_sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
+      "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-volatile-mlflow-archive-counts-in-audit-20260805",
+      "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
+      "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "recovery_id": "a1.2-stable-mlflow-doctor-audit-contract-20260805",
+      "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-05T15:46:35Z",
-  "generated_from_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
-  "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+  "generated_at": "2026-08-05T15:56:15Z",
+  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -527,9 +537,9 @@
       "uri": "control/budgets/a1.2-common-screen-v1.json"
     },
     "a12_closeout_validation_audit": {
-      "check_count": 16,
-      "recovery_count": 6,
-      "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+      "check_count": 17,
+      "recovery_count": 7,
+      "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
     },
     "a12_execution_contract": {
@@ -563,7 +573,7 @@
       "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+    "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -580,7 +590,7 @@
   },
   "interpretation": "A1 now has a reproducible CPU anchor and a bounded pre-GPU contract. Scientific completion still requires Owner-local artifact validation, explicit adoption, and the separately authorized common screen.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:46:35Z",
+  "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -675,7 +685,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "2e3d7586a6f5c5c4914f498b80ff36a367a3f877a51bd0a278fd9a2631200189",
+  "report_sha256": "bf5235a585f8de191b96720a6b19f0698d73feaf266bcb6dfb89410e51a772fa",
   "report_type": "phase",
   "result": {
     "decision": "active",

@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T15:46:35Z",
-  "generated_from_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
-  "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+  "generated_at": "2026-08-05T15:56:15Z",
+  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+    "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
     "source_of_truth": {
       "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:46:35Z",
+  "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [],
   "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "92d8e17f56e7be11f0eb6db9df49dfd29ee03bff33b085c8c1da347e8f62f090",
+  "report_sha256": "21b087935531dff6dd47363788e3f47366bdcfcb10bedeffa5d0cc4b5c70ee53",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

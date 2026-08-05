@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-05T15:46:35Z",
-  "generated_from_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
-  "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+  "generated_at": "2026-08-05T15:56:15Z",
+  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+    "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:46:35Z",
+  "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [],
   "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "bc0d408bf13c2d3c22430851644ae385b51f0f0abfd00387205f0ba89a8c947e",
+  "report_sha256": "ba618f1a41c946aafcb9565bb445bf81d41995b40256830d71281a9b648fb45c",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

@@ -4,13 +4,13 @@
       "managed_by": "myis-report",
       "note_id": "ARM-INDEX-HOME",
       "relative_path": "00_Home/ARM_INDEX_HOME.md",
-      "sha256": "f37a10c31c655f59d7e1bd4a9cecaf9ad18bc85656dce1dd7c5b34e35b550b8a"
+      "sha256": "7e261b537298f24fda2b3bfa9f726aae05910aeae3a53470d7cebe2dfe3bd00d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "ARM-INDEX-MOC",
       "relative_path": "00_Home/MOC.md",
-      "sha256": "a778e3b888da4fb3eaceaff3c55a567928a68667502df460bebe4bd9836126f8"
+      "sha256": "03a770d3f997ec292c6f86373697db4aa7245e78e3d7d3091fe7fd5c1148fba5"
     },
     {
       "managed_by": "myis-report",
@@ -22,7 +22,7 @@
       "managed_by": "myis-report",
       "note_id": "REPORT-INDEX",
       "relative_path": "00_System/Generated/REPORT_INDEX.md",
-      "sha256": "6f0740cc7e8b12612549ee0f7a1d9d15ca49b511c581776c182f2c6b8b9a08f1"
+      "sha256": "c4665900618ac8abf0361593bd68a3a81bfd86754ec40e7047ed7414d36108a6"
     },
     {
       "managed_by": "myis-report",
@@ -34,1333 +34,1333 @@
       "managed_by": "myis-report",
       "note_id": "A0_MIGRATION_FOUNDATION-MASTER",
       "relative_path": "01_Phases/ArmIndex/A0_MIGRATION_FOUNDATION/A0_MIGRATION_FOUNDATION_REPORT.md",
-      "sha256": "f67e603966fdcfcde51de06621db3a89f6f49d4bb80310d0c13e0700269a9629"
+      "sha256": "fc8cb604f70291b415d2cf784c8c32141faba89888e610bf5742c40e59c6b1cf"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER",
       "relative_path": "01_Phases/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1_BASELINES_AND_MULTI_ARM_SCREENING_REPORT.md",
-      "sha256": "d4a26746e61c6605fc3a71155be33e2f9e7e386dbb29087cecff96328c7e244e"
+      "sha256": "f7e58f0ba4048645c0a2b3326da8d4beaa759360a379dd1ce13124060404589b"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A2_PER_ARM_AUTOINDEX-MASTER",
       "relative_path": "01_Phases/ArmIndex/A2_PER_ARM_AUTOINDEX/A2_PER_ARM_AUTOINDEX_REPORT.md",
-      "sha256": "5139c81236fcff4d5d44685dd660db6d4e25a2ed82181a2db61314771d166f70"
+      "sha256": "42973ec67824dfce79a8d0ef5b111892e88e88e64f4a972f750cb90219b4593e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT-MASTER",
       "relative_path": "01_Phases/ArmIndex/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_REPORT.md",
-      "sha256": "4496c8f9bc9c5f7792ba4ab9ece20a922a91fcecfaf521ebc9a222e8ed493559"
+      "sha256": "7faf3ecde87900b5c50a9e17a3ef00f5b25e3accd12b4b2a207cb7f224d38910"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION-MASTER",
       "relative_path": "01_Phases/ArmIndex/A4_PRODUCTION_TRANSFER_AND_SELECTION/A4_PRODUCTION_TRANSFER_AND_SELECTION_REPORT.md",
-      "sha256": "fcabfbb1aa67e713ff88ac1955ab07d2a56835af0024f631fc95a0cdec62d168"
+      "sha256": "b61d6842cea4a63a16c44d2f8be3b497da0788ea7b1319c7a07ecdcd59a1f381"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A5_FINAL_CONFIRMATION-MASTER",
       "relative_path": "01_Phases/ArmIndex/A5_FINAL_CONFIRMATION/A5_FINAL_CONFIRMATION_REPORT.md",
-      "sha256": "fe7f4cdd56025b858e79748d0e03c764ba4deae361c55fdc88762423dbcbe895"
+      "sha256": "0330721dc006649ec9fa52ddbace500142ba0d953bb807ce92cd6d4c40f59bde"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A6_PUBLICATION_AND_RELEASE-MASTER",
       "relative_path": "01_Phases/ArmIndex/A6_PUBLICATION_AND_RELEASE/A6_PUBLICATION_AND_RELEASE_REPORT.md",
-      "sha256": "3f3059c393da5af651eed587f519d271645b343acdacca1f6d79437338bafc8d"
+      "sha256": "99c0ab0a053cd76436b8dcb157c65f0692f0c1ef57fd81ff8b1e9f1f716fdd97"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P0_FOUNDATION-MASTER",
       "relative_path": "01_Phases/P0_FOUNDATION/P0_FOUNDATION_MASTER_REPORT.md",
-      "sha256": "698902b729d1a2dcf05e216c48a77556c32ed44475c26498dda1eac04a8b89ea"
+      "sha256": "0f3f1134e79cf4c310e5b356f1641407eef0321bc5f700ddb4308ff32734c090"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P0.1",
       "relative_path": "01_Phases/P0_FOUNDATION/Tasks/P0.1.md",
-      "sha256": "008e5aa227c8e7dbfad526b068f862ff19a47e3f89715f6e0d3b7c861a75dfd3"
+      "sha256": "9518a88f8dc052f3f41c9013a0d37fb5e4a62453519ed8f1318dc0734632ae91"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P0.2",
       "relative_path": "01_Phases/P0_FOUNDATION/Tasks/P0.2.md",
-      "sha256": "d67775fcd47ed36139dee1498d50801bd1b88dcb8323a726c50a37cfaec03817"
+      "sha256": "57a6c8a161a7162dc365abf57fedd1750a1f95612b7b2fec13be5d84ccc32821"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P0.3",
       "relative_path": "01_Phases/P0_FOUNDATION/Tasks/P0.3.md",
-      "sha256": "f13d2ebce63b2a42208f8a3546aebbbf29cf3b4090ae50fd0a9deebbc4f95cf3"
+      "sha256": "6e363a599ee94d733fdad4eecda16b03628d79a4dd2542e701fbc708f28e0d20"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P1_CPU_BASELINE-MASTER",
       "relative_path": "01_Phases/P1_CPU_BASELINE/P1_CPU_BASELINE_MASTER_REPORT.md",
-      "sha256": "c48e638e0f19084939a1c987c8de491fd32cfdb50d6e119d338fea95b18c7d51"
+      "sha256": "d4896525cba4caca04b900c20ba1f3ca440bc65249a52c474ca5440d7cb66614"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P1.1",
       "relative_path": "01_Phases/P1_CPU_BASELINE/Tasks/P1.1.md",
-      "sha256": "bcef26958a60d9e3572d448db4f729c03170c5d53e58445f7a5f227d5d4f398f"
+      "sha256": "b5eff40cf3b67f6f53e3c6a97222e38595f1a9061c7c46af2302317893538baf"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P1.2",
       "relative_path": "01_Phases/P1_CPU_BASELINE/Tasks/P1.2.md",
-      "sha256": "afa6445184d014e9c69bef5b27053c37bdf0caf9d95bb51bc5854120fbf485b6"
+      "sha256": "ba8dfc2dad0d97a9340b215f182455ee79ad95b5b460d9be22c7d840fc3658b7"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P1.3",
       "relative_path": "01_Phases/P1_CPU_BASELINE/Tasks/P1.3.md",
-      "sha256": "f1f6224268591a9e0bc8903dace7612a63b0c9bd39b19aa64de891e8cad2c579"
+      "sha256": "49cf5edd92b9aebb8c8dc0e56fde4e6ebfdf12947807c3b2a1d812ca91ab5b72"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2_SCOPE_DEVELOPMENT-MASTER",
       "relative_path": "01_Phases/P2_SCOPE_DEVELOPMENT/P2_SCOPE_DEVELOPMENT_MASTER_REPORT.md",
-      "sha256": "dbd95d3ea6a75425d7f59a74a1176907f04fc9c870597975ba6638b74c9517b8"
+      "sha256": "ac021a62bc6d35da31b127607e024543e0dcadba3ae51c0f1ae842a315ea7897"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2.1",
       "relative_path": "01_Phases/P2_SCOPE_DEVELOPMENT/Tasks/P2.1.md",
-      "sha256": "5864690fb97dbd17c152f629f7a20f6cd0f11dc086e52d11c2ec8e669c219efd"
+      "sha256": "1d6933dc8c24b8102829fa4247dd14af9df689fb8807f51195761dc6cfda67ed"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P3_FINAL-MASTER",
       "relative_path": "01_Phases/P3_FINAL/P3_FINAL_MASTER_REPORT.md",
-      "sha256": "57e9c55c55f17c7696a04b52217ba64358c048ae2df92bc9780d2d368288919d"
+      "sha256": "22cac71115357ea9f1eedc2bbdd7bca3df2ec1525684d83c4788a5c7ba050728"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P3.1",
       "relative_path": "01_Phases/P3_FINAL/Tasks/P3.1.md",
-      "sha256": "f9f5156d817f0bd98046037e3bcdba54d1d00a308ccbbe574b5a19f75a7baf13"
+      "sha256": "ad821e4a45cdc51b95020b86e2549bf0e287ea9b7ef7e3923aecaae0c680d91e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P4_PUBLICATION-MASTER",
       "relative_path": "01_Phases/P4_PUBLICATION/P4_PUBLICATION_MASTER_REPORT.md",
-      "sha256": "c9db54443e3c9bc0db6b5534c69a1dfd5232cc667a555d2c0f81ef2a08b69e0e"
+      "sha256": "120121c2dc0472a517f65170d91072af0093c48c97be8e3fd42d324156dcc8d2"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P4.1",
       "relative_path": "01_Phases/P4_PUBLICATION/Tasks/P4.1.md",
-      "sha256": "bb79ade7c637bd87e48bb483baf72677beb0e4853a697fb862747a300efe1eb3"
+      "sha256": "014a7bdc753fda7ae8016dba8d316a0ef7a495b7cfed6cb32d1ff7e40be69f3b"
     },
     {
       "managed_by": "myis-report",
       "note_id": "CURRENT-ADVISOR-UPDATE",
       "relative_path": "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md",
-      "sha256": "a3df6355866266e982edeec03e9e8f8606a1e39c8f3afdbd18a6b25545904610"
+      "sha256": "c064a9d5486341ca0717d4e175eb0f73e70bf81d2841662d091e2fb9933a3d3a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.1",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.1.md",
-      "sha256": "62d5e0a05df9cf4dc01e67df7e931c2e736f35067f2916bd312659e976640659"
+      "sha256": "519e378d3068559dbba6c11586c286d98eb466abc416aa1f5c7b6b9d99724c2d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.10",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.10.md",
-      "sha256": "05424b1ddb63891d3b6af315786ec6eeeb5c5c0f3fba263a4bb4012ee0faee1b"
+      "sha256": "d33fc646cee1ee22228ffa30b2bdcacfc05df17a3239d9fe7118110a01ebcefe"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.2",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.2.md",
-      "sha256": "f8fec5618bec2bfb2110d5cae57fcee0757109d49cc38c6e3f60b34973916e7b"
+      "sha256": "34b87b7d534b1680acbf9e1f74113a9bcb2f8c0e74d78a6d5b303ec30307aa20"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.3",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.3.md",
-      "sha256": "77a050d30e16ddee317d1944908f33ba728b2c6b9fa525c5ebd7b5d2f7fadac4"
+      "sha256": "c7e0103c951497fe1f35fb0d4f538f207871a6f0114e387ad1a7765632c8c1eb"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.4",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.4.md",
-      "sha256": "9942e3170d7efe0d9586a51a2683e832ad0238cf44080aa40d079112db83178c"
+      "sha256": "286a8ba626733b2ecf87051d378a4b53718bfabb1084eedec6f403421e8238f3"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.5",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.5.md",
-      "sha256": "913cb4732fe47723331b52bb6b3b0abcb23eeedfe02ada1b0cca591b5ce7bd86"
+      "sha256": "92f83ca6f4225da4641a41ed7311d3c9831e997d9c9a1a18a529907f2b560153"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.6",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.6.md",
-      "sha256": "d085f3225eb045588abd350704a3f7a2ef24b9416289885e144561a8dd214401"
+      "sha256": "d2de648a138af4fa6468782e676bcfcf770529d6818823d8100a00bc569671d4"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.7",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.7.md",
-      "sha256": "55edce52cfb366a37bcb0dcbdbb35d287288dcdebb28ce398fb08327a9d39b72"
+      "sha256": "25f318623ea0a955f1ddd1849bbaf23563a44571d90386795ba0fed43458fb09"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.8",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.8.md",
-      "sha256": "c1beaf02db7079bd3c34870f44430a7231e41079ab9a49c5c3cd3408d96fd0f1"
+      "sha256": "f93ccc2400a1ae5d22c932db421b20d325c20cda759d05c2088faa6bf80992f2"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A0.9",
       "relative_path": "02_Tasks/ArmIndex/A0_MIGRATION_FOUNDATION/A0.9.md",
-      "sha256": "8da753c41b71e95403199555adb826d792ea63af4f691efc450c229a44890081"
+      "sha256": "20830fb7fea30f2c0da4304f6958d8986323531190cbfbd7eab0e69839e046b3"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A1.1",
       "relative_path": "02_Tasks/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.1.md",
-      "sha256": "ead28aa4f9de43ca36b6baf90ac855fafbcd053a0e91148a8a3dd2e4ddc3655a"
+      "sha256": "54db32e4f2cff6a969934698e2f8a22eb6e1898deff484c49286fb77d112f024"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A1.2",
       "relative_path": "02_Tasks/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2.md",
-      "sha256": "aabfb22aea16e7b1f205747ac64fa5d7696fbe78c7dbbecf6be6808f3af764e7"
+      "sha256": "4fbfc2ccc4f3089550f5391b81873a165266a623fda9aac5f84f2f3f71704f0e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A2.1",
       "relative_path": "02_Tasks/ArmIndex/A2_PER_ARM_AUTOINDEX/A2.1.md",
-      "sha256": "17e8139b41f71160e35e44de056d8f703c6c058d48073f75cd7b802ec0c6eac1"
+      "sha256": "de1aba1b2b6c62a1f9bf1e0f6c33c030d0138be4c7cad98973562a994c5b2bf0"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A3.1",
       "relative_path": "02_Tasks/ArmIndex/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT/A3.1.md",
-      "sha256": "7cfe7696f4bcc23781db8ace2d607c818166059759d0853cb06b65fd1983629a"
+      "sha256": "394cbdf987066e351eb1c950e771a5ef21a4d94a2a8a4de172ac75235270b80f"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A3.2",
       "relative_path": "02_Tasks/ArmIndex/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT/A3.2.md",
-      "sha256": "30caab9833c9fca66dc2f8dceefb0a97e6310c1a4fb698f9dce8110f47bb75ec"
+      "sha256": "9b748a423ac2eb055ed59a2b632a5ae44d90d305d44ffeae0dc3bdbb52166fe1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A4.1",
       "relative_path": "02_Tasks/ArmIndex/A4_PRODUCTION_TRANSFER_AND_SELECTION/A4.1.md",
-      "sha256": "74e50706504543bca7684f79d90d08ce222aa04d8b96c863496d4e6d7e34aba7"
+      "sha256": "b8924711f6fcab30b950a1d002643667769587ea44003951d329139477dccc90"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A5.1",
       "relative_path": "02_Tasks/ArmIndex/A5_FINAL_CONFIRMATION/A5.1.md",
-      "sha256": "3e75cef066a14709e641f39fc8cddb6a3ba381866e34ce84e6f6db40187d2674"
+      "sha256": "3d61c3cb756fcb947878e333c5a610d609c2b7f2bb88468e750a69986864eb53"
     },
     {
       "managed_by": "myis-report",
       "note_id": "A6.1",
       "relative_path": "02_Tasks/ArmIndex/A6_PUBLICATION_AND_RELEASE/A6.1.md",
-      "sha256": "1a6ccf5ef3e8814ef445651763871423402cff5e41d79cf6599d9161fc316789"
+      "sha256": "00d6c66fbfa00a474a98a42bdf415488e96052de2b8342699ecc03cfc66d5bef"
     },
     {
       "managed_by": "myis-report",
       "note_id": "ARMINDEX-MIGRATION-RESULT",
       "relative_path": "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md",
-      "sha256": "b037422c156449f49ef69637d3e9ac2e87e02784cd367b3c8e76efadfc0f5a3a"
+      "sha256": "dd32d537253c7f453626db52b84a544a297b33468416414e4db1455716e50859"
     },
     {
       "managed_by": "myis-report",
       "note_id": "OBSERVATORY-FIXTURE-RUN",
       "relative_path": "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md",
-      "sha256": "4d76d027a047eef924fb5a79ffb2c23bfbecb494045e37f4cffb7e4e930227cb"
+      "sha256": "2272f608f810a8392567c6d76d9f966a68b1123d5cc05b148ee1751743da212d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P1-CPU-BASELINE-RESULT",
       "relative_path": "03_Results/Current/P1_CPU_BASELINE_RESULT.md",
-      "sha256": "20be180215ad6916404cfed0cc90e7d140ab808b6dd808432c1d2f42f8bf2b53"
+      "sha256": "f2c702ac78c95eda59a85cecb2aa1754b61c97c5b2e06c6dee96b41a063dca07"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-MEASURED-PENDING",
       "relative_path": "03_Results/Current/P2_MEASURED_PENDING.md",
-      "sha256": "de09166cc4394f1294d9f5429a43b84fb0a3dc4a9258eb623996b1a2f30ef8a9"
+      "sha256": "155a56e7327885bddbd05ba5b60f9e0283234c65dc55e3b144277968ea5fe669"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-SCOPE-DEVELOPMENT-RESULT",
       "relative_path": "03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md",
-      "sha256": "2423898e903bf1b74fd91b31877843cd376a67e637a7b7a6f37564329a4dfb14"
+      "sha256": "941b8a0c8ebccd4174c690a33201bcb2cc79c24ce67ab9f2604968c126e09880"
     },
     {
       "managed_by": "myis-report",
       "note_id": "RUN-p1-r0-selection-d9533ba623ce",
       "relative_path": "03_Runs/p1-r0-selection-d9533ba623ce.md",
-      "sha256": "0c46ecb2dd8ce107b0d5ba838e5defd8ea4c6a40c316477a1f31ec1743203ed1"
+      "sha256": "2b27d8fceceb58f214366ad3e105ea37bbca58adbcd2b9db5539c98a6ba19193"
     },
     {
       "managed_by": "myis-report",
       "note_id": "RUN-p1-r0-train-d9533ba623ce",
       "relative_path": "03_Runs/p1-r0-train-d9533ba623ce.md",
-      "sha256": "0cca09154e24a356a87d65078f9d32b164f4a34b2763bc42625c76afd6f83a34"
+      "sha256": "e01f7b5399dfbda00b3fb459113e5090bd7c5ab30d1107ea12af0181d5926e9b"
     },
     {
       "managed_by": "myis-report",
       "note_id": "RUN-p1-r0ww-selection-d9533ba623ce",
       "relative_path": "03_Runs/p1-r0ww-selection-d9533ba623ce.md",
-      "sha256": "e9b6b023e85d813dcc2ba082890446b0ba07ce88dcc70ee53a6a8a98accf2cd6"
+      "sha256": "7ae19d6c7e291283338b6d6dbca4dd33e2e9fee92e9ec83fa86ed214aec0153d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "RUN-p1-r0ww-train-d9533ba623ce",
       "relative_path": "03_Runs/p1-r0ww-train-d9533ba623ce.md",
-      "sha256": "fcf5a99075dd582af551f596e6ac898643425b5e286463671a43ac13d27c435e"
+      "sha256": "a53d87a609d1131cabd3e727b306d81518052bdd2512636a56a9ff1f2a903240"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LITERATURE-INDEX",
       "relative_path": "04_Literature_Map/LITERATURE_INDEX.md",
-      "sha256": "e4eb13888303c9bc8e79a1daf2c3839a1a51fc4abac2886429d6a5d8e057aa50"
+      "sha256": "4eafe58369d9dea73aac14358161d603ae97c0ecb5fee5649ead43e8e167fe3c"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U001",
       "relative_path": "04_Literature_Map/Papers/U001.md",
-      "sha256": "2cd717f14c71002676a81a5f46a3d632115d79068efdef62881da22027e29df3"
+      "sha256": "228c9bca4b8fc4366697560465e0b9aec0bf65be2c2ca0587f3960a018fa31fa"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U002",
       "relative_path": "04_Literature_Map/Papers/U002.md",
-      "sha256": "e17ad02a92f68959bedb880c9bcec289954d3ee8021773c741ee8b25efd1e14e"
+      "sha256": "5d5362b9e28c81f650ecede954c0070a76353561e345a8b28689aba9e26c2a67"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U003",
       "relative_path": "04_Literature_Map/Papers/U003.md",
-      "sha256": "7673fe6043bddcee6afd41145ff917ebfdc13efe75f7ed052419128bc447fbf7"
+      "sha256": "7c78816eca20e8dcc83e30fba20656702a3690bce006f2cec18f118bf05e0053"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U004",
       "relative_path": "04_Literature_Map/Papers/U004.md",
-      "sha256": "9c950260ce0f2256202d2be56fc54ad855a1cbe7d772b2ff374329c7da6e24ba"
+      "sha256": "adefaf6bf67193d44ad26c3e2aed0f6890248cec2ea729e07780eb5459eaae65"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U005",
       "relative_path": "04_Literature_Map/Papers/U005.md",
-      "sha256": "5c6f3b2380022bb7fe49025d1e475989b505f4f757cbb70a7f7517420c28c80f"
+      "sha256": "8f0c258874eb3ef688e2b5a84a2c8d02fa4e8a68fc6eabd657d28709f27faf53"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U006",
       "relative_path": "04_Literature_Map/Papers/U006.md",
-      "sha256": "4a362cfee3e5fabfff047b3a93d3a61e7a1a039b8cfab73503bb74e74a57e753"
+      "sha256": "f0f92a9dabe8968c7e7b166d29f301f9c1699fcb802cc741323c6416bc4a6ef1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U007",
       "relative_path": "04_Literature_Map/Papers/U007.md",
-      "sha256": "4ae28e5532d5d0569f4ba5474434c5cfc728286d71d6ec2841934671b1a07dd9"
+      "sha256": "beda4e0653bb122689197f98d003983654016586b3d2a287fbd6845ce22490cc"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U008",
       "relative_path": "04_Literature_Map/Papers/U008.md",
-      "sha256": "ea0475777d9e12f61bed099583610fa5d4037965d882515e0635e5efc9025a74"
+      "sha256": "bf115f75f4887395e23a05b9c3b6a70b28b7f435c50f19b06e7004d033056230"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U009",
       "relative_path": "04_Literature_Map/Papers/U009.md",
-      "sha256": "d3817de6fbbbb79df17b2f42b34621f4554ab6479beab5026368db77d87c8b73"
+      "sha256": "8429d5f8bae87cd9be130cd80f86628442814b755c1ebcb56af1c2a95a161e55"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U010",
       "relative_path": "04_Literature_Map/Papers/U010.md",
-      "sha256": "b57f5af7cb309f3ddcd4886a4100fbaabb6e2c9fc9abaaa1e592907b98a86d22"
+      "sha256": "68c9bde389417164598f54f74073b8d39e298a802ff621101b661ea794088901"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U011",
       "relative_path": "04_Literature_Map/Papers/U011.md",
-      "sha256": "8679c9a17f2d481b9ca4d09a3beb36c14217842b82eff92951e9e6bfc5d85cd6"
+      "sha256": "89df02c4c48d7ee152e76e4295886d4b9c21b48a27190711e0a5cd3dba6b59b5"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U012",
       "relative_path": "04_Literature_Map/Papers/U012.md",
-      "sha256": "6276835561481690ff0fc4aa49d75a8b4a1ef9db09cad5353d578088dcfc99c8"
+      "sha256": "7bdb76569b1abec1164ad15f7c432adfb862c14c3ea02b90563aaad8e83f0674"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U013",
       "relative_path": "04_Literature_Map/Papers/U013.md",
-      "sha256": "94965f3afd709330e1a5a893acc8ba49e3fc7695f66aa7208338d6b2341e9b9a"
+      "sha256": "6d58cfaaa4ed37ab3e226be3926b28b8adf7979a61c5db40cc90903e4f542452"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U014",
       "relative_path": "04_Literature_Map/Papers/U014.md",
-      "sha256": "2940ee41a8190966775eba46b8a4dc3beb9e95c975990b886d043ef172af4ea7"
+      "sha256": "9b126f96428244c0f1dc2ebdc0ef3940c9015692d951b025ce8e88cf6a9ec17f"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U015",
       "relative_path": "04_Literature_Map/Papers/U015.md",
-      "sha256": "d9f02820ba412e6ecdd2c2b92c15dbd6d7f8880f5502e40c2f2526b2c3e29320"
+      "sha256": "02e5727003f2470f8652471f621d4f107bae7501721d55143c136dff34df79ab"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U016",
       "relative_path": "04_Literature_Map/Papers/U016.md",
-      "sha256": "2eacb957b3e3cb1a351d083b657ad834ed3ec7a8a835e67565e0ba8455948aae"
+      "sha256": "d3445e4497d24474deae3941034d30c8e8055b7783eaa59c7a8f19587847d824"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U017",
       "relative_path": "04_Literature_Map/Papers/U017.md",
-      "sha256": "a19178fbccce30872e786f3136c8474d9d97fe3f9d84f5b6069c7736e4b34490"
+      "sha256": "63c40add40e0ac208e9ebc1f5bd698189d9455317e7e7d050cf85ff0af2ea28f"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U018",
       "relative_path": "04_Literature_Map/Papers/U018.md",
-      "sha256": "d7ecdf7f177934f0e78972afd0a7db1b59e5a1e7bd3519c079dfd47ac55323c4"
+      "sha256": "5f56691d7ce7c9ec1543d9dc82dbcc64ffcf1f6e51015b08b054733d74435a83"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U019",
       "relative_path": "04_Literature_Map/Papers/U019.md",
-      "sha256": "963c6ae17b9a65ec9c6092d0f989fd28a06d1e4369d6a4544c80df31951bfd1a"
+      "sha256": "b0e61c956948c7de44b66acedced12aaebf4ae13a8309b9b7bd6c064f2344346"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U020",
       "relative_path": "04_Literature_Map/Papers/U020.md",
-      "sha256": "77429ea4104187580a686c40ff7c0053e84d6017b03031a52b375a3d5f341ccd"
+      "sha256": "e75ab8dfb3f1ef73a4dcc5333f29e196621fb5403aa08457fcb999ac362bc982"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U021",
       "relative_path": "04_Literature_Map/Papers/U021.md",
-      "sha256": "1ec5f49d40b5ff0a4b8da8a545753e009d0754fb8745c1e5ed58cc748ad147e5"
+      "sha256": "15e243501fff8ca3ba0ad360964d5d30d361537c648f9afab4cd9da64a468009"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U022",
       "relative_path": "04_Literature_Map/Papers/U022.md",
-      "sha256": "bde18c31b6587e4ae2c6513f822dda113d223bb54638d8341ec6ecd7fb808cf1"
+      "sha256": "fde861b035d99d65afad3f59b25b5c969256421d5a93e52f02cf83f4bba651b4"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U023",
       "relative_path": "04_Literature_Map/Papers/U023.md",
-      "sha256": "30dadce811eca51cc2d9d568f6f9f5228f7d8d5199613c52ced746627cef1085"
+      "sha256": "4859f91556e8e5f71c489c668d557238e8fe16bf2718e3210edbf7c3def96cfb"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U024",
       "relative_path": "04_Literature_Map/Papers/U024.md",
-      "sha256": "c51529612cbce8f4893a8efba1801cf4401c5f816510206de2a0b0f067b33caa"
+      "sha256": "f9b8018c4673b92fd008e23f6e57b0e9f8d588a545c4bd00147ac58b4deab4bd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U025",
       "relative_path": "04_Literature_Map/Papers/U025.md",
-      "sha256": "e938e28e50c55a5633512649cec269ac78bbbf736ddf941617365b3943182bd5"
+      "sha256": "e5bf073902777d4d3f561bc4e5a75e0dcb7a52b8db3e2a7bd3bcf81a093f038a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U026",
       "relative_path": "04_Literature_Map/Papers/U026.md",
-      "sha256": "52ce2f4a1287cbd1d0e08ac3fd9a4b9b13f27eeafda0013930d46e485694eb08"
+      "sha256": "01aea11cdc82917adde826951f5007de8bb1b665d2e6601d0f4986cd5382d128"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U027",
       "relative_path": "04_Literature_Map/Papers/U027.md",
-      "sha256": "d5557cf592b562ae7c847eb05fff0744bb1ee1aa267fa9adb503ee81a1f1323b"
+      "sha256": "a9d7eec047cc8f021f99067e4d2bd005cf201404e3e7489999c1b8e8316d24c3"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U028",
       "relative_path": "04_Literature_Map/Papers/U028.md",
-      "sha256": "83bb82e455be19d2740386c779e87c6de461fb0b315ab72af904983696c8ed09"
+      "sha256": "d4785f5bc73a2d856fadcfc149d9d1f6e5b49b6fe90b7e53bde495be6dad8efd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U029",
       "relative_path": "04_Literature_Map/Papers/U029.md",
-      "sha256": "daacef03a4311a60bd15faf9854facc312697fb4fd8f9bb6edb191be4af7980f"
+      "sha256": "01fd72d9858721bbc20397c20945a6812039841473b2af7eaf9f01e8ee5c408a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U030",
       "relative_path": "04_Literature_Map/Papers/U030.md",
-      "sha256": "91e1a6606096e24ede5c4370b8dd0ed288f4eb5716fa2cc32f990e3f7654ab96"
+      "sha256": "e15b3f444a716fd760e13d3706a95dc18e73710242f8f22d20a8116aceddd9ef"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U031",
       "relative_path": "04_Literature_Map/Papers/U031.md",
-      "sha256": "e70be582b3fc59976e607c33bb6cfb854c6a8ecaec9fa378d1a6912d49ea57ae"
+      "sha256": "d8205079eb439925407ed5c8d56444fec7a6774118817c9521d20e56108c0644"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U032",
       "relative_path": "04_Literature_Map/Papers/U032.md",
-      "sha256": "0bea393579b83fc508fcfc22bca590a014a205f6e13ba3fdf7b9783fe79eed1e"
+      "sha256": "8c2dad9db0101b14bda143102d0b4be63c08975a1fc3583a4a58e74b4b6c8be8"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U033",
       "relative_path": "04_Literature_Map/Papers/U033.md",
-      "sha256": "6d9f9aed8ddd806a4ea9b4daa17c0b6206f39e554a075a7cfc3503469d2a4616"
+      "sha256": "09e1c9f412906e6270f5a5da5c114eb8754a0d4642642620e013589493aa83e9"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U034",
       "relative_path": "04_Literature_Map/Papers/U034.md",
-      "sha256": "a5945feff9bf183fa897e0d123f0da62555a44a5366b23a117172c1e047ce3b0"
+      "sha256": "937af9dd8852a7e27d81a98eb2d2dcbc6c29ca513f0fed342accbdbf012cbccd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U035",
       "relative_path": "04_Literature_Map/Papers/U035.md",
-      "sha256": "466ec348aa7bb3bc71794e19d9755f183de8283da3abc90ed07f2be7305af4ec"
+      "sha256": "e2929d76b64c7fd4a106896a23eadddd1c27130b86186619d565061f45202fcb"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U036",
       "relative_path": "04_Literature_Map/Papers/U036.md",
-      "sha256": "5792e94c79f77960881921991bfc187c2f740478e9c055d13abfa769d5f6b6f5"
+      "sha256": "a38b15e872ba797f00b2d942bb7717c3883c4c3ed77726a6f0cb795daa178266"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U037",
       "relative_path": "04_Literature_Map/Papers/U037.md",
-      "sha256": "6929e8fdf8388a6a468e39b4a1f510dd9ee314a58c99c3af7af2fa598e878c84"
+      "sha256": "ce61ca5aedc1cb99cb990dd3abb2d985937b2aee9e0c0bfdbf5941ebc5ea0b6a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U038",
       "relative_path": "04_Literature_Map/Papers/U038.md",
-      "sha256": "6d1276d0bd5211b9368969481b567377086e3bd3acc4f080fe83eab0baae789f"
+      "sha256": "e2088b39f67e0542a9f1a620b39b2e921a87db49f2935080d59a6337b99a24fa"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U039",
       "relative_path": "04_Literature_Map/Papers/U039.md",
-      "sha256": "ce01c39dd019cb8124f11b795f24c567a462af1cd7bb5976f969bc33e02a7731"
+      "sha256": "7f087f341f981366bcfbc9dd0572fa1bac8f22e0429596f40303d4ea7a4b3ffc"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U040",
       "relative_path": "04_Literature_Map/Papers/U040.md",
-      "sha256": "f079221c992310d068d6066027c9990d59d0756a87ec66089952ec2f88f17cba"
+      "sha256": "197956c194e6ca41d921bfbd1fe4affadf17d1877f80f2be4969d85cb5bca264"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U041",
       "relative_path": "04_Literature_Map/Papers/U041.md",
-      "sha256": "cb2118fb6638e28cdd4c9e0dc478a8c157a27d3c08940607b824908ff9ee4376"
+      "sha256": "b362182e83606fd1bc41a460882722c220ae9f3a32de0344f0955858f99382c5"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U042",
       "relative_path": "04_Literature_Map/Papers/U042.md",
-      "sha256": "7ef23f2b87b72053e9b1619651c11688e0fc4ad90ea117a50769f843993f4fea"
+      "sha256": "e29cc58afeb6b585ee88fcaad30f22baa2d35b33c3d0f6c227e8a4af8967eb15"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U043",
       "relative_path": "04_Literature_Map/Papers/U043.md",
-      "sha256": "ee23caddce131fff33a3188817d1d8c874aa40181444d1c1321b889bf0747ace"
+      "sha256": "23961a36b309a1bec4c2c65f43d9b7b01f59d0803cb204e069876ef42466004e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U044",
       "relative_path": "04_Literature_Map/Papers/U044.md",
-      "sha256": "c6714cc7c29d550102290c2e42fc426ad2ed8b07ee438c8950a0240eaab94a0a"
+      "sha256": "772d0538e6e0cfd6fececacbdade4f410dc50ed665284d2f39f48c5bff6f876e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U045",
       "relative_path": "04_Literature_Map/Papers/U045.md",
-      "sha256": "e5172ad3b889156af14584ceed231cf4d0ce5dd0bbf714b8a7e2e920f29eabba"
+      "sha256": "96c34ef70e1acc04eae105e65f5868d3aa1d65d06162fab40f8599dbc9e61fe0"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U046",
       "relative_path": "04_Literature_Map/Papers/U046.md",
-      "sha256": "c55e6e6eb9a2f6b77c69811020d03f1c353d8a57caa6ab616751f4cd1cf4975b"
+      "sha256": "65f9cdd946c8be7a75595274fbe7fafa527235b567dc5627dd16c42fb4d8995e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U047",
       "relative_path": "04_Literature_Map/Papers/U047.md",
-      "sha256": "84e856304f56c059c28fa9f8f00e1326cafbb52463bc3caea6dececa0b009038"
+      "sha256": "a5040340316a3e23b98485ab882854b9f68596c91e4e7f3e1ee13bf5063e6da3"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U048",
       "relative_path": "04_Literature_Map/Papers/U048.md",
-      "sha256": "2291ed25676591597443cd1c8373344268fd8840ae2523a57ea698d3185cca52"
+      "sha256": "886bbaebb400eba1d903c4e14757fbb4a16e720e0e27194954350babea7c1d78"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U049",
       "relative_path": "04_Literature_Map/Papers/U049.md",
-      "sha256": "bb6a0821644d7387d43de530295766096c29e90dafccb807418fe3c3b4943481"
+      "sha256": "f1e46a77e6571920c0a483f68395b601da078c4a9b36987d22584ba452e27e59"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U050",
       "relative_path": "04_Literature_Map/Papers/U050.md",
-      "sha256": "5336f4a89a33b078386c33d15a4757e3921193c1c8580dcf7b107ddcefd87711"
+      "sha256": "5adab41a39aa96c64a14fd0730cac945ea95ffec0154293e01afd9d6c36212db"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U051",
       "relative_path": "04_Literature_Map/Papers/U051.md",
-      "sha256": "65321b0dc4963614d0c7882fbdcc1e3b053cbba6a6b8187821577d088a26075d"
+      "sha256": "723c06097b3c746e61daad9e180e44926220960101c2e57c436e361e832a1532"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U052",
       "relative_path": "04_Literature_Map/Papers/U052.md",
-      "sha256": "cda76eb0e0f5e33c040c7f1281577632d609341eb3880dc2cadc67b331027cac"
+      "sha256": "cbca0fa2e65c17fecbb21afc59b34b791537b220a6e839cc1d4dd42d0b9180b1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U053",
       "relative_path": "04_Literature_Map/Papers/U053.md",
-      "sha256": "26eee97befea8ec978a592392ebfc959fb6596106bb7b8fc0d71f5e86b16cf97"
+      "sha256": "4ba3957c5b38df46f7078b2a2f9f9916e0e229109f7c48188f8ae2fb284a2b79"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U054",
       "relative_path": "04_Literature_Map/Papers/U054.md",
-      "sha256": "fffaaf52cbeee8d588fe23c9be14fee0945508d21e73a5c2708d5933538b65f0"
+      "sha256": "5c8b849e680e0aff192155d73882b0eb08386d81610b8ff0cd1c6d4fb59540d1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U055",
       "relative_path": "04_Literature_Map/Papers/U055.md",
-      "sha256": "3d468616b78b14622c68e6da8ab191cbfec4dd9a9d2a44fab71195d7ce52b542"
+      "sha256": "c93e9620d6b066afaadbfb7fa5b37e629754be420394803dddb51f48545e66c4"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U056",
       "relative_path": "04_Literature_Map/Papers/U056.md",
-      "sha256": "cd62a21a9c203464640f5c4585c769ebca1779664f1d845b1a1777ec26dfe4f3"
+      "sha256": "ab614ad9c88cc6cece1bf1eebbfc24ef14963b254f9b1ba59e1e762bdbf2820e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U057",
       "relative_path": "04_Literature_Map/Papers/U057.md",
-      "sha256": "49ca51891f933f31dbabe8b3f80ae8bd39eb5d016d6534e8ee4e85889845d9ff"
+      "sha256": "f86ff7ab62eb228c524baaf26b88e17eb5eca9ef64d410eb9839cf6cd63db4fb"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U058",
       "relative_path": "04_Literature_Map/Papers/U058.md",
-      "sha256": "62b11a7b5bc424c3c6da3e22bd78e678b5f1062212650b038b95402f61373c14"
+      "sha256": "06770a69ea80128ba150165e8c0b4ed4f16d7868e3d744f06ebad334dd69812c"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U059",
       "relative_path": "04_Literature_Map/Papers/U059.md",
-      "sha256": "51265bf033f0940db4a82badf3289160546aeca92cd8898ff64c1edb3457303e"
+      "sha256": "13375e72008e094496e12cd1c6eb29de11191badba60bcdd0459776605e64e7d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U060",
       "relative_path": "04_Literature_Map/Papers/U060.md",
-      "sha256": "380a3433069d98a35c04f76f6a3911c4aca4fd4458b3a1dc4aa3cc2e61b0a1af"
+      "sha256": "fad782c0ce4914ff53aec387a43d4ae246363aeb597c890602c02aa9b9da4b8a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U061",
       "relative_path": "04_Literature_Map/Papers/U061.md",
-      "sha256": "8db6dbfef16a66e60341fd2af3e0efb7b5aa758cbebba646cfe31f5e5be664c6"
+      "sha256": "4c88020fd247c5427d46a96f81c988e053808002f00760692258e4b90d9efa76"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U062",
       "relative_path": "04_Literature_Map/Papers/U062.md",
-      "sha256": "e6b72a5a1d813e605991314ea606cd3e28e4733aa24108cd10bd745a242466e2"
+      "sha256": "ade51795f69a685d2edf345f95d778163761ee1fb97af61350426b4f7a9454b1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U063",
       "relative_path": "04_Literature_Map/Papers/U063.md",
-      "sha256": "c549082da45b9a1174009629fea5e316e6ecbe31ab8a28030f8a3cf0156cd1be"
+      "sha256": "83214fcc6622d0a10009ddea3dd3b91760ca4d5fc6d23c541e53142d6e9bab0a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U064",
       "relative_path": "04_Literature_Map/Papers/U064.md",
-      "sha256": "76ed9511bcd2aa2131acbf181571e01ae70cc22c2cdac816d70daeb8f6db2307"
+      "sha256": "17cae26ac180c8f9c6a0fed61535eab2f4387e4bfeab3b591c1579db55690b09"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U065",
       "relative_path": "04_Literature_Map/Papers/U065.md",
-      "sha256": "2dba8920b3a5b4bb683e11af353309574480f00a710acbdce0dd86deca33e1cd"
+      "sha256": "fa4cb3669ad0c8f22fd9c0a708b3abdcc0b17e14edc8430b09babb971200514e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U066",
       "relative_path": "04_Literature_Map/Papers/U066.md",
-      "sha256": "e87354b127053e1621608e302de15c75e793b4851f96b360cee3b402ca92262c"
+      "sha256": "85801dd1e9d51bcedc5ccc664c2bfbc59fda2a5af7d1fe8ffa6b1f2a7541064d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U067",
       "relative_path": "04_Literature_Map/Papers/U067.md",
-      "sha256": "207e9fdc468a6d3296a62a9b6590b6ee8b7fc6179cdd89e5dafd0fa9b1b999a8"
+      "sha256": "8333f99f3077e280b80b75f05f9980c5af929a5db68ef49881c88aedded60b58"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U068",
       "relative_path": "04_Literature_Map/Papers/U068.md",
-      "sha256": "6efe247fa4c63f638b62b28424ae53d3aba5e5742d10e074024676e1b7205d30"
+      "sha256": "986ecc7daef990fd23efac178899bb8cf8fc04606b2c61fd54e3dc5d383edd46"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U069",
       "relative_path": "04_Literature_Map/Papers/U069.md",
-      "sha256": "e7f6907efe88906366bf06ba95aa54efc3db3e73bc45d4bb9c9fe67a7d2c505f"
+      "sha256": "8531c7d56e7a0527fddeb8492a96593ca0e07b01a90e496dcdeccb3206ced559"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U070",
       "relative_path": "04_Literature_Map/Papers/U070.md",
-      "sha256": "a995a445604340e283a6a1ce066474216fea73813cfb666fdc42ada82e82a823"
+      "sha256": "50e8f27886aa200849362b54535b01adbba4a084d984392c678c18e1b0b94a3a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U071",
       "relative_path": "04_Literature_Map/Papers/U071.md",
-      "sha256": "be42ad07c5915cbe4a61e0f452da783b34394c764710e0d0a2c03e9ceac7528a"
+      "sha256": "f5dc2983180739d53bc9b400585c413672db2b89c0bc039efb9fec8ad26019dd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U072",
       "relative_path": "04_Literature_Map/Papers/U072.md",
-      "sha256": "fe32d6d953c4551db1cedbc7a2e50de66a615c4a950705fb5ada97b2f63ef962"
+      "sha256": "ac4ce32a6060798d8d20aafdd334f09272ee06f84cf583c7fd36350b6db9bbea"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U073",
       "relative_path": "04_Literature_Map/Papers/U073.md",
-      "sha256": "500dbaa1e2c5bd5f52d7dd2c8be267a117f205e6586293d65b60ac7b65a65ce2"
+      "sha256": "a360d6d9c0cac06d7b7d8c8ace3d168d36a60955f8edb1507e1d52517c70974a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U074",
       "relative_path": "04_Literature_Map/Papers/U074.md",
-      "sha256": "f24acf5bc5be214ec619b17bd43914ad1f37573819e7aabfc76a4016fde89373"
+      "sha256": "97d636954f839baf064372cfc68162c6090f3e6570786abcae6dd0765766a246"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U075",
       "relative_path": "04_Literature_Map/Papers/U075.md",
-      "sha256": "349bc96ae0fb43ad2c6d4b2b30e4c02c42f93aee0cf69bc3f9267d9213f173ba"
+      "sha256": "d2ec421da0662e68978a2e07d82763a0e3731913de7d585f1fd898b713f654bb"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U076",
       "relative_path": "04_Literature_Map/Papers/U076.md",
-      "sha256": "ea340db84e02fe410968e841e01d175524541a4ac31746acb4519f62add134d7"
+      "sha256": "a276b65e349dd36b53aa886e611905077e5b8e9247500ddb4d20455021897407"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U077",
       "relative_path": "04_Literature_Map/Papers/U077.md",
-      "sha256": "12a1ca90ef66387902df65e68ad27973891394e50c9e2b99df142bdec1f35823"
+      "sha256": "cd0d9a6b45912a828b24f3e48e48a355b8a142a83c749fd5a10e5518f5c9926a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U078",
       "relative_path": "04_Literature_Map/Papers/U078.md",
-      "sha256": "b4c85e3e622c5095f5990e1b63525fce7645a69c60c0f3164ab0f375cd28fd68"
+      "sha256": "cd399ca8f25f438abf85002563f4a334bbb0c4b160083c3280b867ba81715747"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U079",
       "relative_path": "04_Literature_Map/Papers/U079.md",
-      "sha256": "8ea401b9284ab1c901c6c81a388d4eeb2280c150da4bd1273322b0c93b34b364"
+      "sha256": "2786e742428865f3808d1e113f1b70b749fb5da21a169c9f934102995b3d4e2e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U080",
       "relative_path": "04_Literature_Map/Papers/U080.md",
-      "sha256": "07d93aaf888372cb57883f7ddae41e0805152e55f9845f245a4d0557232315ae"
+      "sha256": "4d7302ddd666d87228cba5f36a45f3f8149b27bb8c6ec4702862a057961d4328"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U081",
       "relative_path": "04_Literature_Map/Papers/U081.md",
-      "sha256": "ae6153def277e66180fd0865b52f3a74257b4a435ea2cdcf9325322822a55e27"
+      "sha256": "e2f5239aff629fd92c6909e5e1a11f25195361d2f8254451b53d991b695612c1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U082",
       "relative_path": "04_Literature_Map/Papers/U082.md",
-      "sha256": "6b96f698bbb2d1c669d38405c0b2481ee0aee5289a7eecc75a186ddef09fa66a"
+      "sha256": "4a26e77e0e3e8475eb238316853e972a799b61d7c0f255d29c10310447f623af"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U083",
       "relative_path": "04_Literature_Map/Papers/U083.md",
-      "sha256": "b7ff70f0605efe2d9b85744f8296f55ea076ff5754b10cd8f18a8285060378c1"
+      "sha256": "4877cb5a4b8f64913f36bb1287ff7625bce0601a3acb198d7352730dc109dd74"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U084",
       "relative_path": "04_Literature_Map/Papers/U084.md",
-      "sha256": "df53a95e61cdbd8dcd9543df8591f08321ec949d752fef57f3734dcfdd6e7918"
+      "sha256": "929439d160b86118759d3914d9ada6c8ad5efdcc4f62535b8d434c205b79098c"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U085",
       "relative_path": "04_Literature_Map/Papers/U085.md",
-      "sha256": "d54dfc78d9ab96226acddd5bddcfe83741c5e4395a4e648007f856098a919407"
+      "sha256": "6756c3ff4051646dc6498339dee7655ba3b4ac47eb746a5b4cc70bfe4eb46e91"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U086",
       "relative_path": "04_Literature_Map/Papers/U086.md",
-      "sha256": "2cca99612d2f0a1d7d3496882fc2ceb9c45d53d9e6e53c975695aa2e0fef50a2"
+      "sha256": "d11ff2c3ee4e1395f74d997b903f1fb0985614fac9ace93cc78c7424baf87784"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U087",
       "relative_path": "04_Literature_Map/Papers/U087.md",
-      "sha256": "c453016feabab6dccc8dec9add6533500509031b26ff59528c085fda30762c97"
+      "sha256": "c09e9657a270a51b3a941e857a95b4f8e2af216406e08f203129fe081386eb36"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U088",
       "relative_path": "04_Literature_Map/Papers/U088.md",
-      "sha256": "1a8d9e176084de9716023159ccfab7b56e2e53060ca4b3805e79c1b02e9eb8c7"
+      "sha256": "4816cbe40dfd6ee6ff1a3272a9e6d067e16a521490dedddbbd59d1f0ba112eb6"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U089",
       "relative_path": "04_Literature_Map/Papers/U089.md",
-      "sha256": "1e66cacc8e8cfec76b9ffcaf0a8e5fbf73cd7dea65530d5e239c8b58c401d72d"
+      "sha256": "95eff04d66e2c3f7a24c04378974036f1eda831728c688129aab060ef885ea44"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U090",
       "relative_path": "04_Literature_Map/Papers/U090.md",
-      "sha256": "99397916ec150677a9151d49ee5c2fa4be01b000753dfeb93fc94164dd03a09d"
+      "sha256": "f4fe62e3825bf122911e8e68a0b0eda7b6e4a4f34176fe874e92fab8c2cd37dd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U091",
       "relative_path": "04_Literature_Map/Papers/U091.md",
-      "sha256": "e0fd9eaedfc8faaa52caff98e8b3a23a2e68b1f1265fbc1c1ad45d3e7a70204e"
+      "sha256": "d78d3860278cb4217445a253e7436585b63d934e05a56695ae1a5cac4ad90fb9"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U092",
       "relative_path": "04_Literature_Map/Papers/U092.md",
-      "sha256": "358974ffe75e8281880f7e3f7b1662f1d2b816a915e6f7242ebec927103b1234"
+      "sha256": "a42b56091f3367fd175942851540d7bfd64ad61f9c9905358ea38d51880a11f7"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U093",
       "relative_path": "04_Literature_Map/Papers/U093.md",
-      "sha256": "f3493aea70d947e5cfa1d87227cf931a8f13c5b200441283a714ece52ea9476f"
+      "sha256": "bce493df33e1007b2c50c3b5f0b2090d71304aebd75ea6014c320d4c92ea92ba"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U094",
       "relative_path": "04_Literature_Map/Papers/U094.md",
-      "sha256": "98d93cc6208cfee1458b3de32e63245ff5e17d3b4fd8ce407ce93fc96ad2b6b2"
+      "sha256": "fddead1b40cb7cd6dc86156ba897fbb73934b32e071aeeacb19d0faff399ea09"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U095",
       "relative_path": "04_Literature_Map/Papers/U095.md",
-      "sha256": "9048bde1251a5d6a9ca6c9aeadeee201aa18d49c8073210c3f4580ff3a5457ff"
+      "sha256": "0c726d2e7bf23784fd5360d03a607bea91dcbc4acd9ac315cff4064710b70d23"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U096",
       "relative_path": "04_Literature_Map/Papers/U096.md",
-      "sha256": "f95c9e1ab937fcd15364b7c1781fe6f5fa060b114355ca17aefb55a8d75fe3b8"
+      "sha256": "c9ece757b49ed751c038602db2176df13b15e0ac4785b93a4ce8450c67b04a51"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U097",
       "relative_path": "04_Literature_Map/Papers/U097.md",
-      "sha256": "a74477e803dca705ef4d4c9ca62cdb372600faec5f2f61673736a81159f1088a"
+      "sha256": "1a37d0f2e95ae881e60bfc10ce6795999d7e1d8d278a114e113c51f629fd77a2"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U098",
       "relative_path": "04_Literature_Map/Papers/U098.md",
-      "sha256": "46ff8ee241950fd9e35bbe3b4590186e127caf6abb11dba9de4667a4767d47b3"
+      "sha256": "6bf6493f6769ed5a549b171f8f8c19bcb195ed979fedcb8a79fc0c7315fef3bf"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U099",
       "relative_path": "04_Literature_Map/Papers/U099.md",
-      "sha256": "2d5740f772d714a7ff69a4f979de7a9218254f4a529fb93119f71b1789156158"
+      "sha256": "044ebb4c3af0a23e792254b8c704235960ad504e27b09f63eef495428326dcaa"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U100",
       "relative_path": "04_Literature_Map/Papers/U100.md",
-      "sha256": "e3be7f303cd5d8ac659f67f8abc281f176039b0f6c42cfb83a33464eaea69216"
+      "sha256": "2b32fe36037e6e6ab94c33a38f32f93367dfb652841ff7cbfb87c1f18d75e276"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U101",
       "relative_path": "04_Literature_Map/Papers/U101.md",
-      "sha256": "8e2acea6dffe982ca037b4d95f2e84435e78f24f575a5815258a0f523b8b0e42"
+      "sha256": "db8d8b85f06f61aa52f91366a7cd87dc2f91a4e2ff5d5fe46434fb876f7a7a7f"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U102",
       "relative_path": "04_Literature_Map/Papers/U102.md",
-      "sha256": "92fd4ad692b8dff764e44dd0cf6497bfd6377634b411a5bb70798eff8008a3e1"
+      "sha256": "e7cf68946224926592d30eccb5813943ec4697f308f3c4814927dd053ee5f3f6"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U103",
       "relative_path": "04_Literature_Map/Papers/U103.md",
-      "sha256": "3893f8a28d5595a16715e6c563889b9b6aa133a5952385ae379d1e6e70ba36bf"
+      "sha256": "db947967012890a6761c18143e70749125ad4a179013e30ffc6875ff73a090d5"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U104",
       "relative_path": "04_Literature_Map/Papers/U104.md",
-      "sha256": "c345b6debef839d4d3bf9eac1a9ecdaee8496e297f910800a2e091f96f7c9be2"
+      "sha256": "fbd15d5b9b3c74e061c2297f7495e515288eb84f002dbd712a9a1df1bff5d1d9"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U105",
       "relative_path": "04_Literature_Map/Papers/U105.md",
-      "sha256": "bba142c49827dce83710b40eab6db9b77ee4685386a8e0887151dbcb46b72203"
+      "sha256": "ec077e9be4871c170b1af7f7bf3055fd705fc895936dd3bbab599d2803615baf"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U106",
       "relative_path": "04_Literature_Map/Papers/U106.md",
-      "sha256": "d08f6349be13329615aa90fac7c05a501bf407aa05fbdd78b84523d552cad29b"
+      "sha256": "d49afc10e4b3e1806c12088a3766f65fc18ecdead673eab4bedc35bd6f94b04a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U107",
       "relative_path": "04_Literature_Map/Papers/U107.md",
-      "sha256": "7be1a4045c7ea0046c4b86241b707972af30a2295388dc8823c2fa470a1bd3f6"
+      "sha256": "bf4eb36f4ea9841b63ebb9f83fc896457e87f6188e82e6e4a19b21025d7ea469"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U108",
       "relative_path": "04_Literature_Map/Papers/U108.md",
-      "sha256": "9cff5dba7f1affefc284cd458a80d57a265d7061a17116bcb3378c3c0dc534c1"
+      "sha256": "a856214056d362f6fb1edf0e5dbd3d91fe104b691fca13f3465be104d81c4cbe"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U109",
       "relative_path": "04_Literature_Map/Papers/U109.md",
-      "sha256": "c1b9e4b26f86f15c77f11d48bc7039628461c4ae32c9e4b029db5c1f8e43a737"
+      "sha256": "c2ed79545a4fdbf3b177c8e41202f192b46dc50d4c10d1c7ae0fdb95835ed23c"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U110",
       "relative_path": "04_Literature_Map/Papers/U110.md",
-      "sha256": "0f3e8139bcd93a24a923a4eb025fcb7cb9a56abee011e8197ff3de7a89427c6c"
+      "sha256": "5206d368600ea8559b2ccf2e8e5994ed9fffc17b29c868189fb115ff836f6778"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U111",
       "relative_path": "04_Literature_Map/Papers/U111.md",
-      "sha256": "a950dfc33a21752ae6651b75f5301f60f6be5c56a2095c7e2c3f38faee12bafe"
+      "sha256": "aebe3f7cbf893c59d7574707200ae14b6637f8760418d0336fa585cf56e2c6f4"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U112",
       "relative_path": "04_Literature_Map/Papers/U112.md",
-      "sha256": "900e13d597b4ddbb97d342a59e393f23e1c0744ad9e983c185c92358bca8a2b9"
+      "sha256": "018abb49d8dfbdb12ace18812fc141b43c2cdd393817c212661f2efadc9598db"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U113",
       "relative_path": "04_Literature_Map/Papers/U113.md",
-      "sha256": "369ca8e13eaa89e154aa71dbccfeec4a8cb0a088048290eebbae6bca0f7f062e"
+      "sha256": "2262b6ac60b37e20b2d9174a2aa095c2a21fe7d9941dc163358da78352476c04"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U114",
       "relative_path": "04_Literature_Map/Papers/U114.md",
-      "sha256": "1023f2c87417fa284be226d7f26c0bec2649fdb625de1ba7b27da5bbd8b22f18"
+      "sha256": "eb43d275fe9ca4f1b63539a82a9dfabf29249e37fe3874a0e89cacb0d85ac780"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U115",
       "relative_path": "04_Literature_Map/Papers/U115.md",
-      "sha256": "b9e510faddae090bef4220cc3ff28bb010e9120b8c7aec18575b33df3016c6b8"
+      "sha256": "17fbbe3ddd4d58b45e4b8e59598d9ffe443aae66dc1cb78cb5cc075a8d451587"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U116",
       "relative_path": "04_Literature_Map/Papers/U116.md",
-      "sha256": "1132244be68a63fb18e034059f16ca8ad746a32d5bc99d5446ccbe45d89f9e86"
+      "sha256": "ff36523ae62ea9ebe54522034c6b8bde86a0713fed8551ca7d0eb589c69a679e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U117",
       "relative_path": "04_Literature_Map/Papers/U117.md",
-      "sha256": "e90221238ae9317a3668ba4a0698a76329bcfad44018662da8effc65b95e7d38"
+      "sha256": "e2a214f9608c386ba53dc7738d9cd6e2c6bf13e0ef2f3bad41545aa87cca0349"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U118",
       "relative_path": "04_Literature_Map/Papers/U118.md",
-      "sha256": "6063d5880c6ef52ff7927a8e753dbc9e6774fdbad51ea7d17976247af3827159"
+      "sha256": "3d86d1b2cacabbc11eb967810001be1b34f29e6992ca86450372e18f37b8326b"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U119",
       "relative_path": "04_Literature_Map/Papers/U119.md",
-      "sha256": "62dc4cae7d47ec5c90bdb34f52bef21c7a52c32b23ccee4ef259f09adea5afa1"
+      "sha256": "2529db8f95cb58d880c920425bcb3bdab4704abac03650d1ae7ad1dae796ceba"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U120",
       "relative_path": "04_Literature_Map/Papers/U120.md",
-      "sha256": "fbb5ab2da0ef910bc328e5c3eb61ecbf7b68b0ec7ff2c9152685501a50c04d67"
+      "sha256": "e833f63c1ebb42dcfc70360bc239b3b7013185461f095c20231b32645c37deae"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U121",
       "relative_path": "04_Literature_Map/Papers/U121.md",
-      "sha256": "a2e00555dca1a31c384aeb98291347bbcb9400098cf8930200ced2f9a6396339"
+      "sha256": "9c562b7a0867667830dc1df1a98c8b2c88481d960fa82317ea2439725f0e8d44"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U122",
       "relative_path": "04_Literature_Map/Papers/U122.md",
-      "sha256": "27fcd0636d5a78feeaccb9818b2cb812baa28768e7bb794231e521f84bba3377"
+      "sha256": "272a95deb68fbd2ddc6e559414378c74a9fdd113772baab1a2e0e6a7c7f26560"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U123",
       "relative_path": "04_Literature_Map/Papers/U123.md",
-      "sha256": "e356e941bccfb74fbde86d552ad187bce24ed8798810a5a91a2cf9cd5224204b"
+      "sha256": "a3a93c4dbb2869adf415bf0d61a2559ec65b88c7213262ad1279d9da2e6784d3"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U124",
       "relative_path": "04_Literature_Map/Papers/U124.md",
-      "sha256": "d75a4c2cde495cd6a8221e859d611665b1590bce343908d889d01cdb6987be43"
+      "sha256": "f24f4c17c571f35e8e1715d64a9c70bdd4b2e52350fc48d40bdbffba53e43453"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U125",
       "relative_path": "04_Literature_Map/Papers/U125.md",
-      "sha256": "af23e226db3454f9a2bb3a700c6d5501b28c71b3aee21b5bad0e724c795d8fe7"
+      "sha256": "9fe6721b88c538f6398b2e9ad8d35755358c105f0c59e5982bde59cfd6dda9bd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U126",
       "relative_path": "04_Literature_Map/Papers/U126.md",
-      "sha256": "d09eaf81a93a8da8dd92b4ab0b03ffa369f0e6c0a09d2a1b7a9a43f5ae072416"
+      "sha256": "6001fbc6fe5e000b7179f639fbee14ec8cf9c316e58b9f312d6fc341f70ad4d7"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U127",
       "relative_path": "04_Literature_Map/Papers/U127.md",
-      "sha256": "a42089b00e2cb0d6aed095ac83398aecfffae76b6a063a8138a4bd894e36c362"
+      "sha256": "ad71f771530542e2ad093e439e72352531c0bf1040830eebb2f2f50374d1964d"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U128",
       "relative_path": "04_Literature_Map/Papers/U128.md",
-      "sha256": "e23763101e68e8868d6aa78d1eddea1318e7ecb79b725881341e590a648bbb7f"
+      "sha256": "cc130b1a70f1b7da82cc74fe76d05aab0799dde2bafe3b209d12ee0cf99cff99"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U129",
       "relative_path": "04_Literature_Map/Papers/U129.md",
-      "sha256": "3b00a17a750bd961e6778e36f5cb5b892f1d7caba9220d277c51a24fc0f97183"
+      "sha256": "89dfcd2ee756e3b883010feeec40ba604ae7fc90e8dee23fe5cf02eb1d85ed29"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U130",
       "relative_path": "04_Literature_Map/Papers/U130.md",
-      "sha256": "1c40f6317789f7f3f313975056013441de4e75cb68e7dbd19193a22e5cf74a59"
+      "sha256": "fc625bd91b8fd68e3bce8cfa43eac282710d28ec41c9a1b01ab928122c2ff88c"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U131",
       "relative_path": "04_Literature_Map/Papers/U131.md",
-      "sha256": "b39a856383ca0e822d0ac486f373dc0e6409ecfd8b2701ca49273f32e66138f9"
+      "sha256": "f61455b9ffb0efb8bf55a436d89d0e13908e97fef9db9a579a42009cd447b164"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U132",
       "relative_path": "04_Literature_Map/Papers/U132.md",
-      "sha256": "5b0ee137acf6e63af54838aff7a6722b2f3245322f766dc4f386f654cd235fa6"
+      "sha256": "219ea26352992ad53ad331cb8960925ad87301eeb3879354fb1a5343aa4faf76"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U133",
       "relative_path": "04_Literature_Map/Papers/U133.md",
-      "sha256": "6529cfe1a24c61db3353e626fd0c234fbe6156d521d09d61b0d651b05267ebec"
+      "sha256": "523f5d637656d2a66ac00d895f4d08e1ca460095e70da52c908c4eb6ae5ade85"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U134",
       "relative_path": "04_Literature_Map/Papers/U134.md",
-      "sha256": "d30b8445f516ca4034350121e4f48deb0cf1245abf7fa106c36ff16b96aefa6b"
+      "sha256": "a23a082735595882dcb7b0b46e9c6b3e3486de94757e5ccc587a2a5016a5bba2"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U135",
       "relative_path": "04_Literature_Map/Papers/U135.md",
-      "sha256": "8d211fc41bbeb2535c529b247ffbd12f779b3a885106cd491cb7d72d27bff16c"
+      "sha256": "2acb5cc8508687f253f4984a8f88584c07873793bea28416f14c9f1dca1e1899"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U136",
       "relative_path": "04_Literature_Map/Papers/U136.md",
-      "sha256": "0722ffa05258d20ce7c6c6280219e086e7b334842e4d60a7f0fccffbc082c7cc"
+      "sha256": "b0668c26870b70c7734ff67979e11e2989e9ed8164a094bb1483b0d6d866f5bc"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U137",
       "relative_path": "04_Literature_Map/Papers/U137.md",
-      "sha256": "977ad87901e249a81cb2557a0093819c60273cf91e0351923819ebbc16fb18dd"
+      "sha256": "52dbf9412bdf2fa3f753d46abd66033b7b8ca01ec02a1dc55c483d45d1481d5b"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U138",
       "relative_path": "04_Literature_Map/Papers/U138.md",
-      "sha256": "6dc5e9d30d3e9b42fb688906af6beafb68e024f7cf38eb3b9956a36295842aa7"
+      "sha256": "a79455f6a0f2988dafa930ea7ac3051c5c4991e70672cc3b68ea1f2f892c6c53"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U139",
       "relative_path": "04_Literature_Map/Papers/U139.md",
-      "sha256": "26b94b25aff11025623adbc35b92fd2b58ccb5393222a9611d86eaff0724e39b"
+      "sha256": "5e8f566016efb52b33b23993e882129a0f30d848600b052730916e883901f64e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U140",
       "relative_path": "04_Literature_Map/Papers/U140.md",
-      "sha256": "7d7ea265cd7fb001682db08d440588a790beb9e5de74510b7bf2a11f79711c21"
+      "sha256": "6a7c0f3c593c3d18cce2dceec67533dd897d905f9e5341868e159c61b43bb52c"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U141",
       "relative_path": "04_Literature_Map/Papers/U141.md",
-      "sha256": "6d26426a3ed875774ad9899d3fe2e77e0dd5725dc62f011bca4d03ad283e2bdd"
+      "sha256": "68f04bccae9610b4156f1ea27e3b0e220a0bcfec94c6764cfba261b02bcd1435"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U142",
       "relative_path": "04_Literature_Map/Papers/U142.md",
-      "sha256": "8639c31f2e59ff72b76c1ddb2683cb3504fa3a6250c2bfb7849082d9df39e8e9"
+      "sha256": "5a7f20aa53714eac5ceb86ce66d2f950d2ebecc27eaf1e9c44da3d3851c440b2"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U143",
       "relative_path": "04_Literature_Map/Papers/U143.md",
-      "sha256": "527ef26001d7090806789909e26e3e23d66a6f24f4c98cc7b7fd40431f811c93"
+      "sha256": "5e45bf7dd0cbd26cd12a349beea8685c26b2d1947f09ffe56a5761050edf02d0"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U144",
       "relative_path": "04_Literature_Map/Papers/U144.md",
-      "sha256": "c7e6f1b8f886ed612ff41439a5382558873d5a955b34c08658a13acd2f9decbc"
+      "sha256": "7cdf60d34c76b128ef4a8edc52f96f31648dff1f555e2b2ba6fc0c5041da5669"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U145",
       "relative_path": "04_Literature_Map/Papers/U145.md",
-      "sha256": "83a3ca087956fc0d0d297f946133d55f3eb6c3abf62310891912d40b66cc1c05"
+      "sha256": "7bc6c18e57efe734babc9a847f0483ed0ea6b72695e3fefac7663423db36c748"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U146",
       "relative_path": "04_Literature_Map/Papers/U146.md",
-      "sha256": "5c00c7f17afd5e3129236471bdc030c09a57c3b2454ceae77dd4f9d21ca9bbed"
+      "sha256": "973c1bf1fa33f1a339aaa7128a61dbaea379c5591edc9833c4b07b27f37d800a"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U147",
       "relative_path": "04_Literature_Map/Papers/U147.md",
-      "sha256": "db338f00a937bab8f908b94cf2738697f7d7487cff7cc17434751c62a3b7a304"
+      "sha256": "21a076450932e997da3bb294342233e3148175931a3b41cddb51525c19152f29"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U148",
       "relative_path": "04_Literature_Map/Papers/U148.md",
-      "sha256": "103b7692c65f1214a61f840417cbc73a0dc87598f65726bad1fbeb84951af716"
+      "sha256": "20c35d2953071dadf4aaae8f86cc9ea3627f20355553250cb1c976b471a10ca7"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U149",
       "relative_path": "04_Literature_Map/Papers/U149.md",
-      "sha256": "1b68bba56256032e699d4425d8db470f475783b41d9d33f9d4de19e87dea4521"
+      "sha256": "2c86f7fc810f35b11bb24b114688a65de68ab84f3f44c267b647cccc69bb5200"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U150",
       "relative_path": "04_Literature_Map/Papers/U150.md",
-      "sha256": "4b83b07fa27e0960192721ca31ed13823ed27a2ae6dd6e0d8e3f75a7fc0a4807"
+      "sha256": "dd1e6cd85fb09acb0028266470aac0fcfc8c20ca4ba4fa0052abdc221898c1b2"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U151",
       "relative_path": "04_Literature_Map/Papers/U151.md",
-      "sha256": "8c74b9b736b9757035a53f58c54294a0088604ee28c06394aee97816ea3e54a0"
+      "sha256": "f296a1567f8cabcd86b44876524b037be3dd0cc4049b6bed0a5993a1a29b5911"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U152",
       "relative_path": "04_Literature_Map/Papers/U152.md",
-      "sha256": "c0de40abb3b423493b6f5e9e329129707be5dae90661434045355120dea12671"
+      "sha256": "e0d382561d0a016558ecc715eed5d3a2a1298e941643fa9f8aab6f57517c729b"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U153",
       "relative_path": "04_Literature_Map/Papers/U153.md",
-      "sha256": "9a57cdb9c2931aee5e79b2962323d62653c67e98af0de6b2cf0e5c1a6b66e196"
+      "sha256": "f45c7a2a5e9cf0fa91d9a2a0768cbb60f2b16e9cedc65d39a6515895a45fb6d8"
     },
     {
       "managed_by": "myis-report",
       "note_id": "LIT-U154",
       "relative_path": "04_Literature_Map/Papers/U154.md",
-      "sha256": "9e2645ac8b980d64f1e1c2e1c55b82ef54112a25503f21e479f938b5938968e7"
+      "sha256": "23a89937f24ca7a4295a97182bbe5389cc6234042ba2587854f2d2633bec2dbe"
     },
     {
       "managed_by": "myis-report",
       "note_id": "OBSERVATORY-FAILURE-RECOVERY",
       "relative_path": "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md",
-      "sha256": "7f63bbd164f481f9594c69696923632dd2b7d24467874845212ace3c99a7bb98"
+      "sha256": "c59e64c58b0a6a8368cbde082207e6db14b59e3aba244a4e6c44cb1c4809b107"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-FIXTURE-PILOT",
       "relative_path": "05_Research_History/P2_FIXTURE_PILOT.md",
-      "sha256": "72df2563fc93f6fadc3b23d9d32fc9550c3d05f78d6bbf45dc003c5093c9ff71"
+      "sha256": "dc4656b6e6cb7cd79a171459dff3d5a57e95374aecee5baa0e15fcc1370f3893"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-OFFICIAL-REVIEW-AUDIT",
       "relative_path": "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md",
-      "sha256": "fca8f6444c57012f9e606c2f7c0d7aa13ca631080e84728799cd35514dd558b0"
+      "sha256": "0bc9e2ed000d97f63ec168073e3c357efd7530c313d6594efdc24df0e23e9a67"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-OFFICIAL-REVIEW-ROUND-1",
       "relative_path": "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_1.md",
-      "sha256": "7e0720fccdd9d0dc4ff7d8a587863f88249374c214a08a9df5efcd87a554a473"
+      "sha256": "4b0549834a608b00b24d18f16b265ebd6f79be19f3967f0df67f3af16a25cb88"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-OFFICIAL-REVIEW-ROUND-2",
       "relative_path": "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_2.md",
-      "sha256": "a469005924a3944137d146e5a3ba31f0101680476ddeeb05cb38778d79bfe309"
+      "sha256": "34a162050b50f5099b7e280e59de7a0af96655cb66d903c0afa822db54a6438e"
     },
     {
       "managed_by": "myis-report",
       "note_id": "P2-OFFICIAL-REVIEW-ROUND-3",
       "relative_path": "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_3.md",
-      "sha256": "c325809dcc8949640782af00cbfa6a5ede518355abdcd2751ab00fd533f06b81"
+      "sha256": "9758199168d4659a18f735cb262edc3b8d26a02a4dcb1a059ae28552de5ee6b0"
     },
     {
       "managed_by": "myis-report",
       "note_id": "HISTORY-PAPER-A",
       "relative_path": "05_Research_History/Paper_A.md",
-      "sha256": "f7231393d1facf225ef99b86fbe90ba546f5141d1e62674fa038db7cfe025852"
+      "sha256": "98f20ef75ee515a8da118f543ff69b69076bb32f0d37c3d87a9f5ffd0aebfbdd"
     },
     {
       "managed_by": "myis-report",
       "note_id": "HISTORY-PAPER-B",
       "relative_path": "05_Research_History/Paper_B.md",
-      "sha256": "cbd7bf22ea09c27023e70aa4caa0e29015a3b4f872f2c4f7e175dc74cc3f173c"
+      "sha256": "077777d7a050abdb6e35050f0af73a9368e1e9cdf88eb0c0e2e31fe2f2f71c78"
     },
     {
       "managed_by": "myis-report",
       "note_id": "HISTORY-PAPER-C",
       "relative_path": "05_Research_History/Paper_C.md",
-      "sha256": "cb30d6b904b8590b10b2979f3d6eb5d3defeb260d63069d4aa5ecaceb2605a22"
+      "sha256": "d5b9a956d07bfae208cfb170599a73b917667b22a912920818562b1943e982b1"
     },
     {
       "managed_by": "myis-report",
       "note_id": "HISTORY-PAPER-D",
       "relative_path": "05_Research_History/Paper_D.md",
-      "sha256": "dd0eeb0d3344448e329f28bf0a43a76911bf0ee9598708b6a67c887a6f3f67ee"
+      "sha256": "87ebcc2fabc0a6734170e1f3d4ac9c02b7a97f8f50ea017cbfb2750c46f47a54"
     },
     {
       "managed_by": "myis-report",
       "note_id": "RESEARCH-HISTORY-INDEX",
       "relative_path": "05_Research_History/RESEARCH_HISTORY_INDEX.md",
-      "sha256": "737d72a589295ef8cca68e663a0f85969be2ab0a67880da36b7ee0285b011add"
+      "sha256": "6069d61afefab39902d9920e865538d619e9089d605d1b46691db2ae705e1b31"
     },
     {
       "managed_by": "myis-report",
       "note_id": "SCOPE-HISTORY-INDEX",
       "relative_path": "05_Research_History/SCOPE/SCOPE_HISTORY_INDEX.md",
-      "sha256": "dc927ac6e4ce8ada962852767f486b9097781ed7407b079a1bb34085959c38d4"
+      "sha256": "d8baf4d97a70777ad3646f86b58af432976c2c4917587e6d99d0c602e5261a82"
     },
     {
       "managed_by": "myis-report",
       "note_id": "DECISION-D1_START_CAMPAIGN",
       "relative_path": "06_Decisions_Risks/D1_START_CAMPAIGN.md",
-      "sha256": "c015629ee9299b76d91b58b3aa81cccccebdfff8b2d2a8f724a63eb69492aa40"
+      "sha256": "1c35fae7c85a320142ee99690c6af0bc1d11630caf3475a6809a28278cc84a87"
     },
     {
       "managed_by": "myis-report",
       "note_id": "DECISION-D2_OPEN_FINAL",
       "relative_path": "06_Decisions_Risks/D2_OPEN_FINAL.md",
-      "sha256": "f2622f6ee6a4efbeb64181d3c3f48641a8dbe510a84b7a2ec76a4e9b38144018"
+      "sha256": "48087049ebb9cbd3edda429eee00421fd574e34a366517c39720fa07fe485234"
     },
     {
       "managed_by": "myis-report",
       "note_id": "DECISION-D3_SUBMIT_RELEASE",
       "relative_path": "06_Decisions_Risks/D3_SUBMIT_RELEASE.md",
-      "sha256": "92f741f2676f6a95b815eb16cf0512dbf9574c0562ee9098b08f51dc8b618b36"
+      "sha256": "62cc8604fe1b56d6ec96b8cbda42057dce092a2559192cce2fa12d1f70243533"
     },
     {
       "managed_by": "myis-report",
       "note_id": "DECISIONS",
       "relative_path": "06_Decisions_Risks/Decisions.md",
-      "sha256": "6dace8eaef8467c863cc71f50eb58accf5881dc2eb5c1e1bbddfe64204ad933f"
+      "sha256": "377ae6d18d80cfe629ac4ad70999f817322f5c8b31acf080ea8239244ee76b27"
     },
     {
       "managed_by": "myis-report",
       "note_id": "FAILED-ATTEMPTS",
       "relative_path": "06_Decisions_Risks/Failed_Attempts.md",
-      "sha256": "9b8745edf6d83861ee84450af036d2bce061866e1689e248f7cea9cf1399f76c"
+      "sha256": "e62f1766edc1363709b8e7a5cf0e7b31fdc3bb5eb031a0b2acfce012fe26cb11"
     },
     {
       "managed_by": "myis-report",
       "note_id": "RAID",
       "relative_path": "06_Decisions_Risks/RAID.md",
-      "sha256": "4afae550ceafe51943dce2b12a2ee6d1b743aa2340abbf71310d4cc2153b8504"
+      "sha256": "6c3b73f83f9606860e5882dfe1bff848df7b47c65848ae298e39ba37fcd8c077"
     },
     {
       "managed_by": "myis-report",
@@ -1402,13 +1402,13 @@
       "managed_by": "myis-report",
       "note_id": "OWNER-NOTE-TEMPLATE",
       "relative_path": "70_Templates/OWNER_NOTE_TEMPLATE.md",
-      "sha256": "c1b2432827e0bd3886c4db0507dc9dbbee4f76b83d2069a07c3aca312954ebcc"
+      "sha256": "3e6542a3c5ada90f77f661a8cf439ec083d4e81476cb62395791f9e8e00dbeb4"
     },
     {
       "managed_by": "myis-report",
       "note_id": "HOME",
       "relative_path": "HOME.md",
-      "sha256": "a9ac75e9a5207e2f8cae89d134166e7e73796162f1690450eeefe58c72196524"
+      "sha256": "8c827b053bc4b44200bafa61bbabddcbabe41c05149b79846d21bd41fca538b6"
     },
     {
       "managed_by": "myis-report",
@@ -1417,11 +1417,11 @@
       "sha256": "1917e97cafd8c4159e57f7fb2fdad28c4d5cfdc4242fe43593c15c6671d8ee51"
     }
   ],
-  "manifest_sha256": "7fe42f1fb48e925520edeefe3bc0f1b030dc3f504aac08707495c3d710a32a55",
+  "manifest_sha256": "8ad1998d191b46e98a4273899a80d3ac66e9cf628a027c5f937ac5c9f385b708",
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "b91bbeb83e25bb1d016b79db6f64ee49162c172433b996c219a4d3e2ef43cb40",
-  "read_model_sha256": "004c227ac9746c898d9856ed45f0d64a6989baf53be16e84cfc582b9de477cf5",
+  "read_model_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "read_model_sha256": "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a",
   "schema_version": "myis.obsidian-generated-manifest.v2",
-  "source_commit": "8b4b3d6f39aa06580fc2c46743ea7fad8f5f390e",
+  "source_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "vault_id": "myis-obsidian-report"
 }
