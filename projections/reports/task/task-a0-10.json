@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93",
+      "content_sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -227,7 +227,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93",
+      "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -298,9 +298,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-05T13:42:17Z",
-  "generated_from_revision": "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f",
-  "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
+  "generated_at": "2026-08-05T15:37:19Z",
+  "generated_from_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
+  "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -327,10 +327,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93",
+      "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
+    "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -357,7 +357,7 @@
       "uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json"
     },
     "source_of_truth": {
-      "sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
+      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
       "uri": "control/source-of-truth.yaml"
     },
     "source_verification_receipt": {
@@ -371,13 +371,13 @@
   },
   "interpretation": "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation.",
   "language": "en",
-  "last_material_update": "2026-08-05T13:42:17Z",
+  "last_material_update": "2026-08-05T15:37:19Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.",
+  "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
   "objective": "Legacy code harvest and phase-ready scaffolding",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-10",
-  "report_sha256": "819b700a457edcb62d29e40d044d10bed2393b6398b8a66f7ee196232a68cb62",
+  "report_sha256": "1a0a87baa4047f367dc3f69dff0bf0623c0887ecfdaac963dba25266f2039930",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -390,7 +390,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_1_complete_a1_2_contract_locked",
+    "program_state": "a1_2_contract_scaffold_complete_launch_locked",
     "task": "A0.10"
   },
   "status": "completed",

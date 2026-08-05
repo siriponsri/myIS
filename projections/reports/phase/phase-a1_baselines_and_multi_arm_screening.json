@@ -107,15 +107,231 @@
       "scientific_authority": false,
       "title": "A1.2 GPU, elapsed-time, and budget proposal",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-contract-scaffold-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "834ed83440b7d2c0809588f661739208ddb62d72d6d4cd582f192bd9f2cbff7d",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Closes the offline scaffold goal while preserving launch, measured retrieval, Selection, and Final locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 contract scaffold receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-execution-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Binds the five-arm order, zero real counters, resource plan, and the exact launch-locked next action.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 versioned execution contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-arm01-rank-parity",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "517e2157426cce4f050b71e7423c3a76014077f8ae525133099f0c9b048a587d",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Records exact synthetic rank-order parity against the repository Okapi reference with zero measured and charged-resource counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a1.2/bm25s-rank-parity-v1/receipt.json",
+      "scientific_authority": false,
+      "title": "A1.2 ARM-01 bm25s synthetic CPU rank-parity receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-budget-profile",
+      "artifact_type": "budget",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Freezes the USD 5 pilot, USD 18 screen, USD 23 A1, and USD 100 campaign hard stops without authorizing spend.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/budgets/a1.2-common-screen-v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 hash-bound budget profile",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-execution-envelope",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Separates the CPU-only zero-cost scaffold authority from the planned but unadopted GPU execution boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/execution-envelope-a1.2-v1.yaml",
+      "scientific_authority": false,
+      "title": "A1.2 execution envelope",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-model-lockset",
+      "artifact_type": "lockset",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Freezes the ARM-01 bm25s adapter and four public dense source revisions while requiring Owner-local runtime manifests.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/model-lockset.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 five-arm model source lockset",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-launch-checklist",
+      "artifact_type": "checklist",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6dff0daf0d4190a1a5018ce28ee20d67af60e82220717adea1ec480867894175",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Lists the remaining Owner-local artifact, parity, quote, capacity, storage, adoption, and termination checks; launch remains false.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/launch-checklist.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 Owner-local launch checklist",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-shutdown-plan",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Requires both an in-instance guard and an Owner-local provider termination watcher; guest poweroff alone is insufficient.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/shutdown-plan.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 two-layer shutdown plan",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scaffold-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ae5e816c5efd60ed972be2d6f0d1490656321ccc323e450e679b18beefc1dde5",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Defines the detailed English reporting, archive retention, CPU-only ARM-01, and pre-GPU acceptance contract.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md",
+      "scientific_authority": false,
+      "title": "A1.2 contract scaffold runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scaffold-ledger",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c0c2ab001460905e52a8d22606da3a2d44f7c8388612b1592d0b4fa05105273f",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Hash-chains scaffold start, ARM-01 synthetic CPU parity, and launch-locked closeout.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-scaffold-ledger.v1.jsonl",
+      "scientific_authority": false,
+      "title": "A1.2 append-only scaffold ledger",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-report-archive-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e1a17d104a245eae8c601b637316175422263d50f60f36e864dcf17c07ebf6a4",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Confirms that all 39 registered detailed English Phase/Task reports remain current or graph-referenced and that no generated or Owner-authored report is eligible to move.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/report-archive-audit.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 generated report archive audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-closeout-validation-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Records the aggregate-safe validation matrix, recovered infrastructure failures, zero scientific counters, and untouched protected surfaces.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "scientific_authority": false,
+      "title": "A1.2 closeout validation audit",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity",
+  "claim_boundary": "offline_scaffold_only_no_measured_retrieval_claim",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1.1 is active; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero.",
+    "reason": "A1 engineering scaffolding is current; A1.2 scientific screening remains unexecuted and measured, Selection, and Final counters remain zero.",
     "status": "active"
   },
-  "evidence_class": "engineering_fixture",
+  "evidence_class": "engineering_contract_scaffold",
   "evidence_links": [
     {
       "artifact_id": "a11-adapter-task-receipt",
@@ -146,16 +362,127 @@
       "artifact_id": "a12-gpu-execution-proposal",
       "sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
       "uri": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json"
+    },
+    {
+      "artifact_id": "a12-contract-scaffold-receipt",
+      "sha256": "834ed83440b7d2c0809588f661739208ddb62d72d6d4cd582f192bd9f2cbff7d",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json"
+    },
+    {
+      "artifact_id": "a12-execution-contract",
+      "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
+      "uri": "control/armindex/a1.2/execution-contract.v1.json"
+    },
+    {
+      "artifact_id": "a12-arm01-rank-parity",
+      "sha256": "517e2157426cce4f050b71e7423c3a76014077f8ae525133099f0c9b048a587d",
+      "uri": "outputs/fixtures/armindex/a1.2/bm25s-rank-parity-v1/receipt.json"
+    },
+    {
+      "artifact_id": "a12-budget-profile",
+      "sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
+      "uri": "control/budgets/a1.2-common-screen-v1.json"
+    },
+    {
+      "artifact_id": "a12-execution-envelope",
+      "sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
+      "uri": "control/execution-envelope-a1.2-v1.yaml"
+    },
+    {
+      "artifact_id": "a12-model-lockset",
+      "sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
+      "uri": "control/armindex/a1.2/model-lockset.v1.json"
+    },
+    {
+      "artifact_id": "a12-launch-checklist",
+      "sha256": "6dff0daf0d4190a1a5018ce28ee20d67af60e82220717adea1ec480867894175",
+      "uri": "control/armindex/a1.2/launch-checklist.v1.json"
+    },
+    {
+      "artifact_id": "a12-shutdown-plan",
+      "sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
+      "uri": "control/armindex/a1.2/shutdown-plan.v1.json"
+    },
+    {
+      "artifact_id": "a12-scaffold-runbook",
+      "sha256": "ae5e816c5efd60ed972be2d6f0d1490656321ccc323e450e679b18beefc1dde5",
+      "uri": "control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md"
+    },
+    {
+      "artifact_id": "a12-scaffold-ledger",
+      "sha256": "c0c2ab001460905e52a8d22606da3a2d44f7c8388612b1592d0b4fa05105273f",
+      "uri": "control/armindex/a1.2/execution-scaffold-ledger.v1.jsonl"
+    },
+    {
+      "artifact_id": "a12-report-archive-audit",
+      "sha256": "e1a17d104a245eae8c601b637316175422263d50f60f36e864dcf17c07ebf6a4",
+      "uri": "control/armindex/a1.2/report-archive-audit.v1.json"
+    },
+    {
+      "artifact_id": "a12-closeout-validation-audit",
+      "sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
     }
   ],
-  "failure_recovery_references": [],
-  "generated_at": "2026-08-05T13:42:17Z",
-  "generated_from_revision": "24cc5e748960c5c2751db993542e53d5d02ea4c245d80c417c7a1d2b2243298f",
-  "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
+  "failure_recovery_references": [
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-unsynced-console-entrypoint-20260805",
+      "failure_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "recovery_id": "a1.2-module-cli-validation-20260805",
+      "recovery_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-mlflow-v2-experiment-missing-20260805",
+      "failure_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "recovery_id": "a1.2-zero-data-mlflow-bootstrap-20260805",
+      "recovery_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-full-suite-runner-timeout-20260805",
+      "failure_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "recovery_id": "a1.2-full-suite-extended-timeout-pass-20260805",
+      "recovery_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-extended-style-profile-debt-20260805",
+      "failure_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "recovery_id": "a1.2-scoped-correctness-ruff-pass-20260805",
+      "recovery_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "status": "bounded_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-report-builder-second-source-read-20260805",
+      "failure_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "failure_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "recovery_id": "a1.2-single-read-model-recovery-projection-20260805",
+      "recovery_sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+      "status": "repaired_and_validated"
+    }
+  ],
+  "generated_at": "2026-08-05T15:37:19Z",
+  "generated_from_revision": "bbdd61a569271d55d37decbf1a2eabd479c05bafb51055d4231997bbef59e4e7",
+  "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering_fixture",
+    "evidence_class": "engineering_contract_scaffold",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -185,20 +512,48 @@
       "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json"
     },
+    "a12_budget_profile": {
+      "sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
+      "uri": "control/budgets/a1.2-common-screen-v1.json"
+    },
+    "a12_closeout_validation_audit": {
+      "check_count": 15,
+      "recovery_count": 5,
+      "sha256": "9fedd108724ca75e577e1f3bb269b8983a7a9c660e7975dd3478834a93ed0fd3",
+      "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
+    },
+    "a12_execution_contract": {
+      "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
+      "status": "a1_2_contract_scaffold_complete_launch_locked",
+      "uri": "control/armindex/a1.2/execution-contract.v1.json"
+    },
     "a12_gpu_proposal": {
       "sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
       "status": "proposal_not_adopted_execution_locked",
       "uri": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json"
+    },
+    "a12_launch_checklist": {
+      "launch_ready": false,
+      "sha256": "6dff0daf0d4190a1a5018ce28ee20d67af60e82220717adea1ec480867894175",
+      "uri": "control/armindex/a1.2/launch-checklist.v1.json"
+    },
+    "a12_model_lockset": {
+      "sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
+      "uri": "control/armindex/a1.2/model-lockset.v1.json"
+    },
+    "a12_shutdown_plan": {
+      "sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
+      "uri": "control/armindex/a1.2/shutdown-plan.v1.json"
     },
     "armindex_schema_root": {
       "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "0779c019d1cbdbf52747b0bae90eb31f739f0a10af23f6fcfab50012799aee93",
+      "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "800a50baba209ffdc78551d78f9c8e5e8044428a",
+    "git_commit": "c93cd8f3a7bd18a8ce15a040cb2d2b94075cdc29",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -209,13 +564,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "09661ecfd6a336c2f163ecf69d5921e0752eaa47fc4b0b03ba45cdc8f13835cd",
+      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.",
+  "interpretation": "A1 now has a reproducible CPU anchor and a bounded pre-GPU contract. Scientific completion still requires Owner-local artifact validation, explicit adoption, and the separately authorized common screen.",
   "language": "en",
-  "last_material_update": "2026-08-05T13:42:17Z",
+  "last_material_update": "2026-08-05T15:37:19Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -306,16 +661,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.",
+  "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "cc08d3b3e762ed78dcb1219386de4e701eddcc38f762113e16c001c5ace109d5",
+  "report_sha256": "9aad07eb2efb2c9f21c6f42d3da4c23cfcdba0b317ee5357a55f88862dad75f6",
   "report_type": "phase",
   "result": {
     "decision": "active",
-    "output": "A receipt-bound synthetic adapter fixture validates 5 declared arms, executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks 4 dense arms before model or network access.",
-    "result": "A1.1 is active; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero."
+    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture and a validated, launch-locked A1.2 execution scaffold for 5 arms.",
+    "result": "A1 engineering scaffolding is current; A1.2 scientific screening remains unexecuted and measured, Selection, and Final counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -323,20 +678,32 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_1_complete_a1_2_contract_locked",
+    "program_state": "a1_2_contract_scaffold_complete_launch_locked",
     "task": null
   },
   "status": "active",
   "supported_claims": [
     {
-      "claim": "A receipt-bound synthetic adapter fixture validates 5 declared arms, executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks 4 dense arms before model or network access.",
+      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture and a validated, launch-locked A1.2 execution scaffold for 5 arms.",
       "evidence": [
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
         "a11-adapter-fixture-receipt",
         "a11-adapter-runbook",
         "a11-adapter-ledger",
-        "a12-gpu-execution-proposal"
+        "a12-gpu-execution-proposal",
+        "a12-contract-scaffold-receipt",
+        "a12-execution-contract",
+        "a12-arm01-rank-parity",
+        "a12-budget-profile",
+        "a12-execution-envelope",
+        "a12-model-lockset",
+        "a12-launch-checklist",
+        "a12-shutdown-plan",
+        "a12-scaffold-runbook",
+        "a12-scaffold-ledger",
+        "a12-report-archive-audit",
+        "a12-closeout-validation-audit"
       ]
     }
   ],
@@ -347,5 +714,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
+  "work_summary": "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. ARM-01 remains local CPU only; four dense source revisions and critical commitments are frozen, while Owner-local runtime manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
 }
