@@ -1,0 +1,186 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260805T154917Z-a1.2-contract-scaffold-closeout-v1",
+  "run_id": null,
+  "goal_id": "019fcefe-6705-7971-aed4-6d64d9341850",
+  "started_at_utc": "2026-08-05T14:09:08Z",
+  "ended_at_utc": "2026-08-05T15:49:17Z",
+  "scope": "Complete and close the offline A1.2 common multi-arm screening scaffold with ARM-01 synthetic CPU validation, detailed English Phase/Task reports, archive audit, model/source locks, resource proposal, validation, Brain pointers, commits, and push readiness.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-05",
+      "scope": "CPU-only ARM-01 scaffold work, detailed English reports for every Phase and Task, retention or archival assessment for unrelated generated reports, and commit/push closeout; no measured retrieval or GPU spend."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "f217846594d7b10c6d80f35690a4303613b35d9d",
+    "dirty_paths": [
+      "outputs/audits/research-sessions/20260805T154917Z-a1.2-contract-scaffold-closeout-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner requested CPU-first ARM-01 work, detailed English reports for every registered Phase and Task, archive assessment, full file/Brain/report refresh, and commit/push closeout without authorizing GPU execution.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The versioned A1.2 execution contract, hash-bound budget, five source locks, launch checklist, shutdown plan, receipt, and ledger were materialized and validated with launch locked.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json",
+          "sha256": "834ed83440b7d2c0809588f661739208ddb62d72d6d4cd582f192bd9f2cbff7d",
+          "locator": "status, bindings, safety, and real_counters"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "ARM-01 bm25s produced exact deterministic rank-order parity against the repository Okapi reference on synthetic CPU-only inputs.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/armindex/a1.2/bm25s-rank-parity-v1/receipt.json",
+          "sha256": "517e2157426cce4f050b71e7423c3a76014077f8ae525133099f0c9b048a587d",
+          "locator": "checks, safety, and real_counters"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "Closeout exposed bounded infrastructure and projection defects; all were retained with explicit recovery records and none changed scientific counters.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "locator": "failures_and_recoveries"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "Projection generation was repaired to use one validated read-model object and to bind the latest validated A1.2 receipt in sync and MLflow-safe projections.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "locator": "failures_and_recoveries and check_groups.latest_validated_projection_source"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "All 39 registered Phase and Task reports are detailed English generated reports with the required fifteen-section structure; zero reports qualified for archival because every report remained current or graph-referenced.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/report-archive-audit.v1.json",
+          "sha256": "e1a17d104a245eae8c601b637316175422263d50f60f36e864dcf17c07ebf6a4",
+          "locator": "registered_reports, required_sections, report_language, archive_candidates, and disposition"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0007",
+      "sequence": 7,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The closeout validation matrix passed sixteen aggregate-safe groups, including the full test suite, report drift, assets, sessions, layout, safety policy, MLflow doctor, Brain literature, Ruff correctness, and clean-checkout byte policy.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "locator": "check_count and check_groups"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0008",
+      "sequence": 8,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The deterministic report sync completed with the A1.2 scaffold receipt as the latest source and projected consistent Research, Brain, Paper, Dashboard, Obsidian, and MLflow-safe artifacts.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "ce200daadcbbd92b227917c586e3d12f7fc31c9bfc613b1fbe2e41a76c62ae7e",
+          "locator": "status, source_receipt_uri, read_model_revision, and projection_events"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0009",
+      "sequence": 9,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Measured retrieval, GPU use, paid APIs, network model download, provider switching, Selection, and Final all remained closed with zero real and charged-resource counters.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/launch-checklist.v1.json",
+          "sha256": "6dff0daf0d4190a1a5018ce28ee20d67af60e82220717adea1ec480867894175",
+          "locator": "launch_ready, forbidden_until_all_pass, and pending_owner"
+        },
+        {
+          "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "locator": "safety, real_counters, and resource_counters"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread": "Owner-local dense artifact manifests, adapter parity, Snowflake remote-code byte hashes, and Qwen measured maximum input length remain pending.",
+      "provenance": "agent-observed",
+      "source": "control/armindex/a1.2/launch-checklist.v1.json"
+    },
+    {
+      "thread": "A live quote, capacity, provider instance identity, artifact return target, free-space check, external termination watcher, and TTL dry run are required before GPU reservation.",
+      "provenance": "agent-observed",
+      "source": "control/armindex/a1.2/launch-checklist.v1.json"
+    },
+    {
+      "thread": "The unchanged A1.2 execution contract still requires explicit Owner adoption; D2_OPEN_FINAL and D3_SUBMIT_RELEASE remain closed.",
+      "provenance": "agent-observed",
+      "source": "control/armindex/a1.2/execution-contract.v1.json"
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
