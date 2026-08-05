@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41"
-read_model_sha256: "031a07f945e9bc8e93bb35511787a98e4524ce4c88702aa04b78a57cf8a90527"
-source_commit: "07227c57cdcdaf91efbc3416e8127074e99229fb"
+read_model_revision: "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6"
+read_model_sha256: "d0d5025a60398ac34f3258989c2fb66ebc5385a7dec82c2b9a0b73697a78c217"
+source_commit: "b0be7bd6bc2d929277e2f190ad3ab91844639fb9"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41"
-last_material_update: "2026-08-04T15:19:53Z"
+generated_from_revision: "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6"
+last_material_update: "2026-08-05T11:47:54Z"
 next_authorized_action: "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-04T15:19:53Z"
-updated_at: "2026-08-04T15:19:53Z"
+created_at: "2026-08-05T11:47:54Z"
+updated_at: "2026-08-05T11:47:54Z"
 note_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT-MASTER"
 note_type: "phase_report"
 phase_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"

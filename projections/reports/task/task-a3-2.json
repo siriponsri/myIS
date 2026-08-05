@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T15:19:53Z",
-  "generated_from_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
-  "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
+  "generated_at": "2026-08-05T11:47:54Z",
+  "generated_from_revision": "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6",
+  "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
+    "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -57,13 +57,13 @@
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-04T15:19:53Z",
+  "last_material_update": "2026-08-05T11:47:54Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
   "objective": "Complementarity and HarnessOpt",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-2",
-  "report_sha256": "9b2baf3af23faa3dc3122d2ac99cc1f5a1592520d2a1a2fabe5358ef6fd7b1f5",
+  "report_sha256": "7c5c05b836cbec0cf7651079e307a3c54c99ad054a1e445e7adfca4ed66dd7e2",
   "report_type": "task",
   "result": {
     "decision": "planned",

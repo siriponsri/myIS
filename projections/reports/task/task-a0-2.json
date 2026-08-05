@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-04T15:19:53Z",
-  "generated_from_revision": "62538da261d1f47cb5eeb14a7540586b42f54ef0f50bf7121f206a83d779cd41",
-  "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
+  "generated_at": "2026-08-05T11:47:54Z",
+  "generated_from_revision": "d54d706ff5439d87ab8058c23b1410fc35ba43f8570860d36d79f969348d59f6",
+  "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "41afbeef94da548869a54b3d96d841aa1345d29f744995a1d2e0b923bf4296ea",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "07227c57cdcdaf91efbc3416e8127074e99229fb",
+    "git_commit": "b0be7bd6bc2d929277e2f190ad3ab91844639fb9",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -197,13 +197,13 @@
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
-  "last_material_update": "2026-08-04T15:19:53Z",
+  "last_material_update": "2026-08-05T11:47:54Z",
   "metric_references": [],
   "next_authorized_action": "/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.",
   "objective": "Canonical authority and professional documentation",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-2",
-  "report_sha256": "5c10f7986bfd1948a163f33c9c2e85a10d7b65bbaa3f2b2d87389be8f0a18389",
+  "report_sha256": "2ed8899614902bd9030f7a8545e7350b608942e0725d63837b7c2c2760478c06",
   "report_type": "task",
   "result": {
     "decision": "completed",
