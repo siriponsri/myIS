@@ -4,7 +4,7 @@
   "run_id": null,
   "goal_id": "019fcefe-6705-7971-aed4-6d64d9341850",
   "started_at_utc": "2026-08-05T14:09:08Z",
-  "ended_at_utc": "2026-08-05T15:49:17Z",
+  "ended_at_utc": "2026-08-05T15:59:06Z",
   "scope": "Complete and close the offline A1.2 common multi-arm screening scaffold with ARM-01 synthetic CPU validation, detailed English Phase/Task reports, archive audit, model/source locks, resource proposal, validation, Brain pointers, commits, and push readiness.",
   "provenance": "agent-observed",
   "owner_approvals": [
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "path": ".",
-    "revision": "f217846594d7b10c6d80f35690a4303613b35d9d",
+    "revision": "6d884c7cf8a8a1c6a50486b7f30a8b370e435fbc",
     "dirty_paths": [
       "outputs/audits/research-sessions/20260805T154917Z-a1.2-contract-scaffold-closeout-v1.json"
     ]
@@ -67,7 +67,7 @@
       "evidence_refs": [
         {
           "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
-          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
           "locator": "failures_and_recoveries"
         }
       ]
@@ -81,7 +81,7 @@
       "evidence_refs": [
         {
           "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
-          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
           "locator": "failures_and_recoveries and check_groups.latest_validated_projection_source"
         }
       ]
@@ -105,11 +105,11 @@
       "sequence": 7,
       "type": "action",
       "provenance": "agent-observed",
-      "summary": "The closeout validation matrix passed sixteen aggregate-safe groups, including the full test suite, report drift, assets, sessions, layout, safety policy, MLflow doctor, Brain literature, Ruff correctness, and clean-checkout byte policy.",
+      "summary": "The closeout validation matrix passed seventeen aggregate-safe groups, including the full test suite, report drift, assets, sessions, layout, safety policy, MLflow doctor, Brain literature, Ruff correctness, clean-checkout byte policy, and volatility-safe audit policy.",
       "evidence_refs": [
         {
           "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
-          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
           "locator": "check_count and check_groups"
         }
       ]
@@ -123,7 +123,7 @@
       "evidence_refs": [
         {
           "path": "projections/sync-receipt.v2.json",
-          "sha256": "ce200daadcbbd92b227917c586e3d12f7fc31c9bfc613b1fbe2e41a76c62ae7e",
+          "sha256": "c6a0c26ab90ee1ec2d82f837b7c578f64d7225991006481e04f57c2ade8d16b1",
           "locator": "status, source_receipt_uri, read_model_revision, and projection_events"
         }
       ]
@@ -142,7 +142,7 @@
         },
         {
           "path": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
-          "sha256": "c34de6c8f1bfa7b29814536e9825c75ba869644289a0c2012b65271b04e5e0c5",
+          "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
           "locator": "safety, real_counters, and resource_counters"
         }
       ]
