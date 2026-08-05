@@ -8,7 +8,7 @@
   "evidence_class": "engineering_validation",
   "scientific_authority": false,
   "claim_boundary": "offline_scaffold_and_synthetic_arm01_cpu_validation_only_no_measured_retrieval_claim",
-  "check_count": 16,
+  "check_count": 17,
   "check_groups": [
     {"check_id": "a1_2_scaffold_validation", "status": "PASS", "observed_count": 16, "unit": "hash_bound_scaffold_files"},
     {"check_id": "arm01_bm25s_rank_parity", "status": "PASS", "observed_count": 7, "unit": "focused_tests"},
@@ -17,7 +17,7 @@
     {"check_id": "layout_and_markdown_links", "status": "PASS", "observed_count": 26, "unit": "markdown_files_checked"},
     {"check_id": "session_capsule_audit", "status": "PASS", "observed_count": 22, "unit": "classified_capsules", "unresolved_invalid_count": 0},
     {"check_id": "independent_migration_verifier", "status": "PASS", "observed_count": 9, "unit": "migration_invariants"},
-    {"check_id": "repository_safe_mlflow_doctor", "status": "PASS", "observed_count": 16, "unit": "doctor_checks", "archive_receipts": 3, "archive_runs": 3, "archive_artifacts": 36},
+    {"check_id": "repository_safe_mlflow_doctor", "status": "PASS", "observed_count": 16, "unit": "doctor_checks"},
     {"check_id": "dashboard_and_api", "status": "PASS", "observed_count": 19, "unit": "tests"},
     {"check_id": "policy_artifact_report_and_session_safety", "status": "PASS", "observed_count": 42, "unit": "tests"},
     {"check_id": "full_test_suite", "status": "PASS", "observed_count": 414, "unit": "tests", "warnings": 1},
@@ -25,6 +25,7 @@
     {"check_id": "brain_literature_validation", "status": "PASS", "observed_count": 154, "unit": "unique_literature_notes"},
     {"check_id": "clean_checkout_byte_policy", "status": "PASS", "observed_count": 9, "unit": "representative_hash_bound_paths"},
     {"check_id": "latest_validated_projection_source", "status": "PASS", "observed_count": 2, "unit": "sync_and_mlflow_projection_bindings"},
+    {"check_id": "volatility_safe_closeout_audit", "status": "PASS", "observed_count": 1, "unit": "immutable_audit_without_additive_store_counts"},
     {"check_id": "git_diff_check", "status": "PASS", "observed_count": 1, "unit": "repository_worktree"}
   ],
   "failures_and_recoveries": [
@@ -75,6 +76,14 @@
       "failure_summary": "The first post-commit sync receipt still selected the completed A1.1 adapter receipt as its latest ArmIndex source.",
       "recovery_summary": "The sync receipt and MLflow archive now bind the validated A1.2 scaffold receipt and closeout audit while keeping launch and measured execution false.",
       "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-volatile-mlflow-archive-counts-in-audit-20260805",
+      "recovery_id": "a1.2-stable-mlflow-doctor-audit-contract-20260805",
+      "status": "repaired_and_validated",
+      "failure_summary": "The first immutable closeout audit copied additive MLflow archive counts that increased during later deterministic report syncs.",
+      "recovery_summary": "The audit now records the stable doctor check result without freezing volatile archive counts; append-only MLflow receipts remain authoritative in the external store.",
+      "counters_changed": false
     }
   ],
   "safety": {
@@ -91,5 +100,5 @@
   "resource_counters": {"charged_usd": 0, "gpu_scientific_runs": 0, "paid_api_calls": 0, "model_downloads": 0, "provider_switches": 0},
   "untouched_surfaces": ["owner_local_protected_store", "final_split", "qrels", "membership", "query_ids", "per_query_outcomes", "credentials", "raw_provider_payloads"],
   "post_audit_obligations": ["deterministic_report_sync_twice", "report_drift_check", "research_session_capsule", "scoped_brain_commit_and_lease_release", "research_commit_and_push", "remote_state_verification"],
-  "audit_sha256": "dd798c013c13eba79356865071accdb63ba2f84d2d7d307620d9befd4c0c36f6"
+  "audit_sha256": "1620d36cb657b91619b2f0420faf63f16eaac0ed1334bd680da726d9710894de"
 }

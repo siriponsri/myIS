@@ -239,9 +239,9 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert projection["budget_limits"]["arm01_gpu_usd"] == 0
     assert projection["budget_limits"]["a1_total_hard_stop_usd"] == 23
     assert projection["archive_disposition"]["candidate_count"] == 0
-    assert projection["closeout_validation_check_count"] == 16
-    assert projection["closeout_validation_recovery_count"] == 6
-    assert len(projection["closeout_validation_recoveries"]) == 6
+    assert projection["closeout_validation_check_count"] == 17
+    assert projection["closeout_validation_recovery_count"] == 7
+    assert len(projection["closeout_validation_recoveries"]) == 7
     assert projection["closeout_validation_audit_sha256"]
     assert set(projection["real_counters"].values()) == {0}
     assert set(projection["resource_counters"].values()) == {0}
