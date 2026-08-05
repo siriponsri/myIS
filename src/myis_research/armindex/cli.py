@@ -9,10 +9,12 @@ from typing import Sequence
 
 import yaml
 
+from .adapter_fixture import run_adapter_fixture
 from .arms import ArmRegistry
 from .contracts import grouped_json_schemas, load_campaign
 from .feasibility import run_compute_storage_feasibility_fixture
 from .fixture import run_synthetic_fixture
+from .resource_proposal import load_and_validate_gpu_proposal
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -25,6 +27,13 @@ def _parser() -> argparse.ArgumentParser:
     fixture = commands.add_parser("fixture", help="run the disposable synthetic ARM-01 slice")
     fixture.add_argument("--repository-root", type=Path, default=Path.cwd())
     fixture.add_argument("--output", type=Path)
+    adapter_fixture = commands.add_parser(
+        "adapter-fixture",
+        help="run the synthetic-only A1.1 five-arm adapter and ARM-01 CPU fixture",
+    )
+    adapter_fixture.add_argument("--repository-root", type=Path, default=Path.cwd())
+    adapter_fixture.add_argument("--output", type=Path)
+    adapter_fixture.add_argument("--repetitions", type=int, default=11)
     feasibility = commands.add_parser(
         "feasibility-fixture",
         help="run the synthetic-only A0.8 CPU compute and storage fixture",
@@ -74,6 +83,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             if actual != expected:
                 raise ValueError(f"generated ArmIndex schema drift: {filename}")
         capabilities = ArmRegistry().capabilities()
+        proposal = load_and_validate_gpu_proposal(root)
         payload = {
             "schema_version": "myis.armindex-cli-validation.v1",
             "status": "PASS",
@@ -87,11 +97,15 @@ def main(argv: Sequence[str] | None = None) -> int:
                 item.fixture_status == "declared_unresolved_model_not_downloaded"
                 for item in capabilities
             ),
+            "a1_2_gpu_proposal_status": proposal["status"],
             "scientific_authority": False,
             "measured_execution": False,
         }
     elif args.command == "fixture":
         artifacts = run_synthetic_fixture(args.output)
+        payload = artifacts.summary()
+    elif args.command == "adapter-fixture":
+        artifacts = run_adapter_fixture(args.output, repetitions=args.repetitions)
         payload = artifacts.summary()
     else:
         artifacts = run_compute_storage_feasibility_fixture(

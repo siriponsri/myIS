@@ -23,3 +23,13 @@ A1_1_NEXT_AUTHORIZED_ACTION = (
     "open Selection, or open Final. Keep A1 measured screening closed until a separate "
     "execution contract authorizes it."
 )
+
+A1_2_NEXT_AUTHORIZED_ACTION = (
+    "/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING "
+    "execution contract, hash-bound budget profile, frozen offline model and adapter "
+    "locks, Owner-local launch checklist, and automatic shutdown plan from the validated "
+    "A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do "
+    "not launch measured retrieval, access protected payloads from the agent workspace, "
+    "download model weights during measured runtime, use paid APIs, switch providers, "
+    "open Selection, or open Final until the separate contract is adopted and validated."
+)

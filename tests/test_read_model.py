@@ -14,6 +14,7 @@ from myis_research.armindex.constants import (
     A0_8_NEXT_AUTHORIZED_ACTION,
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
+    A1_2_NEXT_AUTHORIZED_ACTION,
 )
 from myis_research.owner_local import build_receipt
 from myis_research.projections.read_model import (
@@ -24,6 +25,7 @@ from myis_research.projections.read_model import (
     A010_SOURCE_VERIFICATION_RECEIPT_PATH,
     _a08_compute_storage_feasibility_projection,
     _a09_phase_closeout_projection,
+    _a11_adapter_fixture_projection,
     _a010_legacy_code_harvest_projection,
     _legacy_file_commitment_matches,
     build_read_model,
@@ -193,7 +195,30 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    assert model["armindex"]["next_command"] == A1_1_NEXT_AUTHORIZED_ACTION
+    assert model["armindex"]["next_command"] == A1_2_NEXT_AUTHORIZED_ACTION
+
+
+def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
+    projection = _a11_adapter_fixture_projection(ROOT)
+
+    assert projection["status"] == "complete"
+    assert projection["validated"] is True
+    assert projection["fixture_status"] == "passed"
+    assert projection["registered_arms"] == 5
+    assert projection["runnable_cpu_arms"] == 1
+    assert projection["dense_arms_blocked"] == 4
+    assert projection["gpu_proposal_status"] == "proposal_not_adopted_execution_locked"
+    assert projection["gpu_spec"]["minimum_vram_gib"] == 24
+    assert projection["time_estimate"]["end_to_end_elapsed_hours_max"] == 20
+    assert projection["budget_estimate"]["a1_total_hard_stop"] == 23
+    assert projection["report_contract"]["language"] == "en"
+    assert projection["report_contract"]["required_registered_phase_reports"] == 12
+    assert projection["report_contract"]["required_registered_task_reports"] == 27
+    assert projection["measured_runs"] == 0
+    assert projection["selection_accesses"] == 0
+    assert projection["final_accesses"] == 0
+    assert set(projection["resource_counters"].values()) == {0}
+    assert projection["next_authorized_action"] == A1_2_NEXT_AUTHORIZED_ACTION
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

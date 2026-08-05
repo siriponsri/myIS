@@ -15,6 +15,14 @@ records:
     authority: control/migrations/armindex-a0.10-amendment.v1.yaml
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_fixture_only, no_protected_data, measured_counters_zero]
+  - id: armindex_a1_1_adapter_fixture_closeout
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_fixture_only, arm01_cpu_fixture_backend_only, dense_arms_fail_closed, no_protected_data, measured_counters_zero, gpu_proposal_non_authorizing]
+  - id: phase_task_reporting_contract
+    authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
+    projections: [projections/reports, obsidian]
+    restrictions: [detailed_english, fifteen_sections, owner_notes_preserved, archive_only_when_superseded_and_unreferenced]
   - id: control
     authority: control/program.yaml
     projections: [dashboard, brain, paper, mlflow]

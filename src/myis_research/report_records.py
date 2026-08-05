@@ -58,9 +58,14 @@ def _lifecycle(value: Any) -> str:
     value = str(value)
     if value in {"complete", "measured"}:
         return "completed"
-    if value in {"in_progress", "active", "executable"}:
+    if value in {
+        "in_progress",
+        "active",
+        "executable",
+        "a1_1_complete_a1_2_contract_locked",
+    }:
         return "active"
-    if value in {"blocked", "blocked_until_p1"}:
+    if value in {"blocked", "blocked_until_p1"} or value.startswith("locked"):
         return "blocked"
     return "planned"
 
@@ -467,10 +472,113 @@ def _artifacts(
                         producing_phase_id="A0_MIGRATION_FOUNDATION",
                         producing_task_id="A0.9",
                     ))
+    elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING":
+        adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
+        if isinstance(adapter, Mapping) and adapter.get("validated") is True:
+            if task_id in {None, "A1.1"}:
+                for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                    ("a11-adapter-task-receipt", "A1.1 adapter fixture task receipt", "receipt", "task_receipt_uri", "task_receipt_sha256", "Closes A1.1 against the validated five-arm scaffold, ARM-01 CPU path, reporting contract, and zero real counters."),
+                    ("a11-adapter-fixture-manifest", "A1.1 adapter fixture manifest", "manifest", "fixture_manifest_uri", "fixture_manifest_sha256", "Freezes the five adapter declarations, synthetic representation commitments, ARM-01 fixture backend, and fail-closed dense-arm boundary."),
+                    ("a11-adapter-fixture-receipt", "A1.1 ARM-01 CPU fixture receipt", "receipt", "fixture_receipt_uri", "fixture_receipt_sha256", "Records aggregate compile, index, search, evaluation, throughput, and Python-allocation observations from synthetic CPU execution."),
+                    ("a11-adapter-runbook", "A1.1 adapter fixture runbook", "runbook", "runbook_uri", "runbook_sha256", "Defines the synthetic-only acceptance, detailed English report requirement, archive controls, and pre-GPU boundary."),
+                    ("a11-adapter-ledger", "A1.1 append-only execution ledger", "ledger", "ledger_uri", "ledger_sha256", "Binds task start, fixture execution, resource proposal, and ready-to-close state through a canonical hash chain."),
+                ):
+                    uri = adapter.get(uri_key)
+                    digest = adapter.get(sha_key)
+                    if uri and digest:
+                        result.append(_artifact(
+                            artifact_id=artifact_id,
+                            title=title,
+                            artifact_type=artifact_type,
+                            evidence_class="engineering_fixture",
+                            scientific_authority=False,
+                            safe_uri=str(uri),
+                            content_sha256=str(digest),
+                            explanation=explanation,
+                            producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                            producing_task_id="A1.1",
+                        ))
+            if task_id in {None, "A1.1", "A1.2"}:
+                proposal_uri = adapter.get("gpu_proposal_uri")
+                proposal_digest = adapter.get("gpu_proposal_sha256")
+                if proposal_uri and proposal_digest:
+                    result.append(_artifact(
+                        artifact_id="a12-gpu-execution-proposal",
+                        title="A1.2 GPU, elapsed-time, and budget proposal",
+                        artifact_type="proposal",
+                        evidence_class="planning_estimate",
+                        scientific_authority=False,
+                        safe_uri=str(proposal_uri),
+                        content_sha256=str(proposal_digest),
+                        explanation="Provides bounded owner-managed GPU planning assumptions and hard stops without adopting an execution contract or launching compute.",
+                        producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                        producing_task_id="A1.1",
+                    ))
     return result
 
 
 def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> list[dict[str, Any]]:
+    if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}:
+        adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
+        if not isinstance(adapter, Mapping) or adapter.get("validated") is not True:
+            return []
+        observation = adapter.get("cpu_observation", {})
+        if not isinstance(observation, Mapping):
+            return []
+        latency = observation.get("latency_ms", {})
+        repetitions = int(observation.get("repetitions", 0))
+        rows = []
+        for operation in ("compile", "index_build", "search_workload"):
+            summary = latency.get(operation, {}) if isinstance(latency, Mapping) else {}
+            rows.append({
+                "name": f"fixture_{operation}_latency_p50_ms",
+                "cutoff": 100,
+                "split": "synthetic",
+                "scope": "A1.1",
+                "value": summary.get("p50") if isinstance(summary, Mapping) else None,
+                "n": repetitions,
+                "denominator": "host_observed_fixed_synthetic_adapter_workload",
+                "source_uri": adapter.get("fixture_receipt_uri"),
+                "source_sha256": adapter.get("fixture_receipt_sha256"),
+            })
+        rows.extend((
+            {
+                "name": "fixture_search_throughput_qps",
+                "cutoff": 100,
+                "split": "synthetic",
+                "scope": "A1.1",
+                "value": observation.get("search_throughput_qps"),
+                "n": observation.get("workload_calls"),
+                "denominator": "host_observed_fixed_synthetic_adapter_workload",
+                "source_uri": adapter.get("fixture_receipt_uri"),
+                "source_sha256": adapter.get("fixture_receipt_sha256"),
+            },
+            {
+                "name": "fixture_peak_python_allocation_bytes",
+                "cutoff": 100,
+                "split": "synthetic",
+                "scope": "A1.1",
+                "value": observation.get("peak_python_allocation_bytes"),
+                "n": repetitions,
+                "denominator": "tracemalloc_peak_for_fixed_synthetic_adapter_workload",
+                "source_uri": adapter.get("fixture_receipt_uri"),
+                "source_sha256": adapter.get("fixture_receipt_sha256"),
+            },
+        ))
+        for metric in adapter.get("synthetic_metrics", []):
+            if isinstance(metric, Mapping):
+                rows.append({
+                    "name": f"fixture_{metric.get('name')}",
+                    "cutoff": metric.get("cutoff"),
+                    "split": "synthetic",
+                    "scope": "A1.1",
+                    "value": metric.get("value"),
+                    "n": metric.get("n"),
+                    "denominator": metric.get("denominator"),
+                    "source_uri": adapter.get("fixture_receipt_uri"),
+                    "source_sha256": adapter.get("fixture_receipt_sha256"),
+                })
+        return rows
     if phase_id == "A0_MIGRATION_FOUNDATION" and task_id in {None, "A0.8"}:
         feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
         if not isinstance(feasibility, Mapping) or feasibility.get("validated") is not True:
@@ -646,6 +754,25 @@ def _bindings(
                 "uri": closeout.get("validation_audit_uri"),
                 "sha256": closeout.get("validation_audit_sha256"),
             }
+        adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
+        if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and isinstance(adapter, Mapping):
+            bindings["a11_task_receipt"] = {
+                "uri": adapter.get("task_receipt_uri"),
+                "sha256": adapter.get("task_receipt_sha256"),
+            }
+            bindings["a11_fixture_manifest"] = {
+                "uri": adapter.get("fixture_manifest_uri"),
+                "sha256": adapter.get("fixture_manifest_sha256"),
+            }
+            bindings["a11_fixture_receipt"] = {
+                "uri": adapter.get("fixture_receipt_uri"),
+                "sha256": adapter.get("fixture_receipt_sha256"),
+            }
+            bindings["a12_gpu_proposal"] = {
+                "uri": adapter.get("gpu_proposal_uri"),
+                "sha256": adapter.get("gpu_proposal_sha256"),
+                "status": adapter.get("gpu_proposal_status"),
+            }
     return bindings
 
 
@@ -656,8 +783,14 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     report_id = (f"task-{task_id.lower().replace('.', '-')}") if task_id else f"phase-{phase_id.lower()}"
     status = _lifecycle(task.get("status") if task else phase.get("status"))
     scientific = phase_id == "P1_CPU_BASELINE"
-    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
-    claim_boundary = "train_selection_only" if scientific else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} or phase_id.startswith("A") else "unavailable"
+    adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
+    a11_validated = (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and isinstance(adapter, Mapping)
+        and adapter.get("validated") is True
+    )
+    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering_fixture" if a11_validated and task_id in {None, "A1.1"} else "planning_estimate" if a11_validated and task_id == "A1.2" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
+    claim_boundary = "train_selection_only" if scientific else str(adapter.get("claim_boundary")) if a11_validated and task_id in {None, "A1.1"} else "resource_planning_only_no_gpu_launch_or_measured_authority" if a11_validated and task_id == "A1.2" else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} or phase_id.startswith("A") else "unavailable"
     objective = str(task.get("title")) if task else f"Deliver the {phase_id} research phase with an auditable evidence boundary."
     if phase_id == "P2_SCOPE_DEVELOPMENT":
         objective = "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2."
@@ -834,6 +967,22 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         result = f"A0.10 is {status}; synthetic vertical-slice status is {fixture_status}; measured ArmIndex, Selection, and Final counters remain zero."
         interpretation = "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation."
         decision_status = status
+    elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}:
+        registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
+        dense_blocked = int(adapter.get("dense_arms_blocked", 0)) if isinstance(adapter, Mapping) else 0
+        output = (
+            f"A receipt-bound synthetic adapter fixture validates {registered_arms} declared arms, "
+            f"executes the ARM-01 compile-index-search-evaluate path on CPU, and blocks {dense_blocked} dense arms before model or network access."
+        )
+        result = f"A1.1 is {status}; the fixture passed; measured ArmIndex, candidate, Selection, and Final counters remain zero."
+        interpretation = "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance."
+        decision_status = status
+    elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2":
+        proposal_status = str(adapter.get("gpu_proposal_status", "not_available")) if isinstance(adapter, Mapping) else "not_available"
+        output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
+        result = "A1.2 measured screening remains blocked pending a separate versioned execution contract and hash-bound budget profile; no GPU reservation or measured run occurred."
+        interpretation = "The proposal is resource planning evidence only. A 24 GiB sequential GPU screen is plausible under the stated assumptions, but protected workload size, live provider pricing, pre-staged artifact hashes, and an Owner-local throughput pilot are still required before adoption."
+        decision_status = "blocked"
     elif phase_id.startswith("A"):
         armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
         output = "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer."
@@ -886,6 +1035,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "phase_id": phase_id,
         "task_id": task_id,
         "status": status,
+        "language": "en",
         "evidence_class": evidence_class,
         "scientific_authority": scientific,
         "claim_boundary": claim_boundary,
@@ -905,6 +1055,10 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         "work_summary": (
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
+            else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
+            if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}
+            else "The A1.1 receipt is used only to plan the A1.2 execution contract. The proposal records one 24 GiB GPU class, sequential model residency, elapsed-time and cost ranges, hard stops, pre-staging requirements, automatic shutdown, and Owner-local prerequisites; it does not authorize reservation or execution."
+            if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2"
             else "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
             if phase_id.startswith("A") and task_id == "A0.10"
             else "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."

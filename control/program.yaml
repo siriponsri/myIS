@@ -21,7 +21,7 @@ active_phase_registry:
   campaign_id: armindex-multiretriever-v2
   phases: [A0_MIGRATION_FOUNDATION, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX, A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT, A4_PRODUCTION_TRANSFER_AND_SELECTION, A5_FINAL_CONFIRMATION, A6_PUBLICATION_AND_RELEASE]
   current_phase: A1_BASELINES_AND_MULTI_ARM_SCREENING
-  current_task: A1.1
+  current_task: A1.2
   measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -55,4 +55,4 @@ protected_boundary:
   protected_membership_in_agent_workspace: false
   qrels_in_projections: false
   per_query_outcomes_in_projections: false
-  active_project_claim_boundary: synthetic_offline_adapter_fixture_only
+  active_project_claim_boundary: synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity

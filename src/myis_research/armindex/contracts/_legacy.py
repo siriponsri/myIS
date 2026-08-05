@@ -12,7 +12,11 @@ from typing import Any, Iterable, Mapping
 import yaml
 from jsonschema import Draft202012Validator
 
-from ..constants import A0_8_NEXT_AUTHORIZED_ACTION, A1_1_NEXT_AUTHORIZED_ACTION
+from ..constants import (
+    A0_8_NEXT_AUTHORIZED_ACTION,
+    A1_1_NEXT_AUTHORIZED_ACTION,
+    A1_2_NEXT_AUTHORIZED_ACTION,
+)
 
 
 CAMPAIGN_ID = "armindex-multiretriever-v2"
@@ -272,7 +276,9 @@ def build_armindex_projection(root: Path) -> dict[str, Any]:
         "budget": {"currency": "USD", "actual": 0.0, "hard_stop": 100.0, "migration_profile": "armindex-migration-v2"},
         "historical_campaigns": [{"campaign_id": "scope-autoindex-v1", "status": "historical_read_only", "p1_measured_evidence": "preserved_by_pointer", "p2_measured_runs": 0}],
         "next_command": (
-            A1_1_NEXT_AUTHORIZED_ACTION
+            A1_2_NEXT_AUTHORIZED_ACTION
+            if config["phases"][1].get("tasks", [{}])[0].get("status") == "complete"
+            else A1_1_NEXT_AUTHORIZED_ACTION
             if config["phases"][0].get("status") == "complete"
             else A0_8_NEXT_AUTHORIZED_ACTION
         ),

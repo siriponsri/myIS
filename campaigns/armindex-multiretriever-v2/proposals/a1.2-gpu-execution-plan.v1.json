@@ -1,0 +1,98 @@
+{
+  "schema_version": "myis.armindex-a1.2-gpu-proposal.v1",
+  "proposal_id": "a1.2-gpu-execution-plan-v1",
+  "campaign_id": "armindex-multiretriever-v2",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "proposal_not_adopted_execution_locked",
+  "evidence_class": "planning_estimate",
+  "scientific_authority": false,
+  "claim_boundary": "resource_planning_only_no_gpu_launch_or_measured_authority",
+  "protected_data_accessed": false,
+  "source_bindings": [
+    {
+      "uri": "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md",
+      "sha256": "6fe7ff85586fa5de7e17b1ffe0d7ec9fbf97aec8935c5c455b71bd8d1a7c8b7c"
+    },
+    {
+      "uri": "docs/research/MODEL_SELECTION_V02.md",
+      "sha256": "cee027a661368627b476ad3a657c80d0bcaa3d98582c1f4de0886e8127146b21"
+    },
+    {
+      "uri": "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json",
+      "sha256": "b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24"
+    }
+  ],
+  "workload_assumptions": {
+    "dense_arm_count": 4,
+    "common_program_count": 5,
+    "sequential_model_residency": true,
+    "training": false,
+    "fine_tuning": false,
+    "model_weights_frozen": true,
+    "models_prestaged_before_execution": true,
+    "network_model_download": false,
+    "protected_unit_count_available_to_agent": false
+  },
+  "proposed_gpu_spec": {
+    "provider_class": "vast_ai_or_equivalent_owner_managed",
+    "gpu_count": 1,
+    "minimum_vram_gib": 24,
+    "preferred_gpu_classes": [
+      "RTX_4090_24GB",
+      "RTX_3090_24GB",
+      "L4_24GB",
+      "A10_24GB"
+    ],
+    "a100_or_h100_required": false,
+    "precision_preference": [
+      "bf16",
+      "fp16"
+    ],
+    "minimum_vcpu": 8,
+    "minimum_ram_gib": 32,
+    "recommended_ram_gib": 64,
+    "minimum_local_ssd_gib": 200,
+    "measured_runtime_network_enabled": false
+  },
+  "time_estimate": {
+    "gpu_reservation_hours_min": 8,
+    "gpu_reservation_hours_max": 16,
+    "local_collection_and_validation_hours_min": 2,
+    "local_collection_and_validation_hours_max": 4,
+    "end_to_end_elapsed_hours_min": 10,
+    "end_to_end_elapsed_hours_max": 20,
+    "confidence": "low_until_owner_local_unit_count_and_throughput_pilot"
+  },
+  "budget_estimate": {
+    "currency": "USD",
+    "hourly_quote_assumption_min": 0.3,
+    "hourly_quote_assumption_max": 0.8,
+    "raw_gpu_compute_estimate_min": 2.4,
+    "raw_gpu_compute_estimate_max": 12.8,
+    "model_parity_and_pilot_hard_stop": 5,
+    "common_screen_hard_stop": 18,
+    "a1_total_hard_stop": 23,
+    "campaign_hard_stop": 100,
+    "live_quote_required_before_launch": true,
+    "automatic_shutdown_required": true
+  },
+  "admission_requirements": [
+    "separate_versioned_A1.2_execution_contract",
+    "hash_bound_budget_profile",
+    "owner_local_protected_root_available",
+    "pre_staged_model_and_tokenizer_hashes",
+    "snowflake_remote_code_hashes_frozen",
+    "live_provider_quote_and_capacity_check",
+    "pre_run_unit_storage_time_and_cost_estimate",
+    "automatic_shutdown_and_artifact_return_plan"
+  ],
+  "owner_needs": [
+    "make_owner_local_protected_root_available_to_the_runner",
+    "prestage_frozen_model_artifacts_without_agent_credential_access",
+    "ensure_Vast_or_equivalent_account_credit_and_credentials_are_available",
+    "intervene_only_if_provider_unavailable_hashes_conflict_or_budget_must_increase"
+  ],
+  "next_action": "Prepare and validate the A1.2 execution contract and budget profile; do not launch GPU or measured screening",
+  "proposal_sha256": "cc920248bbbe68609815623b26aeda5d47e77a28dfba5e8e4b1fa903d6e32fc3"
+}

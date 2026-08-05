@@ -12,6 +12,14 @@ change, meaningful run, failure/recovery, or decision, and finalize it or mark
 it blocked at close. Generated reports are deterministic and are never edited
 by hand. Owner notes are separate and are preserved by sync.
 
+Every generated Phase and Task report is written in detailed technical English.
+The generator may retain stable identifiers, paths, hashes, and quoted canonical
+commands in their original form, but narrative fields and all fifteen section
+bodies must be English. A one-line placeholder is insufficient when validated
+evidence exists: the report must explain the starting state, work, artifacts,
+result, interpretation, safety boundary, decision, and next action at the level
+supported by the shared read model.
+
 Allowed report lifecycle values are `planned`, `active`, `blocked`,
 `completed`, and `superseded`. `evidence_class` and `scientific_authority`
 must describe the evidence actually present. A fixture is engineering evidence
@@ -43,11 +51,27 @@ important artifact, and links to canonical sources instead of copying values
 into a second source of truth. Reports use evidence-led prose without first-
 person authorial claims.
 
+## Report retention and archives
+
+Generated reports for every registered Phase and Task remain present in the
+active vault while they are current, planned, blocked, or required by the
+artifact graph. A generated report may move to
+`obsidian_report/90_Archives/Generated/` only when it is explicitly marked
+`superseded`, no current index or generated manifest expects its active path,
+and dependency, checksum, protected-data, and unsafe-path validation pass.
+Archival is a verified move, never evidence deletion: the archived note keeps
+its managed metadata, source revision, hashes, and a supersession pointer.
+Historical evidence reports that remain referenced by validators or the shared
+read model are not unused and must not be archived merely because their
+campaign vocabulary is historical. Owner-authored notes are never moved by
+generated report sync.
+
 ## Machine record
 
 `schemas/phase-task-report.v1.json` defines `myis.phase-task-report.v1`.
 Each record includes the phase/task identity, lifecycle and evidence boundary,
-read-model revision, Git commit, objective, starting state, frozen bindings,
+report language, read-model revision, Git commit, objective, starting state,
+frozen bindings,
 work summary, artifact and metric references, result/interpretation/claims,
 failure and governance fields, decision, one next authorized action, evidence
 links, validation status, and a self SHA-256. JSON and Markdown are generated

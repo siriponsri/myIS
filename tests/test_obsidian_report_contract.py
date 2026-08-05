@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -154,6 +155,30 @@ def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contrac
     assert "a0.10-legacy-code-harvest-independent-accept-20260804" in task_report
     assert "repaired_and_validated" in task_report
     assert "Measured P2, real selection, and final evaluation" in task_report
+
+
+def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
+    model = build_read_model(ROOT)
+    records = build_report_records(ROOT, model)
+
+    assert len(records) == 39
+    assert sum(record["report_type"] == "phase" for record in records) == 12
+    assert sum(record["report_type"] == "task" for record in records) == 27
+    assert {record["language"] for record in records} == {"en"}
+
+    outputs = projection_report_contents(ROOT, model)
+    task_path = (
+        ROOT
+        / VAULT_RELATIVE_PATH
+        / "02_Tasks/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.1.md"
+    )
+    report = outputs[task_path]
+    assert re.search(r"[\u0e00-\u0e7f]", report) is None
+    assert "A1.2 resource planning boundary" in report
+    assert "24" in report
+    assert "10-20" in report
+    assert "USD `23` for A1" in report
+    assert "proposal_not_adopted_execution_locked" in report
 
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:

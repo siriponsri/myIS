@@ -32,9 +32,12 @@ from ..armindex.constants import (
     A0_8_NEXT_AUTHORIZED_ACTION,
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
+    A1_2_NEXT_AUTHORIZED_ACTION,
 )
+from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
+from ..armindex.resource_proposal import load_and_validate_gpu_proposal
 
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
@@ -125,6 +128,7 @@ PROJECTION_SOURCE_PATHS = (
     "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md",
     "control/armindex",
     "campaigns/armindex-multiretriever-v2/evidence",
+    "campaigns/armindex-multiretriever-v2/proposals",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -179,6 +183,21 @@ A09_VALIDATION_AUDIT_PATH = Path(
 A09_PHASE_CLOSEOUT_RECEIPT_PATH = Path(
     "campaigns/armindex-multiretriever-v2/evidence/a0-phase-closeout.receipt.v1.json"
 )
+A11_RUNBOOK_PATH = Path("control/runbooks/A1_1_ADAPTER_FIXTURE_VALIDATION.md")
+A11_LEDGER_PATH = Path("control/armindex/a1.1-adapter-fixture-validation-ledger.v1.jsonl")
+A11_FIXTURE_MANIFEST_PATH = Path(
+    "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json"
+)
+A11_FIXTURE_RECEIPT_PATH = Path(
+    "outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json"
+)
+A11_GPU_PROPOSAL_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json"
+)
+A11_TASK_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a1.1-adapter-fixture-validation.receipt.v1.json"
+)
 
 
 def canonical_json(value: Any) -> bytes:
@@ -198,13 +217,44 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         armindex = _empty_armindex_projection()
     feasibility = _a08_compute_storage_feasibility_projection(root)
     closeout = _a09_phase_closeout_projection(root)
+    adapter_validation = _a11_adapter_fixture_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
         "compute_storage_feasibility": feasibility,
         "phase_closeout": closeout,
+        "adapter_fixture_validation": adapter_validation,
     }
-    if closeout.get("validated") is True and closeout.get("status") == "complete":
+    a11_declared_complete = any(
+        task.get("task_id") == "A1.1" and task.get("status") == "complete"
+        for phase in armindex.get("phases", [])
+        if isinstance(phase, Mapping)
+        for task in phase.get("tasks", [])
+        if isinstance(task, Mapping)
+    )
+    if (
+        adapter_validation.get("validated") is True
+        and adapter_validation.get("status") == "complete"
+    ):
+        armindex["status"] = "a1_1_complete_a1_2_contract_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = A1_2_NEXT_AUTHORIZED_ACTION
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "synthetic_cpu_fixture_validated_measured_lock_pending"
+                    if item.get("arm_id") == "ARM-01"
+                    else "declared_fixture_blocked_offline_model_lock_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif a11_declared_complete:
+        armindex["status"] = "a1_1_receipt_invalid_fail_closed"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = A1_1_NEXT_AUTHORIZED_ACTION
+    elif closeout.get("validated") is True and closeout.get("status") == "complete":
         armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         armindex["next_command"] = A1_1_NEXT_AUTHORIZED_ACTION
     elif feasibility.get("validated") is True and feasibility.get("status") == "complete":
@@ -1024,8 +1074,6 @@ def _a09_phase_closeout_projection(root: Path) -> dict[str, Any]:
         a08_path = root / A08_TASK_RECEIPT_PATH
         a010_path = root / A010_LEGACY_CODE_HARVEST_RECEIPT_PATH
         campaign_path = root / "control/campaigns/armindex-multiretriever-v2.yaml"
-        program_path = root / "control/program.yaml"
-        plan_path = root / "PLAN.md"
         if not isinstance(receipt, Mapping) or not isinstance(audit, Mapping):
             raise ValueError("A0 closeout receipt and audit must be objects")
         receipt_unsigned = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
@@ -1050,20 +1098,23 @@ def _a09_phase_closeout_projection(root: Path) -> dict[str, Any]:
                 A010_LEGACY_CODE_HARVEST_RECEIPT_PATH,
                 a010_path,
             ),
-            (
-                "campaign_uri",
-                "campaign_sha256",
-                Path("control/campaigns/armindex-multiretriever-v2.yaml"),
-                campaign_path,
-            ),
-            ("program_uri", "program_sha256", Path("control/program.yaml"), program_path),
-            ("plan_uri", "plan_sha256", Path("PLAN.md"), plan_path),
         )
         for uri_key, sha_key, expected_path, actual_path in expected_files:
             if receipt.get(uri_key) != expected_path.as_posix():
                 raise ValueError(f"A0 closeout path is invalid: {uri_key}")
             if receipt.get(sha_key) != _file_sha256(actual_path):
                 raise ValueError(f"A0 closeout commitment is invalid: {sha_key}")
+        historical_mutable_bindings = (
+            ("campaign_uri", "campaign_sha256", "control/campaigns/armindex-multiretriever-v2.yaml"),
+            ("program_uri", "program_sha256", "control/program.yaml"),
+            ("plan_uri", "plan_sha256", "PLAN.md"),
+        )
+        for uri_key, sha_key, expected_uri in historical_mutable_bindings:
+            if (
+                receipt.get(uri_key) != expected_uri
+                or re.fullmatch(r"[a-f0-9]{64}", str(receipt.get(sha_key, ""))) is None
+            ):
+                raise ValueError(f"A0 historical mutable binding is invalid: {sha_key}")
         if (
             receipt.get("schema_version") != "myis.armindex-phase-closeout-receipt.v1"
             or receipt.get("campaign_id") != "armindex-multiretriever-v2"
@@ -1118,18 +1169,12 @@ def _a09_phase_closeout_projection(root: Path) -> dict[str, Any]:
         ):
             raise ValueError("A0 typed closeout event is invalid")
         campaign = _load_yaml_like(campaign_path)
-        program = _load_yaml_like(program_path)
         a0_phase = next(item for item in campaign.get("phases", []) if item.get("id") == "A0_MIGRATION_FOUNDATION")
-        a1_phase = next(item for item in campaign.get("phases", []) if item.get("id") == "A1_BASELINES_AND_MULTI_ARM_SCREENING")
-        registry = program.get("active_phase_registry", {})
         if (
             a0_phase.get("status") != "complete"
             or any(item.get("status") != "complete" for item in a0_phase.get("tasks", []))
-            or a1_phase.get("status") != "ready_synthetic_fixture_only"
-            or registry.get("current_phase") != "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-            or registry.get("current_task") != "A1.1"
         ):
-            raise ValueError("A0/A1 canonical transition state is inconsistent")
+            raise ValueError("A0 canonical completion state is inconsistent")
         _validate_a09_ledger(ledger_path, audit_sha256=_file_sha256(audit_path))
         assert_aggregate_only(receipt)
         assert_aggregate_only(audit)
@@ -1151,6 +1196,263 @@ def _a09_phase_closeout_projection(root: Path) -> dict[str, Any]:
         "final_accesses": int(counters["final_accesses"]),
         "next_authorized_action": A1_1_NEXT_AUTHORIZED_ACTION,
     }
+
+
+def _a11_adapter_fixture_projection(root: Path) -> dict[str, Any]:
+    """Load the receipt-bound A1.1 synthetic adapter and ARM-01 CPU result."""
+
+    root = root.resolve()
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "fixture_status": "not_started",
+        "evidence_class": "engineering_fixture",
+        "scientific_authority": False,
+        "claim_boundary": "synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity",
+        "task_receipt_uri": A11_TASK_RECEIPT_PATH.as_posix(),
+        "task_receipt_sha256": None,
+        "fixture_manifest_uri": A11_FIXTURE_MANIFEST_PATH.as_posix(),
+        "fixture_manifest_sha256": None,
+        "fixture_receipt_uri": A11_FIXTURE_RECEIPT_PATH.as_posix(),
+        "fixture_receipt_sha256": None,
+        "runbook_uri": A11_RUNBOOK_PATH.as_posix(),
+        "runbook_sha256": None,
+        "ledger_uri": A11_LEDGER_PATH.as_posix(),
+        "ledger_sha256": None,
+        "gpu_proposal_uri": A11_GPU_PROPOSAL_PATH.as_posix(),
+        "gpu_proposal_sha256": None,
+        "gpu_proposal_status": "not_available",
+        "report_contract": {},
+        "registered_arms": 0,
+        "runnable_cpu_arms": 0,
+        "dense_arms_blocked": 0,
+        "arm01_backend": {},
+        "cpu_observation": {},
+        "synthetic_metrics": [],
+        "gpu_spec": {},
+        "time_estimate": {},
+        "budget_estimate": {},
+        "owner_needs": [],
+        "measured_runs": 0,
+        "candidate_count": 0,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+        "resource_counters": {
+            "charged_usd": 0,
+            "gpu_scientific_runs": 0,
+            "paid_api_calls": 0,
+            "model_downloads": 0,
+            "model_weight_modifications": 0,
+        },
+        "next_authorized_action": A1_1_NEXT_AUTHORIZED_ACTION,
+    }
+    task_path = root / A11_TASK_RECEIPT_PATH
+    if not task_path.is_file():
+        return missing
+    invalid = {**missing, "status": "invalid"}
+    try:
+        task_receipt = json.loads(task_path.read_text(encoding="utf-8"))
+        manifest_path = root / A11_FIXTURE_MANIFEST_PATH
+        fixture_receipt_path = root / A11_FIXTURE_RECEIPT_PATH
+        runbook_path = root / A11_RUNBOOK_PATH
+        ledger_path = root / A11_LEDGER_PATH
+        proposal_path = root / A11_GPU_PROPOSAL_PATH
+        reporting_policy_path = root / "docs/observatory/REPORTING_POLICY.md"
+        report_schema_path = root / "schemas/phase-task-report.v1.json"
+        manifest = json.loads(manifest_path.read_text(encoding="ascii"))
+        fixture_receipt = json.loads(fixture_receipt_path.read_text(encoding="ascii"))
+        proposal = load_and_validate_gpu_proposal(root)
+        if not isinstance(task_receipt, Mapping):
+            raise ValueError("A1.1 task receipt must be an object")
+        validate_adapter_fixture_artifacts(manifest, fixture_receipt)
+        task_unsigned = {
+            key: value for key, value in task_receipt.items() if key != "receipt_sha256"
+        }
+        if task_receipt.get("receipt_sha256") != canonical_sha256(task_unsigned):
+            raise ValueError("A1.1 task receipt self-hash is invalid")
+        expected_files = (
+            ("runbook_uri", "runbook_sha256", A11_RUNBOOK_PATH, runbook_path),
+            ("ledger_uri", "ledger_sha256", A11_LEDGER_PATH, ledger_path),
+            (
+                "fixture_manifest_uri",
+                "fixture_manifest_sha256",
+                A11_FIXTURE_MANIFEST_PATH,
+                manifest_path,
+            ),
+            (
+                "fixture_receipt_uri",
+                "fixture_receipt_sha256",
+                A11_FIXTURE_RECEIPT_PATH,
+                fixture_receipt_path,
+            ),
+            (
+                "gpu_proposal_uri",
+                "gpu_proposal_sha256",
+                A11_GPU_PROPOSAL_PATH,
+                proposal_path,
+            ),
+            (
+                "reporting_policy_uri",
+                "reporting_policy_sha256",
+                Path("docs/observatory/REPORTING_POLICY.md"),
+                reporting_policy_path,
+            ),
+            (
+                "report_schema_uri",
+                "report_schema_sha256",
+                Path("schemas/phase-task-report.v1.json"),
+                report_schema_path,
+            ),
+        )
+        for uri_key, sha_key, expected_path, actual_path in expected_files:
+            if task_receipt.get(uri_key) != expected_path.as_posix():
+                raise ValueError(f"A1.1 task receipt path is invalid: {uri_key}")
+            if task_receipt.get(sha_key) != _file_sha256(actual_path):
+                raise ValueError(f"A1.1 task receipt commitment is invalid: {sha_key}")
+        if task_receipt.get("fixture_manifest_self_sha256") != manifest.get(
+            "manifest_sha256"
+        ):
+            raise ValueError("A1.1 fixture manifest self-hash binding is invalid")
+        if task_receipt.get("fixture_receipt_self_sha256") != fixture_receipt.get(
+            "receipt_sha256"
+        ):
+            raise ValueError("A1.1 fixture receipt self-hash binding is invalid")
+        if task_receipt.get("gpu_proposal_self_sha256") != proposal.get(
+            "proposal_sha256"
+        ):
+            raise ValueError("A1.1 GPU proposal self-hash binding is invalid")
+        if (
+            task_receipt.get("schema_version")
+            != "myis.armindex-adapter-fixture-task-receipt.v1"
+            or task_receipt.get("campaign_id") != "armindex-multiretriever-v2"
+            or task_receipt.get("phase_id")
+            != "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+            or task_receipt.get("task_id") != "A1.1"
+            or task_receipt.get("status") != "complete"
+            or task_receipt.get("fixture_status") != "passed"
+        ):
+            raise ValueError("A1.1 task receipt identity or status is invalid")
+        if (
+            task_receipt.get("scientific_authority") is not False
+            or task_receipt.get("protected_data_accessed") is not False
+            or task_receipt.get("measured_execution_performed") is not False
+        ):
+            raise ValueError("A1.1 task receipt crosses the engineering evidence boundary")
+        if task_receipt.get("next_authorized_action") != A1_2_NEXT_AUTHORIZED_ACTION:
+            raise ValueError("A1.1 next authorized action is not canonical")
+        counters = task_receipt.get("counters", {})
+        resources = task_receipt.get("resource_counters", {})
+        if not isinstance(counters, Mapping) or any(value != 0 for value in counters.values()):
+            raise ValueError("A1.1 task receipt real counters must remain zero")
+        if not isinstance(resources, Mapping) or any(value != 0 for value in resources.values()):
+            raise ValueError("A1.1 task receipt resource counters must remain zero")
+        report_contract = task_receipt.get("report_contract", {})
+        if (
+            not isinstance(report_contract, Mapping)
+            or report_contract.get("language") != "en"
+            or report_contract.get("required_active_phase_reports") != 7
+            or report_contract.get("required_active_task_reports") != 18
+            or report_contract.get("required_registered_phase_reports") != 12
+            or report_contract.get("required_registered_task_reports") != 27
+            or report_contract.get("required_sections") != 15
+            or report_contract.get("archive_candidate_count") != 0
+            or report_contract.get("archive_disposition")
+            != "retain_all_current_and_graph_referenced_reports"
+        ):
+            raise ValueError("A1.1 detailed English report and archive contract is invalid")
+        implementation_bindings = task_receipt.get("implementation_bindings", [])
+        if not isinstance(implementation_bindings, list) or len(implementation_bindings) < 6:
+            raise ValueError("A1.1 implementation bindings are incomplete")
+        for binding in implementation_bindings:
+            if not isinstance(binding, Mapping):
+                raise ValueError("A1.1 implementation binding must be an object")
+            uri = binding.get("uri")
+            if not isinstance(uri, str) or not uri:
+                raise ValueError("A1.1 implementation binding URI is invalid")
+            implementation_path = (root / uri).resolve()
+            implementation_path.relative_to(root)
+            if (
+                implementation_path.is_symlink()
+                or not implementation_path.is_file()
+                or binding.get("sha256") != _file_sha256(implementation_path)
+            ):
+                raise ValueError("A1.1 implementation binding commitment is invalid")
+        if task_receipt.get("gpu_proposal_status") != proposal.get("status"):
+            raise ValueError("A1.1 GPU proposal status binding is invalid")
+        _validate_a11_ledger(
+            ledger_path,
+            fixture_receipt_sha256=_file_sha256(fixture_receipt_path),
+            gpu_proposal_sha256=_file_sha256(proposal_path),
+        )
+        assert_aggregate_only(task_receipt)
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return invalid
+    aggregate_counts = manifest.get("aggregate_counts", {})
+    return {
+        **missing,
+        "status": "complete",
+        "validated": True,
+        "fixture_status": "passed",
+        "task_receipt_sha256": _file_sha256(task_path),
+        "fixture_manifest_sha256": _file_sha256(manifest_path),
+        "fixture_receipt_sha256": _file_sha256(fixture_receipt_path),
+        "runbook_sha256": _file_sha256(runbook_path),
+        "ledger_sha256": _file_sha256(ledger_path),
+        "gpu_proposal_sha256": _file_sha256(proposal_path),
+        "gpu_proposal_status": str(proposal["status"]),
+        "report_contract": dict(report_contract),
+        "registered_arms": int(aggregate_counts.get("registered_arms", 0)),
+        "runnable_cpu_arms": int(aggregate_counts.get("runnable_cpu_arms", 0)),
+        "dense_arms_blocked": int(aggregate_counts.get("dense_arms_blocked", 0)),
+        "arm01_backend": dict(manifest.get("arm01_backend", {})),
+        "cpu_observation": dict(fixture_receipt.get("cpu_observation", {})),
+        "synthetic_metrics": list(fixture_receipt.get("synthetic_metrics", [])),
+        "gpu_spec": dict(proposal.get("proposed_gpu_spec", {})),
+        "time_estimate": dict(proposal.get("time_estimate", {})),
+        "budget_estimate": dict(proposal.get("budget_estimate", {})),
+        "owner_needs": list(proposal.get("owner_needs", [])),
+        "measured_runs": int(counters["measured_runs"]),
+        "candidate_count": int(counters["candidate_count"]),
+        "selection_accesses": int(counters["selection_accesses"]),
+        "final_accesses": int(counters["final_accesses"]),
+        "resource_counters": dict(resources),
+        "next_authorized_action": A1_2_NEXT_AUTHORIZED_ACTION,
+    }
+
+
+def _validate_a11_ledger(
+    path: Path,
+    *,
+    fixture_receipt_sha256: str,
+    gpu_proposal_sha256: str,
+) -> None:
+    entries = [json.loads(line) for line in path.read_text(encoding="ascii").splitlines() if line]
+    if len(entries) < 3:
+        raise ValueError("A1.1 execution ledger is incomplete")
+    previous = "0" * 64
+    for sequence, entry in enumerate(entries, start=1):
+        if not isinstance(entry, Mapping):
+            raise ValueError("A1.1 execution ledger entry must be an object")
+        unsigned = {key: value for key, value in entry.items() if key != "entry_sha256"}
+        if (
+            entry.get("ledger_id") != "a1.1-adapter-fixture-validation-v1"
+            or entry.get("sequence") != sequence
+            or entry.get("previous_entry_sha256") != previous
+            or entry.get("entry_sha256") != canonical_sha256(unsigned)
+        ):
+            raise ValueError("A1.1 execution ledger sequence or chain is invalid")
+        assert_aggregate_only(entry)
+        previous = str(entry["entry_sha256"])
+    fixture_event = entries[-2]
+    final = entries[-1]
+    if (
+        fixture_event.get("status") != "passed"
+        or fixture_event.get("artifact_sha256") != fixture_receipt_sha256
+        or final.get("status") != "complete"
+        or final.get("gpu_proposal_sha256") != gpu_proposal_sha256
+    ):
+        raise ValueError("A1.1 execution ledger does not close against frozen artifacts")
 
 
 def _validate_a09_ledger(path: Path, *, audit_sha256: str) -> None:

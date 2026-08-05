@@ -7,9 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.1`
-- Status: `a0_complete_a1_fixture_ready`
-- Evidence class: engineering validation and scaffolding; scientific authority `false`
+- Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
+- Status: `a1_1_complete_a1_2_contract_locked`
+- Evidence class: engineering fixture and resource planning; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -50,6 +50,18 @@ evidence.
   assets, layout, Dashboard/API and policy checks, session audit, repository-safe
   MLflow doctor, Brain literature validation, and whitespace validation. The
   required pointer-only Brain note was committed under a validated writer lease.
+- A1.1 completed the five-arm synthetic adapter fixture and ARM-01 CPU
+  compile-index-search-evaluate path. The write-once manifest, receipt,
+  hash-chained ledger, and task receipt validate one runnable CPU fixture arm,
+  four fail-closed dense arms, and zero measured or charged-resource counters.
+- A1.1 adopted detailed English reporting for every registered Phase and Task
+  using the fifteen-section machine/Markdown contract. The archive audit found
+  no unused generated report: current and historical reports remain referenced
+  by the generated manifest, validators, or artifact graph, so no report moved.
+- The A1.2 resource proposal is planning-only: one 24 GiB GPU (RTX 4090, RTX
+  3090, L4, or A10), 8-16 GPU hours, 10-20 hours end to end, USD 2.40-12.80 raw
+  GPU estimate, and hard stops of USD 5 pilot, USD 18 screen, USD 23 A1, and
+  USD 100 campaign. A100/H100 is not required.
 
 ## Boundaries
 
@@ -60,16 +72,22 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-No integrity or evidence blocker is currently known. The root software license
-requires an Owner legal decision before external release; this does not block
-the engineering migration.
+No integrity or evidence blocker is currently known. A1.2 execution remains
+deliberately locked until its versioned execution contract and hash-bound budget
+profile validate. The root software license requires an Owner legal decision
+before external release; this does not block contract scaffolding.
 
 ## Active authorized action
 
-Begin only the synthetic/offline A1.1 adapter-fixture scaffold on CPU. A1.2 and
-all measured screening remain locked pending a separate A1 execution contract.
-The exact next task is:
+Prepare only the A1.2 offline execution-contract scaffold. This must be complete
+before any real GPU reservation or measured run. The exact next task is:
 
 ```text
-/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.
+/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.
 ```
+
+No Owner action is needed to write and validate the scaffold. Before a real
+launch, the Owner must make the protected root available to the runner,
+pre-stage frozen model/tokenizer and required remote-code artifacts, provide
+Vast or equivalent credit and credentials without exposing them to agents, and
+intervene only for provider unavailability, hash conflict, or budget increase.

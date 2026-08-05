@@ -15,9 +15,10 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.1_ADAPTER_FIXTURE_VALIDATION` (ready; synthetic/offline only)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (locked pending a versioned
+  execution contract and hash-bound budget profile)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: engineering scaffolding; scientific authority `false`
+- Current evidence class: engineering fixture; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -58,7 +59,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | ready for synthetic/offline A1.1 fixture only |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 locked pending execution contract |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -95,6 +96,35 @@ deterministic storage characterization. Task `A0.9` then validated the A0
 controls, fixtures, projections, and safety boundary and emitted the hash-bound
 phase closeout receipt. Existing App sparse indexes remain protected,
 reference-only A1 assets and were not opened or used by A0.
+
+### A1 task map
+
+| Task | Purpose | Status |
+|---|---|---|
+| `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | locked pending execution contract |
+
+Task `A1.1` completed the synthetic compile-index-search-evaluate path for
+`ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
+arms were declared, `ARM-02` through `ARM-05` failed closed before model or
+network access, and measured, candidate, Selection, Final, GPU, paid-API, and
+model-download counters remained zero. This is engineering fixture evidence;
+it does not establish parity with the future locked `bm25s` measured adapter or
+support a retrieval-quality claim.
+
+The non-authorizing A1.2 planning proposal uses one 24 GiB GPU, preferably RTX
+4090, RTX 3090, L4, or A10; A100/H100 is not required. The planning estimate is
+8-16 GPU hours plus 2-4 local validation hours, or 10-20 hours end to end. At
+USD 0.30-0.80 per GPU-hour, raw GPU compute is estimated at USD 2.40-12.80.
+Hard stops remain USD 5 for parity/pilot, USD 18 for the common screen, USD 23
+for A1, and USD 100 for the campaign. These values are planning assumptions,
+not authorization or measured evidence.
+
+All registered Phase and Task reports are generated in detailed English from
+one validated read model using the canonical fifteen-section contract.
+Historical reports remain at their expected paths while referenced. A report
+may move to the generated archive only when it is explicitly superseded,
+unreferenced, checksum-validated, and retained with a supersession pointer.
 
 ## Historical evidence
 
@@ -136,9 +166,13 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Execute A1.1_ADAPTER_FIXTURE_VALIDATION from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Build and validate only synthetic/offline adapter fixtures on CPU. Do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, switch providers, open Selection, or open Final. Keep A1 measured screening closed until a separate execution contract authorizes it.
+/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.
 ```
 
-A1.1 may begin only as synthetic/offline adapter-fixture scaffolding. Measured
-retrieval, model download, dense-arm execution, and A1.2 remain closed until a
-separate A1 execution contract authorizes them.
+A1.2 may begin only as offline execution-contract, budget-profile, model-lock,
+adapter-lock, and launch-checklist scaffolding. No GPU reservation, protected
+payload access, model download during measured runtime, dense-arm execution, or
+measured retrieval is authorized until that separate contract is adopted and
+validated. The Owner is needed at launch time to expose the protected root to
+the runner, pre-stage frozen artifacts, and provide provider credit and
+credentials without transferring them to the agent workspace.

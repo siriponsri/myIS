@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "report_id", "report_type", "phase_id", "task_id",
-    "status", "evidence_class", "scientific_authority", "claim_boundary",
+    "status", "language", "evidence_class", "scientific_authority", "claim_boundary",
     "generated_at", "generated_from_revision", "last_material_update",
     "git_commit", "objective", "starting_state", "input_bindings",
     "work_summary", "artifact_references", "metric_references", "result",
@@ -22,6 +22,7 @@
     "phase_id": {"enum": ["P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION", "A0_MIGRATION_FOUNDATION", "A1_BASELINES_AND_MULTI_ARM_SCREENING", "A2_PER_ARM_AUTOINDEX", "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT", "A4_PRODUCTION_TRANSFER_AND_SELECTION", "A5_FINAL_CONFIRMATION", "A6_PUBLICATION_AND_RELEASE"]},
     "task_id": {"type": ["string", "null"]},
     "status": {"enum": ["planned", "active", "blocked", "completed", "superseded"]},
+    "language": {"const": "en"},
     "preflight_status": {"enum": ["not_started", "passed_pending_owner", "failed"]},
     "evidence_class": {"type": "string", "minLength": 1},
     "scientific_authority": {"type": "boolean"},

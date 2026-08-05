@@ -172,6 +172,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
     feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
     closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
+    adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -221,6 +222,24 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "measured_runs": closeout.get("measured_runs", 0),
             "selection_accesses": closeout.get("selection_accesses", 0),
             "final_accesses": closeout.get("final_accesses", 0),
+        },
+        "armindex_a1_adapter_fixture": {
+            "status": adapter.get("status", "not_started"),
+            "fixture_status": adapter.get("fixture_status", "not_started"),
+            "evidence_class": adapter.get("evidence_class", "engineering_fixture"),
+            "scientific_authority": adapter.get("scientific_authority", False),
+            "source_receipt_uri": adapter.get("task_receipt_uri"),
+            "source_receipt_sha256": adapter.get("task_receipt_sha256"),
+            "fixture_manifest_sha256": adapter.get("fixture_manifest_sha256"),
+            "fixture_receipt_sha256": adapter.get("fixture_receipt_sha256"),
+            "gpu_proposal_status": adapter.get("gpu_proposal_status", "not_available"),
+            "gpu_proposal_sha256": adapter.get("gpu_proposal_sha256"),
+            "registered_arms": adapter.get("registered_arms", 0),
+            "runnable_cpu_arms": adapter.get("runnable_cpu_arms", 0),
+            "dense_arms_blocked": adapter.get("dense_arms_blocked", 0),
+            "measured_runs": adapter.get("measured_runs", 0),
+            "selection_accesses": adapter.get("selection_accesses", 0),
+            "final_accesses": adapter.get("final_accesses", 0),
         },
         "observatory": {
             "status": observatory.get("status", "not_available"),
@@ -292,18 +311,27 @@ def _a010_projection_lifecycle(
     harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
     feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
     closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
-    if closeout.get("validated") is True and closeout.get("status") == "complete":
+    adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
+    if adapter.get("validated") is True and adapter.get("status") == "complete":
+        source_uri = adapter.get("task_receipt_uri")
+        source_sha256 = adapter.get("task_receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif closeout.get("validated") is True and closeout.get("status") == "complete":
         source_uri = closeout.get("receipt_uri")
         source_sha256 = closeout.get("receipt_sha256")
         source_validated = True
+        source_phase_id = "A0_MIGRATION_FOUNDATION"
     elif feasibility.get("validated") is True and feasibility.get("status") == "complete":
         source_uri = feasibility.get("task_receipt_uri")
         source_sha256 = feasibility.get("task_receipt_sha256")
         source_validated = True
+        source_phase_id = "A0_MIGRATION_FOUNDATION"
     else:
         source_uri = harvest.get("receipt_uri")
         source_sha256 = harvest.get("receipt_sha256")
         source_validated = harvest.get("validated") is True
+        source_phase_id = "A0_MIGRATION_FOUNDATION"
     if (
         source_validated is not True
         or not isinstance(source_uri, str)
@@ -311,7 +339,9 @@ def _a010_projection_lifecycle(
         or not _SHA256_RE.fullmatch(source_sha256)
     ):
         raise ValueError("ArmIndex projection lifecycle requires a validated source receipt")
-    brain_path = (root.parent / "02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md").resolve()
+    brain_path = (
+        root.parent / f"02_Brain/reports/generated/armindex/phase-{source_phase_id}.md"
+    ).resolve()
     paper_path = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
     if brain_path not in external_outputs or paper_path not in external_outputs:
         raise ValueError("ArmIndex external projection lifecycle is incomplete")
@@ -332,7 +362,7 @@ def _a010_projection_lifecycle(
             },
             "brain_projection": {
                 "status": "projected",
-                "artifact_uri": "../02_Brain/reports/generated/armindex/phase-A0_MIGRATION_FOUNDATION.md",
+                "artifact_uri": f"../02_Brain/reports/generated/armindex/phase-{source_phase_id}.md",
                 "artifact_sha256": sha256(external_outputs[brain_path].encode("utf-8")),
             },
             "obsidian_report": {
@@ -1043,6 +1073,30 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
             f"`{fixture.get('synthetic_candidates', 0)}` candidates, `{fixture.get('synthetic_iterations', 0)}` iterations, "
             f"`{fixture.get('synthetic_shortlist', 0)}` finalists, and `{fixture.get('fixture_selection_exposures', 0)}` fixture selection exposure(s)."
         )
+    a1_note = ""
+    if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING":
+        armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+        adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
+        gpu = adapter.get("gpu_spec", {}) if isinstance(adapter.get("gpu_spec"), Mapping) else {}
+        timing = adapter.get("time_estimate", {}) if isinstance(adapter.get("time_estimate"), Mapping) else {}
+        budget = adapter.get("budget_estimate", {}) if isinstance(adapter.get("budget_estimate"), Mapping) else {}
+        owner_needs = adapter.get("owner_needs", []) if isinstance(adapter.get("owner_needs"), list) else []
+        gpu_classes = ", ".join(str(item) for item in gpu.get("preferred_gpu_classes", []))
+        owner_lines = "\n".join(f"- {item}" for item in owner_needs) or "- No Owner input is required for the completed CPU fixture."
+        a1_note = (
+            "\n\n### A1.2 resource planning boundary\n\n"
+            f"The proposal remains `{adapter.get('gpu_proposal_status', 'not_available')}`. "
+            f"It specifies `{gpu.get('gpu_count', 0)}` GPU with at least `{gpu.get('minimum_vram_gib', 0)}` GiB VRAM; "
+            f"preferred classes are {gpu_classes or 'not recorded'}. A100/H100 required: `{gpu.get('a100_or_h100_required', False)}`. "
+            f"The planning range is `{timing.get('gpu_reservation_hours_min', 0)}-{timing.get('gpu_reservation_hours_max', 0)}` GPU hours and "
+            f"`{timing.get('end_to_end_elapsed_hours_min', 0)}-{timing.get('end_to_end_elapsed_hours_max', 0)}` elapsed hours. "
+            f"Raw compute is estimated at USD `{budget.get('raw_gpu_compute_estimate_min', 0)}-{budget.get('raw_gpu_compute_estimate_max', 0)}`; "
+            f"hard stops are USD `{budget.get('model_parity_and_pilot_hard_stop', 0)}` for parity/pilot, "
+            f"USD `{budget.get('common_screen_hard_stop', 0)}` for the common screen, "
+            f"USD `{budget.get('a1_total_hard_stop', 0)}` for A1, and USD `{budget.get('campaign_hard_stop', 0)}` for the campaign.\n\n"
+            "Owner prerequisites:\n\n"
+            f"{owner_lines}"
+        )
     failures = record.get("failure_recovery_references", [])
     artifact_markdown = "\n".join(artifact_rows)
     metric_markdown = "\n".join(metric_rows)
@@ -1056,7 +1110,7 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         "## Inputs and Frozen Bindings\n\n"
         f"{binding_lines(record.get('input_bindings'))}\n\n"
         "## Work Performed\n\n"
-        f"{record.get('work_summary')}{progress_note}{p2_note}\n\n"
+        f"{record.get('work_summary')}{progress_note}{p2_note}{a1_note}\n\n"
         "## Artifacts Produced\n\n"
         "These references explain what each artifact is for; the bytes remain governed by canonical paths.\n\n"
         f"{artifact_markdown}\n\n"
@@ -1167,7 +1221,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             for task in phase.get("tasks", [])
             if isinstance(task, Mapping)
         ) or "| none | none | planned |"
-        body = (
+        fallback_body = (
             f"# {phase_id}\n\n"
             f"## Objective\n\n{phase.get('purpose')}\n\n"
             "## Starting State\n\nArmIndex measured counters are zero and historical SCOPE evidence is read-only.\n\n"
@@ -1186,8 +1240,23 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "## Evidence Links\n\n[[ARM_INDEX_HOME]] · [[ARMINDEX_MIGRATION_RESULT]] · [[SCOPE_HISTORY_INDEX]]\n\n"
             "## Tasks\n\n| Task | Work | Status |\n|---|---|---|\n" + task_table + "\n"
         )
+        body = (
+            _structured_report_body(phase_record, model)
+            if phase_record is not None
+            else fallback_body
+        )
+        phase_evidence_class = (
+            str(phase_record.get("evidence_class")) if phase_record else "engineering"
+        )
+        phase_maturity = (
+            "fixture"
+            if phase_evidence_class == "engineering_fixture"
+            else "planned"
+            if phase_evidence_class == "planning_estimate"
+            else "non_scientific"
+        )
         outputs[phase_folder / f"{phase_id}_REPORT.md"] = _note(
-            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(str(phase.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none", "next_authorized_action": phase_record.get("next_authorized_action", common["next_authorized_action"]) if phase_record else common["next_authorized_action"]},
+            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(str(phase_record.get("status"))) if phase_record else _workflow_status(str(phase.get('status'))), "evidence_class": phase_evidence_class, "evidence_maturity": phase_maturity, "scientific_authority": bool(phase_record.get("scientific_authority")) if phase_record else False, "claim_boundary": str(phase_record.get("claim_boundary")) if phase_record else "engineering_provenance_only", "claim_level": "none", "next_authorized_action": phase_record.get("next_authorized_action", common["next_authorized_action"]) if phase_record else common["next_authorized_action"]},
             body,
         )
         for task in phase.get("tasks", []):
@@ -1197,11 +1266,21 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             task_record = report_records.get(f"task-{task_id.lower().replace('.', '-')}")
             task_body = (
                 _structured_report_body(task_record, model)
-                if task_id in {"A0.8", "A0.9", "A0.10"} and task_record is not None
-                else body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
+                if task_record is not None
+                else fallback_body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
+            )
+            task_evidence_class = (
+                str(task_record.get("evidence_class")) if task_record else "engineering"
+            )
+            task_maturity = (
+                "fixture"
+                if task_evidence_class == "engineering_fixture"
+                else "planned"
+                if task_evidence_class == "planning_estimate"
+                else "non_scientific"
             )
             outputs[VAULT_RELATIVE_PATH / "02_Tasks" / "ArmIndex" / phase_id / f"{task_id}.md"] = _note(
-                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(str(task.get('status'))), "evidence_maturity": "non_scientific", "claim_level": "none", "next_authorized_action": task_record.get("next_authorized_action", common["next_authorized_action"]) if task_record else common["next_authorized_action"]},
+                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(str(task_record.get("status"))) if task_record else _workflow_status(str(task.get('status'))), "evidence_class": task_evidence_class, "evidence_maturity": task_maturity, "scientific_authority": bool(task_record.get("scientific_authority")) if task_record else False, "claim_boundary": str(task_record.get("claim_boundary")) if task_record else "engineering_provenance_only", "claim_level": "none", "next_authorized_action": task_record.get("next_authorized_action", common["next_authorized_action"]) if task_record else common["next_authorized_action"]},
                 task_body,
             )
     outputs[VAULT_RELATIVE_PATH / "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md"] = _note(
@@ -1954,10 +2033,13 @@ def _workflow_status(value: Any) -> str:
         "planned": "ready",
         "ready": "ready",
         "active": "in_progress",
+        "a1_1_complete_a1_2_contract_locked": "in_progress",
         "complete": "complete",
+        "completed": "complete",
         "measured": "complete",
         "blocked": "blocked",
         "blocked_until_p1": "waiting_dependency",
+        "locked_pending_execution_contract": "waiting_dependency",
         "locked_until_D2": "waiting_gate",
         "locked_until_D3": "waiting_gate",
         "locked_owner_D2": "waiting_gate",

@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a0_complete_a1_fixture_ready
-  evidence_class: engineering_scaffolding
+  status: a1_1_complete_a1_2_contract_locked
+  evidence_class: engineering_fixture
   scientific_authority: false
-  claim_boundary: synthetic_offline_adapter_fixture_only
+  claim_boundary: synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -58,9 +58,9 @@ phases:
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: ready_synthetic_fixture_only
+    status: a1_1_complete_a1_2_contract_locked
     measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: ready}, {id: A1.2, title: Common multi-arm screen, status: locked_until_A1_1_fixture}]
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: locked_pending_execution_contract}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
     status: locked_until_A1
