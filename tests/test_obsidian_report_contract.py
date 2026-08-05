@@ -180,6 +180,42 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "USD `23` for A1" in report
     assert "proposal_not_adopted_execution_locked" in report
 
+    a12_report = outputs[
+        ROOT
+        / VAULT_RELATIVE_PATH
+        / "02_Tasks/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2.md"
+    ]
+    assert "A1.2 closeout validation audit" in a12_report
+    assert "passed `15` validation groups" in a12_report
+    assert "`5` bounded failure/recovery records" in a12_report
+
+    required_headings = (
+        "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",
+        "Artifacts Produced", "Metrics", "Result", "Interpretation", "Supported Claims",
+        "Unsupported Claims", "Failures and Recovery", "Governance and Safety", "Decision",
+        "Next Action", "Evidence Links",
+    )
+    phase_task_paths = [
+        path for path in outputs
+        if path.suffix == ".md"
+        and (
+            "01_Phases/" in path.as_posix()
+            or "02_Tasks/ArmIndex/" in path.as_posix()
+        )
+        and (
+            path.name.endswith("_MASTER_REPORT.md")
+            or ("/01_Phases/ArmIndex/" in path.as_posix() and path.name.endswith("_REPORT.md"))
+            or "/Tasks/" in path.as_posix()
+            or "/02_Tasks/ArmIndex/" in path.as_posix()
+        )
+    ]
+    assert len(phase_task_paths) == 39
+    for path in phase_task_paths:
+        content = outputs[path]
+        assert re.search(r"[\u0e00-\u0e7f]", content) is None
+        for heading in required_headings:
+            assert f"## {heading}" in content
+
 
 def test_generated_vault_raw_hashes_are_checkout_stable() -> None:
     vault_root = ROOT / VAULT_RELATIVE_PATH

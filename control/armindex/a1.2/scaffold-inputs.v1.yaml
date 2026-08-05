@@ -1,0 +1,131 @@
+schema_version: myis.armindex-a1.2-scaffold-inputs.v1
+scaffold_id: a1.2-common-multi-arm-screen-v1
+campaign_id: armindex-multiretriever-v2
+phase_id: A1_BASELINES_AND_MULTI_ARM_SCREENING
+task_id: A1.2
+prepared_at_utc: '2026-08-05T14:30:18Z'
+status: a1_2_contract_scaffold_complete_launch_locked
+source_bindings:
+- uri: outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json
+  sha256: b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24
+- uri: campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json
+  sha256: 56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83
+- uri: campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json
+  sha256: 2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a
+- uri: docs/research/ARMINDEX_RESEARCH_PLAN_V02.md
+  sha256: 6fe7ff85586fa5de7e17b1ffe0d7ec9fbf97aec8935c5c455b71bd8d1a7c8b7c
+- uri: docs/research/MODEL_SELECTION_V02.md
+  sha256: cee027a661368627b476ad3a657c80d0bcaa3d98582c1f4de0886e8127146b21
+- uri: src/myis_research/armindex/bm25s_adapter.py
+  sha256: e569bdfaa343c483d829b4fcaed7dc6cc31789099e7609d2e847b9b2a4f56157
+- uri: control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md
+  sha256: ae5e816c5efd60ed972be2d6f0d1490656321ccc323e450e679b18beefc1dde5
+- uri: docs/research/A1_2_MODEL_SOURCE_LOCKS.md
+  sha256: 8436f39d0ae5b06cd64f36fc0e0c111e736f5e1be9660c3a0a92732d2cc1a4b4
+- uri: src/myis_research/armindex/a1_2_contract.py
+  sha256: e93c46427c96c25a4a08c191ec80f11eb436d95ada4dc56f6990ebfb1e2a5616
+- uri: tests/test_armindex_bm25s_adapter.py
+  sha256: 978d7cecebcf15863d71fd857520e883fcf80c62a94a0460d504a2309da68358
+- uri: pyproject.toml
+  sha256: 0e2170e13dba98d08c85887b4214abfb1689cd43fac8e544a025f9b135f86dea
+- uri: uv.lock
+  sha256: 900e52fe6c115a04f34c93288e344df2211fdc249299f4a3f52390f2abf7a5cc
+model_sources:
+- arm_id: ARM-02
+  model_id: BAAI/bge-m3
+  source_uri: https://huggingface.co/BAAI/bge-m3
+  resolved_revision: 5617a9f61b028005a4858fdac845db406aefb181
+  license: MIT
+  commercial_status: commercial_capable
+  dimension: 1024
+  max_input_tokens: 8192
+  pooling: official_dense_implementation_pending_owner_local_parity
+  normalization: official_dense_implementation_pending_owner_local_parity
+  query_format: no_instruction
+  critical_artifacts:
+  - path: pytorch_model.bin
+    sha256: b5e0ce3470abf5ef3831aa1bd5553b486803e83251590ab7ff35a117cf6aad38
+  - path: tokenizer.json
+    sha256: 21106b6d7dab2952c1d496fb21d5dc9db75c28ed361a05f5020bbba27810dd08
+  remote_code: []
+- arm_id: ARM-03
+  model_id: datalyes/patembed-large
+  source_uri: https://huggingface.co/datalyes/patembed-large
+  resolved_revision: 2d5c0f92a3e5dc3d5415c08e612c57543c0e03ad
+  license: CC-BY-NC-SA-4.0
+  commercial_status: research_non_commercial
+  dimension: 1024
+  max_input_tokens: 512
+  pooling: mean_non_padding_tokens
+  normalization: l2
+  query_format: 'encode query for different document retrieval: {query}'
+  document_format: 'encode document for different retrieval: {document}'
+  critical_artifacts:
+  - path: model.safetensors
+    sha256: 234ea36a876fe5d5c416c1cbaad6f7221e17861fadd6481f0b96588fdc1ca482
+  metadata_git_oids:
+  - path: tokenizer.json
+    git_oid: 5dff0fb953b220cf9900a811df9ae7798d802fdc
+  remote_code: []
+- arm_id: ARM-04
+  model_id: Snowflake/snowflake-arctic-embed-m-v2.0
+  source_uri: https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v2.0
+  resolved_revision: 95c2741480856aa9666782eb4afe11959938017f
+  license: Apache-2.0
+  commercial_status: commercial_capable
+  dimension: 768
+  max_input_tokens: 8192
+  pooling: first_token_cls
+  normalization: l2
+  query_format: 'query: {query}'
+  document_format: '{document}'
+  critical_artifacts:
+  - path: model.safetensors
+    sha256: 3d80d4727ac8759fb8624b690697c053a3d1992120111dc4a71178e608c26604
+  - path: tokenizer.json
+    sha256: f1cc44ad7faaeec47241864835473fd5403f2da94673f3f764a77ebcb0a803ec
+  remote_code:
+  - path: configuration_hf_alibaba_nlp_gte.py
+    git_oid: d816ed663a58404f966fe322cd113ac39a957686
+  - path: modeling_hf_alibaba_nlp_gte.py
+    git_oid: 63c0975e09b5631b564170d2ecb7985c5d8dd189
+- arm_id: ARM-05
+  model_id: Qwen/Qwen3-Embedding-0.6B
+  source_uri: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B
+  resolved_revision: 97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3
+  license: Apache-2.0
+  commercial_status: commercial_capable
+  dimension: 1024
+  declared_max_input_tokens: 32768
+  measured_max_input_tokens: pending_owner_local_preflight_freeze
+  pooling: last_token_left_padding
+  normalization: l2
+  query_format: 'Instruct: Retrieve patent families containing technical information relevant to prior-art search for the
+    query patent family.
+
+    Query:{query}'
+  document_format: '{document}'
+  critical_artifacts:
+  - path: model.safetensors
+    sha256: 0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd
+  - path: tokenizer.json
+    sha256: def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a
+  remote_code: []
+report_contract:
+  language: en
+  required_sections: 15
+  one_report_per_registered_phase: true
+  one_report_per_registered_task: true
+  archive_policy: retain_history_archive_only_superseded_unreferenced_checksum_validated_generated_reports
+  owner_notes_mutable_by_sync: false
+safety:
+  scaffold_cpu_only: true
+  protected_data_accessed: false
+  model_payload_downloaded: false
+  measured_execution: false
+  gpu_reserved: false
+  paid_api_used: false
+  provider_switched: false
+  selection_opened: false
+  final_opened: false
+inputs_sha256: ed45bc579546ef7de0d297d5efc77b4d5fe1b5c68f0e52a2fa554482a75aaf86

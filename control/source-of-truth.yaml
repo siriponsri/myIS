@@ -10,7 +10,7 @@ records:
   - id: armindex_protocol
     authority: control/campaigns/armindex-multiretriever-v2.yaml
     projections: [projections/read-model, dashboard, brain, paper, mlflow]
-    restrictions: [synthetic_fixtures_only_during_migration, no_model_download]
+    restrictions: [offline_scaffold_only, measured_execution_locked, no_runtime_model_download]
   - id: armindex_a0_10_goal_amendment
     authority: control/migrations/armindex-a0.10-amendment.v1.yaml
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
@@ -19,6 +19,11 @@ records:
     authority: campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_fixture_only, arm01_cpu_fixture_backend_only, dense_arms_fail_closed, no_protected_data, measured_counters_zero, gpu_proposal_non_authorizing]
+  - id: armindex_a1_2_contract_scaffold
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.v1.json, control/budgets/a1.2-common-screen-v1.json, control/execution-envelope-a1.2-v1.yaml, control/armindex/a1.2/model-lockset.v1.json, control/armindex/a1.2/launch-checklist.v1.json, control/armindex/a1.2/shutdown-plan.v1.json]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_contract_scaffold_only, arm01_local_cpu_only, dense_owner_artifacts_pending, launch_locked, no_protected_data, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
   - id: phase_task_reporting_contract
     authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
     projections: [projections/reports, obsidian]

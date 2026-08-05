@@ -47,6 +47,8 @@ defaults:
   p2_budget_profile_required: true
   p2_hidden_runtime_defaults: false
   armindex_budget_profile_id: armindex-migration-v2
+  armindex_a1_2_budget_profile_id: a1.2-common-screen-v1
+  armindex_a1_2_contract_status: scaffold_complete_launch_locked
   armindex_measured_campaign_started: false
 
 protected_boundary:
@@ -55,4 +57,4 @@ protected_boundary:
   protected_membership_in_agent_workspace: false
   qrels_in_projections: false
   per_query_outcomes_in_projections: false
-  active_project_claim_boundary: synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity
+  active_project_claim_boundary: offline_a1_2_scaffold_and_arm01_synthetic_cpu_rank_parity_only_no_measured_retrieval

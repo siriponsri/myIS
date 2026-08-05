@@ -105,3 +105,17 @@ outputs/audits/research-sessions/*.json -text
 projections/read-model/** -text
 projections/sessions/** -text
 projections/sync-receipt.v2.json -text
+
+# A1.2 scaffold inputs and nested artifacts are raw-SHA-256 bound. Preserve LF
+# bytes so clean Windows and POSIX checkouts validate the same commitments.
+control/armindex/a1.2/** -text
+control/budgets/a1.2-*.json -text
+control/execution-envelope-a1.2-*.yaml -text
+control/runbooks/A1_2_*.md -text
+docs/research/A1_2_*.md -text
+src/myis_research/armindex/a1_2_*.py -text
+src/myis_research/armindex/bm25s_adapter.py -text
+tests/test_armindex_a1_2_*.py -text
+tests/test_armindex_bm25s_adapter.py -text
+pyproject.toml -text
+uv.lock -text

@@ -1,0 +1,86 @@
+{
+  "schema_version": "myis.armindex-a1.2-closeout-validation-audit.v1",
+  "audit_id": "a1.2-contract-scaffold-closeout-validation-20260805",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "PASS",
+  "completed_at_utc": "2026-08-05T15:20:47Z",
+  "evidence_class": "engineering_validation",
+  "scientific_authority": false,
+  "claim_boundary": "offline_scaffold_and_synthetic_arm01_cpu_validation_only_no_measured_retrieval_claim",
+  "check_count": 15,
+  "check_groups": [
+    {"check_id": "a1_2_scaffold_validation", "status": "PASS", "observed_count": 16, "unit": "hash_bound_scaffold_files"},
+    {"check_id": "arm01_bm25s_rank_parity", "status": "PASS", "observed_count": 7, "unit": "focused_tests"},
+    {"check_id": "registered_phase_task_reports", "status": "PASS", "observed_count": 39, "unit": "detailed_english_reports", "phase_reports": 12, "task_reports": 27, "required_sections": 15, "archive_candidates": 0},
+    {"check_id": "asset_registry_full_validation", "status": "PASS", "observed_count": 5, "unit": "registered_assets"},
+    {"check_id": "layout_and_markdown_links", "status": "PASS", "observed_count": 26, "unit": "markdown_files_checked"},
+    {"check_id": "session_capsule_audit", "status": "PASS", "observed_count": 22, "unit": "classified_capsules", "unresolved_invalid_count": 0},
+    {"check_id": "independent_migration_verifier", "status": "PASS", "observed_count": 9, "unit": "migration_invariants"},
+    {"check_id": "repository_safe_mlflow_doctor", "status": "PASS", "observed_count": 16, "unit": "doctor_checks", "archive_receipts": 3, "archive_runs": 3, "archive_artifacts": 36},
+    {"check_id": "dashboard_and_api", "status": "PASS", "observed_count": 19, "unit": "tests"},
+    {"check_id": "policy_artifact_report_and_session_safety", "status": "PASS", "observed_count": 42, "unit": "tests"},
+    {"check_id": "full_test_suite", "status": "PASS", "observed_count": 414, "unit": "tests", "warnings": 1},
+    {"check_id": "scoped_ruff_correctness", "status": "PASS", "observed_count": 4, "unit": "rule_families", "rules": ["E4", "E7", "E9", "F"]},
+    {"check_id": "brain_literature_validation", "status": "PASS", "observed_count": 154, "unit": "unique_literature_notes"},
+    {"check_id": "clean_checkout_byte_policy", "status": "PASS", "observed_count": 9, "unit": "representative_hash_bound_paths"},
+    {"check_id": "git_diff_check", "status": "PASS", "observed_count": 1, "unit": "repository_worktree"}
+  ],
+  "failures_and_recoveries": [
+    {
+      "failure_id": "a1.2-unsynced-console-entrypoint-20260805",
+      "recovery_id": "a1.2-module-cli-validation-20260805",
+      "status": "repaired_and_validated",
+      "failure_summary": "The newly declared myis-a1.2 console entry point was unavailable in the existing no-sync environment.",
+      "recovery_summary": "The same CLI was executed through its Python module and the 16-file scaffold validation passed.",
+      "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-mlflow-v2-experiment-missing-20260805",
+      "recovery_id": "a1.2-zero-data-mlflow-bootstrap-20260805",
+      "status": "repaired_and_validated",
+      "failure_summary": "The repository-safe MLflow doctor found the historical fixture store before the ArmIndex experiment registry existed.",
+      "recovery_summary": "A zero-data metadata-only bootstrap added the active ArmIndex experiment; the doctor then passed all checks with no dataset access or scientific metrics.",
+      "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-full-suite-runner-timeout-20260805",
+      "recovery_id": "a1.2-full-suite-extended-timeout-pass-20260805",
+      "status": "repaired_and_validated",
+      "failure_summary": "The first full-suite process exceeded the command runner's 124-second limit without reporting a test failure.",
+      "recovery_summary": "The unchanged suite was rerun with a longer command envelope and all 414 tests passed.",
+      "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-extended-style-profile-debt-20260805",
+      "recovery_id": "a1.2-scoped-correctness-ruff-pass-20260805",
+      "status": "bounded_and_validated",
+      "failure_summary": "An unconfigured extended Ruff profile exposed pre-existing modernize and exception-style debt, including byte-bound scaffold sources.",
+      "recovery_summary": "The scoped correctness profile E4, E7, E9, and F passed; immutable scaffold bytes were preserved and style debt was not misreported as a correctness failure.",
+      "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-report-builder-second-source-read-20260805",
+      "recovery_id": "a1.2-single-read-model-recovery-projection-20260805",
+      "status": "repaired_and_validated",
+      "failure_summary": "The first closeout-audit report integration reopened the audit from the filesystem and failed in a temporary projection checkout.",
+      "recovery_summary": "Failure and recovery records now flow through the one validated read-model object shared by every projection writer.",
+      "counters_changed": false
+    }
+  ],
+  "safety": {
+    "protected_data_accessed": false,
+    "measured_execution": false,
+    "gpu_used": false,
+    "paid_api_used": false,
+    "network_model_download": false,
+    "provider_switched": false,
+    "selection_opened": false,
+    "final_opened": false
+  },
+  "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+  "resource_counters": {"charged_usd": 0, "gpu_scientific_runs": 0, "paid_api_calls": 0, "model_downloads": 0, "provider_switches": 0},
+  "untouched_surfaces": ["owner_local_protected_store", "final_split", "qrels", "membership", "query_ids", "per_query_outcomes", "credentials", "raw_provider_payloads"],
+  "post_audit_obligations": ["deterministic_report_sync_twice", "report_drift_check", "research_session_capsule", "scoped_brain_commit_and_lease_release", "research_commit_and_push", "remote_state_verification"],
+  "audit_sha256": "9ec228853bd8c51853974905d97a0c4d6c022f46f8e81e31f98c81ed7d29ea4a"
+}

@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_1_complete_a1_2_contract_locked`
-- Evidence class: engineering fixture and resource planning; scientific authority `false`
+- Status: `a1_2_contract_scaffold_complete_launch_locked`
+- Evidence class: engineering contract scaffold; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -62,6 +62,21 @@ evidence.
   3090, L4, or A10), 8-16 GPU hours, 10-20 hours end to end, USD 2.40-12.80 raw
   GPU estimate, and hard stops of USD 5 pilot, USD 18 screen, USD 23 A1, and
   USD 100 campaign. A100/H100 is not required.
+- The A1.2 offline execution scaffold is validated and receipt-bound. It adds
+  `bm25s==0.3.10`, exact ARM-01 synthetic CPU rank-order parity, one versioned
+  execution envelope, a hash-bound budget, five source locks, a lockset, an
+  Owner-local launch checklist, a two-layer shutdown plan, an execution
+  contract, and an append-only ledger. ARM-01 remains local CPU only with USD 0
+  GPU budget.
+- Public revisions and critical artifact commitments are frozen for BGE-M3,
+  PatEmbed-large, Snowflake Arctic Embed M v2.0, and Qwen3-Embedding-0.6B. No
+  model payload was downloaded. The four dense locks remain
+  `metadata_frozen_owner_artifacts_pending`; complete Owner-local byte-level
+  `SHA256SUMS` manifests are required before launch.
+- Every registered Phase and Task continues to receive one detailed English
+  generated Obsidian report with the canonical fifteen-section structure. The
+  archive audit found zero eligible orphan/superseded reports; referenced
+  historical SCOPE/P1/P2 reports remain active evidence lineage.
 
 ## Boundaries
 
@@ -72,22 +87,25 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-No integrity or evidence blocker is currently known. A1.2 execution remains
-deliberately locked until its versioned execution contract and hash-bound budget
-profile validate. The root software license requires an Owner legal decision
-before external release; this does not block contract scaffolding.
+No scaffold integrity blocker is currently known. A1.2 scientific execution
+remains deliberately locked until the Owner-local runtime manifests, dense
+adapter parity, Qwen measured maximum length, live quote/capacity, storage, and
+external provider-termination dry run pass and the unchanged contract is
+explicitly adopted. The root software license requires an Owner legal decision
+before external release; this does not block preflight.
 
 ## Active authorized action
 
-Prepare only the A1.2 offline execution-contract scaffold. This must be complete
-before any real GPU reservation or measured run. The exact next task is:
+Run only the Owner-local A1.2 artifact-manifest and provider-termination dry-run
+preflight on CPU. The exact next task is:
 
 ```text
-/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.
+/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.
 ```
 
-No Owner action is needed to write and validate the scaffold. Before a real
-launch, the Owner must make the protected root available to the runner,
-pre-stage frozen model/tokenizer and required remote-code artifacts, provide
-Vast or equivalent credit and credentials without exposing them to agents, and
-intervene only for provider unavailability, hash conflict, or budget increase.
+The Owner is now needed for the next preflight: make the protected root
+available read-only to the runner, pre-stage frozen model/tokenizer and
+remote-code artifacts, provide complete local byte manifests, keep Vast or
+equivalent credentials outside the agent workspace, bind a live quote and
+instance identity, and dry-run provider termination/TTL. No GPU capacity should
+be reserved until those checks pass and the unchanged contract is adopted.

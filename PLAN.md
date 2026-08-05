@@ -15,10 +15,10 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (locked pending a versioned
-  execution contract and hash-bound budget profile)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (offline contract scaffold
+  complete; scientific screen and GPU launch remain locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: engineering fixture; scientific authority `false`
+- Current evidence class: engineering contract scaffold; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -59,7 +59,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 locked pending execution contract |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 scaffold complete and launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -102,15 +102,28 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | locked pending execution contract |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | contract scaffold complete; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
 arms were declared, `ARM-02` through `ARM-05` failed closed before model or
 network access, and measured, candidate, Selection, Final, GPU, paid-API, and
 model-download counters remained zero. This is engineering fixture evidence;
-it does not establish parity with the future locked `bm25s` measured adapter or
-support a retrieval-quality claim.
+it did not establish parity with the future locked `bm25s` measured adapter or
+support a retrieval-quality claim. The subsequent A1.2 scaffold added
+`bm25s==0.3.10` and validated exact synthetic CPU rank-order parity against the
+repository Okapi reference. That parity receipt remains engineering fixture
+evidence and is not a retrieval-quality result.
+
+The versioned A1.2 execution envelope, hash-bound budget, five source locks,
+launch checklist, two-layer shutdown plan, execution contract, receipt, and
+append-only ledger are now validated. `ARM-01` is frozen for local CPU use with
+exactly USD 0 GPU budget. Public revisions and critical commitments are frozen
+for `ARM-02` through `ARM-05`, but all four dense arms remain
+`metadata_frozen_owner_artifacts_pending` until complete Owner-local
+`SHA256SUMS` manifests and adapter parity checks pass. Exact source revisions
+and public commitments are documented in
+[`docs/research/A1_2_MODEL_SOURCE_LOCKS.md`](docs/research/A1_2_MODEL_SOURCE_LOCKS.md).
 
 The non-authorizing A1.2 planning proposal uses one 24 GiB GPU, preferably RTX
 4090, RTX 3090, L4, or A10; A100/H100 is not required. The planning estimate is
@@ -125,6 +138,9 @@ one validated read model using the canonical fifteen-section contract.
 Historical reports remain at their expected paths while referenced. A report
 may move to the generated archive only when it is explicitly superseded,
 unreferenced, checksum-validated, and retained with a supersession pointer.
+The current archive audit found zero eligible generated reports; historical
+SCOPE/P1/P2 reports remain in place because the read model, validators,
+generated manifest, or artifact graph still reference them.
 
 ## Historical evidence
 
@@ -166,13 +182,13 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Prepare and validate the versioned A1.2_COMMON_MULTI_ARM_SCREENING execution contract, hash-bound budget profile, frozen offline model and adapter locks, Owner-local launch checklist, and automatic shutdown plan from the validated A1.1 engineering receipt. Complete this scaffold before reserving GPU capacity. Do not launch measured retrieval, access protected payloads from the agent workspace, download model weights during measured runtime, use paid APIs, switch providers, open Selection, or open Final until the separate contract is adopted and validated.
+/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.
 ```
 
-A1.2 may begin only as offline execution-contract, budget-profile, model-lock,
-adapter-lock, and launch-checklist scaffolding. No GPU reservation, protected
-payload access, model download during measured runtime, dense-arm execution, or
-measured retrieval is authorized until that separate contract is adopted and
-validated. The Owner is needed at launch time to expose the protected root to
-the runner, pre-stage frozen artifacts, and provide provider credit and
-credentials without transferring them to the agent workspace.
+The offline scaffold is complete. The next action remains reversible and
+CPU-only: the Owner-local runner validates pre-staged artifacts, dense adapter
+parity, Qwen maximum length, storage, live quote/capacity, and the external
+provider termination watcher. No GPU reservation, protected payload access
+from the agent workspace, runtime model download, dense-arm execution, or
+measured retrieval is authorized until every checklist item passes and the
+unchanged contract is explicitly adopted.

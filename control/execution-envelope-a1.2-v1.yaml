@@ -1,0 +1,50 @@
+schema_version: myis.armindex-a1.2-execution-envelope.v1
+envelope_id: a1.2-common-screen-v1
+status: scaffold_validated_execution_not_authorized
+standing_decision: D1_START_CAMPAIGN
+scope:
+  phase_id: A1_BASELINES_AND_MULTI_ARM_SCREENING
+  task_id: A1.2
+  arms:
+  - ARM-01
+  - ARM-02
+  - ARM-03
+  - ARM-04
+  - ARM-05
+  rep_dev_only: true
+  selection_open: false
+  final_open: false
+scaffold_resources:
+  cpu_only: true
+  gpu: false
+  paid_api: false
+  network_model_download: false
+  hard_stop_usd: 0
+planned_execution_resources:
+  gpu_count: 1
+  minimum_vram_gib: 24
+  gpu_classes:
+  - RTX_4090_24GB
+  - RTX_3090_24GB
+  - L4_24GB
+  - A10_24GB
+  a100_or_h100_required: false
+  minimum_vcpu: 8
+  minimum_ram_gib: 32
+  recommended_ram_gib: 64
+  minimum_local_ssd_gib: 200
+  offline_measured_runtime: true
+  sequential_dense_model_residency: true
+  arm01_gpu_budget_usd: 0
+authorization:
+  adopted: false
+  launch_allowed: false
+  requires_owner_artifact_manifest: true
+  requires_owner_live_quote_and_capacity: true
+  requires_external_termination_dry_run: true
+protected_boundary:
+  repository_output: aggregate_hash_count_pointer_only
+  protected_root: owner_local_only
+  agent_payload_access: false
+inputs_sha256: ed45bc579546ef7de0d297d5efc77b4d5fe1b5c68f0e52a2fa554482a75aaf86
+envelope_sha256: 539855ce396fe7438d7ee870d43bd7f7c22be311424542bbcbd8bfd0ce70dcd5

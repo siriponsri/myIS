@@ -63,9 +63,14 @@ def _lifecycle(value: Any) -> str:
         "active",
         "executable",
         "a1_1_complete_a1_2_contract_locked",
+        "a1_2_contract_scaffold_complete_launch_locked",
     }:
         return "active"
-    if value in {"blocked", "blocked_until_p1"} or value.startswith("locked"):
+    if value in {
+        "blocked",
+        "blocked_until_p1",
+        "contract_scaffold_complete_launch_locked",
+    } or value.startswith("locked"):
         return "blocked"
     return "planned"
 
@@ -474,6 +479,7 @@ def _artifacts(
                     ))
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING":
         adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
+        scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
         if isinstance(adapter, Mapping) and adapter.get("validated") is True:
             if task_id in {None, "A1.1"}:
                 for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
@@ -513,6 +519,40 @@ def _artifacts(
                         explanation="Provides bounded owner-managed GPU planning assumptions and hard stops without adopting an execution contract or launching compute.",
                         producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                         producing_task_id="A1.1",
+                    ))
+        if (
+            task_id in {None, "A1.2"}
+            and isinstance(scaffold, Mapping)
+            and scaffold.get("validated") is True
+        ):
+            for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                ("a12-contract-scaffold-receipt", "A1.2 contract scaffold receipt", "receipt", "receipt_uri", "receipt_sha256", "Closes the offline scaffold goal while preserving launch, measured retrieval, Selection, and Final locks."),
+                ("a12-execution-contract", "A1.2 versioned execution contract", "contract", "execution_contract_uri", "execution_contract_sha256", "Binds the five-arm order, zero real counters, resource plan, and the exact launch-locked next action."),
+                ("a12-arm01-rank-parity", "A1.2 ARM-01 bm25s synthetic CPU rank-parity receipt", "receipt", "arm01_parity_receipt_uri", "arm01_parity_receipt_sha256", "Records exact synthetic rank-order parity against the repository Okapi reference with zero measured and charged-resource counters."),
+                ("a12-budget-profile", "A1.2 hash-bound budget profile", "budget", "budget_profile_uri", "budget_profile_sha256", "Freezes the USD 5 pilot, USD 18 screen, USD 23 A1, and USD 100 campaign hard stops without authorizing spend."),
+                ("a12-execution-envelope", "A1.2 execution envelope", "contract", "execution_envelope_uri", "execution_envelope_sha256", "Separates the CPU-only zero-cost scaffold authority from the planned but unadopted GPU execution boundary."),
+                ("a12-model-lockset", "A1.2 five-arm model source lockset", "lockset", "model_lockset_uri", "model_lockset_sha256", "Freezes the ARM-01 bm25s adapter and four public dense source revisions while requiring Owner-local runtime manifests."),
+                ("a12-launch-checklist", "A1.2 Owner-local launch checklist", "checklist", "launch_checklist_uri", "launch_checklist_sha256", "Lists the remaining Owner-local artifact, parity, quote, capacity, storage, adoption, and termination checks; launch remains false."),
+                ("a12-shutdown-plan", "A1.2 two-layer shutdown plan", "runbook", "shutdown_plan_uri", "shutdown_plan_sha256", "Requires both an in-instance guard and an Owner-local provider termination watcher; guest poweroff alone is insufficient."),
+                ("a12-scaffold-runbook", "A1.2 contract scaffold runbook", "runbook", "runbook_uri", "runbook_sha256", "Defines the detailed English reporting, archive retention, CPU-only ARM-01, and pre-GPU acceptance contract."),
+                ("a12-scaffold-ledger", "A1.2 append-only scaffold ledger", "ledger", "ledger_uri", "ledger_sha256", "Hash-chains scaffold start, ARM-01 synthetic CPU parity, and launch-locked closeout."),
+                ("a12-report-archive-audit", "A1.2 generated report archive audit", "audit", "report_archive_audit_uri", "report_archive_audit_sha256", "Confirms that all 39 registered detailed English Phase/Task reports remain current or graph-referenced and that no generated or Owner-authored report is eligible to move."),
+                ("a12-closeout-validation-audit", "A1.2 closeout validation audit", "audit", "closeout_validation_audit_uri", "closeout_validation_audit_sha256", "Records the aggregate-safe validation matrix, recovered infrastructure failures, zero scientific counters, and untouched protected surfaces."),
+            ):
+                uri = scaffold.get(uri_key)
+                digest = scaffold.get(sha_key)
+                if uri and digest:
+                    result.append(_artifact(
+                        artifact_id=artifact_id,
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="engineering_contract_scaffold",
+                        scientific_authority=False,
+                        safe_uri=str(uri),
+                        content_sha256=str(digest),
+                        explanation=explanation,
+                        producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                        producing_task_id="A1.2",
                     ))
     return result
 
@@ -700,6 +740,7 @@ def _bindings(
         proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
         bindings["candidate_freeze_proposal"] = {"uri": proposal.get("proposal_uri"), "sha256": proposal.get("proposal_sha256")}
     elif phase_id.startswith("A"):
+        scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
         bindings["campaign"] = {"uri": "control/campaigns/armindex-multiretriever-v2.yaml", "sha256": _hash_file(root, "control/campaigns/armindex-multiretriever-v2.yaml")}
         bindings["migration_budget"] = {"uri": "control/budgets/armindex-migration-v2.yaml", "sha256": _hash_file(root, "control/budgets/armindex-migration-v2.yaml")}
         bindings["armindex_schema_root"] = {"uri": "schemas/armindex", "sha256": _hash_file(root, "schemas/armindex/read-model.v1.json")}
@@ -773,6 +814,35 @@ def _bindings(
                 "sha256": adapter.get("gpu_proposal_sha256"),
                 "status": adapter.get("gpu_proposal_status"),
             }
+            if isinstance(scaffold, Mapping) and scaffold.get("validated") is True:
+                bindings["a12_execution_contract"] = {
+                    "uri": scaffold.get("execution_contract_uri"),
+                    "sha256": scaffold.get("execution_contract_sha256"),
+                    "status": scaffold.get("status"),
+                }
+                bindings["a12_budget_profile"] = {
+                    "uri": scaffold.get("budget_profile_uri"),
+                    "sha256": scaffold.get("budget_profile_sha256"),
+                }
+                bindings["a12_model_lockset"] = {
+                    "uri": scaffold.get("model_lockset_uri"),
+                    "sha256": scaffold.get("model_lockset_sha256"),
+                }
+                bindings["a12_launch_checklist"] = {
+                    "uri": scaffold.get("launch_checklist_uri"),
+                    "sha256": scaffold.get("launch_checklist_sha256"),
+                    "launch_ready": scaffold.get("launch_ready"),
+                }
+                bindings["a12_shutdown_plan"] = {
+                    "uri": scaffold.get("shutdown_plan_uri"),
+                    "sha256": scaffold.get("shutdown_plan_sha256"),
+                }
+                bindings["a12_closeout_validation_audit"] = {
+                    "uri": scaffold.get("closeout_validation_audit_uri"),
+                    "sha256": scaffold.get("closeout_validation_audit_sha256"),
+                    "check_count": scaffold.get("closeout_validation_check_count"),
+                    "recovery_count": scaffold.get("closeout_validation_recovery_count"),
+                }
     return bindings
 
 
@@ -784,13 +854,19 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     status = _lifecycle(task.get("status") if task else phase.get("status"))
     scientific = phase_id == "P1_CPU_BASELINE"
     adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
+    scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
     a11_validated = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and isinstance(adapter, Mapping)
         and adapter.get("validated") is True
     )
-    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering_fixture" if a11_validated and task_id in {None, "A1.1"} else "planning_estimate" if a11_validated and task_id == "A1.2" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
-    claim_boundary = "train_selection_only" if scientific else str(adapter.get("claim_boundary")) if a11_validated and task_id in {None, "A1.1"} else "resource_planning_only_no_gpu_launch_or_measured_authority" if a11_validated and task_id == "A1.2" else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} or phase_id.startswith("A") else "unavailable"
+    a12_validated = (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and isinstance(scaffold, Mapping)
+        and scaffold.get("validated") is True
+    )
+    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering_contract_scaffold" if a12_validated and task_id in {None, "A1.2"} else "engineering_fixture" if a11_validated and task_id in {None, "A1.1"} else "planning_estimate" if a11_validated and task_id == "A1.2" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
+    claim_boundary = "train_selection_only" if scientific else str(scaffold.get("claim_boundary")) if a12_validated and task_id in {None, "A1.2"} else str(adapter.get("claim_boundary")) if a11_validated and task_id in {None, "A1.1"} else "resource_planning_only_no_gpu_launch_or_measured_authority" if a11_validated and task_id == "A1.2" else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} or phase_id.startswith("A") else "unavailable"
     objective = str(task.get("title")) if task else f"Deliver the {phase_id} research phase with an auditable evidence boundary."
     if phase_id == "P2_SCOPE_DEVELOPMENT":
         objective = "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2."
@@ -814,6 +890,26 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "status": "repaired_and_validated",
                 "counters_changed": False,
             })
+    if (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and task_id in {None, "A1.2"}
+        and isinstance(scaffold, Mapping)
+        and scaffold.get("closeout_validation_audit_sha256")
+    ):
+        audit_uri = scaffold.get("closeout_validation_audit_uri")
+        audit_sha256 = scaffold.get("closeout_validation_audit_sha256")
+        for item in scaffold.get("closeout_validation_recoveries", []):
+            if isinstance(item, Mapping):
+                failures.append({
+                    "failure_id": item.get("failure_id"),
+                    "failure_uri": audit_uri,
+                    "failure_sha256": audit_sha256,
+                    "recovery_id": item.get("recovery_id"),
+                    "recovery_uri": audit_uri,
+                    "recovery_sha256": audit_sha256,
+                    "status": item.get("status"),
+                    "counters_changed": False,
+                })
     if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("observatory", {}).get("failed_child_count", 0):
         failures.append({"failure_id": "obs-failure-candidate-02", "recovery_id": "obs-recovery-candidate-02", "status": "retained_and_recovered", "counters_changed": False})
     if phase_id == "P2_SCOPE_DEVELOPMENT":
@@ -967,7 +1063,13 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         result = f"A0.10 is {status}; synthetic vertical-slice status is {fixture_status}; measured ArmIndex, Selection, and Final counters remain zero."
         interpretation = "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation."
         decision_status = status
-    elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}:
+    elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id is None and a12_validated:
+        registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
+        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture and a validated, launch-locked A1.2 execution scaffold for {registered_arms} arms."
+        result = "A1 engineering scaffolding is current; A1.2 scientific screening remains unexecuted and measured, Selection, and Final counters remain zero."
+        interpretation = "A1 now has a reproducible CPU anchor and a bounded pre-GPU contract. Scientific completion still requires Owner-local artifact validation, explicit adoption, and the separately authorized common screen."
+        decision_status = "active"
+    elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
         dense_blocked = int(adapter.get("dense_arms_blocked", 0)) if isinstance(adapter, Mapping) else 0
         output = (
@@ -979,9 +1081,14 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         decision_status = status
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2":
         proposal_status = str(adapter.get("gpu_proposal_status", "not_available")) if isinstance(adapter, Mapping) else "not_available"
-        output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
-        result = "A1.2 measured screening remains blocked pending a separate versioned execution contract and hash-bound budget profile; no GPU reservation or measured run occurred."
-        interpretation = "The proposal is resource planning evidence only. A 24 GiB sequential GPU screen is plausible under the stated assumptions, but protected workload size, live provider pricing, pre-staged artifact hashes, and an Owner-local throughput pilot are still required before adoption."
+        if a12_validated:
+            output = f"The versioned execution contract, budget, five source locks, launch checklist, shutdown plan, receipt, and ledger validate with status {scaffold.get('status')}; {scaffold.get('dense_artifact_manifests_pending')} dense artifact manifests and {scaffold.get('owner_requirements_pending')} Owner checks remain pending."
+            result = "The A1.2 offline scaffold goal is complete and launch-locked; ARM-01 synthetic CPU rank parity passed, while no GPU reservation, protected payload access, or measured run occurred."
+            interpretation = "The scaffold makes the next Owner-local preflight reproducible and budget-bounded. It does not complete the A1.2 scientific screen: dense runtime bytes, adapter parity, live pricing/capacity, Qwen maximum length, and external provider termination still require Owner-local validation and explicit contract adoption."
+        else:
+            output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
+            result = "A1.2 measured screening remains blocked pending a separate versioned execution contract and hash-bound budget profile; no GPU reservation or measured run occurred."
+            interpretation = "The proposal is resource planning evidence only. A 24 GiB sequential GPU screen is plausible under the stated assumptions, but protected workload size, live provider pricing, pre-staged artifact hashes, and an Owner-local throughput pilot are still required before adoption."
         decision_status = "blocked"
     elif phase_id.startswith("A"):
         armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
@@ -1056,8 +1163,10 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
-            if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}
-            else "The A1.1 receipt is used only to plan the A1.2 execution contract. The proposal records one 24 GiB GPU class, sequential model residency, elapsed-time and cost ranges, hard stops, pre-staging requirements, automatic shutdown, and Owner-local prerequisites; it does not authorize reservation or execution."
+            if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
+            else "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. ARM-01 remains local CPU only; four dense source revisions and critical commitments are frozen, while Owner-local runtime manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
+            if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id is None and a12_validated
+            else "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, execution envelope, launch checklist, two-layer shutdown plan, receipt, and ledger were frozen. Launch remains false pending Owner-local artifact manifests, parity, live quote/capacity, external termination dry run, and explicit adoption."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2"
             else "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
             if phase_id.startswith("A") and task_id == "A0.10"

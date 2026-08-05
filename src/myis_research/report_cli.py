@@ -1022,7 +1022,14 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         lines = []
         for key, item in value.items():
             if isinstance(item, Mapping):
-                lines.append(f"- `{key}`: `{item.get('uri', 'inline')}`; SHA-256 `{item.get('sha256')}`")
+                if "uri" in item or "sha256" in item:
+                    lines.append(
+                        f"- `{key}`: `{item.get('uri', 'inline')}`; "
+                        f"SHA-256 `{item.get('sha256')}`"
+                    )
+                else:
+                    rendered = json.dumps(dict(item), ensure_ascii=True, sort_keys=True)
+                    lines.append(f"- `{key}`: `{rendered}`")
             else:
                 lines.append(f"- `{key}`: {item}")
         return "\n".join(lines) or "- None recorded."
@@ -1077,12 +1084,32 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
     if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING":
         armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
         adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
+        scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
         gpu = adapter.get("gpu_spec", {}) if isinstance(adapter.get("gpu_spec"), Mapping) else {}
         timing = adapter.get("time_estimate", {}) if isinstance(adapter.get("time_estimate"), Mapping) else {}
         budget = adapter.get("budget_estimate", {}) if isinstance(adapter.get("budget_estimate"), Mapping) else {}
         owner_needs = adapter.get("owner_needs", []) if isinstance(adapter.get("owner_needs"), list) else []
         gpu_classes = ", ".join(str(item) for item in gpu.get("preferred_gpu_classes", []))
         owner_lines = "\n".join(f"- {item}" for item in owner_needs) or "- No Owner input is required for the completed CPU fixture."
+        scaffold_note = ""
+        if scaffold.get("validated") is True:
+            scaffold_note = (
+                "\n\n### A1.2 scaffold and launch state\n\n"
+                f"The offline scaffold is `{scaffold.get('status')}` with `{scaffold.get('model_lock_count', 0)}` model/source locks. "
+                f"ARM-01 has `{scaffold.get('offline_adapter_ready', 0)}` offline CPU adapter lock ready; "
+                f"`{scaffold.get('dense_artifact_manifests_pending', 0)}` dense Owner-local artifact manifests and "
+                f"`{scaffold.get('owner_requirements_pending', 0)}` checklist items remain pending. "
+                f"Launch ready: `{scaffold.get('launch_ready', False)}`; measured execution: `{scaffold.get('measured_execution', False)}`. "
+                f"The closeout audit passed `{scaffold.get('closeout_validation_check_count', 0)}` validation groups and retained "
+                f"`{scaffold.get('closeout_validation_recovery_count', 0)}` bounded failure/recovery records.\n\n"
+                "Owner-local prerequisites still required:\n\n"
+                "- mount the protected root read-only for the runner without copying payloads into the agent workspace;\n"
+                "- validate complete `SHA256SUMS` manifests for all dense runtime files and byte SHA-256 for Snowflake remote code;\n"
+                "- pass dense adapter parity checks and freeze the Qwen measured maximum input length;\n"
+                "- bind a live quote, capacity, provider instance identity, artifact-return target, and free-space check;\n"
+                "- dry-run the external provider termination watcher and TTL, because guest poweroff alone does not prove billing stopped;\n"
+                "- explicitly adopt the unchanged execution contract and budget before any GPU reservation."
+            )
         a1_note = (
             "\n\n### A1.2 resource planning boundary\n\n"
             f"The proposal remains `{adapter.get('gpu_proposal_status', 'not_available')}`. "
@@ -1095,7 +1122,7 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
             f"USD `{budget.get('common_screen_hard_stop', 0)}` for the common screen, "
             f"USD `{budget.get('a1_total_hard_stop', 0)}` for A1, and USD `{budget.get('campaign_hard_stop', 0)}` for the campaign.\n\n"
             "Owner prerequisites:\n\n"
-            f"{owner_lines}"
+            f"{owner_lines}{scaffold_note}"
         )
     failures = record.get("failure_recovery_references", [])
     artifact_markdown = "\n".join(artifact_rows)
@@ -2034,6 +2061,8 @@ def _workflow_status(value: Any) -> str:
         "ready": "ready",
         "active": "in_progress",
         "a1_1_complete_a1_2_contract_locked": "in_progress",
+        "a1_2_contract_scaffold_complete_launch_locked": "in_progress",
+        "contract_scaffold_complete_launch_locked": "waiting_dependency",
         "complete": "complete",
         "completed": "complete",
         "measured": "complete",

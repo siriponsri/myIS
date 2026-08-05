@@ -33,6 +33,15 @@ from ..armindex.constants import (
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
+    A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+)
+from ..armindex.a1_2_contract import (
+    ARM01_PARITY_RECEIPT_PATH as A12_ARM01_PARITY_RECEIPT_PATH,
+    CONTROL_ROOT as A12_CONTROL_ROOT,
+    LEDGER_PATH as A12_LEDGER_PATH,
+    RECEIPT_PATH as A12_RECEIPT_PATH,
+    RUNBOOK_PATH as A12_RUNBOOK_PATH,
+    validate_a1_2_scaffold,
 )
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
@@ -122,6 +131,8 @@ PROJECTION_SOURCE_PATHS = (
     "src/myis_research/report_records.py",
     "control/campaigns/armindex-multiretriever-v2.yaml",
     "control/budgets/armindex-migration-v2.yaml",
+    "control/budgets/a1.2-common-screen-v1.json",
+    "control/execution-envelope-a1.2-v1.yaml",
     "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
     "schemas/armindex",
     "src/myis_research/armindex",
@@ -129,6 +140,7 @@ PROJECTION_SOURCE_PATHS = (
     "control/armindex",
     "campaigns/armindex-multiretriever-v2/evidence",
     "campaigns/armindex-multiretriever-v2/proposals",
+    "control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -162,6 +174,9 @@ A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH = Path(
 )
 A010_SOURCE_VERIFICATION_RECEIPT_PATH = Path(
     "outputs/audits/repository/thaipha-lex-source-verification-a0.10-20260804.json"
+)
+A12_CLOSEOUT_VALIDATION_AUDIT_PATH = Path(
+    "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
 )
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
@@ -218,12 +233,14 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     feasibility = _a08_compute_storage_feasibility_projection(root)
     closeout = _a09_phase_closeout_projection(root)
     adapter_validation = _a11_adapter_fixture_projection(root)
+    a1_2_scaffold = _a12_contract_scaffold_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
         "compute_storage_feasibility": feasibility,
         "phase_closeout": closeout,
         "adapter_fixture_validation": adapter_validation,
+        "a1_2_contract_scaffold": a1_2_scaffold,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -233,6 +250,25 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_contract_scaffold_complete_launch_locked"
+    ):
+        armindex["status"] = "a1_2_contract_scaffold_complete_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "source_metadata_frozen_owner_artifacts_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         adapter_validation.get("validated") is True
         and adapter_validation.get("status") == "complete"
     ):
@@ -1418,6 +1454,145 @@ def _a11_adapter_fixture_projection(root: Path) -> dict[str, Any]:
         "final_accesses": int(counters["final_accesses"]),
         "resource_counters": dict(resources),
         "next_authorized_action": A1_2_NEXT_AUTHORIZED_ACTION,
+    }
+
+
+def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
+    """Load the validated A1.2 contract scaffold without opening protected data."""
+
+    root = root.resolve()
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "evidence_class": "engineering_contract_scaffold",
+        "scientific_authority": False,
+        "claim_boundary": "offline_scaffold_only_no_measured_retrieval_claim",
+        "receipt_uri": A12_RECEIPT_PATH.as_posix(),
+        "receipt_sha256": None,
+        "runbook_uri": A12_RUNBOOK_PATH.as_posix(),
+        "runbook_sha256": None,
+        "ledger_uri": A12_LEDGER_PATH.as_posix(),
+        "ledger_sha256": None,
+        "execution_contract_uri": (A12_CONTROL_ROOT / "execution-contract.v1.json").as_posix(),
+        "execution_contract_sha256": None,
+        "arm01_parity_receipt_uri": A12_ARM01_PARITY_RECEIPT_PATH.as_posix(),
+        "arm01_parity_receipt_sha256": None,
+        "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
+        "budget_profile_sha256": None,
+        "execution_envelope_uri": "control/execution-envelope-a1.2-v1.yaml",
+        "execution_envelope_sha256": None,
+        "model_lockset_uri": (A12_CONTROL_ROOT / "model-lockset.v1.json").as_posix(),
+        "model_lockset_sha256": None,
+        "launch_checklist_uri": (A12_CONTROL_ROOT / "launch-checklist.v1.json").as_posix(),
+        "launch_checklist_sha256": None,
+        "shutdown_plan_uri": (A12_CONTROL_ROOT / "shutdown-plan.v1.json").as_posix(),
+        "shutdown_plan_sha256": None,
+        "report_archive_audit_uri": (A12_CONTROL_ROOT / "report-archive-audit.v1.json").as_posix(),
+        "report_archive_audit_sha256": None,
+        "closeout_validation_audit_uri": A12_CLOSEOUT_VALIDATION_AUDIT_PATH.as_posix(),
+        "closeout_validation_audit_sha256": None,
+        "closeout_validation_check_count": 0,
+        "closeout_validation_recovery_count": 0,
+        "closeout_validation_recoveries": [],
+        "model_lock_count": 0,
+        "offline_adapter_ready": 0,
+        "dense_artifact_manifests_pending": 0,
+        "owner_requirements_pending": 0,
+        "launch_ready": False,
+        "measured_execution": False,
+        "resource_plan": {},
+        "budget_limits": {},
+        "archive_disposition": {},
+        "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+        "resource_counters": {"charged_usd": 0, "gpu_scientific_runs": 0, "paid_api_calls": 0, "model_downloads": 0, "provider_switches": 0},
+        "next_authorized_action": A1_2_NEXT_AUTHORIZED_ACTION,
+    }
+    try:
+        validation = validate_a1_2_scaffold(root)
+        contract_path = root / A12_CONTROL_ROOT / "execution-contract.v1.json"
+        budget_path = root / "control/budgets/a1.2-common-screen-v1.json"
+        lockset_path = root / A12_CONTROL_ROOT / "model-lockset.v1.json"
+        checklist_path = root / A12_CONTROL_ROOT / "launch-checklist.v1.json"
+        receipt_path = root / A12_RECEIPT_PATH
+        closeout_audit_path = root / A12_CLOSEOUT_VALIDATION_AUDIT_PATH
+        contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        budget = json.loads(budget_path.read_text(encoding="utf-8"))
+        lockset = json.loads(lockset_path.read_text(encoding="utf-8"))
+        checklist = json.loads(checklist_path.read_text(encoding="utf-8"))
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        closeout_audit = json.loads(closeout_audit_path.read_text(encoding="utf-8"))
+        assert_aggregate_only(contract)
+        assert_aggregate_only(budget)
+        assert_aggregate_only(lockset)
+        assert_aggregate_only(checklist)
+        assert_aggregate_only(receipt)
+        assert_aggregate_only(closeout_audit)
+        check_groups = closeout_audit.get("check_groups")
+        recoveries = closeout_audit.get("failures_and_recoveries")
+        safety = closeout_audit.get("safety")
+        if (
+            closeout_audit.get("schema_version")
+            != "myis.armindex-a1.2-closeout-validation-audit.v1"
+            or closeout_audit.get("audit_id")
+            != "a1.2-contract-scaffold-closeout-validation-20260805"
+            or closeout_audit.get("phase_id") != "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+            or closeout_audit.get("task_id") != "A1.2"
+            or closeout_audit.get("status") != "PASS"
+            or closeout_audit.get("scientific_authority") is not False
+            or not isinstance(check_groups, list)
+            or closeout_audit.get("check_count") != len(check_groups)
+            or any(not isinstance(item, Mapping) or item.get("status") != "PASS" for item in check_groups)
+            or not isinstance(recoveries, list)
+            or any(
+                not isinstance(item, Mapping)
+                or item.get("status") not in {"repaired_and_validated", "bounded_and_validated"}
+                or item.get("counters_changed") is not False
+                for item in recoveries
+            )
+            or not isinstance(safety, Mapping)
+            or any(value is not False for value in safety.values())
+            or any(int(value) != 0 for value in closeout_audit.get("real_counters", {}).values())
+            or any(int(value) != 0 for value in closeout_audit.get("resource_counters", {}).values())
+            or closeout_audit.get("audit_sha256")
+            != canonical_sha256(
+                {key: value for key, value in closeout_audit.items() if key != "audit_sha256"}
+            )
+        ):
+            raise ValueError("A1.2 closeout validation audit is invalid")
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {**missing, "status": "invalid" if (root / A12_RECEIPT_PATH).exists() else "not_started"}
+    counts = lockset["aggregate_counts"]
+    return {
+        **missing,
+        "status": validation.status,
+        "validated": True,
+        "receipt_sha256": _file_sha256(receipt_path),
+        "runbook_sha256": _file_sha256(root / A12_RUNBOOK_PATH),
+        "ledger_sha256": _file_sha256(root / A12_LEDGER_PATH),
+        "execution_contract_sha256": _file_sha256(contract_path),
+        "arm01_parity_receipt_sha256": _file_sha256(root / A12_ARM01_PARITY_RECEIPT_PATH),
+        "budget_profile_sha256": _file_sha256(budget_path),
+        "execution_envelope_sha256": _file_sha256(root / "control/execution-envelope-a1.2-v1.yaml"),
+        "model_lockset_sha256": _file_sha256(lockset_path),
+        "launch_checklist_sha256": _file_sha256(checklist_path),
+        "shutdown_plan_sha256": _file_sha256(root / A12_CONTROL_ROOT / "shutdown-plan.v1.json"),
+        "report_archive_audit_sha256": _file_sha256(root / A12_CONTROL_ROOT / "report-archive-audit.v1.json"),
+        "closeout_validation_audit_sha256": _file_sha256(closeout_audit_path),
+        "closeout_validation_check_count": len(check_groups),
+        "closeout_validation_recovery_count": len(recoveries),
+        "closeout_validation_recoveries": [dict(item) for item in recoveries],
+        "model_lock_count": int(counts["arms"]),
+        "offline_adapter_ready": int(counts["offline_adapter_ready"]),
+        "dense_artifact_manifests_pending": int(counts["owner_artifact_manifests_pending"]),
+        "owner_requirements_pending": len(checklist["pending_owner"]),
+        "launch_ready": bool(checklist["launch_ready"]),
+        "measured_execution": bool(validation.measured_execution),
+        "resource_plan": dict(contract["resource_plan"]),
+        "budget_limits": dict(budget["limits"]),
+        "archive_disposition": dict(receipt["archive_disposition"]),
+        "real_counters": dict(contract["real_counters"]),
+        "resource_counters": dict(contract["resource_counters"]),
+        "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
     }
 
 

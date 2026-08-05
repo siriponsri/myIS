@@ -71,7 +71,10 @@ readiness. Those systems are projections, not independent sources of truth.
 Every adapter requires an immutable revision, tokenizer hash, prompt/prefix,
 pooling, normalization, dimension, truncation, precision, and license snapshot
 before measurement. The model selection record is the authority for planned
-adapter semantics; Phase A0 must verify upstream metadata before locking it.
+adapter semantics. The A1.2 public revisions and critical commitments are
+recorded in [`A1_2_MODEL_SOURCE_LOCKS.md`](docs/research/A1_2_MODEL_SOURCE_LOCKS.md);
+the four dense arms still require complete Owner-local byte manifests and
+adapter parity before launch.
 
 ## Metrics
 
@@ -139,7 +142,7 @@ does not start MLflow automatically.
 
 - Repository infrastructure was migrated in place on the existing Git history.
 - Historical measured P1 R0/R0-W evidence is preserved without reinterpretation.
-- Every Task in `A0_MIGRATION_FOUNDATION` and synthetic/offline Task `A1.1` is complete. Task `A1.2` remains locked while its versioned execution contract, hash-bound budget profile, offline model/adapter locks, and Owner-local launch checklist are prepared and validated before any GPU reservation.
+- Every Task in `A0_MIGRATION_FOUNDATION` and synthetic/offline Task `A1.1` is complete. The `A1.2` offline contract scaffold, ARM-01 `bm25s` CPU rank-parity receipt, budget, source locks, checklist, and shutdown plan are validated; the scientific common screen and every GPU reservation remain launch-locked.
 - ArmIndex measured runs, Selection exposures, and Final exposures are zero.
 - Final-872 is closed; `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` remain the only Owner gates.
 - Production and benchmark validation are pending.
@@ -179,6 +182,7 @@ The seven-phase roadmap runs from A0 migration through A6 publication. See
 - [Architecture](docs/architecture/ARCHITECTURE.md)
 - [Research protocol](docs/research/RESEARCH_PROTOCOL.md)
 - [Model selection](docs/research/MODEL_SELECTION_V02.md)
+- [A1.2 frozen model sources](docs/research/A1_2_MODEL_SOURCE_LOCKS.md)
 - [Productization boundary](docs/product/PRODUCTIZATION.md)
 - [Production profiles](docs/product/PRODUCTION_PROFILES.md)
 - [Use cases](docs/product/USE_CASES.md)

@@ -33,3 +33,13 @@ A1_2_NEXT_AUTHORIZED_ACTION = (
     "download model weights during measured runtime, use paid APIs, switch providers, "
     "open Selection, or open Final until the separate contract is adopted and validated."
 )
+
+A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION = (
+    "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run "
+    "preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, "
+    "freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, "
+    "bind a live quote and provider instance identity, and prove provider termination/TTL "
+    "without exposing credentials or protected payloads. Do not reserve GPU capacity or "
+    "start measured retrieval until every launch-checklist item passes and the unchanged "
+    "execution contract is explicitly adopted."
+)

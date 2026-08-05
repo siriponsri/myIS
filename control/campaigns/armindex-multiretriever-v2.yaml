@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a1_1_complete_a1_2_contract_locked
-  evidence_class: engineering_fixture
+  status: a1_2_contract_scaffold_complete_launch_locked
+  evidence_class: engineering_contract_scaffold
   scientific_authority: false
-  claim_boundary: synthetic_adapter_and_arm01_cpu_path_only_no_measured_parity
+  claim_boundary: offline_a1_2_scaffold_and_arm01_synthetic_cpu_rank_parity_only_no_measured_retrieval
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -39,6 +39,9 @@ contracts:
   mlflow_migration_receipt: schemas/armindex/mlflow-migration-receipt.v1.json
   migration_read_model: schemas/armindex/read-model.v1.json
   budget_profile: control/budgets/armindex-migration-v2.yaml
+  a1_2_execution_contract: control/armindex/a1.2/execution-contract.v1.json
+  a1_2_budget_profile: control/budgets/a1.2-common-screen-v1.json
+  a1_2_model_lockset: control/armindex/a1.2/model-lockset.v1.json
 
 phases:
   - id: A0_MIGRATION_FOUNDATION
@@ -58,9 +61,9 @@ phases:
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: a1_1_complete_a1_2_contract_locked
+    status: a1_2_contract_scaffold_complete_launch_locked
     measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: locked_pending_execution_contract}]
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: contract_scaffold_complete_launch_locked}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
     status: locked_until_A1

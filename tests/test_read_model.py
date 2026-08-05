@@ -15,6 +15,7 @@ from myis_research.armindex.constants import (
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
+    A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
 )
 from myis_research.owner_local import build_receipt
 from myis_research.projections.read_model import (
@@ -26,6 +27,7 @@ from myis_research.projections.read_model import (
     _a08_compute_storage_feasibility_projection,
     _a09_phase_closeout_projection,
     _a11_adapter_fixture_projection,
+    _a12_contract_scaffold_projection,
     _a010_legacy_code_harvest_projection,
     _legacy_file_commitment_matches,
     build_read_model,
@@ -195,7 +197,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    assert model["armindex"]["next_command"] == A1_2_NEXT_AUTHORIZED_ACTION
+    assert model["armindex"]["next_command"] == A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
@@ -219,6 +221,31 @@ def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked
     assert projection["final_accesses"] == 0
     assert set(projection["resource_counters"].values()) == {0}
     assert projection["next_authorized_action"] == A1_2_NEXT_AUTHORIZED_ACTION
+
+
+def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> None:
+    projection = _a12_contract_scaffold_projection(ROOT)
+
+    assert projection["status"] == "a1_2_contract_scaffold_complete_launch_locked"
+    assert projection["validated"] is True
+    assert projection["evidence_class"] == "engineering_contract_scaffold"
+    assert projection["scientific_authority"] is False
+    assert projection["model_lock_count"] == 5
+    assert projection["offline_adapter_ready"] == 1
+    assert projection["dense_artifact_manifests_pending"] == 4
+    assert projection["owner_requirements_pending"] == 9
+    assert projection["launch_ready"] is False
+    assert projection["measured_execution"] is False
+    assert projection["budget_limits"]["arm01_gpu_usd"] == 0
+    assert projection["budget_limits"]["a1_total_hard_stop_usd"] == 23
+    assert projection["archive_disposition"]["candidate_count"] == 0
+    assert projection["closeout_validation_check_count"] == 15
+    assert projection["closeout_validation_recovery_count"] == 5
+    assert len(projection["closeout_validation_recoveries"]) == 5
+    assert projection["closeout_validation_audit_sha256"]
+    assert set(projection["real_counters"].values()) == {0}
+    assert set(projection["resource_counters"].values()) == {0}
+    assert projection["next_authorized_action"] == A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:
