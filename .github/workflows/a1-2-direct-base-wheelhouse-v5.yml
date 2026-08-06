@@ -104,7 +104,7 @@ jobs:
               done > SHA256SUMS
             sha256sum --check SHA256SUMS
           )
-          python - <<'PY'
+          /tmp/a1-2-offline/bin/python - <<'PY'
           import hashlib
           import importlib.metadata
           import json
