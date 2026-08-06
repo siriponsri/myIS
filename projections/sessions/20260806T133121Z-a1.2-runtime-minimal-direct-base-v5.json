@@ -1,0 +1,133 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260806T133121Z-a1.2-runtime-minimal-direct-base-v5",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-06T13:31:21Z",
+  "scope": "Prepare the additive A1.2 runtime-minimal direct official-base image revision for a local-orchestrated future Vast four-RTX3090 preflight; preserve v1-v3 evidence, refresh aggregate-safe projections, and keep live execution locked.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-06",
+      "scope": "Offline/local implementation of the selected direct PyTorch base image preflight revision, runtime-minimal staging contract, generated reporting, Brain pointer updates, and commit/push. No Vast contact, paid GPU reservation, measured retrieval, paid API, Selection, Final, or weight change is authorized."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
+    "dirty_paths": []
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The active preflight runtime uses the selected official PyTorch image directly on linux/amd64 instead of a local custom image or nested-container execution.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
+          "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+          "locator": "image_reference, resolved_manifest_digest, and removed_active_steps"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "pivot",
+      "provenance": "owner-revised",
+      "summary": "Dense model staging is frozen as runtime-minimal allowlisted bytes rather than complete repository snapshots; dense CPU loading remains intentionally skipped for host-memory safety.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/runtime-minimal-model-policy.v4.json",
+          "sha256": "b8a00083c5776a87e8f6b6b2a9ed45882dbd72282e3df7f968c0729dd04b57bd",
+          "locator": "arms, exclusions, and validation rules"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
+          "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+          "locator": "model_snapshots and cpu_model_load"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The direct-base execution contract binds isolated SSH bootstrap behavior, offline wheel installation, fixed four-worker topology, safe uploads, and a fail-closed remote boundary.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/execution-contract.direct-base.v5.json",
+          "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+          "locator": "remote_allowed_inputs, remote_forbidden_inputs, and lifecycle"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "One shared validated read model projected the v5 receipt to aggregate-safe MLflow, Brain, Obsidian, Dashboard, and Paper readiness without projection drift.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "2b4eafcea829cb13779bbfac535c267ab93433daec7fe2472100eabe1b87053b",
+          "locator": "source_receipt_uri, projection_events, and status"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The revision is engineering preflight evidence only: live execution and adoption remain locked, and all measured, charged, Selection, and Final counters remain zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
+          "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+          "locator": "scientific_authority, launch_allowed, adopted_for_execution, real_counters, and resource_counters"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-stage",
+      "provenance": "agent-proposed",
+      "summary": "The Owner must locally stage the runtime-minimal model directories, Linux wheelhouse, SHA256SUMS, and frozen code bundle before opening a matching quoted worker and running the synthetic-only v5 SSH preflight.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "live-vast-checks",
+      "provenance": "agent-observed",
+      "summary": "CUDA dense-adapter parity, Qwen measured maximum length, GPU-memory feasibility, live quote/identity, heartbeat and resume, artifact return capacity, and provider destroy/TTL proof remain pending live preflight.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
