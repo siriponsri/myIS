@@ -1966,8 +1966,6 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "campaign_hard_stop_usd": int(
                 v3_receipt["budget"]["campaign_hard_stop_usd"]
             ),
-            "validation_git_commit": str(v3_validation["git_commit"]),
-            "validation_git_tree": str(v3_validation["git_tree"]),
             "launch_allowed": bool(v3_receipt["launch_allowed"]),
             "adopted_for_execution": bool(v3_receipt["adopted_for_execution"]),
             "real_counters": dict(v3_receipt["real_counters"]),

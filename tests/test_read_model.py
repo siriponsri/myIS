@@ -18,6 +18,7 @@ from myis_research.armindex.constants import (
     A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
 )
 from myis_research.owner_local import build_receipt
+from myis_research.projections import read_model as read_model_module
 from myis_research.projections.read_model import (
     A010_LEGACY_CODE_HARVEST_LEDGER_PATH,
     A010_LEGACY_CODE_HARVEST_RECEIPT_PATH,
@@ -49,6 +50,37 @@ def test_empty_campaign_read_model_is_safe(tmp_path: Path) -> None:
     assert model["publication_readiness"]["status"] == "blocked"
     output = write_read_model(tmp_path)
     assert json.loads(output.read_text(encoding="utf-8"))["projection_revision"] == model["projection_revision"]
+
+
+def test_read_model_revision_ignores_postcommit_validation_git_identity(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original_validator = read_model_module.validate_a1_2_vast_postcommit
+    identities = iter((("a" * 40, "b" * 40), ("c" * 40, "d" * 40)))
+
+    def validator_with_changed_git_identity(
+        repository_root: Path,
+        *,
+        require_clean: bool = True,
+    ) -> dict[str, object]:
+        result = original_validator(repository_root, require_clean=False)
+        commit, tree = next(identities)
+        return {**result, "git_commit": commit, "git_tree": tree}
+
+    monkeypatch.setattr(
+        read_model_module,
+        "validate_a1_2_vast_postcommit",
+        validator_with_changed_git_identity,
+    )
+    first = build_read_model(ROOT)
+    second = build_read_model(ROOT)
+
+    assert first["read_model_revision"] == second["read_model_revision"]
+    assert first["read_model_sha256"] == second["read_model_sha256"]
+    for model in (first, second):
+        vast_v3 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v3"]
+        assert "validation_git_commit" not in vast_v3
+        assert "validation_git_tree" not in vast_v3
 
 
 def test_read_model_validation_rejects_unknown_field_and_non_object(tmp_path: Path) -> None:
