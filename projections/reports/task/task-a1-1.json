@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-06T02:33:36Z",
-  "generated_from_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "generated_from_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
   "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "governance_status": {
     "d2": "waiting_owner",
@@ -195,9 +195,21 @@
       "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
     },
+    "a12_direct_base_v5_execution_contract": {
+      "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+      "platform": "linux/amd64",
+      "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
+    },
+    "a12_direct_base_v5_receipt": {
+      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "status": "direct_base_preflight_prepared_local_owner_stage_pending",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
+    },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -262,7 +274,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
+      "sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
@@ -276,7 +288,7 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85",
+      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -373,11 +385,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
   "objective": "Adapter fixture validation",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-1",
-  "report_sha256": "a038f2bd92ed253ab5538d65ecedcc66c2d411fc3a30af5698d73a6a5dc87785",
+  "report_sha256": "96e51b6e01bc158a5724e1e3e5c8ced6869f45449c83d0ad7df026185b7eb879",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -390,7 +402,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+    "program_state": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
     "task": "A1.1"
   },
   "status": "completed",

@@ -1,19 +1,19 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d"
-read_model_sha256: "e32db4f9a31f6ed1e20108d6d74b29f27e502dec28593ffd20224aa642ad6356"
+read_model_revision: "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f"
+read_model_sha256: "8bd6e0851fcaaa9cf20c7001e0ab222dab82e170aeca6f93b113cc36c2ba60b2"
 source_commit: "1e86c432933f3bbf2e6763d04bb64139f81ce396"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "engineering_preflight_correction"
+evidence_class: "engineering_preflight_revision"
 scientific_authority: false
-claim_boundary: "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority"
-generated_from_revision: "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d"
+claim_boundary: "direct_official_base_image_path_only_no_vast_contact_no_measured_execution"
+generated_from_revision: "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f"
 last_material_update: "2026-08-06T02:33:36Z"
-next_authorized_action: "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes."
+next_authorized_action: "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -40,14 +40,14 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked
+- `program_state`: a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2`
 - `git_commit`: 1e86c432933f3bbf2e6763d04bb64139f81ce396
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
@@ -70,10 +70,12 @@ Reproduce controls and screen the five adapters with common programs.
 - `a12_vast_v2_closeout_validation`: `outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json`; SHA-256 `8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c`
 - `a12_vast_v3_correction_receipt`: `campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json`; SHA-256 `f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0`
 - `a12_vast_v3_execution_contract`: `control/armindex/a1.2/execution-contract.v3.json`; SHA-256 `716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81`
+- `a12_direct_base_v5_receipt`: `campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json`; SHA-256 `8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5`
+- `a12_direct_base_v5_execution_contract`: `control/armindex/a1.2/execution-contract.direct-base.v5.json`; SHA-256 `8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238`
 
 ## Work Performed
 
-A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v3 correction preserves v2 bytes and validates the clean current commit/tree at bundle creation. ARM-01 remains local CPU only; four dense source revisions and critical commitments are frozen, while Owner-local runtime manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending.
+A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending.
 
 ### A1.2 resource planning boundary
 
@@ -88,9 +90,9 @@ Owner prerequisites:
 
 ### A1.2 scaffold and launch state
 
-The offline scaffold is `a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `16` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
+The offline scaffold is `a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `21` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
 
-The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending`. The additive v3 correction is `postcommit_validator_prepared_live_owner_preflight_pending` and binds v2 receipt `869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600`. It validates receipt-bound v2 bytes and captures the clean current commit and tree when the frozen bundle is built; it does not authorize launch or adoption.
+The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
 
 Owner-local prerequisites still required:
 
@@ -154,37 +156,45 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 Vast post-commit receipt schema v3 | `schema` | `engineering_preflight_correction` | `schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json` | `c9b46a32e5c805b0d861e6f79a9965426a2db7df70e89b1397b188535d867f03` | `validated` |
 | A1.2 Vast post-commit validator | `tool` | `engineering_preflight_correction` | `src/myis_research/armindex/a1_2_vast_postcommit.py` | `0d84c8d235c351c51e509c759a6dea0e9f011c4c4a031d556922a423b0839d8e` | `validated` |
 | A1.2 v3 deterministic projection stability repair | `audit` | `engineering_validation` | `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json` | `e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e` | `validated` |
+| A1.2 runtime-minimal direct-base receipt v5 | `receipt` | `engineering_preflight_revision` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json` | `8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5` | `validated` |
+| A1.2 runtime-minimal direct-base execution contract v5 | `contract` | `engineering_preflight_revision` | `control/armindex/a1.2/execution-contract.direct-base.v5.json` | `8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238` | `validated` |
+| A1.2 direct-base runtime lock v5 | `manifest` | `engineering_preflight_revision` | `control/armindex/a1.2/runtime-lock.direct-base.v5.json` | `914159988fe902ca138847a1d8db3c9e0ea9c378bf1b39398cc1784f4346742e` | `validated` |
+| A1.2 direct-base image contract v5 | `contract` | `engineering_preflight_revision` | `control/armindex/a1.2/image-digest-contract.direct-base.v5.json` | `5c691dc92f9f41fc02fbe388545fb3da34b08d9fdb1a9893012d11768d72829b` | `validated` |
+| A1.2 direct-base topology contract v5 | `manifest` | `engineering_preflight_revision` | `control/armindex/a1.2/topology-contract.direct-base.v5.json` | `e36f28b6fceea0d1e25518d49b37afc808af76afeba0010767f068b7bb2f684e` | `validated` |
+| A1.2 direct-base receipt schema v5 | `schema` | `engineering_preflight_revision` | `schemas/armindex/a1.2-runtime-minimal-direct-base.v5.json` | `84e9b58322917b9f76140a2e849d4128cfaac60c3673596013f81cdc4806d3e7` | `validated` |
+| A1.2 beginner Owner direct-base runbook v5 | `runbook` | `engineering_preflight_revision` | `docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md` | `a7a624164df92938bf096bd7b61e7313fb111649a7c37c339c2f995eacb1f02c` | `validated` |
+| A1.2 direct-base validator module v5 | `tool` | `engineering_preflight_revision` | `src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py` | `75e8e3e94a0d2daf0337621475148d2be2e2e01f15a66153accb6e60b58cde0d` | `validated` |
 
 ## Metrics
 
 | Metric | Split | Scope | Value | n | Denominator | Evidence |
 |---|---|---|---:|---:|---|---|
-| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_correction` |
-| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_correction` |
-| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_correction` |
-| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_correction` |
-| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `engineering_preflight_correction` |
-| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `engineering_preflight_correction` |
-| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `engineering_preflight_correction` |
-| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `engineering_preflight_correction` |
+| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_revision` |
+| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_revision` |
+| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_revision` |
+| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `engineering_preflight_revision` |
+| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `engineering_preflight_revision` |
+| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `engineering_preflight_revision` |
+| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `engineering_preflight_revision` |
+| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `engineering_preflight_revision` |
 
 Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), the immutable four-RTX3090 v2 preparation with 4 synthetic workers, and the additive v3 post-commit validator correction.
+**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v5 direct-base preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.
 
-**Result:** A1 engineering preparation is current through the v3 correction receipt, which preserves the immutable v2 receipt; 16 live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
+**Result:** A1 engineering preparation is current through v5 with 21 live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
 
 **Decision:** active
 
 ## Interpretation
 
-The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, a receipt-bound post-commit validator with status postcommit_validator_prepared_live_owner_preflight_pending, and a stable generated read model that excludes runtime-only Git identity. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.
+The offline evidence preserves the v2 four-worker fixture and v3 correction, then binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20 while removing custom-image and nested-container steps. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.
 
 ## Supported Claims
 
-- The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), the immutable four-RTX3090 v2 preparation with 4 synthetic workers, and the additive v3 post-commit validator correction. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair)
+- The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v5 direct-base preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module)
 
 ## Unsupported Claims
 
@@ -218,16 +228,16 @@ The offline evidence proves deterministic four-worker orchestration, frozen topo
 - `d3`: waiting_owner
 - `final_split`: closed
 - `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
-- `evidence_class`: engineering_preflight_correction
+- `evidence_class`: engineering_preflight_revision
 - `scientific_authority`: False
 
 ## Decision
 
-Status: **active**. A1 engineering preparation is current through the v3 correction receipt, which preserves the immutable v2 receipt; 16 live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
+Status: **active**. A1 engineering preparation is current through v5 with 21 live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
 
 ## Next Action
 
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
@@ -280,3 +290,11 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - a12-vast-v3-schema
 - a12-vast-v3-validator
 - a12-vast-v3-projection-stability-repair
+- a12-direct-base-v5-receipt
+- a12-direct-base-v5-contract
+- a12-direct-base-v5-runtime-lock
+- a12-direct-base-v5-image-contract
+- a12-direct-base-v5-topology
+- a12-direct-base-v5-schema
+- a12-direct-base-v5-runbook
+- a12-direct-base-v5-module

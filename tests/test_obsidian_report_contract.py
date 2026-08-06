@@ -191,6 +191,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "A1.2 Vast preflight closeout validation audit" in a12_report
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in a12_report
     assert "A1.2 Vast post-commit correction receipt v3" in a12_report
+    assert "A1.2 runtime-minimal direct-base receipt v5" in a12_report
     assert "a1.2-v2-postcommit-head-tree-regeneration-defect-20260806" in a12_report
     assert "A1.2 v3 deterministic projection stability repair" in a12_report
     assert "a1.2-v3-runtime-git-identity-projection-drift-20260806" in a12_report
@@ -198,7 +199,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(
-        "a1.2-vast-4x3090-postcommit-migration.receipt.v3.json"
+        "a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
@@ -213,6 +214,11 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     )
     assert mlflow_index["armindex_a1_2_vast_postcommit"]["launch_allowed"] is False
     assert mlflow_index["armindex_a1_2_vast_postcommit"]["adopted_for_execution"] is False
+    assert mlflow_index["armindex_a1_2_runtime_minimal_direct_base"]["status"] == (
+        "direct_base_preflight_prepared_local_owner_stage_pending"
+    )
+    assert mlflow_index["armindex_a1_2_runtime_minimal_direct_base"]["custom_local_docker_build"] is False
+    assert mlflow_index["armindex_a1_2_runtime_minimal_direct_base"]["launch_allowed"] is False
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",

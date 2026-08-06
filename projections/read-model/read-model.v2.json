@@ -47,7 +47,7 @@
       },
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
-      "claim_boundary": "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority",
+      "claim_boundary": "direct_official_base_image_path_only_no_vast_contact_no_measured_execution",
       "closeout_validation_audit_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "closeout_validation_check_count": 17,
@@ -111,7 +111,7 @@
       ],
       "closeout_validation_recovery_count": 7,
       "dense_artifact_manifests_pending": 4,
-      "evidence_class": "engineering_preflight_correction",
+      "evidence_class": "engineering_preflight_revision",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
       "execution_contract_uri": "control/armindex/a1.2/execution-contract.v1.json",
       "execution_envelope_sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
@@ -125,9 +125,9 @@
       "model_lock_count": 5,
       "model_lockset_sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
       "model_lockset_uri": "control/armindex/a1.2/model-lockset.v1.json",
-      "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+      "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
       "offline_adapter_ready": 1,
-      "owner_requirements_pending": 16,
+      "owner_requirements_pending": 21,
       "preflight_blockers": [
         "arm-02_sha256s_manifest",
         "arm-03_sha256s_manifest",
@@ -175,7 +175,7 @@
       "scientific_authority": false,
       "shutdown_plan_sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "shutdown_plan_uri": "control/armindex/a1.2/shutdown-plan.v1.json",
-      "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
       "v1_status": "a1_2_contract_scaffold_complete_launch_locked",
       "validated": true,
       "vast_preflight_v2": {
@@ -348,6 +348,92 @@
         "schema_uri": "schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json",
         "status": "postcommit_validator_prepared_live_owner_preflight_pending",
         "v2_receipt_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600",
+        "validated": true
+      },
+      "vast_preflight_v5": {
+        "adopted_for_execution": false,
+        "claim_boundary": "direct_official_base_image_path_only_no_vast_contact_no_measured_execution",
+        "contract_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+        "contract_uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json",
+        "cpu_model_load": "intentionally_skipped_due_host_memory",
+        "custom_local_docker_build": false,
+        "dense_gpu_parity": "pending_live_vast_preflight",
+        "gpu_memory_feasibility": "pending_live_vast_preflight",
+        "image_contract_sha256": "5c691dc92f9f41fc02fbe388545fb3da34b08d9fdb1a9893012d11768d72829b",
+        "image_contract_uri": "control/armindex/a1.2/image-digest-contract.direct-base.v5.json",
+        "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+        "launch_allowed": false,
+        "live_checks_pending": [
+          "exact_git_commit_tree",
+          "frozen_bundle_hash",
+          "image_reference_and_best_observable_identity",
+          "linux_amd64",
+          "python_3_11",
+          "torch_2.6.0_cu118",
+          "cuda_11.8",
+          "cuda_available",
+          "four_distinct_rtx3090_uuids",
+          "gpu_model_and_vram",
+          "cpu_ram_disk",
+          "dependency_versions",
+          "model_sha256sums",
+          "snowflake_remote_code_hashes",
+          "remote_forbidden_surface_absent",
+          "dense_adapter_parity",
+          "qwen_measured_max_length",
+          "gpu_memory_feasibility",
+          "heartbeat_checkpoint_resume",
+          "live_quote_instance_identity",
+          "provider_destroy_ttl"
+        ],
+        "local_preparation_status": "runtime_minimal_policy_ready_model_stage_resumable_pending",
+        "model_snapshots": "runtime_minimal_frozen",
+        "module_sha256": "75e8e3e94a0d2daf0337621475148d2be2e2e01f15a66153accb6e60b58cde0d",
+        "module_uri": "src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py",
+        "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+        "owner_runbook_sha256": "a7a624164df92938bf096bd7b61e7313fb111649a7c37c339c2f995eacb1f02c",
+        "owner_runbook_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md",
+        "platform": "linux/amd64",
+        "qwen_measured_max_length": "pending_live_vast_preflight",
+        "real_counters": {
+          "candidate_count": 0,
+          "final_accesses": 0,
+          "measured_runs": 0,
+          "selection_accesses": 0
+        },
+        "receipt_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+        "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
+        "removed_active_steps": [
+          "custom_image_build",
+          "docker_save",
+          "image_upload",
+          "docker_load",
+          "nested_container_execution",
+          "runtime_model_download"
+        ],
+        "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+        "resource_counters": {
+          "charged_usd": 0,
+          "gpu_reservations": 0,
+          "gpu_scientific_runs": 0,
+          "model_downloads": 0,
+          "paid_api_calls": 0,
+          "provider_switches": 0
+        },
+        "revision_id": "a1.2-runtime-minimal-direct-base-v5",
+        "runtime_lock_sha256": "914159988fe902ca138847a1d8db3c9e0ea9c378bf1b39398cc1784f4346742e",
+        "runtime_lock_uri": "control/armindex/a1.2/runtime-lock.direct-base.v5.json",
+        "schema_sha256": "84e9b58322917b9f76140a2e849d4128cfaac60c3673596013f81cdc4806d3e7",
+        "schema_uri": "schemas/armindex/a1.2-runtime-minimal-direct-base.v5.json",
+        "status": "direct_base_preflight_prepared_local_owner_stage_pending",
+        "topology_sha256": "e36f28b6fceea0d1e25518d49b37afc808af76afeba0010767f068b7bb2f684e",
+        "topology_uri": "control/armindex/a1.2/topology-contract.direct-base.v5.json",
+        "upload_artifacts": [
+          "frozen_code_bundle",
+          "linux_x86_64_wheelhouse/SHA256SUMS",
+          "models/ARM-02..ARM-05/SHA256SUMS",
+          "safe_job_manifests"
+        ],
         "validated": true
       }
     },
@@ -537,7 +623,7 @@
         "role": "lexical_anchor_cpu_fallback"
       },
       {
-        "adapter_status": "v3_clean_bundle_identity_prepared_owner_live_preflight_pending",
+        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
         "arm_id": "ARM-02",
         "commercial_status": "commercial_capable",
         "license": "MIT",
@@ -546,7 +632,7 @@
         "role": "multilingual_dense_anchor"
       },
       {
-        "adapter_status": "v3_clean_bundle_identity_prepared_owner_live_preflight_pending",
+        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
         "arm_id": "ARM-03",
         "commercial_status": "research_non_commercial",
         "license": "CC-BY-NC-SA-4.0",
@@ -555,7 +641,7 @@
         "role": "research_champion_candidate"
       },
       {
-        "adapter_status": "v3_clean_bundle_identity_prepared_owner_live_preflight_pending",
+        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
         "arm_id": "ARM-04",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -564,7 +650,7 @@
         "role": "long_context_dense"
       },
       {
-        "adapter_status": "v3_clean_bundle_identity_prepared_owner_live_preflight_pending",
+        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
         "arm_id": "ARM-05",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -837,7 +923,7 @@
       "status": "complete",
       "validated": true
     },
-    "next_command": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+    "next_command": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -921,7 +1007,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+        "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
         "tasks": [
           {
             "status": "complete",
@@ -929,7 +1015,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+            "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -1017,7 +1103,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+    "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -1049,7 +1135,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -2116,7 +2202,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "projection_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2160,8 +2246,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
-  "read_model_sha256": "e32db4f9a31f6ed1e20108d6d74b29f27e502dec28593ffd20224aa642ad6356",
+  "read_model_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
+  "read_model_sha256": "8bd6e0851fcaaa9cf20c7001e0ab222dab82e170aeca6f93b113cc36c2ba60b2",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

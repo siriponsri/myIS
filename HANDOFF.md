@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked`
-- Evidence class: engineering preflight correction; scientific authority `false`
+- Status: `a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked`
+- Evidence class: engineering preflight revision; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -115,6 +115,13 @@ evidence.
   from the shared read model. The two-identity regression passed, and the repair
   is recorded in
   `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json`.
+- Additive v5 changes only the active runtime path: the official
+  `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` linux/amd64 manifest is bound
+  to `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20`.
+  Vast starts that image directly; custom image build/save/upload/load and
+  nested-container execution are removed from the active path. The v4
+  runtime-minimal model policy remains the source for exact model allowlists,
+  with no runtime model download.
 - Public revisions and critical artifact commitments are frozen for BGE-M3,
   PatEmbed-large, Snowflake Arctic Embed M v2.0, and Qwen3-Embedding-0.6B. No
   model payload was downloaded. The four dense locks remain
@@ -134,7 +141,7 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-The v1/v2 receipt integrity and v3 correction checks pass. A1.2 scientific execution remains
+The v1/v2 receipt integrity, v3 correction, and v5 direct-base checks pass. A1.2 scientific execution remains
 deliberately locked because the live Owner preflight has not bound the exact
 commit/tree/image digest, four GPU UUIDs, runtime/model manifests, dense adapter
 parity, Qwen measured maximum length, live quote/identity, storage, heartbeat/
@@ -148,15 +155,15 @@ Run only the Owner-local SSH/Vast A1.2 preflight from the immutable beginner
 runbook. The exact next task is:
 
 ```text
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md on one disposable four-RTX3090 instance after local runtime-minimal staging. Use the direct official PyTorch image digest on linux/amd64, verify the frozen code bundle, wheelhouse and model SHA256SUMS, and keep launch_allowed=false and adopted_for_execution=false. Do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
 The Owner is now needed to follow
-`docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md`: validate the clean
-pushed revision, then follow the preserved v2 runbook to stage frozen artifacts and
-complete `SHA256SUMS` files outside Git, build and bind the OCI image digest,
-confirm a live quote, open one matching four-RTX3090 instance, run the exact
-local coordinator/watchdog commands, collect only allowlisted outputs, and
-destroy and verify the provider instance. Access material and every protected
-surface remain local. Passing the preflight still does not adopt the revision
-or authorize scientific execution.
+`docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md`: validate the clean
+pushed revision, stage frozen runtime-minimal artifacts and complete
+`SHA256SUMS` files outside Git, verify the OCI image digest, confirm a live
+quote, open one matching four-RTX3090 instance, run the exact local
+coordinator/watchdog commands, collect only allowlisted outputs, and destroy
+and verify the provider instance. Access material and every protected surface
+remain local. Passing the preflight still does not adopt the revision or
+authorize scientific execution.

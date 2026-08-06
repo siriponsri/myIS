@@ -15,7 +15,6 @@ from myis_research.armindex.constants import (
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
-    A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
 )
 from myis_research.owner_local import build_receipt
 from myis_research.projections import read_model as read_model_module
@@ -229,7 +228,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    assert model["armindex"]["next_command"] == A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
+    assert model["armindex"]["next_command"] == model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v5"]["next_authorized_action"]
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
@@ -258,17 +257,15 @@ def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked
 def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> None:
     projection = _a12_contract_scaffold_projection(ROOT)
 
-    assert projection["status"] == (
-        "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
-    )
+    assert projection["status"] == "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
     assert projection["validated"] is True
     assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
-    assert projection["evidence_class"] == "engineering_preflight_correction"
+    assert projection["evidence_class"] == "engineering_preflight_revision"
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
     assert projection["dense_artifact_manifests_pending"] == 4
-    assert projection["owner_requirements_pending"] == 16
+    assert projection["owner_requirements_pending"] == len(projection["vast_preflight_v5"]["live_checks_pending"])
     assert projection["launch_ready"] is False
     assert projection["measured_execution"] is False
     assert projection["budget_limits"]["arm01_gpu_usd"] == 0
@@ -280,7 +277,7 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert projection["closeout_validation_audit_sha256"]
     assert set(projection["real_counters"].values()) == {0}
     assert set(projection["resource_counters"].values()) == {0}
-    assert projection["next_authorized_action"] == A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
+    assert projection["next_authorized_action"] == projection["vast_preflight_v5"]["next_authorized_action"]
     vast = projection["vast_preflight_v2"]
     assert vast["validated"] is True
     assert vast["gpu_count"] == 4
@@ -316,6 +313,16 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert vast_v3["adopted_for_execution"] is False
     assert set(vast_v3["real_counters"].values()) == {0}
     assert set(vast_v3["resource_counters"].values()) == {0}
+    vast_v5 = projection["vast_preflight_v5"]
+    assert vast_v5["validated"] is True
+    assert vast_v5["image_reference"] == "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime"
+    assert vast_v5["resolved_manifest_digest"] == "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20"
+    assert vast_v5["platform"] == "linux/amd64"
+    assert vast_v5["custom_local_docker_build"] is False
+    assert vast_v5["launch_allowed"] is False
+    assert vast_v5["adopted_for_execution"] is False
+    assert set(vast_v5["real_counters"].values()) == {0}
+    assert set(vast_v5["resource_counters"].values()) == {0}
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

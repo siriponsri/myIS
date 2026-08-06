@@ -1,0 +1,60 @@
+{
+  "schema_version": "myis.armindex-a1.2-runtime-minimal-policy.v4",
+  "revision_id": "a1.2-runtime-minimal-frozen-snapshot-v4",
+  "allowlist_version": "runtime-minimal-allowlist.v4",
+  "exclusion_policy": {
+    "policy_id": "pytorch-execution-bytes-only-v1",
+    "rule": "Include exact PyTorch execution, tokenizer, SentenceTransformer, required custom-code, license, and provenance files. Exclude only enumerated alternate runtimes, non-selected heads, documentation images, evaluation assets, training artifacts, quantizations, or alternate framework weights.",
+    "transfer_rule": "Only paths in allow_patterns plus SHA256SUMS and runtime-file-manifest.v4.json may enter the remote model transfer. Preexisting excluded .part files remain local and are neither deleted nor transferred."
+  },
+  "arms": [
+    {
+      "arm_id": "ARM-02",
+      "model_id": "BAAI/bge-m3",
+      "resolved_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+      "source_lock_file_sha256": "c9b60991149aa94506321b2cd719b49477c1c77ab30b78dd29d9c29faf52c607",
+      "upstream_full_snapshot_bytes": 4587317404,
+      "runtime_minimal_expected_bytes": 2293333250,
+      "allow_patterns": [".gitattributes", "1_Pooling/config.json", "README.md", "config.json", "config_sentence_transformers.json", "modules.json", "pytorch_model.bin", "sentence_bert_config.json", "sentencepiece.bpe.model", "special_tokens_map.json", "tokenizer.json", "tokenizer_config.json"],
+      "critical_artifacts": [{"path": "pytorch_model.bin", "sha256": "b5e0ce3470abf5ef3831aa1bd5553b486803e83251590ab7ff35a117cf6aad38"}, {"path": "tokenizer.json", "sha256": "21106b6d7dab2952c1d496fb21d5dc9db75c28ed361a05f5020bbba27810dd08"}],
+      "required_custom_code": [],
+      "excluded_files": [{"path": "colbert_linear.pt", "reason": "non_selected_colbert_head"}, {"path": "sparse_linear.pt", "reason": "non_selected_sparse_head"}, {"path": "imgs/.DS_Store", "reason": "documentation_image_metadata"}, {"path": "imgs/bm25.jpg", "reason": "documentation_image"}, {"path": "imgs/long.jpg", "reason": "documentation_image"}, {"path": "imgs/miracl.jpg", "reason": "documentation_image"}, {"path": "imgs/mkqa.jpg", "reason": "documentation_image"}, {"path": "imgs/nqa.jpg", "reason": "documentation_image"}, {"path": "imgs/others.webp", "reason": "documentation_image"}, {"path": "long.jpg", "reason": "documentation_image"}, {"path": "onnx/config.json", "reason": "alternate_onnx_runtime"}, {"path": "onnx/Constant_7_attr__value", "reason": "alternate_onnx_runtime"}, {"path": "onnx/model.onnx", "reason": "alternate_onnx_runtime"}, {"path": "onnx/model.onnx_data", "reason": "alternate_onnx_runtime"}, {"path": "onnx/sentencepiece.bpe.model", "reason": "alternate_onnx_runtime"}, {"path": "onnx/special_tokens_map.json", "reason": "alternate_onnx_runtime"}, {"path": "onnx/tokenizer.json", "reason": "alternate_onnx_runtime"}, {"path": "onnx/tokenizer_config.json", "reason": "alternate_onnx_runtime"}]
+    },
+    {
+      "arm_id": "ARM-03",
+      "model_id": "datalyes/patembed-large",
+      "resolved_revision": "2d5c0f92a3e5dc3d5415c08e612c57543c0e03ad",
+      "source_lock_file_sha256": "44ee3ec647938556f35852a279ab6a7c8808f35fb721becdc26e69ff9c16a830",
+      "upstream_full_snapshot_bytes": 1380156488,
+      "runtime_minimal_expected_bytes": 1380156488,
+      "allow_patterns": [".gitattributes", "1_Pooling/config.json", "README.md", "config.json", "config_sentence_transformers.json", "model.safetensors", "modules.json", "sentence_bert_config.json", "special_tokens_map.json", "tokenizer.json", "tokenizer_config.json", "vocab.txt"],
+      "critical_artifacts": [{"path": "model.safetensors", "sha256": "234ea36a876fe5d5c416c1cbaad6f7221e17861fadd6481f0b96588fdc1ca482"}],
+      "required_custom_code": [],
+      "excluded_files": []
+    },
+    {
+      "arm_id": "ARM-04",
+      "model_id": "Snowflake/snowflake-arctic-embed-m-v2.0",
+      "resolved_revision": "95c2741480856aa9666782eb4afe11959938017f",
+      "source_lock_file_sha256": "3ff3107bc6d866aa778548a208a9a8c1446fc5b373f58bde32be7332777b808f",
+      "upstream_full_snapshot_bytes": 6142196116,
+      "runtime_minimal_expected_bytes": 1238875076,
+      "allow_patterns": [".gitattributes", "1_Pooling/config.json", "README.md", "config.json", "config_sentence_transformers.json", "configuration_hf_alibaba_nlp_gte.py", "model.safetensors", "modeling_hf_alibaba_nlp_gte.py", "modules.json", "special_tokens_map.json", "tokenizer.json", "tokenizer_config.json"],
+      "critical_artifacts": [{"path": "model.safetensors", "sha256": "3d80d4727ac8759fb8624b690697c053a3d1992120111dc4a71178e608c26604"}, {"path": "tokenizer.json", "sha256": "f1cc44ad7faaeec47241864835473fd5403f2da94673f3f764a77ebcb0a803ec"}],
+      "required_custom_code": [{"path": "configuration_hf_alibaba_nlp_gte.py", "git_oid": "d816ed663a58404f966fe322cd113ac39a957686"}, {"path": "modeling_hf_alibaba_nlp_gte.py", "git_oid": "63c0975e09b5631b564170d2ecb7985c5d8dd189"}],
+      "excluded_files": [{"path": "onnx/model.onnx", "reason": "alternate_onnx_runtime"}, {"path": "onnx/model_bnb4.onnx", "reason": "alternate_onnx_quantized_runtime"}, {"path": "onnx/model_fp16.onnx", "reason": "alternate_onnx_runtime"}, {"path": "onnx/model_int8.onnx", "reason": "alternate_onnx_quantized_runtime"}, {"path": "onnx/model_q4.onnx", "reason": "alternate_onnx_quantized_runtime"}, {"path": "onnx/model_q4f16.onnx", "reason": "alternate_onnx_quantized_runtime"}, {"path": "onnx/model_quantized.onnx", "reason": "alternate_onnx_quantized_runtime"}, {"path": "onnx/model_uint8.onnx", "reason": "alternate_onnx_quantized_runtime"}]
+    },
+    {
+      "arm_id": "ARM-05",
+      "model_id": "Qwen/Qwen3-Embedding-0.6B",
+      "resolved_revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "source_lock_file_sha256": "e31d412985289a7a0aafe1529860998bdafe834d6b235fe7cc81e4d1630b782a",
+      "upstream_full_snapshot_bytes": 1207489041,
+      "runtime_minimal_expected_bytes": 1207489041,
+      "allow_patterns": [".gitattributes", "1_Pooling/config.json", "README.md", "config.json", "config_sentence_transformers.json", "generation_config.json", "merges.txt", "model.safetensors", "modules.json", "tokenizer.json", "tokenizer_config.json", "vocab.json"],
+      "critical_artifacts": [{"path": "model.safetensors", "sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd"}, {"path": "tokenizer.json", "sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a"}],
+      "required_custom_code": [],
+      "excluded_files": []
+    }
+  ]
+}

@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-06T02:33:36Z",
-  "generated_from_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "generated_from_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
   "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "governance_status": {
     "d2": "waiting_owner",
@@ -39,7 +39,7 @@
     },
     "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
     "source_of_truth": {
-      "sha256": "0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85",
+      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -47,11 +47,11 @@
   "language": "en",
   "last_material_update": "2026-08-06T02:33:36Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "f0391f0424faecd22b8ffd1b2d399c972e515712915611a94013b1a79c67021b",
+  "report_sha256": "054cc984c23d4dab57628d3bd8dca119e74977eaf8dd3dd67ce2d20417297950",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

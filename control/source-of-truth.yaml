@@ -39,6 +39,11 @@ records:
     supporting_authority: [control/armindex/a1.2/execution-contract.v3.json, schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json, control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_preflight_correction_only, v1_v2_preserved, clean_commit_required, dynamic_bundle_identity, launch_locked, adopted_for_execution_false, live_owner_preflight_pending, no_protected_data, no_access_material_remote, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_runtime_minimal_direct_base_v5
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.direct-base.v5.json, control/armindex/a1.2/runtime-lock.direct-base.v5.json, control/armindex/a1.2/image-digest-contract.direct-base.v5.json, control/armindex/a1.2/topology-contract.direct-base.v5.json, control/armindex/a1.2/runtime-minimal-model-policy.v4.json, schemas/armindex/a1.2-runtime-minimal-direct-base.v5.json, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_preflight_revision_only, v1_v2_v3_preserved, direct_official_base_image, linux_amd64, launch_locked, adopted_for_execution_false, local_owner_stage_pending, no_runtime_model_download, no_protected_data, no_credentials, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
   - id: phase_task_reporting_contract
     authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
     projections: [projections/reports, obsidian]

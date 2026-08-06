@@ -15,11 +15,11 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v3 post-commit
-  correction prepared for the local-orchestrated Vast 4xRTX3090 preflight;
-  live Owner preflight and scientific launch remain locked)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive direct-base v5
+  runtime-minimal revision prepared for the local-orchestrated Vast 4xRTX3090
+  preflight; live Owner preflight and scientific launch remain locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: engineering preflight correction; scientific authority `false`
+- Current evidence class: engineering preflight revision; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -60,7 +60,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v3 four-GPU preflight correction prepared and launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v5 direct official-base preflight prepared and launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -103,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Vast 4xRTX3090 v3 post-commit correction prepared; live preflight and measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Additive v5 runtime-minimal direct-base preflight prepared; local Owner stage and live checks pending; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -242,11 +242,12 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md after local runtime-minimal staging. Verify the direct official PyTorch image manifest digest on linux/amd64, frozen code bundle, Linux wheelhouse and model SHA256SUMS, four GPU UUIDs, protected-data boundary, live quote, heartbeat/resume, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
-The offline preparation is complete. The next action is the Owner-local live
-SSH/Vast preflight only, using the exact commands in the runbook. It may verify
+The direct-base contract preparation is complete. The next action is the
+Owner-local runtime-minimal staging followed by the live SSH/Vast preflight,
+using the exact commands in the v5 runbook. It may verify
 the disposable worker and run synthetic preflight workers, but it must not run
 measured retrieval or adopt the revision. Scientific launch remains forbidden
 until every checklist item passes and the Owner later adopts the unchanged

@@ -845,15 +845,159 @@
       "scientific_authority": false,
       "title": "A1.2 v3 deterministic projection stability repair",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Binds the direct official PyTorch manifest, runtime-minimal policy, upload allowlist, live pending checks, and zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
+      "scientific_authority": false,
+      "title": "A1.2 runtime-minimal direct-base receipt v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Removes custom-image build/save/upload/load and nested-container execution from the active path while preserving v1-v3.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json",
+      "scientific_authority": false,
+      "title": "A1.2 runtime-minimal direct-base execution contract v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-runtime-lock",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "914159988fe902ca138847a1d8db3c9e0ea9c378bf1b39398cc1784f4346742e",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Freezes linux/amd64, Python 3.11, torch 2.6.0+cu118, CUDA 11.8, offline wheelhouse, and no runtime model download.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/runtime-lock.direct-base.v5.json",
+      "scientific_authority": false,
+      "title": "A1.2 direct-base runtime lock v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-image-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5c691dc92f9f41fc02fbe388545fb3da34b08d9fdb1a9893012d11768d72829b",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Binds the registry-verified OCI manifest digest and direct-launch identity rules.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/image-digest-contract.direct-base.v5.json",
+      "scientific_authority": false,
+      "title": "A1.2 direct-base image contract v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-topology",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e36f28b6fceea0d1e25518d49b37afc808af76afeba0010767f068b7bb2f684e",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Freezes one Vast linux/amd64 worker with four RTX 3090 slots and local-only protected surfaces.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/topology-contract.direct-base.v5.json",
+      "scientific_authority": false,
+      "title": "A1.2 direct-base topology contract v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-schema",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "84e9b58322917b9f76140a2e849d4128cfaac60c3673596013f81cdc4806d3e7",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Validates the additive receipt lifecycle, safety flags, and zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-runtime-minimal-direct-base.v5.json",
+      "scientific_authority": false,
+      "title": "A1.2 direct-base receipt schema v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a7a624164df92938bf096bd7b61e7313fb111649a7c37c339c2f995eacb1f02c",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Documents local staging, direct image verification, SSH upload allowlist, synthetic preflight, and provider destroy/TTL obligations.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner direct-base runbook v5",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-module",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "75e8e3e94a0d2daf0337621475148d2be2e2e01f15a66153accb6e60b58cde0d",
+      "evidence_class": "engineering_preflight_revision",
+      "explanation": "Validates the additive direct-base contracts and receipt without contacting Vast.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py",
+      "scientific_authority": false,
+      "title": "A1.2 direct-base validator module v5",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority",
+  "claim_boundary": "direct_official_base_image_path_only_no_vast_contact_no_measured_execution",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1 engineering preparation is current through the v3 correction receipt, which preserves the immutable v2 receipt; 16 live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.",
+    "reason": "A1 engineering preparation is current through v5 with 21 live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.",
     "status": "active"
   },
-  "evidence_class": "engineering_preflight_correction",
+  "evidence_class": "engineering_preflight_revision",
   "evidence_links": [
     {
       "artifact_id": "a11-adapter-task-receipt",
@@ -1089,6 +1233,46 @@
       "artifact_id": "a12-vast-v3-projection-stability-repair",
       "sha256": "e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e",
       "uri": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-receipt",
+      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-contract",
+      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-runtime-lock",
+      "sha256": "914159988fe902ca138847a1d8db3c9e0ea9c378bf1b39398cc1784f4346742e",
+      "uri": "control/armindex/a1.2/runtime-lock.direct-base.v5.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-image-contract",
+      "sha256": "5c691dc92f9f41fc02fbe388545fb3da34b08d9fdb1a9893012d11768d72829b",
+      "uri": "control/armindex/a1.2/image-digest-contract.direct-base.v5.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-topology",
+      "sha256": "e36f28b6fceea0d1e25518d49b37afc808af76afeba0010767f068b7bb2f684e",
+      "uri": "control/armindex/a1.2/topology-contract.direct-base.v5.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-schema",
+      "sha256": "84e9b58322917b9f76140a2e849d4128cfaac60c3673596013f81cdc4806d3e7",
+      "uri": "schemas/armindex/a1.2-runtime-minimal-direct-base.v5.json"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-runbook",
+      "sha256": "a7a624164df92938bf096bd7b61e7313fb111649a7c37c339c2f995eacb1f02c",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md"
+    },
+    {
+      "artifact_id": "a12-direct-base-v5-module",
+      "sha256": "75e8e3e94a0d2daf0337621475148d2be2e2e01f15a66153accb6e60b58cde0d",
+      "uri": "src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py"
     }
   ],
   "failure_recovery_references": [
@@ -1204,12 +1388,12 @@
     }
   ],
   "generated_at": "2026-08-06T02:33:36Z",
-  "generated_from_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "generated_from_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
   "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering_preflight_correction",
+    "evidence_class": "engineering_preflight_revision",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -1249,9 +1433,21 @@
       "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
     },
+    "a12_direct_base_v5_execution_contract": {
+      "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+      "platform": "linux/amd64",
+      "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
+    },
+    "a12_direct_base_v5_receipt": {
+      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "status": "direct_base_preflight_prepared_local_owner_stage_pending",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
+    },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -1316,7 +1512,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
+      "sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
@@ -1330,11 +1526,11 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85",
+      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, a receipt-bound post-commit validator with status postcommit_validator_prepared_live_owner_preflight_pending, and a stable generated read model that excludes runtime-only Git identity. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.",
+  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, then binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20 while removing custom-image and nested-container steps. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
   "last_material_update": "2026-08-06T02:33:36Z",
   "metric_references": [
@@ -1427,16 +1623,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "f2523a797324423ffda8cbb941466edbe361b303a8a54a31ea2e32567fd12138",
+  "report_sha256": "f70f626234c6d27a8ade5092ccb8e07fedbb7f6e6dd71d8f8e9fc4504a0d8608",
   "report_type": "phase",
   "result": {
     "decision": "active",
-    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), the immutable four-RTX3090 v2 preparation with 4 synthetic workers, and the additive v3 post-commit validator correction.",
-    "result": "A1 engineering preparation is current through the v3 correction receipt, which preserves the immutable v2 receipt; 16 live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
+    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v5 direct-base preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.",
+    "result": "A1 engineering preparation is current through v5 with 21 live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -1444,13 +1640,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
+    "program_state": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
     "task": null
   },
   "status": "planned",
   "supported_claims": [
     {
-      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), the immutable four-RTX3090 v2 preparation with 4 synthetic workers, and the additive v3 post-commit validator correction.",
+      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v5 direct-base preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.",
       "evidence": [
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
@@ -1498,7 +1694,15 @@
         "a12-vast-v3-owner-runbook",
         "a12-vast-v3-schema",
         "a12-vast-v3-validator",
-        "a12-vast-v3-projection-stability-repair"
+        "a12-vast-v3-projection-stability-repair",
+        "a12-direct-base-v5-receipt",
+        "a12-direct-base-v5-contract",
+        "a12-direct-base-v5-runtime-lock",
+        "a12-direct-base-v5-image-contract",
+        "a12-direct-base-v5-topology",
+        "a12-direct-base-v5-schema",
+        "a12-direct-base-v5-runbook",
+        "a12-direct-base-v5-module"
       ]
     }
   ],
@@ -1509,5 +1713,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v3 correction preserves v2 bytes and validates the clean current commit/tree at bundle creation. ARM-01 remains local CPU only; four dense source revisions and critical commitments are frozen, while Owner-local runtime manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
+  "work_summary": "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
 }

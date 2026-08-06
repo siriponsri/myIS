@@ -651,6 +651,22 @@ def _artifacts(
                         producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                         producing_task_id="A1.2",
                     ))
+            vast_v5 = scaffold.get("vast_preflight_v5", {})
+            if isinstance(vast_v5, Mapping) and vast_v5.get("validated") is True:
+                for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                    ("a12-direct-base-v5-receipt", "A1.2 runtime-minimal direct-base receipt v5", "receipt", "receipt_uri", "receipt_sha256", "Binds the direct official PyTorch manifest, runtime-minimal policy, upload allowlist, live pending checks, and zero counters."),
+                    ("a12-direct-base-v5-contract", "A1.2 runtime-minimal direct-base execution contract v5", "contract", "contract_uri", "contract_sha256", "Removes custom-image build/save/upload/load and nested-container execution from the active path while preserving v1-v3."),
+                    ("a12-direct-base-v5-runtime-lock", "A1.2 direct-base runtime lock v5", "manifest", "runtime_lock_uri", "runtime_lock_sha256", "Freezes linux/amd64, Python 3.11, torch 2.6.0+cu118, CUDA 11.8, offline wheelhouse, and no runtime model download."),
+                    ("a12-direct-base-v5-image-contract", "A1.2 direct-base image contract v5", "contract", "image_contract_uri", "image_contract_sha256", "Binds the registry-verified OCI manifest digest and direct-launch identity rules."),
+                    ("a12-direct-base-v5-topology", "A1.2 direct-base topology contract v5", "manifest", "topology_uri", "topology_sha256", "Freezes one Vast linux/amd64 worker with four RTX 3090 slots and local-only protected surfaces."),
+                    ("a12-direct-base-v5-schema", "A1.2 direct-base receipt schema v5", "schema", "schema_uri", "schema_sha256", "Validates the additive receipt lifecycle, safety flags, and zero counters."),
+                    ("a12-direct-base-v5-runbook", "A1.2 beginner Owner direct-base runbook v5", "runbook", "owner_runbook_uri", "owner_runbook_sha256", "Documents local staging, direct image verification, SSH upload allowlist, synthetic preflight, and provider destroy/TTL obligations."),
+                    ("a12-direct-base-v5-module", "A1.2 direct-base validator module v5", "tool", "module_uri", "module_sha256", "Validates the additive direct-base contracts and receipt without contacting Vast."),
+                ):
+                    uri = vast_v5.get(uri_key)
+                    digest = vast_v5.get(sha_key)
+                    if uri and digest:
+                        result.append(_artifact(artifact_id=artifact_id, title=title, artifact_type=artifact_type, evidence_class="engineering_preflight_revision", scientific_authority=False, safe_uri=str(uri), content_sha256=str(digest), explanation=explanation, producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING", producing_task_id="A1.2"))
     return result
 
 
@@ -779,6 +795,32 @@ def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> li
                     "denominator": "hard_stop_not_spend_authorization",
                     "source_uri": vast_v3.get("receipt_uri"),
                     "source_sha256": vast_v3.get("receipt_sha256"),
+                },
+            ])
+        vast_v5 = scaffold.get("vast_preflight_v5", {})
+        if isinstance(vast_v5, Mapping) and vast_v5.get("validated") is True:
+            rows.extend([
+                {
+                    "name": "vast_v5_direct_base_live_check_pending_count",
+                    "cutoff": 0,
+                    "split": "engineering_preflight",
+                    "scope": "A1.2",
+                    "value": len(vast_v5.get("live_checks_pending", [])),
+                    "n": 1,
+                    "denominator": "direct_base_live_preflight_checks",
+                    "source_uri": vast_v5.get("receipt_uri"),
+                    "source_sha256": vast_v5.get("receipt_sha256"),
+                },
+                {
+                    "name": "vast_v5_custom_local_docker_build_removed",
+                    "cutoff": 0,
+                    "split": "engineering_preflight",
+                    "scope": "A1.2",
+                    "value": int(vast_v5.get("custom_local_docker_build") is False),
+                    "n": 1,
+                    "denominator": "active_direct_base_path",
+                    "source_uri": vast_v5.get("receipt_uri"),
+                    "source_sha256": vast_v5.get("receipt_sha256"),
                 },
             ])
         return rows
@@ -1048,6 +1090,20 @@ def _bindings(
                         "uri": vast_v3.get("contract_uri"),
                         "sha256": vast_v3.get("contract_sha256"),
                         "self_sha256": vast_v3.get("contract_self_sha256"),
+                    }
+                vast_v5 = scaffold.get("vast_preflight_v5", {})
+                if isinstance(vast_v5, Mapping) and vast_v5.get("validated") is True:
+                    bindings["a12_direct_base_v5_receipt"] = {
+                        "uri": vast_v5.get("receipt_uri"),
+                        "sha256": vast_v5.get("receipt_sha256"),
+                        "status": vast_v5.get("status"),
+                    }
+                    bindings["a12_direct_base_v5_execution_contract"] = {
+                        "uri": vast_v5.get("contract_uri"),
+                        "sha256": vast_v5.get("contract_sha256"),
+                        "image_reference": vast_v5.get("image_reference"),
+                        "resolved_manifest_digest": vast_v5.get("resolved_manifest_digest"),
+                        "platform": vast_v5.get("platform"),
                     }
     return bindings
 
@@ -1320,9 +1376,10 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         blocker_count = len(scaffold.get("preflight_blockers", [])) if isinstance(scaffold.get("preflight_blockers"), list) else 0
         vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
         vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
-        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), the immutable four-RTX3090 v2 preparation with {vast.get('synthetic_worker_count', 0)} synthetic workers, and the additive v3 post-commit validator correction."
-        result = f"A1 engineering preparation is current through the v3 correction receipt, which preserves the immutable v2 receipt; {vast.get('live_check_count', 0)} live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
-        interpretation = f"The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, a receipt-bound post-commit validator with status {vast_v3.get('status', 'not_started')}, and a stable generated read model that excludes runtime-only Git identity. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization."
+        vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
+        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and v5 direct-base preparation using {vast_v5.get('image_reference', 'not_recorded')} on {vast_v5.get('platform', 'not_recorded')}."
+        result = f"A1 engineering preparation is current through v5 with {len(vast_v5.get('live_checks_pending', []))} live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
+        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, then binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')} while removing custom-image and nested-container steps. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization."
         decision_status = "active"
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
@@ -1342,9 +1399,10 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             blocker_count = len(blockers) if isinstance(blockers, list) else 0
             vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
             vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
-            output = f"The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains {preflight_status} with {blocker_count} blocker group(s), the immutable v2 local-orchestrated four-RTX3090 preparation records {vast.get('synthetic_worker_count', 0)} of {vast.get('synthetic_worker_count', 0)} synthetic workers completed and {vast.get('live_check_count', 0)} live checks pending, and the v3 post-commit correction is {vast_v3.get('status', 'not_started')}."
+            vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
+            output = f"The preserved v1-v3 contracts validate, the earlier CPU-only Owner preflight remains {preflight_status} with {blocker_count} blocker group(s), the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and v5 direct-base preparation is {vast_v5.get('status', 'not_started')} with {len(vast_v5.get('live_checks_pending', []))} live checks pending."
             result = f"A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD {vast.get('planning_rate_usd', 0):.2f} per complete four-GPU instance-hour; the estimate is {vast.get('estimated_instance_hours', 'unavailable')} instance-hours and USD {vast.get('estimated_raw_worker_usd', 'unavailable')}. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred."
-            interpretation = "The v3 receipt corrects post-commit validation by checking immutable v2 bytes through their receipt and capturing the clean current commit/tree when the bundle is built. The subsequent projection-stability repair keeps that runtime validation output available while excluding volatile Git identity from generated state. Live image, hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request."
+            interpretation = "The v5 receipt retains v1-v3 provenance while selecting a registry-verified official PyTorch linux/amd64 base image for direct Vast launch. The active path removes custom image build/save/upload/load and nested containers; remote dependency installation is offline from the wheelhouse and model downloads are forbidden. Live hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request."
             decision_status = "blocked"
         else:
             output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
@@ -1425,9 +1483,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
-            else "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v3 correction preserves v2 bytes and validates the clean current commit/tree at bundle creation. ARM-01 remains local CPU only; four dense source revisions and critical commitments are frozen, while Owner-local runtime manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
+            else "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id is None and a12_validated
-            else "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, execution envelope, launch checklist, two-layer shutdown plan, receipt, and ledger were frozen. The v3 post-commit validator now checks preserved v2 bytes through their receipt and captures the clean bundle commit/tree dynamically. Launch remains false pending Owner-local artifact manifests, parity, live quote/capacity, external termination dry run, and explicit adoption."
+            else "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, and runtime-minimal allowlists were frozen. The v5 direct-base revision binds the official PyTorch linux/amd64 manifest and replaces active custom-image transfers with code, Linux wheelhouse, runtime-minimal models, and safe job manifests. Launch remains false pending Owner-local artifact manifests, parity, live quote/capacity, external termination dry run, and explicit adoption."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2"
             else "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
             if phase_id.startswith("A") and task_id == "A0.10"

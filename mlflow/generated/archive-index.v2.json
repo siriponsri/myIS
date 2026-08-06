@@ -36,6 +36,60 @@
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json",
     "status": "a1_2_contract_scaffold_complete_launch_locked"
   },
+  "armindex_a1_2_runtime_minimal_direct_base": {
+    "adopted_for_execution": false,
+    "contract_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+    "contract_uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json",
+    "custom_local_docker_build": false,
+    "evidence_class": "engineering_preflight_revision",
+    "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+    "launch_allowed": false,
+    "live_checks_pending": [
+      "exact_git_commit_tree",
+      "frozen_bundle_hash",
+      "image_reference_and_best_observable_identity",
+      "linux_amd64",
+      "python_3_11",
+      "torch_2.6.0_cu118",
+      "cuda_11.8",
+      "cuda_available",
+      "four_distinct_rtx3090_uuids",
+      "gpu_model_and_vram",
+      "cpu_ram_disk",
+      "dependency_versions",
+      "model_sha256sums",
+      "snowflake_remote_code_hashes",
+      "remote_forbidden_surface_absent",
+      "dense_adapter_parity",
+      "qwen_measured_max_length",
+      "gpu_memory_feasibility",
+      "heartbeat_checkpoint_resume",
+      "live_quote_instance_identity",
+      "provider_destroy_ttl"
+    ],
+    "local_preparation_status": "runtime_minimal_policy_ready_model_stage_resumable_pending",
+    "model_snapshots": "runtime_minimal_frozen",
+    "platform": "linux/amd64",
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_reservations": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0,
+      "provider_switches": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
+    "status": "direct_base_preflight_prepared_local_owner_stage_pending"
+  },
   "armindex_a1_2_vast_postcommit": {
     "adopted_for_execution": false,
     "contract_sha256": "716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81",
@@ -141,7 +195,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "e32db4f9a31f6ed1e20108d6d74b29f27e502dec28593ffd20224aa642ad6356",
+  "dashboard_snapshot_sha256": "8bd6e0851fcaaa9cf20c7001e0ab222dab82e170aeca6f93b113cc36c2ba60b2",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -174,7 +228,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "8c7404b8e65978d31ed8394cb31a257e97254687d8741ac49638b83807706e88",
+  "obsidian_manifest_sha256": "73aa4c268305ef13a71621f340286ea393f9ee526c5955ee23c05b770a76f640",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -212,8 +266,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
-  "read_model_sha256": "e32db4f9a31f6ed1e20108d6d74b29f27e502dec28593ffd20224aa642ad6356",
+  "read_model_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
+  "read_model_sha256": "8bd6e0851fcaaa9cf20c7001e0ab222dab82e170aeca6f93b113cc36c2ba60b2",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",

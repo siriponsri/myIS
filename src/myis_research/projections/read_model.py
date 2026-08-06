@@ -56,6 +56,16 @@ from ..armindex.a1_2_vast_postcommit import (
     RECEIPT_PATH as A12_V3_RECEIPT_PATH,
     validate_postcommit_revision as validate_a1_2_vast_postcommit,
 )
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    CONTRACT_PATH as A12_V5_CONTRACT_PATH,
+    IMAGE_CONTRACT_PATH as A12_V5_IMAGE_CONTRACT_PATH,
+    OWNER_RUNBOOK_PATH as A12_V5_OWNER_RUNBOOK_PATH,
+    RECEIPT_PATH as A12_V5_RECEIPT_PATH,
+    RUNTIME_LOCK_PATH as A12_V5_RUNTIME_LOCK_PATH,
+    SCHEMA_PATH as A12_V5_SCHEMA_PATH,
+    TOPOLOGY_PATH as A12_V5_TOPOLOGY_PATH,
+    validate_direct_base_revision as validate_a1_2_v5_direct_base,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -160,6 +170,7 @@ PROJECTION_SOURCE_PATHS = (
     "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md",
     "control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md",
     "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md",
+    "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -214,6 +225,7 @@ A12_V3_OWNER_RUNBOOK_PATH = Path(
 )
 A12_V3_SCHEMA_PATH = Path("schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json")
 A12_V3_MODULE_PATH = Path("src/myis_research/armindex/a1_2_vast_postcommit.py")
+A12_V5_MODULE_PATH = Path("src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py")
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -286,6 +298,27 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v5"), Mapping)
+        and a1_2_scaffold["vast_preflight_v5"].get("validated") is True
+    ):
+        armindex["status"] = "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v5_direct_official_base_prepared_owner_local_stage_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
@@ -1680,6 +1713,46 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": "postcommit_validator_not_prepared",
             "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
         },
+        "vast_preflight_v5": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": "a1.2-runtime-minimal-direct-base-v5",
+            "receipt_uri": A12_V5_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "contract_uri": A12_V5_CONTRACT_PATH.as_posix(),
+            "contract_sha256": None,
+            "runtime_lock_uri": A12_V5_RUNTIME_LOCK_PATH.as_posix(),
+            "runtime_lock_sha256": None,
+            "image_contract_uri": A12_V5_IMAGE_CONTRACT_PATH.as_posix(),
+            "image_contract_sha256": None,
+            "topology_uri": A12_V5_TOPOLOGY_PATH.as_posix(),
+            "topology_sha256": None,
+            "schema_uri": A12_V5_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "owner_runbook_uri": A12_V5_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "module_uri": A12_V5_MODULE_PATH.as_posix(),
+            "module_sha256": None,
+            "image_reference": None,
+            "resolved_manifest_digest": None,
+            "platform": None,
+            "local_preparation_status": "not_started",
+            "model_snapshots": "runtime_minimal_frozen",
+            "cpu_model_load": "intentionally_skipped_due_host_memory",
+            "dense_gpu_parity": "pending_live_vast_preflight",
+            "qwen_measured_max_length": "pending_live_vast_preflight",
+            "gpu_memory_feasibility": "pending_live_vast_preflight",
+            "custom_local_docker_build": False,
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "live_checks_pending": [],
+            "removed_active_steps": [],
+            "upload_artifacts": [],
+            "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+            "resource_counters": {"charged_usd": 0, "gpu_reservations": 0, "gpu_scientific_runs": 0, "model_downloads": 0, "paid_api_calls": 0, "provider_switches": 0},
+            "claim_boundary": "direct_base_revision_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -1707,6 +1780,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         v3_validation = None
         v3_receipt = None
         v3_contract = None
+        v5_validation = None
+        v5_receipt = None
+        v5_contract = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
@@ -1722,6 +1798,10 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v3_validation = validate_a1_2_vast_postcommit(root, require_clean=False)
             v3_receipt = json.loads((root / A12_V3_RECEIPT_PATH).read_text(encoding="utf-8"))
             v3_contract = json.loads((root / A12_V3_CONTRACT_PATH).read_text(encoding="utf-8"))
+        if (root / A12_V5_RECEIPT_PATH).is_file():
+            v5_validation = validate_a1_2_v5_direct_base(root)
+            v5_receipt = json.loads((root / A12_V5_RECEIPT_PATH).read_text(encoding="utf-8"))
+            v5_contract = json.loads((root / A12_V5_CONTRACT_PATH).read_text(encoding="utf-8"))
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -1738,6 +1818,8 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v2_closeout_audit,
             v3_receipt,
             v3_contract,
+            v5_receipt,
+            v5_contract,
         ):
             if value is not None:
                 assert_aggregate_only(value)
@@ -1766,6 +1848,19 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or any(float(value) != 0 for value in v3_receipt.get("resource_counters", {}).values())
         ):
             raise ValueError("A1.2 Vast v3 post-commit correction receipt is invalid")
+        if v5_receipt is not None and (
+            v5_validation is None
+            or v5_validation.get("status") != "direct_base_prepared_launch_locked"
+            or v5_receipt.get("status") != "direct_base_preflight_prepared_local_owner_stage_pending"
+            or v5_receipt.get("launch_allowed") is not False
+            or v5_receipt.get("adopted_for_execution") is not False
+            or v5_contract is None
+            or v5_contract.get("launch_allowed") is not False
+            or v5_contract.get("adopted_for_execution") is not False
+            or any(int(value) != 0 for value in v5_receipt.get("real_counters", {}).values())
+            or any(float(value) != 0 for value in v5_receipt.get("resource_counters", {}).values())
+        ):
+            raise ValueError("A1.2 direct-base v5 receipt is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -1973,9 +2068,47 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": str(v3_receipt["claim_boundary"]),
             "next_authorized_action": str(v3_receipt["next_authorized_action"]),
         }
+    v5_projection = dict(missing["vast_preflight_v5"])
+    if v5_receipt is not None and v5_contract is not None and v5_validation is not None:
+        v5_projection = {
+            **v5_projection,
+            "status": str(v5_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v5_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V5_RECEIPT_PATH),
+            "contract_sha256": _file_sha256(root / A12_V5_CONTRACT_PATH),
+            "runtime_lock_sha256": _file_sha256(root / A12_V5_RUNTIME_LOCK_PATH),
+            "image_contract_sha256": _file_sha256(root / A12_V5_IMAGE_CONTRACT_PATH),
+            "topology_sha256": _file_sha256(root / A12_V5_TOPOLOGY_PATH),
+            "schema_sha256": _file_sha256(root / A12_V5_SCHEMA_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V5_OWNER_RUNBOOK_PATH),
+            "module_sha256": _file_sha256(root / A12_V5_MODULE_PATH),
+            "image_reference": str(v5_receipt["image_reference"]),
+            "resolved_manifest_digest": str(v5_receipt["resolved_manifest_digest"]),
+            "platform": str(v5_receipt["platform"]),
+            "local_preparation_status": str(v5_receipt["local_preparation_status"]),
+            "model_snapshots": str(v5_receipt["model_snapshots"]),
+            "cpu_model_load": str(v5_receipt["cpu_model_load"]),
+            "dense_gpu_parity": str(v5_receipt["dense_gpu_parity"]),
+            "qwen_measured_max_length": str(v5_receipt["qwen_measured_max_length"]),
+            "gpu_memory_feasibility": str(v5_receipt["gpu_memory_feasibility"]),
+            "custom_local_docker_build": bool(v5_receipt["custom_local_docker_build"]),
+            "launch_allowed": bool(v5_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v5_receipt["adopted_for_execution"]),
+            "live_checks_pending": list(v5_receipt["live_checks_pending"]),
+            "removed_active_steps": list(v5_receipt["removed_active_steps"]),
+            "upload_artifacts": list(v5_receipt["upload_artifacts"]),
+            "real_counters": dict(v5_receipt["real_counters"]),
+            "resource_counters": dict(v5_receipt["resource_counters"]),
+            "claim_boundary": str(v5_receipt["claim_boundary"]),
+            "next_authorized_action": str(v5_receipt["next_authorized_action"]),
+        }
     return {
         **missing,
         "status": (
+            "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
+            if v5_projection["validated"]
+            else
             "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
             if v3_projection["validated"]
             else "a1_2_vast_4x3090_preflight_prepared_launch_locked"
@@ -1985,6 +2118,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
+            "engineering_preflight_revision"
+            if v5_projection["validated"]
+            else
             "engineering_preflight_correction"
             if v3_projection["validated"]
             else "engineering_preflight_scaffold"
@@ -1992,6 +2128,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             else "engineering_contract_scaffold"
         ),
         "claim_boundary": (
+            v5_projection.get("claim_boundary")
+            if v5_projection["validated"]
+            else
             v3_projection.get("claim_boundary")
             if v3_projection["validated"]
             else v2_projection.get("claim_boundary")
@@ -2017,6 +2156,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "offline_adapter_ready": int(counts["offline_adapter_ready"]),
         "dense_artifact_manifests_pending": int(counts["owner_artifact_manifests_pending"]),
         "owner_requirements_pending": (
+            len(v5_projection["live_checks_pending"])
+            if v5_projection["validated"]
+            else
             int(v2_projection["live_check_count"])
             if v2_projection["validated"]
             else len(checklist["pending_owner"])
@@ -2050,6 +2192,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
         "next_authorized_action": (
+            str(v5_projection["next_authorized_action"])
+            if v5_projection["validated"]
+            else
             str(v3_projection["next_authorized_action"])
             if v3_projection["validated"]
             else A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
@@ -2061,6 +2206,7 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "preflight_mlflow_registration_sha256": _file_sha256(root / "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json") if (root / "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json").is_file() else None,
         "vast_preflight_v2": v2_projection,
         "vast_preflight_v3": v3_projection,
+        "vast_preflight_v5": v5_projection,
     }
 
 
