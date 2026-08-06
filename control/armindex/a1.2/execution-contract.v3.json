@@ -1,0 +1,49 @@
+{
+  "schema_version": "myis.armindex-a1.2-execution-contract.v3",
+  "contract_id": "a1.2-local-vast-4x3090-postcommit-v3",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "postcommit_validator_prepared_live_owner_preflight_pending",
+  "evidence_class": "engineering_preflight_correction",
+  "scientific_authority": false,
+  "migration_from": {
+    "revision_id": "a1.2-local-vast-4x3090-v2",
+    "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+    "receipt_file_sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+    "receipt_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600",
+    "disposition": "preserved_immutable_with_postcommit_validator_correction"
+  },
+  "bindings": [
+    {"uri": "src/myis_research/armindex/a1_2_vast_postcommit.py", "sha256": "0d84c8d235c351c51e509c759a6dea0e9f011c4c4a031d556922a423b0839d8e"},
+    {"uri": "schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json", "sha256": "c9b46a32e5c805b0d861e6f79a9965426a2db7df70e89b1397b188535d867f03"},
+    {"uri": "control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md", "sha256": "10b1ab667fac6ca06de1b92671ff42fdedd09dee748237d217cafe710144bca7"},
+    {"uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md", "sha256": "354c19d3debcda6d8c82c0a67d6fe310999c1f883198d6ceba4af0f4120f26de"},
+    {"uri": "tests/test_armindex_a1_2_vast_postcommit.py", "sha256": "1448dd878d33f39589305220aacf91716d8960344003cb494fe2cb2db1aa95b8"},
+    {"uri": "tests/conftest.py", "sha256": "e04af86951bced38b3df27f4b2c8a67b0f6ede5459357f454143392a9e847d88"},
+    {"uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json", "sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb"},
+    {"uri": "control/armindex/a1.2/execution-contract.v2.json", "sha256": "ee1709d3f2557c8810505388fd82bb668905f0b166905c201d2f3e4d5f43da85"}
+  ],
+  "git_identity_rule": {
+    "preparation_commit_is_provenance_only": true,
+    "current_clean_commit_and_tree_captured_at_bundle_build": true,
+    "remote_verification_must_match_bundle_identity": true,
+    "mutable_branch_or_tag_is_identity": false
+  },
+  "budget": {
+    "planning_rate_usd_per_four_gpu_instance_hour": 0.6,
+    "estimated_instance_hours": "2-4",
+    "estimated_raw_worker_usd": "1.20-2.40",
+    "common_screen_hard_stop_usd": 18,
+    "a1_hard_stop_usd": 23,
+    "campaign_hard_stop_usd": 100,
+    "live_quote_required": true,
+    "over_hard_stop_status": "BLOCKED_BUDGET"
+  },
+  "launch_allowed": false,
+  "adopted_for_execution": false,
+  "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+  "resource_counters": {"charged_usd": 0, "gpu_reservations": 0, "gpu_scientific_runs": 0, "model_downloads": 0, "paid_api_calls": 0, "provider_switches": 0},
+  "claim_boundary": "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority",
+  "next_authorized_action": "Owner runs only the v3 clean-commit validator and the documented local SSH/Vast synthetic preflight; stop before adoption or scientific execution.",
+  "contract_sha256": "4cd7e2bf9599f095a8645a09644028a410a4a920550eaacc2f03f3a37a0501ff"
+}

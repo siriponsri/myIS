@@ -34,6 +34,11 @@ records:
     supporting_authority: [control/armindex/a1.2/execution-contract.v2.json, control/budgets/a1.2-common-screen-vast-4x3090-v2.json, control/execution-envelope-a1.2-v2.yaml, control/armindex/a1.2/topology-contract.v2.json, control/armindex/a1.2/runtime-lock.v2.json, control/armindex/a1.2/image-digest-contract.v2.json, control/armindex/a1.2/launch-checklist.v2.json, control/armindex/a1.2/shutdown-plan.v2.json, control/armindex/a1.2/safe-export-allowlist.v2.json, outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_preflight_scaffold_only, v1_preserved, launch_locked, adopted_for_execution_false, live_owner_preflight_pending, no_protected_data, no_access_material_remote, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_vast_4x3090_postcommit_correction
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.v3.json, schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json, control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_preflight_correction_only, v1_v2_preserved, clean_commit_required, dynamic_bundle_identity, launch_locked, adopted_for_execution_false, live_owner_preflight_pending, no_protected_data, no_access_material_remote, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
   - id: phase_task_reporting_contract
     authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
     projections: [projections/reports, obsidian]

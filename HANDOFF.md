@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_vast_4x3090_preflight_prepared_launch_locked`
-- Evidence class: engineering preflight scaffold; scientific authority `false`
+- Status: `a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked`
+- Evidence class: engineering preflight correction; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -98,6 +98,16 @@ evidence.
   assets, 28 Markdown link files, two PowerShell scripts with zero parse errors,
   and two byte-stable final report sync/check cycles. The audit self-hash is
   `fe2e2b48324e18d7de1a50413831462f942222a11cfdf4bda9f53a35421a2646`.
+- The first clean post-commit v2 validation then exposed a bounded validator
+  defect: it regenerated an expected input from the new `HEAD/tree` instead of
+  treating the frozen v2 preparation commit/tree as provenance. All v1/v2
+  bytes and receipt hashes remained valid. Additive revision
+  `a1.2-local-vast-4x3090-postcommit-v3` validates v2 through its immutable
+  receipt and captures the clean current commit/tree when the bundle is built.
+  The v3 correction receipt self-hash is
+  `c56c22e063d81c045537d9e566e7703aed2bafcc1f48dd1c9bb0ba2211dc79e2`;
+  launch, adoption, measured, GPU, paid, Selection, and Final counters remain
+  locked or zero.
 - Public revisions and critical artifact commitments are frozen for BGE-M3,
   PatEmbed-large, Snowflake Arctic Embed M v2.0, and Qwen3-Embedding-0.6B. No
   model payload was downloaded. The four dense locks remain
@@ -117,7 +127,7 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-The v1 and v2 integrity checks pass. A1.2 scientific execution remains
+The v1/v2 receipt integrity and v3 correction checks pass. A1.2 scientific execution remains
 deliberately locked because the live Owner preflight has not bound the exact
 commit/tree/image digest, four GPU UUIDs, runtime/model manifests, dense adapter
 parity, Qwen measured maximum length, live quote/identity, storage, heartbeat/
@@ -131,11 +141,12 @@ Run only the Owner-local SSH/Vast A1.2 preflight from the immutable beginner
 runbook. The exact next task is:
 
 ```text
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
 The Owner is now needed to follow
-`docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md`: stage frozen artifacts and
+`docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md`: validate the clean
+pushed revision, then follow the preserved v2 runbook to stage frozen artifacts and
 complete `SHA256SUMS` files outside Git, build and bind the OCI image digest,
 confirm a live quote, open one matching four-RTX3090 instance, run the exact
 local coordinator/watchdog commands, collect only allowlisted outputs, and

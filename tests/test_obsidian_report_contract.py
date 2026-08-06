@@ -190,9 +190,14 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "`7` bounded failure/recovery records" in a12_report
     assert "A1.2 Vast preflight closeout validation audit" in a12_report
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in a12_report
+    assert "A1.2 Vast post-commit correction receipt v3" in a12_report
+    assert "a1.2-v2-postcommit-head-tree-regeneration-defect-20260806" in a12_report
+    assert "USD 0.60 per complete four-GPU instance-hour" in a12_report
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
-    assert sync_receipt["source_receipt_uri"].endswith("a1.2-vast-4x3090-migration.receipt.v2.json")
+    assert sync_receipt["source_receipt_uri"].endswith(
+        "a1.2-vast-4x3090-postcommit-migration.receipt.v3.json"
+    )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
         "a1_2_contract_scaffold_complete_launch_locked"
@@ -201,6 +206,11 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         "offline_preparation_complete_live_owner_preflight_pending"
     )
     assert mlflow_index["armindex_a1_2_vast_preflight"]["planning_rate_usd_per_instance_hour"] == 0.6
+    assert mlflow_index["armindex_a1_2_vast_postcommit"]["status"] == (
+        "postcommit_validator_prepared_live_owner_preflight_pending"
+    )
+    assert mlflow_index["armindex_a1_2_vast_postcommit"]["launch_allowed"] is False
+    assert mlflow_index["armindex_a1_2_vast_postcommit"]["adopted_for_execution"] is False
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",

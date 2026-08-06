@@ -50,7 +50,11 @@ from ..armindex.a1_2_vast import (
     RUNBOOK_PATH as A12_V2_RUNBOOK_PATH,
     SYNTHETIC_RECEIPT_PATH as A12_V2_SYNTHETIC_RECEIPT_PATH,
     validate_preparation_receipt as validate_a1_2_vast_receipt,
-    validate_v2 as validate_a1_2_vast,
+)
+from ..armindex.a1_2_vast_postcommit import (
+    CONTRACT_PATH as A12_V3_CONTRACT_PATH,
+    RECEIPT_PATH as A12_V3_RECEIPT_PATH,
+    validate_postcommit_revision as validate_a1_2_vast_postcommit,
 )
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
@@ -154,6 +158,8 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/armindex-multiretriever-v2/proposals",
     "control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md",
     "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md",
+    "control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md",
+    "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -200,6 +206,14 @@ A12_V2_ALLOWLIST_PATH = A12_V2_CONTROL_ROOT / "safe-export-allowlist.v2.json"
 A12_V2_CLOSEOUT_AUDIT_PATH = Path(
     "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json"
 )
+A12_V3_CONTROL_RUNBOOK_PATH = Path(
+    "control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md"
+)
+A12_V3_OWNER_RUNBOOK_PATH = Path(
+    "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md"
+)
+A12_V3_SCHEMA_PATH = Path("schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json")
+A12_V3_MODULE_PATH = Path("src/myis_research/armindex/a1_2_vast_postcommit.py")
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -272,6 +286,29 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v3"), Mapping)
+        and a1_2_scaffold["vast_preflight_v3"].get("validated") is True
+    ):
+        armindex["status"] = (
+            "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
+        )
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v3_clean_bundle_identity_prepared_owner_live_preflight_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
@@ -1611,6 +1648,38 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
             "resource_counters": {"charged_usd": 0, "gpu_reservations": 0, "gpu_scientific_runs": 0, "model_downloads": 0, "paid_api_calls": 0},
         },
+        "vast_preflight_v3": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": "a1.2-local-vast-4x3090-postcommit-v3",
+            "receipt_uri": A12_V3_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "contract_uri": A12_V3_CONTRACT_PATH.as_posix(),
+            "contract_sha256": None,
+            "contract_self_sha256": None,
+            "control_runbook_uri": A12_V3_CONTROL_RUNBOOK_PATH.as_posix(),
+            "control_runbook_sha256": None,
+            "owner_runbook_uri": A12_V3_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "schema_uri": A12_V3_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "module_uri": A12_V3_MODULE_PATH.as_posix(),
+            "module_sha256": None,
+            "v2_receipt_sha256": None,
+            "planning_rate_usd": 0,
+            "estimated_instance_hours": "unavailable",
+            "estimated_raw_worker_usd": "unavailable",
+            "common_screen_hard_stop_usd": 0,
+            "a1_hard_stop_usd": 0,
+            "campaign_hard_stop_usd": 0,
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+            "resource_counters": {"charged_usd": 0, "gpu_reservations": 0, "gpu_scientific_runs": 0, "model_downloads": 0, "paid_api_calls": 0, "provider_switches": 0},
+            "claim_boundary": "postcommit_validator_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -1629,15 +1698,16 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         closeout_audit = json.loads(closeout_audit_path.read_text(encoding="utf-8"))
         preflight = json.loads(preflight_path.read_text(encoding="utf-8")) if preflight_path.is_file() else None
         v2_receipt = None
-        v2_validation = None
         v2_contract = None
         v2_budget = None
         v2_topology = None
         v2_checklist = None
         v2_synthetic = None
         v2_closeout_audit = None
+        v3_validation = None
+        v3_receipt = None
+        v3_contract = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
-            v2_validation = validate_a1_2_vast(root)
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
             v2_budget = json.loads((root / A12_V2_BUDGET_PATH).read_text(encoding="utf-8"))
@@ -1648,6 +1718,10 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
                 v2_closeout_audit = json.loads(
                     (root / A12_V2_CLOSEOUT_AUDIT_PATH).read_text(encoding="utf-8")
                 )
+        if (root / A12_V3_RECEIPT_PATH).is_file():
+            v3_validation = validate_a1_2_vast_postcommit(root, require_clean=False)
+            v3_receipt = json.loads((root / A12_V3_RECEIPT_PATH).read_text(encoding="utf-8"))
+            v3_contract = json.loads((root / A12_V3_CONTRACT_PATH).read_text(encoding="utf-8"))
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -1662,13 +1736,13 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v2_checklist,
             v2_synthetic,
             v2_closeout_audit,
+            v3_receipt,
+            v3_contract,
         ):
             if value is not None:
                 assert_aggregate_only(value)
         if v2_receipt is not None and (
-            v2_validation is None
-            or v2_validation.status != "prepared_launch_locked"
-            or v2_receipt.get("status") != "offline_preparation_complete_live_owner_preflight_pending"
+            v2_receipt.get("status") != "offline_preparation_complete_live_owner_preflight_pending"
             or v2_receipt.get("launch_allowed") is not False
             or v2_receipt.get("adopted_for_execution") is not False
             or v2_synthetic is None
@@ -1678,6 +1752,20 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or any(float(value) != 0 for value in v2_receipt.get("resource_counters", {}).values())
         ):
             raise ValueError("A1.2 Vast v2 preparation receipt is invalid")
+        if v3_receipt is not None and (
+            v3_validation is None
+            or v3_validation.get("status") != "prepared_postcommit_launch_locked"
+            or v3_receipt.get("status")
+            != "postcommit_validator_prepared_live_owner_preflight_pending"
+            or v3_receipt.get("launch_allowed") is not False
+            or v3_receipt.get("adopted_for_execution") is not False
+            or v3_contract is None
+            or v3_contract.get("launch_allowed") is not False
+            or v3_contract.get("adopted_for_execution") is not False
+            or any(int(value) != 0 for value in v3_receipt.get("real_counters", {}).values())
+            or any(float(value) != 0 for value in v3_receipt.get("resource_counters", {}).values())
+        ):
+            raise ValueError("A1.2 Vast v3 post-commit correction receipt is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -1846,22 +1934,69 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": str(v2_receipt["claim_boundary"]),
             "next_authorized_action": str(v2_receipt["next_authorized_action"]),
         }
+    v3_projection = dict(missing["vast_preflight_v3"])
+    if v3_receipt is not None and v3_contract is not None and v3_validation is not None:
+        v3_projection = {
+            **v3_projection,
+            "status": str(v3_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v3_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V3_RECEIPT_PATH),
+            "receipt_self_sha256": str(v3_receipt["receipt_sha256"]),
+            "contract_sha256": _file_sha256(root / A12_V3_CONTRACT_PATH),
+            "contract_self_sha256": str(v3_contract["contract_sha256"]),
+            "control_runbook_sha256": _file_sha256(root / A12_V3_CONTROL_RUNBOOK_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V3_OWNER_RUNBOOK_PATH),
+            "schema_sha256": _file_sha256(root / A12_V3_SCHEMA_PATH),
+            "module_sha256": _file_sha256(root / A12_V3_MODULE_PATH),
+            "v2_receipt_sha256": str(v3_receipt["v2_receipt_sha256"]),
+            "planning_rate_usd": float(
+                v3_receipt["budget"]["planning_rate_usd_per_four_gpu_instance_hour"]
+            ),
+            "estimated_instance_hours": str(
+                v3_receipt["budget"]["estimated_instance_hours"]
+            ),
+            "estimated_raw_worker_usd": str(
+                v3_receipt["budget"]["estimated_raw_worker_usd"]
+            ),
+            "common_screen_hard_stop_usd": int(
+                v3_receipt["budget"]["common_screen_hard_stop_usd"]
+            ),
+            "a1_hard_stop_usd": int(v3_receipt["budget"]["a1_hard_stop_usd"]),
+            "campaign_hard_stop_usd": int(
+                v3_receipt["budget"]["campaign_hard_stop_usd"]
+            ),
+            "validation_git_commit": str(v3_validation["git_commit"]),
+            "validation_git_tree": str(v3_validation["git_tree"]),
+            "launch_allowed": bool(v3_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v3_receipt["adopted_for_execution"]),
+            "real_counters": dict(v3_receipt["real_counters"]),
+            "resource_counters": dict(v3_receipt["resource_counters"]),
+            "claim_boundary": str(v3_receipt["claim_boundary"]),
+            "next_authorized_action": str(v3_receipt["next_authorized_action"]),
+        }
     return {
         **missing,
         "status": (
-            "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+            "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
+            if v3_projection["validated"]
+            else "a1_2_vast_4x3090_preflight_prepared_launch_locked"
             if v2_projection["validated"]
             else validation.status
         ),
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
-            "engineering_preflight_scaffold"
+            "engineering_preflight_correction"
+            if v3_projection["validated"]
+            else "engineering_preflight_scaffold"
             if v2_projection["validated"]
             else "engineering_contract_scaffold"
         ),
         "claim_boundary": (
-            v2_projection.get("claim_boundary")
+            v3_projection.get("claim_boundary")
+            if v3_projection["validated"]
+            else v2_projection.get("claim_boundary")
             if v2_projection["validated"]
             else "offline_scaffold_only_no_measured_retrieval_claim"
         ),
@@ -1916,13 +2051,18 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "archive_disposition": dict(receipt["archive_disposition"]),
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
-        "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        "next_authorized_action": (
+            str(v3_projection["next_authorized_action"])
+            if v3_projection["validated"]
+            else A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
+        ),
         "preflight_sha256": _file_sha256(preflight_path) if preflight_path.is_file() else None,
         "preflight_status": preflight.get("status", "not_started") if isinstance(preflight, Mapping) else "not_started",
         "preflight_blockers": list(preflight.get("blockers", [])) if isinstance(preflight, Mapping) else [],
         "preflight_launch_ready": bool(preflight.get("launch_ready", False)) if isinstance(preflight, Mapping) else False,
         "preflight_mlflow_registration_sha256": _file_sha256(root / "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json") if (root / "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json").is_file() else None,
         "vast_preflight_v2": v2_projection,
+        "vast_preflight_v3": v3_projection,
     }
 
 

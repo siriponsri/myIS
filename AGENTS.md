@@ -212,9 +212,11 @@ assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
 The current state must agree everywhere: ArmIndex is the active campaign,
 SCOPE is historical read-only, all A0 Tasks and A1.1 are complete, measured
 ArmIndex counters remain zero, Selection and Final remain closed, and the next
-action is exactly the Owner-local SSH/Vast preflight for the immutable A1.2
-local-orchestrated four-RTX3090 revision in `HANDOFF.md`. The offline scaffold
-is complete; the live preflight must keep `launch_allowed=false` and
+action is exactly the Owner-local SSH/Vast preflight for the additive A1.2 v3
+post-commit correction in `HANDOFF.md`. The v3 validator must preserve every
+v1/v2 byte, validate v2 through its immutable receipt, and bind the clean
+current commit/tree at frozen-bundle creation. The offline scaffold is
+complete; the live preflight must keep `launch_allowed=false` and
 `adopted_for_execution=false` and must stop before scientific execution.
 Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
 fixture is `passed`, and measured P2 was not started. A stale narrative is a

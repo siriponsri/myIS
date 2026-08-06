@@ -175,6 +175,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
     scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
     vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
+    vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -278,6 +279,21 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "real_counters": vast.get("real_counters", {}),
             "resource_counters": vast.get("resource_counters", {}),
         },
+        "armindex_a1_2_vast_postcommit": {
+            "status": vast_v3.get("status", "not_started"),
+            "evidence_class": "engineering_preflight_correction",
+            "scientific_authority": False,
+            "source_receipt_uri": vast_v3.get("receipt_uri"),
+            "source_receipt_sha256": vast_v3.get("receipt_sha256"),
+            "source_receipt_self_sha256": vast_v3.get("receipt_self_sha256"),
+            "contract_uri": vast_v3.get("contract_uri"),
+            "contract_sha256": vast_v3.get("contract_sha256"),
+            "v2_receipt_sha256": vast_v3.get("v2_receipt_sha256"),
+            "launch_allowed": vast_v3.get("launch_allowed", False),
+            "adopted_for_execution": vast_v3.get("adopted_for_execution", False),
+            "real_counters": vast_v3.get("real_counters", {}),
+            "resource_counters": vast_v3.get("resource_counters", {}),
+        },
         "observatory": {
             "status": observatory.get("status", "not_available"),
             "evidence_class": observatory.get("evidence_class", "fixture"),
@@ -351,7 +367,18 @@ def _a010_projection_lifecycle(
     adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
     scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
     vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
+    vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
     if (
+        scaffold.get("validated") is True
+        and scaffold.get("status")
+        == "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
+        and vast_v3.get("validated") is True
+    ):
+        source_uri = vast_v3.get("receipt_uri")
+        source_sha256 = vast_v3.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
         scaffold.get("validated") is True
         and scaffold.get("status") == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
         and vast.get("validated") is True
@@ -1142,6 +1169,8 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
         adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
         scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
+        vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
+        vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
         gpu = adapter.get("gpu_spec", {}) if isinstance(adapter.get("gpu_spec"), Mapping) else {}
         timing = adapter.get("time_estimate", {}) if isinstance(adapter.get("time_estimate"), Mapping) else {}
         budget = adapter.get("budget_estimate", {}) if isinstance(adapter.get("budget_estimate"), Mapping) else {}
@@ -1159,6 +1188,10 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
                 f"Launch ready: `{scaffold.get('launch_ready', False)}`; measured execution: `{scaffold.get('measured_execution', False)}`. "
                 f"The closeout audit passed `{scaffold.get('closeout_validation_check_count', 0)}` validation groups and retained "
                 f"`{scaffold.get('closeout_validation_recovery_count', 0)}` bounded failure/recovery records.\n\n"
+                f"The immutable v2 preparation remains `{vast.get('status', 'not_started')}`. The additive v3 correction is "
+                f"`{vast_v3.get('status', 'not_started')}` and binds v2 receipt `{vast_v3.get('v2_receipt_sha256')}`. "
+                "It validates receipt-bound v2 bytes and captures the clean current commit and tree when the frozen bundle is built; "
+                "it does not authorize launch or adoption.\n\n"
                 "Owner-local prerequisites still required:\n\n"
                 "- mount the protected root read-only for the runner without copying payloads into the agent workspace;\n"
                 "- validate complete `SHA256SUMS` manifests for all dense runtime files and byte SHA-256 for Snowflake remote code;\n"

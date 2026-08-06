@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "revision_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "bindings", "v2_receipt_sha256", "budget", "launch_allowed", "adopted_for_execution", "real_counters", "resource_counters", "next_authorized_action", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-vast-4x3090-postcommit.v3"},
+    "receipt_id": {"const": "a1.2-vast-4x3090-postcommit-correction-v3"},
+    "revision_id": {"const": "a1.2-local-vast-4x3090-postcommit-v3"},
+    "status": {"const": "postcommit_validator_prepared_live_owner_preflight_pending"},
+    "evidence_class": {"const": "engineering_preflight_correction"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 20},
+    "bindings": {"type": "array", "minItems": 7, "items": {"type": "object", "additionalProperties": false, "required": ["uri", "sha256"], "properties": {"uri": {"type": "string", "minLength": 3}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
+    "v2_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planning_rate_usd_per_four_gpu_instance_hour", "estimated_instance_hours", "estimated_raw_worker_usd", "common_screen_hard_stop_usd", "a1_hard_stop_usd", "campaign_hard_stop_usd", "live_quote_required", "over_hard_stop_status"],
+      "properties": {
+        "planning_rate_usd_per_four_gpu_instance_hour": {"const": 0.6},
+        "estimated_instance_hours": {"const": "2-4"},
+        "estimated_raw_worker_usd": {"const": "1.20-2.40"},
+        "common_screen_hard_stop_usd": {"const": 18},
+        "a1_hard_stop_usd": {"const": 23},
+        "campaign_hard_stop_usd": {"const": 100},
+        "live_quote_required": {"const": true},
+        "over_hard_stop_status": {"const": "BLOCKED_BUDGET"}
+      }
+    },
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "real_counters": {"type": "object"},
+    "resource_counters": {"type": "object"},
+    "next_authorized_action": {"type": "string", "minLength": 20},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

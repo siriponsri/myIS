@@ -226,10 +226,12 @@ def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked
 def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> None:
     projection = _a12_contract_scaffold_projection(ROOT)
 
-    assert projection["status"] == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+    assert projection["status"] == (
+        "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked"
+    )
     assert projection["validated"] is True
     assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
-    assert projection["evidence_class"] == "engineering_preflight_scaffold"
+    assert projection["evidence_class"] == "engineering_preflight_correction"
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
@@ -265,6 +267,23 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert vast["closeout_validation_audit_sha256"]
     assert set(vast["real_counters"].values()) == {0}
     assert set(vast["resource_counters"].values()) == {0}
+    vast_v3 = projection["vast_preflight_v3"]
+    assert vast_v3["validated"] is True
+    assert vast_v3["status"] == (
+        "postcommit_validator_prepared_live_owner_preflight_pending"
+    )
+    assert vast_v3["v2_receipt_sha256"] == vast["receipt_self_sha256"]
+    assert len(vast_v3["receipt_self_sha256"]) == 64
+    assert vast_v3["planning_rate_usd"] == 0.6
+    assert vast_v3["estimated_instance_hours"] == "2-4"
+    assert vast_v3["estimated_raw_worker_usd"] == "1.20-2.40"
+    assert vast_v3["common_screen_hard_stop_usd"] == 18
+    assert vast_v3["a1_hard_stop_usd"] == 23
+    assert vast_v3["campaign_hard_stop_usd"] == 100
+    assert vast_v3["launch_allowed"] is False
+    assert vast_v3["adopted_for_execution"] is False
+    assert set(vast_v3["real_counters"].values()) == {0}
+    assert set(vast_v3["resource_counters"].values()) == {0}
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

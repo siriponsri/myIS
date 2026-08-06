@@ -36,8 +36,9 @@ A1_2_NEXT_AUTHORIZED_ACTION = (
 
 A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION = (
     "/goal Run only the Owner-local SSH/Vast A1.2 preflight from "
-    "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 "
-    "instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked "
+    "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 "
+    "instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, "
+    "and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked "
     "runtime and model bytes, adapter parity, Qwen maximum length, local protected-root "
     "boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL "
     "path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured "

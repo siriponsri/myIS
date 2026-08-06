@@ -22,7 +22,7 @@ active_phase_registry:
   phases: [A0_MIGRATION_FOUNDATION, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX, A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT, A4_PRODUCTION_TRANSFER_AND_SELECTION, A5_FINAL_CONFIRMATION, A6_PUBLICATION_AND_RELEASE]
   current_phase: A1_BASELINES_AND_MULTI_ARM_SCREENING
   current_task: A1.2
-  current_task_status: a1_2_vast_4x3090_preflight_prepared_launch_locked
+  current_task_status: a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked
   measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -49,7 +49,9 @@ defaults:
   p2_hidden_runtime_defaults: false
   armindex_budget_profile_id: armindex-migration-v2
   armindex_a1_2_budget_profile_id: a1.2-common-screen-vast-4x3090-v2
-  armindex_a1_2_contract_status: vast_4x3090_preflight_prepared_launch_locked
+  armindex_a1_2_contract_status: vast_4x3090_postcommit_preflight_prepared_launch_locked
+  armindex_a1_2_active_revision: a1.2-local-vast-4x3090-postcommit-v3
+  armindex_a1_2_preserved_revision: a1.2-local-vast-4x3090-v2
   armindex_a1_2_historical_v1_status: scaffold_complete_launch_locked_not_adopted
   armindex_a1_2_planning_rate_usd_per_four_gpu_instance_hour: 0.6
   armindex_measured_campaign_started: false
@@ -60,4 +62,4 @@ protected_boundary:
   protected_membership_in_agent_workspace: false
   qrels_in_projections: false
   per_query_outcomes_in_projections: false
-  active_project_claim_boundary: offline_a1_2_four_worker_synthetic_preparation_only_live_vast_and_scientific_execution_unstarted
+  active_project_claim_boundary: postcommit_validator_and_clean_bundle_identity_correction_only_live_vast_and_scientific_execution_unstarted

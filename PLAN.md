@@ -15,11 +15,11 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive local-orchestrated
-  Vast 4xRTX3090 preflight revision prepared; live Owner preflight and
-  scientific launch remain locked)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v3 post-commit
+  correction prepared for the local-orchestrated Vast 4xRTX3090 preflight;
+  live Owner preflight and scientific launch remain locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: engineering preflight scaffold; scientific authority `false`
+- Current evidence class: engineering preflight correction; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -60,7 +60,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 four-GPU preflight prepared and launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v3 four-GPU preflight correction prepared and launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -103,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Vast 4xRTX3090 preflight prepared; live preflight and measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Vast 4xRTX3090 v3 post-commit correction prepared; live preflight and measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -172,6 +172,18 @@ and deterministic projection sync/check cycles. The audit self-hash is
 These counts describe engineering validation only and do not change any
 scientific or charged-resource counter.
 
+The first clean post-commit v2 validation exposed a bounded engineering defect:
+the v2 validator regenerated one expected input from the new `HEAD/tree`, even
+though the immutable v2 input correctly retained its preparation provenance.
+No v2 byte was changed. Additive revision
+`a1.2-local-vast-4x3090-postcommit-v3` validates the preserved v2 bytes through
+receipt self-hash `869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600`
+and captures the clean current commit and tree only when the frozen bundle is
+built. The v3 correction receipt self-hash is
+`c56c22e063d81c045537d9e566e7703aed2bafcc1f48dd1c9bb0ba2211dc79e2`.
+It keeps `launch_allowed=false`, `adopted_for_execution=false`, and all
+measured and resource counters at zero.
+
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
 Historical reports remain at their expected paths while referenced. A report
@@ -221,7 +233,7 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
 The offline preparation is complete. The next action is the Owner-local live
