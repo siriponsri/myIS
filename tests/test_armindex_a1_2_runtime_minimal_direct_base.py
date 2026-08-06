@@ -102,3 +102,30 @@ def test_direct_coordinator_supports_dry_run_without_secrets(tmp_path: Path) -> 
         payload = json.loads(result.stdout)
         assert payload["status"] == "dry_run_validated"
         assert str(key) not in result.stdout
+
+
+def test_wheelhouse_workflow_uses_the_pinned_base_and_exports_only_safe_artifacts() -> None:
+    workflow = (ROOT / ".github/workflows/a1-2-direct-base-wheelhouse-v5.yml").read_text(
+        encoding="utf-8"
+    )
+    assert "workflow_dispatch:" in workflow
+    assert (
+        "pytorch/pytorch@sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20"
+        in workflow
+    )
+    assert "--only-binary=:all:" in workflow
+    assert "--no-index --find-links artifact" in workflow
+    assert 'torch.__version__ == "2.6.0+cu118"' in workflow
+    assert 'torch.version.cuda == "11.8"' in workflow
+    assert "torch_wheel_included" in workflow
+    assert "a1-2-direct-base-wheelhouse-v5" in workflow
+    lowered = workflow.lower()
+    for forbidden in (
+        "qrels",
+        "membership",
+        "query_ids",
+        "id_rsa",
+        "id_ed25519",
+        "openai_api_key",
+    ):
+        assert forbidden not in lowered

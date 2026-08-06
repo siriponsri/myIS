@@ -1,0 +1,157 @@
+name: A1.2 direct-base v5 wheelhouse
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wheelhouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    container:
+      image: pytorch/pytorch@sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve the base-compatible Linux dependency closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -s)" = Linux
+          test "$(uname -m)" = x86_64
+          python - <<'PY'
+          import sys
+          import torch
+
+          assert sys.version_info[:2] == (3, 11), sys.version
+          assert torch.__version__ == "2.6.0+cu118", torch.__version__
+          assert torch.version.cuda == "11.8", torch.version.cuda
+          PY
+          python -m pip install --dry-run --report /tmp/a1-2-resolve.json \
+            -r containers/a1_2_vast_4x3090/runtime/requirements.v2.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("/tmp/a1-2-resolve.json").read_text(encoding="utf-8"))
+          requirements = sorted(
+              {
+                  f"{item['metadata']['name']}=={item['metadata']['version']}"
+                  for item in report["install"]
+                  if item["metadata"]["name"].lower().replace("_", "-") != "torch"
+              },
+              key=str.lower,
+          )
+          if not requirements:
+              raise SystemExit("dependency resolver produced an empty wheel set")
+          Path("/tmp/a1-2-resolved.txt").write_text(
+              "\n".join(requirements) + "\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Download wheels and verify an offline install
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          python -m pip download --only-binary=:all: --no-deps \
+            --dest artifact -r /tmp/a1-2-resolved.txt
+          cp containers/a1_2_vast_4x3090/runtime/requirements.v2.txt \
+            artifact/requirements.v2.txt
+          if find artifact -maxdepth 1 -type f -iname 'torch-*.whl' | grep -q .; then
+            echo 'the base-supplied torch package must not be in the wheelhouse' >&2
+            exit 1
+          fi
+          python -m venv --system-site-packages /tmp/a1-2-offline
+          PIP_NO_INDEX=1 /tmp/a1-2-offline/bin/python -m pip install \
+            --no-index --find-links artifact -r artifact/requirements.v2.txt
+          HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
+            /tmp/a1-2-offline/bin/python - <<'PY'
+          import importlib.metadata
+          import os
+          import torch
+
+          expected = {
+              "accelerate": "1.6.0",
+              "pyyaml": "6.0.2",
+              "safetensors": "0.5.3",
+              "sentence-transformers": "4.1.0",
+              "transformers": "4.51.3",
+          }
+          assert torch.__version__ == "2.6.0+cu118", torch.__version__
+          assert torch.version.cuda == "11.8", torch.version.cuda
+          assert os.environ["HF_HUB_OFFLINE"] == "1"
+          assert os.environ["TRANSFORMERS_OFFLINE"] == "1"
+          for package, version in expected.items():
+              assert importlib.metadata.version(package) == version
+          import accelerate, safetensors, sentence_transformers, transformers, yaml
+          PY
+
+      - name: Write deterministic checksums and safe receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd artifact
+            find . -maxdepth 1 -type f ! -name SHA256SUMS \
+              -printf '%f\n' | LC_ALL=C sort | while IFS= read -r file; do
+                sha256sum "$file"
+              done > SHA256SUMS
+            sha256sum --check SHA256SUMS
+          )
+          python - <<'PY'
+          import hashlib
+          import importlib.metadata
+          import json
+          import platform
+          import sys
+          from pathlib import Path
+
+          root = Path("artifact")
+          receipt = {
+              "schema_version": "myis.owner-a1.2-wheelhouse-status.v5",
+              "status": "PASS",
+              "platform": "linux/amd64",
+              "machine": platform.machine(),
+              "python": f"{sys.version_info.major}.{sys.version_info.minor}",
+              "torch": "2.6.0+cu118",
+              "cuda": "11.8",
+              "dependencies": {
+                  name: importlib.metadata.version(name)
+                  for name in (
+                      "accelerate",
+                      "pyyaml",
+                      "safetensors",
+                      "sentence-transformers",
+                      "transformers",
+                  )
+              },
+              "wheel_count": len(list(root.glob("*.whl"))),
+              "torch_wheel_included": False,
+              "offline_install": "PASS",
+              "requirements_sha256": hashlib.sha256(
+                  (root / "requirements.v2.txt").read_bytes()
+              ).hexdigest(),
+              "sha256sums_sha256": hashlib.sha256(
+                  (root / "SHA256SUMS").read_bytes()
+              ).hexdigest(),
+              "contains_models_or_protected_data": False,
+          }
+          (root / "WHEELHOUSE_VALIDATION.json").write_text(
+              json.dumps(receipt, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Upload the Owner-local wheelhouse payload
+        uses: actions/upload-artifact@v4
+        with:
+          name: a1-2-direct-base-wheelhouse-v5
+          path: artifact/
+          if-no-files-found: error
+          retention-days: 7
