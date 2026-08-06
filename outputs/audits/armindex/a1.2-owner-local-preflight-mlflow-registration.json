@@ -1,0 +1,16 @@
+{
+  "credential_material_mirrored": false,
+  "evidence_class": "engineering_preflight",
+  "experiment": "myis-armindex-multiretriever-v2",
+  "mirror_key": "205bb16764c4daf72bb36044d512104499d9f0ce5b65f86d92ad4515a9ab45a2",
+  "mlflow_run_id": "0491aabb7f3b4c2fba1b1b6263886eb9",
+  "protected_artifacts_mirrored": false,
+  "registration_sha256": "65f304fe5045045dd3c43239f224bb9433ee3e94f4eecbcb20e7fd5f843d15bf",
+  "safe_projection_sha256": "483042142c0b1a0443ec6e425e1cc045e066ff080c60d9182664a3ce80791a92",
+  "safe_projection_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-safe.json",
+  "schema_version": "myis.armindex-a1.2-preflight-mlflow-registration.v1",
+  "scientific_authority": false,
+  "source_receipt_sha256": "9557aab753986f7d593d4f1f9916862204e54474d6b52fd1c3f5df096336a9d3",
+  "source_receipt_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json",
+  "status": "registered"
+}

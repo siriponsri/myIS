@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_contract_scaffold_complete_launch_locked`
-- Evidence class: engineering contract scaffold; scientific authority `false`
+- Status: `a1_2_vast_4x3090_preflight_prepared_launch_locked`
+- Evidence class: engineering preflight scaffold; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -58,16 +58,46 @@ evidence.
   using the fifteen-section machine/Markdown contract. The archive audit found
   no unused generated report: current and historical reports remain referenced
   by the generated manifest, validators, or artifact graph, so no report moved.
-- The A1.2 resource proposal is planning-only: one 24 GiB GPU (RTX 4090, RTX
+- The preserved A1.2 v1 resource proposal is planning-only: one 24 GiB GPU (RTX 4090, RTX
   3090, L4, or A10), 8-16 GPU hours, 10-20 hours end to end, USD 2.40-12.80 raw
   GPU estimate, and hard stops of USD 5 pilot, USD 18 screen, USD 23 A1, and
-  USD 100 campaign. A100/H100 is not required.
+  USD 100 campaign. A100/H100 is not required. This v1 proposal is historical,
+  unchanged, unadopted evidence.
 - The A1.2 offline execution scaffold is validated and receipt-bound. It adds
   `bm25s==0.3.10`, exact ARM-01 synthetic CPU rank-order parity, one versioned
   execution envelope, a hash-bound budget, five source locks, a lockset, an
   Owner-local launch checklist, a two-layer shutdown plan, an execution
   contract, and an append-only ledger. ARM-01 remains local CPU only with USD 0
   GPU budget.
+- The CPU-only Owner-local preflight runner was implemented and executed. Canonical
+  contract bindings passed; the aggregate-safe receipt is
+  `blocked_owner_input` because the four dense-arm manifests, Snowflake remote-code
+  byte hashes, Qwen measured maximum length, dense parity, storage, live quote/provider
+  identity, and termination/TTL evidence are not present in the workspace.
+- The preflight result has a scanner-safe MLflow projection and registration script.
+  MLflow is allowed to receive only hashes, counts, status, and safe pointers; the
+  canonical receipt remains the source of truth and no protected or sensitive bytes
+  are mirrored.
+- The additive `a1.2-local-vast-4x3090-v2` revision is prepared and validated
+  offline. Codex remains local and is the only canonical writer; `ARM-01` stays
+  on local CPU, while `ARM-02` through `ARM-05` are fixed to four RTX 3090 GPUs
+  in parallel on one disposable Vast SSH worker.
+- The synthetic four-worker orchestration passed `4/4` workers with zero
+  failures, no GPU use, no paid compute, and no measured retrieval. Its receipt
+  self-hash is `4c8e22e76308178bfe5909fea434b7db06f3b80f6f6615f3f5f74ccec598a6c7`.
+  The v2 migration receipt self-hash is
+  `869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600`.
+- The Owner planning rate is USD 0.60 per hour for the complete four-RTX3090
+  instance. The estimate is 2-4 instance-hours, or USD 1.20-2.40 raw worker
+  cost, plus 2-4 local hours. Hard stops remain USD 18 for the common screen,
+  USD 23 for A1, and USD 100 for the campaign; the live quote must fit or the
+  preflight stops `BLOCKED_BUDGET`.
+- The A1.2 v2 closeout audit passed 18 validation groups: 428 full-suite
+  tests, 19 focused A1.2 tests, 21 safety/report/session tests, 21 Dashboard/API
+  tests, 16 MLflow doctor checks, 154 Brain literature notes, 5 registered
+  assets, 28 Markdown link files, two PowerShell scripts with zero parse errors,
+  and two byte-stable final report sync/check cycles. The audit self-hash is
+  `fe2e2b48324e18d7de1a50413831462f942222a11cfdf4bda9f53a35421a2646`.
 - Public revisions and critical artifact commitments are frozen for BGE-M3,
   PatEmbed-large, Snowflake Arctic Embed M v2.0, and Qwen3-Embedding-0.6B. No
   model payload was downloaded. The four dense locks remain
@@ -87,25 +117,28 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-No scaffold integrity blocker is currently known. A1.2 scientific execution
-remains deliberately locked until the Owner-local runtime manifests, dense
-adapter parity, Qwen measured maximum length, live quote/capacity, storage, and
-external provider-termination dry run pass and the unchanged contract is
-explicitly adopted. The root software license requires an Owner legal decision
-before external release; this does not block preflight.
+The v1 and v2 integrity checks pass. A1.2 scientific execution remains
+deliberately locked because the live Owner preflight has not bound the exact
+commit/tree/image digest, four GPU UUIDs, runtime/model manifests, dense adapter
+parity, Qwen measured maximum length, live quote/identity, storage, heartbeat/
+resume, and provider-destruction proof. The root
+software license requires an Owner legal decision before external release; this
+does not block the CPU preflight.
 
 ## Active authorized action
 
-Run only the Owner-local A1.2 artifact-manifest and provider-termination dry-run
-preflight on CPU. The exact next task is:
+Run only the Owner-local SSH/Vast A1.2 preflight from the immutable beginner
+runbook. The exact next task is:
 
 ```text
-/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
-The Owner is now needed for the next preflight: make the protected root
-available read-only to the runner, pre-stage frozen model/tokenizer and
-remote-code artifacts, provide complete local byte manifests, keep Vast or
-equivalent credentials outside the agent workspace, bind a live quote and
-instance identity, and dry-run provider termination/TTL. No GPU capacity should
-be reserved until those checks pass and the unchanged contract is adopted.
+The Owner is now needed to follow
+`docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md`: stage frozen artifacts and
+complete `SHA256SUMS` files outside Git, build and bind the OCI image digest,
+confirm a live quote, open one matching four-RTX3090 instance, run the exact
+local coordinator/watchdog commands, collect only allowlisted outputs, and
+destroy and verify the provider instance. Access material and every protected
+surface remain local. Passing the preflight still does not adopt the revision
+or authorize scientific execution.

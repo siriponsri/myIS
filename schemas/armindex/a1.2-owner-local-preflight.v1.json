@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a1.2-owner-local-preflight:v1",
+  "title": "A1.2 Owner-local CPU preflight receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "status", "phase_id", "task_id",
+    "evidence_class", "scientific_authority", "generated_at", "cpu_only",
+    "canonical_bindings", "blockers", "launch_ready", "execution_contract_adopted",
+    "gpu_reserved", "measured_execution", "protected_data_accessed",
+    "credentials_accessed", "real_counters", "resource_counters",
+    "claim_boundary", "next_authorized_action", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-owner-local-preflight.v1"},
+    "receipt_id": {"type": "string", "pattern": "^a1\\.2-owner-local-preflight-[0-9TZ-]+$"},
+    "status": {"enum": ["blocked_owner_input", "passed_pending_owner_adoption"]},
+    "phase_id": {"const": "A1_BASELINES_AND_MULTI_ARM_SCREENING"},
+    "task_id": {"const": "A1.2"},
+    "evidence_class": {"const": "engineering_preflight"},
+    "scientific_authority": {"const": false},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "cpu_only": {"const": true},
+    "owner_input": {"type": "object"},
+    "canonical_bindings": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+    },
+    "blockers": {"type": "array", "items": {"type": "string"}},
+    "launch_ready": {"const": false},
+    "execution_contract_adopted": {"const": false},
+    "gpu_reserved": {"const": false},
+    "measured_execution": {"const": false},
+    "protected_data_accessed": {"const": false},
+    "credentials_accessed": {"const": false},
+    "real_counters": {
+      "type": "object", "additionalProperties": {"const": 0}
+    },
+    "resource_counters": {
+      "type": "object",
+      "properties": {"charged_usd": {"const": 0}},
+      "required": ["charged_usd"],
+      "additionalProperties": {"type": "number", "minimum": 0}
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "next_authorized_action": {"type": "string", "minLength": 1},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

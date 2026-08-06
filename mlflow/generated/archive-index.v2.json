@@ -36,6 +36,39 @@
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json",
     "status": "a1_2_contract_scaffold_complete_launch_locked"
   },
+  "armindex_a1_2_vast_preflight": {
+    "adopted_for_execution": false,
+    "closeout_validation_audit_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+    "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+    "closeout_validation_check_count": 18,
+    "closeout_validation_recovery_count": 2,
+    "estimated_instance_hours": "2-4",
+    "estimated_raw_worker_usd": "1.20-2.40",
+    "evidence_class": "engineering_preflight_scaffold",
+    "gpu_count": 4,
+    "launch_allowed": false,
+    "planning_rate_usd_per_instance_hour": 0.6,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_reservations": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+    "status": "offline_preparation_complete_live_owner_preflight_pending",
+    "synthetic_receipt_sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
+    "synthetic_receipt_uri": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
+    "synthetic_worker_count": 4
+  },
   "armindex_a1_adapter_fixture": {
     "dense_arms_blocked": 4,
     "evidence_class": "engineering_fixture",
@@ -81,7 +114,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a",
+  "dashboard_snapshot_sha256": "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -114,7 +147,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "8ad1998d191b46e98a4273899a80d3ac66e9cf628a027c5f937ac5c9f385b708",
+  "obsidian_manifest_sha256": "81ba6b5d0c05009ac4c3000552e964ed0fdf9fad4d822f26d0c8cbe42e7ac78c",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -152,8 +185,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
-  "read_model_sha256": "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a",
+  "read_model_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
+  "read_model_sha256": "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",

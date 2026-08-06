@@ -212,9 +212,10 @@ assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
 The current state must agree everywhere: ArmIndex is the active campaign,
 SCOPE is historical read-only, all A0 Tasks and A1.1 are complete, measured
 ArmIndex counters remain zero, Selection and Final remain closed, and the next
-action is exactly the offline A1.2 execution-contract, budget-profile,
-model-lock, adapter-lock, and Owner-local launch-checklist scaffold in
-`HANDOFF.md`. This scaffold must validate before any GPU reservation.
+action is exactly the Owner-local SSH/Vast preflight for the immutable A1.2
+local-orchestrated four-RTX3090 revision in `HANDOFF.md`. The offline scaffold
+is complete; the live preflight must keep `launch_allowed=false` and
+`adopted_for_execution=false` and must stop before scientific execution.
 Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
 fixture is `passed`, and measured P2 was not started. A stale narrative is a
 validation failure, not a documentation preference.
@@ -228,4 +229,6 @@ in `docs/observatory/REPORTING_POLICY.md` and
 Report the exact phase, task, status, checks, changed files, untouched
 protected surfaces, evidence class, blockers, and next automatic action. Do not
 claim P1 measured completion unless a protected Owner-local run actually
-completed. Keep the next action reversible and CPU-only until D2 is requested.
+completed. Keep the next action limited to the launch-locked Owner-local
+SSH/Vast preflight; `D2_OPEN_FINAL` remains closed and does not authorize A1.2
+scientific execution.

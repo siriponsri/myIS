@@ -226,14 +226,15 @@ def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked
 def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> None:
     projection = _a12_contract_scaffold_projection(ROOT)
 
-    assert projection["status"] == "a1_2_contract_scaffold_complete_launch_locked"
+    assert projection["status"] == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
     assert projection["validated"] is True
-    assert projection["evidence_class"] == "engineering_contract_scaffold"
+    assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
+    assert projection["evidence_class"] == "engineering_preflight_scaffold"
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
     assert projection["dense_artifact_manifests_pending"] == 4
-    assert projection["owner_requirements_pending"] == 9
+    assert projection["owner_requirements_pending"] == 16
     assert projection["launch_ready"] is False
     assert projection["measured_execution"] is False
     assert projection["budget_limits"]["arm01_gpu_usd"] == 0
@@ -246,6 +247,24 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert set(projection["real_counters"].values()) == {0}
     assert set(projection["resource_counters"].values()) == {0}
     assert projection["next_authorized_action"] == A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
+    vast = projection["vast_preflight_v2"]
+    assert vast["validated"] is True
+    assert vast["gpu_count"] == 4
+    assert vast["gpu_model"] == "NVIDIA GeForce RTX 3090"
+    assert vast["synthetic_worker_count"] == 4
+    assert vast["planning_rate_usd"] == 0.6
+    assert vast["estimated_instance_hours_min"] == 2
+    assert vast["estimated_instance_hours_max"] == 4
+    assert vast["estimated_raw_worker_usd_min"] == 1.2
+    assert vast["estimated_raw_worker_usd_max"] == 2.4
+    assert vast["launch_allowed"] is False
+    assert vast["adopted_for_execution"] is False
+    assert len(vast["jobs"]) == 4
+    assert vast["closeout_validation_check_count"] == 18
+    assert vast["closeout_validation_recovery_count"] == 2
+    assert vast["closeout_validation_audit_sha256"]
+    assert set(vast["real_counters"].values()) == {0}
+    assert set(vast["resource_counters"].values()) == {0}
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

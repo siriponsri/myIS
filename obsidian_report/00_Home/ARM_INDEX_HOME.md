@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
-read_model_sha256: "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a"
+read_model_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
+read_model_sha256: "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da"
 source_commit: "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
+generated_from_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
 last_material_update: "2026-08-05T15:56:15Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
@@ -36,17 +36,17 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 
 - Campaign: `armindex-multiretriever-v2`
 - Phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Status: `a1_2_contract_scaffold_complete_launch_locked`
+- Status: `a1_2_vast_4x3090_preflight_prepared_launch_locked`
 
 ## Retrieval arms
 
 | Arm | Model | Adapter | Representation | Commercial status |
 |---|---|---|---|---|
 | `ARM-01` | `lexical/bm25s` | bm25s_cpu_lock_and_synthetic_rank_parity_validated | not_started | commercial_capable |
-| `ARM-02` | `BAAI/bge-m3` | source_metadata_frozen_owner_artifacts_pending | not_started | commercial_capable |
-| `ARM-03` | `datalyes/patembed-large` | source_metadata_frozen_owner_artifacts_pending | not_started | research_non_commercial |
-| `ARM-04` | `Snowflake/snowflake-arctic-embed-m-v2.0` | source_metadata_frozen_owner_artifacts_pending | not_started | commercial_capable |
-| `ARM-05` | `Qwen/Qwen3-Embedding-0.6B` | source_metadata_frozen_owner_artifacts_pending | not_started | commercial_capable |
+| `ARM-02` | `BAAI/bge-m3` | v2_parallel_worker_prepared_owner_live_preflight_pending | not_started | commercial_capable |
+| `ARM-03` | `datalyes/patembed-large` | v2_parallel_worker_prepared_owner_live_preflight_pending | not_started | research_non_commercial |
+| `ARM-04` | `Snowflake/snowflake-arctic-embed-m-v2.0` | v2_parallel_worker_prepared_owner_live_preflight_pending | not_started | commercial_capable |
+| `ARM-05` | `Qwen/Qwen3-Embedding-0.6B` | v2_parallel_worker_prepared_owner_live_preflight_pending | not_started | commercial_capable |
 
 ## Optimization status
 
@@ -66,7 +66,7 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 
 ## Next command
 
-`/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.`
+`/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.`
 
 ## Historical evidence
 

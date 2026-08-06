@@ -323,15 +323,411 @@
       "scientific_authority": false,
       "title": "A1.2 closeout validation audit",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-owner-local-preflight",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2c3ce75d23c8909f8d345295538a4eb230e436970f488b837d887405c754ca57",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Records the CPU-only fail-closed artifact, provider, storage, and termination preflight without exposing Owner-local bytes or access material.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json",
+      "scientific_authority": false,
+      "title": "A1.2 Owner-local CPU preflight receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-owner-local-mlflow-registration",
+      "artifact_type": "result",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "84855affa318db91f2853ebeef972d8ef4cac300d531e1563fd342dcce0c6cbc",
+      "evidence_class": "engineering_contract_scaffold",
+      "explanation": "Binds the aggregate-safe preflight result and MLflow mirror registration while keeping protected artifacts outside MLflow.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json",
+      "scientific_authority": false,
+      "title": "A1.2 MLflow safe preflight registration",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-migration-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Binds the additive local-orchestrated four-GPU preparation while preserving every v1 source byte and keeping launch and adoption false.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast 4xRTX3090 migration receipt v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-execution-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ee1709d3f2557c8810505388fd82bb668905f0b166905c201d2f3e4d5f43da85",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Freezes the local canonical-writer and disposable remote-worker boundary with one dense arm per GPU.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast 4xRTX3090 execution contract v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-synthetic-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Records a four-subprocess CPU-only orchestration pass with no GPU reservation, paid compute, or scientific measurement.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
+      "scientific_authority": false,
+      "title": "A1.2 synthetic four-worker receipt",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-budget",
+      "artifact_type": "budget",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Records the Owner planning rate of USD 0.60 per complete four-GPU instance-hour, the USD 1.20-2.40 estimate, and unchanged hard stops.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast 4xRTX3090 budget profile v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-topology",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "92ada300e29426f39f27095e08a92332974b23a6412099e09f5348920e44a4b2",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Assigns ARM-02 through ARM-05 to fixed GPU slots while all canonical and protected surfaces remain local.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/topology-contract.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 local-Codex remote-four-GPU topology",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-runtime",
+      "artifact_type": "lockset",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "df4094edde1b69a9b15c2cc24a574d733c23a818380c21fe898b441e3567d336",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Freezes the Python, CUDA, PyTorch, package, and offline-install runtime contract; live image digest remains pending.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/runtime-lock.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast runtime lock v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-image",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "49fa3ffda00d9466326e005dce7cbebc8a090bc167fc5292b1279461dc03327b",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Requires immutable base and built-image identities before upload or remote start.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/image-digest-contract.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 OCI image digest contract v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-checklist",
+      "artifact_type": "checklist",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f0539e0baa359b1b1218811097e2b1238eec44b9708db45347f982ab6fa61d16",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Enumerates the live Owner checks that must pass before the unchanged revision can be considered for adoption.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/launch-checklist.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast live preflight checklist v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-shutdown",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "4c560d28a265c847343270adbecc6d850ee900c8680ec03ddc61f9697422469f",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Requires provider destruction and verification from the Owner-local watchdog; guest poweroff is explicitly insufficient.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/shutdown-plan.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 Owner-local termination plan v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-allowlist",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "55e027de43ce48b9cf85b54598fd92f1119bc9a51940ce75ba754fcc5901fa91",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Restricts collected remote outputs to declared aggregate-safe receipts, logs, hashes, and checkpoints.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/safe-export-allowlist.v2.json",
+      "scientific_authority": false,
+      "title": "A1.2 remote safe-export allowlist v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "98eb5dda969b034c723fd00eb561664c370f2a76f12c591c9d0c495a7e7dcfb1",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Defines the offline preparation, live Owner preflight, hard stops, and launch-lock acceptance boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md",
+      "scientific_authority": false,
+      "title": "A1.2 Vast preflight runbook v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-owner-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "9019036b721b03dcbaa5525668dcc63c6827e6c9b6dbb3715c90ab62c633ca2f",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Provides exact local PowerShell commands without embedding access material or protected benchmark content.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-coordinator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "88e30d1211cd8260e3f76045a9631982aabbbb0d7cac2d5fb36d455540aa00d2",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Implements upload, verification, bootstrap, status, collection, and teardown from the Owner-local machine.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/Invoke-A12VastCoordinator.ps1",
+      "scientific_authority": false,
+      "title": "A1.2 local SSH coordinator",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-watchdog",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c6eaca0457b20be05a83d54a0d1ef96f2489b5bb1e4788e90396ef45458ad7b2",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Monitors heartbeat and TTL, invokes provider destruction, and requires destruction verification.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/Invoke-A12VastWatchdog.ps1",
+      "scientific_authority": false,
+      "title": "A1.2 Owner-local TTL watchdog",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-ledger",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "3a9a6d8ee840f98405abeae714c909b9aecb202336c857bad8bddfe637e5803a",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Hash-chains preparation start, synthetic orchestration, and the immutable migration receipt.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/vast-4x3090-preflight-ledger.v2.jsonl",
+      "scientific_authority": false,
+      "title": "A1.2 Vast preflight ledger v2",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-closeout-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Records the offline validation matrix, two bounded recoveries, zero counters, and untouched protected and paid-worker surfaces.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast preflight closeout validation audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-02",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a82f3c2c276529f1a2f04bc1728a06bdc5c40d8a0d9d019a5a536c4b089e2d6b",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Freezes one arm, one visible GPU slot, isolated outputs, checkpoint policy, heartbeat, and safe-export behavior.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/v2/ARM-02.json",
+      "scientific_authority": false,
+      "title": "A1.2 immutable ARM-02 remote job",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-03",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "20b21cfcd4b256b1ca8b61a53584c70940e0ea278d4a072cae2aa99a410822a2",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Freezes one arm, one visible GPU slot, isolated outputs, checkpoint policy, heartbeat, and safe-export behavior.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/v2/ARM-03.json",
+      "scientific_authority": false,
+      "title": "A1.2 immutable ARM-03 remote job",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-04",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e4c8c562b222b835fd50afc59d92180f7defffd5ec0a2902d845d2e9b2dca5ed",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Freezes one arm, one visible GPU slot, isolated outputs, checkpoint policy, heartbeat, and safe-export behavior.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/v2/ARM-04.json",
+      "scientific_authority": false,
+      "title": "A1.2 immutable ARM-04 remote job",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-05",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a787141e7168567b8b2294333c6883d93080546f15efe349d938ceb766bbd6a3",
+      "evidence_class": "engineering_preflight_scaffold",
+      "explanation": "Freezes one arm, one visible GPU slot, isolated outputs, checkpoint policy, heartbeat, and safe-export behavior.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/v2/ARM-05.json",
+      "scientific_authority": false,
+      "title": "A1.2 immutable ARM-05 remote job",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "offline_scaffold_only_no_measured_retrieval_claim",
+  "claim_boundary": "offline_synthetic_preparation_only_live_vast_and_scientific_execution_unstarted",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1 engineering scaffolding is current; A1.2 scientific screening remains unexecuted and measured, Selection, and Final counters remain zero.",
+    "reason": "A1 engineering preparation is current through the immutable v2 receipt; 16 live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.",
     "status": "active"
   },
-  "evidence_class": "engineering_contract_scaffold",
+  "evidence_class": "engineering_preflight_scaffold",
   "evidence_links": [
     {
       "artifact_id": "a11-adapter-task-receipt",
@@ -422,6 +818,116 @@
       "artifact_id": "a12-closeout-validation-audit",
       "sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
+    },
+    {
+      "artifact_id": "a12-owner-local-preflight",
+      "sha256": "2c3ce75d23c8909f8d345295538a4eb230e436970f488b837d887405c754ca57",
+      "uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json"
+    },
+    {
+      "artifact_id": "a12-owner-local-mlflow-registration",
+      "sha256": "84855affa318db91f2853ebeef972d8ef4cac300d531e1563fd342dcce0c6cbc",
+      "uri": "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-migration-receipt",
+      "sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-execution-contract",
+      "sha256": "ee1709d3f2557c8810505388fd82bb668905f0b166905c201d2f3e4d5f43da85",
+      "uri": "control/armindex/a1.2/execution-contract.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-synthetic-receipt",
+      "sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
+      "uri": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-budget",
+      "sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
+      "uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-topology",
+      "sha256": "92ada300e29426f39f27095e08a92332974b23a6412099e09f5348920e44a4b2",
+      "uri": "control/armindex/a1.2/topology-contract.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-runtime",
+      "sha256": "df4094edde1b69a9b15c2cc24a574d733c23a818380c21fe898b441e3567d336",
+      "uri": "control/armindex/a1.2/runtime-lock.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-image",
+      "sha256": "49fa3ffda00d9466326e005dce7cbebc8a090bc167fc5292b1279461dc03327b",
+      "uri": "control/armindex/a1.2/image-digest-contract.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-checklist",
+      "sha256": "f0539e0baa359b1b1218811097e2b1238eec44b9708db45347f982ab6fa61d16",
+      "uri": "control/armindex/a1.2/launch-checklist.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-shutdown",
+      "sha256": "4c560d28a265c847343270adbecc6d850ee900c8680ec03ddc61f9697422469f",
+      "uri": "control/armindex/a1.2/shutdown-plan.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-allowlist",
+      "sha256": "55e027de43ce48b9cf85b54598fd92f1119bc9a51940ce75ba754fcc5901fa91",
+      "uri": "control/armindex/a1.2/safe-export-allowlist.v2.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-runbook",
+      "sha256": "98eb5dda969b034c723fd00eb561664c370f2a76f12c591c9d0c495a7e7dcfb1",
+      "uri": "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md"
+    },
+    {
+      "artifact_id": "a12-vast-v2-owner-runbook",
+      "sha256": "9019036b721b03dcbaa5525668dcc63c6827e6c9b6dbb3715c90ab62c633ca2f",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md"
+    },
+    {
+      "artifact_id": "a12-vast-v2-coordinator",
+      "sha256": "88e30d1211cd8260e3f76045a9631982aabbbb0d7cac2d5fb36d455540aa00d2",
+      "uri": "scripts/a1_2_vast/Invoke-A12VastCoordinator.ps1"
+    },
+    {
+      "artifact_id": "a12-vast-v2-watchdog",
+      "sha256": "c6eaca0457b20be05a83d54a0d1ef96f2489b5bb1e4788e90396ef45458ad7b2",
+      "uri": "scripts/a1_2_vast/Invoke-A12VastWatchdog.ps1"
+    },
+    {
+      "artifact_id": "a12-vast-v2-ledger",
+      "sha256": "3a9a6d8ee840f98405abeae714c909b9aecb202336c857bad8bddfe637e5803a",
+      "uri": "control/armindex/a1.2/vast-4x3090-preflight-ledger.v2.jsonl"
+    },
+    {
+      "artifact_id": "a12-vast-v2-closeout-audit",
+      "sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-02",
+      "sha256": "a82f3c2c276529f1a2f04bc1728a06bdc5c40d8a0d9d019a5a536c4b089e2d6b",
+      "uri": "control/armindex/a1.2/jobs/v2/ARM-02.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-03",
+      "sha256": "20b21cfcd4b256b1ca8b61a53584c70940e0ea278d4a072cae2aa99a410822a2",
+      "uri": "control/armindex/a1.2/jobs/v2/ARM-03.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-04",
+      "sha256": "e4c8c562b222b835fd50afc59d92180f7defffd5ec0a2902d845d2e9b2dca5ed",
+      "uri": "control/armindex/a1.2/jobs/v2/ARM-04.json"
+    },
+    {
+      "artifact_id": "a12-vast-v2-job-arm-05",
+      "sha256": "a787141e7168567b8b2294333c6883d93080546f15efe349d938ceb766bbd6a3",
+      "uri": "control/armindex/a1.2/jobs/v2/ARM-05.json"
     }
   ],
   "failure_recovery_references": [
@@ -494,15 +1000,35 @@
       "recovery_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "recovery_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-v2-pyproject-v1-source-binding-drift-20260806",
+      "failure_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "failure_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+      "recovery_id": "a1.2-v2-module-command-v1-byte-preservation-20260806",
+      "recovery_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "recovery_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+      "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-v2-stale-generated-projection-source-20260806",
+      "failure_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "failure_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+      "recovery_id": "a1.2-v2-receipt-first-shared-read-model-sync-20260806",
+      "recovery_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "recovery_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+      "status": "repaired_and_validated"
     }
   ],
   "generated_at": "2026-08-05T15:56:15Z",
-  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "generated_from_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
   "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering_contract_scaffold",
+    "evidence_class": "engineering_preflight_scaffold",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -544,7 +1070,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_contract_scaffold_complete_launch_locked",
+      "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -561,16 +1087,44 @@
       "sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
       "uri": "control/armindex/a1.2/model-lockset.v1.json"
     },
+    "a12_owner_local_mlflow_registration": {
+      "sha256": "84855affa318db91f2853ebeef972d8ef4cac300d531e1563fd342dcce0c6cbc",
+      "uri": "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json"
+    },
+    "a12_owner_local_preflight": {
+      "blocker_count": 10,
+      "sha256": "2c3ce75d23c8909f8d345295538a4eb230e436970f488b837d887405c754ca57",
+      "status": "blocked_owner_input",
+      "uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json"
+    },
     "a12_shutdown_plan": {
       "sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "uri": "control/armindex/a1.2/shutdown-plan.v1.json"
+    },
+    "a12_vast_v2_budget": {
+      "sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
+      "uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json"
+    },
+    "a12_vast_v2_closeout_validation": {
+      "check_count": 18,
+      "sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+      "uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json"
+    },
+    "a12_vast_v2_receipt": {
+      "sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+      "status": "offline_preparation_complete_live_owner_preflight_pending",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json"
+    },
+    "a12_vast_v2_topology": {
+      "sha256": "92ada300e29426f39f27095e08a92332974b23a6412099e09f5348920e44a4b2",
+      "uri": "control/armindex/a1.2/topology-contract.v2.json"
     },
     "armindex_schema_root": {
       "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
+      "sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
@@ -584,11 +1138,11 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
+      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "A1 now has a reproducible CPU anchor and a bounded pre-GPU contract. Scientific completion still requires Owner-local artifact validation, explicit adoption, and the separately authorized common screen.",
+  "interpretation": "The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, and fail-closed export and shutdown paths. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
   "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [
@@ -681,16 +1235,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
+  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "bf5235a585f8de191b96720a6b19f0698d73feaf266bcb6dfb89410e51a772fa",
+  "report_sha256": "dd3993cf9d4bcf88327b89e07524230c99a0578d6d88d39d5bcce5acc18cc48a",
   "report_type": "phase",
   "result": {
     "decision": "active",
-    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture and a validated, launch-locked A1.2 execution scaffold for 5 arms.",
-    "result": "A1 engineering scaffolding is current; A1.2 scientific screening remains unexecuted and measured, Selection, and Final counters remain zero."
+    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and the additive four-RTX3090 v2 preparation with 4 synthetic workers.",
+    "result": "A1 engineering preparation is current through the immutable v2 receipt; 16 live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -698,13 +1252,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_contract_scaffold_complete_launch_locked",
+    "program_state": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
     "task": null
   },
   "status": "active",
   "supported_claims": [
     {
-      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture and a validated, launch-locked A1.2 execution scaffold for 5 arms.",
+      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and the additive four-RTX3090 v2 preparation with 4 synthetic workers.",
       "evidence": [
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
@@ -723,7 +1277,29 @@
         "a12-scaffold-runbook",
         "a12-scaffold-ledger",
         "a12-report-archive-audit",
-        "a12-closeout-validation-audit"
+        "a12-closeout-validation-audit",
+        "a12-owner-local-preflight",
+        "a12-owner-local-mlflow-registration",
+        "a12-vast-v2-migration-receipt",
+        "a12-vast-v2-execution-contract",
+        "a12-vast-v2-synthetic-receipt",
+        "a12-vast-v2-budget",
+        "a12-vast-v2-topology",
+        "a12-vast-v2-runtime",
+        "a12-vast-v2-image",
+        "a12-vast-v2-checklist",
+        "a12-vast-v2-shutdown",
+        "a12-vast-v2-allowlist",
+        "a12-vast-v2-runbook",
+        "a12-vast-v2-owner-runbook",
+        "a12-vast-v2-coordinator",
+        "a12-vast-v2-watchdog",
+        "a12-vast-v2-ledger",
+        "a12-vast-v2-closeout-audit",
+        "a12-vast-v2-job-arm-02",
+        "a12-vast-v2-job-arm-03",
+        "a12-vast-v2-job-arm-04",
+        "a12-vast-v2-job-arm-05"
       ]
     }
   ],

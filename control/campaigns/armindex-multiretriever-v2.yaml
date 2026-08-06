@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a1_2_contract_scaffold_complete_launch_locked
-  evidence_class: engineering_contract_scaffold
+  status: a1_2_vast_4x3090_preflight_prepared_launch_locked
+  evidence_class: engineering_preflight_scaffold
   scientific_authority: false
-  claim_boundary: offline_a1_2_scaffold_and_arm01_synthetic_cpu_rank_parity_only_no_measured_retrieval
+  claim_boundary: offline_a1_2_four_worker_synthetic_preparation_only_live_vast_and_scientific_execution_unstarted
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -42,6 +42,12 @@ contracts:
   a1_2_execution_contract: control/armindex/a1.2/execution-contract.v1.json
   a1_2_budget_profile: control/budgets/a1.2-common-screen-v1.json
   a1_2_model_lockset: control/armindex/a1.2/model-lockset.v1.json
+  a1_2_vast_execution_contract: control/armindex/a1.2/execution-contract.v2.json
+  a1_2_vast_budget_profile: control/budgets/a1.2-common-screen-vast-4x3090-v2.json
+  a1_2_vast_topology: control/armindex/a1.2/topology-contract.v2.json
+  a1_2_vast_runtime_lock: control/armindex/a1.2/runtime-lock.v2.json
+  a1_2_vast_launch_checklist: control/armindex/a1.2/launch-checklist.v2.json
+  a1_2_vast_shutdown_plan: control/armindex/a1.2/shutdown-plan.v2.json
 
 phases:
   - id: A0_MIGRATION_FOUNDATION
@@ -61,9 +67,9 @@ phases:
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: a1_2_contract_scaffold_complete_launch_locked
+    status: a1_2_vast_4x3090_preflight_prepared_launch_locked
     measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: contract_scaffold_complete_launch_locked}]
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: a1_2_vast_4x3090_preflight_prepared_launch_locked}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
     status: locked_until_A1
@@ -105,3 +111,6 @@ budget:
   cpu_only: true
   paid_api: false
   gpu_scientific_run: false
+  a1_2_planning_rate_usd_per_four_gpu_instance_hour: 0.6
+  a1_2_estimated_instance_hours: 2-4
+  a1_2_estimated_raw_worker_usd: 1.20-2.40

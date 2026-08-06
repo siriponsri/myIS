@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
-read_model_sha256: "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a"
+read_model_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
+read_model_sha256: "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da"
 source_commit: "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,9 +11,9 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
+generated_from_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
 last_material_update: "2026-08-05T15:56:15Z"
-next_authorized_action: "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted."
+next_authorized_action: "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -40,14 +40,14 @@ Search and freeze one representation program per promoted arm.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_contract_scaffold_complete_launch_locked
+- `program_state`: a1_2_vast_4x3090_preflight_prepared_launch_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7`
 - `git_commit`: 1149f9e63ac6174a3ce4bc5a553d793b7d707b0b
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
@@ -120,7 +120,7 @@ Status: **blocked**. A2_PER_ARM_AUTOINDEX is blocked; ArmIndex measured runs, Se
 
 ## Next Action
 
-/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

@@ -174,6 +174,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
     adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
     scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
+    vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -243,8 +244,8 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "final_accesses": adapter.get("final_accesses", 0),
         },
         "armindex_a1_2_contract_scaffold": {
-            "status": scaffold.get("status", "not_started"),
-            "evidence_class": scaffold.get("evidence_class", "engineering_contract_scaffold"),
+            "status": scaffold.get("v1_status", scaffold.get("status", "not_started")),
+            "evidence_class": "engineering_contract_scaffold",
             "scientific_authority": scaffold.get("scientific_authority", False),
             "source_receipt_uri": scaffold.get("receipt_uri"),
             "source_receipt_sha256": scaffold.get("receipt_sha256"),
@@ -254,6 +255,28 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "measured_execution": scaffold.get("measured_execution", False),
             "real_counters": scaffold.get("real_counters", {}),
             "resource_counters": scaffold.get("resource_counters", {}),
+        },
+        "armindex_a1_2_vast_preflight": {
+            "status": vast.get("status", "not_started"),
+            "evidence_class": "engineering_preflight_scaffold",
+            "scientific_authority": False,
+            "source_receipt_uri": vast.get("receipt_uri"),
+            "source_receipt_sha256": vast.get("receipt_sha256"),
+            "synthetic_receipt_uri": vast.get("synthetic_receipt_uri"),
+            "synthetic_receipt_sha256": vast.get("synthetic_receipt_sha256"),
+            "closeout_validation_audit_uri": vast.get("closeout_validation_audit_uri"),
+            "closeout_validation_audit_sha256": vast.get("closeout_validation_audit_sha256"),
+            "closeout_validation_check_count": vast.get("closeout_validation_check_count", 0),
+            "closeout_validation_recovery_count": vast.get("closeout_validation_recovery_count", 0),
+            "gpu_count": vast.get("gpu_count", 0),
+            "synthetic_worker_count": vast.get("synthetic_worker_count", 0),
+            "planning_rate_usd_per_instance_hour": vast.get("planning_rate_usd", 0),
+            "estimated_instance_hours": vast.get("estimated_instance_hours", "unavailable"),
+            "estimated_raw_worker_usd": vast.get("estimated_raw_worker_usd", "unavailable"),
+            "launch_allowed": vast.get("launch_allowed", False),
+            "adopted_for_execution": vast.get("adopted_for_execution", False),
+            "real_counters": vast.get("real_counters", {}),
+            "resource_counters": vast.get("resource_counters", {}),
         },
         "observatory": {
             "status": observatory.get("status", "not_available"),
@@ -327,9 +350,20 @@ def _a010_projection_lifecycle(
     closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
     adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
     scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
+    vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
     if (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_contract_scaffold_complete_launch_locked"
+        and scaffold.get("status") == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+        and vast.get("validated") is True
+    ):
+        source_uri = vast.get("receipt_uri")
+        source_sha256 = vast.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
+        scaffold.get("validated") is True
+        and scaffold.get("v1_status", scaffold.get("status"))
+        == "a1_2_contract_scaffold_complete_launch_locked"
     ):
         source_uri = scaffold.get("receipt_uri")
         source_sha256 = scaffold.get("receipt_sha256")
@@ -2085,6 +2119,7 @@ def _workflow_status(value: Any) -> str:
         "active": "in_progress",
         "a1_1_complete_a1_2_contract_locked": "in_progress",
         "a1_2_contract_scaffold_complete_launch_locked": "in_progress",
+        "a1_2_vast_4x3090_preflight_prepared_launch_locked": "waiting_dependency",
         "contract_scaffold_complete_launch_locked": "waiting_dependency",
         "complete": "complete",
         "completed": "complete",

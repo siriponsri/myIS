@@ -1,0 +1,74 @@
+{
+  "schema_version": "myis.armindex-a1.2-vast-4x3090-closeout-validation-audit.v2",
+  "audit_id": "a1.2-vast-4x3090-preflight-closeout-validation-20260806",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "revision_id": "a1.2-local-vast-4x3090-v2",
+  "status": "PASS",
+  "completed_at_utc": "2026-08-05T23:58:35Z",
+  "evidence_class": "engineering_validation",
+  "scientific_authority": false,
+  "claim_boundary": "offline_synthetic_four_worker_preparation_and_projection_validation_only_no_live_vast_or_retrieval_quality_authority",
+  "source_receipt": {
+    "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+    "file_sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+    "receipt_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600"
+  },
+  "check_count": 18,
+  "check_groups": [
+    {"check_id": "a1_2_v1_scaffold_preservation", "status": "PASS", "observed_count": 16, "unit": "hash_bound_v1_files"},
+    {"check_id": "a1_2_v2_preflight_revision_validation", "status": "PASS", "observed_count": 14, "unit": "validated_v2_control_files", "job_count": 4},
+    {"check_id": "offline_synthetic_four_worker_orchestration", "status": "PASS", "observed_count": 4, "unit": "completed_workers", "failure_count": 0},
+    {"check_id": "powershell_coordinator_and_watchdog_parse", "status": "PASS", "observed_count": 2, "unit": "scripts", "parse_error_count": 0},
+    {"check_id": "shared_read_model_and_projection_cycle", "status": "PASS", "observed_count": 301, "unit": "projection_outputs", "drift": false},
+    {"check_id": "registered_phase_task_reports", "status": "PASS", "observed_count": 39, "unit": "detailed_english_reports", "phase_reports": 12, "task_reports": 27, "required_sections": 15},
+    {"check_id": "artifact_checksum_protected_path_and_report_safety", "status": "PASS", "observed_count": 21, "unit": "focused_tests"},
+    {"check_id": "asset_registry_full_validation", "status": "PASS", "observed_count": 5, "unit": "registered_assets"},
+    {"check_id": "layout_validation", "status": "PASS", "observed_count": 0, "unit": "missing_or_stale_roots"},
+    {"check_id": "markdown_link_validation", "status": "PASS", "observed_count": 28, "unit": "files_checked"},
+    {"check_id": "session_capsule_audit", "status": "PASS", "observed_count": 22, "unit": "classified_capsules", "unresolved_invalid_count": 0},
+    {"check_id": "dashboard_and_api", "status": "PASS", "observed_count": 21, "unit": "tests"},
+    {"check_id": "repository_safe_mlflow_doctor", "status": "PASS", "observed_count": 16, "unit": "doctor_checks"},
+    {"check_id": "brain_literature_validation", "status": "PASS", "observed_count": 154, "unit": "unique_literature_notes"},
+    {"check_id": "full_test_suite", "status": "PASS", "observed_count": 428, "unit": "tests", "warnings": 1},
+    {"check_id": "focused_a1_2_integration", "status": "PASS", "observed_count": 19, "unit": "tests"},
+    {"check_id": "scoped_ruff_correctness", "status": "PASS", "observed_count": 4, "unit": "rule_families", "rules": ["E4", "E7", "E9", "F"]},
+    {"check_id": "zero_counter_and_launch_lock_invariants", "status": "PASS", "observed_count": 11, "unit": "real_and_resource_counters"}
+  ],
+  "failures_and_recoveries": [
+    {
+      "failure_id": "a1.2-v2-pyproject-v1-source-binding-drift-20260806",
+      "recovery_id": "a1.2-v2-module-command-v1-byte-preservation-20260806",
+      "status": "repaired_and_validated",
+      "failure_summary": "Adding a convenience console entry changed pyproject.toml, which is transitively bound by the immutable A1.2 v1 evidence and caused the v1 validator to fail closed.",
+      "recovery_summary": "Only the new console entry was removed; module-based commands were retained, all v1 hashes returned to their recorded values, and both v1 and v2 validators passed.",
+      "counters_changed": false
+    },
+    {
+      "failure_id": "a1.2-v2-stale-generated-projection-source-20260806",
+      "recovery_id": "a1.2-v2-receipt-first-shared-read-model-sync-20260806",
+      "status": "repaired_and_validated",
+      "failure_summary": "Before the first v2 projection sync, the on-disk sync receipt and A1.2 report still identified the preserved v1 scaffold and earlier blocked CPU preflight as the latest projection state.",
+      "recovery_summary": "The shared read model now preserves v1 as historical, selects the immutable v2 receipt as the latest lifecycle source, and projects the same launch-locked state to MLflow, Brain, Obsidian, Dashboard, and Paper readiness with zero drift.",
+      "counters_changed": false
+    }
+  ],
+  "safety": {
+    "protected_data_accessed": false,
+    "measured_execution": false,
+    "gpu_reserved": false,
+    "gpu_used": false,
+    "paid_api_used": false,
+    "network_model_download": false,
+    "provider_contacted": false,
+    "provider_switched": false,
+    "selection_opened": false,
+    "final_opened": false,
+    "model_weights_changed": false
+  },
+  "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+  "resource_counters": {"charged_usd": 0, "gpu_reservations": 0, "gpu_scientific_runs": 0, "paid_api_calls": 0, "model_downloads": 0, "provider_switches": 0},
+  "untouched_surfaces": ["owner_local_protected_store", "final_split", "qrels", "membership", "query_ids", "per_query_outcomes", "access_material", "raw_provider_payloads", "paid_vast_worker"],
+  "post_audit_obligations": ["deterministic_report_sync_and_check_twice", "research_session_capsule", "brain_pointer_validation", "scoped_brain_commit_and_lease_release", "research_commit_and_push", "remote_branch_verification"],
+  "audit_sha256": "fe2e2b48324e18d7de1a50413831462f942222a11cfdf4bda9f53a35421a2646"
+}

@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
-read_model_sha256: "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a"
+read_model_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
+read_model_sha256: "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da"
 source_commit: "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d"
+generated_from_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
 last_material_update: "2026-08-05T15:56:15Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
@@ -46,7 +46,7 @@ Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
 - `git_commit`: 1149f9e63ac6174a3ce4bc5a553d793b7d707b0b
 
@@ -60,7 +60,7 @@ These references explain what each artifact is for; the bytes remain governed by
 
 | Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
 |---|---|---|---|---|---|
-| Source-of-truth contract | `schema` | `engineering` | `control/source-of-truth.yaml` | `27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11` | `validated` |
+| Source-of-truth contract | `schema` | `engineering` | `control/source-of-truth.yaml` | `56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590` | `validated` |
 | Shared read-model schema | `schema` | `engineering` | `schemas/read-model.v2.json` | `3c3ccc32f9a59afb6fb6bfec86f2953eeea28fdfb657d144747e9925b83b596d` | `validated` |
 | Reporting policy | `schema` | `engineering` | `docs/observatory/REPORTING_POLICY.md` | `a04ed73e9131310727d4c8f21db835ef12525e1bb224c9de2fcec42001e35b41` | `validated` |
 
@@ -119,7 +119,7 @@ Status: **completed**. The foundation records the authority and safety boundary 
 
 ## Next Action
 
-/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

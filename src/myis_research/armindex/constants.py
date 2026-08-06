@@ -35,11 +35,11 @@ A1_2_NEXT_AUTHORIZED_ACTION = (
 )
 
 A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION = (
-    "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run "
-    "preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, "
-    "freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, "
-    "bind a live quote and provider instance identity, and prove provider termination/TTL "
-    "without exposing credentials or protected payloads. Do not reserve GPU capacity or "
-    "start measured retrieval until every launch-checklist item passes and the unchanged "
-    "execution contract is explicitly adopted."
+    "/goal Run only the Owner-local SSH/Vast A1.2 preflight from "
+    "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 "
+    "instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked "
+    "runtime and model bytes, adapter parity, Qwen maximum length, local protected-root "
+    "boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL "
+    "path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured "
+    "retrieval, optimization, Selection, Final, paid API work, or weight changes."
 )

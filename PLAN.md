@@ -15,10 +15,11 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (offline contract scaffold
-  complete; scientific screen and GPU launch remain locked)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive local-orchestrated
+  Vast 4xRTX3090 preflight revision prepared; live Owner preflight and
+  scientific launch remain locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: engineering contract scaffold; scientific authority `false`
+- Current evidence class: engineering preflight scaffold; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -59,7 +60,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 scaffold complete and launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 four-GPU preflight prepared and launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -102,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | contract scaffold complete; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Vast 4xRTX3090 preflight prepared; live preflight and measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -125,13 +126,51 @@ for `ARM-02` through `ARM-05`, but all four dense arms remain
 and public commitments are documented in
 [`docs/research/A1_2_MODEL_SOURCE_LOCKS.md`](docs/research/A1_2_MODEL_SOURCE_LOCKS.md).
 
-The non-authorizing A1.2 planning proposal uses one 24 GiB GPU, preferably RTX
+The preserved A1.2 v1 non-authorizing planning proposal uses one 24 GiB GPU, preferably RTX
 4090, RTX 3090, L4, or A10; A100/H100 is not required. The planning estimate is
 8-16 GPU hours plus 2-4 local validation hours, or 10-20 hours end to end. At
 USD 0.30-0.80 per GPU-hour, raw GPU compute is estimated at USD 2.40-12.80.
 Hard stops remain USD 5 for parity/pilot, USD 18 for the common screen, USD 23
 for A1, and USD 100 for the campaign. These values are planning assumptions,
-not authorization or measured evidence.
+not authorization or measured evidence. It remains historical and was not adopted.
+
+The CPU-only Owner-local preflight runner was executed on 2026-08-06. Canonical
+contract bindings passed, but the receipt is `blocked_owner_input` because the
+four dense-arm `SHA256SUMS` manifests, Snowflake remote-code byte hashes, Qwen
+measured maximum length, adapter parity, storage, live quote/provider identity,
+and external termination/TTL evidence were not supplied in the Owner-local
+staging root. The preflight and MLflow-safe projection are aggregate-only;
+measured counters, GPU reservations, protected access, and charged cost remain
+zero. MLflow receives only the safe projection and a hash pointer to the
+canonical receipt.
+
+The additive `a1.2-local-vast-4x3090-v2` revision now prepares one disposable
+Vast SSH worker with four RTX 3090 GPUs. Codex remains the only canonical writer
+on the local machine; `ARM-01` remains local CPU, while `ARM-02` through
+`ARM-05` are mapped to devices 0 through 3 with one dense arm per GPU. The
+offline synthetic orchestration passed four of four worker processes with no
+failures. The migration receipt SHA-256 is
+`869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600`;
+the synthetic receipt self-hash is
+`4c8e22e76308178bfe5909fea434b7db06f3b80f6f6615f3f5f74ccec598a6c7`.
+This evidence has no retrieval-quality authority, and all measured, GPU,
+charged-resource, Selection, and Final counters remain zero.
+
+The Owner planning rate is USD 0.60 per hour for the complete four-RTX3090
+instance, not per GPU. The parallel dense preflight estimate is 2-4 instance
+hours, or USD 1.20-2.40 raw worker cost, plus 2-4 local hours. The unchanged
+hard stops are USD 18 for the common screen, USD 23 for A1, and USD 100 for the
+campaign. A current provider quote must fit the remaining limits or the live
+preflight stops `BLOCKED_BUDGET`.
+
+The aggregate-safe A1.2 v2 closeout audit passed 18 validation groups,
+including 428 repository tests, 19 focused A1.2 tests, report and safety scans,
+Dashboard/API checks, the repository-safe MLflow doctor, assets, layout,
+session audit, Brain literature validation, scoped Ruff, PowerShell parsing,
+and deterministic projection sync/check cycles. The audit self-hash is
+`fe2e2b48324e18d7de1a50413831462f942222a11cfdf4bda9f53a35421a2646`.
+These counts describe engineering validation only and do not change any
+scientific or charged-resource counter.
 
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
@@ -165,7 +204,7 @@ flowchart LR
 ## Safety boundary
 
 Protected qrels, membership, query IDs, rankings, per-query outcomes, raw
-provider payloads, and credentials stay Owner-local. Git and every projection
+provider payloads, and access material stay Owner-local. Git and every projection
 receive validated aggregates, hashes, counts, safe IDs, and pointers only.
 The migration does not authorize measured retrieval, model download, GPU
 scientific work, paid APIs, Selection, or Final.
@@ -182,13 +221,12 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
-The offline scaffold is complete. The next action remains reversible and
-CPU-only: the Owner-local runner validates pre-staged artifacts, dense adapter
-parity, Qwen maximum length, storage, live quote/capacity, and the external
-provider termination watcher. No GPU reservation, protected payload access
-from the agent workspace, runtime model download, dense-arm execution, or
-measured retrieval is authorized until every checklist item passes and the
-unchanged contract is explicitly adopted.
+The offline preparation is complete. The next action is the Owner-local live
+SSH/Vast preflight only, using the exact commands in the runbook. It may verify
+the disposable worker and run synthetic preflight workers, but it must not run
+measured retrieval or adopt the revision. Scientific launch remains forbidden
+until every checklist item passes and the Owner later adopts the unchanged
+revision in a separate authorized goal.

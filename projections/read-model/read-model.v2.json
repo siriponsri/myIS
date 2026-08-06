@@ -36,15 +36,18 @@
         "common_screen_hard_stop_usd": 18,
         "end_to_end_hours_max": 20,
         "end_to_end_hours_min": 10,
+        "estimated_instance_hours": "2-4",
+        "estimated_raw_worker_usd": "1.20-2.40",
         "gpu_hours_max": 16,
         "gpu_hours_min": 8,
         "pilot_hard_stop_usd": 5,
+        "planning_rate_usd_per_four_gpu_instance_hour": 0.6,
         "raw_gpu_estimate_max_usd": 12.8,
         "raw_gpu_estimate_min_usd": 2.4
       },
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
-      "claim_boundary": "offline_scaffold_only_no_measured_retrieval_claim",
+      "claim_boundary": "offline_synthetic_preparation_only_live_vast_and_scientific_execution_unstarted",
       "closeout_validation_audit_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "closeout_validation_check_count": 17,
@@ -108,7 +111,7 @@
       ],
       "closeout_validation_recovery_count": 7,
       "dense_artifact_manifests_pending": 4,
-      "evidence_class": "engineering_contract_scaffold",
+      "evidence_class": "engineering_preflight_scaffold",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
       "execution_contract_uri": "control/armindex/a1.2/execution-contract.v1.json",
       "execution_envelope_sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
@@ -122,9 +125,27 @@
       "model_lock_count": 5,
       "model_lockset_sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
       "model_lockset_uri": "control/armindex/a1.2/model-lockset.v1.json",
-      "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
+      "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
       "offline_adapter_ready": 1,
-      "owner_requirements_pending": 9,
+      "owner_requirements_pending": 16,
+      "preflight_blockers": [
+        "arm-02_sha256s_manifest",
+        "arm-03_sha256s_manifest",
+        "arm-04_sha256s_manifest",
+        "arm-05_sha256s_manifest",
+        "snowflake_remote_code_byte_hashes",
+        "qwen_measured_max_input_tokens",
+        "dense_adapter_parity",
+        "artifact_return_storage",
+        "live_quote_and_provider_instance",
+        "external_termination_and_ttl"
+      ],
+      "preflight_launch_ready": false,
+      "preflight_mlflow_registration_sha256": "84855affa318db91f2853ebeef972d8ef4cac300d531e1563fd342dcce0c6cbc",
+      "preflight_mlflow_registration_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json",
+      "preflight_sha256": "2c3ce75d23c8909f8d345295538a4eb230e436970f488b837d887405c754ca57",
+      "preflight_status": "blocked_owner_input",
+      "preflight_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json",
       "real_counters": {
         "candidate_count": 0,
         "final_accesses": 0,
@@ -144,18 +165,147 @@
       },
       "resource_plan": {
         "arm01": "local_cpu_only_zero_gpu_usd",
-        "dense_arms": "one_owner_managed_24_gib_gpu_sequential",
-        "estimated_end_to_end_hours": "10-20",
-        "estimated_gpu_hours": "8-16",
-        "raw_gpu_estimate_usd": "2.40-12.80"
+        "dense_arms": "one_owner_managed_vast_instance_four_rtx3090_parallel",
+        "estimated_instance_hours": "2-4",
+        "estimated_raw_worker_usd": "1.20-2.40",
+        "planning_rate_usd_per_instance_hour": 0.6
       },
       "runbook_sha256": "ae5e816c5efd60ed972be2d6f0d1490656321ccc323e450e679b18beefc1dde5",
       "runbook_uri": "control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md",
       "scientific_authority": false,
       "shutdown_plan_sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "shutdown_plan_uri": "control/armindex/a1.2/shutdown-plan.v1.json",
-      "status": "a1_2_contract_scaffold_complete_launch_locked",
-      "validated": true
+      "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
+      "v1_status": "a1_2_contract_scaffold_complete_launch_locked",
+      "validated": true,
+      "vast_preflight_v2": {
+        "adopted_for_execution": false,
+        "allowlist_sha256": "55e027de43ce48b9cf85b54598fd92f1119bc9a51940ce75ba754fcc5901fa91",
+        "allowlist_uri": "control/armindex/a1.2/safe-export-allowlist.v2.json",
+        "budget_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
+        "budget_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
+        "checklist_sha256": "f0539e0baa359b1b1218811097e2b1238eec44b9708db45347f982ab6fa61d16",
+        "checklist_uri": "control/armindex/a1.2/launch-checklist.v2.json",
+        "claim_boundary": "offline_synthetic_preparation_only_live_vast_and_scientific_execution_unstarted",
+        "closeout_validation_audit_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+        "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+        "closeout_validation_check_count": 18,
+        "closeout_validation_recoveries": [
+          {
+            "counters_changed": false,
+            "failure_id": "a1.2-v2-pyproject-v1-source-binding-drift-20260806",
+            "failure_summary": "Adding a convenience console entry changed pyproject.toml, which is transitively bound by the immutable A1.2 v1 evidence and caused the v1 validator to fail closed.",
+            "recovery_id": "a1.2-v2-module-command-v1-byte-preservation-20260806",
+            "recovery_summary": "Only the new console entry was removed; module-based commands were retained, all v1 hashes returned to their recorded values, and both v1 and v2 validators passed.",
+            "status": "repaired_and_validated"
+          },
+          {
+            "counters_changed": false,
+            "failure_id": "a1.2-v2-stale-generated-projection-source-20260806",
+            "failure_summary": "Before the first v2 projection sync, the on-disk sync receipt and A1.2 report still identified the preserved v1 scaffold and earlier blocked CPU preflight as the latest projection state.",
+            "recovery_id": "a1.2-v2-receipt-first-shared-read-model-sync-20260806",
+            "recovery_summary": "The shared read model now preserves v1 as historical, selects the immutable v2 receipt as the latest lifecycle source, and projects the same launch-locked state to MLflow, Brain, Obsidian, Dashboard, and Paper readiness with zero drift.",
+            "status": "repaired_and_validated"
+          }
+        ],
+        "closeout_validation_recovery_count": 2,
+        "contract_sha256": "ee1709d3f2557c8810505388fd82bb668905f0b166905c201d2f3e4d5f43da85",
+        "contract_uri": "control/armindex/a1.2/execution-contract.v2.json",
+        "coordinator_sha256": "88e30d1211cd8260e3f76045a9631982aabbbb0d7cac2d5fb36d455540aa00d2",
+        "coordinator_uri": "scripts/a1_2_vast/Invoke-A12VastCoordinator.ps1",
+        "estimated_instance_hours": "2-4",
+        "estimated_instance_hours_max": 4,
+        "estimated_instance_hours_min": 2,
+        "estimated_raw_worker_usd": "1.20-2.40",
+        "estimated_raw_worker_usd_max": 2.4,
+        "estimated_raw_worker_usd_min": 1.2,
+        "gpu_count": 4,
+        "gpu_model": "NVIDIA GeForce RTX 3090",
+        "image_contract_sha256": "49fa3ffda00d9466326e005dce7cbebc8a090bc167fc5292b1279461dc03327b",
+        "image_contract_uri": "control/armindex/a1.2/image-digest-contract.v2.json",
+        "jobs": [
+          {
+            "arm_id": "ARM-02",
+            "sha256": "a82f3c2c276529f1a2f04bc1728a06bdc5c40d8a0d9d019a5a536c4b089e2d6b",
+            "uri": "control/armindex/a1.2/jobs/v2/ARM-02.json"
+          },
+          {
+            "arm_id": "ARM-03",
+            "sha256": "20b21cfcd4b256b1ca8b61a53584c70940e0ea278d4a072cae2aa99a410822a2",
+            "uri": "control/armindex/a1.2/jobs/v2/ARM-03.json"
+          },
+          {
+            "arm_id": "ARM-04",
+            "sha256": "e4c8c562b222b835fd50afc59d92180f7defffd5ec0a2902d845d2e9b2dca5ed",
+            "uri": "control/armindex/a1.2/jobs/v2/ARM-04.json"
+          },
+          {
+            "arm_id": "ARM-05",
+            "sha256": "a787141e7168567b8b2294333c6883d93080546f15efe349d938ceb766bbd6a3",
+            "uri": "control/armindex/a1.2/jobs/v2/ARM-05.json"
+          }
+        ],
+        "launch_allowed": false,
+        "ledger_sha256": "3a9a6d8ee840f98405abeae714c909b9aecb202336c857bad8bddfe637e5803a",
+        "ledger_uri": "control/armindex/a1.2/vast-4x3090-preflight-ledger.v2.jsonl",
+        "live_check_count": 16,
+        "live_checks_pending": [
+          "clean_git_commit_and_tree_match_frozen_bundle",
+          "built_oci_image_digest_matches_owner_binding",
+          "four_distinct_rtx3090_gpu_uuids",
+          "cuda_pytorch_compatibility",
+          "cpu_ram_disk_minimums",
+          "complete_model_tokenizer_sha256sums",
+          "snowflake_remote_code_byte_hashes",
+          "dense_adapter_parity",
+          "qwen_measured_max_length_frozen",
+          "protected_root_read_only_and_local",
+          "remote_forbidden_surface_absence",
+          "artifact_return_path_free_space",
+          "provider_identity_and_live_quote",
+          "heartbeat_checkpoint_resume",
+          "provider_destroy_ttl_dry_run",
+          "owner_adopts_unchanged_revision"
+        ],
+        "next_authorized_action": "Owner opens one four-RTX3090 Vast instance and runs the documented local SSH preflight without starting measured retrieval.",
+        "owner_runbook_sha256": "9019036b721b03dcbaa5525668dcc63c6827e6c9b6dbb3715c90ab62c633ca2f",
+        "owner_runbook_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md",
+        "planning_rate_usd": 0.6,
+        "real_counters": {
+          "candidate_count": 0,
+          "final_accesses": 0,
+          "measured_runs": 0,
+          "selection_accesses": 0
+        },
+        "receipt_self_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600",
+        "receipt_sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+        "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+        "resource_counters": {
+          "charged_usd": 0,
+          "gpu_reservations": 0,
+          "gpu_scientific_runs": 0,
+          "model_downloads": 0,
+          "paid_api_calls": 0
+        },
+        "revision_id": "a1.2-local-vast-4x3090-v2",
+        "runbook_sha256": "98eb5dda969b034c723fd00eb561664c370f2a76f12c591c9d0c495a7e7dcfb1",
+        "runbook_uri": "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md",
+        "runtime_lock_sha256": "df4094edde1b69a9b15c2cc24a574d733c23a818380c21fe898b441e3567d336",
+        "runtime_lock_uri": "control/armindex/a1.2/runtime-lock.v2.json",
+        "shutdown_sha256": "4c560d28a265c847343270adbecc6d850ee900c8680ec03ddc61f9697422469f",
+        "shutdown_uri": "control/armindex/a1.2/shutdown-plan.v2.json",
+        "status": "offline_preparation_complete_live_owner_preflight_pending",
+        "synthetic_parallel_launch_count": 4,
+        "synthetic_receipt_self_sha256": "4c8e22e76308178bfe5909fea434b7db06f3b80f6f6615f3f5f74ccec598a6c7",
+        "synthetic_receipt_sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
+        "synthetic_receipt_uri": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
+        "synthetic_worker_count": 4,
+        "topology_sha256": "92ada300e29426f39f27095e08a92332974b23a6412099e09f5348920e44a4b2",
+        "topology_uri": "control/armindex/a1.2/topology-contract.v2.json",
+        "validated": true,
+        "watchdog_sha256": "c6eaca0457b20be05a83d54a0d1ef96f2489b5bb1e4788e90396ef45458ad7b2",
+        "watchdog_uri": "scripts/a1_2_vast/Invoke-A12VastWatchdog.ps1"
+      }
     },
     "adapter_fixture_validation": {
       "arm01_backend": {
@@ -343,7 +493,7 @@
         "role": "lexical_anchor_cpu_fallback"
       },
       {
-        "adapter_status": "source_metadata_frozen_owner_artifacts_pending",
+        "adapter_status": "v2_parallel_worker_prepared_owner_live_preflight_pending",
         "arm_id": "ARM-02",
         "commercial_status": "commercial_capable",
         "license": "MIT",
@@ -352,7 +502,7 @@
         "role": "multilingual_dense_anchor"
       },
       {
-        "adapter_status": "source_metadata_frozen_owner_artifacts_pending",
+        "adapter_status": "v2_parallel_worker_prepared_owner_live_preflight_pending",
         "arm_id": "ARM-03",
         "commercial_status": "research_non_commercial",
         "license": "CC-BY-NC-SA-4.0",
@@ -361,7 +511,7 @@
         "role": "research_champion_candidate"
       },
       {
-        "adapter_status": "source_metadata_frozen_owner_artifacts_pending",
+        "adapter_status": "v2_parallel_worker_prepared_owner_live_preflight_pending",
         "arm_id": "ARM-04",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -370,7 +520,7 @@
         "role": "long_context_dense"
       },
       {
-        "adapter_status": "source_metadata_frozen_owner_artifacts_pending",
+        "adapter_status": "v2_parallel_worker_prepared_owner_live_preflight_pending",
         "arm_id": "ARM-05",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -643,7 +793,7 @@
       "status": "complete",
       "validated": true
     },
-    "next_command": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
+    "next_command": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -727,7 +877,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_contract_scaffold_complete_launch_locked",
+        "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
         "tasks": [
           {
             "status": "complete",
@@ -735,7 +885,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "contract_scaffold_complete_launch_locked",
+            "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -823,7 +973,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_contract_scaffold_complete_launch_locked",
+    "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -855,7 +1005,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_contract_scaffold_complete_launch_locked",
+      "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -1922,7 +2072,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "projection_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -1966,8 +2116,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
-  "read_model_sha256": "7d2fe287959edf2997cc8d88aac56dda6f77debcdbf7de674f10eefd9145932a",
+  "read_model_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
+  "read_model_sha256": "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

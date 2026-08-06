@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
+      "content_sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
+      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-05T15:56:15Z",
-  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "generated_from_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
   "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
@@ -110,7 +110,7 @@
     },
     "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
     "source_of_truth": {
-      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
+      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -118,11 +118,11 @@
   "language": "en",
   "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
+  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "dc492d95bf7f5adf781e1e5d3a5a3f25d713ae94db670d66b1a15a6359f1878b",
+  "report_sha256": "2bf3a3fce0de397e16da96a5d3b6994eff54eeef5cf0bb725ca455ac57fed696",
   "report_type": "task",
   "result": {
     "decision": "completed",

@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
+      "content_sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -119,7 +119,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
+      "sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-05T15:56:15Z",
-  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "generated_from_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
   "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
@@ -178,7 +178,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "f06e85d015aaaaca7d33e40b5484a2edf03e6f5e72964365c42030980ace5447",
+      "sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
@@ -192,7 +192,7 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
+      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -200,11 +200,11 @@
   "language": "en",
   "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
+  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "MLflow and Dashboard migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-4",
-  "report_sha256": "9269d5263c1ff9f145043c9c542037e7d69563a2500e3eb896f249e6bf392784",
+  "report_sha256": "302870e113e860b0545733dd7e236eef92f0c702a7bd9d2985592638fbf16ad4",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -217,7 +217,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_contract_scaffold_complete_launch_locked",
+    "program_state": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
     "task": "A0.4"
   },
   "status": "completed",

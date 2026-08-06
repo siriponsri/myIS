@@ -1,0 +1,49 @@
+schema_version: myis.armindex-a1.2-vast-preflight-inputs.v2
+revision_id: a1.2-local-vast-4x3090-v2
+prepared_at_utc: '2026-08-05T22:57:54Z'
+prepared_against_git_commit: efb30f86719811a2e892c299454cfe28ad3fb1b3
+prepared_against_git_tree: b52a987fae2911c2cafa3823294f99fa25283c55
+v1_preserved_bindings:
+- uri: campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json
+  sha256: 834ed83440b7d2c0809588f661739208ddb62d72d6d4cd582f192bd9f2cbff7d
+- uri: control/armindex/a1.2/execution-contract.v1.json
+  sha256: 2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335
+- uri: control/armindex/a1.2/execution-scaffold-ledger.v1.jsonl
+  sha256: c0c2ab001460905e52a8d22606da3a2d44f7c8388612b1592d0b4fa05105273f
+- uri: control/armindex/a1.2/launch-checklist.v1.json
+  sha256: 6dff0daf0d4190a1a5018ce28ee20d67af60e82220717adea1ec480867894175
+- uri: control/armindex/a1.2/model-lockset.v1.json
+  sha256: 0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43
+- uri: control/armindex/a1.2/scaffold-inputs.v1.yaml
+  sha256: 6383c3c790cabe8ad633d8e8312121d97a60ae465c6c7058f39bd2dbb3a060cc
+- uri: control/armindex/a1.2/shutdown-plan.v1.json
+  sha256: 9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482
+- uri: control/budgets/a1.2-common-screen-v1.json
+  sha256: 07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c
+- uri: control/execution-envelope-a1.2-v1.yaml
+  sha256: 0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf
+source_bindings:
+- uri: control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md
+  sha256: 98eb5dda969b034c723fd00eb561664c370f2a76f12c591c9d0c495a7e7dcfb1
+- uri: containers/a1_2_vast_4x3090/Dockerfile
+  sha256: 3ec9c293774126d1f5cb641dd537607f01fe9df0d030f68743245880d6737317
+- uri: containers/a1_2_vast_4x3090/runtime/requirements.v2.txt
+  sha256: 7fd9798e6bd1607ee046871e8f5b66b5b57bf2453c93ac3d978bd2821f751f60
+- uri: scripts/a1_2_vast/Invoke-A12VastCoordinator.ps1
+  sha256: 88e30d1211cd8260e3f76045a9631982aabbbb0d7cac2d5fb36d455540aa00d2
+- uri: scripts/a1_2_vast/Invoke-A12VastWatchdog.ps1
+  sha256: c6eaca0457b20be05a83d54a0d1ef96f2489b5bb1e4788e90396ef45458ad7b2
+- uri: scripts/a1_2_vast/remote-bootstrap.sh
+  sha256: fb5eccb2d6e3ad697e3e448c85067a07806eab71d6bc91b66016f9d87c3dbabe
+- uri: scripts/a1_2_vast/remote-launch-4gpu.sh
+  sha256: f590b99f52f0db273176aefc924113cbbdde54057c0c601a20bea48b83f243ae
+- uri: src/myis_research/armindex/a1_2_vast.py
+  sha256: a665cbdf7cdac4a2fb4a07a93c5c37768d94ac857b5e02a333b18481a64d5188
+authorization:
+  offline_local_synthetic_only: true
+  launch_allowed: false
+  adopted_for_execution: false
+  paid_worker_contact_allowed: false
+  model_download_allowed: false
+  measured_retrieval_allowed: false
+inputs_sha256: 6a4f815cb37e2643f5aab3ef12ed69511418b5d133608cb70db5d12302dda83c

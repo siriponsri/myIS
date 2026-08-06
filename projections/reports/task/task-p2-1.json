@@ -720,7 +720,7 @@
     }
   ],
   "generated_at": "2026-08-05T15:56:15Z",
-  "generated_from_revision": "68a5e65f0a33764c6f0f665a26fbfb5ad090b8ea9a639f8aa2502e0966fee99d",
+  "generated_from_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
   "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
   "governance_status": {
     "d2": "waiting_owner",
@@ -788,7 +788,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "27cdd4ddbe84d69985616c689a65191a78e9461f4c0e99d9b48e90bfc681ba11",
+      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -800,12 +800,12 @@
   "language": "en",
   "last_material_update": "2026-08-05T15:56:15Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Run the Owner-local A1.2 artifact-manifest and external-termination dry-run preflight on CPU. Validate complete SHA256SUMS manifests for the four dense arms, freeze byte hashes for Snowflake remote code and the Qwen measured maximum length, bind a live quote and provider instance identity, and prove provider termination/TTL without exposing credentials or protected payloads. Do not reserve GPU capacity or start measured retrieval until every launch-checklist item passes and the unchanged execution contract is explicitly adopted.",
+  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "43379e5d26877125fb9410730000ad61c1ebd666ad056276f40116e90ac5cd76",
+  "report_sha256": "378cf448d2aaa2e023ccc5486871ba558c4ea182ae7932cc9092e6113d03240e",
   "report_type": "task",
   "result": {
     "decision": "not_started",

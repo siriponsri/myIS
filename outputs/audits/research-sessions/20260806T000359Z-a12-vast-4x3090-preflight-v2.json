@@ -1,0 +1,152 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260806T000359Z-a12-vast-4x3090-preflight-v2",
+  "run_id": null,
+  "goal_id": "019fcefe-6705-7971-aed4-6d64d9341850",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-06T00:03:59Z",
+  "scope": "Prepare, validate, report, and project the additive launch-locked A1.2 local-orchestrated Vast four-RTX3090 preflight revision without contacting a paid worker or starting scientific execution.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "control/decisions/D1_START_CAMPAIGN.yaml",
+      "scope": "Standing ArmIndex campaign authority within canonical launch, budget, protected-boundary, Selection, and Final controls."
+    },
+    {
+      "gate": "A1.2_PREFLIGHT_PREPARATION_SCOPE",
+      "source": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json fields budget and revision_id",
+      "scope": "Offline synthetic preparation for local Codex plus one future disposable four-RTX3090 Vast worker at the Owner planning rate of USD 0.60 per complete instance-hour; no paid reservation in this session."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "efb30f86719811a2e892c299454cfe28ad3fb1b3",
+    "dirty_paths": [
+      "A1.2 v2 control, container, coordinator, runtime, schema, implementation, test, audit, and generated projection files pending the closeout commit",
+      "AGENTS.md, PLAN.md, HANDOFF.md, control/program.yaml, control/source-of-truth.yaml, and the active campaign record",
+      "pointer-only Brain decision, active-context, failed-attempt, and archived superseded-context notes"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "Prepare the A1.2 topology with local Codex as the only canonical writer, ARM-01 on local CPU, and ARM-02 through ARM-05 mapped one per GPU on one future disposable Vast four-RTX3090 worker.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+          "sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+          "locator": "revision_id, bindings, budget, next_authorized_action"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "The offline synthetic orchestration completed four of four local worker processes with zero failures, zero charged cost, and no GPU or measured execution.",
+      "evidence_refs": [
+        {
+          "path": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
+          "sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
+          "locator": "status, worker_count, parallel_launch_count, failure_count, gpu_used, charged_usd, measured_execution"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "A convenience console-entry change altered a v1-bound source hash and was rejected; removing only that entry restored all immutable v1 bindings while module commands remained available.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+          "sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+          "locator": "failures_and_recoveries[a1.2-v2-pyproject-v1-source-binding-drift-20260806]"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The closeout matrix passed 18 aggregate-safe validation groups, including 428 full-suite tests and 19 focused A1.2 tests, with all real and resource counters unchanged at zero.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+          "sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
+          "locator": "check_count, check_groups, real_counters, resource_counters, safety"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "One shared read model was projected deterministically to the local MLflow mirror, Brain, generated Obsidian, Dashboard, and Paper readiness, and two final sync/check cycles were byte-stable.",
+      "evidence_refs": [
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "d55923499fd23da488a2232b2e77a3521800c4f542180b4f27281d87f0e86f85",
+          "locator": "read_model_revision, read_model_sha256, projection_events, mlflow_run_id"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Pointer-only Brain decision, active-context, and material failed-attempt notes were written under the serial-writer lease, and the superseded active context was archived.",
+      "evidence_refs": [
+        {
+          "path": "../02_Brain/memory/decisions/a1.2-local-vast-4x3090-topology-20260806.md",
+          "sha256": "d44a5b1b6cf35b63d953bf6cff0d6fde4ddf2737f93711638a6ded66bf54da97",
+          "locator": "frontmatter and Supporting pointers"
+        },
+        {
+          "path": "../02_Brain/memory/active/a1.2-vast-4x3090-preflight-20260806.md",
+          "sha256": "cc87c65bc617f14f927fcacbf9b9af4e7e2f7c7f0f0bb7553668d14b6bd16f0c",
+          "locator": "frontmatter, next action, and Research agent contract binding"
+        },
+        {
+          "path": "../02_Brain/memory/failed-attempts/a1.2-v2-pyproject-v1-binding-drift-20260806.md",
+          "sha256": "15cb7149b485d08f99067961cc53fc4ef974d499e06ccc7d974f369c349ba059",
+          "locator": "frontmatter and Recovery"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md",
+    "progress": "control/armindex/a1.2/vast-4x3090-preflight-ledger.v2.jsonl",
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json",
+    "metrics": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
+    "runtime": "control/armindex/a1.2/runtime-lock.v2.json",
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    "The Owner-local live SSH/Vast preflight remains pending and must keep launch_allowed=false and adopted_for_execution=false.",
+    "Live commit/tree/image, hardware, model-byte, parity, Qwen length, quote, heartbeat/resume, return-path, and provider-destruction checks remain unproven.",
+    "Scientific execution, Selection, and Final remain closed."
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

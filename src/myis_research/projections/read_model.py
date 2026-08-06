@@ -43,6 +43,15 @@ from ..armindex.a1_2_contract import (
     RUNBOOK_PATH as A12_RUNBOOK_PATH,
     validate_a1_2_scaffold,
 )
+from ..armindex.a1_2_vast import (
+    CONTROL_ROOT as A12_V2_CONTROL_ROOT,
+    LEDGER_PATH as A12_V2_LEDGER_PATH,
+    RECEIPT_PATH as A12_V2_RECEIPT_PATH,
+    RUNBOOK_PATH as A12_V2_RUNBOOK_PATH,
+    SYNTHETIC_RECEIPT_PATH as A12_V2_SYNTHETIC_RECEIPT_PATH,
+    validate_preparation_receipt as validate_a1_2_vast_receipt,
+    validate_v2 as validate_a1_2_vast,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -93,6 +102,7 @@ PROJECTION_SOURCE_PATHS = (
     "outputs/observatory/fixture-v1",
     "control/assets/dapfam-p1-source.v1.json",
     "outputs/audits/rigor",
+    "outputs/audits/armindex",
     "evidence/legacy-dapfam-inventory.v1.json",
     "schemas/read-model.v2.json",
     "schemas/p2-budget-profile.v1.json",
@@ -132,7 +142,9 @@ PROJECTION_SOURCE_PATHS = (
     "control/campaigns/armindex-multiretriever-v2.yaml",
     "control/budgets/armindex-migration-v2.yaml",
     "control/budgets/a1.2-common-screen-v1.json",
+    "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
     "control/execution-envelope-a1.2-v1.yaml",
+    "control/execution-envelope-a1.2-v2.yaml",
     "control/plans/ARMINDEX_AUTOINDEX_HARNESSOPT_CONTRACT.md",
     "schemas/armindex",
     "src/myis_research/armindex",
@@ -141,6 +153,7 @@ PROJECTION_SOURCE_PATHS = (
     "campaigns/armindex-multiretriever-v2/evidence",
     "campaigns/armindex-multiretriever-v2/proposals",
     "control/runbooks/A1_2_COMMON_MULTI_ARM_SCREENING.md",
+    "control/runbooks/A1_2_VAST_4X3090_PREFLIGHT_V2.md",
 )
 
 P2_ARTIFACT_DIRS = ("requests", "manifests", "evidence", "packages", "reports")
@@ -177,6 +190,15 @@ A010_SOURCE_VERIFICATION_RECEIPT_PATH = Path(
 )
 A12_CLOSEOUT_VALIDATION_AUDIT_PATH = Path(
     "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json"
+)
+A12_PREFLIGHT_PATH = Path("outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json")
+A12_V2_BUDGET_PATH = Path("control/budgets/a1.2-common-screen-vast-4x3090-v2.json")
+A12_V2_OWNER_RUNBOOK_PATH = Path("docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md")
+A12_V2_COORDINATOR_PATH = Path("scripts/a1_2_vast/Invoke-A12VastCoordinator.ps1")
+A12_V2_WATCHDOG_PATH = Path("scripts/a1_2_vast/Invoke-A12VastWatchdog.ps1")
+A12_V2_ALLOWLIST_PATH = A12_V2_CONTROL_ROOT / "safe-export-allowlist.v2.json"
+A12_V2_CLOSEOUT_AUDIT_PATH = Path(
+    "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json"
 )
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
@@ -250,6 +272,27 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v2"), Mapping)
+        and a1_2_scaffold["vast_preflight_v2"].get("validated") is True
+    ):
+        armindex["status"] = "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v2_parallel_worker_prepared_owner_live_preflight_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_contract_scaffold_complete_launch_locked"
@@ -1506,6 +1549,68 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
         "resource_counters": {"charged_usd": 0, "gpu_scientific_runs": 0, "paid_api_calls": 0, "model_downloads": 0, "provider_switches": 0},
         "next_authorized_action": A1_2_NEXT_AUTHORIZED_ACTION,
+        "preflight_uri": A12_PREFLIGHT_PATH.as_posix(),
+        "preflight_sha256": None,
+        "preflight_status": "not_started",
+        "preflight_blockers": [],
+        "preflight_launch_ready": False,
+        "preflight_mlflow_registration_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json",
+        "preflight_mlflow_registration_sha256": None,
+        "v1_status": "not_started",
+        "vast_preflight_v2": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": "a1.2-local-vast-4x3090-v2",
+            "receipt_uri": A12_V2_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "contract_uri": (A12_V2_CONTROL_ROOT / "execution-contract.v2.json").as_posix(),
+            "contract_sha256": None,
+            "synthetic_receipt_uri": A12_V2_SYNTHETIC_RECEIPT_PATH.as_posix(),
+            "synthetic_receipt_sha256": None,
+            "runbook_uri": A12_V2_RUNBOOK_PATH.as_posix(),
+            "runbook_sha256": None,
+            "ledger_uri": A12_V2_LEDGER_PATH.as_posix(),
+            "ledger_sha256": None,
+            "budget_uri": A12_V2_BUDGET_PATH.as_posix(),
+            "budget_sha256": None,
+            "topology_uri": (A12_V2_CONTROL_ROOT / "topology-contract.v2.json").as_posix(),
+            "topology_sha256": None,
+            "runtime_lock_uri": (A12_V2_CONTROL_ROOT / "runtime-lock.v2.json").as_posix(),
+            "runtime_lock_sha256": None,
+            "image_contract_uri": (A12_V2_CONTROL_ROOT / "image-digest-contract.v2.json").as_posix(),
+            "image_contract_sha256": None,
+            "checklist_uri": (A12_V2_CONTROL_ROOT / "launch-checklist.v2.json").as_posix(),
+            "checklist_sha256": None,
+            "shutdown_uri": (A12_V2_CONTROL_ROOT / "shutdown-plan.v2.json").as_posix(),
+            "shutdown_sha256": None,
+            "allowlist_uri": A12_V2_ALLOWLIST_PATH.as_posix(),
+            "allowlist_sha256": None,
+            "owner_runbook_uri": A12_V2_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "coordinator_uri": A12_V2_COORDINATOR_PATH.as_posix(),
+            "coordinator_sha256": None,
+            "watchdog_uri": A12_V2_WATCHDOG_PATH.as_posix(),
+            "watchdog_sha256": None,
+            "closeout_validation_audit_uri": A12_V2_CLOSEOUT_AUDIT_PATH.as_posix(),
+            "closeout_validation_audit_sha256": None,
+            "closeout_validation_check_count": 0,
+            "closeout_validation_recovery_count": 0,
+            "closeout_validation_recoveries": [],
+            "jobs": [],
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "live_check_count": 0,
+            "synthetic_worker_count": 0,
+            "planning_rate_usd": 0,
+            "estimated_instance_hours": "unavailable",
+            "estimated_raw_worker_usd": "unavailable",
+            "estimated_instance_hours_min": 0,
+            "estimated_instance_hours_max": 0,
+            "estimated_raw_worker_usd_min": 0,
+            "estimated_raw_worker_usd_max": 0,
+            "real_counters": {"measured_runs": 0, "candidate_count": 0, "selection_accesses": 0, "final_accesses": 0},
+            "resource_counters": {"charged_usd": 0, "gpu_reservations": 0, "gpu_scientific_runs": 0, "model_downloads": 0, "paid_api_calls": 0},
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -1515,18 +1620,119 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         checklist_path = root / A12_CONTROL_ROOT / "launch-checklist.v1.json"
         receipt_path = root / A12_RECEIPT_PATH
         closeout_audit_path = root / A12_CLOSEOUT_VALIDATION_AUDIT_PATH
+        preflight_path = root / A12_PREFLIGHT_PATH
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
         budget = json.loads(budget_path.read_text(encoding="utf-8"))
         lockset = json.loads(lockset_path.read_text(encoding="utf-8"))
         checklist = json.loads(checklist_path.read_text(encoding="utf-8"))
         receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
         closeout_audit = json.loads(closeout_audit_path.read_text(encoding="utf-8"))
+        preflight = json.loads(preflight_path.read_text(encoding="utf-8")) if preflight_path.is_file() else None
+        v2_receipt = None
+        v2_validation = None
+        v2_contract = None
+        v2_budget = None
+        v2_topology = None
+        v2_checklist = None
+        v2_synthetic = None
+        v2_closeout_audit = None
+        if (root / A12_V2_RECEIPT_PATH).is_file():
+            v2_validation = validate_a1_2_vast(root)
+            v2_receipt = validate_a1_2_vast_receipt(root)
+            v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
+            v2_budget = json.loads((root / A12_V2_BUDGET_PATH).read_text(encoding="utf-8"))
+            v2_topology = json.loads((root / A12_V2_CONTROL_ROOT / "topology-contract.v2.json").read_text(encoding="utf-8"))
+            v2_checklist = json.loads((root / A12_V2_CONTROL_ROOT / "launch-checklist.v2.json").read_text(encoding="utf-8"))
+            v2_synthetic = json.loads((root / A12_V2_SYNTHETIC_RECEIPT_PATH).read_text(encoding="utf-8"))
+            if (root / A12_V2_CLOSEOUT_AUDIT_PATH).is_file():
+                v2_closeout_audit = json.loads(
+                    (root / A12_V2_CLOSEOUT_AUDIT_PATH).read_text(encoding="utf-8")
+                )
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
         assert_aggregate_only(checklist)
         assert_aggregate_only(receipt)
         assert_aggregate_only(closeout_audit)
+        for value in (
+            v2_receipt,
+            v2_contract,
+            v2_budget,
+            v2_topology,
+            v2_checklist,
+            v2_synthetic,
+            v2_closeout_audit,
+        ):
+            if value is not None:
+                assert_aggregate_only(value)
+        if v2_receipt is not None and (
+            v2_validation is None
+            or v2_validation.status != "prepared_launch_locked"
+            or v2_receipt.get("status") != "offline_preparation_complete_live_owner_preflight_pending"
+            or v2_receipt.get("launch_allowed") is not False
+            or v2_receipt.get("adopted_for_execution") is not False
+            or v2_synthetic is None
+            or v2_synthetic.get("status") != "PASS"
+            or v2_synthetic.get("worker_count") != 4
+            or any(int(value) != 0 for value in v2_receipt.get("real_counters", {}).values())
+            or any(float(value) != 0 for value in v2_receipt.get("resource_counters", {}).values())
+        ):
+            raise ValueError("A1.2 Vast v2 preparation receipt is invalid")
+        if v2_closeout_audit is not None:
+            v2_checks = v2_closeout_audit.get("check_groups")
+            v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
+            v2_safety = v2_closeout_audit.get("safety")
+            if (
+                v2_closeout_audit.get("schema_version")
+                != "myis.armindex-a1.2-vast-4x3090-closeout-validation-audit.v2"
+                or v2_closeout_audit.get("audit_id")
+                != "a1.2-vast-4x3090-preflight-closeout-validation-20260806"
+                or v2_closeout_audit.get("revision_id") != "a1.2-local-vast-4x3090-v2"
+                or v2_closeout_audit.get("status") != "PASS"
+                or v2_closeout_audit.get("scientific_authority") is not False
+                or not isinstance(v2_checks, list)
+                or v2_closeout_audit.get("check_count") != len(v2_checks)
+                or any(
+                    not isinstance(item, Mapping) or item.get("status") != "PASS"
+                    for item in v2_checks
+                )
+                or not isinstance(v2_recoveries, list)
+                or any(
+                    not isinstance(item, Mapping)
+                    or item.get("status") not in {"repaired_and_validated", "bounded_and_validated"}
+                    or item.get("counters_changed") is not False
+                    for item in v2_recoveries
+                )
+                or not isinstance(v2_safety, Mapping)
+                or any(value is not False for value in v2_safety.values())
+                or any(int(value) != 0 for value in v2_closeout_audit.get("real_counters", {}).values())
+                or any(float(value) != 0 for value in v2_closeout_audit.get("resource_counters", {}).values())
+                or v2_closeout_audit.get("audit_sha256")
+                != canonical_sha256(
+                    {
+                        key: value
+                        for key, value in v2_closeout_audit.items()
+                        if key != "audit_sha256"
+                    }
+                )
+            ):
+                raise ValueError("A1.2 Vast v2 closeout audit is invalid")
+        if preflight is not None:
+            assert_aggregate_only(preflight)
+            if (
+                preflight.get("schema_version") != "myis.armindex-a1.2-owner-local-preflight.v1"
+                or preflight.get("phase_id") != "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+                or preflight.get("task_id") != "A1.2"
+                or preflight.get("scientific_authority") is not False
+                or preflight.get("launch_ready") is not False
+                or preflight.get("execution_contract_adopted") is not False
+                or preflight.get("gpu_reserved") is not False
+                or preflight.get("measured_execution") is not False
+                or preflight.get("protected_data_accessed") is not False
+                or preflight.get("credentials_accessed") is not False
+                or preflight.get("receipt_sha256") != canonical_sha256({key: value for key, value in preflight.items() if key != "receipt_sha256"})
+            ):
+                raise ValueError("A1.2 owner-local preflight receipt is invalid")
         check_groups = closeout_audit.get("check_groups")
         recoveries = closeout_audit.get("failures_and_recoveries")
         safety = closeout_audit.get("safety")
@@ -1562,10 +1768,103 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
     except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
         return {**missing, "status": "invalid" if (root / A12_RECEIPT_PATH).exists() else "not_started"}
     counts = lockset["aggregate_counts"]
+    v2_projection = dict(missing["vast_preflight_v2"])
+    if v2_receipt is not None and v2_contract is not None and v2_budget is not None and v2_topology is not None and v2_checklist is not None and v2_synthetic is not None:
+        v2_projection = {
+            **v2_projection,
+            "status": str(v2_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v2_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V2_RECEIPT_PATH),
+            "receipt_self_sha256": str(v2_receipt["receipt_sha256"]),
+            "contract_sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json"),
+            "synthetic_receipt_sha256": _file_sha256(root / A12_V2_SYNTHETIC_RECEIPT_PATH),
+            "synthetic_receipt_self_sha256": str(v2_synthetic["receipt_sha256"]),
+            "runbook_sha256": _file_sha256(root / A12_V2_RUNBOOK_PATH),
+            "ledger_sha256": _file_sha256(root / A12_V2_LEDGER_PATH),
+            "budget_uri": A12_V2_BUDGET_PATH.as_posix(),
+            "budget_sha256": _file_sha256(root / A12_V2_BUDGET_PATH),
+            "topology_uri": (A12_V2_CONTROL_ROOT / "topology-contract.v2.json").as_posix(),
+            "topology_sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "topology-contract.v2.json"),
+            "runtime_lock_uri": (A12_V2_CONTROL_ROOT / "runtime-lock.v2.json").as_posix(),
+            "runtime_lock_sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "runtime-lock.v2.json"),
+            "image_contract_uri": (A12_V2_CONTROL_ROOT / "image-digest-contract.v2.json").as_posix(),
+            "image_contract_sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "image-digest-contract.v2.json"),
+            "checklist_uri": (A12_V2_CONTROL_ROOT / "launch-checklist.v2.json").as_posix(),
+            "checklist_sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "launch-checklist.v2.json"),
+            "shutdown_uri": (A12_V2_CONTROL_ROOT / "shutdown-plan.v2.json").as_posix(),
+            "shutdown_sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "shutdown-plan.v2.json"),
+            "allowlist_sha256": _file_sha256(root / A12_V2_ALLOWLIST_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V2_OWNER_RUNBOOK_PATH),
+            "coordinator_sha256": _file_sha256(root / A12_V2_COORDINATOR_PATH),
+            "watchdog_sha256": _file_sha256(root / A12_V2_WATCHDOG_PATH),
+            "closeout_validation_audit_sha256": (
+                _file_sha256(root / A12_V2_CLOSEOUT_AUDIT_PATH)
+                if v2_closeout_audit is not None
+                else None
+            ),
+            "closeout_validation_check_count": (
+                len(v2_closeout_audit["check_groups"])
+                if v2_closeout_audit is not None
+                else 0
+            ),
+            "closeout_validation_recovery_count": (
+                len(v2_closeout_audit["failures_and_recoveries"])
+                if v2_closeout_audit is not None
+                else 0
+            ),
+            "closeout_validation_recoveries": (
+                [dict(item) for item in v2_closeout_audit["failures_and_recoveries"]]
+                if v2_closeout_audit is not None
+                else []
+            ),
+            "jobs": [
+                {
+                    "arm_id": arm_id,
+                    "uri": (A12_V2_CONTROL_ROOT / "jobs" / "v2" / f"{arm_id}.json").as_posix(),
+                    "sha256": _file_sha256(root / A12_V2_CONTROL_ROOT / "jobs" / "v2" / f"{arm_id}.json"),
+                }
+                for arm_id in ("ARM-02", "ARM-03", "ARM-04", "ARM-05")
+            ],
+            "launch_allowed": bool(v2_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v2_receipt["adopted_for_execution"]),
+            "live_check_count": len(v2_checklist["pending_live_owner"]),
+            "live_checks_pending": list(v2_checklist["pending_live_owner"]),
+            "synthetic_worker_count": int(v2_synthetic["worker_count"]),
+            "synthetic_parallel_launch_count": int(v2_synthetic["parallel_launch_count"]),
+            "planning_rate_usd": float(v2_budget["planning_quote"]["hourly_instance_usd"]),
+            "estimated_instance_hours": str(v2_receipt["budget"]["estimated_instance_hours"]),
+            "estimated_raw_worker_usd": str(v2_receipt["budget"]["estimated_raw_worker_usd"]),
+            "estimated_instance_hours_min": int(v2_budget["planning_quote"]["estimated_instance_hours_min"]),
+            "estimated_instance_hours_max": int(v2_budget["planning_quote"]["estimated_instance_hours_max"]),
+            "estimated_raw_worker_usd_min": float(v2_budget["planning_quote"]["raw_worker_estimate_min_usd"]),
+            "estimated_raw_worker_usd_max": float(v2_budget["planning_quote"]["raw_worker_estimate_max_usd"]),
+            "gpu_count": int(v2_topology["worker"]["gpu_count"]),
+            "gpu_model": str(v2_topology["worker"]["gpu_model_exact"]),
+            "real_counters": dict(v2_receipt["real_counters"]),
+            "resource_counters": dict(v2_receipt["resource_counters"]),
+            "claim_boundary": str(v2_receipt["claim_boundary"]),
+            "next_authorized_action": str(v2_receipt["next_authorized_action"]),
+        }
     return {
         **missing,
-        "status": validation.status,
+        "status": (
+            "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+            if v2_projection["validated"]
+            else validation.status
+        ),
         "validated": True,
+        "v1_status": validation.status,
+        "evidence_class": (
+            "engineering_preflight_scaffold"
+            if v2_projection["validated"]
+            else "engineering_contract_scaffold"
+        ),
+        "claim_boundary": (
+            v2_projection.get("claim_boundary")
+            if v2_projection["validated"]
+            else "offline_scaffold_only_no_measured_retrieval_claim"
+        ),
         "receipt_sha256": _file_sha256(receipt_path),
         "runbook_sha256": _file_sha256(root / A12_RUNBOOK_PATH),
         "ledger_sha256": _file_sha256(root / A12_LEDGER_PATH),
@@ -1584,15 +1883,46 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "model_lock_count": int(counts["arms"]),
         "offline_adapter_ready": int(counts["offline_adapter_ready"]),
         "dense_artifact_manifests_pending": int(counts["owner_artifact_manifests_pending"]),
-        "owner_requirements_pending": len(checklist["pending_owner"]),
+        "owner_requirements_pending": (
+            int(v2_projection["live_check_count"])
+            if v2_projection["validated"]
+            else len(checklist["pending_owner"])
+        ),
         "launch_ready": bool(checklist["launch_ready"]),
         "measured_execution": bool(validation.measured_execution),
-        "resource_plan": dict(contract["resource_plan"]),
-        "budget_limits": dict(budget["limits"]),
+        "resource_plan": (
+            {
+                "arm01": "local_cpu_only_zero_gpu_usd",
+                "dense_arms": "one_owner_managed_vast_instance_four_rtx3090_parallel",
+                "estimated_instance_hours": v2_projection["estimated_instance_hours"],
+                "estimated_raw_worker_usd": v2_projection["estimated_raw_worker_usd"],
+                "planning_rate_usd_per_instance_hour": v2_projection["planning_rate_usd"],
+            }
+            if v2_projection["validated"]
+            else dict(contract["resource_plan"])
+        ),
+        "budget_limits": {
+            **dict(budget["limits"]),
+            **(
+                {
+                    "planning_rate_usd_per_four_gpu_instance_hour": v2_projection["planning_rate_usd"],
+                    "estimated_instance_hours": v2_projection["estimated_instance_hours"],
+                    "estimated_raw_worker_usd": v2_projection["estimated_raw_worker_usd"],
+                }
+                if v2_projection["validated"]
+                else {}
+            ),
+        },
         "archive_disposition": dict(receipt["archive_disposition"]),
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
         "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        "preflight_sha256": _file_sha256(preflight_path) if preflight_path.is_file() else None,
+        "preflight_status": preflight.get("status", "not_started") if isinstance(preflight, Mapping) else "not_started",
+        "preflight_blockers": list(preflight.get("blockers", [])) if isinstance(preflight, Mapping) else [],
+        "preflight_launch_ready": bool(preflight.get("launch_ready", False)) if isinstance(preflight, Mapping) else False,
+        "preflight_mlflow_registration_sha256": _file_sha256(root / "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json") if (root / "outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json").is_file() else None,
+        "vast_preflight_v2": v2_projection,
     }
 
 

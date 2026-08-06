@@ -24,6 +24,16 @@ records:
     supporting_authority: [control/armindex/a1.2/execution-contract.v1.json, control/budgets/a1.2-common-screen-v1.json, control/execution-envelope-a1.2-v1.yaml, control/armindex/a1.2/model-lockset.v1.json, control/armindex/a1.2/launch-checklist.v1.json, control/armindex/a1.2/shutdown-plan.v1.json]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_contract_scaffold_only, arm01_local_cpu_only, dense_owner_artifacts_pending, launch_locked, no_protected_data, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_owner_local_preflight
+    authority: outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json
+    supporting_authority: [schemas/armindex/a1.2-owner-local-preflight.v1.json, outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-safe.json, outputs/audits/armindex/a1.2-owner-local-preflight-mlflow-registration.json]
+    projections: [projections/read-model, dashboard, brain, obsidian, mlflow]
+    restrictions: [engineering_preflight_only, owner_input_blocked, launch_locked, no_protected_data, no_credentials, no_gpu_reservation, measured_counters_zero]
+  - id: armindex_a1_2_vast_4x3090_preflight_revision
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-migration.receipt.v2.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.v2.json, control/budgets/a1.2-common-screen-vast-4x3090-v2.json, control/execution-envelope-a1.2-v2.yaml, control/armindex/a1.2/topology-contract.v2.json, control/armindex/a1.2/runtime-lock.v2.json, control/armindex/a1.2/image-digest-contract.v2.json, control/armindex/a1.2/launch-checklist.v2.json, control/armindex/a1.2/shutdown-plan.v2.json, control/armindex/a1.2/safe-export-allowlist.v2.json, outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_preflight_scaffold_only, v1_preserved, launch_locked, adopted_for_execution_false, live_owner_preflight_pending, no_protected_data, no_access_material_remote, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
   - id: phase_task_reporting_contract
     authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
     projections: [projections/reports, obsidian]

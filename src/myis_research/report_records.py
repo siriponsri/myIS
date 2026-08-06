@@ -64,6 +64,7 @@ def _lifecycle(value: Any) -> str:
         "executable",
         "a1_1_complete_a1_2_contract_locked",
         "a1_2_contract_scaffold_complete_launch_locked",
+        "a1_2_vast_4x3090_preflight_prepared_launch_locked",
     }:
         return "active"
     if value in {
@@ -538,6 +539,8 @@ def _artifacts(
                 ("a12-scaffold-ledger", "A1.2 append-only scaffold ledger", "ledger", "ledger_uri", "ledger_sha256", "Hash-chains scaffold start, ARM-01 synthetic CPU parity, and launch-locked closeout."),
                 ("a12-report-archive-audit", "A1.2 generated report archive audit", "audit", "report_archive_audit_uri", "report_archive_audit_sha256", "Confirms that all 39 registered detailed English Phase/Task reports remain current or graph-referenced and that no generated or Owner-authored report is eligible to move."),
                 ("a12-closeout-validation-audit", "A1.2 closeout validation audit", "audit", "closeout_validation_audit_uri", "closeout_validation_audit_sha256", "Records the aggregate-safe validation matrix, recovered infrastructure failures, zero scientific counters, and untouched protected surfaces."),
+                ("a12-owner-local-preflight", "A1.2 Owner-local CPU preflight receipt", "audit", "preflight_uri", "preflight_sha256", "Records the CPU-only fail-closed artifact, provider, storage, and termination preflight without exposing Owner-local bytes or access material."),
+                ("a12-owner-local-mlflow-registration", "A1.2 MLflow safe preflight registration", "result", "preflight_mlflow_registration_uri", "preflight_mlflow_registration_sha256", "Binds the aggregate-safe preflight result and MLflow mirror registration while keeping protected artifacts outside MLflow."),
             ):
                 uri = scaffold.get(uri_key)
                 digest = scaffold.get(sha_key)
@@ -554,6 +557,56 @@ def _artifacts(
                         producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                         producing_task_id="A1.2",
                     ))
+            vast = scaffold.get("vast_preflight_v2", {})
+            if isinstance(vast, Mapping) and vast.get("validated") is True:
+                for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                    ("a12-vast-v2-migration-receipt", "A1.2 Vast 4xRTX3090 migration receipt v2", "receipt", "receipt_uri", "receipt_sha256", "Binds the additive local-orchestrated four-GPU preparation while preserving every v1 source byte and keeping launch and adoption false."),
+                    ("a12-vast-v2-execution-contract", "A1.2 Vast 4xRTX3090 execution contract v2", "contract", "contract_uri", "contract_sha256", "Freezes the local canonical-writer and disposable remote-worker boundary with one dense arm per GPU."),
+                    ("a12-vast-v2-synthetic-receipt", "A1.2 synthetic four-worker receipt", "receipt", "synthetic_receipt_uri", "synthetic_receipt_sha256", "Records a four-subprocess CPU-only orchestration pass with no GPU reservation, paid compute, or scientific measurement."),
+                    ("a12-vast-v2-budget", "A1.2 Vast 4xRTX3090 budget profile v2", "budget", "budget_uri", "budget_sha256", "Records the Owner planning rate of USD 0.60 per complete four-GPU instance-hour, the USD 1.20-2.40 estimate, and unchanged hard stops."),
+                    ("a12-vast-v2-topology", "A1.2 local-Codex remote-four-GPU topology", "contract", "topology_uri", "topology_sha256", "Assigns ARM-02 through ARM-05 to fixed GPU slots while all canonical and protected surfaces remain local."),
+                    ("a12-vast-v2-runtime", "A1.2 Vast runtime lock v2", "lockset", "runtime_lock_uri", "runtime_lock_sha256", "Freezes the Python, CUDA, PyTorch, package, and offline-install runtime contract; live image digest remains pending."),
+                    ("a12-vast-v2-image", "A1.2 OCI image digest contract v2", "contract", "image_contract_uri", "image_contract_sha256", "Requires immutable base and built-image identities before upload or remote start."),
+                    ("a12-vast-v2-checklist", "A1.2 Vast live preflight checklist v2", "checklist", "checklist_uri", "checklist_sha256", "Enumerates the live Owner checks that must pass before the unchanged revision can be considered for adoption."),
+                    ("a12-vast-v2-shutdown", "A1.2 Owner-local termination plan v2", "runbook", "shutdown_uri", "shutdown_sha256", "Requires provider destruction and verification from the Owner-local watchdog; guest poweroff is explicitly insufficient."),
+                    ("a12-vast-v2-allowlist", "A1.2 remote safe-export allowlist v2", "contract", "allowlist_uri", "allowlist_sha256", "Restricts collected remote outputs to declared aggregate-safe receipts, logs, hashes, and checkpoints."),
+                    ("a12-vast-v2-runbook", "A1.2 Vast preflight runbook v2", "runbook", "runbook_uri", "runbook_sha256", "Defines the offline preparation, live Owner preflight, hard stops, and launch-lock acceptance boundary."),
+                    ("a12-vast-v2-owner-runbook", "A1.2 beginner Owner runbook", "runbook", "owner_runbook_uri", "owner_runbook_sha256", "Provides exact local PowerShell commands without embedding access material or protected benchmark content."),
+                    ("a12-vast-v2-coordinator", "A1.2 local SSH coordinator", "tool", "coordinator_uri", "coordinator_sha256", "Implements upload, verification, bootstrap, status, collection, and teardown from the Owner-local machine."),
+                    ("a12-vast-v2-watchdog", "A1.2 Owner-local TTL watchdog", "tool", "watchdog_uri", "watchdog_sha256", "Monitors heartbeat and TTL, invokes provider destruction, and requires destruction verification."),
+                    ("a12-vast-v2-ledger", "A1.2 Vast preflight ledger v2", "ledger", "ledger_uri", "ledger_sha256", "Hash-chains preparation start, synthetic orchestration, and the immutable migration receipt."),
+                    ("a12-vast-v2-closeout-audit", "A1.2 Vast preflight closeout validation audit", "audit", "closeout_validation_audit_uri", "closeout_validation_audit_sha256", "Records the offline validation matrix, two bounded recoveries, zero counters, and untouched protected and paid-worker surfaces."),
+                ):
+                    uri = vast.get(uri_key)
+                    digest = vast.get(sha_key)
+                    if uri and digest:
+                        result.append(_artifact(
+                            artifact_id=artifact_id,
+                            title=title,
+                            artifact_type=artifact_type,
+                            evidence_class="engineering_preflight_scaffold",
+                            scientific_authority=False,
+                            safe_uri=str(uri),
+                            content_sha256=str(digest),
+                            explanation=explanation,
+                            producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                            producing_task_id="A1.2",
+                        ))
+                for job in vast.get("jobs", []):
+                    if isinstance(job, Mapping) and job.get("arm_id") and job.get("uri") and job.get("sha256"):
+                        arm_id = str(job["arm_id"])
+                        result.append(_artifact(
+                            artifact_id=f"a12-vast-v2-job-{arm_id.lower()}",
+                            title=f"A1.2 immutable {arm_id} remote job",
+                            artifact_type="manifest",
+                            evidence_class="engineering_preflight_scaffold",
+                            scientific_authority=False,
+                            safe_uri=str(job["uri"]),
+                            content_sha256=str(job["sha256"]),
+                            explanation="Freezes one arm, one visible GPU slot, isolated outputs, checkpoint policy, heartbeat, and safe-export behavior.",
+                            producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                            producing_task_id="A1.2",
+                        ))
     return result
 
 
@@ -618,6 +671,46 @@ def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> li
                     "source_uri": adapter.get("fixture_receipt_uri"),
                     "source_sha256": adapter.get("fixture_receipt_sha256"),
                 })
+        return rows
+    if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.2"}:
+        scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
+        if not isinstance(scaffold, Mapping) or scaffold.get("validated") is not True:
+            return []
+        blockers = scaffold.get("preflight_blockers", [])
+        rows = [{
+            "name": "owner_local_cpu_preflight_blocker_count",
+            "cutoff": 0,
+            "split": "engineering_preflight",
+            "scope": "A1.2",
+            "value": len(blockers) if isinstance(blockers, list) else 0,
+            "n": 1,
+            "denominator": "pending_owner_launch_checklist_items",
+            "source_uri": scaffold.get("preflight_uri"),
+            "source_sha256": scaffold.get("preflight_sha256"),
+        }]
+        vast = scaffold.get("vast_preflight_v2", {})
+        if isinstance(vast, Mapping) and vast.get("validated") is True:
+            metric_specs = (
+                ("vast_v2_live_check_pending_count", vast.get("live_check_count"), 1, "frozen_live_owner_checklist_items", "checklist_uri", "checklist_sha256"),
+                ("vast_v2_synthetic_worker_count", vast.get("synthetic_worker_count"), vast.get("synthetic_worker_count"), "completed_synthetic_worker_processes", "synthetic_receipt_uri", "synthetic_receipt_sha256"),
+                ("vast_v2_synthetic_parallel_launch_count", vast.get("synthetic_parallel_launch_count"), vast.get("synthetic_worker_count"), "synthetic_workers_started_in_parallel", "synthetic_receipt_uri", "synthetic_receipt_sha256"),
+                ("vast_v2_planning_rate_usd_per_instance_hour", vast.get("planning_rate_usd"), 1, "complete_four_rtx3090_instance", "budget_uri", "budget_sha256"),
+                ("vast_v2_estimated_instance_hours_min", vast.get("estimated_instance_hours_min"), 1, "planning_estimate_not_authorization", "budget_uri", "budget_sha256"),
+                ("vast_v2_estimated_instance_hours_max", vast.get("estimated_instance_hours_max"), 1, "planning_estimate_not_authorization", "budget_uri", "budget_sha256"),
+                ("vast_v2_estimated_raw_worker_usd_min", vast.get("estimated_raw_worker_usd_min"), 1, "planning_estimate_not_authorization", "budget_uri", "budget_sha256"),
+                ("vast_v2_estimated_raw_worker_usd_max", vast.get("estimated_raw_worker_usd_max"), 1, "planning_estimate_not_authorization", "budget_uri", "budget_sha256"),
+            )
+            rows.extend({
+                "name": name,
+                "cutoff": 0,
+                "split": "engineering_preflight",
+                "scope": "A1.2",
+                "value": value,
+                "n": n,
+                "denominator": denominator,
+                "source_uri": vast.get(uri_key),
+                "source_sha256": vast.get(sha_key),
+            } for name, value, n, denominator, uri_key, sha_key in metric_specs)
         return rows
     if phase_id == "A0_MIGRATION_FOUNDATION" and task_id in {None, "A0.8"}:
         feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
@@ -843,6 +936,36 @@ def _bindings(
                     "check_count": scaffold.get("closeout_validation_check_count"),
                     "recovery_count": scaffold.get("closeout_validation_recovery_count"),
                 }
+                bindings["a12_owner_local_preflight"] = {
+                    "uri": scaffold.get("preflight_uri"),
+                    "sha256": scaffold.get("preflight_sha256"),
+                    "status": scaffold.get("preflight_status"),
+                    "blocker_count": len(scaffold.get("preflight_blockers", [])) if isinstance(scaffold.get("preflight_blockers"), list) else 0,
+                }
+                bindings["a12_owner_local_mlflow_registration"] = {
+                    "uri": scaffold.get("preflight_mlflow_registration_uri"),
+                    "sha256": scaffold.get("preflight_mlflow_registration_sha256"),
+                }
+                vast = scaffold.get("vast_preflight_v2", {})
+                if isinstance(vast, Mapping) and vast.get("validated") is True:
+                    bindings["a12_vast_v2_receipt"] = {
+                        "uri": vast.get("receipt_uri"),
+                        "sha256": vast.get("receipt_sha256"),
+                        "status": vast.get("status"),
+                    }
+                    bindings["a12_vast_v2_budget"] = {
+                        "uri": vast.get("budget_uri"),
+                        "sha256": vast.get("budget_sha256"),
+                    }
+                    bindings["a12_vast_v2_topology"] = {
+                        "uri": vast.get("topology_uri"),
+                        "sha256": vast.get("topology_sha256"),
+                    }
+                    bindings["a12_vast_v2_closeout_validation"] = {
+                        "uri": vast.get("closeout_validation_audit_uri"),
+                        "sha256": vast.get("closeout_validation_audit_sha256"),
+                        "check_count": vast.get("closeout_validation_check_count"),
+                    }
     return bindings
 
 
@@ -865,7 +988,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         and isinstance(scaffold, Mapping)
         and scaffold.get("validated") is True
     )
-    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else "engineering_contract_scaffold" if a12_validated and task_id in {None, "A1.2"} else "engineering_fixture" if a11_validated and task_id in {None, "A1.1"} else "planning_estimate" if a11_validated and task_id == "A1.2" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
+    evidence_class = "train_selection_measured" if scientific else "fixture" if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status") == "passed" else str(scaffold.get("evidence_class", "engineering_preflight_scaffold")) if a12_validated and task_id in {None, "A1.2"} else "engineering_fixture" if a11_validated and task_id in {None, "A1.1"} else "planning_estimate" if a11_validated and task_id == "A1.2" else "engineering" if phase_id == "P0_FOUNDATION" or phase_id.startswith("A") else "planned"
     claim_boundary = "train_selection_only" if scientific else str(scaffold.get("claim_boundary")) if a12_validated and task_id in {None, "A1.2"} else str(adapter.get("claim_boundary")) if a11_validated and task_id in {None, "A1.1"} else "resource_planning_only_no_gpu_launch_or_measured_authority" if a11_validated and task_id == "A1.2" else "engineering_provenance_only" if phase_id in {"P0_FOUNDATION", "P2_SCOPE_DEVELOPMENT"} or phase_id.startswith("A") else "unavailable"
     objective = str(task.get("title")) if task else f"Deliver the {phase_id} research phase with an auditable evidence boundary."
     if phase_id == "P2_SCOPE_DEVELOPMENT":
@@ -910,6 +1033,25 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                     "status": item.get("status"),
                     "counters_changed": False,
                 })
+        vast = scaffold.get("vast_preflight_v2", {})
+        if (
+            isinstance(vast, Mapping)
+            and vast.get("closeout_validation_audit_sha256")
+        ):
+            audit_uri = vast.get("closeout_validation_audit_uri")
+            audit_sha256 = vast.get("closeout_validation_audit_sha256")
+            for item in vast.get("closeout_validation_recoveries", []):
+                if isinstance(item, Mapping):
+                    failures.append({
+                        "failure_id": item.get("failure_id"),
+                        "failure_uri": audit_uri,
+                        "failure_sha256": audit_sha256,
+                        "recovery_id": item.get("recovery_id"),
+                        "recovery_uri": audit_uri,
+                        "recovery_sha256": audit_sha256,
+                        "status": item.get("status"),
+                        "counters_changed": False,
+                    })
     if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("observatory", {}).get("failed_child_count", 0):
         failures.append({"failure_id": "obs-failure-candidate-02", "recovery_id": "obs-recovery-candidate-02", "status": "retained_and_recovered", "counters_changed": False})
     if phase_id == "P2_SCOPE_DEVELOPMENT":
@@ -1065,9 +1207,12 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         decision_status = status
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id is None and a12_validated:
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
-        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture and a validated, launch-locked A1.2 execution scaffold for {registered_arms} arms."
-        result = "A1 engineering scaffolding is current; A1.2 scientific screening remains unexecuted and measured, Selection, and Final counters remain zero."
-        interpretation = "A1 now has a reproducible CPU anchor and a bounded pre-GPU contract. Scientific completion still requires Owner-local artifact validation, explicit adoption, and the separately authorized common screen."
+        preflight_status = str(scaffold.get("preflight_status", "not_started"))
+        blocker_count = len(scaffold.get("preflight_blockers", [])) if isinstance(scaffold.get("preflight_blockers"), list) else 0
+        vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
+        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and the additive four-RTX3090 v2 preparation with {vast.get('synthetic_worker_count', 0)} synthetic workers."
+        result = f"A1 engineering preparation is current through the immutable v2 receipt; {vast.get('live_check_count', 0)} live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
+        interpretation = "The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, and fail-closed export and shutdown paths. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization."
         decision_status = "active"
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
@@ -1082,9 +1227,14 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2":
         proposal_status = str(adapter.get("gpu_proposal_status", "not_available")) if isinstance(adapter, Mapping) else "not_available"
         if a12_validated:
-            output = f"The versioned execution contract, budget, five source locks, launch checklist, shutdown plan, receipt, and ledger validate with status {scaffold.get('status')}; {scaffold.get('dense_artifact_manifests_pending')} dense artifact manifests and {scaffold.get('owner_requirements_pending')} Owner checks remain pending."
-            result = "The A1.2 offline scaffold goal is complete and launch-locked; ARM-01 synthetic CPU rank parity passed, while no GPU reservation, protected payload access, or measured run occurred."
-            interpretation = "The scaffold makes the next Owner-local preflight reproducible and budget-bounded. It does not complete the A1.2 scientific screen: dense runtime bytes, adapter parity, live pricing/capacity, Qwen maximum length, and external provider termination still require Owner-local validation and explicit contract adoption."
+            preflight_status = str(scaffold.get("preflight_status", "not_started"))
+            blockers = scaffold.get("preflight_blockers", [])
+            blocker_count = len(blockers) if isinstance(blockers, list) else 0
+            vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
+            output = f"The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains {preflight_status} with {blocker_count} blocker group(s), and the additive v2 local-orchestrated four-RTX3090 revision validates with {vast.get('synthetic_worker_count', 0)} of {vast.get('synthetic_worker_count', 0)} synthetic workers completed and {vast.get('live_check_count', 0)} live checks pending."
+            result = f"A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD {vast.get('planning_rate_usd', 0):.2f} per complete four-GPU instance-hour; the estimate is {vast.get('estimated_instance_hours', 'unavailable')} instance-hours and USD {vast.get('estimated_raw_worker_usd', 'unavailable')}. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred."
+            interpretation = "The v2 receipt supports only offline engineering claims about frozen orchestration, topology, runtime, safe export, checkpointing, and shutdown controls. Live commit/tree/image, hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request."
+            decision_status = "blocked"
         else:
             output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
             result = "A1.2 measured screening remains blocked pending a separate versioned execution contract and hash-bound budget profile; no GPU reservation or measured run occurred."

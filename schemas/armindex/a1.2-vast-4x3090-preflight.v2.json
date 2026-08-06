@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a1.2-vast-4x3090-preflight:v2",
+  "title": "A1.2 local-orchestrated Vast 4xRTX3090 preparation receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "revision_id", "status", "phase_id",
+    "task_id", "evidence_class", "scientific_authority", "generated_at",
+    "validation", "synthetic_four_worker", "bindings",
+    "v1_preserved_bindings", "budget", "launch_allowed",
+    "adopted_for_execution", "real_counters", "resource_counters",
+    "claim_boundary", "next_authorized_action", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-vast-4x3090-preflight.v2"},
+    "receipt_id": {"const": "a1.2-vast-4x3090-migration-and-preparation-v2"},
+    "revision_id": {"const": "a1.2-local-vast-4x3090-v2"},
+    "status": {"const": "offline_preparation_complete_live_owner_preflight_pending"},
+    "phase_id": {"const": "A1_BASELINES_AND_MULTI_ARM_SCREENING"},
+    "task_id": {"const": "A1.2"},
+    "evidence_class": {"const": "engineering_preflight_scaffold"},
+    "scientific_authority": {"const": false},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "validation": {"type": "object"},
+    "synthetic_four_worker": {
+      "type": "object",
+      "required": ["receipt_sha256", "worker_count", "parallel_launch_count"],
+      "properties": {
+        "uri": {"type": "string", "minLength": 1},
+        "file_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "worker_count": {"const": 4},
+        "parallel_launch_count": {"const": 4}
+      },
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/binding"}
+    },
+    "v1_preserved_bindings": {
+      "type": "array",
+      "minItems": 9,
+      "items": {"$ref": "#/$defs/binding"}
+    },
+    "budget": {
+      "type": "object",
+      "required": [
+        "planning_rate_usd_per_four_gpu_instance_hour",
+        "estimated_instance_hours", "estimated_raw_worker_usd",
+        "common_screen_hard_stop_usd", "a1_hard_stop_usd",
+        "campaign_hard_stop_usd", "charged_usd"
+      ],
+      "properties": {
+        "planning_rate_usd_per_four_gpu_instance_hour": {"const": 0.6},
+        "estimated_instance_hours": {"const": "2-4"},
+        "estimated_raw_worker_usd": {"const": "1.20-2.40"},
+        "common_screen_hard_stop_usd": {"const": 18},
+        "a1_hard_stop_usd": {"const": 23},
+        "campaign_hard_stop_usd": {"const": 100},
+        "charged_usd": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "real_counters": {"type": "object", "additionalProperties": {"const": 0}},
+    "resource_counters": {"type": "object", "additionalProperties": {"const": 0}},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "next_authorized_action": {"type": "string", "minLength": 1},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "required": ["uri", "sha256"],
+      "properties": {
+        "uri": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

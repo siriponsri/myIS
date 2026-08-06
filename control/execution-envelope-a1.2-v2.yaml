@@ -1,0 +1,34 @@
+schema_version: myis.armindex-a1.2-execution-envelope.v2
+envelope_id: a1.2-local-vast-4x3090-v2
+status: offline_preflight_revision_prepared_launch_locked
+standing_decision: D1_START_CAMPAIGN
+scope:
+  phase_id: A1_BASELINES_AND_MULTI_ARM_SCREENING
+  task_id: A1.2
+  offline_local_synthetic_preparation_only: true
+  selection_open: false
+  final_open: false
+planned_topology:
+  local_arm: ARM-01_cpu
+  remote_dense_arms:
+  - ARM-02
+  - ARM-03
+  - ARM-04
+  - ARM-05
+  parallelism: 4
+  one_arm_per_gpu: true
+  gpu_model: RTX_3090_24GB
+authorization:
+  launch_allowed: false
+  adopted_for_execution: false
+  paid_worker_contact_allowed: false
+  scientific_execution_allowed: false
+bindings:
+  inputs_sha256: 6a4f815cb37e2643f5aab3ef12ed69511418b5d133608cb70db5d12302dda83c
+  budget_profile_sha256: a04591ece1ef80c2e53cda15b6d605fa9d1f5ed8783bf1ea9d5ff65a78812480
+  runtime_lock_sha256: 8a31d6cae461d03393b3454de7c73c087ac43bb08dddd89ba76f37128d5183f0
+  image_contract_sha256: af409795d7b63e2aebcdee2de844710081ff0b3720959ce2c16f803653b89ff5
+  topology_contract_sha256: dba8082059e2aab89123e6d632347c9bc0426dba6f8ea0fe8cd329f958672979
+  shutdown_plan_sha256: b8a7f08c6c7c89eeda564e37df1960bcfb6bdd606a73313c4d25ac216edc3af7
+  allowlist_sha256: f2a03e7c7411e862c5a8a8b103c2d28e7736405840df6ffc87a805c8de7cecc3
+envelope_sha256: 80481981256512672044f2e0dfef1623a2859dd5331f925b823917e0a028b97c
