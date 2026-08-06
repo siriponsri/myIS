@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f"
-read_model_sha256: "8bd6e0851fcaaa9cf20c7001e0ab222dab82e170aeca6f93b113cc36c2ba60b2"
-source_commit: "1e86c432933f3bbf2e6763d04bb64139f81ce396"
+read_model_revision: "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738"
+read_model_sha256: "8fb06f64bbea69b27e9177b97246b3cfe6a809ecd2d8a89ae871b4c60e720f4f"
+source_commit: "b53ff76578ca2b03663d6064ee018f7bb4131b09"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f"
-last_material_update: "2026-08-06T02:33:36Z"
+generated_from_revision: "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738"
+last_material_update: "2026-08-06T13:30:53Z"
 next_authorized_action: "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-06T02:33:36Z"
-updated_at: "2026-08-06T02:33:36Z"
+created_at: "2026-08-06T13:30:53Z"
+updated_at: "2026-08-06T13:30:53Z"
 note_id: "A4_PRODUCTION_TRANSFER_AND_SELECTION-MASTER"
 note_type: "phase_report"
 phase_id: "A4_PRODUCTION_TRANSFER_AND_SELECTION"
@@ -48,7 +48,7 @@ Freeze FAST/BALANCED/DEEP profiles and expose Selection once.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2`
-- `git_commit`: 1e86c432933f3bbf2e6763d04bb64139f81ce396
+- `git_commit`: b53ff76578ca2b03663d6064ee018f7bb4131b09
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`

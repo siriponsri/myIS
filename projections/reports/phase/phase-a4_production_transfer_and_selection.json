@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T02:33:36Z",
-  "generated_from_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
-  "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
+  "generated_at": "2026-08-06T13:30:53Z",
+  "generated_from_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
+  "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
+    "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-06T02:33:36Z",
+  "last_material_update": "2026-08-06T13:30:53Z",
   "metric_references": [],
   "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
   "objective": "Freeze FAST/BALANCED/DEEP profiles and expose Selection once.",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "phase-a4_production_transfer_and_selection",
-  "report_sha256": "5db9cb0cc80afecf31c53ef211bfed5cae085de84349265cc4334952bf32d210",
+  "report_sha256": "0d0a41cfb596a3fe503a45ba7079d9733b27d08eb3cdf2748b02b5c2266d1187",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

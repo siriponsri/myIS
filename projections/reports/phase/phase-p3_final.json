@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T02:33:36Z",
-  "generated_from_revision": "50b081e9bb0795b9772a3fd1e790e3b0503e5ab1f0478541458680163e9b880f",
-  "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
+  "generated_at": "2026-08-06T13:30:53Z",
+  "generated_from_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
+  "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
+    "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
     "source_of_truth": {
       "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-06T02:33:36Z",
+  "last_material_update": "2026-08-06T13:30:53Z",
   "metric_references": [],
   "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "054cc984c23d4dab57628d3bd8dca119e74977eaf8dd3dd67ce2d20417297950",
+  "report_sha256": "3ae029a13c6a0e5aebb90a6881488258538763f0242f1fea3ef4fab63850090f",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",
