@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
-read_model_sha256: "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da"
-source_commit: "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b"
+read_model_revision: "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e"
+read_model_sha256: "1114f96b4e89e2c97989c3f6b78ebe1a3bf2b6328f9dae0a7718b0678798b94f"
+source_commit: "ae0c65c18abf14b80b66016ad4ba9e1b589275dd"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43"
-last_material_update: "2026-08-05T15:56:15Z"
+generated_from_revision: "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e"
+last_material_update: "2026-08-06T01:32:27Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-05T15:56:15Z"
-updated_at: "2026-08-05T15:56:15Z"
+created_at: "2026-08-06T01:32:27Z"
+updated_at: "2026-08-06T01:32:27Z"
 note_id: "P3_FINAL-MASTER"
 note_type: "phase_report"
 phase_id: "P3_FINAL"
@@ -46,9 +46,9 @@ Deliver the P3_FINAL research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 1149f9e63ac6174a3ce4bc5a553d793b7d707b0b
+- `git_commit`: ae0c65c18abf14b80b66016ad4ba9e1b589275dd
 
 ## Work Performed
 
@@ -117,7 +117,7 @@ Status: **waiting_owner**. The phase remains planned and closed.
 
 ## Next Action
 
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

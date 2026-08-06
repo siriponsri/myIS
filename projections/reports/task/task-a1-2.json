@@ -629,15 +629,123 @@
       "scientific_authority": false,
       "title": "A1.2 immutable ARM-05 remote job",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-correction-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "evidence_class": "engineering_preflight_correction",
+      "explanation": "Preserves immutable v2 evidence and binds the additive clean-commit validation correction, USD 0.60 complete-instance planning rate, cost estimate, hard stops, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast post-commit correction receipt v3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-execution-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81",
+      "evidence_class": "engineering_preflight_correction",
+      "explanation": "Separates v2 preparation provenance from live bundle identity and freezes the USD 0.60 complete-instance planning rate without authorizing execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.v3.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast post-commit execution contract v3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-control-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "10b1ab667fac6ca06de1b92671ff42fdedd09dee748237d217cafe710144bca7",
+      "evidence_class": "engineering_preflight_correction",
+      "explanation": "Defines the corrected validation rule and preserves every v1 and v2 artifact byte.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md",
+      "scientific_authority": false,
+      "title": "A1.2 Vast post-commit preflight runbook v3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-owner-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "354c19d3debcda6d8c82c0a67d6fe310999c1f883198d6ceba4af0f4120f26de",
+      "evidence_class": "engineering_preflight_correction",
+      "explanation": "Provides the exact clean-commit validator and frozen-bundle command substitutions for the preserved v2 live preflight.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner runbook v3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-schema",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c9b46a32e5c805b0d861e6f79a9965426a2db7df70e89b1397b188535d867f03",
+      "evidence_class": "engineering_preflight_correction",
+      "explanation": "Validates the additive correction receipt, immutable bindings, launch locks, and zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json",
+      "scientific_authority": false,
+      "title": "A1.2 Vast post-commit receipt schema v3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-validator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0d84c8d235c351c51e509c759a6dea0e9f011c4c4a031d556922a423b0839d8e",
+      "evidence_class": "engineering_preflight_correction",
+      "explanation": "Validates receipt-bound v2 bytes and captures the current clean commit and tree without regenerating v2 controls.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_vast_postcommit.py",
+      "scientific_authority": false,
+      "title": "A1.2 Vast post-commit validator",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "offline_synthetic_preparation_only_live_vast_and_scientific_execution_unstarted",
+  "claim_boundary": "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority",
   "decision": {
     "owner_decisions_unchanged": true,
     "reason": "A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD 0.60 per complete four-GPU instance-hour; the estimate is 2-4 instance-hours and USD 1.20-2.40. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred.",
     "status": "blocked"
   },
-  "evidence_class": "engineering_preflight_scaffold",
+  "evidence_class": "engineering_preflight_correction",
   "evidence_links": [
     {
       "artifact_id": "a12-gpu-execution-proposal",
@@ -813,6 +921,36 @@
       "artifact_id": "a12-vast-v2-job-arm-05",
       "sha256": "a787141e7168567b8b2294333c6883d93080546f15efe349d938ceb766bbd6a3",
       "uri": "control/armindex/a1.2/jobs/v2/ARM-05.json"
+    },
+    {
+      "artifact_id": "a12-vast-v3-correction-receipt",
+      "sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json"
+    },
+    {
+      "artifact_id": "a12-vast-v3-execution-contract",
+      "sha256": "716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81",
+      "uri": "control/armindex/a1.2/execution-contract.v3.json"
+    },
+    {
+      "artifact_id": "a12-vast-v3-control-runbook",
+      "sha256": "10b1ab667fac6ca06de1b92671ff42fdedd09dee748237d217cafe710144bca7",
+      "uri": "control/runbooks/A1_2_VAST_4X3090_POSTCOMMIT_PREFLIGHT_V3.md"
+    },
+    {
+      "artifact_id": "a12-vast-v3-owner-runbook",
+      "sha256": "354c19d3debcda6d8c82c0a67d6fe310999c1f883198d6ceba4af0f4120f26de",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md"
+    },
+    {
+      "artifact_id": "a12-vast-v3-schema",
+      "sha256": "c9b46a32e5c805b0d861e6f79a9965426a2db7df70e89b1397b188535d867f03",
+      "uri": "schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json"
+    },
+    {
+      "artifact_id": "a12-vast-v3-validator",
+      "sha256": "0d84c8d235c351c51e509c759a6dea0e9f011c4c4a031d556922a423b0839d8e",
+      "uri": "src/myis_research/armindex/a1_2_vast_postcommit.py"
     }
   ],
   "failure_recovery_references": [
@@ -905,15 +1043,25 @@
       "recovery_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
       "recovery_uri": "outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-v2-postcommit-head-tree-regeneration-defect-20260806",
+      "failure_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+      "recovery_id": "a1.2-v3-receipt-bound-clean-commit-validator-20260806",
+      "recovery_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+      "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-05T15:56:15Z",
-  "generated_from_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
-  "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
+  "generated_at": "2026-08-06T01:32:27Z",
+  "generated_from_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
+  "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering_preflight_scaffold",
+    "evidence_class": "engineering_preflight_correction",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -955,7 +1103,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
+      "status": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -1004,15 +1152,26 @@
       "sha256": "92ada300e29426f39f27095e08a92332974b23a6412099e09f5348920e44a4b2",
       "uri": "control/armindex/a1.2/topology-contract.v2.json"
     },
+    "a12_vast_v3_correction_receipt": {
+      "self_sha256": "75379b2f33b85549036135cf6c7cc1b06c479b6fe5a1643c08a88501fefdc8ca",
+      "sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "status": "postcommit_validator_prepared_live_owner_preflight_pending",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json"
+    },
+    "a12_vast_v3_execution_contract": {
+      "self_sha256": "4cd7e2bf9599f095a8645a09644028a410a4a920550eaacc2f03f3a37a0501ff",
+      "sha256": "716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81",
+      "uri": "control/armindex/a1.2/execution-contract.v3.json"
+    },
     "armindex_schema_root": {
       "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
+      "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
+    "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -1023,13 +1182,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
+      "sha256": "0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The v2 receipt supports only offline engineering claims about frozen orchestration, topology, runtime, safe export, checkpointing, and shutdown controls. Live commit/tree/image, hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request.",
+  "interpretation": "The v3 receipt corrects only post-commit validation by checking immutable v2 bytes through their receipt and capturing the clean current commit/tree when the bundle is built. Live image, hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:56:15Z",
+  "last_material_update": "2026-08-06T01:32:27Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -1129,17 +1288,39 @@
       "source_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
       "split": "engineering_preflight",
       "value": 2.4
+    },
+    {
+      "cutoff": 0,
+      "denominator": "complete_four_rtx3090_instance",
+      "n": 1,
+      "name": "vast_v3_planning_rate_usd_per_instance_hour",
+      "scope": "A1.2",
+      "source_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+      "split": "engineering_preflight",
+      "value": 0.6
+    },
+    {
+      "cutoff": 0,
+      "denominator": "hard_stop_not_spend_authorization",
+      "n": 1,
+      "name": "vast_v3_common_screen_hard_stop_usd",
+      "scope": "A1.2",
+      "source_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+      "split": "engineering_preflight",
+      "value": 18
     }
   ],
-  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "0019e461e2fce030f5c3db11184ab56a82c24843722fc0748f439a0e6d372fc8",
+  "report_sha256": "a8fcf08fa416c978ebaf213b208d1c6469e5555b67725f5632a7541793c75744",
   "report_type": "task",
   "result": {
     "decision": "blocked",
-    "output": "The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), and the additive v2 local-orchestrated four-RTX3090 revision validates with 4 of 4 synthetic workers completed and 16 live checks pending.",
+    "output": "The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), the immutable v2 local-orchestrated four-RTX3090 preparation records 4 of 4 synthetic workers completed and 16 live checks pending, and the v3 post-commit correction is postcommit_validator_prepared_live_owner_preflight_pending.",
     "result": "A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD 0.60 per complete four-GPU instance-hour; the estimate is 2-4 instance-hours and USD 1.20-2.40. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred."
   },
   "schema_version": "myis.phase-task-report.v1",
@@ -1148,13 +1329,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
+    "program_state": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
     "task": "A1.2"
   },
-  "status": "active",
+  "status": "planned",
   "supported_claims": [
     {
-      "claim": "The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), and the additive v2 local-orchestrated four-RTX3090 revision validates with 4 of 4 synthetic workers completed and 16 live checks pending.",
+      "claim": "The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), the immutable v2 local-orchestrated four-RTX3090 preparation records 4 of 4 synthetic workers completed and 16 live checks pending, and the v3 post-commit correction is postcommit_validator_prepared_live_owner_preflight_pending.",
       "evidence": [
         "a12-gpu-execution-proposal",
         "a12-contract-scaffold-receipt",
@@ -1190,7 +1371,13 @@
         "a12-vast-v2-job-arm-02",
         "a12-vast-v2-job-arm-03",
         "a12-vast-v2-job-arm-04",
-        "a12-vast-v2-job-arm-05"
+        "a12-vast-v2-job-arm-05",
+        "a12-vast-v3-correction-receipt",
+        "a12-vast-v3-execution-contract",
+        "a12-vast-v3-control-runbook",
+        "a12-vast-v3-owner-runbook",
+        "a12-vast-v3-schema",
+        "a12-vast-v3-validator"
       ]
     }
   ],
@@ -1201,5 +1388,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, execution envelope, launch checklist, two-layer shutdown plan, receipt, and ledger were frozen. Launch remains false pending Owner-local artifact manifests, parity, live quote/capacity, external termination dry run, and explicit adoption."
+  "work_summary": "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, execution envelope, launch checklist, two-layer shutdown plan, receipt, and ledger were frozen. The v3 post-commit validator now checks preserved v2 bytes through their receipt and captures the clean bundle commit/tree dynamically. Launch remains false pending Owner-local artifact manifests, parity, live quote/capacity, external termination dry run, and explicit adoption."
 }

@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
+      "content_sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -119,7 +119,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
+      "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-05T15:56:15Z",
-  "generated_from_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
-  "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
+  "generated_at": "2026-08-06T01:32:27Z",
+  "generated_from_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
+  "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -178,10 +178,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "db97cfc937bae62b3321dc8fc653fbebb42b1c2c6fa401bd92069c1cab4707e7",
+      "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
+    "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -192,19 +192,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "56dd24adcd10a5fa8d30abe5d708821d89641dcca0b166db607b53124b419590",
+      "sha256": "0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-05T15:56:15Z",
+  "last_material_update": "2026-08-06T01:32:27Z",
   "metric_references": [],
-  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK.md on one disposable four-RTX3090 instance. Verify the unchanged v2 commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
+  "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "MLflow and Dashboard migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-4",
-  "report_sha256": "302870e113e860b0545733dd7e236eef92f0c702a7bd9d2985592638fbf16ad4",
+  "report_sha256": "88a20d6a99674b597d206678fc9e975bba2ac359c68a568a7fe6dd05bbaa630e",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -217,7 +217,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_vast_4x3090_preflight_prepared_launch_locked",
+    "program_state": "a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked",
     "task": "A0.4"
   },
   "status": "completed",

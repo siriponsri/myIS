@@ -36,6 +36,33 @@
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json",
     "status": "a1_2_contract_scaffold_complete_launch_locked"
   },
+  "armindex_a1_2_vast_postcommit": {
+    "adopted_for_execution": false,
+    "contract_sha256": "716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81",
+    "contract_uri": "control/armindex/a1.2/execution-contract.v3.json",
+    "evidence_class": "engineering_preflight_correction",
+    "launch_allowed": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_reservations": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0,
+      "provider_switches": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_self_sha256": "75379b2f33b85549036135cf6c7cc1b06c479b6fe5a1643c08a88501fefdc8ca",
+    "source_receipt_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+    "status": "postcommit_validator_prepared_live_owner_preflight_pending",
+    "v2_receipt_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600"
+  },
   "armindex_a1_2_vast_preflight": {
     "adopted_for_execution": false,
     "closeout_validation_audit_sha256": "8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c",
@@ -114,7 +141,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da",
+  "dashboard_snapshot_sha256": "1114f96b4e89e2c97989c3f6b78ebe1a3bf2b6328f9dae0a7718b0678798b94f",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -147,7 +174,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "81ba6b5d0c05009ac4c3000552e964ed0fdf9fad4d822f26d0c8cbe42e7ac78c",
+  "obsidian_manifest_sha256": "4043fab2602cabe601aa62955780130fcd351ff48e9e8f70514850bead0acf8c",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -185,8 +212,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "3ebeb9054849cc287b756773368c572b06a7d205bc25ff29c361a7e819cf9d43",
-  "read_model_sha256": "7f430f951c8600955f0b3c5a60d3a7060ef8df5c7120a9ab7926518802d658da",
+  "read_model_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
+  "read_model_sha256": "1114f96b4e89e2c97989c3f6b78ebe1a3bf2b6328f9dae0a7718b0678798b94f",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -194,7 +221,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "1149f9e63ac6174a3ce4bc5a553d793b7d707b0b",
+  "source_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
   "status": "current",
   "system_experiment": "myis-system"
 }
