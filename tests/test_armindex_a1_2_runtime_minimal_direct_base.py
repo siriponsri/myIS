@@ -53,7 +53,13 @@ def test_active_direct_path_has_no_custom_image_or_nested_container_steps() -> N
     assert "docker run" not in bootstrap
     assert "docker load" not in bootstrap
     assert "--no-index" in bootstrap
+    assert "--no-index --no-deps" not in bootstrap
     assert "--system-site-packages" in bootstrap
+    assert "grep -R" not in bootstrap
+    assert "remote model tree is not the exact frozen runtime tree" in bootstrap
+    assert "remote wheelhouse tree is not the exact Actions artifact" in bootstrap
+    assert "remote bundle tree is not the exact frozen bundle" in bootstrap
+    assert "unsafe remote job manifest" in bootstrap
     coordinator = (ROOT / "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinator.ps1").read_text(encoding="utf-8")
     assert "ImageArchivePath" not in coordinator
     assert "docker load" not in coordinator.lower()

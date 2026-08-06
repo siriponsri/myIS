@@ -851,7 +851,7 @@
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "content_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "evidence_class": "engineering_preflight_revision",
       "explanation": "Binds the direct official PyTorch manifest, runtime-minimal policy, upload allowlist, live pending checks, and zero counters.",
       "parent_artifact_hashes": {},
@@ -869,7 +869,7 @@
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "content_sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
       "evidence_class": "engineering_preflight_revision",
       "explanation": "Removes custom-image build/save/upload/load and nested-container execution from the active path while preserving v1-v3.",
       "parent_artifact_hashes": {},
@@ -1236,12 +1236,12 @@
     },
     {
       "artifact_id": "a12-direct-base-v5-receipt",
-      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
     },
     {
       "artifact_id": "a12-direct-base-v5-contract",
-      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
       "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
     },
     {
@@ -1388,7 +1388,7 @@
     }
   ],
   "generated_at": "2026-08-06T13:30:53Z",
-  "generated_from_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
+  "generated_from_revision": "59e7efc0e448cc5a1f9b1fc2682e78d989b93fd5e050a689e015fb15b9888cab",
   "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
   "governance_status": {
     "d2": "waiting_owner",
@@ -1437,11 +1437,11 @@
       "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
       "platform": "linux/amd64",
       "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
-      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
       "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
     },
     "a12_direct_base_v5_receipt": {
-      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "status": "direct_base_preflight_prepared_local_owner_stage_pending",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
     },
@@ -1627,7 +1627,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "ddcaa10b3eef442ef58e54f46ea64e527135bc3578c64964b3c03865a4ff4c77",
+  "report_sha256": "2b038762c8593dc9dc82b303b0a202c6016139a73368b985321179a6d2f16f41",
   "report_type": "phase",
   "result": {
     "decision": "active",

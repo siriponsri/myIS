@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-06T13:30:53Z",
-  "generated_from_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
+  "generated_from_revision": "59e7efc0e448cc5a1f9b1fc2682e78d989b93fd5e050a689e015fb15b9888cab",
   "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Complementarity and HarnessOpt",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-2",
-  "report_sha256": "c598d6dcd66c02306541bfb2ebc1415d90eea8d673bd78f8b34fbd78de97c7ed",
+  "report_sha256": "3a210ef93ab25acc437c6f90d333dc8e9ab0df7be1abf2f398510f0a85374c83",
   "report_type": "task",
   "result": {
     "decision": "planned",

@@ -38,7 +38,7 @@
   },
   "armindex_a1_2_runtime_minimal_direct_base": {
     "adopted_for_execution": false,
-    "contract_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+    "contract_sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
     "contract_uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json",
     "custom_local_docker_build": false,
     "evidence_class": "engineering_preflight_revision",
@@ -86,7 +86,7 @@
       "provider_switches": 0
     },
     "scientific_authority": false,
-    "source_receipt_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+    "source_receipt_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
     "status": "direct_base_preflight_prepared_local_owner_stage_pending"
   },
@@ -195,7 +195,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "8fb06f64bbea69b27e9177b97246b3cfe6a809ecd2d8a89ae871b4c60e720f4f",
+  "dashboard_snapshot_sha256": "7208e92091ad9906ff998beafdfa4687c101830b373f77ffe7f432943bffed2c",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -228,7 +228,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "b899eb3ca60cea8e5ddc2ed4200d3cba7b8819216da3cba2242c721afa32e391",
+  "obsidian_manifest_sha256": "e2fc40acab02f506b1d577bd767849648923f3abe64e052caa34998f7d91c4a7",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -266,8 +266,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
-  "read_model_sha256": "8fb06f64bbea69b27e9177b97246b3cfe6a809ecd2d8a89ae871b4c60e720f4f",
+  "read_model_revision": "59e7efc0e448cc5a1f9b1fc2682e78d989b93fd5e050a689e015fb15b9888cab",
+  "read_model_sha256": "7208e92091ad9906ff998beafdfa4687c101830b373f77ffe7f432943bffed2c",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",

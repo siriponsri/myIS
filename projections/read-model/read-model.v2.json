@@ -353,7 +353,7 @@
       "vast_preflight_v5": {
         "adopted_for_execution": false,
         "claim_boundary": "direct_official_base_image_path_only_no_vast_contact_no_measured_execution",
-        "contract_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+        "contract_sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
         "contract_uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json",
         "cpu_model_load": "intentionally_skipped_due_host_memory",
         "custom_local_docker_build": false,
@@ -401,7 +401,7 @@
           "measured_runs": 0,
           "selection_accesses": 0
         },
-        "receipt_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+        "receipt_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
         "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
         "removed_active_steps": [
           "custom_image_build",
@@ -2202,7 +2202,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
+  "projection_revision": "59e7efc0e448cc5a1f9b1fc2682e78d989b93fd5e050a689e015fb15b9888cab",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2246,8 +2246,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
-  "read_model_sha256": "8fb06f64bbea69b27e9177b97246b3cfe6a809ecd2d8a89ae871b4c60e720f4f",
+  "read_model_revision": "59e7efc0e448cc5a1f9b1fc2682e78d989b93fd5e050a689e015fb15b9888cab",
+  "read_model_sha256": "7208e92091ad9906ff998beafdfa4687c101830b373f77ffe7f432943bffed2c",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

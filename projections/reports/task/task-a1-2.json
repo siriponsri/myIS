@@ -761,7 +761,7 @@
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "content_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "evidence_class": "engineering_preflight_revision",
       "explanation": "Binds the direct official PyTorch manifest, runtime-minimal policy, upload allowlist, live pending checks, and zero counters.",
       "parent_artifact_hashes": {},
@@ -779,7 +779,7 @@
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "content_sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
       "evidence_class": "engineering_preflight_revision",
       "explanation": "Removes custom-image build/save/upload/load and nested-container execution from the active path while preserving v1-v3.",
       "parent_artifact_hashes": {},
@@ -1121,12 +1121,12 @@
     },
     {
       "artifact_id": "a12-direct-base-v5-receipt",
-      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
     },
     {
       "artifact_id": "a12-direct-base-v5-contract",
-      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
       "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
     },
     {
@@ -1273,7 +1273,7 @@
     }
   ],
   "generated_at": "2026-08-06T13:30:53Z",
-  "generated_from_revision": "181a8bb34ec0d365a89174e948225e9d8835ef32eb904e1cb419f46ead46f738",
+  "generated_from_revision": "59e7efc0e448cc5a1f9b1fc2682e78d989b93fd5e050a689e015fb15b9888cab",
   "git_commit": "b53ff76578ca2b03663d6064ee018f7bb4131b09",
   "governance_status": {
     "d2": "waiting_owner",
@@ -1322,11 +1322,11 @@
       "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
       "platform": "linux/amd64",
       "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
-      "sha256": "8fabe004c96e561f7a2fbf8a1ff6819acfa1038d9b49021b11f1da07b956d238",
+      "sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
       "uri": "control/armindex/a1.2/execution-contract.direct-base.v5.json"
     },
     "a12_direct_base_v5_receipt": {
-      "sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "status": "direct_base_preflight_prepared_local_owner_stage_pending",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
     },
@@ -1546,7 +1546,7 @@
       "n": 1,
       "name": "vast_v5_direct_base_live_check_pending_count",
       "scope": "A1.2",
-      "source_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "source_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
       "split": "engineering_preflight",
       "value": 21
@@ -1557,7 +1557,7 @@
       "n": 1,
       "name": "vast_v5_custom_local_docker_build_removed",
       "scope": "A1.2",
-      "source_sha256": "8d0480b4c6ef8ae3631f04f8038761db2eaee660eef01644605530dfeea715a5",
+      "source_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
       "split": "engineering_preflight",
       "value": 1
@@ -1567,7 +1567,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "40114c66112dab3e0f972f3a9d1ab8d1e1fb829b6287b6415672283f80207a24",
+  "report_sha256": "129192249366d46f41bd635bb5b4505e77423737c6b5b8120e2707120697473a",
   "report_type": "task",
   "result": {
     "decision": "blocked",
