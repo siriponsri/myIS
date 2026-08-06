@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e"
-read_model_sha256: "1114f96b4e89e2c97989c3f6b78ebe1a3bf2b6328f9dae0a7718b0678798b94f"
-source_commit: "ae0c65c18abf14b80b66016ad4ba9e1b589275dd"
+read_model_revision: "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d"
+read_model_sha256: "e32db4f9a31f6ed1e20108d6d74b29f27e502dec28593ffd20224aa642ad6356"
+source_commit: "1e86c432933f3bbf2e6763d04bb64139f81ce396"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_preflight_correction"
 scientific_authority: false
 claim_boundary: "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority"
-generated_from_revision: "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e"
-last_material_update: "2026-08-06T01:32:27Z"
+generated_from_revision: "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d"
+last_material_update: "2026-08-06T02:33:36Z"
 next_authorized_action: "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-06T01:32:27Z"
-updated_at: "2026-08-06T01:32:27Z"
+created_at: "2026-08-06T02:33:36Z"
+updated_at: "2026-08-06T02:33:36Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -48,7 +48,7 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0`
-- `git_commit`: ae0c65c18abf14b80b66016ad4ba9e1b589275dd
+- `git_commit`: 1e86c432933f3bbf2e6763d04bb64139f81ce396
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -153,6 +153,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 beginner Owner runbook v3 | `runbook` | `engineering_preflight_correction` | `docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md` | `354c19d3debcda6d8c82c0a67d6fe310999c1f883198d6ceba4af0f4120f26de` | `validated` |
 | A1.2 Vast post-commit receipt schema v3 | `schema` | `engineering_preflight_correction` | `schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json` | `c9b46a32e5c805b0d861e6f79a9965426a2db7df70e89b1397b188535d867f03` | `validated` |
 | A1.2 Vast post-commit validator | `tool` | `engineering_preflight_correction` | `src/myis_research/armindex/a1_2_vast_postcommit.py` | `0d84c8d235c351c51e509c759a6dea0e9f011c4c4a031d556922a423b0839d8e` | `validated` |
+| A1.2 v3 deterministic projection stability repair | `audit` | `engineering_validation` | `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json` | `e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e` | `validated` |
 
 ## Metrics
 
@@ -179,11 +180,11 @@ Fixture values are synthetic engineering diagnostics and are never reported as m
 
 ## Interpretation
 
-The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, and a receipt-bound post-commit validator with status postcommit_validator_prepared_live_owner_preflight_pending. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.
+The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, a receipt-bound post-commit validator with status postcommit_validator_prepared_live_owner_preflight_pending, and a stable generated read model that excludes runtime-only Git identity. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.
 
 ## Supported Claims
 
-- The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), the immutable four-RTX3090 v2 preparation with 4 synthetic workers, and the additive v3 post-commit validator correction. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator)
+- The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), the immutable four-RTX3090 v2 preparation with 4 synthetic workers, and the additive v3 post-commit validator correction. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair)
 
 ## Unsupported Claims
 
@@ -203,6 +204,7 @@ The offline evidence proves deterministic four-worker orchestration, frozen topo
 - `a1.2-v2-pyproject-v1-source-binding-drift-20260806` -> `a1.2-v2-module-command-v1-byte-preservation-20260806`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json` / `8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c`; recovery `outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json` / `8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c`
 - `a1.2-v2-stale-generated-projection-source-20260806` -> `a1.2-v2-receipt-first-shared-read-model-sync-20260806`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json` / `8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c`; recovery `outputs/audits/rigor/a1.2-vast-4x3090-preflight-closeout-validation-20260806.json` / `8bfd4817abfeb10c48169efc80bb5c655760da1ab03b06fad98435cb0072e33c`
 - `a1.2-v2-postcommit-head-tree-regeneration-defect-20260806` -> `a1.2-v3-receipt-bound-clean-commit-validator-20260806`; status `repaired_and_validated`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json` / `f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json` / `f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0`
+- `a1.2-v3-runtime-git-identity-projection-drift-20260806` -> `a1.2-v3-runtime-git-identity-projection-exclusion-20260806`; status `repaired_and_validated`; counters changed `False`; failure `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json` / `e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e`; recovery `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json` / `e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e`
 
 ## Governance and Safety
 
@@ -277,3 +279,4 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - a12-vast-v3-owner-runbook
 - a12-vast-v3-schema
 - a12-vast-v3-validator
+- a12-vast-v3-projection-stability-repair

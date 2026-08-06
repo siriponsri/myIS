@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T01:32:27Z",
-  "generated_from_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
-  "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+  "generated_at": "2026-08-06T02:33:36Z",
+  "generated_from_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,7 +108,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+    "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
     "source_of_truth": {
       "sha256": "0583967d68044a7fa2b724a627aebc84946f63fbd14b8844dfd520f76ac88d85",
       "uri": "control/source-of-truth.yaml"
@@ -116,13 +116,13 @@
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-06T01:32:27Z",
+  "last_material_update": "2026-08-06T02:33:36Z",
   "metric_references": [],
   "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "d5241836648f511c23047d6a23f51d35714d3d3f54d96153e514c5ada567f1b3",
+  "report_sha256": "cd4a9488ed9939757f031529ceecc91140ae97fd43f9df86326b230d6c01a51a",
   "report_type": "task",
   "result": {
     "decision": "completed",

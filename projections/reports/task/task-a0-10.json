@@ -298,9 +298,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-06T01:32:27Z",
-  "generated_from_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
-  "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+  "generated_at": "2026-08-06T02:33:36Z",
+  "generated_from_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -330,7 +330,7 @@
       "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+    "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -371,13 +371,13 @@
   },
   "interpretation": "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation.",
   "language": "en",
-  "last_material_update": "2026-08-06T01:32:27Z",
+  "last_material_update": "2026-08-06T02:33:36Z",
   "metric_references": [],
   "next_authorized_action": "/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V3.md on one disposable four-RTX3090 instance. Validate the clean pushed v3 correction, preserve the unchanged v2 bytes, and verify the frozen bundle commit, tree, image digest, four GPU UUIDs, locked runtime and model bytes, adapter parity, Qwen maximum length, local protected-root boundary, live USD quote, heartbeat/resume, safe return path, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.",
   "objective": "Legacy code harvest and phase-ready scaffolding",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-10",
-  "report_sha256": "fddd7c4326d9e64f437af944b1bbcb51e55c86a22b706a1f9b617c30e77f84e4",
+  "report_sha256": "51bd8e66383a4b641a1640eca702b662e8b78d03fc5887c9f623851b2a64b8f6",
   "report_type": "task",
   "result": {
     "decision": "completed",

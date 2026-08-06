@@ -348,9 +348,7 @@
         "schema_uri": "schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json",
         "status": "postcommit_validator_prepared_live_owner_preflight_pending",
         "v2_receipt_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600",
-        "validated": true,
-        "validation_git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
-        "validation_git_tree": "f78ac30edce4941bd0e06412669456b1c87cbdb3"
+        "validated": true
       }
     },
     "adapter_fixture_validation": {
@@ -1210,7 +1208,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-06T01:32:27Z",
+  "generated_at": "2026-08-06T02:33:36Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -2118,7 +2116,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
+  "projection_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2162,8 +2160,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
-  "read_model_sha256": "1114f96b4e89e2c97989c3f6b78ebe1a3bf2b6328f9dae0a7718b0678798b94f",
+  "read_model_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "read_model_sha256": "e32db4f9a31f6ed1e20108d6d74b29f27e502dec28593ffd20224aa642ad6356",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2296,7 +2294,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+  "source_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "tasks": [
     {
       "evidence_ids": [],

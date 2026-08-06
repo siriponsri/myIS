@@ -827,6 +827,24 @@
       "scientific_authority": false,
       "title": "A1.2 Vast post-commit validator",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-vast-v3-projection-stability-repair",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e",
+      "evidence_class": "engineering_validation",
+      "explanation": "Records the bounded runtime Git-identity projection drift, the deterministic read-model repair, focused regression evidence, preserved v1/v2/v3 receipts, and unchanged zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json",
+      "scientific_authority": false,
+      "title": "A1.2 v3 deterministic projection stability repair",
+      "validation_status": "validated"
     }
   ],
   "claim_boundary": "postcommit_validator_and_clean_bundle_identity_correction_only_no_live_vast_or_retrieval_quality_authority",
@@ -1066,6 +1084,11 @@
       "artifact_id": "a12-vast-v3-validator",
       "sha256": "0d84c8d235c351c51e509c759a6dea0e9f011c4c4a031d556922a423b0839d8e",
       "uri": "src/myis_research/armindex/a1_2_vast_postcommit.py"
+    },
+    {
+      "artifact_id": "a12-vast-v3-projection-stability-repair",
+      "sha256": "e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e",
+      "uri": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json"
     }
   ],
   "failure_recovery_references": [
@@ -1168,11 +1191,21 @@
       "recovery_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
       "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
       "status": "repaired_and_validated"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "a1.2-v3-runtime-git-identity-projection-drift-20260806",
+      "failure_sha256": "e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e",
+      "failure_uri": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json",
+      "recovery_id": "a1.2-v3-runtime-git-identity-projection-exclusion-20260806",
+      "recovery_sha256": "e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e",
+      "recovery_uri": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json",
+      "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-06T01:32:27Z",
-  "generated_from_revision": "e2b10cee31b02daff0418c821358212484302f5b3768cc5d8647aca4b638851e",
-  "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+  "generated_at": "2026-08-06T02:33:36Z",
+  "generated_from_revision": "e3165c74caf18b254fab7e0010ab3555c3bdb268c7031c088d678bb3d62fba0d",
+  "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -1286,7 +1319,7 @@
       "sha256": "d900f43d0d5741c67a6be01b0dee423745fa67514e344741f85d752efec972b0",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "ae0c65c18abf14b80b66016ad4ba9e1b589275dd",
+    "git_commit": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -1301,9 +1334,9 @@
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, and a receipt-bound post-commit validator with status postcommit_validator_prepared_live_owner_preflight_pending. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.",
+  "interpretation": "The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, a receipt-bound post-commit validator with status postcommit_validator_prepared_live_owner_preflight_pending, and a stable generated read model that excludes runtime-only Git identity. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
-  "last_material_update": "2026-08-06T01:32:27Z",
+  "last_material_update": "2026-08-06T02:33:36Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -1398,7 +1431,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "75bb9c506ab95601b000424fa0cce73451615ac5ec01fa72fd9263168ae3e770",
+  "report_sha256": "f2523a797324423ffda8cbb941466edbe361b303a8a54a31ea2e32567fd12138",
   "report_type": "phase",
   "result": {
     "decision": "active",
@@ -1464,7 +1497,8 @@
         "a12-vast-v3-control-runbook",
         "a12-vast-v3-owner-runbook",
         "a12-vast-v3-schema",
-        "a12-vast-v3-validator"
+        "a12-vast-v3-validator",
+        "a12-vast-v3-projection-stability-repair"
       ]
     }
   ],

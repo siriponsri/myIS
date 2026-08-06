@@ -1,0 +1,136 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260806T023413Z-a1.2-v3-projection-stability-repair",
+  "run_id": null,
+  "goal_id": "019fcefe-6705-7971-aed4-6d64d9341850",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-06T02:34:13Z",
+  "scope": "Repair and validate deterministic A1.2 v3 report projection after an evidence-neutral commit exposed runtime Git identity drift, preserve all frozen receipts and launch locks, record the material failure and recovery, and prepare aggregate-safe MLflow and Brain pointers.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-06",
+      "scope": "Offline and local synthetic A1.2 preflight preparation, detailed English reports, aggregate-safe MLflow and Brain projection, commit, and push. The planning rate is USD 0.60 per hour for the complete four-RTX3090 instance. No paid worker connection, GPU reservation, measured retrieval, paid API, Selection, Final, or model-weight change is authorized."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "1e86c432933f3bbf2e6763d04bb64139f81ce396",
+    "dirty_paths": []
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The first report check after the projection-only closeout commit changed the shared read-model revision because generated A1.2 state contained runtime validator Git commit and tree values.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json",
+          "sha256": "e0abfe9c9c7a77c6e31a61160f7760133f4313a8bda12d74956ddd2bdbcfcf6e",
+          "locator": "failure"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "Generated projections now omit runtime-only validator commit and tree values while the clean-tree validator continues to report and verify both identities.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/projections/read_model.py",
+          "sha256": "8d1068213f1624f25d860fce6758ef062b9a145ace104586159d0faad4190368",
+          "locator": "_a12_contract_scaffold_projection vast_preflight_v3"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "A regression test supplies two different runtime Git identities and proves that the read-model revision and read-model file hash remain unchanged.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_read_model.py",
+          "sha256": "c751e91f6858d74f1b7c012c025c68f596917a957ab79600ef52e390efe22cfe",
+          "locator": "test_read_model_revision_ignores_postcommit_validation_git_identity"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The report generator now projects the repair audit into the detailed English A1 Phase and A1.2 Task reports as both an artifact and a recovered material failure.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/report_records.py",
+          "sha256": "919adfa0eb2f357ef39844838b39ce6a3b87c82d0cadcb72c9914a57105448eb",
+          "locator": "A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT artifact and failure records"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner planning rate remains USD 0.60 per hour for the complete four-RTX3090 instance, not per GPU.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+          "sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+          "locator": "budget.planning_rate_usd_per_four_gpu_instance_hour"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The repaired projection has engineering-validation authority only; launch and adoption remain false, and measured, GPU-reservation, charged-cost, Selection, and Final counters remain zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
+          "sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+          "locator": "scientific_authority, launch_allowed, adopted_for_execution, real_counters, and resource_counters"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "outputs/audits/research-sessions/20260806T023413Z-a1.2-v3-projection-stability-repair-mlflow-registration.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-proposed",
+      "summary": "The Owner-local live SSH/Vast preflight remains pending and must bind the live quote and provider identity, four GPU UUIDs, image and model hashes, adapter parity, Qwen maximum length, heartbeat and resume, safe artifact return, and provider destruction and TTL proof before any unchanged-revision adoption request.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
