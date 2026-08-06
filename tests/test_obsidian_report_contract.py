@@ -192,6 +192,8 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in a12_report
     assert "A1.2 Vast post-commit correction receipt v3" in a12_report
     assert "a1.2-v2-postcommit-head-tree-regeneration-defect-20260806" in a12_report
+    assert "A1.2 v3 deterministic projection stability repair" in a12_report
+    assert "a1.2-v3-runtime-git-identity-projection-drift-20260806" in a12_report
     assert "USD 0.60 per complete four-GPU instance-hour" in a12_report
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))

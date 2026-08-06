@@ -105,9 +105,16 @@ evidence.
   `a1.2-local-vast-4x3090-postcommit-v3` validates v2 through its immutable
   receipt and captures the clean current commit/tree when the bundle is built.
   The v3 correction receipt self-hash is
-  `c56c22e063d81c045537d9e566e7703aed2bafcc1f48dd1c9bb0ba2211dc79e2`;
+  `75379b2f33b85549036135cf6c7cc1b06c479b6fe5a1643c08a88501fefdc8ca`;
   launch, adoption, measured, GPU, paid, Selection, and Final counters remain
   locked or zero.
+- The first report check after the projection-only closeout commit exposed a
+  second bounded defect: runtime validator commit/tree values changed generated
+  A1.2 state after every evidence-neutral commit. Repair commit `4b5194e`
+  preserves clean-tree validation output while excluding those volatile values
+  from the shared read model. The two-identity regression passed, and the repair
+  is recorded in
+  `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json`.
 - Public revisions and critical artifact commitments are frozen for BGE-M3,
   PatEmbed-large, Snowflake Arctic Embed M v2.0, and Qwen3-Embedding-0.6B. No
   model payload was downloaded. The four dense locks remain

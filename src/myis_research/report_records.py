@@ -33,6 +33,9 @@ P2_RUNTIME_INDEPENDENT_REVISE_AUDIT = "outputs/audits/rigor/p2-runtime-resilienc
 P2_RUNTIME_INDEPENDENT_ACCEPT_AUDIT = "outputs/audits/rigor/p2-runtime-resilience-v2-independent-verifier-accept-20260803.json"
 A010_RIGOR_REVISE_AUDIT = "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-revise-20260804.json"
 A010_RIGOR_ACCEPT_AUDIT = "outputs/audits/rigor/a0.10-legacy-code-harvest-independent-accept-20260804.json"
+A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT = (
+    "outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json"
+)
 _FORBIDDEN = re.compile(
     r"(?:query_ids?|split_membership|per_query(?:_outcomes?)?|rankings|"
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
@@ -632,6 +635,22 @@ def _artifacts(
                             producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                             producing_task_id="A1.2",
                         ))
+                projection_repair_sha256 = _hash_file(
+                    root, A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT
+                )
+                if projection_repair_sha256:
+                    result.append(_artifact(
+                        artifact_id="a12-vast-v3-projection-stability-repair",
+                        title="A1.2 v3 deterministic projection stability repair",
+                        artifact_type="audit",
+                        evidence_class="engineering_validation",
+                        scientific_authority=False,
+                        safe_uri=A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT,
+                        content_sha256=projection_repair_sha256,
+                        explanation="Records the bounded runtime Git-identity projection drift, the deterministic read-model repair, focused regression evidence, preserved v1/v2/v3 receipts, and unchanged zero counters.",
+                        producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                        producing_task_id="A1.2",
+                    ))
     return result
 
 
@@ -1128,6 +1147,20 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 "status": "repaired_and_validated",
                 "counters_changed": False,
             })
+            projection_repair_sha256 = _hash_file(
+                root, A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT
+            )
+            if projection_repair_sha256:
+                failures.append({
+                    "failure_id": "a1.2-v3-runtime-git-identity-projection-drift-20260806",
+                    "failure_uri": A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT,
+                    "failure_sha256": projection_repair_sha256,
+                    "recovery_id": "a1.2-v3-runtime-git-identity-projection-exclusion-20260806",
+                    "recovery_uri": A12_V3_PROJECTION_STABILITY_REPAIR_AUDIT,
+                    "recovery_sha256": projection_repair_sha256,
+                    "status": "repaired_and_validated",
+                    "counters_changed": False,
+                })
     if phase_id == "P2_SCOPE_DEVELOPMENT" and model.get("observatory", {}).get("failed_child_count", 0):
         failures.append({"failure_id": "obs-failure-candidate-02", "recovery_id": "obs-recovery-candidate-02", "status": "retained_and_recovered", "counters_changed": False})
     if phase_id == "P2_SCOPE_DEVELOPMENT":
@@ -1289,7 +1322,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
         output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved launch-locked A1.2 v1 scaffold for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), the immutable four-RTX3090 v2 preparation with {vast.get('synthetic_worker_count', 0)} synthetic workers, and the additive v3 post-commit validator correction."
         result = f"A1 engineering preparation is current through the v3 correction receipt, which preserves the immutable v2 receipt; {vast.get('live_check_count', 0)} live Owner checks remain pending, while measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
-        interpretation = f"The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, and a receipt-bound post-commit validator with status {vast_v3.get('status', 'not_started')}. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization."
+        interpretation = f"The offline evidence proves deterministic four-worker orchestration, frozen topology and budget controls, fail-closed export and shutdown paths, a receipt-bound post-commit validator with status {vast_v3.get('status', 'not_started')}, and a stable generated read model that excludes runtime-only Git identity. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization."
         decision_status = "active"
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
@@ -1311,7 +1344,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
             output = f"The preserved v1 contract scaffold validates, the earlier CPU-only Owner preflight remains {preflight_status} with {blocker_count} blocker group(s), the immutable v2 local-orchestrated four-RTX3090 preparation records {vast.get('synthetic_worker_count', 0)} of {vast.get('synthetic_worker_count', 0)} synthetic workers completed and {vast.get('live_check_count', 0)} live checks pending, and the v3 post-commit correction is {vast_v3.get('status', 'not_started')}."
             result = f"A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD {vast.get('planning_rate_usd', 0):.2f} per complete four-GPU instance-hour; the estimate is {vast.get('estimated_instance_hours', 'unavailable')} instance-hours and USD {vast.get('estimated_raw_worker_usd', 'unavailable')}. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred."
-            interpretation = "The v3 receipt corrects only post-commit validation by checking immutable v2 bytes through their receipt and capturing the clean current commit/tree when the bundle is built. Live image, hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request."
+            interpretation = "The v3 receipt corrects post-commit validation by checking immutable v2 bytes through their receipt and capturing the clean current commit/tree when the bundle is built. The subsequent projection-stability repair keeps that runtime validation output available while excluding volatile Git identity from generated state. Live image, hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request."
             decision_status = "blocked"
         else:
             output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."

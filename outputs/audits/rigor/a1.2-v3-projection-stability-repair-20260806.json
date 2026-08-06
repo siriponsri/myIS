@@ -1,0 +1,85 @@
+{
+  "schema_version": "myis.armindex-a1.2-projection-stability-repair.v1",
+  "audit_id": "a1.2-v3-projection-stability-repair-20260806",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "PASS",
+  "completed_at_utc": "2026-08-06T02:28:31Z",
+  "evidence_class": "engineering_validation",
+  "scientific_authority": false,
+  "claim_boundary": "deterministic_projection_repair_only_no_live_vast_or_retrieval_quality_authority",
+  "source_revision": {
+    "git_commit": "4b5194e4d8c4594875901935652184499200c419",
+    "git_tree": "09d848293de17142b906ed50f84985112f17535d"
+  },
+  "failure": {
+    "failure_id": "a1.2-v3-runtime-git-identity-projection-drift-20260806",
+    "summary": "The first report check after the projection-only closeout commit changed the shared read-model revision because the A1.2 v3 projection copied runtime validator Git commit and tree values into generated state.",
+    "affected_surface": "armindex.a1_2_contract_scaffold.vast_preflight_v3",
+    "scientific_counters_changed": false,
+    "resource_counters_changed": false
+  },
+  "recovery": {
+    "recovery_id": "a1.2-v3-runtime-git-identity-projection-exclusion-20260806",
+    "summary": "Runtime validation still reports and verifies the current clean Git commit and tree, while generated projections omit those volatile values. A regression test changes both runtime identities and proves that the read-model revision and file hash remain unchanged.",
+    "implementation_paths": [
+      "src/myis_research/projections/read_model.py",
+      "tests/test_read_model.py"
+    ],
+    "repair_commit": "4b5194e4d8c4594875901935652184499200c419"
+  },
+  "validation": [
+    {
+      "check_id": "read_model_and_postcommit_focused_tests",
+      "status": "PASS",
+      "passed": 25,
+      "xfailed": 0
+    },
+    {
+      "check_id": "a1_2_revision_validators",
+      "status": "PASS",
+      "passed": 21,
+      "xfailed": 1
+    },
+    {
+      "check_id": "clean_tree_v3_validator",
+      "status": "PASS",
+      "git_commit": "4b5194e4d8c4594875901935652184499200c419",
+      "git_tree": "09d848293de17142b906ed50f84985112f17535d",
+      "launch_allowed": false,
+      "adopted_for_execution": false
+    }
+  ],
+  "preserved_receipts": {
+    "v1_file_sha256": "834ed83440b7d2c0809588f661739208ddb62d72d6d4cd582f192bd9f2cbff7d",
+    "v2_file_sha256": "efc6550fc9cb321a3cbaca75c5aea1b95e52d007b59b21f80888ab872e462efb",
+    "v2_receipt_sha256": "869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600",
+    "v3_file_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
+    "v3_receipt_sha256": "75379b2f33b85549036135cf6c7cc1b06c479b6fe5a1643c08a88501fefdc8ca"
+  },
+  "real_counters": {
+    "measured_runs": 0,
+    "candidate_count": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "resource_counters": {
+    "charged_usd": 0,
+    "gpu_reservations": 0,
+    "gpu_scientific_runs": 0,
+    "model_downloads": 0,
+    "paid_api_calls": 0
+  },
+  "untouched_surfaces": [
+    "owner_local_protected_store",
+    "qrels",
+    "split_membership",
+    "query_ids",
+    "per_query_outcomes",
+    "credentials",
+    "paid_vast_worker",
+    "selection",
+    "final"
+  ],
+  "audit_sha256": "7440aff477e77ef23c42d55ecc1a82f7b32e867efb388f32deafacba12ac1883"
+}

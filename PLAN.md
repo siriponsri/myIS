@@ -180,9 +180,18 @@ No v2 byte was changed. Additive revision
 receipt self-hash `869b6feac387c069f3f53ec49cc3ebf42159cf750d3e23acb0d57ead622ca600`
 and captures the clean current commit and tree only when the frozen bundle is
 built. The v3 correction receipt self-hash is
-`c56c22e063d81c045537d9e566e7703aed2bafcc1f48dd1c9bb0ba2211dc79e2`.
+`75379b2f33b85549036135cf6c7cc1b06c479b6fe5a1643c08a88501fefdc8ca`.
 It keeps `launch_allowed=false`, `adopted_for_execution=false`, and all
 measured and resource counters at zero.
+
+The first report check after the projection-only closeout commit exposed a
+second bounded engineering defect: runtime validator commit/tree values had
+been copied into generated A1.2 state, so an evidence-neutral commit changed
+the shared read-model revision. Repair commit `4b5194e` preserves the runtime
+validator output but excludes those volatile values from projections. A
+regression test changes both identities and confirms an unchanged read-model
+revision and file hash. The additive repair audit is
+`outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json`.
 
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
