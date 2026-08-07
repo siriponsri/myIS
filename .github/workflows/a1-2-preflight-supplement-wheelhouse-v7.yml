@@ -1,0 +1,145 @@
+name: A1.2 preflight supplement wheelhouse v7
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wheelhouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: pytorch/pytorch@sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve the missing preflight dependency closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -s)" = Linux
+          test "$(uname -m)" = x86_64
+          python -m pip install --dry-run --report /tmp/a1-2-supplement.json \
+            -r containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("/tmp/a1-2-supplement.json").read_text(encoding="utf-8"))
+          requirements = sorted(
+              {
+                  f"{item['metadata']['name']}=={item['metadata']['version']}"
+                  for item in report["install"]
+                  if item["metadata"]["name"].lower().replace("_", "-") != "torch"
+              },
+              key=str.lower,
+          )
+          Path("/tmp/a1-2-supplement-resolved.txt").write_text(
+              "\n".join(requirements) + "\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Download Linux wheels and validate the complete offline import surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          python -m pip download --only-binary=:all: --no-deps \
+            --dest artifact -r /tmp/a1-2-supplement-resolved.txt
+          cp containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt \
+            artifact/requirements.preflight-supplement.v7.txt
+          if find artifact -maxdepth 1 -type f -iname 'torch-*.whl' | grep -q .; then
+            echo 'the base-supplied torch package must not be in the supplement' >&2
+            exit 1
+          fi
+          python -m venv --system-site-packages /tmp/a1-2-supplement-test
+          /tmp/a1-2-supplement-test/bin/python -m pip install \
+            -r containers/a1_2_vast_4x3090/runtime/requirements.v2.txt
+          PIP_NO_INDEX=1 /tmp/a1-2-supplement-test/bin/python -m pip install \
+            --no-index --find-links artifact \
+            -r artifact/requirements.preflight-supplement.v7.txt
+          HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=src \
+            /tmp/a1-2-supplement-test/bin/python - <<'PY'
+          import importlib.metadata
+          import os
+          import torch
+          import myis_research.armindex
+
+          expected = {
+              "jsonschema": "4.25.1",
+              "pydantic": "2.13.4",
+              "structlog": "26.1.0",
+          }
+          assert torch.__version__ == "2.6.0+cu118"
+          assert torch.version.cuda == "11.8"
+          assert os.environ["HF_HUB_OFFLINE"] == "1"
+          assert os.environ["TRANSFORMERS_OFFLINE"] == "1"
+          for package, locked in expected.items():
+              assert importlib.metadata.version(package) == locked
+          PY
+
+      - name: Write deterministic checksums and safe receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd artifact
+            find . -maxdepth 1 -type f ! -name SHA256SUMS \
+              -printf '%f\n' | LC_ALL=C sort | while IFS= read -r file; do
+                sha256sum "$file"
+              done > SHA256SUMS
+            sha256sum --check SHA256SUMS
+          )
+          /tmp/a1-2-supplement-test/bin/python - <<'PY'
+          import hashlib
+          import importlib.metadata
+          import json
+          import platform
+          from pathlib import Path
+
+          root = Path("artifact")
+          receipt = {
+              "schema_version": "myis.owner-a1.2-preflight-supplement-wheelhouse.v7",
+              "status": "PASS",
+              "platform": "linux/amd64",
+              "machine": platform.machine(),
+              "dependencies": {
+                  name: importlib.metadata.version(name)
+                  for name in ("jsonschema", "pydantic", "structlog")
+              },
+              "wheel_count": len(list(root.glob("*.whl"))),
+              "torch_wheel_included": False,
+              "offline_install": "PASS",
+              "contains_models_or_protected_data": False,
+          }
+          (root / "SUPPLEMENT_VALIDATION.json").write_text(
+              json.dumps(receipt, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Refresh checksum after writing the receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd artifact
+            find . -maxdepth 1 -type f ! -name SHA256SUMS \
+              -printf '%f\n' | LC_ALL=C sort | while IFS= read -r file; do
+                sha256sum "$file"
+              done > SHA256SUMS
+            sha256sum --check SHA256SUMS
+          )
+
+      - name: Upload only the safe supplement
+        uses: actions/upload-artifact@v4
+        with:
+          name: a1-2-preflight-supplement-wheelhouse-v7
+          path: artifact/
+          if-no-files-found: error
+          retention-days: 7

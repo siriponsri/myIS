@@ -164,3 +164,22 @@ def test_v6_safe_export_allowlist_contains_only_bounded_text_receipts() -> None:
     assert allowlist["model_bytes_allowed"] is False
     assert allowlist["raw_provider_payload_allowed"] is False
     assert allowlist["maximum_total_bytes"] <= 16 * 1024 * 1024
+
+
+def test_v7_supplement_closes_repository_runtime_dependencies_without_torch() -> None:
+    requirements = (
+        ROOT
+        / "containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt"
+    ).read_text(encoding="utf-8").splitlines()
+    assert requirements == [
+        "jsonschema==4.25.1",
+        "pydantic==2.13.4",
+        "structlog==26.1.0",
+    ]
+    workflow = (
+        ROOT / ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml"
+    ).read_text(encoding="utf-8")
+    assert "pytorch/pytorch@sha256:2428b92e" in workflow
+    assert "--no-index --find-links artifact" in workflow
+    assert "import myis_research.armindex" in workflow
+    assert "torch_wheel_included" in workflow
