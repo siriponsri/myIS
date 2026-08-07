@@ -289,3 +289,11 @@ def test_v9_adapter_runtime_records_fp16_tolerance_and_snowflake_sdpa() -> None:
             "use_memory_efficient_attention": False,
         }
     }
+
+
+def test_v9_qwen_adapter_uses_fp16_normalization_tolerance() -> None:
+    source = Path(
+        "src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py"
+    ).read_text(encoding="utf-8")
+    assert "atol=L2_NORMALIZATION_ATOL" in source
+    assert '"l2_normalization_atol": L2_NORMALIZATION_ATOL' in source

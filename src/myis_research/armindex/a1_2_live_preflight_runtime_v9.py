@@ -553,7 +553,12 @@ def measure_qwen_max_length(
             finite = bool(np.isfinite(output).all())
             dimension = int(output.shape[1]) if getattr(output, "ndim", 0) == 2 and output.shape[0] == 1 else 0
             normalized = dimension == 1024 and bool(
-                np.allclose(np.linalg.norm(output, axis=1), [1.0], rtol=0.0, atol=1e-4)
+                np.allclose(
+                    np.linalg.norm(output, axis=1),
+                    [1.0],
+                    rtol=0.0,
+                    atol=L2_NORMALIZATION_ATOL,
+                )
             )
             if not finite or not normalized:
                 raise LiveRuntimeV9Error("Qwen adapter output invariant failed")
@@ -615,6 +620,7 @@ def measure_qwen_max_length(
         "first_oom_adapter_input_tokens": first_oom,
         "repeat_agreement_atol": 1e-6,
         "repeat_agreement": repeat_agreement,
+        "l2_normalization_atol": L2_NORMALIZATION_ATOL,
         "output_dimension": 1024,
         "attempts": attempts,
         "claim_boundary": "single RTX 3090, FP16, batch size one, frozen v9 runtime and model only",
