@@ -1374,6 +1374,7 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
         vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
         vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
+        closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
         gpu = adapter.get("gpu_spec", {}) if isinstance(adapter.get("gpu_spec"), Mapping) else {}
         timing = adapter.get("time_estimate", {}) if isinstance(adapter.get("time_estimate"), Mapping) else {}
         budget = adapter.get("budget_estimate", {}) if isinstance(adapter.get("budget_estimate"), Mapping) else {}
@@ -1382,6 +1383,13 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         owner_lines = "\n".join(f"- {item}" for item in owner_needs) or "- No Owner input is required for the completed CPU fixture."
         scaffold_note = ""
         if scaffold.get("validated") is True:
+            closeout_note = ""
+            if closeout_v10.get("validated") is True and closeout_v10.get("status") == "PASS":
+                closeout_note = (
+                    f"The v10 Owner-local provider closeout is `{closeout_v10.get('status')}`; "
+                    "no independent Vast API or CLI record was obtained, so the provider-absence "
+                    "claim is limited to the Owner UI attestation and endpoint-unreachable observation. "
+                )
             scaffold_note = (
                 "\n\n### A1.2 scaffold and launch state\n\n"
                 f"The offline scaffold is `{scaffold.get('status')}` with `{scaffold.get('model_lock_count', 0)}` model/source locks. "
@@ -1402,6 +1410,7 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
                 f"Qwen measured adapter max `{vast_v9.get('live_result', {}).get('qwen', {}).get('measured_adapter_max_input_tokens', '-') if isinstance(vast_v9.get('live_result'), Mapping) else '-'}`, "
                 f"checkpoint/resume `{vast_v9.get('live_result', {}).get('lifecycle', {}).get('checkpoint_resume', '-') if isinstance(vast_v9.get('live_result'), Mapping) else '-'}`, "
                 f"and guest teardown `{vast_v9.get('live_result', {}).get('lifecycle', {}).get('guest_process_teardown', '-') if isinstance(vast_v9.get('live_result'), Mapping) else '-'}`. "
+                f"{closeout_note}"
                 "It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.\n\n"
                 f"The Owner continuity policy is `{vast_v6.get('continuation_policy', {}).get('status', 'not_started')}`. Its default is `{vast_v6.get('continuation_policy', {}).get('default_post_preflight_instruction', 'destroy_and_verify_provider_instance_absent')}`; `{vast_v6.get('continuation_policy', {}).get('allowed_post_preflight_instruction', 'continue_next_goal_on_PLAN')}` remains conditional and is not authorized now.\n\n"
                 "Owner-local prerequisites still required:\n\n"
