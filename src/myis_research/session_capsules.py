@@ -462,9 +462,20 @@ def _validate_v2_closeout(payload: Mapping[str, Any], root: Path, revision: str)
 
 
 def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str) -> None:
-    phase_aliases = {f"P{index}": name for index, name in enumerate((
-        "P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"
-    ))}
+    phase_aliases = {
+        **{f"P{index}": name for index, name in enumerate((
+            "P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION"
+        ))},
+        **{f"A{index}": name for index, name in enumerate((
+            "A0_MIGRATION_FOUNDATION",
+            "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+            "A2_PER_ARM_AUTOINDEX",
+            "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+            "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+            "A5_FINAL_CONFIRMATION",
+            "A6_PUBLICATION_AND_RELEASE",
+        ))},
+    }
     task_prefix = task_id.split(".", 1)[0] if _TASK_RE.fullmatch(task_id) else ""
     if not _TASK_RE.fullmatch(task_id) or phase_id != phase_aliases.get(task_prefix, task_prefix) or not _GATE_RE.fullmatch(gate_id):
         raise SessionCapsuleValidationError("execution_snapshot phase, task, or gate is invalid")
@@ -472,7 +483,13 @@ def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str
         return
     current_task: str | None = None
     bindings: dict[str, tuple[str, str]] = {}
-    for line in (root / "PLAN.md").read_text(encoding="utf-8").splitlines():
+    plan_lines = (root / "PLAN.md").read_text(encoding="utf-8").splitlines()
+    task_table_ids = {
+        match.group(1)
+        for line in plan_lines
+        if (match := re.match(r"^\| `([A-Z][A-Z0-9]*\.\d+)` \|", line))
+    }
+    for line in plan_lines:
         task_match = _PLAN_TASK_RE.match(line)
         if task_match:
             current_task = task_match.group(1)
@@ -485,6 +502,10 @@ def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str
     # P0/P1 implementation tasks run under the single standing D1
     # authorization; they do not create a recurring Owner micro-gate.
     if expected_binding is None and task_id in {"P0.3", "P1.3"}:
+        expected_binding = (phase_id, "D1_START_CAMPAIGN")
+    # ArmIndex task maps use the standing D1 campaign authorization unless
+    # PLAN declares a later Owner decision explicitly.
+    if expected_binding is None and task_id in task_table_ids and task_prefix.startswith("A"):
         expected_binding = (phase_id, "D1_START_CAMPAIGN")
     if expected_binding != (phase_id, gate_id):
         raise SessionCapsuleValidationError("execution_snapshot does not match PLAN.md")

@@ -17,9 +17,11 @@ measurement, and production-constrained HarnessOpt.
 - Campaign: `armindex-multiretriever-v2`
 - Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v9 attempt-scoped
   live synthetic preflight passed; additive v10 records Owner-confirmed provider
-  destruction and observed endpoint absence; scientific launch remains locked)
+  destruction; additive v11 prepares the scientific execution request for Owner
+  review without adoption; scientific launch remains locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: Owner-local provider closeout over live engineering synthetic preflight; scientific authority `false`
+- Current evidence class: scientific execution adoption-request preparation over
+  preserved v1-v10 engineering and provider-closeout lineage; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -60,7 +62,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v9 synthetic live preflight PASS; scientific screen launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v9 synthetic live preflight PASS; v10 provider closeout PASS; v11 request prepared for Owner review and launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -103,7 +105,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 live synthetic preflight PASS; additive v10 provider closeout PASS; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 live synthetic preflight PASS; additive v10 provider closeout PASS; additive v11 request prepared but not adopted; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -237,6 +239,17 @@ provider disposition under an explicit claim boundary: no independent Vast API
 or CLI destruction record was obtained. This is engineering and Owner-local
 closeout evidence only and supports no retrieval-quality or publication claim.
 
+Additive v11 preserves v1-v10 and prepares a future A1.2 scientific execution
+request on local CPU only. It freezes five executable common representation
+programs, five arm workloads, 25 mandatory logical program-arm results, 35
+physical program-view paths, a 150-query REP-DEV commitment with 100 Train-250
+queries reserved for HARNESS-DEV, an opaque scientific-transfer and safe-return
+protocol, aggregate result and resource receipts, all-fee quote admission, and
+fail-closed stop conditions. The repaired package passed its artifact-only rigor
+review. It is not adopted, does not authorize provider contact or measured
+retrieval, and leaves every scientific, Selection, Final, paid-API, model-change,
+and charged-resource counter at zero.
+
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
 Historical reports remain at their expected paths while referenced. A report
@@ -286,12 +299,14 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Prepare an additive A1.2 scientific execution and adoption request on local CPU only. Bind the unchanged v1-v10 preflight lineage, protected Owner-local evaluator handoff, measured-run budget, workload manifests, stop conditions, and a fresh provider admission plan. Do not open a provider, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights during preparation.
+/goal Review the unchanged A1.2 scientific execution and adoption request v11 locally and prepare its Owner-local adoption inputs only. Bind the clean pushed execution commit/tree and bundle hash, protected handoff and transfer receipts, all 25 compiled-program bindings, a fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/provider-destroy dry-run. Do not open or contact Vast, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights until the unchanged v11 request passes this separate adoption goal.
 ```
 
 The local runtime-minimal stage, v9 synthetic live preflight, safe collection,
 guest teardown, and v10 Owner-confirmed provider closeout are complete. The
-destroyed instance cannot be reused. Scientific launch remains forbidden until
-a separate authorized PLAN goal prepares and the Owner adopts an unchanged
-execution revision. A future provider instance requires a fresh identity,
-quote/budget, TTL/destroy path, artifact-integrity, and protected-boundary check.
+destroyed instance cannot be reused. v11 is prepared for Owner review but is not
+adopted. Scientific launch remains forbidden until a separate authorized PLAN
+goal validates every adoption input and records explicit Owner adoption of the
+unchanged request. A future provider instance requires a fresh identity,
+all-fee quote/budget, TTL/destroy path, artifact integrity, and
+protected-boundary check.

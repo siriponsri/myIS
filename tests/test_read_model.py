@@ -228,7 +228,9 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    assert model["armindex"]["next_command"] == model["armindex"]["a1_2_contract_scaffold"]["provider_closeout_v10"]["next_authorized_action"]
+    assert model["armindex"]["next_command"] == model["armindex"][
+        "a1_2_contract_scaffold"
+    ]["scientific_execution_request_v11"]["next_authorized_action"]
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
@@ -258,17 +260,21 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     projection = _a12_contract_scaffold_projection(ROOT)
 
     assert projection["status"] == (
-        "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
+        "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked"
     )
     assert projection["validated"] is True
     assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
-    assert projection["evidence_class"] == "owner_local_provider_closeout"
+    assert projection["evidence_class"] == (
+        "scientific_execution_adoption_request_preparation"
+    )
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
     assert projection["dense_artifact_manifests_pending"] == 4
     assert projection["owner_requirements_pending"] == len(
-        projection["provider_closeout_v10"]["pending_provider_checks"]
+        projection["scientific_execution_request_v11"][
+            "pending_adoption_requirements"
+        ]
     )
     assert projection["launch_ready"] is False
     assert projection["measured_execution"] is False
@@ -281,7 +287,9 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert projection["closeout_validation_audit_sha256"]
     assert set(projection["real_counters"].values()) == {0}
     assert set(projection["resource_counters"].values()) == {0}
-    assert projection["next_authorized_action"] == projection["provider_closeout_v10"]["next_authorized_action"]
+    assert projection["next_authorized_action"] == projection[
+        "scientific_execution_request_v11"
+    ]["next_authorized_action"]
     vast = projection["vast_preflight_v2"]
     assert vast["validated"] is True
     assert vast["gpu_count"] == 4
@@ -420,6 +428,19 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert closeout_v10["selection_accesses"] == 0
     assert closeout_v10["final_accesses"] == 0
     assert closeout_v10["charged_usd"] == 0
+    request_v11 = projection["scientific_execution_request_v11"]
+    assert request_v11["validated"] is True
+    assert request_v11["status"] == "PASS"
+    assert request_v11["workload_manifests"] == 5
+    assert request_v11["expected_program_arm_runs"] == 25
+    assert request_v11["expected_physical_program_view_paths"] == 35
+    assert request_v11["rep_dev_query_count"] == 150
+    assert request_v11["harness_dev_reserved_count"] == 100
+    assert request_v11["launch_allowed"] is False
+    assert request_v11["adopted_for_execution"] is False
+    assert set(request_v11["authorization"].values()) == {False}
+    assert set(request_v11["counters"].values()) == {0}
+    assert len(request_v11["jobs"]) == 5
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

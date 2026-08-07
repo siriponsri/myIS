@@ -88,7 +88,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "measured results = `unavailable`" in pending_report
 
 
-def test_a12_v10_provider_closeout_is_the_canonical_projection_lifecycle_source() -> None:
+def test_a12_v11_request_is_the_canonical_projection_lifecycle_source() -> None:
     model = build_read_model(ROOT)
     manifest = json.loads(
         (ROOT / VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json").read_text(
@@ -109,13 +109,15 @@ def test_a12_v10_provider_closeout_is_the_canonical_projection_lifecycle_source(
         obsidian_manifest_sha256=str(manifest["manifest_sha256"]),
         external_outputs=external_outputs,
     )
-    v10 = model["armindex"]["a1_2_contract_scaffold"]["provider_closeout_v10"]
+    v11 = model["armindex"]["a1_2_contract_scaffold"][
+        "scientific_execution_request_v11"
+    ]
 
     assert lifecycle["source_receipt_uri"] == (
         "campaigns/armindex-multiretriever-v2/evidence/"
-        "a1.2-provider-closeout-result.receipt.v10.json"
+        "a1.2-scientific-execution-adoption-request.receipt.v11.json"
     )
-    assert lifecycle["source_receipt_sha256"] == v10["receipt_sha256"]
+    assert lifecycle["source_receipt_sha256"] == v11["receipt_sha256"]
 
 
 def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contract() -> None:
@@ -231,6 +233,8 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "A1.2 validation-complete frozen-bundle repair receipt v8" in a12_report
     assert "A1.2 execution-lifecycle repair receipt v9" in a12_report
     assert "A1.2 Owner-local provider closeout receipt v10" in a12_report
+    assert "A1.2 scientific execution and adoption request v11" in a12_report
+    assert "prepared for Owner review" in a12_report
     assert "no independent Vast API or CLI record was obtained" in a12_report
     assert "v6-initial-wheelhouse-missing-pydantic" in a12_report
     assert "v6-supplement-repair-mutated-pycache-tree" in a12_report
@@ -256,7 +260,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(
-        "a1.2-provider-closeout-result.receipt.v10.json"
+        "a1.2-scientific-execution-adoption-request.receipt.v11.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
@@ -311,6 +315,16 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     ] == "destroyed_and_provider_absence_verified"
     assert mlflow_index["armindex_a1_2_provider_closeout"]["pending_provider_checks"] == []
     assert mlflow_index["armindex_a1_2_provider_closeout"]["launch_allowed"] is False
+    request_v11 = mlflow_index["armindex_a1_2_scientific_execution_request"]
+    assert request_v11["status"] == "PASS"
+    assert request_v11["workload_manifests"] == 5
+    assert request_v11["expected_program_arm_runs"] == 25
+    assert request_v11["launch_allowed"] is False
+    assert request_v11["adopted_for_execution"] is False
+    assert request_v11["measured_runs"] == 0
+    assert request_v11["selection_accesses"] == 0
+    assert request_v11["final_accesses"] == 0
+    assert request_v11["charged_usd"] == 0
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",

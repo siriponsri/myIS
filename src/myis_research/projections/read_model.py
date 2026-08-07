@@ -106,6 +106,15 @@ from ..armindex.a1_2_provider_closeout_result_v10 import (
     SCHEMA_PATH as A12_V10_CLOSEOUT_SCHEMA_PATH,
     validate_closeout as validate_a1_2_v10_provider_closeout,
 )
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    BUDGET_PATH as A12_V11_BUDGET_PATH,
+    RECEIPT_PATH as A12_V11_RECEIPT_PATH,
+    RECEIPT_SCHEMA_PATH as A12_V11_RECEIPT_SCHEMA_PATH,
+    REQUEST_PATH as A12_V11_REQUEST_PATH,
+    REQUEST_SCHEMA_PATH as A12_V11_REQUEST_SCHEMA_PATH,
+    REVISION_ID as A12_V11_REVISION_ID,
+    validate as validate_a1_2_v11_scientific_request,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -297,6 +306,19 @@ A12_V9_RESULT_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight
 A12_V10_CLOSEOUT_MODULE_PATH = Path(
     "src/myis_research/armindex/a1_2_provider_closeout_result_v10.py"
 )
+A12_V11_MODULE_PATH = Path(
+    "src/myis_research/armindex/a1_2_scientific_execution_request_v11.py"
+)
+A12_V11_RUNBOOK_PATH = Path(
+    "docs/operations/A1_2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11.md"
+)
+A12_V11_LEDGER_PATH = Path(
+    "control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl"
+)
+A12_V11_RIGOR_REVIEW_PATH = Path(
+    "outputs/audits/rigor/"
+    "a1.2-scientific-execution-adoption-request-v11-20260807.json"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -369,6 +391,18 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked"
+        and isinstance(a1_2_scaffold.get("scientific_execution_request_v11"), Mapping)
+        and a1_2_scaffold["scientific_execution_request_v11"].get("validated") is True
+    ):
+        armindex["status"] = (
+            "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked"
+        )
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
@@ -2187,6 +2221,44 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": "provider_closeout_not_recorded",
             "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
         },
+        "scientific_execution_request_v11": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": A12_V11_REVISION_ID,
+            "receipt_uri": A12_V11_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "request_uri": A12_V11_REQUEST_PATH.as_posix(),
+            "request_sha256": None,
+            "request_self_sha256": None,
+            "request_schema_uri": A12_V11_REQUEST_SCHEMA_PATH.as_posix(),
+            "request_schema_sha256": None,
+            "receipt_schema_uri": A12_V11_RECEIPT_SCHEMA_PATH.as_posix(),
+            "receipt_schema_sha256": None,
+            "validator_uri": A12_V11_MODULE_PATH.as_posix(),
+            "validator_sha256": None,
+            "runbook_uri": A12_V11_RUNBOOK_PATH.as_posix(),
+            "runbook_sha256": None,
+            "ledger_uri": A12_V11_LEDGER_PATH.as_posix(),
+            "ledger_sha256": None,
+            "rigor_review_uri": A12_V11_RIGOR_REVIEW_PATH.as_posix(),
+            "rigor_review_sha256": None,
+            "component_bindings": {},
+            "jobs": [],
+            "pending_adoption_requirements": [],
+            "authorization": {},
+            "counters": {},
+            "budget_hard_stops": {},
+            "workload_manifests": 0,
+            "expected_program_arm_runs": 0,
+            "expected_physical_program_view_paths": 0,
+            "rep_dev_query_count": 0,
+            "harness_dev_reserved_count": 0,
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "claim_boundary": "scientific_request_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -2234,6 +2306,10 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         v9_result_receipt = None
         v10_closeout_validation = None
         v10_closeout_receipt = None
+        v11_request_validation = None
+        v11_request = None
+        v11_request_receipt = None
+        v11_budget = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
@@ -2282,6 +2358,17 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v10_closeout_receipt = json.loads(
                 (root / A12_V10_CLOSEOUT_RECEIPT_PATH).read_text(encoding="utf-8")
             )
+        if (root / A12_V11_RECEIPT_PATH).is_file():
+            v11_request_validation = validate_a1_2_v11_scientific_request(root)
+            v11_request = json.loads(
+                (root / A12_V11_REQUEST_PATH).read_text(encoding="utf-8")
+            )
+            v11_request_receipt = json.loads(
+                (root / A12_V11_RECEIPT_PATH).read_text(encoding="utf-8")
+            )
+            v11_budget = json.loads(
+                (root / A12_V11_BUDGET_PATH).read_text(encoding="utf-8")
+            )
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -2311,6 +2398,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v9_contract,
             v9_result_receipt,
             v10_closeout_receipt,
+            v11_request,
+            v11_request_receipt,
+            v11_budget,
         ):
             if value is not None:
                 assert_aggregate_only(value)
@@ -2544,6 +2634,31 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or v10_closeout_receipt.get("pending_provider_checks") != []
         ):
             raise ValueError("A1.2 provider closeout v10 receipt is invalid")
+        if v11_request_receipt is not None and (
+            v11_request_validation is None
+            or v10_closeout_receipt is None
+            or v11_request is None
+            or v11_budget is None
+            or v11_request_validation.get("status") != "PASS"
+            or v11_request_receipt.get("status") != "PASS"
+            or v11_request_receipt.get("scientific_authority") is not False
+            or v11_request_receipt.get("launch_allowed") is not False
+            or v11_request_receipt.get("adopted_for_execution") is not False
+            or any(
+                int(v11_request_receipt.get(key, -1)) != 0
+                for key in ("measured_runs", "selection_accesses", "final_accesses")
+            )
+            or float(v11_request_receipt.get("charged_usd", -1)) != 0
+            or v11_request.get("status") != "prepared_for_owner_review_not_adopted"
+            or v11_request.get("scientific_authority") is not False
+            or any(bool(value) for value in v11_request.get("authorization", {}).values())
+            or any(float(value) != 0 for value in v11_request.get("counters", {}).values())
+            or v11_request.get("predecessor_lineage", [])[-1].get("embedded_sha256")
+            != v10_closeout_receipt.get("receipt_sha256")
+            or v11_budget.get("launch_allowed") is not False
+            or v11_budget.get("adopted_for_execution") is not False
+        ):
+            raise ValueError("A1.2 scientific execution request v11 is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -3056,9 +3171,75 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
                 v10_closeout_receipt["next_authorized_action"]
             ),
         }
+    v11_request_projection = dict(missing["scientific_execution_request_v11"])
+    if (
+        v11_request_receipt is not None
+        and v11_request is not None
+        and v11_request_validation is not None
+        and v11_budget is not None
+    ):
+        rigor_review = json.loads(
+            (root / A12_V11_RIGOR_REVIEW_PATH).read_text(encoding="utf-8")
+        )
+        assert_aggregate_only(rigor_review)
+        if (
+            rigor_review.get("review_status") != "complete"
+            or rigor_review.get("artifact_sha256")
+            != _file_sha256(root / A12_V11_REQUEST_PATH)
+            or rigor_review.get("governance", {}).get("blocking_findings") != []
+            or rigor_review.get("overall", {}).get("grade") not in {"Accept", "Strong Accept"}
+        ):
+            raise ValueError("A1.2 v11 rigor review is invalid")
+        summary = v11_request_receipt["validation_summary"]
+        workload_binding = v11_request["component_bindings"]["workload_set"]
+        workload_set = json.loads(
+            (root / str(workload_binding["uri"])).read_text(encoding="utf-8")
+        )
+        v11_request_projection = {
+            **v11_request_projection,
+            "status": str(v11_request_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v11_request_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V11_RECEIPT_PATH),
+            "receipt_self_sha256": str(v11_request_receipt["receipt_sha256"]),
+            "request_sha256": _file_sha256(root / A12_V11_REQUEST_PATH),
+            "request_self_sha256": str(v11_request["request_sha256"]),
+            "request_schema_sha256": _file_sha256(root / A12_V11_REQUEST_SCHEMA_PATH),
+            "receipt_schema_sha256": _file_sha256(root / A12_V11_RECEIPT_SCHEMA_PATH),
+            "validator_sha256": _file_sha256(root / A12_V11_MODULE_PATH),
+            "runbook_sha256": _file_sha256(root / A12_V11_RUNBOOK_PATH),
+            "ledger_sha256": _file_sha256(root / A12_V11_LEDGER_PATH),
+            "rigor_review_sha256": _file_sha256(root / A12_V11_RIGOR_REVIEW_PATH),
+            "component_bindings": dict(v11_request["component_bindings"]),
+            "jobs": [dict(item) for item in workload_set["manifests"]],
+            "pending_adoption_requirements": list(
+                v11_request_receipt["pending_adoption_requirements"]
+            ),
+            "authorization": dict(v11_request["authorization"]),
+            "counters": dict(v11_request["counters"]),
+            "budget_hard_stops": dict(v11_budget["hard_stops"]),
+            "workload_manifests": int(summary["workload_manifests"]),
+            "expected_program_arm_runs": int(summary["expected_program_arm_runs"]),
+            "expected_physical_program_view_paths": int(
+                summary["expected_physical_program_view_paths"]
+            ),
+            "rep_dev_query_count": int(summary["rep_dev_query_count"]),
+            "harness_dev_reserved_count": int(summary["harness_dev_reserved_count"]),
+            "launch_allowed": bool(v11_request_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(
+                v11_request_receipt["adopted_for_execution"]
+            ),
+            "claim_boundary": str(v11_request_receipt["claim_boundary"]),
+            "next_authorized_action": str(
+                v11_request_receipt["next_authorized_action"]
+            ),
+        }
     return {
         **missing,
         "status": (
+            "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked"
+            if v11_request_receipt is not None and v11_request_validation is not None
+            else
             "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
             if v10_closeout_receipt is not None and v10_closeout_validation is not None
             else
@@ -3089,6 +3270,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
+            "scientific_execution_adoption_request_preparation"
+            if v11_request_receipt is not None and v11_request_validation is not None
+            else
             "owner_local_provider_closeout"
             if v10_closeout_receipt is not None and v10_closeout_validation is not None
             else
@@ -3117,6 +3301,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             else "engineering_contract_scaffold"
         ),
         "claim_boundary": (
+            v11_request_projection.get("claim_boundary")
+            if v11_request_projection["validated"]
+            else
             v10_closeout_projection.get("claim_boundary")
             if v10_closeout_projection["validated"]
             else
@@ -3160,6 +3347,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "offline_adapter_ready": int(counts["offline_adapter_ready"]),
         "dense_artifact_manifests_pending": int(counts["owner_artifact_manifests_pending"]),
         "owner_requirements_pending": (
+            len(v11_request_receipt["pending_adoption_requirements"])
+            if v11_request_receipt is not None and v11_request_validation is not None
+            else
             len(v10_closeout_receipt["pending_provider_checks"])
             if v10_closeout_receipt is not None and v10_closeout_validation is not None
             else
@@ -3201,6 +3391,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
         "next_authorized_action": (
+            str(v11_request_projection["next_authorized_action"])
+            if v11_request_projection["validated"]
+            else
             str(v10_closeout_projection["next_authorized_action"])
             if v10_closeout_projection["validated"]
             else
@@ -3236,6 +3429,7 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "vast_preflight_v8": v8_projection,
         "vast_preflight_v9": v9_projection,
         "provider_closeout_v10": v10_closeout_projection,
+        "scientific_execution_request_v11": v11_request_projection,
     }
 
 

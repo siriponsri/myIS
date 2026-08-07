@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked
-  evidence_class: owner_local_provider_closeout
+  status: a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked
+  evidence_class: scientific_execution_adoption_request_preparation
   scientific_authority: false
-  claim_boundary: live_synthetic_adapter_lifecycle_and_owner_provider_closeout_evidence_only_no_retrieval_quality_or_publication_claim
+  claim_boundary: local_request_preparation_only_prior_provider_destroyed_no_adoption_execution_retrieval_quality_or_publication_claim
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -67,6 +67,13 @@ contracts:
   a1_2_live_synthetic_preflight_result_receipt: campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json
   a1_2_provider_closeout_result_receipt: campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json
   a1_2_owner_instance_continuation_policy: control/armindex/a1.2/owner-instance-continuation-policy.v1.json
+  a1_2_scientific_execution_request: control/armindex/a1.2/scientific-execution-adoption-request.v11.json
+  a1_2_scientific_execution_request_receipt: campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json
+  a1_2_scientific_execution_budget: control/budgets/a1.2-common-screen-scientific-request-v11.json
+  a1_2_scientific_transfer: control/armindex/a1.2/scientific-transfer-contract.v11.json
+  a1_2_common_program_set: control/armindex/a1.2/common-program-set.v11.json
+  a1_2_aggregate_result_contract: control/armindex/a1.2/aggregate-result-contract.v11.json
+  a1_2_scientific_workload_set: control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json
 
 phases:
   - id: A0_MIGRATION_FOUNDATION
@@ -86,9 +93,9 @@ phases:
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked
+    status: a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked
     measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: synthetic_preflight_closed_provider_destroyed_scientific_execution_locked}]
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: scientific_execution_request_prepared_owner_review_launch_locked}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
     status: locked_until_A1

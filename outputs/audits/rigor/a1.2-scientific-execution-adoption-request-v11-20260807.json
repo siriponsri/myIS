@@ -1,0 +1,102 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a1.2-scientific-execution-adoption-request-v11-rigor-20260807",
+  "artifact": "A1.2 scientific execution and adoption request v11",
+  "artifact_path": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+  "artifact_sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+  "review_status": "complete",
+  "review_boundary": "Artifact-only review of a local preparation request. No provider, protected payload, measured retrieval, model, or external evidence was accessed.",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.17,
+    "one_line_summary": "The repaired v11 package is a coherent, fail-closed request for later Owner review, but it is not adoption, execution authority, or measured evidence.",
+    "strengths": [
+      "All v1-v10 predecessors remain byte-bound and keep their original claim boundaries.",
+      "The repaired transfer contract separates opaque scientific inputs, safe return, cleanup, and Owner-local evaluation from the preserved v5/v6 paths.",
+      "REP-DEV is fixed at 150 while 100 Train-250 queries remain reserved for HARNESS-DEV.",
+      "P00-P04 have executable specifications, compiler-source commitments, deterministic synthetic tests, and explicit physical-path accounting.",
+      "All 25 program-arm receipts are mandatory and all authorization flags and scientific counters remain locked at zero."
+    ],
+    "weaknesses": [
+      "Adapter-specific rendered-token feasibility cannot be assessed without the future Owner-local protected transfer and compiled-program manifests.",
+      "The live quote, all-fee worst-case charge, provider identity, and remaining authoritative budgets are intentionally pending a separate adoption goal."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": ["The workload and result contract directly target common-screen quality, unique contribution, latency, storage, determinism, and failures."],
+      "weaknesses": ["No measured result exists because this package is preparation-only."],
+      "suggestions": ["Keep publication claims closed until all 25 aggregate receipts validate."]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["Missing lineage, 24-of-25 completion, unsafe transfer, budget overflow, over-length compilation, and non-determinism each have explicit fail-closed outcomes."],
+      "weaknesses": ["Scientific promotion thresholds belong to the later measured-screen decision package, not this preparation request."],
+      "suggestions": ["Bind the unchanged promotion rule before the first measured result is evaluated."]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": ["The claim boundary is limited to request preparation and explicitly excludes retrieval quality and publication claims."],
+      "weaknesses": ["The v9 Qwen observation remains limited to its single-GPU FP16 batch-one scope."],
+      "suggestions": ["Do not generalize v9 synthetic feasibility to multi-program scientific throughput."]
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": ["Research plan, protected handoff, transfer, common programs, workloads, result schema, budget, stop rules, and provider admission form a traceable chain."],
+      "weaknesses": ["A separate adoption receipt is still required to bind live identities and Owner-local protected commitments."],
+      "suggestions": ["Require every adoption binding to match the unchanged request hash."]
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": ["The initial schema failure and independent-review rejection are retained instead of being erased, and v1-v10 failures remain immutable."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 4,
+      "strengths": ["The package freezes five arms, five programs, 150 REP-DEV queries, deterministic compilation, result lineage, resource metrics, and aggregate-only projection."],
+      "weaknesses": ["Per-arm rendered-token feasibility and actual storage/runtime cost remain unobserved until protected local compilation and live admission."],
+      "suggestions": ["Fail adoption unless all 25 compilation bindings report no silent truncation or unresolved over-length input and the full-TTL all-fee quote fits every hard stop."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "minor",
+      "target_artifact": "control/armindex/a1.2/common-program-set.v11.json",
+      "target_entity": "/per_arm_compilation_manifest",
+      "evidence_locator": "status=pending_owner_adoption_receipt; required_program_arm_bindings=25",
+      "observation": "The logical programs are frozen, but adapter-rendered token lengths, compilation hashes, coverage, and index manifests are not yet available.",
+      "reasoning": "This is appropriate for a non-adopted preparation request, but it prevents any execution-ready or feasibility claim.",
+      "suggestion": "Treat the 25 validated compilation bindings and zero unresolved over-length inputs as mandatory adoption prerequisites."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/campaigns/armindex-multiretriever-v2.yaml",
+    "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+    "control/owner-local/a1.2-evaluator-handoff-request.v11.json",
+    "control/armindex/a1.2/scientific-transfer-contract.v11.json",
+    "control/armindex/a1.2/common-program-set.v11.json",
+    "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json",
+    "control/armindex/a1.2/aggregate-result-contract.v11.json",
+    "control/budgets/a1.2-common-screen-scientific-request-v11.json",
+    "control/armindex/a1.2/stop-conditions.scientific-request.v11.json",
+    "control/armindex/a1.2/provider-admission-plan.v11.json",
+    "docs/operations/A1_2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11.md"
+  ]
+}

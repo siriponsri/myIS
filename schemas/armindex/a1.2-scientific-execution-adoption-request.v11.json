@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-execution-adoption-request.v11.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "request_id", "revision_id", "status",
+    "evidence_class", "scientific_authority", "claim_boundary",
+    "campaign_id", "phase_id", "task_id", "standing_authorization",
+    "preparation_base_identity", "predecessor_lineage",
+    "operational_bindings", "component_bindings",
+    "future_execution_identity", "adoption", "authorization", "counters",
+    "next_authorized_action", "request_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-execution-adoption-request.v11"},
+    "request_id": {"const": "a1.2-scientific-execution-adoption-request-v11"},
+    "revision_id": {"const": "a1.2-scientific-execution-adoption-request-v11"},
+    "status": {"const": "prepared_for_owner_review_not_adopted"},
+    "evidence_class": {"const": "scientific_execution_adoption_request_preparation"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 180},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"const": "A1_BASELINES_AND_MULTI_ARM_SCREENING"},
+    "task_id": {"const": "A1.2"},
+    "standing_authorization": {"const": "D1_START_CAMPAIGN"},
+    "preparation_base_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["git_commit", "git_tree", "role"],
+      "properties": {
+        "git_commit": {"const": "b6dc377e810f9b9c251e5ed032ddbfb1282614e7"},
+        "git_tree": {"const": "73e6f527971177d4b6612cae7ab0b942dd0d9b86"},
+        "role": {"const": "pre_v11_clean_pushed_base_not_execution_identity"}
+      }
+    },
+    "predecessor_lineage": {
+      "type": "array", "minItems": 11, "maxItems": 11,
+      "items": {"$ref": "#/$defs/binding_with_boundary"}
+    },
+    "operational_bindings": {
+      "type": "array", "minItems": 7, "maxItems": 7,
+      "items": {"$ref": "#/$defs/binding"}
+    },
+    "component_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "budget", "protected_evaluator_handoff", "stop_conditions",
+        "provider_admission", "scientific_transfer", "common_program_set",
+        "aggregate_result_contract", "workload_set"
+      ],
+      "properties": {
+        "budget": {"$ref": "#/$defs/component"},
+        "protected_evaluator_handoff": {"$ref": "#/$defs/component"},
+        "stop_conditions": {"$ref": "#/$defs/component"},
+        "provider_admission": {"$ref": "#/$defs/component"},
+        "scientific_transfer": {"$ref": "#/$defs/component"},
+        "common_program_set": {"$ref": "#/$defs/component"},
+        "aggregate_result_contract": {"$ref": "#/$defs/component"},
+        "workload_set": {
+          "allOf": [
+            {"$ref": "#/$defs/component"},
+            {
+              "type": "object",
+              "required": ["arm_count"],
+              "properties": {"arm_count": {"const": 5}}
+            }
+          ]
+        }
+      }
+    },
+    "future_execution_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clean_pushed_commit_tree", "frozen_bundle_sha256",
+        "owner_local_handoff_receipt_sha256",
+        "owner_local_protected_transfer_manifest_sha256",
+        "compiled_program_manifest_set_sha256",
+        "fresh_provider_admission_receipt_sha256",
+        "request_hash_must_remain_unchanged"
+      ],
+      "properties": {
+        "clean_pushed_commit_tree": {"const": "pending_separate_adoption_receipt"},
+        "frozen_bundle_sha256": {"const": "pending_separate_adoption_receipt"},
+        "owner_local_handoff_receipt_sha256": {"const": "pending_separate_adoption_receipt"},
+        "owner_local_protected_transfer_manifest_sha256": {"const": "pending_separate_adoption_receipt"},
+        "compiled_program_manifest_set_sha256": {"const": "pending_separate_adoption_receipt"},
+        "fresh_provider_admission_receipt_sha256": {"const": "pending_separate_adoption_receipt"},
+        "request_hash_must_remain_unchanged": {"const": true}
+      }
+    },
+    "adoption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "new_micro_gate_created", "separate_owner_authorized_goal_required",
+        "adoption_receipt_present", "unchanged_request_review_required"
+      ],
+      "properties": {
+        "new_micro_gate_created": {"const": false},
+        "separate_owner_authorized_goal_required": {"const": true},
+        "adoption_receipt_present": {"const": false},
+        "unchanged_request_review_required": {"const": true}
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_contact_allowed", "gpu_reservation_allowed", "launch_allowed",
+        "adopted_for_execution", "measured_retrieval_allowed",
+        "optimization_allowed", "selection_open", "final_open",
+        "paid_api_allowed", "model_weight_changes_allowed"
+      ],
+      "properties": {
+        "provider_contact_allowed": {"const": false},
+        "gpu_reservation_allowed": {"const": false},
+        "launch_allowed": {"const": false},
+        "adopted_for_execution": {"const": false},
+        "measured_retrieval_allowed": {"const": false},
+        "optimization_allowed": {"const": false},
+        "selection_open": {"const": false},
+        "final_open": {"const": false},
+        "paid_api_allowed": {"const": false},
+        "model_weight_changes_allowed": {"const": false}
+      }
+    },
+    "counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measured_runs", "candidate_count", "selection_accesses",
+        "final_accesses", "gpu_scientific_runs", "charged_usd",
+        "paid_api_calls", "model_weight_changes"
+      ],
+      "properties": {
+        "measured_runs": {"const": 0},
+        "candidate_count": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0},
+        "gpu_scientific_runs": {"const": 0},
+        "charged_usd": {"const": 0},
+        "paid_api_calls": {"const": 0},
+        "model_weight_changes": {"const": 0}
+      }
+    },
+    "next_authorized_action": {"type": "string", "minLength": 220},
+    "request_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {
+      "type": "string",
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binding_id", "uri", "file_sha256", "embedded_sha256"],
+      "properties": {
+        "binding_id": {"type": "string", "minLength": 2},
+        "uri": {"$ref": "#/$defs/uri"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "embedded_sha256": {
+          "oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]
+        }
+      }
+    },
+    "binding_with_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision", "uri", "file_sha256", "embedded_sha256", "claim_boundary"
+      ],
+      "properties": {
+        "revision": {"type": "string", "minLength": 2},
+        "uri": {"$ref": "#/$defs/uri"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "embedded_sha256": {
+          "oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]
+        },
+        "claim_boundary": {"type": "string", "minLength": 12}
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "file_sha256", "self_sha256"],
+      "properties": {
+        "uri": {"$ref": "#/$defs/uri"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "self_sha256": {"$ref": "#/$defs/hash"},
+        "arm_count": {"type": "integer"}
+      }
+    }
+  }
+}

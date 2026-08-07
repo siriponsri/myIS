@@ -8,8 +8,9 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked`
-- Evidence class: Owner-local provider closeout over live engineering synthetic preflight; scientific authority `false`
+- Status: `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked`
+- Evidence class: scientific execution adoption-request preparation over preserved
+  v1-v10 engineering and provider-closeout lineage; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -158,6 +159,13 @@ evidence.
   `connection_refused`. The closeout claim is deliberately limited because no
   independent Vast API or CLI destruction record was obtained. Canonical
   authority is `campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json`.
+- Additive v11 preserves the complete v1-v10 lineage and prepares a local-only
+  scientific execution request for Owner review. It freezes five common programs,
+  five arm workloads, 25 required logical results, 35 physical program-view
+  paths, 150 REP-DEV queries with 100 Train-250 queries reserved for HARNESS-DEV,
+  opaque transfer/safe-return rules, aggregate result receipts, all-fee budget
+  admission, and fail-closed stop conditions. The artifact-only rigor review is
+  `Accept` with no blocking finding. v11 remains unadopted and launch-locked.
 - Every registered Phase and Task continues to receive one detailed English
   generated Obsidian report with the canonical fifteen-section structure. The
   archive audit found zero eligible orphan/superseded reports; referenced
@@ -174,24 +182,26 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 The v1-v10 receipt lineage, v5 local stage, live runtime identity, four dense
 adapter checks, Qwen 32,768-token adapter measurement, checkpoint/resume, safe
-return, guest teardown, and Owner-confirmed provider closeout pass. A1.2
-scientific execution remains deliberately locked because no execution revision
-has been adopted and no measured retrieval goal is authorized. The destroyed
-instance cannot be reused. The root software license requires an
+return, guest teardown, and Owner-confirmed provider closeout pass. The v11
+request is prepared but A1.2 scientific execution remains deliberately locked
+because the Owner-local handoff/transfer receipts, 25 compiled-program bindings,
+clean execution bundle identity, fresh provider identity and all-fee quote,
+whole-workload budget admission, watchdog/destroy dry-run, and explicit adoption
+receipt do not yet exist. The destroyed instance cannot be reused. The root software license requires an
 Owner legal decision before external release; this does not invalidate the
 engineering preflight.
 
 ## Active authorized action
 
-Prepare the next execution request locally. The exact next task is:
+Review v11 and prepare its adoption inputs locally. The exact next task is:
 
 ```text
-/goal Prepare an additive A1.2 scientific execution and adoption request on local CPU only. Bind the unchanged v1-v10 preflight lineage, protected Owner-local evaluator handoff, measured-run budget, workload manifests, stop conditions, and a fresh provider admission plan. Do not open a provider, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights during preparation.
+/goal Review the unchanged A1.2 scientific execution and adoption request v11 locally and prepare its Owner-local adoption inputs only. Bind the clean pushed execution commit/tree and bundle hash, protected handoff and transfer receipts, all 25 compiled-program bindings, a fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/provider-destroy dry-run. Do not open or contact Vast, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights until the unchanged v11 request passes this separate adoption goal.
 ```
 
-The synthetic preflight, safe collection, guest teardown, and Owner-confirmed
-provider closeout are complete. No Vast instance remains available for reuse.
-Access material and every protected surface remain local. The next goal is
-reversible local preparation only and does not adopt the revision or authorize
-measured retrieval, optimization, Selection, Final, paid API work, or weight
-changes.
+The synthetic preflight, safe collection, guest teardown, Owner-confirmed
+provider closeout, and v11 request preparation are complete. No Vast instance
+remains available for reuse. Access material and every protected surface remain
+local. The next goal is reversible local adoption-input preparation only and
+does not open a provider, adopt the revision, or authorize measured retrieval,
+optimization, Selection, Final, paid API work, or weight changes.

@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-aggregate-result-receipt.v11.json",
+  "title": "A1.2 aggregate-safe program-arm result receipt v11",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "status",
+    "evidence_class",
+    "scientific_authority",
+    "claim_boundary",
+    "arm_id",
+    "program_id",
+    "lineage",
+    "completion",
+    "quality",
+    "performance",
+    "resources",
+    "reliability",
+    "safety",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-aggregate-result-receipt.v11"},
+    "receipt_id": {"type": "string", "minLength": 1, "maxLength": 160},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "measured_development_aggregate"},
+    "scientific_authority": {"const": true},
+    "claim_boundary": {"type": "string", "minLength": 20, "maxLength": 500},
+    "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+    "program_id": {"enum": ["P00-TAC-DOC", "P01-TA-DOC", "P02-CLAIM1", "P03-PASSAGE", "P04-SECTION-MULTIVIEW"]},
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_sha256",
+        "adoption_receipt_sha256",
+        "transfer_manifest_sha256",
+        "workload_manifest_sha256",
+        "program_spec_sha256",
+        "model_lock_file_sha256",
+        "compiler_source_manifest_sha256",
+        "runtime_lock_sha256",
+        "image_manifest_digest",
+        "git_commit",
+        "git_tree",
+        "frozen_bundle_sha256",
+        "evaluator_sha256",
+        "split_commitment_sha256",
+        "qrels_commitment_sha256",
+        "ephemeral_token_map_sha256",
+        "safe_return_archive_sha256"
+      ],
+      "properties": {
+        "request_sha256": {"$ref": "#/$defs/hash"},
+        "adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "transfer_manifest_sha256": {"$ref": "#/$defs/hash"},
+        "workload_manifest_sha256": {"$ref": "#/$defs/hash"},
+        "program_spec_sha256": {"$ref": "#/$defs/hash"},
+        "model_lock_file_sha256": {"$ref": "#/$defs/hash"},
+        "compiler_source_manifest_sha256": {"$ref": "#/$defs/hash"},
+        "runtime_lock_sha256": {"$ref": "#/$defs/hash"},
+        "image_manifest_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "git_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "git_tree": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "frozen_bundle_sha256": {"$ref": "#/$defs/hash"},
+        "evaluator_sha256": {"$ref": "#/$defs/hash"},
+        "split_commitment_sha256": {"$ref": "#/$defs/hash"},
+        "qrels_commitment_sha256": {"$ref": "#/$defs/hash"},
+        "ephemeral_token_map_sha256": {"$ref": "#/$defs/hash"},
+        "safe_return_archive_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rep_dev_query_count", "returned_query_count", "top_k", "valid_result_lists", "unique_results_per_work_token", "program_arm_complete"],
+      "properties": {
+        "rep_dev_query_count": {"const": 150},
+        "returned_query_count": {"const": 150},
+        "top_k": {"const": 100},
+        "valid_result_lists": {"const": 150},
+        "unique_results_per_work_token": {"const": 100},
+        "program_arm_complete": {"const": true}
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recall_at_100_out", "ndcg_at_100_out", "ndcg_at_10_out", "unique_relevant_family_query_pairs", "judged_query_count", "tie_rate", "failure_rate"],
+      "properties": {
+        "recall_at_100_out": {"$ref": "#/$defs/rate"},
+        "ndcg_at_100_out": {"$ref": "#/$defs/rate"},
+        "ndcg_at_10_out": {"$ref": "#/$defs/rate"},
+        "unique_relevant_family_query_pairs": {"type": "integer", "minimum": 0},
+        "judged_query_count": {"type": "integer", "minimum": 1, "maximum": 150},
+        "tie_rate": {"$ref": "#/$defs/rate"},
+        "failure_rate": {"$ref": "#/$defs/rate"}
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compile_latency_ms", "index_latency_ms", "search_latency_ms", "throughput_qps", "wall_seconds"],
+      "properties": {
+        "compile_latency_ms": {"type": "number", "minimum": 0},
+        "index_latency_ms": {"type": "number", "minimum": 0},
+        "search_latency_ms": {"$ref": "#/$defs/latency"},
+        "throughput_qps": {"type": "number", "exclusiveMinimum": 0},
+        "wall_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["peak_host_ram_bytes", "peak_vram_bytes", "index_size_bytes", "safe_return_bytes"],
+      "properties": {
+        "peak_host_ram_bytes": {"type": "integer", "minimum": 0},
+        "peak_vram_bytes": {"type": "integer", "minimum": 0},
+        "index_size_bytes": {"type": "integer", "minimum": 0},
+        "safe_return_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "reliability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ranking_replay_count", "ranking_replay_hash_match", "retry_count", "oom_recovery_count", "failure_categories"],
+      "properties": {
+        "ranking_replay_count": {"type": "integer", "minimum": 2},
+        "ranking_replay_hash_match": {"const": true},
+        "retry_count": {"type": "integer", "minimum": 0},
+        "oom_recovery_count": {"type": "integer", "minimum": 0, "maximum": 1},
+        "failure_categories": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}}
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protected_payload_projected", "per_query_outcome_projected", "selection_accessed", "final_accessed", "model_weight_changed"],
+      "properties": {
+        "protected_payload_projected": {"const": false},
+        "per_query_outcome_projected": {"const": false},
+        "selection_accessed": {"const": false},
+        "final_accessed": {"const": false},
+        "model_weight_changed": {"const": false}
+      }
+    },
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "latency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["p50", "p95", "p99"],
+      "properties": {
+        "p50": {"type": "number", "minimum": 0},
+        "p95": {"type": "number", "minimum": 0},
+        "p99": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

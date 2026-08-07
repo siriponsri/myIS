@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-execution-adoption-request-receipt.v11.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "revision_id", "status",
+    "evidence_class", "scientific_authority", "claim_boundary", "request",
+    "bindings", "ledger", "validation_summary", "pending_adoption_requirements",
+    "launch_allowed", "adopted_for_execution", "measured_runs",
+    "selection_accesses", "final_accesses", "charged_usd",
+    "next_authorized_action", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-execution-adoption-request-receipt.v11"},
+    "receipt_id": {"const": "a1.2-scientific-execution-adoption-request-v11"},
+    "revision_id": {"const": "a1.2-scientific-execution-adoption-request-v11"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "scientific_execution_adoption_request_preparation"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 180},
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "file_sha256", "request_sha256"],
+      "properties": {
+        "uri": {"const": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "request_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "bindings": {
+      "type": "array", "minItems": 14, "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uri", "file_sha256"],
+        "properties": {
+          "uri": {"$ref": "#/$defs/uri"},
+          "file_sha256": {"$ref": "#/$defs/hash"}
+        }
+      }
+    },
+    "ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "start_entry_sha256", "append_only"],
+      "properties": {
+        "uri": {"const": "control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl"},
+        "start_entry_sha256": {"const": "52589c23c0e4d1cb1737d5d7935215746b8fc17a19b3aaade6d12dca9d3f08f0"},
+        "append_only": {"const": true}
+      }
+    },
+    "validation_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lineage_bindings", "operational_bindings", "workload_manifests",
+        "common_programs", "expected_program_arm_runs",
+        "expected_physical_program_view_paths", "rep_dev_query_count",
+        "harness_dev_reserved_count", "required_aggregate_result_receipts",
+        "provider_contacted",
+        "protected_payload_opened"
+      ],
+      "properties": {
+        "lineage_bindings": {"const": 11},
+        "operational_bindings": {"const": 7},
+        "workload_manifests": {"const": 5},
+        "common_programs": {"const": 5},
+        "expected_program_arm_runs": {"const": 25},
+        "expected_physical_program_view_paths": {"const": 35},
+        "rep_dev_query_count": {"const": 150},
+        "harness_dev_reserved_count": {"const": 100},
+        "required_aggregate_result_receipts": {"const": 25},
+        "provider_contacted": {"const": false},
+        "protected_payload_opened": {"const": false}
+      }
+    },
+    "pending_adoption_requirements": {
+      "type": "array", "minItems": 9, "maxItems": 9,
+      "items": {"type": "string", "minLength": 12}, "uniqueItems": true
+    },
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "measured_runs": {"const": 0},
+    "selection_accesses": {"const": 0},
+    "final_accesses": {"const": 0},
+    "charged_usd": {"const": 0},
+    "next_authorized_action": {"type": "string", "minLength": 220},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {
+      "type": "string",
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    }
+  }
+}

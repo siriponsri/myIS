@@ -182,6 +182,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
     vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
     provider_closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
+    scientific_request_v11 = scaffold.get("scientific_execution_request_v11", {}) if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -420,6 +421,60 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "final_accesses": provider_closeout_v10.get("final_accesses", 0),
             "charged_usd": provider_closeout_v10.get("charged_usd", 0),
         },
+        "armindex_a1_2_scientific_execution_request": {
+            "status": scientific_request_v11.get("status", "not_started"),
+            "evidence_class": "scientific_execution_adoption_request_preparation",
+            "scientific_authority": False,
+            "source_receipt_uri": scientific_request_v11.get("receipt_uri"),
+            "source_receipt_sha256": scientific_request_v11.get("receipt_sha256"),
+            "source_receipt_self_sha256": scientific_request_v11.get(
+                "receipt_self_sha256"
+            ),
+            "request_uri": scientific_request_v11.get("request_uri"),
+            "request_sha256": scientific_request_v11.get("request_sha256"),
+            "request_self_sha256": scientific_request_v11.get("request_self_sha256"),
+            "component_bindings": scientific_request_v11.get(
+                "component_bindings", {}
+            ),
+            "budget_hard_stops": scientific_request_v11.get(
+                "budget_hard_stops", {}
+            ),
+            "workload_manifests": scientific_request_v11.get(
+                "workload_manifests", 0
+            ),
+            "expected_program_arm_runs": scientific_request_v11.get(
+                "expected_program_arm_runs", 0
+            ),
+            "expected_physical_program_view_paths": scientific_request_v11.get(
+                "expected_physical_program_view_paths", 0
+            ),
+            "rep_dev_query_count": scientific_request_v11.get(
+                "rep_dev_query_count", 0
+            ),
+            "harness_dev_reserved_count": scientific_request_v11.get(
+                "harness_dev_reserved_count", 0
+            ),
+            "pending_adoption_requirements": scientific_request_v11.get(
+                "pending_adoption_requirements", []
+            ),
+            "launch_allowed": scientific_request_v11.get("launch_allowed", False),
+            "adopted_for_execution": scientific_request_v11.get(
+                "adopted_for_execution", False
+            ),
+            "measured_runs": scientific_request_v11.get("counters", {}).get(
+                "measured_runs", 0
+            ),
+            "selection_accesses": scientific_request_v11.get("counters", {}).get(
+                "selection_accesses", 0
+            ),
+            "final_accesses": scientific_request_v11.get("counters", {}).get(
+                "final_accesses", 0
+            ),
+            "charged_usd": scientific_request_v11.get("counters", {}).get(
+                "charged_usd", 0
+            ),
+            "counters": scientific_request_v11.get("counters", {}),
+        },
         "observatory": {
             "status": observatory.get("status", "not_available"),
             "evidence_class": observatory.get("evidence_class", "fixture"),
@@ -500,7 +555,19 @@ def _a010_projection_lifecycle(
     vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
     vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
     provider_closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
+    scientific_request_v11 = scaffold.get("scientific_execution_request_v11", {}) if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping) else {}
     if (
+        scaffold.get("validated") is True
+        and scaffold.get("status")
+        == "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked"
+        and scientific_request_v11.get("validated") is True
+        and scientific_request_v11.get("status") == "PASS"
+    ):
+        source_uri = scientific_request_v11.get("receipt_uri")
+        source_sha256 = scientific_request_v11.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
         scaffold.get("validated") is True
         and scaffold.get("status")
         == "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
@@ -2379,6 +2446,7 @@ def _workflow_status(value: Any) -> str:
         "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked": "waiting_owner_decision",
         "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked": "in_progress",
+        "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked": "waiting_owner_decision",
         "synthetic_preflight_closed_provider_destroyed_scientific_execution_locked": "waiting_dependency",
         "contract_scaffold_complete_launch_locked": "waiting_dependency",
         "complete": "complete",

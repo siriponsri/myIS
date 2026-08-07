@@ -75,6 +75,7 @@ def _lifecycle(value: Any) -> str:
         "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
         "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
         "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
+        "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
         "synthetic_preflight_closed_provider_destroyed_scientific_execution_locked",
     }:
         return "active"
@@ -785,6 +786,83 @@ def _artifacts(
                             producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                             producing_task_id="A1.2",
                         ))
+                request_v11 = scaffold.get("scientific_execution_request_v11", {})
+                if (
+                    isinstance(request_v11, Mapping)
+                    and request_v11.get("validated") is True
+                ):
+                    for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                        ("a12-scientific-request-v11", "A1.2 scientific execution and adoption request v11", "contract", "request_uri", "request_sha256", "Freezes a future five-arm scientific request for Owner review while keeping provider contact, adoption, measured retrieval, Selection, and Final closed."),
+                        ("a12-scientific-request-receipt-v11", "A1.2 scientific request preparation receipt v11", "receipt", "receipt_uri", "receipt_sha256", "Validates the repaired request, eleven immutable lineage bindings, five workloads, zero counters, and the separate-adoption boundary."),
+                        ("a12-scientific-request-schema-v11", "A1.2 scientific request schema v11", "schema", "request_schema_uri", "request_schema_sha256", "Fail-closes request authorization, lineage, components, future identities, and zero-counter invariants."),
+                        ("a12-scientific-request-receipt-schema-v11", "A1.2 scientific request receipt schema v11", "schema", "receipt_schema_uri", "receipt_schema_sha256", "Validates the preparation receipt and its non-authorizing lifecycle."),
+                        ("a12-scientific-request-runbook-v11", "A1.2 scientific request runbook v11", "runbook", "runbook_uri", "runbook_sha256", "Explains the protected transfer, exact programs, result evidence, budget admission, and Owner-review boundary."),
+                        ("a12-scientific-request-ledger-v11", "A1.2 scientific request append-only ledger v11", "ledger", "ledger_uri", "ledger_sha256", "Preserves the schema failure, independent-review rejection, repairs, and rigor-review closeout."),
+                        ("a12-scientific-request-rigor-v11", "A1.2 scientific request artifact-only rigor review", "audit", "rigor_review_uri", "rigor_review_sha256", "Accepts the repaired preparation request with no blocking finding while retaining live and protected obligations."),
+                    ):
+                        uri = request_v11.get(uri_key)
+                        digest = request_v11.get(sha_key)
+                        if uri and digest:
+                            result.append(_artifact(
+                                artifact_id=artifact_id,
+                                title=title,
+                                artifact_type=artifact_type,
+                                evidence_class="scientific_execution_adoption_request_preparation",
+                                scientific_authority=False,
+                                safe_uri=str(uri),
+                                content_sha256=str(digest),
+                                explanation=explanation,
+                                producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                                producing_task_id="A1.2",
+                            ))
+                    component_metadata = {
+                        "budget": ("A1.2 v11 all-fee budget request", "budget"),
+                        "protected_evaluator_handoff": ("A1.2 v11 protected evaluator handoff", "contract"),
+                        "stop_conditions": ("A1.2 v11 scientific stop conditions", "contract"),
+                        "provider_admission": ("A1.2 v11 fresh provider admission plan", "contract"),
+                        "scientific_transfer": ("A1.2 v11 scientific transfer and safe-return contract", "contract"),
+                        "common_program_set": ("A1.2 v11 executable common-program set", "manifest"),
+                        "aggregate_result_contract": ("A1.2 v11 aggregate result contract", "contract"),
+                        "workload_set": ("A1.2 v11 five-arm workload manifest set", "manifest"),
+                    }
+                    for component_id, binding in request_v11.get(
+                        "component_bindings", {}
+                    ).items():
+                        if (
+                            component_id not in component_metadata
+                            or not isinstance(binding, Mapping)
+                            or not binding.get("uri")
+                            or not binding.get("file_sha256")
+                        ):
+                            continue
+                        title, artifact_type = component_metadata[component_id]
+                        result.append(_artifact(
+                            artifact_id=f"a12-v11-{component_id.replace('_', '-')}",
+                            title=title,
+                            artifact_type=artifact_type,
+                            evidence_class="scientific_execution_adoption_request_preparation",
+                            scientific_authority=False,
+                            safe_uri=str(binding["uri"]),
+                            content_sha256=str(binding["file_sha256"]),
+                            explanation="Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+                            producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                            producing_task_id="A1.2",
+                        ))
+                    for job in request_v11.get("jobs", []):
+                        if not isinstance(job, Mapping):
+                            continue
+                        result.append(_artifact(
+                            artifact_id=f"a12-v11-job-{str(job.get('arm_id', 'unknown')).lower()}",
+                            title=f"A1.2 v11 {job.get('arm_id', 'unknown')} scientific workload",
+                            artifact_type="manifest",
+                            evidence_class="scientific_execution_adoption_request_preparation",
+                            scientific_authority=False,
+                            safe_uri=str(job.get("uri")),
+                            content_sha256=str(job.get("manifest_sha256")),
+                            explanation="Freezes one arm's five common programs, device mapping, protected transfer binding, aggregate result requirements, and launch locks.",
+                            producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                            producing_task_id="A1.2",
+                        ))
     return result
 
 
@@ -1086,6 +1164,39 @@ def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> li
                         "source_sha256": vast_v9.get("live_result_sha256"),
                     },
                 ])
+        request_v11 = scaffold.get("scientific_execution_request_v11", {})
+        if isinstance(request_v11, Mapping) and request_v11.get("validated") is True:
+            metric_specs = (
+                ("v11_workload_manifest_count", request_v11.get("workload_manifests"), 5, "frozen_five_arm_request_manifests"),
+                ("v11_expected_program_arm_runs", request_v11.get("expected_program_arm_runs"), 25, "planned_logical_program_arm_results_not_measured_runs"),
+                ("v11_expected_physical_program_view_paths", request_v11.get("expected_physical_program_view_paths"), 35, "planned_physical_program_view_paths_not_measured_runs"),
+                ("v11_rep_dev_query_count", request_v11.get("rep_dev_query_count"), 150, "protected_rep_dev_count_commitment"),
+                ("v11_harness_dev_reserved_count", request_v11.get("harness_dev_reserved_count"), 100, "protected_harness_dev_reservation_count"),
+                ("v11_pending_adoption_requirement_count", len(request_v11.get("pending_adoption_requirements", [])), 1, "fail_closed_owner_adoption_requirements"),
+            )
+            rows.extend({
+                "name": name,
+                "cutoff": 0,
+                "split": "request_preparation",
+                "scope": "A1.2",
+                "value": value,
+                "n": n,
+                "denominator": denominator,
+                "source_uri": request_v11.get("receipt_uri"),
+                "source_sha256": request_v11.get("receipt_sha256"),
+            } for name, value, n, denominator in metric_specs)
+            for key, value in request_v11.get("budget_hard_stops", {}).items():
+                rows.append({
+                    "name": f"v11_{key}",
+                    "cutoff": 0,
+                    "split": "request_preparation",
+                    "scope": "A1.2",
+                    "value": value,
+                    "n": 1,
+                    "denominator": "hard_stop_not_spend_authorization",
+                    "source_uri": request_v11.get("receipt_uri"),
+                    "source_sha256": request_v11.get("receipt_sha256"),
+                })
         return rows
     if phase_id == "A0_MIGRATION_FOUNDATION" and task_id in {None, "A0.8"}:
         feasibility = model.get("armindex", {}).get("compute_storage_feasibility", {})
@@ -1645,14 +1756,16 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
         vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
         closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
+        request_v11 = scaffold.get("scientific_execution_request_v11", {}) if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping) else {}
         active = vast_v9 if vast_v9.get("validated") is True else vast_v8 if vast_v8.get("validated") is True else vast_v7
         active_revision = "v9 execution-lifecycle repair" if active is vast_v9 else "v8 validation-complete frozen-bundle repair" if active is vast_v8 else "v7 same-instance repair"
         live_result_pass = vast_v9.get("live_result_status") == "PASS"
         live_result = vast_v9.get("live_result", {}) if isinstance(vast_v9.get("live_result"), Mapping) else {}
         provider_closed = closeout_v10.get("validated") is True and closeout_v10.get("status") == "PASS"
-        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and {active_revision} preparation using {vast_v6.get('image_reference', vast_v5.get('image_reference', 'not_recorded'))} on {vast_v6.get('platform', vast_v5.get('platform', 'not_recorded'))}. The additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for {len(live_result.get('arms', []))} dense arms, and provider closeout v10 is {'PASS' if provider_closed else 'pending'}."
-        result = f"A1 engineering preflight is current through v10 with live synthetic status {vast_v9.get('live_result_status', 'not_started')}; {'the Owner destroyed the Vast instance and provider absence was observed' if provider_closed else 'Owner instance disposition remains pending'}, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
-        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')}, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. {'The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown.' if live_result_pass else 'The additive v9 repair remains preparation evidence only.'} {'The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained.' if provider_closed else 'Provider disposition remains open.'} It does not establish retrieval quality, execution adoption, or scientific authorization."
+        v11_prepared = request_v11.get("validated") is True and request_v11.get("status") == "PASS"
+        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and {active_revision} preparation using {vast_v6.get('image_reference', vast_v5.get('image_reference', 'not_recorded'))} on {vast_v6.get('platform', vast_v5.get('platform', 'not_recorded'))}. The additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for {len(live_result.get('arms', []))} dense arms, provider closeout v10 is {'PASS' if provider_closed else 'pending'}, and scientific execution request v11 is {'prepared for Owner review' if v11_prepared else 'not prepared'}."
+        result = f"A1 request preparation is current through v11; {'the Owner destroyed the prior Vast instance and provider absence was observed' if provider_closed else 'Owner instance disposition remains pending'}. The v11 request freezes {request_v11.get('expected_program_arm_runs', 0)} logical program-arm results over {request_v11.get('rep_dev_query_count', 0)} REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
+        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')}, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. {'The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown.' if live_result_pass else 'The additive v9 repair remains preparation evidence only.'} {'The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained.' if provider_closed else 'Provider disposition remains open.'} {'The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts.' if v11_prepared else 'The v11 request remains unavailable.'} It does not establish retrieval quality, execution adoption, or scientific authorization."
         decision_status = "active"
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
@@ -1678,6 +1791,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
             vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
             closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
+            request_v11 = scaffold.get("scientific_execution_request_v11", {}) if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping) else {}
             live_failures = (
                 vast_v8.get("preserved_live_failures", [])
                 if vast_v8.get("validated") is True and isinstance(vast_v8.get("preserved_live_failures"), list)
@@ -1690,6 +1804,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             live_result_pass = vast_v9.get("live_result_status") == "PASS"
             live_result = vast_v9.get("live_result", {}) if isinstance(vast_v9.get("live_result"), Mapping) else {}
             provider_closed = closeout_v10.get("validated") is True and closeout_v10.get("status") == "PASS"
+            v11_prepared = request_v11.get("validated") is True and request_v11.get("status") == "PASS"
             for item in live_failures:
                 if not isinstance(item, Mapping):
                     continue
@@ -1708,9 +1823,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 for item in live_failures
                 if isinstance(item, Mapping)
             )
-            output = f"The preserved v1-v8 contracts validate, the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and the additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for attempt {live_result.get('attempt_id', 'not_recorded')}. It preserves repair evidence for {failure_summary or 'no recorded failures'}; provider closeout v10 is {'PASS' if provider_closed else 'pending'}."
-            result = f"A1.2 synthetic live preflight status is {vast_v9.get('live_result_status', 'not_started')}: {len(live_result.get('arms', []))} dense-arm adapter receipts were collected, Qwen measured adapter maximum is {live_result.get('qwen', {}).get('measured_adapter_max_input_tokens', 'not_recorded')} tokens, guest teardown is {live_result.get('lifecycle', {}).get('guest_process_teardown', 'not_recorded')}, and {'the Owner-confirmed provider closeout is recorded' if provider_closed else 'provider disposition remains pending'}. Scientific launch remains locked; measured runs and charged USD counters remain zero."
-            interpretation = "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. It is not retrieval-quality or publication evidence."
+            output = f"The preserved v1-v10 contracts validate, the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and the additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for attempt {live_result.get('attempt_id', 'not_recorded')}. It preserves repair evidence for {failure_summary or 'no recorded failures'}; provider closeout v10 is {'PASS' if provider_closed else 'pending'} and request v11 is {'prepared for Owner review' if v11_prepared else 'not prepared'}."
+            result = f"A1.2 v11 freezes {request_v11.get('workload_manifests', 0)} workloads, {request_v11.get('expected_program_arm_runs', 0)} required logical results, {request_v11.get('expected_physical_program_view_paths', 0)} physical program-view paths, and {request_v11.get('rep_dev_query_count', 0)} REP-DEV queries while reserving {request_v11.get('harness_dev_reserved_count', 0)} for HARNESS-DEV. It is not adopted; scientific launch remains locked and measured runs and charged USD counters remain zero."
+            interpretation = "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. The repaired v11 request adds exact P00-P04 compiler hashes, protected opaque transfer/return rules, aggregate result schemas, whole-workload completion, and all-fee budget admission. It remains preparation evidence, not retrieval-quality or publication evidence."
             decision_status = "active" if live_result_pass else "blocked"
         else:
             output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
@@ -1791,9 +1906,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
-            else "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. The additive v6 correction handles direct-container observability and offline environment injection. The additive v7 same-instance repair preserves the missing-pydantic wheelhouse and frozen-tree bytecode failures, requires a fresh repair root, hash-validated reuse, and bytecode suppression; continuation remains conditional on complete future live evidence and a separately authorized next goal. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
+            else "A1.1 synthetic adapter evidence and the A1.2 v1-v10 preflight/closeout lineage are validated. The additive v11 request preserves that history and freezes a separate protected scientific transfer, executable P00-P04 compiler source/spec hashes, 150 REP-DEV queries with 100 reserved for HARNESS-DEV, 25 required aggregate result receipts, all-fee budget admission, and a fresh-provider plan. The prior instance is destroyed. Provider contact, adoption, measured retrieval, Selection, Final, and paid API work remain closed."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id is None and a12_validated
-            else "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, and runtime-minimal allowlists were frozen. The v5 direct-base revision binds the official PyTorch linux/amd64 manifest and replaces active custom-image transfers with code, Linux wheelhouse, runtime-minimal models, and safe job manifests. The additive v6 correction remains synthetic-only. The additive v7 repair preserves two live engineering failures and repairs them through a fresh root, checksum-gated reuse, a hash-bound supplement, and bytecode suppression; any later instance continuation remains conditional on complete live evidence, budget, watchdog, clean protected boundary, and separate next-goal authorization. Launch remains false pending live preflight and explicit adoption."
+            else "The A1.1 receipt anchors a validated A1.2 lineage through v10 provider closeout. The repaired additive v11 request binds the future protected transfer, exact five-program scientific compiler, five workload manifests, aggregate result schema, stop conditions, fresh-provider admission, and hard-stop budget. The request is prepared for Owner review only; launch and adoption remain false pending the unchanged request hash, protected handoff/transfer receipts, 25 compiled program bindings, fresh quote/identity, full-TTL budget fit, and watchdog/destroy validation."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2"
             else "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
             if phase_id.startswith("A") and task_id == "A0.10"

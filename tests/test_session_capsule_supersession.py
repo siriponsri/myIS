@@ -3,7 +3,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from myis_research.session_capsules import latest_valid_session, validate_all_session_capsules
+import pytest
+
+from myis_research.session_capsules import (
+    SessionCapsuleValidationError,
+    _validate_plan_binding,
+    latest_valid_session,
+    validate_all_session_capsules,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,3 +79,15 @@ def test_p1_legacy_completion_capsule_is_superseded_by_recovery_freeze() -> None
     latest = latest_valid_session(ROOT, phase_id="P1_CPU_BASELINE", task_id="P1.3", gate_id="D1_START_CAMPAIGN")
     assert latest is not None
     assert latest["session_id"] != "20260730T180521Z-p1-legacy-certification-v1"
+
+
+def test_armindex_task_map_uses_canonical_phase_and_standing_d1() -> None:
+    _validate_plan_binding(
+        ROOT,
+        "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+        "A1.2",
+        "D1_START_CAMPAIGN",
+    )
+
+    with pytest.raises(SessionCapsuleValidationError, match="phase, task, or gate"):
+        _validate_plan_binding(ROOT, "A1", "A1.2", "D1_START_CAMPAIGN")
