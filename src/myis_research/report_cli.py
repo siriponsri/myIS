@@ -15,7 +15,6 @@ from urllib.parse import urlparse
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError
 
-from .armindex.constants import A0_8_NEXT_AUTHORIZED_ACTION
 from .mlflow_archive import (
     ACTIVE_CAMPAIGN,
     ArchiveRun,
@@ -1547,6 +1546,12 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
 def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
     revision = str(model["read_model_revision"])
     report_records = {str(item["report_id"]): item for item in build_report_records(root, model)}
+    armindex = model.get("armindex")
+    if not isinstance(armindex, Mapping):
+        raise ValueError("read model is missing the ArmIndex projection")
+    next_authorized_action = armindex.get("next_command")
+    if not isinstance(next_authorized_action, str) or not next_authorized_action.strip():
+        raise ValueError("read model is missing the current ArmIndex next command")
     common = {
         "schema_version": "myis.obsidian-note.v2",
         "read_model_revision": revision,
@@ -1562,7 +1567,7 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "claim_boundary": "engineering_provenance_only",
         "generated_from_revision": revision,
         "last_material_update": model["generated_at"],
-        "next_authorized_action": A0_8_NEXT_AUTHORIZED_ACTION,
+        "next_authorized_action": next_authorized_action,
         "managed_by": "myis-report",
         "edit_policy": "generated_do_not_edit",
         "safe_to_present": True,
@@ -1580,7 +1585,6 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         _p1_home_body(model, next_lines) + "\n\n## P2 Readiness\n\n" + _p2_readiness_table(model) + "\n\nP2 remains planned and not measured; selection access is zero.\n",
     )
 
-    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
     armindex_phases = [row for row in armindex.get("phases", []) if isinstance(row, Mapping)]
     arm_rows = "\n".join(
         f"| `{row.get('arm_id')}` | `{row.get('model_id')}` | {row.get('adapter_status')} | {row.get('representation_status')} | {row.get('commercial_status')} |"

@@ -16,6 +16,7 @@ from myis_research.report_cli import (
     _brain_report_contents,
     _check,
     _compatibility_report_contents,
+    _obsidian_vault_contents,
     _paper_report_contents,
     _projection_identity_fingerprint,
     _validate_generated_contents,
@@ -86,6 +87,30 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "`32`" not in pending_report
     assert "`0.72`" not in pending_report
     assert "measured results = `unavailable`" in pending_report
+
+
+def test_generic_obsidian_notes_use_the_current_armindex_next_command() -> None:
+    model = build_read_model(ROOT)
+    contents = _obsidian_vault_contents(ROOT, model)
+    expected = model["armindex"]["next_command"]
+
+    for relative_path in (
+        VAULT_RELATIVE_PATH / "HOME.md",
+        VAULT_RELATIVE_PATH / "00_Home/ARM_INDEX_HOME.md",
+    ):
+        frontmatter = yaml.safe_load(contents[relative_path].split("---", 2)[1])
+        assert frontmatter["next_authorized_action"] == expected
+
+
+def test_obsidian_generation_fails_closed_without_current_armindex_next_command() -> None:
+    model = build_read_model(ROOT)
+    broken = {
+        **model,
+        "armindex": {**model["armindex"], "next_command": ""},
+    }
+
+    with pytest.raises(ValueError, match="current ArmIndex next command"):
+        _obsidian_vault_contents(ROOT, broken)
 
 
 def test_a12_v11_request_is_the_canonical_projection_lifecycle_source() -> None:

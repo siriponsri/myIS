@@ -212,12 +212,13 @@ assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
 The current state must agree everywhere: ArmIndex is the active campaign,
 SCOPE is historical read-only, all A0 Tasks and A1.1 are complete, measured
 ArmIndex counters remain zero, Selection and Final remain closed, and the next
-action is exactly the Owner-local SSH/Vast preflight for the additive A1.2 v3
-post-commit correction in `HANDOFF.md`. The v3 validator must preserve every
-v1/v2 byte, validate v2 through its immutable receipt, and bind the clean
-current commit/tree at frozen-bundle creation. The offline scaffold is
-complete; the live preflight must keep `launch_allowed=false` and
-`adopted_for_execution=false` and must stop before scientific execution.
+action is exactly the local-only Owner review and adoption-input preparation
+for the unchanged A1.2 scientific execution request v11 in `HANDOFF.md`.
+Preparation must bind the clean pushed execution commit/tree and bundle,
+protected handoff and transfer receipts, all 25 compiled-program bindings, a
+fresh provider identity and all-fee quote, whole-workload budget admission,
+and watchdog/provider-destroy dry-run. It must not contact a provider, adopt
+execution, or start scientific execution.
 Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
 fixture is `passed`, and measured P2 was not started. A stale narrative is a
 validation failure, not a documentation preference.
@@ -231,6 +232,6 @@ in `docs/observatory/REPORTING_POLICY.md` and
 Report the exact phase, task, status, checks, changed files, untouched
 protected surfaces, evidence class, blockers, and next automatic action. Do not
 claim P1 measured completion unless a protected Owner-local run actually
-completed. Keep the next action limited to the launch-locked Owner-local
-SSH/Vast preflight; `D2_OPEN_FINAL` remains closed and does not authorize A1.2
-scientific execution.
+completed. Keep the next action limited to the launch-locked local-only Owner
+review and adoption-input preparation for unchanged v11; `D2_OPEN_FINAL`
+remains closed and does not authorize A1.2 scientific execution.
