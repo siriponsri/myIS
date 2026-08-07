@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-07T13:00:35Z",
-  "generated_from_revision": "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b",
-  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
+  "generated_at": "2026-08-07T15:03:37Z",
+  "generated_from_revision": "9bda9e25522585ac0bab7765907c2d1a5f5f6c673dfc1b9c3b5e31c7feff757b",
+  "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
+    "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T13:00:35Z",
+  "last_material_update": "2026-08-07T15:03:37Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "62c2f70831839885502901b085bd9281c804b9b0ed042d75be6468e51188c779",
+  "report_sha256": "77b1a8a7a1794b3396aa311aa8bbe5ebbc9d62dcc2edcc11fe5d774e284bbc9d",
   "report_type": "task",
   "result": {
     "decision": "not_started",

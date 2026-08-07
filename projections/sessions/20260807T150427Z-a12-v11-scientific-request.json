@@ -1,0 +1,396 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260807T150427Z-a12-v11-scientific-request",
+  "run_id": null,
+  "goal_id": "A1.2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11",
+  "started_at_utc": "2026-08-07T13:22:23Z",
+  "ended_at_utc": "2026-08-07T15:04:27Z",
+  "scope": "Prepare and validate the additive A1.2 scientific execution and adoption request v11 for Owner review, preserve v1-v10 evidence, and keep provider contact and scientific execution locked.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread through 2026-08-07",
+      "scope": "Prepare the additive local-only A1.2 request, preserve historical evidence, record the prior instance as destroyed under v10 authority, and close documentation, projection, Brain, Git, and validation work without opening a provider or starting measured retrieval."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "04475017e348df16dc3bde46d208ad4607c56483",
+    "dirty_paths": [
+      "mlflow/generated/archive-index.v2.json",
+      "obsidian_report",
+      "projections",
+      "projections/sessions/20260807T150427Z-a12-v11-scientific-request.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner selected additive local request preparation and later confirmed the prior Vast instance was destroyed; v10 remains the sole provider-closeout authority.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "410fd06c83c243415f1749c9019b8a41a029a969e2faa51bf0debe7691d707c7",
+          "locator": "A1 task map, additive v11 preparation boundary, and Next authorized action"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The request freezes the common-program workload, protected handoff, aggregate result, budget, stop, and fresh-provider admission contracts for later Owner adoption review.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+          "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+          "locator": "summary, component_bindings, scientific_protocol, and authorization"
+        }
+      ],
+      "quantitative_claims": [
+        {
+          "claim_id": "QC0001",
+          "statement": "Frozen arm workloads",
+          "value": 5,
+          "unit": "workloads",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "summary, component_bindings, scientific_protocol, and authorization"
+          }
+        },
+        {
+          "claim_id": "QC0002",
+          "statement": "Required logical program-arm results",
+          "value": 25,
+          "unit": "results",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "summary, component_bindings, scientific_protocol, and authorization"
+          }
+        },
+        {
+          "claim_id": "QC0003",
+          "statement": "Required physical program-view paths",
+          "value": 35,
+          "unit": "paths",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "summary, component_bindings, scientific_protocol, and authorization"
+          }
+        },
+        {
+          "claim_id": "QC0004",
+          "statement": "REP-DEV query commitment",
+          "value": 150,
+          "unit": "queries",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "summary, component_bindings, scientific_protocol, and authorization"
+          }
+        },
+        {
+          "claim_id": "QC0005",
+          "statement": "HARNESS-DEV reserved query count",
+          "value": 100,
+          "unit": "queries",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "summary, component_bindings, scientific_protocol, and authorization"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "Materialization first failed closed on a schema count, and independent review then rejected transfer, split, program, Qwen, result, and quote gaps; the additive draft was repaired and revalidated without altering v1-v10 evidence.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl",
+          "sha256": "bddd133983c9d7e56bb1979ecc41f354d7ac8ab0b934089f43f869f722c4b1d0",
+          "locator": "a1.2-v11-schema-count-failure through a1.2-v11-independent-review-recovery"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The artifact-only rigor review accepted the repaired request for Owner review with no blocking finding while explicitly withholding execution-ready and scientific-result authority.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a1.2-scientific-execution-adoption-request-v11-20260807.json",
+          "sha256": "8d2d8213a26fc9a5b21d4d57a543b852cbf945d47df0d5c2b1a7e9f2e9907fdf",
+          "locator": "overall.grade, governance.blocking_findings, review_boundary, and findings"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "Provider contact, launch, adoption, measured retrieval, Selection, Final, and charged-resource authority remain closed.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+          "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+          "locator": "authorization and counters"
+        }
+      ],
+      "quantitative_claims": [
+        {
+          "claim_id": "QC0006",
+          "statement": "Measured runs remain zero",
+          "value": 0,
+          "unit": "runs",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "authorization and counters"
+          }
+        },
+        {
+          "claim_id": "QC0007",
+          "statement": "Selection accesses remain zero",
+          "value": 0,
+          "unit": "accesses",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "authorization and counters"
+          }
+        },
+        {
+          "claim_id": "QC0008",
+          "statement": "Final accesses remain zero",
+          "value": 0,
+          "unit": "accesses",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "authorization and counters"
+          }
+        },
+        {
+          "claim_id": "QC0009",
+          "statement": "Charged provider cost remains zero",
+          "value": 0,
+          "unit": "USD",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+            "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+            "locator": "authorization and counters"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The next authorized action is local review and adoption-input preparation for the unchanged request; the destroyed provider instance cannot be reused.",
+      "evidence_refs": [
+        {
+          "path": "HANDOFF.md",
+          "sha256": "4fa110c151d453711c87ed528b9ee21219ed6392b0dc953d5190026094f3ecac",
+          "locator": "Blockers and Active authorized action"
+        }
+      ],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a1.2-scientific-execution-adoption-request-v11-20260807.json",
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-review-and-adoption-inputs",
+      "provenance": "agent-observed",
+      "summary": "The unchanged request still needs a clean execution bundle identity, Owner-local protected transfer commitments, all compiled-program bindings, fresh provider admission evidence, full-workload budget admission, and a separate explicit adoption receipt.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "live-vast-scientific-preflight",
+      "provenance": "agent-observed",
+      "summary": "No provider may be opened or contacted until a separate authorized goal admits a fresh instance; GPU parity, memory feasibility, live identity, quote, watchdog, and destroy proof remain pending.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "protected-owner-local-handoff",
+      "provenance": "agent-observed",
+      "summary": "Protected corpus, REP-DEV membership, evaluator, qrels, token maps, credentials, and original identifiers remain Owner-local and were not accessed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "task_id": "A1.2",
+    "gate_id": "D1_START_CAMPAIGN",
+    "gate_status": "pending"
+  },
+  "owner_brief_th": "เตรียมคำขอ A1.2 v11 สำหรับให้ Owner ตรวจแล้ว โดยยังไม่อนุญาตเปิด Vast หรือเริ่ม measured retrieval อินสแตนซ์เดิมถูกทำลายและใช้ต่อไม่ได้ ขั้นถัดไปคือทบทวนคำขอเดิมและเตรียมหลักฐาน adoption บนเครื่อง local เท่านั้น",
+  "owner_actions": [
+    {
+      "action_id": "review-v11-unchanged",
+      "priority": "required",
+      "action_th": "ตรวจคำขอ A1.2 v11 และเตรียมข้อมูล adoption บนเครื่อง local โดยไม่แก้ไข request เดิม",
+      "reason_th": "ต้องผูก code bundle, protected handoff, compiled programs, budget และ provider admission ให้ครบก่อนขอสิทธิ์เปิด Vast รอบใหม่",
+      "blocking_gate": null
+    },
+    {
+      "action_id": "keep-provider-closed",
+      "priority": "required",
+      "action_th": "ยังไม่เปิดหรือเชื่อมต่อ Vast จนกว่าจะมี goal แยกที่ผ่าน adoption checks",
+      "reason_th": "v11 เป็นเอกสารเตรียมการเท่านั้น และ launch_allowed กับ adopted_for_execution ยังเป็น false",
+      "blocking_gate": null
+    }
+  ],
+  "gate_request": {
+    "gate_id": "D1_START_CAMPAIGN",
+    "state": "draft",
+    "summary_th": "ปิดงานเตรียม v11 ภายใต้ D1 เดิมโดยไม่สร้าง micro-gate และยังไม่ขอ D2 หรือ D3",
+    "blocking_reason_th": null,
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "owner-local-adoption-evidence",
+        "description_th": "หลักฐาน protected handoff, transfer และ compiled-program bindings ที่เก็บใน Owner-local store",
+        "purpose_th": "ยืนยัน exact executed bytes และขอบเขตข้อมูลก่อน adoption โดยไม่ส่งข้อมูล protected เข้า Git"
+      },
+      {
+        "resource_id": "fresh-provider-admission-later",
+        "description_th": "ข้อมูล instance, all-fee quote, budget fit, watchdog และ destroy path สำหรับ provider ใหม่เมื่อมีสิทธิ์แยก",
+        "purpose_th": "ป้องกันการใช้ instance หรือ quote เก่าและหยุดทันทีหากค่าใช้จ่ายเกิน hard stop"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "v11-validator",
+        "status": "PASS",
+        "summary": "Request, receipt, eleven lineage bindings, five workload manifests, six ledger entries, authorization flags, and zero counters validated."
+      },
+      {
+        "check_id": "pytest-full",
+        "status": "PASS",
+        "summary": "Full repository suite passed 509 tests with one expected xfail and one known deprecation warning."
+      },
+      {
+        "check_id": "focused-security-and-projections",
+        "status": "PASS",
+        "summary": "Sixty-three focused v11, compiler, historical v8, artifact graph, Dashboard/API, and MLflow archive tests passed."
+      },
+      {
+        "check_id": "report-sync-check",
+        "status": "PASS",
+        "summary": "Generated reports and read model synchronized and two checks reported no drift."
+      },
+      {
+        "check_id": "mlflow-doctor",
+        "status": "PASS",
+        "summary": "External repository-safe MLflow store, SQLite read-only integrity, archive lineage, experiments, and backup readiness passed."
+      },
+      {
+        "check_id": "assets-layout-links-sessions",
+        "status": "PASS",
+        "summary": "Full assets, layout, Markdown links, session audit, and independent ArmIndex migration verification passed."
+      },
+      {
+        "check_id": "brain",
+        "status": "PASS",
+        "summary": "Pointer-only v11 memory notes, superseded v10 context, MOC, serial-writer lease, and literature validation passed."
+      },
+      {
+        "check_id": "protected-boundary",
+        "status": "PASS",
+        "summary": "No protected payload, credentials, provider contact, GPU work, measured retrieval, Selection, Final, paid API, or weight change occurred."
+      }
+    ],
+    "changed_files": [
+      "HANDOFF.md",
+      "PLAN.md",
+      "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "control/armindex/a1.2/aggregate-result-contract.v11.json",
+      "control/armindex/a1.2/common-program-set.v11.json",
+      "control/armindex/a1.2/jobs/scientific-request-v11/ARM-01.json",
+      "control/armindex/a1.2/jobs/scientific-request-v11/ARM-02.json",
+      "control/armindex/a1.2/jobs/scientific-request-v11/ARM-03.json",
+      "control/armindex/a1.2/jobs/scientific-request-v11/ARM-04.json",
+      "control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json",
+      "control/armindex/a1.2/provider-admission-plan.v11.json",
+      "control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl",
+      "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+      "control/armindex/a1.2/scientific-transfer-contract.v11.json",
+      "control/armindex/a1.2/stop-conditions.scientific-request.v11.json",
+      "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json",
+      "control/budgets/a1.2-common-screen-scientific-request-v11.json",
+      "control/campaigns/armindex-multiretriever-v2.yaml",
+      "control/owner-local/a1.2-evaluator-handoff-request.v11.json",
+      "control/source-of-truth.yaml",
+      "docs/operations/A1_2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11.md",
+      "outputs/audits/rigor/a1.2-scientific-execution-adoption-request-v11-20260807.json",
+      "projections/sessions/20260807T150427Z-a12-v11-scientific-request.json",
+      "schemas/armindex/a1.2-aggregate-result-receipt.v11.json",
+      "schemas/armindex/a1.2-scientific-execution-adoption-request-receipt.v11.json",
+      "schemas/armindex/a1.2-scientific-execution-adoption-request.v11.json",
+      "src/myis_research/armindex/a1_2_scientific_execution_request_v11.py",
+      "src/myis_research/armindex/scientific_common_programs_v11.py",
+      "src/myis_research/projections/read_model.py",
+      "src/myis_research/report_cli.py",
+      "src/myis_research/report_records.py",
+      "src/myis_research/session_capsules.py",
+      "tests/test_armindex_a1_2_scientific_execution_request_v11.py",
+      "tests/test_armindex_scientific_common_programs_v11.py",
+      "tests/test_obsidian_report_contract.py",
+      "tests/test_read_model.py",
+      "tests/test_session_capsule_supersession.py"
+    ],
+    "untouched_protected_surfaces": [
+      "Owner-local protected corpus and evaluator store",
+      "qrels, split membership, query identifiers, and token maps",
+      "per-query outcomes, rankings, and original protected identifiers",
+      "credentials, SSH keys, and raw provider payloads",
+      "GPU, measured retrieval, optimization, and paid API surfaces",
+      "D2_OPEN_FINAL and D3_SUBMIT_RELEASE decision records",
+      "model weights and immutable v1-v10 contracts and receipts"
+    ]
+  },
+  "corrections": []
+}

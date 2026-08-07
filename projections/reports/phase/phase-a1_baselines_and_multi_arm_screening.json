@@ -2652,9 +2652,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-07T13:00:35Z",
-  "generated_from_revision": "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b",
-  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
+  "generated_at": "2026-08-07T15:03:37Z",
+  "generated_from_revision": "9bda9e25522585ac0bab7765907c2d1a5f5f6c673dfc1b9c3b5e31c7feff757b",
+  "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -2780,7 +2780,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
+    "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2797,7 +2797,7 @@
   },
   "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. It does not establish retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
-  "last_material_update": "2026-08-07T13:00:35Z",
+  "last_material_update": "2026-08-07T15:03:37Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -2892,7 +2892,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "6a70cc632c8abe7356e9cd8fe3d0e9b41bcc5fa8045c078e7f1dfdc92c6b569c",
+  "report_sha256": "c64ebe62673305737dcdf8bc46a908bc30ddf029ad29390316fdba1314ed51b9",
   "report_type": "phase",
   "result": {
     "decision": "active",

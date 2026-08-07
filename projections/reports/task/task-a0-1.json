@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T13:00:35Z",
-  "generated_from_revision": "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b",
-  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
+  "generated_at": "2026-08-07T15:03:37Z",
+  "generated_from_revision": "9bda9e25522585ac0bab7765907c2d1a5f5f6c673dfc1b9c3b5e31c7feff757b",
+  "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
+    "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -198,13 +198,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T13:00:35Z",
+  "last_material_update": "2026-08-07T15:03:37Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Repository and evidence migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-1",
-  "report_sha256": "bef77b9a35f20f0bfe0698355f2959ba534e9659b43c1d81b9e900dbd62e7d92",
+  "report_sha256": "6814c04ba8e8e910a882c68d3aaa7a3167e7e17ec8b70fb760cf3a6880554efc",
   "report_type": "task",
   "result": {
     "decision": "completed",
