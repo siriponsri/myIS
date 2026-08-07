@@ -88,7 +88,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "measured results = `unavailable`" in pending_report
 
 
-def test_a12_v9_live_result_is_the_canonical_projection_lifecycle_source() -> None:
+def test_a12_v10_provider_closeout_is_the_canonical_projection_lifecycle_source() -> None:
     model = build_read_model(ROOT)
     manifest = json.loads(
         (ROOT / VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json").read_text(
@@ -109,13 +109,13 @@ def test_a12_v9_live_result_is_the_canonical_projection_lifecycle_source() -> No
         obsidian_manifest_sha256=str(manifest["manifest_sha256"]),
         external_outputs=external_outputs,
     )
-    v9 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v9"]
+    v10 = model["armindex"]["a1_2_contract_scaffold"]["provider_closeout_v10"]
 
     assert lifecycle["source_receipt_uri"] == (
         "campaigns/armindex-multiretriever-v2/evidence/"
-        "a1.2-live-synthetic-preflight-result.receipt.v9.json"
+        "a1.2-provider-closeout-result.receipt.v10.json"
     )
-    assert lifecycle["source_receipt_sha256"] == v9["live_result_sha256"]
+    assert lifecycle["source_receipt_sha256"] == v10["receipt_sha256"]
 
 
 def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contract() -> None:
@@ -230,6 +230,8 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "A1.2 same-instance repair receipt v7" in a12_report
     assert "A1.2 validation-complete frozen-bundle repair receipt v8" in a12_report
     assert "A1.2 execution-lifecycle repair receipt v9" in a12_report
+    assert "A1.2 Owner-local provider closeout receipt v10" in a12_report
+    assert "no independent Vast API or CLI record was obtained" in a12_report
     assert "v6-initial-wheelhouse-missing-pydantic" in a12_report
     assert "v6-supplement-repair-mutated-pycache-tree" in a12_report
     assert "v7-frozen-bundle-missing-validation-lineage" in a12_report
@@ -254,7 +256,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(
-        "a1.2-live-synthetic-preflight-result.receipt.v9.json"
+        "a1.2-provider-closeout-result.receipt.v10.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
@@ -303,6 +305,12 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert mlflow_index["armindex_a1_2_live_preflight_execution_lifecycle_repair"][
         "launch_allowed"
     ] is False
+    assert mlflow_index["armindex_a1_2_provider_closeout"]["status"] == "PASS"
+    assert mlflow_index["armindex_a1_2_provider_closeout"]["provider_closeout"][
+        "owner_disposition"
+    ] == "destroyed_and_provider_absence_verified"
+    assert mlflow_index["armindex_a1_2_provider_closeout"]["pending_provider_checks"] == []
+    assert mlflow_index["armindex_a1_2_provider_closeout"]["launch_allowed"] is False
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",

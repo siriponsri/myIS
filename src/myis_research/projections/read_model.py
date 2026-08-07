@@ -100,6 +100,12 @@ from ..armindex.a1_2_live_preflight_result_v9 import (
     SCHEMA_PATH as A12_V9_RESULT_SCHEMA_PATH,
     validate_result as validate_a1_2_v9_live_result,
 )
+from ..armindex.a1_2_provider_closeout_result_v10 import (
+    RECEIPT_PATH as A12_V10_CLOSEOUT_RECEIPT_PATH,
+    REVISION_ID as A12_V10_CLOSEOUT_REVISION_ID,
+    SCHEMA_PATH as A12_V10_CLOSEOUT_SCHEMA_PATH,
+    validate_closeout as validate_a1_2_v10_provider_closeout,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -288,6 +294,9 @@ A12_V9_COORDINATOR_PATH = Path("scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordi
 A12_V9_BOOTSTRAP_PATH = Path("scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh")
 A12_V9_LAUNCHER_PATH = Path("scripts/a1_2_vast/remote-live-preflight-v9.sh")
 A12_V9_RESULT_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_result_v9.py")
+A12_V10_CLOSEOUT_MODULE_PATH = Path(
+    "src/myis_research/armindex/a1_2_provider_closeout_result_v10.py"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -360,6 +369,24 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
+        and isinstance(a1_2_scaffold.get("provider_closeout_v10"), Mapping)
+        and a1_2_scaffold["provider_closeout_v10"].get("validated") is True
+    ):
+        armindex["status"] = (
+            "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
+        )
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {**item, "status": "live_synthetic_preflight_pass"}
+            if item.get("arm_id") in {"ARM-02", "ARM-03", "ARM-04", "ARM-05"}
+            else item
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
@@ -2136,6 +2163,30 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": "execution_lifecycle_repair_not_prepared",
             "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
         },
+        "provider_closeout_v10": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": A12_V10_CLOSEOUT_REVISION_ID,
+            "receipt_uri": A12_V10_CLOSEOUT_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "schema_uri": A12_V10_CLOSEOUT_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "validator_uri": A12_V10_CLOSEOUT_MODULE_PATH.as_posix(),
+            "validator_sha256": None,
+            "predecessor": {},
+            "owner_evidence": {},
+            "provider_closeout": {},
+            "pending_provider_checks": [],
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "measured_runs": 0,
+            "selection_accesses": 0,
+            "final_accesses": 0,
+            "charged_usd": 0,
+            "claim_boundary": "provider_closeout_not_recorded",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -2181,6 +2232,8 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         v9_contract = None
         v9_result_validation = None
         v9_result_receipt = None
+        v10_closeout_validation = None
+        v10_closeout_receipt = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
@@ -2224,6 +2277,11 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v9_result_receipt = json.loads(
                 (root / A12_V9_RESULT_RECEIPT_PATH).read_text(encoding="utf-8")
             )
+        if (root / A12_V10_CLOSEOUT_RECEIPT_PATH).is_file():
+            v10_closeout_validation = validate_a1_2_v10_provider_closeout(root)
+            v10_closeout_receipt = json.loads(
+                (root / A12_V10_CLOSEOUT_RECEIPT_PATH).read_text(encoding="utf-8")
+            )
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -2252,6 +2310,7 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v9_receipt,
             v9_contract,
             v9_result_receipt,
+            v10_closeout_receipt,
         ):
             if value is not None:
                 assert_aggregate_only(value)
@@ -2458,6 +2517,33 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or v9_result_receipt.get("lifecycle", {}).get("guest_process_teardown") != "PASS"
         ):
             raise ValueError("A1.2 live synthetic preflight result receipt is invalid")
+        if v10_closeout_receipt is not None and (
+            v10_closeout_validation is None
+            or v9_result_receipt is None
+            or v10_closeout_receipt.get("status") != "PASS"
+            or v10_closeout_receipt.get("scientific_authority") is not False
+            or v10_closeout_receipt.get("launch_allowed") is not False
+            or v10_closeout_receipt.get("adopted_for_execution") is not False
+            or any(
+                int(v10_closeout_receipt.get(key, -1)) != 0
+                for key in ("measured_runs", "selection_accesses", "final_accesses")
+            )
+            or float(v10_closeout_receipt.get("charged_usd", -1)) != 0
+            or v10_closeout_receipt.get("predecessor", {}).get("receipt_self_sha256")
+            != v9_result_receipt.get("receipt_sha256")
+            or v10_closeout_receipt.get("provider_closeout", {}).get("owner_disposition")
+            != "destroyed_and_provider_absence_verified"
+            or v10_closeout_receipt.get("provider_closeout", {}).get(
+                "provider_destruction_proven"
+            )
+            is not True
+            or v10_closeout_receipt.get("provider_closeout", {}).get(
+                "provider_instance_absent_verified"
+            )
+            is not True
+            or v10_closeout_receipt.get("pending_provider_checks") != []
+        ):
+            raise ValueError("A1.2 provider closeout v10 receipt is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -2942,9 +3028,40 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": str(v9_result_receipt["claim_boundary"]),
             "next_authorized_action": str(v9_result_receipt["next_authorized_action"]),
         }
+    v10_closeout_projection = dict(missing["provider_closeout_v10"])
+    if v10_closeout_receipt is not None and v10_closeout_validation is not None:
+        v10_closeout_projection = {
+            **v10_closeout_projection,
+            "status": str(v10_closeout_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v10_closeout_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V10_CLOSEOUT_RECEIPT_PATH),
+            "receipt_self_sha256": str(v10_closeout_receipt["receipt_sha256"]),
+            "schema_sha256": _file_sha256(root / A12_V10_CLOSEOUT_SCHEMA_PATH),
+            "validator_sha256": _file_sha256(root / A12_V10_CLOSEOUT_MODULE_PATH),
+            "predecessor": dict(v10_closeout_receipt["predecessor"]),
+            "owner_evidence": dict(v10_closeout_receipt["owner_evidence"]),
+            "provider_closeout": dict(v10_closeout_receipt["provider_closeout"]),
+            "pending_provider_checks": list(
+                v10_closeout_receipt["pending_provider_checks"]
+            ),
+            "launch_allowed": bool(v10_closeout_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v10_closeout_receipt["adopted_for_execution"]),
+            "measured_runs": int(v10_closeout_receipt["measured_runs"]),
+            "selection_accesses": int(v10_closeout_receipt["selection_accesses"]),
+            "final_accesses": int(v10_closeout_receipt["final_accesses"]),
+            "charged_usd": float(v10_closeout_receipt["charged_usd"]),
+            "claim_boundary": str(v10_closeout_receipt["claim_boundary"]),
+            "next_authorized_action": str(
+                v10_closeout_receipt["next_authorized_action"]
+            ),
+        }
     return {
         **missing,
         "status": (
+            "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
+            if v10_closeout_receipt is not None and v10_closeout_validation is not None
+            else
             "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
             if v9_result_receipt is not None and v9_result_validation is not None
             else
@@ -2972,6 +3089,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
+            "owner_local_provider_closeout"
+            if v10_closeout_receipt is not None and v10_closeout_validation is not None
+            else
             "live_engineering_synthetic_preflight"
             if v9_result_receipt is not None and v9_result_validation is not None
             else
@@ -2997,6 +3117,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             else "engineering_contract_scaffold"
         ),
         "claim_boundary": (
+            v10_closeout_projection.get("claim_boundary")
+            if v10_closeout_projection["validated"]
+            else
             v9_projection.get("claim_boundary")
             if v9_projection["validated"]
             else
@@ -3037,6 +3160,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "offline_adapter_ready": int(counts["offline_adapter_ready"]),
         "dense_artifact_manifests_pending": int(counts["owner_artifact_manifests_pending"]),
         "owner_requirements_pending": (
+            len(v10_closeout_receipt["pending_provider_checks"])
+            if v10_closeout_receipt is not None and v10_closeout_validation is not None
+            else
             len(v9_result_receipt["pending_live_checks"])
             if v9_result_receipt is not None and v9_result_validation is not None
             else len(v5_projection["live_checks_pending"])
@@ -3075,6 +3201,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
         "next_authorized_action": (
+            str(v10_closeout_projection["next_authorized_action"])
+            if v10_closeout_projection["validated"]
+            else
             str(v9_projection["next_authorized_action"])
             if v9_projection["validated"]
             else
@@ -3106,6 +3235,7 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "vast_preflight_v7": v7_projection,
         "vast_preflight_v8": v8_projection,
         "vast_preflight_v9": v9_projection,
+        "provider_closeout_v10": v10_closeout_projection,
     }
 
 

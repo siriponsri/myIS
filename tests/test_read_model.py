@@ -228,7 +228,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    assert model["armindex"]["next_command"] == model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v9"]["next_authorized_action"]
+    assert model["armindex"]["next_command"] == model["armindex"]["a1_2_contract_scaffold"]["provider_closeout_v10"]["next_authorized_action"]
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
@@ -258,17 +258,17 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     projection = _a12_contract_scaffold_projection(ROOT)
 
     assert projection["status"] == (
-        "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+        "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
     )
     assert projection["validated"] is True
     assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
-    assert projection["evidence_class"] == "live_engineering_synthetic_preflight"
+    assert projection["evidence_class"] == "owner_local_provider_closeout"
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
     assert projection["dense_artifact_manifests_pending"] == 4
     assert projection["owner_requirements_pending"] == len(
-        projection["vast_preflight_v9"]["live_result"]["pending_live_checks"]
+        projection["provider_closeout_v10"]["pending_provider_checks"]
     )
     assert projection["launch_ready"] is False
     assert projection["measured_execution"] is False
@@ -281,7 +281,7 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert projection["closeout_validation_audit_sha256"]
     assert set(projection["real_counters"].values()) == {0}
     assert set(projection["resource_counters"].values()) == {0}
-    assert projection["next_authorized_action"] == projection["vast_preflight_v9"]["next_authorized_action"]
+    assert projection["next_authorized_action"] == projection["provider_closeout_v10"]["next_authorized_action"]
     vast = projection["vast_preflight_v2"]
     assert vast["validated"] is True
     assert vast["gpu_count"] == 4
@@ -401,6 +401,25 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert vast_v9["live_result"]["lifecycle"]["provider_destruction_proven"] is False
     assert set(vast_v9["real_counters"].values()) == {0}
     assert set(vast_v9["resource_counters"].values()) == {0}
+    closeout_v10 = projection["provider_closeout_v10"]
+    assert closeout_v10["validated"] is True
+    assert closeout_v10["status"] == "PASS"
+    assert closeout_v10["predecessor"]["receipt_self_sha256"] == (
+        vast_v9["live_result_self_sha256"]
+    )
+    assert closeout_v10["provider_closeout"]["owner_disposition"] == (
+        "destroyed_and_provider_absence_verified"
+    )
+    assert closeout_v10["provider_closeout"]["provider_destruction_proven"] is True
+    assert closeout_v10["provider_closeout"]["provider_instance_absent_verified"] is True
+    assert closeout_v10["provider_closeout"]["provider_api_query_performed"] is False
+    assert closeout_v10["pending_provider_checks"] == []
+    assert closeout_v10["launch_allowed"] is False
+    assert closeout_v10["adopted_for_execution"] is False
+    assert closeout_v10["measured_runs"] == 0
+    assert closeout_v10["selection_accesses"] == 0
+    assert closeout_v10["final_accesses"] == 0
+    assert closeout_v10["charged_usd"] == 0
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

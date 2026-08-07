@@ -16,10 +16,10 @@ measurement, and production-constrained HarnessOpt.
 
 - Campaign: `armindex-multiretriever-v2`
 - Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v9 attempt-scoped
-  live synthetic preflight passed; Owner instance disposition is pending and
-  scientific launch remains locked)
+  live synthetic preflight passed; additive v10 records Owner-confirmed provider
+  destruction and observed endpoint absence; scientific launch remains locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: live engineering synthetic preflight; scientific authority `false`
+- Current evidence class: Owner-local provider closeout over live engineering synthetic preflight; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -103,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 live synthetic preflight PASS; Owner instance disposition pending; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 live synthetic preflight PASS; additive v10 provider closeout PASS; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -230,9 +230,12 @@ cleanup. Attempt `a12-v9-20260807-06` passed all four dense adapter checks,
 measured Qwen adapter capacity at 32,768 tokens for the frozen single-RTX3090
 configuration, passed checkpoint/resume and expected-failure handling, returned
 a 72-member hash-validated safe export, and completed verified guest-process
-teardown. Provider destruction/TTL proof or policy-valid continuation remains
-pending. This is engineering evidence only and supports no retrieval-quality or
-publication claim.
+teardown. Additive v10 preserves the v9 result unchanged and records the later
+Owner confirmation that Vast instance `47023328` was destroyed. A sanitized
+post-confirmation endpoint probe observed `connection_refused`. This closes the
+provider disposition under an explicit claim boundary: no independent Vast API
+or CLI destruction record was obtained. This is engineering and Owner-local
+closeout evidence only and supports no retrieval-quality or publication claim.
 
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
@@ -283,14 +286,12 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Decide the A1.2 post-preflight Vast instance disposition. Default to destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only for a separately authorized next PLAN goal while the same instance identity, artifact hashes, quote/budget, TTL/destroy path, and protected-data boundary remain valid. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Prepare an additive A1.2 scientific execution and adoption request on local CPU only. Bind the unchanged v1-v10 preflight lineage, protected Owner-local evaluator handoff, measured-run budget, workload manifests, stop conditions, and a fresh provider admission plan. Do not open a provider, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights during preparation.
 ```
 
-The local runtime-minimal stage and the v9 synthetic live preflight are complete,
-and the v1-v8 lineage remains preserved. Scientific launch remains forbidden
-until the Owner separately adopts an unchanged execution revision under an
-authorized PLAN goal. The default closeout destroys and verifies absence of the
-provider instance. The additive continuation policy may retain the unchanged
-instance only for a separately authorized next PLAN goal when identity, hashes,
-quote/budget, TTL/destroy proof, and the protected-data boundary all still pass.
-Retention itself never adopts the revision or authorizes scientific work.
+The local runtime-minimal stage, v9 synthetic live preflight, safe collection,
+guest teardown, and v10 Owner-confirmed provider closeout are complete. The
+destroyed instance cannot be reused. Scientific launch remains forbidden until
+a separate authorized PLAN goal prepares and the Owner adopts an unchanged
+execution revision. A future provider instance requires a fresh identity,
+quote/budget, TTL/destroy path, artifact-integrity, and protected-boundary check.

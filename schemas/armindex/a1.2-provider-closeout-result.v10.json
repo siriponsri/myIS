@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-provider-closeout-result.v10.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "revision_id", "status", "evidence_class",
+    "scientific_authority", "claim_boundary", "predecessor", "owner_evidence",
+    "provider_closeout", "pending_provider_checks", "launch_allowed",
+    "adopted_for_execution", "measured_runs", "selection_accesses",
+    "final_accesses", "charged_usd", "next_authorized_action", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-provider-closeout-result.v10"},
+    "receipt_id": {"const": "a1.2-provider-closeout-result-v10"},
+    "revision_id": {"const": "a1.2-provider-closeout-result-v10"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "owner_local_provider_closeout"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 120},
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_uri", "receipt_file_sha256", "receipt_self_sha256", "attempt_id"],
+      "properties": {
+        "receipt_uri": {"const": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json"},
+        "receipt_file_sha256": {"const": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6"},
+        "receipt_self_sha256": {"const": "f8969e55225b4fa567c94079b6bffc834e1951268f626bdad7754104294df510"},
+        "attempt_id": {"const": "a12-v9-20260807-06"}
+      }
+    },
+    "owner_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_uri", "receipt_file_sha256", "receipt_self_sha256", "source"],
+      "properties": {
+        "receipt_uri": {"const": "owner-store/a1.2-vast-20260806/receipts/VAST_PROVIDER_CLOSEOUT_V10.json"},
+        "receipt_file_sha256": {"const": "a803a84f5cb7c39165ce841c10339359dff3297981e2ebe5b42128418619f0d4"},
+        "receipt_self_sha256": {"const": "24a8f7340aa9b8cf15188855f5c635c801efbc2df08cd9625bc4af572da5da71"},
+        "source": {"const": "active_codex_thread_owner_message_20260807"}
+      }
+    },
+    "provider_closeout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_label", "instance_id", "owner_disposition",
+        "provider_destroy_invoked", "provider_instance_absent_verified",
+        "provider_destruction_proven", "endpoint_observation",
+        "provider_api_query_performed", "independent_provider_api_record_available",
+        "guest_poweroff_is_provider_destruction", "proof_basis", "limitation"
+      ],
+      "properties": {
+        "provider_label": {"const": "Vast"},
+        "instance_id": {"const": "47023328"},
+        "owner_disposition": {"const": "destroyed_and_provider_absence_verified"},
+        "provider_destroy_invoked": {"const": true},
+        "provider_instance_absent_verified": {"const": true},
+        "provider_destruction_proven": {"const": true},
+        "endpoint_observation": {"const": "connection_refused"},
+        "provider_api_query_performed": {"const": false},
+        "independent_provider_api_record_available": {"const": false},
+        "guest_poweroff_is_provider_destruction": {"const": false},
+        "proof_basis": {"const": ["owner_provider_ui_attestation", "post_confirmation_endpoint_unreachable"]},
+        "limitation": {"type": "string", "minLength": 100}
+      }
+    },
+    "pending_provider_checks": {"type": "array", "maxItems": 0},
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "measured_runs": {"const": 0},
+    "selection_accesses": {"const": 0},
+    "final_accesses": {"const": 0},
+    "charged_usd": {"const": 0},
+    "next_authorized_action": {"type": "string", "minLength": 80},
+    "receipt_sha256": {"pattern": "^[a-f0-9]{64}$"}
+  }
+}

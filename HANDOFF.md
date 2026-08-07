@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked`
-- Evidence class: live engineering synthetic preflight; scientific authority `false`
+- Status: `a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked`
+- Evidence class: Owner-local provider closeout over live engineering synthetic preflight; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -153,6 +153,11 @@ evidence.
   expected-failure handling, 72-member safe export validation, and guest-process
   teardown. The aggregate-only canonical result receipt is
   `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json`.
+- Additive v10 preserves v9 byte-for-byte and records the later Owner-confirmed
+  destruction of Vast instance `47023328`. A sanitized endpoint check observed
+  `connection_refused`. The closeout claim is deliberately limited because no
+  independent Vast API or CLI destruction record was obtained. Canonical
+  authority is `campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json`.
 - Every registered Phase and Task continues to receive one detailed English
   generated Obsidian report with the canonical fifteen-section structure. The
   archive audit found zero eligible orphan/superseded reports; referenced
@@ -167,29 +172,26 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-The v1-v9 receipt lineage, v5 local stage, live runtime identity, four dense
+The v1-v10 receipt lineage, v5 local stage, live runtime identity, four dense
 adapter checks, Qwen 32,768-token adapter measurement, checkpoint/resume, safe
-return, and guest teardown pass. A1.2 scientific execution remains deliberately
-locked because no execution revision has been adopted and no measured retrieval
-goal is authorized. Provider destruction/TTL proof or a policy-valid Owner
-continuation decision remains pending. The root software license requires an
+return, guest teardown, and Owner-confirmed provider closeout pass. A1.2
+scientific execution remains deliberately locked because no execution revision
+has been adopted and no measured retrieval goal is authorized. The destroyed
+instance cannot be reused. The root software license requires an
 Owner legal decision before external release; this does not invalidate the
 engineering preflight.
 
 ## Active authorized action
 
-Choose the post-preflight instance disposition. The exact next task is:
+Prepare the next execution request locally. The exact next task is:
 
 ```text
-/goal Decide the A1.2 post-preflight Vast instance disposition. Default to destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only for a separately authorized next PLAN goal while the same instance identity, artifact hashes, quote/budget, TTL/destroy path, and protected-data boundary remain valid. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Prepare an additive A1.2 scientific execution and adoption request on local CPU only. Bind the unchanged v1-v10 preflight lineage, protected Owner-local evaluator handoff, measured-run budget, workload manifests, stop conditions, and a fresh provider admission plan. Do not open a provider, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights during preparation.
 ```
 
-The synthetic preflight and safe collection are complete. The default is to
-destroy and verify the provider instance. The additive Owner
-policy at `control/armindex/a1.2/owner-instance-continuation-policy.v1.json`
-permits the report `Owner continue next goal on PLAN` only after a complete
-live PASS and a separately authorized next PLAN goal, while the same instance
-identity, artifact hashes, quote/budget, TTL/destroy path, and protected-data
-boundary remain valid. Access material and every protected surface remain
-local. Reuse does not adopt the revision or authorize measured retrieval,
-optimization, Selection, Final, paid API work, or weight changes.
+The synthetic preflight, safe collection, guest teardown, and Owner-confirmed
+provider closeout are complete. No Vast instance remains available for reuse.
+Access material and every protected surface remain local. The next goal is
+reversible local preparation only and does not adopt the revision or authorize
+measured retrieval, optimization, Selection, Final, paid API work, or weight
+changes.

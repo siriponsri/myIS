@@ -74,6 +74,8 @@ def _lifecycle(value: Any) -> str:
         "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked",
         "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
         "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+        "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
+        "synthetic_preflight_closed_provider_destroyed_scientific_execution_locked",
     }:
         return "active"
     if value in {
@@ -766,6 +768,23 @@ def _artifacts(
                         producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                         producing_task_id="A1.2",
                     ))
+                closeout = scaffold.get("provider_closeout_v10", {})
+                if isinstance(closeout, Mapping) and closeout.get("validated") is True:
+                    closeout_uri = closeout.get("receipt_uri")
+                    closeout_sha = closeout.get("receipt_sha256")
+                    if closeout_uri and closeout_sha:
+                        result.append(_artifact(
+                            artifact_id="a12-provider-closeout-result-v10",
+                            title="A1.2 Owner-local provider closeout receipt v10",
+                            artifact_type="receipt",
+                            evidence_class="owner_local_provider_closeout",
+                            scientific_authority=False,
+                            safe_uri=str(closeout_uri),
+                            content_sha256=str(closeout_sha),
+                            explanation="Binds the immutable v9 result to the later Owner destroy attestation and sanitized endpoint-unreachable observation, while recording the absence of an independent provider API record and keeping all scientific authorization closed.",
+                            producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                            producing_task_id="A1.2",
+                        ))
     return result
 
 
@@ -1625,13 +1644,15 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
         vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
         vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
+        closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
         active = vast_v9 if vast_v9.get("validated") is True else vast_v8 if vast_v8.get("validated") is True else vast_v7
         active_revision = "v9 execution-lifecycle repair" if active is vast_v9 else "v8 validation-complete frozen-bundle repair" if active is vast_v8 else "v7 same-instance repair"
         live_result_pass = vast_v9.get("live_result_status") == "PASS"
         live_result = vast_v9.get("live_result", {}) if isinstance(vast_v9.get("live_result"), Mapping) else {}
-        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and {active_revision} preparation using {vast_v6.get('image_reference', vast_v5.get('image_reference', 'not_recorded'))} on {vast_v6.get('platform', vast_v5.get('platform', 'not_recorded'))}. The additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for {len(live_result.get('arms', []))} dense arms."
-        result = f"A1 engineering preflight is current through v9 with live synthetic status {vast_v9.get('live_result_status', 'not_started')}; Owner instance disposition remains pending, and measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
-        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')}, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. {'The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown.' if live_result_pass else 'The additive v9 repair remains preparation evidence only.'} It does not establish retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse."
+        provider_closed = closeout_v10.get("validated") is True and closeout_v10.get("status") == "PASS"
+        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and {active_revision} preparation using {vast_v6.get('image_reference', vast_v5.get('image_reference', 'not_recorded'))} on {vast_v6.get('platform', vast_v5.get('platform', 'not_recorded'))}. The additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for {len(live_result.get('arms', []))} dense arms, and provider closeout v10 is {'PASS' if provider_closed else 'pending'}."
+        result = f"A1 engineering preflight is current through v10 with live synthetic status {vast_v9.get('live_result_status', 'not_started')}; {'the Owner destroyed the Vast instance and provider absence was observed' if provider_closed else 'Owner instance disposition remains pending'}, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
+        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')}, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. {'The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown.' if live_result_pass else 'The additive v9 repair remains preparation evidence only.'} {'The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained.' if provider_closed else 'Provider disposition remains open.'} It does not establish retrieval quality, execution adoption, or scientific authorization."
         decision_status = "active"
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
@@ -1656,6 +1677,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
             vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
             vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
+            closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
             live_failures = (
                 vast_v8.get("preserved_live_failures", [])
                 if vast_v8.get("validated") is True and isinstance(vast_v8.get("preserved_live_failures"), list)
@@ -1667,6 +1689,7 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             active = vast_v9 if vast_v9.get("validated") is True else vast_v8 if vast_v8.get("validated") is True else vast_v7
             live_result_pass = vast_v9.get("live_result_status") == "PASS"
             live_result = vast_v9.get("live_result", {}) if isinstance(vast_v9.get("live_result"), Mapping) else {}
+            provider_closed = closeout_v10.get("validated") is True and closeout_v10.get("status") == "PASS"
             for item in live_failures:
                 if not isinstance(item, Mapping):
                     continue
@@ -1685,9 +1708,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
                 for item in live_failures
                 if isinstance(item, Mapping)
             )
-            output = f"The preserved v1-v8 contracts validate, the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and the additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for attempt {live_result.get('attempt_id', 'not_recorded')}. It preserves repair evidence for {failure_summary or 'no recorded failures'} and leaves provider disposition conditional."
-            result = f"A1.2 synthetic live preflight status is {vast_v9.get('live_result_status', 'not_started')}: {len(live_result.get('arms', []))} dense-arm adapter receipts were collected, Qwen measured adapter maximum is {live_result.get('qwen', {}).get('measured_adapter_max_input_tokens', 'not_recorded')} tokens, and guest teardown is {live_result.get('lifecycle', {}).get('guest_process_teardown', 'not_recorded')}. Scientific launch remains locked; measured runs and charged USD counters remain zero."
-            interpretation = "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. It is not retrieval-quality or publication evidence. Provider destruction/TTL proof or a policy-valid separately authorized continuation remains pending."
+            output = f"The preserved v1-v8 contracts validate, the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and the additive v9 live synthetic result is {vast_v9.get('live_result_status', 'not_started')} for attempt {live_result.get('attempt_id', 'not_recorded')}. It preserves repair evidence for {failure_summary or 'no recorded failures'}; provider closeout v10 is {'PASS' if provider_closed else 'pending'}."
+            result = f"A1.2 synthetic live preflight status is {vast_v9.get('live_result_status', 'not_started')}: {len(live_result.get('arms', []))} dense-arm adapter receipts were collected, Qwen measured adapter maximum is {live_result.get('qwen', {}).get('measured_adapter_max_input_tokens', 'not_recorded')} tokens, guest teardown is {live_result.get('lifecycle', {}).get('guest_process_teardown', 'not_recorded')}, and {'the Owner-confirmed provider closeout is recorded' if provider_closed else 'provider disposition remains pending'}. Scientific launch remains locked; measured runs and charged USD counters remain zero."
+            interpretation = "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent provider API record exists. It is not retrieval-quality or publication evidence."
             decision_status = "active" if live_result_pass else "blocked"
         else:
             output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."

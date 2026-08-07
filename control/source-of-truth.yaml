@@ -69,6 +69,11 @@ records:
     supporting_authority: [campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json, control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json, schemas/armindex/a1.2-live-synthetic-preflight-result.v9.json, src/myis_research/armindex/a1_2_live_preflight_result_v9.py]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [live_engineering_synthetic_preflight_only, attempt_06_pass, four_dense_adapter_receipts_pass, qwen_adapter_32768_tokens_pass, checkpoint_resume_pass, safe_export_validated, guest_process_teardown_complete, provider_disposition_pending, no_retrieval_quality_claim, no_publication_result_claim, launch_locked, adopted_for_execution_false, no_protected_data, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_provider_closeout_result_v10
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json
+    supporting_authority: [campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json, schemas/armindex/a1.2-provider-closeout-result.v10.json, src/myis_research/armindex/a1_2_provider_closeout_result_v10.py]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [owner_local_provider_closeout_only, v1_v9_preserved, owner_destroy_attested, endpoint_connection_refused_observed, no_independent_provider_api_record, provider_instance_absent_verified, provider_disposition_closed, no_retrieval_quality_claim, no_publication_result_claim, launch_locked, adopted_for_execution_false, no_protected_data, measured_counters_zero, selection_closed, final_closed]
   - id: armindex_a1_2_owner_instance_continuation_policy
     authority: control/armindex/a1.2/owner-instance-continuation-policy.v1.json
     supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight.v6.json, control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json, control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json, control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json, campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json]

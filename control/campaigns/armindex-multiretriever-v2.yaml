@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked
-  evidence_class: live_engineering_synthetic_preflight
+  status: a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked
+  evidence_class: owner_local_provider_closeout
   scientific_authority: false
-  claim_boundary: live_synthetic_adapter_and_lifecycle_evidence_only_no_retrieval_quality_or_publication_claim
+  claim_boundary: live_synthetic_adapter_lifecycle_and_owner_provider_closeout_evidence_only_no_retrieval_quality_or_publication_claim
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -65,6 +65,7 @@ contracts:
   a1_2_execution_lifecycle_repair_contract: control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json
   a1_2_execution_lifecycle_repair_receipt: campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json
   a1_2_live_synthetic_preflight_result_receipt: campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json
+  a1_2_provider_closeout_result_receipt: campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json
   a1_2_owner_instance_continuation_policy: control/armindex/a1.2/owner-instance-continuation-policy.v1.json
 
 phases:
@@ -85,9 +86,9 @@ phases:
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked
+    status: a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked
     measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: live_synthetic_preflight_pass_owner_disposition_pending_launch_locked}]
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: synthetic_preflight_closed_provider_destroyed_scientific_execution_locked}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
     status: locked_until_A1

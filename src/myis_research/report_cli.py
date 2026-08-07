@@ -181,6 +181,7 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
     vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
     vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
+    provider_closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -395,6 +396,30 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "real_counters": vast_v9.get("real_counters", {}),
             "resource_counters": vast_v9.get("resource_counters", {}),
         },
+        "armindex_a1_2_provider_closeout": {
+            "status": provider_closeout_v10.get("status", "not_started"),
+            "evidence_class": "owner_local_provider_closeout",
+            "scientific_authority": False,
+            "source_receipt_uri": provider_closeout_v10.get("receipt_uri"),
+            "source_receipt_sha256": provider_closeout_v10.get("receipt_sha256"),
+            "source_receipt_self_sha256": provider_closeout_v10.get(
+                "receipt_self_sha256"
+            ),
+            "predecessor": provider_closeout_v10.get("predecessor", {}),
+            "owner_evidence": provider_closeout_v10.get("owner_evidence", {}),
+            "provider_closeout": provider_closeout_v10.get("provider_closeout", {}),
+            "pending_provider_checks": provider_closeout_v10.get(
+                "pending_provider_checks", []
+            ),
+            "launch_allowed": provider_closeout_v10.get("launch_allowed", False),
+            "adopted_for_execution": provider_closeout_v10.get(
+                "adopted_for_execution", False
+            ),
+            "measured_runs": provider_closeout_v10.get("measured_runs", 0),
+            "selection_accesses": provider_closeout_v10.get("selection_accesses", 0),
+            "final_accesses": provider_closeout_v10.get("final_accesses", 0),
+            "charged_usd": provider_closeout_v10.get("charged_usd", 0),
+        },
         "observatory": {
             "status": observatory.get("status", "not_available"),
             "evidence_class": observatory.get("evidence_class", "fixture"),
@@ -474,7 +499,19 @@ def _a010_projection_lifecycle(
     vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
     vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
     vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
+    provider_closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
     if (
+        scaffold.get("validated") is True
+        and scaffold.get("status")
+        == "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked"
+        and provider_closeout_v10.get("validated") is True
+        and provider_closeout_v10.get("status") == "PASS"
+    ):
+        source_uri = provider_closeout_v10.get("receipt_uri")
+        source_sha256 = provider_closeout_v10.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
         scaffold.get("validated") is True
         and scaffold.get("status") == "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
         and vast_v9.get("validated") is True
@@ -2332,6 +2369,8 @@ def _workflow_status(value: Any) -> str:
         "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked": "waiting_owner_decision",
+        "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked": "in_progress",
+        "synthetic_preflight_closed_provider_destroyed_scientific_execution_locked": "waiting_dependency",
         "contract_scaffold_complete_launch_locked": "waiting_dependency",
         "complete": "complete",
         "completed": "complete",
