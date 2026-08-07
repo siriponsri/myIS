@@ -269,7 +269,9 @@ def test_v9_completion_rejects_minimal_forged_summary(tmp_path: Path) -> None:
 def test_v9_launcher_has_immediate_failure_cleanup_and_no_measured_path() -> None:
     root = Path(__file__).resolve().parents[1]
     script = (root / "scripts/a1_2_vast/remote-live-preflight-v9.sh").read_text(encoding="utf-8")
-    assert "wait -n -p finished" in script
+    assert "wait -n -p finished" not in script
+    assert "ps -o stat=" in script
+    assert "completed[\"${pid}\"]" in script
     assert "trap cleanup EXIT INT TERM" in script
     assert "kill -TERM" in script and "record-process-exit" in script
     assert "CUDA_VISIBLE_DEVICES" in script

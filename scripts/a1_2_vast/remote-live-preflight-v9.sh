@@ -74,30 +74,32 @@ spawn_child() {
 }
 
 wait_group() {
-  local index pid rc finished failed=0 remaining="${#children[@]}"
+  local active_pid index pid rc state failed=0 progress remaining="${#children[@]}"
   local active=()
   declare -A completed=()
   while [[ "${remaining}" -gt 0 ]]; do
-    active=()
-    for pid in "${children[@]}"; do
-      [[ -n "${completed[$pid]:-}" ]] || active+=("${pid}")
-    done
-    if wait -n -p finished "${active[@]}"; then rc=0; else rc=$?; fi
-    completed["${finished}"]=1
-    remaining=$((remaining - 1))
+    progress=0
     for index in "${!children[@]}"; do
-      if [[ "${children[$index]}" == "${finished}" ]]; then
-        stop_heartbeat "${heartbeat_pids[$index]}"
-        break
+      pid="${children[$index]}"
+      [[ -n "${completed[$pid]:-}" ]] && continue
+      state="$(ps -o stat= -p "${pid}" 2>/dev/null | tr -d '[:space:]')"
+      if [[ -n "${state}" && "${state}" != Z* ]]; then
+        continue
+      fi
+      if wait "${pid}"; then rc=0; else rc=$?; fi
+      completed["${pid}"]=1
+      remaining=$((remaining - 1))
+      progress=1
+      stop_heartbeat "${heartbeat_pids[$index]}"
+      attempt_runtime record-process-exit --pid "${pid}" --exit-code "${rc}" >/dev/null
+      if [[ "${rc}" -ne 0 && "${failed}" -eq 0 ]]; then
+        failed=1
+        for active_pid in "${children[@]}"; do
+          [[ -n "${completed[$active_pid]:-}" ]] || kill -TERM "${active_pid}" 2>/dev/null || true
+        done
       fi
     done
-    attempt_runtime record-process-exit --pid "${finished}" --exit-code "${rc}" >/dev/null
-    if [[ "${rc}" -ne 0 && "${failed}" -eq 0 ]]; then
-      failed=1
-      for pid in "${children[@]}"; do
-        [[ -n "${completed[$pid]:-}" ]] || kill -TERM "${pid}" 2>/dev/null || true
-      done
-    fi
+    [[ "${remaining}" -eq 0 || "${progress}" -eq 1 ]] || sleep 1
   done
   children=()
   roles=()
