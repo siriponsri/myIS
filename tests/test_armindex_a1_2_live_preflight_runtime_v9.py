@@ -8,6 +8,8 @@ import numpy as np
 import pytest
 
 from myis_research.armindex.a1_2_live_preflight_runtime_v9 import (
+    ARM_CONFIG_OVERRIDES,
+    L2_NORMALIZATION_ATOL,
     IMAGE_DIGEST,
     LiveRuntimeV9Error,
     attempt_status,
@@ -276,3 +278,14 @@ def test_v9_launcher_has_immediate_failure_cleanup_and_no_measured_path() -> Non
     assert "kill -TERM" in script and "record-process-exit" in script
     assert "CUDA_VISIBLE_DEVICES" in script
     assert "measured" not in script.casefold()
+
+
+def test_v9_adapter_runtime_records_fp16_tolerance_and_snowflake_sdpa() -> None:
+    assert L2_NORMALIZATION_ATOL == 1e-3
+    assert ARM_CONFIG_OVERRIDES == {
+        "ARM-04": {
+            "attn_implementation": "sdpa",
+            "unpad_inputs": False,
+            "use_memory_efficient_attention": False,
+        }
+    }

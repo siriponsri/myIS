@@ -31,6 +31,14 @@ SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 ROLE_RE = re.compile(r"^[a-z][a-z0-9_-]{1,79}$")
 STATUSES = frozenset({"RUNNING", "FAILED", "COMPLETE"})
 ARMS = ("ARM-02", "ARM-03", "ARM-04", "ARM-05")
+L2_NORMALIZATION_ATOL = 1e-3
+ARM_CONFIG_OVERRIDES: dict[str, dict[str, Any]] = {
+    "ARM-04": {
+        "attn_implementation": "sdpa",
+        "unpad_inputs": False,
+        "use_memory_efficient_attention": False,
+    }
+}
 SAFE_EXPORT_PREFIXES = (
     "attempt.json",
     "state.json",
@@ -652,6 +660,7 @@ def run_adapter_check(
         trust_remote_code=arm_id == "ARM-04",
         local_files_only=True,
         model_kwargs={"torch_dtype": torch.float16},
+        config_kwargs=ARM_CONFIG_OVERRIDES.get(arm_id),
     )
     model.max_seq_length = MAX_INPUT_TOKENS[arm_id]
     first = model.encode(
@@ -664,7 +673,14 @@ def run_adapter_check(
     )
     finite = bool(np.isfinite(first).all())
     dimension = int(first.shape[1]) if first.ndim == 2 else 0
-    normalized = bool(np.allclose(np.linalg.norm(first, axis=1), np.ones(2), rtol=0.0, atol=1e-4))
+    normalized = bool(
+        np.allclose(
+            np.linalg.norm(first, axis=1),
+            np.ones(2),
+            rtol=0.0,
+            atol=L2_NORMALIZATION_ATOL,
+        )
+    )
     repeat = bool(np.allclose(first, repeated, rtol=0.0, atol=1e-6))
     if not finite or not normalized or not repeat or dimension != EXPECTED_DIMENSIONS[arm_id]:
         raise LiveRuntimeV9Error(f"{arm_id} frozen adapter parity failed")
@@ -690,8 +706,11 @@ def run_adapter_check(
         "output_dimension": dimension,
         "finite_embeddings": finite,
         "l2_normalized": normalized,
+        "l2_normalization_atol": L2_NORMALIZATION_ATOL,
         "repeat_agreement_atol": 1e-6,
         "repeat_agreement": repeat,
+        "model_config_overrides": ARM_CONFIG_OVERRIDES.get(arm_id, {}),
+        "torch_dtype": "float16",
         "peak_vram_bytes": int(torch.cuda.max_memory_allocated()),
         "qwen_adapter_maximum": qwen,
         "trust_remote_code": arm_id == "ARM-04",
