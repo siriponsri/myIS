@@ -228,7 +228,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    assert model["armindex"]["next_command"] == model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v7"]["next_authorized_action"]
+    assert model["armindex"]["next_command"] == model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v9"]["next_authorized_action"]
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
@@ -257,10 +257,10 @@ def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked
 def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> None:
     projection = _a12_contract_scaffold_projection(ROOT)
 
-    assert projection["status"] == "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
+    assert projection["status"] == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
     assert projection["validated"] is True
     assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
-    assert projection["evidence_class"] == "live_engineering_preflight_repair"
+    assert projection["evidence_class"] == "live_engineering_preflight_execution_lifecycle_repair"
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
@@ -277,7 +277,7 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert projection["closeout_validation_audit_sha256"]
     assert set(projection["real_counters"].values()) == {0}
     assert set(projection["resource_counters"].values()) == {0}
-    assert projection["next_authorized_action"] == projection["vast_preflight_v7"]["next_authorized_action"]
+    assert projection["next_authorized_action"] == projection["vast_preflight_v9"]["next_authorized_action"]
     vast = projection["vast_preflight_v2"]
     assert vast["validated"] is True
     assert vast["gpu_count"] == 4
@@ -360,6 +360,35 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert vast_v7["continuation_policy"]["continuation_authorized_now"] is False
     assert set(vast_v7["real_counters"].values()) == {0}
     assert set(vast_v7["resource_counters"].values()) == {0}
+    vast_v8 = projection["vast_preflight_v8"]
+    assert vast_v8["validated"] is True
+    assert vast_v8["status"] == "validation_complete_bundle_repair_prepared_preflight_pending"
+    assert vast_v8["image_reference"] == "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime"
+    assert vast_v8["resolved_manifest_digest"] == "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20"
+    assert vast_v8["launch_allowed"] is False
+    assert vast_v8["adopted_for_execution"] is False
+    assert vast_v8["synthetic_preflight_only"] is True
+    assert [item["failure_id"] for item in vast_v8["preserved_live_failures"]] == [
+        "v6-initial-wheelhouse-missing-pydantic",
+        "v6-supplement-repair-mutated-pycache-tree",
+        "v7-frozen-bundle-missing-validation-lineage",
+    ]
+    assert vast_v8["active_correction"]["validation_lineage_complete"] is True
+    assert vast_v8["active_correction"]["fresh_remote_root"] == "/opt/myis/a1.2-v8"
+    assert set(vast_v8["real_counters"].values()) == {0}
+    assert set(vast_v8["resource_counters"].values()) == {0}
+    vast_v9 = projection["vast_preflight_v9"]
+    assert vast_v9["validated"] is True
+    assert vast_v9["status"] == "execution_lifecycle_repair_prepared_preflight_pending"
+    assert vast_v9["launch_allowed"] is False
+    assert vast_v9["adopted_for_execution"] is False
+    assert vast_v9["synthetic_preflight_only"] is True
+    assert vast_v9["active_correction"]["fresh_remote_root"] == "/opt/myis/a1.2-v9"
+    assert vast_v9["active_correction"]["source_remote_root"] == "/opt/myis/a1.2-v7"
+    assert vast_v9["active_correction"]["implementation_validation_complete"] is True
+    assert vast_v9["active_correction"]["live_preflight_execution_pending"] is True
+    assert set(vast_v9["real_counters"].values()) == {0}
+    assert set(vast_v9["resource_counters"].values()) == {0}
 
 
 def _p1_request(repository_root: Path, request_id: str = "p1-projection-test") -> dict[str, object]:

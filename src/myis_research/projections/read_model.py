@@ -80,6 +80,20 @@ from ..armindex.a1_2_live_preflight_repair_v7 import (
     SCHEMA_PATH as A12_V7_SCHEMA_PATH,
     validate_live_repair_v7 as validate_a1_2_v7_live_repair,
 )
+from ..armindex.a1_2_live_preflight_packaging_v8 import (
+    CONTRACT_PATH as A12_V8_CONTRACT_PATH,
+    RECEIPT_PATH as A12_V8_RECEIPT_PATH,
+    REVISION_ID as A12_V8_REVISION_ID,
+    SCHEMA_PATH as A12_V8_SCHEMA_PATH,
+    validate_revision as validate_a1_2_v8_packaging_repair,
+)
+from ..armindex.a1_2_live_preflight_execution_v9 import (
+    CONTRACT_PATH as A12_V9_CONTRACT_PATH,
+    RECEIPT_PATH as A12_V9_RECEIPT_PATH,
+    REVISION_ID as A12_V9_REVISION_ID,
+    SCHEMA_PATH as A12_V9_SCHEMA_PATH,
+    validate_revision as validate_a1_2_v9_execution_lifecycle,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -257,6 +271,16 @@ A12_V7_SUPPLEMENT_REQUIREMENTS_PATH = Path(
 A12_V7_SUPPLEMENT_WORKFLOW_PATH = Path(
     ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml"
 )
+A12_V8_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_packaging_v8.py")
+A12_V8_OWNER_RUNBOOK_PATH = Path("docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V8.md")
+A12_V8_COORDINATOR_PATH = Path("scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV8.ps1")
+A12_V8_BOOTSTRAP_PATH = Path("scripts/a1_2_vast/remote-bootstrap-direct-base-v8.sh")
+A12_V9_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_execution_v9.py")
+A12_V9_RUNTIME_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py")
+A12_V9_OWNER_RUNBOOK_PATH = Path("docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md")
+A12_V9_COORDINATOR_PATH = Path("scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1")
+A12_V9_BOOTSTRAP_PATH = Path("scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh")
+A12_V9_LAUNCHER_PATH = Path("scripts/a1_2_vast/remote-live-preflight-v9.sh")
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -329,6 +353,48 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v9"), Mapping)
+        and a1_2_scaffold["vast_preflight_v9"].get("validated") is True
+    ):
+        armindex["status"] = "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v9_attempt_scoped_synthetic_gpu_preflight_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v8"), Mapping)
+        and a1_2_scaffold["vast_preflight_v8"].get("validated") is True
+    ):
+        armindex["status"] = "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v8_validation_complete_bundle_prepared_synthetic_preflight_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
@@ -1945,6 +2011,96 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": "same_instance_repair_not_prepared",
             "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
         },
+        "vast_preflight_v8": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": A12_V8_REVISION_ID,
+            "receipt_uri": A12_V8_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "contract_uri": A12_V8_CONTRACT_PATH.as_posix(),
+            "contract_sha256": None,
+            "contract_self_sha256": None,
+            "schema_uri": A12_V8_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "validator_uri": A12_V8_MODULE_PATH.as_posix(),
+            "validator_sha256": None,
+            "owner_runbook_uri": A12_V8_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "coordinator_uri": A12_V8_COORDINATOR_PATH.as_posix(),
+            "coordinator_sha256": None,
+            "bootstrap_uri": A12_V8_BOOTSTRAP_PATH.as_posix(),
+            "bootstrap_sha256": None,
+            "image_reference": None,
+            "resolved_manifest_digest": None,
+            "platform": None,
+            "preserved_live_failures": [],
+            "active_correction": {},
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "synthetic_preflight_only": True,
+            "real_counters": {
+                "measured_runs": 0,
+                "candidate_count": 0,
+                "selection_accesses": 0,
+                "final_accesses": 0,
+            },
+            "resource_counters": {
+                "charged_usd": 0,
+                "gpu_reservations": 0,
+                "gpu_scientific_runs": 0,
+                "model_downloads": 0,
+                "paid_api_calls": 0,
+                "provider_switches": 0,
+            },
+            "claim_boundary": "validation_complete_bundle_repair_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
+        "vast_preflight_v9": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": A12_V9_REVISION_ID,
+            "receipt_uri": A12_V9_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "contract_uri": A12_V9_CONTRACT_PATH.as_posix(),
+            "contract_sha256": None,
+            "contract_self_sha256": None,
+            "schema_uri": A12_V9_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "validator_uri": A12_V9_MODULE_PATH.as_posix(),
+            "validator_sha256": None,
+            "runtime_uri": A12_V9_RUNTIME_PATH.as_posix(),
+            "runtime_sha256": None,
+            "owner_runbook_uri": A12_V9_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "coordinator_uri": A12_V9_COORDINATOR_PATH.as_posix(),
+            "coordinator_sha256": None,
+            "bootstrap_uri": A12_V9_BOOTSTRAP_PATH.as_posix(),
+            "bootstrap_sha256": None,
+            "launcher_uri": A12_V9_LAUNCHER_PATH.as_posix(),
+            "launcher_sha256": None,
+            "active_correction": {},
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "synthetic_preflight_only": True,
+            "real_counters": {
+                "measured_runs": 0,
+                "candidate_count": 0,
+                "selection_accesses": 0,
+                "final_accesses": 0,
+            },
+            "resource_counters": {
+                "charged_usd": 0,
+                "gpu_reservations": 0,
+                "gpu_scientific_runs": 0,
+                "model_downloads": 0,
+                "paid_api_calls": 0,
+                "provider_switches": 0,
+            },
+            "claim_boundary": "execution_lifecycle_repair_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -1982,6 +2138,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         v7_validation = None
         v7_receipt = None
         v7_contract = None
+        v8_validation = None
+        v8_receipt = None
+        v8_contract = None
+        v9_validation = None
+        v9_receipt = None
+        v9_contract = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
@@ -2012,6 +2174,14 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v7_validation = validate_a1_2_v7_live_repair(root)
             v7_receipt = json.loads((root / A12_V7_RECEIPT_PATH).read_text(encoding="utf-8"))
             v7_contract = json.loads((root / A12_V7_CONTRACT_PATH).read_text(encoding="utf-8"))
+        if (root / A12_V8_RECEIPT_PATH).is_file():
+            v8_validation = validate_a1_2_v8_packaging_repair(root)
+            v8_receipt = json.loads((root / A12_V8_RECEIPT_PATH).read_text(encoding="utf-8"))
+            v8_contract = json.loads((root / A12_V8_CONTRACT_PATH).read_text(encoding="utf-8"))
+        if (root / A12_V9_RECEIPT_PATH).is_file():
+            v9_validation = validate_a1_2_v9_execution_lifecycle(root)
+            v9_receipt = json.loads((root / A12_V9_RECEIPT_PATH).read_text(encoding="utf-8"))
+            v9_contract = json.loads((root / A12_V9_CONTRACT_PATH).read_text(encoding="utf-8"))
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -2035,6 +2205,10 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             continuation_policy,
             v7_receipt,
             v7_contract,
+            v8_receipt,
+            v8_contract,
+            v9_receipt,
+            v9_contract,
         ):
             if value is not None:
                 assert_aggregate_only(value)
@@ -2143,6 +2317,84 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or any(int(value) != 0 for value in v7_contract.get("resource_counters", {}).values())
         ):
             raise ValueError("A1.2 same-instance repair v7 receipt is invalid")
+        if v8_receipt is not None and (
+            v8_validation is None
+            or v8_validation.get("status")
+            != "validation_complete_bundle_repair_prepared_preflight_pending"
+            or v8_receipt.get("status")
+            != "validation_complete_bundle_repair_prepared_preflight_pending"
+            or v8_receipt.get("evidence_class")
+            != "live_engineering_preflight_packaging_repair"
+            or v8_receipt.get("scientific_authority") is not False
+            or v8_receipt.get("launch_allowed") is not False
+            or v8_receipt.get("adopted_for_execution") is not False
+            or any(int(v8_receipt.get(key, -1)) != 0 for key in ("measured_runs", "selection_accesses", "final_accesses"))
+            or v8_contract is None
+            or v8_contract.get("contract_id") != A12_V8_REVISION_ID
+            or v8_contract.get("status")
+            != "validation_complete_bundle_repair_prepared_preflight_pending"
+            or v8_contract.get("evidence_class")
+            != "live_engineering_preflight_packaging_repair"
+            or v8_contract.get("scientific_authority") is not False
+            or v8_contract.get("synthetic_preflight_only") is not True
+            or v8_contract.get("measured_retrieval_allowed") is not False
+            or v8_contract.get("launch_allowed") is not False
+            or v8_contract.get("adopted_for_execution") is not False
+            or v7_receipt is None
+            or v8_receipt.get("v7_receipt_sha256") != _file_sha256(root / A12_V7_RECEIPT_PATH)
+            or v8_contract.get("migration_from", {}).get("sha256") != _file_sha256(root / A12_V7_RECEIPT_PATH)
+            or v8_receipt.get("preserved_live_failure_ids")
+            != v8_contract.get("preserved_live_failures")
+            or v8_contract.get("preserved_live_failures")
+            != [
+                "v6-initial-wheelhouse-missing-pydantic",
+                "v6-supplement-repair-mutated-pycache-tree",
+                "v7-frozen-bundle-missing-validation-lineage",
+            ]
+            or not isinstance(v8_contract.get("active_correction"), Mapping)
+            or v8_contract["active_correction"].get("fresh_remote_root") != "/opt/myis/a1.2-v8"
+            or v8_contract["active_correction"].get("source_remote_root") != "/opt/myis/a1.2-v7"
+            or v8_contract["active_correction"].get("same_instance_reuse") is not True
+            or v8_contract["active_correction"].get("validation_lineage_complete") is not True
+            or v8_contract["active_correction"].get("pythondontwritebytecode") is not True
+            or any(int(value) != 0 for value in v8_contract.get("real_counters", {}).values())
+            or any(int(value) != 0 for value in v8_contract.get("resource_counters", {}).values())
+        ):
+            raise ValueError("A1.2 validation-complete bundle repair v8 receipt is invalid")
+        if v9_receipt is not None and (
+            v9_validation is None
+            or v9_validation.get("status") != "execution_lifecycle_repair_prepared_preflight_pending"
+            or v9_receipt.get("status") != "execution_lifecycle_repair_prepared_preflight_pending"
+            or v9_receipt.get("evidence_class") != "live_engineering_preflight_execution_lifecycle_repair"
+            or v9_receipt.get("scientific_authority") is not False
+            or v9_receipt.get("launch_allowed") is not False
+            or v9_receipt.get("adopted_for_execution") is not False
+            or v9_receipt.get("implementation_validation_complete") is not True
+            or v9_receipt.get("live_preflight_execution_pending") is not True
+            or any(int(v9_receipt.get(key, -1)) != 0 for key in ("measured_runs", "selection_accesses", "final_accesses"))
+            or float(v9_receipt.get("charged_usd", -1)) != 0
+            or v9_contract is None
+            or v9_contract.get("contract_id") != A12_V9_REVISION_ID
+            or v9_contract.get("status") != "execution_lifecycle_repair_prepared_preflight_pending"
+            or v9_contract.get("evidence_class") != "live_engineering_preflight_execution_lifecycle_repair"
+            or v9_contract.get("scientific_authority") is not False
+            or v9_contract.get("synthetic_preflight_only") is not True
+            or v9_contract.get("measured_retrieval_allowed") is not False
+            or v9_contract.get("launch_allowed") is not False
+            or v9_contract.get("adopted_for_execution") is not False
+            or v8_receipt is None
+            or v9_receipt.get("v8_receipt_sha256") != v8_receipt.get("receipt_sha256")
+            or v9_contract.get("migration_from", {}).get("sha256") != v8_receipt.get("receipt_sha256")
+            or not isinstance(v9_contract.get("active_correction"), Mapping)
+            or v9_contract["active_correction"].get("fresh_remote_root") != "/opt/myis/a1.2-v9"
+            or v9_contract["active_correction"].get("source_remote_root") != "/opt/myis/a1.2-v7"
+            or v9_contract["active_correction"].get("same_instance_reuse") is not True
+            or v9_contract["active_correction"].get("implementation_validation_complete") is not True
+            or v9_contract["active_correction"].get("live_preflight_execution_pending") is not True
+            or any(int(value) != 0 for value in v9_contract.get("real_counters", {}).values())
+            or any(float(value) != 0 for value in v9_contract.get("resource_counters", {}).values())
+        ):
+            raise ValueError("A1.2 execution-lifecycle repair v9 receipt is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -2512,9 +2764,106 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": str(v7_receipt["claim_boundary"]),
             "next_authorized_action": str(v7_contract["next_authorized_action"]),
         }
+    v8_projection = dict(missing["vast_preflight_v8"])
+    if v8_receipt is not None and v8_contract is not None and v8_validation is not None:
+        active_correction = v8_contract["active_correction"]
+        v8_projection = {
+            **v8_projection,
+            "status": str(v8_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v8_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V8_RECEIPT_PATH),
+            "receipt_self_sha256": str(v8_receipt["receipt_sha256"]),
+            "contract_sha256": _file_sha256(root / A12_V8_CONTRACT_PATH),
+            "contract_self_sha256": str(v8_contract["contract_sha256"]),
+            "schema_sha256": _file_sha256(root / A12_V8_SCHEMA_PATH),
+            "validator_sha256": _file_sha256(root / A12_V8_MODULE_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V8_OWNER_RUNBOOK_PATH),
+            "coordinator_sha256": _file_sha256(root / A12_V8_COORDINATOR_PATH),
+            "bootstrap_sha256": _file_sha256(root / A12_V8_BOOTSTRAP_PATH),
+            "image_reference": str(v8_contract["image_reference"]),
+            "resolved_manifest_digest": str(v8_contract["resolved_manifest_digest"]),
+            "platform": str(v8_contract["platform"]),
+            "preserved_live_failures": [
+                {
+                    "failure_id": str(failure_id),
+                    "description": "Preserved failed-closed live engineering attempt.",
+                    "disposition": "preserved_immutable_additive_repair",
+                }
+                for failure_id in v8_contract["preserved_live_failures"]
+            ],
+            "active_correction": {
+                "fresh_remote_root": str(active_correction["fresh_remote_root"]),
+                "source_remote_root": str(active_correction["source_remote_root"]),
+                "same_instance_reuse": bool(active_correction["same_instance_reuse"]),
+                "validation_lineage_complete": bool(active_correction["validation_lineage_complete"]),
+                "historical_dockerfile_hash_only_nonexecuted": bool(
+                    active_correction["historical_dockerfile_hash_only_nonexecuted"]
+                ),
+                "pythondontwritebytecode": bool(active_correction["pythondontwritebytecode"]),
+                "reuse_only_after_sha256_validation": list(
+                    active_correction["reuse_only_after_sha256_validation"]
+                ),
+                "upload_only": list(active_correction["upload_only"]),
+            },
+            "launch_allowed": bool(v8_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v8_receipt["adopted_for_execution"]),
+            "synthetic_preflight_only": bool(v8_contract["synthetic_preflight_only"]),
+            "real_counters": dict(v8_contract["real_counters"]),
+            "resource_counters": dict(v8_contract["resource_counters"]),
+            "claim_boundary": str(v8_receipt["claim_boundary"]),
+            "next_authorized_action": str(v8_contract["next_authorized_action"]),
+        }
+    v9_projection = dict(missing["vast_preflight_v9"])
+    if v9_receipt is not None and v9_contract is not None and v9_validation is not None:
+        active_correction = v9_contract["active_correction"]
+        v9_projection = {
+            **v9_projection,
+            "status": str(v9_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v9_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V9_RECEIPT_PATH),
+            "receipt_self_sha256": str(v9_receipt["receipt_sha256"]),
+            "contract_sha256": _file_sha256(root / A12_V9_CONTRACT_PATH),
+            "contract_self_sha256": str(v9_contract["contract_sha256"]),
+            "schema_sha256": _file_sha256(root / A12_V9_SCHEMA_PATH),
+            "validator_sha256": _file_sha256(root / A12_V9_MODULE_PATH),
+            "runtime_sha256": _file_sha256(root / A12_V9_RUNTIME_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V9_OWNER_RUNBOOK_PATH),
+            "coordinator_sha256": _file_sha256(root / A12_V9_COORDINATOR_PATH),
+            "bootstrap_sha256": _file_sha256(root / A12_V9_BOOTSTRAP_PATH),
+            "launcher_sha256": _file_sha256(root / A12_V9_LAUNCHER_PATH),
+            "active_correction": {
+                "fresh_remote_root": str(active_correction["fresh_remote_root"]),
+                "source_remote_root": str(active_correction["source_remote_root"]),
+                "same_instance_reuse": bool(active_correction["same_instance_reuse"]),
+                "implementation_validation_complete": bool(
+                    active_correction["implementation_validation_complete"]
+                ),
+                "live_preflight_execution_pending": bool(
+                    active_correction["live_preflight_execution_pending"]
+                ),
+                "required_lifecycle_controls": list(
+                    active_correction["required_lifecycle_controls"]
+                ),
+            },
+            "launch_allowed": bool(v9_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v9_receipt["adopted_for_execution"]),
+            "synthetic_preflight_only": bool(v9_contract["synthetic_preflight_only"]),
+            "real_counters": dict(v9_contract["real_counters"]),
+            "resource_counters": dict(v9_contract["resource_counters"]),
+            "claim_boundary": str(v9_receipt["claim_boundary"]),
+            "next_authorized_action": str(v9_contract["next_authorized_action"]),
+        }
     return {
         **missing,
         "status": (
+            "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
+            if v9_projection["validated"]
+            else
+            "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked"
+            if v8_projection["validated"]
+            else
             "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
             if v7_projection["validated"]
             else
@@ -2533,6 +2882,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
+            "live_engineering_preflight_execution_lifecycle_repair"
+            if v9_projection["validated"]
+            else
+            "live_engineering_preflight_packaging_repair"
+            if v8_projection["validated"]
+            else
             "live_engineering_preflight_repair"
             if v7_projection["validated"]
             else
@@ -2549,6 +2904,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             else "engineering_contract_scaffold"
         ),
         "claim_boundary": (
+            v9_projection.get("claim_boundary")
+            if v9_projection["validated"]
+            else
+            v8_projection.get("claim_boundary")
+            if v8_projection["validated"]
+            else
             v7_projection.get("claim_boundary")
             if v7_projection["validated"]
             else
@@ -2619,6 +2980,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
         "next_authorized_action": (
+            str(v9_projection["next_authorized_action"])
+            if v9_projection["validated"]
+            else
+            str(v8_projection["next_authorized_action"])
+            if v8_projection["validated"]
+            else
             str(v7_projection["next_authorized_action"])
             if v7_projection["validated"]
             else
@@ -2642,6 +3009,8 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "vast_preflight_v5": v5_projection,
         "vast_preflight_v6": v6_projection,
         "vast_preflight_v7": v7_projection,
+        "vast_preflight_v8": v8_projection,
+        "vast_preflight_v9": v9_projection,
     }
 
 

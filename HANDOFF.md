@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_same_instance_repair_prepared_preflight_pending_launch_locked`
-- Evidence class: live engineering preflight repair; scientific authority `false`
+- Status: `a1_2_execution_lifecycle_repair_prepared_preflight_pending_launch_locked`
+- Evidence class: live engineering preflight execution-lifecycle repair; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -134,6 +134,21 @@ evidence.
 - Additive v7 uses a fresh `/opt/myis/a1.2-v7` root on the same unchanged
   instance, requires `PYTHONDONTWRITEBYTECODE=1`, revalidates staged bytes, and
   uploads only the new clean frozen code bundle.
+- The v7 verifier then failed closed before model or GPU work because that
+  bundle omitted the historical v1 receipt required by the transitive v5 to v1
+  validator chain. Additive v8 preserves the v7 root, uses a fresh
+  `/opt/myis/a1.2-v8` root, adds the exact repository-safe validation lineage,
+  validates frozen Git metadata without a `.git` directory, and requires a
+  commit/tree/bundle/image-bound PASS marker before synthetic workers can start.
+- Independent lifecycle review then blocked v8 start because worker failure,
+  checkpoint, Qwen adapter-path, status, collection, and teardown semantics were
+  not strong enough for auditable live evidence. Additive v9 preserves v1-v8,
+  uses fresh `/opt/myis/a1.2-v9`, reuses only checksum-validated v7 staged
+  bytes, and binds immutable attempt IDs, PID/start-time liveness, fresh
+  heartbeats, immediate sibling cancellation/reaping, durable checkpoints,
+  adapter-level Qwen length measurement, same-attempt PASS export, member-hash
+  validation, and verified guest-process cleanup. Focused local validation
+  passed; live synthetic execution is still pending.
 - Every registered Phase and Task continues to receive one detailed English
   generated Obsidian report with the canonical fifteen-section structure. The
   archive audit found zero eligible orphan/superseded reports; referenced
@@ -148,9 +163,9 @@ fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-The v1-v6 receipt lineage, v5 local stage, live runtime identity, and additive
-v7 repair contract pass. A1.2 scientific execution remains deliberately locked
-because the v7 synthetic preflight has not completed dense adapter parity, the
+The v1-v7 receipt lineage, v5 local stage, live runtime identity, and additive
+v8 packaging and v9 lifecycle repair contracts pass. A1.2 scientific execution remains deliberately locked
+because the v9 synthetic preflight has not completed dense adapter parity, the
 Qwen measured maximum length, GPU memory feasibility, four-worker heartbeat/
 resume, safe return validation, and provider-destruction/TTL proof. The local
 Vast CLI is not currently available, so automatic provider destruction and
@@ -164,11 +179,11 @@ Run only the Owner-local SSH/Vast A1.2 preflight from the immutable beginner
 runbook. The exact next task is:
 
 ```text
-/goal Run only the same-instance A1.2 v7 repair preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md. Preserve the failed v6 root, create a fresh /opt/myis/a1.2-v7 root, upload only the clean pushed v7 code bundle, revalidate the staged runtime-minimal models, wheelhouse, jobs, and supplement, and run synthetic checks only. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the A1.2 v9 attempt-scoped synthetic preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md. Preserve v6-v8 evidence, create fresh /opt/myis/a1.2-v9, reuse v7 staged inputs only after SHA-256 validation, require the runtime-bound v9 marker, run one synthetic arm per RTX 3090 with verified lifecycle controls, collect the same-attempt PASS archive, and stop verified guest processes. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
 No Owner input is required while the agent prepares, validates, commits, and
-pushes the v7 bundle. After the synthetic preflight and safe collection, the
+pushes the v9 bundle. After the synthetic preflight and safe collection, the
 default is to destroy and verify the provider instance. The additive Owner
 policy at `control/armindex/a1.2/owner-instance-continuation-policy.v1.json`
 permits the report `Owner continue next goal on PLAN` only after a complete

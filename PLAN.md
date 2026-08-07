@@ -15,9 +15,9 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v7 same-instance
-  repair prepared after two fail-closed v6 verification attempts; synthetic
-  live preflight and scientific launch remain locked)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v9 attempt-scoped
+  execution-lifecycle repair validated after the v8 packaging closure; synthetic
+  live preflight is pending and scientific launch remains locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
 - Current evidence class: engineering preflight revision; scientific authority `false`
 - ArmIndex measured runs: `0`
@@ -60,7 +60,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v5 direct official-base preflight prepared and launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v9 synthetic live preflight prepared and launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -103,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v7 same-instance repair prepared; synthetic live checks pending; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 execution-lifecycle repair validated; synthetic live checks pending; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -211,6 +211,23 @@ frozen tree. Both failures are preserved. Additive v7 uses a fresh remote root,
 disables Python bytecode writes, revalidates the already staged model,
 wheelhouse, job, and supplement trees, and uploads only a new frozen code
 bundle. Launch and adoption remain false and scientific counters remain zero.
+The v7 verifier then stopped before model or GPU work because the frozen bundle
+did not include a historical v1 receipt required by the transitive validation
+chain. Additive v8 preserves that failed root and adds only the exact 55-file
+repository-safe validation lineage. It validates commit and tree from the
+self-hashed frozen bundle rather than shipping `.git`, validates archive paths
+before extraction, and requires a bound PASS marker before synthetic launch.
+
+Independent review of the v8 launch path then found unsafe lifecycle behavior:
+failed children could outlive a sibling, checkpoints could precede durable
+work, status relied on stale files, Qwen bypassed the frozen adapter path, and
+collection/teardown were not end-to-end attempt-bound. Additive v9 preserves
+v1-v8 and binds a fresh `/opt/myis/a1.2-v9` root, immutable attempt IDs,
+PID/start-time identities, fresh heartbeats, sibling cancellation and reaping,
+post-work checkpoints, `SentenceTransformer.encode` Qwen measurement,
+same-attempt PASS export, member-hash validation, and verified guest-process
+cleanup. Local implementation validation is complete; live synthetic execution
+and provider destruction/TTL proof remain pending.
 
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
@@ -261,12 +278,12 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Run only the same-instance A1.2 v7 repair preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md. Preserve the failed v6 root, use a fresh /opt/myis/a1.2-v7 root, revalidate reused staged bytes, upload only the clean pushed v7 code bundle, and run synthetic GPU adapter and checkpoint/resume checks. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes. After a complete PASS, follow control/armindex/a1.2/owner-instance-continuation-policy.v1.json: destroy by default, or report Owner continuation to a separately authorized next PLAN goal only when every continuation requirement remains true.
+/goal Run only the A1.2 v9 attempt-scoped synthetic live preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md. Preserve v6-v8 evidence, use fresh /opt/myis/a1.2-v9, reuse v7 staged bytes only after SHA-256 validation, require the runtime-bound v9 marker, run one dense arm per RTX 3090, collect and validate the same-attempt PASS archive, and stop verified guest processes. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes. After PASS, follow the Owner continuation policy: destroy by default, or report Owner continuation only for a separately authorized next PLAN goal when every requirement remains true.
 ```
 
-The local runtime-minimal stage is complete and the v6 root remains preserved
-as failed-attempt evidence. The next action is the bounded v7 repair on the
-same unchanged instance. It may verify the worker and run synthetic preflight
+The local runtime-minimal stage is complete and the v6-v8 lineage remains
+preserved. The next action is the bounded v9 synthetic preflight on the same
+unchanged instance. It may verify the worker and run synthetic preflight
 workers, but it must not run measured retrieval or adopt the revision.
 Scientific launch remains forbidden until every checklist item passes and the
 Owner later adopts the unchanged revision in a separate authorized goal. The

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-live-preflight-packaging-repair.v8.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "revision_id",
+    "status",
+    "evidence_class",
+    "scientific_authority",
+    "claim_boundary",
+    "contract_sha256",
+    "v7_receipt_sha256",
+    "preserved_live_failure_ids",
+    "new_remote_root",
+    "validation_lineage_complete",
+    "launch_allowed",
+    "adopted_for_execution",
+    "measured_runs",
+    "selection_accesses",
+    "final_accesses",
+    "charged_usd",
+    "bindings",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-live-preflight-packaging-repair.v8"},
+    "receipt_id": {"const": "a1.2-live-preflight-validation-complete-bundle-v8"},
+    "revision_id": {"const": "a1.2-live-preflight-validation-complete-bundle-v8"},
+    "status": {"const": "validation_complete_bundle_repair_prepared_preflight_pending"},
+    "evidence_class": {"const": "live_engineering_preflight_packaging_repair"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 30},
+    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "v7_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "preserved_live_failure_ids": {
+      "type": "array",
+      "const": [
+        "v6-initial-wheelhouse-missing-pydantic",
+        "v6-supplement-repair-mutated-pycache-tree",
+        "v7-frozen-bundle-missing-validation-lineage"
+      ]
+    },
+    "new_remote_root": {"const": "/opt/myis/a1.2-v8"},
+    "validation_lineage_complete": {"const": true},
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "measured_runs": {"const": 0},
+    "selection_accesses": {"const": 0},
+    "final_accesses": {"const": 0},
+    "charged_usd": {"const": 0},
+    "bindings": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uri", "sha256"],
+        "properties": {
+          "uri": {"type": "string", "minLength": 3},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

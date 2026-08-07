@@ -179,6 +179,8 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
     vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
     vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
+    vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
+    vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -359,6 +361,40 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "real_counters": vast_v7.get("real_counters", {}),
             "resource_counters": vast_v7.get("resource_counters", {}),
         },
+        "armindex_a1_2_live_preflight_validation_complete_bundle_repair": {
+            "status": vast_v8.get("status", "not_started"),
+            "evidence_class": "live_engineering_preflight_packaging_repair",
+            "scientific_authority": False,
+            "source_receipt_uri": vast_v8.get("receipt_uri"),
+            "source_receipt_sha256": vast_v8.get("receipt_sha256"),
+            "contract_uri": vast_v8.get("contract_uri"),
+            "contract_sha256": vast_v8.get("contract_sha256"),
+            "image_reference": vast_v8.get("image_reference"),
+            "resolved_manifest_digest": vast_v8.get("resolved_manifest_digest"),
+            "platform": vast_v8.get("platform"),
+            "preserved_live_failures": vast_v8.get("preserved_live_failures", []),
+            "active_correction": vast_v8.get("active_correction", {}),
+            "launch_allowed": vast_v8.get("launch_allowed", False),
+            "adopted_for_execution": vast_v8.get("adopted_for_execution", False),
+            "synthetic_preflight_only": vast_v8.get("synthetic_preflight_only", True),
+            "real_counters": vast_v8.get("real_counters", {}),
+            "resource_counters": vast_v8.get("resource_counters", {}),
+        },
+        "armindex_a1_2_live_preflight_execution_lifecycle_repair": {
+            "status": vast_v9.get("status", "not_started"),
+            "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+            "scientific_authority": False,
+            "source_receipt_uri": vast_v9.get("receipt_uri"),
+            "source_receipt_sha256": vast_v9.get("receipt_sha256"),
+            "contract_uri": vast_v9.get("contract_uri"),
+            "contract_sha256": vast_v9.get("contract_sha256"),
+            "active_correction": vast_v9.get("active_correction", {}),
+            "launch_allowed": vast_v9.get("launch_allowed", False),
+            "adopted_for_execution": vast_v9.get("adopted_for_execution", False),
+            "synthetic_preflight_only": vast_v9.get("synthetic_preflight_only", True),
+            "real_counters": vast_v9.get("real_counters", {}),
+            "resource_counters": vast_v9.get("resource_counters", {}),
+        },
         "observatory": {
             "status": observatory.get("status", "not_available"),
             "evidence_class": observatory.get("evidence_class", "fixture"),
@@ -436,7 +472,27 @@ def _a010_projection_lifecycle(
     vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
     vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
     vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
+    vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
+    vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
     if (
+        scaffold.get("validated") is True
+        and scaffold.get("status") == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
+        and vast_v9.get("validated") is True
+    ):
+        source_uri = vast_v9.get("receipt_uri")
+        source_sha256 = vast_v9.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
+        scaffold.get("validated") is True
+        and scaffold.get("status") == "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked"
+        and vast_v8.get("validated") is True
+    ):
+        source_uri = vast_v8.get("receipt_uri")
+        source_sha256 = vast_v8.get("receipt_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
         scaffold.get("validated") is True
         and scaffold.get("status") == "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
         and vast_v7.get("validated") is True
@@ -1269,6 +1325,8 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
         vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
         vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
+        vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
+        vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
         gpu = adapter.get("gpu_spec", {}) if isinstance(adapter.get("gpu_spec"), Mapping) else {}
         timing = adapter.get("time_estimate", {}) if isinstance(adapter.get("time_estimate"), Mapping) else {}
         budget = adapter.get("budget_estimate", {}) if isinstance(adapter.get("budget_estimate"), Mapping) else {}
@@ -1290,12 +1348,13 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
                 f"The active additive v5 direct-base revision is `{vast_v5.get('status', 'not_started')}` with image `{vast_v5.get('image_reference', '-')}` at manifest `{vast_v5.get('resolved_manifest_digest', '-')}` on `{vast_v5.get('platform', '-')}`. "
                 f"The additive v6 live-container correction is `{vast_v6.get('status', 'not_started')}` and remains synthetic-only with launch `{vast_v6.get('launch_allowed', False)}` and adoption `{vast_v6.get('adopted_for_execution', False)}`. "
                 f"The additive v7 same-instance repair is `{vast_v7.get('status', 'not_started')}` with `{len(vast_v7.get('preserved_live_failures', []))}` preserved engineering failure(s), a fresh runtime root requirement `{vast_v7.get('active_correction', {}).get('fresh_remote_root_required', False)}`, and bytecode suppression `{vast_v7.get('active_correction', {}).get('pythondontwritebytecode', False)}`. "
+                f"The additive v8 validation-complete frozen-bundle repair is `{vast_v8.get('status', 'not_started')}` with `{len(vast_v8.get('preserved_live_failures', []))}` preserved engineering failure(s), validation lineage complete `{vast_v8.get('active_correction', {}).get('validation_lineage_complete', False)}`, and a fresh root `{vast_v8.get('active_correction', {}).get('fresh_remote_root', '-')}`. "
+                f"The additive v9 execution-lifecycle repair is `{vast_v9.get('status', 'not_started')}` with implementation validation `{vast_v9.get('active_correction', {}).get('implementation_validation_complete', False)}`, live synthetic execution pending `{vast_v9.get('active_correction', {}).get('live_preflight_execution_pending', True)}`, and fresh root `{vast_v9.get('active_correction', {}).get('fresh_remote_root', '-')}`. "
                 "It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.\n\n"
                 f"The Owner continuity policy is `{vast_v6.get('continuation_policy', {}).get('status', 'not_started')}`. Its default is `{vast_v6.get('continuation_policy', {}).get('default_post_preflight_instruction', 'destroy_and_verify_provider_instance_absent')}`; `{vast_v6.get('continuation_policy', {}).get('allowed_post_preflight_instruction', 'continue_next_goal_on_PLAN')}` remains conditional and is not authorized now.\n\n"
                 "Owner-local prerequisites still required:\n\n"
-                "- mount the protected root read-only for the runner without copying payloads into the agent workspace;\n"
-                "- validate complete `SHA256SUMS` manifests for all dense runtime files and byte SHA-256 for Snowflake remote code;\n"
-                "- pass dense adapter parity checks and freeze the Qwen measured maximum input length;\n"
+                "- keep the protected root, qrels, membership, credentials, and evaluator payloads local;\n"
+                "- pass live dense adapter parity and the Qwen adapter-level maximum-length check;\n"
                 "- bind a live quote, capacity, provider instance identity, artifact-return target, and free-space check;\n"
                 "- dry-run the external provider termination watcher and TTL, because guest poweroff alone does not prove billing stopped;\n"
                 "- explicitly adopt the unchanged execution contract and budget before any GPU reservation."
@@ -2256,6 +2315,8 @@ def _workflow_status(value: Any) -> str:
         "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_preflight_correction_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_preflight_same_instance_repair_prepared_launch_locked": "waiting_dependency",
+        "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked": "waiting_dependency",
+        "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked": "waiting_dependency",
         "contract_scaffold_complete_launch_locked": "waiting_dependency",
         "complete": "complete",
         "completed": "complete",

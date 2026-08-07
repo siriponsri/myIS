@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "revision_id",
+    "status",
+    "evidence_class",
+    "scientific_authority",
+    "claim_boundary",
+    "contract_sha256",
+    "v8_receipt_sha256",
+    "continuation_policy_sha256",
+    "new_remote_root",
+    "implementation_validation_complete",
+    "live_preflight_execution_pending",
+    "launch_allowed",
+    "adopted_for_execution",
+    "measured_runs",
+    "selection_accesses",
+    "final_accesses",
+    "charged_usd",
+    "bindings",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-live-preflight-execution-lifecycle.v9"},
+    "receipt_id": {"const": "a1.2-live-preflight-execution-lifecycle-v9"},
+    "revision_id": {"const": "a1.2-live-preflight-execution-lifecycle-v9"},
+    "status": {"const": "execution_lifecycle_repair_prepared_preflight_pending"},
+    "evidence_class": {"const": "live_engineering_preflight_execution_lifecycle_repair"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 40},
+    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "v8_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "continuation_policy_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "new_remote_root": {"const": "/opt/myis/a1.2-v9"},
+    "implementation_validation_complete": {"const": true},
+    "live_preflight_execution_pending": {"const": true},
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "measured_runs": {"const": 0},
+    "selection_accesses": {"const": 0},
+    "final_accesses": {"const": 0},
+    "charged_usd": {"const": 0},
+    "bindings": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uri", "sha256"],
+        "properties": {
+          "uri": {"type": "string", "minLength": 3},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

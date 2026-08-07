@@ -88,7 +88,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "measured results = `unavailable`" in pending_report
 
 
-def test_a12_v7_receipt_is_the_canonical_projection_lifecycle_source() -> None:
+def test_a12_v9_receipt_is_the_canonical_projection_lifecycle_source() -> None:
     model = build_read_model(ROOT)
     manifest = json.loads(
         (ROOT / VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json").read_text(
@@ -109,13 +109,13 @@ def test_a12_v7_receipt_is_the_canonical_projection_lifecycle_source() -> None:
         obsidian_manifest_sha256=str(manifest["manifest_sha256"]),
         external_outputs=external_outputs,
     )
-    v7 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v7"]
+    v9 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v9"]
 
     assert lifecycle["source_receipt_uri"] == (
         "campaigns/armindex-multiretriever-v2/evidence/"
-        "a1.2-live-preflight-repair.receipt.v7.json"
+        "a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
     )
-    assert lifecycle["source_receipt_sha256"] == v7["receipt_sha256"]
+    assert lifecycle["source_receipt_sha256"] == v9["receipt_sha256"]
 
 
 def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contract() -> None:
@@ -228,8 +228,11 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "A1.2 runtime-minimal direct-base receipt v5" in a12_report
     assert "A1.2 live-container correction receipt v6" in a12_report
     assert "A1.2 same-instance repair receipt v7" in a12_report
+    assert "A1.2 validation-complete frozen-bundle repair receipt v8" in a12_report
+    assert "A1.2 execution-lifecycle repair receipt v9" in a12_report
     assert "v6-initial-wheelhouse-missing-pydantic" in a12_report
     assert "v6-supplement-repair-mutated-pycache-tree" in a12_report
+    assert "v7-frozen-bundle-missing-validation-lineage" in a12_report
     assert "vast_v7_preserved_live_failure_count" in a12_report
     assert "A1.2 Owner conditional instance-continuation policy" in a12_report
     assert "vast_v6_live_quote_usd_per_instance_hour" in a12_report
@@ -250,7 +253,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(
-        "a1.2-live-preflight-repair.receipt.v7.json"
+        "a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
@@ -287,6 +290,18 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert len(mlflow_index["armindex_a1_2_live_preflight_same_instance_repair"][
         "preserved_live_failures"
     ]) == 2
+    assert mlflow_index["armindex_a1_2_live_preflight_validation_complete_bundle_repair"]["status"] == (
+        "validation_complete_bundle_repair_prepared_preflight_pending"
+    )
+    assert mlflow_index["armindex_a1_2_live_preflight_validation_complete_bundle_repair"][
+        "launch_allowed"
+    ] is False
+    assert mlflow_index["armindex_a1_2_live_preflight_execution_lifecycle_repair"]["status"] == (
+        "execution_lifecycle_repair_prepared_preflight_pending"
+    )
+    assert mlflow_index["armindex_a1_2_live_preflight_execution_lifecycle_repair"][
+        "launch_allowed"
+    ] is False
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",
