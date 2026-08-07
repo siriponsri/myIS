@@ -1,0 +1,152 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260807T083023Z-a12-v9-lifecycle",
+  "run_id": null,
+  "goal_id": "A1.2_V9_SYNTHETIC_PREFLIGHT_PREPARATION",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-07T08:30:23Z",
+  "scope": "Complete the additive A1.2 v9 attempt-scoped synthetic Vast preflight implementation and local validation without contacting Vast or starting GPU work.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instruction in the active Codex thread on 2026-08-07",
+      "scope": "Use additive v9 lifecycle hardening, preserve v1-v8 evidence, keep scientific launch locked, and use subagents for bounded validation; no Vast contact or measured retrieval."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+    "dirty_paths": [
+      "mlflow/generated/archive-index.v2.json",
+      "obsidian_report",
+      "projections"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The additive v9 execution-lifecycle revision is the active implementation path; v1-v8 contracts and receipts remain preserved and v8 is not used for live start.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
+          "sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+          "locator": "revision_id, status, v8_receipt_sha256, and live_preflight_execution_pending"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+          "sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+          "locator": "status and lifecycle review boundary"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The first v9 materialization became stale after lifecycle edits, and the runbook ordering exposed that collection could precede teardown; the revision was regenerated and the coordinator/runbook were corrected without changing v1-v8 evidence.",
+      "evidence_refs": [
+        {
+          "path": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md",
+          "sha256": "57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc",
+          "locator": "sections 6-8: teardown verification before collection and conditional disposition"
+        },
+        {
+          "path": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
+          "sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+          "locator": "bindings and lifecycle controls"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Completion must validate the same evidence set used by summary generation; a self-hashed summary alone is insufficient for auditable safe export.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py",
+          "sha256": "ab786e2b34457a9ba226009bfae618e30a0f398053fd2a0f0125b77acfeb78a2",
+          "locator": "_attempt_evidence, summarize_attempt, and complete_attempt"
+        },
+        {
+          "path": "tests/test_armindex_a1_2_live_preflight_runtime_v9.py",
+          "sha256": "2af9ab0f7c05577d5358be480173f388761e1c4983b2cdae6b5d2ca4e9fef116",
+          "locator": "forged summary and tampered injected-failure receipt tests"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The local validation and projection closure passed, including the full repository suite, focused v9 tests, report sync/check cycles, MLflow doctor, assets, layout, session audit, Dashboard/API, shell syntax, and Brain literature validation.",
+      "evidence_refs": [
+        {
+          "path": "control/source-of-truth.yaml",
+          "sha256": "4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e",
+          "locator": "projection and safety boundaries"
+        },
+        {
+          "path": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
+          "sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+          "locator": "implementation_validation_complete and zero counters"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "No live Vast instance was contacted, no GPU scientific execution or measured retrieval started, and launch/adoption/resource/scientific counters remain locked or zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
+          "sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+          "locator": "launch_allowed, adopted_for_execution, measured_runs, charged_usd, and live_preflight_execution_pending"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-ssh-material",
+      "provenance": "agent-observed",
+      "summary": "Owner must provide the Vast SSH host, port, username, and local key path after reviewing the pushed v9 bundle; credentials remain local and are never recorded.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "live-vast-evidence",
+      "provenance": "agent-observed",
+      "summary": "CUDA adapter parity, Snowflake GPU parity, Qwen measured maximum length, GPU memory feasibility, four-worker lifecycle evidence, live quote/provider identity, return validation, and provider destruction/TTL proof remain pending a bounded synthetic live preflight.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

@@ -1,24 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978"
-read_model_sha256: "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51"
-source_commit: "59b419b07fc22cf969b6d55251ed1be31f3537ad"
+read_model_revision: "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e"
+read_model_sha256: "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df"
+source_commit: "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "live_engineering_preflight_repair"
+evidence_class: "live_engineering_preflight_execution_lifecycle_repair"
 scientific_authority: false
-claim_boundary: "same-instance synthetic preflight repair only; no measured retrieval or scientific result"
-generated_from_revision: "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978"
-last_material_update: "2026-08-06T23:16:45Z"
-next_authorized_action: "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed."
+claim_boundary: "synthetic execution-lifecycle repair only; no measured retrieval or scientific result"
+generated_from_revision: "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e"
+last_material_update: "2026-08-07T08:28:50Z"
+next_authorized_action: "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-06T23:16:45Z"
-updated_at: "2026-08-06T23:16:45Z"
+created_at: "2026-08-07T08:28:50Z"
+updated_at: "2026-08-07T08:28:50Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -40,15 +40,15 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_live_preflight_same_instance_repair_prepared_launch_locked
+- `program_state`: a1_2_live_preflight_execution_lifecycle_prepared_launch_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043`
-- `git_commit`: 59b419b07fc22cf969b6d55251ed1be31f3537ad
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8`
+- `git_commit`: 4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -90,17 +90,16 @@ Owner prerequisites:
 
 ### A1.2 scaffold and launch state
 
-The offline scaffold is `a1_2_live_preflight_same_instance_repair_prepared_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `21` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
+The offline scaffold is `a1_2_live_preflight_execution_lifecycle_prepared_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `21` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
 
-The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. The additive v6 live-container correction is `live_correction_prepared_preflight_pending` and remains synthetic-only with launch `False` and adoption `False`. The additive v7 same-instance repair is `same_instance_repair_prepared_preflight_pending` with `2` preserved engineering failure(s), a fresh runtime root requirement `True`, and bytecode suppression `True`. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
+The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. The additive v6 live-container correction is `live_correction_prepared_preflight_pending` and remains synthetic-only with launch `False` and adoption `False`. The additive v7 same-instance repair is `same_instance_repair_prepared_preflight_pending` with `2` preserved engineering failure(s), a fresh runtime root requirement `True`, and bytecode suppression `True`. The additive v8 validation-complete frozen-bundle repair is `validation_complete_bundle_repair_prepared_preflight_pending` with `3` preserved engineering failure(s), validation lineage complete `True`, and a fresh root `/opt/myis/a1.2-v8`. The additive v9 execution-lifecycle repair is `execution_lifecycle_repair_prepared_preflight_pending` with implementation validation `True`, live synthetic execution pending `True`, and fresh root `/opt/myis/a1.2-v9`. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
 
 The Owner continuity policy is `active_owner_policy`. Its default is `destroy_and_verify_provider_instance_absent`; `continue_next_goal_on_PLAN` remains conditional and is not authorized now.
 
 Owner-local prerequisites still required:
 
-- mount the protected root read-only for the runner without copying payloads into the agent workspace;
-- validate complete `SHA256SUMS` manifests for all dense runtime files and byte SHA-256 for Snowflake remote code;
-- pass dense adapter parity checks and freeze the Qwen measured maximum input length;
+- keep the protected root, qrels, membership, credentials, and evaluator payloads local;
+- pass live dense adapter parity and the Qwen adapter-level maximum-length check;
 - bind a live quote, capacity, provider instance identity, artifact-return target, and free-space check;
 - dry-run the external provider termination watcher and TTL, because guest poweroff alone does not prove billing stopped;
 - explicitly adopt the unchanged execution contract and budget before any GPU reservation.
@@ -183,37 +182,53 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 preflight supplement validator v7 | `tool` | `live_engineering_preflight_repair` | `scripts/a1_2_vast/validate_preflight_supplement_v7.py` | `6ea824337585a972c543989bb792775f3597967ff736cc30dd547997d5798291` | `validated` |
 | A1.2 preflight supplement requirements v7 | `manifest` | `live_engineering_preflight_repair` | `containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt` | `8262320bc0541873a29cf0362566998dc7039e72d92a820f802a3bf8a0118fe6` | `validated` |
 | A1.2 supplement wheelhouse workflow v7 | `workflow` | `live_engineering_preflight_repair` | `.github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml` | `3c397dcf9d2bac02924a2d64c4be1cdf30b54bcfea3ee558d9b650f089af4843` | `validated` |
+| A1.2 validation-complete frozen-bundle repair receipt v8 | `receipt` | `live_engineering_preflight_packaging_repair` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` | `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6` | `validated` |
+| A1.2 validation-complete frozen-bundle repair contract v8 | `contract` | `live_engineering_preflight_packaging_repair` | `control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json` | `d46193a975a7d3afdb3c6a3b5c038157e6bd246458bc054c043adc80c45ac020` | `validated` |
+| A1.2 validation-complete frozen-bundle repair schema v8 | `schema` | `live_engineering_preflight_packaging_repair` | `schemas/armindex/a1.2-live-preflight-packaging-repair.v8.json` | `eadce7b35347d8fb57df9e2e83b2cdcbb62f41671eee6544acaaab8a7223f3f9` | `validated` |
+| A1.2 validation-complete frozen-bundle validator v8 | `tool` | `live_engineering_preflight_packaging_repair` | `src/myis_research/armindex/a1_2_live_preflight_packaging_v8.py` | `2f33493e979d227839b2aca0a4be2a51302fca06e70a5f706ca3d39491cc3ccc` | `validated` |
+| A1.2 beginner Owner validation-complete bundle runbook v8 | `runbook` | `live_engineering_preflight_packaging_repair` | `docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V8.md` | `8eab91cf0082dc1f165c17183016b4a8c5a3b971cbe91bcd0b973dc71b19a3fd` | `validated` |
+| A1.2 validation-complete bundle coordinator v8 | `tool` | `live_engineering_preflight_packaging_repair` | `scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV8.ps1` | `142d78db8e1407cad23385e7e837ee3e50383e4914818190f53c73b3cc045d67` | `validated` |
+| A1.2 validation-complete bundle bootstrap v8 | `tool` | `live_engineering_preflight_packaging_repair` | `scripts/a1_2_vast/remote-bootstrap-direct-base-v8.sh` | `d01f70b7c4a1abdacf6b5045876cbd011010104643dda594f9c8b84a5ba499e4` | `validated` |
+| A1.2 execution-lifecycle repair receipt v9 | `receipt` | `live_engineering_preflight_execution_lifecycle_repair` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json` | `e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36` | `validated` |
+| A1.2 execution-lifecycle repair contract v9 | `contract` | `live_engineering_preflight_execution_lifecycle_repair` | `control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json` | `5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b` | `validated` |
+| A1.2 execution-lifecycle repair schema v9 | `schema` | `live_engineering_preflight_execution_lifecycle_repair` | `schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json` | `945188d828eccda02dc841f53176b92e6ba74cc436c45f624ed2a10f193041a0` | `validated` |
+| A1.2 execution-lifecycle contract validator v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `src/myis_research/armindex/a1_2_live_preflight_execution_v9.py` | `8b8d29d08f4939cc96131e4265e0760dcb986c1aa1851cef3c8c7957f264ad3f` | `validated` |
+| A1.2 attempt-scoped live runtime v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py` | `ab786e2b34457a9ba226009bfae618e30a0f398053fd2a0f0125b77acfeb78a2` | `validated` |
+| A1.2 beginner Owner execution-lifecycle runbook v9 | `runbook` | `live_engineering_preflight_execution_lifecycle_repair` | `docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md` | `57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc` | `validated` |
+| A1.2 execution-lifecycle coordinator v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1` | `b3651b77c06c06dda54169e31fb880261cf9db0b553a3dcf004d592f09ebafce` | `validated` |
+| A1.2 execution-lifecycle bootstrap v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh` | `c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358` | `validated` |
+| A1.2 four-GPU synthetic launcher v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-live-preflight-v9.sh` | `5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954` | `validated` |
 
 ## Metrics
 
 | Metric | Split | Scope | Value | n | Denominator | Evidence |
 |---|---|---|---:|---:|---|---|
-| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_repair` |
-| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_repair` |
-| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_repair` |
-| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_repair` |
-| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `live_engineering_preflight_repair` |
-| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `live_engineering_preflight_repair` |
-| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `live_engineering_preflight_repair` |
-| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `live_engineering_preflight_repair` |
+| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `live_engineering_preflight_execution_lifecycle_repair` |
+| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `live_engineering_preflight_execution_lifecycle_repair` |
 
 Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v6 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v7 same-instance repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.
+**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.
 
-**Result:** A1 engineering preparation is current through v7 with 2 preserved live repair failure(s); the owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
+**Result:** A1 engineering preparation is current through v9; the Owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
 
 **Decision:** active
 
 ## Interpretation
 
-The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, and adds v7 same-instance repair controls for the missing-pydantic wheelhouse failure and frozen-tree bytecode mutation. It does not establish live hardware readiness, retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse.
+The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The additive v9 repair binds attempt identity, PID/start-time liveness, durable checkpoint semantics, adapter-level Qwen measurement, retry-safe export, and verified teardown before live synthetic execution. It does not establish retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse.
 
 ## Supported Claims
 
-- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v6 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v7 same-instance repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow)
+- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher)
 
 ## Unsupported Claims
 
@@ -247,16 +262,16 @@ The offline evidence preserves the v2 four-worker fixture and v3 correction, bin
 - `d3`: waiting_owner
 - `final_split`: closed
 - `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
-- `evidence_class`: live_engineering_preflight_repair
+- `evidence_class`: live_engineering_preflight_execution_lifecycle_repair
 - `scientific_authority`: False
 
 ## Decision
 
-Status: **active**. A1 engineering preparation is current through v7 with 2 preserved live repair failure(s); the owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
+Status: **active**. A1 engineering preparation is current through v9; the Owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.
 
 ## Next Action
 
-Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.
+Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
@@ -334,3 +349,19 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - a12-live-preflight-v7-supplement-validator
 - a12-live-preflight-v7-supplement-requirements
 - a12-live-preflight-v7-supplement-workflow
+- a12-live-preflight-v8-receipt
+- a12-live-preflight-v8-contract
+- a12-live-preflight-v8-schema
+- a12-live-preflight-v8-validator
+- a12-live-preflight-v8-owner-runbook
+- a12-live-preflight-v8-coordinator
+- a12-live-preflight-v8-bootstrap
+- a12-live-preflight-v9-receipt
+- a12-live-preflight-v9-contract
+- a12-live-preflight-v9-schema
+- a12-live-preflight-v9-validator
+- a12-live-preflight-v9-runtime
+- a12-live-preflight-v9-owner-runbook
+- a12-live-preflight-v9-coordinator
+- a12-live-preflight-v9-bootstrap
+- a12-live-preflight-v9-launcher

@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978"
-read_model_sha256: "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51"
-source_commit: "59b419b07fc22cf969b6d55251ed1be31f3537ad"
+read_model_revision: "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e"
+read_model_sha256: "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df"
+source_commit: "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978"
-last_material_update: "2026-08-06T23:16:45Z"
+generated_from_revision: "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e"
+last_material_update: "2026-08-07T08:28:50Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-06T23:16:45Z"
-updated_at: "2026-08-06T23:16:45Z"
+created_at: "2026-08-07T08:28:50Z"
+updated_at: "2026-08-07T08:28:50Z"
 note_id: "P0_FOUNDATION-MASTER"
 note_type: "phase_report"
 phase_id: "P0_FOUNDATION"
@@ -46,9 +46,9 @@ Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 59b419b07fc22cf969b6d55251ed1be31f3537ad
+- `git_commit`: 4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66
 
 ## Work Performed
 
@@ -60,7 +60,7 @@ These references explain what each artifact is for; the bytes remain governed by
 
 | Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
 |---|---|---|---|---|---|
-| Source-of-truth contract | `schema` | `engineering` | `control/source-of-truth.yaml` | `9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9` | `validated` |
+| Source-of-truth contract | `schema` | `engineering` | `control/source-of-truth.yaml` | `4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e` | `validated` |
 | Shared read-model schema | `schema` | `engineering` | `schemas/read-model.v2.json` | `3c3ccc32f9a59afb6fb6bfec86f2953eeea28fdfb657d144747e9925b83b596d` | `validated` |
 | Reporting policy | `schema` | `engineering` | `docs/observatory/REPORTING_POLICY.md` | `a04ed73e9131310727d4c8f21db835ef12525e1bb224c9de2fcec42001e35b41` | `validated` |
 
@@ -119,7 +119,7 @@ Status: **completed**. The foundation records the authority and safety boundary 
 
 ## Next Action
 
-Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.
+Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

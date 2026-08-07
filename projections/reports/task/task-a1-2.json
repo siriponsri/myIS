@@ -1205,15 +1205,303 @@
       "scientific_authority": false,
       "title": "A1.2 supplement wheelhouse workflow v7",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Preserves all v6-v7 failed-closed evidence and binds a validation-complete frozen code bundle repair with every authorization flag false.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "scientific_authority": false,
+      "title": "A1.2 validation-complete frozen-bundle repair receipt v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d46193a975a7d3afdb3c6a3b5c038157e6bd246458bc054c043adc80c45ac020",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Binds the fresh v8 root, checksum-gated same-instance reuse, historical validation lineage, and synthetic-only preflight boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json",
+      "scientific_authority": false,
+      "title": "A1.2 validation-complete frozen-bundle repair contract v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-schema",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "eadce7b35347d8fb57df9e2e83b2cdcbb62f41671eee6544acaaab8a7223f3f9",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Validates the additive v8 receipt shape, preserved failure history, false authorization flags, and zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-live-preflight-packaging-repair.v8.json",
+      "scientific_authority": false,
+      "title": "A1.2 validation-complete frozen-bundle repair schema v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-validator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2f33493e979d227839b2aca0a4be2a51302fca06e70a5f706ca3d39491cc3ccc",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Fails closed unless the frozen bundle contains all historical validator lineage required without remote Git metadata.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_live_preflight_packaging_v8.py",
+      "scientific_authority": false,
+      "title": "A1.2 validation-complete frozen-bundle validator v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-owner-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8eab91cf0082dc1f165c17183016b4a8c5a3b971cbe91bcd0b973dc71b19a3fd",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Documents the bounded v8 synthetic-only repair and retains the conditional instance-continuation policy.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V8.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner validation-complete bundle runbook v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-coordinator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "142d78db8e1407cad23385e7e837ee3e50383e4914818190f53c73b3cc045d67",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Stages only the new validation-complete frozen code bundle into a fresh remote root.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV8.ps1",
+      "scientific_authority": false,
+      "title": "A1.2 validation-complete bundle coordinator v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-bootstrap",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d01f70b7c4a1abdacf6b5045876cbd011010104643dda594f9c8b84a5ba499e4",
+      "evidence_class": "live_engineering_preflight_packaging_repair",
+      "explanation": "Validates historical lineage from frozen bytes before any synthetic preflight work.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v8.sh",
+      "scientific_authority": false,
+      "title": "A1.2 validation-complete bundle bootstrap v8",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Binds the attempt-scoped synthetic lifecycle repair while keeping scientific launch, adoption, measured runs, and charged-resource counters closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
+      "scientific_authority": false,
+      "title": "A1.2 execution-lifecycle repair receipt v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Binds v8 lineage, fresh-root reuse, PID identity, checkpoint, export, teardown, and synthetic-only controls.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
+      "scientific_authority": false,
+      "title": "A1.2 execution-lifecycle repair contract v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-schema",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "945188d828eccda02dc841f53176b92e6ba74cc436c45f624ed2a10f193041a0",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Validates the v9 receipt, completed implementation state, pending live preflight, false authorization flags, and zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json",
+      "scientific_authority": false,
+      "title": "A1.2 execution-lifecycle repair schema v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-validator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8b8d29d08f4939cc96131e4265e0760dcb986c1aa1851cef3c8c7957f264ad3f",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Fails closed on v8 lineage or any changed v9 implementation binding.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_live_preflight_execution_v9.py",
+      "scientific_authority": false,
+      "title": "A1.2 execution-lifecycle contract validator v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-runtime",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ab786e2b34457a9ba226009bfae618e30a0f398053fd2a0f0125b77acfeb78a2",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Implements process identity, fresh heartbeat, durable checkpoints, adapter-level Qwen measurement, safe export, and verified teardown.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py",
+      "scientific_authority": false,
+      "title": "A1.2 attempt-scoped live runtime v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-owner-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Provides exact local SSH coordinator commands without credentials or protected data.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner execution-lifecycle runbook v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-coordinator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b3651b77c06c06dda54169e31fb880261cf9db0b553a3dcf004d592f09ebafce",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Stages a fresh root, gates start on the marker, validates collection end to end, and keeps provider destruction separate.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1",
+      "scientific_authority": false,
+      "title": "A1.2 execution-lifecycle coordinator v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-bootstrap",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Revalidates archive bytes and members before bundled Python and writes a runtime-bound marker.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh",
+      "scientific_authority": false,
+      "title": "A1.2 execution-lifecycle bootstrap v9",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-launcher",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "explanation": "Maps one arm per GPU, cancels siblings on failure, reaps children, and completes only after same-attempt PASS.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/remote-live-preflight-v9.sh",
+      "scientific_authority": false,
+      "title": "A1.2 four-GPU synthetic launcher v9",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "same-instance synthetic preflight repair only; no measured retrieval or scientific result",
+  "claim_boundary": "synthetic execution-lifecycle repair only; no measured retrieval or scientific result",
   "decision": {
     "owner_decisions_unchanged": true,
     "reason": "A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD 0.60 per complete four-GPU instance-hour; the estimate is 2-4 instance-hours and USD 1.20-2.40. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred.",
     "status": "blocked"
   },
-  "evidence_class": "live_engineering_preflight_repair",
+  "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
   "evidence_links": [
     {
       "artifact_id": "a12-gpu-execution-proposal",
@@ -1549,6 +1837,86 @@
       "artifact_id": "a12-live-preflight-v7-supplement-workflow",
       "sha256": "3c397dcf9d2bac02924a2d64c4be1cdf30b54bcfea3ee558d9b650f089af4843",
       "uri": ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-receipt",
+      "sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-contract",
+      "sha256": "d46193a975a7d3afdb3c6a3b5c038157e6bd246458bc054c043adc80c45ac020",
+      "uri": "control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-schema",
+      "sha256": "eadce7b35347d8fb57df9e2e83b2cdcbb62f41671eee6544acaaab8a7223f3f9",
+      "uri": "schemas/armindex/a1.2-live-preflight-packaging-repair.v8.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-validator",
+      "sha256": "2f33493e979d227839b2aca0a4be2a51302fca06e70a5f706ca3d39491cc3ccc",
+      "uri": "src/myis_research/armindex/a1_2_live_preflight_packaging_v8.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-owner-runbook",
+      "sha256": "8eab91cf0082dc1f165c17183016b4a8c5a3b971cbe91bcd0b973dc71b19a3fd",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V8.md"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-coordinator",
+      "sha256": "142d78db8e1407cad23385e7e837ee3e50383e4914818190f53c73b3cc045d67",
+      "uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV8.ps1"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v8-bootstrap",
+      "sha256": "d01f70b7c4a1abdacf6b5045876cbd011010104643dda594f9c8b84a5ba499e4",
+      "uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v8.sh"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-receipt",
+      "sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-contract",
+      "sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+      "uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-schema",
+      "sha256": "945188d828eccda02dc841f53176b92e6ba74cc436c45f624ed2a10f193041a0",
+      "uri": "schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-validator",
+      "sha256": "8b8d29d08f4939cc96131e4265e0760dcb986c1aa1851cef3c8c7957f264ad3f",
+      "uri": "src/myis_research/armindex/a1_2_live_preflight_execution_v9.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-runtime",
+      "sha256": "ab786e2b34457a9ba226009bfae618e30a0f398053fd2a0f0125b77acfeb78a2",
+      "uri": "src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-owner-runbook",
+      "sha256": "57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-coordinator",
+      "sha256": "b3651b77c06c06dda54169e31fb880261cf9db0b553a3dcf004d592f09ebafce",
+      "uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-bootstrap",
+      "sha256": "c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358",
+      "uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v9-launcher",
+      "sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+      "uri": "scripts/a1_2_vast/remote-live-preflight-v9.sh"
     }
   ],
   "failure_recovery_references": [
@@ -1665,31 +2033,41 @@
     {
       "counters_changed": false,
       "failure_id": "v6-initial-wheelhouse-missing-pydantic",
-      "failure_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
-      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
-      "recovery_id": "preserved_live_failure_repaired_by_hash_validated_supplement",
-      "recovery_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
-      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
+      "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "recovery_id": "preserved_immutable_additive_repair",
+      "recovery_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
       "status": "preserved_and_repaired_preflight_pending"
     },
     {
       "counters_changed": false,
       "failure_id": "v6-supplement-repair-mutated-pycache-tree",
-      "failure_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
-      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
-      "recovery_id": "preserved_live_failure_repaired_by_new_root_and_bytecode_suppression",
-      "recovery_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
-      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
+      "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "recovery_id": "preserved_immutable_additive_repair",
+      "recovery_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "status": "preserved_and_repaired_preflight_pending"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "v7-frozen-bundle-missing-validation-lineage",
+      "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "recovery_id": "preserved_immutable_additive_repair",
+      "recovery_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
       "status": "preserved_and_repaired_preflight_pending"
     }
   ],
-  "generated_at": "2026-08-06T23:16:45Z",
-  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
-  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+  "generated_at": "2026-08-07T08:28:50Z",
+  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
+  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "live_engineering_preflight_repair",
+    "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -1743,7 +2121,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
+      "status": "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -1808,10 +2186,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
+      "sha256": "93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -1822,13 +2200,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
+      "sha256": "4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The v5 receipt retains v1-v3 provenance while selecting a registry-verified official PyTorch linux/amd64 base image for direct Vast launch. The additive v6 correction records direct-container observability and per-command offline environment handling. The additive v7 repair preserves the missing-pydantic and frozen-tree-bytecode failures, stages only new frozen code into a fresh repair root, validates retained artifacts by SHA-256, and suppresses bytecode mutation. The active path removes custom image build/save/upload/load and nested containers; remote dependency installation is offline from the wheelhouse and model downloads are forbidden. Live hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations. Instance continuation can be reported only after the policy's complete live checks and separate next-goal authorization; otherwise provider destruction remains the default.",
+  "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The additive v9 repair closes the unsafe process, checkpoint, Qwen adapter-path, status, export, and teardown behaviors before live synthetic preflight. The active path has no custom image or nested-container step, installs dependencies offline, and forbids runtime model download. Live adapter parity, Qwen length, GPU feasibility, provider quote, safe return, and provider destruction/TTL proof remain pending live evidence. Instance continuation remains conditional on the separate Owner policy and next PLAN authorization.",
   "language": "en",
-  "last_material_update": "2026-08-06T23:16:45Z",
+  "last_material_update": "2026-08-07T08:28:50Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -2016,17 +2394,61 @@
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
       "split": "engineering_preflight",
       "value": 1
+    },
+    {
+      "cutoff": 0,
+      "denominator": "preserved_validation_complete_bundle_failure_history",
+      "n": 1,
+      "name": "vast_v8_preserved_live_failure_count",
+      "scope": "A1.2",
+      "source_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "split": "engineering_preflight",
+      "value": 3
+    },
+    {
+      "cutoff": 0,
+      "denominator": "frozen_bundle_historical_validator_lineage",
+      "n": 1,
+      "name": "vast_v8_validation_lineage_complete",
+      "scope": "A1.2",
+      "source_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "split": "engineering_preflight",
+      "value": 1
+    },
+    {
+      "cutoff": 0,
+      "denominator": "hash_bound_execution_lifecycle_controls",
+      "n": 1,
+      "name": "vast_v9_required_lifecycle_control_count",
+      "scope": "A1.2",
+      "source_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
+      "split": "engineering_preflight",
+      "value": 6
+    },
+    {
+      "cutoff": 0,
+      "denominator": "additive_v9_runtime_and_orchestration_revision",
+      "n": 1,
+      "name": "vast_v9_implementation_validation_complete",
+      "scope": "A1.2",
+      "source_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
+      "split": "engineering_preflight",
+      "value": 1
     }
   ],
-  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
+  "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "ac15f550debda208c41bfa6100410ec34eeb05e448e4817f06602547fe521c58",
+  "report_sha256": "6492919329b5fcf745448b4e70cfdddd2aa4b09300dd6acdda4bbcb19482da67",
   "report_type": "task",
   "result": {
     "decision": "blocked",
-    "output": "The preserved v1-v6 contracts validate, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), the immutable v2 fixture records 4 synthetic workers, and v7 same-instance repair preparation is same_instance_repair_prepared_preflight_pending. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree, requires a fresh repair root and bytecode suppression, and leaves continuation conditional.",
+    "output": "The preserved v1-v8 contracts validate, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), the immutable v2 fixture records 4 synthetic workers, and v9 execution-lifecycle repair preparation is execution_lifecycle_repair_prepared_preflight_pending. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage, requires a fresh repair root, and leaves continuation conditional.",
     "result": "A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD 0.60 per complete four-GPU instance-hour; the estimate is 2-4 instance-hours and USD 1.20-2.40. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred."
   },
   "schema_version": "myis.phase-task-report.v1",
@@ -2035,13 +2457,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
+    "program_state": "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
     "task": "A1.2"
   },
   "status": "planned",
   "supported_claims": [
     {
-      "claim": "The preserved v1-v6 contracts validate, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), the immutable v2 fixture records 4 synthetic workers, and v7 same-instance repair preparation is same_instance_repair_prepared_preflight_pending. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree, requires a fresh repair root and bytecode suppression, and leaves continuation conditional.",
+      "claim": "The preserved v1-v8 contracts validate, the earlier CPU-only Owner preflight remains blocked_owner_input with 10 blocker group(s), the immutable v2 fixture records 4 synthetic workers, and v9 execution-lifecycle repair preparation is execution_lifecycle_repair_prepared_preflight_pending. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage, requires a fresh repair root, and leaves continuation conditional.",
       "evidence": [
         "a12-gpu-execution-proposal",
         "a12-contract-scaffold-receipt",
@@ -2109,7 +2531,23 @@
         "a12-live-preflight-v7-bootstrap",
         "a12-live-preflight-v7-supplement-validator",
         "a12-live-preflight-v7-supplement-requirements",
-        "a12-live-preflight-v7-supplement-workflow"
+        "a12-live-preflight-v7-supplement-workflow",
+        "a12-live-preflight-v8-receipt",
+        "a12-live-preflight-v8-contract",
+        "a12-live-preflight-v8-schema",
+        "a12-live-preflight-v8-validator",
+        "a12-live-preflight-v8-owner-runbook",
+        "a12-live-preflight-v8-coordinator",
+        "a12-live-preflight-v8-bootstrap",
+        "a12-live-preflight-v9-receipt",
+        "a12-live-preflight-v9-contract",
+        "a12-live-preflight-v9-schema",
+        "a12-live-preflight-v9-validator",
+        "a12-live-preflight-v9-runtime",
+        "a12-live-preflight-v9-owner-runbook",
+        "a12-live-preflight-v9-coordinator",
+        "a12-live-preflight-v9-bootstrap",
+        "a12-live-preflight-v9-launcher"
       ]
     }
   ],

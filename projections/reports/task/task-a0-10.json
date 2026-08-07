@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
+      "content_sha256": "93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -227,7 +227,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
+      "sha256": "93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -298,9 +298,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-06T23:16:45Z",
-  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
-  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+  "generated_at": "2026-08-07T08:28:50Z",
+  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
+  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -327,10 +327,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
+      "sha256": "93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -357,7 +357,7 @@
       "uri": "outputs/audits/repository/repository-hygiene-a0.10-20260804.json"
     },
     "source_of_truth": {
-      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
+      "sha256": "4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e",
       "uri": "control/source-of-truth.yaml"
     },
     "source_verification_receipt": {
@@ -371,13 +371,13 @@
   },
   "interpretation": "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation.",
   "language": "en",
-  "last_material_update": "2026-08-06T23:16:45Z",
+  "last_material_update": "2026-08-07T08:28:50Z",
   "metric_references": [],
-  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
+  "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
   "objective": "Legacy code harvest and phase-ready scaffolding",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-10",
-  "report_sha256": "a9afa906b79acec32ee4775914193ac23a353ca3b82270b1483284c3e7a18b62",
+  "report_sha256": "6f9773a21358aba2aa6fb5657bb92222713e4d46a0e2db50785482d4444a3280",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -390,7 +390,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
+    "program_state": "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
     "task": "A0.10"
   },
   "status": "completed",

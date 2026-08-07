@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T23:16:45Z",
-  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
-  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+  "generated_at": "2026-08-07T08:28:50Z",
+  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
+  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
+      "sha256": "4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-06T23:16:45Z",
+  "last_material_update": "2026-08-07T08:28:50Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
+  "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
   "objective": "Protected owner-local CPU evidence import",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-3",
-  "report_sha256": "232c30d4b40e497acd16c10e0a965d76893ef6eed735f3a565191b22d94a4231",
+  "report_sha256": "595c3d2fdc33d8b81c4ee6a5946121cf5d306516b662b60fc44de3c2a7292f25",
   "report_type": "task",
   "result": {
     "decision": "completed",

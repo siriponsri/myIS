@@ -111,6 +111,45 @@
     "status": "live_correction_prepared_preflight_pending",
     "synthetic_preflight_only": true
   },
+  "armindex_a1_2_live_preflight_execution_lifecycle_repair": {
+    "active_correction": {
+      "fresh_remote_root": "/opt/myis/a1.2-v9",
+      "implementation_validation_complete": true,
+      "live_preflight_execution_pending": true,
+      "required_lifecycle_controls": [
+        "coordinated_failure_cancellation_and_reaping",
+        "checkpoint_records_completed_work_only",
+        "retry_safe_run_root_and_receipts",
+        "idempotent_safe_export_with_local_hash_validation",
+        "status_reports_liveness_exit_and_gpu_processes",
+        "owner_local_ttl_and_provider_destruction_proof_pending"
+      ],
+      "same_instance_reuse": true,
+      "source_remote_root": "/opt/myis/a1.2-v7"
+    },
+    "adopted_for_execution": false,
+    "contract_sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+    "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
+    "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+    "launch_allowed": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
+    "status": "execution_lifecycle_repair_prepared_preflight_pending",
+    "synthetic_preflight_only": true
+  },
   "armindex_a1_2_live_preflight_same_instance_repair": {
     "active_correction": {
       "fresh_remote_root_required": true,
@@ -189,6 +228,67 @@
     "source_receipt_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
     "status": "same_instance_repair_prepared_preflight_pending",
+    "synthetic_preflight_only": true
+  },
+  "armindex_a1_2_live_preflight_validation_complete_bundle_repair": {
+    "active_correction": {
+      "fresh_remote_root": "/opt/myis/a1.2-v8",
+      "historical_dockerfile_hash_only_nonexecuted": true,
+      "pythondontwritebytecode": true,
+      "reuse_only_after_sha256_validation": [
+        "models",
+        "wheelhouse",
+        "jobs",
+        "supplement_wheelhouse_v7"
+      ],
+      "same_instance_reuse": true,
+      "source_remote_root": "/opt/myis/a1.2-v7",
+      "upload_only": [
+        "validation_complete_frozen_code_bundle_v8"
+      ],
+      "validation_lineage_complete": true
+    },
+    "adopted_for_execution": false,
+    "contract_sha256": "d46193a975a7d3afdb3c6a3b5c038157e6bd246458bc054c043adc80c45ac020",
+    "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json",
+    "evidence_class": "live_engineering_preflight_packaging_repair",
+    "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+    "launch_allowed": false,
+    "platform": "linux/amd64",
+    "preserved_live_failures": [
+      {
+        "description": "Preserved failed-closed live engineering attempt.",
+        "disposition": "preserved_immutable_additive_repair",
+        "failure_id": "v6-initial-wheelhouse-missing-pydantic"
+      },
+      {
+        "description": "Preserved failed-closed live engineering attempt.",
+        "disposition": "preserved_immutable_additive_repair",
+        "failure_id": "v6-supplement-repair-mutated-pycache-tree"
+      },
+      {
+        "description": "Preserved failed-closed live engineering attempt.",
+        "disposition": "preserved_immutable_additive_repair",
+        "failure_id": "v7-frozen-bundle-missing-validation-lineage"
+      }
+    ],
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+    "status": "validation_complete_bundle_repair_prepared_preflight_pending",
     "synthetic_preflight_only": true
   },
   "armindex_a1_2_runtime_minimal_direct_base": {
@@ -350,7 +450,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51",
+  "dashboard_snapshot_sha256": "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -383,7 +483,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "e9708113c8ecf24cfc446d92f01a5dbf88ee170eef42f7cf75825cb4cbbc6ed8",
+  "obsidian_manifest_sha256": "756ba93f2f3fc25d0ef8a7b84d04aef3e764f49e7906a16d24d01bfc177974f5",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -421,8 +521,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
-  "read_model_sha256": "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51",
+  "read_model_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
+  "read_model_sha256": "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -430,7 +530,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
+  "source_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
   "status": "current",
   "system_experiment": "myis-system"
 }
