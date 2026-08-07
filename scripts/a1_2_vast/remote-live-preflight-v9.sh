@@ -66,7 +66,12 @@ spawn_child() {
   attempt_runtime heartbeat --pid "${pid}" >/dev/null
   (
     while kill -0 "${pid}" 2>/dev/null; do
-      attempt_runtime heartbeat --pid "${pid}" >/dev/null || exit 1
+      if ! attempt_runtime heartbeat --pid "${pid}" >/dev/null; then
+        # A worker may exit between kill -0 and the /proc identity read. Treat
+        # that narrow race as terminal only when the PID is truly gone.
+        kill -0 "${pid}" 2>/dev/null && exit 1
+        exit 0
+      fi
       sleep 15
     done
   ) &

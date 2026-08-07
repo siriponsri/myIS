@@ -276,6 +276,7 @@ def test_v9_launcher_has_immediate_failure_cleanup_and_no_measured_path() -> Non
     assert "completed[\"${pid}\"]" in script
     assert "trap cleanup EXIT INT TERM" in script
     assert "kill -TERM" in script and "record-process-exit" in script
+    assert "kill -0 \"${pid}\" 2>/dev/null && exit 1" in script
     assert "CUDA_VISIBLE_DEVICES" in script
     assert "measured" not in script.casefold()
 
