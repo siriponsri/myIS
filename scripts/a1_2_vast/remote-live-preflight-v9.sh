@@ -63,10 +63,14 @@ spawn_child() {
   children+=("${pid}")
   roles+=("${role}")
   attempt_runtime record-pid --pid "${pid}" --role "${role}" >/dev/null
-  attempt_runtime heartbeat --pid "${pid}" >/dev/null
+  if ! attempt_runtime heartbeat --pid "${pid}" >/dev/null 2>&1; then
+    # An injected failure is allowed to exit before its first heartbeat. Any
+    # still-live PID, however, indicates a real identity/runtime failure.
+    kill -0 "${pid}" 2>/dev/null && exit 1
+  fi
   (
     while kill -0 "${pid}" 2>/dev/null; do
-      if ! attempt_runtime heartbeat --pid "${pid}" >/dev/null; then
+      if ! attempt_runtime heartbeat --pid "${pid}" >/dev/null 2>&1; then
         # A worker may exit between kill -0 and the /proc identity read. Treat
         # that narrow race as terminal only when the PID is truly gone.
         kill -0 "${pid}" 2>/dev/null && exit 1
