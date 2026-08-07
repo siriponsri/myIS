@@ -1427,7 +1427,7 @@
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "content_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
       "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
       "explanation": "Binds the attempt-scoped synthetic lifecycle repair while keeping scientific launch, adoption, measured runs, and charged-resource counters closed.",
       "parent_artifact_hashes": {},
@@ -1445,7 +1445,7 @@
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+      "content_sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
       "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
       "explanation": "Binds v8 lineage, fresh-root reuse, PID identity, checkpoint, export, teardown, and synthetic-only controls.",
       "parent_artifact_hashes": {},
@@ -1571,7 +1571,7 @@
       "artifact_type": "tool",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+      "content_sha256": "af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4",
       "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
       "explanation": "Maps one arm per GPU, cancels siblings on failure, reaps children, and completes only after same-attempt PASS.",
       "parent_artifact_hashes": {},
@@ -1990,12 +1990,12 @@
     },
     {
       "artifact_id": "a12-live-preflight-v9-receipt",
-      "sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
     },
     {
       "artifact_id": "a12-live-preflight-v9-contract",
-      "sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+      "sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
       "uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json"
     },
     {
@@ -2030,7 +2030,7 @@
     },
     {
       "artifact_id": "a12-live-preflight-v9-launcher",
-      "sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+      "sha256": "af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4",
       "uri": "scripts/a1_2_vast/remote-live-preflight-v9.sh"
     }
   ],
@@ -2146,9 +2146,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-07T08:28:50Z",
-  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
-  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+  "generated_at": "2026-08-07T09:20:54Z",
+  "generated_from_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -2274,7 +2274,7 @@
       "sha256": "93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+    "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2291,7 +2291,7 @@
   },
   "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The additive v9 repair binds attempt identity, PID/start-time liveness, durable checkpoint semantics, adapter-level Qwen measurement, retry-safe export, and verified teardown before live synthetic execution. It does not establish retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse.",
   "language": "en",
-  "last_material_update": "2026-08-07T08:28:50Z",
+  "last_material_update": "2026-08-07T09:20:54Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -2386,7 +2386,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "657036ee37dcedc9d91355eb6bcb80e1ad84f42caaa1603510f41e5784a895d4",
+  "report_sha256": "52f2c9e905066ee498f2c475870f28fb974d9eae725f21ceb2961a548e3f3d0f",
   "report_type": "phase",
   "result": {
     "decision": "active",

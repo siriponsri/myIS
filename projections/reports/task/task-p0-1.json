@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T08:28:50Z",
-  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
-  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+  "generated_at": "2026-08-07T09:20:54Z",
+  "generated_from_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,7 +108,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+    "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
     "source_of_truth": {
       "sha256": "4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e",
       "uri": "control/source-of-truth.yaml"
@@ -116,13 +116,13 @@
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-07T08:28:50Z",
+  "last_material_update": "2026-08-07T09:20:54Z",
   "metric_references": [],
   "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
   "objective": "Deterministic kernel and schema contracts",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-1",
-  "report_sha256": "9191e4ae4185002beec3b21675396502486687a9b26317bd34288f5a6e5e790a",
+  "report_sha256": "5e800b69dd484e915851887e565bb40f9cb71f96bc7ad09b79708b86a6c1007c",
   "report_type": "task",
   "result": {
     "decision": "completed",

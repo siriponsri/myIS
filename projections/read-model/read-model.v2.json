@@ -722,13 +722,13 @@
         "bootstrap_sha256": "c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358",
         "bootstrap_uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh",
         "claim_boundary": "synthetic execution-lifecycle repair only; no measured retrieval or scientific result",
-        "contract_self_sha256": "e1baeed1a2eb7e804213f0bdd62dc47af6f16ebb725082b609e13df1f9613060",
-        "contract_sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+        "contract_self_sha256": "8858d3b42644f6ab3ba0f7d1ef4aaf5fb88bf1fd15c8ef99223b20cab96b7986",
+        "contract_sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
         "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
         "coordinator_sha256": "b3651b77c06c06dda54169e31fb880261cf9db0b553a3dcf004d592f09ebafce",
         "coordinator_uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1",
         "launch_allowed": false,
-        "launcher_sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+        "launcher_sha256": "af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4",
         "launcher_uri": "scripts/a1_2_vast/remote-live-preflight-v9.sh",
         "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
         "owner_runbook_sha256": "57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc",
@@ -739,8 +739,8 @@
           "measured_runs": 0,
           "selection_accesses": 0
         },
-        "receipt_self_sha256": "a6026125f246caf03909adae00a9a373a83b7f9df768c5b6ae5ffe9ac5332958",
-        "receipt_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+        "receipt_self_sha256": "d6948ce51b70f80408a3ed71fc0650a918b9299e7ceb57c3b49966c53d43e6d6",
+        "receipt_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
         "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
         "resource_counters": {
           "charged_usd": 0,
@@ -1617,7 +1617,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-07T08:28:50Z",
+  "generated_at": "2026-08-07T09:20:54Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -2525,7 +2525,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
+  "projection_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2569,8 +2569,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
-  "read_model_sha256": "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df",
+  "read_model_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "read_model_sha256": "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2703,7 +2703,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+  "source_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
   "tasks": [
     {
       "evidence_ids": [],

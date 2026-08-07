@@ -128,7 +128,7 @@
       "source_remote_root": "/opt/myis/a1.2-v7"
     },
     "adopted_for_execution": false,
-    "contract_sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+    "contract_sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
     "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
     "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
     "launch_allowed": false,
@@ -145,7 +145,7 @@
       "paid_api_calls": 0
     },
     "scientific_authority": false,
-    "source_receipt_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+    "source_receipt_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
     "status": "execution_lifecycle_repair_prepared_preflight_pending",
     "synthetic_preflight_only": true
@@ -450,7 +450,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df",
+  "dashboard_snapshot_sha256": "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -483,7 +483,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "756ba93f2f3fc25d0ef8a7b84d04aef3e764f49e7906a16d24d01bfc177974f5",
+  "obsidian_manifest_sha256": "3cec5cfe323e8bb958a314127875732f1df99a131a4ef71821f75a46b6b1aac6",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -521,8 +521,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
-  "read_model_sha256": "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df",
+  "read_model_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "read_model_sha256": "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -530,7 +530,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+  "source_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
   "status": "current",
   "system_experiment": "myis-system"
 }

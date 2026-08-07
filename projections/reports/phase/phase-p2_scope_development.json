@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-07T08:28:50Z",
-  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
-  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+  "generated_at": "2026-08-07T09:20:54Z",
+  "generated_from_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+    "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T08:28:50Z",
+  "last_material_update": "2026-08-07T09:20:54Z",
   "metric_references": [],
   "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "074ebe30b6f6e35116a1f8cff006737201a2a1f8df8e1d3cb5e5018e7a188ba3",
+  "report_sha256": "3de4ecb8f67abf5cdcc7cdacb79165a31eef9df2fe76e5373ca64f7c79147803",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

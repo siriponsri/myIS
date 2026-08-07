@@ -1337,7 +1337,7 @@
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "content_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
       "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
       "explanation": "Binds the attempt-scoped synthetic lifecycle repair while keeping scientific launch, adoption, measured runs, and charged-resource counters closed.",
       "parent_artifact_hashes": {},
@@ -1355,7 +1355,7 @@
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+      "content_sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
       "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
       "explanation": "Binds v8 lineage, fresh-root reuse, PID identity, checkpoint, export, teardown, and synthetic-only controls.",
       "parent_artifact_hashes": {},
@@ -1481,7 +1481,7 @@
       "artifact_type": "tool",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+      "content_sha256": "af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4",
       "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
       "explanation": "Maps one arm per GPU, cancels siblings on failure, reaps children, and completes only after same-attempt PASS.",
       "parent_artifact_hashes": {},
@@ -1875,12 +1875,12 @@
     },
     {
       "artifact_id": "a12-live-preflight-v9-receipt",
-      "sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
     },
     {
       "artifact_id": "a12-live-preflight-v9-contract",
-      "sha256": "5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b",
+      "sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
       "uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json"
     },
     {
@@ -1915,7 +1915,7 @@
     },
     {
       "artifact_id": "a12-live-preflight-v9-launcher",
-      "sha256": "5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954",
+      "sha256": "af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4",
       "uri": "scripts/a1_2_vast/remote-live-preflight-v9.sh"
     }
   ],
@@ -2061,9 +2061,9 @@
       "status": "preserved_and_repaired_preflight_pending"
     }
   ],
-  "generated_at": "2026-08-07T08:28:50Z",
-  "generated_from_revision": "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e",
-  "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+  "generated_at": "2026-08-07T09:20:54Z",
+  "generated_from_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -2189,7 +2189,7 @@
       "sha256": "93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66",
+    "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2206,7 +2206,7 @@
   },
   "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The additive v9 repair closes the unsafe process, checkpoint, Qwen adapter-path, status, export, and teardown behaviors before live synthetic preflight. The active path has no custom image or nested-container step, installs dependencies offline, and forbids runtime model download. Live adapter parity, Qwen length, GPU feasibility, provider quote, safe return, and provider destruction/TTL proof remain pending live evidence. Instance continuation remains conditional on the separate Owner policy and next PLAN authorization.",
   "language": "en",
-  "last_material_update": "2026-08-07T08:28:50Z",
+  "last_material_update": "2026-08-07T09:20:54Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -2423,7 +2423,7 @@
       "n": 1,
       "name": "vast_v9_required_lifecycle_control_count",
       "scope": "A1.2",
-      "source_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "source_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
       "split": "engineering_preflight",
       "value": 6
@@ -2434,7 +2434,7 @@
       "n": 1,
       "name": "vast_v9_implementation_validation_complete",
       "scope": "A1.2",
-      "source_sha256": "e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36",
+      "source_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
       "split": "engineering_preflight",
       "value": 1
@@ -2444,7 +2444,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "6492919329b5fcf745448b4e70cfdddd2aa4b09300dd6acdda4bbcb19482da67",
+  "report_sha256": "5f499fd56520b294ac01d1562eedb6c9e52629efb48487a7e48ad477f3429d99",
   "report_type": "task",
   "result": {
     "decision": "blocked",

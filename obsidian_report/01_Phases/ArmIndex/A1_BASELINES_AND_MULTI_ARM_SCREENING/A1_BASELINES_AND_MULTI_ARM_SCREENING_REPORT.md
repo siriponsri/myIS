@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e"
-read_model_sha256: "2c455ffee376a71b80957287ea9f5e0326e3fddf8c37545ab9e65e15fe4293df"
-source_commit: "4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66"
+read_model_revision: "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa"
+read_model_sha256: "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8"
+source_commit: "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "live_engineering_preflight_execution_lifecycle_repair"
 scientific_authority: false
 claim_boundary: "synthetic execution-lifecycle repair only; no measured retrieval or scientific result"
-generated_from_revision: "a83946815ca767b28971373f48300868662830e9f4beb73b7e40111ad4531e5e"
-last_material_update: "2026-08-07T08:28:50Z"
+generated_from_revision: "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa"
+last_material_update: "2026-08-07T09:20:54Z"
 next_authorized_action: "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-07T08:28:50Z"
-updated_at: "2026-08-07T08:28:50Z"
+created_at: "2026-08-07T09:20:54Z"
+updated_at: "2026-08-07T09:20:54Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -48,7 +48,7 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8`
-- `git_commit`: 4e816f771f46b3e46ad1bb37f1c4c28ba97f8b66
+- `git_commit`: cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -189,15 +189,15 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 beginner Owner validation-complete bundle runbook v8 | `runbook` | `live_engineering_preflight_packaging_repair` | `docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V8.md` | `8eab91cf0082dc1f165c17183016b4a8c5a3b971cbe91bcd0b973dc71b19a3fd` | `validated` |
 | A1.2 validation-complete bundle coordinator v8 | `tool` | `live_engineering_preflight_packaging_repair` | `scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV8.ps1` | `142d78db8e1407cad23385e7e837ee3e50383e4914818190f53c73b3cc045d67` | `validated` |
 | A1.2 validation-complete bundle bootstrap v8 | `tool` | `live_engineering_preflight_packaging_repair` | `scripts/a1_2_vast/remote-bootstrap-direct-base-v8.sh` | `d01f70b7c4a1abdacf6b5045876cbd011010104643dda594f9c8b84a5ba499e4` | `validated` |
-| A1.2 execution-lifecycle repair receipt v9 | `receipt` | `live_engineering_preflight_execution_lifecycle_repair` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json` | `e6d26e99435f5cfc8cf9db925fdbd90016843480de4196f76f236415b4381b36` | `validated` |
-| A1.2 execution-lifecycle repair contract v9 | `contract` | `live_engineering_preflight_execution_lifecycle_repair` | `control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json` | `5b7f975fe9305d98a797dee67c8d79f4dc120ad50e0fa4020e419c79615e390b` | `validated` |
+| A1.2 execution-lifecycle repair receipt v9 | `receipt` | `live_engineering_preflight_execution_lifecycle_repair` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json` | `2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b` | `validated` |
+| A1.2 execution-lifecycle repair contract v9 | `contract` | `live_engineering_preflight_execution_lifecycle_repair` | `control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json` | `25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f` | `validated` |
 | A1.2 execution-lifecycle repair schema v9 | `schema` | `live_engineering_preflight_execution_lifecycle_repair` | `schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json` | `945188d828eccda02dc841f53176b92e6ba74cc436c45f624ed2a10f193041a0` | `validated` |
 | A1.2 execution-lifecycle contract validator v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `src/myis_research/armindex/a1_2_live_preflight_execution_v9.py` | `8b8d29d08f4939cc96131e4265e0760dcb986c1aa1851cef3c8c7957f264ad3f` | `validated` |
 | A1.2 attempt-scoped live runtime v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py` | `ab786e2b34457a9ba226009bfae618e30a0f398053fd2a0f0125b77acfeb78a2` | `validated` |
 | A1.2 beginner Owner execution-lifecycle runbook v9 | `runbook` | `live_engineering_preflight_execution_lifecycle_repair` | `docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md` | `57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc` | `validated` |
 | A1.2 execution-lifecycle coordinator v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1` | `b3651b77c06c06dda54169e31fb880261cf9db0b553a3dcf004d592f09ebafce` | `validated` |
 | A1.2 execution-lifecycle bootstrap v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh` | `c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358` | `validated` |
-| A1.2 four-GPU synthetic launcher v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-live-preflight-v9.sh` | `5053af3b29006b1b7ca1cacc3dff1c95f6e9ee874434f2e61fcf92ce5754e954` | `validated` |
+| A1.2 four-GPU synthetic launcher v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-live-preflight-v9.sh` | `af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4` | `validated` |
 
 ## Metrics
 
