@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T10:14:03Z",
-  "generated_from_revision": "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944",
-  "git_commit": "1cdff09343121b26cda968263d6a83cb403fba28",
+  "generated_at": "2026-08-07T11:52:12Z",
+  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
+  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "1cdff09343121b26cda968263d6a83cb403fba28",
+    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
     "source_of_truth": {
       "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-07T10:14:03Z",
+  "last_material_update": "2026-08-07T11:52:12Z",
   "metric_references": [],
   "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
   "objective": "Manuscript and release package",
   "phase_id": "P4_PUBLICATION",
   "report_id": "task-p4-1",
-  "report_sha256": "e6545996999f08ebcc50b0b266ddde8e313d81295985af8ac2a6bc34ec10d38d",
+  "report_sha256": "008fd2bb03082a7345a15867df8d995cd2fa83bc679db0bad6851cc89aabb808",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

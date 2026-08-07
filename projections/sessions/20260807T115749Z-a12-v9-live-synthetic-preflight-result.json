@@ -1,0 +1,142 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260807T115749Z-a12-v9-live-synthetic-preflight-result",
+  "run_id": "a12-v9-20260807-06",
+  "goal_id": "A1.2_V9_LIVE_SYNTHETIC_PREFLIGHT",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-07T11:57:49Z",
+  "scope": "Record the completed A1.2 v9 live synthetic four-RTX3090 preflight, its aggregate-safe result and lifecycle evidence, the unchanged scientific locks, and the pending Owner disposition without opening protected data or starting measured retrieval.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-07",
+      "scope": "Run the bounded A1.2 synthetic preflight on the Owner-opened Vast four-RTX3090 instance, collect all safe artifacts locally, preserve the USD 18 common-screen, USD 23 A1, and USD 100 campaign hard stops, and use the continuation policy after preflight. Measured retrieval, optimization, Selection, Final, paid API work, protected-data transfer, and model-weight changes remain unauthorized."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "dirty_paths": []
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner authorized a bounded live A1.2 synthetic preflight on the opened Vast four-RTX3090 instance while keeping measured retrieval and scientific execution locked.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+          "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "locator": "provider, evidence_class, scientific_authority, launch_allowed, and adopted_for_execution"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "Attempt a12-v9-20260807-06 passed synthetic adapter checks for ARM-02 through ARM-05 on four distinct NVIDIA GeForce RTX 3090 GPUs; the observed provider quote was USD 0.656 per instance-hour and fit the frozen hard stops.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+          "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "locator": "attempt_id, status, arms, and provider"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "The frozen ARM-05 SentenceTransformer adapter path passed a bounded 32,768-token maximum-input measurement on one RTX 3090 with FP16 and batch size one; this is engineering capacity evidence only.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+          "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "locator": "qwen.measured_adapter_max_input_tokens, qwen.measurement_scope, and claim_boundary"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Checkpoint/resume and expected-failure handling passed, a 72-member hash-validated safe export was collected locally, and all registered guest processes were reaped before export completion.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+          "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "locator": "lifecycle.checkpoint_resume, lifecycle.injected_failure, lifecycle.safe_export_member_count, and lifecycle.guest_process_teardown"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The v9 result has live engineering synthetic-preflight authority only: launch and adoption remain false, and measured-run, Selection, Final, and charged-USD counters remain zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+          "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "locator": "evidence_class, scientific_authority, claim_boundary, launch_allowed, adopted_for_execution, measured_runs, selection_accesses, final_accesses, and charged_usd"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "decision",
+      "provenance": "owner-revised",
+      "summary": "The Owner continuation policy permits retaining the unchanged instance only for a separately authorized next PLAN goal while identity, artifact hashes, quote and budget, TTL and provider destroy path, and the protected-data boundary remain valid; otherwise destruction is the default.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json",
+          "sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+          "locator": "allowed_post_preflight_instruction, continuation_requires, fallback_to_destroy_if, and does_not_authorize"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-instance-disposition",
+      "provenance": "agent-observed",
+      "summary": "Provider destruction or a policy-valid continuation decision remains pending; provider-side absence has not been proved.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "same-instance-continuation-prerequisites",
+      "provenance": "agent-proposed",
+      "summary": "Before reusing the instance, the Owner must prove an active local TTL watchdog and provider destroy path, reconfirm the live quote and remaining budget in Vast, and separately authorize the exact next PLAN goal. No GPU work may begin from retention alone.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
