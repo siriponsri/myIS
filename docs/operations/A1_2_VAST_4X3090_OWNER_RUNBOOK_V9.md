@@ -19,7 +19,7 @@ $VastHost = '<VAST_SSH_HOST>'
 $VastPort = <VAST_SSH_PORT>
 $VastUser = 'root'
 $SshKey = '<LOCAL_PRIVATE_KEY_PATH>'
-$AttemptId = 'a12-v9-20260807-01'
+$AttemptId = 'a12-v9-20260807-03'
 ```
 
 The attempt ID must use lowercase letters, digits, dots, underscores, or
