@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T15:03:37Z",
-  "generated_from_revision": "9bda9e25522585ac0bab7765907c2d1a5f5f6c673dfc1b9c3b5e31c7feff757b",
-  "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
+  "generated_at": "2026-08-07T15:32:01Z",
+  "generated_from_revision": "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a",
+  "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
+    "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T15:03:37Z",
+  "last_material_update": "2026-08-07T15:32:01Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Complementarity and HarnessOpt",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-2",
-  "report_sha256": "adb166e70a620c9a9ef89c4d8ad4030f89e4a4cb6cad04a34ccc8ec9ab24bc35",
+  "report_sha256": "15146bde37df5a233fc8759b43f0e5e628dee74162c1ec3f41082984c6ee559a",
   "report_type": "task",
   "result": {
     "decision": "planned",

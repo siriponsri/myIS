@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T15:03:37Z",
-  "generated_from_revision": "9bda9e25522585ac0bab7765907c2d1a5f5f6c673dfc1b9c3b5e31c7feff757b",
-  "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
+  "generated_at": "2026-08-07T15:32:01Z",
+  "generated_from_revision": "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a",
+  "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
+    "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
     "source_of_truth": {
       "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-07T15:03:37Z",
+  "last_material_update": "2026-08-07T15:32:01Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "b0c9c412f42b06cc804bea47e90e26e39e28a17d2f1579fc52286dae28662d36",
+  "report_sha256": "7a76777c1875d57f17344458b6ecf4c71c9a9eda2c66450c0fe702dbb27ddac7",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

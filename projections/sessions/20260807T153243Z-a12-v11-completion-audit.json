@@ -1,0 +1,247 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260807T153243Z-a12-v11-completion-audit",
+  "run_id": null,
+  "goal_id": "A1.2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11_COMPLETION_AUDIT",
+  "started_at_utc": "2026-08-07T15:19:28Z",
+  "ended_at_utc": "2026-08-07T15:32:43Z",
+  "scope": "Record the Owner-confirmed provider destruction, reconcile stale A1.2 v11 next-action text in the Research agent contract and generated reports, and preserve the launch-locked local-only boundary.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner confirmation in the active Codex thread on 2026-08-07",
+      "scope": "Record that the previous Vast instance was destroyed and continue the already-authorized local-only v11 completion work without provider contact, GPU work, or measured retrieval."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+    "dirty_paths": [
+      "projections/sessions/20260807T153243Z-a12-v11-completion-audit.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner confirmed that the previous Vast instance was destroyed; the existing v10 provider-closeout receipt remains the canonical aggregate-safe authority.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+          "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+          "locator": "provider_closeout and claim_boundary"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "A completion audit found that the Research agent contract still named a historical v3 SSH/Vast preflight while PLAN, HANDOFF, and source of truth already named the local-only v11 review boundary.",
+      "evidence_refs": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "337f093f4c70c547522b4b47f2b23b95cf00bf4e99d3d0200f4133092e6ca546",
+          "locator": "Mandatory reporting policy and Closeout"
+        },
+        {
+          "path": "control/source-of-truth.yaml",
+          "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
+          "locator": "a1_2_scientific_execution_adoption_request_v11"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The Obsidian generator now derives generic-note next-action metadata from the validated ArmIndex read model and fails closed when that command is absent; regression tests bind HOME and the generic ArmIndex home to the same value.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/report_cli.py",
+          "sha256": "a8d092da304d4534b468f0b59b1440b6f919209497c1516eb553899125c1fd6f",
+          "locator": "_obsidian_vault_contents"
+        },
+        {
+          "path": "tests/test_obsidian_report_contract.py",
+          "sha256": "3d957f9c7159411353be4497edeb11f4161fb80f846eec0f0f510951db6db81d",
+          "locator": "generic next-command and missing-command regression tests"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Generated Obsidian and MLflow-safe projections were rebuilt from one unchanged read model and passed two deterministic drift checks.",
+      "evidence_refs": [
+        {
+          "path": "obsidian_report/00_System/Generated/generated-manifest.json",
+          "sha256": "2795caeb4befd2df48880d5f274981ed0b3fd1a883f5b2d91e8e80b496ded816",
+          "locator": "generated manifest and manifest_sha256"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "9e663aeb72b8cf41c5db18bc621a2eb2fc989957bd4bdc028460a4b2a45c5e42",
+          "locator": "projection_events and projection identities"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The v11 request remains unadopted and launch-locked, with measured, charged-resource, Selection, and Final counters unchanged at zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+          "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+          "locator": "authorization and counters"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The next authorized action is local review of unchanged v11 and preparation of its adoption inputs; the destroyed provider instance cannot be reused and no replacement provider may be contacted under this goal.",
+      "evidence_refs": [
+        {
+          "path": "obsidian_report/HOME.md",
+          "sha256": "113291ecdb23eab35196011e70224108f742e27816d34a7ca7db798742a301da",
+          "locator": "next_authorized_action frontmatter"
+        }
+      ],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-review-and-adoption-inputs",
+      "provenance": "agent-observed",
+      "summary": "The unchanged v11 request still requires the clean execution identity, protected Owner-local handoff and transfer receipts, 25 compiled-program bindings, fresh provider admission evidence, whole-workload budget admission, watchdog and destroy checks, and explicit later adoption.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "task_id": "A1.2",
+    "gate_id": "D1_START_CAMPAIGN",
+    "gate_status": "pending"
+  },
+  "owner_brief_th": "Owner ยืนยันว่า Vast instance เดิมถูกทำลายแล้ว การตรวจปิดงานพบและแก้ข้อความ next action เก่าจนเอกสารกับ generated reports ตรงกับ v11 แล้ว งานยังเป็น local-only และยังห้ามเปิด provider หรือเริ่ม measured retrieval",
+  "owner_actions": [
+    {
+      "action_id": "review-unchanged-v11",
+      "priority": "required",
+      "action_th": "ตรวจทานคำขอ v11 เดิมและเตรียม adoption inputs บนเครื่อง local ใน goal ถัดไป",
+      "reason_th": "ต้องผูก execution identity ข้อมูลส่งมอบแบบ Owner-local โปรแกรมทั้ง 25 รายการ budget และ provider admission ให้ครบก่อนมี adoption receipt",
+      "blocking_gate": null
+    },
+    {
+      "action_id": "keep-provider-closed",
+      "priority": "required",
+      "action_th": "ยังไม่เปิดหรือติดต่อ Vast instance ใหม่ภายใต้ goal นี้",
+      "reason_th": "v11 ยังมี launch_allowed=false และ adopted_for_execution=false จึงยังไม่มีสิทธิ์ใช้ GPU หรือเริ่ม scientific execution",
+      "blocking_gate": null
+    }
+  ],
+  "gate_request": {
+    "gate_id": "D1_START_CAMPAIGN",
+    "state": "draft",
+    "summary_th": "บันทึกการปิด provider เดิมและแก้เอกสารให้ตรงกับ v11 ภายใต้สิทธิ์ D1 เดิม โดยไม่สร้าง micro-gate และไม่ขอ D2 หรือ D3",
+    "blocking_reason_th": null,
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "owner-local-adoption-inputs",
+        "description_th": "หลักฐาน execution bundle, protected handoff, transfer และ compiled-program bindings ที่เก็บแบบ Owner-local",
+        "purpose_th": "ยืนยัน exact execution bytes และขอบเขตข้อมูลก่อนพิจารณา adoption โดยไม่ส่ง protected data เข้า Git"
+      },
+      {
+        "resource_id": "fresh-provider-admission-later",
+        "description_th": "ข้อมูล instance ใหม่ all-fee quote budget fit watchdog และ destroy path เมื่อมี goal ที่อนุญาตในภายหลัง",
+        "purpose_th": "ป้องกันการใช้ instance หรือ quote เก่าและหยุดก่อนใช้จ่ายหากเกิน hard stop"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "completion-lineage-audit",
+        "status": "PASS",
+        "summary": "All v11 request, receipt, ledger, lineage, workload, budget, and provider-admission bindings passed; the one stale documentation finding was reconciled."
+      },
+      {
+        "check_id": "focused-report-tests",
+        "status": "PASS",
+        "summary": "All 15 focused Obsidian/report contract tests passed after synchronization."
+      },
+      {
+        "check_id": "report-sync-check-twice",
+        "status": "PASS",
+        "summary": "Two deterministic report checks reported no read-model or generated-report drift."
+      },
+      {
+        "check_id": "brain-pointer-note",
+        "status": "PASS",
+        "summary": "The AGENTS-linked pointer-only Brain note and MOC link were validated and committed under the serial-writer lease."
+      },
+      {
+        "check_id": "protected-boundary",
+        "status": "PASS",
+        "summary": "No provider contact, GPU work, measured retrieval, protected payload access, paid API, Selection, Final, credential handling, or model-weight change occurred."
+      }
+    ],
+    "changed_files": [
+      "AGENTS.md",
+      "src/myis_research/report_cli.py",
+      "tests/test_obsidian_report_contract.py",
+      "obsidian_report",
+      "mlflow/generated/archive-index.v2.json",
+      "projections/sync-receipt.v2.json"
+    ],
+    "untouched_protected_surfaces": [
+      "Owner-local protected corpus and evaluator store",
+      "qrels, split membership, query identifiers, token maps, rankings, and per-query outcomes",
+      "credentials, private keys, access material, and raw provider payloads",
+      "GPU, measured retrieval, optimization, Selection, Final, paid API, and model-weight surfaces",
+      "immutable v1-v10 contracts, receipts, and historical evidence"
+    ]
+  },
+  "corrections": []
+}

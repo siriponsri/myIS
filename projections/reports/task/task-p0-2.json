@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T15:03:37Z",
-  "generated_from_revision": "9bda9e25522585ac0bab7765907c2d1a5f5f6c673dfc1b9c3b5e31c7feff757b",
-  "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
+  "generated_at": "2026-08-07T15:32:01Z",
+  "generated_from_revision": "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a",
+  "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,7 +108,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "04475017e348df16dc3bde46d208ad4607c56483",
+    "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
     "source_of_truth": {
       "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
       "uri": "control/source-of-truth.yaml"
@@ -116,13 +116,13 @@
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-07T15:03:37Z",
+  "last_material_update": "2026-08-07T15:32:01Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "8b9b9a81313269ad7d4bb3d63ce5094c028ff8d822d1837f6616b95ca4d9c55b",
+  "report_sha256": "24565ffb143d175d3d27a95cb6f634b092245ba8cd6550037e2ed9c9178530cf",
   "report_type": "task",
   "result": {
     "decision": "completed",
