@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
+      "content_sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
+      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T16:50:33Z",
-  "generated_from_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
-  "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+  "generated_at": "2026-08-06T23:16:45Z",
+  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
+  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,21 +108,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
     "source_of_truth": {
-      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
+      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-06T16:50:33Z",
+  "last_material_update": "2026-08-06T23:16:45Z",
   "metric_references": [],
-  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "c82933e050fd3477359fdc368cbf979645bac38ffccae032fa79a74e6cb595e8",
+  "report_sha256": "dab78163022d98afcfbb89b2dfc2319622451dd46eb8ab58375bf6cd08746cc0",
   "report_type": "task",
   "result": {
     "decision": "completed",

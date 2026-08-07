@@ -989,15 +989,321 @@
       "scientific_authority": false,
       "title": "A1.2 direct-base validator module v5",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "3918f0c6e9699a3c66de3f70d2c1efc1daead8e86f03647f4236ddb37cdab9a9",
+      "evidence_class": "live_engineering_preflight_correction",
+      "explanation": "Records only the additive direct-base container correction, live defects, synthetic-only boundary, and unchanged zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-correction.receipt.v6.json",
+      "scientific_authority": false,
+      "title": "A1.2 live-container correction receipt v6",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "29642d4d6a00f385e8a3fceedbf0c06c23ceae147f6da77a8bcd513ea1f420b0",
+      "evidence_class": "live_engineering_preflight_correction",
+      "explanation": "Binds the correction to the v5 lineage, official image manifest, safe exports, synthetic GPU checks, and hard-stop budget without authorizing scientific execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.live-preflight.v6.json",
+      "scientific_authority": false,
+      "title": "A1.2 live-container correction contract v6",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-schema",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "433391902514a7b6b2ba3fb7a1a4e53ae4b7f4b19f5caf28bbe5ad832ae1e5ed",
+      "evidence_class": "live_engineering_preflight_correction",
+      "explanation": "Defines the additive v6 receipt shape, false authorization flags, and zero measured counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-live-preflight-correction.v6.json",
+      "scientific_authority": false,
+      "title": "A1.2 live-container correction receipt schema v6",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-validator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d700afb1f6e0e4bd7d13bb3be2dd273c28f0030dcbf1e5549fa086324c782a19",
+      "evidence_class": "live_engineering_preflight_correction",
+      "explanation": "Fail-closed validation of v5 lineage, v6 bindings, receipt self-hash, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_live_preflight_revision.py",
+      "scientific_authority": false,
+      "title": "A1.2 live-container correction validator v6",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-preflight-module",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f84170f6744b6a9f31207331662328f383fa802dab1b80c26cdc7d4b0d9bddc2",
+      "evidence_class": "live_engineering_preflight_correction",
+      "explanation": "Implements synthetic-only runtime identity, adapter parity, Qwen length, and checkpoint/resume checks without protected evaluation inputs.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_live_preflight.py",
+      "scientific_authority": false,
+      "title": "A1.2 synthetic live preflight module v6",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-owner-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "355c22e34b7a6e44ddeea37a8cdb37a35dbf315fe29368bb4aa6ba98dcf2313d",
+      "evidence_class": "live_engineering_preflight_correction",
+      "explanation": "Documents the direct-base live preflight and safe artifact collection while preserving the launch lock.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V6.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner runbook v6",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-owner-instance-continuation-policy-v1",
+      "artifact_type": "decision",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+      "evidence_class": "owner_policy_for_engineering_continuity",
+      "explanation": "Keeps provider destruction as the default; continuation is possible only after complete safe preflight evidence, unchanged identity and budget, an active watchdog, and a separately authorized next PLAN goal.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json",
+      "scientific_authority": false,
+      "title": "A1.2 Owner conditional instance-continuation policy",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-receipt",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Preserves the v6 live failures, binds the same-instance repair, requires a fresh runtime root and bytecode suppression, and keeps every authorization flag false.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
+      "scientific_authority": false,
+      "title": "A1.2 same-instance repair receipt v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "590d8d196522078dc047eaa5e1c0a03e0ff93313719e2f6f2d10e9ed6be08c61",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Binds v6 lineage, the continuation policy, hash-validated staged reuse, the supplement wheelhouse workflow, and synthetic-only preflight behavior.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json",
+      "scientific_authority": false,
+      "title": "A1.2 same-instance repair contract v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-schema",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ba2fda966d828a0e86b8c64d25e69e569b490c70e6d4b8eddd6415939740c029",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Validates two preserved repair failures, bytecode suppression, false authorization flags, and zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-live-preflight-repair.v7.json",
+      "scientific_authority": false,
+      "title": "A1.2 same-instance repair receipt schema v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-validator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "17846d4691faa3d354fc19d9172bc3c0bf82bc3fb3d14289d4c5a64957e0d0f3",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Fail-closed validation of v6 lineage, same-instance repair bindings, fresh-root correction, and unchanged zero counters.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_live_preflight_repair_v7.py",
+      "scientific_authority": false,
+      "title": "A1.2 same-instance repair validator v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-owner-runbook",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "23e2aa879e3918fce840d23885108ba6eb9e48fdf7ea4874f072189fd1d5e060",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Documents v7 dry-run staging, structural verification, synthetic-only preflight, safe collection, default destruction, and conditional continuation.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md",
+      "scientific_authority": false,
+      "title": "A1.2 beginner Owner same-instance repair runbook v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-coordinator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "274e09a06b81ab2291a4683681d53d7265666392e1c025cedb96d0344fef2d58",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Stages only the new frozen code bundle and reuses prior staged inputs only after checksum validation.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV7.ps1",
+      "scientific_authority": false,
+      "title": "A1.2 same-instance repair coordinator v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-bootstrap",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a573987e368a325534e05c15cf3a8b3ed6b3d6f800d3120e4231a0c989fa9c6f",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Creates the fresh runtime root with bytecode suppression and verifies the reuse boundary before synthetic work.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v7.sh",
+      "scientific_authority": false,
+      "title": "A1.2 same-instance repair bootstrap v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-supplement-validator",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6ea824337585a972c543989bb792775f3597967ff736cc30dd547997d5798291",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Validates the hash-bound dependency supplement without network fallback.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "scripts/a1_2_vast/validate_preflight_supplement_v7.py",
+      "scientific_authority": false,
+      "title": "A1.2 preflight supplement validator v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-supplement-requirements",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8262320bc0541873a29cf0362566998dc7039e72d92a820f802a3bf8a0118fe6",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Records the small offline dependency supplement required after the preserved missing-pydantic failure.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt",
+      "scientific_authority": false,
+      "title": "A1.2 preflight supplement requirements v7",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-supplement-workflow",
+      "artifact_type": "workflow",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "3c397dcf9d2bac02924a2d64c4be1cdf30b54bcfea3ee558d9b650f089af4843",
+      "evidence_class": "live_engineering_preflight_repair",
+      "explanation": "Produces a Linux-compatible, checksum-bound supplement wheelhouse without models or protected data.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml",
+      "scientific_authority": false,
+      "title": "A1.2 supplement wheelhouse workflow v7",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "direct_official_base_image_path_only_no_vast_contact_no_measured_execution",
+  "claim_boundary": "same-instance synthetic preflight repair only; no measured retrieval or scientific result",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1 engineering preparation is current through v5 with 21 live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.",
+    "reason": "A1 engineering preparation is current through v7 with 2 preserved live repair failure(s); the owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero.",
     "status": "active"
   },
-  "evidence_class": "engineering_preflight_revision",
+  "evidence_class": "live_engineering_preflight_repair",
   "evidence_links": [
     {
       "artifact_id": "a11-adapter-task-receipt",
@@ -1273,6 +1579,91 @@
       "artifact_id": "a12-direct-base-v5-module",
       "sha256": "75e8e3e94a0d2daf0337621475148d2be2e2e01f15a66153accb6e60b58cde0d",
       "uri": "src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-receipt",
+      "sha256": "3918f0c6e9699a3c66de3f70d2c1efc1daead8e86f03647f4236ddb37cdab9a9",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-correction.receipt.v6.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-contract",
+      "sha256": "29642d4d6a00f385e8a3fceedbf0c06c23ceae147f6da77a8bcd513ea1f420b0",
+      "uri": "control/armindex/a1.2/execution-contract.live-preflight.v6.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-schema",
+      "sha256": "433391902514a7b6b2ba3fb7a1a4e53ae4b7f4b19f5caf28bbe5ad832ae1e5ed",
+      "uri": "schemas/armindex/a1.2-live-preflight-correction.v6.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-validator",
+      "sha256": "d700afb1f6e0e4bd7d13bb3be2dd273c28f0030dcbf1e5549fa086324c782a19",
+      "uri": "src/myis_research/armindex/a1_2_live_preflight_revision.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-preflight-module",
+      "sha256": "f84170f6744b6a9f31207331662328f383fa802dab1b80c26cdc7d4b0d9bddc2",
+      "uri": "src/myis_research/armindex/a1_2_live_preflight.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v6-owner-runbook",
+      "sha256": "355c22e34b7a6e44ddeea37a8cdb37a35dbf315fe29368bb4aa6ba98dcf2313d",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V6.md"
+    },
+    {
+      "artifact_id": "a12-owner-instance-continuation-policy-v1",
+      "sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+      "uri": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-receipt",
+      "sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-contract",
+      "sha256": "590d8d196522078dc047eaa5e1c0a03e0ff93313719e2f6f2d10e9ed6be08c61",
+      "uri": "control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-schema",
+      "sha256": "ba2fda966d828a0e86b8c64d25e69e569b490c70e6d4b8eddd6415939740c029",
+      "uri": "schemas/armindex/a1.2-live-preflight-repair.v7.json"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-validator",
+      "sha256": "17846d4691faa3d354fc19d9172bc3c0bf82bc3fb3d14289d4c5a64957e0d0f3",
+      "uri": "src/myis_research/armindex/a1_2_live_preflight_repair_v7.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-owner-runbook",
+      "sha256": "23e2aa879e3918fce840d23885108ba6eb9e48fdf7ea4874f072189fd1d5e060",
+      "uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-coordinator",
+      "sha256": "274e09a06b81ab2291a4683681d53d7265666392e1c025cedb96d0344fef2d58",
+      "uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV7.ps1"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-bootstrap",
+      "sha256": "a573987e368a325534e05c15cf3a8b3ed6b3d6f800d3120e4231a0c989fa9c6f",
+      "uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v7.sh"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-supplement-validator",
+      "sha256": "6ea824337585a972c543989bb792775f3597967ff736cc30dd547997d5798291",
+      "uri": "scripts/a1_2_vast/validate_preflight_supplement_v7.py"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-supplement-requirements",
+      "sha256": "8262320bc0541873a29cf0362566998dc7039e72d92a820f802a3bf8a0118fe6",
+      "uri": "containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt"
+    },
+    {
+      "artifact_id": "a12-live-preflight-v7-supplement-workflow",
+      "sha256": "3c397dcf9d2bac02924a2d64c4be1cdf30b54bcfea3ee558d9b650f089af4843",
+      "uri": ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml"
     }
   ],
   "failure_recovery_references": [
@@ -1387,13 +1778,13 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-06T16:50:33Z",
-  "generated_from_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
-  "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+  "generated_at": "2026-08-06T23:16:45Z",
+  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
+  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering_preflight_revision",
+    "evidence_class": "live_engineering_preflight_repair",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -1447,7 +1838,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+      "status": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -1512,10 +1903,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
+      "sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -1526,13 +1917,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
+      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, then binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20 while removing custom-image and nested-container steps. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization.",
+  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, and adds v7 same-instance repair controls for the missing-pydantic wheelhouse failure and frozen-tree bytecode mutation. It does not establish live hardware readiness, retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse.",
   "language": "en",
-  "last_material_update": "2026-08-06T16:50:33Z",
+  "last_material_update": "2026-08-06T23:16:45Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -1623,16 +2014,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "7e402ddaec66672378d76cea3de0968e3b19637350b168c7478d6fb8be1db91e",
+  "report_sha256": "54639127e1584249d52aed7a7fb0cec736074e8bf22728454b725f2cdd4ecf96",
   "report_type": "phase",
   "result": {
     "decision": "active",
-    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v5 direct-base preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.",
-    "result": "A1 engineering preparation is current through v5 with 21 live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
+    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v6 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v7 same-instance repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.",
+    "result": "A1 engineering preparation is current through v7 with 2 preserved live repair failure(s); the owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -1640,13 +2031,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+    "program_state": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
     "task": null
   },
   "status": "planned",
   "supported_claims": [
     {
-      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v5 direct-base preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.",
+      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v6 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v7 same-instance repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64.",
       "evidence": [
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
@@ -1702,7 +2093,24 @@
         "a12-direct-base-v5-topology",
         "a12-direct-base-v5-schema",
         "a12-direct-base-v5-runbook",
-        "a12-direct-base-v5-module"
+        "a12-direct-base-v5-module",
+        "a12-live-preflight-v6-receipt",
+        "a12-live-preflight-v6-contract",
+        "a12-live-preflight-v6-schema",
+        "a12-live-preflight-v6-validator",
+        "a12-live-preflight-v6-preflight-module",
+        "a12-live-preflight-v6-owner-runbook",
+        "a12-owner-instance-continuation-policy-v1",
+        "a12-live-preflight-v7-receipt",
+        "a12-live-preflight-v7-contract",
+        "a12-live-preflight-v7-schema",
+        "a12-live-preflight-v7-validator",
+        "a12-live-preflight-v7-owner-runbook",
+        "a12-live-preflight-v7-coordinator",
+        "a12-live-preflight-v7-bootstrap",
+        "a12-live-preflight-v7-supplement-validator",
+        "a12-live-preflight-v7-supplement-requirements",
+        "a12-live-preflight-v7-supplement-workflow"
       ]
     }
   ],
@@ -1713,5 +2121,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
+  "work_summary": "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. The additive v6 correction handles direct-container observability and offline environment injection. The additive v7 same-instance repair preserves the missing-pydantic wheelhouse and frozen-tree bytecode failures, requires a fresh repair root, hash-validated reuse, and bytecode suppression; continuation remains conditional on complete future live evidence and a separately authorized next goal. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
 }

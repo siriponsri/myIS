@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6"
-read_model_sha256: "644bc659b489caeb9691267435003a7b373bfc064d2c6e310ed681cff239c115"
-source_commit: "554221200af7a36c88c96a4c911dcfb2273f79e5"
+read_model_revision: "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978"
+read_model_sha256: "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51"
+source_commit: "59b419b07fc22cf969b6d55251ed1be31f3537ad"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6"
-last_material_update: "2026-08-06T16:50:33Z"
+generated_from_revision: "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978"
+last_material_update: "2026-08-06T23:16:45Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-06T16:50:33Z"
-updated_at: "2026-08-06T16:50:33Z"
+created_at: "2026-08-06T23:16:45Z"
+updated_at: "2026-08-06T23:16:45Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -46,9 +46,9 @@ Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 554221200af7a36c88c96a4c911dcfb2273f79e5
+- `git_commit`: 59b419b07fc22cf969b6d55251ed1be31f3537ad
 - `execution_envelope`: `control/execution-envelope.yaml`; SHA-256 `e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af`
 - `request_id`: dapfam-p1-fulltext-c058a3aa7357c782
 - `protected_payloads`: owner-local; aggregate hashes only in this report
@@ -139,7 +139,7 @@ Status: **completed**. P1 measured train/selection evidence is complete within i
 
 ## Next Action
 
-Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.
+Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

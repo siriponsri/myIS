@@ -12,7 +12,11 @@ from myis_research.projections.read_model import build_read_model, canonical_jso
 from myis_research.report_records import build_report_records
 from myis_research.report_cli import (
     VAULT_RELATIVE_PATH,
+    _a010_projection_lifecycle,
+    _brain_report_contents,
     _check,
+    _compatibility_report_contents,
+    _paper_report_contents,
     _projection_identity_fingerprint,
     _validate_generated_contents,
     correct_advisor_update,
@@ -82,6 +86,36 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "`32`" not in pending_report
     assert "`0.72`" not in pending_report
     assert "measured results = `unavailable`" in pending_report
+
+
+def test_a12_v7_receipt_is_the_canonical_projection_lifecycle_source() -> None:
+    model = build_read_model(ROOT)
+    manifest = json.loads(
+        (ROOT / VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    archive_text = (ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8")
+    external_outputs = {
+        **_brain_report_contents(ROOT, model),
+        **_paper_report_contents(ROOT, model),
+        **_compatibility_report_contents(ROOT, model),
+    }
+
+    lifecycle = _a010_projection_lifecycle(
+        ROOT,
+        model,
+        archive_text=archive_text,
+        obsidian_manifest_sha256=str(manifest["manifest_sha256"]),
+        external_outputs=external_outputs,
+    )
+    v7 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v7"]
+
+    assert lifecycle["source_receipt_uri"] == (
+        "campaigns/armindex-multiretriever-v2/evidence/"
+        "a1.2-live-preflight-repair.receipt.v7.json"
+    )
+    assert lifecycle["source_receipt_sha256"] == v7["receipt_sha256"]
 
 
 def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contract() -> None:
@@ -192,14 +226,31 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in a12_report
     assert "A1.2 Vast post-commit correction receipt v3" in a12_report
     assert "A1.2 runtime-minimal direct-base receipt v5" in a12_report
+    assert "A1.2 live-container correction receipt v6" in a12_report
+    assert "A1.2 same-instance repair receipt v7" in a12_report
+    assert "v6-initial-wheelhouse-missing-pydantic" in a12_report
+    assert "v6-supplement-repair-mutated-pycache-tree" in a12_report
+    assert "vast_v7_preserved_live_failure_count" in a12_report
+    assert "A1.2 Owner conditional instance-continuation policy" in a12_report
+    assert "vast_v6_live_quote_usd_per_instance_hour" in a12_report
     assert "a1.2-v2-postcommit-head-tree-regeneration-defect-20260806" in a12_report
     assert "A1.2 v3 deterministic projection stability repair" in a12_report
     assert "a1.2-v3-runtime-git-identity-projection-drift-20260806" in a12_report
+
+    a12_record = next(
+        record for record in records if record["report_id"] == "task-a1-2"
+    )
+    failure_ids = {
+        item["failure_id"] for item in a12_record["failure_recovery_references"]
+    }
+    assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in failure_ids
+    assert "v6-initial-wheelhouse-missing-pydantic" in failure_ids
+    assert "v6-supplement-repair-mutated-pycache-tree" in failure_ids
     assert "USD 0.60 per complete four-GPU instance-hour" in a12_report
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(
-        "a1.2-runtime-minimal-direct-base-migration.receipt.v5.json"
+        "a1.2-live-preflight-repair.receipt.v7.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
@@ -219,6 +270,23 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     )
     assert mlflow_index["armindex_a1_2_runtime_minimal_direct_base"]["custom_local_docker_build"] is False
     assert mlflow_index["armindex_a1_2_runtime_minimal_direct_base"]["launch_allowed"] is False
+    assert mlflow_index["armindex_a1_2_live_preflight_correction"]["status"] == (
+        "live_correction_prepared_preflight_pending"
+    )
+    assert mlflow_index["armindex_a1_2_live_preflight_correction"]["launch_allowed"] is False
+    assert mlflow_index["armindex_a1_2_live_preflight_correction"]["adopted_for_execution"] is False
+    assert mlflow_index["armindex_a1_2_live_preflight_correction"]["continuation_policy"][
+        "continuation_authorized_now"
+    ] is False
+    assert mlflow_index["armindex_a1_2_live_preflight_same_instance_repair"]["status"] == (
+        "same_instance_repair_prepared_preflight_pending"
+    )
+    assert mlflow_index["armindex_a1_2_live_preflight_same_instance_repair"][
+        "launch_allowed"
+    ] is False
+    assert len(mlflow_index["armindex_a1_2_live_preflight_same_instance_repair"][
+        "preserved_live_failures"
+    ]) == 2
 
     required_headings = (
         "Objective", "Starting State", "Inputs and Frozen Bindings", "Work Performed",

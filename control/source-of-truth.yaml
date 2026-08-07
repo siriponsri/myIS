@@ -44,6 +44,21 @@ records:
     supporting_authority: [control/armindex/a1.2/execution-contract.direct-base.v5.json, control/armindex/a1.2/runtime-lock.direct-base.v5.json, control/armindex/a1.2/image-digest-contract.direct-base.v5.json, control/armindex/a1.2/topology-contract.direct-base.v5.json, control/armindex/a1.2/runtime-minimal-model-policy.v4.json, schemas/armindex/a1.2-runtime-minimal-direct-base.v5.json, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_preflight_revision_only, v1_v2_v3_preserved, direct_official_base_image, linux_amd64, launch_locked, adopted_for_execution_false, local_owner_stage_pending, no_runtime_model_download, no_protected_data, no_credentials, no_gpu_reservation, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_live_preflight_correction_v6
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-correction.receipt.v6.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight.v6.json, schemas/armindex/a1.2-live-preflight-correction.v6.json, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V6.md]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [live_engineering_preflight_correction_only, v1_v5_preserved, direct_container_observability, offline_environment_per_command, launch_locked, adopted_for_execution_false, synthetic_only, no_protected_data, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_same_instance_repair_v7
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json, schemas/armindex/a1.2-live-preflight-repair.v7.json, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [live_engineering_preflight_repair_only, v1_v6_preserved, same_instance_identity_required, fresh_remote_root, bytecode_writes_disabled, staged_bytes_revalidated, upload_new_code_bundle_only, launch_locked, adopted_for_execution_false, synthetic_only, no_protected_data, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_owner_instance_continuation_policy
+    authority: control/armindex/a1.2/owner-instance-continuation-policy.v1.json
+    supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight.v6.json, control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [owner_policy_only, additive_to_v1_v6, default_destroy_remains, continuation_requires_complete_live_preflight_and_separate_next_goal_authorization, launch_locked, adopted_for_execution_false, measured_counters_zero, selection_closed, final_closed, no_protected_data]
   - id: phase_task_reporting_contract
     authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
     projections: [projections/reports, obsidian]

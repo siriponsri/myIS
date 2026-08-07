@@ -47,7 +47,7 @@
       },
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
-      "claim_boundary": "direct_official_base_image_path_only_no_vast_contact_no_measured_execution",
+      "claim_boundary": "same-instance synthetic preflight repair only; no measured retrieval or scientific result",
       "closeout_validation_audit_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "closeout_validation_check_count": 17,
@@ -111,7 +111,7 @@
       ],
       "closeout_validation_recovery_count": 7,
       "dense_artifact_manifests_pending": 4,
-      "evidence_class": "engineering_preflight_revision",
+      "evidence_class": "live_engineering_preflight_repair",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
       "execution_contract_uri": "control/armindex/a1.2/execution-contract.v1.json",
       "execution_envelope_sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
@@ -125,7 +125,7 @@
       "model_lock_count": 5,
       "model_lockset_sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
       "model_lockset_uri": "control/armindex/a1.2/model-lockset.v1.json",
-      "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+      "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
       "offline_adapter_ready": 1,
       "owner_requirements_pending": 21,
       "preflight_blockers": [
@@ -175,7 +175,7 @@
       "scientific_authority": false,
       "shutdown_plan_sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "shutdown_plan_uri": "control/armindex/a1.2/shutdown-plan.v1.json",
-      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+      "status": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
       "v1_status": "a1_2_contract_scaffold_complete_launch_locked",
       "validated": true,
       "vast_preflight_v2": {
@@ -435,6 +435,197 @@
           "safe_job_manifests"
         ],
         "validated": true
+      },
+      "vast_preflight_v6": {
+        "adopted_for_execution": false,
+        "budget_hard_stops_usd": {
+          "a1": 23,
+          "campaign": 100,
+          "common_screen": 18
+        },
+        "claim_boundary": "live container compatibility correction only; no measured retrieval or scientific result",
+        "continuation_policy": {
+          "allowed_post_preflight_instruction": "continue_next_goal_on_PLAN",
+          "continuation_authorized_now": false,
+          "continuation_requires": [
+            "all_live_preflight_checks_pass_with_safe_collected_artifacts",
+            "same_instance_identity_gpu_uuids_image_runtime_and_staged_artifact_hashes_remain_bound",
+            "live_quote_and_remaining_time_remain_within_all_hard_stops",
+            "owner_local_ttl_watchdog_remains_active_and_provider_destroy_path_has_been_proved",
+            "remote_protected_data_boundary_remains_clean",
+            "a_separate_next_PLAN_goal_is_explicitly_authorized"
+          ],
+          "default_post_preflight_instruction": "destroy_and_verify_provider_instance_absent",
+          "fallback_to_destroy_if": [
+            "any_preflight_check_fails_or_is_inconclusive",
+            "instance_identity_or_artifact_binding_changes",
+            "quote_or_remaining_budget_fails",
+            "watchdog_or_destroy_path_is_unavailable",
+            "protected_data_boundary_fails",
+            "next_PLAN_goal_is_not_separately_authorized",
+            "owner_requests_destroy"
+          ],
+          "policy_sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+          "policy_uri": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json",
+          "status": "active_owner_policy",
+          "validated": true
+        },
+        "contract_self_sha256": "c249e95ef603307ad4697fd9b70efb14d954760429feb74a22b4eb2e4d2ad4fd",
+        "contract_sha256": "29642d4d6a00f385e8a3fceedbf0c06c23ceae147f6da77a8bcd513ea1f420b0",
+        "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight.v6.json",
+        "corrections": {
+          "bundle_archive_commit_tree_and_all_file_hashes_verified": true,
+          "checkpoint_resume_injected_failure": true,
+          "image_identity_when_container_api_absent": "registry_manifest_binding_plus_exact_runtime_anchors_with_observability_limit_reported",
+          "offline_environment_injected_per_remote_command": true,
+          "runtime_minimal_model_validation": true,
+          "safe_export_v6": true,
+          "synthetic_gpu_adapter_checks": true
+        },
+        "estimated_preflight_usd": {
+          "four_hours": 2.624,
+          "six_hour_ttl": 3.936,
+          "two_hours": 1.312
+        },
+        "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+        "launch_allowed": false,
+        "live_quote_usd_per_hour": 0.656,
+        "next_authorized_action": "Run v6 upload, structural verification, synthetic GPU adapter and checkpoint-resume preflight, collect safe artifacts, then require Owner provider destruction.",
+        "observed_live_defects": [
+          "direct_vast_container_has_no_docker_cli_or_socket",
+          "ssh_login_shell_does_not_inherit_offline_environment"
+        ],
+        "owner_runbook_sha256": "355c22e34b7a6e44ddeea37a8cdb37a35dbf315fe29368bb4aa6ba98dcf2313d",
+        "owner_runbook_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V6.md",
+        "platform": "linux/amd64",
+        "preflight_module_sha256": "f84170f6744b6a9f31207331662328f383fa802dab1b80c26cdc7d4b0d9bddc2",
+        "preflight_module_uri": "src/myis_research/armindex/a1_2_live_preflight.py",
+        "real_counters": {
+          "candidate_count": 0,
+          "final_accesses": 0,
+          "measured_runs": 0,
+          "selection_accesses": 0
+        },
+        "receipt_self_sha256": "c31ed46ff25a3d8fbd4768329e5a9ba61e50109011d24e41e6139687da227c5f",
+        "receipt_sha256": "3918f0c6e9699a3c66de3f70d2c1efc1daead8e86f03647f4236ddb37cdab9a9",
+        "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-correction.receipt.v6.json",
+        "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+        "resource_counters": {
+          "charged_usd": 0,
+          "gpu_reservations": 0,
+          "gpu_scientific_runs": 0,
+          "model_downloads": 0,
+          "paid_api_calls": 0,
+          "provider_switches": 0
+        },
+        "revision_id": "a1.2-live-preflight-correction-v6",
+        "schema_sha256": "433391902514a7b6b2ba3fb7a1a4e53ae4b7f4b19f5caf28bbe5ad832ae1e5ed",
+        "schema_uri": "schemas/armindex/a1.2-live-preflight-correction.v6.json",
+        "status": "live_correction_prepared_preflight_pending",
+        "synthetic_preflight_only": true,
+        "validated": true,
+        "validator_sha256": "d700afb1f6e0e4bd7d13bb3be2dd273c28f0030dcbf1e5549fa086324c782a19",
+        "validator_uri": "src/myis_research/armindex/a1_2_live_preflight_revision.py"
+      },
+      "vast_preflight_v7": {
+        "active_correction": {
+          "fresh_remote_root_required": true,
+          "pythondontwritebytecode": true,
+          "reuse_only_after_sha256_validation": [
+            "models",
+            "wheelhouse",
+            "jobs",
+            "supplement_wheelhouse_v7"
+          ],
+          "same_instance_reuse": true,
+          "upload_only": [
+            "new_frozen_code_bundle"
+          ]
+        },
+        "adopted_for_execution": false,
+        "bootstrap_sha256": "a573987e368a325534e05c15cf3a8b3ed6b3d6f800d3120e4231a0c989fa9c6f",
+        "bootstrap_uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v7.sh",
+        "claim_boundary": "same-instance synthetic preflight repair only; no measured retrieval or scientific result",
+        "continuation_policy": {
+          "allowed_post_preflight_instruction": "continue_next_goal_on_PLAN",
+          "continuation_authorized_now": false,
+          "continuation_requires": [
+            "all_live_preflight_checks_pass_with_safe_collected_artifacts",
+            "same_instance_identity_gpu_uuids_image_runtime_and_staged_artifact_hashes_remain_bound",
+            "live_quote_and_remaining_time_remain_within_all_hard_stops",
+            "owner_local_ttl_watchdog_remains_active_and_provider_destroy_path_has_been_proved",
+            "remote_protected_data_boundary_remains_clean",
+            "a_separate_next_PLAN_goal_is_explicitly_authorized"
+          ],
+          "default_post_preflight_instruction": "destroy_and_verify_provider_instance_absent",
+          "fallback_to_destroy_if": [
+            "any_preflight_check_fails_or_is_inconclusive",
+            "instance_identity_or_artifact_binding_changes",
+            "quote_or_remaining_budget_fails",
+            "watchdog_or_destroy_path_is_unavailable",
+            "protected_data_boundary_fails",
+            "next_PLAN_goal_is_not_separately_authorized",
+            "owner_requests_destroy"
+          ],
+          "policy_sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+          "policy_uri": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json",
+          "status": "active_owner_policy",
+          "validated": true
+        },
+        "contract_self_sha256": "677d7872141d3aec21aa39d3ea73eaa7b4e80784e3287dfcf09856852b0f448c",
+        "contract_sha256": "590d8d196522078dc047eaa5e1c0a03e0ff93313719e2f6f2d10e9ed6be08c61",
+        "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json",
+        "coordinator_sha256": "274e09a06b81ab2291a4683681d53d7265666392e1c025cedb96d0344fef2d58",
+        "coordinator_uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV7.ps1",
+        "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+        "launch_allowed": false,
+        "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
+        "owner_runbook_sha256": "23e2aa879e3918fce840d23885108ba6eb9e48fdf7ea4874f072189fd1d5e060",
+        "owner_runbook_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md",
+        "platform": "linux/amd64",
+        "preserved_live_failures": [
+          {
+            "description": "initial staged wheelhouse lacked pydantic required by the repository runtime",
+            "disposition": "preserved_live_failure_repaired_by_hash_validated_supplement",
+            "failure_id": "v6-initial-wheelhouse-missing-pydantic"
+          },
+          {
+            "description": "supplement repair wrote __pycache__ into the frozen code tree",
+            "disposition": "preserved_live_failure_repaired_by_new_root_and_bytecode_suppression",
+            "failure_id": "v6-supplement-repair-mutated-pycache-tree"
+          }
+        ],
+        "real_counters": {
+          "candidate_count": 0,
+          "final_accesses": 0,
+          "measured_runs": 0,
+          "selection_accesses": 0
+        },
+        "receipt_self_sha256": "bbfedc2c32b8245350d1566fed2c0b62c559e3bd703fecee8604f6fe6e0e48a4",
+        "receipt_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
+        "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
+        "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+        "resource_counters": {
+          "charged_usd": 0,
+          "gpu_reservations": 0,
+          "gpu_scientific_runs": 0,
+          "model_downloads": 0,
+          "paid_api_calls": 0
+        },
+        "revision_id": "a1.2-live-preflight-same-instance-repair-v7",
+        "schema_sha256": "ba2fda966d828a0e86b8c64d25e69e569b490c70e6d4b8eddd6415939740c029",
+        "schema_uri": "schemas/armindex/a1.2-live-preflight-repair.v7.json",
+        "status": "same_instance_repair_prepared_preflight_pending",
+        "supplement_requirements_sha256": "8262320bc0541873a29cf0362566998dc7039e72d92a820f802a3bf8a0118fe6",
+        "supplement_requirements_uri": "containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt",
+        "supplement_validator_sha256": "6ea824337585a972c543989bb792775f3597967ff736cc30dd547997d5798291",
+        "supplement_validator_uri": "scripts/a1_2_vast/validate_preflight_supplement_v7.py",
+        "supplement_workflow_sha256": "3c397dcf9d2bac02924a2d64c4be1cdf30b54bcfea3ee558d9b650f089af4843",
+        "supplement_workflow_uri": ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml",
+        "synthetic_preflight_only": true,
+        "validated": true,
+        "validator_sha256": "17846d4691faa3d354fc19d9172bc3c0bf82bc3fb3d14289d4c5a64957e0d0f3",
+        "validator_uri": "src/myis_research/armindex/a1_2_live_preflight_repair_v7.py"
       }
     },
     "adapter_fixture_validation": {
@@ -623,7 +814,7 @@
         "role": "lexical_anchor_cpu_fallback"
       },
       {
-        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
+        "adapter_status": "v7_same_instance_repair_prepared_synthetic_preflight_pending",
         "arm_id": "ARM-02",
         "commercial_status": "commercial_capable",
         "license": "MIT",
@@ -632,7 +823,7 @@
         "role": "multilingual_dense_anchor"
       },
       {
-        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
+        "adapter_status": "v7_same_instance_repair_prepared_synthetic_preflight_pending",
         "arm_id": "ARM-03",
         "commercial_status": "research_non_commercial",
         "license": "CC-BY-NC-SA-4.0",
@@ -641,7 +832,7 @@
         "role": "research_champion_candidate"
       },
       {
-        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
+        "adapter_status": "v7_same_instance_repair_prepared_synthetic_preflight_pending",
         "arm_id": "ARM-04",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -650,7 +841,7 @@
         "role": "long_context_dense"
       },
       {
-        "adapter_status": "v5_direct_official_base_prepared_owner_local_stage_pending",
+        "adapter_status": "v7_same_instance_repair_prepared_synthetic_preflight_pending",
         "arm_id": "ARM-05",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -923,7 +1114,7 @@
       "status": "complete",
       "validated": true
     },
-    "next_command": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+    "next_command": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -1007,7 +1198,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+        "status": "a1_2_same_instance_repair_prepared_preflight_pending_launch_locked",
         "tasks": [
           {
             "status": "complete",
@@ -1015,7 +1206,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+            "status": "same_instance_repair_prepared_preflight_pending_launch_locked",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -1103,7 +1294,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+    "status": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -1135,7 +1326,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+      "status": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -1294,7 +1485,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-06T16:50:33Z",
+  "generated_at": "2026-08-06T23:16:45Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -2202,7 +2393,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
+  "projection_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2246,8 +2437,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
-  "read_model_sha256": "644bc659b489caeb9691267435003a7b373bfc064d2c6e310ed681cff239c115",
+  "read_model_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
+  "read_model_sha256": "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2380,7 +2571,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+  "source_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
   "tasks": [
     {
       "evidence_ids": [],

@@ -36,6 +36,161 @@
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-contract-scaffold.receipt.v1.json",
     "status": "a1_2_contract_scaffold_complete_launch_locked"
   },
+  "armindex_a1_2_live_preflight_correction": {
+    "adopted_for_execution": false,
+    "budget_hard_stops_usd": {
+      "a1": 23,
+      "campaign": 100,
+      "common_screen": 18
+    },
+    "continuation_policy": {
+      "allowed_post_preflight_instruction": "continue_next_goal_on_PLAN",
+      "continuation_authorized_now": false,
+      "continuation_requires": [
+        "all_live_preflight_checks_pass_with_safe_collected_artifacts",
+        "same_instance_identity_gpu_uuids_image_runtime_and_staged_artifact_hashes_remain_bound",
+        "live_quote_and_remaining_time_remain_within_all_hard_stops",
+        "owner_local_ttl_watchdog_remains_active_and_provider_destroy_path_has_been_proved",
+        "remote_protected_data_boundary_remains_clean",
+        "a_separate_next_PLAN_goal_is_explicitly_authorized"
+      ],
+      "default_post_preflight_instruction": "destroy_and_verify_provider_instance_absent",
+      "fallback_to_destroy_if": [
+        "any_preflight_check_fails_or_is_inconclusive",
+        "instance_identity_or_artifact_binding_changes",
+        "quote_or_remaining_budget_fails",
+        "watchdog_or_destroy_path_is_unavailable",
+        "protected_data_boundary_fails",
+        "next_PLAN_goal_is_not_separately_authorized",
+        "owner_requests_destroy"
+      ],
+      "policy_sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+      "policy_uri": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json",
+      "status": "active_owner_policy",
+      "validated": true
+    },
+    "contract_sha256": "29642d4d6a00f385e8a3fceedbf0c06c23ceae147f6da77a8bcd513ea1f420b0",
+    "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight.v6.json",
+    "corrections": {
+      "bundle_archive_commit_tree_and_all_file_hashes_verified": true,
+      "checkpoint_resume_injected_failure": true,
+      "image_identity_when_container_api_absent": "registry_manifest_binding_plus_exact_runtime_anchors_with_observability_limit_reported",
+      "offline_environment_injected_per_remote_command": true,
+      "runtime_minimal_model_validation": true,
+      "safe_export_v6": true,
+      "synthetic_gpu_adapter_checks": true
+    },
+    "estimated_preflight_usd": {
+      "four_hours": 2.624,
+      "six_hour_ttl": 3.936,
+      "two_hours": 1.312
+    },
+    "evidence_class": "live_engineering_preflight_correction",
+    "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+    "launch_allowed": false,
+    "live_quote_usd_per_hour": 0.656,
+    "platform": "linux/amd64",
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_reservations": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0,
+      "provider_switches": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_sha256": "3918f0c6e9699a3c66de3f70d2c1efc1daead8e86f03647f4236ddb37cdab9a9",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-correction.receipt.v6.json",
+    "status": "live_correction_prepared_preflight_pending",
+    "synthetic_preflight_only": true
+  },
+  "armindex_a1_2_live_preflight_same_instance_repair": {
+    "active_correction": {
+      "fresh_remote_root_required": true,
+      "pythondontwritebytecode": true,
+      "reuse_only_after_sha256_validation": [
+        "models",
+        "wheelhouse",
+        "jobs",
+        "supplement_wheelhouse_v7"
+      ],
+      "same_instance_reuse": true,
+      "upload_only": [
+        "new_frozen_code_bundle"
+      ]
+    },
+    "adopted_for_execution": false,
+    "continuation_policy": {
+      "allowed_post_preflight_instruction": "continue_next_goal_on_PLAN",
+      "continuation_authorized_now": false,
+      "continuation_requires": [
+        "all_live_preflight_checks_pass_with_safe_collected_artifacts",
+        "same_instance_identity_gpu_uuids_image_runtime_and_staged_artifact_hashes_remain_bound",
+        "live_quote_and_remaining_time_remain_within_all_hard_stops",
+        "owner_local_ttl_watchdog_remains_active_and_provider_destroy_path_has_been_proved",
+        "remote_protected_data_boundary_remains_clean",
+        "a_separate_next_PLAN_goal_is_explicitly_authorized"
+      ],
+      "default_post_preflight_instruction": "destroy_and_verify_provider_instance_absent",
+      "fallback_to_destroy_if": [
+        "any_preflight_check_fails_or_is_inconclusive",
+        "instance_identity_or_artifact_binding_changes",
+        "quote_or_remaining_budget_fails",
+        "watchdog_or_destroy_path_is_unavailable",
+        "protected_data_boundary_fails",
+        "next_PLAN_goal_is_not_separately_authorized",
+        "owner_requests_destroy"
+      ],
+      "policy_sha256": "28402c57d22400b343cdc94ef88aa285ce94eedf3cb44680c9679c6be9654acd",
+      "policy_uri": "control/armindex/a1.2/owner-instance-continuation-policy.v1.json",
+      "status": "active_owner_policy",
+      "validated": true
+    },
+    "contract_sha256": "590d8d196522078dc047eaa5e1c0a03e0ff93313719e2f6f2d10e9ed6be08c61",
+    "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json",
+    "evidence_class": "live_engineering_preflight_repair",
+    "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+    "launch_allowed": false,
+    "platform": "linux/amd64",
+    "preserved_live_failures": [
+      {
+        "description": "initial staged wheelhouse lacked pydantic required by the repository runtime",
+        "disposition": "preserved_live_failure_repaired_by_hash_validated_supplement",
+        "failure_id": "v6-initial-wheelhouse-missing-pydantic"
+      },
+      {
+        "description": "supplement repair wrote __pycache__ into the frozen code tree",
+        "disposition": "preserved_live_failure_repaired_by_new_root_and_bytecode_suppression",
+        "failure_id": "v6-supplement-repair-mutated-pycache-tree"
+      }
+    ],
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 0,
+      "measured_runs": 0,
+      "selection_accesses": 0
+    },
+    "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+    "resource_counters": {
+      "charged_usd": 0,
+      "gpu_reservations": 0,
+      "gpu_scientific_runs": 0,
+      "model_downloads": 0,
+      "paid_api_calls": 0
+    },
+    "scientific_authority": false,
+    "source_receipt_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
+    "status": "same_instance_repair_prepared_preflight_pending",
+    "synthetic_preflight_only": true
+  },
   "armindex_a1_2_runtime_minimal_direct_base": {
     "adopted_for_execution": false,
     "contract_sha256": "df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563",
@@ -195,7 +350,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "644bc659b489caeb9691267435003a7b373bfc064d2c6e310ed681cff239c115",
+  "dashboard_snapshot_sha256": "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -228,7 +383,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "5e105d0890d2338f752a195590618cfe0808a89b687ac3b3814414bb599f4247",
+  "obsidian_manifest_sha256": "e9708113c8ecf24cfc446d92f01a5dbf88ee170eef42f7cf75825cb4cbbc6ed8",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -266,8 +421,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
-  "read_model_sha256": "644bc659b489caeb9691267435003a7b373bfc064d2c6e310ed681cff239c115",
+  "read_model_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
+  "read_model_sha256": "a6ce623315507fd24e2bd76ec5504c9b79eb5f49cc0d72fb640d6e13e82cbb51",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",
@@ -275,7 +430,7 @@
     "p1-r0ww-train-d9533ba623ce"
   ],
   "schema_version": "myis.mlflow-archive-index.v2",
-  "source_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+  "source_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
   "status": "current",
   "system_experiment": "myis-system"
 }

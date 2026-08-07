@@ -15,9 +15,9 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive direct-base v5
-  runtime-minimal revision prepared for the local-orchestrated Vast 4xRTX3090
-  preflight; live Owner preflight and scientific launch remain locked)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v7 same-instance
+  repair prepared after two fail-closed v6 verification attempts; synthetic
+  live preflight and scientific launch remain locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
 - Current evidence class: engineering preflight revision; scientific authority `false`
 - ArmIndex measured runs: `0`
@@ -103,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Additive v5 runtime-minimal direct-base preflight prepared; local Owner stage and live checks pending; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v7 same-instance repair prepared; synthetic live checks pending; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -193,6 +193,25 @@ regression test changes both identities and confirms an unchanged read-model
 revision and file hash. The additive repair audit is
 `outputs/audits/rigor/a1.2-v3-projection-stability-repair-20260806.json`.
 
+The Owner-local v5 stage then completed all four runtime-minimal dense model
+trees: 48 of 48 allowlisted files passed deterministic SHA-256 validation,
+with 6,119,853,855 runtime bytes staged outside Git. The Snowflake custom-code
+files, Linux wheelhouse, safe jobs, transfer checksums, and return directory
+also passed. These are engineering staging facts only; dense CPU load was
+intentionally skipped and GPU parity, Qwen measured length, VRAM feasibility,
+four-worker recovery, provider identity, and destruction/TTL proof remained
+live obligations.
+
+The direct Vast container subsequently exposed the selected linux/amd64 image
+runtime with Python 3.11.11, PyTorch 2.6.0+cu118, CUDA 11.8 available, and four
+RTX 3090 devices. No dense adapter check or measured retrieval began. The first
+v6 verification stopped because the initial wheelhouse lacked `pydantic`; the
+supplement repair then stopped because an import created `__pycache__` in the
+frozen tree. Both failures are preserved. Additive v7 uses a fresh remote root,
+disables Python bytecode writes, revalidates the already staged model,
+wheelhouse, job, and supplement trees, and uploads only a new frozen code
+bundle. Launch and adoption remain false and scientific counters remain zero.
+
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
 Historical reports remain at their expected paths while referenced. A report
@@ -242,13 +261,18 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Run only the Owner-local SSH/Vast A1.2 preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V5.md after local runtime-minimal staging. Verify the direct official PyTorch image manifest digest on linux/amd64, frozen code bundle, Linux wheelhouse and model SHA256SUMS, four GPU UUIDs, protected-data boundary, live quote, heartbeat/resume, and provider destroy/TTL path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Run only the same-instance A1.2 v7 repair preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md. Preserve the failed v6 root, use a fresh /opt/myis/a1.2-v7 root, revalidate reused staged bytes, upload only the clean pushed v7 code bundle, and run synthetic GPU adapter and checkpoint/resume checks. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes. After a complete PASS, follow control/armindex/a1.2/owner-instance-continuation-policy.v1.json: destroy by default, or report Owner continuation to a separately authorized next PLAN goal only when every continuation requirement remains true.
 ```
 
-The direct-base contract preparation is complete. The next action is the
-Owner-local runtime-minimal staging followed by the live SSH/Vast preflight,
-using the exact commands in the v5 runbook. It may verify
-the disposable worker and run synthetic preflight workers, but it must not run
-measured retrieval or adopt the revision. Scientific launch remains forbidden
-until every checklist item passes and the Owner later adopts the unchanged
-revision in a separate authorized goal.
+The local runtime-minimal stage is complete and the v6 root remains preserved
+as failed-attempt evidence. The next action is the bounded v7 repair on the
+same unchanged instance. It may verify the worker and run synthetic preflight
+workers, but it must not run measured retrieval or adopt the revision.
+Scientific launch remains forbidden until every checklist item passes and the
+Owner later adopts the unchanged revision in a separate authorized goal. The
+default closeout destroys the provider instance. Under the additive Owner
+continuation policy, a completed preflight may instead retain the unchanged
+instance solely for a separately authorized next PLAN goal when identity,
+hashes, quote/budget, TTL/destroy proof, and the protected-data boundary all
+still pass. Retention itself never adopts the revision or authorizes scientific
+work.

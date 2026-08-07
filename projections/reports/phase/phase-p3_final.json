@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T16:50:33Z",
-  "generated_from_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
-  "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+  "generated_at": "2026-08-06T23:16:45Z",
+  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
+  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,21 +37,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
     "source_of_truth": {
-      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
+      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-06T16:50:33Z",
+  "last_material_update": "2026-08-06T23:16:45Z",
   "metric_references": [],
-  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "9f613bf45bbec50fb9345d714562ab1765badb6495c5b0a6575ce01dfeb8f28c",
+  "report_sha256": "9bcf569cd6c43cebeac36047b1d4ed09091a63e6cc32a1b097e1f566c28fc083",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

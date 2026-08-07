@@ -68,6 +68,9 @@ def _lifecycle(value: Any) -> str:
         "a1_1_complete_a1_2_contract_locked",
         "a1_2_contract_scaffold_complete_launch_locked",
         "a1_2_vast_4x3090_preflight_prepared_launch_locked",
+        "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+        "a1_2_live_preflight_correction_prepared_launch_locked",
+        "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
     }:
         return "active"
     if value in {
@@ -667,6 +670,52 @@ def _artifacts(
                     digest = vast_v5.get(sha_key)
                     if uri and digest:
                         result.append(_artifact(artifact_id=artifact_id, title=title, artifact_type=artifact_type, evidence_class="engineering_preflight_revision", scientific_authority=False, safe_uri=str(uri), content_sha256=str(digest), explanation=explanation, producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING", producing_task_id="A1.2"))
+            vast_v6 = scaffold.get("vast_preflight_v6", {})
+            if isinstance(vast_v6, Mapping) and vast_v6.get("validated") is True:
+                for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                    ("a12-live-preflight-v6-receipt", "A1.2 live-container correction receipt v6", "receipt", "receipt_uri", "receipt_sha256", "Records only the additive direct-base container correction, live defects, synthetic-only boundary, and unchanged zero counters."),
+                    ("a12-live-preflight-v6-contract", "A1.2 live-container correction contract v6", "contract", "contract_uri", "contract_sha256", "Binds the correction to the v5 lineage, official image manifest, safe exports, synthetic GPU checks, and hard-stop budget without authorizing scientific execution."),
+                    ("a12-live-preflight-v6-schema", "A1.2 live-container correction receipt schema v6", "schema", "schema_uri", "schema_sha256", "Defines the additive v6 receipt shape, false authorization flags, and zero measured counters."),
+                    ("a12-live-preflight-v6-validator", "A1.2 live-container correction validator v6", "tool", "validator_uri", "validator_sha256", "Fail-closed validation of v5 lineage, v6 bindings, receipt self-hash, and launch locks."),
+                    ("a12-live-preflight-v6-preflight-module", "A1.2 synthetic live preflight module v6", "tool", "preflight_module_uri", "preflight_module_sha256", "Implements synthetic-only runtime identity, adapter parity, Qwen length, and checkpoint/resume checks without protected evaluation inputs."),
+                    ("a12-live-preflight-v6-owner-runbook", "A1.2 beginner Owner runbook v6", "runbook", "owner_runbook_uri", "owner_runbook_sha256", "Documents the direct-base live preflight and safe artifact collection while preserving the launch lock."),
+                ):
+                    uri = vast_v6.get(uri_key)
+                    digest = vast_v6.get(sha_key)
+                    if uri and digest:
+                        result.append(_artifact(artifact_id=artifact_id, title=title, artifact_type=artifact_type, evidence_class="live_engineering_preflight_correction", scientific_authority=False, safe_uri=str(uri), content_sha256=str(digest), explanation=explanation, producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING", producing_task_id="A1.2"))
+                policy = vast_v6.get("continuation_policy", {})
+                if isinstance(policy, Mapping) and policy.get("validated") is True:
+                    result.append(_artifact(
+                        artifact_id="a12-owner-instance-continuation-policy-v1",
+                        title="A1.2 Owner conditional instance-continuation policy",
+                        artifact_type="decision",
+                        evidence_class="owner_policy_for_engineering_continuity",
+                        scientific_authority=False,
+                        safe_uri=str(policy["policy_uri"]),
+                        content_sha256=str(policy["policy_sha256"]),
+                        explanation="Keeps provider destruction as the default; continuation is possible only after complete safe preflight evidence, unchanged identity and budget, an active watchdog, and a separately authorized next PLAN goal.",
+                        producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                        producing_task_id="A1.2",
+                    ))
+            vast_v7 = scaffold.get("vast_preflight_v7", {})
+            if isinstance(vast_v7, Mapping) and vast_v7.get("validated") is True:
+                for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                    ("a12-live-preflight-v7-receipt", "A1.2 same-instance repair receipt v7", "receipt", "receipt_uri", "receipt_sha256", "Preserves the v6 live failures, binds the same-instance repair, requires a fresh runtime root and bytecode suppression, and keeps every authorization flag false."),
+                    ("a12-live-preflight-v7-contract", "A1.2 same-instance repair contract v7", "contract", "contract_uri", "contract_sha256", "Binds v6 lineage, the continuation policy, hash-validated staged reuse, the supplement wheelhouse workflow, and synthetic-only preflight behavior."),
+                    ("a12-live-preflight-v7-schema", "A1.2 same-instance repair receipt schema v7", "schema", "schema_uri", "schema_sha256", "Validates two preserved repair failures, bytecode suppression, false authorization flags, and zero counters."),
+                    ("a12-live-preflight-v7-validator", "A1.2 same-instance repair validator v7", "tool", "validator_uri", "validator_sha256", "Fail-closed validation of v6 lineage, same-instance repair bindings, fresh-root correction, and unchanged zero counters."),
+                    ("a12-live-preflight-v7-owner-runbook", "A1.2 beginner Owner same-instance repair runbook v7", "runbook", "owner_runbook_uri", "owner_runbook_sha256", "Documents v7 dry-run staging, structural verification, synthetic-only preflight, safe collection, default destruction, and conditional continuation."),
+                    ("a12-live-preflight-v7-coordinator", "A1.2 same-instance repair coordinator v7", "tool", "coordinator_uri", "coordinator_sha256", "Stages only the new frozen code bundle and reuses prior staged inputs only after checksum validation."),
+                    ("a12-live-preflight-v7-bootstrap", "A1.2 same-instance repair bootstrap v7", "tool", "bootstrap_uri", "bootstrap_sha256", "Creates the fresh runtime root with bytecode suppression and verifies the reuse boundary before synthetic work."),
+                    ("a12-live-preflight-v7-supplement-validator", "A1.2 preflight supplement validator v7", "tool", "supplement_validator_uri", "supplement_validator_sha256", "Validates the hash-bound dependency supplement without network fallback."),
+                    ("a12-live-preflight-v7-supplement-requirements", "A1.2 preflight supplement requirements v7", "manifest", "supplement_requirements_uri", "supplement_requirements_sha256", "Records the small offline dependency supplement required after the preserved missing-pydantic failure."),
+                    ("a12-live-preflight-v7-supplement-workflow", "A1.2 supplement wheelhouse workflow v7", "workflow", "supplement_workflow_uri", "supplement_workflow_sha256", "Produces a Linux-compatible, checksum-bound supplement wheelhouse without models or protected data."),
+                ):
+                    uri = vast_v7.get(uri_key)
+                    digest = vast_v7.get(sha_key)
+                    if uri and digest:
+                        result.append(_artifact(artifact_id=artifact_id, title=title, artifact_type=artifact_type, evidence_class="live_engineering_preflight_repair", scientific_authority=False, safe_uri=str(uri), content_sha256=str(digest), explanation=explanation, producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING", producing_task_id="A1.2"))
     return result
 
 
@@ -821,6 +870,60 @@ def _metrics(model: Mapping[str, Any], phase_id: str, task_id: str | None) -> li
                     "denominator": "active_direct_base_path",
                     "source_uri": vast_v5.get("receipt_uri"),
                     "source_sha256": vast_v5.get("receipt_sha256"),
+                },
+            ])
+        vast_v6 = scaffold.get("vast_preflight_v6", {})
+        if isinstance(vast_v6, Mapping) and vast_v6.get("validated") is True:
+            rows.extend([
+                {
+                    "name": "vast_v6_live_quote_usd_per_instance_hour",
+                    "cutoff": 0,
+                    "split": "engineering_preflight",
+                    "scope": "A1.2",
+                    "value": vast_v6.get("live_quote_usd_per_hour"),
+                    "n": 1,
+                    "denominator": "quoted_complete_four_rtx3090_instance_not_spend_authorization",
+                    "source_uri": vast_v6.get("contract_uri"),
+                    "source_sha256": vast_v6.get("contract_sha256"),
+                },
+                {
+                    "name": "vast_v6_synthetic_preflight_only",
+                    "cutoff": 0,
+                    "split": "engineering_preflight",
+                    "scope": "A1.2",
+                    "value": int(vast_v6.get("synthetic_preflight_only") is True),
+                    "n": 1,
+                    "denominator": "live_correction_authorization_boundary",
+                    "source_uri": vast_v6.get("receipt_uri"),
+                    "source_sha256": vast_v6.get("receipt_sha256"),
+                },
+            ])
+        vast_v7 = scaffold.get("vast_preflight_v7", {})
+        if isinstance(vast_v7, Mapping) and vast_v7.get("validated") is True:
+            rows.extend([
+                {
+                    "name": "vast_v7_preserved_live_failure_count",
+                    "cutoff": 0,
+                    "split": "engineering_preflight",
+                    "scope": "A1.2",
+                    "value": len(vast_v7.get("preserved_live_failures", [])),
+                    "n": 1,
+                    "denominator": "preserved_same_instance_repair_failures",
+                    "source_uri": vast_v7.get("receipt_uri"),
+                    "source_sha256": vast_v7.get("receipt_sha256"),
+                },
+                {
+                    "name": "vast_v7_bytecode_suppression_required",
+                    "cutoff": 0,
+                    "split": "engineering_preflight",
+                    "scope": "A1.2",
+                    "value": int(
+                        vast_v7.get("active_correction", {}).get("pythondontwritebytecode") is True
+                    ),
+                    "n": 1,
+                    "denominator": "fresh_same_instance_repair_root",
+                    "source_uri": vast_v7.get("receipt_uri"),
+                    "source_sha256": vast_v7.get("receipt_sha256"),
                 },
             ])
         return rows
@@ -1377,9 +1480,11 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
         vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
         vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
         vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
-        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, the preserved A1.2 v1-v3 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and v5 direct-base preparation using {vast_v5.get('image_reference', 'not_recorded')} on {vast_v5.get('platform', 'not_recorded')}."
-        result = f"A1 engineering preparation is current through v5 with {len(vast_v5.get('live_checks_pending', []))} live checks pending; measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
-        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, then binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')} while removing custom-image and nested-container steps. It does not establish live hardware readiness, retrieval quality, execution adoption, or scientific authorization."
+        vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
+        vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
+        output = f"The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v6 lineage for {registered_arms} arms, the earlier CPU preflight with status {preflight_status} and {blocker_count} blocker group(s), and v7 same-instance repair preparation using {vast_v7.get('image_reference', vast_v6.get('image_reference', vast_v5.get('image_reference', 'not_recorded')))} on {vast_v7.get('platform', vast_v6.get('platform', vast_v5.get('platform', 'not_recorded')))}."
+        result = f"A1 engineering preparation is current through v7 with {len(vast_v7.get('preserved_live_failures', []))} preserved live repair failure(s); the owner continuation policy is conditional, and measured ArmIndex, Selection, Final, GPU-reservation, and charged-resource counters remain zero."
+        interpretation = f"The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest {vast_v5.get('resolved_manifest_digest', 'not_recorded')}, records v6 direct-container corrections, and adds v7 same-instance repair controls for the missing-pydantic wheelhouse failure and frozen-tree bytecode mutation. It does not establish live hardware readiness, retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse."
         decision_status = "active"
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1":
         registered_arms = int(adapter.get("registered_arms", 0)) if isinstance(adapter, Mapping) else 0
@@ -1400,9 +1505,34 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
             vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
             vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
-            output = f"The preserved v1-v3 contracts validate, the earlier CPU-only Owner preflight remains {preflight_status} with {blocker_count} blocker group(s), the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and v5 direct-base preparation is {vast_v5.get('status', 'not_started')} with {len(vast_v5.get('live_checks_pending', []))} live checks pending."
+            vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
+            vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
+            live_failures = (
+                vast_v7.get("preserved_live_failures", [])
+                if isinstance(vast_v7.get("preserved_live_failures"), list)
+                else []
+            )
+            for item in live_failures:
+                if not isinstance(item, Mapping):
+                    continue
+                failures.append({
+                    "failure_id": item.get("failure_id"),
+                    "failure_uri": vast_v7.get("receipt_uri"),
+                    "failure_sha256": vast_v7.get("receipt_sha256"),
+                    "recovery_id": item.get("disposition"),
+                    "recovery_uri": vast_v7.get("receipt_uri"),
+                    "recovery_sha256": vast_v7.get("receipt_sha256"),
+                    "status": "preserved_and_repaired_preflight_pending",
+                    "counters_changed": False,
+                })
+            failure_summary = "; ".join(
+                str(item.get("failure_id", "unrecorded"))
+                for item in live_failures
+                if isinstance(item, Mapping)
+            )
+            output = f"The preserved v1-v6 contracts validate, the earlier CPU-only Owner preflight remains {preflight_status} with {blocker_count} blocker group(s), the immutable v2 fixture records {vast.get('synthetic_worker_count', 0)} synthetic workers, and v7 same-instance repair preparation is {vast_v7.get('status', 'not_started')}. It preserves repair evidence for {failure_summary or 'no recorded failures'}, requires a fresh repair root and bytecode suppression, and leaves continuation conditional."
             result = f"A1.2 offline preparation is complete and launch-locked at an Owner planning rate of USD {vast.get('planning_rate_usd', 0):.2f} per complete four-GPU instance-hour; the estimate is {vast.get('estimated_instance_hours', 'unavailable')} instance-hours and USD {vast.get('estimated_raw_worker_usd', 'unavailable')}. No GPU reservation, protected payload access, access-material exposure, paid compute, or measured run occurred."
-            interpretation = "The v5 receipt retains v1-v3 provenance while selecting a registry-verified official PyTorch linux/amd64 base image for direct Vast launch. The active path removes custom image build/save/upload/load and nested containers; remote dependency installation is offline from the wheelhouse and model downloads are forbidden. Live hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations before any later adoption request."
+            interpretation = "The v5 receipt retains v1-v3 provenance while selecting a registry-verified official PyTorch linux/amd64 base image for direct Vast launch. The additive v6 correction records direct-container observability and per-command offline environment handling. The additive v7 repair preserves the missing-pydantic and frozen-tree-bytecode failures, stages only new frozen code into a fresh repair root, validates retained artifacts by SHA-256, and suppresses bytecode mutation. The active path removes custom image build/save/upload/load and nested containers; remote dependency installation is offline from the wheelhouse and model downloads are forbidden. Live hardware, model bytes, adapter parity, Qwen length, provider quote, heartbeat/resume, return path, and provider-destruction evidence remain Owner-local obligations. Instance continuation can be reported only after the policy's complete live checks and separate next-goal authorization; otherwise provider destruction remains the default."
             decision_status = "blocked"
         else:
             output = f"A bounded single-GPU specification, elapsed-time range, charged-USD estimate, admission requirements, and Owner needs are available with status {proposal_status}."
@@ -1483,9 +1613,9 @@ def _record_for(root: Path, model: Mapping[str, Any], *, phase: Mapping[str, Any
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
-            else "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
+            else "A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. The additive v6 correction handles direct-container observability and offline environment injection. The additive v7 same-instance repair preserves the missing-pydantic wheelhouse and frozen-tree bytecode failures, requires a fresh repair root, hash-validated reuse, and bytecode suppression; continuation remains conditional on complete future live evidence and a separately authorized next goal. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id is None and a12_validated
-            else "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, and runtime-minimal allowlists were frozen. The v5 direct-base revision binds the official PyTorch linux/amd64 manifest and replaces active custom-image transfers with code, Linux wheelhouse, runtime-minimal models, and safe job manifests. Launch remains false pending Owner-local artifact manifests, parity, live quote/capacity, external termination dry run, and explicit adoption."
+            else "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, and runtime-minimal allowlists were frozen. The v5 direct-base revision binds the official PyTorch linux/amd64 manifest and replaces active custom-image transfers with code, Linux wheelhouse, runtime-minimal models, and safe job manifests. The additive v6 correction remains synthetic-only. The additive v7 repair preserves two live engineering failures and repairs them through a fresh root, checksum-gated reuse, a hash-bound supplement, and bytecode suppression; any later instance continuation remains conditional on complete live evidence, budget, watchdog, clean protected boundary, and separate next-goal authorization. Launch remains false pending live preflight and explicit adoption."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.2"
             else "The A0.10 receipt, ledger, repository hygiene audit, output-root relocation receipt, and external-source verification receipt were validated before the shared read-model projection; legacy source code remains reference-only unless the receipt records an explicit disposition."
             if phase_id.startswith("A") and task_id == "A0.10"

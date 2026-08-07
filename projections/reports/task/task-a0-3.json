@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
+      "content_sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -119,7 +119,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
+      "sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-06T16:50:33Z",
-  "generated_from_revision": "7cb436be4db6a030dc80461d4af238869bd906538a3986ecc5daa7a42a3a4fe6",
-  "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+  "generated_at": "2026-08-06T23:16:45Z",
+  "generated_from_revision": "ba8aa3dd4732a5436450a9d7389c894d030fa489c4fe2c3aee5b36911a85f978",
+  "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -178,10 +178,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "5f98245607ce1c3edbdff38b813e1b4c7142e2683cf93ab53991bdc72df484f2",
+      "sha256": "255e791acac1b9183f6fe3fa5d195df8156b0012f23b20cf41cf032729085043",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "554221200af7a36c88c96a4c911dcfb2273f79e5",
+    "git_commit": "59b419b07fc22cf969b6d55251ed1be31f3537ad",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -192,19 +192,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "7206aed728c79af3f2b3dcf4dcf36d5fa2530e2bde6f3a6916bc4be9558bb685",
+      "sha256": "9f8fe4ab981ba316bea03758c8f49d2dec45cc9f0c17d4e4c9897bbcca12f1e9",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-06T16:50:33Z",
+  "last_material_update": "2026-08-06T23:16:45Z",
   "metric_references": [],
-  "next_authorized_action": "Owner stages local runtime-minimal artifacts, then later opens one quoted Vast worker and runs the v5 SSH preflight without measured retrieval.",
+  "next_authorized_action": "Owner runs only the v7 same-instance repair preflight from the v7 runbook; validation, launch adoption, and measured retrieval remain closed.",
   "objective": "Brain, read-model, and Obsidian migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-3",
-  "report_sha256": "9d7eb896029ef5662af07d637df631e0229f994ed39e7e8d55a0abcd3e26f0a6",
+  "report_sha256": "c1dd3830c24830d0b7c4dbacd67f1d77ffbe0ac6cbb7d91563a7ada214338714",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -217,7 +217,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked",
+    "program_state": "a1_2_live_preflight_same_instance_repair_prepared_launch_locked",
     "task": "A0.3"
   },
   "status": "completed",

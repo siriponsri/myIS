@@ -66,6 +66,20 @@ from ..armindex.a1_2_runtime_minimal_direct_base import (
     TOPOLOGY_PATH as A12_V5_TOPOLOGY_PATH,
     validate_direct_base_revision as validate_a1_2_v5_direct_base,
 )
+from ..armindex.a1_2_live_preflight_revision import (
+    CONTRACT_PATH as A12_V6_CONTRACT_PATH,
+    RECEIPT_PATH as A12_V6_RECEIPT_PATH,
+    REVISION_ID as A12_V6_REVISION_ID,
+    SCHEMA_PATH as A12_V6_SCHEMA_PATH,
+    validate_live_revision as validate_a1_2_v6_live_revision,
+)
+from ..armindex.a1_2_live_preflight_repair_v7 import (
+    CONTRACT_PATH as A12_V7_CONTRACT_PATH,
+    RECEIPT_PATH as A12_V7_RECEIPT_PATH,
+    REVISION_ID as A12_V7_REVISION_ID,
+    SCHEMA_PATH as A12_V7_SCHEMA_PATH,
+    validate_live_repair_v7 as validate_a1_2_v7_live_repair,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -226,6 +240,23 @@ A12_V3_OWNER_RUNBOOK_PATH = Path(
 A12_V3_SCHEMA_PATH = Path("schemas/armindex/a1.2-vast-4x3090-postcommit.v3.json")
 A12_V3_MODULE_PATH = Path("src/myis_research/armindex/a1_2_vast_postcommit.py")
 A12_V5_MODULE_PATH = Path("src/myis_research/armindex/a1_2_runtime_minimal_direct_base.py")
+A12_V6_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_revision.py")
+A12_V6_PREFLIGHT_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight.py")
+A12_V6_OWNER_RUNBOOK_PATH = Path("docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V6.md")
+A12_V6_CONTINUATION_POLICY_PATH = Path(
+    "control/armindex/a1.2/owner-instance-continuation-policy.v1.json"
+)
+A12_V7_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_repair_v7.py")
+A12_V7_OWNER_RUNBOOK_PATH = Path("docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V7.md")
+A12_V7_COORDINATOR_PATH = Path("scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV7.ps1")
+A12_V7_BOOTSTRAP_PATH = Path("scripts/a1_2_vast/remote-bootstrap-direct-base-v7.sh")
+A12_V7_SUPPLEMENT_VALIDATOR_PATH = Path("scripts/a1_2_vast/validate_preflight_supplement_v7.py")
+A12_V7_SUPPLEMENT_REQUIREMENTS_PATH = Path(
+    "containers/a1_2_vast_4x3090/runtime/requirements.preflight-supplement.v7.txt"
+)
+A12_V7_SUPPLEMENT_WORKFLOW_PATH = Path(
+    ".github/workflows/a1-2-preflight-supplement-wheelhouse-v7.yml"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -298,6 +329,48 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v7"), Mapping)
+        and a1_2_scaffold["vast_preflight_v7"].get("validated") is True
+    ):
+        armindex["status"] = "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v7_same_instance_repair_prepared_synthetic_preflight_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_live_preflight_correction_prepared_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v6"), Mapping)
+        and a1_2_scaffold["vast_preflight_v6"].get("validated") is True
+    ):
+        armindex["status"] = "a1_2_live_preflight_correction_prepared_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v6_live_container_correction_prepared_synthetic_preflight_pending"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
@@ -1753,6 +1826,125 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": "direct_base_revision_not_prepared",
             "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
         },
+        "vast_preflight_v6": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": A12_V6_REVISION_ID,
+            "receipt_uri": A12_V6_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "contract_uri": A12_V6_CONTRACT_PATH.as_posix(),
+            "contract_sha256": None,
+            "contract_self_sha256": None,
+            "schema_uri": A12_V6_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "validator_uri": A12_V6_MODULE_PATH.as_posix(),
+            "validator_sha256": None,
+            "preflight_module_uri": A12_V6_PREFLIGHT_MODULE_PATH.as_posix(),
+            "preflight_module_sha256": None,
+            "owner_runbook_uri": A12_V6_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "continuation_policy": {
+                "status": "not_started",
+                "validated": False,
+                "policy_uri": A12_V6_CONTINUATION_POLICY_PATH.as_posix(),
+                "policy_sha256": None,
+                "default_post_preflight_instruction": "destroy_and_verify_provider_instance_absent",
+                "allowed_post_preflight_instruction": "continue_next_goal_on_PLAN",
+                "continuation_authorized_now": False,
+                "continuation_requires": [],
+                "fallback_to_destroy_if": [],
+            },
+            "image_reference": None,
+            "resolved_manifest_digest": None,
+            "platform": None,
+            "live_quote_usd_per_hour": 0,
+            "estimated_preflight_usd": {},
+            "budget_hard_stops_usd": {},
+            "observed_live_defects": [],
+            "corrections": {},
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "synthetic_preflight_only": True,
+            "real_counters": {
+                "measured_runs": 0,
+                "candidate_count": 0,
+                "selection_accesses": 0,
+                "final_accesses": 0,
+            },
+            "resource_counters": {
+                "charged_usd": 0,
+                "gpu_reservations": 0,
+                "gpu_scientific_runs": 0,
+                "model_downloads": 0,
+                "paid_api_calls": 0,
+                "provider_switches": 0,
+            },
+            "claim_boundary": "live_preflight_correction_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
+        "vast_preflight_v7": {
+            "status": "not_started",
+            "validated": False,
+            "revision_id": A12_V7_REVISION_ID,
+            "receipt_uri": A12_V7_RECEIPT_PATH.as_posix(),
+            "receipt_sha256": None,
+            "receipt_self_sha256": None,
+            "contract_uri": A12_V7_CONTRACT_PATH.as_posix(),
+            "contract_sha256": None,
+            "contract_self_sha256": None,
+            "schema_uri": A12_V7_SCHEMA_PATH.as_posix(),
+            "schema_sha256": None,
+            "validator_uri": A12_V7_MODULE_PATH.as_posix(),
+            "validator_sha256": None,
+            "owner_runbook_uri": A12_V7_OWNER_RUNBOOK_PATH.as_posix(),
+            "owner_runbook_sha256": None,
+            "coordinator_uri": A12_V7_COORDINATOR_PATH.as_posix(),
+            "coordinator_sha256": None,
+            "bootstrap_uri": A12_V7_BOOTSTRAP_PATH.as_posix(),
+            "bootstrap_sha256": None,
+            "supplement_validator_uri": A12_V7_SUPPLEMENT_VALIDATOR_PATH.as_posix(),
+            "supplement_validator_sha256": None,
+            "supplement_requirements_uri": A12_V7_SUPPLEMENT_REQUIREMENTS_PATH.as_posix(),
+            "supplement_requirements_sha256": None,
+            "supplement_workflow_uri": A12_V7_SUPPLEMENT_WORKFLOW_PATH.as_posix(),
+            "supplement_workflow_sha256": None,
+            "continuation_policy": {
+                "status": "not_started",
+                "validated": False,
+                "policy_uri": A12_V6_CONTINUATION_POLICY_PATH.as_posix(),
+                "policy_sha256": None,
+                "default_post_preflight_instruction": "destroy_and_verify_provider_instance_absent",
+                "allowed_post_preflight_instruction": "continue_next_goal_on_PLAN",
+                "continuation_authorized_now": False,
+                "continuation_requires": [],
+                "fallback_to_destroy_if": [],
+            },
+            "image_reference": None,
+            "resolved_manifest_digest": None,
+            "platform": None,
+            "preserved_live_failures": [],
+            "active_correction": {},
+            "launch_allowed": False,
+            "adopted_for_execution": False,
+            "synthetic_preflight_only": True,
+            "real_counters": {
+                "measured_runs": 0,
+                "candidate_count": 0,
+                "selection_accesses": 0,
+                "final_accesses": 0,
+            },
+            "resource_counters": {
+                "charged_usd": 0,
+                "gpu_reservations": 0,
+                "gpu_scientific_runs": 0,
+                "model_downloads": 0,
+                "paid_api_calls": 0,
+                "provider_switches": 0,
+            },
+            "claim_boundary": "same_instance_repair_not_prepared",
+            "next_authorized_action": A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+        },
     }
     try:
         validation = validate_a1_2_scaffold(root)
@@ -1783,6 +1975,13 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         v5_validation = None
         v5_receipt = None
         v5_contract = None
+        v6_validation = None
+        v6_receipt = None
+        v6_contract = None
+        continuation_policy = None
+        v7_validation = None
+        v7_receipt = None
+        v7_contract = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
@@ -1802,6 +2001,17 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v5_validation = validate_a1_2_v5_direct_base(root)
             v5_receipt = json.loads((root / A12_V5_RECEIPT_PATH).read_text(encoding="utf-8"))
             v5_contract = json.loads((root / A12_V5_CONTRACT_PATH).read_text(encoding="utf-8"))
+        if (root / A12_V6_RECEIPT_PATH).is_file():
+            v6_validation = validate_a1_2_v6_live_revision(root)
+            v6_receipt = json.loads((root / A12_V6_RECEIPT_PATH).read_text(encoding="utf-8"))
+            v6_contract = json.loads((root / A12_V6_CONTRACT_PATH).read_text(encoding="utf-8"))
+            continuation_policy = json.loads(
+                (root / A12_V6_CONTINUATION_POLICY_PATH).read_text(encoding="utf-8")
+            )
+        if (root / A12_V7_RECEIPT_PATH).is_file():
+            v7_validation = validate_a1_2_v7_live_repair(root)
+            v7_receipt = json.loads((root / A12_V7_RECEIPT_PATH).read_text(encoding="utf-8"))
+            v7_contract = json.loads((root / A12_V7_CONTRACT_PATH).read_text(encoding="utf-8"))
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -1820,6 +2030,11 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v3_contract,
             v5_receipt,
             v5_contract,
+            v6_receipt,
+            v6_contract,
+            continuation_policy,
+            v7_receipt,
+            v7_contract,
         ):
             if value is not None:
                 assert_aggregate_only(value)
@@ -1861,6 +2076,73 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or any(float(value) != 0 for value in v5_receipt.get("resource_counters", {}).values())
         ):
             raise ValueError("A1.2 direct-base v5 receipt is invalid")
+        if v6_receipt is not None and (
+            v6_validation is None
+            or v6_validation.get("status") != "live_correction_prepared_preflight_pending"
+            or v6_receipt.get("status") != "live_correction_prepared_preflight_pending"
+            or v6_receipt.get("evidence_class") != "live_engineering_preflight_correction"
+            or v6_receipt.get("scientific_authority") is not False
+            or v6_receipt.get("launch_allowed") is not False
+            or v6_receipt.get("adopted_for_execution") is not False
+            or v6_contract is None
+            or v6_contract.get("contract_id") != A12_V6_REVISION_ID
+            or v6_contract.get("status") != "live_correction_prepared_preflight_pending"
+            or v6_contract.get("synthetic_preflight_only") is not True
+            or v6_contract.get("measured_retrieval_allowed") is not False
+            or v6_contract.get("launch_allowed") is not False
+            or v6_contract.get("adopted_for_execution") is not False
+            or any(int(v6_receipt.get(key, -1)) != 0 for key in ("measured_runs", "selection_accesses", "final_accesses"))
+            or not isinstance(continuation_policy, Mapping)
+            or continuation_policy.get("schema_version") != "myis.armindex-a1.2-owner-instance-continuation-policy.v1"
+            or continuation_policy.get("policy_id") != "a1.2-owner-instance-continuation-v1"
+            or continuation_policy.get("status") != "active_owner_policy"
+            or continuation_policy.get("decision_kind") != "owner_change_policy"
+            or continuation_policy.get("evidence_class") != "owner_policy_for_engineering_continuity"
+            or continuation_policy.get("launch_allowed") is not False
+            or continuation_policy.get("default_post_preflight_instruction") != "destroy_and_verify_provider_instance_absent"
+            or continuation_policy.get("allowed_post_preflight_instruction") != "continue_next_goal_on_PLAN"
+            or not isinstance(continuation_policy.get("continuation_requires"), list)
+            or not continuation_policy.get("continuation_requires")
+            or not isinstance(continuation_policy.get("fallback_to_destroy_if"), list)
+            or not continuation_policy.get("fallback_to_destroy_if")
+            or not isinstance(continuation_policy.get("measured_counters"), Mapping)
+            or any(int(value) != 0 for value in continuation_policy["measured_counters"].values())
+        ):
+            raise ValueError("A1.2 live-preflight correction v6 or continuation policy is invalid")
+        if v7_receipt is not None and (
+            v7_validation is None
+            or v7_validation.get("status") != "same_instance_repair_prepared_preflight_pending"
+            or v7_receipt.get("status") != "same_instance_repair_prepared_preflight_pending"
+            or v7_receipt.get("evidence_class") != "live_engineering_preflight_repair"
+            or v7_receipt.get("scientific_authority") is not False
+            or v7_receipt.get("launch_allowed") is not False
+            or v7_receipt.get("adopted_for_execution") is not False
+            or v7_receipt.get("pythondontwritebytecode") is not True
+            or any(int(v7_receipt.get(key, -1)) != 0 for key in ("measured_runs", "selection_accesses", "final_accesses"))
+            or v7_contract is None
+            or v7_contract.get("contract_id") != A12_V7_REVISION_ID
+            or v7_contract.get("status") != "same_instance_repair_prepared_preflight_pending"
+            or v7_contract.get("evidence_class") != "live_engineering_preflight_repair"
+            or v7_contract.get("scientific_authority") is not False
+            or v7_contract.get("synthetic_preflight_only") is not True
+            or v7_contract.get("measured_retrieval_allowed") is not False
+            or v7_contract.get("launch_allowed") is not False
+            or v7_contract.get("adopted_for_execution") is not False
+            or v6_receipt is None
+            or v7_receipt.get("v6_receipt_sha256") != v6_receipt.get("receipt_sha256")
+            or not isinstance(v7_contract.get("preserved_live_failures"), list)
+            or len(v7_contract["preserved_live_failures"]) != 2
+            or v7_receipt.get("preserved_live_failure_ids")
+            != [item.get("failure_id") for item in v7_contract["preserved_live_failures"]]
+            or not isinstance(v7_contract.get("active_correction"), Mapping)
+            or v7_contract["active_correction"].get("fresh_root_required") is not True
+            or v7_contract["active_correction"].get("same_instance_reuse") is not True
+            or v7_contract["active_correction"].get("required_environment")
+            != {"PYTHONDONTWRITEBYTECODE": "1"}
+            or any(int(value) != 0 for value in v7_contract.get("real_counters", {}).values())
+            or any(int(value) != 0 for value in v7_contract.get("resource_counters", {}).values())
+        ):
+            raise ValueError("A1.2 same-instance repair v7 receipt is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -2103,9 +2385,142 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": str(v5_receipt["claim_boundary"]),
             "next_authorized_action": str(v5_receipt["next_authorized_action"]),
         }
+    v6_projection = dict(missing["vast_preflight_v6"])
+    if (
+        v6_receipt is not None
+        and v6_contract is not None
+        and v6_validation is not None
+        and isinstance(continuation_policy, Mapping)
+    ):
+        v6_projection = {
+            **v6_projection,
+            "status": str(v6_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v6_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V6_RECEIPT_PATH),
+            "receipt_self_sha256": str(v6_receipt["receipt_sha256"]),
+            "contract_sha256": _file_sha256(root / A12_V6_CONTRACT_PATH),
+            "contract_self_sha256": str(v6_contract["contract_sha256"]),
+            "schema_sha256": _file_sha256(root / A12_V6_SCHEMA_PATH),
+            "validator_sha256": _file_sha256(root / A12_V6_MODULE_PATH),
+            "preflight_module_sha256": _file_sha256(root / A12_V6_PREFLIGHT_MODULE_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V6_OWNER_RUNBOOK_PATH),
+            "continuation_policy": {
+                "status": str(continuation_policy["status"]),
+                "validated": True,
+                "policy_uri": A12_V6_CONTINUATION_POLICY_PATH.as_posix(),
+                "policy_sha256": _file_sha256(root / A12_V6_CONTINUATION_POLICY_PATH),
+                "default_post_preflight_instruction": str(
+                    continuation_policy["default_post_preflight_instruction"]
+                ),
+                "allowed_post_preflight_instruction": str(
+                    continuation_policy["allowed_post_preflight_instruction"]
+                ),
+                # v6 is still preflight-pending; this policy is conditional and
+                # cannot authorize reuse until its listed live evidence exists.
+                "continuation_authorized_now": False,
+                "continuation_requires": list(continuation_policy["continuation_requires"]),
+                "fallback_to_destroy_if": list(continuation_policy["fallback_to_destroy_if"]),
+            },
+            "image_reference": str(v6_contract["image_reference"]),
+            "resolved_manifest_digest": str(v6_contract["resolved_manifest_digest"]),
+            "platform": str(v6_contract["platform"]),
+            "live_quote_usd_per_hour": float(v6_contract["live_quote_usd_per_hour"]),
+            "estimated_preflight_usd": dict(v6_contract["estimated_preflight_usd"]),
+            "budget_hard_stops_usd": dict(v6_contract["budget_hard_stops_usd"]),
+            "observed_live_defects": list(v6_contract["observed_live_defects"]),
+            "corrections": dict(v6_contract["corrections"]),
+            "launch_allowed": bool(v6_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v6_receipt["adopted_for_execution"]),
+            "synthetic_preflight_only": bool(v6_contract["synthetic_preflight_only"]),
+            "real_counters": {
+                "measured_runs": int(v6_receipt["measured_runs"]),
+                "candidate_count": 0,
+                "selection_accesses": int(v6_receipt["selection_accesses"]),
+                "final_accesses": int(v6_receipt["final_accesses"]),
+            },
+            "resource_counters": dict(missing["vast_preflight_v6"]["resource_counters"]),
+            "claim_boundary": str(v6_receipt["claim_boundary"]),
+            "next_authorized_action": str(v6_contract["next_authorized_action"]),
+        }
+    v7_projection = dict(missing["vast_preflight_v7"])
+    if (
+        v7_receipt is not None
+        and v7_contract is not None
+        and v7_validation is not None
+        and isinstance(continuation_policy, Mapping)
+    ):
+        image_runtime_lock = v7_contract["image_runtime_lock"]
+        active_correction = v7_contract["active_correction"]
+        v7_projection = {
+            **v7_projection,
+            "status": str(v7_receipt["status"]),
+            "validated": True,
+            "revision_id": str(v7_receipt["revision_id"]),
+            "receipt_sha256": _file_sha256(root / A12_V7_RECEIPT_PATH),
+            "receipt_self_sha256": str(v7_receipt["receipt_sha256"]),
+            "contract_sha256": _file_sha256(root / A12_V7_CONTRACT_PATH),
+            "contract_self_sha256": str(v7_contract["contract_sha256"]),
+            "schema_sha256": _file_sha256(root / A12_V7_SCHEMA_PATH),
+            "validator_sha256": _file_sha256(root / A12_V7_MODULE_PATH),
+            "owner_runbook_sha256": _file_sha256(root / A12_V7_OWNER_RUNBOOK_PATH),
+            "coordinator_sha256": _file_sha256(root / A12_V7_COORDINATOR_PATH),
+            "bootstrap_sha256": _file_sha256(root / A12_V7_BOOTSTRAP_PATH),
+            "supplement_validator_sha256": _file_sha256(root / A12_V7_SUPPLEMENT_VALIDATOR_PATH),
+            "supplement_requirements_sha256": _file_sha256(root / A12_V7_SUPPLEMENT_REQUIREMENTS_PATH),
+            "supplement_workflow_sha256": _file_sha256(root / A12_V7_SUPPLEMENT_WORKFLOW_PATH),
+            "continuation_policy": {
+                "status": str(continuation_policy["status"]),
+                "validated": True,
+                "policy_uri": A12_V6_CONTINUATION_POLICY_PATH.as_posix(),
+                "policy_sha256": _file_sha256(root / A12_V6_CONTINUATION_POLICY_PATH),
+                "default_post_preflight_instruction": str(
+                    continuation_policy["default_post_preflight_instruction"]
+                ),
+                "allowed_post_preflight_instruction": str(
+                    continuation_policy["allowed_post_preflight_instruction"]
+                ),
+                "continuation_authorized_now": False,
+                "continuation_requires": list(continuation_policy["continuation_requires"]),
+                "fallback_to_destroy_if": list(continuation_policy["fallback_to_destroy_if"]),
+            },
+            "image_reference": str(image_runtime_lock["image_reference"]),
+            "resolved_manifest_digest": str(image_runtime_lock["resolved_manifest_digest"]),
+            "platform": str(image_runtime_lock["platform"]),
+            "preserved_live_failures": [
+                {
+                    "failure_id": str(item["failure_id"]),
+                    "description": str(item["description"]),
+                    "disposition": str(item["disposition"]),
+                }
+                for item in v7_contract["preserved_live_failures"]
+            ],
+            "active_correction": {
+                "fresh_remote_root_required": bool(active_correction["fresh_root_required"]),
+                "same_instance_reuse": bool(active_correction["same_instance_reuse"]),
+                "pythondontwritebytecode": v7_receipt["pythondontwritebytecode"] is True,
+                "reuse_only_after_sha256_validation": list(
+                    active_correction["reuse_only_after_sha256_validation"]
+                ),
+                "upload_only": list(active_correction["upload_only"]),
+            },
+            "launch_allowed": bool(v7_receipt["launch_allowed"]),
+            "adopted_for_execution": bool(v7_receipt["adopted_for_execution"]),
+            "synthetic_preflight_only": bool(v7_contract["synthetic_preflight_only"]),
+            "real_counters": dict(v7_contract["real_counters"]),
+            "resource_counters": dict(v7_contract["resource_counters"]),
+            "claim_boundary": str(v7_receipt["claim_boundary"]),
+            "next_authorized_action": str(v7_contract["next_authorized_action"]),
+        }
     return {
         **missing,
         "status": (
+            "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
+            if v7_projection["validated"]
+            else
+            "a1_2_live_preflight_correction_prepared_launch_locked"
+            if v6_projection["validated"]
+            else
             "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
             if v5_projection["validated"]
             else
@@ -2118,6 +2533,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
+            "live_engineering_preflight_repair"
+            if v7_projection["validated"]
+            else
+            "live_engineering_preflight_correction"
+            if v6_projection["validated"]
+            else
             "engineering_preflight_revision"
             if v5_projection["validated"]
             else
@@ -2128,6 +2549,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             else "engineering_contract_scaffold"
         ),
         "claim_boundary": (
+            v7_projection.get("claim_boundary")
+            if v7_projection["validated"]
+            else
+            v6_projection.get("claim_boundary")
+            if v6_projection["validated"]
+            else
             v5_projection.get("claim_boundary")
             if v5_projection["validated"]
             else
@@ -2192,6 +2619,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "real_counters": dict(contract["real_counters"]),
         "resource_counters": dict(contract["resource_counters"]),
         "next_authorized_action": (
+            str(v7_projection["next_authorized_action"])
+            if v7_projection["validated"]
+            else
+            str(v6_projection["next_authorized_action"])
+            if v6_projection["validated"]
+            else
             str(v5_projection["next_authorized_action"])
             if v5_projection["validated"]
             else
@@ -2207,6 +2640,8 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "vast_preflight_v2": v2_projection,
         "vast_preflight_v3": v3_projection,
         "vast_preflight_v5": v5_projection,
+        "vast_preflight_v6": v6_projection,
+        "vast_preflight_v7": v7_projection,
     }
 
 

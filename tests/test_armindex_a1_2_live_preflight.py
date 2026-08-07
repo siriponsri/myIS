@@ -183,3 +183,18 @@ def test_v7_supplement_closes_repository_runtime_dependencies_without_torch() ->
     assert "--no-index --find-links artifact" in workflow
     assert "import myis_research.armindex" in workflow
     assert "torch_wheel_included" in workflow
+
+    bootstrap = (
+        ROOT / "scripts/a1_2_vast/remote-bootstrap-direct-base-v7.sh"
+    ).read_text(encoding="utf-8")
+    assert "PYTHONDONTWRITEBYTECODE=1" in bootstrap
+    assert "requirements.preflight-supplement.v7.txt" in bootstrap
+    assert "remote-bootstrap-direct-base-v6.sh" in bootstrap
+    assert "fresh v7 frozen bundle already contains Python bytecode cache" in bootstrap
+
+    coordinator = (
+        ROOT / "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV7.ps1"
+    ).read_text(encoding="utf-8")
+    assert "stage-repair" in coordinator
+    assert "v6_model_wheelhouse_job_bytes_reused_on_same_instance" in coordinator
+    assert "docker load" not in coordinator.lower()
