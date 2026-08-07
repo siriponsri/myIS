@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T11:52:12Z",
-  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "generated_at": "2026-08-07T13:00:35Z",
+  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -38,10 +38,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "44f36dc7bb9fb5e73b4733ea35ad4b68baf6feeec67a4abd6bdb94502e5d7049",
+      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,19 +52,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
+      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T11:52:12Z",
+  "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [],
-  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
   "objective": "Production profiles and legal transfer",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "task-a4-1",
-  "report_sha256": "ae0f3b3207fe4bf39620a5ac2e0453eb65c8b3e0cabb48442c2d421016d8b044",
+  "report_sha256": "2592cd7152c762d9f76c6369038bf599e7896c80bd6a67107352163ac9a5526c",
   "report_type": "task",
   "result": {
     "decision": "planned",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+    "program_state": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
     "task": "A4.1"
   },
   "status": "planned",

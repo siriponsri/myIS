@@ -47,7 +47,7 @@
       },
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
-      "claim_boundary": "Engineering-only synthetic adapter and lifecycle evidence on one Vast 4xRTX3090 instance; no retrieval-quality, publication, or general workload claim.",
+      "claim_boundary": "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim.",
       "closeout_validation_audit_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "closeout_validation_check_count": 17,
@@ -111,7 +111,7 @@
       ],
       "closeout_validation_recovery_count": 7,
       "dense_artifact_manifests_pending": 4,
-      "evidence_class": "live_engineering_synthetic_preflight",
+      "evidence_class": "owner_local_provider_closeout",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
       "execution_contract_uri": "control/armindex/a1.2/execution-contract.v1.json",
       "execution_envelope_sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
@@ -125,9 +125,9 @@
       "model_lock_count": 5,
       "model_lockset_sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
       "model_lockset_uri": "control/armindex/a1.2/model-lockset.v1.json",
-      "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+      "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
       "offline_adapter_ready": 1,
-      "owner_requirements_pending": 2,
+      "owner_requirements_pending": 0,
       "preflight_blockers": [
         "arm-02_sha256s_manifest",
         "arm-03_sha256s_manifest",
@@ -146,6 +146,56 @@
       "preflight_sha256": "2c3ce75d23c8909f8d345295538a4eb230e436970f488b837d887405c754ca57",
       "preflight_status": "blocked_owner_input",
       "preflight_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json",
+      "provider_closeout_v10": {
+        "adopted_for_execution": false,
+        "charged_usd": 0.0,
+        "claim_boundary": "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim.",
+        "final_accesses": 0,
+        "launch_allowed": false,
+        "measured_runs": 0,
+        "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
+        "owner_evidence": {
+          "receipt_file_sha256": "a803a84f5cb7c39165ce841c10339359dff3297981e2ebe5b42128418619f0d4",
+          "receipt_self_sha256": "24a8f7340aa9b8cf15188855f5c635c801efbc2df08cd9625bc4af572da5da71",
+          "receipt_uri": "owner-store/a1.2-vast-20260806/receipts/VAST_PROVIDER_CLOSEOUT_V10.json",
+          "source": "active_codex_thread_owner_message_20260807"
+        },
+        "pending_provider_checks": [],
+        "predecessor": {
+          "attempt_id": "a12-v9-20260807-06",
+          "receipt_file_sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "receipt_self_sha256": "f8969e55225b4fa567c94079b6bffc834e1951268f626bdad7754104294df510",
+          "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json"
+        },
+        "provider_closeout": {
+          "endpoint_observation": "connection_refused",
+          "guest_poweroff_is_provider_destruction": false,
+          "independent_provider_api_record_available": false,
+          "instance_id": "47023328",
+          "limitation": "The Owner reported destruction in the provider UI and the prior SSH endpoint immediately refused a connection; no independent Vast API or CLI destruction record was queried or retained.",
+          "owner_disposition": "destroyed_and_provider_absence_verified",
+          "proof_basis": [
+            "owner_provider_ui_attestation",
+            "post_confirmation_endpoint_unreachable"
+          ],
+          "provider_api_query_performed": false,
+          "provider_destroy_invoked": true,
+          "provider_destruction_proven": true,
+          "provider_instance_absent_verified": true,
+          "provider_label": "Vast"
+        },
+        "receipt_self_sha256": "22f4e027668ecdd6ba5c9f162eee781269b0868bdec513df3ff0fab79b8507ef",
+        "receipt_sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+        "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+        "revision_id": "a1.2-provider-closeout-result-v10",
+        "schema_sha256": "17563625d057f31a19c85d8ffb9934206e12dc2dd495169cc6edc66dd42f8681",
+        "schema_uri": "schemas/armindex/a1.2-provider-closeout-result.v10.json",
+        "selection_accesses": 0,
+        "status": "PASS",
+        "validated": true,
+        "validator_sha256": "9d7c3bac271798ac7bf51a9e04d07c818b435bdff6038075eb72875f9f50328f",
+        "validator_uri": "src/myis_research/armindex/a1_2_provider_closeout_result_v10.py"
+      },
       "real_counters": {
         "candidate_count": 0,
         "final_accesses": 0,
@@ -175,7 +225,7 @@
       "scientific_authority": false,
       "shutdown_plan_sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "shutdown_plan_uri": "control/armindex/a1.2/shutdown-plan.v1.json",
-      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
       "v1_status": "a1_2_contract_scaffold_complete_launch_locked",
       "validated": true,
       "vast_preflight_v2": {
@@ -1043,7 +1093,7 @@
     },
     "arms": [
       {
-        "adapter_status": "bm25s_cpu_lock_and_synthetic_rank_parity_validated",
+        "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-01",
         "commercial_status": "commercial_capable",
         "license": "MIT",
@@ -1052,40 +1102,44 @@
         "role": "lexical_anchor_cpu_fallback"
       },
       {
-        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
+        "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-02",
         "commercial_status": "commercial_capable",
         "license": "MIT",
         "model_id": "BAAI/bge-m3",
         "representation_status": "not_started",
-        "role": "multilingual_dense_anchor"
+        "role": "multilingual_dense_anchor",
+        "status": "live_synthetic_preflight_pass"
       },
       {
-        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
+        "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-03",
         "commercial_status": "research_non_commercial",
         "license": "CC-BY-NC-SA-4.0",
         "model_id": "datalyes/patembed-large",
         "representation_status": "not_started",
-        "role": "research_champion_candidate"
+        "role": "research_champion_candidate",
+        "status": "live_synthetic_preflight_pass"
       },
       {
-        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
+        "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-04",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
         "model_id": "Snowflake/snowflake-arctic-embed-m-v2.0",
         "representation_status": "not_started",
-        "role": "long_context_dense"
+        "role": "long_context_dense",
+        "status": "live_synthetic_preflight_pass"
       },
       {
-        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
+        "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-05",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
         "model_id": "Qwen/Qwen3-Embedding-0.6B",
         "representation_status": "not_started",
-        "role": "instruction_aware_dense"
+        "role": "instruction_aware_dense",
+        "status": "live_synthetic_preflight_pass"
       }
     ],
     "budget": {
@@ -1352,7 +1406,7 @@
       "status": "complete",
       "validated": true
     },
-    "next_command": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+    "next_command": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -1436,7 +1490,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+        "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
         "tasks": [
           {
             "status": "complete",
@@ -1444,7 +1498,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+            "status": "synthetic_preflight_closed_provider_destroyed_scientific_execution_locked",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -1532,7 +1586,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+    "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -1564,7 +1618,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -1723,7 +1777,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-07T11:52:12Z",
+  "generated_at": "2026-08-07T13:00:35Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -2631,7 +2685,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
+  "projection_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2675,8 +2729,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "read_model_sha256": "22b0999cf694b1702b846d4ca261f0c8f4ea1e1bd2d1f7548800afa19d3c219e",
+  "read_model_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "read_model_sha256": "944697aa79079bfbfcbfaa0c0ab7ed05595c25debfbc60e77777b6ecdad7d1de",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2809,7 +2863,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "source_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "tasks": [
     {
       "evidence_ids": [],

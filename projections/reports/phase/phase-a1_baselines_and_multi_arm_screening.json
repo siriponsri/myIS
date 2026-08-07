@@ -1601,15 +1601,33 @@
       "scientific_authority": false,
       "title": "A1.2 live synthetic preflight result receipt v9",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-provider-closeout-result-v10",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+      "evidence_class": "owner_local_provider_closeout",
+      "explanation": "Binds the immutable v9 result to the later Owner destroy attestation and sanitized endpoint-unreachable observation, while recording the absence of an independent provider API record and keeping all scientific authorization closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+      "scientific_authority": false,
+      "title": "A1.2 Owner-local provider closeout receipt v10",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "Engineering-only synthetic adapter and lifecycle evidence on one Vast 4xRTX3090 instance; no retrieval-quality, publication, or general workload claim.",
+  "claim_boundary": "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1 engineering preflight is current through v9 with live synthetic status PASS; Owner instance disposition remains pending, and measured ArmIndex, Selection, Final, and charged-resource counters remain zero.",
+    "reason": "A1 engineering preflight is current through v10 with live synthetic status PASS; the Owner destroyed the Vast instance and provider absence was observed, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero.",
     "status": "active"
   },
-  "evidence_class": "live_engineering_synthetic_preflight",
+  "evidence_class": "owner_local_provider_closeout",
   "evidence_links": [
     {
       "artifact_id": "a11-adapter-task-receipt",
@@ -2055,6 +2073,11 @@
       "artifact_id": "a12-live-synthetic-preflight-result-v9",
       "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json"
+    },
+    {
+      "artifact_id": "a12-provider-closeout-result-v10",
+      "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json"
     }
   ],
   "failure_recovery_references": [
@@ -2169,13 +2192,13 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-07T11:52:12Z",
-  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "generated_at": "2026-08-07T13:00:35Z",
+  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "live_engineering_synthetic_preflight",
+    "evidence_class": "owner_local_provider_closeout",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -2229,7 +2252,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -2294,10 +2317,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "44f36dc7bb9fb5e73b4733ea35ad4b68baf6feeec67a4abd6bdb94502e5d7049",
+      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2308,13 +2331,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
+      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. It does not establish retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse.",
+  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. It does not establish retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
-  "last_material_update": "2026-08-07T11:52:12Z",
+  "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -2405,16 +2428,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "a89ce216420603ef3daa2035cc8b1e360d4fe48743fa8f68e81309c5e4a73246",
+  "report_sha256": "a5f3563b9c476d10f8a6c1d4fceff7408aa83ee5c350c1c51b25c21b50049a29",
   "report_type": "phase",
   "result": {
     "decision": "active",
-    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms.",
-    "result": "A1 engineering preflight is current through v9 with live synthetic status PASS; Owner instance disposition remains pending, and measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
+    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, and provider closeout v10 is PASS.",
+    "result": "A1 engineering preflight is current through v10 with live synthetic status PASS; the Owner destroyed the Vast instance and provider absence was observed, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -2422,13 +2445,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+    "program_state": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
     "task": null
   },
   "status": "active",
   "supported_claims": [
     {
-      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms.",
+      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, and provider closeout v10 is PASS.",
       "evidence": [
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
@@ -2518,7 +2541,8 @@
         "a12-live-preflight-v9-coordinator",
         "a12-live-preflight-v9-bootstrap",
         "a12-live-preflight-v9-launcher",
-        "a12-live-synthetic-preflight-result-v9"
+        "a12-live-synthetic-preflight-result-v9",
+        "a12-provider-closeout-result-v10"
       ]
     }
   ],

@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-07T11:52:12Z",
-  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "generated_at": "2026-08-07T13:00:35Z",
+  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -788,7 +788,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
+      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T11:52:12Z",
+  "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [],
-  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "9eb64bc27c69c69035c79b1ae5e8615e3ba019ce1a0653b90dae273ec7b66fc3",
+  "report_sha256": "5f67fc33cf2f04e84ea300a789b1c3c3dd4635e8651a36dbefb2c7f08ba12571",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

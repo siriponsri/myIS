@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T11:52:12Z",
-  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "generated_at": "2026-08-07T13:00:35Z",
+  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
+      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-07T11:52:12Z",
+  "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [
     {
       "arm": "R0-W",
@@ -278,11 +278,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "d615056cc0868595952fbb40e8cbf2b47e4bc68b0d65e37f2f463b9a9d935a8e",
+  "report_sha256": "9434a0ebf528a5fb7039fde0331e50b890aae6cb47eac393f1dad30974bdd002",
   "report_type": "task",
   "result": {
     "decision": "completed",

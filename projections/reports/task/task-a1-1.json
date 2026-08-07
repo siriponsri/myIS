@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T11:52:12Z",
-  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "generated_at": "2026-08-07T13:00:35Z",
+  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -209,7 +209,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -274,10 +274,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "44f36dc7bb9fb5e73b4733ea35ad4b68baf6feeec67a4abd6bdb94502e5d7049",
+      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -288,13 +288,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
+      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.",
   "language": "en",
-  "last_material_update": "2026-08-07T11:52:12Z",
+  "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -385,11 +385,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
   "objective": "Adapter fixture validation",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-1",
-  "report_sha256": "f58091e99e49b8b62cc659af0e501c21d15a1892bca35a37a236e8f5a2e79e2e",
+  "report_sha256": "4b33528b6aa46100e53a26ddea6239d43a2a5e59a2871e07c32ce11974180d1c",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -402,7 +402,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+    "program_state": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
     "task": "A1.1"
   },
   "status": "completed",

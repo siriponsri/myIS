@@ -1511,15 +1511,33 @@
       "scientific_authority": false,
       "title": "A1.2 live synthetic preflight result receipt v9",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-provider-closeout-result-v10",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+      "evidence_class": "owner_local_provider_closeout",
+      "explanation": "Binds the immutable v9 result to the later Owner destroy attestation and sanitized endpoint-unreachable observation, while recording the absence of an independent provider API record and keeping all scientific authorization closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+      "scientific_authority": false,
+      "title": "A1.2 Owner-local provider closeout receipt v10",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "Engineering-only synthetic adapter and lifecycle evidence on one Vast 4xRTX3090 instance; no retrieval-quality, publication, or general workload claim.",
+  "claim_boundary": "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1.2 synthetic live preflight status is PASS: 4 dense-arm adapter receipts were collected, Qwen measured adapter maximum is 32768 tokens, and guest teardown is PASS. Scientific launch remains locked; measured runs and charged USD counters remain zero.",
+    "reason": "A1.2 synthetic live preflight status is PASS: 4 dense-arm adapter receipts were collected, Qwen measured adapter maximum is 32768 tokens, guest teardown is PASS, and the Owner-confirmed provider closeout is recorded. Scientific launch remains locked; measured runs and charged USD counters remain zero.",
     "status": "blocked"
   },
-  "evidence_class": "live_engineering_synthetic_preflight",
+  "evidence_class": "owner_local_provider_closeout",
   "evidence_links": [
     {
       "artifact_id": "a12-gpu-execution-proposal",
@@ -1940,6 +1958,11 @@
       "artifact_id": "a12-live-synthetic-preflight-result-v9",
       "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json"
+    },
+    {
+      "artifact_id": "a12-provider-closeout-result-v10",
+      "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json"
     }
   ],
   "failure_recovery_references": [
@@ -2084,13 +2107,13 @@
       "status": "preserved_and_repaired_preflight_pending"
     }
   ],
-  "generated_at": "2026-08-07T11:52:12Z",
-  "generated_from_revision": "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3",
-  "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+  "generated_at": "2026-08-07T13:00:35Z",
+  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "live_engineering_synthetic_preflight",
+    "evidence_class": "owner_local_provider_closeout",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -2144,7 +2167,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -2209,10 +2232,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "44f36dc7bb9fb5e73b4733ea35ad4b68baf6feeec67a4abd6bdb94502e5d7049",
+      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "c489d78adea68967cfc1e452eee4c932a3b27c63",
+    "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2223,13 +2246,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
+      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. It is not retrieval-quality or publication evidence. Provider destruction/TTL proof or a policy-valid separately authorized continuation remains pending.",
+  "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. It is not retrieval-quality or publication evidence.",
   "language": "en",
-  "last_material_update": "2026-08-07T11:52:12Z",
+  "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -2496,16 +2519,16 @@
       "value": 1
     }
   ],
-  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "b6162bcc0583f4d849c97c9d15e34fe454079094b52395f28eac6727917cb076",
+  "report_sha256": "185372d1a419e6d3e701d048a988e0482a7925ad29d3ac4438d0de9c7451df9f",
   "report_type": "task",
   "result": {
     "decision": "blocked",
-    "output": "The preserved v1-v8 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage and leaves provider disposition conditional.",
-    "result": "A1.2 synthetic live preflight status is PASS: 4 dense-arm adapter receipts were collected, Qwen measured adapter maximum is 32768 tokens, and guest teardown is PASS. Scientific launch remains locked; measured runs and charged USD counters remain zero."
+    "output": "The preserved v1-v8 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage; provider closeout v10 is PASS.",
+    "result": "A1.2 synthetic live preflight status is PASS: 4 dense-arm adapter receipts were collected, Qwen measured adapter maximum is 32768 tokens, guest teardown is PASS, and the Owner-confirmed provider closeout is recorded. Scientific launch remains locked; measured runs and charged USD counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -2513,13 +2536,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
+    "program_state": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
     "task": "A1.2"
   },
-  "status": "planned",
+  "status": "active",
   "supported_claims": [
     {
-      "claim": "The preserved v1-v8 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage and leaves provider disposition conditional.",
+      "claim": "The preserved v1-v8 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage; provider closeout v10 is PASS.",
       "evidence": [
         "a12-gpu-execution-proposal",
         "a12-contract-scaffold-receipt",
@@ -2604,7 +2627,8 @@
         "a12-live-preflight-v9-coordinator",
         "a12-live-preflight-v9-bootstrap",
         "a12-live-preflight-v9-launcher",
-        "a12-live-synthetic-preflight-result-v9"
+        "a12-live-synthetic-preflight-result-v9",
+        "a12-provider-closeout-result-v10"
       ]
     }
   ],

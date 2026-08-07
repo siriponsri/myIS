@@ -1,0 +1,132 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260807T124740Z-a12-v10-provider-closeout",
+  "run_id": "a12-v9-20260807-06",
+  "goal_id": "A1.2_PROVIDER_CLOSEOUT_V10",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-07T12:47:40Z",
+  "scope": "Record the Owner-confirmed destruction and observed absence of the A1.2 Vast provider instance as an additive v10 closeout, preserve immutable v1-v9 evidence, keep scientific execution locked, and project the aggregate-safe state without opening protected data or starting measured work.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner confirmation in the active Codex thread on 2026-08-07",
+      "scope": "Record that Vast instance 47023328 was destroyed and close the provider disposition. This does not authorize a new instance, scientific adoption, measured retrieval, optimization, Selection, Final, paid API work, protected-data transfer, or model-weight changes."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "036f5a3e463e5d283f0c0669ae457f9544bab3fc",
+    "dirty_paths": []
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner confirmed that the A1.2 Vast instance was destroyed, selecting closeout rather than same-instance continuation.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+          "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+          "locator": "provider_closeout.owner_disposition and owner_evidence"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "A sanitized post-confirmation probe observed connection refusal; the closeout explicitly records that no independent Vast API or CLI destruction record was obtained.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+          "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+          "locator": "provider_closeout.endpoint_observation, provider_api_query_performed, independent_provider_api_record_available, and limitation"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The additive v10 receipt binds the exact v9 result file and self hashes plus the sanitized Owner-local closeout receipt hashes without changing any historical v9 byte.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+          "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+          "locator": "predecessor and owner_evidence"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+          "sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+          "locator": "lifecycle.provider_destruction_proven and owner_disposition"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The provider lifecycle is closed, but A1.2 scientific screening is not complete: launch and adoption remain false, and measured-run, Selection, Final, and charged-USD counters remain zero.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+          "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
+          "locator": "scientific_authority, claim_boundary, launch_allowed, adopted_for_execution, measured_runs, selection_accesses, final_accesses, and charged_usd"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "pivot",
+      "provenance": "agent-observed",
+      "summary": "The next authorized action changes from provider disposition to local CPU-only preparation of a separately authorized A1.2 scientific execution and adoption request; any future provider requires fresh admission checks.",
+      "evidence_refs": [
+        {
+          "path": "PLAN.md",
+          "sha256": "ac46b7b3e7ec3b25d02f4073e2918b642d4607221528057fbdc137a3dcfdde8d",
+          "locator": "Next authorized action"
+        },
+        {
+          "path": "HANDOFF.md",
+          "sha256": "0312275a2d8e1ac9fd39f1e10bf43be4e0f7c33e340fd02be6e753d232b39c9f",
+          "locator": "Blockers and Active authorized action"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json",
+    "manifest": null,
+    "mlflow_receipts": [
+      "projections/sync-receipt.v2.json"
+    ]
+  },
+  "open_threads": [
+    {
+      "thread_id": "a1.2-scientific-execution-adoption-preparation",
+      "provenance": "agent-proposed",
+      "summary": "Prepare a separate local-only goal that binds the unchanged preflight lineage, protected evaluator handoff, measured budget, workload manifests, stop conditions, and a fresh provider admission plan before requesting execution adoption.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

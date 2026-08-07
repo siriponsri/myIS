@@ -1,24 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3"
-read_model_sha256: "22b0999cf694b1702b846d4ca261f0c8f4ea1e1bd2d1f7548800afa19d3c219e"
-source_commit: "c489d78adea68967cfc1e452eee4c932a3b27c63"
+read_model_revision: "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b"
+read_model_sha256: "944697aa79079bfbfcbfaa0c0ab7ed05595c25debfbc60e77777b6ecdad7d1de"
+source_commit: "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "live_engineering_synthetic_preflight"
+evidence_class: "owner_local_provider_closeout"
 scientific_authority: false
-claim_boundary: "Engineering-only synthetic adapter and lifecycle evidence on one Vast 4xRTX3090 instance; no retrieval-quality, publication, or general workload claim."
-generated_from_revision: "0f838c7d44685a2168f7f0dc0e0e41c8a33cde6fb612aa976e2bea4350b4dda3"
-last_material_update: "2026-08-07T11:52:12Z"
-next_authorized_action: "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true."
+claim_boundary: "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim."
+generated_from_revision: "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b"
+last_material_update: "2026-08-07T13:00:35Z"
+next_authorized_action: "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-07T11:52:12Z"
-updated_at: "2026-08-07T11:52:12Z"
+created_at: "2026-08-07T13:00:35Z"
+updated_at: "2026-08-07T13:00:35Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -40,15 +40,15 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked
+- `program_state`: a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `44f36dc7bb9fb5e73b4733ea35ad4b68baf6feeec67a4abd6bdb94502e5d7049`
-- `git_commit`: c489d78adea68967cfc1e452eee4c932a3b27c63
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879`
+- `git_commit`: 62b253a7c2fdc65fd807bafcca8f5af9fb971c7f
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -90,9 +90,9 @@ Owner prerequisites:
 
 ### A1.2 scaffold and launch state
 
-The offline scaffold is `a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `2` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
+The offline scaffold is `a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `0` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
 
-The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. The additive v6 live-container correction is `live_correction_prepared_preflight_pending` and remains synthetic-only with launch `False` and adoption `False`. The additive v7 same-instance repair is `same_instance_repair_prepared_preflight_pending` with `2` preserved engineering failure(s), a fresh runtime root requirement `True`, and bytecode suppression `True`. The additive v8 validation-complete frozen-bundle repair is `validation_complete_bundle_repair_prepared_preflight_pending` with `3` preserved engineering failure(s), validation lineage complete `True`, and a fresh root `/opt/myis/a1.2-v8`. The additive v9 execution-lifecycle repair is `execution_lifecycle_repair_prepared_preflight_pending` with implementation validation `True`, live synthetic execution pending `True`, and fresh root `/opt/myis/a1.2-v9`. Collected live synthetic result: `PASS`; 4 arm receipts, Qwen measured adapter max `32768`, checkpoint/resume `PASS`, and guest teardown `PASS`. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
+The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. The additive v6 live-container correction is `live_correction_prepared_preflight_pending` and remains synthetic-only with launch `False` and adoption `False`. The additive v7 same-instance repair is `same_instance_repair_prepared_preflight_pending` with `2` preserved engineering failure(s), a fresh runtime root requirement `True`, and bytecode suppression `True`. The additive v8 validation-complete frozen-bundle repair is `validation_complete_bundle_repair_prepared_preflight_pending` with `3` preserved engineering failure(s), validation lineage complete `True`, and a fresh root `/opt/myis/a1.2-v8`. The additive v9 execution-lifecycle repair is `execution_lifecycle_repair_prepared_preflight_pending` with implementation validation `True`, live synthetic execution pending `True`, and fresh root `/opt/myis/a1.2-v9`. Collected live synthetic result: `PASS`; 4 arm receipts, Qwen measured adapter max `32768`, checkpoint/resume `PASS`, and guest teardown `PASS`. The v10 Owner-local provider closeout is `PASS`; no independent Vast API or CLI record was obtained, so the provider-absence claim is limited to the Owner UI attestation and endpoint-unreachable observation. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
 
 The Owner continuity policy is `active_owner_policy`. Its default is `destroy_and_verify_provider_instance_absent`; `continue_next_goal_on_PLAN` remains conditional and is not authorized now.
 
@@ -198,37 +198,38 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 execution-lifecycle bootstrap v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh` | `c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358` | `validated` |
 | A1.2 four-GPU synthetic launcher v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-live-preflight-v9.sh` | `958ae71cf029ad2843f4ba06e3db170f310bfc887dfd28fd791b6f856586c73f` | `validated` |
 | A1.2 live synthetic preflight result receipt v9 | `receipt` | `live_engineering_synthetic_preflight` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json` | `52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6` | `validated` |
+| A1.2 Owner-local provider closeout receipt v10 | `receipt` | `owner_local_provider_closeout` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json` | `e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216` | `validated` |
 
 ## Metrics
 
 | Metric | Split | Scope | Value | n | Denominator | Evidence |
 |---|---|---|---:|---:|---|---|
-| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_synthetic_preflight` |
-| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_synthetic_preflight` |
-| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_synthetic_preflight` |
-| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `live_engineering_synthetic_preflight` |
-| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `live_engineering_synthetic_preflight` |
-| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `live_engineering_synthetic_preflight` |
-| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `live_engineering_synthetic_preflight` |
-| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `live_engineering_synthetic_preflight` |
+| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
+| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
+| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
+| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
+| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
+| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `owner_local_provider_closeout` |
+| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `owner_local_provider_closeout` |
+| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `owner_local_provider_closeout` |
 
 Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms.
+**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, and provider closeout v10 is PASS.
 
-**Result:** A1 engineering preflight is current through v9 with live synthetic status PASS; Owner instance disposition remains pending, and measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
+**Result:** A1 engineering preflight is current through v10 with live synthetic status PASS; the Owner destroyed the Vast instance and provider absence was observed, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
 
 **Decision:** active
 
 ## Interpretation
 
-The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. It does not establish retrieval quality, execution adoption, scientific authorization, or unconditional instance reuse.
+The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. It does not establish retrieval quality, execution adoption, or scientific authorization.
 
 ## Supported Claims
 
-- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9)
+- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, and provider closeout v10 is PASS. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10)
 
 ## Unsupported Claims
 
@@ -262,16 +263,16 @@ The offline evidence preserves the v2 four-worker fixture and v3 correction, bin
 - `d3`: waiting_owner
 - `final_split`: closed
 - `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
-- `evidence_class`: live_engineering_synthetic_preflight
+- `evidence_class`: owner_local_provider_closeout
 - `scientific_authority`: False
 
 ## Decision
 
-Status: **active**. A1 engineering preflight is current through v9 with live synthetic status PASS; Owner instance disposition remains pending, and measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
+Status: **active**. A1 engineering preflight is current through v10 with live synthetic status PASS; the Owner destroyed the Vast instance and provider absence was observed, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
 
 ## Next Action
 
-Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.
+Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
@@ -366,3 +367,4 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - a12-live-preflight-v9-bootstrap
 - a12-live-preflight-v9-launcher
 - a12-live-synthetic-preflight-result-v9
+- a12-provider-closeout-result-v10
