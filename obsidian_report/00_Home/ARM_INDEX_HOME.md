@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b"
-read_model_sha256: "944697aa79079bfbfcbfaa0c0ab7ed05595c25debfbc60e77777b6ecdad7d1de"
+read_model_revision: "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b"
+read_model_sha256: "ddd4d4040ad40ba3edc3b1c1aec1fdc1d7e8cf21310f5e5ddb2f6020c83aeffa"
 source_commit: "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b"
+generated_from_revision: "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b"
 last_material_update: "2026-08-07T13:00:35Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
@@ -36,7 +36,7 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 
 - Campaign: `armindex-multiretriever-v2`
 - Phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Status: `a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked`
+- Status: `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked`
 
 ## Retrieval arms
 
@@ -66,7 +66,7 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 
 ## Next command
 
-`Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.`
+`Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.`
 
 ## Historical evidence
 

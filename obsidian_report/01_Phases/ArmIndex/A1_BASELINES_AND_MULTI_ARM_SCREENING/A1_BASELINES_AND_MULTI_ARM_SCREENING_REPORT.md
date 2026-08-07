@@ -1,19 +1,19 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b"
-read_model_sha256: "944697aa79079bfbfcbfaa0c0ab7ed05595c25debfbc60e77777b6ecdad7d1de"
+read_model_revision: "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b"
+read_model_sha256: "ddd4d4040ad40ba3edc3b1c1aec1fdc1d7e8cf21310f5e5ddb2f6020c83aeffa"
 source_commit: "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "owner_local_provider_closeout"
+evidence_class: "scientific_execution_adoption_request_preparation"
 scientific_authority: false
-claim_boundary: "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim."
-generated_from_revision: "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b"
+claim_boundary: "Local CPU-only preparation of a future A1.2 measured common-screen request; no provider contact, adoption, measured retrieval, optimization, Selection, Final, paid API work, model change, retrieval-quality result, or publication claim."
+generated_from_revision: "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b"
 last_material_update: "2026-08-07T13:00:35Z"
-next_authorized_action: "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work."
+next_authorized_action: "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -40,14 +40,14 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked
+- `program_state`: a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
 - `git_commit`: 62b253a7c2fdc65fd807bafcca8f5af9fb971c7f
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
@@ -75,7 +75,7 @@ Reproduce controls and screen the five adapters with common programs.
 
 ## Work Performed
 
-A1.1 synthetic adapter evidence and the A1.2 launch-locked execution scaffold are both validated. The additive v5 direct-base revision preserves v1-v3 history, binds the official PyTorch linux/amd64 manifest, and removes custom image and nested-container steps from the active path. The additive v6 correction handles direct-container observability and offline environment injection. The additive v7 same-instance repair preserves the missing-pydantic wheelhouse and frozen-tree bytecode failures, requires a fresh repair root, hash-validated reuse, and bytecode suppression; continuation remains conditional on complete future live evidence and a separately authorized next goal. ARM-01 remains local CPU only; four dense source revisions and runtime-minimal allowlists are frozen, while Owner-local manifests, adapter parity, live provider binding, termination dry run, and explicit adoption remain pending.
+A1.1 synthetic adapter evidence and the A1.2 v1-v10 preflight/closeout lineage are validated. The additive v11 request preserves that history and freezes a separate protected scientific transfer, executable P00-P04 compiler source/spec hashes, 150 REP-DEV queries with 100 reserved for HARNESS-DEV, 25 required aggregate result receipts, all-fee budget admission, and a fresh-provider plan. The prior instance is destroyed. Provider contact, adoption, measured retrieval, Selection, Final, and paid API work remain closed.
 
 ### A1.2 resource planning boundary
 
@@ -90,7 +90,7 @@ Owner prerequisites:
 
 ### A1.2 scaffold and launch state
 
-The offline scaffold is `a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `0` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
+The offline scaffold is `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `9` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
 
 The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. The additive v6 live-container correction is `live_correction_prepared_preflight_pending` and remains synthetic-only with launch `False` and adoption `False`. The additive v7 same-instance repair is `same_instance_repair_prepared_preflight_pending` with `2` preserved engineering failure(s), a fresh runtime root requirement `True`, and bytecode suppression `True`. The additive v8 validation-complete frozen-bundle repair is `validation_complete_bundle_repair_prepared_preflight_pending` with `3` preserved engineering failure(s), validation lineage complete `True`, and a fresh root `/opt/myis/a1.2-v8`. The additive v9 execution-lifecycle repair is `execution_lifecycle_repair_prepared_preflight_pending` with implementation validation `True`, live synthetic execution pending `True`, and fresh root `/opt/myis/a1.2-v9`. Collected live synthetic result: `PASS`; 4 arm receipts, Qwen measured adapter max `32768`, checkpoint/resume `PASS`, and guest teardown `PASS`. The v10 Owner-local provider closeout is `PASS`; no independent Vast API or CLI record was obtained, so the provider-absence claim is limited to the Owner UI attestation and endpoint-unreachable observation. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
 
@@ -199,37 +199,57 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 four-GPU synthetic launcher v9 | `tool` | `live_engineering_preflight_execution_lifecycle_repair` | `scripts/a1_2_vast/remote-live-preflight-v9.sh` | `958ae71cf029ad2843f4ba06e3db170f310bfc887dfd28fd791b6f856586c73f` | `validated` |
 | A1.2 live synthetic preflight result receipt v9 | `receipt` | `live_engineering_synthetic_preflight` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json` | `52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6` | `validated` |
 | A1.2 Owner-local provider closeout receipt v10 | `receipt` | `owner_local_provider_closeout` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json` | `e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216` | `validated` |
+| A1.2 scientific execution and adoption request v11 | `contract` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/scientific-execution-adoption-request.v11.json` | `d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d` | `validated` |
+| A1.2 scientific request preparation receipt v11 | `receipt` | `scientific_execution_adoption_request_preparation` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json` | `e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2` | `validated` |
+| A1.2 scientific request schema v11 | `schema` | `scientific_execution_adoption_request_preparation` | `schemas/armindex/a1.2-scientific-execution-adoption-request.v11.json` | `d7fa396ec01ba4b4b4ee1506fd4eb5e5539b9555f518ed986d195accc811211e` | `validated` |
+| A1.2 scientific request receipt schema v11 | `schema` | `scientific_execution_adoption_request_preparation` | `schemas/armindex/a1.2-scientific-execution-adoption-request-receipt.v11.json` | `a02666bbeed4043c70b9b2cf1e1462b10ce2f2bbdb486f4afd7c033ebeb27977` | `validated` |
+| A1.2 scientific request runbook v11 | `runbook` | `scientific_execution_adoption_request_preparation` | `docs/operations/A1_2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11.md` | `b2c7d4d7d45d2fca4d7c78272c2a57c68cb78c4bab0630db17b6a8a357436a09` | `validated` |
+| A1.2 scientific request append-only ledger v11 | `ledger` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl` | `bddd133983c9d7e56bb1979ecc41f354d7ac8ab0b934089f43f869f722c4b1d0` | `validated` |
+| A1.2 scientific request artifact-only rigor review | `audit` | `scientific_execution_adoption_request_preparation` | `outputs/audits/rigor/a1.2-scientific-execution-adoption-request-v11-20260807.json` | `8d2d8213a26fc9a5b21d4d57a543b852cbf945d47df0d5c2b1a7e9f2e9907fdf` | `validated` |
+| A1.2 v11 aggregate result contract | `contract` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/aggregate-result-contract.v11.json` | `e0e29bfa15286977d865679200dd3a8d66ec852f4239780f60226b5b9eea2c4b` | `validated` |
+| A1.2 v11 all-fee budget request | `budget` | `scientific_execution_adoption_request_preparation` | `control/budgets/a1.2-common-screen-scientific-request-v11.json` | `e01626eef5afa484089cbe96b59855eea98679519c5fd3eefa3ddc42f2e5bafc` | `validated` |
+| A1.2 v11 executable common-program set | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/common-program-set.v11.json` | `6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa` | `validated` |
+| A1.2 v11 protected evaluator handoff | `contract` | `scientific_execution_adoption_request_preparation` | `control/owner-local/a1.2-evaluator-handoff-request.v11.json` | `2f7d70d708909e8c6c946ab2e03c62e6246222fcb0333bdee44997fb24020b4b` | `validated` |
+| A1.2 v11 fresh provider admission plan | `contract` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/provider-admission-plan.v11.json` | `a41392aa33fbaf6e376a2aa6ff02dbf6e49053876affa7a27cc3820a12793594` | `validated` |
+| A1.2 v11 scientific transfer and safe-return contract | `contract` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/scientific-transfer-contract.v11.json` | `21e4d9913056968cdf314382c12812ff8f4b1f01586c82294765a0ebd2a4777a` | `validated` |
+| A1.2 v11 scientific stop conditions | `contract` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/stop-conditions.scientific-request.v11.json` | `8a46db96a95d0f61caeb9fb2cd052daf07b35acdcf592a11e2336e17c88597d7` | `validated` |
+| A1.2 v11 five-arm workload manifest set | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json` | `a838b19794c05b08a5b9f4efb3aef5805f5a174a37e92c5a9111b16a9e8b91fb` | `validated` |
+| A1.2 v11 ARM-01 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-01.json` | `4743c80e9d50dc196fe9eda180a39b67926648eefe75222852ffd41364fcf672` | `validated` |
+| A1.2 v11 ARM-02 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-02.json` | `89a19182aaf0356768b5708ead3b521adf34d052c07ba1e0f6301776e56490aa` | `validated` |
+| A1.2 v11 ARM-03 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-03.json` | `98071fe47d7d0b9ffd6eeb65e8676e2c74e09f97f4eafe69f138f3c472ce54b3` | `validated` |
+| A1.2 v11 ARM-04 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-04.json` | `70d387095f6d3b4f1683295cba6d425bcafe38f7c35a5d14056c07263ef6f9d2` | `validated` |
+| A1.2 v11 ARM-05 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json` | `1125a006d307b28dbc5f0265e927620b61b419f54d1a8d0263d104f0a07d7348` | `validated` |
 
 ## Metrics
 
 | Metric | Split | Scope | Value | n | Denominator | Evidence |
 |---|---|---|---:|---:|---|---|
-| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
-| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
-| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
-| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
-| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `owner_local_provider_closeout` |
-| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `owner_local_provider_closeout` |
-| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `owner_local_provider_closeout` |
-| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `owner_local_provider_closeout` |
+| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `scientific_execution_adoption_request_preparation` |
+| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `scientific_execution_adoption_request_preparation` |
+| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `scientific_execution_adoption_request_preparation` |
+| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `scientific_execution_adoption_request_preparation` |
+| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `scientific_execution_adoption_request_preparation` |
+| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `scientific_execution_adoption_request_preparation` |
+| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `scientific_execution_adoption_request_preparation` |
+| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `scientific_execution_adoption_request_preparation` |
 
 Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, and provider closeout v10 is PASS.
+**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, and scientific execution request v11 is prepared for Owner review.
 
-**Result:** A1 engineering preflight is current through v10 with live synthetic status PASS; the Owner destroyed the Vast instance and provider absence was observed, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
+**Result:** A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
 
 **Decision:** active
 
 ## Interpretation
 
-The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. It does not establish retrieval quality, execution adoption, or scientific authorization.
+The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. It does not establish retrieval quality, execution adoption, or scientific authorization.
 
 ## Supported Claims
 
-- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v8 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, and provider closeout v10 is PASS. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10)
+- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, and scientific execution request v11 is prepared for Owner review. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05)
 
 ## Unsupported Claims
 
@@ -263,16 +283,16 @@ The offline evidence preserves the v2 four-worker fixture and v3 correction, bin
 - `d3`: waiting_owner
 - `final_split`: closed
 - `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
-- `evidence_class`: owner_local_provider_closeout
+- `evidence_class`: scientific_execution_adoption_request_preparation
 - `scientific_authority`: False
 
 ## Decision
 
-Status: **active**. A1 engineering preflight is current through v10 with live synthetic status PASS; the Owner destroyed the Vast instance and provider absence was observed, while measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
+Status: **active**. A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
 
 ## Next Action
 
-Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.
+Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
@@ -368,3 +388,23 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - a12-live-preflight-v9-launcher
 - a12-live-synthetic-preflight-result-v9
 - a12-provider-closeout-result-v10
+- a12-scientific-request-v11
+- a12-scientific-request-receipt-v11
+- a12-scientific-request-schema-v11
+- a12-scientific-request-receipt-schema-v11
+- a12-scientific-request-runbook-v11
+- a12-scientific-request-ledger-v11
+- a12-scientific-request-rigor-v11
+- a12-v11-aggregate-result-contract
+- a12-v11-budget
+- a12-v11-common-program-set
+- a12-v11-protected-evaluator-handoff
+- a12-v11-provider-admission
+- a12-v11-scientific-transfer
+- a12-v11-stop-conditions
+- a12-v11-workload-set
+- a12-v11-job-arm-01
+- a12-v11-job-arm-02
+- a12-v11-job-arm-03
+- a12-v11-job-arm-04
+- a12-v11-job-arm-05

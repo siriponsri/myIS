@@ -389,6 +389,97 @@
     "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
     "status": "direct_base_preflight_prepared_local_owner_stage_pending"
   },
+  "armindex_a1_2_scientific_execution_request": {
+    "adopted_for_execution": false,
+    "budget_hard_stops": {
+      "a1_total_usd": 23,
+      "campaign_usd": 100,
+      "common_screen_usd": 18
+    },
+    "charged_usd": 0,
+    "component_bindings": {
+      "aggregate_result_contract": {
+        "file_sha256": "e0e29bfa15286977d865679200dd3a8d66ec852f4239780f60226b5b9eea2c4b",
+        "self_sha256": "dde8344903b697b37005e57fb4da2d821efe711c7eb0640af45955b44514e99c",
+        "uri": "control/armindex/a1.2/aggregate-result-contract.v11.json"
+      },
+      "budget": {
+        "file_sha256": "e01626eef5afa484089cbe96b59855eea98679519c5fd3eefa3ddc42f2e5bafc",
+        "self_sha256": "c7333272a08278a01e3bd741acdf2c9d987ec4007e8ce7c393f15dd5cbc905cc",
+        "uri": "control/budgets/a1.2-common-screen-scientific-request-v11.json"
+      },
+      "common_program_set": {
+        "file_sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+        "self_sha256": "54991eb6a34f59495562539ede8dfd6553bdbfb259a41b8d564baec17c4026fb",
+        "uri": "control/armindex/a1.2/common-program-set.v11.json"
+      },
+      "protected_evaluator_handoff": {
+        "file_sha256": "2f7d70d708909e8c6c946ab2e03c62e6246222fcb0333bdee44997fb24020b4b",
+        "self_sha256": "a3d9b2b908e83ad3599e1940d614c74dfa86321cf23e45a921b72f08cbec8997",
+        "uri": "control/owner-local/a1.2-evaluator-handoff-request.v11.json"
+      },
+      "provider_admission": {
+        "file_sha256": "a41392aa33fbaf6e376a2aa6ff02dbf6e49053876affa7a27cc3820a12793594",
+        "self_sha256": "29a2cbd32aef8f773180b1cc6aaca858ed7625ef976bd5a7712d1445291d209c",
+        "uri": "control/armindex/a1.2/provider-admission-plan.v11.json"
+      },
+      "scientific_transfer": {
+        "file_sha256": "21e4d9913056968cdf314382c12812ff8f4b1f01586c82294765a0ebd2a4777a",
+        "self_sha256": "6b3d0179261a58fbb7ccaf0340dd9d74917db8808f2b97463fb98e510c0a2ded",
+        "uri": "control/armindex/a1.2/scientific-transfer-contract.v11.json"
+      },
+      "stop_conditions": {
+        "file_sha256": "8a46db96a95d0f61caeb9fb2cd052daf07b35acdcf592a11e2336e17c88597d7",
+        "self_sha256": "bd15db16d4c79f88bd094db3c7e298819e8a7c3bfc16ee0ff0c22a3212a45361",
+        "uri": "control/armindex/a1.2/stop-conditions.scientific-request.v11.json"
+      },
+      "workload_set": {
+        "arm_count": 5,
+        "file_sha256": "a838b19794c05b08a5b9f4efb3aef5805f5a174a37e92c5a9111b16a9e8b91fb",
+        "self_sha256": "13960fa29bd65167933580f94133c5e0f3985554816f31db81a7f15ba22824d4",
+        "uri": "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json"
+      }
+    },
+    "counters": {
+      "candidate_count": 0,
+      "charged_usd": 0,
+      "final_accesses": 0,
+      "gpu_scientific_runs": 0,
+      "measured_runs": 0,
+      "model_weight_changes": 0,
+      "paid_api_calls": 0,
+      "selection_accesses": 0
+    },
+    "evidence_class": "scientific_execution_adoption_request_preparation",
+    "expected_physical_program_view_paths": 35,
+    "expected_program_arm_runs": 25,
+    "final_accesses": 0,
+    "harness_dev_reserved_count": 100,
+    "launch_allowed": false,
+    "measured_runs": 0,
+    "pending_adoption_requirements": [
+      "unchanged_v11_request_hash",
+      "clean_pushed_execution_commit_tree_and_bundle_hash",
+      "owner_local_protected_handoff_receipt",
+      "owner_local_protected_transfer_manifest",
+      "twenty_five_valid_compiled_program_bindings",
+      "fresh_provider_identity_and_live_quote",
+      "whole_workload_budget_admission",
+      "owner_local_watchdog_and_provider_destroy_dry_run",
+      "separate_owner_authorized_adoption_goal"
+    ],
+    "rep_dev_query_count": 150,
+    "request_self_sha256": "2e95bf70d4843dadac03b442cb231573f73ec05a65884a70ac42d9713f52b7db",
+    "request_sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+    "request_uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "scientific_authority": false,
+    "selection_accesses": 0,
+    "source_receipt_self_sha256": "6de14783873a8405d67a21236252a0d93269601b494366b686fe348ac7308bc2",
+    "source_receipt_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+    "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+    "status": "PASS",
+    "workload_manifests": 5
+  },
   "armindex_a1_2_vast_postcommit": {
     "adopted_for_execution": false,
     "contract_sha256": "716ea6542df7a668a1148ef0eed1eb61d13bd6a8a3663874ec8b66db697c5b81",
@@ -494,7 +585,7 @@
     "status": "complete"
   },
   "campaign_experiment": "myis-scope-autoindex-v1",
-  "dashboard_snapshot_sha256": "944697aa79079bfbfcbfaa0c0ab7ed05595c25debfbc60e77777b6ecdad7d1de",
+  "dashboard_snapshot_sha256": "ddd4d4040ad40ba3edc3b1c1aec1fdc1d7e8cf21310f5e5ddb2f6020c83aeffa",
   "evidence_ids": [
     "r0-index",
     "r0-selection-rankings",
@@ -527,7 +618,7 @@
     "validated_artifact_count": 5,
     "validated_metric_count": 1
   },
-  "obsidian_manifest_sha256": "5f3550d48ca32fb290e67fe0239393023c255c8987f95b3dc7683fca87c7605a",
+  "obsidian_manifest_sha256": "570579f1a306f212b826642b2743468d211a4977d663907eb31233ee9660e63d",
   "p2_readiness": {
     "budget_profile_id": "p2-r1-primary-v2",
     "budget_profile_sha256": "9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324",
@@ -565,8 +656,8 @@
     "status": "ready_planned_not_measured"
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
-  "read_model_sha256": "944697aa79079bfbfcbfaa0c0ab7ed05595c25debfbc60e77777b6ecdad7d1de",
+  "read_model_revision": "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b",
+  "read_model_sha256": "ddd4d4040ad40ba3edc3b1c1aec1fdc1d7e8cf21310f5e5ddb2f6020c83aeffa",
   "run_ids": [
     "p1-r0-selection-d9533ba623ce",
     "p1-r0-train-d9533ba623ce",

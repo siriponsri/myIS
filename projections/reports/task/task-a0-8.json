@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
+      "content_sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -209,7 +209,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
+      "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -265,7 +265,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-07T13:00:35Z",
-  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "generated_from_revision": "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b",
   "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -293,7 +293,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
+      "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "compute_storage_fixture_manifest": {
@@ -319,7 +319,7 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
+      "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
       "uri": "control/source-of-truth.yaml"
     }
   },
@@ -394,11 +394,11 @@
       "value": 156846
     }
   ],
-  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
+  "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Compute and storage feasibility fixtures",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-8",
-  "report_sha256": "dcdb727d03e4d6b70c18263cccccff984b1a7129ad4653ba60bba4b755b25d2a",
+  "report_sha256": "d9d986e649cf609a0c3c9fa9c01a69deb233f758151cb7cb221591e56ff2cef0",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -411,7 +411,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
+    "program_state": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
     "task": "A0.8"
   },
   "status": "completed",

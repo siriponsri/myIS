@@ -1529,15 +1529,375 @@
       "scientific_authority": false,
       "title": "A1.2 Owner-local provider closeout receipt v10",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-v11",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Freezes a future five-arm scientific request for Owner review while keeping provider contact, adoption, measured retrieval, Selection, and Final closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 scientific execution and adoption request v11",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-receipt-v11",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Validates the repaired request, eleven immutable lineage bindings, five workloads, zero counters, and the separate-adoption boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 scientific request preparation receipt v11",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-schema-v11",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d7fa396ec01ba4b4b4ee1506fd4eb5e5539b9555f518ed986d195accc811211e",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Fail-closes request authorization, lineage, components, future identities, and zero-counter invariants.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-scientific-execution-adoption-request.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 scientific request schema v11",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-receipt-schema-v11",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a02666bbeed4043c70b9b2cf1e1462b10ce2f2bbdb486f4afd7c033ebeb27977",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Validates the preparation receipt and its non-authorizing lifecycle.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-scientific-execution-adoption-request-receipt.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 scientific request receipt schema v11",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-runbook-v11",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b2c7d4d7d45d2fca4d7c78272c2a57c68cb78c4bab0630db17b6a8a357436a09",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Explains the protected transfer, exact programs, result evidence, budget admission, and Owner-review boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/operations/A1_2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11.md",
+      "scientific_authority": false,
+      "title": "A1.2 scientific request runbook v11",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-ledger-v11",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "bddd133983c9d7e56bb1979ecc41f354d7ac8ab0b934089f43f869f722c4b1d0",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Preserves the schema failure, independent-review rejection, repairs, and rigor-review closeout.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl",
+      "scientific_authority": false,
+      "title": "A1.2 scientific request append-only ledger v11",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-scientific-request-rigor-v11",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8d2d8213a26fc9a5b21d4d57a543b852cbf945d47df0d5c2b1a7e9f2e9907fdf",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Accepts the repaired preparation request with no blocking finding while retaining live and protected obligations.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/a1.2-scientific-execution-adoption-request-v11-20260807.json",
+      "scientific_authority": false,
+      "title": "A1.2 scientific request artifact-only rigor review",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-aggregate-result-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e0e29bfa15286977d865679200dd3a8d66ec852f4239780f60226b5b9eea2c4b",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/aggregate-result-contract.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 aggregate result contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-budget",
+      "artifact_type": "budget",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e01626eef5afa484089cbe96b59855eea98679519c5fd3eefa3ddc42f2e5bafc",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/budgets/a1.2-common-screen-scientific-request-v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 all-fee budget request",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-common-program-set",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/common-program-set.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 executable common-program set",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-protected-evaluator-handoff",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2f7d70d708909e8c6c946ab2e03c62e6246222fcb0333bdee44997fb24020b4b",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/owner-local/a1.2-evaluator-handoff-request.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 protected evaluator handoff",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-provider-admission",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a41392aa33fbaf6e376a2aa6ff02dbf6e49053876affa7a27cc3820a12793594",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/provider-admission-plan.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 fresh provider admission plan",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-scientific-transfer",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "21e4d9913056968cdf314382c12812ff8f4b1f01586c82294765a0ebd2a4777a",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/scientific-transfer-contract.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 scientific transfer and safe-return contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-stop-conditions",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8a46db96a95d0f61caeb9fb2cd052daf07b35acdcf592a11e2336e17c88597d7",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/stop-conditions.scientific-request.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 scientific stop conditions",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-workload-set",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a838b19794c05b08a5b9f4efb3aef5805f5a174a37e92c5a9111b16a9e8b91fb",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Hash-bound additive v11 request component; it is prepared for review and not adopted for execution.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 five-arm workload manifest set",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-01",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "4743c80e9d50dc196fe9eda180a39b67926648eefe75222852ffd41364fcf672",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Freezes one arm's five common programs, device mapping, protected transfer binding, aggregate result requirements, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-01.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 ARM-01 scientific workload",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-02",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "89a19182aaf0356768b5708ead3b521adf34d052c07ba1e0f6301776e56490aa",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Freezes one arm's five common programs, device mapping, protected transfer binding, aggregate result requirements, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-02.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 ARM-02 scientific workload",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-03",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "98071fe47d7d0b9ffd6eeb65e8676e2c74e09f97f4eafe69f138f3c472ce54b3",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Freezes one arm's five common programs, device mapping, protected transfer binding, aggregate result requirements, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-03.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 ARM-03 scientific workload",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-04",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "70d387095f6d3b4f1683295cba6d425bcafe38f7c35a5d14056c07263ef6f9d2",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Freezes one arm's five common programs, device mapping, protected transfer binding, aggregate result requirements, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-04.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 ARM-04 scientific workload",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-05",
+      "artifact_type": "manifest",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "1125a006d307b28dbc5f0265e927620b61b419f54d1a8d0263d104f0a07d7348",
+      "evidence_class": "scientific_execution_adoption_request_preparation",
+      "explanation": "Freezes one arm's five common programs, device mapping, protected transfer binding, aggregate result requirements, and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json",
+      "scientific_authority": false,
+      "title": "A1.2 v11 ARM-05 scientific workload",
+      "validation_status": "validated"
     }
   ],
-  "claim_boundary": "Provider-lifecycle closeout only, supported by Owner provider-UI attestation plus endpoint unreachability; no independent provider API record, retrieval-quality result, execution adoption, or publication claim.",
+  "claim_boundary": "Local CPU-only preparation of a future A1.2 measured common-screen request; no provider contact, adoption, measured retrieval, optimization, Selection, Final, paid API work, model change, retrieval-quality result, or publication claim.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1.2 synthetic live preflight status is PASS: 4 dense-arm adapter receipts were collected, Qwen measured adapter maximum is 32768 tokens, guest teardown is PASS, and the Owner-confirmed provider closeout is recorded. Scientific launch remains locked; measured runs and charged USD counters remain zero.",
+    "reason": "A1.2 v11 freezes 5 workloads, 25 required logical results, 35 physical program-view paths, and 150 REP-DEV queries while reserving 100 for HARNESS-DEV. It is not adopted; scientific launch remains locked and measured runs and charged USD counters remain zero.",
     "status": "blocked"
   },
-  "evidence_class": "owner_local_provider_closeout",
+  "evidence_class": "scientific_execution_adoption_request_preparation",
   "evidence_links": [
     {
       "artifact_id": "a12-gpu-execution-proposal",
@@ -1963,6 +2323,106 @@
       "artifact_id": "a12-provider-closeout-result-v10",
       "sha256": "e3ec242228a9472a838518dca31ce9b5a5505d9d3b8c5ae567fb5815a9583216",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-provider-closeout-result.receipt.v10.json"
+    },
+    {
+      "artifact_id": "a12-scientific-request-v11",
+      "sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+      "uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json"
+    },
+    {
+      "artifact_id": "a12-scientific-request-receipt-v11",
+      "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json"
+    },
+    {
+      "artifact_id": "a12-scientific-request-schema-v11",
+      "sha256": "d7fa396ec01ba4b4b4ee1506fd4eb5e5539b9555f518ed986d195accc811211e",
+      "uri": "schemas/armindex/a1.2-scientific-execution-adoption-request.v11.json"
+    },
+    {
+      "artifact_id": "a12-scientific-request-receipt-schema-v11",
+      "sha256": "a02666bbeed4043c70b9b2cf1e1462b10ce2f2bbdb486f4afd7c033ebeb27977",
+      "uri": "schemas/armindex/a1.2-scientific-execution-adoption-request-receipt.v11.json"
+    },
+    {
+      "artifact_id": "a12-scientific-request-runbook-v11",
+      "sha256": "b2c7d4d7d45d2fca4d7c78272c2a57c68cb78c4bab0630db17b6a8a357436a09",
+      "uri": "docs/operations/A1_2_SCIENTIFIC_EXECUTION_ADOPTION_REQUEST_V11.md"
+    },
+    {
+      "artifact_id": "a12-scientific-request-ledger-v11",
+      "sha256": "bddd133983c9d7e56bb1979ecc41f354d7ac8ab0b934089f43f869f722c4b1d0",
+      "uri": "control/armindex/a1.2/scientific-execution-adoption-request-ledger.v11.jsonl"
+    },
+    {
+      "artifact_id": "a12-scientific-request-rigor-v11",
+      "sha256": "8d2d8213a26fc9a5b21d4d57a543b852cbf945d47df0d5c2b1a7e9f2e9907fdf",
+      "uri": "outputs/audits/rigor/a1.2-scientific-execution-adoption-request-v11-20260807.json"
+    },
+    {
+      "artifact_id": "a12-v11-aggregate-result-contract",
+      "sha256": "e0e29bfa15286977d865679200dd3a8d66ec852f4239780f60226b5b9eea2c4b",
+      "uri": "control/armindex/a1.2/aggregate-result-contract.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-budget",
+      "sha256": "e01626eef5afa484089cbe96b59855eea98679519c5fd3eefa3ddc42f2e5bafc",
+      "uri": "control/budgets/a1.2-common-screen-scientific-request-v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-common-program-set",
+      "sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+      "uri": "control/armindex/a1.2/common-program-set.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-protected-evaluator-handoff",
+      "sha256": "2f7d70d708909e8c6c946ab2e03c62e6246222fcb0333bdee44997fb24020b4b",
+      "uri": "control/owner-local/a1.2-evaluator-handoff-request.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-provider-admission",
+      "sha256": "a41392aa33fbaf6e376a2aa6ff02dbf6e49053876affa7a27cc3820a12793594",
+      "uri": "control/armindex/a1.2/provider-admission-plan.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-scientific-transfer",
+      "sha256": "21e4d9913056968cdf314382c12812ff8f4b1f01586c82294765a0ebd2a4777a",
+      "uri": "control/armindex/a1.2/scientific-transfer-contract.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-stop-conditions",
+      "sha256": "8a46db96a95d0f61caeb9fb2cd052daf07b35acdcf592a11e2336e17c88597d7",
+      "uri": "control/armindex/a1.2/stop-conditions.scientific-request.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-workload-set",
+      "sha256": "a838b19794c05b08a5b9f4efb3aef5805f5a174a37e92c5a9111b16a9e8b91fb",
+      "uri": "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-01",
+      "sha256": "4743c80e9d50dc196fe9eda180a39b67926648eefe75222852ffd41364fcf672",
+      "uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-01.json"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-02",
+      "sha256": "89a19182aaf0356768b5708ead3b521adf34d052c07ba1e0f6301776e56490aa",
+      "uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-02.json"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-03",
+      "sha256": "98071fe47d7d0b9ffd6eeb65e8676e2c74e09f97f4eafe69f138f3c472ce54b3",
+      "uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-03.json"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-04",
+      "sha256": "70d387095f6d3b4f1683295cba6d425bcafe38f7c35a5d14056c07263ef6f9d2",
+      "uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-04.json"
+    },
+    {
+      "artifact_id": "a12-v11-job-arm-05",
+      "sha256": "1125a006d307b28dbc5f0265e927620b61b419f54d1a8d0263d104f0a07d7348",
+      "uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json"
     }
   ],
   "failure_recovery_references": [
@@ -2108,12 +2568,12 @@
     }
   ],
   "generated_at": "2026-08-07T13:00:35Z",
-  "generated_from_revision": "61468630fae46b5136a4f82479451bda38358fe17ab082d9bf179d6234f08b8b",
+  "generated_from_revision": "2c4c5ad527c4921ddbd93f90536ca19b3bdb4d4323da8d564013ee6abbafab2b",
   "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "owner_local_provider_closeout",
+    "evidence_class": "scientific_execution_adoption_request_preparation",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
@@ -2167,7 +2627,7 @@
     },
     "a12_execution_contract": {
       "sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
-      "status": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
+      "status": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
       "uri": "control/armindex/a1.2/execution-contract.v1.json"
     },
     "a12_gpu_proposal": {
@@ -2232,7 +2692,7 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "c163f475750110db8d4cd76c11d73eefc6ff93b2f21db1ff6fef2397b9cac879",
+      "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "git_commit": "62b253a7c2fdc65fd807bafcca8f5af9fb971c7f",
@@ -2246,11 +2706,11 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "4fe61d7f00696a0b878be476abd95c0c4ee6027f7e23444ae6712d944e4ab6a3",
+      "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. It is not retrieval-quality or publication evidence.",
+  "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. The repaired v11 request adds exact P00-P04 compiler hashes, protected opaque transfer/return rules, aggregate result schemas, whole-workload completion, and all-fee budget admission. It remains preparation evidence, not retrieval-quality or publication evidence.",
   "language": "en",
   "last_material_update": "2026-08-07T13:00:35Z",
   "metric_references": [
@@ -2517,18 +2977,117 @@
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
       "split": "engineering_preflight",
       "value": 1
+    },
+    {
+      "cutoff": 0,
+      "denominator": "frozen_five_arm_request_manifests",
+      "n": 5,
+      "name": "v11_workload_manifest_count",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 5
+    },
+    {
+      "cutoff": 0,
+      "denominator": "planned_logical_program_arm_results_not_measured_runs",
+      "n": 25,
+      "name": "v11_expected_program_arm_runs",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 25
+    },
+    {
+      "cutoff": 0,
+      "denominator": "planned_physical_program_view_paths_not_measured_runs",
+      "n": 35,
+      "name": "v11_expected_physical_program_view_paths",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 35
+    },
+    {
+      "cutoff": 0,
+      "denominator": "protected_rep_dev_count_commitment",
+      "n": 150,
+      "name": "v11_rep_dev_query_count",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 150
+    },
+    {
+      "cutoff": 0,
+      "denominator": "protected_harness_dev_reservation_count",
+      "n": 100,
+      "name": "v11_harness_dev_reserved_count",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 100
+    },
+    {
+      "cutoff": 0,
+      "denominator": "fail_closed_owner_adoption_requirements",
+      "n": 1,
+      "name": "v11_pending_adoption_requirement_count",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 9
+    },
+    {
+      "cutoff": 0,
+      "denominator": "hard_stop_not_spend_authorization",
+      "n": 1,
+      "name": "v11_a1_total_usd",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 23
+    },
+    {
+      "cutoff": 0,
+      "denominator": "hard_stop_not_spend_authorization",
+      "n": 1,
+      "name": "v11_campaign_usd",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 100
+    },
+    {
+      "cutoff": 0,
+      "denominator": "hard_stop_not_spend_authorization",
+      "n": 1,
+      "name": "v11_common_screen_usd",
+      "scope": "A1.2",
+      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+      "split": "request_preparation",
+      "value": 18
     }
   ],
-  "next_authorized_action": "Prepare a separately authorized A1.2 scientific execution and adoption goal on local CPU only; do not open a provider or begin measured work.",
+  "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "185372d1a419e6d3e701d048a988e0482a7925ad29d3ac4438d0de9c7451df9f",
+  "report_sha256": "9b8449b249ee36dd715f8205f7a3e835909cb6407dae2752d625e385549576df",
   "report_type": "task",
   "result": {
     "decision": "blocked",
-    "output": "The preserved v1-v8 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage; provider closeout v10 is PASS.",
-    "result": "A1.2 synthetic live preflight status is PASS: 4 dense-arm adapter receipts were collected, Qwen measured adapter maximum is 32768 tokens, guest teardown is PASS, and the Owner-confirmed provider closeout is recorded. Scientific launch remains locked; measured runs and charged USD counters remain zero."
+    "output": "The preserved v1-v10 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage; provider closeout v10 is PASS and request v11 is prepared for Owner review.",
+    "result": "A1.2 v11 freezes 5 workloads, 25 required logical results, 35 physical program-view paths, and 150 REP-DEV queries while reserving 100 for HARNESS-DEV. It is not adopted; scientific launch remains locked and measured runs and charged USD counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -2536,13 +3095,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_live_synthetic_preflight_closed_provider_destroyed_launch_locked",
+    "program_state": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
     "task": "A1.2"
   },
-  "status": "active",
+  "status": "planned",
   "supported_claims": [
     {
-      "claim": "The preserved v1-v8 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage; provider closeout v10 is PASS.",
+      "claim": "The preserved v1-v10 contracts validate, the immutable v2 fixture records 4 synthetic workers, and the additive v9 live synthetic result is PASS for attempt a12-v9-20260807-06. It preserves repair evidence for v6-initial-wheelhouse-missing-pydantic; v6-supplement-repair-mutated-pycache-tree; v7-frozen-bundle-missing-validation-lineage; provider closeout v10 is PASS and request v11 is prepared for Owner review.",
       "evidence": [
         "a12-gpu-execution-proposal",
         "a12-contract-scaffold-receipt",
@@ -2628,7 +3187,27 @@
         "a12-live-preflight-v9-bootstrap",
         "a12-live-preflight-v9-launcher",
         "a12-live-synthetic-preflight-result-v9",
-        "a12-provider-closeout-result-v10"
+        "a12-provider-closeout-result-v10",
+        "a12-scientific-request-v11",
+        "a12-scientific-request-receipt-v11",
+        "a12-scientific-request-schema-v11",
+        "a12-scientific-request-receipt-schema-v11",
+        "a12-scientific-request-runbook-v11",
+        "a12-scientific-request-ledger-v11",
+        "a12-scientific-request-rigor-v11",
+        "a12-v11-aggregate-result-contract",
+        "a12-v11-budget",
+        "a12-v11-common-program-set",
+        "a12-v11-protected-evaluator-handoff",
+        "a12-v11-provider-admission",
+        "a12-v11-scientific-transfer",
+        "a12-v11-stop-conditions",
+        "a12-v11-workload-set",
+        "a12-v11-job-arm-01",
+        "a12-v11-job-arm-02",
+        "a12-v11-job-arm-03",
+        "a12-v11-job-arm-04",
+        "a12-v11-job-arm-05"
       ]
     }
   ],
@@ -2639,5 +3218,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The A1.1 receipt anchors a validated A1.2 offline scaffold. ARM-01 bm25s rank parity was checked on synthetic CPU inputs; four public dense source revisions, critical artifact commitments, a hash-bound budget, and runtime-minimal allowlists were frozen. The v5 direct-base revision binds the official PyTorch linux/amd64 manifest and replaces active custom-image transfers with code, Linux wheelhouse, runtime-minimal models, and safe job manifests. The additive v6 correction remains synthetic-only. The additive v7 repair preserves two live engineering failures and repairs them through a fresh root, checksum-gated reuse, a hash-bound supplement, and bytecode suppression; any later instance continuation remains conditional on complete live evidence, budget, watchdog, clean protected boundary, and separate next-goal authorization. Launch remains false pending live preflight and explicit adoption."
+  "work_summary": "The A1.1 receipt anchors a validated A1.2 lineage through v10 provider closeout. The repaired additive v11 request binds the future protected transfer, exact five-program scientific compiler, five workload manifests, aggregate result schema, stop conditions, fresh-provider admission, and hard-stop budget. The request is prepared for Owner review only; launch and adoption remain false pending the unchanged request hash, protected handoff/transfer receipts, 25 compiled program bindings, fresh quote/identity, full-TTL budget fit, and watchdog/destroy validation."
 }
