@@ -291,3 +291,16 @@ def test_doctor_archive_checks_detect_lineage_hash_and_protected_content(tmp_pat
             artifact_id="copied", artifact_class="protected", role="ranking",
             store_uri="owner-local://runs/opaque-1", sha256=_digest("pointer"), schema_id="ranking.v1", copied_to_mlflow=True,
         ).validate()
+
+
+def test_doctor_resolves_historical_artifact_uri_after_owner_store_relocation(tmp_path: Path) -> None:
+    module = _script_module("mlflow_doctor")
+    store = tmp_path / "04_Owner_Stores_archive_20260806" / "mlflow"
+    connection, _ = _doctor_fixture(store)
+    old_uri = (tmp_path / "04_Owner_Stores" / "mlflow" / "artifacts" / "synthetic-run").as_uri()
+    connection.execute("update runs set artifact_uri=?", (old_uri,))
+    connection.commit()
+    ok, counts, failures = module._validate_archives(store, connection)
+    connection.close()
+    assert ok and not failures
+    assert counts["archive_runs"] == 1

@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T09:20:54Z",
-  "generated_from_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
-  "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
+  "generated_at": "2026-08-07T10:14:03Z",
+  "generated_from_revision": "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944",
+  "git_commit": "1cdff09343121b26cda968263d6a83cb403fba28",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
+    "git_commit": "1cdff09343121b26cda968263d6a83cb403fba28",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e",
+      "sha256": "784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-07T09:20:54Z",
+  "last_material_update": "2026-08-07T10:14:03Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
+  "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
   "objective": "Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "phase-p1_cpu_baseline",
-  "report_sha256": "649bdcd0f816957aeb62a75c70eabf4e641a01aae2f9db0f71db1d5bc199b169",
+  "report_sha256": "efcdf236dddf88e543673a31f23635b7d79f497af32f0ab6a4dce178129cdc5d",
   "report_type": "phase",
   "result": {
     "decision": "completed",

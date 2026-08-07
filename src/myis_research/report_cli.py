@@ -476,6 +476,16 @@ def _a010_projection_lifecycle(
     vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
     if (
         scaffold.get("validated") is True
+        and scaffold.get("status") == "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+        and vast_v9.get("validated") is True
+        and vast_v9.get("live_result_status") == "PASS"
+    ):
+        source_uri = vast_v9.get("live_result_uri")
+        source_sha256 = vast_v9.get("live_result_sha256")
+        source_validated = True
+        source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+    elif (
+        scaffold.get("validated") is True
         and scaffold.get("status") == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
         and vast_v9.get("validated") is True
     ):
@@ -1350,14 +1360,18 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
                 f"The additive v7 same-instance repair is `{vast_v7.get('status', 'not_started')}` with `{len(vast_v7.get('preserved_live_failures', []))}` preserved engineering failure(s), a fresh runtime root requirement `{vast_v7.get('active_correction', {}).get('fresh_remote_root_required', False)}`, and bytecode suppression `{vast_v7.get('active_correction', {}).get('pythondontwritebytecode', False)}`. "
                 f"The additive v8 validation-complete frozen-bundle repair is `{vast_v8.get('status', 'not_started')}` with `{len(vast_v8.get('preserved_live_failures', []))}` preserved engineering failure(s), validation lineage complete `{vast_v8.get('active_correction', {}).get('validation_lineage_complete', False)}`, and a fresh root `{vast_v8.get('active_correction', {}).get('fresh_remote_root', '-')}`. "
                 f"The additive v9 execution-lifecycle repair is `{vast_v9.get('status', 'not_started')}` with implementation validation `{vast_v9.get('active_correction', {}).get('implementation_validation_complete', False)}`, live synthetic execution pending `{vast_v9.get('active_correction', {}).get('live_preflight_execution_pending', True)}`, and fresh root `{vast_v9.get('active_correction', {}).get('fresh_remote_root', '-')}`. "
+                f"Collected live synthetic result: `{vast_v9.get('live_result_status', 'not_started')}`; "
+                f"{len(vast_v9.get('live_result', {}).get('arms', [])) if isinstance(vast_v9.get('live_result'), Mapping) else 0} arm receipts, "
+                f"Qwen measured adapter max `{vast_v9.get('live_result', {}).get('qwen', {}).get('measured_adapter_max_input_tokens', '-') if isinstance(vast_v9.get('live_result'), Mapping) else '-'}`, "
+                f"checkpoint/resume `{vast_v9.get('live_result', {}).get('lifecycle', {}).get('checkpoint_resume', '-') if isinstance(vast_v9.get('live_result'), Mapping) else '-'}`, "
+                f"and guest teardown `{vast_v9.get('live_result', {}).get('lifecycle', {}).get('guest_process_teardown', '-') if isinstance(vast_v9.get('live_result'), Mapping) else '-'}`. "
                 "It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.\n\n"
                 f"The Owner continuity policy is `{vast_v6.get('continuation_policy', {}).get('status', 'not_started')}`. Its default is `{vast_v6.get('continuation_policy', {}).get('default_post_preflight_instruction', 'destroy_and_verify_provider_instance_absent')}`; `{vast_v6.get('continuation_policy', {}).get('allowed_post_preflight_instruction', 'continue_next_goal_on_PLAN')}` remains conditional and is not authorized now.\n\n"
                 "Owner-local prerequisites still required:\n\n"
                 "- keep the protected root, qrels, membership, credentials, and evaluator payloads local;\n"
-                "- pass live dense adapter parity and the Qwen adapter-level maximum-length check;\n"
-                "- bind a live quote, capacity, provider instance identity, artifact-return target, and free-space check;\n"
-                "- dry-run the external provider termination watcher and TTL, because guest poweroff alone does not prove billing stopped;\n"
-                "- explicitly adopt the unchanged execution contract and budget before any GPU reservation."
+                "- preserve the safe export and all return artifacts under the Owner store;\n"
+                "- prove provider destruction and TTL, or explicitly authorize the unchanged-instance continuation policy for a separately authorized next PLAN goal;\n"
+                "- do not interpret this engineering PASS as retrieval-quality or publication evidence."
             )
         a1_note = (
             "\n\n### A1.2 resource planning boundary\n\n"
@@ -2317,6 +2331,7 @@ def _workflow_status(value: Any) -> str:
         "a1_2_live_preflight_same_instance_repair_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked": "waiting_dependency",
         "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked": "waiting_dependency",
+        "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked": "waiting_owner_decision",
         "contract_scaffold_complete_launch_locked": "waiting_dependency",
         "complete": "complete",
         "completed": "complete",

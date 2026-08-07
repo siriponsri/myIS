@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa"
-read_model_sha256: "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8"
-source_commit: "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7"
+read_model_revision: "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944"
+read_model_sha256: "ee71fc4bdcdbbda57ddb2a9edc710029e49d9783efe9e550d75c954afd0a20b4"
+source_commit: "1cdff09343121b26cda968263d6a83cb403fba28"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa"
-last_material_update: "2026-08-07T09:20:54Z"
-next_authorized_action: "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed."
+generated_from_revision: "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944"
+last_material_update: "2026-08-07T10:14:03Z"
+next_authorized_action: "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-07T09:20:54Z"
-updated_at: "2026-08-07T09:20:54Z"
+created_at: "2026-08-07T10:14:03Z"
+updated_at: "2026-08-07T10:14:03Z"
 note_id: "A2_PER_ARM_AUTOINDEX-MASTER"
 note_type: "phase_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -40,15 +40,15 @@ Search and freeze one representation program per promoted arm.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_live_preflight_execution_lifecycle_prepared_launch_locked
+- `program_state`: a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `4b98d0c3960788e92a9a4423d5414308a8503d6b5ed41378f4e7f90a1b63fb8e`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `93cb6190f073993009cbd77e7628399e1a0d08f88973786337e1307fcbc0d0b8`
-- `git_commit`: cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `784803a48bb71b802685da8d9af7c772c22177562c85e6f81ceeeca64c387c1b`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `44f36dc7bb9fb5e73b4733ea35ad4b68baf6feeec67a4abd6bdb94502e5d7049`
+- `git_commit`: 1cdff09343121b26cda968263d6a83cb403fba28
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -120,7 +120,7 @@ Status: **blocked**. A2_PER_ARM_AUTOINDEX is blocked; ArmIndex measured runs, Se
 
 ## Next Action
 
-Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.
+Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

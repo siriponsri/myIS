@@ -257,15 +257,19 @@ def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked
 def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> None:
     projection = _a12_contract_scaffold_projection(ROOT)
 
-    assert projection["status"] == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
+    assert projection["status"] == (
+        "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+    )
     assert projection["validated"] is True
     assert projection["v1_status"] == "a1_2_contract_scaffold_complete_launch_locked"
-    assert projection["evidence_class"] == "live_engineering_preflight_execution_lifecycle_repair"
+    assert projection["evidence_class"] == "live_engineering_synthetic_preflight"
     assert projection["scientific_authority"] is False
     assert projection["model_lock_count"] == 5
     assert projection["offline_adapter_ready"] == 1
     assert projection["dense_artifact_manifests_pending"] == 4
-    assert projection["owner_requirements_pending"] == len(projection["vast_preflight_v5"]["live_checks_pending"])
+    assert projection["owner_requirements_pending"] == len(
+        projection["vast_preflight_v9"]["live_result"]["pending_live_checks"]
+    )
     assert projection["launch_ready"] is False
     assert projection["measured_execution"] is False
     assert projection["budget_limits"]["arm01_gpu_usd"] == 0
@@ -387,6 +391,14 @@ def test_a12_contract_scaffold_projection_is_complete_and_launch_locked() -> Non
     assert vast_v9["active_correction"]["source_remote_root"] == "/opt/myis/a1.2-v7"
     assert vast_v9["active_correction"]["implementation_validation_complete"] is True
     assert vast_v9["active_correction"]["live_preflight_execution_pending"] is True
+    assert vast_v9["live_result_status"] == "PASS"
+    assert vast_v9["live_result"]["attempt_id"] == "a12-v9-20260807-06"
+    assert len(vast_v9["live_result"]["arms"]) == 4
+    assert {item["status"] for item in vast_v9["live_result"]["arms"]} == {"PASS"}
+    assert vast_v9["live_result"]["qwen"]["measured_adapter_max_input_tokens"] == 32768
+    assert vast_v9["live_result"]["lifecycle"]["checkpoint_resume"] == "PASS"
+    assert vast_v9["live_result"]["lifecycle"]["guest_process_teardown"] == "PASS"
+    assert vast_v9["live_result"]["lifecycle"]["provider_destruction_proven"] is False
     assert set(vast_v9["real_counters"].values()) == {0}
     assert set(vast_v9["resource_counters"].values()) == {0}
 

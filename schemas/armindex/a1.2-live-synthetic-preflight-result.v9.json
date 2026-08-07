@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-live-synthetic-preflight-result.v9.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "revision_id", "status", "evidence_class",
+    "scientific_authority", "claim_boundary", "attempt_id", "identity", "provider",
+    "arms", "qwen", "lifecycle", "source_bindings", "pending_live_checks",
+    "owner_disposition", "launch_allowed", "adopted_for_execution", "measured_runs",
+    "selection_accesses", "final_accesses", "charged_usd", "next_authorized_action",
+    "v9_contract_sha256", "v9_preparation_receipt_sha256", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-live-synthetic-preflight-result.v9"},
+    "receipt_id": {"const": "a1.2-live-synthetic-preflight-result-v9"},
+    "revision_id": {"const": "a1.2-live-synthetic-preflight-result-v9"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "live_engineering_synthetic_preflight"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 80},
+    "attempt_id": {"const": "a12-v9-20260807-06"},
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["git_commit", "git_tree", "bundle_sha256", "image_reference", "resolved_manifest_digest", "verification_marker_sha256"],
+      "properties": {
+        "git_commit": {"const": "1cdff09343121b26cda968263d6a83cb403fba28"},
+        "git_tree": {"const": "701b6c2bc1596334637d7c096ac50c4914936ebc"},
+        "bundle_sha256": {"pattern": "^[a-f0-9]{64}$"},
+        "image_reference": {"const": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime"},
+        "resolved_manifest_digest": {"const": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20"},
+        "verification_marker_sha256": {"pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "provider": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_label", "instance_id", "quote_usd_per_hour", "hard_stop_fit", "gpu_count", "gpu_model", "vram_mib_each", "gpu_uuid_set_sha256", "cpu_count", "ram_bytes", "disk_total_bytes", "image_identity_observation"],
+      "properties": {
+        "provider_label": {"const": "Vast"}, "instance_id": {"pattern": "^[0-9]+$"},
+        "quote_usd_per_hour": {"type": "number", "minimum": 0, "maximum": 18}, "hard_stop_fit": {"const": true},
+        "gpu_count": {"const": 4}, "gpu_model": {"const": "NVIDIA GeForce RTX 3090"}, "vram_mib_each": {"const": 24576},
+        "gpu_uuid_set_sha256": {"pattern": "^[a-f0-9]{64}$"}, "cpu_count": {"type": "integer", "minimum": 1},
+        "ram_bytes": {"type": "integer", "minimum": 1}, "disk_total_bytes": {"type": "integer", "minimum": 1},
+        "image_identity_observation": {"type": "string", "minLength": 10}
+      }
+    },
+    "arms": {"type": "array", "minItems": 4, "maxItems": 4, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["arm_id", "cuda_visible_devices", "status", "adapter_receipt_sha256", "worker_receipt_sha256", "model_manifest_sha256", "output_dimension", "peak_vram_bytes"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-02", "ARM-03", "ARM-04", "ARM-05"]}, "cuda_visible_devices": {"pattern": "^[0-3]$"}, "status": {"const": "PASS"},
+        "adapter_receipt_sha256": {"pattern": "^[a-f0-9]{64}$"}, "worker_receipt_sha256": {"pattern": "^[a-f0-9]{64}$"}, "model_manifest_sha256": {"pattern": "^[a-f0-9]{64}$"},
+        "output_dimension": {"type": "integer", "minimum": 1}, "peak_vram_bytes": {"type": "integer", "minimum": 1}
+      }
+    }},
+    "qwen": {"type": "object", "additionalProperties": false, "required": ["arm_id", "adapter_path", "declared_max_input_tokens", "measured_adapter_max_input_tokens", "candidate_safe_max_input_tokens", "candidate_tokens_passed", "peak_allocated_vram_bytes", "first_oom_adapter_input_tokens", "measurement_scope"], "properties": {
+      "arm_id": {"const": "ARM-05"}, "adapter_path": {"const": "sentence_transformer_encode"}, "declared_max_input_tokens": {"const": 32768}, "measured_adapter_max_input_tokens": {"const": 32768}, "candidate_safe_max_input_tokens": {"const": 32768}, "candidate_tokens_passed": {"const": [8192, 16384, 32768]}, "peak_allocated_vram_bytes": {"type": "integer", "minimum": 1}, "first_oom_adapter_input_tokens": {"type": ["null", "integer"]}, "measurement_scope": {"type": "string", "minLength": 20}
+    }},
+    "lifecycle": {"type": "object", "additionalProperties": false, "required": ["checkpoint_resume", "injected_failure", "guest_process_teardown", "teardown_receipt_sha256", "safe_export_archive_sha256", "safe_export_members_sha256", "safe_export_member_count", "provider_destruction_proven"], "properties": {
+      "checkpoint_resume": {"const": "PASS"}, "injected_failure": {"const": "EXPECTED_FAILURE"}, "guest_process_teardown": {"const": "PASS"}, "teardown_receipt_sha256": {"pattern": "^[a-f0-9]{64}$"}, "safe_export_archive_sha256": {"pattern": "^[a-f0-9]{64}$"}, "safe_export_members_sha256": {"pattern": "^[a-f0-9]{64}$"}, "safe_export_member_count": {"const": 72}, "provider_destruction_proven": {"const": false}
+    }},
+    "source_bindings": {"type": "array", "minItems": 4, "items": {"type": "object", "additionalProperties": false, "required": ["uri", "sha256"], "properties": {"uri": {"type": "string", "minLength": 5}, "sha256": {"pattern": "^[a-f0-9]{64}$"}}}},
+    "pending_live_checks": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "owner_disposition": {"const": "pending_owner_policy_decision"},
+    "launch_allowed": {"const": false}, "adopted_for_execution": {"const": false}, "measured_runs": {"const": 0}, "selection_accesses": {"const": 0}, "final_accesses": {"const": 0}, "charged_usd": {"const": 0},
+    "next_authorized_action": {"type": "string", "minLength": 40}, "v9_contract_sha256": {"pattern": "^[a-f0-9]{64}$"}, "v9_preparation_receipt_sha256": {"pattern": "^[a-f0-9]{64}$"}, "receipt_sha256": {"pattern": "^[a-f0-9]{64}$"}
+  }
+}

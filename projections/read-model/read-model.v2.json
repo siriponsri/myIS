@@ -47,7 +47,7 @@
       },
       "budget_profile_sha256": "07ae7de5c7e704c2f905f3da1294c70db1e5f786a2b00ad6d17c97626b86f44c",
       "budget_profile_uri": "control/budgets/a1.2-common-screen-v1.json",
-      "claim_boundary": "synthetic execution-lifecycle repair only; no measured retrieval or scientific result",
+      "claim_boundary": "Engineering-only synthetic adapter and lifecycle evidence on one Vast 4xRTX3090 instance; no retrieval-quality, publication, or general workload claim.",
       "closeout_validation_audit_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
       "closeout_validation_audit_uri": "outputs/audits/rigor/a1.2-contract-scaffold-closeout-validation-20260805.json",
       "closeout_validation_check_count": 17,
@@ -111,7 +111,7 @@
       ],
       "closeout_validation_recovery_count": 7,
       "dense_artifact_manifests_pending": 4,
-      "evidence_class": "live_engineering_preflight_execution_lifecycle_repair",
+      "evidence_class": "live_engineering_synthetic_preflight",
       "execution_contract_sha256": "2c927841a06ee355a405f9053976a8e5543f7f43794dca0231ea04d3b286e335",
       "execution_contract_uri": "control/armindex/a1.2/execution-contract.v1.json",
       "execution_envelope_sha256": "0117e36c7737baba58a1f5de2b3ec42355f3350ec1b856b110e61b3dd4e32cbf",
@@ -125,9 +125,9 @@
       "model_lock_count": 5,
       "model_lockset_sha256": "0e31912ba0e036580fd394db9bab2260c0eaffafef6baea89b2f7567460f5e43",
       "model_lockset_uri": "control/armindex/a1.2/model-lockset.v1.json",
-      "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
+      "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
       "offline_adapter_ready": 1,
-      "owner_requirements_pending": 21,
+      "owner_requirements_pending": 2,
       "preflight_blockers": [
         "arm-02_sha256s_manifest",
         "arm-03_sha256s_manifest",
@@ -175,7 +175,7 @@
       "scientific_authority": false,
       "shutdown_plan_sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "shutdown_plan_uri": "control/armindex/a1.2/shutdown-plan.v1.json",
-      "status": "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
       "v1_status": "a1_2_contract_scaffold_complete_launch_locked",
       "validated": true,
       "vast_preflight_v2": {
@@ -721,17 +721,123 @@
         "adopted_for_execution": false,
         "bootstrap_sha256": "c99dfc7bcb1289136df3ae992346a25a0b6e3ba66bb25689821b50f4246e9358",
         "bootstrap_uri": "scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh",
-        "claim_boundary": "synthetic execution-lifecycle repair only; no measured retrieval or scientific result",
-        "contract_self_sha256": "8858d3b42644f6ab3ba0f7d1ef4aaf5fb88bf1fd15c8ef99223b20cab96b7986",
-        "contract_sha256": "25db8ffc6f3f91d4ac355388bbe4e33fffc8b761a214e531f456ce7f22fd7d2f",
+        "claim_boundary": "Engineering-only synthetic adapter and lifecycle evidence on one Vast 4xRTX3090 instance; no retrieval-quality, publication, or general workload claim.",
+        "contract_self_sha256": "af8932c78b2e7128f626f240ad40a122a86cc1dbd5200748c2fa03fa90c74e69",
+        "contract_sha256": "abf4769d94a5c45fb09d0d0694400d8963ef53a1bdca3d5408f19c89232b35a6",
         "contract_uri": "control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json",
         "coordinator_sha256": "b3651b77c06c06dda54169e31fb880261cf9db0b553a3dcf004d592f09ebafce",
         "coordinator_uri": "scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1",
         "launch_allowed": false,
-        "launcher_sha256": "af5c2fe6ef0853a4fb5fcebb0dce877ef521fd21ce595ad63b118603963766c4",
+        "launcher_sha256": "958ae71cf029ad2843f4ba06e3db170f310bfc887dfd28fd791b6f856586c73f",
         "launcher_uri": "scripts/a1_2_vast/remote-live-preflight-v9.sh",
-        "next_authorized_action": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
-        "owner_runbook_sha256": "57ebbd5a83ed1f461215a247b20cbefd203cc21894b3461c1a2d20c22a1215dc",
+        "live_result": {
+          "arms": [
+            {
+              "adapter_receipt_sha256": "4de9210e97228620a202df5b733a3b6bccaa0fbde46d3643e1a61e3b90be893d",
+              "arm_id": "ARM-02",
+              "cuda_visible_devices": "0",
+              "model_manifest_sha256": "421aca4aa39d42e24ecec6f615b1e21a6c08f9ea85f8c91c6fa7de77be9f14fa",
+              "output_dimension": 1024,
+              "peak_vram_bytes": 1145933824,
+              "status": "PASS",
+              "worker_receipt_sha256": "a223c443b9dd37ad89d0afe0a0ef54ff7a84c3dfc42e2253fc6fdf7a8f234552"
+            },
+            {
+              "adapter_receipt_sha256": "67f5c374f82a475866a08d2be5f458b61a88ae745fc39046e0832965998a4e4b",
+              "arm_id": "ARM-03",
+              "cuda_visible_devices": "1",
+              "model_manifest_sha256": "0070947e7621ea3247e02e2bb5aa27caa72ebe9fb36cd1256139715b99f1343e",
+              "output_dimension": 1024,
+              "peak_vram_bytes": 699831808,
+              "status": "PASS",
+              "worker_receipt_sha256": "6f7d089bdc6f42ea7a6b90a713722ddf49ad484410a294147899557a88d28b01"
+            },
+            {
+              "adapter_receipt_sha256": "b91cfd112da14af4888207af8f42065e35f39b064fb91eef70890c1df8bc9b00",
+              "arm_id": "ARM-04",
+              "cuda_visible_devices": "2",
+              "model_manifest_sha256": "d2f14a2fd821e40fd5fbe714973b2f9450ff28b886e34d3de604b21317fd95bb",
+              "output_dimension": 768,
+              "peak_vram_bytes": 629110272,
+              "status": "PASS",
+              "worker_receipt_sha256": "571669dbddc6f49a397e2df66116e5724fd49340b99417bdce76750203e45d71"
+            },
+            {
+              "adapter_receipt_sha256": "3cbfc95f260b6dac910abce1bd41ca13ae61f9face23baa7d6d6ef01cf33c44e",
+              "arm_id": "ARM-05",
+              "cuda_visible_devices": "3",
+              "model_manifest_sha256": "0faade000cb4967cce1f16b8f7e1ed9e8368daea0d023f6ac24462a78d5fabef",
+              "output_dimension": 1024,
+              "peak_vram_bytes": 5982380544,
+              "status": "PASS",
+              "worker_receipt_sha256": "ebdb3fcb64207f4e711f6297a55ec9cf5ee756d9935246b53a5cf7fbdf81a482"
+            }
+          ],
+          "attempt_id": "a12-v9-20260807-06",
+          "identity": {
+            "bundle_sha256": "e8c980f312f07b04ba6b5972f2098d95ee64ec92b7316f620a8a9c09538f439c",
+            "git_commit": "1cdff09343121b26cda968263d6a83cb403fba28",
+            "git_tree": "701b6c2bc1596334637d7c096ac50c4914936ebc",
+            "image_reference": "pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime",
+            "resolved_manifest_digest": "sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20",
+            "verification_marker_sha256": "a5ca248198724a9a10fee85d4e080b106f6f0efac981bb958f4ecb33878b5a10"
+          },
+          "lifecycle": {
+            "checkpoint_resume": "PASS",
+            "guest_process_teardown": "PASS",
+            "injected_failure": "EXPECTED_FAILURE",
+            "provider_destruction_proven": false,
+            "safe_export_archive_sha256": "92d24af6b24cf99e176ad23a5f3eec22478b8485f3a8770269640dcb423047a6",
+            "safe_export_member_count": 72,
+            "safe_export_members_sha256": "0fcf3b00a5ae3cdbfcaa18c95fc7be6ed6566ad7e14f6af7e8cafd7627dbb3b7",
+            "teardown_receipt_sha256": "94b5d32414f5bd9e41e56c453263fff9b31fadc2338b2aae438c8b98c4ded0ae"
+          },
+          "owner_disposition": "pending_owner_policy_decision",
+          "pending_live_checks": [
+            "provider destruction or policy-valid continuation disposition",
+            "Owner-local TTL watchdog and provider absence proof"
+          ],
+          "provider": {
+            "cpu_count": 64,
+            "disk_total_bytes": 268435456000,
+            "gpu_count": 4,
+            "gpu_model": "NVIDIA GeForce RTX 3090",
+            "gpu_uuid_set_sha256": "7b670e2c35f9ce93731ab13b3d82f4810d16df7d9e0d7885e7f47f958718027a",
+            "hard_stop_fit": true,
+            "image_identity_observation": "runtime_anchors_only_expected_manifest_bound_locally",
+            "instance_id": "47023328",
+            "provider_label": "Vast",
+            "quote_usd_per_hour": 0.656,
+            "ram_bytes": 117996920832,
+            "vram_mib_each": 24576
+          },
+          "qwen": {
+            "adapter_path": "sentence_transformer_encode",
+            "arm_id": "ARM-05",
+            "candidate_safe_max_input_tokens": 32768,
+            "candidate_tokens_passed": [
+              8192,
+              16384,
+              32768
+            ],
+            "declared_max_input_tokens": 32768,
+            "first_oom_adapter_input_tokens": null,
+            "measured_adapter_max_input_tokens": 32768,
+            "measurement_scope": "single RTX 3090, FP16, batch size one, frozen v9 runtime/model",
+            "peak_allocated_vram_bytes": 5982380544
+          }
+        },
+        "live_result_revision_id": "a1.2-live-synthetic-preflight-result-v9",
+        "live_result_schema_sha256": "0f9d971614d2fb3d7b9c08c181bfb22bfe9c83a7578eee3c22c59da350654b61",
+        "live_result_schema_uri": "schemas/armindex/a1.2-live-synthetic-preflight-result.v9.json",
+        "live_result_self_sha256": "f8969e55225b4fa567c94079b6bffc834e1951268f626bdad7754104294df510",
+        "live_result_sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+        "live_result_status": "PASS",
+        "live_result_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+        "live_result_validator_sha256": "184cdd92a49145e29914a61b031ca09062b333c964de3cd3eafd26c3a79513c8",
+        "live_result_validator_uri": "src/myis_research/armindex/a1_2_live_preflight_result_v9.py",
+        "next_authorized_action": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
+        "owner_runbook_sha256": "4aa934e8e80a8e8685136711190eea1b6a3c9d2fbf0f05f2506cfbdfdd563cce",
         "owner_runbook_uri": "docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md",
         "real_counters": {
           "candidate_count": 0,
@@ -739,8 +845,8 @@
           "measured_runs": 0,
           "selection_accesses": 0
         },
-        "receipt_self_sha256": "d6948ce51b70f80408a3ed71fc0650a918b9299e7ceb57c3b49966c53d43e6d6",
-        "receipt_sha256": "2dc12abd8707a31ddc989ebfc18d6a5d5913acc4737652c60c5631bd57ea0c3b",
+        "receipt_self_sha256": "c4d3d5af35cbb0e79abe42821e30d18b1c9c72e902b9d318b7ac064bb025fd9d",
+        "receipt_sha256": "0435823ca9e0e94695059c5aaba6c1f3406cc2873e6c2041ff132cc8f640fcbf",
         "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
         "resource_counters": {
           "charged_usd": 0,
@@ -749,7 +855,7 @@
           "paid_api_calls": 0
         },
         "revision_id": "a1.2-live-preflight-execution-lifecycle-v9",
-        "runtime_sha256": "ab786e2b34457a9ba226009bfae618e30a0f398053fd2a0f0125b77acfeb78a2",
+        "runtime_sha256": "13f1191cd411adac3699ee688de9545d7ead9ace6f3679ee634b95e62fd45894",
         "runtime_uri": "src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py",
         "schema_sha256": "945188d828eccda02dc841f53176b92e6ba74cc436c45f624ed2a10f193041a0",
         "schema_uri": "schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json",
@@ -946,7 +1052,7 @@
         "role": "lexical_anchor_cpu_fallback"
       },
       {
-        "adapter_status": "v9_attempt_scoped_synthetic_gpu_preflight_pending",
+        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
         "arm_id": "ARM-02",
         "commercial_status": "commercial_capable",
         "license": "MIT",
@@ -955,7 +1061,7 @@
         "role": "multilingual_dense_anchor"
       },
       {
-        "adapter_status": "v9_attempt_scoped_synthetic_gpu_preflight_pending",
+        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
         "arm_id": "ARM-03",
         "commercial_status": "research_non_commercial",
         "license": "CC-BY-NC-SA-4.0",
@@ -964,7 +1070,7 @@
         "role": "research_champion_candidate"
       },
       {
-        "adapter_status": "v9_attempt_scoped_synthetic_gpu_preflight_pending",
+        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
         "arm_id": "ARM-04",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -973,7 +1079,7 @@
         "role": "long_context_dense"
       },
       {
-        "adapter_status": "v9_attempt_scoped_synthetic_gpu_preflight_pending",
+        "adapter_status": "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked",
         "arm_id": "ARM-05",
         "commercial_status": "commercial_capable",
         "license": "Apache-2.0",
@@ -1246,7 +1352,7 @@
       "status": "complete",
       "validated": true
     },
-    "next_command": "Run only the v9 synthetic execution-lifecycle preflight after all bound implementation checks pass; launch adoption and measured retrieval remain closed.",
+    "next_command": "Owner may destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only while the continuation policy requirements remain true.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -1330,7 +1436,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_execution_lifecycle_repair_prepared_preflight_pending_launch_locked",
+        "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
         "tasks": [
           {
             "status": "complete",
@@ -1338,7 +1444,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "execution_lifecycle_repair_prepared_preflight_pending_launch_locked",
+            "status": "live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -1426,7 +1532,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
+    "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -1458,7 +1564,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked",
+      "status": "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -1617,7 +1723,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-07T09:20:54Z",
+  "generated_at": "2026-08-07T10:14:03Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -2525,7 +2631,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
+  "projection_revision": "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -2569,8 +2675,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa",
-  "read_model_sha256": "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8",
+  "read_model_revision": "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944",
+  "read_model_sha256": "ee71fc4bdcdbbda57ddb2a9edc710029e49d9783efe9e550d75c954afd0a20b4",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -2703,7 +2809,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7",
+  "source_commit": "1cdff09343121b26cda968263d6a83cb403fba28",
   "tasks": [
     {
       "evidence_ids": [],

@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa"
-read_model_sha256: "f231cd9c802ccdc97637102d037cbaa38bf02e8fb75fb751b19e4780820917d8"
-source_commit: "cdfdc0bae21fa52a7c8e72272b3a13b4cfaaa7f7"
+read_model_revision: "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944"
+read_model_sha256: "ee71fc4bdcdbbda57ddb2a9edc710029e49d9783efe9e550d75c954afd0a20b4"
+source_commit: "1cdff09343121b26cda968263d6a83cb403fba28"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["obs-run-candidate-02"]
 source_manifest_sha256: ["51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1","6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "1f424c3540ceb636e1f08697f5530dca7ee23140ac080600b2dc51be659a06aa"
-last_material_update: "2026-08-07T09:20:54Z"
+generated_from_revision: "3a0f4effa34596eff6c2a4d358c86c214315d3e13dcfaf9d4f78775e16e7a944"
+last_material_update: "2026-08-07T10:14:03Z"
 next_authorized_action: "/goal Execute A0.8_COMPUTE_AND_STORAGE_FEASIBILITY_FIXTURES from the canonical PLAN and control/campaigns/armindex-multiretriever-v2.yaml. Use synthetic fixtures only; do not access protected data, start measured retrieval, download model weights, use GPU or paid APIs, open Selection, or open Final."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-07T09:20:54Z"
-updated_at: "2026-08-07T09:20:54Z"
+created_at: "2026-08-07T10:14:03Z"
+updated_at: "2026-08-07T10:14:03Z"
 note_id: "OBSERVATORY-FAILURE-RECOVERY"
 note_type: "failed_attempt"
 phase_id: "P2_SCOPE_DEVELOPMENT"

@@ -88,7 +88,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "measured results = `unavailable`" in pending_report
 
 
-def test_a12_v9_receipt_is_the_canonical_projection_lifecycle_source() -> None:
+def test_a12_v9_live_result_is_the_canonical_projection_lifecycle_source() -> None:
     model = build_read_model(ROOT)
     manifest = json.loads(
         (ROOT / VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json").read_text(
@@ -113,9 +113,9 @@ def test_a12_v9_receipt_is_the_canonical_projection_lifecycle_source() -> None:
 
     assert lifecycle["source_receipt_uri"] == (
         "campaigns/armindex-multiretriever-v2/evidence/"
-        "a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
+        "a1.2-live-synthetic-preflight-result.receipt.v9.json"
     )
-    assert lifecycle["source_receipt_sha256"] == v9["receipt_sha256"]
+    assert lifecycle["source_receipt_sha256"] == v9["live_result_sha256"]
 
 
 def test_a010_task_report_is_receipt_driven_and_uses_the_fifteen_section_contract() -> None:
@@ -249,11 +249,12 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in failure_ids
     assert "v6-initial-wheelhouse-missing-pydantic" in failure_ids
     assert "v6-supplement-repair-mutated-pycache-tree" in failure_ids
-    assert "USD 0.60 per complete four-GPU instance-hour" in a12_report
+    assert "vast_v6_live_quote_usd_per_instance_hour" in a12_report
+    assert "`0.656`" in a12_report
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(
-        "a1.2-live-preflight-execution-lifecycle.receipt.v9.json"
+        "a1.2-live-synthetic-preflight-result.receipt.v9.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (

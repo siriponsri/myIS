@@ -16,10 +16,10 @@ measurement, and production-constrained HarnessOpt.
 
 - Campaign: `armindex-multiretriever-v2`
 - Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v9 attempt-scoped
-  execution-lifecycle repair validated after the v8 packaging closure; synthetic
-  live preflight is pending and scientific launch remains locked)
+  live synthetic preflight passed; Owner instance disposition is pending and
+  scientific launch remains locked)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: engineering preflight revision; scientific authority `false`
+- Current evidence class: live engineering synthetic preflight; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -60,7 +60,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v9 synthetic live preflight prepared and launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v9 synthetic live preflight PASS; scientific screen launch-locked |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -103,7 +103,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 execution-lifecycle repair validated; synthetic live checks pending; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 live synthetic preflight PASS; Owner instance disposition pending; measured screen launch-locked |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -226,8 +226,13 @@ v1-v8 and binds a fresh `/opt/myis/a1.2-v9` root, immutable attempt IDs,
 PID/start-time identities, fresh heartbeats, sibling cancellation and reaping,
 post-work checkpoints, `SentenceTransformer.encode` Qwen measurement,
 same-attempt PASS export, member-hash validation, and verified guest-process
-cleanup. Local implementation validation is complete; live synthetic execution
-and provider destruction/TTL proof remain pending.
+cleanup. Attempt `a12-v9-20260807-06` passed all four dense adapter checks,
+measured Qwen adapter capacity at 32,768 tokens for the frozen single-RTX3090
+configuration, passed checkpoint/resume and expected-failure handling, returned
+a 72-member hash-validated safe export, and completed verified guest-process
+teardown. Provider destruction/TTL proof or policy-valid continuation remains
+pending. This is engineering evidence only and supports no retrieval-quality or
+publication claim.
 
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
@@ -278,18 +283,14 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Run only the A1.2 v9 attempt-scoped synthetic live preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md. Preserve v6-v8 evidence, use fresh /opt/myis/a1.2-v9, reuse v7 staged bytes only after SHA-256 validation, require the runtime-bound v9 marker, run one dense arm per RTX 3090, collect and validate the same-attempt PASS archive, and stop verified guest processes. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes. After PASS, follow the Owner continuation policy: destroy by default, or report Owner continuation only for a separately authorized next PLAN goal when every requirement remains true.
+/goal Decide the A1.2 post-preflight Vast instance disposition. Default to destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only for a separately authorized next PLAN goal while the same instance identity, artifact hashes, quote/budget, TTL/destroy path, and protected-data boundary remain valid. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
-The local runtime-minimal stage is complete and the v6-v8 lineage remains
-preserved. The next action is the bounded v9 synthetic preflight on the same
-unchanged instance. It may verify the worker and run synthetic preflight
-workers, but it must not run measured retrieval or adopt the revision.
-Scientific launch remains forbidden until every checklist item passes and the
-Owner later adopts the unchanged revision in a separate authorized goal. The
-default closeout destroys the provider instance. Under the additive Owner
-continuation policy, a completed preflight may instead retain the unchanged
-instance solely for a separately authorized next PLAN goal when identity,
-hashes, quote/budget, TTL/destroy proof, and the protected-data boundary all
-still pass. Retention itself never adopts the revision or authorizes scientific
-work.
+The local runtime-minimal stage and the v9 synthetic live preflight are complete,
+and the v1-v8 lineage remains preserved. Scientific launch remains forbidden
+until the Owner separately adopts an unchanged execution revision under an
+authorized PLAN goal. The default closeout destroys and verifies absence of the
+provider instance. The additive continuation policy may retain the unchanged
+instance only for a separately authorized next PLAN goal when identity, hashes,
+quote/budget, TTL/destroy proof, and the protected-data boundary all still pass.
+Retention itself never adopts the revision or authorizes scientific work.

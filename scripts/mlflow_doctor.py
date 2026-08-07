@@ -116,7 +116,7 @@ def _validate_archives(store: Path, connection: sqlite3.Connection) -> tuple[boo
                 raise ValueError("archive record hash mismatch")
             if run_record.get("freeze_sha256") != tags.get("freeze_sha256"):
                 raise ValueError("freeze lineage mismatch")
-            artifact_root = _artifact_uri_path(str(run_row[0])) / "mirror"
+            artifact_root = _artifact_uri_path(str(run_row[0]), store_root=store) / "mirror"
             staged_files = [item for item in staging.rglob("*") if item.is_file()]
             stored_files = [item for item in artifact_root.rglob("*") if item.is_file()]
             staged_by_suffix = {item.relative_to(staging).as_posix(): _hash(item) for item in staged_files}
@@ -169,7 +169,7 @@ def _structured_key_is_protected(value: Any) -> bool:
     return False
 
 
-def _artifact_uri_path(value: str) -> Path:
+def _artifact_uri_path(value: str, *, store_root: Path | None = None) -> Path:
     from urllib.parse import unquote, urlparse
 
     parsed = urlparse(value)
@@ -180,7 +180,29 @@ def _artifact_uri_path(value: str) -> Path:
         raw = f"//{parsed.netloc}{raw}"
     if re.match(r"^/[A-Za-z]:/", raw):
         raw = raw[1:]
-    return Path(raw).resolve(strict=True)
+    path = Path(raw)
+    try:
+        return path.resolve(strict=True)
+    except FileNotFoundError:
+        if store_root is None:
+            raise
+
+        # Historical archive receipts can retain an absolute artifact URI from
+        # before the Owner store was moved. Rebind only the path suffix below
+        # the current, explicitly supplied MLflow store; never search broadly.
+        store = store_root.resolve(strict=True)
+        parts = path.parts
+        store_name = store.name.casefold()
+        matching_indexes = [index for index, part in enumerate(parts) if part.casefold() == store_name]
+        if not matching_indexes:
+            raise
+        relative = Path(*parts[matching_indexes[-1] + 1:])
+        relocated = (store / relative).resolve(strict=True)
+        try:
+            relocated.relative_to(store)
+        except ValueError as error:
+            raise FileNotFoundError(f"relocated artifact path escapes MLflow store: {relocated}") from error
+        return relocated
 
 
 def _store_metadata_valid(store: Path) -> bool:

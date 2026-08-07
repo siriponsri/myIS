@@ -8,8 +8,8 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_execution_lifecycle_repair_prepared_preflight_pending_launch_locked`
-- Evidence class: live engineering preflight execution-lifecycle repair; scientific authority `false`
+- Status: `a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked`
+- Evidence class: live engineering synthetic preflight; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -147,8 +147,12 @@ evidence.
   bytes, and binds immutable attempt IDs, PID/start-time liveness, fresh
   heartbeats, immediate sibling cancellation/reaping, durable checkpoints,
   adapter-level Qwen length measurement, same-attempt PASS export, member-hash
-  validation, and verified guest-process cleanup. Focused local validation
-  passed; live synthetic execution is still pending.
+  validation, and verified guest-process cleanup.
+- Attempt `a12-v9-20260807-06` passed ARM-02 through ARM-05 synthetic adapter
+  parity, Qwen adapter-level 32,768-token measurement, checkpoint/resume,
+  expected-failure handling, 72-member safe export validation, and guest-process
+  teardown. The aggregate-only canonical result receipt is
+  `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json`.
 - Every registered Phase and Task continues to receive one detailed English
   generated Obsidian report with the canonical fifteen-section structure. The
   archive audit found zero eligible orphan/superseded reports; referenced
@@ -156,35 +160,32 @@ evidence.
 
 ## Boundaries
 
-No measured retrieval, REP-DEV/HARNESS-DEV optimization, dense-arm execution,
+No measured retrieval, REP-DEV/HARNESS-DEV optimization, measured dense-arm execution,
 Selection, Final, GPU scientific execution, paid API, model download, provider
 switch, or model-weight modification is authorized by the A0 closeout or A1.1
 fixture handoff. Protected Owner-local data remains untouched.
 
 ## Blockers
 
-The v1-v7 receipt lineage, v5 local stage, live runtime identity, and additive
-v8 packaging and v9 lifecycle repair contracts pass. A1.2 scientific execution remains deliberately locked
-because the v9 synthetic preflight has not completed dense adapter parity, the
-Qwen measured maximum length, GPU memory feasibility, four-worker heartbeat/
-resume, safe return validation, and provider-destruction/TTL proof. The local
-Vast CLI is not currently available, so automatic provider destruction and
-instance continuation are not yet eligible. The root
-software license requires an Owner legal decision before external release; this
-does not block the CPU preflight.
+The v1-v9 receipt lineage, v5 local stage, live runtime identity, four dense
+adapter checks, Qwen 32,768-token adapter measurement, checkpoint/resume, safe
+return, and guest teardown pass. A1.2 scientific execution remains deliberately
+locked because no execution revision has been adopted and no measured retrieval
+goal is authorized. Provider destruction/TTL proof or a policy-valid Owner
+continuation decision remains pending. The root software license requires an
+Owner legal decision before external release; this does not invalidate the
+engineering preflight.
 
 ## Active authorized action
 
-Run only the Owner-local SSH/Vast A1.2 preflight from the immutable beginner
-runbook. The exact next task is:
+Choose the post-preflight instance disposition. The exact next task is:
 
 ```text
-/goal Run only the A1.2 v9 attempt-scoped synthetic preflight from docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md. Preserve v6-v8 evidence, create fresh /opt/myis/a1.2-v9, reuse v7 staged inputs only after SHA-256 validation, require the runtime-bound v9 marker, run one synthetic arm per RTX 3090 with verified lifecycle controls, collect the same-attempt PASS archive, and stop verified guest processes. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
+/goal Decide the A1.2 post-preflight Vast instance disposition. Default to destroy and verify provider absence, or explicitly authorize continue_next_goal_on_PLAN only for a separately authorized next PLAN goal while the same instance identity, artifact hashes, quote/budget, TTL/destroy path, and protected-data boundary remain valid. Keep launch_allowed=false and adopted_for_execution=false; do not start measured retrieval, optimization, Selection, Final, paid API work, or weight changes.
 ```
 
-No Owner input is required while the agent prepares, validates, commits, and
-pushes the v9 bundle. After the synthetic preflight and safe collection, the
-default is to destroy and verify the provider instance. The additive Owner
+The synthetic preflight and safe collection are complete. The default is to
+destroy and verify the provider instance. The additive Owner
 policy at `control/armindex/a1.2/owner-instance-continuation-policy.v1.json`
 permits the report `Owner continue next goal on PLAN` only after a complete
 live PASS and a separately authorized next PLAN goal, while the same instance

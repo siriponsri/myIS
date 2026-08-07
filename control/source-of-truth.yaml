@@ -64,9 +64,14 @@ records:
     supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json, schemas/armindex/a1.2-live-preflight-execution-lifecycle.v9.json, docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK_V9.md]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [live_engineering_preflight_execution_lifecycle_repair_only, v1_v8_preserved, attempt_scoped_outputs, verified_pid_start_identity, fresh_heartbeats, checkpoint_after_durable_work, sentence_transformer_qwen_measurement, same_attempt_pass_export, end_to_end_archive_validation, verified_guest_process_teardown, fresh_remote_root, launch_locked, adopted_for_execution_false, synthetic_only, no_protected_data, measured_counters_zero, selection_closed, final_closed]
+  - id: armindex_a1_2_live_synthetic_preflight_result_v9
+    authority: campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json
+    supporting_authority: [campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json, control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json, schemas/armindex/a1.2-live-synthetic-preflight-result.v9.json, src/myis_research/armindex/a1_2_live_preflight_result_v9.py]
+    projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [live_engineering_synthetic_preflight_only, attempt_06_pass, four_dense_adapter_receipts_pass, qwen_adapter_32768_tokens_pass, checkpoint_resume_pass, safe_export_validated, guest_process_teardown_complete, provider_disposition_pending, no_retrieval_quality_claim, no_publication_result_claim, launch_locked, adopted_for_execution_false, no_protected_data, measured_counters_zero, selection_closed, final_closed]
   - id: armindex_a1_2_owner_instance_continuation_policy
     authority: control/armindex/a1.2/owner-instance-continuation-policy.v1.json
-    supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight.v6.json, control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json, control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json, control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json]
+    supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight.v6.json, control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json, control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json, control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json, campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [owner_policy_only, additive_to_v1_v6, default_destroy_remains, continuation_requires_complete_live_preflight_and_separate_next_goal_authorization, launch_locked, adopted_for_execution_false, measured_counters_zero, selection_closed, final_closed, no_protected_data]
   - id: phase_task_reporting_contract

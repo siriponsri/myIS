@@ -94,6 +94,12 @@ from ..armindex.a1_2_live_preflight_execution_v9 import (
     SCHEMA_PATH as A12_V9_SCHEMA_PATH,
     validate_revision as validate_a1_2_v9_execution_lifecycle,
 )
+from ..armindex.a1_2_live_preflight_result_v9 import (
+    RECEIPT_PATH as A12_V9_RESULT_RECEIPT_PATH,
+    REVISION_ID as A12_V9_RESULT_REVISION_ID,
+    SCHEMA_PATH as A12_V9_RESULT_SCHEMA_PATH,
+    validate_result as validate_a1_2_v9_live_result,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -281,6 +287,7 @@ A12_V9_OWNER_RUNBOOK_PATH = Path("docs/operations/A1_2_VAST_4X3090_OWNER_RUNBOOK
 A12_V9_COORDINATOR_PATH = Path("scripts/a1_2_vast/Invoke-A12VastDirectBaseCoordinatorV9.ps1")
 A12_V9_BOOTSTRAP_PATH = Path("scripts/a1_2_vast/remote-bootstrap-direct-base-v9.sh")
 A12_V9_LAUNCHER_PATH = Path("scripts/a1_2_vast/remote-live-preflight-v9.sh")
+A12_V9_RESULT_MODULE_PATH = Path("src/myis_research/armindex/a1_2_live_preflight_result_v9.py")
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path("control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl")
 A08_FIXTURE_MANIFEST_PATH = Path(
@@ -353,6 +360,28 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         if isinstance(task, Mapping)
     )
     if (
+        a1_2_scaffold.get("validated") is True
+        and a1_2_scaffold.get("status")
+        == "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+        and isinstance(a1_2_scaffold.get("vast_preflight_v9"), Mapping)
+        and a1_2_scaffold["vast_preflight_v9"].get("validated") is True
+        and a1_2_scaffold["vast_preflight_v9"].get("live_result_status") == "PASS"
+    ):
+        armindex["status"] = "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_scaffold["next_authorized_action"]
+        armindex["arms"] = [
+            {
+                **item,
+                "adapter_status": (
+                    "bm25s_cpu_lock_and_synthetic_rank_parity_validated"
+                    if item.get("arm_id") == "ARM-01"
+                    else "v9_live_synthetic_gpu_preflight_pass_scientific_execution_locked"
+                ),
+            }
+            for item in armindex.get("arms", [])
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
@@ -2080,6 +2109,12 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "bootstrap_sha256": None,
             "launcher_uri": A12_V9_LAUNCHER_PATH.as_posix(),
             "launcher_sha256": None,
+            "live_result_uri": A12_V9_RESULT_RECEIPT_PATH.as_posix(),
+            "live_result_sha256": None,
+            "live_result_self_sha256": None,
+            "live_result_revision_id": A12_V9_RESULT_REVISION_ID,
+            "live_result_status": "not_started",
+            "live_result": {},
             "active_correction": {},
             "launch_allowed": False,
             "adopted_for_execution": False,
@@ -2144,6 +2179,8 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         v9_validation = None
         v9_receipt = None
         v9_contract = None
+        v9_result_validation = None
+        v9_result_receipt = None
         if (root / A12_V2_RECEIPT_PATH).is_file():
             v2_receipt = validate_a1_2_vast_receipt(root)
             v2_contract = json.loads((root / A12_V2_CONTROL_ROOT / "execution-contract.v2.json").read_text(encoding="utf-8"))
@@ -2182,6 +2219,11 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v9_validation = validate_a1_2_v9_execution_lifecycle(root)
             v9_receipt = json.loads((root / A12_V9_RECEIPT_PATH).read_text(encoding="utf-8"))
             v9_contract = json.loads((root / A12_V9_CONTRACT_PATH).read_text(encoding="utf-8"))
+        if (root / A12_V9_RESULT_RECEIPT_PATH).is_file():
+            v9_result_validation = validate_a1_2_v9_live_result(root)
+            v9_result_receipt = json.loads(
+                (root / A12_V9_RESULT_RECEIPT_PATH).read_text(encoding="utf-8")
+            )
         assert_aggregate_only(contract)
         assert_aggregate_only(budget)
         assert_aggregate_only(lockset)
@@ -2209,6 +2251,7 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             v8_contract,
             v9_receipt,
             v9_contract,
+            v9_result_receipt,
         ):
             if value is not None:
                 assert_aggregate_only(value)
@@ -2395,6 +2438,26 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             or any(float(value) != 0 for value in v9_contract.get("resource_counters", {}).values())
         ):
             raise ValueError("A1.2 execution-lifecycle repair v9 receipt is invalid")
+        if v9_result_receipt is not None and (
+            v9_result_validation is None
+            or v9_result_receipt.get("status") != "PASS"
+            or v9_result_receipt.get("scientific_authority") is not False
+            or v9_result_receipt.get("launch_allowed") is not False
+            or v9_result_receipt.get("adopted_for_execution") is not False
+            or any(
+                int(v9_result_receipt.get(key, -1)) != 0
+                for key in ("measured_runs", "selection_accesses", "final_accesses")
+            )
+            or float(v9_result_receipt.get("charged_usd", -1)) != 0
+            or v9_result_receipt.get("attempt_id") != "a12-v9-20260807-06"
+            or not isinstance(v9_result_receipt.get("arms"), list)
+            or len(v9_result_receipt["arms"]) != 4
+            or any(item.get("status") != "PASS" for item in v9_result_receipt["arms"])
+            or v9_result_receipt.get("qwen", {}).get("measured_adapter_max_input_tokens") != 32768
+            or v9_result_receipt.get("lifecycle", {}).get("checkpoint_resume") != "PASS"
+            or v9_result_receipt.get("lifecycle", {}).get("guest_process_teardown") != "PASS"
+        ):
+            raise ValueError("A1.2 live synthetic preflight result receipt is invalid")
         if v2_closeout_audit is not None:
             v2_checks = v2_closeout_audit.get("check_groups")
             v2_recoveries = v2_closeout_audit.get("failures_and_recoveries")
@@ -2855,9 +2918,36 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
             "claim_boundary": str(v9_receipt["claim_boundary"]),
             "next_authorized_action": str(v9_contract["next_authorized_action"]),
         }
+    if v9_result_receipt is not None and v9_result_validation is not None:
+        v9_projection = {
+            **v9_projection,
+            "live_result_sha256": _file_sha256(root / A12_V9_RESULT_RECEIPT_PATH),
+            "live_result_self_sha256": str(v9_result_receipt["receipt_sha256"]),
+            "live_result_revision_id": str(v9_result_receipt["revision_id"]),
+            "live_result_status": str(v9_result_receipt["status"]),
+            "live_result_schema_uri": A12_V9_RESULT_SCHEMA_PATH.as_posix(),
+            "live_result_schema_sha256": _file_sha256(root / A12_V9_RESULT_SCHEMA_PATH),
+            "live_result_validator_uri": A12_V9_RESULT_MODULE_PATH.as_posix(),
+            "live_result_validator_sha256": _file_sha256(root / A12_V9_RESULT_MODULE_PATH),
+            "live_result": {
+                "attempt_id": str(v9_result_receipt["attempt_id"]),
+                "identity": dict(v9_result_receipt["identity"]),
+                "provider": dict(v9_result_receipt["provider"]),
+                "arms": [dict(item) for item in v9_result_receipt["arms"]],
+                "qwen": dict(v9_result_receipt["qwen"]),
+                "lifecycle": dict(v9_result_receipt["lifecycle"]),
+                "pending_live_checks": list(v9_result_receipt["pending_live_checks"]),
+                "owner_disposition": str(v9_result_receipt["owner_disposition"]),
+            },
+            "claim_boundary": str(v9_result_receipt["claim_boundary"]),
+            "next_authorized_action": str(v9_result_receipt["next_authorized_action"]),
+        }
     return {
         **missing,
         "status": (
+            "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+            if v9_result_receipt is not None and v9_result_validation is not None
+            else
             "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
             if v9_projection["validated"]
             else
@@ -2882,6 +2972,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "v1_status": validation.status,
         "evidence_class": (
+            "live_engineering_synthetic_preflight"
+            if v9_result_receipt is not None and v9_result_validation is not None
+            else
             "live_engineering_preflight_execution_lifecycle_repair"
             if v9_projection["validated"]
             else
@@ -2944,7 +3037,9 @@ def _a12_contract_scaffold_projection(root: Path) -> dict[str, Any]:
         "offline_adapter_ready": int(counts["offline_adapter_ready"]),
         "dense_artifact_manifests_pending": int(counts["owner_artifact_manifests_pending"]),
         "owner_requirements_pending": (
-            len(v5_projection["live_checks_pending"])
+            len(v9_result_receipt["pending_live_checks"])
+            if v9_result_receipt is not None and v9_result_validation is not None
+            else len(v5_projection["live_checks_pending"])
             if v5_projection["validated"]
             else
             int(v2_projection["live_check_count"])
