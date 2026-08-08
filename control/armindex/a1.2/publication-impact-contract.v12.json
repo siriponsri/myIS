@@ -1,0 +1,93 @@
+{
+  "schema_version": "myis.armindex-a1.2-publication-impact-contract.v12",
+  "contract_id": "a1.2-publication-impact-preregistration-v12",
+  "revision_id": "a1.2-publication-impact-preregistration-v12",
+  "status": "prepared_local_only_not_adopted",
+  "evidence_class": "publication_analysis_preregistration_preparation",
+  "scientific_authority": false,
+  "claim_boundary": "Additive local-only publication-analysis preregistration bound to the unchanged v11 scientific request. It defines future analysis only; it is not adoption, provider authority, measured evidence, a retrieval-quality result, or a publication claim.",
+  "v11_binding": {
+    "request": {"uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json", "file_sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d", "self_sha256": "2e95bf70d4843dadac03b442cb231573f73ec05a65884a70ac42d9713f52b7db"},
+    "receipt": {"uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json", "file_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2", "self_sha256": "6de14783873a8405d67a21236252a0d93269601b494366b686fe348ac7308bc2"},
+    "v11_request_must_remain_unchanged": true
+  },
+  "authorization": {"adopted_for_execution": false, "launch_allowed": false, "measured_retrieval_allowed": false, "provider_contact_allowed": false, "selection_open": false, "final_open": false},
+  "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0, "charged_usd": 0},
+  "analysis": {
+    "outcomes": {
+      "primary": "out_recall_at_100",
+      "secondary": ["out_ndcg_at_100", "out_ndcg_at_10"],
+      "evaluation_unit": "patent_family",
+      "aggregation": "macro_over_eligible_out_queries",
+      "cutoff": 100,
+      "family_mapping_and_evaluator_bindings_required": true,
+      "missing_or_unjudged_policy": "predeclared_owner_local_evaluator_receipt_required",
+      "stable_tie_policy_required": true
+    },
+    "development_confirmation_boundary": {
+      "rep_dev_role": "exploratory_common_screen_and_representation_development",
+      "harness_dev_role": "exploratory_transfer_complementarity_and_harness_development",
+      "selection_125_role": "one_time_finalist_selection_not_confirmation",
+      "final_872_role": "sole_confirmatory_evaluation",
+      "finalists_must_freeze_before_final": true,
+      "post_selection_or_final_mutation_allowed": false
+    },
+    "statistics": {
+      "paired_unit": "eligible_out_query",
+      "bootstrap_resamples": 10000,
+      "bootstrap_seed_source": "frozen_confirmation_analysis_receipt",
+      "confidence_interval": "two_sided_95_percent_paired_bootstrap",
+      "required_aggregate_outputs": ["point_estimate", "paired_delta", "ci_lower", "ci_upper", "win_tie_loss", "rank_biserial_effect", "comparison_family_id"],
+      "superiority_rule": "paired_bootstrap_95ci_lower_gt_zero",
+      "positive_ci_crossing_zero_interpretation": "higher_measured_score_uncertain_superiority",
+      "multiple_comparison_rule": "holm_only_for_preregistered_additional_confirmatory_comparisons",
+      "unplanned_analysis_label": "exploratory"
+    },
+    "candidate_selection": {
+      "development_decision_ledger_required": true,
+      "candidate_universe_and_budget_frozen_before_measurement": true,
+      "promotion_rule_must_be_lexicographic_and_replayable": true,
+      "max_cell_promotion_allowed": false,
+      "arm_or_program_failure_policy_predeclared": true,
+      "research_and_commercial_champion_tracks_distinct": true
+    },
+    "candidate_exposure": {
+      "same_total_candidate_depth_required": true,
+      "per_arm_depth_union_dedup_and_fusion_bound": true,
+      "pool_hash_required": true,
+      "deployed_result": "out_recall_at_100_after_frozen_family_aggregation",
+      "oracle_metrics_role": "frozen_pool_diagnostic_not_deployed_result",
+      "latency_and_cost_include_all_arms": true,
+      "post_hoc_cutoff_or_depth_change_allowed": false
+    },
+    "interaction": {
+      "matrix": "program_by_arm_within_arm_and_cross_arm_deltas",
+      "required_outputs": ["within_arm_delta", "transfer_delta", "rank_order", "rank_reversal_indicator", "paired_effect_and_ci", "truncation_and_cost_context"],
+      "claim_scope": "five_frozen_arms_five_programs_dapfam_and_frozen_budget_only",
+      "universal_causal_claim_allowed": false
+    },
+    "complementarity": {
+      "eligible_out_query_denominator_required": true,
+      "unique_relevant_family_query_pair_numerator_required": true,
+      "pairwise_relevant_pair_overlap_definition_required": true,
+      "equal_depth_union_against_best_single_required": true,
+      "incremental_latency_and_cost_required": true,
+      "non_best_arm_retention_requires_preregistered_gate": true
+    },
+    "operational": {
+      "cold_and_warm_protocol_bound": true,
+      "repetition_count_order_and_discard_policy_bound": true,
+      "hardware_runtime_identity_bound": true,
+      "resource_sampling_cadence_bound": true,
+      "failure_timeout_and_oom_denominator_bound": true,
+      "ranking_replay_is_not_latency_variance_evidence": true
+    },
+    "safe_reporting": {
+      "protected_analysis_location": "owner_local_only",
+      "repository_safe_receipt_contains": ["aggregate_estimates", "confidence_intervals", "effect_sizes", "comparison_family_metadata", "hashes", "counts", "claim_boundary"],
+      "repository_safe_receipt_forbids": ["opaque_rankings", "query_identifiers", "family_identifiers", "per_query_values", "raw_evaluator_payload"],
+      "publication_claim_requires_final_confirmatory_receipt": true
+    }
+  },
+  "contract_sha256": "abfe059cc84f77fc6c76caded95e7ebc43c84e7ec62da5e6d820c6fc19d03897"
+}

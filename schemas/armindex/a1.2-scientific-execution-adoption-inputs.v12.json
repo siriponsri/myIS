@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-execution-adoption-inputs.v12.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "revision_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "preserved_v11", "component_bindings", "required_owner_local_inputs", "pending_live_provider_inputs", "authorization", "counters", "ready_for_live_adoption_goal", "next_authorized_action", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-execution-adoption-inputs.v12"},
+    "contract_id": {"const": "a1.2-scientific-execution-adoption-inputs-v12"},
+    "revision_id": {"const": "a1.2-scientific-execution-adoption-inputs-v12"},
+    "status": {"const": "LOCAL_PREPARATION_PASS_PENDING_OWNER_LOCAL_AND_LIVE_PROVIDER"},
+    "evidence_class": {"const": "scientific_execution_adoption_input_preparation"},
+    "scientific_authority": {"const": false}, "claim_boundary": {"type": "string", "minLength": 180},
+    "preserved_v11": {"type": "object", "additionalProperties": false, "required": ["request", "receipt", "must_remain_unchanged"], "properties": {"request": {"$ref": "#/$defs/binding"}, "receipt": {"$ref": "#/$defs/binding"}, "must_remain_unchanged": {"const": true}}},
+    "component_bindings": {"type": "object", "additionalProperties": false, "required": ["provider_admission_input_template", "whole_workload_budget_admission", "owner_local_receipt_contract", "compiled_program_bindings_contract", "publication_impact_contract", "instance_disposition_policy", "watchdog_provider_destroy_dry_run_contract"], "properties": {"provider_admission_input_template": {"$ref": "#/$defs/binding"}, "whole_workload_budget_admission": {"$ref": "#/$defs/binding"}, "owner_local_receipt_contract": {"$ref": "#/$defs/binding"}, "compiled_program_bindings_contract": {"$ref": "#/$defs/binding"}, "publication_impact_contract": {"$ref": "#/$defs/binding"}, "instance_disposition_policy": {"$ref": "#/$defs/binding"}, "watchdog_provider_destroy_dry_run_contract": {"$ref": "#/$defs/binding"}}},
+    "required_owner_local_inputs": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "string"}},
+    "pending_live_provider_inputs": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "string"}},
+    "authorization": {"$ref": "#/$defs/authorization"}, "counters": {"$ref": "#/$defs/counters"},
+    "ready_for_live_adoption_goal": {"const": false}, "next_authorized_action": {"type": "string", "minLength": 180}, "contract_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "binding": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256"], "properties": {"uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"}, "file_sha256": {"$ref": "#/$defs/hash"}, "self_sha256": {"$ref": "#/$defs/hash"}}},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed", "selection_open", "final_open", "paid_api_allowed", "model_weight_changes_allowed"], "properties": {"provider_contact_allowed": {"const": false}, "launch_allowed": {"const": false}, "adopted_for_execution": {"const": false}, "measured_retrieval_allowed": {"const": false}, "selection_open": {"const": false}, "final_open": {"const": false}, "paid_api_allowed": {"const": false}, "model_weight_changes_allowed": {"const": false}}},
+    "counters": {"type": "object", "additionalProperties": false, "required": ["measured_runs", "selection_accesses", "final_accesses", "charged_usd", "gpu_scientific_runs"], "properties": {"measured_runs": {"const": 0}, "selection_accesses": {"const": 0}, "final_accesses": {"const": 0}, "charged_usd": {"const": 0}, "gpu_scientific_runs": {"const": 0}}}
+  }
+}

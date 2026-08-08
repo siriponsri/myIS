@@ -1,0 +1,95 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a1.2-publication-impact-preregistration-v12-rigor-20260808",
+  "artifact": "A1.2 additive publication-impact preregistration v12",
+  "artifact_path": "control/armindex/a1.2/publication-impact-contract.v12.json",
+  "artifact_sha256": "124a48157c9114e61d30d01e0ea9597f4af97b98ace4a51d7f021cd9993d4a59",
+  "review_status": "complete",
+  "review_boundary": "Artifact-only review of an additive local-only analysis preregistration. No provider, protected evaluator payload, measured retrieval, model, or external evidence was accessed.",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.33,
+    "one_line_summary": "V12 supplies a publication-grade analysis boundary for the unchanged v11 request without creating execution authority or treating development evidence as confirmation.",
+    "strengths": [
+      "The contract immutably binds the v11 request and receipt by file and self SHA-256.",
+      "OUT Recall@100 remains the sole primary outcome and OUT nDCG@100/@10 remain ordered secondaries.",
+      "Candidate exposure, oracle diagnostics, complementarity, interaction scope, operational measurement, and confirmation statistics are separated explicitly.",
+      "Selection-125 is prohibited from serving as confirmation and Final-872 is designated the sole confirmatory evaluation."
+    ],
+    "weaknesses": [
+      "The protected evaluator must still bind exact missing/unjudged handling, bootstrap seed, and final comparator identities before measured work.",
+      "No measured evidence exists; the contract cannot support a performance or publication claim by itself."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": ["The outcome hierarchy distinguishes candidate exposure from ranking quality and binds the family-level OUT estimand."],
+      "weaknesses": [],
+      "suggestions": ["Keep oracle-pool diagnostics visually and semantically separate from deployed Recall@100 in later reports."]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["The primary superiority rule, paired unit, 10,000 resamples, CI interpretation, and no-max-cell rule are explicit."],
+      "weaknesses": ["The frozen confirmation receipt must provide the exact bootstrap seed and concrete comparator hashes."],
+      "suggestions": ["Fail the future confirmation package when either field is missing or differs from its frozen comparator bundle."]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": ["Interaction claims are explicitly limited to five frozen arms, five programs, DAPFAM, and the frozen budget; universal causal claims are forbidden."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": ["The v11 binding, development-to-confirmation path, exposure controls, analysis outputs, and safe reporting form a traceable claim chain."],
+      "weaknesses": ["The later adoption/confirmation packages must reference this contract explicitly to make the future lineage mechanically complete."],
+      "suggestions": ["Bind this contract SHA-256 in the separate adoption receipt and final aggregate claim receipt."]
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": ["REP-DEV and HARNESS-DEV are labelled exploratory; Selection-125 is one-time finalist selection, and post-exposure mutation is forbidden."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": ["Equal total candidate depth, pool binding, unique-pair denominator, operational repetition policy, and paired effect reporting are preregistered."],
+      "weaknesses": ["Exact candidate promotion thresholds and the final protected evaluator's missing/unjudged policy remain deferred to future frozen receipts."],
+      "suggestions": ["Before the first measured screen, bind a replayable lexicographic promotion rule and the protected evaluator policy without exposing protected payloads."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "minor",
+      "target_artifact": "control/armindex/a1.2/publication-impact-contract.v12.json",
+      "target_entity": "/analysis/candidate_selection",
+      "evidence_locator": "promotion_rule_must_be_lexicographic_and_replayable=true",
+      "observation": "V12 requires a replayable lexicographic promotion rule but intentionally does not freeze its numerical thresholds in this local-only layer.",
+      "reasoning": "This preserves the unchanged v11 request but leaves a required future binding before any candidate result is evaluated.",
+      "suggestion": "Add the threshold-bearing promotion receipt before the first measured A1.2 result and bind its SHA-256 into adoption lineage."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "HANDOFF.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+    "control/armindex/a1.2/publication-impact-contract.v12.json",
+    "schemas/armindex/a1.2-publication-impact-contract.v12.json",
+    "tests/test_armindex_a1_2_publication_impact_v12.py"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-compiled-program-binding-set.v12.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "binding_set_id", "status", "claim_boundary", "contract_file_sha256", "frozen_bindings", "owner_local_receipts", "expected_bindings", "bindings", "launch_allowed", "adopted_for_execution", "measured_runs", "charged_usd", "binding_set_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-compiled-program-binding-set.v12"},
+    "binding_set_id": {"type": "string", "pattern": "^a1\\.2-v12-[a-z0-9-]+$"},
+    "status": {"enum": ["pending_owner_local_protected_compilation", "validated_owner_local_protected_compilation"]},
+    "claim_boundary": {"type": "string", "minLength": 80},
+    "contract_file_sha256": {"$ref": "#/$defs/hash"},
+    "frozen_bindings": {"$ref": "#/$defs/frozen_bindings"},
+    "owner_local_receipts": {"$ref": "#/$defs/owner_receipts"},
+    "expected_bindings": {"type": "array", "minItems": 25, "maxItems": 25, "items": {"$ref": "#/$defs/expected_binding"}},
+    "bindings": {"type": "array", "maxItems": 25, "items": {"$ref": "#/$defs/binding"}},
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "measured_runs": {"const": 0},
+    "charged_usd": {"const": 0},
+    "binding_set_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "hash_or_null": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "frozen_bindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["v11_request_file_sha256", "v11_request_sha256", "program_set_file_sha256", "program_set_sha256", "compiler_source_manifest_sha256"],
+      "properties": {"v11_request_file_sha256": {"$ref": "#/$defs/hash"}, "v11_request_sha256": {"$ref": "#/$defs/hash"}, "program_set_file_sha256": {"$ref": "#/$defs/hash"}, "program_set_sha256": {"$ref": "#/$defs/hash"}, "compiler_source_manifest_sha256": {"$ref": "#/$defs/hash"}}
+    },
+    "owner_receipts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["handoff_receipt_sha256", "protected_transfer_manifest_sha256", "corpus_bundle_sha256", "query_bundle_sha256", "split_commitment_sha256", "evaluator_sha256", "ephemeral_token_map_sha256"],
+      "properties": {"handoff_receipt_sha256": {"$ref": "#/$defs/hash_or_null"}, "protected_transfer_manifest_sha256": {"$ref": "#/$defs/hash_or_null"}, "corpus_bundle_sha256": {"$ref": "#/$defs/hash_or_null"}, "query_bundle_sha256": {"$ref": "#/$defs/hash_or_null"}, "split_commitment_sha256": {"$ref": "#/$defs/hash_or_null"}, "evaluator_sha256": {"$ref": "#/$defs/hash_or_null"}, "ephemeral_token_map_sha256": {"$ref": "#/$defs/hash_or_null"}}
+    },
+    "expected_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["binding_id", "arm_id", "program_id", "logical_program_sha256"],
+      "properties": {"binding_id": {"type": "string", "pattern": "^ARM-0[1-5]--P0[0-4]-[A-Z0-9-]+$"}, "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]}, "program_id": {"enum": ["P00-TAC-DOC", "P01-TA-DOC", "P02-CLAIM1", "P03-PASSAGE", "P04-SECTION-MULTIVIEW"]}, "logical_program_sha256": {"$ref": "#/$defs/hash"}}
+    },
+    "binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["binding_id", "arm_id", "program_id", "logical_program_sha256", "compiler_source_manifest_sha256", "model_lock_file_sha256", "adapter_contract_sha256", "tokenizer_sha256", "effective_input_limit", "rendered_input_max_tokens", "compiled_representation_sha256", "unit_count", "coverage_gap_count", "omitted_unit_count", "truncation_count", "overlength_count", "index_manifest_sha256"],
+      "properties": {"binding_id": {"type": "string", "pattern": "^ARM-0[1-5]--P0[0-4]-[A-Z0-9-]+$"}, "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]}, "program_id": {"enum": ["P00-TAC-DOC", "P01-TA-DOC", "P02-CLAIM1", "P03-PASSAGE", "P04-SECTION-MULTIVIEW"]}, "logical_program_sha256": {"$ref": "#/$defs/hash"}, "compiler_source_manifest_sha256": {"$ref": "#/$defs/hash"}, "model_lock_file_sha256": {"$ref": "#/$defs/hash"}, "adapter_contract_sha256": {"$ref": "#/$defs/hash"}, "tokenizer_sha256": {"$ref": "#/$defs/hash"}, "effective_input_limit": {"type": "integer", "minimum": 1}, "rendered_input_max_tokens": {"type": "integer", "minimum": 1}, "compiled_representation_sha256": {"$ref": "#/$defs/hash"}, "unit_count": {"type": "integer", "minimum": 1}, "coverage_gap_count": {"type": "integer", "minimum": 0}, "omitted_unit_count": {"type": "integer", "minimum": 0}, "truncation_count": {"type": "integer", "minimum": 0}, "overlength_count": {"type": "integer", "minimum": 0}, "index_manifest_sha256": {"$ref": "#/$defs/hash"}}
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "myis.armindex-a1.2-compiled-program-bindings-contract.v12",
+  "contract_id": "a1.2-owner-local-compiled-program-bindings-v12",
+  "status": "template_only_owner_local_protected_compilation_required",
+  "claim_boundary": "This additive contract defines aggregate-safe evidence needed to bind a future A1.2 scientific workload. It creates no compiled representation, index, measured retrieval, provider contact, or adoption authority.",
+  "v11_request": {
+    "uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "file_sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+    "request_sha256": "2e95bf70d4843dadac03b442cb231573f73ec05a65884a70ac42d9713f52b7db"
+  },
+  "program_set": {
+    "uri": "control/armindex/a1.2/common-program-set.v11.json",
+    "file_sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+    "program_set_sha256": "54991eb6a34f59495562539ede8dfd6553bdbfb259a41b8d564baec17c4026fb",
+    "compiler_source_manifest_sha256": "6be21e10518c0ff221625c3c5631f768c82dd439f6efcdfc4b783901d8ea847e"
+  },
+  "model_locks": [
+    {"arm_id": "ARM-01", "uri": "control/armindex/a1.2/model-locks/ARM-01.v1.json", "file_sha256": "1fcaac97ae2bed15add7aca2f71d3d6eac953406347f12d0fe9348382fdf3292", "adapter_contract_sha256": "86f9795f8c9689831ef84a2e6ce9077befbd88c023c8a1a58d24ad7d4bc09c07", "tokenizer_sha256": "83f1d550ae22518056f00738d83ac6e76283a46fa9783dab7f80c3d1f3bfc6c6", "effective_input_limit": null},
+    {"arm_id": "ARM-02", "uri": "control/armindex/a1.2/model-locks/ARM-02.v1.json", "file_sha256": "c9b60991149aa94506321b2cd719b49477c1c77ab30b78dd29d9c29faf52c607", "adapter_contract_sha256": "7b007357a8266c550fdbf8eca47096557f35b848b8a84aff496dc2b1fee0a6de", "tokenizer_sha256": "21106b6d7dab2952c1d496fb21d5dc9db75c28ed361a05f5020bbba27810dd08", "effective_input_limit": 8192},
+    {"arm_id": "ARM-03", "uri": "control/armindex/a1.2/model-locks/ARM-03.v1.json", "file_sha256": "44ee3ec647938556f35852a279ab6a7c8808f35fb721becdc26e69ff9c16a830", "adapter_contract_sha256": "5f0865d1ab903c0e9876de5e520266ac0cf2a616d94df54cd258dd798b027f87", "tokenizer_sha256": "d5496fadd2d7fda4e958da4285f7cd97c41177bbfc500580addc9c08896fb773", "effective_input_limit": 512},
+    {"arm_id": "ARM-04", "uri": "control/armindex/a1.2/model-locks/ARM-04.v1.json", "file_sha256": "3ff3107bc6d866aa778548a208a9a8c1446fc5b373f58bde32be7332777b808f", "adapter_contract_sha256": "e7e40e25feb5b051083af8b1f6dcfd519cfa44e45786d8619c857361c29e8811", "tokenizer_sha256": "f1cc44ad7faaeec47241864835473fd5403f2da94673f3f764a77ebcb0a803ec", "effective_input_limit": 8192},
+    {"arm_id": "ARM-05", "uri": "control/armindex/a1.2/model-locks/ARM-05.v1.json", "file_sha256": "e31d412985289a7a0aafe1529860998bdafe834d6b235fe7cc81e4d1630b782a", "adapter_contract_sha256": "398d547a829c318861ef78401aef2e63bf64016d7f6be683b9b7fa59eb057c6a", "tokenizer_sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a", "effective_input_limit": 32768}
+  ],
+  "required_binding_fields": ["binding_id", "arm_id", "program_id", "logical_program_sha256", "compiler_source_manifest_sha256", "model_lock_file_sha256", "adapter_contract_sha256", "tokenizer_sha256", "effective_input_limit", "rendered_input_max_tokens", "compiled_representation_sha256", "unit_count", "coverage_gap_count", "omitted_unit_count", "truncation_count", "overlength_count", "index_manifest_sha256"],
+  "required_owner_local_receipt_hashes": ["handoff_receipt_sha256", "protected_transfer_manifest_sha256", "corpus_bundle_sha256", "query_bundle_sha256", "split_commitment_sha256", "evaluator_sha256", "ephemeral_token_map_sha256"],
+  "forbidden_payload_classes": ["qrels", "split_membership", "query_ids", "family_or_publication_ids", "per_query_outcomes", "raw_inputs", "credentials", "private_keys", "absolute_paths"],
+  "zero_required": ["coverage_gap_count", "omitted_unit_count", "truncation_count", "overlength_count"],
+  "launch_allowed": false,
+  "adopted_for_execution": false,
+  "measured_runs": 0,
+  "charged_usd": 0
+}

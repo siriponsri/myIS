@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-publication-impact-contract.v12.json",
+  "title": "A1.2 additive publication-impact preregistration v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "revision_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "v11_binding", "authorization", "counters", "analysis", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-publication-impact-contract.v12"},
+    "contract_id": {"const": "a1.2-publication-impact-preregistration-v12"},
+    "revision_id": {"const": "a1.2-publication-impact-preregistration-v12"},
+    "status": {"const": "prepared_local_only_not_adopted"},
+    "evidence_class": {"const": "publication_analysis_preregistration_preparation"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 180},
+    "v11_binding": {"$ref": "#/$defs/v11_binding"},
+    "authorization": {"$ref": "#/$defs/authorization"},
+    "counters": {"$ref": "#/$defs/counters"},
+    "analysis": {"$ref": "#/$defs/analysis"},
+    "contract_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "binding": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256", "self_sha256"], "properties": {"uri": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/).+"}, "file_sha256": {"$ref": "#/$defs/hash"}, "self_sha256": {"$ref": "#/$defs/hash"}}},
+    "v11_binding": {"type": "object", "additionalProperties": false, "required": ["request", "receipt", "v11_request_must_remain_unchanged"], "properties": {"request": {"$ref": "#/$defs/binding"}, "receipt": {"$ref": "#/$defs/binding"}, "v11_request_must_remain_unchanged": {"const": true}}},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["adopted_for_execution", "launch_allowed", "measured_retrieval_allowed", "provider_contact_allowed", "selection_open", "final_open"], "properties": {"adopted_for_execution": {"const": false}, "launch_allowed": {"const": false}, "measured_retrieval_allowed": {"const": false}, "provider_contact_allowed": {"const": false}, "selection_open": {"const": false}, "final_open": {"const": false}}},
+    "counters": {"type": "object", "additionalProperties": false, "required": ["measured_runs", "selection_accesses", "final_accesses", "charged_usd"], "properties": {"measured_runs": {"const": 0}, "selection_accesses": {"const": 0}, "final_accesses": {"const": 0}, "charged_usd": {"const": 0}}},
+    "analysis": {"type": "object", "additionalProperties": false, "required": ["outcomes", "development_confirmation_boundary", "statistics", "candidate_selection", "candidate_exposure", "interaction", "complementarity", "operational", "safe_reporting"], "properties": {"outcomes": {"type": "object"}, "development_confirmation_boundary": {"type": "object"}, "statistics": {"type": "object"}, "candidate_selection": {"type": "object"}, "candidate_exposure": {"type": "object"}, "interaction": {"type": "object"}, "complementarity": {"type": "object"}, "operational": {"type": "object"}, "safe_reporting": {"type": "object"}}}
+  }
+}
