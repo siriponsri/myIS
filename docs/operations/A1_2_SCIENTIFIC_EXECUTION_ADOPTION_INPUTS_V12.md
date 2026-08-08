@@ -120,6 +120,29 @@ confirmation gates are separately authorized and completed.
 8. Run rigor, safety, report, MLflow, Brain, Dashboard, and session validation.
 9. Commit and push only after every local requirement is proven.
 
+The bundle command must be run only after the reusable bundle builder is
+committed, pushed, and the worktree is clean. Both outputs stay in the external
+Owner root:
+
+```powershell
+$OwnerRoot = Join-Path (Resolve-Path '..') '04_Owner_Stores\a1.2-vast-20260806'
+uv run --no-sync python -m myis_research.armindex.a1_2_scientific_execution_adoption_inputs_v12 build-bundle `
+  --repository-root . `
+  --output (Join-Path $OwnerRoot 'transfer\a1.2-scientific-execution-bundle-v12-r2.tar.gz') `
+  --receipt-output (Join-Path $OwnerRoot 'receipts\A1_2_EXECUTION_BUNDLE_V12_R2.json')
+```
+
+The earlier `a1.2-scientific-execution-code-bundle-v12.tar.gz` is preserved as
+failed historical preparation evidence. It is not an adoption input because it
+omitted required A1.2 result schemas and the v11 Owner-local evaluator handoff
+contract. Do not upload or use it for v12 execution.
+
+The v12 bundle freezes its exact tracked-path set by SHA-256 and refuses any
+new, removed, or renamed selected path. Its required external receipt is
+published atomically with the archive. Remote verification binds the exact v11
+request and receipt bytes through the v12 static hash check; it intentionally
+does not replay the historical v1-v10 provider lineage validator on Vast.
+
 ## Current launch gate
 
 `launch_allowed=false` and `adopted_for_execution=false` remain mandatory.

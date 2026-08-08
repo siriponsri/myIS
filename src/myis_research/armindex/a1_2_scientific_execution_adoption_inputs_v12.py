@@ -9,9 +9,17 @@ while Owner-local or live-provider evidence is absent.
 from __future__ import annotations
 
 import argparse
+import gzip
+import hashlib
+from io import BytesIO
 import json
+import os
 import re
 from pathlib import Path
+import stat
+import subprocess
+import tarfile
+import tempfile
 from typing import Any, Mapping
 
 from jsonschema import Draft202012Validator
@@ -66,6 +74,74 @@ WATCHDOG_CONTRACT_PATH = Path(
 LEDGER_PATH = Path(
     "control/armindex/a1.2/scientific-execution-adoption-inputs-ledger.v12.jsonl"
 )
+_BUNDLE_PREFIXES = (
+    "src/myis_research/",
+    "control/armindex/a1.2/",
+    "schemas/armindex/a1.2-",
+    "scripts/a1_2_vast/",
+)
+_BUNDLE_EXACT_FILES = {
+    "control/assets/dapfam-p1-source.v1.json",
+    "control/budgets/a1.2-common-screen-scientific-request-v11.json",
+    "control/execution-envelope-a1.2-v2.yaml",
+    "control/owner-local/a1.2-evaluator-handoff-request.v11.json",
+    "containers/a1_2_vast_4x3090/runtime/requirements.v2.txt",
+    "pyproject.toml",
+}
+_BUNDLE_REQUIRED_FILES = _BUNDLE_EXACT_FILES | {
+    CONTRACT_PATH.as_posix(),
+    CONTRACT_SCHEMA_PATH.as_posix(),
+    RECEIPT_SCHEMA_PATH.as_posix(),
+    V11_REQUEST_PATH.as_posix(),
+    V11_RECEIPT_PATH.as_posix(),
+    PROVIDER_TEMPLATE_PATH.as_posix(),
+    BUDGET_PATH.as_posix(),
+    OWNER_RECEIPT_CONTRACT_PATH.as_posix(),
+    COMPILED_BINDINGS_CONTRACT_PATH.as_posix(),
+    PUBLICATION_PATH.as_posix(),
+    DISPOSITION_PATH.as_posix(),
+    WATCHDOG_CONTRACT_PATH.as_posix(),
+    LEDGER_PATH.as_posix(),
+    "control/armindex/a1.2/aggregate-result-contract.v11.json",
+    "control/armindex/a1.2/common-program-set.v11.json",
+    "control/armindex/a1.2/provider-admission-plan.v11.json",
+    "control/armindex/a1.2/scientific-transfer-contract.v11.json",
+    "control/armindex/a1.2/stop-conditions.scientific-request.v11.json",
+    "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json",
+    "control/armindex/a1.2/jobs/scientific-request-v11/ARM-01.json",
+    "control/armindex/a1.2/jobs/scientific-request-v11/ARM-02.json",
+    "control/armindex/a1.2/jobs/scientific-request-v11/ARM-03.json",
+    "control/armindex/a1.2/jobs/scientific-request-v11/ARM-04.json",
+    "control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json",
+    "schemas/armindex/a1.2-aggregate-result-receipt.v11.json",
+    "schemas/armindex/a1.2-compiled-program-binding-set.v12.json",
+    "schemas/armindex/a1.2-instance-disposition-result.v12.json",
+    "schemas/armindex/a1.2-provider-admission-input.v12.json",
+    "schemas/armindex/a1.2-publication-impact-contract.v12.json",
+    "schemas/armindex/a1.2-scientific-execution-adoption-request-receipt.v11.json",
+    "schemas/armindex/a1.2-scientific-execution-adoption-request.v11.json",
+    "schemas/armindex/a1.2-watchdog-provider-destroy-dry-run-result.v12.json",
+    "schemas/armindex/a1.2-whole-workload-budget-admission-result.v12.json",
+    "src/myis_research/armindex/a1_2_compiled_bindings_v12.py",
+    "src/myis_research/armindex/a1_2_instance_disposition_v12.py",
+    "src/myis_research/armindex/a1_2_provider_admission_input_v12.py",
+    "src/myis_research/armindex/a1_2_publication_impact_v12.py",
+    "src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v12.py",
+    "src/myis_research/armindex/a1_2_scientific_execution_request_v11.py",
+    "src/myis_research/armindex/a1_2_watchdog_provider_destroy_dry_run_v12.py",
+    "src/myis_research/armindex/a1_2_whole_workload_budget_admission_v12.py",
+}
+_BUNDLE_ALLOWED_SUFFIXES = frozenset(
+    {".json", ".jsonl", ".ps1", ".py", ".sh", ".toml", ".txt", ".yaml"}
+)
+_BUNDLE_MAX_FILE_BYTES = 4 * 1024 * 1024
+_BUNDLE_PATH_SET_SHA256 = (
+    "cef2c0977d9a23e8835a60cf5d088adb6640b19f1dd6a1f374970e492e81188e"
+)
+_BUNDLE_FORBIDDEN_NAMES = re.compile(
+    r"(?:qrels?|membership|query[_-]?ids?|credentials?|id_rsa|id_ed25519|private[_-]?key)",
+    re.IGNORECASE,
+)
 
 V11_REQUEST_FILE_SHA256 = (
     "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d"
@@ -95,6 +171,293 @@ def _json(value: Mapping[str, Any]) -> str:
         json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
         + "\n"
     )
+
+
+class ExecutionBundleV12Error(ValueError):
+    """Raised when a V12 scientific bundle cannot be built safely."""
+
+
+def _git(root: Path, *args: str) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        cwd=root,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    if completed.returncode:
+        raise ExecutionBundleV12Error(completed.stderr.strip() or "git command failed")
+    return completed.stdout.strip()
+
+
+def _bundle_paths(root: Path) -> list[str]:
+    tracked = _git(root, "ls-files").splitlines()
+    selected = sorted(
+        path
+        for path in tracked
+        if path in _BUNDLE_REQUIRED_FILES
+        or any(path.startswith(prefix) for prefix in _BUNDLE_PREFIXES)
+    )
+    missing = sorted(_BUNDLE_REQUIRED_FILES - set(selected))
+    if missing:
+        raise ExecutionBundleV12Error(
+            "scientific bundle is missing required tracked files: " + ", ".join(missing)
+        )
+    if not selected:
+        raise ExecutionBundleV12Error("scientific bundle selected no tracked files")
+    if canonical_sha256({"paths": selected}) != _BUNDLE_PATH_SET_SHA256:
+        raise ExecutionBundleV12Error(
+            "scientific bundle tracked-file allowlist hash mismatch"
+        )
+    unsafe = [path for path in selected if _BUNDLE_FORBIDDEN_NAMES.search(path)]
+    if unsafe:
+        raise ExecutionBundleV12Error(
+            "scientific bundle selected protected or credential-like filenames"
+        )
+    for path in selected:
+        source = root / path
+        try:
+            source_stat = source.lstat()
+            resolved = source.resolve(strict=True)
+        except OSError as error:
+            raise ExecutionBundleV12Error(
+                f"scientific bundle source cannot be resolved: {path}"
+            ) from error
+        if (
+            source.is_symlink()
+            or not stat.S_ISREG(source_stat.st_mode)
+            or source_stat.st_nlink != 1
+            or not resolved.is_relative_to(root)
+        ):
+            raise ExecutionBundleV12Error(
+                f"scientific bundle source must be a unique in-repository regular file: {path}"
+            )
+        if source.suffix.lower() not in _BUNDLE_ALLOWED_SUFFIXES:
+            raise ExecutionBundleV12Error(
+                f"scientific bundle source type is not allowlisted: {path}"
+            )
+        if source_stat.st_size > _BUNDLE_MAX_FILE_BYTES:
+            raise ExecutionBundleV12Error(
+                f"scientific bundle source exceeds the per-file byte limit: {path}"
+            )
+    return selected
+
+
+def _verify_bundle_archive(
+    bundle: Path,
+    entries: list[dict[str, Any]],
+    metadata: Mapping[str, str],
+) -> None:
+    expected_names = {str(entry["path"]) for entry in entries} | set(metadata)
+    expected_entries = {str(entry["path"]): entry for entry in entries}
+    with tarfile.open(bundle, mode="r:gz") as archive:
+        members = archive.getmembers()
+        names = [member.name for member in members]
+        if len(names) != len(set(names)) or set(names) != expected_names:
+            raise ExecutionBundleV12Error(
+                "scientific bundle archive member closure mismatch"
+            )
+        for member in members:
+            if not member.isfile() or member.issym() or member.islnk():
+                raise ExecutionBundleV12Error(
+                    f"scientific bundle contains a non-regular member: {member.name}"
+                )
+            stream = archive.extractfile(member)
+            if stream is None:
+                raise ExecutionBundleV12Error(
+                    f"scientific bundle member cannot be read: {member.name}"
+                )
+            digest = hashlib.sha256()
+            size = 0
+            while chunk := stream.read(1024 * 1024):
+                digest.update(chunk)
+                size += len(chunk)
+            if member.name in metadata:
+                expected = metadata[member.name].encode("utf-8")
+                if size != len(expected) or digest.hexdigest() != hashlib.sha256(
+                    expected
+                ).hexdigest():
+                    raise ExecutionBundleV12Error(
+                        f"scientific bundle metadata mismatch: {member.name}"
+                    )
+            else:
+                entry = expected_entries[member.name]
+                if size != entry["size_bytes"] or digest.hexdigest() != entry["sha256"]:
+                    raise ExecutionBundleV12Error(
+                        f"scientific bundle member hash mismatch: {member.name}"
+                    )
+
+
+def _temporary_sibling(target: Path) -> Path:
+    descriptor, name = tempfile.mkstemp(
+        dir=target.parent,
+        prefix=f".{target.name}.",
+        suffix=".tmp",
+    )
+    os.close(descriptor)
+    return Path(name)
+
+
+def _publish_exclusive(source: Path, target: Path) -> None:
+    try:
+        os.link(source, target)
+    except FileExistsError as error:
+        raise ExecutionBundleV12Error(
+            f"immutable output already exists: {target.name}"
+        ) from error
+    except OSError as error:
+        raise ExecutionBundleV12Error(
+            f"could not atomically publish immutable output: {target.name}"
+        ) from error
+
+
+def build_execution_bundle(
+    repository_root: Path,
+    output: Path,
+    *,
+    receipt_output: Path,
+) -> dict[str, Any]:
+    """Build a deterministic V12 scientific code/contract bundle outside Git."""
+
+    root = repository_root.resolve()
+    target = output.resolve()
+    if target.is_relative_to(root):
+        raise ExecutionBundleV12Error("execution bundle must remain outside the repository")
+    if target.exists():
+        raise ExecutionBundleV12Error("execution bundle already exists; refusing overwrite")
+    receipt_target = receipt_output.resolve()
+    if receipt_target.is_relative_to(root):
+        raise ExecutionBundleV12Error(
+            "execution bundle receipt must remain outside the repository"
+        )
+    if receipt_target == target:
+        raise ExecutionBundleV12Error(
+            "execution bundle and receipt outputs must be different paths"
+        )
+    if receipt_target.exists():
+        raise ExecutionBundleV12Error(
+            "execution bundle receipt already exists; refusing overwrite"
+        )
+    if _git(root, "status", "--porcelain=v1", "--untracked-files=all"):
+        raise ExecutionBundleV12Error("repository must be clean before bundle creation")
+    commit = _git(root, "rev-parse", "HEAD^{commit}")
+    tree = _git(root, "rev-parse", "HEAD^{tree}")
+    origin = _git(root, "rev-parse", "origin/main")
+    if commit != origin:
+        raise ExecutionBundleV12Error("HEAD must equal pushed origin/main")
+    if re.fullmatch(r"[a-f0-9]{40}", commit) is None or re.fullmatch(
+        r"[a-f0-9]{40}", tree
+    ) is None:
+        raise ExecutionBundleV12Error("Git commit/tree identity is malformed")
+
+    selected = _bundle_paths(root)
+    entries = [
+        {
+            "path": path,
+            "size_bytes": (root / path).stat().st_size,
+            "sha256": file_sha256(root / path),
+        }
+        for path in selected
+    ]
+    manifest_body: dict[str, Any] = {
+        "schema_version": "myis.armindex-a1.2-scientific-execution-bundle.v12",
+        "revision_id": REVISION_ID,
+        "git_commit": commit,
+        "git_tree": tree,
+        "contract_file_sha256": file_sha256(root / CONTRACT_PATH),
+        "v11_request_file_sha256": V11_REQUEST_FILE_SHA256,
+        "files": entries,
+        "file_count": len(entries),
+        "frozen_path_allowlist_sha256": _BUNDLE_PATH_SET_SHA256,
+        "model_bytes_included": False,
+        "protected_payload_included": False,
+        "remote_v11_validation_scope": "static_exact_request_and_receipt_hash_binding",
+        "remote_full_historical_lineage_validation_supported": False,
+    }
+    manifest = {
+        **manifest_body,
+        "manifest_sha256": canonical_sha256(manifest_body),
+    }
+    metadata = {
+        "BUNDLE_MANIFEST.json": _json(manifest),
+        "GIT_COMMIT": commit + "\n",
+        "GIT_TREE": tree + "\n",
+    }
+    target.parent.mkdir(parents=True, exist_ok=True)
+    receipt_target.parent.mkdir(parents=True, exist_ok=True)
+    bundle_temporary = _temporary_sibling(target)
+    receipt_temporary: Path | None = None
+    published: list[Path] = []
+    try:
+        with bundle_temporary.open("wb") as raw:
+            with gzip.GzipFile(
+                fileobj=raw, mode="wb", mtime=0, filename=""
+            ) as compressed:
+                with tarfile.open(fileobj=compressed, mode="w") as archive:
+                    for relative in selected:
+                        source = root / relative
+                        info = tarfile.TarInfo(relative)
+                        info.size = source.stat().st_size
+                        info.mtime = 0
+                        info.mode = (
+                            0o755 if source.suffix in {".sh", ".ps1"} else 0o644
+                        )
+                        with source.open("rb") as handle:
+                            archive.addfile(info, handle)
+                    for name, text in sorted(metadata.items()):
+                        data = text.encode("utf-8")
+                        info = tarfile.TarInfo(name)
+                        info.size = len(data)
+                        info.mtime = 0
+                        info.mode = 0o644
+                        archive.addfile(info, BytesIO(data))
+        _verify_bundle_archive(bundle_temporary, entries, metadata)
+        if _git(root, "status", "--porcelain=v1", "--untracked-files=all"):
+            raise ExecutionBundleV12Error(
+                "repository changed during scientific bundle creation"
+            )
+        receipt_body = {
+            "clean_worktree": True,
+            "frozen_bundle_sha256": file_sha256(bundle_temporary),
+            "git_commit": commit,
+            "git_tree": tree,
+            "pushed_to_origin_main": True,
+        }
+        receipt = {
+            **receipt_body,
+            "receipt_sha256": canonical_sha256(receipt_body),
+        }
+        receipt_temporary = _temporary_sibling(receipt_target)
+        receipt_temporary.write_text(_json(receipt), encoding="utf-8", newline="")
+        _publish_exclusive(bundle_temporary, target)
+        published.append(target)
+        if receipt_temporary is not None:
+            _publish_exclusive(receipt_temporary, receipt_target)
+            published.append(receipt_target)
+        if file_sha256(target) != receipt["frozen_bundle_sha256"]:
+            raise ExecutionBundleV12Error(
+                "published scientific bundle hash verification failed"
+            )
+        if receipt_target.read_text(encoding="utf-8") != _json(receipt):
+            raise ExecutionBundleV12Error(
+                "published execution bundle receipt verification failed"
+            )
+    except Exception:
+        for path in reversed(published):
+            path.unlink(missing_ok=True)
+        raise
+    finally:
+        bundle_temporary.unlink(missing_ok=True)
+        if receipt_temporary is not None:
+            receipt_temporary.unlink(missing_ok=True)
+    return {
+        "status": "PASS",
+        "execution_bundle": receipt,
+        "bundle_bytes": target.stat().st_size,
+        "file_count": len(entries),
+        "manifest_sha256": manifest["manifest_sha256"],
+    }
 
 
 def _finalize(body: dict[str, Any], field: str) -> dict[str, Any]:
@@ -508,18 +871,32 @@ def finalize(repository_root: Path, inputs: Mapping[str, Any]) -> dict[str, Any]
 
 def main() -> int:
     parser = argparse.ArgumentParser(prog="myis-a1.2-scientific-adoption-inputs-v12")
-    parser.add_argument("command", choices=("materialize", "validate", "finalize"))
+    parser.add_argument(
+        "command", choices=("materialize", "validate", "finalize", "build-bundle")
+    )
     parser.add_argument("--repository-root", type=Path, default=Path("."))
     parser.add_argument("--inputs", type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--receipt-output", type=Path)
     args = parser.parse_args()
     if args.command == "materialize":
         result = materialize(args.repository_root)
     elif args.command == "validate":
         result = validate(args.repository_root)
-    else:
+    elif args.command == "finalize":
         if args.inputs is None:
             parser.error("--inputs is required for finalize")
         result = finalize(args.repository_root, _load(args.inputs))
+    else:
+        if args.output is None:
+            parser.error("--output is required for build-bundle")
+        if args.receipt_output is None:
+            parser.error("--receipt-output is required for build-bundle")
+        result = build_execution_bundle(
+            args.repository_root,
+            args.output,
+            receipt_output=args.receipt_output,
+        )
     print(json.dumps(result, ensure_ascii=True, sort_keys=True, separators=(",", ":")))
     return 0
 

@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T15:32:01Z",
-  "generated_from_revision": "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a",
-  "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+  "generated_at": "2026-08-08T01:48:27Z",
+  "generated_from_revision": "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f",
+  "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+    "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
     "source_of_truth": {
       "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-07T15:32:01Z",
+  "last_material_update": "2026-08-08T01:48:27Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "4779ba5a379d21da564807d6f5ac18786fd442a1a81a1af31c67445e5cb96009",
+  "report_sha256": "a55571a40610761c38ae3ba734bacf1de85584ed9a9305fcd77ce3276009caca",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

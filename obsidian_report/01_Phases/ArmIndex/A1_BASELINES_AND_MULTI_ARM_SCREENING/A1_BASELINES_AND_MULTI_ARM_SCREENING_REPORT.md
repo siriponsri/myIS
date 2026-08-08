@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a"
-read_model_sha256: "e38bdbd871215c77baf7e71ee674595da84eb28574e118a2ddc0f262cec95709"
-source_commit: "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1"
+read_model_revision: "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f"
+read_model_sha256: "df6cfaf225a55e884ad550ce48bc5afe50131e36490aca6432fd5016a72ea0ec"
+source_commit: "2e7a3dc380de47311cdc5e982641925053d45645"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "scientific_execution_adoption_request_preparation"
 scientific_authority: false
 claim_boundary: "Local CPU-only preparation of a future A1.2 measured common-screen request; no provider contact, adoption, measured retrieval, optimization, Selection, Final, paid API work, model change, retrieval-quality result, or publication claim."
-generated_from_revision: "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a"
-last_material_update: "2026-08-07T15:32:01Z"
+generated_from_revision: "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f"
+last_material_update: "2026-08-08T01:48:27Z"
 next_authorized_action: "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-07T15:32:01Z"
-updated_at: "2026-08-07T15:32:01Z"
+created_at: "2026-08-08T01:48:27Z"
+updated_at: "2026-08-08T01:48:27Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -48,7 +48,7 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: 147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1
+- `git_commit`: 2e7a3dc380de47311cdc5e982641925053d45645
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`

@@ -2567,9 +2567,9 @@
       "status": "preserved_and_repaired_preflight_pending"
     }
   ],
-  "generated_at": "2026-08-07T15:32:01Z",
-  "generated_from_revision": "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a",
-  "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+  "generated_at": "2026-08-08T01:48:27Z",
+  "generated_from_revision": "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f",
+  "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -2695,7 +2695,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+    "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2712,7 +2712,7 @@
   },
   "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. The repaired v11 request adds exact P00-P04 compiler hashes, protected opaque transfer/return rules, aggregate result schemas, whole-workload completion, and all-fee budget admission. It remains preparation evidence, not retrieval-quality or publication evidence.",
   "language": "en",
-  "last_material_update": "2026-08-07T15:32:01Z",
+  "last_material_update": "2026-08-08T01:48:27Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -3082,7 +3082,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "7dc6eb12ea0bdfad44880013540add6d843f9ee067fea48a4faddb617e86ba90",
+  "report_sha256": "ceef3b39228f3f3562a46d4bb4c4d30f33237203b991d2da7dd469d7586a9881",
   "report_type": "task",
   "result": {
     "decision": "blocked",

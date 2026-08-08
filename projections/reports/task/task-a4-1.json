@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-07T15:32:01Z",
-  "generated_from_revision": "eca7e0fa0d3d849bf04a43e99498f4b7e15886636e48b8c82783fd20b046c63a",
-  "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+  "generated_at": "2026-08-08T01:48:27Z",
+  "generated_from_revision": "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f",
+  "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "147424bfffb2fb93e33a48b9dd2a4aee25a8d0b1",
+    "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-07T15:32:01Z",
+  "last_material_update": "2026-08-08T01:48:27Z",
   "metric_references": [],
   "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
   "objective": "Production profiles and legal transfer",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "task-a4-1",
-  "report_sha256": "d28015e57abaa4dec37e0f4582e75f8a74e7ba8b5afb3484b0beb3b846db98a8",
+  "report_sha256": "eeb45a4ada94deceb1c3f46a5a4bc66421429a01dbc4594321919c0a45dd2c9a",
   "report_type": "task",
   "result": {
     "decision": "planned",
