@@ -44,7 +44,7 @@
   "support_sources": {
     "safe_return": {"path": "src/myis_research/armindex/a1_2_safe_return_v16.py", "sha256": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8"},
     "safe_return_builder": {"path": "src/myis_research/armindex/a1_2_safe_return_builder_v16.py", "sha256": "708c7e707d006f4318bb517b3f9e45fdb1cd52a66ca0a4e097b91a0f0449c8f4"},
-    "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "16bb950d17ffe5ad90c58d65f1ca9280ba22b69a843da63135a08069063160b5"},
+    "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "fd9ecd56fc323cfb7b59c4549df21887d9e770f07935f19f06a1ae8d9a19c4be"},
     "input_manifest": {"path": "src/myis_research/armindex/a1_2_owner_local_input_manifest_v16.py", "sha256": "2fa8b2e05066b5a7b224297966d892605ec0e7a166dd2b2e7534953c09b21703"},
     "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "3910924f1cfa867d3be80351f61ea7fc1583002c3b1878741e6f0bcbd6a799e8"},
     "remote_arm_worker": {"path": "src/myis_research/armindex/a1_2_remote_arm_worker_v16.py", "sha256": "84383d286c262566b0a2cc6a4c39af19eb7bdb0f19d1d3021dd11d06727757ee"},
@@ -55,5 +55,5 @@
   "runtime_policy": {"runtime_downloads_forbidden": true, "model_bytes_owner_local_only": true, "protected_payload_in_bundle": false, "safe_aggregate_export_required": true},
   "authorization": {"provider_admission_receipt_pass": false, "execution_adoption_receipt_pass": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
   "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
-  "contract_sha256": "6a613d212a3113298602462478f341ca7a63c19313569af5628ad16982f6d34e"
+  "contract_sha256": "2d7c40ea065a21d5d905fd213eb3285a993d1290e412fe1f5fe3289e0f1f068e"
 }

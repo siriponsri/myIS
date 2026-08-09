@@ -45,12 +45,21 @@ function Get-OwnerFingerprint {
     $text = [IO.File]::ReadAllText([IO.Path]::GetFullPath($OwnerConnectionFile))
     $values = [regex]::Matches($text, 'SHA256:[A-Za-z0-9+/=]+') | ForEach-Object { $_.Value } | Select-Object -Unique
     if (@($values).Count -ne 1) { throw 'owner_fingerprint_pin_invalid' }
-    return [string]$values[0]
+    return [string]$values
 }
 
 function Ensure-HostKeyPin {
     $script:HostKeyStage = 'read_owner_pin'
     $expected = Get-OwnerFingerprint
+    if (Test-Path -LiteralPath $knownHostsPath -PathType Leaf) {
+        $script:HostKeyStage = 'existing_pin'
+        $entry = & $sshKeygen -F "[$SshHost]:$SshPort" -f $knownHostsPath 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $entry) { throw 'ssh_known_hosts_pin_drift' }
+        $observedLine = (& $sshKeygen -lf $knownHostsPath -E sha256 2>$null | Out-String)
+        $observed = ([regex]::Match($observedLine, 'SHA256:[A-Za-z0-9+/=]+')).Value
+        if (-not $observed -or $observed -ne $expected) { throw 'ssh_fingerprint_mismatch' }
+        return
+    }
     $script:HostKeyStage = 'keyscan'
     $raw = & $sshKeyscan -T 10 -p $SshPort -t ed25519 $SshHost 2>$null
     if ($LASTEXITCODE -ne 0 -or -not $raw) { throw 'ssh_keyscan_failed' }
