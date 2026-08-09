@@ -791,6 +791,9 @@ def _artifacts(
         )
         p02_limit_audit = model.get("armindex", {}).get("a1_2_p02_limit_audit", {})
         dense_overflow = model.get("armindex", {}).get("a1_2_dense_overflow", {})
+        exact_token_id_probe = model.get("armindex", {}).get(
+            "a1_2_exact_token_id_adapter_probe", {}
+        )
         if (
             task_id in {None, "A1.2"}
             and isinstance(split_claim_audit, Mapping)
@@ -967,6 +970,35 @@ def _artifacts(
                             producing_task_id="A1.2",
                         )
                     )
+        if (
+            task_id in {None, "A1.2"}
+            and isinstance(exact_token_id_probe, Mapping)
+            and exact_token_id_probe.get("validated") is True
+        ):
+            result.append(
+                _artifact(
+                    artifact_id="a12-v16-exact-token-id-adapter-probe",
+                    title="A1.2 v16 exact-token-ID adapter probe",
+                    artifact_type="audit",
+                    evidence_class=str(
+                        exact_token_id_probe.get(
+                            "evidence_class",
+                            "aggregate_safe_synthetic_runtime_preparation",
+                        )
+                    ),
+                    scientific_authority=False,
+                    safe_uri=str(exact_token_id_probe["audit_uri"]),
+                    content_sha256=str(exact_token_id_probe["audit_file_sha256"]),
+                    explanation=(
+                        "Records the aggregate-safe synthetic exact-token-ID repair "
+                        "probe across ARM-02 through ARM-05 while preserving frozen "
+                        "v11-v15 semantics and keeping provider admission and "
+                        "measured retrieval closed."
+                    ),
+                    producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                    producing_task_id="A1.2",
+                )
+            )
         if isinstance(adapter, Mapping) and adapter.get("validated") is True:
             if task_id in {None, "A1.1"}:
                 for (

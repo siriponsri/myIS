@@ -20,7 +20,9 @@ measurement, and production-constrained HarnessOpt.
   `47256937`; additive v16 executor/lifecycle/launcher recovery, protected
   25/25 bindings, budget extension, and 40-hour watchdog are validated; fresh
   provider admission and execution adoption receipts are the remaining launch
-  transition, and measured work has not started)
+  transition. The r8 raw-overflow text-round-trip blocker has an additive
+  exact-token-ID transport repair verified only with synthetic adapter probes;
+  a new clean bundle is required and measured work has not started)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
 - Current evidence class: owner-approved live-provider preparation over preserved
   v1-v15 lineage plus additive v16 engineering; scientific authority `false`

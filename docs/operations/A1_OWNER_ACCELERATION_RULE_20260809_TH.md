@@ -33,8 +33,10 @@ metrics, evaluator semantics, candidate rule หรือ promotion rule ขอ�
 
 1. instance/provider/SSH identity ต้องตรงกับ `47256937` และ fingerprint ที่ pin ไว้
 2. runtime ต้องเป็น linux/amd64, Python 3.11, Torch 2.6.0+cu118 และ 4x RTX 3090
-3. live all-fee quote และ whole-workload budget ต้องอยู่ใน `$18 / $23 / $100`
-4. watchdog/TTL และความสามารถทำลาย instance ต้องพร้อมก่อนเริ่มวัด
+3. live all-fee quote และ whole-workload budget ต้องอยู่ใน active v16 limits:
+   common screen `$27`, A1 `$32`, campaign `$150`; historical v15
+   `$18/$23/$100` เป็นข้อมูลอ้างอิงเดิมเท่านั้น
+4. watchdog/TTL ต้องผ่าน โดย active v16 TTL คือ `40` ชั่วโมง และความสามารถทำลาย instance ต้องพร้อมก่อนเริ่มวัด
 5. protected boundary ต้องไม่รั่ว และ Git/report/Brain/MLflow รับเฉพาะ aggregate-safe data
 6. ต้องได้ผลครบ `25/25`; 20/25 หรือ 24/25 ไม่ถือว่าปิด A1
 7. safe return, hash validation, deterministic replay และ teardown ต้องผ่าน

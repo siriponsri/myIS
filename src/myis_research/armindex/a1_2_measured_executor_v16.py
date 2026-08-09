@@ -105,6 +105,7 @@ class PhysicalInput:
 
     text: str
     source_token_count: int
+    token_ids: tuple[int, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -212,6 +213,76 @@ class SentenceTransformerDenseAdapter:
         )
         return values
 
+    def encode_token_ids(self, inputs: Sequence[Sequence[int]]) -> np.ndarray:
+        """Encode compiler-planned IDs without lossy text round-tripping."""
+
+        if not inputs or any(not values for values in inputs):
+            raise MeasuredExecutorV16Error("dense token-ID inputs must be nonempty")
+        try:
+            import torch
+        except ImportError as error:
+            raise MeasuredExecutorV16Error(
+                "dense runtime tensor dependency is unavailable"
+            ) from error
+        tokenizer = getattr(self.model, "tokenizer", None)
+        pad_id = getattr(tokenizer, "pad_token_id", None)
+        padding_side = getattr(tokenizer, "padding_side", "right")
+        if tokenizer is None or not isinstance(pad_id, int) or pad_id < 0:
+            raise MeasuredExecutorV16Error("dense tokenizer padding is unavailable")
+        if padding_side not in {"left", "right"}:
+            raise MeasuredExecutorV16Error("dense tokenizer padding side is invalid")
+        if any(
+            any(not isinstance(value, int) or value < 0 for value in row)
+            for row in inputs
+        ):
+            raise MeasuredExecutorV16Error("dense token IDs are invalid")
+        width = max(len(row) for row in inputs)
+        try:
+            device = next(self.model.parameters()).device
+        except (AttributeError, StopIteration):
+            # SentenceTransformer has parameters in production.  The CPU
+            # fallback makes the exact-ID forward contract testable in isolation.
+            device = torch.device("cpu")
+        input_ids = torch.full(
+            (len(inputs), width), pad_id, dtype=torch.long, device=device
+        )
+        attention_mask = torch.zeros(
+            (len(inputs), width), dtype=torch.long, device=device
+        )
+        for index, row in enumerate(inputs):
+            values = torch.as_tensor(row, dtype=torch.long, device=device)
+            start = width - len(row) if padding_side == "left" else 0
+            input_ids[index, start : start + len(row)] = values
+            attention_mask[index, start : start + len(row)] = 1
+        features: dict[str, Any] = {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+        }
+        try:
+            probe = self.model.tokenize(["probe"])
+        except Exception as error:
+            raise MeasuredExecutorV16Error(
+                "dense tokenizer feature contract is unavailable"
+            ) from error
+        if "token_type_ids" in probe:
+            features["token_type_ids"] = torch.zeros_like(input_ids)
+        self.model.eval()
+        try:
+            with torch.inference_mode():
+                output = self.model.forward(features)
+            values = np.asarray(
+                output["sentence_embedding"].detach().cpu().numpy(), dtype=np.float64
+            )
+        except Exception as error:
+            raise MeasuredExecutorV16Error(
+                "dense token-ID encoding failed"
+            ) from error
+        _validate_embedding_matrix(values, expected_rows=len(inputs))
+        norms = np.linalg.norm(values, axis=1, keepdims=True)
+        values = values / norms
+        _validate_embedding_matrix(values, expected_rows=len(inputs), require_normalized=True)
+        return values
+
 
 def _validate_embedding_matrix(
     values: np.ndarray, *, expected_rows: int, require_normalized: bool = False
@@ -265,6 +336,14 @@ def _validate_logical_inputs(
                 or physical.source_token_count < 1
             ):
                 raise MeasuredExecutorV16Error("physical input plan is invalid")
+            if physical.token_ids is not None and (
+                not physical.token_ids
+                or any(
+                    not isinstance(value, int) or value < 0
+                    for value in physical.token_ids
+                )
+            ):
+                raise MeasuredExecutorV16Error("physical token-ID plan is invalid")
     return result
 
 
@@ -280,9 +359,20 @@ def encode_logical_inputs(
         raise MeasuredExecutorV16Error("weighted dense encoding requires a dense arm")
     units = _validate_logical_inputs(logical_inputs)
     physical = [window for unit in units for window in unit.physical_inputs]
-    encoded = np.asarray(
-        adapter.encode([window.text for window in physical]), dtype=np.float64
-    )
+    token_id_windows = [window.token_ids for window in physical]
+    if any(values is not None for values in token_id_windows):
+        if not all(values is not None for values in token_id_windows):
+            raise MeasuredExecutorV16Error("physical token-ID plan is incomplete")
+        encoder = getattr(adapter, "encode_token_ids", None)
+        if not callable(encoder):
+            raise MeasuredExecutorV16Error(
+                "adapter cannot consume the frozen physical token-ID plan"
+            )
+        encoded = np.asarray(encoder(token_id_windows), dtype=np.float64)
+    else:
+        encoded = np.asarray(
+            adapter.encode([window.text for window in physical]), dtype=np.float64
+        )
     _validate_embedding_matrix(encoded, expected_rows=len(physical))
     cursor = 0
     logical_vectors: list[tuple[float, ...]] = []

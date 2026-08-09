@@ -152,6 +152,20 @@ def _optional_ids(tokenizer: Any, text: str) -> tuple[int, ...]:
     return () if not text else _one_ids(tokenizer, text, add_special_tokens=False)
 
 
+def _special_envelope(
+    *, rendered_ids: Sequence[int], full_ids: Sequence[int]
+) -> tuple[tuple[int, ...], tuple[int, ...]]:
+    matches = [
+        start
+        for start in range(len(full_ids) - len(rendered_ids) + 1)
+        if tuple(full_ids[start : start + len(rendered_ids)]) == tuple(rendered_ids)
+    ]
+    if len(matches) != 1:
+        raise RawMaterializerBridgeV16Error("special-token envelope is not uniquely recoverable")
+    start = matches[0]
+    return tuple(full_ids[:start]), tuple(full_ids[start + len(rendered_ids) :])
+
+
 def _decode(tokenizer: Any, values: Sequence[int]) -> str:
     try:
         if callable(getattr(tokenizer, "decode", None)):
@@ -168,27 +182,25 @@ def _decode(tokenizer: Any, values: Sequence[int]) -> str:
     return text
 
 
-def _verify_window_ids(
-    tokenizer: Any,
-    text: str,
+def _planned_window_ids(
     *,
-    expected_no_special: Sequence[int],
+    leading_special: Sequence[int],
+    prefix: Sequence[int],
+    source_window: Sequence[int],
+    suffix: Sequence[int],
+    trailing_special: Sequence[int],
     planned_hash: str,
     role: str,
-) -> None:
-    """Prove decoded text re-tokenizes to the exact planned physical IDs."""
+) -> tuple[int, ...]:
+    """Return the exact frozen IDs and verify their committed hash."""
 
-    observed_no_special = _one_ids(tokenizer, text, add_special_tokens=False)
-    if tuple(observed_no_special) != tuple(expected_no_special):
-        raise RawMaterializerBridgeV16Error(
-            f"{role} tokenizer round-trip differs from the frozen plan"
-        )
-    observed_full = _one_ids(tokenizer, text, add_special_tokens=True)
-    observed_hash = hashlib.sha256(bytes_json(observed_full)).hexdigest()
+    values = tuple(leading_special) + tuple(prefix) + tuple(source_window) + tuple(suffix) + tuple(trailing_special)
+    observed_hash = hashlib.sha256(bytes_json(values)).hexdigest()
     if observed_hash != planned_hash:
         raise RawMaterializerBridgeV16Error(
             f"{role} physical token IDs differ from the frozen plan"
         )
+    return values
 
 
 def _physical_texts(*, arm_id: str, text: str, adapter: Any) -> tuple[PhysicalInput, ...]:
@@ -220,33 +232,46 @@ def _physical_texts(*, arm_id: str, text: str, adapter: Any) -> tuple[PhysicalIn
         raise RawMaterializerBridgeV16Error("frozen physical-window planning failed") from error
 
     physical: list[PhysicalInput] = []
+    leading_special: tuple[int, ...] = ()
+    trailing_special: tuple[int, ...] = ()
+    if plan.mode != "EXISTING_FROZEN_ADAPTER_PATH":
+        try:
+            leading_special, trailing_special = _special_envelope(
+                rendered_ids=rendered_ids, full_ids=full_ids
+            )
+        except RawMaterializerBridgeV16Error:
+            raise
+        except Exception as error:
+            raise RawMaterializerBridgeV16Error("special-token envelope is invalid") from error
     for window in plan.physical_windows:
         if plan.mode == "EXISTING_FROZEN_ADAPTER_PATH":
             window_text = rendered
             count = len(source_ids)
-            expected_no_special = rendered_ids
+            token_ids = tuple(full_ids)
+            observed_hash = hashlib.sha256(bytes_json(token_ids)).hexdigest()
+            if observed_hash != window.physical_input_sha256:
+                raise RawMaterializerBridgeV16Error("corpus physical token IDs differ from the frozen plan")
         else:
             source_window = source_ids[window.source_start : window.source_end]
-            decoded = _decode(tokenizer, source_window)
-            if _one_ids(tokenizer, decoded, add_special_tokens=False) != tuple(source_window):
-                raise RawMaterializerBridgeV16Error(
-                    "corpus source-token decode cannot be verified"
-                )
-            window_text = template.format(text=decoded)
+            # Dense execution consumes ``token_ids`` below.  Retain the
+            # logical rendered text only as an in-memory diagnostic field;
+            # decoding a window cannot affect the frozen token sequence.
+            window_text = rendered
             count = window.source_token_count
-            expected_no_special = prefix_ids + tuple(source_window) + suffix_ids
+            token_ids = _planned_window_ids(
+                leading_special=leading_special,
+                prefix=prefix_ids,
+                source_window=source_window,
+                suffix=suffix_ids,
+                trailing_special=trailing_special,
+                planned_hash=window.physical_input_sha256,
+                role="corpus",
+            )
         if count < 1:
             raise RawMaterializerBridgeV16Error("physical window source-token count is invalid")
-        _verify_window_ids(
-            tokenizer,
-            window_text,
-            expected_no_special=expected_no_special,
-            planned_hash=window.physical_input_sha256,
-            role="corpus",
-        )
-        if len(_one_ids(tokenizer, window_text, add_special_tokens=True)) > limit:
+        if len(token_ids) > limit:
             raise RawMaterializerBridgeV16Error("physical window exceeds frozen effective limit")
-        physical.append(PhysicalInput(window_text, count))
+        physical.append(PhysicalInput(window_text, count, token_ids))
     if not physical or sum(item.source_token_count for item in physical) != len(source_ids):
         raise RawMaterializerBridgeV16Error("physical windows do not cover source tokens exactly")
     return tuple(physical)
@@ -315,32 +340,44 @@ def materialize_raw_query(
             )
     except Exception as error:
         raise RawMaterializerBridgeV16Error("frozen query physical-window planning failed") from error
+    leading_special: tuple[int, ...] = ()
+    trailing_special: tuple[int, ...] = ()
+    if plan.mode != "EXISTING_FROZEN_ADAPTER_PATH":
+        try:
+            leading_special, trailing_special = _special_envelope(
+                rendered_ids=rendered_ids, full_ids=full_ids
+            )
+        except RawMaterializerBridgeV16Error:
+            raise
+        except Exception as error:
+            raise RawMaterializerBridgeV16Error("special-token envelope is invalid") from error
     physical: list[PhysicalInput] = []
     for window in plan.physical_windows:
         source_window = source_ids[window.source_start : window.source_end]
         if plan.mode == "EXISTING_FROZEN_ADAPTER_PATH":
             piece = rendered
-            expected_no_special = rendered_ids
             count = len(source_ids)
+            token_ids = tuple(full_ids)
+            observed_hash = hashlib.sha256(bytes_json(token_ids)).hexdigest()
+            if observed_hash != window.physical_input_sha256:
+                raise RawMaterializerBridgeV16Error("query physical token IDs differ from the frozen plan")
         else:
-            decoded = _decode(tokenizer, source_window)
-            if _one_ids(tokenizer, decoded, add_special_tokens=False) != tuple(source_window):
-                raise RawMaterializerBridgeV16Error(
-                    "query source-token decode cannot be verified"
-                )
-            piece = template.format(text=decoded)
-            expected_no_special = prefix_ids + tuple(source_window) + suffix_ids
+            # The planned IDs, rather than decoded text, are the executable
+            # physical input.  This avoids a tokenizer decode/re-tokenize path.
+            piece = rendered
             count = window.source_token_count
-        _verify_window_ids(
-            tokenizer,
-            piece,
-            expected_no_special=expected_no_special,
-            planned_hash=window.physical_input_sha256,
-            role="query",
-        )
-        if len(_one_ids(tokenizer, piece, add_special_tokens=True)) > limit:
+            token_ids = _planned_window_ids(
+                leading_special=leading_special,
+                prefix=prefix_ids,
+                source_window=source_window,
+                suffix=suffix_ids,
+                trailing_special=trailing_special,
+                planned_hash=window.physical_input_sha256,
+                role="query",
+            )
+        if len(token_ids) > limit:
             raise RawMaterializerBridgeV16Error("query physical window exceeds frozen effective limit")
-        physical.append(PhysicalInput(piece, count))
+        physical.append(PhysicalInput(piece, count, token_ids))
     return LogicalInput(token, token, None, tuple(physical))
 
 

@@ -235,6 +235,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "a12-v16-exact-token-id-adapter-probe",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d",
+      "evidence_class": "aggregate_safe_synthetic_runtime_preparation",
+      "explanation": "Records the aggregate-safe synthetic exact-token-ID repair probe across ARM-02 through ARM-05 while preserving frozen v11-v15 semantics and keeping provider admission and measured retrieval closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json",
+      "scientific_authority": false,
+      "title": "A1.2 v16 exact-token-ID adapter probe",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a12-gpu-execution-proposal",
       "artifact_type": "proposal",
       "child_artifact_hashes": {},
@@ -2343,6 +2361,11 @@
       "uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json"
     },
     {
+      "artifact_id": "a12-v16-exact-token-id-adapter-probe",
+      "sha256": "b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d",
+      "uri": "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json"
+    },
+    {
       "artifact_id": "a12-gpu-execution-proposal",
       "sha256": "2c652fbb83aff0d10997dc2fa963d937b9aa0912bd45fe059e3a6f6b6742ca6a",
       "uri": "campaigns/armindex-multiretriever-v2/proposals/a1.2-gpu-execution-plan.v1.json"
@@ -3050,9 +3073,9 @@
       "status": "preserved_and_repaired_preflight_pending"
     }
   ],
-  "generated_at": "2026-08-09T08:17:27Z",
-  "generated_from_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
-  "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
+  "generated_at": "2026-08-09T18:37:03Z",
+  "generated_from_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
+  "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3178,7 +3201,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
+    "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3195,7 +3218,7 @@
   },
   "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. The repaired v11 request adds exact P00-P04 compiler hashes, protected opaque transfer/return rules, aggregate result schemas, whole-workload completion, and all-fee budget admission. V12-r3 binds an unchanged v11 request to local-only inputs, and v13 declares OUT Recall@100 as the candidate-exposure primary outcome with nDCG outcomes secondary; both remain preparation evidence, not retrieval-quality or publication evidence.",
   "language": "en",
-  "last_material_update": "2026-08-09T08:17:27Z",
+  "last_material_update": "2026-08-09T18:37:03Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -3598,7 +3621,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "b165919a5ee7cc33a12d9bd2b75074d8b8daf446454cbf8b5d81d27c528f2ce9",
+  "report_sha256": "b658ed07eb3cc804555838244f15ee1d2c6d9f5e05551f4eeb436f93c3884921",
   "report_type": "task",
   "result": {
     "decision": "blocked",
@@ -3632,6 +3655,7 @@
         "a12-protected-compiler-integration-v15",
         "a12-protected-compiler-audit-v15",
         "a12-whole-workload-budget-model-v15",
+        "a12-v16-exact-token-id-adapter-probe",
         "a12-gpu-execution-proposal",
         "a12-contract-scaffold-receipt",
         "a12-execution-contract",

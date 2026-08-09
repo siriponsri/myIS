@@ -233,6 +233,13 @@ receipt now pass. The Owner-approved v16 policy extends the additive limits to
 without changing v11-v15 scientific semantics. Instance `47256937` remains
 the same live provider identity; fresh all-fee budget admission, provider
 admission, and execution adoption are being materialized before measured work.
+Attempt `a12-v16-r8` stopped before any result receipt when a real tokenizer
+could not round-trip one overflow token window through decoded text. The
+additive exact-token-ID transport repair now passes synthetic adapter checks on
+all four dense arms without retrieval; its aggregate-safe audit is
+`outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json`.
+It still requires a clean bundle and fresh admission/adoption before measured
+work can resume.
 
 ## Active authorized action
 

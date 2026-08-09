@@ -167,12 +167,22 @@ def _physical_inputs(row: Mapping[str, Any], *, role: str) -> tuple[PhysicalInpu
         raise OwnerLocalMeasuredRunnerV16Error(f"{role} physical plan is missing")
     parsed: list[PhysicalInput] = []
     for value in values:
-        if not isinstance(value, Mapping) or set(value) != {"text", "source_token_count"}:
+        if not isinstance(value, Mapping) or set(value) not in (
+            {"text", "source_token_count"},
+            {"text", "source_token_count", "token_ids"},
+        ):
             raise OwnerLocalMeasuredRunnerV16Error(f"{role} physical plan is invalid")
         text, count = value["text"], value["source_token_count"]
         if not isinstance(text, str) or not text or isinstance(count, bool) or not isinstance(count, int) or count < 1:
             raise OwnerLocalMeasuredRunnerV16Error(f"{role} physical input is invalid")
-        parsed.append(PhysicalInput(text, count))
+        token_ids = value.get("token_ids")
+        if token_ids is not None and (
+            not isinstance(token_ids, list)
+            or not token_ids
+            or any(isinstance(item, bool) or not isinstance(item, int) or item < 0 for item in token_ids)
+        ):
+            raise OwnerLocalMeasuredRunnerV16Error(f"{role} physical token-ID plan is invalid")
+        parsed.append(PhysicalInput(text, count, tuple(token_ids) if token_ids is not None else None))
     return tuple(parsed)
 
 

@@ -189,7 +189,10 @@ current transition, plus the required critical checks below. Never reduce or
 skip the protected-data boundary, credential redaction, frozen v11-v15
 scientific semantics, split/query reservation, whole-workload budget and TTL,
 SSH/provider identity, artifact integrity, safe return, or the 25/25 result
-requirement. A failure in any critical check remains fail-closed.
+requirement. A failure in any critical check remains fail-closed. The active
+Owner-approved v16 limits for this same-instance run are common screen `$27`,
+A1 `$32`, campaign `$150`, and TTL `40` hours; v15 values `$18/$23/$100` are
+historical only and must not be used for current admission.
 
 Before code or plan edits, apply the local Karpathy guidelines: state
 assumptions, choose the smallest direct change, avoid speculative abstraction,

@@ -19,6 +19,7 @@ def test_ready_v16_contract_preserves_frozen_surface_and_cannot_authorize() -> N
 
 def test_ready_v16_contract_has_complete_bundle_closure() -> None:
     contract = v16.validate_contract(ROOT, require_ready=True)
+    assert contract["support_sources"]["raw_materializer_bridge"]["sha256"]
     assert contract["support_sources"]["remote_arm_worker"]["sha256"]
     assert contract["support_sources"]["distributed_launcher"]["sha256"]
 

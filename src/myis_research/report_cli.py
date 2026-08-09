@@ -490,6 +490,63 @@ def _a12_dense_overflow_body(audit: Mapping[str, Any]) -> str:
     )
 
 
+def _a12_exact_token_id_adapter_probe_body(audit: Mapping[str, Any]) -> str:
+    """Render the aggregate-safe v16 exact-token-ID probe history report."""
+
+    repair = audit.get("repair", {}) if isinstance(audit.get("repair"), Mapping) else {}
+    probe = (
+        audit.get("synthetic_probe", {})
+        if isinstance(audit.get("synthetic_probe"), Mapping)
+        else {}
+    )
+    rows = [
+        "| Arm | Status | Windows | Dimension | Finite |",
+        "|---|---|---:|---:|---|",
+    ]
+    for arm_id in ("ARM-02", "ARM-03", "ARM-04", "ARM-05"):
+        item = probe.get(arm_id, {}) if isinstance(probe.get(arm_id), Mapping) else {}
+        rows.append(
+            f"| `{arm_id}` | `{item.get('status')}` | "
+            f"{item.get('exact_token_id_windows', '-') } | "
+            f"{item.get('embedding_dimension', '-')} | `{item.get('finite')}` |"
+        )
+    return (
+        "# A1.2 v16 Exact-Token-ID Adapter Probe\n\n"
+        "## Objective\n\n"
+        "Validate the additive exact-token-ID transport repair at adapter level before resuming the frozen A1.2 screen.\n\n"
+        "## Starting State\n\n"
+        "Attempt `a12-v16-r8` stopped before measured retrieval because overflow windows could not safely survive tokenizer decode/re-tokenize round-tripping.\n\n"
+        "## Inputs and Frozen Bindings\n\n"
+        f"- Audit: `{audit.get('audit_uri')}` (`{audit.get('audit_sha256')}`)\n"
+        f"- Repair executor hash: `{repair.get('retrieval_executor_sha256')}`\n"
+        f"- Materializer bridge hash: `{repair.get('raw_materializer_bridge_sha256')}`\n\n"
+        "## Work Performed\n\n"
+        "The compiler-planned full token IDs were retained in Owner-local runtime memory and passed directly through the frozen SentenceTransformer path. The probe covered ARM-02 through ARM-05 without protected input access or retrieval.\n\n"
+        "## Artifacts Produced\n\n"
+        f"- Aggregate-safe audit file: `{audit.get('audit_uri')}` (`{audit.get('audit_file_sha256')}`)\n\n"
+        "## Metrics\n\n"
+        + "\n".join(rows)
+        + "\n\n"
+        "## Result\n\n"
+        f"`{audit.get('status')}`. All four dense adapter probes passed with exact token-ID windows and finite embeddings.\n\n"
+        "## Interpretation\n\n"
+        "This is an adapter-level synthetic preparation check; it does not establish encoder parity, retrieval quality, latency, cost, or publication impact.\n\n"
+        "## Supported Claims\n\n"
+        "The additive transport repair preserves the frozen scientific semantics and avoids lossy token-ID round-tripping for the tested synthetic inputs.\n\n"
+        "## Unsupported Claims\n\n"
+        "No measured A1 result, provider admission, execution adoption, Selection, Final, or publication claim is authorized.\n\n"
+        "## Failures and Recovery\n\n"
+        "The r8 overflow transport failure is retained as the trigger; recovery is additive exact-token-ID transport and remains pre-measurement.\n\n"
+        "## Governance and Safety\n\n"
+        "Protected inputs were not accessed, instance identity was preserved, measured retrieval did not start, and provider admission/adoption remain false.\n\n"
+        "## Decision\n\n"
+        "Accept the synthetic probe as preparation evidence only; keep the frozen 25/25 A1.2 screen gated on fresh provider admission and execution adoption.\n\n"
+        f"## Next Action\n\n{audit.get('next_authorized_action')}\n\n"
+        "## Evidence Links\n\n"
+        f"- Audit: `{audit.get('audit_uri')}`\n"
+    )
+
+
 def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     p2 = (
         model.get("p2_readiness", {})
@@ -2626,6 +2683,37 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
                 ),
             },
             _a12_dense_overflow_body(dense_overflow),
+        )
+    exact_token_id_probe = armindex.get("a1_2_exact_token_id_adapter_probe", {})
+    if (
+        isinstance(exact_token_id_probe, Mapping)
+        and exact_token_id_probe.get("validated") is True
+    ):
+        outputs[
+            VAULT_RELATIVE_PATH
+            / "05_Research_History/ArmIndex/A1_2_EXACT_TOKEN_ID_ADAPTER_PROBE.md"
+        ] = _note(
+            {
+                **common,
+                "note_id": "A1-2-EXACT-TOKEN-ID-ADAPTER-PROBE",
+                "note_type": "history_report",
+                "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                "task_id": "A1.2",
+                "workflow_status": "complete",
+                "evidence_maturity": "engineering",
+                "claim_level": "none",
+                "evidence_class": str(exact_token_id_probe.get("evidence_class")),
+                "scientific_authority": False,
+                "claim_boundary": str(exact_token_id_probe.get("claim_boundary")),
+                "source_manifest_sha256": [
+                    str(exact_token_id_probe.get("audit_sha256")),
+                    str(exact_token_id_probe.get("audit_file_sha256")),
+                ],
+                "next_authorized_action": str(
+                    exact_token_id_probe.get("next_authorized_action")
+                ),
+            },
+            _a12_exact_token_id_adapter_probe_body(exact_token_id_probe),
         )
     outputs[VAULT_RELATIVE_PATH / "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md"] = (
         _note(

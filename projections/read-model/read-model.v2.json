@@ -2722,6 +2722,85 @@
       "validated": true,
       "watchdog_dry_run_status": "PENDING"
     },
+    "a1_2_exact_token_id_adapter_probe": {
+      "audit_file_sha256": "b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d",
+      "audit_id": "a1.2-v16-exact-token-id-adapter-probe-20260809",
+      "audit_sha256": "03b2bce9ab001e2ce4a0fff218ac4dead89f9107cb64173fe56291a780bebb8c",
+      "audit_uri": "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json",
+      "authorization": {
+        "execution_adoption_receipt_pass": false,
+        "final_allowed": false,
+        "measured_retrieval_allowed": false,
+        "provider_admission_receipt_pass": false,
+        "selection_allowed": false
+      },
+      "claim_boundary": "This is a synthetic adapter-level preparation check. It contains no protected source text, query identifiers, memberships, qrels, rankings, per-query outcomes, credentials, raw provider payloads, or A1 retrieval result.",
+      "counters": {
+        "final_accesses": 0,
+        "measured_runs": 0,
+        "selection_accesses": 0
+      },
+      "evidence_class": "aggregate_safe_synthetic_runtime_preparation",
+      "generated_at_utc": "2026-08-09T20:19:44Z",
+      "next_authorized_action": "Commit and push the hash-bound repair, build a clean v16 bundle, re-run provider admission and execution adoption, then resume only the frozen 25/25 A1.2 screen.",
+      "repair": {
+        "description": "The runtime retains compiler-planned full token IDs in Owner-local RAM and feeds those IDs directly through the frozen SentenceTransformer model path. Decoded text is no longer relied upon as a reversible token-ID transport.",
+        "pooling_or_normalization_changed": false,
+        "raw_materializer_bridge_sha256": "1195a2df11531714ae1503e94450d3f3e6b1257a4198762ab93533307e97d05f",
+        "retrieval_executor_sha256": "f3ae2fb2abf29e85f0a3ecfc619e6b2d3f4a8d5981a8429d1ae0512deaa4abce",
+        "retrieval_or_evaluation_executed": false,
+        "scientific_semantics_changed": false,
+        "source_token_coverage_changed": false,
+        "source_token_overlap_changed": false,
+        "window_weighting_changed": false
+      },
+      "schema_version": "myis.armindex-a1.2-v16-exact-token-id-adapter-probe.v1",
+      "scientific_authority": false,
+      "scope": "A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2",
+      "status": "PASS_PRE_MEASUREMENT",
+      "synthetic_probe": {
+        "ARM-02": {
+          "embedding_dimension": 1024,
+          "exact_token_id_windows": 2,
+          "finite": true,
+          "input_count": 2,
+          "status": "PASS"
+        },
+        "ARM-03": {
+          "embedding_dimension": 1024,
+          "exact_token_id_windows": 5,
+          "finite": true,
+          "l2_norm": 1.0,
+          "max_window_tokens": 512,
+          "overflow_window_count": 5,
+          "source_token_count": 2058,
+          "status": "PASS"
+        },
+        "ARM-04": {
+          "embedding_dimension": 768,
+          "exact_token_id_windows": 2,
+          "finite": true,
+          "input_count": 2,
+          "status": "PASS"
+        },
+        "ARM-05": {
+          "embedding_dimension": 1024,
+          "exact_token_id_windows": 2,
+          "finite": true,
+          "input_count": 2,
+          "status": "PASS"
+        },
+        "protected_input_access": false,
+        "runtime_downloads": false
+      },
+      "trigger": {
+        "attempt_id": "a12-v16-r8",
+        "failure_class": "raw_overflow_window_decode_round_trip",
+        "instance_destroyed": false,
+        "measured_retrieval_started": false
+      },
+      "validated": true
+    },
     "a1_2_p02_limit_audit": {
       "claim_boundary": "P02 coverage and deterministic replay passed, but frozen ARM-03 x P00 exceeds its effective input limit without truncation. No retrieval or provider work was performed.",
       "evidence_class": "pre_measurement_owner_local_input_validation",
@@ -3867,7 +3946,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-09T08:17:27Z",
+  "generated_at": "2026-08-09T18:37:03Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -4775,7 +4854,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
+  "projection_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -4819,8 +4898,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
-  "read_model_sha256": "1cf94eaf16d43a9e46da9948f65536385cde187a3ffefded31d0aea9fbc37f55",
+  "read_model_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
+  "read_model_sha256": "a8018fa0dba74c3a62bcb0b119f8183743f9987ab0f3c10cff3cef872d0f37dd",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -4953,7 +5032,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
+  "source_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
   "tasks": [
     {
       "evidence_ids": [],

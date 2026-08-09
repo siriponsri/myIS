@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-import pytest
-
 from myis_research.armindex.a1_2_raw_materializer_bridge_v16 import (
-    RawMaterializerBridgeV16Error,
     materialize_raw_corpus,
     materialize_raw_query,
 )
@@ -115,16 +112,33 @@ def test_dense_overflow_has_zero_overlap_and_no_truncation() -> None:
     assert all(len(adapter.tokenizer(item.text, add_special_tokens=True)["input_ids"][0]) <= 512 for item in physical)
 
 
-def test_dense_decode_tokenizer_drift_fails_closed() -> None:
+def test_dense_decode_text_does_not_replace_exact_planned_ids() -> None:
     class DriftAdapter(Adapter):
         def __init__(self) -> None:
             super().__init__()
             self.tokenizer.decode = lambda *_args, **_kwargs: "drifted"
 
-    with pytest.raises(RawMaterializerBridgeV16Error, match="decode cannot be verified"):
-        materialize_raw_corpus(
-            [_row(abstract=" ".join(f"token{i}" for i in range(700)))],
-            arm_id="ARM-03",
-            program_id="P01-TA-DOC",
-            adapter=DriftAdapter(),
-        )
+    units = materialize_raw_corpus(
+        [_row(abstract=" ".join(f"token{i}" for i in range(700)))],
+        arm_id="ARM-03",
+        program_id="P01-TA-DOC",
+        adapter=DriftAdapter(),
+    )
+    assert len(units) == 1
+    assert all(item.token_ids for item in units[0].physical_inputs)
+
+
+def test_dense_materialization_never_requires_window_decode() -> None:
+    class DecodeForbiddenAdapter(Adapter):
+        def __init__(self) -> None:
+            super().__init__()
+            self.tokenizer.decode = lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("decode called"))
+
+    units = materialize_raw_corpus(
+        [_row(abstract=" ".join(f"token{i}" for i in range(700)))],
+        arm_id="ARM-03",
+        program_id="P01-TA-DOC",
+        adapter=DecodeForbiddenAdapter(),
+    )
+    assert len(units[0].physical_inputs) > 1
+    assert all(item.token_ids for item in units[0].physical_inputs)

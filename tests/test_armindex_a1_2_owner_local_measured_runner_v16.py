@@ -8,6 +8,7 @@ import pytest
 from myis_research.armindex.a1_2_measured_executor_v16 import FamilyRank
 from myis_research.armindex.a1_2_owner_local_measured_runner_v16 import (
     OwnerLocalMeasuredRunnerV16Error,
+    _physical_inputs,
     merge_measured_arm_outputs,
     run_owner_local_measured_screen,
     validate_manifest,
@@ -83,6 +84,19 @@ def _manifest(tmp_path: Path) -> Path:
     manifest = root / "manifest.json"
     _write_json(manifest, {**body, "manifest_sha256": canonical_sha256(body)})
     return manifest
+
+
+def test_compiled_physical_inputs_allow_exact_token_ids_only_when_valid() -> None:
+    values = _physical_inputs(
+        {"physical_inputs": [{"text": "opaque", "source_token_count": 2, "token_ids": [1, 2]}]},
+        role="compiled corpus",
+    )
+    assert values[0].token_ids == (1, 2)
+    with pytest.raises(OwnerLocalMeasuredRunnerV16Error, match="token-ID"):
+        _physical_inputs(
+            {"physical_inputs": [{"text": "opaque", "source_token_count": 2, "token_ids": [True]}]},
+            role="compiled corpus",
+        )
 
 
 def test_owner_local_bridge_runs_25_cells_and_preserves_p02_bridge(tmp_path: Path) -> None:

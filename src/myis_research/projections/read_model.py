@@ -437,6 +437,9 @@ A12_LOCAL_ADOPTION_INPUTS_RECEIPT_V15_PATH = Path(
     "campaigns/armindex-multiretriever-v2/evidence/"
     "a1.2-scientific-execution-adoption-inputs.receipt.v15.json"
 )
+A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH = Path(
+    "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path(
     "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl"
@@ -504,6 +507,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a1_2_split_claim_audit = _a12_rep_harness_claim_audit_projection(root)
     a1_2_p02_limit_audit = _a12_p02_limit_audit_projection(root)
     a1_2_dense_overflow = _a12_dense_overflow_projection(root)
+    a1_2_exact_token_id_probe = _a12_exact_token_id_adapter_probe_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -514,6 +518,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_rep_harness_claim_audit": a1_2_split_claim_audit,
         "a1_2_p02_limit_audit": a1_2_p02_limit_audit,
         "a1_2_dense_overflow": a1_2_dense_overflow,
+        "a1_2_exact_token_id_adapter_probe": a1_2_exact_token_id_probe,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -2501,6 +2506,100 @@ def _a12_p02_limit_audit_projection(root: Path) -> dict[str, Any]:
         "input_limit_audit_uri": A12_EFFECTIVE_INPUT_LIMIT_AUDIT_PATH.as_posix(),
         "input_limit_audit_file_sha256": _file_sha256(limit_path),
         "next_authorized_action": "Owner decides an additive pre-measurement program-limit compatibility repair or ARM-03 disposition; do not admit a provider or measured retrieval.",
+    }
+
+
+def _a12_exact_token_id_adapter_probe_projection(root: Path) -> dict[str, Any]:
+    """Project the aggregate-safe v16 exact-token-ID adapter probe."""
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "evidence_class": "aggregate_safe_synthetic_runtime_preparation",
+        "scientific_authority": False,
+        "claim_boundary": (
+            "Synthetic adapter preparation only; no protected inputs, retrieval "
+            "results, or provider admission are represented."
+        ),
+        "audit_uri": A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH.as_posix(),
+        "audit_file_sha256": None,
+        "audit_sha256": None,
+        "next_authorized_action": (
+            "Commit and push the hash-bound repair, build a clean v16 bundle, "
+            "re-run provider admission and execution adoption, then resume only "
+            "the frozen 25/25 A1.2 screen."
+        ),
+    }
+    audit_path = root / A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH
+    if not audit_path.is_file():
+        return missing
+    try:
+        audit = json.loads(audit_path.read_text(encoding="ascii"))
+        if not isinstance(audit, Mapping):
+            raise TypeError("exact-token-ID probe must be an object")
+        assert_aggregate_only(audit)
+        unsigned = {key: value for key, value in audit.items() if key != "audit_sha256"}
+        if (
+            audit.get("schema_version")
+            != "myis.armindex-a1.2-v16-exact-token-id-adapter-probe.v1"
+            or audit.get("status") != "PASS_PRE_MEASUREMENT"
+            or audit.get("scientific_authority") is not False
+            or audit.get("scope")
+            != "A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2"
+            or audit.get("audit_sha256") != canonical_sha256(unsigned)
+        ):
+            raise ValueError("exact-token-ID probe identity or self-hash is invalid")
+        trigger = audit.get("trigger", {})
+        repair = audit.get("repair", {})
+        authorization = audit.get("authorization", {})
+        counters = audit.get("counters", {})
+        if (
+            not isinstance(trigger, Mapping)
+            or trigger.get("measured_retrieval_started") is not False
+            or trigger.get("instance_destroyed") is not False
+            or not isinstance(repair, Mapping)
+            or any(
+                repair.get(key) is not False
+                for key in (
+                    "scientific_semantics_changed",
+                    "source_token_coverage_changed",
+                    "source_token_overlap_changed",
+                    "window_weighting_changed",
+                    "pooling_or_normalization_changed",
+                    "retrieval_or_evaluation_executed",
+                )
+            )
+            or not isinstance(authorization, Mapping)
+            or any(
+                authorization.get(key) is not False
+                for key in (
+                    "provider_admission_receipt_pass",
+                    "execution_adoption_receipt_pass",
+                    "measured_retrieval_allowed",
+                    "selection_allowed",
+                    "final_allowed",
+                )
+            )
+            or not isinstance(counters, Mapping)
+            or counters.get("measured_runs") != 0
+            or counters.get("selection_accesses") != 0
+            or counters.get("final_accesses") != 0
+        ):
+            raise ValueError("exact-token-ID probe safety boundary drifted")
+        synthetic_probe = audit.get("synthetic_probe")
+        if not isinstance(synthetic_probe, Mapping) or any(
+            not isinstance(synthetic_probe.get(arm_id), Mapping)
+            or synthetic_probe[arm_id].get("status") != "PASS"
+            for arm_id in ("ARM-02", "ARM-03", "ARM-04", "ARM-05")
+        ):
+            raise ValueError("exact-token-ID synthetic probe is incomplete")
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {**missing, "status": "invalid"}
+    return {
+        **dict(audit),
+        "validated": True,
+        "audit_uri": A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH.as_posix(),
+        "audit_file_sha256": _file_sha256(audit_path),
     }
 
 

@@ -8,6 +8,7 @@ from myis_research.armindex.a1_2_measured_executor_v16 import (
     LogicalInput,
     MeasuredExecutorV16Error,
     PhysicalInput,
+    SentenceTransformerDenseAdapter,
     build_dense_index,
     encode_logical_inputs,
     execute_program_cell,
@@ -33,6 +34,16 @@ class CountingAdapter(FakeAdapter):
     def encode(self, inputs: list[str]) -> np.ndarray:
         self.calls.append(tuple(inputs))
         return super().encode(inputs)
+
+
+class TokenIdAdapter(FakeAdapter):
+    def __init__(self, vectors: dict[str, tuple[float, ...]]) -> None:
+        super().__init__(vectors)
+        self.token_id_calls: list[tuple[tuple[int, ...], ...]] = []
+
+    def encode_token_ids(self, inputs: list[tuple[int, ...]]) -> np.ndarray:
+        self.token_id_calls.append(tuple(inputs))
+        return np.asarray([(1.0, 0.0) for _ in inputs], dtype=np.float64)
 
 
 def unit(
@@ -63,6 +74,63 @@ def test_dense_overflow_recomposition_is_source_token_weighted_then_normalized()
         ),
     )
     assert np.allclose(values[0], np.asarray((3.0, 1.0)) / np.sqrt(10.0))
+
+
+def test_dense_executor_prefers_exact_planned_token_ids() -> None:
+    adapter = TokenIdAdapter({"decoded": (0.0, 1.0)})
+    values = encode_logical_inputs(
+        arm_id="ARM-03",
+        adapter=adapter,
+        logical_inputs=(
+            LogicalInput(
+                "doc",
+                "F-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                None,
+                (PhysicalInput("decoded", 2, (101, 102, 103)),),
+            ),
+        ),
+    )
+    assert values.shape == (1, 2)
+    assert adapter.token_id_calls == [((101, 102, 103),)]
+
+
+def test_sentence_transformer_adapter_forwards_exact_ids_with_left_padding() -> None:
+    torch = pytest.importorskip("torch")
+
+    class Tokenizer:
+        pad_token_id = 0
+        padding_side = "left"
+
+    class Model:
+        tokenizer = Tokenizer()
+
+        def __init__(self) -> None:
+            self.features = None
+
+        def parameters(self):
+            return iter(())
+
+        def tokenize(self, _inputs):
+            return {"input_ids": object(), "token_type_ids": object()}
+
+        def eval(self):
+            return self
+
+        def forward(self, features):
+            self.features = {key: value.detach().cpu().tolist() for key, value in features.items()}
+            return {"sentence_embedding": torch.tensor([[3.0, 4.0], [5.0, 12.0]])}
+
+    model = Model()
+    values = SentenceTransformerDenseAdapter(arm_id="ARM-05", model=model).encode_token_ids(
+        ((11, 12), (21, 22, 23))
+    )
+
+    assert model.features == {
+        "input_ids": [[0, 11, 12], [21, 22, 23]],
+        "attention_mask": [[0, 1, 1], [1, 1, 1]],
+        "token_type_ids": [[0, 0, 0], [0, 0, 0]],
+    }
+    assert np.allclose(np.linalg.norm(values, axis=1), (1.0, 1.0))
 
 
 def test_dense_family_max_rank_has_lexical_ties_and_hides_units() -> None:

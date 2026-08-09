@@ -235,6 +235,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "a12-v16-exact-token-id-adapter-probe",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d",
+      "evidence_class": "aggregate_safe_synthetic_runtime_preparation",
+      "explanation": "Records the aggregate-safe synthetic exact-token-ID repair probe across ARM-02 through ARM-05 while preserving frozen v11-v15 semantics and keeping provider admission and measured retrieval closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json",
+      "scientific_authority": false,
+      "title": "A1.2 v16 exact-token-ID adapter probe",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a11-adapter-task-receipt",
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
@@ -2433,6 +2451,11 @@
       "uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json"
     },
     {
+      "artifact_id": "a12-v16-exact-token-id-adapter-probe",
+      "sha256": "b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d",
+      "uri": "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json"
+    },
+    {
       "artifact_id": "a11-adapter-task-receipt",
       "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json"
@@ -3135,9 +3158,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-09T08:17:27Z",
-  "generated_from_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
-  "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
+  "generated_at": "2026-08-09T18:37:03Z",
+  "generated_from_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
+  "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3263,7 +3286,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
+    "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3280,7 +3303,7 @@
   },
   "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. V12-r3 binds the unchanged request to local-only verification, while v13 makes OUT Recall@100 the primary candidate-exposure outcome and keeps instance disposition pending live-provider evidence. It does not establish retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
-  "last_material_update": "2026-08-09T08:17:27Z",
+  "last_material_update": "2026-08-09T18:37:03Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3375,7 +3398,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "70244b01d000af1ce7d12d77afc817a76d5c5f534a9cff84d24c21603a3703b6",
+  "report_sha256": "19adbe4df07e46fea1ebfa8eb517e72d9d0f3e9b9d3591dc36e2c47c926b3497",
   "report_type": "phase",
   "result": {
     "decision": "active",
@@ -3409,6 +3432,7 @@
         "a12-protected-compiler-integration-v15",
         "a12-protected-compiler-audit-v15",
         "a12-whole-workload-budget-model-v15",
+        "a12-v16-exact-token-id-adapter-probe",
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
         "a11-adapter-fixture-receipt",
