@@ -505,9 +505,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-08T02:20:32Z",
-  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
-  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+  "generated_at": "2026-08-09T04:38:15Z",
+  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -537,7 +537,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -554,7 +554,7 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-08T02:20:32Z",
+  "last_material_update": "2026-08-09T04:38:15Z",
   "metric_references": [
     {
       "cutoff": 32,
@@ -627,7 +627,7 @@
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "6831ba5b0f1e9d325f6783d8af2009fd02fab8425f68eb5af237e6328f143c3e",
+  "report_sha256": "b0c5af484fdce782e0f40d89e88da64f32e517ab323def98c2c0af78c2bb938d",
   "report_type": "phase",
   "result": {
     "decision": "completed",

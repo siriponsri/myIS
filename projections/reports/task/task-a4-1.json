@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-08T02:20:32Z",
-  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
-  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+  "generated_at": "2026-08-09T04:38:15Z",
+  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-08T02:20:32Z",
+  "last_material_update": "2026-08-09T04:38:15Z",
   "metric_references": [],
   "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
   "objective": "Production profiles and legal transfer",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "task-a4-1",
-  "report_sha256": "69870223beceb54512ff4af9f1a2fd2398147dcf9574a26825744e124de67f9c",
+  "report_sha256": "8fa78f5602b6b18322266e761b8d41b4947826abbba696beb3bdc4d1710b0c0a",
   "report_type": "task",
   "result": {
     "decision": "planned",

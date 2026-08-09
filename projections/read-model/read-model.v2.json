@@ -3867,7 +3867,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-08T02:20:32Z",
+  "generated_at": "2026-08-09T04:38:15Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -4775,7 +4775,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
+  "projection_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -4819,8 +4819,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
-  "read_model_sha256": "a0b21ef2423efda045e25ee2ef7181d07cc25b0057b9f1d326a7ef26c5e85de0",
+  "read_model_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "read_model_sha256": "b6b684729dd0751d526494303f029aed5c319dbe199c5fd20779c258cc83b7e6",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -4953,7 +4953,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+  "source_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "tasks": [
     {
       "evidence_ids": [],

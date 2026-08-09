@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-08T02:20:32Z",
-  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
-  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+  "generated_at": "2026-08-09T04:38:15Z",
+  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,7 +108,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
     "source_of_truth": {
       "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
       "uri": "control/source-of-truth.yaml"
@@ -116,13 +116,13 @@
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-08T02:20:32Z",
+  "last_material_update": "2026-08-09T04:38:15Z",
   "metric_references": [],
   "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "24dae4a417edd648c19279992c34f73b62077056a6b3076ed1b73997e227bdde",
+  "report_sha256": "e5da53cef98df44411544433506716b6d25bb1004fcc8564c522f691e62656d5",
   "report_type": "task",
   "result": {
     "decision": "completed",

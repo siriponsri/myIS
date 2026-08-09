@@ -3050,9 +3050,9 @@
       "status": "preserved_and_repaired_preflight_pending"
     }
   ],
-  "generated_at": "2026-08-08T02:20:32Z",
-  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
-  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+  "generated_at": "2026-08-09T04:38:15Z",
+  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3178,7 +3178,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3195,7 +3195,7 @@
   },
   "interpretation": "The v5 receipt retains v1-v3 provenance while selecting the official PyTorch linux/amd64 base image. v6-v8 preserve direct-container corrections, failed-closed evidence, bytecode suppression, and complete validator lineage. The v9 PASS establishes only synthetic adapter compatibility, bounded Qwen capacity for the frozen single-GPU configuration, lifecycle checkpoint/resume, safe return, and guest-process cleanup. The additive v10 closeout records the Owner destroy attestation and endpoint-unreachable observation, while explicitly limiting the claim because no independent Vast API or CLI record was obtained. The repaired v11 request adds exact P00-P04 compiler hashes, protected opaque transfer/return rules, aggregate result schemas, whole-workload completion, and all-fee budget admission. V12-r3 binds an unchanged v11 request to local-only inputs, and v13 declares OUT Recall@100 as the candidate-exposure primary outcome with nDCG outcomes secondary; both remain preparation evidence, not retrieval-quality or publication evidence.",
   "language": "en",
-  "last_material_update": "2026-08-08T02:20:32Z",
+  "last_material_update": "2026-08-09T04:38:15Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -3598,7 +3598,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "524e34f90f1ac2053fd0c967fe954132c58e25b2f33b7488ceb642a9e683a36d",
+  "report_sha256": "143bb32824966fdf78aeeabfc6c470590cbc7eddcf8d921b0f3020961e40a177",
   "report_type": "task",
   "result": {
     "decision": "blocked",
