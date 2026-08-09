@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
-  "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
+  "generated_at": "2026-08-09T07:04:22Z",
+  "generated_from_revision": "005e23c20df9060e7f8185b3e9f33143915b9219c5675fb97fb60608a8ba4d22",
+  "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
+    "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-09T04:38:15Z",
+  "last_material_update": "2026-08-09T07:04:22Z",
   "metric_references": [],
   "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "e5950701307676fb715617df3c2488d03f3085d6a65eee509a0ea82f9c53ac64",
+  "report_sha256": "af92a6ebacbd9d875356f57836b7686d5081b9bc02d52a102315824e34c6d74c",
   "report_type": "task",
   "result": {
     "decision": "not_started",

@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
-  "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
+  "generated_at": "2026-08-09T07:04:22Z",
+  "generated_from_revision": "005e23c20df9060e7f8185b3e9f33143915b9219c5675fb97fb60608a8ba4d22",
+  "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
+    "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-09T04:38:15Z",
+  "last_material_update": "2026-08-09T07:04:22Z",
   "metric_references": [],
   "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Production profiles and legal transfer",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "task-a4-1",
-  "report_sha256": "9c04b699d144d2c92e966e9644072562c7a23407ec392f746d4a45d32f436808",
+  "report_sha256": "73e78dd408be45619cd233a7ca632b215077f23a665ecebbcf88ce3a591c3a96",
   "report_type": "task",
   "result": {
     "decision": "planned",

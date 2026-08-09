@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62"
-read_model_sha256: "8fda366b47c292d04c5e4b0217f0307a0953356da2e98c494f9bd433a43cb55d"
-source_commit: "2bd76d36b418564b9f7494196e70a31251b552fb"
+read_model_revision: "005e23c20df9060e7f8185b3e9f33143915b9219c5675fb97fb60608a8ba4d22"
+read_model_sha256: "67bd40852bb576cec34c8a323027a17f71d60b59269eef4f0852dfc94e9e76b1"
+source_commit: "b0963b8c1a5c72bd329d1760d3992ab7f694163b"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: ["a16294fa92e1b7a7bf3b4e571869751ea20e03a32580abea92819418d2e770eb","d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634","df09cc3c030d36ca13010aa00adb2cf78937717bf3d0ea9a3bcc6355d082d653","30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b","a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8","742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6","1de6ecf6f0f9fb7f1e2a4465311a556e7c75e5aaed00dde893c811a2c2d98234"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_compatibility_validation"
 scientific_authority: false
 claim_boundary: "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result."
-generated_from_revision: "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62"
-last_material_update: "2026-08-09T04:38:15Z"
+generated_from_revision: "005e23c20df9060e7f8185b3e9f33143915b9219c5675fb97fb60608a8ba4d22"
+last_material_update: "2026-08-09T07:04:22Z"
 next_authorized_action: "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-09T04:38:15Z"
-updated_at: "2026-08-09T04:38:15Z"
+created_at: "2026-08-09T07:04:22Z"
+updated_at: "2026-08-09T07:04:22Z"
 note_id: "A1-2-DENSE-OVERFLOW-REPAIR-COMPILER-BLOCKER"
 note_type: "history_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
