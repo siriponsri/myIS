@@ -42,6 +42,8 @@ _BASE_PATHS = (
     "src/myis_research/kernel/canonical.py",
     "src/myis_research/armindex/bm25s_adapter.py",
     "src/myis_research/armindex/scientific_common_programs_v11.py",
+    "src/myis_research/armindex/a1_2_dense_overflow_adapter_v1.py",
+    "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py",
     "src/myis_research/armindex/a1_2_live_preflight_runtime_v9.py",
     "src/myis_research/armindex/a1_2_engineering_execution_bundle_v16.py",
     "src/myis_research/armindex/a1_2_safe_return_v16.py",

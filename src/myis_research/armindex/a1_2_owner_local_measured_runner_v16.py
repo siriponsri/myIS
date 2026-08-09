@@ -26,6 +26,11 @@ from .a1_2_measured_executor_v16 import (
     PhysicalInput,
     execute_program_cell_batch,
 )
+from .a1_2_raw_materializer_bridge_v16 import (
+    RawMaterializerBridgeV16Error,
+    materialize_raw_corpus,
+    materialize_raw_query,
+)
 
 ARM_IDS = ("ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05")
 ORIGINAL_PROGRAM_IDS = (
@@ -350,7 +355,20 @@ def run_owner_local_measured_screen(
             cell_receipts.append(existing)
             continue
         corpus_rows = _read_jsonl(_safe_file(root, cell["corpus_path"], role="compiled corpus"), role="compiled corpus")
-        corpus = tuple(_logical(row, role="compiled corpus") for row in corpus_rows)
+        adapter = None if cell["arm_id"] == "ARM-01" else (adapters or {}).get(cell["arm_id"])
+        raw_corpus = bool(corpus_rows and {"claims", "claims_text", "publication_token"}.issubset(corpus_rows[0]))
+        try:
+            if raw_corpus:
+                corpus = materialize_raw_corpus(
+                    corpus_rows,
+                    arm_id=cell["arm_id"],
+                    program_id=cell["executable_program_id"],
+                    adapter=adapter,
+                )
+            else:
+                corpus = tuple(_logical(row, role="compiled corpus") for row in corpus_rows)
+        except RawMaterializerBridgeV16Error as error:
+            raise OwnerLocalMeasuredRunnerV16Error("raw corpus materialization failed") from error
         query_path = _safe_file(root, cell["query_path"], role="compiled query")
         query_rows = _read_jsonl(query_path, role="compiled query")
         if len(query_rows) != 150 or {row.get("work_token") for row in query_rows} != query_tokens:
@@ -359,14 +377,20 @@ def run_owner_local_measured_screen(
         batch_queries: dict[str, str | LogicalInput] = {}
         for token in work_tokens:
             row = query_by_token[token]
-            if "physical_inputs" in row:
-                batch_queries[token] = _logical(row, role="compiled query", query=True)
-            else:
-                text = row.get("text")
-                if not isinstance(text, str) or not text:
-                    raise OwnerLocalMeasuredRunnerV16Error("compiled query text is invalid")
-                batch_queries[token] = text
-        adapter = None if cell["arm_id"] == "ARM-01" else (adapters or {}).get(cell["arm_id"])
+            try:
+                if "physical_inputs" in row:
+                    batch_queries[token] = _logical(row, role="compiled query", query=True)
+                elif cell["arm_id"] == "ARM-01" or not raw_corpus:
+                    text = row.get("text")
+                    if not isinstance(text, str) or not text:
+                        raise RawMaterializerBridgeV16Error("raw query text is invalid")
+                    batch_queries[token] = text
+                else:
+                    batch_queries[token] = materialize_raw_query(
+                        row, arm_id=cell["arm_id"], adapter=adapter
+                    )
+            except RawMaterializerBridgeV16Error as error:
+                raise OwnerLocalMeasuredRunnerV16Error("raw query materialization failed") from error
         if cell["arm_id"] != "ARM-01" and adapter is None:
             raise OwnerLocalMeasuredRunnerV16Error("dense adapter is missing")
         rank_hashes: list[str] = []

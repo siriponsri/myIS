@@ -37,6 +37,8 @@ def test_v16_bundle_binds_runtime_import_closure_without_protected_compiler() ->
         "src/myis_research/kernel/canonical.py",
         "src/myis_research/armindex/bm25s_adapter.py",
         "src/myis_research/armindex/scientific_common_programs_v11.py",
+        "src/myis_research/armindex/a1_2_dense_overflow_adapter_v1.py",
+        "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py",
     } <= paths
     assert "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v15.py" not in paths
 

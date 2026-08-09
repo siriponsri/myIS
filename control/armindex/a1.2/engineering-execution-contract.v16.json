@@ -46,7 +46,7 @@
     "safe_return_builder": {"path": "src/myis_research/armindex/a1_2_safe_return_builder_v16.py", "sha256": "708c7e707d006f4318bb517b3f9e45fdb1cd52a66ca0a4e097b91a0f0449c8f4"},
     "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "fd9ecd56fc323cfb7b59c4549df21887d9e770f07935f19f06a1ae8d9a19c4be"},
     "input_manifest": {"path": "src/myis_research/armindex/a1_2_owner_local_input_manifest_v16.py", "sha256": "2fa8b2e05066b5a7b224297966d892605ec0e7a166dd2b2e7534953c09b21703"},
-    "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "3910924f1cfa867d3be80351f61ea7fc1583002c3b1878741e6f0bcbd6a799e8"},
+    "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "8f635b3678988403741692ebe986a2c8a8a21b2f18aeb7b1070bf3cb3aeb70fa"},
     "remote_arm_worker": {"path": "src/myis_research/armindex/a1_2_remote_arm_worker_v16.py", "sha256": "84383d286c262566b0a2cc6a4c39af19eb7bdb0f19d1d3021dd11d06727757ee"},
     "distributed_launcher": {"path": "src/myis_research/armindex/a1_2_remote_measured_launcher_v16.py", "sha256": "2faef191e44e4be7efb2ad7f0ac522f9087c6dd024a987f4795e2b484fc38971"},
     "evaluator_promotion": {"path": "src/myis_research/armindex/a1_2_owner_local_evaluator_v16.py", "sha256": "4479affa0e3bfb0c87b26f6e54e258293a19e86df54a3e8b268478d375396e43"}
@@ -55,5 +55,5 @@
   "runtime_policy": {"runtime_downloads_forbidden": true, "model_bytes_owner_local_only": true, "protected_payload_in_bundle": false, "safe_aggregate_export_required": true},
   "authorization": {"provider_admission_receipt_pass": false, "execution_adoption_receipt_pass": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
   "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
-  "contract_sha256": "099308478de82f8b39672ae4f056568e990e962d6ac94d6cfabf96ee9c1a0463"
+  "contract_sha256": "d5c765b5937766e0a1785704b1e7f8c7c6ae270176225bcfc8c8f7bceb7d0eac"
 }
