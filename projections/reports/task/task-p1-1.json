@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-08T01:48:27Z",
-  "generated_from_revision": "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f",
-  "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
+  "generated_at": "2026-08-08T02:20:32Z",
+  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
+  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
+    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
+      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-08T01:48:27Z",
+  "last_material_update": "2026-08-08T02:20:32Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -278,11 +278,11 @@
       "value": 0.076057227485
     }
   ],
-  "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
+  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
   "objective": "R0 flat BM25 measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-1",
-  "report_sha256": "98503bf5d6079bfcc6d0f4890742d95818d7a589e39638e160eeead3a1b226f9",
+  "report_sha256": "a75eda1f6d1819f7c790adbe03c2be2c304d7c2f0cfc018e729f372f97f72e5b",
   "report_type": "task",
   "result": {
     "decision": "completed",

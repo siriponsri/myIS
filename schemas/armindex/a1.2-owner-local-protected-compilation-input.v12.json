@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-owner-local-protected-compilation-input.v12.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "input_id", "claim_boundary", "corpus", "queries", "split", "evaluator", "ephemeral_token_map", "handoff_receipt", "protected_transfer_manifest", "pre_adoption_anchor", "models", "protected_index_manifest_directory"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-owner-local-protected-compilation-input.v12"},
+    "input_id": {"type": "string", "pattern": "^a1\\.2-v12-[a-z0-9-]+$"},
+    "claim_boundary": {"type": "string", "minLength": 80},
+    "corpus": {"$ref": "#/$defs/artifact"},
+    "queries": {"$ref": "#/$defs/artifact"},
+    "split": {"$ref": "#/$defs/artifact"},
+    "evaluator": {"$ref": "#/$defs/artifact"},
+    "ephemeral_token_map": {"$ref": "#/$defs/artifact"},
+    "handoff_receipt": {"$ref": "#/$defs/artifact"},
+    "protected_transfer_manifest": {"$ref": "#/$defs/artifact"},
+    "pre_adoption_anchor": {"$ref": "#/$defs/artifact"},
+    "models": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/model"}},
+    "protected_index_manifest_directory": {"$ref": "#/$defs/relative_path"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "relative_path": {"type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relative_path", "sha256"],
+      "properties": {"relative_path": {"$ref": "#/$defs/relative_path"}, "sha256": {"$ref": "#/$defs/hash"}}
+    },
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["arm_id", "model_relative_path", "tokenizer_json_relative_path", "runtime_manifest_relative_path"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "model_relative_path": {"oneOf": [{"$ref": "#/$defs/relative_path"}, {"type": "null"}]},
+        "tokenizer_json_relative_path": {"oneOf": [{"$ref": "#/$defs/relative_path"}, {"type": "null"}]},
+        "runtime_manifest_relative_path": {"oneOf": [{"$ref": "#/$defs/relative_path"}, {"type": "null"}]}
+      }
+    }
+  }
+}

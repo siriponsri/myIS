@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import secrets
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -40,7 +41,29 @@ def create_app(
     previews: dict[str, dict[str, Any]] = {}
     ledger = ImmutableJsonLedger(root / "control" / "decisions" / "records", prior_field="prior_record_hash")
     tools = tool_controller or ToolController(root)
-    reports = ReportCatalog(root)
+    model_lock = threading.Lock()
+    model_cache: dict[str, Any] = {}
+
+    def read_model_snapshot() -> dict[str, Any]:
+        """Build one validated read model for this dashboard process.
+
+        The model is a synchronized projection artifact. Keeping one snapshot
+        per app instance prevents every API endpoint from replaying the full
+        historical contract lineage and guarantees that a response family
+        shares one revision.
+        """
+
+        cached = model_cache.get("value")
+        if cached is not None:
+            return cached
+        with model_lock:
+            cached = model_cache.get("value")
+            if cached is None:
+                cached = build_read_model(root)
+                model_cache["value"] = cached
+        return cached
+
+    reports = ReportCatalog(root, read_model_provider=read_model_snapshot)
 
     def session(request: Request) -> tuple[str, Any]:
         return sessions.require(request)
@@ -86,17 +109,17 @@ def create_app(
     @app.get("/api/v1/read-model")
     @app.get("/api/v2/snapshot")
     def read_model(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        return build_read_model(root)
+        return read_model_snapshot()
 
     @app.get("/api/v1/dashboard")
     @app.get("/api/v1/dashboard-snapshot")
     @app.get("/api/v2/overview")
     def dashboard(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        return _dashboard_projection(build_read_model(root))
+        return _dashboard_projection(read_model_snapshot())
 
     @app.get("/api/v1/owner-inbox")
     def owner_inbox(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         projection = _dashboard_projection(model)
         return {
             "schema_version": "myis.owner-inbox.v3",
@@ -112,13 +135,13 @@ def create_app(
     @app.get("/api/v1/owner-decisions")
     @app.get("/api/v1/owner-gates")
     def owner_decisions(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {"schema_version": "myis.decisions.v3", "active_decisions": list(ACTIVE_DECISIONS), "decisions": model.get("decisions", []), "micro_gates": False}
 
     @app.get("/api/v1/presentation")
     @app.get("/api/v1/presentation-topics")
     def presentation(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {"schema_version": "myis.presentation.v3", "title": "ArmIndex", "sections": [
             {"id": "question", "title_th": "โจทย์วิจัย", "title_en": "Research question", "body": "Can retriever-conditioned representation programs and a deterministic multi-arm harness improve structured-document retrieval under explicit quality, latency, and cost constraints?"},
             {"id": "flow", "title_th": "ลำดับการทำงาน", "title_en": "Execution flow", "body": "A0 Migration → A1 Screening → A2 Per-arm AutoIndex → A3 Transfer and HarnessOpt → A4 Production and Selection → A5 Final → A6 Publication"},
@@ -127,7 +150,7 @@ def create_app(
 
     @app.get("/api/v2/board")
     def board(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         armindex_tasks = [task for phase in model.get("armindex", {}).get("phases", []) for task in phase.get("tasks", [])]
         return {
             "schema_version": "myis.dashboard-board.v2",
@@ -139,7 +162,7 @@ def create_app(
 
     @app.get("/api/v2/phases/{phase_id}")
     def phase_detail(phase_id: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         active_phases = model.get("armindex", {}).get("phases", [])
         phase = next((item for item in active_phases if item.get("phase_id") == phase_id), None)
         if phase is None:
@@ -150,22 +173,22 @@ def create_app(
 
     @app.get("/api/v2/results")
     def results(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {"schema_version": "myis.dashboard-results.v2", "read_model_revision": model["read_model_revision"], "results": model["results"], "interpretations": model["interpretations"]}
 
     @app.get("/api/v2/armindex")
     def armindex(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {"schema_version": "myis.dashboard-armindex.v1", "read_model_revision": model["read_model_revision"], "armindex": model["armindex"]}
 
     @app.get("/api/v2/observatory")
     def observatory(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {"schema_version": "myis.dashboard-observatory.v1", "read_model_revision": model["read_model_revision"], "observatory": model.get("observatory", {})}
 
     @app.get("/api/v2/observatory/registry")
     def observatory_registry(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         try:
             registry = load_observatory_registry(root)
         except ObservatoryError as error:
@@ -174,7 +197,7 @@ def create_app(
 
     @app.get("/api/v2/observatory/graph")
     def observatory_graph(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         try:
             registry = load_observatory_registry(root)
             graph = build_evidence_graph(registry)
@@ -186,7 +209,7 @@ def create_app(
     def presentation_v2(audience: str, _: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
         if audience not in {"owner", "advisor", "peer"}:
             raise HTTPException(404, "audience is not allowlisted")
-        model = build_read_model(root)
+        model = read_model_snapshot()
         presentation = model["presentation"]
         screens = [
             screen
@@ -202,12 +225,12 @@ def create_app(
 
     @app.get("/api/v2/raid")
     def raid(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {"schema_version": "myis.dashboard-raid.v2", "read_model_revision": model["read_model_revision"], "items": model["raid"]}
 
     @app.get("/api/v2/timeline")
     def timeline(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {
             "schema_version": "myis.dashboard-timeline.v2",
             "read_model_revision": model["read_model_revision"],
@@ -216,7 +239,7 @@ def create_app(
 
     @app.get("/api/v2/governance")
     def governance(_: tuple[str, Any] = Depends(session)) -> dict[str, Any]:
-        model = build_read_model(root)
+        model = read_model_snapshot()
         return {
             "schema_version": "myis.dashboard-governance.v2",
             "read_model_revision": model["read_model_revision"],

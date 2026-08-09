@@ -1,0 +1,50 @@
+{
+  "schema_version": "myis.armindex-a1.2-publication-impact-contract.v13",
+  "contract_id": "a1.2-publication-impact-preregistration-v13",
+  "revision_id": "a1.2-publication-impact-preregistration-v13",
+  "status": "prepared_local_only_not_adopted",
+  "evidence_class": "publication_analysis_preregistration_hardening",
+  "scientific_authority": false,
+  "claim_boundary": "Additive V13 hardening preserves the V12 publication-impact contract and all older evidence unchanged. It freezes a future analysis declaration only; it is not adoption, provider authority, measured evidence, a retrieval-quality result, or a publication claim.",
+  "v12_binding": {
+    "uri": "control/armindex/a1.2/publication-impact-contract.v12.json",
+    "file_sha256": "124a48157c9114e61d30d01e0ea9597f4af97b98ace4a51d7f021cd9993d4a59",
+    "self_sha256": "abfe059cc84f77fc6c76caded95e7ebc43c84e7ec62da5e6d820c6fc19d03897",
+    "v12_contract_must_remain_unchanged": true
+  },
+  "historical_metric_reconciliation": {
+    "source": {"uri": "evidence/literature/digests/U011_dapfam_digest.md", "file_sha256": "103dc96cb7a9c7ddd9e017666cc9252f830a520b174692dea313d3db249cfdf6"},
+    "historical_metric_convention": "dapfam_source_study_ndcg_at_100_primary_recall_at_100_secondary",
+    "current_a1_2_metric_convention": "candidate_exposure_out_recall_at_100_primary_ndcg_secondary",
+    "scope": "historical_external_study_not_current_armindex_candidate_exposure_claim",
+    "resolution": "additive_scope_specific_metric_supersession_without_source_rewrite",
+    "historical_file_must_remain_unchanged": true
+  },
+  "documentation_binding": {
+    "uri": "docs/research/A1_2_PUBLICATION_IMPACT_PREREGISTRATION_V13.md",
+    "file_sha256": "4698e8a4d90dd72904f066cd0073121685edfc842b47d73fbb53155333efb35c",
+    "purpose": "human_readable_projection_of_this_contract"
+  },
+  "study_identity": {
+    "a1_2_study_type": "candidate_exposure_and_representation_screening",
+    "evidence_stage": "development_diagnostic_evidence_only",
+    "representation_program_effects": "pre_registered_program_by_arm_contrasts",
+    "retriever_family_effects": "pre_registered_family_grouped_arm_contrasts",
+    "retriever_by_representation_interaction": "pre_registered_cross_arm_transfer_interaction",
+    "publication_claim_before_final_allowed": false
+  },
+  "authorization": {"adopted_for_execution": false, "launch_allowed": false, "measured_retrieval_allowed": false, "provider_contact_allowed": false, "selection_open": false, "final_open": false},
+  "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0, "charged_usd": 0},
+  "analysis": {
+    "outcomes": {"primary": "out_recall_at_100", "secondary": ["out_ndcg_at_100", "out_ndcg_at_10"], "evaluation_unit": "patent_family", "aggregation": "macro_over_eligible_out_queries", "cutoff": 100, "family_mapping_and_evaluator_bindings_required": true, "missing_or_unjudged_policy": "predeclared_owner_local_evaluator_receipt_required", "stable_tie_policy_required": true},
+    "development_confirmation_boundary": {"rep_dev_role": "exploratory_common_screen_and_representation_development", "harness_dev_role": "exploratory_transfer_complementarity_and_harness_development", "selection_125_role": "one_time_finalist_selection_not_confirmation", "final_872_role": "sole_confirmatory_evaluation", "finalists_must_freeze_before_final": true, "post_selection_or_final_mutation_allowed": false},
+    "statistics": {"paired_unit": "eligible_out_query", "bootstrap_resamples": 10000, "bootstrap_seed_source": "frozen_confirmation_analysis_receipt", "confidence_interval": "two_sided_95_percent_paired_bootstrap", "required_aggregate_outputs": ["point_estimate", "paired_delta", "ci_lower", "ci_upper", "win_tie_loss", "rank_biserial_effect", "comparison_family_id"], "superiority_rule": "paired_bootstrap_95ci_lower_gt_zero", "positive_ci_crossing_zero_interpretation": "higher_measured_score_uncertain_superiority", "multiple_comparison_rule": "holm_only_for_preregistered_additional_confirmatory_comparisons", "unplanned_analysis_label": "exploratory"},
+    "candidate_selection": {"development_decision_ledger_required": true, "candidate_universe_and_budget_frozen_before_measurement": true, "promotion_rule_must_be_lexicographic_and_replayable": true, "max_cell_promotion_allowed": false, "arm_or_program_failure_policy_predeclared": true, "research_and_commercial_champion_tracks_distinct": true},
+    "candidate_exposure": {"same_total_candidate_depth_required": true, "per_arm_depth_union_dedup_and_fusion_bound": true, "pool_hash_required": true, "deployed_result": "out_recall_at_100_after_frozen_family_aggregation", "oracle_metrics_role": "frozen_pool_diagnostic_not_deployed_result", "latency_and_cost_include_all_arms": true, "post_hoc_cutoff_or_depth_change_allowed": false},
+    "interaction": {"matrix": "program_by_arm_within_arm_and_cross_arm_deltas", "required_outputs": ["within_arm_delta", "transfer_delta", "rank_order", "rank_reversal_indicator", "paired_effect_and_ci", "truncation_and_cost_context"], "claim_scope": "five_frozen_arms_five_programs_dapfam_and_frozen_budget_only", "universal_causal_claim_allowed": false},
+    "complementarity": {"eligible_out_query_denominator_required": true, "unique_relevant_family_query_pair_numerator_required": true, "pairwise_relevant_pair_overlap_definition_required": true, "equal_depth_union_against_best_single_required": true, "incremental_latency_and_cost_required": true, "non_best_arm_retention_requires_preregistered_gate": true},
+    "operational": {"cold_and_warm_protocol_bound": true, "repetition_count_order_and_discard_policy_bound": true, "hardware_runtime_identity_bound": true, "resource_sampling_cadence_bound": true, "failure_timeout_and_oom_denominator_bound": true, "ranking_replay_is_not_latency_variance_evidence": true},
+    "safe_reporting": {"protected_analysis_location": "owner_local_only", "repository_safe_receipt_contains": ["aggregate_estimates", "confidence_intervals", "effect_sizes", "comparison_family_metadata", "hashes", "counts", "claim_boundary"], "repository_safe_receipt_forbids": ["opaque_rankings", "query_identifiers", "family_identifiers", "per_query_values", "raw_evaluator_payload"], "publication_claim_requires_final_confirmatory_receipt": true}
+  },
+  "contract_sha256": "2ebcf5bf51cb6e904dcef0df363c8708900db40079ecf21361a43d930e5ef958"
+}

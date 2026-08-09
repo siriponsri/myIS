@@ -1,0 +1,71 @@
+{
+  "schema_version": "myis.armindex-a1.2-protected-compiler-integration.v15",
+  "integration_id": "a1.2-protected-compiler-integration-v15",
+  "status": "FROZEN_ADDITIVE_PRE_MEASUREMENT_INTEGRATION",
+  "preserved_lineage": {
+    "v11_request_uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "v11_request_sha256": "2e95bf70d4843dadac03b442cb231573f73ec05a65884a70ac42d9713f52b7db",
+    "v11_program_set_uri": "control/armindex/a1.2/common-program-set.v11.json",
+    "v11_program_set_sha256": "54991eb6a34f59495562539ede8dfd6553bdbfb259a41b8d564baec17c4026fb",
+    "v12_r3_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+    "v12_r3_file_sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
+    "v13_publication_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
+    "v13_publication_sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+    "v14_repair_uri": "control/armindex/a1.2/dense-overflow-adapter-repair.v14.json",
+    "v14_repair_sha256": "9b8504d94ad670fb1034d05a090c99dc8ba0624fc90fe05f69716b3633410490"
+  },
+  "implementation": {
+    "version": "a1.2-protected-compiler-integration-v15",
+    "source_uri": "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v15.py",
+    "source_sha256": "5ef5cb95617fe4f93fe68386810802a0b1aa1294f2e108ec0c9faca241b0e7c7",
+    "materializer_source_uri": "src/myis_research/armindex/a1_2_owner_local_protected_materializer_v15.py",
+    "materializer_source_sha256": "bd56e60f5edce8cc1812028e785f2b8500b0264b8166d4df02874422d44b8b5d",
+    "v14_schema_uri": "schemas/armindex/a1.2-dense-overflow-adapter-repair.v14.json"
+  },
+  "topology": {
+    "arm_ids": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"],
+    "program_slots": ["P00", "P01", "P02", "P03", "P04"],
+    "required_bindings": 25,
+    "arm01_mode": "link_existing_frozen_lexical_path",
+    "dense_mode": "direct_physical_window_plan_and_logical_composition_contract"
+  },
+  "p02_successor": {
+    "topology_slot": "P02",
+    "original_program_id": "P02-CLAIM1",
+    "executable_program_id": "P02-FIRST-CLAIM",
+    "contract_uri": "control/armindex/a1.2/p02-first-claim-repair.v1.json",
+    "independence_or_dependency_status": "not_inferred_not_asserted_not_published",
+    "fallback": false
+  },
+  "compatibility_inputs": {
+    "inventory_uri": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json",
+    "inventory_sha256": "d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634",
+    "composition_uri": "outputs/audits/armindex/a1.2-dense-overflow-composition-20260808.json",
+    "composition_sha256": "e78e87352cbdd4fc878279513fc97fa7a6f22d05aaee43de508a5b815dbb3110",
+    "rep_harness_split_uri": "control/armindex/a1.2/rep-harness-split-decision.v1.json",
+    "p02_repair_uri": "control/armindex/a1.2/p02-first-claim-repair.v1.json"
+  },
+  "requirements": {
+    "compatible_cells": 25,
+    "dense_cells": 20,
+    "rep_dev_queries": 150,
+    "zero_drops": true,
+    "zero_overlap": true,
+    "zero_silent_truncation": true,
+    "zero_fallback": true,
+    "deterministic_replay": true,
+    "no_encoder_inference": true,
+    "no_retrieval": true,
+    "no_provider_contact": true
+  },
+  "authorization": {
+    "provider_contact_allowed": false,
+    "launch_allowed": false,
+    "adopted_for_execution": false,
+    "measured_retrieval_allowed": false,
+    "selection_allowed": false,
+    "final_allowed": false,
+    "paid_api_allowed": false
+  },
+  "contract_sha256": "742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6"
+}

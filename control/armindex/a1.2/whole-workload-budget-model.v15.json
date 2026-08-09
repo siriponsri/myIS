@@ -1,0 +1,41 @@
+{
+  "schema_version": "myis.armindex-a1.2-whole-workload-budget-model.v15",
+  "model_id": "a1.2-whole-workload-budget-model-v15",
+  "status": "LOCAL_MODEL_PENDING_LIVE_PROVIDER",
+  "claim_boundary": "Aggregate-only whole-workload planning model derived from the protected v15 compiled binding summary. It includes no quote, provider identity, reservation, launch, measured execution, cost claim, retrieval result, or scientific/publication claim.",
+  "source": {
+    "binding_set_relative_path": "v15/receipts/A1_2_COMPILED_PROGRAM_BINDINGS_V15.json",
+    "binding_set_sha256": "c8a6b3a9c784be23f7effe5a51e470259322e7e99a51fc13eacbc2c0b16f8760"
+  },
+  "workload": {
+    "arm_count": 5,
+    "program_count": 5,
+    "program_arm_cells": 25,
+    "rep_dev_queries": 150,
+    "reserved_harness_dev_queries": 100,
+    "corpus_logical_units": 45336,
+    "physical_window_total": 2581603,
+    "raw_overflow_logical_inputs": 140907,
+    "corpus_overflow_logical_units": 140152,
+    "query_overflow_logical_units": 755
+  },
+  "frozen_hard_stops_usd": {
+    "common_screen": 18,
+    "a1_total": 23,
+    "campaign": 100
+  },
+  "execution_window": {
+    "owner_ttl_hours": 6,
+    "whole_workload_required": true,
+    "partial_arm_admission_allowed": false
+  },
+  "live_admission": {
+    "fresh_provider_identity": "PENDING_LIVE_PROVIDER",
+    "fresh_all_fee_quote": "PENDING_LIVE_PROVIDER",
+    "whole_workload_live_budget_admission": "PENDING_LIVE_PROVIDER",
+    "live_provider_admission_receipt": "PENDING_LIVE_PROVIDER",
+    "admitted": false,
+    "launch_allowed": false
+  },
+  "model_sha256": "cf671f163c83d63b0edf66150293a4509e0d2aca8e94afbd251272e544a30529"
+}

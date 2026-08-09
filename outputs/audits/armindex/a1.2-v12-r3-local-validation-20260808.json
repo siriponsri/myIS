@@ -1,0 +1,112 @@
+{
+  "schema_version": "myis.armindex-a1.2-local-validation.v1",
+  "audit_id": "a1.2-v12-r3-local-validation-20260808",
+  "timestamp_utc": "2026-08-08T10:08:27Z",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "BLOCKED_OWNER_INPUT",
+  "evidence_class": "local_engineering_validation",
+  "scientific_authority": false,
+  "claim_boundary": "Local engineering validation only. PASS means the repository-side validators and projections work on bounded local or synthetic evidence; it is not protected compilation, provider admission, measured retrieval, scientific evidence, or a publication claim.",
+  "check_groups": [
+    {
+      "id": "mlflow_doctor",
+      "status": "PASS",
+      "check_count": 16,
+      "archive_runs": 90,
+      "archive_receipts": 90,
+      "archive_artifacts": 1076,
+      "configuration_source": "canonical_user_environment_MYIS_MLFLOW_STORE",
+      "source_uri": "scripts/mlflow_doctor.py",
+      "source_sha256": "26c9c326e8c89204b4c2c8a43c249aa5b4f6bbf72ddbbb933cb90e245b3f3d6e"
+    },
+    {
+      "id": "dashboard_api_validation",
+      "status": "PASS",
+      "tests_passed": 22,
+      "warning_count": 1,
+      "warning_scope": "third_party_deprecation_only",
+      "source_uris": [
+        "src/myis_research/dashboard/app.py",
+        "src/myis_research/dashboard/reports.py"
+      ],
+      "source_sha256": [
+        "d688d4c72a9fd8a4577759f9b072fa6f70dea2175beaa450299d8b55e6940c83",
+        "75824244f5a516115d3bbc91f6de6be4346e5102a2920f5528a51327606b035a"
+      ]
+    },
+    {
+      "id": "mlflow_archive_regression",
+      "status": "PASS",
+      "tests_passed": 14
+    },
+    {
+      "id": "a1_2_v11_v12_r3_v13_focused_validation",
+      "status": "PASS",
+      "tests_passed": 80,
+      "validated_surfaces": [
+        "unchanged_v11_request",
+        "v12_r3_local_adoption_contract",
+        "compiled_binding_validator",
+        "protected_compiler_synthetic_fixtures",
+        "whole_workload_budget_model",
+        "watchdog_provider_destroy_synthetic_dry_run",
+        "v13_publication_contract",
+        "v13_instance_disposition_policy"
+      ],
+      "contract_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+      "contract_sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0"
+    },
+    {
+      "id": "reusable_asset_registry",
+      "status": "PASS",
+      "asset_count": 5,
+      "task_asset": "APP-DAPFAM-PROTECTED",
+      "protected_data_level": "owner_local_only",
+      "live_fetch_allowed": false
+    },
+    {
+      "id": "owner_local_protected_compiler_preflight",
+      "status": "FAIL",
+      "failure_type": "required_protected_compilation_input_missing",
+      "expected_bindings": 25,
+      "observed_bindings": 0,
+      "blocker_receipt_uri": "outputs/audits/armindex/a1.2-v12-r3-local-blocker-20260808.json",
+      "blocker_receipt_file_sha256": "5566b84294e85b6e9fb9ba23eb4777cc395d0c30002be7d5e22da9f7002228e8",
+      "blocker_receipt_sha256": "48b470f13f23c2de2b3540bfe9f247071e0a4b4bd22e4f45baf352f566f01e3d"
+    }
+  ],
+  "conditional_closeout": {
+    "full_required_tests": "SKIPPED_LOCAL_PRECONDITION_FAILED",
+    "report_sync_and_check": "SKIPPED_LOCAL_PRECONDITION_FAILED",
+    "session_and_brain_closeout": "PARTIAL_BLOCKER_RECORD_ONLY",
+    "clean_execution_commit_and_tree": "NOT_AVAILABLE",
+    "frozen_bundle": "NOT_BUILT",
+    "final_local_adoption_receipt": "NOT_EMITTED",
+    "commit": "NOT_AUTHORIZED_CONDITION_NOT_MET",
+    "push": "NOT_AUTHORIZED_CONDITION_NOT_MET"
+  },
+  "publication_v13": {
+    "status": "UNCHANGED",
+    "contract_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
+    "contract_file_sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+    "primary_outcome": "out_recall_at_100",
+    "secondary_outcomes": ["out_ndcg_at_100", "out_ndcg_at_10"],
+    "interaction_and_complementarity_preregistered": true,
+    "publication_claim_authorized": false
+  },
+  "pending_live_provider": [
+    "fresh_provider_identity",
+    "fresh_all_fee_quote",
+    "whole_workload_live_budget_admission",
+    "live_provider_admission_receipt"
+  ],
+  "counters": {
+    "measured_runs": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0,
+    "charged_usd": 0
+  },
+  "next_authorized_action": "Owner supplies or canonically authorizes the missing protected compilation inputs; then rerun the protected compiler preflight before any full closeout, commit, push, bundle build, or live-provider admission.",
+  "audit_sha256": "81562101f642b4ed7a13a0c7ce1e315b7148b3e03150a5e7a624fe4a92d66f36"
+}

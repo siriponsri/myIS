@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-08T01:48:27Z",
-  "generated_from_revision": "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f",
-  "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
+  "generated_at": "2026-08-08T02:20:32Z",
+  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
+  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,21 +37,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
+    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
     "source_of_truth": {
-      "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
+      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-08T01:48:27Z",
+  "last_material_update": "2026-08-08T02:20:32Z",
   "metric_references": [],
-  "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
+  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "a55571a40610761c38ae3ba734bacf1de85584ed9a9305fcd77ce3276009caca",
+  "report_sha256": "742267f45c4faee7f966cd17fdb71d2c996b6644ac5be57c2ad19134ce6559ba",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import sqlite3
 from pathlib import Path
@@ -47,6 +48,10 @@ def doctor(repository_root: Path, store_root: Path | None = None) -> dict[str, o
         "legacy_experiments": list(LEGACY_EXPERIMENTS),
         "v2_experiments": list(V2_EXPERIMENTS),
     }
+    if store_root is None:
+        configured = os.environ.get("MYIS_MLFLOW_STORE")
+        if configured:
+            store_root = Path(configured)
     if store_root is None:
         checks["store_configured"] = False
         return _result(checks, metadata, reason="pass --store-root or set MYIS_MLFLOW_STORE")

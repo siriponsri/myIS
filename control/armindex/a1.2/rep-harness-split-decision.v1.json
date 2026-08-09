@@ -1,0 +1,47 @@
+{
+  "schema_version": "myis.armindex-a1.2-rep-harness-split-decision.v1",
+  "decision_id": "a1.2-rep-harness-split-owner-decision-v1",
+  "status": "AUTHORIZED_PRE_MEASUREMENT",
+  "algorithm": {
+    "id": "hamilton-role-set-exact-relevance-sha256-order-v1",
+    "source_uri": "src/myis_research/armindex/a1_2_rep_harness_split_v1.py",
+    "source_sha256": "9eb29a55ff5ce39a80de053741da14860db62a48e9d6e68153a4d3dc0c316118"
+  },
+  "seed": 42,
+  "parent": {
+    "split_role": "Train-250",
+    "count": 250,
+    "split_sha256": "33a1818ff3c00775d43951182fdf769255c8ebfc591de183df4fbfdd3b039dc6",
+    "file_sha256": "f56ad94e2a8d821ab8da556b39fcb60c30a970b9274dda4a40ddfc8f4364195c"
+  },
+  "stratification": {
+    "fields": ["canonical_in_out_role_set", "exact_positive_relevant_family_count"],
+    "relevance_count_bins_allowed": false
+  },
+  "allocation": {
+    "method": "Hamilton largest remainder",
+    "rep_dev_target": 150,
+    "harness_dev_target": 100,
+    "rep_dev_fraction": 0.6,
+    "equal_remainder_tie_break": "lexical_stratum_key"
+  },
+  "within_stratum_order": {
+    "algorithm": "SHA256(seed-colon-canonical-query-id), lexical query-id tie-break",
+    "algorithm_id": "sha256-seed-colon-id-lexical-v1"
+  },
+  "grouping_policy": {
+    "preserve_prior_frozen_constraints": true,
+    "audit_result": "NO_PRIOR_FROZEN_SUBDIVISION_GROUPING_CONSTRAINT_FOUND",
+    "constraints": []
+  },
+  "privacy": {
+    "exact_membership_owner_local_only": true,
+    "repository_outputs": ["safe_hashes", "counts", "commitments"]
+  },
+  "safety": {
+    "retrieval_results_inspected": false,
+    "resampling_allowed": false,
+    "optimization_allowed": false
+  },
+  "decision_sha256": "87efd2ef78400b6025b5cfe153ff5e8b165ea4fad784d0a99979e514e6bb2202"
+}

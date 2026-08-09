@@ -1,0 +1,126 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260808T060730Z-a1.2-v12-r3-v13-local-prep-v1",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-08T06:07:30Z",
+  "scope": "Validate and document the local-only A1.2 v12-r3 adoption-input boundary with v13 publication-impact and instance-disposition controls while preserving the unchanged v11 request and launch lock.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "PLAN.md",
+      "control/source-of-truth.yaml",
+      "control/armindex/a1.2/",
+      "schemas/armindex/",
+      "src/myis_research/armindex/",
+      "src/myis_research/projections/read_model.py",
+      "src/myis_research/report_records.py",
+      "tests/",
+      "projections/",
+      "obsidian_report/",
+      "mlflow/generated/archive-index.v2.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The unchanged v11 request and its receipt remained the immutable scientific authority while v12-r3/v13 local controls were prepared in the dirty working tree.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+          "sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+          "locator": "request_sha256, authorization, counters, and expected workload bindings"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
+          "sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
+          "locator": "receipt_sha256, status, authorization, and counters"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The v12-r3 validator, protected compiler checks, v13 publication contract, and v13 instance-disposition policy were exercised locally; the resulting files are intentionally uncommitted and are not treated as immutable evidence yet.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The first isolated v12-r3 bundle test exposed a bounded commitment defect caused by adding the v13 Markdown member without updating the path-set hash and suffix allowlist; the source and contract were repaired and the focused test passed.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The shared read model and generated projections were synchronized and two consecutive report checks were byte-stable; the generated receipt remains dirty working-tree evidence until commit.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "No provider was contacted, no execution was adopted, no retrieval or optimization was started, Selection and Final stayed closed, and measured and charged-resource counters remain zero; Owner-local handoff, compilation, provider, budget, and admission inputs remain open.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+          "sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+          "locator": "authorization and counters"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-adoption-bindings",
+      "provenance": "agent-observed",
+      "summary": "Owner-local protected handoff and transfer receipts, clean pushed execution commit/tree and bundle identity, and all 25 compiled-program bindings remain pending.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "fresh-provider-admission",
+      "provenance": "agent-observed",
+      "summary": "Fresh provider identity, all-fee quote, whole-workload budget admission, live admission receipt, and provider watchdog/destroy dry-run remain pending; provider contact is forbidden in this state.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "owner-adoption-and-final-gates",
+      "provenance": "agent-observed",
+      "summary": "The unchanged v11 request is not adopted; D2_OPEN_FINAL and D3_SUBMIT_RELEASE remain closed.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-protected-compiler-integration-audit.v15.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "integration", "protected_receipts", "coverage", "safety", "p02_semantics", "publication_v13", "authorization", "pending_live_provider", "audit_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-protected-compiler-integration-audit.v15"},
+    "audit_id": {"const": "a1.2-protected-compiler-integration-20260809-v15"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "pre_measurement_owner_local_compiler_validation"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 180},
+    "integration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["uri", "file_sha256", "contract_sha256", "compiler_source_sha256", "materializer_source_sha256"],
+      "properties": {
+        "uri": {"const": "control/armindex/a1.2/protected-compiler-integration.v15.json"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "contract_sha256": {"$ref": "#/$defs/hash"},
+        "compiler_source_sha256": {"$ref": "#/$defs/hash"},
+        "materializer_source_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "protected_receipts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["binding_set_file_sha256", "binding_set_sha256", "compiler_receipt_file_sha256", "compiler_receipt_sha256", "handoff_receipt_sha256", "transfer_manifest_sha256", "pre_compilation_anchor_sha256"],
+      "properties": {
+        "binding_set_file_sha256": {"$ref": "#/$defs/hash"},
+        "binding_set_sha256": {"$ref": "#/$defs/hash"},
+        "compiler_receipt_file_sha256": {"$ref": "#/$defs/hash"},
+        "compiler_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "handoff_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "transfer_manifest_sha256": {"$ref": "#/$defs/hash"},
+        "pre_compilation_anchor_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["compiled_bindings", "dense_bindings", "rep_dev_queries", "corpus_families", "query_coverage_fraction", "corpus_coverage_fraction", "raw_overflow_count", "cells"],
+      "properties": {
+        "compiled_bindings": {"const": 25},
+        "dense_bindings": {"const": 20},
+        "rep_dev_queries": {"const": 150},
+        "corpus_families": {"type": "integer", "minimum": 1},
+        "query_coverage_fraction": {"const": 1.0},
+        "corpus_coverage_fraction": {"const": 1.0},
+        "raw_overflow_count": {"type": "integer", "minimum": 0},
+        "cells": {"type": "array", "minItems": 25, "maxItems": 25, "items": {"$ref": "#/$defs/cell"}}
+      }
+    },
+    "safety": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coverage_gap_count", "omitted_unit_count", "source_token_drop_count", "source_token_overlap_count", "truncation_count", "fallback_count", "over_limit_physical_window_count", "deterministic_replay", "zero_silent_truncation", "protected_boundary"],
+      "properties": {
+        "coverage_gap_count": {"const": 0},
+        "omitted_unit_count": {"const": 0},
+        "source_token_drop_count": {"const": 0},
+        "source_token_overlap_count": {"const": 0},
+        "truncation_count": {"const": 0},
+        "fallback_count": {"const": 0},
+        "over_limit_physical_window_count": {"const": 0},
+        "deterministic_replay": {"const": true},
+        "zero_silent_truncation": {"const": true},
+        "protected_boundary": {"const": "PASS"}
+      }
+    },
+    "p02_semantics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["program_id", "independence_status", "fallback"],
+      "properties": {
+        "program_id": {"const": "P02-FIRST-CLAIM"},
+        "independence_status": {"const": "not_inferred_not_asserted_not_published"},
+        "fallback": {"const": false}
+      }
+    },
+    "publication_v13": {
+      "type": "object", "additionalProperties": false,
+      "required": ["unchanged", "primary", "secondary", "interaction_complementarity_preregistered", "measured_or_publication_claim_authorized"],
+      "properties": {
+        "unchanged": {"const": true},
+        "primary": {"const": "out_recall_at_100"},
+        "secondary": {"const": ["out_ndcg_at_100", "out_ndcg_at_10"]},
+        "interaction_complementarity_preregistered": {"const": true},
+        "measured_or_publication_claim_authorized": {"const": false}
+      }
+    },
+    "authorization": {"$ref": "#/$defs/authorization"},
+    "pending_live_provider": {"const": ["fresh_provider_identity", "fresh_all_fee_quote", "whole_workload_live_budget_admission", "live_provider_admission_receipt"]},
+    "audit_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "authorization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed", "selection_allowed", "final_allowed", "paid_api_allowed"],
+      "properties": {
+        "provider_contact_allowed": {"const": false},
+        "launch_allowed": {"const": false},
+        "adopted_for_execution": {"const": false},
+        "measured_retrieval_allowed": {"const": false},
+        "selection_allowed": {"const": false},
+        "final_allowed": {"const": false},
+        "paid_api_allowed": {"const": false}
+      }
+    },
+    "cell": {
+      "type": "object", "additionalProperties": false,
+      "required": ["arm_id", "program_slot", "program_id", "mode", "effective_input_limit", "raw_rendered_input_max_tokens", "physical_window_max_tokens", "physical_window_count", "corpus_logical_unit_count", "corpus_overflow_logical_unit_count", "query_logical_unit_count", "query_overflow_logical_unit_count"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "program_slot": {"enum": ["P00", "P01", "P02", "P03", "P04"]},
+        "program_id": {"enum": ["P00-TAC-DOC", "P01-TA-DOC", "P02-FIRST-CLAIM", "P03-PASSAGE", "P04-SECTION-MULTIVIEW"]},
+        "mode": {"enum": ["EXISTING_FROZEN_ADAPTER_PATH", "DENSE_OVERFLOW_COMPOSED"]},
+        "effective_input_limit": {"type": "integer", "minimum": 1},
+        "raw_rendered_input_max_tokens": {"type": "integer", "minimum": 1},
+        "physical_window_max_tokens": {"type": "integer", "minimum": 1},
+        "physical_window_count": {"type": "integer", "minimum": 1},
+        "corpus_logical_unit_count": {"type": "integer", "minimum": 1},
+        "corpus_overflow_logical_unit_count": {"type": "integer", "minimum": 0},
+        "query_logical_unit_count": {"const": 150},
+        "query_overflow_logical_unit_count": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

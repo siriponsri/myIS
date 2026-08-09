@@ -1,0 +1,74 @@
+{
+  "schema_version": "myis.armindex-a1.2-local-adoption-blocker.v1",
+  "blocker_id": "a1.2-v12-r3-owner-local-protected-inputs-missing-20260808",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "BLOCKED_OWNER_INPUT",
+  "evidence_class": "engineering_validation_failure",
+  "scientific_authority": false,
+  "claim_boundary": "Aggregate-safe local preflight failure evidence only. It records no protected payload, membership, query identifier, claim text, credential, provider value, measured retrieval result, scientific result, or execution authorization.",
+  "preflight": {
+    "status": "FAIL",
+    "failure_type": "required_protected_compilation_input_missing",
+    "failure_message": "required protected compilation input contract is missing",
+    "stopped_before": [
+      "corpus_read",
+      "query_read",
+      "split_validation",
+      "model_validation",
+      "program_compilation",
+      "provider_contact",
+      "retrieval",
+      "evaluation"
+    ],
+    "expected_input_relative_path": "receipts/A1_2_PROTECTED_COMPILATION_INPUT_V12.json",
+    "expected_binding_count": 25,
+    "observed_binding_count": 0,
+    "template_status": "pending_owner_local_protected_compilation"
+  },
+  "missing_owner_inputs": [
+    "owner_local_protected_compilation_input_contract",
+    "frozen_rep_dev_harness_dev_membership_or_exact_deterministic_subdivision_algorithm",
+    "structured_independent_claim_records_with_ordinal_and_independence_markers",
+    "protected_handoff_receipt",
+    "protected_scientific_transfer_manifest",
+    "protected_compiler_receipt_and_25_binding_set"
+  ],
+  "preserved_contracts": {
+    "v11_request_uri": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "v11_request_unchanged": true,
+    "v12_r3_contract_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+    "v13_publication_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
+    "v13_primary_outcome": "out_recall_at_100",
+    "v13_secondary_outcomes": ["out_ndcg_at_100", "out_ndcg_at_10"],
+    "measured_runs": 0,
+    "charged_usd": 0,
+    "provider_contacted": false,
+    "launch_allowed": false,
+    "adopted_for_execution": false
+  },
+  "evidence_refs": [
+    {
+      "uri": "control/owner-local/a1.2-compiled-program-bindings-contract.v12.json",
+      "locator": "status and expected_bindings",
+      "sha256": "058c61c7d3e4cc0d72aeb44f66efa2d91dea5388e290cfcceb78255d3fc8cb89"
+    },
+    {
+      "uri": "schemas/armindex/a1.2-owner-local-protected-compilation-input.v12.json",
+      "locator": "required input fields",
+      "sha256": "3100ee0a95429cbfea91d03feabc112e0b4b3b257d13c8c80a925942d3a785a8"
+    },
+    {
+      "uri": "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md",
+      "locator": "REP-DEV/HARNESS-DEV membership rule",
+      "sha256": "6fe7ff85586fa5de7e17b1ffe0d7ec9fbf97aec8935c5c455b71bd8d1a7c8b7c"
+    },
+    {
+      "uri": "control/armindex/a1.2/common-program-set.v11.json",
+      "locator": "structured claim contract and raw-claim fallback prohibition",
+      "sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa"
+    }
+  ],
+  "next_authorized_action": "Owner supplies or canonically authorizes the frozen protected compilation inputs without changing the v11 program, split, evaluator, or publication definitions; then rerun protected compiler preflight.",
+  "receipt_sha256": "48b470f13f23c2de2b3540bfe9f247071e0a4b4bd22e4f45baf352f566f01e3d"
+}

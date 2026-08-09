@@ -1,0 +1,16 @@
+{
+  "schema_version": "myis.armindex-a1.2-scientific-execution-adoption-inputs.v15",
+  "revision_id": "a1.2-scientific-execution-adoption-inputs-v15",
+  "status": "ADDITIVE_LOCAL_ONLY_FINALIZER_PENDING_LIVE_PROVIDER",
+  "preserves": {
+    "v11": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "v12_r3": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+    "v13": "control/armindex/a1.2/publication-impact-contract.v13.json",
+    "original_p02": "control/armindex/a1.2/common-program-set.v11.json"
+  },
+  "required_local_inputs": ["clean_pushed_bundle", "pre_adoption_anchor", "protected_handoff_receipt", "protected_transfer_manifest", "protected_compiler_receipt", "compiled_bindings_25_of_25", "whole_workload_budget_model", "watchdog_provider_destroy_dry_run"],
+  "pending_live_provider": ["fresh_provider_identity", "fresh_all_fee_quote", "whole_workload_live_budget_admission", "live_provider_admission_receipt"],
+  "authorization": {"provider_contact_allowed": false, "launch_allowed": false, "adopted_for_execution": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
+  "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0, "charged_usd": 0},
+  "contract_sha256": "eba073b2b9796e6ede6a4ad7b898b6455f9a945bc829a1236a7c2f74cf4f28d3"
+}

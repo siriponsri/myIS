@@ -1,0 +1,9 @@
+{
+  "target_instance_identity_sha256": "3ff001fabb264eb3aaf2ea135fd6ccc5c75efc724fdf72b437654457a618f7f0",
+  "ttl_seconds": 21600,
+  "heartbeat_stale_seconds": 300,
+  "simulated_elapsed_seconds": 21600,
+  "simulated_heartbeat_age_seconds": 0,
+  "expected_trigger": "ttl_expired",
+  "command_template_tokens": ["<provider_cli>", "destroy", "instance", "<provider_instance_identity_sha256>"]
+}

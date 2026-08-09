@@ -48,8 +48,19 @@ the Owner-readable closeout template.
 
 After a GPU Sprint, pull and validate all allowlisted artifacts locally, stop
 remote processes, record local metrics/MLflow-safe artifacts and manifests,
-then stop and tell the Owner:
+then classify the live instance from verified same-attempt evidence before the
+Owner acts:
 
-> บันทึกข้อมูลครบทุกอย่างแล้ว เสนอ Owner destroy Vast Instance ทันที หลังจากนั้น ให้ Owner พิมพ์ “ดำเนินการต่อ” เพื่อทำงานต่อบน local project ครับ
+- `REUSE_ELIGIBLE` only when safe return passed, frozen identities are
+  unchanged, workers and protected scans are clean, the tested provider
+  destroy path remains available, budget and TTL are sufficient, and an
+  already-authorized compatible next PLAN workload exists. Report
+  `Owner continue next goal on PLAN`; this does not authorize that goal.
+- `DESTROY_REQUIRED` for drift, unknown state, safety or protected-data
+  concern, budget or TTL pressure, missing next-goal authorization, or a
+  scientific boundary requiring fresh provider admission. Report
+  `Owner destroy instance` and wait for Owner confirmation before local
+  continuation that depends on provider closeout.
 
-Do not continue until the Owner confirms destruction and types `ดำเนินการต่อ`.
+Never retain an idle instance without an explicit evidence-backed disposition,
+and never let a reuse decision broaden scientific or execution authority.

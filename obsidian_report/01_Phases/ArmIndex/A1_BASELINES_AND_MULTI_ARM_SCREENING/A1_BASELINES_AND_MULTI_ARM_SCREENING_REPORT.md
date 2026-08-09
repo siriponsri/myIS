@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f"
-read_model_sha256: "df6cfaf225a55e884ad550ce48bc5afe50131e36490aca6432fd5016a72ea0ec"
-source_commit: "2e7a3dc380de47311cdc5e982641925053d45645"
+read_model_revision: "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d"
+read_model_sha256: "a0b21ef2423efda045e25ee2ef7181d07cc25b0057b9f1d326a7ef26c5e85de0"
+source_commit: "525f058a57d7c407c0d417a05253f9e96a2c584f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "scientific_execution_adoption_request_preparation"
 scientific_authority: false
 claim_boundary: "Local CPU-only preparation of a future A1.2 measured common-screen request; no provider contact, adoption, measured retrieval, optimization, Selection, Final, paid API work, model change, retrieval-quality result, or publication claim."
-generated_from_revision: "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f"
-last_material_update: "2026-08-08T01:48:27Z"
-next_authorized_action: "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal."
+generated_from_revision: "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d"
+last_material_update: "2026-08-08T02:20:32Z"
+next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-08T01:48:27Z"
-updated_at: "2026-08-08T01:48:27Z"
+created_at: "2026-08-08T02:20:32Z"
+updated_at: "2026-08-08T02:20:32Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -46,9 +46,9 @@ Reproduce controls and screen the five adapters with common programs.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: 2e7a3dc380de47311cdc5e982641925053d45645
+- `git_commit`: 525f058a57d7c407c0d417a05253f9e96a2c584f
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -109,6 +109,19 @@ These references explain what each artifact is for; the bytes remain governed by
 
 | Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
 |---|---|---|---|---|---|
+| A1.2 REP-DEV/HARNESS-DEV and claim-parser audit | `audit` | `pre_measurement_owner_local_input_audit` | `outputs/audits/armindex/a1.2-rep-harness-claim-audit-20260808.json` | `54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c` | `validated` |
+| A1.2 aggregate-safe split EDA PNG | `figure` | `pre_measurement_owner_local_input_audit` | `outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.png` | `659d4631cc8ae850dc4c57e0cc726a001cc9296b1082cf4cf4f66cafa63b09ed` | `validated` |
+| A1.2 aggregate-safe split EDA SVG | `figure` | `pre_measurement_owner_local_input_audit` | `outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.svg` | `0365e61e7117cab0112568ffd26815cbebc7829a6478084d289d9b80145480c3` | `validated` |
+| A1.2 P02-FIRST-CLAIM repair and coverage audit | `audit` | `pre_measurement_owner_local_input_validation` | `outputs/audits/armindex/a1.2-p02-first-claim-repair-20260808.json` | `38856e94d73c3df677471ba28062707cfded090da10d669758d8af48b8baf884` | `validated` |
+| A1.2 effective input-limit contract blocker | `audit` | `pre_measurement_owner_local_input_validation` | `outputs/audits/armindex/a1.2-effective-input-limit-blocker-20260808.json` | `1e1adc521a726926449259a33e4c2667a1b9250cfbb1c483bd829620a842dcff` | `validated` |
+| A1.2 frozen dense-overflow repair contract | `contract` | `pre_measurement_owner_local_compatibility_validation` | `control/armindex/a1.2/dense-overflow-adapter-repair.v14.json` | `9b8504d94ad670fb1034d05a090c99dc8ba0624fc90fe05f69716b3633410490` | `validated` |
+| A1.2 dense-overflow compatibility inventory | `audit` | `pre_measurement_owner_local_compatibility_validation` | `outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json` | `a9afaecb93d759af16684a84a60edc049c57ff2a7d2edf7cc53bf580df719867` | `validated` |
+| A1.2 dense-overflow composition audit | `audit` | `pre_measurement_owner_local_compatibility_validation` | `outputs/audits/armindex/a1.2-dense-overflow-composition-20260808.json` | `e78e87352cbdd4fc878279513fc97fa7a6f22d05aaee43de508a5b815dbb3110` | `validated` |
+| A1.2 dense-overflow EDA PNG | `figure` | `pre_measurement_owner_local_compatibility_validation` | `outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png` | `30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b` | `validated` |
+| A1.2 dense-overflow EDA SVG | `figure` | `pre_measurement_owner_local_compatibility_validation` | `outputs/figures/armindex/a1.2-dense-overflow-eda-v1.svg` | `a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8` | `validated` |
+| A1.2 protected compiler integration v15 | `contract` | `pre_measurement_owner_local_compatibility_validation` | `control/armindex/a1.2/protected-compiler-integration.v15.json` | `cc7d8d7e9ed623de03b96498a01095fe2180db9a3a596b19ef58062a19d3297e` | `validated` |
+| A1.2 aggregate-safe protected compiler audit v15 | `audit` | `pre_measurement_owner_local_compatibility_validation` | `outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json` | `c6fee2f284bdb6bd82e08fc757c6f1d6ee71797158d1c8a03608380bef76186a` | `validated` |
+| A1.2 aggregate whole-workload budget model v15 | `contract` | `pre_measurement_owner_local_compatibility_validation` | `control/armindex/a1.2/whole-workload-budget-model.v15.json` | `6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff` | `validated` |
 | A1.1 adapter fixture task receipt | `receipt` | `engineering_fixture` | `campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json` | `56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83` | `validated` |
 | A1.1 adapter fixture manifest | `manifest` | `engineering_fixture` | `outputs/fixtures/armindex/a1.1/adapter-cpu-v1/manifest.json` | `2736750d6f650fa64f5810c4b1d1c480517cf1a389f55515597bfd9839f07d17` | `validated` |
 | A1.1 ARM-01 CPU fixture receipt | `receipt` | `engineering_fixture` | `outputs/fixtures/armindex/a1.1/adapter-cpu-v1/receipt.json` | `b58c02f9bde3edffe6b54076e0df5a8ce3c9ed081441416bea8bc27ed1c02d24` | `validated` |
@@ -219,6 +232,14 @@ These references explain what each artifact is for; the bytes remain governed by
 | A1.2 v11 ARM-03 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-03.json` | `98071fe47d7d0b9ffd6eeb65e8676e2c74e09f97f4eafe69f138f3c472ce54b3` | `validated` |
 | A1.2 v11 ARM-04 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-04.json` | `70d387095f6d3b4f1683295cba6d425bcafe38f7c35a5d14056c07263ef6f9d2` | `validated` |
 | A1.2 v11 ARM-05 scientific workload | `manifest` | `scientific_execution_adoption_request_preparation` | `control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json` | `1125a006d307b28dbc5f0265e927620b61b419f54d1a8d0263d104f0a07d7348` | `validated` |
+| A1.2 local scientific-execution adoption inputs v12-r3 | `contract` | `scientific_execution_adoption_input_preparation` | `control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json` | `c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0` | `validated` |
+| A1.2 local adoption-inputs schema v12-r3 | `schema` | `scientific_execution_adoption_input_preparation` | `schemas/armindex/a1.2-scientific-execution-adoption-inputs.v12-r3.json` | `bbb13c5d2dd5678be82bd77a4349aeba9d70647b1f20c70f675256d47bce26e6` | `validated` |
+| A1.2 local adoption-inputs validator v12-r3 | `tool` | `scientific_execution_adoption_input_preparation` | `src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v12_r3.py` | `5c82949bcd193e7c567ed0a2b7bcf9816257791121e0d80eee2918c1975df4c1` | `validated` |
+| A1.2 publication-impact preregistration v13 | `contract` | `publication_analysis_preregistration_hardening` | `control/armindex/a1.2/publication-impact-contract.v13.json` | `8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811` | `validated` |
+| A1.2 publication-impact schema v13 | `schema` | `publication_analysis_preregistration_hardening` | `schemas/armindex/a1.2-publication-impact-contract.v13.json` | `ded56c190db2ae942595a29e91b0a1769da6faa33bbe2c27fb5afbb80326294a` | `validated` |
+| A1.2 publication-impact preregistration note v13 | `documentation` | `publication_analysis_preregistration_hardening` | `docs/research/A1_2_PUBLICATION_IMPACT_PREREGISTRATION_V13.md` | `4698e8a4d90dd72904f066cd0073121685edfc842b47d73fbb53155333efb35c` | `validated` |
+| A1.2 instance disposition policy v13 | `policy` | `owner_policy_for_instance_disposition` | `control/armindex/a1.2/instance-disposition-policy.v13.json` | `57fa8a8329775fe2d7dd53cef51a96fac3e61cb414aa82e5ba1cb16e9664ede0` | `validated` |
+| A1.2 instance disposition result schema v13 | `schema` | `owner_policy_for_instance_disposition` | `schemas/armindex/a1.2-instance-disposition-result.v13.json` | `458493dc8c68a24ec9e9d2603905137eb785e42319b540664a759e759b375582` | `validated` |
 
 ## Metrics
 
@@ -237,19 +258,19 @@ Fixture values are synthetic engineering diagnostics and are never reported as m
 
 ## Result
 
-**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, and scientific execution request v11 is prepared for Owner review.
+**Output:** The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, scientific execution request v11 is prepared for Owner review, and local adoption-input controls v12-r3 are validated.
 
-**Result:** A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
+**Result:** A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; v12-r3 keeps the 25 compiled bindings, protected handoff/transfer receipts, clean pushed bundle, and 4 live-provider inputs pending. Measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
 
 **Decision:** active
 
 ## Interpretation
 
-The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. It does not establish retrieval quality, execution adoption, or scientific authorization.
+The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. V12-r3 binds the unchanged request to local-only verification, while v13 makes OUT Recall@100 the primary candidate-exposure outcome and keeps instance disposition pending live-provider evidence. It does not establish retrieval quality, execution adoption, or scientific authorization.
 
 ## Supported Claims
 
-- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, and scientific execution request v11 is prepared for Owner review. (evidence: a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05)
+- The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, scientific execution request v11 is prepared for Owner review, and local adoption-input controls v12-r3 are validated. (evidence: a12-rep-harness-claim-audit, a12-rep-harness-split-eda-png, a12-rep-harness-split-eda-svg, a12-p02-first-claim-repair, a12-effective-input-limit-blocker, a12-dense-overflow-contract, a12-dense-overflow-inventory, a12-dense-overflow-composition-audit, a12-dense-overflow-eda-png, a12-dense-overflow-eda-svg, a12-protected-compiler-integration-v15, a12-protected-compiler-audit-v15, a12-whole-workload-budget-model-v15, a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05, a12-adoption-inputs-v12-r3, a12-adoption-inputs-schema-v12-r3, a12-adoption-inputs-validator-v12-r3, a12-publication-impact-contract-v13, a12-publication-impact-schema-v13, a12-publication-impact-preregistration-v13, a12-instance-disposition-policy-v13, a12-instance-disposition-result-schema-v13)
 
 ## Unsupported Claims
 
@@ -288,16 +309,29 @@ The offline evidence preserves the v2 four-worker fixture and v3 correction, bin
 
 ## Decision
 
-Status: **active**. A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
+Status: **active**. A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; v12-r3 keeps the 25 compiled bindings, protected handoff/transfer receipts, clean pushed bundle, and 4 live-provider inputs pending. Measured ArmIndex, Selection, Final, and charged-resource counters remain zero.
 
 ## Next Action
 
-Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.
+Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
 ## Evidence Links
 
+- a12-rep-harness-claim-audit
+- a12-rep-harness-split-eda-png
+- a12-rep-harness-split-eda-svg
+- a12-p02-first-claim-repair
+- a12-effective-input-limit-blocker
+- a12-dense-overflow-contract
+- a12-dense-overflow-inventory
+- a12-dense-overflow-composition-audit
+- a12-dense-overflow-eda-png
+- a12-dense-overflow-eda-svg
+- a12-protected-compiler-integration-v15
+- a12-protected-compiler-audit-v15
+- a12-whole-workload-budget-model-v15
 - a11-adapter-task-receipt
 - a11-adapter-fixture-manifest
 - a11-adapter-fixture-receipt
@@ -408,3 +442,11 @@ Measured P2, real selection, and final evaluation must not start automatically f
 - a12-v11-job-arm-03
 - a12-v11-job-arm-04
 - a12-v11-job-arm-05
+- a12-adoption-inputs-v12-r3
+- a12-adoption-inputs-schema-v12-r3
+- a12-adoption-inputs-validator-v12-r3
+- a12-publication-impact-contract-v13
+- a12-publication-impact-schema-v13
+- a12-publication-impact-preregistration-v13
+- a12-instance-disposition-policy-v13
+- a12-instance-disposition-result-schema-v13

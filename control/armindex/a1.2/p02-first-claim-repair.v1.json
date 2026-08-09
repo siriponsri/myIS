@@ -1,0 +1,78 @@
+{
+  "schema_version": "myis.armindex-a1.2-p02-first-claim-repair.v1",
+  "repair_id": "a1.2-p02-first-claim-additive-pre-measurement-v1",
+  "status": "FROZEN_ADDITIVE_PRE_MEASUREMENT_REPAIR",
+  "owner_decision": {
+    "authorize_additive_p02_first_claim_repair": true,
+    "preserve_v11_v12_r3_v13": true,
+    "promote_regex_independence_parser": false,
+    "allow_partial_20_of_25_screen": false,
+    "allow_provider_contact": false
+  },
+  "immutable_lineage": {
+    "original_program_id": "P02-CLAIM1",
+    "original_program_spec_sha256": "49cce42c3559289f36b65b8fba41846b9e20162f61a57fcd3401c4e7e6aa9378",
+    "v11_program_set_uri": "control/armindex/a1.2/common-program-set.v11.json",
+    "v11_program_set_file_sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+    "v12_r3_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+    "v12_r3_file_sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
+    "v13_publication_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
+    "v13_publication_file_sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811"
+  },
+  "executable_successor": {
+    "program_id": "P02-FIRST-CLAIM",
+    "topology_slot": "P02",
+    "source": "frozen_active_dapfam_claims_text",
+    "representation": "first_successfully_parsed_claim_segment_in_source_order",
+    "semantic_version": 1,
+    "independent_or_dependent_status": "not_inferred_not_asserted_not_published"
+  },
+  "parser": {
+    "version": "p02-first-claim-boundary-parser-v1",
+    "source_uri": "src/myis_research/armindex/a1_2_p02_first_claim_v1.py",
+    "source_sha256": "c038480fa96d72d961944115469d423a79d099af46294a196d66620fc0a8d0a5",
+    "boundary_regex_sha256": "6d73d906b66d841917383b103533b29bf33afabebb349b5e20e0a1b82fd66001",
+    "single_unmarked_source_mode": "one_declared_primary_parser_segment",
+    "dependency_regex_allowed": false
+  },
+  "source_binding": {
+    "dataset_id": "datalyes/DAPFAM_patent",
+    "revision": "a59a74ce31384165065af1823a83c6f94ccafd48",
+    "source_contract_uri": "control/assets/dapfam-p1-source.v1.json",
+    "source_contract_file_sha256": "f829e1827aff84dfb332742f74c1f717da655a1ef962e1aca0260d8d2a450d6c"
+  },
+  "coverage_requirements": {
+    "rep_dev_query_count": 150,
+    "rep_dev_query_availability_fraction": 1.0,
+    "corpus_failure_accounting_required": true,
+    "deterministic_replay_required": true,
+    "fail_closed": true
+  },
+  "fallback_policy": {
+    "alternate_fields_allowed": false,
+    "raw_whole_claims_fallback_allowed": false
+  },
+  "independence_or_dependency_semantics": "FORBIDDEN",
+  "common_screen": {
+    "unchanged_program_slots": ["P00", "P01", "P03", "P04"],
+    "arm_count": 5,
+    "program_count": 5,
+    "required_cells": 25,
+    "partial_screen_allowed": false
+  },
+  "publication_v13": {
+    "primary": "out_recall_at_100",
+    "secondary": ["out_ndcg_at_100", "out_ndcg_at_10"],
+    "interaction_and_complementarity_preregistered": true,
+    "measured_or_publication_claim_authorized": false
+  },
+  "authorization": {
+    "provider_contact_allowed": false,
+    "launch_allowed": false,
+    "measured_retrieval_allowed": false,
+    "selection_allowed": false,
+    "final_allowed": false,
+    "paid_api_allowed": false
+  },
+  "contract_sha256": "5d661e6859f44eaafa29172d369c87eba4d86ad251a80c908edd00d04cd98fc1"
+}

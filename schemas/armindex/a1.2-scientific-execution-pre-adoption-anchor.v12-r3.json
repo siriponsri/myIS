@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-execution-pre-adoption-anchor.v12-r3.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "anchor_id", "revision_id", "status", "claim_boundary", "v11_request", "v11_receipt", "v12_contract", "publication_v13", "instance_disposition_v13", "execution_bundle", "authorization", "counters", "anchor_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-execution-pre-adoption-anchor.v12-r3"},
+    "anchor_id": {"pattern": "^a1\\.2-pre-adoption-anchor-[a-z0-9._-]+-v12-r3$", "type": "string"},
+    "revision_id": {"const": "a1.2-scientific-execution-adoption-inputs-v12-r3"},
+    "status": {"const": "PRE_ADOPTION_INPUT_ANCHOR"},
+    "claim_boundary": {"minLength": 160, "type": "string"},
+    "v11_request": {"$ref": "#/$defs/self_binding"},
+    "v11_receipt": {"$ref": "#/$defs/self_binding"},
+    "v12_contract": {"$ref": "#/$defs/self_binding"},
+    "publication_v13": {"$ref": "#/$defs/self_binding"},
+    "instance_disposition_v13": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256", "policy_id"], "properties": {"uri": {"type": "string"}, "file_sha256": {"$ref": "#/$defs/hash"}, "policy_id": {"const": "a1.2-instance-disposition-v13"}}},
+    "execution_bundle": {"type": "object", "additionalProperties": false, "required": ["git_commit", "git_tree", "frozen_bundle_sha256", "bundle_manifest_sha256", "receipt_sha256"], "properties": {"git_commit": {"$ref": "#/$defs/git"}, "git_tree": {"$ref": "#/$defs/git"}, "frozen_bundle_sha256": {"$ref": "#/$defs/hash"}, "bundle_manifest_sha256": {"$ref": "#/$defs/hash"}, "receipt_sha256": {"$ref": "#/$defs/hash"}}},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed"], "properties": {"provider_contact_allowed": {"const": false}, "launch_allowed": {"const": false}, "adopted_for_execution": {"const": false}, "measured_retrieval_allowed": {"const": false}}},
+    "counters": {"type": "object", "additionalProperties": false, "required": ["measured_runs", "selection_accesses", "final_accesses", "charged_usd"], "properties": {"measured_runs": {"const": 0}, "selection_accesses": {"const": 0}, "final_accesses": {"const": 0}, "charged_usd": {"const": 0}}},
+    "anchor_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"pattern": "^[a-f0-9]{64}$", "type": "string"},
+    "git": {"pattern": "^[a-f0-9]{40}$", "type": "string"},
+    "self_binding": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256", "self_sha256"], "properties": {"uri": {"type": "string"}, "file_sha256": {"$ref": "#/$defs/hash"}, "self_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

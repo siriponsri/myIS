@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-execution-pre-adoption-anchor.v15.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "anchor_id", "revision_id", "status", "claim_boundary", "execution_bundle", "authorization", "counters", "anchor_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-execution-pre-adoption-anchor.v15"},
+    "anchor_id": {"type": "string", "pattern": "^a1\\.2-pre-adoption-anchor-[a-f0-9]{12}-v15$"},
+    "revision_id": {"const": "a1.2-scientific-execution-adoption-inputs-v15"},
+    "status": {"const": "PRE_ADOPTION_INPUT_ANCHOR_V15"},
+    "claim_boundary": {"type": "string", "minLength": 160},
+    "execution_bundle": {"type": "object", "additionalProperties": false, "required": ["git_commit", "git_tree", "frozen_bundle_sha256", "bundle_manifest_sha256", "receipt_sha256"], "properties": {"git_commit": {"$ref": "#/$defs/git"}, "git_tree": {"$ref": "#/$defs/git"}, "frozen_bundle_sha256": {"$ref": "#/$defs/hash"}, "bundle_manifest_sha256": {"$ref": "#/$defs/hash"}, "receipt_sha256": {"$ref": "#/$defs/hash"}}},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed", "selection_allowed", "final_allowed", "paid_api_allowed"], "properties": {"provider_contact_allowed": {"const": false}, "launch_allowed": {"const": false}, "adopted_for_execution": {"const": false}, "measured_retrieval_allowed": {"const": false}, "selection_allowed": {"const": false}, "final_allowed": {"const": false}, "paid_api_allowed": {"const": false}}},
+    "counters": {"type": "object", "additionalProperties": false, "required": ["measured_runs", "selection_accesses", "final_accesses", "charged_usd"], "properties": {"measured_runs": {"const": 0}, "selection_accesses": {"const": 0}, "final_accesses": {"const": 0}, "charged_usd": {"const": 0}}},
+    "anchor_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "git": {"type": "string", "pattern": "^[a-f0-9]{40}$"}}
+}

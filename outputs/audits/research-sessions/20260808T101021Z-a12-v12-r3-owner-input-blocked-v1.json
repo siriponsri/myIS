@@ -1,0 +1,133 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260808T101021Z-a12-v12-r3-owner-input-blocked-v1",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-08T10:10:21Z",
+  "scope": "Bounded local-only A1.2 v12-r3 adoption-input validation and explicit Owner-input blocker recording while preserving unchanged v11 and v13 publication semantics.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "PLAN.md",
+      "control/",
+      "schemas/armindex/",
+      "src/myis_research/dashboard/",
+      "src/myis_research/armindex/",
+      "src/myis_research/projections/read_model.py",
+      "src/myis_research/report_records.py",
+      "scripts/mlflow_doctor.py",
+      "tests/",
+      "projections/",
+      "obsidian_report/",
+      "mlflow/generated/archive-index.v2.json",
+      "outputs/audits/armindex/",
+      "outputs/audits/research-sessions/"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The unchanged v11 request and additive v12-r3/v13 controls were validated locally with provider contact, launch, adoption, and measured counters remaining closed or zero.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+          "sha256": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+          "locator": "request_sha256, authorization, counters"
+        },
+        {
+          "path": "control/armindex/a1.2/publication-impact-contract.v13.json",
+          "sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+          "locator": "primary/secondary outcomes and authorization"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "Bounded local engineering checks passed: MLflow doctor, Dashboard/API, MLflow archive regression, focused A1.2 v11/v12-r3/v13 validators, and reusable-asset validation.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/armindex/a1.2-v12-r3-local-validation-20260808.json",
+          "sha256": "583ab4afb6cbd87d0c537ad89bc2d975633852471924cde5ff2dfb955fe4c6a8",
+          "locator": "check_groups"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "Protected compiler preflight failed closed before corpus, query, split, model, or compilation work because the Owner-local protected compilation input contract is absent; the available binding artifact remains a zero-binding template.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/armindex/a1.2-v12-r3-local-blocker-20260808.json",
+          "sha256": "5566b84294e85b6e9fb9ba23eb4777cc395d0c30002be7d5e22da9f7002228e8",
+          "locator": "preflight and missing_owner_inputs"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "Fresh provider identity, all-fee quote, whole-workload live budget admission, and live provider admission receipt remain pending; no provider contact or scientific execution occurred.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/armindex/a1.2-v12-r3-local-validation-20260808.json",
+          "sha256": "583ab4afb6cbd87d0c537ad89bc2d975633852471924cde5ff2dfb955fe4c6a8",
+          "locator": "pending_live_provider and counters"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/armindex/a1.2-v12-r3-local-validation-20260808.json",
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "owner-local-protected-compilation-inputs",
+      "provenance": "agent-observed",
+      "summary": "Owner must supply or canonically authorize the protected compilation input contract, frozen REP-DEV/HARNESS-DEV membership or exact subdivision algorithm, structured independent-claim records, protected handoff/transfer receipts, and the resulting 25/25 binding set.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "fresh-live-provider-admission",
+      "provenance": "agent-observed",
+      "summary": "Fresh provider identity, all-fee quote, whole-workload budget admission, and live admission receipt remain PENDING_LIVE_PROVIDER; provider contact is forbidden.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "conditional-commit-push",
+      "provenance": "agent-observed",
+      "summary": "Clean execution commit/tree, frozen bundle, final local adoption receipt, commit, and push cannot be produced until the protected compilation precondition passes.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

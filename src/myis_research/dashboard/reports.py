@@ -7,7 +7,7 @@ import html
 import json
 import re
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 from ..projections.read_model import build_read_model, canonical_json, sha256
 
@@ -29,10 +29,16 @@ class ReportCatalogError(RuntimeError):
 
 
 class ReportCatalog:
-    def __init__(self, repository_root: Path) -> None:
+    def __init__(
+        self,
+        repository_root: Path,
+        *,
+        read_model_provider: Callable[[], Mapping[str, Any]] | None = None,
+    ) -> None:
         self.repository_root = repository_root.resolve(strict=True)
         self.vault_root = (self.repository_root / "obsidian_report").resolve(strict=True)
         self.vault_root.relative_to(self.repository_root)
+        self._read_model_provider = read_model_provider or (lambda: build_read_model(self.repository_root))
 
     def list(self, *, note_type: str | None = None, campaign: str | None = None) -> dict[str, Any]:
         if note_type is not None and note_type not in _REPORT_NOTE_TYPES:
@@ -106,7 +112,7 @@ class ReportCatalog:
         unsigned = {key: value for key, value in manifest.items() if key != "manifest_sha256"}
         if sha256(canonical_json(unsigned)) != manifest.get("manifest_sha256"):
             raise ReportCatalogError("generated report manifest hash is invalid")
-        model = build_read_model(self.repository_root)
+        model = self._read_model_provider()
         for key in ("read_model_revision", "read_model_sha256", "source_commit", "projection_schema_version"):
             if manifest.get(key) != model.get(key):
                 raise ReportCatalogError("generated report vault is stale")

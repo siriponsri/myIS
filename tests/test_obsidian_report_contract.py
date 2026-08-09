@@ -571,6 +571,12 @@ def test_generated_content_rejects_stale_fixture_review_and_measured_state() -> 
     with pytest.raises(ValueError, match="stale official review narrative"):
         _validate_generated_contents(stale_review, model)
 
+    unrelated_pending = dict(contents)
+    unrelated_pending[
+        VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"
+    ] += "\nNext action: live-provider inputs remain pending.\n"
+    _validate_generated_contents(unrelated_pending, model)
+
     stale_measured = dict(contents)
     stale_measured[VAULT_RELATIVE_PATH / "03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md"] += (
         "\nMeasured P2 started.\n"

@@ -1,6 +1,240 @@
 {
   "artifact_references": [
     {
+      "artifact_id": "a12-rep-harness-claim-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c",
+      "evidence_class": "pre_measurement_owner_local_input_audit",
+      "explanation": "Binds the aggregate-safe deterministic 150/100 split commitments and the fail-closed P02 parser recommendation without exposing exact membership or retrieval outcomes.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-rep-harness-claim-audit-20260808.json",
+      "scientific_authority": false,
+      "title": "A1.2 REP-DEV/HARNESS-DEV and claim-parser audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-rep-harness-split-eda-png",
+      "artifact_type": "figure",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "659d4631cc8ae850dc4c57e0cc726a001cc9296b1082cf4cf4f66cafa63b09ed",
+      "evidence_class": "pre_measurement_owner_local_input_audit",
+      "explanation": "Shows only Train-250 stratum and Hamilton allocation counts; it contains no identifiers or scientific results.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.png",
+      "scientific_authority": false,
+      "title": "A1.2 aggregate-safe split EDA PNG",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-rep-harness-split-eda-svg",
+      "artifact_type": "figure",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0365e61e7117cab0112568ffd26815cbebc7829a6478084d289d9b80145480c3",
+      "evidence_class": "pre_measurement_owner_local_input_audit",
+      "explanation": "Retains the vector version of the same aggregate-only pre-measurement EDA.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.svg",
+      "scientific_authority": false,
+      "title": "A1.2 aggregate-safe split EDA SVG",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-p02-first-claim-repair",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "38856e94d73c3df677471ba28062707cfded090da10d669758d8af48b8baf884",
+      "evidence_class": "pre_measurement_owner_local_input_validation",
+      "explanation": "Binds the Owner-authorized additive boundary parser, 100 percent REP-DEV and corpus coverage, deterministic replay, and zero fallback without dependency semantics.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-p02-first-claim-repair-20260808.json",
+      "scientific_authority": false,
+      "title": "A1.2 P02-FIRST-CLAIM repair and coverage audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-effective-input-limit-blocker",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "1e1adc521a726926449259a33e4c2667a1b9250cfbb1c483bd829620a842dcff",
+      "evidence_class": "pre_measurement_owner_local_input_validation",
+      "explanation": "Records the deterministic ARM-03 x P00 overlength witness and fail-closed zero-truncation decision before retrieval.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-effective-input-limit-blocker-20260808.json",
+      "scientific_authority": false,
+      "title": "A1.2 effective input-limit contract blocker",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-contract",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "9b8504d94ad670fb1034d05a090c99dc8ba0624fc90fe05f69716b3633410490",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Binds the Owner-authorized additive physical-window composition policy while preserving v11/v12-r3/v13 and original P02 lineage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/dense-overflow-adapter-repair.v14.json",
+      "scientific_authority": false,
+      "title": "A1.2 frozen dense-overflow repair contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-inventory",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a9afaecb93d759af16684a84a60edc049c57ff2a7d2edf7cc53bf580df719867",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Records aggregate-only rendered-length incidence across all 25 program-arm cells, REP-DEV queries, and required corpus logical units.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json",
+      "scientific_authority": false,
+      "title": "A1.2 dense-overflow compatibility inventory",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-composition-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e78e87352cbdd4fc878279513fc97fa7a6f22d05aaee43de508a5b815dbb3110",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Validates physical-window limits, token coverage, zero overlap, zero fallback, and deterministic composition planning without executing encoder vectors.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-dense-overflow-composition-20260808.json",
+      "scientific_authority": false,
+      "title": "A1.2 dense-overflow composition audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-eda-png",
+      "artifact_type": "figure",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Shows aggregate overflow incidence and the PatEmbed P00 engineering disclosure boundary; no retrieval result is displayed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png",
+      "scientific_authority": false,
+      "title": "A1.2 dense-overflow EDA PNG",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-eda-svg",
+      "artifact_type": "figure",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Vector form of the aggregate-only dense-overflow EDA for reproducibility.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.svg",
+      "scientific_authority": false,
+      "title": "A1.2 dense-overflow EDA SVG",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-protected-compiler-integration-v15",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "cc7d8d7e9ed623de03b96498a01095fe2180db9a3a596b19ef58062a19d3297e",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Binds the additive protected compiler to the frozen dense-overflow policy while preserving v11/v12-r3/v13 and the original P02 lineage.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/protected-compiler-integration.v15.json",
+      "scientific_authority": false,
+      "title": "A1.2 protected compiler integration v15",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-protected-compiler-audit-v15",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c6fee2f284bdb6bd82e08fc757c6f1d6ee71797158d1c8a03608380bef76186a",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Records validated 25/25 bindings, protected handoff and transfer receipt hashes, deterministic replay, and zero silent truncation without exposing protected payloads.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json",
+      "scientific_authority": false,
+      "title": "A1.2 aggregate-safe protected compiler audit v15",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-whole-workload-budget-model-v15",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Binds the complete physical-window workload to frozen hard stops while keeping fresh quote and live budget admission pending.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json",
+      "scientific_authority": false,
+      "title": "A1.2 aggregate whole-workload budget model v15",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a11-adapter-task-receipt",
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
@@ -1979,16 +2213,225 @@
       "scientific_authority": false,
       "title": "A1.2 v11 ARM-05 scientific workload",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-adoption-inputs-v12-r3",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
+      "evidence_class": "scientific_execution_adoption_input_preparation",
+      "explanation": "Binds the unchanged v11 request to local-only bundle, protected compilation, publication, and disposition requirements while preserving the provider and launch locks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+      "scientific_authority": false,
+      "title": "A1.2 local scientific-execution adoption inputs v12-r3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-adoption-inputs-schema-v12-r3",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "bbb13c5d2dd5678be82bd77a4349aeba9d70647b1f20c70f675256d47bce26e6",
+      "evidence_class": "scientific_execution_adoption_input_preparation",
+      "explanation": "Defines the aggregate-safe, non-authorizing v12-r3 contract shape.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-scientific-execution-adoption-inputs.v12-r3.json",
+      "scientific_authority": false,
+      "title": "A1.2 local adoption-inputs schema v12-r3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-adoption-inputs-validator-v12-r3",
+      "artifact_type": "tool",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5c82949bcd193e7c567ed0a2b7bcf9816257791121e0d80eee2918c1975df4c1",
+      "evidence_class": "scientific_execution_adoption_input_preparation",
+      "explanation": "Fails closed on changed v11/v12/v13 bindings or a mismatched frozen bundle path set.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v12_r3.py",
+      "scientific_authority": false,
+      "title": "A1.2 local adoption-inputs validator v12-r3",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-publication-impact-contract-v13",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+      "evidence_class": "publication_analysis_preregistration_hardening",
+      "explanation": "Pre-registers A1.2 as candidate exposure and representation screening with OUT Recall@100 primary, required nDCG secondary outcomes, and no pre-confirmation publication claim.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
+      "scientific_authority": false,
+      "title": "A1.2 publication-impact preregistration v13",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-publication-impact-schema-v13",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ded56c190db2ae942595a29e91b0a1769da6faa33bbe2c27fb5afbb80326294a",
+      "evidence_class": "publication_analysis_preregistration_hardening",
+      "explanation": "Freezes the primary/secondary outcome hierarchy, comparisons, candidate promotion guard, and protected reporting boundary.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-publication-impact-contract.v13.json",
+      "scientific_authority": false,
+      "title": "A1.2 publication-impact schema v13",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-publication-impact-preregistration-v13",
+      "artifact_type": "documentation",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "4698e8a4d90dd72904f066cd0073121685edfc842b47d73fbb53155333efb35c",
+      "evidence_class": "publication_analysis_preregistration_hardening",
+      "explanation": "Human-readable, hash-bound explanation of the additive publication-impact contract.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/research/A1_2_PUBLICATION_IMPACT_PREREGISTRATION_V13.md",
+      "scientific_authority": false,
+      "title": "A1.2 publication-impact preregistration note v13",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-instance-disposition-policy-v13",
+      "artifact_type": "policy",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "57fa8a8329775fe2d7dd53cef51a96fac3e61cb414aa82e5ba1cb16e9664ede0",
+      "evidence_class": "owner_policy_for_instance_disposition",
+      "explanation": "Requires evidence-backed REUSE_ELIGIBLE or DESTROY_REQUIRED classification after safe return and preserves the default no-live-instance state.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a1.2/instance-disposition-policy.v13.json",
+      "scientific_authority": false,
+      "title": "A1.2 instance disposition policy v13",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-instance-disposition-result-schema-v13",
+      "artifact_type": "schema",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "458493dc8c68a24ec9e9d2603905137eb785e42319b540664a759e759b375582",
+      "evidence_class": "owner_policy_for_instance_disposition",
+      "explanation": "Defines the aggregate-safe classification receipt and forbids any execution authorization.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "schemas/armindex/a1.2-instance-disposition-result.v13.json",
+      "scientific_authority": false,
+      "title": "A1.2 instance disposition result schema v13",
+      "validation_status": "validated"
     }
   ],
   "claim_boundary": "Local CPU-only preparation of a future A1.2 measured common-screen request; no provider contact, adoption, measured retrieval, optimization, Selection, Final, paid API work, model change, retrieval-quality result, or publication claim.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero.",
+    "reason": "A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; v12-r3 keeps the 25 compiled bindings, protected handoff/transfer receipts, clean pushed bundle, and 4 live-provider inputs pending. Measured ArmIndex, Selection, Final, and charged-resource counters remain zero.",
     "status": "active"
   },
   "evidence_class": "scientific_execution_adoption_request_preparation",
   "evidence_links": [
+    {
+      "artifact_id": "a12-rep-harness-claim-audit",
+      "sha256": "54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c",
+      "uri": "outputs/audits/armindex/a1.2-rep-harness-claim-audit-20260808.json"
+    },
+    {
+      "artifact_id": "a12-rep-harness-split-eda-png",
+      "sha256": "659d4631cc8ae850dc4c57e0cc726a001cc9296b1082cf4cf4f66cafa63b09ed",
+      "uri": "outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.png"
+    },
+    {
+      "artifact_id": "a12-rep-harness-split-eda-svg",
+      "sha256": "0365e61e7117cab0112568ffd26815cbebc7829a6478084d289d9b80145480c3",
+      "uri": "outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.svg"
+    },
+    {
+      "artifact_id": "a12-p02-first-claim-repair",
+      "sha256": "38856e94d73c3df677471ba28062707cfded090da10d669758d8af48b8baf884",
+      "uri": "outputs/audits/armindex/a1.2-p02-first-claim-repair-20260808.json"
+    },
+    {
+      "artifact_id": "a12-effective-input-limit-blocker",
+      "sha256": "1e1adc521a726926449259a33e4c2667a1b9250cfbb1c483bd829620a842dcff",
+      "uri": "outputs/audits/armindex/a1.2-effective-input-limit-blocker-20260808.json"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-contract",
+      "sha256": "9b8504d94ad670fb1034d05a090c99dc8ba0624fc90fe05f69716b3633410490",
+      "uri": "control/armindex/a1.2/dense-overflow-adapter-repair.v14.json"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-inventory",
+      "sha256": "a9afaecb93d759af16684a84a60edc049c57ff2a7d2edf7cc53bf580df719867",
+      "uri": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-composition-audit",
+      "sha256": "e78e87352cbdd4fc878279513fc97fa7a6f22d05aaee43de508a5b815dbb3110",
+      "uri": "outputs/audits/armindex/a1.2-dense-overflow-composition-20260808.json"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-eda-png",
+      "sha256": "30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b",
+      "uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png"
+    },
+    {
+      "artifact_id": "a12-dense-overflow-eda-svg",
+      "sha256": "a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8",
+      "uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.svg"
+    },
+    {
+      "artifact_id": "a12-protected-compiler-integration-v15",
+      "sha256": "cc7d8d7e9ed623de03b96498a01095fe2180db9a3a596b19ef58062a19d3297e",
+      "uri": "control/armindex/a1.2/protected-compiler-integration.v15.json"
+    },
+    {
+      "artifact_id": "a12-protected-compiler-audit-v15",
+      "sha256": "c6fee2f284bdb6bd82e08fc757c6f1d6ee71797158d1c8a03608380bef76186a",
+      "uri": "outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json"
+    },
+    {
+      "artifact_id": "a12-whole-workload-budget-model-v15",
+      "sha256": "6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff",
+      "uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json"
+    },
     {
       "artifact_id": "a11-adapter-task-receipt",
       "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
@@ -2538,6 +2981,46 @@
       "artifact_id": "a12-v11-job-arm-05",
       "sha256": "1125a006d307b28dbc5f0265e927620b61b419f54d1a8d0263d104f0a07d7348",
       "uri": "control/armindex/a1.2/jobs/scientific-request-v11/ARM-05.json"
+    },
+    {
+      "artifact_id": "a12-adoption-inputs-v12-r3",
+      "sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
+      "uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json"
+    },
+    {
+      "artifact_id": "a12-adoption-inputs-schema-v12-r3",
+      "sha256": "bbb13c5d2dd5678be82bd77a4349aeba9d70647b1f20c70f675256d47bce26e6",
+      "uri": "schemas/armindex/a1.2-scientific-execution-adoption-inputs.v12-r3.json"
+    },
+    {
+      "artifact_id": "a12-adoption-inputs-validator-v12-r3",
+      "sha256": "5c82949bcd193e7c567ed0a2b7bcf9816257791121e0d80eee2918c1975df4c1",
+      "uri": "src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v12_r3.py"
+    },
+    {
+      "artifact_id": "a12-publication-impact-contract-v13",
+      "sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+      "uri": "control/armindex/a1.2/publication-impact-contract.v13.json"
+    },
+    {
+      "artifact_id": "a12-publication-impact-schema-v13",
+      "sha256": "ded56c190db2ae942595a29e91b0a1769da6faa33bbe2c27fb5afbb80326294a",
+      "uri": "schemas/armindex/a1.2-publication-impact-contract.v13.json"
+    },
+    {
+      "artifact_id": "a12-publication-impact-preregistration-v13",
+      "sha256": "4698e8a4d90dd72904f066cd0073121685edfc842b47d73fbb53155333efb35c",
+      "uri": "docs/research/A1_2_PUBLICATION_IMPACT_PREREGISTRATION_V13.md"
+    },
+    {
+      "artifact_id": "a12-instance-disposition-policy-v13",
+      "sha256": "57fa8a8329775fe2d7dd53cef51a96fac3e61cb414aa82e5ba1cb16e9664ede0",
+      "uri": "control/armindex/a1.2/instance-disposition-policy.v13.json"
+    },
+    {
+      "artifact_id": "a12-instance-disposition-result-schema-v13",
+      "sha256": "458493dc8c68a24ec9e9d2603905137eb785e42319b540664a759e759b375582",
+      "uri": "schemas/armindex/a1.2-instance-disposition-result.v13.json"
     }
   ],
   "failure_recovery_references": [
@@ -2652,9 +3135,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-08T01:48:27Z",
-  "generated_from_revision": "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f",
-  "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
+  "generated_at": "2026-08-08T02:20:32Z",
+  "generated_from_revision": "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d",
+  "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -2780,7 +3263,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "2e7a3dc380de47311cdc5e982641925053d45645",
+    "git_commit": "525f058a57d7c407c0d417a05253f9e96a2c584f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -2791,13 +3274,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "bdea20342ca7f48d9547eb05ef981c359f60d6a615394dd37d0089ffcc5f7a31",
+      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. It does not establish retrieval quality, execution adoption, or scientific authorization.",
+  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. V12-r3 binds the unchanged request to local-only verification, while v13 makes OUT Recall@100 the primary candidate-exposure outcome and keeps instance disposition pending live-provider evidence. It does not establish retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
-  "last_material_update": "2026-08-08T01:48:27Z",
+  "last_material_update": "2026-08-08T02:20:32Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -2888,16 +3371,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal.",
+  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "92e45ba34161e504bddc76fbfa9ac78dea109877a6a7270319333d292ff2e76c",
+  "report_sha256": "eab548831921f8157582e8461b32cb0add61f7fefeaec52bb2d9e3cab3e3d088",
   "report_type": "phase",
   "result": {
     "decision": "active",
-    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, and scientific execution request v11 is prepared for Owner review.",
-    "result": "A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
+    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, scientific execution request v11 is prepared for Owner review, and local adoption-input controls v12-r3 are validated.",
+    "result": "A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; v12-r3 keeps the 25 compiled bindings, protected handoff/transfer receipts, clean pushed bundle, and 4 live-provider inputs pending. Measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -2911,8 +3394,21 @@
   "status": "active",
   "supported_claims": [
     {
-      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, and scientific execution request v11 is prepared for Owner review.",
+      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, scientific execution request v11 is prepared for Owner review, and local adoption-input controls v12-r3 are validated.",
       "evidence": [
+        "a12-rep-harness-claim-audit",
+        "a12-rep-harness-split-eda-png",
+        "a12-rep-harness-split-eda-svg",
+        "a12-p02-first-claim-repair",
+        "a12-effective-input-limit-blocker",
+        "a12-dense-overflow-contract",
+        "a12-dense-overflow-inventory",
+        "a12-dense-overflow-composition-audit",
+        "a12-dense-overflow-eda-png",
+        "a12-dense-overflow-eda-svg",
+        "a12-protected-compiler-integration-v15",
+        "a12-protected-compiler-audit-v15",
+        "a12-whole-workload-budget-model-v15",
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
         "a11-adapter-fixture-receipt",
@@ -3022,7 +3518,15 @@
         "a12-v11-job-arm-02",
         "a12-v11-job-arm-03",
         "a12-v11-job-arm-04",
-        "a12-v11-job-arm-05"
+        "a12-v11-job-arm-05",
+        "a12-adoption-inputs-v12-r3",
+        "a12-adoption-inputs-schema-v12-r3",
+        "a12-adoption-inputs-validator-v12-r3",
+        "a12-publication-impact-contract-v13",
+        "a12-publication-impact-schema-v13",
+        "a12-publication-impact-preregistration-v13",
+        "a12-instance-disposition-policy-v13",
+        "a12-instance-disposition-result-schema-v13"
       ]
     }
   ],

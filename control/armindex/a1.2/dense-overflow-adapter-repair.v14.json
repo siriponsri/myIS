@@ -1,0 +1,125 @@
+{
+  "schema_version": "myis.armindex-a1.2-dense-overflow-adapter-repair.v14",
+  "repair_id": "a1.2-additive-dense-overflow-composition-v14",
+  "status": "FROZEN_ADDITIVE_PRE_MEASUREMENT_REPAIR",
+  "owner_decision": {
+    "authorize_additive_dense_overflow_adapter_repair": true,
+    "preserve_historical_v11_v12_r3_v13": true,
+    "preserve_original_p02_lineage": true,
+    "preserve_5_arm_x_5_program_topology": true,
+    "allow_partial_screen": false,
+    "allow_silent_truncation": false,
+    "allow_provider_contact": false,
+    "allow_measured_retrieval": false
+  },
+  "immutable_lineage": {
+    "v11_program_set_uri": "control/armindex/a1.2/common-program-set.v11.json",
+    "v11_program_set_file_sha256": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+    "v12_r3_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+    "v12_r3_file_sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
+    "v13_publication_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
+    "v13_publication_file_sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+    "p02_first_claim_uri": "control/armindex/a1.2/p02-first-claim-repair.v1.json",
+    "p02_first_claim_file_sha256": "e4b758228d3d1ea44f94fd5987bfea0a06258f3b370621e4f4015f4e8e33038b"
+  },
+  "raw_inventory": {
+    "uri": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json",
+    "file_sha256": "a9afaecb93d759af16684a84a60edc049c57ff2a7d2edf7cc53bf580df719867",
+    "inventory_sha256": "d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634",
+    "deterministic_replay": {
+      "status": "PASS",
+      "batch_schedules": [128, 256],
+      "byte_identical_receipt": true,
+      "first_wall_seconds": 2246.6,
+      "replay_wall_seconds": 1118.0
+    }
+  },
+  "implementation": {
+    "version": "a1.2-dense-overflow-composition-v1",
+    "planner_source_uri": "src/myis_research/armindex/a1_2_dense_overflow_adapter_v1.py",
+    "planner_source_sha256": "8c337de894648ef216ab64ae6b347885ac2de858b16110d94a1b279abc6818a0",
+    "audit_source_uri": "src/myis_research/armindex/a1_2_dense_overflow_composition_audit_v1.py",
+    "audit_source_sha256": "0c6863a4d7f72a343cf3c9c86154f6ffde5df5d990c2910125e307a6a2815a4d"
+  },
+  "composition_semantics": {
+    "fit_path": "preserve_existing_frozen_adapter_path_exactly",
+    "overflow_scope": "physical_encoder_input_only",
+    "logical_program_identity_changed": false,
+    "logical_unit_identity_changed": false,
+    "source_token_domain": "frozen_tokenizer_input_ids_without_special_tokens",
+    "template_semantics": "exact_frozen_query_or_document_template_with_token_concatenation_parity",
+    "window_order": "contiguous_source_order",
+    "window_size": "longest_source_token_prefix_that_fits_effective_limit",
+    "overlap_tokens": 0,
+    "source_token_multiplicity": 1,
+    "truncation_allowed": false,
+    "omission_allowed": false,
+    "alternate_field_fallback_allowed": false,
+    "physical_encoder": "unchanged_frozen_arm_adapter",
+    "aggregation": "source_token_count_weighted_mean",
+    "aggregation_formula": "sum(window_source_tokens * physical_window_vector) / sum(window_source_tokens)",
+    "postprocessing": "preserve_arm_specific_frozen_logical_vector_postprocessing_after_weighted_mean",
+    "p03_physical_windows_become_retrieval_units": false
+  },
+  "arm_postprocessing": {
+    "ARM-02": {
+      "adapter_receipt_sha256": "4de9210e97228620a202df5b733a3b6bccaa0fbde46d3643e1a61e3b90be893d",
+      "pooling": "preserve_frozen_v9_sentence_transformer_model_modules",
+      "physical_window_vector_postprocessing": "unchanged_normalize_embeddings_true",
+      "logical_vector_postprocessing": "apply_ARM_02_frozen_l2_output_normalization_after_weighted_mean"
+    },
+    "ARM-03": {
+      "adapter_receipt_sha256": "67f5c374f82a475866a08d2be5f458b61a88ae745fc39046e0832965998a4e4b",
+      "pooling": "mean_non_padding_tokens",
+      "physical_window_vector_postprocessing": "unchanged_normalize_embeddings_true",
+      "logical_vector_postprocessing": "apply_ARM_03_frozen_l2_output_normalization_after_weighted_mean"
+    },
+    "ARM-04": {
+      "adapter_receipt_sha256": "b91cfd112da14af4888207af8f42065e35f39b064fb91eef70890c1df8bc9b00",
+      "pooling": "first_token_cls",
+      "physical_window_vector_postprocessing": "unchanged_normalize_embeddings_true",
+      "logical_vector_postprocessing": "apply_ARM_04_frozen_l2_output_normalization_after_weighted_mean"
+    },
+    "ARM-05": {
+      "adapter_receipt_sha256": "3cbfc95f260b6dac910abce1bd41ca13ae61f9face23baa7d6d6ef01cf33c44e",
+      "pooling": "last_token_left_padding",
+      "physical_window_vector_postprocessing": "unchanged_normalize_embeddings_true",
+      "logical_vector_postprocessing": "apply_ARM_05_frozen_l2_output_normalization_after_weighted_mean"
+    }
+  },
+  "v9_adapter_lineage": {
+    "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
+    "file_sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
+    "receipt_sha256": "f8969e55225b4fa567c94079b6bffc834e1951268f626bdad7754104294df510"
+  },
+  "publication_method_disclosure": {
+    "required": true,
+    "patembed_p00_description": "whole-document composed embedding rather than native single-pass embedding",
+    "patembed_p00_corpus_overflow_incidence": 0.9243215113816834,
+    "patembed_p00_rep_dev_query_overflow_incidence": 0.9666666666666667,
+    "retrieval_quality_claim_authorized": false,
+    "publication_claim_authorized": false
+  },
+  "requirements": {
+    "compatible_program_arm_cells": 25,
+    "rep_dev_query_coverage_fraction": 1.0,
+    "required_corpus_logical_unit_coverage_fraction": 1.0,
+    "maximum_physical_window_must_not_exceed_effective_limit": true,
+    "source_token_drop_count": 0,
+    "source_token_overlap_count": 0,
+    "silent_truncation_count": 0,
+    "fallback_count": 0,
+    "deterministic_replay_required": true,
+    "fail_closed": true
+  },
+  "authorization": {
+    "provider_contact_allowed": false,
+    "launch_allowed": false,
+    "adopted_for_execution": false,
+    "measured_retrieval_allowed": false,
+    "selection_allowed": false,
+    "final_allowed": false,
+    "paid_api_allowed": false
+  },
+  "contract_sha256": "a16294fa92e1b7a7bf3b4e571869751ea20e03a32580abea92819418d2e770eb"
+}

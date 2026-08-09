@@ -1,0 +1,111 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260808T124401Z-a12-p02-limit-blocked-v1",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-08T12:44:01Z",
+  "scope": "Owner-authorized additive P02-FIRST-CLAIM pre-measurement repair, protected coverage validation, deterministic effective input-limit blocker audit, and aggregate-safe report projection. The pre-existing dirty worktree was preserved.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "525f058a57d7c407c0d417a05253f9e96a2c584f",
+    "dirty_path_count": 327,
+    "dirty_paths": [
+      "control/armindex/a1.2/p02-first-claim-repair.v1.json",
+      "control/source-of-truth.yaml",
+      "HANDOFF.md",
+      "PLAN.md",
+      "src/myis_research/armindex/a1_2_p02_first_claim_v1.py",
+      "src/myis_research/armindex/a1_2_effective_input_limit_audit_v1.py",
+      "src/myis_research/projections/read_model.py",
+      "src/myis_research/report_cli.py",
+      "src/myis_research/report_records.py",
+      "tests/test_armindex_a1_2_p02_first_claim_v1.py",
+      "tests/test_armindex_a1_2_effective_input_limit_audit_v1.py",
+      "outputs/audits/armindex/a1.2-p02-first-claim-repair-20260808.json",
+      "outputs/audits/armindex/a1.2-effective-input-limit-blocker-20260808.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner authorized additive P02-FIRST-CLAIM based on frozen DAPFAM claims_text, preserved historical contracts, and forbade dependency semantics and fallback; the resulting control record remains dirty working-tree evidence.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The additive parser and protected coverage audit passed their fail-closed checks without exporting identifiers or text; the receipt and implementation remain dirty working-tree evidence.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The bounded tokenizer audit proved that the unchanged complete screen cannot satisfy its zero-truncation requirement for at least one program-arm cell; its detailed receipt remains dirty working-tree evidence.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "V13 publication semantics remain unchanged and no measured or publication claim is authorized; the V13 control remains part of the preserved dirty working-tree lineage.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "One synchronized read model regenerated Dashboard and Obsidian projections; consecutive report checks had no drift, and the regenerated receipt remains dirty working-tree evidence.",
+      "evidence_refs": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-proposed",
+      "status": "OWNER_DECISION_REQUIRED",
+      "summary": "Choose an additive pre-measurement program-limit compatibility repair or ARM-03 disposition without truncation or partial-screen promotion."
+    },
+    {
+      "thread_id": "OT0002",
+      "provenance": "agent-observed",
+      "status": "BLOCKED_BY_OT0001",
+      "summary": "Protected handoff, transfer, compiler receipt, 25/25 bindings, clean bundle, final local adoption receipt, commit, and push remain unmaterialized."
+    },
+    {
+      "thread_id": "OT0003",
+      "provenance": "agent-observed",
+      "status": "PENDING_LIVE_PROVIDER",
+      "summary": "Fresh provider identity, all-fee quote, live whole-workload budget admission, and live provider admission receipt remain pending."
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

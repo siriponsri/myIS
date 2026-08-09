@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f"
-read_model_sha256: "df6cfaf225a55e884ad550ce48bc5afe50131e36490aca6432fd5016a72ea0ec"
-source_commit: "2e7a3dc380de47311cdc5e982641925053d45645"
+read_model_revision: "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d"
+read_model_sha256: "a0b21ef2423efda045e25ee2ef7181d07cc25b0057b9f1d326a7ef26c5e85de0"
+source_commit: "525f058a57d7c407c0d417a05253f9e96a2c584f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "ce1361e9a48dfa1eb327df266d96106aaac7e92ffcf5e3a3ea75739235ad4d8f"
-last_material_update: "2026-08-08T01:48:27Z"
-next_authorized_action: "Owner reviews the unchanged v11 request locally. A separate goal may prepare an adoption receipt only after a clean pushed execution commit/tree, Owner-local protected handoff and transfer receipts, 25 validated compiled-program bindings, fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/destroy checks are available; do not open a provider during this preparation goal."
+generated_from_revision: "bc9729b4f69c70834069d839630ba404954ab9a7c1014f7425691dd39d7ff08d"
+last_material_update: "2026-08-08T02:20:32Z"
+next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-08T01:48:27Z"
-updated_at: "2026-08-08T01:48:27Z"
+created_at: "2026-08-08T02:20:32Z"
+updated_at: "2026-08-08T02:20:32Z"
 note_id: "ARMINDEX-MIGRATION-RESULT"
 note_type: "result_report"
 phase_id: "A0_MIGRATION_FOUNDATION"

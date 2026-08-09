@@ -9,6 +9,7 @@ evidence.
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
 - Status: `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked`
+- Local adoption-input status: `PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY`
 - Evidence class: scientific execution adoption-request preparation over preserved
   v1-v10 engineering and provider-closeout lineage; scientific authority `false`
 - ArmIndex measured runs: `0`
@@ -166,42 +167,84 @@ evidence.
   opaque transfer/safe-return rules, aggregate result receipts, all-fee budget
   admission, and fail-closed stop conditions. The artifact-only rigor review is
   `Accept` with no blocking finding. v11 remains unadopted and launch-locked.
+- Additive v12-r3 hardens the local adoption-input boundary without changing v11:
+  the clean execution bundle path set now includes the hash-bound v13 publication
+  preregistration, the frozen path commitment is validated, and the aggregate-only
+  contract keeps provider contact, adoption, launch, and measured retrieval false.
+  The local v12-r3 validator, protected compiler checks, v13 publication contract,
+  and v13 instance-disposition policy all pass focused tests.
+- V13 records `OUT Recall@100` as the development candidate-exposure primary
+  outcome, with `OUT nDCG@100` and `OUT nDCG@10` secondary; it is not a measured
+  result or publication claim. The current disposition is
+  `NO_LIVE_INSTANCE` / `PENDING_LIVE_PROVIDER`, and the four live-provider inputs
+  remain pending.
 - Every registered Phase and Task continues to receive one detailed English
   generated Obsidian report with the canonical fifteen-section structure. The
   archive audit found zero eligible orphan/superseded reports; referenced
   historical SCOPE/P1/P2 reports remain active evidence lineage.
+- The Owner-authorized additive `P02-FIRST-CLAIM` repair is frozen without
+  dependency or independence semantics. It passes deterministic replay with
+  REP-DEV availability 150/150, corpus availability 45,336/45,336, zero parse
+  failures, and zero fallback. The matching aggregate-safe receipt is mirrored
+  in `outputs/audits/armindex/a1.2-p02-first-claim-repair-20260808.json` while
+  exact membership and source text remain Owner-local.
+- A bounded offline validator then proved an actual unchanged-v11 contract
+  defect before retrieval: `ARM-03--P00-TAC-DOC` renders 971 tokens against the
+  frozen 512-token effective limit. No truncation was performed and 20/25
+  partial promotion remains forbidden.
+- The Owner-authorized additive dense-overflow policy and protected compiler v15
+  close that local engineering defect without changing v11/v12-r3/v13. The
+  Owner-local run validates all 25/25 bindings over 45,336 corpus families and
+  150 REP-DEV queries, deterministic replay, effective input limits, 140,907
+  overlength logical inputs composed without token loss, and zero silent
+  truncation. Protected handoff, transfer, and compiler receipts are hash-linked;
+  no encoder inference, retrieval, provider action, or scientific result occurred.
+- The additive v15 whole-workload model binds 2,581,603 physical windows to the
+  frozen USD 18 common-screen, USD 23 A1, and USD 100 campaign hard stops. It is
+  a planning model only; fresh all-fee quote and live budget admission remain
+  `PENDING_LIVE_PROVIDER`.
 
 ## Boundaries
 
 No measured retrieval, REP-DEV/HARNESS-DEV optimization, measured dense-arm execution,
 Selection, Final, GPU scientific execution, paid API, model download, provider
 switch, or model-weight modification is authorized by the A0 closeout or A1.1
-fixture handoff. Protected Owner-local data remains untouched.
+fixture handoff. The authorized local P02 coverage audit read protected
+membership and frozen DAPFAM `claims_text` in place; it exported only validated
+aggregate counts and hashes. All exact membership, identifiers, and text remain
+Owner-local.
 
 ## Blockers
 
 The v1-v10 receipt lineage, v5 local stage, live runtime identity, four dense
 adapter checks, Qwen 32,768-token adapter measurement, checkpoint/resume, safe
 return, guest teardown, and Owner-confirmed provider closeout pass. The v11
-request is prepared but A1.2 scientific execution remains deliberately locked
-because the Owner-local handoff/transfer receipts, 25 compiled-program bindings,
-clean execution bundle identity, fresh provider identity and all-fee quote,
-whole-workload budget admission, watchdog/destroy dry-run, and explicit adoption
-receipt do not yet exist. The destroyed instance cannot be reused. The root software license requires an
-Owner legal decision before external release; this does not invalidate the
-engineering preflight.
+request is prepared and v12-r3/v13 local contract validation is complete. The
+P02 source blocker and unchanged-v11 input-limit defect are closed by the
+Owner-authorized additive dense-overflow repair. Its aggregate-only inventory
+and composition audit pass. Additive protected compiler v15 now validates
+physical-window execution contracts, source-token-count-weighted vector
+recomposition semantics, all 25/25 compiled bindings, deterministic replay,
+effective input limits, zero silent truncation, and linked protected
+handoff/transfer/compiler receipts. The remaining local-only closure is the
+clean pushed bundle, pre-adoption anchor, aggregate budget model,
+watchdog/provider-destroy dry-run, and final local receipt. Fresh provider
+identity, quote, live budget admission, and live admission receipt remain
+`PENDING_LIVE_PROVIDER`. The destroyed instance cannot be reused.
 
 ## Active authorized action
 
-Review v11 and prepare its adoption inputs locally. The exact next task is:
+Complete the downstream local adoption-input closure without weakening the
+publication design. The exact next local action is:
 
 ```text
-/goal Review the unchanged A1.2 scientific execution and adoption request v11 locally and prepare its Owner-local adoption inputs only. Bind the clean pushed execution commit/tree and bundle hash, protected handoff and transfer receipts, all 25 compiled-program bindings, a fresh provider identity and all-fee quote, whole-workload budget admission, and watchdog/provider-destroy dry-run. Do not open or contact Vast, adopt execution, start measured retrieval, optimize, access Selection or Final, use paid APIs, or change model weights until the unchanged v11 request passes this separate adoption goal.
+/goal Close the additive v15 local adoption inputs after the protected compiler PASS. Build the clean pushed execution bundle and Owner-local anchor, validate the aggregate whole-workload budget model and synthetic watchdog/provider-destroy control path, publish the final local receipt, and keep all live-provider inputs pending. Do not contact a provider, adopt execution, run measured retrieval, access Selection or Final, use paid APIs, or change frozen scientific semantics.
 ```
 
 The synthetic preflight, safe collection, guest teardown, Owner-confirmed
-provider closeout, and v11 request preparation are complete. No Vast instance
-remains available for reuse. Access material and every protected surface remain
-local. The next goal is reversible local adoption-input preparation only and
-does not open a provider, adopt the revision, or authorize measured retrieval,
-optimization, Selection, Final, paid API work, or weight changes.
+provider closeout, v11 request preparation, frozen split, P02-FIRST-CLAIM
+coverage repair, dense-overflow compatibility audit, and additive protected
+compiler v15 are complete. No Vast instance remains available for reuse. The
+next goal is local bundle/final-receipt closure only; it does not open a
+provider, adopt execution, or authorize measured retrieval, optimization,
+Selection, Final, paid API work, or weight changes.

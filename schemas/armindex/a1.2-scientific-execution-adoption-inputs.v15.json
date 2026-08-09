@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-execution-adoption-inputs.v15.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "revision_id", "status", "preserves", "required_local_inputs", "pending_live_provider", "authorization", "counters", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-execution-adoption-inputs.v15"},
+    "revision_id": {"const": "a1.2-scientific-execution-adoption-inputs-v15"},
+    "status": {"const": "ADDITIVE_LOCAL_ONLY_FINALIZER_PENDING_LIVE_PROVIDER"},
+    "preserves": {"type": "object", "additionalProperties": false, "required": ["v11", "v12_r3", "v13", "original_p02"], "properties": {"v11": {"const": "control/armindex/a1.2/scientific-execution-adoption-request.v11.json"}, "v12_r3": {"const": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json"}, "v13": {"const": "control/armindex/a1.2/publication-impact-contract.v13.json"}, "original_p02": {"const": "control/armindex/a1.2/common-program-set.v11.json"}}},
+    "required_local_inputs": {"const": ["clean_pushed_bundle", "pre_adoption_anchor", "protected_handoff_receipt", "protected_transfer_manifest", "protected_compiler_receipt", "compiled_bindings_25_of_25", "whole_workload_budget_model", "watchdog_provider_destroy_dry_run"]},
+    "pending_live_provider": {"const": ["fresh_provider_identity", "fresh_all_fee_quote", "whole_workload_live_budget_admission", "live_provider_admission_receipt"]},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed", "selection_allowed", "final_allowed", "paid_api_allowed"], "properties": {"provider_contact_allowed": {"const": false}, "launch_allowed": {"const": false}, "adopted_for_execution": {"const": false}, "measured_retrieval_allowed": {"const": false}, "selection_allowed": {"const": false}, "final_allowed": {"const": false}, "paid_api_allowed": {"const": false}}},
+    "counters": {"type": "object", "additionalProperties": false, "required": ["measured_runs", "selection_accesses", "final_accesses", "charged_usd"], "properties": {"measured_runs": {"const": 0}, "selection_accesses": {"const": 0}, "final_accesses": {"const": 0}, "charged_usd": {"const": 0}}},
+    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

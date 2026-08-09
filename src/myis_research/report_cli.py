@@ -26,13 +26,20 @@ from .mlflow_archive import (
 )
 from .mlflow_mirror import default_store as default_mlflow_store
 from .progress import DEFAULT_HEARTBEAT_SECONDS
-from .projections.read_model import build_read_model, canonical_json, sha256, write_read_model
+from .projections.read_model import (
+    build_read_model,
+    canonical_json,
+    sha256,
+    write_read_model,
+)
 from .report_records import build_report_records, report_json_outputs
 
 
 READ_MODEL_RELATIVE_PATH = Path("projections/read-model/read-model.v2.json")
 VAULT_RELATIVE_PATH = Path("obsidian_report")
-GENERATED_MANIFEST_RELATIVE_PATH = VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json"
+GENERATED_MANIFEST_RELATIVE_PATH = (
+    VAULT_RELATIVE_PATH / "00_System/Generated/generated-manifest.json"
+)
 SYNC_RECEIPT_RELATIVE_PATH = Path("projections/sync-receipt.v2.json")
 _SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 _NOTE_ID_RE = re.compile(r"^note_id:\s*([^\r\n]+)$", re.MULTILINE)
@@ -48,32 +55,89 @@ _PROTECTED_FIELD_RE = re.compile(
 )
 _REMOTE_IMAGE_RE = re.compile(r"!\[[^\]]*\]\(https?://", re.IGNORECASE)
 _SNAPSHOT_ID_RE = re.compile(r"^[A-Z0-9][A-Z0-9-]{2,63}$")
-_ALLOWED_NOTE_TYPES = frozenset({
-    "home", "project_map", "phase_report", "task_report", "result_report",
-    "advisor_update", "literature_proxy", "literature_synthesis", "history_report",
-    "run_report", "decision", "risk", "failed_attempt", "presentation", "glossary", "owner_note",
-})
-_ALLOWED_WORKFLOW_STATUSES = frozenset({
-    "waiting_dependency", "ready", "in_progress", "verification_needed",
-    "waiting_gate", "blocked", "complete",
-})
-_ALLOWED_EVIDENCE_MATURITY = frozenset({
-    "non_scientific", "fixture", "dry_run", "measured_development",
-    "measured_selection", "confirmatory", "publication", "historical_exposed",
-    "planned", "engineering", "train_selection_measured", "static_contract_review",
-})
-_ALLOWED_CLAIM_LEVELS = frozenset({
-    "none", "descriptive", "exploratory", "confirmatory", "publication_ready",
-})
-_REQUIRED_NOTE_PROPERTIES = frozenset({
-    "schema_version", "note_id", "note_type", "workflow_status", "evidence_maturity",
-    "claim_level", "safe_to_present", "managed_by", "edit_policy",
-    "read_model_revision", "read_model_sha256", "source_commit",
-    "projection_schema_version", "source_run_ids", "source_manifest_sha256",
-    "related_literature_ids", "related_decision_ids",
-    "evidence_class", "scientific_authority", "claim_boundary",
-    "generated_from_revision", "last_material_update", "next_authorized_action",
-})
+_ALLOWED_NOTE_TYPES = frozenset(
+    {
+        "home",
+        "project_map",
+        "phase_report",
+        "task_report",
+        "result_report",
+        "advisor_update",
+        "literature_proxy",
+        "literature_synthesis",
+        "history_report",
+        "run_report",
+        "decision",
+        "risk",
+        "failed_attempt",
+        "presentation",
+        "glossary",
+        "owner_note",
+    }
+)
+_ALLOWED_WORKFLOW_STATUSES = frozenset(
+    {
+        "waiting_dependency",
+        "ready",
+        "in_progress",
+        "verification_needed",
+        "waiting_gate",
+        "blocked",
+        "complete",
+    }
+)
+_ALLOWED_EVIDENCE_MATURITY = frozenset(
+    {
+        "non_scientific",
+        "fixture",
+        "dry_run",
+        "measured_development",
+        "measured_selection",
+        "confirmatory",
+        "publication",
+        "historical_exposed",
+        "planned",
+        "engineering",
+        "train_selection_measured",
+        "static_contract_review",
+    }
+)
+_ALLOWED_CLAIM_LEVELS = frozenset(
+    {
+        "none",
+        "descriptive",
+        "exploratory",
+        "confirmatory",
+        "publication_ready",
+    }
+)
+_REQUIRED_NOTE_PROPERTIES = frozenset(
+    {
+        "schema_version",
+        "note_id",
+        "note_type",
+        "workflow_status",
+        "evidence_maturity",
+        "claim_level",
+        "safe_to_present",
+        "managed_by",
+        "edit_policy",
+        "read_model_revision",
+        "read_model_sha256",
+        "source_commit",
+        "projection_schema_version",
+        "source_run_ids",
+        "source_manifest_sha256",
+        "related_literature_ids",
+        "related_decision_ids",
+        "evidence_class",
+        "scientific_authority",
+        "claim_boundary",
+        "generated_from_revision",
+        "last_material_update",
+        "next_authorized_action",
+    }
+)
 
 
 def validate_read_model(model: Mapping[str, Any]) -> None:
@@ -90,10 +154,16 @@ def validate_read_model(model: Mapping[str, Any]) -> None:
     recorded = model.get("read_model_sha256")
     if not isinstance(recorded, str) or not _SHA256_RE.fullmatch(recorded):
         raise ValueError("read_model_sha256 must be SHA-256")
-    unsigned = {key: value for key, value in model.items() if key != "read_model_sha256"}
+    unsigned = {
+        key: value for key, value in model.items() if key != "read_model_sha256"
+    }
     if sha256(canonical_json(unsigned)) != recorded:
         raise ValueError("read_model_sha256 does not match canonical read model")
-    gate_ids = {str(item.get("gate_id")) for item in model.get("gates", []) if isinstance(item, Mapping)}
+    gate_ids = {
+        str(item.get("gate_id"))
+        for item in model.get("gates", [])
+        if isinstance(item, Mapping)
+    }
     if gate_ids != {"D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"}:
         raise ValueError("read model must expose exactly D2 and D3 decisions")
 
@@ -129,9 +199,7 @@ def projection_report_contents(
         **_compatibility_report_contents(root, model),
     }
     _validate_external_projection_contents(external_outputs)
-    outputs = {
-        root / relative: content for relative, content in vault_contents.items()
-    }
+    outputs = {root / relative: content for relative, content in vault_contents.items()}
     outputs[root / GENERATED_MANIFEST_RELATIVE_PATH] = manifest_text
     outputs[root / "mlflow/generated/archive-index.v2.json"] = archive_text
     if mlflow_run_id is not None:
@@ -142,46 +210,388 @@ def projection_report_contents(
             obsidian_manifest_sha256=str(manifest["manifest_sha256"]),
             external_outputs=external_outputs,
         )
-        outputs[root / SYNC_RECEIPT_RELATIVE_PATH] = _json_text({
-            "schema_version": "myis.projection-sync-receipt.v2",
-            "projection_schema_version": model["projection_schema_version"],
-            "read_model_revision": revision,
-            "read_model_sha256": model_sha,
-            "source_commit": source_commit,
-            "mlflow_run_id": mlflow_run_id,
-            "mlflow_archive_sha256": sha256(archive_text.encode("utf-8")),
-            "dashboard_snapshot_sha256": model_sha,
-            "obsidian_manifest_sha256": manifest["manifest_sha256"],
-            **lifecycle,
-            "status": "PASS",
-        })
+        outputs[root / SYNC_RECEIPT_RELATIVE_PATH] = _json_text(
+            {
+                "schema_version": "myis.projection-sync-receipt.v2",
+                "projection_schema_version": model["projection_schema_version"],
+                "read_model_revision": revision,
+                "read_model_sha256": model_sha,
+                "source_commit": source_commit,
+                "mlflow_run_id": mlflow_run_id,
+                "mlflow_archive_sha256": sha256(archive_text.encode("utf-8")),
+                "dashboard_snapshot_sha256": model_sha,
+                "obsidian_manifest_sha256": manifest["manifest_sha256"],
+                **lifecycle,
+                "status": "PASS",
+            }
+        )
     outputs.update(external_outputs)
     outputs.update(report_json_outputs(root, model))
     return outputs
 
 
+def _a12_rep_harness_claim_audit_body(audit: Mapping[str, Any]) -> str:
+    split = audit.get("split", {}) if isinstance(audit.get("split"), Mapping) else {}
+    rows = [
+        "| Stratum | Exact relevance-count | Parent | REP-DEV | HARNESS-DEV |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for item in (
+        split.get("strata", []) if isinstance(split.get("strata"), list) else []
+    ):
+        rows.append(
+            f"| `{item.get('role_set')}` | {item.get('relevance_count')} | {item.get('parent_count')} | {item.get('rep_dev_count')} | {item.get('harness_dev_count')} |"
+        )
+    parser_audit = (
+        audit.get("claim_parser_audit", {})
+        if isinstance(audit.get("claim_parser_audit"), Mapping)
+        else {}
+    )
+    return (
+        "# A1.2 REP-DEV / HARNESS-DEV Split and Structured-Claim Audit\n\n"
+        "## Objective\n\n"
+        "บันทึกการแบ่งย่อย Train-250 ก่อน measurement และตรวจว่า source/parser ปัจจุบันรองรับ structured independent claim ที่ P02 ต้องการจริงหรือไม่\n\n"
+        "## Starting State\n\n"
+        "ใช้ parent Train-250 ที่ถูก freeze แล้ว (`seed=42`) โดยคง v11, v12-r3 และ v13 contracts เดิมทุกไบต์ที่อยู่นอกงานนี้ การตรวจเป็น local-only และยังไม่มี measured retrieval\n\n"
+        "## Inputs and Frozen Bindings\n\n"
+        f"- Parent split commitment: `{split.get('parent_split_sha256')}`; file commitment `{split.get('parent_split_file_sha256')}`\n"
+        f"- Algorithm: `{split.get('algorithm_id')}`; source `{split.get('algorithm_source_sha256')}`; seed `{split.get('seed')}`\n"
+        "- Strata: canonical IN/OUT role set x exact positive relevant-family count; no arbitrary bins\n"
+        "- Grouping policy: preserve prior frozen constraints; audit found an empty constraint set\n\n"
+        "## Work Performed\n\n"
+        "คำนวณ Hamilton largest-remainder allocation ไปยังเป้าหมาย 150/100 แล้วจัดลำดับภายในแต่ละ stratum ด้วย SHA256(`42:` + canonical query ID) และ lexical tie-break จากนั้น replay ซ้ำด้วย input relation order ที่กลับด้าน และ audit candidate parser แบบ aggregate-only สองรอบ\n\n"
+        "## Artifacts Produced\n\n"
+        f"- Safe composite audit: `{audit.get('audit_uri')}` (`{audit.get('audit_file_sha256')}`)\n"
+        f"- Owner-local protected receipt: `{split.get('owner_local_receipt_uri')}` (`{split.get('owner_local_receipt_sha256')}`)\n"
+        f"- Aggregate-safe EDA: `{audit.get('figure_png_uri')}` (`{audit.get('figure_png_sha256')}`) and `{audit.get('figure_svg_uri')}` (`{audit.get('figure_svg_sha256')}`)\n\n"
+        "## Metrics\n\n" + "\n".join(rows) + "\n\n"
+        f"Totals: parent `{split.get('counts', {}).get('parent_train')}`, REP-DEV `{split.get('counts', {}).get('rep_dev')}`, HARNESS-DEV `{split.get('counts', {}).get('harness_dev')}`. Exact relevance-count is 20 in every stratum. These are split counts, not retrieval metrics.\n\n"
+        "## Result\n\n"
+        f"Split status **{split.get('status')}**. Forward replay = `{split.get('deterministic_replay', {}).get('forward_repeat_match')}`; reversed-relation replay = `{split.get('deterministic_replay', {}).get('reversed_relation_input_match')}`; grouping constraint count = `{split.get('grouping_policy', {}).get('constraint_count')}`.\n\n"
+        + "## Interpretation\n\n"
+        "การ split นี้เป็น deterministic engineering commitment สำหรับการพัฒนาเท่านั้น ไม่ใช่การเลือกจากผล retrieval และไม่เปิดสิทธิ์ provider หรือ measured execution\n\n"
+        "## Supported Claims\n\n"
+        "รองรับเฉพาะการกล่าวว่า subdivision ครบ 250 และได้เป้าหมาย 150/100 ตาม algorithm ที่ bind ไว้ และ parser audit สามารถ replay ได้\n\n"
+        "## Unsupported Claims\n\n"
+        "ยังห้ามอ้างคุณภาพ retrieval, ranking improvement, causality, legal meaning, publication result หรือความถูกต้องของ independent-claim labels\n\n"
+        "## Failures and Recovery\n\n"
+        "Audit พบ blocker ที่ P02 เพราะ active DAPFAM มี raw claims source แต่ไม่มี canonical structured fields และ parser candidate ใช้ regex inference; จึงไม่ promote parser และไม่แก้ P02 ในงานนี้\n\n"
+        + "## Governance and Safety\n\n"
+        "ไม่มี retrieval result ถูกอ่าน, ไม่มี provider contact, ไม่มี paid API, ไม่มี model/program/evaluator/split-definition mutation และ exact membership อยู่ Owner-local เท่านั้น\n\n"
+        "## Decision\n\n"
+        f"`{parser_audit.get('recommendation')}`. Protected compiler preflight remains blocked until Owner-approved additive P02-FIRST-CLAIM repair provides trustworthy structured independence\n\n"
+        "## Next Action\n\n"
+        "Owner review additive P02-FIRST-CLAIM repair. หลังจากนั้นค่อย rerun protected compiler preflight; measured retrieval และ live-provider admission ยัง pending ตาม v12-r3/v13\n\n"
+        "## Evidence Links\n\n"
+        f"- Composite audit: `{audit.get('audit_uri')}`\n"
+        f"- Parser audit: `{parser_audit.get('audit_uri')}` (`{parser_audit.get('audit_sha256')}`)\n"
+        f"- EDA figure: ![Aggregate-safe split EDA](../../../{audit.get('figure_png_uri')})\n"
+        "- Publication v13 remains additive and unchanged by this split/audit task.\n"
+    )
+
+
+def _a12_p02_limit_audit_body(audit: Mapping[str, Any]) -> str:
+    p02 = audit.get("p02", {}) if isinstance(audit.get("p02"), Mapping) else {}
+    coverage = (
+        p02.get("coverage", {}) if isinstance(p02.get("coverage"), Mapping) else {}
+    )
+    query = (
+        coverage.get("rep_dev_queries", {})
+        if isinstance(coverage.get("rep_dev_queries"), Mapping)
+        else {}
+    )
+    corpus = (
+        coverage.get("corpus", {})
+        if isinstance(coverage.get("corpus"), Mapping)
+        else {}
+    )
+    limit = (
+        audit.get("input_limit", {})
+        if isinstance(audit.get("input_limit"), Mapping)
+        else {}
+    )
+    defect = limit.get("defect", {}) if isinstance(limit.get("defect"), Mapping) else {}
+    return (
+        "# A1.2 P02-FIRST-CLAIM Repair and Effective Input-Limit Audit\n\n"
+        "## Objective\n\n"
+        "ปิด blocker เดิมของ P02 ด้วย additive repair ก่อน measurement โดยไม่แก้ historical v11/v12-r3/v13 และตรวจต่อว่าทั้ง 25 program-arm cells สามารถรักษา zero silent truncation ได้จริงหรือไม่\n\n"
+        "## Starting State\n\n"
+        "REP-DEV/HARNESS-DEV split ถูก freeze แล้วที่ 150/100 แต่ P02 เดิมต้องการ independent-claim marker ซึ่ง DAPFAM ไม่มี ground truth ที่เชื่อถือได้ จึงยังสร้าง protected bindings ไม่ได้\n\n"
+        "## Inputs and Frozen Bindings\n\n"
+        f"- Additive repair contract: `{p02.get('repair_contract', {}).get('uri')}` (`{p02.get('repair_contract', {}).get('contract_sha256')}`)\n"
+        f"- Frozen parser: `{p02.get('parser', {}).get('version')}` (`{p02.get('parser', {}).get('source_sha256')}`)\n"
+        f"- DAPFAM revision: `{p02.get('source', {}).get('dataset_revision')}`\n"
+        "- V13 remains OUT Recall@100 primary and OUT nDCG@100 / nDCG@10 secondary.\n\n"
+        "## Work Performed\n\n"
+        "รัน claim-boundary parser สองรอบบน corpus และ frozen REP-DEV membership โดยไม่ใช้ dependency regex จากนั้นโหลด frozen ARM-03 tokenizer แบบ offline และตรวจ rendered P00 input โดยไม่ truncate หรือเริ่ม retrieval\n\n"
+        "## Artifacts Produced\n\n"
+        f"- P02 aggregate-safe audit: `{audit.get('p02_audit_uri')}` (`{audit.get('p02_audit_file_sha256')}`)\n"
+        f"- Effective input-limit blocker: `{audit.get('input_limit_audit_uri')}` (`{audit.get('input_limit_audit_file_sha256')}`)\n"
+        "- Matching P02 receipt remains Owner-local; no protected membership or text was exported.\n\n"
+        "## Metrics\n\n"
+        f"REP-DEV availability `{query.get('available_count')}/{query.get('required_row_count')}`; corpus availability `{corpus.get('available_count')}/{corpus.get('required_row_count')}`; parse failures `{p02.get('parse_failures')}`. "
+        f"The first fail-closed binding is `{defect.get('binding_id')}` with rendered length `{defect.get('observed_rendered_input_tokens')}` against limit `{defect.get('effective_input_limit')}`. These are engineering validation counts, not retrieval metrics.\n\n"
+        "## Result\n\n"
+        f"P02 repair status **{p02.get('status')}** with deterministic replay **{p02.get('deterministic_replay', {}).get('status')}**. Whole 25/25 protected compilation status **{limit.get('status')}** because the frozen input exceeds its declared limit.\n\n"
+        "## Interpretation\n\n"
+        "P02 blocker ถูกปิดแล้วโดยไม่สร้าง independent/dependent semantics ใหม่ แต่ v11 common-screen contract ยังไม่ executable แบบ zero-truncation สำหรับ ARM-03 x P00 ดังนั้นการฝืนสร้าง 20/25 หรือ truncate จะลดความเที่ยงตรงและขัด Owner decision\n\n"
+        "## Supported Claims\n\n"
+        "รองรับเฉพาะข้อสรุปว่า P02-FIRST-CLAIM มี coverage ครบและ replay ได้ และ validator พบ input-limit incompatibility อย่างน้อยหนึ่ง cell ก่อน measurement\n\n"
+        "## Unsupported Claims\n\n"
+        "ยังไม่รองรับ retrieval-quality, ranking, interaction, complementarity, superiority, publication, legal หรือ provider-cost claim ใด ๆ\n\n"
+        "## Failures and Recovery\n\n"
+        f"Compiler ต้อง fail closed ที่ `{defect.get('binding_id')}`; ไม่มี truncation, fallback, partial-screen promotion, provider contact หรือ measured retrieval เกิดขึ้น การ recover ต้องใช้ Owner-approved additive pre-measurement compatibility decision เท่านั้น\n\n"
+        "## Governance and Safety\n\n"
+        "v11/v12-r3/v13 และ original P02 ยังเป็น immutable lineage; exact membership/text อยู่ Owner-local; Selection และ Final ปิด; paid API และ provider contact เป็น false\n\n"
+        "## Decision\n\n"
+        "คง `COMPILED_BINDINGS_25_OF_25=BLOCKED` และ `ZERO_TRUNCATION_CHECK=FAIL_OVERLENGTH_INPUT`; ไม่ commit/push เพราะ conditional authorization ยังไม่ครบ\n\n"
+        "## Next Action\n\n"
+        f"{audit.get('next_authorized_action')}\n\n"
+        "## Evidence Links\n\n"
+        f"- P02 receipt: `{p02.get('receipt_sha256')}`\n"
+        f"- Input-limit audit: `{limit.get('audit_sha256')}`\n"
+        "- Historical split audit and EDA remain preserved at their existing paths.\n"
+    )
+
+
+def _a12_dense_overflow_body(audit: Mapping[str, Any]) -> str:
+    """Render the frozen overflow decision and compiler-integration status."""
+
+    cells = audit.get("cells", {}) if isinstance(audit.get("cells"), Mapping) else {}
+    rows = [
+        "| Arm | Program | Corpus overflow | REP-DEV query overflow | Physical windows | Max physical tokens |",
+        "|---|---|---:|---:|---:|---:|",
+    ]
+    for arm_id in ("ARM-02", "ARM-03", "ARM-04", "ARM-05"):
+        arm = cells.get(arm_id, {}) if isinstance(cells.get(arm_id), Mapping) else {}
+        for program_id, program_key in zip(
+            ("P00", "P01", "P02", "P03", "P04"),
+            (
+                "P00-TAC-DOC",
+                "P01-TA-DOC",
+                "P02-CLAIM1",
+                "P03-PASSAGE",
+                "P04-SECTION-MULTIVIEW",
+            ),
+            strict=True,
+        ):
+            cell = (
+                arm.get(program_key, {})
+                if isinstance(arm.get(program_key), Mapping)
+                else {}
+            )
+            corpus = (
+                cell.get("corpus", {})
+                if isinstance(cell.get("corpus"), Mapping)
+                else {}
+            )
+            query = (
+                cell.get("rep_dev_queries", {})
+                if isinstance(cell.get("rep_dev_queries"), Mapping)
+                else {}
+            )
+            rows.append(
+                f"| `{arm_id}` | `{program_id}` | {float(corpus.get('overflow_incidence', 0)) * 100:.3f}% | "
+                f"{float(query.get('overflow_incidence', 0)) * 100:.3f}% | {int(corpus.get('physical_window_count', 0)):,} | "
+                f"{int(corpus.get('maximum_physical_window_tokens', 0)):,} |"
+            )
+    semantics = (
+        audit.get("composition_semantics", {})
+        if isinstance(audit.get("composition_semantics"), Mapping)
+        else {}
+    )
+    requirements = (
+        audit.get("requirements", {})
+        if isinstance(audit.get("requirements"), Mapping)
+        else {}
+    )
+    safety = audit.get("safety", {}) if isinstance(audit.get("safety"), Mapping) else {}
+    compiler_coverage = (
+        audit.get("compiler_coverage", {})
+        if isinstance(audit.get("compiler_coverage"), Mapping)
+        else {}
+    )
+    compiler_safety = (
+        audit.get("compiler_safety", {})
+        if isinstance(audit.get("compiler_safety"), Mapping)
+        else {}
+    )
+    receipts = (
+        audit.get("protected_receipts", {})
+        if isinstance(audit.get("protected_receipts"), Mapping)
+        else {}
+    )
+    compiler_pass = audit.get("compiler_integration_status") == "PASS"
+    local_adoption_pass = audit.get("local_adoption_input_status") == "PASS"
+    result_text = (
+        "The complete additive v15 local adoption-input closure **PASS**. The clean pushed bundle, Owner-local anchor, all 25 protected bindings, whole-workload budget model, and synthetic watchdog/provider-destroy dry-run are validated; every live-provider input remains pending."
+        if local_adoption_pass
+        else "The additive repair and protected v15 compiler integration **PASS**. All 25 bindings, the protected handoff, transfer manifest, deterministic replay, effective-limit checks, and zero-silent-truncation evidence are materialized Owner-local."
+        if compiler_pass
+        else "The additive repair is frozen and the aggregate-only compatibility/composition audit passes. Protected compiler integration remains **BLOCKED**."
+    )
+    recovery_text = (
+        "The historical v12 compiler lacked the physical-window composition path and therefore failed closed. Additive v15 preserves v12-r3 unchanged, binds the frozen v14 policy, validates the Owner-local source/receipt chain, emits 25/25 bindings, and keeps encoder/retrieval execution disabled."
+        if compiler_pass
+        else "The existing v12 compiler has no physical-window integration path and no encoder-vector aggregation implementation. The system therefore fails closed at compiler integration rather than silently truncating or dropping ARM-03."
+    )
+    decision_text = (
+        "`LOCAL_ADOPTION_INPUTS=PASS` and `READY_FOR_LIVE_PROVIDER_ADMISSION=true`. This readiness permits only a separately authorized live-provider admission goal; provider identity, quote, live budget admission, and live admission receipt remain pending, and scientific execution is not adopted."
+        if local_adoption_pass
+        else "`repair frozen, compiler integration PASS`. `COMPILED_BINDINGS_25_OF_25=PASS`, `PROTECTED_HANDOFF=PASS`, `TRANSFER_RECEIPT=PASS`, and `ZERO_TRUNCATION_CHECK=PASS`. Continue only with the clean-tree bundle/final local receipt gates; live-provider admission remains pending."
+        if compiler_pass
+        else "`repair frozen, compiler integration blocked`. Keep `COMPILED_BINDINGS_25_OF_25=BLOCKED`, `PROTECTED_HANDOFF=BLOCKED`, and `TRANSFER_RECEIPT=BLOCKED`."
+    )
+    return (
+        "# A1.2 Dense-Overflow Repair and Protected Compiler Integration\n\n"
+        "## Objective\n\n"
+        "Freeze the Owner-authorized additive dense-overflow composition policy, integrate it with the protected compiler, and record aggregate-safe validation evidence before any provider admission.\n\n"
+        "## Starting State\n\n"
+        "The unchanged v11/v12-r3/v13 contracts contain 25 logical program-arm cells. The previous protected compiler accepted one rendered logical input and failed closed on overlength inputs; no retrieval or provider work was performed.\n\n"
+        "## Inputs and Frozen Bindings\n\n"
+        f"- Repair contract: `{audit.get('contract_uri')}` (`{audit.get('contract_sha256')}`)\n"
+        f"- Raw inventory: `{audit.get('inventory_uri')}` (`{audit.get('inventory_sha256')}`)\n"
+        f"- Composition audit: `{audit.get('composition_uri')}` (`{audit.get('composition_sha256')}`)\n"
+        f"- Composition: `{semantics.get('aggregation')}`; contiguous source-order windows; overlap `{semantics.get('overlap_tokens')}`; no truncation or fallback.\n\n"
+        "## Work Performed\n\n"
+        "Validated contract self-hashes, immutable v11/v12-r3/v13/P02 lineage, implementation source hashes, raw inventory bindings, aggregate-only composition receipt, and EDA assets. The additive v15 compiler then materialized Owner-local protected inputs, validated handoff and transfer receipts, compiled the complete topology, and replayed deterministic compilation without executing encoder vectors or retrieval.\n\n"
+        "## Artifacts Produced\n\n"
+        f"- PNG EDA: `{audit.get('figure_png_uri')}` (`{audit.get('figure_png_sha256')}`)\n"
+        f"- SVG EDA: `{audit.get('figure_svg_uri')}` (`{audit.get('figure_svg_sha256')}`)\n"
+        f"- Protected compiler integration: `{audit.get('compiler_integration_uri')}` (`{audit.get('compiler_integration_contract_sha256')}`)\n"
+        f"- Aggregate-safe compiler audit: `{audit.get('compiler_audit_uri')}` (`{audit.get('compiler_audit_sha256')}`)\n\n"
+        f"- Whole-workload budget model: `{audit.get('budget_model_uri')}` (`{audit.get('budget_model_sha256')}`)\n"
+        f"- Final local adoption receipt: `{audit.get('final_receipt_uri')}` (`{audit.get('final_receipt_sha256')}`)\n\n"
+        "## Metrics\n\n" + "\n".join(rows) + "\n\n"
+        f"Requirements: 25/25 compatible `{requirements.get('compatible_cells_25_of_25')}`; REP-DEV coverage `{requirements.get('rep_dev_query_coverage_fraction')}`; corpus coverage `{requirements.get('required_corpus_logical_unit_coverage_fraction')}`; zero drop `{requirements.get('zero_omitted_source_tokens')}`; zero truncation `{requirements.get('zero_silent_truncation')}`. Compiler bindings `{compiler_coverage.get('compiled_bindings')}/25`; compiler replay `{compiler_safety.get('deterministic_replay')}`; protected boundary `{compiler_safety.get('protected_boundary')}`; raw overflow logical inputs `{compiler_coverage.get('raw_overflow_count')}`; clean bundle `{audit.get('bundle_status')}`; watchdog dry-run `{audit.get('watchdog_dry_run_status')}`.\n\n"
+        "## Result\n\n"
+        f"{result_text}\n\n"
+        "## Interpretation\n\n"
+        "PatEmbed is the high-incidence engineering case: P00 has 92.432% corpus overflow and 96.667% REP-DEV query overflow, with approximately 3.34 physical windows per logical P00 corpus unit. This describes planned physical composition only; it is not a retrieval or quality result.\n\n"
+        "## Supported Claims\n\n"
+        "The frozen policy preserves logical program/unit identity, uses longest contiguous zero-overlap windows, represents each source token once, and now has deterministic protected compiler evidence within every frozen effective limit.\n\n"
+        "## Unsupported Claims\n\n"
+        "No vector, encoder-parity, latency, cost, retrieval-quality, interaction, complementarity, or publication claim is authorized. PatEmbed P00 must be disclosed as a whole-document composed embedding if execution later proceeds.\n\n"
+        "## Failures and Recovery\n\n"
+        f"{recovery_text}\n\n"
+        "## Governance and Safety\n\n"
+        + " ".join(f"`{key}={value}`" for key, value in safety.items())
+        + ". Historical v11/v12-r3/v13 and original P02 lineage remain unchanged; no provider was contacted and no measured retrieval started.\n\n"
+        + "## Decision\n\n"
+        + f"{decision_text}\n\n"
+        + f"## Next Action\n\n{audit.get('next_authorized_action')}\n\n"
+        "## Evidence Links\n\n"
+        f"- Contract: `{audit.get('contract_uri')}`\n"
+        f"- Inventory: `{audit.get('inventory_uri')}`\n"
+        f"- Composition: `{audit.get('composition_uri')}`\n"
+        f"- Binding set: `{receipts.get('binding_set_sha256')}`\n"
+        f"- Compiler receipt: `{receipts.get('compiler_receipt_sha256')}`\n"
+        f"- Figure: ![Dense overflow EDA](../../../{audit.get('figure_png_uri')})\n"
+    )
+
+
 def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
-    p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
-    freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
-    review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
-    fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
-    review_source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
-    observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
-    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
-    harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
-    feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
-    closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
-    adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
-    scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
-    vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
-    vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
-    vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
-    vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
-    vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
-    vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
-    vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
-    provider_closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
-    scientific_request_v11 = scaffold.get("scientific_execution_request_v11", {}) if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping) else {}
+    p2 = (
+        model.get("p2_readiness", {})
+        if isinstance(model.get("p2_readiness"), Mapping)
+        else {}
+    )
+    freeze = (
+        p2.get("freeze_barrier", {})
+        if isinstance(p2.get("freeze_barrier"), Mapping)
+        else {}
+    )
+    review = (
+        p2.get("official_review", {})
+        if isinstance(p2.get("official_review"), Mapping)
+        else {}
+    )
+    fixture = (
+        p2.get("fixture_pilot", {})
+        if isinstance(p2.get("fixture_pilot"), Mapping)
+        else {}
+    )
+    review_source = (
+        review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
+    )
+    observatory = (
+        model.get("observatory", {})
+        if isinstance(model.get("observatory"), Mapping)
+        else {}
+    )
+    armindex = (
+        model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    )
+    harvest = (
+        armindex.get("legacy_code_harvest", {})
+        if isinstance(armindex.get("legacy_code_harvest"), Mapping)
+        else {}
+    )
+    feasibility = (
+        armindex.get("compute_storage_feasibility", {})
+        if isinstance(armindex.get("compute_storage_feasibility"), Mapping)
+        else {}
+    )
+    closeout = (
+        armindex.get("phase_closeout", {})
+        if isinstance(armindex.get("phase_closeout"), Mapping)
+        else {}
+    )
+    adapter = (
+        armindex.get("adapter_fixture_validation", {})
+        if isinstance(armindex.get("adapter_fixture_validation"), Mapping)
+        else {}
+    )
+    scaffold = (
+        armindex.get("a1_2_contract_scaffold", {})
+        if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping)
+        else {}
+    )
+    vast = (
+        scaffold.get("vast_preflight_v2", {})
+        if isinstance(scaffold.get("vast_preflight_v2"), Mapping)
+        else {}
+    )
+    vast_v3 = (
+        scaffold.get("vast_preflight_v3", {})
+        if isinstance(scaffold.get("vast_preflight_v3"), Mapping)
+        else {}
+    )
+    vast_v5 = (
+        scaffold.get("vast_preflight_v5", {})
+        if isinstance(scaffold.get("vast_preflight_v5"), Mapping)
+        else {}
+    )
+    vast_v6 = (
+        scaffold.get("vast_preflight_v6", {})
+        if isinstance(scaffold.get("vast_preflight_v6"), Mapping)
+        else {}
+    )
+    vast_v7 = (
+        scaffold.get("vast_preflight_v7", {})
+        if isinstance(scaffold.get("vast_preflight_v7"), Mapping)
+        else {}
+    )
+    vast_v8 = (
+        scaffold.get("vast_preflight_v8", {})
+        if isinstance(scaffold.get("vast_preflight_v8"), Mapping)
+        else {}
+    )
+    vast_v9 = (
+        scaffold.get("vast_preflight_v9", {})
+        if isinstance(scaffold.get("vast_preflight_v9"), Mapping)
+        else {}
+    )
+    provider_closeout_v10 = (
+        scaffold.get("provider_closeout_v10", {})
+        if isinstance(scaffold.get("provider_closeout_v10"), Mapping)
+        else {}
+    )
+    scientific_request_v11 = (
+        scaffold.get("scientific_execution_request_v11", {})
+        if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping)
+        else {}
+    )
     return {
         "schema_version": "myis.mlflow-archive-index.v2",
         "projection_schema_version": model["projection_schema_version"],
@@ -192,15 +602,21 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
         "system_experiment": "myis-system",
         "run_ids": [item.get("run_id") for item in model.get("runs", [])],
         "evidence_ids": [item.get("evidence_id") for item in model.get("evidence", [])],
-        "status": "blocked" if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "current",
+        "status": "blocked"
+        if model["project"]["state"] == "P1_BLOCKED_WITH_EVIDENCE"
+        else "current",
         "armindex_legacy_code_harvest": {
             "status": harvest.get("status", "not_started"),
             "evidence_class": harvest.get("evidence_class", "engineering"),
             "scientific_authority": harvest.get("scientific_authority", False),
             "source_receipt_uri": harvest.get("receipt_uri"),
             "source_receipt_sha256": harvest.get("receipt_sha256"),
-            "source_verification_receipt_uri": harvest.get("source_verification_receipt_uri"),
-            "source_verification_receipt_sha256": harvest.get("source_verification_receipt_sha256"),
+            "source_verification_receipt_uri": harvest.get(
+                "source_verification_receipt_uri"
+            ),
+            "source_verification_receipt_sha256": harvest.get(
+                "source_verification_receipt_sha256"
+            ),
             "measured_runs": harvest.get("measured_runs", 0),
             "selection_accesses": harvest.get("selection_accesses", 0),
             "final_accesses": harvest.get("final_accesses", 0),
@@ -256,7 +672,9 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "scientific_authority": scaffold.get("scientific_authority", False),
             "source_receipt_uri": scaffold.get("receipt_uri"),
             "source_receipt_sha256": scaffold.get("receipt_sha256"),
-            "closeout_validation_audit_sha256": scaffold.get("closeout_validation_audit_sha256"),
+            "closeout_validation_audit_sha256": scaffold.get(
+                "closeout_validation_audit_sha256"
+            ),
             "model_lock_count": scaffold.get("model_lock_count", 0),
             "launch_ready": scaffold.get("launch_ready", False),
             "measured_execution": scaffold.get("measured_execution", False),
@@ -272,14 +690,24 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "synthetic_receipt_uri": vast.get("synthetic_receipt_uri"),
             "synthetic_receipt_sha256": vast.get("synthetic_receipt_sha256"),
             "closeout_validation_audit_uri": vast.get("closeout_validation_audit_uri"),
-            "closeout_validation_audit_sha256": vast.get("closeout_validation_audit_sha256"),
-            "closeout_validation_check_count": vast.get("closeout_validation_check_count", 0),
-            "closeout_validation_recovery_count": vast.get("closeout_validation_recovery_count", 0),
+            "closeout_validation_audit_sha256": vast.get(
+                "closeout_validation_audit_sha256"
+            ),
+            "closeout_validation_check_count": vast.get(
+                "closeout_validation_check_count", 0
+            ),
+            "closeout_validation_recovery_count": vast.get(
+                "closeout_validation_recovery_count", 0
+            ),
             "gpu_count": vast.get("gpu_count", 0),
             "synthetic_worker_count": vast.get("synthetic_worker_count", 0),
             "planning_rate_usd_per_instance_hour": vast.get("planning_rate_usd", 0),
-            "estimated_instance_hours": vast.get("estimated_instance_hours", "unavailable"),
-            "estimated_raw_worker_usd": vast.get("estimated_raw_worker_usd", "unavailable"),
+            "estimated_instance_hours": vast.get(
+                "estimated_instance_hours", "unavailable"
+            ),
+            "estimated_raw_worker_usd": vast.get(
+                "estimated_raw_worker_usd", "unavailable"
+            ),
             "launch_allowed": vast.get("launch_allowed", False),
             "adopted_for_execution": vast.get("adopted_for_execution", False),
             "real_counters": vast.get("real_counters", {}),
@@ -313,7 +741,9 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "platform": vast_v5.get("platform"),
             "model_snapshots": vast_v5.get("model_snapshots"),
             "local_preparation_status": vast_v5.get("local_preparation_status"),
-            "custom_local_docker_build": vast_v5.get("custom_local_docker_build", False),
+            "custom_local_docker_build": vast_v5.get(
+                "custom_local_docker_build", False
+            ),
             "live_checks_pending": vast_v5.get("live_checks_pending", []),
             "launch_allowed": vast_v5.get("launch_allowed", False),
             "adopted_for_execution": vast_v5.get("adopted_for_execution", False),
@@ -432,24 +862,16 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "request_uri": scientific_request_v11.get("request_uri"),
             "request_sha256": scientific_request_v11.get("request_sha256"),
             "request_self_sha256": scientific_request_v11.get("request_self_sha256"),
-            "component_bindings": scientific_request_v11.get(
-                "component_bindings", {}
-            ),
-            "budget_hard_stops": scientific_request_v11.get(
-                "budget_hard_stops", {}
-            ),
-            "workload_manifests": scientific_request_v11.get(
-                "workload_manifests", 0
-            ),
+            "component_bindings": scientific_request_v11.get("component_bindings", {}),
+            "budget_hard_stops": scientific_request_v11.get("budget_hard_stops", {}),
+            "workload_manifests": scientific_request_v11.get("workload_manifests", 0),
             "expected_program_arm_runs": scientific_request_v11.get(
                 "expected_program_arm_runs", 0
             ),
             "expected_physical_program_view_paths": scientific_request_v11.get(
                 "expected_physical_program_view_paths", 0
             ),
-            "rep_dev_query_count": scientific_request_v11.get(
-                "rep_dev_query_count", 0
-            ),
+            "rep_dev_query_count": scientific_request_v11.get("rep_dev_query_count", 0),
             "harness_dev_reserved_count": scientific_request_v11.get(
                 "harness_dev_reserved_count", 0
             ),
@@ -485,11 +907,15 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "validated_metric_count": observatory.get("validated_metric_count", 0),
             "failed_child_count": observatory.get("failed_child_count", 0),
             "recovered_child_count": observatory.get("recovered_child_count", 0),
-            "artifact_lineage_status": observatory.get("artifact_lineage_status", "unknown"),
+            "artifact_lineage_status": observatory.get(
+                "artifact_lineage_status", "unknown"
+            ),
             "retention_class_counts": observatory.get("retention_class_counts", {}),
             "prompt_binding_count": observatory.get("prompt_binding_count", 0),
             "config_binding_count": observatory.get("config_binding_count", 0),
-            "environment_binding_count": observatory.get("environment_binding_count", 0),
+            "environment_binding_count": observatory.get(
+                "environment_binding_count", 0
+            ),
         },
         "p2_readiness": {
             "status": p2.get("status", "unknown"),
@@ -504,12 +930,18 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
                 "status": fixture.get("status", "not_executed"),
                 "evidence_class": fixture.get("evidence_class", "fixture"),
                 "scientific_authority": fixture.get("scientific_authority", False),
-                "protected_data_accessed": fixture.get("protected_data_accessed", False),
-                "measured_execution_performed": fixture.get("measured_execution_performed", False),
+                "protected_data_accessed": fixture.get(
+                    "protected_data_accessed", False
+                ),
+                "measured_execution_performed": fixture.get(
+                    "measured_execution_performed", False
+                ),
                 "synthetic_candidates": fixture.get("synthetic_candidates", 0),
                 "synthetic_iterations": fixture.get("synthetic_iterations", 0),
                 "synthetic_shortlist": fixture.get("synthetic_shortlist", 0),
-                "fixture_selection_exposures": fixture.get("fixture_selection_exposures", 0),
+                "fixture_selection_exposures": fixture.get(
+                    "fixture_selection_exposures", 0
+                ),
                 "receipt_sha256": fixture.get("receipt_sha256"),
                 "execution_manifest_sha256": fixture.get("execution_manifest_sha256"),
                 "fixture_package_sha256": fixture.get("fixture_package_sha256"),
@@ -518,13 +950,17 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             },
             "official_review": {
                 "status": review.get("status", "not_recorded"),
-                "evidence_class": review.get("evidence_class", "static_contract_review"),
+                "evidence_class": review.get(
+                    "evidence_class", "static_contract_review"
+                ),
                 "final_round": review.get("final_round"),
                 "final_verdict": review.get("final_verdict"),
                 "reviewed_commit": review.get("reviewed_commit"),
                 "index_sha256": review_source.get("index_sha256"),
                 "protected_data_accessed": review.get("protected_data_accessed", False),
-                "measured_execution_performed": review.get("measured_execution_performed", False),
+                "measured_execution_performed": review.get(
+                    "measured_execution_performed", False
+                ),
             },
         },
     }
@@ -540,21 +976,79 @@ def _a010_projection_lifecycle(
 ) -> dict[str, Any]:
     """Bind every projection sink to the latest validated ArmIndex task receipt."""
 
-    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
-    harvest = armindex.get("legacy_code_harvest", {}) if isinstance(armindex.get("legacy_code_harvest"), Mapping) else {}
-    feasibility = armindex.get("compute_storage_feasibility", {}) if isinstance(armindex.get("compute_storage_feasibility"), Mapping) else {}
-    closeout = armindex.get("phase_closeout", {}) if isinstance(armindex.get("phase_closeout"), Mapping) else {}
-    adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
-    scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
-    vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
-    vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
-    vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
-    vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
-    vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
-    vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
-    vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
-    provider_closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
-    scientific_request_v11 = scaffold.get("scientific_execution_request_v11", {}) if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping) else {}
+    armindex = (
+        model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    )
+    harvest = (
+        armindex.get("legacy_code_harvest", {})
+        if isinstance(armindex.get("legacy_code_harvest"), Mapping)
+        else {}
+    )
+    feasibility = (
+        armindex.get("compute_storage_feasibility", {})
+        if isinstance(armindex.get("compute_storage_feasibility"), Mapping)
+        else {}
+    )
+    closeout = (
+        armindex.get("phase_closeout", {})
+        if isinstance(armindex.get("phase_closeout"), Mapping)
+        else {}
+    )
+    adapter = (
+        armindex.get("adapter_fixture_validation", {})
+        if isinstance(armindex.get("adapter_fixture_validation"), Mapping)
+        else {}
+    )
+    scaffold = (
+        armindex.get("a1_2_contract_scaffold", {})
+        if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping)
+        else {}
+    )
+    vast = (
+        scaffold.get("vast_preflight_v2", {})
+        if isinstance(scaffold.get("vast_preflight_v2"), Mapping)
+        else {}
+    )
+    vast_v3 = (
+        scaffold.get("vast_preflight_v3", {})
+        if isinstance(scaffold.get("vast_preflight_v3"), Mapping)
+        else {}
+    )
+    vast_v5 = (
+        scaffold.get("vast_preflight_v5", {})
+        if isinstance(scaffold.get("vast_preflight_v5"), Mapping)
+        else {}
+    )
+    vast_v6 = (
+        scaffold.get("vast_preflight_v6", {})
+        if isinstance(scaffold.get("vast_preflight_v6"), Mapping)
+        else {}
+    )
+    vast_v7 = (
+        scaffold.get("vast_preflight_v7", {})
+        if isinstance(scaffold.get("vast_preflight_v7"), Mapping)
+        else {}
+    )
+    vast_v8 = (
+        scaffold.get("vast_preflight_v8", {})
+        if isinstance(scaffold.get("vast_preflight_v8"), Mapping)
+        else {}
+    )
+    vast_v9 = (
+        scaffold.get("vast_preflight_v9", {})
+        if isinstance(scaffold.get("vast_preflight_v9"), Mapping)
+        else {}
+    )
+    provider_closeout_v10 = (
+        scaffold.get("provider_closeout_v10", {})
+        if isinstance(scaffold.get("provider_closeout_v10"), Mapping)
+        else {}
+    )
+    scientific_request_v11 = (
+        scaffold.get("scientific_execution_request_v11", {})
+        if isinstance(scaffold.get("scientific_execution_request_v11"), Mapping)
+        else {}
+    )
     if (
         scaffold.get("validated") is True
         and scaffold.get("status")
@@ -579,7 +1073,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_live_synthetic_preflight_pass_owner_disposition_pending_launch_locked"
         and vast_v9.get("validated") is True
         and vast_v9.get("live_result_status") == "PASS"
     ):
@@ -589,7 +1084,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_live_preflight_execution_lifecycle_prepared_launch_locked"
         and vast_v9.get("validated") is True
     ):
         source_uri = vast_v9.get("receipt_uri")
@@ -598,7 +1094,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_live_preflight_validation_complete_bundle_prepared_launch_locked"
         and vast_v8.get("validated") is True
     ):
         source_uri = vast_v8.get("receipt_uri")
@@ -607,7 +1104,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_live_preflight_same_instance_repair_prepared_launch_locked"
         and vast_v7.get("validated") is True
     ):
         source_uri = vast_v7.get("receipt_uri")
@@ -616,7 +1114,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_live_preflight_correction_prepared_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_live_preflight_correction_prepared_launch_locked"
         and vast_v6.get("validated") is True
     ):
         source_uri = vast_v6.get("receipt_uri")
@@ -625,7 +1124,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_runtime_minimal_direct_base_preflight_prepared_launch_locked"
         and vast_v5.get("validated") is True
     ):
         source_uri = vast_v5.get("receipt_uri")
@@ -644,7 +1144,8 @@ def _a010_projection_lifecycle(
         source_phase_id = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     elif (
         scaffold.get("validated") is True
-        and scaffold.get("status") == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
+        and scaffold.get("status")
+        == "a1_2_vast_4x3090_preflight_prepared_launch_locked"
         and vast.get("validated") is True
     ):
         source_uri = vast.get("receipt_uri")
@@ -670,7 +1171,9 @@ def _a010_projection_lifecycle(
         source_sha256 = closeout.get("receipt_sha256")
         source_validated = True
         source_phase_id = "A0_MIGRATION_FOUNDATION"
-    elif feasibility.get("validated") is True and feasibility.get("status") == "complete":
+    elif (
+        feasibility.get("validated") is True and feasibility.get("status") == "complete"
+    ):
         source_uri = feasibility.get("task_receipt_uri")
         source_sha256 = feasibility.get("task_receipt_sha256")
         source_validated = True
@@ -686,11 +1189,16 @@ def _a010_projection_lifecycle(
         or not isinstance(source_sha256, str)
         or not _SHA256_RE.fullmatch(source_sha256)
     ):
-        raise ValueError("ArmIndex projection lifecycle requires a validated source receipt")
+        raise ValueError(
+            "ArmIndex projection lifecycle requires a validated source receipt"
+        )
     brain_path = (
         root.parent / f"02_Brain/reports/generated/armindex/phase-{source_phase_id}.md"
     ).resolve()
-    paper_path = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
+    paper_path = (
+        root.parent
+        / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md"
+    ).resolve()
     if brain_path not in external_outputs or paper_path not in external_outputs:
         raise ValueError("ArmIndex external projection lifecycle is incomplete")
     read_model_sha256 = str(model["read_model_sha256"])
@@ -774,9 +1282,19 @@ def _sync_mlflow_projection(
     p2_profile_path = root / str(p2_source.get("profile", ""))
     evaluator_path = root / "src/myis_research/report_cli.py"
     environment_path = root / "uv.lock"
-    for path in (schema_path, campaign_path, envelope_path, p2_envelope_path, p2_profile_path, evaluator_path, environment_path):
+    for path in (
+        schema_path,
+        campaign_path,
+        envelope_path,
+        p2_envelope_path,
+        p2_profile_path,
+        evaluator_path,
+        environment_path,
+    ):
         if path.is_symlink() or not path.is_file():
-            raise RuntimeError(f"MLflow projection source is missing or unsafe: {path.relative_to(root)}")
+            raise RuntimeError(
+                f"MLflow projection source is missing or unsafe: {path.relative_to(root)}"
+            )
 
     schema_registry = RegistrySnapshot(
         schema_version=SCHEMA_REGISTRY_SCHEMA,
@@ -796,7 +1314,10 @@ def _sync_mlflow_projection(
         items=(
             {"id": "scope-autoindex-v1", "sha256": sha256(campaign_path.read_bytes())},
             {"id": "execution-envelope", "sha256": sha256(envelope_path.read_bytes())},
-            {"id": "execution-envelope-p2", "sha256": sha256(p2_envelope_path.read_bytes())},
+            {
+                "id": "execution-envelope-p2",
+                "sha256": sha256(p2_envelope_path.read_bytes()),
+            },
             {"id": "p2-budget-profile", "sha256": sha256(p2_profile_path.read_bytes())},
         ),
     )
@@ -893,13 +1414,27 @@ def _p2_measured(model: Mapping[str, Any]) -> bool:
 
 def _p2_readiness_table(model: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
-    budget = p2.get("candidate_budget", {}) if isinstance(p2.get("candidate_budget"), Mapping) else {}
+    budget = (
+        p2.get("candidate_budget", {})
+        if isinstance(p2.get("candidate_budget"), Mapping)
+        else {}
+    )
     runtime = p2.get("runtime", {}) if isinstance(p2.get("runtime"), Mapping) else {}
-    freeze = p2.get("freeze_barrier", {}) if isinstance(p2.get("freeze_barrier"), Mapping) else {}
-    resources = p2.get("resources", {}) if isinstance(p2.get("resources"), Mapping) else {}
+    freeze = (
+        p2.get("freeze_barrier", {})
+        if isinstance(p2.get("freeze_barrier"), Mapping)
+        else {}
+    )
+    resources = (
+        p2.get("resources", {}) if isinstance(p2.get("resources"), Mapping) else {}
+    )
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
-    proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+    proposal = (
+        p2.get("candidate_proposal", {})
+        if isinstance(p2.get("candidate_proposal"), Mapping)
+        else {}
+    )
     review_value = (
         f"Round {review.get('final_round')} {review.get('final_verdict')} / {review.get('status')}"
         if review.get("final_round") is not None
@@ -927,24 +1462,58 @@ def _p2_readiness_table(model: Mapping[str, Any]) -> str:
             f"shortlist {fixture.get('synthetic_shortlist', 0)}; "
             f"fixture selection {fixture.get('fixture_selection_exposures', 0)}",
         ),
-        ("Profile", f"{p2.get('budget_profile_id', '-')} / {p2.get('budget_profile_sha256', '-') }"),
-        ("Real candidates", f"{p2.get('candidate_count', 0)} / {budget.get('max_candidates_total', '-')}"),
-        ("Real shortlist", f"{p2.get('shortlist_count', 0)} / {budget.get('max_selection_finalists', '-')}"),
-        ("Runtime", f"{runtime.get('max_wall_clock_seconds', '-')} wall seconds; {runtime.get('per_candidate_timeout_seconds', '-')} per candidate"),
-        ("Real freeze / selection", f"{freeze.get('status', 'not_started')}; {p2.get('selection_accesses', 0)}/{budget.get('selection_exposure_limit', 1)}"),
+        (
+            "Profile",
+            f"{p2.get('budget_profile_id', '-')} / {p2.get('budget_profile_sha256', '-')}",
+        ),
+        (
+            "Real candidates",
+            f"{p2.get('candidate_count', 0)} / {budget.get('max_candidates_total', '-')}",
+        ),
+        (
+            "Real shortlist",
+            f"{p2.get('shortlist_count', 0)} / {budget.get('max_selection_finalists', '-')}",
+        ),
+        (
+            "Runtime",
+            f"{runtime.get('max_wall_clock_seconds', '-')} wall seconds; {runtime.get('per_candidate_timeout_seconds', '-')} per candidate",
+        ),
+        (
+            "Real freeze / selection",
+            f"{freeze.get('status', 'not_started')}; {p2.get('selection_accesses', 0)}/{budget.get('selection_exposure_limit', 1)}",
+        ),
         ("Protected access", fixture.get("protected_data_accessed", False)),
         ("Scientific claim", fixture.get("claim_boundary", "no_measured_claim")),
-        ("Resources", f"GPU {resources.get('gpu_budget_usd', 0)} USD; paid API {resources.get('paid_api_budget_usd', 0)} USD; model download {resources.get('network_model_download', False)}"),
-        ("Next step", "Owner review of preflight and candidate-freeze proposal" if p2.get("preflight_status") == "passed_pending_owner" else "Owner-local measured preflight" if fixture.get("status") == "passed" else "Repository-only fixture pilot"),
+        (
+            "Resources",
+            f"GPU {resources.get('gpu_budget_usd', 0)} USD; paid API {resources.get('paid_api_budget_usd', 0)} USD; model download {resources.get('network_model_download', False)}",
+        ),
+        (
+            "Next step",
+            "Owner review of preflight and candidate-freeze proposal"
+            if p2.get("preflight_status") == "passed_pending_owner"
+            else "Owner-local measured preflight"
+            if fixture.get("status") == "passed"
+            else "Repository-only fixture pilot",
+        ),
     ]
-    return "\n".join(["| Check | Value |", "|---|---|"] + [f"| {label} | {value} |" for label, value in rows])
+    return "\n".join(
+        ["| Check | Value |", "|---|---|"]
+        + [f"| {label} | {value} |" for label, value in rows]
+    )
 
 
-def _p2_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision: str) -> str:
+def _p2_phase_body(
+    model: Mapping[str, Any], phase: Mapping[str, Any], revision: str
+) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
-    proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+    proposal = (
+        p2.get("candidate_proposal", {})
+        if isinstance(p2.get("candidate_proposal"), Mapping)
+        else {}
+    )
     return (
         "# P2_SCOPE_DEVELOPMENT\n\n"
         "P2 คือช่วงพัฒนา R1 SCOPE/AutoIndex แบบ reversible และ CPU-only. ตอนนี้เป็น readiness/planned เท่านั้น ยังไม่มี measured P2 run.\n\n"
@@ -976,7 +1545,11 @@ def _p2_task_body(model: Mapping[str, Any], task: Mapping[str, Any]) -> str:
     p2 = _p2_readiness(model)
     review = _p2_official_review(model)
     fixture = _p2_fixture(model)
-    proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
+    proposal = (
+        p2.get("candidate_proposal", {})
+        if isinstance(p2.get("candidate_proposal"), Mapping)
+        else {}
+    )
     return (
         f"# {task.get('task_id')}: {task.get('title')}\n\n"
         "## Objective\n\n"
@@ -1054,8 +1627,13 @@ def _p2_fixture_body(model: Mapping[str, Any]) -> str:
 
 def _p2_official_review_body(model: Mapping[str, Any]) -> str:
     review = _p2_official_review(model)
-    source = review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
-    round_lines = ["| รอบ | Verdict | Commit ที่ตรวจ | Result SHA-256 |", "|---:|---|---|---|"]
+    source = (
+        review.get("source", {}) if isinstance(review.get("source"), Mapping) else {}
+    )
+    round_lines = [
+        "| รอบ | Verdict | Commit ที่ตรวจ | Result SHA-256 |",
+        "|---:|---|---|---|",
+    ]
     for item in review.get("rounds", []):
         if not isinstance(item, Mapping):
             continue
@@ -1066,9 +1644,7 @@ def _p2_official_review_body(model: Mapping[str, Any]) -> str:
         "# P2 Official Review Audit\n\n"
         "## สถานะตอนนี้\n\n"
         f"Official static review จบที่ Round `{review.get('final_round', '-')}` ด้วย verdict **{review.get('final_verdict', 'not_recorded')}**. สถานะ projection คือ `{review.get('status', 'not_recorded')}` และหลักฐานเป็น engineering provenance เท่านั้น ไม่ใช่ผลการทดลองทางวิทยาศาสตร์\n\n"
-        "## สิ่งที่ทำแล้ว\n\n"
-        + "\n".join(round_lines)
-        + "\n\n"
+        "## สิ่งที่ทำแล้ว\n\n" + "\n".join(round_lines) + "\n\n"
         f"Audit index: `{source.get('index_uri', '-')}` (`{source.get('index_sha256', '-')}`)\n\n"
         f"Checksum manifest: `{source.get('checksums_uri', '-')}` (`{source.get('checksums_sha256', '-')}`)\n\n"
         "ทุก round เป็น read-only static inspection; provider/model provenance ถูกเก็บแบบ sanitized และไม่มี credential หรือ raw runtime payload ใน projection นี้\n\n"
@@ -1087,7 +1663,11 @@ def _p2_official_review_body(model: Mapping[str, Any]) -> str:
 
 
 def _p1_run_ids(model: Mapping[str, Any]) -> list[str]:
-    return sorted(str(row["run_id"]) for row in model.get("runs", []) if row.get("campaign_id") == "scope-autoindex-v1")
+    return sorted(
+        str(row["run_id"])
+        for row in model.get("runs", [])
+        if row.get("campaign_id") == "scope-autoindex-v1"
+    )
 
 
 def _p1_manifest_hashes(model: Mapping[str, Any]) -> list[str]:
@@ -1102,14 +1682,17 @@ def _p1_metric_table(model: Mapping[str, Any], arm: str | None = None) -> str:
     split_order = {"train": 0, "selection": 1}
     scope_order = {"ALL": 0, "IN": 1, "OUT": 2}
     rows = [
-        row for row in model.get("metrics", [])
+        row
+        for row in model.get("metrics", [])
         if isinstance(row, Mapping) and (arm is None or row.get("arm") == arm)
     ]
-    rows.sort(key=lambda row: (
-        str(row.get("arm", "")),
-        split_order.get(str(row.get("split", "")), 9),
-        scope_order.get(str(row.get("scope", "")), 9),
-    ))
+    rows.sort(
+        key=lambda row: (
+            str(row.get("arm", "")),
+            split_order.get(str(row.get("split", "")), 9),
+            scope_order.get(str(row.get("scope", "")), 9),
+        )
+    )
     if not rows:
         return "ยังไม่มี measured metric ที่ผ่าน package และ rigor review"
     lines = [
@@ -1118,7 +1701,11 @@ def _p1_metric_table(model: Mapping[str, Any], arm: str | None = None) -> str:
     ]
     for row in rows:
         value = row.get("value")
-        rendered = f"{float(value):.6f}" if isinstance(value, (int, float)) and not isinstance(value, bool) else "n/a"
+        rendered = (
+            f"{float(value):.6f}"
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+            else "n/a"
+        )
         lines.append(
             f"| {row.get('arm')} | {row.get('split')} | {row.get('scope')} | "
             f"{row.get('name')} | {rendered} | {row.get('n')} | "
@@ -1151,38 +1738,65 @@ def _p1_dataset_table(model: Mapping[str, Any]) -> str:
     rows = [row for row in model.get("datasets", []) if isinstance(row, Mapping)]
     if not rows:
         return "ยังไม่มี dataset projection ที่ผ่าน validation"
-    lines = ["| Dataset view | Representation | Safe aggregate counts |", "|---|---|---|"]
+    lines = [
+        "| Dataset view | Representation | Safe aggregate counts |",
+        "|---|---|---|",
+    ]
     for row in rows:
         counts = row.get("counts", {})
-        count_text = ", ".join(f"{key}={value}" for key, value in sorted(counts.items())) if isinstance(counts, Mapping) else "n/a"
-        lines.append(f"| {row.get('dataset_id')} | {row.get('representation')} | {count_text or 'n/a'} |")
+        count_text = (
+            ", ".join(f"{key}={value}" for key, value in sorted(counts.items()))
+            if isinstance(counts, Mapping)
+            else "n/a"
+        )
+        lines.append(
+            f"| {row.get('dataset_id')} | {row.get('representation')} | {count_text or 'n/a'} |"
+        )
     return "\n".join(lines)
 
 
 def _p1_evidence_table(model: Mapping[str, Any]) -> str:
-    rows = [row for row in model.get("runs", []) if row.get("campaign_id") == "scope-autoindex-v1"]
+    rows = [
+        row
+        for row in model.get("runs", [])
+        if row.get("campaign_id") == "scope-autoindex-v1"
+    ]
     if not rows:
         return "ยังไม่มี canonical four-slot run matrix"
     lines = ["| Arm | Split | Run ID | Manifest SHA-256 |", "|---|---|---|---|"]
-    for row in sorted(rows, key=lambda item: (str(item.get("arm")), str(item.get("stage")))):
-        lines.append(f"| {row.get('arm')} | {row.get('stage')} | `{row.get('run_id')}` | `{row.get('manifest_sha256')}` |")
+    for row in sorted(
+        rows, key=lambda item: (str(item.get("arm")), str(item.get("stage")))
+    ):
+        lines.append(
+            f"| {row.get('arm')} | {row.get('stage')} | `{row.get('run_id')}` | `{row.get('manifest_sha256')}` |"
+        )
     evidence = {
         str(row.get("evidence_id")): row
         for row in model.get("evidence", [])
         if isinstance(row, Mapping)
     }
-    for evidence_id in ("p1-four-slot-package", "p1-rigor-review", "mlflow-p1-registration"):
+    for evidence_id in (
+        "p1-four-slot-package",
+        "p1-rigor-review",
+        "mlflow-p1-registration",
+    ):
         row = evidence.get(evidence_id)
         if row:
-            lines.append(f"\n- `{evidence_id}`: `{row.get('sha256')}` at `{row.get('uri')}`")
+            lines.append(
+                f"\n- `{evidence_id}`: `{row.get('sha256')}` at `{row.get('uri')}`"
+            )
     return "\n".join(lines)
 
 
 def _p1_execution_summary(model: Mapping[str, Any]) -> str:
     resources = model.get("resources", {})
-    latency = resources.get("latency_seconds") if isinstance(resources, Mapping) else None
+    latency = (
+        resources.get("latency_seconds") if isinstance(resources, Mapping) else None
+    )
     if isinstance(latency, (int, float)) and not isinstance(latency, bool):
-        elapsed = f"`{float(latency):.3f}` seconds (`{float(latency) / 3600:.2f}` hours)"
+        elapsed = (
+            f"`{float(latency):.3f}` seconds (`{float(latency) / 3600:.2f}` hours)"
+        )
     else:
         elapsed = "not available"
     return (
@@ -1219,9 +1833,13 @@ def _p1_home_body(model: Mapping[str, Any], next_lines: str) -> str:
     )
 
 
-def _p1_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision: str) -> str:
+def _p1_phase_body(
+    model: Mapping[str, Any], phase: Mapping[str, Any], revision: str
+) -> str:
     measured = _p1_measured(model)
-    status = "complete (measured train/selection)" if measured else "blocked with evidence"
+    status = (
+        "complete (measured train/selection)" if measured else "blocked with evidence"
+    )
     task_rows = "\n".join(
         f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
         for task in phase.get("tasks", [])
@@ -1254,7 +1872,9 @@ def _p1_phase_body(model: Mapping[str, Any], phase: Mapping[str, Any], revision:
     )
 
 
-def _p1_task_body(model: Mapping[str, Any], phase_id: str, task: Mapping[str, Any]) -> str:
+def _p1_task_body(
+    model: Mapping[str, Any], phase_id: str, task: Mapping[str, Any]
+) -> str:
     task_id = str(task["task_id"])
     measured = _p1_measured(model)
     arm = "R0" if task_id == "P1.1" else "R0-W" if task_id == "P1.2" else None
@@ -1268,7 +1888,11 @@ def _p1_task_body(model: Mapping[str, Any], phase_id: str, task: Mapping[str, An
         objective = "ผูก measured run กับ request, aggregate receipt, four manifests, validation reports, package, rigor review และ MLflow mirror"
         method = "immutable aggregate-only evidence chain; protected run artifacts remain Owner-local"
     result = _p1_metric_table(model, arm=arm) if arm else _p1_metric_table(model)
-    evidence = _p1_evidence_table(model) if measured else "evidence chain ยังไม่ครบ จึง fail closed"
+    evidence = (
+        _p1_evidence_table(model)
+        if measured
+        else "evidence chain ยังไม่ครบ จึง fail closed"
+    )
     return (
         f"# {task_id}: {task['title']}\n\n"
         f"## Objective / hypothesis\n\n{objective}\n\n"
@@ -1318,10 +1942,12 @@ def _p1_advisor_body(model: Mapping[str, Any]) -> str:
     measured = _p1_measured(model)
     summary = (
         "P1 CPU baseline เสร็จด้วย measured train/selection evidence ครบ R0 และ R0-W; package ผ่าน structural validation และ artifact-only rigor review"
-        if measured else
-        "P1 ยัง blocked เพราะ four-slot package และ validation evidence ยังไม่ครบ"
+        if measured
+        else "P1 ยัง blocked เพราะ four-slot package และ validation evidence ยังไม่ครบ"
     )
-    measured_result = _p1_comparison(model) if measured else "ยังไม่มี validated measured result"
+    measured_result = (
+        _p1_comparison(model) if measured else "ยังไม่มี validated measured result"
+    )
     return (
         "# Advisor Update\n\nGenerated draft; Owner edits belong in a separate immutable meeting note\n\n"
         f"## One-paragraph summary\n\n{summary}.\n\n"
@@ -1356,9 +1982,19 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
                         f"recovery `{value.get('recovery_uri', 'not recorded')}` / `{value.get('recovery_sha256')}`"
                     )
                     continue
-                claim = value.get("claim") or value.get("artifact_id") or value.get("failure_id") or value.get("uri") or value
+                claim = (
+                    value.get("claim")
+                    or value.get("artifact_id")
+                    or value.get("failure_id")
+                    or value.get("uri")
+                    or value
+                )
                 evidence = value.get("evidence")
-                suffix = f" (evidence: {', '.join(map(str, evidence))})" if isinstance(evidence, list) and evidence else ""
+                suffix = (
+                    f" (evidence: {', '.join(map(str, evidence))})"
+                    if isinstance(evidence, list) and evidence
+                    else ""
+                )
                 lines.append(f"- {claim}{suffix}")
             else:
                 lines.append(f"- {value}")
@@ -1397,7 +2033,10 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         artifact_rows.append("| None | - | - | - | - | - |")
 
     metrics = record.get("metric_references", [])
-    metric_rows = ["| Metric | Split | Scope | Value | n | Denominator | Evidence |", "|---|---|---|---:|---:|---|---|"]
+    metric_rows = [
+        "| Metric | Split | Scope | Value | n | Denominator | Evidence |",
+        "|---|---|---|---:|---:|---|---|",
+    ]
     for metric in metrics if isinstance(metrics, list) else []:
         if not isinstance(metric, Mapping):
             continue
@@ -1405,23 +2044,40 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
             f"| `{metric.get('name')}`@{metric.get('cutoff', 100)} | `{metric.get('split')}` | `{metric.get('scope')}` | `{metric.get('value')}` | `{metric.get('n')}` | `{metric.get('denominator')}` | `{record.get('evidence_class')}` |"
         )
     if len(metric_rows) == 2:
-        metric_rows.append("| No measured metric is available | - | - | - | - | - | planned/fixture |")
+        metric_rows.append(
+            "| No measured metric is available | - | - | - | - | - | planned/fixture |"
+        )
 
     governance = record.get("governance_status", {})
     governance_lines = binding_lines(governance)
-    result = record.get("result", {}) if isinstance(record.get("result"), Mapping) else {}
+    result = (
+        record.get("result", {}) if isinstance(record.get("result"), Mapping) else {}
+    )
     phase_id = str(record.get("phase_id"))
     progress_note = (
         "\n### Execution progress / observability\n\n"
         "Aggregate progress is reported without item identifiers or outcomes. "
         "A future non-TTY measured runner must emit only stage, processed/total, elapsed time, and capped ETA."
-        if phase_id == "P1_CPU_BASELINE" else ""
+        if phase_id == "P1_CPU_BASELINE"
+        else ""
     )
     p2_note = ""
     if phase_id == "P2_SCOPE_DEVELOPMENT":
-        p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
-        fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
-        review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
+        p2 = (
+            model.get("p2_readiness", {})
+            if isinstance(model.get("p2_readiness"), Mapping)
+            else {}
+        )
+        fixture = (
+            p2.get("fixture_pilot", {})
+            if isinstance(p2.get("fixture_pilot"), Mapping)
+            else {}
+        )
+        review = (
+            p2.get("official_review", {})
+            if isinstance(p2.get("official_review"), Mapping)
+            else {}
+        )
         p2_note = (
             f"\nStatic review: Round `{review.get('final_round', '-')}` verdict **{review.get('final_verdict', 'not_recorded')}**. "
             f"Repository-only fixture status **{fixture.get('status', 'not_executed')}**; synthetic lifecycle counts are "
@@ -1430,27 +2086,95 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
         )
     a1_note = ""
     if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING":
-        armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
-        adapter = armindex.get("adapter_fixture_validation", {}) if isinstance(armindex.get("adapter_fixture_validation"), Mapping) else {}
-        scaffold = armindex.get("a1_2_contract_scaffold", {}) if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping) else {}
-        vast = scaffold.get("vast_preflight_v2", {}) if isinstance(scaffold.get("vast_preflight_v2"), Mapping) else {}
-        vast_v3 = scaffold.get("vast_preflight_v3", {}) if isinstance(scaffold.get("vast_preflight_v3"), Mapping) else {}
-        vast_v5 = scaffold.get("vast_preflight_v5", {}) if isinstance(scaffold.get("vast_preflight_v5"), Mapping) else {}
-        vast_v6 = scaffold.get("vast_preflight_v6", {}) if isinstance(scaffold.get("vast_preflight_v6"), Mapping) else {}
-        vast_v7 = scaffold.get("vast_preflight_v7", {}) if isinstance(scaffold.get("vast_preflight_v7"), Mapping) else {}
-        vast_v8 = scaffold.get("vast_preflight_v8", {}) if isinstance(scaffold.get("vast_preflight_v8"), Mapping) else {}
-        vast_v9 = scaffold.get("vast_preflight_v9", {}) if isinstance(scaffold.get("vast_preflight_v9"), Mapping) else {}
-        closeout_v10 = scaffold.get("provider_closeout_v10", {}) if isinstance(scaffold.get("provider_closeout_v10"), Mapping) else {}
-        gpu = adapter.get("gpu_spec", {}) if isinstance(adapter.get("gpu_spec"), Mapping) else {}
-        timing = adapter.get("time_estimate", {}) if isinstance(adapter.get("time_estimate"), Mapping) else {}
-        budget = adapter.get("budget_estimate", {}) if isinstance(adapter.get("budget_estimate"), Mapping) else {}
-        owner_needs = adapter.get("owner_needs", []) if isinstance(adapter.get("owner_needs"), list) else []
-        gpu_classes = ", ".join(str(item) for item in gpu.get("preferred_gpu_classes", []))
-        owner_lines = "\n".join(f"- {item}" for item in owner_needs) or "- No Owner input is required for the completed CPU fixture."
+        armindex = (
+            model.get("armindex", {})
+            if isinstance(model.get("armindex"), Mapping)
+            else {}
+        )
+        adapter = (
+            armindex.get("adapter_fixture_validation", {})
+            if isinstance(armindex.get("adapter_fixture_validation"), Mapping)
+            else {}
+        )
+        scaffold = (
+            armindex.get("a1_2_contract_scaffold", {})
+            if isinstance(armindex.get("a1_2_contract_scaffold"), Mapping)
+            else {}
+        )
+        vast = (
+            scaffold.get("vast_preflight_v2", {})
+            if isinstance(scaffold.get("vast_preflight_v2"), Mapping)
+            else {}
+        )
+        vast_v3 = (
+            scaffold.get("vast_preflight_v3", {})
+            if isinstance(scaffold.get("vast_preflight_v3"), Mapping)
+            else {}
+        )
+        vast_v5 = (
+            scaffold.get("vast_preflight_v5", {})
+            if isinstance(scaffold.get("vast_preflight_v5"), Mapping)
+            else {}
+        )
+        vast_v6 = (
+            scaffold.get("vast_preflight_v6", {})
+            if isinstance(scaffold.get("vast_preflight_v6"), Mapping)
+            else {}
+        )
+        vast_v7 = (
+            scaffold.get("vast_preflight_v7", {})
+            if isinstance(scaffold.get("vast_preflight_v7"), Mapping)
+            else {}
+        )
+        vast_v8 = (
+            scaffold.get("vast_preflight_v8", {})
+            if isinstance(scaffold.get("vast_preflight_v8"), Mapping)
+            else {}
+        )
+        vast_v9 = (
+            scaffold.get("vast_preflight_v9", {})
+            if isinstance(scaffold.get("vast_preflight_v9"), Mapping)
+            else {}
+        )
+        closeout_v10 = (
+            scaffold.get("provider_closeout_v10", {})
+            if isinstance(scaffold.get("provider_closeout_v10"), Mapping)
+            else {}
+        )
+        gpu = (
+            adapter.get("gpu_spec", {})
+            if isinstance(adapter.get("gpu_spec"), Mapping)
+            else {}
+        )
+        timing = (
+            adapter.get("time_estimate", {})
+            if isinstance(adapter.get("time_estimate"), Mapping)
+            else {}
+        )
+        budget = (
+            adapter.get("budget_estimate", {})
+            if isinstance(adapter.get("budget_estimate"), Mapping)
+            else {}
+        )
+        owner_needs = (
+            adapter.get("owner_needs", [])
+            if isinstance(adapter.get("owner_needs"), list)
+            else []
+        )
+        gpu_classes = ", ".join(
+            str(item) for item in gpu.get("preferred_gpu_classes", [])
+        )
+        owner_lines = (
+            "\n".join(f"- {item}" for item in owner_needs)
+            or "- No Owner input is required for the completed CPU fixture."
+        )
         scaffold_note = ""
         if scaffold.get("validated") is True:
             closeout_note = ""
-            if closeout_v10.get("validated") is True and closeout_v10.get("status") == "PASS":
+            if (
+                closeout_v10.get("validated") is True
+                and closeout_v10.get("status") == "PASS"
+            ):
                 closeout_note = (
                     f"The v10 Owner-local provider closeout is `{closeout_v10.get('status')}`; "
                     "no independent Vast API or CLI record was obtained, so the provider-absence "
@@ -1545,12 +2269,17 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
 
 def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
     revision = str(model["read_model_revision"])
-    report_records = {str(item["report_id"]): item for item in build_report_records(root, model)}
+    report_records = {
+        str(item["report_id"]): item for item in build_report_records(root, model)
+    }
     armindex = model.get("armindex")
     if not isinstance(armindex, Mapping):
         raise ValueError("read model is missing the ArmIndex projection")
     next_authorized_action = armindex.get("next_command")
-    if not isinstance(next_authorized_action, str) or not next_authorized_action.strip():
+    if (
+        not isinstance(next_authorized_action, str)
+        or not next_authorized_action.strip()
+    ):
         raise ValueError("read model is missing the current ArmIndex next command")
     common = {
         "schema_version": "myis.obsidian-note.v2",
@@ -1581,11 +2310,31 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     p1_manifest_hashes = _p1_manifest_hashes(model)
     outputs: dict[Path, str] = {}
     outputs[VAULT_RELATIVE_PATH / "HOME.md"] = _note(
-        {**common, "note_id": "HOME", "note_type": "home", "phase_id": project["current_phase"], "task_id": project["current_task"], "workflow_status": "blocked" if project["state"] == "P1_BLOCKED_WITH_EVIDENCE" else "complete", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
-        _p1_home_body(model, next_lines) + "\n\n## P2 Readiness\n\n" + _p2_readiness_table(model) + "\n\nP2 remains planned and not measured; selection access is zero.\n",
+        {
+            **common,
+            "note_id": "HOME",
+            "note_type": "home",
+            "phase_id": project["current_phase"],
+            "task_id": project["current_task"],
+            "workflow_status": "blocked"
+            if project["state"] == "P1_BLOCKED_WITH_EVIDENCE"
+            else "complete",
+            "evidence_maturity": "measured_selection"
+            if _p1_measured(model)
+            else "non_scientific",
+            "claim_level": "descriptive" if _p1_measured(model) else "none",
+            "source_run_ids": p1_run_ids,
+            "source_manifest_sha256": p1_manifest_hashes,
+        },
+        _p1_home_body(model, next_lines)
+        + "\n\n## P2 Readiness\n\n"
+        + _p2_readiness_table(model)
+        + "\n\nP2 remains planned and not measured; selection access is zero.\n",
     )
 
-    armindex_phases = [row for row in armindex.get("phases", []) if isinstance(row, Mapping)]
+    armindex_phases = [
+        row for row in armindex.get("phases", []) if isinstance(row, Mapping)
+    ]
     arm_rows = "\n".join(
         f"| `{row.get('arm_id')}` | `{row.get('model_id')}` | {row.get('adapter_status')} | {row.get('representation_status')} | {row.get('commercial_status')} |"
         for row in armindex.get("arms", [])
@@ -1612,22 +2361,47 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "## Historical evidence\n\n[[SCOPE_HISTORY_INDEX]] · [[P1_CPU_BASELINE_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]]\n"
     )
     outputs[VAULT_RELATIVE_PATH / "00_Home/ARM_INDEX_HOME.md"] = _note(
-        {**common, "note_id": "ARM-INDEX-HOME", "note_type": "home", "phase_id": armindex.get("current_phase"), "task_id": "A0.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none"},
+        {
+            **common,
+            "note_id": "ARM-INDEX-HOME",
+            "note_type": "home",
+            "phase_id": armindex.get("current_phase"),
+            "task_id": "A0.3",
+            "workflow_status": "verification_needed",
+            "evidence_maturity": "non_scientific",
+            "claim_level": "none",
+        },
         armindex_home,
     )
     outputs[VAULT_RELATIVE_PATH / "00_Home/MOC.md"] = _note(
-        {**common, "note_id": "ARM-INDEX-MOC", "note_type": "home", "phase_id": armindex.get("current_phase"), "task_id": "A0.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none"},
-        "# ArmIndex MOC\n\n- [[ARM_INDEX_HOME]]\n" + "\n".join(f"- [[{phase.get('phase_id')}_REPORT]]" for phase in armindex_phases) + "\n- [[ARMINDEX_MIGRATION_RESULT]]\n- [[SCOPE_HISTORY_INDEX]]\n- [[Decisions]]\n- [[Failed_Attempts]]\n",
+        {
+            **common,
+            "note_id": "ARM-INDEX-MOC",
+            "note_type": "home",
+            "phase_id": armindex.get("current_phase"),
+            "task_id": "A0.3",
+            "workflow_status": "verification_needed",
+            "evidence_maturity": "non_scientific",
+            "claim_level": "none",
+        },
+        "# ArmIndex MOC\n\n- [[ARM_INDEX_HOME]]\n"
+        + "\n".join(
+            f"- [[{phase.get('phase_id')}_REPORT]]" for phase in armindex_phases
+        )
+        + "\n- [[ARMINDEX_MIGRATION_RESULT]]\n- [[SCOPE_HISTORY_INDEX]]\n- [[Decisions]]\n- [[Failed_Attempts]]\n",
     )
     for phase in armindex_phases:
         phase_id = str(phase["phase_id"])
         phase_folder = VAULT_RELATIVE_PATH / "01_Phases" / "ArmIndex" / phase_id
         phase_record = report_records.get(f"phase-{phase_id.lower()}")
-        task_table = "\n".join(
-            f"| [[{task.get('task_id')}]] | {task.get('title')} | {task.get('status')} |"
-            for task in phase.get("tasks", [])
-            if isinstance(task, Mapping)
-        ) or "| none | none | planned |"
+        task_table = (
+            "\n".join(
+                f"| [[{task.get('task_id')}]] | {task.get('title')} | {task.get('status')} |"
+                for task in phase.get("tasks", [])
+                if isinstance(task, Mapping)
+            )
+            or "| none | none | planned |"
+        )
         fallback_body = (
             f"# {phase_id}\n\n"
             f"## Objective\n\n{phase.get('purpose')}\n\n"
@@ -1663,18 +2437,49 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             else "non_scientific"
         )
         outputs[phase_folder / f"{phase_id}_REPORT.md"] = _note(
-            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(str(phase_record.get("status"))) if phase_record else _workflow_status(str(phase.get('status'))), "evidence_class": phase_evidence_class, "evidence_maturity": phase_maturity, "scientific_authority": bool(phase_record.get("scientific_authority")) if phase_record else False, "claim_boundary": str(phase_record.get("claim_boundary")) if phase_record else "engineering_provenance_only", "claim_level": "none", "next_authorized_action": phase_record.get("next_authorized_action", common["next_authorized_action"]) if phase_record else common["next_authorized_action"]},
+            {
+                **common,
+                "note_id": f"{phase_id}-MASTER",
+                "note_type": "phase_report",
+                "phase_id": phase_id,
+                "task_id": None,
+                "workflow_status": _workflow_status(str(phase_record.get("status")))
+                if phase_record
+                else _workflow_status(str(phase.get("status"))),
+                "evidence_class": phase_evidence_class,
+                "evidence_maturity": phase_maturity,
+                "scientific_authority": bool(phase_record.get("scientific_authority"))
+                if phase_record
+                else False,
+                "claim_boundary": str(phase_record.get("claim_boundary"))
+                if phase_record
+                else "engineering_provenance_only",
+                "claim_level": "none",
+                "next_authorized_action": phase_record.get(
+                    "next_authorized_action", common["next_authorized_action"]
+                )
+                if phase_record
+                else common["next_authorized_action"],
+            },
             body,
         )
         for task in phase.get("tasks", []):
             if not isinstance(task, Mapping):
                 continue
             task_id = str(task["task_id"])
-            task_record = report_records.get(f"task-{task_id.lower().replace('.', '-')}")
+            task_record = report_records.get(
+                f"task-{task_id.lower().replace('.', '-')}"
+            )
             task_body = (
                 _structured_report_body(task_record, model)
                 if task_record is not None
-                else fallback_body.replace(f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1).replace(f"Status: **{phase.get('status')}**", f"Status: **{task.get('status')}**", 1)
+                else fallback_body.replace(
+                    f"# {phase_id}", f"# {task_id}: {task.get('title')}", 1
+                ).replace(
+                    f"Status: **{phase.get('status')}**",
+                    f"Status: **{task.get('status')}**",
+                    1,
+                )
             )
             task_evidence_class = (
                 str(task_record.get("evidence_class")) if task_record else "engineering"
@@ -1686,80 +2491,360 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
                 if task_evidence_class == "planning_estimate"
                 else "non_scientific"
             )
-            outputs[VAULT_RELATIVE_PATH / "02_Tasks" / "ArmIndex" / phase_id / f"{task_id}.md"] = _note(
-                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(str(task_record.get("status"))) if task_record else _workflow_status(str(task.get('status'))), "evidence_class": task_evidence_class, "evidence_maturity": task_maturity, "scientific_authority": bool(task_record.get("scientific_authority")) if task_record else False, "claim_boundary": str(task_record.get("claim_boundary")) if task_record else "engineering_provenance_only", "claim_level": "none", "next_authorized_action": task_record.get("next_authorized_action", common["next_authorized_action"]) if task_record else common["next_authorized_action"]},
+            outputs[
+                VAULT_RELATIVE_PATH
+                / "02_Tasks"
+                / "ArmIndex"
+                / phase_id
+                / f"{task_id}.md"
+            ] = _note(
+                {
+                    **common,
+                    "note_id": task_id,
+                    "note_type": "task_report",
+                    "phase_id": phase_id,
+                    "task_id": task_id,
+                    "workflow_status": _workflow_status(str(task_record.get("status")))
+                    if task_record
+                    else _workflow_status(str(task.get("status"))),
+                    "evidence_class": task_evidence_class,
+                    "evidence_maturity": task_maturity,
+                    "scientific_authority": bool(
+                        task_record.get("scientific_authority")
+                    )
+                    if task_record
+                    else False,
+                    "claim_boundary": str(task_record.get("claim_boundary"))
+                    if task_record
+                    else "engineering_provenance_only",
+                    "claim_level": "none",
+                    "next_authorized_action": task_record.get(
+                        "next_authorized_action", common["next_authorized_action"]
+                    )
+                    if task_record
+                    else common["next_authorized_action"],
+                },
                 task_body,
             )
-    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md"] = _note(
-        {**common, "note_id": "ARMINDEX-MIGRATION-RESULT", "note_type": "result_report", "phase_id": "A0_MIGRATION_FOUNDATION", "task_id": "A0.3", "workflow_status": "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "result_id": "ARMINDEX-MIGRATION", "current_scientific_authority": False},
-        "# ArmIndex Migration Result\n\nThe infrastructure migration is represented in the shared read model. ArmIndex measured runs, Selection exposures, and Final exposures remain zero. No champion or benchmark result exists.\n\n[[ARM_INDEX_HOME]]\n",
+    split_claim_audit = armindex.get("a1_2_rep_harness_claim_audit", {})
+    if (
+        isinstance(split_claim_audit, Mapping)
+        and split_claim_audit.get("validated") is True
+    ):
+        outputs[
+            VAULT_RELATIVE_PATH
+            / "05_Research_History/ArmIndex/A1_2_REP_HARNESS_SPLIT_AUDIT.md"
+        ] = _note(
+            {
+                **common,
+                "note_id": "A1-2-REP-HARNESS-SPLIT-AUDIT",
+                "note_type": "history_report",
+                "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                "task_id": "A1.2",
+                "workflow_status": "blocked",
+                "evidence_maturity": "engineering",
+                "claim_level": "none",
+                "evidence_class": str(split_claim_audit.get("evidence_class")),
+                "scientific_authority": False,
+                "claim_boundary": str(split_claim_audit.get("claim_boundary")),
+                "source_manifest_sha256": [
+                    str(split_claim_audit.get("audit_sha256")),
+                    str(split_claim_audit.get("figure_png_sha256")),
+                    str(split_claim_audit.get("figure_svg_sha256")),
+                ],
+                "next_authorized_action": "Owner review additive P02-FIRST-CLAIM repair; protected compiler and measured retrieval remain blocked.",
+            },
+            _a12_rep_harness_claim_audit_body(split_claim_audit),
+        )
+    p02_limit_audit = armindex.get("a1_2_p02_limit_audit", {})
+    if (
+        isinstance(p02_limit_audit, Mapping)
+        and p02_limit_audit.get("validated") is True
+    ):
+        outputs[
+            VAULT_RELATIVE_PATH
+            / "05_Research_History/ArmIndex/A1_2_P02_FIRST_CLAIM_AND_INPUT_LIMIT_AUDIT.md"
+        ] = _note(
+            {
+                **common,
+                "note_id": "A1-2-P02-FIRST-CLAIM-INPUT-LIMIT-AUDIT",
+                "note_type": "history_report",
+                "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                "task_id": "A1.2",
+                "workflow_status": "blocked",
+                "evidence_maturity": "engineering",
+                "claim_level": "none",
+                "evidence_class": str(p02_limit_audit.get("evidence_class")),
+                "scientific_authority": False,
+                "claim_boundary": str(p02_limit_audit.get("claim_boundary")),
+                "source_manifest_sha256": [
+                    str(p02_limit_audit.get("p02_audit_file_sha256")),
+                    str(p02_limit_audit.get("input_limit_audit_file_sha256")),
+                ],
+                "next_authorized_action": str(
+                    p02_limit_audit.get("next_authorized_action")
+                ),
+            },
+            _a12_p02_limit_audit_body(p02_limit_audit),
+        )
+    dense_overflow = armindex.get("a1_2_dense_overflow", {})
+    if isinstance(dense_overflow, Mapping) and dense_overflow.get("validated") is True:
+        compiler_pass = dense_overflow.get("compiler_integration_status") == "PASS"
+        source_hashes = [
+            str(dense_overflow.get("contract_sha256")),
+            str(dense_overflow.get("inventory_sha256")),
+            str(dense_overflow.get("composition_sha256")),
+            str(dense_overflow.get("figure_png_sha256")),
+            str(dense_overflow.get("figure_svg_sha256")),
+        ]
+        if compiler_pass:
+            source_hashes.extend(
+                [
+                    str(dense_overflow.get("compiler_integration_contract_sha256")),
+                    str(dense_overflow.get("compiler_audit_sha256")),
+                ]
+            )
+        outputs[
+            VAULT_RELATIVE_PATH
+            / "05_Research_History/ArmIndex/A1_2_DENSE_OVERFLOW_REPAIR_COMPILER_BLOCKER.md"
+        ] = _note(
+            {
+                **common,
+                "note_id": "A1-2-DENSE-OVERFLOW-REPAIR-COMPILER-BLOCKER",
+                "note_type": "history_report",
+                "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                "task_id": "A1.2",
+                "workflow_status": "complete" if compiler_pass else "blocked",
+                "evidence_maturity": "engineering",
+                "claim_level": "none",
+                "evidence_class": str(dense_overflow.get("evidence_class")),
+                "scientific_authority": False,
+                "claim_boundary": str(dense_overflow.get("claim_boundary")),
+                "source_manifest_sha256": source_hashes,
+                "next_authorized_action": str(
+                    dense_overflow.get("next_authorized_action")
+                ),
+            },
+            _a12_dense_overflow_body(dense_overflow),
+        )
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/ARMINDEX_MIGRATION_RESULT.md"] = (
+        _note(
+            {
+                **common,
+                "note_id": "ARMINDEX-MIGRATION-RESULT",
+                "note_type": "result_report",
+                "phase_id": "A0_MIGRATION_FOUNDATION",
+                "task_id": "A0.3",
+                "workflow_status": "verification_needed",
+                "evidence_maturity": "non_scientific",
+                "claim_level": "none",
+                "result_id": "ARMINDEX-MIGRATION",
+                "current_scientific_authority": False,
+            },
+            "# ArmIndex Migration Result\n\nThe infrastructure migration is represented in the shared read model. ArmIndex measured runs, Selection exposures, and Final exposures remain zero. No champion or benchmark result exists.\n\n[[ARM_INDEX_HOME]]\n",
+        )
     )
-    outputs[VAULT_RELATIVE_PATH / "05_Research_History/SCOPE/SCOPE_HISTORY_INDEX.md"] = _note(
-        {**common, "note_id": "SCOPE-HISTORY-INDEX", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "descriptive"},
+    outputs[
+        VAULT_RELATIVE_PATH / "05_Research_History/SCOPE/SCOPE_HISTORY_INDEX.md"
+    ] = _note(
+        {
+            **common,
+            "note_id": "SCOPE-HISTORY-INDEX",
+            "note_type": "history_report",
+            "phase_id": "P2_SCOPE_DEVELOPMENT",
+            "task_id": "P2.1",
+            "workflow_status": "complete",
+            "evidence_maturity": "historical_exposed",
+            "claim_level": "descriptive",
+        },
         "# Historical SCOPE Campaign\n\n`scope-autoindex-v1` is historical and read-only. Its P1 measured evidence and P2 engineering evidence retain their original paths, hashes, counters, and claim boundaries.\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] · [[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2_FIXTURE_PILOT]]\n",
     )
 
     for phase in model.get("phases", []):
         phase_id = str(phase["phase_id"])
         phase_folder = VAULT_RELATIVE_PATH / "01_Phases" / phase_id
-        task_rows = "\n".join(
-            f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
-            for task in phase.get("tasks", [])
-        ) or "| none | none | planned | none |"
+        task_rows = (
+            "\n".join(
+                f"| [[{task['task_id']}]] | {task['title']} | {_workflow_status(task['status'])} | {', '.join(task.get('evidence_ids', [])) or 'not measured'} |"
+                for task in phase.get("tasks", [])
+            )
+            or "| none | none | planned | none |"
+        )
         phase_record = report_records.get(f"phase-{phase_id.lower()}")
-        phase_body = _structured_report_body(phase_record, model) if phase_record else (_p1_phase_body(model, phase, revision) if phase_id == "P1_CPU_BASELINE" else _p2_phase_body(model, phase, revision) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
-            f"# {phase_id}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
-            "## Summary for Owner\n\nThis report is a narrative projection of the shared read model, not a source of scientific truth.\n\n"
-            f"## Current status and gate\n\n**{_workflow_status(phase['status'])}**. D2 and D3 remain Owner-only.\n\n"
-            "## Task board\n\n| Task | Work | Status | Evidence |\n|---|---|---|---|\n"
-            f"{task_rows}\n\n## Output\n\nGenerated task records are available; no run output is promoted from historical-invalid evidence.\n\n"
-            "## Measured results\n\n[[P1_CPU_BASELINE_RESULT]]\n\n"
-            "## Interpretation\n\nNo scientific interpretation is promoted without validated evidence.\n\n"
-            "## What we can say\n\nThe control plane records the evidence boundary and blocks promotion safely.\n\n"
-            "## What we must not say yet\n\nNo P1 measured-complete, selection, or final-split claim.\n\n"
-            "## Literature basis\n\n[[LITERATURE_INDEX]]\n\n"
-            "## Decisions and RAID\n\n[[RAID]]\n\n"
-            f"## Evidence and audit details\n\nRead-model revision: `{revision}`\n"
-        ))
+        phase_body = (
+            _structured_report_body(phase_record, model)
+            if phase_record
+            else (
+                _p1_phase_body(model, phase, revision)
+                if phase_id == "P1_CPU_BASELINE"
+                else _p2_phase_body(model, phase, revision)
+                if phase_id == "P2_SCOPE_DEVELOPMENT"
+                else (
+                    f"# {phase_id}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
+                    "## Summary for Owner\n\nThis report is a narrative projection of the shared read model, not a source of scientific truth.\n\n"
+                    f"## Current status and gate\n\n**{_workflow_status(phase['status'])}**. D2 and D3 remain Owner-only.\n\n"
+                    "## Task board\n\n| Task | Work | Status | Evidence |\n|---|---|---|---|\n"
+                    f"{task_rows}\n\n## Output\n\nGenerated task records are available; no run output is promoted from historical-invalid evidence.\n\n"
+                    "## Measured results\n\n[[P1_CPU_BASELINE_RESULT]]\n\n"
+                    "## Interpretation\n\nNo scientific interpretation is promoted without validated evidence.\n\n"
+                    "## What we can say\n\nThe control plane records the evidence boundary and blocks promotion safely.\n\n"
+                    "## What we must not say yet\n\nNo P1 measured-complete, selection, or final-split claim.\n\n"
+                    "## Literature basis\n\n[[LITERATURE_INDEX]]\n\n"
+                    "## Decisions and RAID\n\n[[RAID]]\n\n"
+                    f"## Evidence and audit details\n\nRead-model revision: `{revision}`\n"
+                )
+            )
+        )
         outputs[phase_folder / f"{phase_id}_MASTER_REPORT.md"] = _note(
-            {**common, "note_id": f"{phase_id}-MASTER", "note_type": "phase_report", "phase_id": phase_id, "task_id": None, "workflow_status": _workflow_status(phase["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model) else "non_scientific" if phase["status"] in {"blocked", "planned", "blocked_until_p1", "locked_until_D2", "locked_until_D3"} else "measured_development", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else [], "related_literature_ids": ["U006", "U011", "U154"] if phase_id == "P2_SCOPE_DEVELOPMENT" else common["related_literature_ids"]},
+            {
+                **common,
+                "note_id": f"{phase_id}-MASTER",
+                "note_type": "phase_report",
+                "phase_id": phase_id,
+                "task_id": None,
+                "workflow_status": _workflow_status(phase["status"]),
+                "evidence_maturity": "measured_selection"
+                if phase_id == "P1_CPU_BASELINE" and _p1_measured(model)
+                else "non_scientific"
+                if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model)
+                else "non_scientific"
+                if phase["status"]
+                in {
+                    "blocked",
+                    "planned",
+                    "blocked_until_p1",
+                    "locked_until_D2",
+                    "locked_until_D3",
+                }
+                else "measured_development",
+                "claim_level": "descriptive"
+                if phase_id == "P1_CPU_BASELINE" and _p1_measured(model)
+                else "none",
+                "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [],
+                "source_manifest_sha256": p1_manifest_hashes
+                if phase_id == "P1_CPU_BASELINE"
+                else [],
+                "related_literature_ids": ["U006", "U011", "U154"]
+                if phase_id == "P2_SCOPE_DEVELOPMENT"
+                else common["related_literature_ids"],
+            },
             phase_body,
         )
         for task in phase.get("tasks", []):
             task_id = str(task["task_id"])
-            task_record = report_records.get(f"task-{task_id.lower().replace('.', '-')}")
-            body = _structured_report_body(task_record, model) if task_record else (_p1_task_body(model, phase_id, task) if phase_id == "P1_CPU_BASELINE" else _p2_task_body(model, task) if phase_id == "P2_SCOPE_DEVELOPMENT" else (
-                f"# {task_id}: {task['title']}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
-                "## Objective / hypothesis\n\nDeliver the registry-defined task without crossing the protected-data boundary.\n\n"
-                f"## Status\n\n**{_workflow_status(task['status'])}**\n\n"
-                "## Definition of Ready\n\nCanonical control records and safe projection inputs are available.\n\n"
-                "## Definition of Done\n\nRequires acceptance evidence in the canonical manifest/receipt chain; changing this note cannot complete the task.\n\n"
-                "## Inputs and protocol boundary\n\nCPU-only, no protected payloads, qrels, membership, or per-query outcomes.\n\n"
-                "## Work performed\n\nThe shared read model records current status.\n\n"
-                "## Output\n\nOutput pointers come from the shared read model.\n\n"
-                "## Result\n\nNo validated measured result is rendered.\n\n"
-                "## Interpretation\n\nBlocked or pending review; no scientific inference follows.\n\n"
-                "## What this does not prove\n\nIt does not prove a P1 metric, selection result, or final evaluation claim.\n\n"
-                "## Checks / blockers / failures\n\nThe evidence matrix remains incomplete where the phase is blocked.\n\n"
-                "## Evidence and MLflow links\n\nNo promoted MLflow run is linked.\n\n"
-                "## Related literature\n\n[[LITERATURE_INDEX]]\n\n"
-                f"## Dependencies\n\n[[{phase_id}_MASTER_REPORT]]\n\n"
-                "## Next action\n\nFollow the Owner-inbox item in [[HOME]].\n\n"
-                f"## Owner notes\n\n[[80_Owner_Notes/README]]\n"
-            ))
+            task_record = report_records.get(
+                f"task-{task_id.lower().replace('.', '-')}"
+            )
+            body = (
+                _structured_report_body(task_record, model)
+                if task_record
+                else (
+                    _p1_task_body(model, phase_id, task)
+                    if phase_id == "P1_CPU_BASELINE"
+                    else _p2_task_body(model, task)
+                    if phase_id == "P2_SCOPE_DEVELOPMENT"
+                    else (
+                        f"# {task_id}: {task['title']}\n\nGenerated from validated evidence. Manual edits may be replaced. Add personal comments in the linked Owner Note.\n\n"
+                        "## Objective / hypothesis\n\nDeliver the registry-defined task without crossing the protected-data boundary.\n\n"
+                        f"## Status\n\n**{_workflow_status(task['status'])}**\n\n"
+                        "## Definition of Ready\n\nCanonical control records and safe projection inputs are available.\n\n"
+                        "## Definition of Done\n\nRequires acceptance evidence in the canonical manifest/receipt chain; changing this note cannot complete the task.\n\n"
+                        "## Inputs and protocol boundary\n\nCPU-only, no protected payloads, qrels, membership, or per-query outcomes.\n\n"
+                        "## Work performed\n\nThe shared read model records current status.\n\n"
+                        "## Output\n\nOutput pointers come from the shared read model.\n\n"
+                        "## Result\n\nNo validated measured result is rendered.\n\n"
+                        "## Interpretation\n\nBlocked or pending review; no scientific inference follows.\n\n"
+                        "## What this does not prove\n\nIt does not prove a P1 metric, selection result, or final evaluation claim.\n\n"
+                        "## Checks / blockers / failures\n\nThe evidence matrix remains incomplete where the phase is blocked.\n\n"
+                        "## Evidence and MLflow links\n\nNo promoted MLflow run is linked.\n\n"
+                        "## Related literature\n\n[[LITERATURE_INDEX]]\n\n"
+                        f"## Dependencies\n\n[[{phase_id}_MASTER_REPORT]]\n\n"
+                        "## Next action\n\nFollow the Owner-inbox item in [[HOME]].\n\n"
+                        f"## Owner notes\n\n[[80_Owner_Notes/README]]\n"
+                    )
+                )
+            )
             outputs[phase_folder / "Tasks" / f"{task_id}.md"] = _note(
-                {**common, "note_id": task_id, "note_type": "task_report", "phase_id": phase_id, "task_id": task_id, "workflow_status": _workflow_status(task["status"]), "evidence_maturity": "measured_selection" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "non_scientific" if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model) else "measured_development" if task.get("evidence_ids") else "non_scientific", "claim_level": "descriptive" if phase_id == "P1_CPU_BASELINE" and _p1_measured(model) else "none", "source_run_ids": p1_run_ids if phase_id == "P1_CPU_BASELINE" else [], "source_manifest_sha256": p1_manifest_hashes if phase_id == "P1_CPU_BASELINE" else [], "related_literature_ids": ["U006", "U011", "U154"] if phase_id == "P2_SCOPE_DEVELOPMENT" else common["related_literature_ids"]},
+                {
+                    **common,
+                    "note_id": task_id,
+                    "note_type": "task_report",
+                    "phase_id": phase_id,
+                    "task_id": task_id,
+                    "workflow_status": _workflow_status(task["status"]),
+                    "evidence_maturity": "measured_selection"
+                    if phase_id == "P1_CPU_BASELINE" and _p1_measured(model)
+                    else "non_scientific"
+                    if phase_id == "P2_SCOPE_DEVELOPMENT" and not _p2_measured(model)
+                    else "measured_development"
+                    if task.get("evidence_ids")
+                    else "non_scientific",
+                    "claim_level": "descriptive"
+                    if phase_id == "P1_CPU_BASELINE" and _p1_measured(model)
+                    else "none",
+                    "source_run_ids": p1_run_ids
+                    if phase_id == "P1_CPU_BASELINE"
+                    else [],
+                    "source_manifest_sha256": p1_manifest_hashes
+                    if phase_id == "P1_CPU_BASELINE"
+                    else [],
+                    "related_literature_ids": ["U006", "U011", "U154"]
+                    if phase_id == "P2_SCOPE_DEVELOPMENT"
+                    else common["related_literature_ids"],
+                },
                 body,
             )
 
     result = model.get("results", [{}])[0]
-    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"] = _note(
-        {**common, "note_id": "P1-CPU-BASELINE-RESULT", "note_type": "result_report", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete" if _p1_measured(model) else "blocked", "evidence_maturity": "measured_selection" if _p1_measured(model) else "historical_exposed", "claim_level": "descriptive" if _p1_measured(model) else "none", "result_id": result.get("result_id", "P1-CPU-BASELINE"), "current_scientific_authority": _p1_measured(model), "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
-        _p1_result_body(model),
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P1_CPU_BASELINE_RESULT.md"] = (
+        _note(
+            {
+                **common,
+                "note_id": "P1-CPU-BASELINE-RESULT",
+                "note_type": "result_report",
+                "phase_id": "P1_CPU_BASELINE",
+                "task_id": "P1.3",
+                "workflow_status": "complete" if _p1_measured(model) else "blocked",
+                "evidence_maturity": "measured_selection"
+                if _p1_measured(model)
+                else "historical_exposed",
+                "claim_level": "descriptive" if _p1_measured(model) else "none",
+                "result_id": result.get("result_id", "P1-CPU-BASELINE"),
+                "current_scientific_authority": _p1_measured(model),
+                "source_run_ids": p1_run_ids,
+                "source_manifest_sha256": p1_manifest_hashes,
+            },
+            _p1_result_body(model),
+        )
     )
-    p2_result = next((item for item in model.get("results", []) if item.get("result_id") == "P2-SCOPE-DEVELOPMENT"), {})
-    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md"] = _note(
-        {**common, "note_id": "P2-SCOPE-DEVELOPMENT-RESULT", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if _p2_measured(model) else "ready", "evidence_maturity": "measured_selection" if _p2_measured(model) else "non_scientific", "claim_level": "descriptive" if _p2_measured(model) else "none", "result_id": p2_result.get("result_id", "P2-SCOPE-DEVELOPMENT"), "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
+    p2_result = next(
+        (
+            item
+            for item in model.get("results", [])
+            if item.get("result_id") == "P2-SCOPE-DEVELOPMENT"
+        ),
+        {},
+    )
+    outputs[
+        VAULT_RELATIVE_PATH / "03_Results/Current/P2_SCOPE_DEVELOPMENT_RESULT.md"
+    ] = _note(
+        {
+            **common,
+            "note_id": "P2-SCOPE-DEVELOPMENT-RESULT",
+            "note_type": "result_report",
+            "phase_id": "P2_SCOPE_DEVELOPMENT",
+            "task_id": "P2.1",
+            "workflow_status": "complete" if _p2_measured(model) else "ready",
+            "evidence_maturity": "measured_selection"
+            if _p2_measured(model)
+            else "non_scientific",
+            "claim_level": "descriptive" if _p2_measured(model) else "none",
+            "result_id": p2_result.get("result_id", "P2-SCOPE-DEVELOPMENT"),
+            "current_scientific_authority": False,
+            "source_run_ids": [],
+            "source_manifest_sha256": [],
+            "related_literature_ids": ["U006", "U011", "U154"],
+        },
         _p2_result_body(model),
     )
     fixture = _p2_fixture(model)
@@ -1769,17 +2854,53 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         else []
     )
     outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_FIXTURE_PILOT.md"] = _note(
-        {**common, "note_id": "P2-FIXTURE-PILOT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if fixture.get("status") == "passed" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": ["p2-fixture-pilot-v1"] if fixture.get("executed") else [], "source_manifest_sha256": fixture_manifest_hashes, "related_literature_ids": ["U006", "U011", "U154"]},
+        {
+            **common,
+            "note_id": "P2-FIXTURE-PILOT",
+            "note_type": "history_report",
+            "phase_id": "P2_SCOPE_DEVELOPMENT",
+            "task_id": "P2.1",
+            "workflow_status": "complete"
+            if fixture.get("status") == "passed"
+            else "verification_needed",
+            "evidence_maturity": "fixture",
+            "claim_level": "none",
+            "current_scientific_authority": False,
+            "source_run_ids": ["p2-fixture-pilot-v1"]
+            if fixture.get("executed")
+            else [],
+            "source_manifest_sha256": fixture_manifest_hashes,
+            "related_literature_ids": ["U006", "U011", "U154"],
+        },
         _p2_fixture_body(model),
     )
     review = _p2_official_review(model)
-    outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"] = _note(
-        {**common, "note_id": "P2-OFFICIAL-REVIEW-AUDIT", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if review.get("status") == "accepted_static_contract_review" else "verification_needed", "evidence_maturity": "non_scientific", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
-        _p2_official_review_body(model),
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"] = (
+        _note(
+            {
+                **common,
+                "note_id": "P2-OFFICIAL-REVIEW-AUDIT",
+                "note_type": "history_report",
+                "phase_id": "P2_SCOPE_DEVELOPMENT",
+                "task_id": "P2.1",
+                "workflow_status": "complete"
+                if review.get("status") == "accepted_static_contract_review"
+                else "verification_needed",
+                "evidence_maturity": "non_scientific",
+                "claim_level": "none",
+                "current_scientific_authority": False,
+                "source_run_ids": [],
+                "source_manifest_sha256": [],
+                "related_literature_ids": ["U006", "U011", "U154"],
+            },
+            _p2_official_review_body(model),
+        )
     )
 
     # Preserve each bounded review round as its own generated history note.
-    for round_item in review.get("rounds", []) if isinstance(review.get("rounds"), list) else []:
+    for round_item in (
+        review.get("rounds", []) if isinstance(review.get("rounds"), list) else []
+    ):
         if not isinstance(round_item, Mapping):
             continue
         round_number = str(round_item.get("round", ""))
@@ -1795,13 +2916,44 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "## Boundary\n\nProtected data, final split, real candidates, selection, and measured P2 remained untouched. A later accepted round supersedes only the review disposition, not the historical record of this round.\n\n"
             "## Links\n\n[[P2_OFFICIAL_REVIEW_AUDIT]] · [[P2.1]] · [[HOME]]\n"
         )
-        outputs[VAULT_RELATIVE_PATH / f"05_Research_History/P2_OFFICIAL_REVIEW_ROUND_{round_number}.md"] = _note(
-            {**common, "note_id": f"P2-OFFICIAL-REVIEW-ROUND-{round_number}", "note_type": "history_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete", "evidence_maturity": "static_contract_review", "claim_level": "none", "source_run_ids": [], "source_manifest_sha256": [result_sha] if result_sha else [], "related_literature_ids": ["U006", "U011", "U154"], "review_round": int(round_number), "verdict": round_verdict},
+        outputs[
+            VAULT_RELATIVE_PATH
+            / f"05_Research_History/P2_OFFICIAL_REVIEW_ROUND_{round_number}.md"
+        ] = _note(
+            {
+                **common,
+                "note_id": f"P2-OFFICIAL-REVIEW-ROUND-{round_number}",
+                "note_type": "history_report",
+                "phase_id": "P2_SCOPE_DEVELOPMENT",
+                "task_id": "P2.1",
+                "workflow_status": "complete",
+                "evidence_maturity": "static_contract_review",
+                "claim_level": "none",
+                "source_run_ids": [],
+                "source_manifest_sha256": [result_sha] if result_sha else [],
+                "related_literature_ids": ["U006", "U011", "U154"],
+                "review_round": int(round_number),
+                "verdict": round_verdict,
+            },
             round_body,
         )
 
     outputs[VAULT_RELATIVE_PATH / "03_Results/Current/P2_MEASURED_PENDING.md"] = _note(
-        {**common, "note_id": "P2-MEASURED-PENDING", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "ready", "evidence_maturity": "planned", "claim_level": "none", "result_id": "P2-MEASURED-PENDING", "current_scientific_authority": False, "source_run_ids": [], "source_manifest_sha256": [], "related_literature_ids": ["U006", "U011", "U154"]},
+        {
+            **common,
+            "note_id": "P2-MEASURED-PENDING",
+            "note_type": "result_report",
+            "phase_id": "P2_SCOPE_DEVELOPMENT",
+            "task_id": "P2.1",
+            "workflow_status": "ready",
+            "evidence_maturity": "planned",
+            "claim_level": "none",
+            "result_id": "P2-MEASURED-PENDING",
+            "current_scientific_authority": False,
+            "source_run_ids": [],
+            "source_manifest_sha256": [],
+            "related_literature_ids": ["U006", "U011", "U154"],
+        },
         "# P2 Measured Result Template\n\n"
         "This validated template is pending Owner-local execution. It contains no fixture metrics and no measured result.\n\n"
         "- status = `not_started`\n"
@@ -1818,14 +2970,58 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "[[P2_SCOPE_DEVELOPMENT_MASTER_REPORT]] · [[P2.1]] · [[HOME]]\n",
     )
 
-    observatory = model.get("observatory", {}) if isinstance(model.get("observatory"), Mapping) else {}
-    observatory_hashes = [str(value) for value in (observatory.get("registry_sha256"), observatory.get("receipt_sha256")) if value]
-    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"] = _note(
-        {**common, "note_id": "OBSERVATORY-FIXTURE-RUN", "note_type": "result_report", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if observatory.get("status") == "ready" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "result_id": "obs-result-fixture", "current_scientific_authority": False, "source_run_ids": ["obs-run-parent"], "source_manifest_sha256": observatory_hashes},
-        _observatory_run_body(observatory),
+    observatory = (
+        model.get("observatory", {})
+        if isinstance(model.get("observatory"), Mapping)
+        else {}
     )
-    outputs[VAULT_RELATIVE_PATH / "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"] = _note(
-        {**common, "note_id": "OBSERVATORY-FAILURE-RECOVERY", "note_type": "failed_attempt", "phase_id": "P2_SCOPE_DEVELOPMENT", "task_id": "P2.1", "workflow_status": "complete" if observatory.get("status") == "ready" else "verification_needed", "evidence_maturity": "fixture", "claim_level": "none", "current_scientific_authority": False, "source_run_ids": ["obs-run-candidate-02"], "source_manifest_sha256": observatory_hashes},
+    observatory_hashes = [
+        str(value)
+        for value in (
+            observatory.get("registry_sha256"),
+            observatory.get("receipt_sha256"),
+        )
+        if value
+    ]
+    outputs[VAULT_RELATIVE_PATH / "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"] = (
+        _note(
+            {
+                **common,
+                "note_id": "OBSERVATORY-FIXTURE-RUN",
+                "note_type": "result_report",
+                "phase_id": "P2_SCOPE_DEVELOPMENT",
+                "task_id": "P2.1",
+                "workflow_status": "complete"
+                if observatory.get("status") == "ready"
+                else "verification_needed",
+                "evidence_maturity": "fixture",
+                "claim_level": "none",
+                "result_id": "obs-result-fixture",
+                "current_scientific_authority": False,
+                "source_run_ids": ["obs-run-parent"],
+                "source_manifest_sha256": observatory_hashes,
+            },
+            _observatory_run_body(observatory),
+        )
+    )
+    outputs[
+        VAULT_RELATIVE_PATH / "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"
+    ] = _note(
+        {
+            **common,
+            "note_id": "OBSERVATORY-FAILURE-RECOVERY",
+            "note_type": "failed_attempt",
+            "phase_id": "P2_SCOPE_DEVELOPMENT",
+            "task_id": "P2.1",
+            "workflow_status": "complete"
+            if observatory.get("status") == "ready"
+            else "verification_needed",
+            "evidence_maturity": "fixture",
+            "claim_level": "none",
+            "current_scientific_authority": False,
+            "source_run_ids": ["obs-run-candidate-02"],
+            "source_manifest_sha256": observatory_hashes,
+        },
         _observatory_failure_body(observatory),
     )
 
@@ -1835,11 +3031,18 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         run_id = str(run.get("run_id", ""))
         if not run_id:
             continue
-        run_metrics = [item for item in model.get("metrics", []) if isinstance(item, Mapping) and item.get("run_id") == run_id]
-        metric_lines = "\n".join(
-            f"- `{item.get('name')}` / split `{item.get('split')}` / scope `{item.get('scope')}`: `{item.get('value')}` (n=`{item.get('n')}`)"
-            for item in run_metrics
-        ) or "- No aggregate metric is recorded for this run."
+        run_metrics = [
+            item
+            for item in model.get("metrics", [])
+            if isinstance(item, Mapping) and item.get("run_id") == run_id
+        ]
+        metric_lines = (
+            "\n".join(
+                f"- `{item.get('name')}` / split `{item.get('split')}` / scope `{item.get('scope')}`: `{item.get('value')}` (n=`{item.get('n')}`)"
+                for item in run_metrics
+            )
+            or "- No aggregate metric is recorded for this run."
+        )
         run_body = (
             f"# Run Report: {run_id}\n\n"
             "## Purpose\n\nThis report describes one validated aggregate run slot and its immutable manifest binding.\n\n"
@@ -1850,12 +3053,46 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "## Links\n\n[[P1_CPU_BASELINE_MASTER_REPORT]] · [[P1.3]] · [[P1_CPU_BASELINE_RESULT]]\n"
         )
         outputs[VAULT_RELATIVE_PATH / "03_Runs" / f"{run_id}.md"] = _note(
-            {**common, "note_id": f"RUN-{run_id}", "note_type": "run_report", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete", "evidence_maturity": "measured_selection", "claim_level": "descriptive", "current_scientific_authority": True, "source_run_ids": [run_id], "source_manifest_sha256": [str(run.get("manifest_sha256"))] if run.get("manifest_sha256") else [], "related_literature_ids": [], "related_decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"]},
+            {
+                **common,
+                "note_id": f"RUN-{run_id}",
+                "note_type": "run_report",
+                "phase_id": "P1_CPU_BASELINE",
+                "task_id": "P1.3",
+                "workflow_status": "complete",
+                "evidence_maturity": "measured_selection",
+                "claim_level": "descriptive",
+                "current_scientific_authority": True,
+                "source_run_ids": [run_id],
+                "source_manifest_sha256": [str(run.get("manifest_sha256"))]
+                if run.get("manifest_sha256")
+                else [],
+                "related_literature_ids": [],
+                "related_decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
+            },
             run_body,
         )
 
-    outputs[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"] = _note(
-        {**common, "note_id": "CURRENT-ADVISOR-UPDATE", "note_type": "advisor_update", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "verification_needed", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "descriptive" if _p1_measured(model) else "none", "lifecycle": "draft", "snapshot_status": "draft", "supersedes": None, "source_run_ids": p1_run_ids, "source_manifest_sha256": p1_manifest_hashes},
+    outputs[
+        VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"
+    ] = _note(
+        {
+            **common,
+            "note_id": "CURRENT-ADVISOR-UPDATE",
+            "note_type": "advisor_update",
+            "phase_id": "P1_CPU_BASELINE",
+            "task_id": "P1.3",
+            "workflow_status": "verification_needed",
+            "evidence_maturity": "measured_selection"
+            if _p1_measured(model)
+            else "non_scientific",
+            "claim_level": "descriptive" if _p1_measured(model) else "none",
+            "lifecycle": "draft",
+            "snapshot_status": "draft",
+            "supersedes": None,
+            "source_run_ids": p1_run_ids,
+            "source_manifest_sha256": p1_manifest_hashes,
+        },
         _p1_advisor_body(model),
     )
 
@@ -1885,8 +3122,16 @@ def _observatory_run_body(observatory: Mapping[str, Any]) -> str:
 
 
 def _observatory_failure_body(observatory: Mapping[str, Any]) -> str:
-    failures = observatory.get("failure_records", []) if isinstance(observatory.get("failure_records"), list) else []
-    recoveries = observatory.get("recovery_records", []) if isinstance(observatory.get("recovery_records"), list) else []
+    failures = (
+        observatory.get("failure_records", [])
+        if isinstance(observatory.get("failure_records"), list)
+        else []
+    )
+    recoveries = (
+        observatory.get("recovery_records", [])
+        if isinstance(observatory.get("recovery_records"), list)
+        else []
+    )
     detail_lines = []
     for failure in failures:
         detail_lines.append(
@@ -1903,14 +3148,23 @@ def _observatory_failure_body(observatory: Mapping[str, Any]) -> str:
         f"- Recovery records: `{observatory.get('recovered_child_count', 0)}`\n"
         f"- Negative checks passed: `{observatory.get('negative_checks_passed', False)}`\n\n"
         "## Captured lineage\n\n"
-        + ("\n".join(detail_lines) if detail_lines else "- No material failure/recovery record is available.")
+        + (
+            "\n".join(detail_lines)
+            if detail_lines
+            else "- No material failure/recovery record is available."
+        )
         + "\n\n"
         "## Lesson\n\n"
         "A failed branch remains useful evidence when the checkpoint, retry action, and claim boundary are recorded together. This is a capture-readiness lesson, not evidence about retrieval quality.\n"
     )
 
 
-def _add_literature_outputs(root: Path, model: Mapping[str, Any], common: Mapping[str, Any], outputs: dict[Path, str]) -> None:
+def _add_literature_outputs(
+    root: Path,
+    model: Mapping[str, Any],
+    common: Mapping[str, Any],
+    outputs: dict[Path, str],
+) -> None:
     catalog = root / "evidence/literature/catalog/corpus_manifest.csv"
     rows: list[dict[str, str]] = []
     if catalog.is_file():
@@ -1923,8 +3177,15 @@ def _add_literature_outputs(root: Path, model: Mapping[str, Any], common: Mappin
             continue
         title = row.get("verified_title") or paper_id
         theme = _literature_theme(paper_id)
-        task_id = "P1.3" if paper_id == "U011" else "P2.1" if paper_id == "U154" else "P0.3"
-        digest = next(iter(sorted((root / "evidence/literature/digests").glob(f"{paper_id}_*.md"))), None)
+        task_id = (
+            "P1.3" if paper_id == "U011" else "P2.1" if paper_id == "U154" else "P0.3"
+        )
+        digest = next(
+            iter(
+                sorted((root / "evidence/literature/digests").glob(f"{paper_id}_*.md"))
+            ),
+            None,
+        )
         digest_uri = digest.relative_to(root).as_posix() if digest else "not-available"
         digest_sha256 = sha256(digest.read_bytes()) if digest else None
         domain = urlparse(row.get("source_url", "")).netloc or "local"
@@ -1936,13 +3197,45 @@ def _add_literature_outputs(root: Path, model: Mapping[str, Any], common: Mappin
             f"## Citation status\n\nTier {row.get('tier') or 'unassigned'}; source domain `{domain}`.\n\n"
             f"## Canonical digest\n\nSafe pointer: `{digest_uri}`\n"
         )
-        outputs[VAULT_RELATIVE_PATH / "04_Literature_Map/Papers" / f"{paper_id}.md"] = _note(
-            {**common, "note_id": f"LIT-{paper_id}", "note_type": "literature_proxy", "phase_id": "P1_CPU_BASELINE" if task_id == "P1.3" else "P0_FOUNDATION", "task_id": task_id, "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "descriptive", "paper_id": paper_id, "literature_status": "digested" if digest else "waiting_dependency", "themes": [theme], "supports": [task_id], "challenges": [], "canonical_digest_path": digest_uri, "canonical_digest_sha256": digest_sha256, "canonical_commit": common["source_commit"], "source_pdf_in_vault": False},
-            body,
+        outputs[VAULT_RELATIVE_PATH / "04_Literature_Map/Papers" / f"{paper_id}.md"] = (
+            _note(
+                {
+                    **common,
+                    "note_id": f"LIT-{paper_id}",
+                    "note_type": "literature_proxy",
+                    "phase_id": "P1_CPU_BASELINE"
+                    if task_id == "P1.3"
+                    else "P0_FOUNDATION",
+                    "task_id": task_id,
+                    "workflow_status": "complete",
+                    "evidence_maturity": "historical_exposed",
+                    "claim_level": "descriptive",
+                    "paper_id": paper_id,
+                    "literature_status": "digested" if digest else "waiting_dependency",
+                    "themes": [theme],
+                    "supports": [task_id],
+                    "challenges": [],
+                    "canonical_digest_path": digest_uri,
+                    "canonical_digest_sha256": digest_sha256,
+                    "canonical_commit": common["source_commit"],
+                    "source_pdf_in_vault": False,
+                },
+                body,
+            )
         )
         links.append(f"- [[{paper_id}]] - {title}")
     outputs[VAULT_RELATIVE_PATH / "04_Literature_Map/LITERATURE_INDEX.md"] = _note(
-        {**common, "note_id": "LITERATURE-INDEX", "note_type": "literature_synthesis", "phase_id": "P0_FOUNDATION", "task_id": "P0.3", "workflow_status": "in_progress", "evidence_maturity": "historical_exposed", "claim_level": "descriptive", "paper_count": len(links)},
+        {
+            **common,
+            "note_id": "LITERATURE-INDEX",
+            "note_type": "literature_synthesis",
+            "phase_id": "P0_FOUNDATION",
+            "task_id": "P0.3",
+            "workflow_status": "in_progress",
+            "evidence_maturity": "historical_exposed",
+            "claim_level": "descriptive",
+            "paper_count": len(links),
+        },
         "# Literature Map\n\n" + "\n".join(links) + "\n",
     )
 
@@ -1951,19 +3244,50 @@ def _add_history_outputs(common: Mapping[str, Any], outputs: dict[Path, str]) ->
     links = []
     for paper in ("A", "B", "C", "D"):
         note_id = f"HISTORY-PAPER-{paper}"
-        exposure = "historical_exposed" if paper in {"A", "B", "D"} else "historical_unverified"
-        outputs[VAULT_RELATIVE_PATH / "05_Research_History" / f"Paper_{paper}.md"] = _note(
-            {**common, "note_id": note_id, "note_type": "history_report", "phase_id": None, "task_id": None, "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "none", "exposure_status": exposure, "current_scientific_authority": False},
-            f"# Paper {paper}\n\nStatus: **{exposure}**\n\nThis note is historical evidence and cannot override current P0-P4 run facts.\n",
+        exposure = (
+            "historical_exposed"
+            if paper in {"A", "B", "D"}
+            else "historical_unverified"
+        )
+        outputs[VAULT_RELATIVE_PATH / "05_Research_History" / f"Paper_{paper}.md"] = (
+            _note(
+                {
+                    **common,
+                    "note_id": note_id,
+                    "note_type": "history_report",
+                    "phase_id": None,
+                    "task_id": None,
+                    "workflow_status": "complete",
+                    "evidence_maturity": "historical_exposed",
+                    "claim_level": "none",
+                    "exposure_status": exposure,
+                    "current_scientific_authority": False,
+                },
+                f"# Paper {paper}\n\nStatus: **{exposure}**\n\nThis note is historical evidence and cannot override current P0-P4 run facts.\n",
+            )
         )
         links.append(f"- [[Paper_{paper}]] - {exposure}")
-    outputs[VAULT_RELATIVE_PATH / "05_Research_History/RESEARCH_HISTORY_INDEX.md"] = _note(
-        {**common, "note_id": "RESEARCH-HISTORY-INDEX", "note_type": "history_report", "phase_id": None, "task_id": None, "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "none", "current_scientific_authority": False},
-        "# Research History\n\n" + "\n".join(links) + "\n",
+    outputs[VAULT_RELATIVE_PATH / "05_Research_History/RESEARCH_HISTORY_INDEX.md"] = (
+        _note(
+            {
+                **common,
+                "note_id": "RESEARCH-HISTORY-INDEX",
+                "note_type": "history_report",
+                "phase_id": None,
+                "task_id": None,
+                "workflow_status": "complete",
+                "evidence_maturity": "historical_exposed",
+                "claim_level": "none",
+                "current_scientific_authority": False,
+            },
+            "# Research History\n\n" + "\n".join(links) + "\n",
+        )
     )
 
 
-def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], outputs: dict[Path, str]) -> None:
+def _add_system_outputs(
+    model: Mapping[str, Any], common: Mapping[str, Any], outputs: dict[Path, str]
+) -> None:
     outputs[VAULT_RELATIVE_PATH / "README.md"] = (
         "# myIS Research Report Vault\n\n"
         "This is a rebuildable narrative and knowledge projection. Canonical run facts remain in Git-tracked manifests and receipts. "
@@ -1994,66 +3318,228 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
             "edit_policy": {"const": "generated_do_not_edit"},
         },
     }
-    outputs[VAULT_RELATIVE_PATH / "00_System/schemas/obsidian-note.v2.json"] = _json_text(note_schema)
+    outputs[VAULT_RELATIVE_PATH / "00_System/schemas/obsidian-note.v2.json"] = (
+        _json_text(note_schema)
+    )
     outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks/RAID.md"] = _note(
-        {**common, "note_id": "RAID", "note_type": "risk", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete" if _p1_measured(model) else "blocked", "evidence_maturity": "measured_selection" if _p1_measured(model) else "non_scientific", "claim_level": "none", "raid_id": "RISK-P1-EVIDENCE-MATRIX", "raid_type": "risk", "raid_status": "closed" if _p1_measured(model) else "open"},
+        {
+            **common,
+            "note_id": "RAID",
+            "note_type": "risk",
+            "phase_id": "P1_CPU_BASELINE",
+            "task_id": "P1.3",
+            "workflow_status": "complete" if _p1_measured(model) else "blocked",
+            "evidence_maturity": "measured_selection"
+            if _p1_measured(model)
+            else "non_scientific",
+            "claim_level": "none",
+            "raid_id": "RISK-P1-EVIDENCE-MATRIX",
+            "raid_type": "risk",
+            "raid_status": "closed" if _p1_measured(model) else "open",
+        },
         "# RAID\n\n"
-        + ("- Closed: P1 evidence matrix, package binding, and rigor review are complete.\n" if _p1_measured(model) else "- Risk: P1 evidence matrix is incomplete.\n")
+        + (
+            "- Closed: P1 evidence matrix, package binding, and rigor review are complete.\n"
+            if _p1_measured(model)
+            else "- Risk: P1 evidence matrix is incomplete.\n"
+        )
         + "- Decision: D2 and D3 remain Owner-only.\n",
     )
     outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks/Decisions.md"] = _note(
-        {**common, "note_id": "DECISIONS", "note_type": "decision", "phase_id": "P3_FINAL", "task_id": "P3.1", "workflow_status": "waiting_gate", "evidence_maturity": "non_scientific", "claim_level": "none", "decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"], "authority": "owner"},
+        {
+            **common,
+            "note_id": "DECISIONS",
+            "note_type": "decision",
+            "phase_id": "P3_FINAL",
+            "task_id": "P3.1",
+            "workflow_status": "waiting_gate",
+            "evidence_maturity": "non_scientific",
+            "claim_level": "none",
+            "decision_ids": ["D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"],
+            "authority": "owner",
+        },
         "# Owner Decisions\n\n- `D2_OPEN_FINAL`: waiting for Owner.\n- `D3_SUBMIT_RELEASE`: waiting for Owner.\n\nThis vault can display but cannot approve either decision.\n",
     )
     decision_sources = {
-        "D1_START_CAMPAIGN": ("control/decisions/D1_START_CAMPAIGN.yaml", "active", "standing campaign authorization; it does not open D2, D3, final split, or selection"),
-        "D2_OPEN_FINAL": ("control/decisions/ledger.jsonl", "waiting_owner", "Owner-only decision required before P3 final evaluation"),
-        "D3_SUBMIT_RELEASE": ("control/decisions/ledger.jsonl", "waiting_owner", "Owner-only decision required before P4 publication and release"),
+        "D1_START_CAMPAIGN": (
+            "control/decisions/D1_START_CAMPAIGN.yaml",
+            "active",
+            "standing campaign authorization; it does not open D2, D3, final split, or selection",
+        ),
+        "D2_OPEN_FINAL": (
+            "control/decisions/ledger.jsonl",
+            "waiting_owner",
+            "Owner-only decision required before P3 final evaluation",
+        ),
+        "D3_SUBMIT_RELEASE": (
+            "control/decisions/ledger.jsonl",
+            "waiting_owner",
+            "Owner-only decision required before P4 publication and release",
+        ),
     }
     for decision_id, (source_uri, status, explanation) in decision_sources.items():
-        outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks" / f"{decision_id}.md"] = _note(
-            {**common, "note_id": f"DECISION-{decision_id}", "note_type": "decision", "phase_id": "P0_FOUNDATION" if decision_id == "D1_START_CAMPAIGN" else "P3_FINAL" if decision_id == "D2_OPEN_FINAL" else "P4_PUBLICATION", "task_id": "P0.3" if decision_id == "D1_START_CAMPAIGN" else "P3.1" if decision_id == "D2_OPEN_FINAL" else "P4.1", "workflow_status": "complete" if decision_id == "D1_START_CAMPAIGN" else "waiting_gate", "evidence_maturity": "engineering", "claim_level": "none", "decision_id": decision_id, "decision_status": status, "authority": "owner", "source_uri": source_uri},
-            f"# Decision {decision_id}\n\n**Status:** `{status}`\n\n{explanation}.\n\nCanonical source: `{source_uri}`. Generated notes cannot approve or mutate Owner decisions.\n\n[[Decisions]] · [[HOME]]\n",
+        outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks" / f"{decision_id}.md"] = (
+            _note(
+                {
+                    **common,
+                    "note_id": f"DECISION-{decision_id}",
+                    "note_type": "decision",
+                    "phase_id": "P0_FOUNDATION"
+                    if decision_id == "D1_START_CAMPAIGN"
+                    else "P3_FINAL"
+                    if decision_id == "D2_OPEN_FINAL"
+                    else "P4_PUBLICATION",
+                    "task_id": "P0.3"
+                    if decision_id == "D1_START_CAMPAIGN"
+                    else "P3.1"
+                    if decision_id == "D2_OPEN_FINAL"
+                    else "P4.1",
+                    "workflow_status": "complete"
+                    if decision_id == "D1_START_CAMPAIGN"
+                    else "waiting_gate",
+                    "evidence_maturity": "engineering",
+                    "claim_level": "none",
+                    "decision_id": decision_id,
+                    "decision_status": status,
+                    "authority": "owner",
+                    "source_uri": source_uri,
+                },
+                f"# Decision {decision_id}\n\n**Status:** `{status}`\n\n{explanation}.\n\nCanonical source: `{source_uri}`. Generated notes cannot approve or mutate Owner decisions.\n\n[[Decisions]] · [[HOME]]\n",
+            )
         )
     outputs[VAULT_RELATIVE_PATH / "06_Decisions_Risks/Failed_Attempts.md"] = _note(
-        {**common, "note_id": "FAILED-ATTEMPTS", "note_type": "failed_attempt", "phase_id": "P1_CPU_BASELINE", "task_id": "P1.3", "workflow_status": "complete", "evidence_maturity": "historical_exposed", "claim_level": "none", "retry_allowed": True},
+        {
+            **common,
+            "note_id": "FAILED-ATTEMPTS",
+            "note_type": "failed_attempt",
+            "phase_id": "P1_CPU_BASELINE",
+            "task_id": "P1.3",
+            "workflow_status": "complete",
+            "evidence_maturity": "historical_exposed",
+            "claim_level": "none",
+            "retry_allowed": True,
+        },
         "# Historical Invalid Attempt\n\n## What was tried\n\nA legacy aggregate P1 receipt was retained.\n\n## Failure category\n\nIt lacks the hash-bound four-slot manifest and validation-report matrix required for promotion.\n\n## Lesson\n\nHistorical aggregate evidence remains traceable but cannot override canonical run facts.\n\n## Retry\n\nA fresh Owner-local CPU P1 run may proceed only through the existing approved envelope.\n",
     )
     bases = {
-        "phases.base": ("phase_id", ["P0-P4 Overview", "Current Phase", "Blocked Phases"]),
-        "tasks.base": ("workflow_status", ["Simple Board", "PM Detail", "By Phase", "Blocked", "Verification Needed", "Owner Actions"]),
-        "results.base": ("evidence_maturity", ["Current Valid", "Selection", "Confirmation", "Negative or Null", "Historical Exposed", "Publication Ready"]),
-        "literature.base": ("literature_status", ["By Theme", "By Status", "Cited", "Supports", "Challenges", "Missing Synthesis"]),
-        "advisor-updates.base": ("snapshot_status", ["Latest", "Drafts", "Presented Snapshots", "Corrections"]),
-        "decisions-risks.base": ("workflow_status", ["Pending Decisions", "Active Risks", "Blocked Dependencies", "Closed Items"]),
+        "phases.base": (
+            "phase_id",
+            ["P0-P4 Overview", "Current Phase", "Blocked Phases"],
+        ),
+        "tasks.base": (
+            "workflow_status",
+            [
+                "Simple Board",
+                "PM Detail",
+                "By Phase",
+                "Blocked",
+                "Verification Needed",
+                "Owner Actions",
+            ],
+        ),
+        "results.base": (
+            "evidence_maturity",
+            [
+                "Current Valid",
+                "Selection",
+                "Confirmation",
+                "Negative or Null",
+                "Historical Exposed",
+                "Publication Ready",
+            ],
+        ),
+        "literature.base": (
+            "literature_status",
+            [
+                "By Theme",
+                "By Status",
+                "Cited",
+                "Supports",
+                "Challenges",
+                "Missing Synthesis",
+            ],
+        ),
+        "advisor-updates.base": (
+            "snapshot_status",
+            ["Latest", "Drafts", "Presented Snapshots", "Corrections"],
+        ),
+        "decisions-risks.base": (
+            "workflow_status",
+            [
+                "Pending Decisions",
+                "Active Risks",
+                "Blocked Dependencies",
+                "Closed Items",
+            ],
+        ),
     }
     for name, (group, views) in bases.items():
         outputs[VAULT_RELATIVE_PATH / "10_Bases" / name] = (
             "filters:\n  and:\n    - 'managed_by == \"myis-report\"'\n"
-            f"groupBy:\n  property: {group}\nviews:\n" + "".join(f"  - type: table\n    name: {view}\n" for view in views)
+            f"groupBy:\n  property: {group}\nviews:\n"
+            + "".join(f"  - type: table\n    name: {view}\n" for view in views)
         )
     outputs[VAULT_RELATIVE_PATH / "70_Templates/OWNER_NOTE_TEMPLATE.md"] = _note(
-        {**common, "note_id": "OWNER-NOTE-TEMPLATE", "note_type": "owner_note", "phase_id": None, "task_id": None, "workflow_status": "ready", "evidence_maturity": "non_scientific", "claim_level": "none", "safe_to_present": False},
+        {
+            **common,
+            "note_id": "OWNER-NOTE-TEMPLATE",
+            "note_type": "owner_note",
+            "phase_id": None,
+            "task_id": None,
+            "workflow_status": "ready",
+            "evidence_maturity": "non_scientific",
+            "claim_level": "none",
+            "safe_to_present": False,
+        },
         "# Owner Note\n\nCopy this template into `80_Owner_Notes/` before writing. Files in that folder are Owner-authored and preserved by sync.\n",
     )
     outputs[VAULT_RELATIVE_PATH / "00_System/Generated/README.md"] = (
         "# Generated files\n\nFiles listed in `generated-manifest.json` are managed by `myis-report`.\n"
     )
-    report_links = ["# Generated Report Index", "", "All report notes are generated from one validated read-model revision.", "", "## Phase and Task reports", ""]
-    for phase in model.get("phases", []) if isinstance(model.get("phases"), list) else []:
+    report_links = [
+        "# Generated Report Index",
+        "",
+        "All report notes are generated from one validated read-model revision.",
+        "",
+        "## Phase and Task reports",
+        "",
+    ]
+    for phase in (
+        model.get("phases", []) if isinstance(model.get("phases"), list) else []
+    ):
         phase_id = str(phase.get("phase_id"))
         report_links.append(f"- [[{phase_id}_MASTER_REPORT]]")
-        for task in phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []:
+        for task in (
+            phase.get("tasks", []) if isinstance(phase.get("tasks"), list) else []
+        ):
             report_links.append(f"  - [[{task.get('task_id')}]]")
-    report_links.extend(["", "## Run, decision, and pending reports", "", "- [[P2_MEASURED_PENDING]]"])
+    report_links.extend(
+        ["", "## Run, decision, and pending reports", "", "- [[P2_MEASURED_PENDING]]"]
+    )
     for target, relative in (
+        (
+            "A1_2_REP_HARNESS_SPLIT_AUDIT",
+            "05_Research_History/ArmIndex/A1_2_REP_HARNESS_SPLIT_AUDIT.md",
+        ),
         ("P2_OFFICIAL_REVIEW_AUDIT", "05_Research_History/P2_OFFICIAL_REVIEW_AUDIT.md"),
-        ("P2_OFFICIAL_REVIEW_ROUND_1", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_1.md"),
-        ("P2_OFFICIAL_REVIEW_ROUND_2", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_2.md"),
-        ("P2_OFFICIAL_REVIEW_ROUND_3", "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_3.md"),
+        (
+            "P2_OFFICIAL_REVIEW_ROUND_1",
+            "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_1.md",
+        ),
+        (
+            "P2_OFFICIAL_REVIEW_ROUND_2",
+            "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_2.md",
+        ),
+        (
+            "P2_OFFICIAL_REVIEW_ROUND_3",
+            "05_Research_History/P2_OFFICIAL_REVIEW_ROUND_3.md",
+        ),
         ("P2_FIXTURE_PILOT", "05_Research_History/P2_FIXTURE_PILOT.md"),
         ("OBSERVATORY_FIXTURE_RUN", "03_Results/Current/OBSERVATORY_FIXTURE_RUN.md"),
-        ("OBSERVATORY_FAILURE_RECOVERY", "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md"),
+        (
+            "OBSERVATORY_FAILURE_RECOVERY",
+            "05_Research_History/OBSERVATORY_FAILURE_RECOVERY.md",
+        ),
         ("D1_START_CAMPAIGN", "06_Decisions_Risks/D1_START_CAMPAIGN.md"),
         ("D2_OPEN_FINAL", "06_Decisions_Risks/D2_OPEN_FINAL.md"),
         ("D3_SUBMIT_RELEASE", "06_Decisions_Risks/D3_SUBMIT_RELEASE.md"),
@@ -2062,7 +3548,17 @@ def _add_system_outputs(model: Mapping[str, Any], common: Mapping[str, Any], out
             report_links.append(f"- [[{target}]]")
     report_links.extend(["", "Source: [[HOME]]", ""])
     outputs[VAULT_RELATIVE_PATH / "00_System/Generated/REPORT_INDEX.md"] = _note(
-        {**common, "note_id": "REPORT-INDEX", "note_type": "project_map", "phase_id": model.get("project", {}).get("current_phase"), "task_id": model.get("project", {}).get("current_task"), "workflow_status": "complete", "evidence_maturity": "engineering", "claim_level": "none", "report_index": "projections/reports/index.json"},
+        {
+            **common,
+            "note_id": "REPORT-INDEX",
+            "note_type": "project_map",
+            "phase_id": model.get("project", {}).get("current_phase"),
+            "task_id": model.get("project", {}).get("current_task"),
+            "workflow_status": "complete",
+            "evidence_maturity": "engineering",
+            "claim_level": "none",
+            "report_index": "projections/reports/index.json",
+        },
         "\n".join(report_links),
     )
 
@@ -2093,9 +3589,17 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     p2 = _p2_readiness(model)
     p2_review = _p2_official_review(model)
     p2_fixture = _p2_fixture(model)
-    p2_proposal = p2.get("candidate_proposal", {}) if isinstance(p2.get("candidate_proposal"), Mapping) else {}
-    armindex = model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
-    armindex_phases = [row for row in armindex.get("phases", []) if isinstance(row, Mapping)]
+    p2_proposal = (
+        p2.get("candidate_proposal", {})
+        if isinstance(p2.get("candidate_proposal"), Mapping)
+        else {}
+    )
+    armindex = (
+        model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
+    )
+    armindex_phases = [
+        row for row in armindex.get("phases", []) if isinstance(row, Mapping)
+    ]
 
     phase_lines: list[str] = []
     for phase in phases:
@@ -2133,7 +3637,9 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     ]
     for dataset in model.get("datasets", []):
         counts = dataset.get("counts", {})
-        count_text = ", ".join(f"{key}={value}" for key, value in sorted(counts.items()))
+        count_text = ", ".join(
+            f"{key}={value}" for key, value in sorted(counts.items())
+        )
         dataset_lines.append(
             f"| `{dataset['dataset_id']}` | {dataset['role']} | {dataset['representation']} | "
             f"{dataset['classification']} | {count_text} | `{dataset['sha256']}` |"
@@ -2153,7 +3659,10 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         "| Arm | Split | Run ID | Status | Manifest SHA-256 |",
         "|---|---|---|---|---|",
     ]
-    for run in sorted(model.get("runs", []), key=lambda row: (str(row.get("arm")), str(row.get("stage")))):
+    for run in sorted(
+        model.get("runs", []),
+        key=lambda row: (str(row.get("arm")), str(row.get("stage"))),
+    ):
         run_lines.append(
             f"| {run['arm']} | {run['stage']} | `{run['run_id']}` | {run['status']} | "
             f"`{run['manifest_sha256']}` |"
@@ -2169,7 +3678,9 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     readiness = model.get("publication_readiness", {})
     readiness_lines = ["| Check | Status | Canonical source |", "|---|---|---|"]
     for check in readiness.get("checks", []):
-        readiness_lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
+        readiness_lines.append(
+            f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |"
+        )
     readiness_body = (
         "# Publication Readiness\n\n"
         f"Status: **{readiness.get('status', 'unknown')}**\n\n"
@@ -2215,11 +3726,14 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     }
     for phase in armindex_phases:
         phase_id = str(phase["phase_id"])
-        task_lines = "\n".join(
-            f"- `{task.get('task_id')}` **{task.get('status')}**: {task.get('title')}"
-            for task in phase.get("tasks", [])
-            if isinstance(task, Mapping)
-        ) or "- No task rows"
+        task_lines = (
+            "\n".join(
+                f"- `{task.get('task_id')}` **{task.get('status')}**: {task.get('title')}"
+                for task in phase.get("tasks", [])
+                if isinstance(task, Mapping)
+            )
+            or "- No task rows"
+        )
         harvest_note = ""
         if phase_id == "A0_MIGRATION_FOUNDATION":
             harvest = armindex.get("legacy_code_harvest", {})
@@ -2232,18 +3746,23 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
                     f"Ledger: `{harvest.get('ledger_uri')}` / `{harvest.get('ledger_sha256')}`.\n\n"
                     f"Receipt: `{harvest.get('receipt_uri')}` / `{harvest.get('receipt_sha256')}`.\n"
                 )
-        outputs[directory / "armindex" / f"phase-{phase_id}.md"] = _projection_frontmatter(model, phase_id=phase_id) + (
-            f"# {phase_id}\n\nStatus: **{phase.get('status')}**\n\n{phase.get('purpose')}\n\n## Tasks\n\n{task_lines}\n\n"
-            f"Measured ArmIndex runs: `{armindex.get('counters', {}).get('measured_runs', 0)}`. Selection: `{armindex.get('counters', {}).get('selection_accesses', 0)}`. Final: `{armindex.get('counters', {}).get('final_accesses', 0)}`.\n\n"
-            f"Next: {armindex.get('next_command', '')}\n"
-            + harvest_note
+        outputs[directory / "armindex" / f"phase-{phase_id}.md"] = (
+            _projection_frontmatter(model, phase_id=phase_id)
+            + (
+                f"# {phase_id}\n\nStatus: **{phase.get('status')}**\n\n{phase.get('purpose')}\n\n## Tasks\n\n{task_lines}\n\n"
+                f"Measured ArmIndex runs: `{armindex.get('counters', {}).get('measured_runs', 0)}`. Selection: `{armindex.get('counters', {}).get('selection_accesses', 0)}`. Final: `{armindex.get('counters', {}).get('final_accesses', 0)}`.\n\n"
+                f"Next: {armindex.get('next_command', '')}\n" + harvest_note
+            )
         )
     for phase in phases:
         phase_id = str(phase["phase_id"])
         task_rows = [task for task in tasks if task.get("phase_id") == phase_id]
         task_lines = []
         for task in task_rows:
-            evidence_ids = ", ".join(f"`{item}`" for item in task.get("evidence_ids", [])) or "none"
+            evidence_ids = (
+                ", ".join(f"`{item}`" for item in task.get("evidence_ids", []))
+                or "none"
+            )
             task_lines.append(
                 f"- `{task['task_id']}` **{task['status']}**: {task['title']}; evidence: {evidence_ids}"
             )
@@ -2301,7 +3820,10 @@ def _brain_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
 
 
 def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
-    path = (root.parent / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md").resolve()
+    path = (
+        root.parent
+        / "03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md"
+    ).resolve()
     source_lock_path = (
         root.parent
         / "03_Paper/publications/isai-nlp-2026/provenance/publication-source-lock.json"
@@ -2313,7 +3835,9 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         harvest = {}
     lines = ["| Check | Status | Canonical source |", "|---|---|---|"]
     for check in readiness.get("checks", []):
-        lines.append(f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |")
+        lines.append(
+            f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |"
+        )
     body = (
         "# Publication Readiness\n\n"
         f"Active campaign: **{model.get('armindex', {}).get('campaign_id', 'armindex-multiretriever-v2')}**\n\n"
@@ -2331,7 +3855,9 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     source_lock = {
         "schema_version": "myis.publication-source-lock.v2",
         "research_repository": "../01_Research",
-        "campaign_id": model.get("armindex", {}).get("campaign_id", "armindex-multiretriever-v2"),
+        "campaign_id": model.get("armindex", {}).get(
+            "campaign_id", "armindex-multiretriever-v2"
+        ),
         "historical_campaign_id": model["project"]["campaign_id"],
         "read_model_path": "../01_Research/projections/read-model/read-model.v2.json",
         "read_model_revision": model["read_model_revision"],
@@ -2345,15 +3871,21 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         path: _projection_frontmatter(
             model,
             read_model_path="../../../../01_Research/projections/read-model/read-model.v2.json",
-        ) + body,
+        )
+        + body,
         source_lock_path: _json_text(source_lock),
     }
 
 
-def _compatibility_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, str]:
+def _compatibility_report_contents(
+    root: Path, model: Mapping[str, Any]
+) -> dict[Path, str]:
     revision = str(model["read_model_revision"])
     state = str(model["project"]["state"])
-    phases = "\n".join(f"- **{phase['phase_id']}**: {phase['status']}" for phase in model.get("phases", []))
+    phases = "\n".join(
+        f"- **{phase['phase_id']}**: {phase['status']}"
+        for phase in model.get("phases", [])
+    )
     content = f"---\nread_model_revision: {revision}\nmanaged_by: myis-report\n---\n\n# Program Status\n\nState: **{state}**\n\n{phases}\n"
     legacy = root / "projections/obsidian/generated/program-status.md"
     return {legacy: content}
@@ -2367,28 +3899,42 @@ def _validate_external_projection_contents(contents: Mapping[Path, str]) -> None
             try:
                 parsed = json.loads(content)
             except json.JSONDecodeError as error:
-                raise ValueError(f"external JSON projection is invalid: {path}") from error
+                raise ValueError(
+                    f"external JSON projection is invalid: {path}"
+                ) from error
             if not isinstance(parsed, Mapping):
                 raise ValueError(f"external JSON projection is not an object: {path}")
-        if _UNSAFE_HTML_RE.search(content) or _ABSOLUTE_PERSONAL_PATH_RE.search(content):
+        if _UNSAFE_HTML_RE.search(content) or _ABSOLUTE_PERSONAL_PATH_RE.search(
+            content
+        ):
             raise ValueError(f"unsafe external projection content: {path}")
         if _PROTECTED_FIELD_RE.search(content) or _REMOTE_IMAGE_RE.search(content):
             raise ValueError(f"protected or remote external projection content: {path}")
 
 
-def _generated_manifest(model: Mapping[str, Any], contents: Mapping[Path, str]) -> dict[str, Any]:
+def _generated_manifest(
+    model: Mapping[str, Any], contents: Mapping[Path, str]
+) -> dict[str, Any]:
     files = []
-    for relative, content in sorted(contents.items(), key=lambda item: item[0].as_posix()):
+    for relative, content in sorted(
+        contents.items(), key=lambda item: item[0].as_posix()
+    ):
         if not relative.is_relative_to(VAULT_RELATIVE_PATH):
             continue
         match = _NOTE_ID_RE.search(content)
-        note_id = match.group(1).strip().strip('"') if match else f"FILE-{sha256(relative.as_posix().encode())[:12]}"
-        files.append({
-            "note_id": note_id,
-            "relative_path": relative.relative_to(VAULT_RELATIVE_PATH).as_posix(),
-            "sha256": sha256(content.encode("utf-8")),
-            "managed_by": "myis-report",
-        })
+        note_id = (
+            match.group(1).strip().strip('"')
+            if match
+            else f"FILE-{sha256(relative.as_posix().encode())[:12]}"
+        )
+        files.append(
+            {
+                "note_id": note_id,
+                "relative_path": relative.relative_to(VAULT_RELATIVE_PATH).as_posix(),
+                "sha256": sha256(content.encode("utf-8")),
+                "managed_by": "myis-report",
+            }
+        )
     manifest: dict[str, Any] = {
         "schema_version": "myis.obsidian-generated-manifest.v2",
         "vault_id": "myis-obsidian-report",
@@ -2488,14 +4034,20 @@ def _json_text(value: Mapping[str, Any]) -> str:
     return json.dumps(value, ensure_ascii=True, indent=2, sort_keys=True) + "\n"
 
 
-def _validate_generated_contents(contents: Mapping[Path, str], model: Mapping[str, Any] | None = None) -> None:
+def _validate_generated_contents(
+    contents: Mapping[Path, str], model: Mapping[str, Any] | None = None
+) -> None:
     seen_note_ids: set[str] = set()
-    known_links = {relative.stem for relative in contents if relative.suffix.lower() == ".md"}
+    known_links = {
+        relative.stem for relative in contents if relative.suffix.lower() == ".md"
+    }
     known_links.add("README")
     for relative, content in contents.items():
         if relative.is_absolute() or ".." in relative.parts:
             raise ValueError(f"generated path escapes repository: {relative}")
-        if _UNSAFE_HTML_RE.search(content) or _ABSOLUTE_PERSONAL_PATH_RE.search(content):
+        if _UNSAFE_HTML_RE.search(content) or _ABSOLUTE_PERSONAL_PATH_RE.search(
+            content
+        ):
             raise ValueError(f"unsafe generated content: {relative}")
         if _PROTECTED_FIELD_RE.search(content) or _REMOTE_IMAGE_RE.search(content):
             raise ValueError(f"protected or remote generated content: {relative}")
@@ -2504,7 +4056,9 @@ def _validate_generated_contents(contents: Mapping[Path, str], model: Mapping[st
             properties = _frontmatter_properties(content, relative)
             missing = _REQUIRED_NOTE_PROPERTIES - properties.keys()
             if missing:
-                raise ValueError(f"note is missing common properties {sorted(missing)}: {relative}")
+                raise ValueError(
+                    f"note is missing common properties {sorted(missing)}: {relative}"
+                )
             note_id = str(properties["note_id"])
             if note_id in seen_note_ids:
                 raise ValueError(f"duplicate note_id: {note_id}")
@@ -2519,7 +4073,10 @@ def _validate_generated_contents(contents: Mapping[Path, str], model: Mapping[st
                 raise ValueError(f"unsupported evidence_maturity: {relative}")
             if properties.get("claim_level") not in _ALLOWED_CLAIM_LEVELS:
                 raise ValueError(f"unsupported claim_level: {relative}")
-            if properties.get("managed_by") != "myis-report" or properties.get("edit_policy") != "generated_do_not_edit":
+            if (
+                properties.get("managed_by") != "myis-report"
+                or properties.get("edit_policy") != "generated_do_not_edit"
+            ):
                 raise ValueError(f"generated ownership contract failed: {relative}")
             if not isinstance(properties.get("safe_to_present"), bool):
                 raise ValueError(f"safe_to_present must be boolean: {relative}")
@@ -2534,35 +4091,73 @@ def _validate_generated_contents(contents: Mapping[Path, str], model: Mapping[st
                     or not properties.get("source_run_ids")
                     or not properties.get("source_manifest_sha256")
                 ):
-                    raise ValueError(f"promoted result is missing measured authority bindings: {relative}")
-            if properties.get("generated_from_revision") != properties.get("read_model_revision"):
-                raise ValueError(f"generated report revision binding mismatch: {relative}")
+                    raise ValueError(
+                        f"promoted result is missing measured authority bindings: {relative}"
+                    )
+            if properties.get("generated_from_revision") != properties.get(
+                "read_model_revision"
+            ):
+                raise ValueError(
+                    f"generated report revision binding mismatch: {relative}"
+                )
             if not str(properties.get("last_material_update", "")).strip():
-                raise ValueError(f"generated report lifecycle timestamp is missing: {relative}")
+                raise ValueError(
+                    f"generated report lifecycle timestamp is missing: {relative}"
+                )
             if not str(properties.get("next_authorized_action", "")).strip():
                 raise ValueError(f"generated report next action is missing: {relative}")
         for target in _WIKILINK_RE.findall(content):
             target_name = Path(target.replace("\\", "/")).name
-            if target_name not in known_links and not target.startswith("80_Owner_Notes/"):
+            if target_name not in known_links and not target.startswith(
+                "80_Owner_Notes/"
+            ):
                 raise ValueError(f"unresolved wikilink {target}: {relative}")
     if model is not None:
-        p2 = model.get("p2_readiness", {}) if isinstance(model.get("p2_readiness"), Mapping) else {}
-        fixture = p2.get("fixture_pilot", {}) if isinstance(p2.get("fixture_pilot"), Mapping) else {}
-        review = p2.get("official_review", {}) if isinstance(p2.get("official_review"), Mapping) else {}
+        p2 = (
+            model.get("p2_readiness", {})
+            if isinstance(model.get("p2_readiness"), Mapping)
+            else {}
+        )
+        fixture = (
+            p2.get("fixture_pilot", {})
+            if isinstance(p2.get("fixture_pilot"), Mapping)
+            else {}
+        )
+        review = (
+            p2.get("official_review", {})
+            if isinstance(p2.get("official_review"), Mapping)
+            else {}
+        )
         if fixture.get("status") == "passed":
             for content in contents.values():
                 lowered = content.lower()
-                if "fixture remains not executed" in lowered or "which remains not executed" in lowered:
-                    raise ValueError("stale fixture narrative contradicts validated fixture status")
+                if (
+                    "fixture remains not executed" in lowered
+                    or "which remains not executed" in lowered
+                ):
+                    raise ValueError(
+                        "stale fixture narrative contradicts validated fixture status"
+                    )
         if review.get("final_verdict") == "accept":
             for content in contents.values():
-                lowered = content.lower()
-                if "official review" in lowered and "pending" in lowered:
-                    raise ValueError("stale official review narrative contradicts accepted review")
+                if re.search(
+                    r"official review[^\r\n]*(?:pending|awaiting)",
+                    content,
+                    re.IGNORECASE,
+                ):
+                    raise ValueError(
+                        "stale official review narrative contradicts accepted review"
+                    )
         if int(p2.get("measured_runs", 0) or 0) == 0:
             for content in contents.values():
-                if re.search(r"measured\s+p2[^\n]*(started|running|complete)", content, re.IGNORECASE):
-                    raise ValueError("measured P2 narrative contradicts zero measured runs")
+                if re.search(
+                    r"measured\s+p2[^\n]*(started|running|complete)",
+                    content,
+                    re.IGNORECASE,
+                ):
+                    raise ValueError(
+                        "measured P2 narrative contradicts zero measured runs"
+                    )
 
 
 def _owner_file_hashes(vault_root: Path) -> dict[str, str]:
@@ -2582,14 +4177,27 @@ def _ensure_owner_boundary(vault_root: Path) -> None:
     owner_root.mkdir(parents=True, exist_ok=True)
     readme = owner_root / "README.md"
     if not readme.exists():
-        readme.write_text("# Owner Notes\n\nFiles in this directory are never generated or overwritten by `myis-report`.\n", encoding="utf-8")
+        readme.write_text(
+            "# Owner Notes\n\nFiles in this directory are never generated or overwritten by `myis-report`.\n",
+            encoding="utf-8",
+        )
     for phase in (
-        "P0_FOUNDATION", "P1_CPU_BASELINE", "P2_SCOPE_DEVELOPMENT", "P3_FINAL", "P4_PUBLICATION",
-        "A0_MIGRATION_FOUNDATION", "A1_BASELINES_AND_MULTI_ARM_SCREENING", "A2_PER_ARM_AUTOINDEX",
-        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT", "A4_PRODUCTION_TRANSFER_AND_SELECTION",
-        "A5_FINAL_CONFIRMATION", "A6_PUBLICATION_AND_RELEASE",
+        "P0_FOUNDATION",
+        "P1_CPU_BASELINE",
+        "P2_SCOPE_DEVELOPMENT",
+        "P3_FINAL",
+        "P4_PUBLICATION",
+        "A0_MIGRATION_FOUNDATION",
+        "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+        "A2_PER_ARM_AUTOINDEX",
+        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+        "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+        "A5_FINAL_CONFIRMATION",
+        "A6_PUBLICATION_AND_RELEASE",
     ):
-        (vault_root / "01_Phases" / phase / "Owner_Notes").mkdir(parents=True, exist_ok=True)
+        (vault_root / "01_Phases" / phase / "Owner_Notes").mkdir(
+            parents=True, exist_ok=True
+        )
 
 
 def write_projection_reports(
@@ -2665,46 +4273,95 @@ def present_advisor_update(root: Path, snapshot_id: str) -> Path:
     root = root.resolve()
     validate_advisor_update(root)
     model = build_read_model(root)
-    draft = _obsidian_vault_contents(root, model)[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"]
+    draft = _obsidian_vault_contents(root, model)[
+        VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"
+    ]
     frozen = (
-        draft.replace('note_id: "CURRENT-ADVISOR-UPDATE"', f'note_id: "{snapshot_id}"', 1)
-        .replace('workflow_status: "verification_needed"', 'workflow_status: "complete"', 1)
+        draft.replace(
+            'note_id: "CURRENT-ADVISOR-UPDATE"', f'note_id: "{snapshot_id}"', 1
+        )
+        .replace(
+            'workflow_status: "verification_needed"', 'workflow_status: "complete"', 1
+        )
         .replace('lifecycle: "draft"', 'lifecycle: "presented"', 1)
         .replace('snapshot_status: "draft"', 'snapshot_status: "presented"', 1)
-        .replace("# Advisor Update", f"# Advisor Update {snapshot_id}\n\nThis immutable snapshot was validated before presentation.", 1)
+        .replace(
+            "# Advisor Update",
+            f"# Advisor Update {snapshot_id}\n\nThis immutable snapshot was validated before presentation.",
+            1,
+        )
     )
-    target = root / VAULT_RELATIVE_PATH / "02_Advisor_Updates/Presented" / f"{snapshot_id}.md"
+    target = (
+        root
+        / VAULT_RELATIVE_PATH
+        / "02_Advisor_Updates/Presented"
+        / f"{snapshot_id}.md"
+    )
     return _write_immutable_snapshot(target, frozen)
 
 
-def correct_advisor_update(root: Path, snapshot_id: str, corrects_snapshot_id: str) -> Path:
-    if not _SNAPSHOT_ID_RE.fullmatch(snapshot_id) or not _SNAPSHOT_ID_RE.fullmatch(corrects_snapshot_id):
+def correct_advisor_update(
+    root: Path, snapshot_id: str, corrects_snapshot_id: str
+) -> Path:
+    if not _SNAPSHOT_ID_RE.fullmatch(snapshot_id) or not _SNAPSHOT_ID_RE.fullmatch(
+        corrects_snapshot_id
+    ):
         raise ValueError("snapshot IDs must be stable uppercase text")
     root = root.resolve()
-    original = root / VAULT_RELATIVE_PATH / "02_Advisor_Updates/Presented" / f"{corrects_snapshot_id}.md"
+    original = (
+        root
+        / VAULT_RELATIVE_PATH
+        / "02_Advisor_Updates/Presented"
+        / f"{corrects_snapshot_id}.md"
+    )
     if not original.is_file():
         raise ValueError("correction target snapshot does not exist")
-    original_properties = _frontmatter_properties(original.read_text(encoding="utf-8"), original.relative_to(root))
+    original_properties = _frontmatter_properties(
+        original.read_text(encoding="utf-8"), original.relative_to(root)
+    )
     if original_properties.get("snapshot_status") not in {"presented", "corrected"}:
         raise ValueError("only a presented snapshot can be corrected")
     validate_advisor_update(root)
     model = build_read_model(root)
-    draft = _obsidian_vault_contents(root, model)[VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"]
+    draft = _obsidian_vault_contents(root, model)[
+        VAULT_RELATIVE_PATH / "02_Advisor_Updates/Drafts/CURRENT_ADVISOR_UPDATE.md"
+    ]
     correction = (
-        draft.replace('note_id: "CURRENT-ADVISOR-UPDATE"', f'note_id: "{snapshot_id}"', 1)
-        .replace('workflow_status: "verification_needed"', 'workflow_status: "complete"', 1)
+        draft.replace(
+            'note_id: "CURRENT-ADVISOR-UPDATE"', f'note_id: "{snapshot_id}"', 1
+        )
+        .replace(
+            'workflow_status: "verification_needed"', 'workflow_status: "complete"', 1
+        )
         .replace('lifecycle: "draft"', 'lifecycle: "correction"', 1)
         .replace('snapshot_status: "draft"', 'snapshot_status: "correction"', 1)
-        .replace('supersedes: null', f'corrects_snapshot_id: "{corrects_snapshot_id}"', 1)
-        .replace("# Advisor Update", f"# Advisor Update Correction {snapshot_id}\n\nCorrects immutable snapshot [[{corrects_snapshot_id}]] without modifying it.", 1)
+        .replace(
+            "supersedes: null", f'corrects_snapshot_id: "{corrects_snapshot_id}"', 1
+        )
+        .replace(
+            "# Advisor Update",
+            f"# Advisor Update Correction {snapshot_id}\n\nCorrects immutable snapshot [[{corrects_snapshot_id}]] without modifying it.",
+            1,
+        )
     )
-    target = root / VAULT_RELATIVE_PATH / "02_Advisor_Updates/Presented" / f"{snapshot_id}.md"
+    target = (
+        root
+        / VAULT_RELATIVE_PATH
+        / "02_Advisor_Updates/Presented"
+        / f"{snapshot_id}.md"
+    )
     return _write_immutable_snapshot(target, correction)
 
 
-def _check(root: Path, target: Path, *, read_model_only: bool = False) -> dict[str, Any]:
+def _check(
+    root: Path, target: Path, *, read_model_only: bool = False
+) -> dict[str, Any]:
     if not target.is_file():
-        return {"status": "FAIL", "reason": "read_model_missing", "read_model": str(target)}
+        return {
+            "status": "FAIL",
+            "reason": "read_model_missing",
+            "read_model": str(target),
+        }
     try:
         payload = json.loads(target.read_text(encoding="utf-8"))
         validate_read_model(payload)
@@ -2717,7 +4374,9 @@ def _check(root: Path, target: Path, *, read_model_only: bool = False) -> dict[s
     if not read_model_only:
         for path, content in projection_report_contents(root, expected).items():
             try:
-                matches = path.is_file() and path.read_bytes() == content.encode("utf-8")
+                matches = path.is_file() and path.read_bytes() == content.encode(
+                    "utf-8"
+                )
             except (OSError, UnicodeError):
                 matches = False
             if not matches:
@@ -2742,18 +4401,34 @@ def _validate_sync_receipt(root: Path, model: Mapping[str, Any]) -> str | None:
     path = root / SYNC_RECEIPT_RELATIVE_PATH
     try:
         receipt = json.loads(path.read_text(encoding="utf-8"))
-        archive_text = (root / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8")
-        manifest = json.loads((root / GENERATED_MANIFEST_RELATIVE_PATH).read_text(encoding="utf-8"))
+        archive_text = (root / "mlflow/generated/archive-index.v2.json").read_text(
+            encoding="utf-8"
+        )
+        manifest = json.loads(
+            (root / GENERATED_MANIFEST_RELATIVE_PATH).read_text(encoding="utf-8")
+        )
     except (OSError, UnicodeError, json.JSONDecodeError):
         return "cross-projection receipt or bound projection is missing/invalid"
     required = {
-        "schema_version", "projection_schema_version", "read_model_revision",
-        "read_model_sha256", "source_commit", "mlflow_run_id",
-        "mlflow_archive_sha256", "dashboard_snapshot_sha256",
-        "obsidian_manifest_sha256", "source_receipt_uri", "source_receipt_sha256",
-        "projection_events", "status",
+        "schema_version",
+        "projection_schema_version",
+        "read_model_revision",
+        "read_model_sha256",
+        "source_commit",
+        "mlflow_run_id",
+        "mlflow_archive_sha256",
+        "dashboard_snapshot_sha256",
+        "obsidian_manifest_sha256",
+        "source_receipt_uri",
+        "source_receipt_sha256",
+        "projection_events",
+        "status",
     }
-    if set(receipt) != required or receipt.get("schema_version") != "myis.projection-sync-receipt.v2" or receipt.get("status") != "PASS":
+    if (
+        set(receipt) != required
+        or receipt.get("schema_version") != "myis.projection-sync-receipt.v2"
+        or receipt.get("status") != "PASS"
+    ):
         return "cross-projection receipt contract is invalid"
     expected = {
         "projection_schema_version": model["projection_schema_version"],
@@ -2769,23 +4444,37 @@ def _validate_sync_receipt(root: Path, model: Mapping[str, Any]) -> str | None:
         **_paper_report_contents(root, model),
         **_compatibility_report_contents(root, model),
     }
-    expected.update(_a010_projection_lifecycle(
-        root,
-        model,
-        archive_text=archive_text,
-        obsidian_manifest_sha256=str(manifest.get("manifest_sha256")),
-        external_outputs=external_outputs,
-    ))
+    expected.update(
+        _a010_projection_lifecycle(
+            root,
+            model,
+            archive_text=archive_text,
+            obsidian_manifest_sha256=str(manifest.get("manifest_sha256")),
+            external_outputs=external_outputs,
+        )
+    )
     if any(receipt.get(key) != value for key, value in expected.items()):
         return "cross-projection receipt does not match the shared revision"
-    if not isinstance(receipt.get("mlflow_run_id"), str) or not re.fullmatch(r"[A-Za-z0-9]{16,64}", receipt["mlflow_run_id"]):
+    if not isinstance(receipt.get("mlflow_run_id"), str) or not re.fullmatch(
+        r"[A-Za-z0-9]{16,64}", receipt["mlflow_run_id"]
+    ):
         return "cross-projection receipt has no valid MLflow run ID"
     return None
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="myis-report")
-    parser.add_argument("command", choices=["build", "check", "sync", "advisor-validate", "advisor-present", "advisor-correct"])
+    parser.add_argument(
+        "command",
+        choices=[
+            "build",
+            "check",
+            "sync",
+            "advisor-validate",
+            "advisor-present",
+            "advisor-correct",
+        ],
+    )
     parser.add_argument("--repository-root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
     parser.add_argument("--snapshot-id")
@@ -2799,7 +4488,9 @@ def main(argv: list[str] | None = None) -> int:
     target = args.output.resolve() if args.output else root / READ_MODEL_RELATIVE_PATH
     if args.command == "build":
         path = write_read_model(root, target)
-        print(json.dumps({"status": "PASS", "read_model": str(path)}, ensure_ascii=True))
+        print(
+            json.dumps({"status": "PASS", "read_model": str(path)}, ensure_ascii=True)
+        )
         return 0
     if args.command == "advisor-validate":
         print(json.dumps(validate_advisor_update(root), ensure_ascii=True))
@@ -2812,20 +4503,35 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "advisor-correct":
         if not args.snapshot_id or not args.corrects_snapshot_id:
-            parser.error("advisor-correct requires --snapshot-id and --corrects-snapshot-id")
+            parser.error(
+                "advisor-correct requires --snapshot-id and --corrects-snapshot-id"
+            )
         path = correct_advisor_update(root, args.snapshot_id, args.corrects_snapshot_id)
         print(json.dumps({"status": "PASS", "snapshot": str(path)}, ensure_ascii=True))
         return 0
     if args.command == "sync":
         model = build_read_model(root)
         validate_read_model(model)
-        mlflow_run_id = _sync_mlflow_projection(root, model, store_root=args.mlflow_store)
+        mlflow_run_id = _sync_mlflow_projection(
+            root, model, store_root=args.mlflow_store
+        )
         target.parent.mkdir(parents=True, exist_ok=True)
         temporary = target.with_suffix(target.suffix + ".tmp")
         temporary.write_text(_json_text(model), encoding="utf-8", newline="\n")
         temporary.replace(target)
         outputs = write_projection_reports(root, model, mlflow_run_id=mlflow_run_id)
-        print(json.dumps({"status": "PASS", "read_model": str(target), "report_count": len(outputs), "read_model_revision": model["read_model_revision"], "mlflow_run_id": mlflow_run_id}, ensure_ascii=True))
+        print(
+            json.dumps(
+                {
+                    "status": "PASS",
+                    "read_model": str(target),
+                    "report_count": len(outputs),
+                    "read_model_revision": model["read_model_revision"],
+                    "mlflow_run_id": mlflow_run_id,
+                },
+                ensure_ascii=True,
+            )
+        )
         return 0
     result = _check(root, target, read_model_only=args.read_model_only)
     print(json.dumps(result, ensure_ascii=True))

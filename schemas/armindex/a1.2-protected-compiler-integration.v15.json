@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-protected-compiler-integration.v15.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "integration_id", "status", "preserved_lineage", "implementation", "topology", "p02_successor", "compatibility_inputs", "requirements", "authorization", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-protected-compiler-integration.v15"},
+    "integration_id": {"const": "a1.2-protected-compiler-integration-v15"},
+    "status": {"const": "FROZEN_ADDITIVE_PRE_MEASUREMENT_INTEGRATION"},
+    "preserved_lineage": {"$ref": "#/$defs/lineage"},
+    "implementation": {"$ref": "#/$defs/implementation"},
+    "topology": {"$ref": "#/$defs/topology"},
+    "p02_successor": {"$ref": "#/$defs/p02"},
+    "compatibility_inputs": {"$ref": "#/$defs/compatibility"},
+    "requirements": {"$ref": "#/$defs/requirements"},
+    "authorization": {"$ref": "#/$defs/authorization"},
+    "contract_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "uri": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"},
+    "lineage": {"type": "object", "additionalProperties": false, "required": ["v11_request_uri", "v11_request_sha256", "v11_program_set_uri", "v11_program_set_sha256", "v12_r3_uri", "v12_r3_file_sha256", "v13_publication_uri", "v13_publication_sha256", "v14_repair_uri", "v14_repair_sha256"], "properties": {"v11_request_uri": {"$ref": "#/$defs/uri"}, "v11_request_sha256": {"$ref": "#/$defs/hash"}, "v11_program_set_uri": {"$ref": "#/$defs/uri"}, "v11_program_set_sha256": {"$ref": "#/$defs/hash"}, "v12_r3_uri": {"$ref": "#/$defs/uri"}, "v12_r3_file_sha256": {"$ref": "#/$defs/hash"}, "v13_publication_uri": {"$ref": "#/$defs/uri"}, "v13_publication_sha256": {"$ref": "#/$defs/hash"}, "v14_repair_uri": {"$ref": "#/$defs/uri"}, "v14_repair_sha256": {"$ref": "#/$defs/hash"}}},
+    "implementation": {"type": "object", "additionalProperties": false, "required": ["version", "source_uri", "source_sha256", "materializer_source_uri", "materializer_source_sha256", "v14_schema_uri"], "properties": {"version": {"const": "a1.2-protected-compiler-integration-v15"}, "source_uri": {"const": "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v15.py"}, "source_sha256": {"$ref": "#/$defs/hash"}, "materializer_source_uri": {"const": "src/myis_research/armindex/a1_2_owner_local_protected_materializer_v15.py"}, "materializer_source_sha256": {"$ref": "#/$defs/hash"}, "v14_schema_uri": {"const": "schemas/armindex/a1.2-dense-overflow-adapter-repair.v14.json"}}},
+    "topology": {"type": "object", "additionalProperties": false, "required": ["arm_ids", "program_slots", "required_bindings", "arm01_mode", "dense_mode"], "properties": {"arm_ids": {"const": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]}, "program_slots": {"const": ["P00", "P01", "P02", "P03", "P04"]}, "required_bindings": {"const": 25}, "arm01_mode": {"const": "link_existing_frozen_lexical_path"}, "dense_mode": {"const": "direct_physical_window_plan_and_logical_composition_contract"}}},
+    "p02": {"type": "object", "additionalProperties": false, "required": ["topology_slot", "original_program_id", "executable_program_id", "contract_uri", "independence_or_dependency_status", "fallback"], "properties": {"topology_slot": {"const": "P02"}, "original_program_id": {"const": "P02-CLAIM1"}, "executable_program_id": {"const": "P02-FIRST-CLAIM"}, "contract_uri": {"const": "control/armindex/a1.2/p02-first-claim-repair.v1.json"}, "independence_or_dependency_status": {"const": "not_inferred_not_asserted_not_published"}, "fallback": {"const": false}}},
+    "compatibility": {"type": "object", "additionalProperties": false, "required": ["inventory_uri", "inventory_sha256", "composition_uri", "composition_sha256", "rep_harness_split_uri", "p02_repair_uri"], "properties": {"inventory_uri": {"const": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json"}, "inventory_sha256": {"$ref": "#/$defs/hash"}, "composition_uri": {"const": "outputs/audits/armindex/a1.2-dense-overflow-composition-20260808.json"}, "composition_sha256": {"$ref": "#/$defs/hash"}, "rep_harness_split_uri": {"const": "control/armindex/a1.2/rep-harness-split-decision.v1.json"}, "p02_repair_uri": {"const": "control/armindex/a1.2/p02-first-claim-repair.v1.json"}}},
+    "requirements": {"type": "object", "additionalProperties": false, "required": ["compatible_cells", "dense_cells", "rep_dev_queries", "zero_drops", "zero_overlap", "zero_silent_truncation", "zero_fallback", "deterministic_replay", "no_encoder_inference", "no_retrieval", "no_provider_contact"], "properties": {"compatible_cells": {"const": 25}, "dense_cells": {"const": 20}, "rep_dev_queries": {"const": 150}, "zero_drops": {"const": true}, "zero_overlap": {"const": true}, "zero_silent_truncation": {"const": true}, "zero_fallback": {"const": true}, "deterministic_replay": {"const": true}, "no_encoder_inference": {"const": true}, "no_retrieval": {"const": true}, "no_provider_contact": {"const": true}}},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed", "selection_allowed", "final_allowed", "paid_api_allowed"], "properties": {"provider_contact_allowed": {"const": false}, "launch_allowed": {"const": false}, "adopted_for_execution": {"const": false}, "measured_retrieval_allowed": {"const": false}, "selection_allowed": {"const": false}, "final_allowed": {"const": false}, "paid_api_allowed": {"const": false}}}
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-dense-overflow-adapter-repair.v14.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "repair_id", "status", "owner_decision",
+    "immutable_lineage", "raw_inventory", "implementation",
+    "composition_semantics", "arm_postprocessing", "v9_adapter_lineage",
+    "publication_method_disclosure", "requirements", "authorization",
+    "contract_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-dense-overflow-adapter-repair.v14"},
+    "repair_id": {"const": "a1.2-additive-dense-overflow-composition-v14"},
+    "status": {"const": "FROZEN_ADDITIVE_PRE_MEASUREMENT_REPAIR"},
+    "owner_decision": {"$ref": "#/$defs/owner_decision"},
+    "immutable_lineage": {"$ref": "#/$defs/immutable_lineage"},
+    "raw_inventory": {"$ref": "#/$defs/raw_inventory"},
+    "implementation": {"$ref": "#/$defs/implementation"},
+    "composition_semantics": {"$ref": "#/$defs/composition"},
+    "arm_postprocessing": {"$ref": "#/$defs/arm_postprocessing"},
+    "v9_adapter_lineage": {"$ref": "#/$defs/v9_lineage"},
+    "publication_method_disclosure": {"$ref": "#/$defs/publication_disclosure"},
+    "requirements": {"$ref": "#/$defs/requirements"},
+    "authorization": {"$ref": "#/$defs/authorization"},
+    "contract_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "immutable_lineage": {"type": "object", "additionalProperties": false, "required": ["v11_program_set_uri", "v11_program_set_file_sha256", "v12_r3_uri", "v12_r3_file_sha256", "v13_publication_uri", "v13_publication_file_sha256", "p02_first_claim_uri", "p02_first_claim_file_sha256"], "properties": {"v11_program_set_uri": {"type": "string"}, "v11_program_set_file_sha256": {"$ref": "#/$defs/hash"}, "v12_r3_uri": {"type": "string"}, "v12_r3_file_sha256": {"$ref": "#/$defs/hash"}, "v13_publication_uri": {"type": "string"}, "v13_publication_file_sha256": {"$ref": "#/$defs/hash"}, "p02_first_claim_uri": {"type": "string"}, "p02_first_claim_file_sha256": {"$ref": "#/$defs/hash"}}},
+    "raw_inventory": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256", "inventory_sha256", "deterministic_replay"], "properties": {"uri": {"type": "string"}, "file_sha256": {"$ref": "#/$defs/hash"}, "inventory_sha256": {"$ref": "#/$defs/hash"}, "deterministic_replay": {"type": "object", "additionalProperties": false, "required": ["status", "batch_schedules", "byte_identical_receipt", "first_wall_seconds", "replay_wall_seconds"], "properties": {"status": {"const": "PASS"}, "batch_schedules": {"const": [128, 256]}, "byte_identical_receipt": {"const": true}, "first_wall_seconds": {"type": "number", "exclusiveMinimum": 0}, "replay_wall_seconds": {"type": "number", "exclusiveMinimum": 0}}}}},
+    "implementation": {"type": "object", "additionalProperties": false, "required": ["version", "planner_source_uri", "planner_source_sha256", "audit_source_uri", "audit_source_sha256"], "properties": {"version": {"const": "a1.2-dense-overflow-composition-v1"}, "planner_source_uri": {"type": "string"}, "planner_source_sha256": {"$ref": "#/$defs/hash"}, "audit_source_uri": {"type": "string"}, "audit_source_sha256": {"$ref": "#/$defs/hash"}}},
+    "owner_decision": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "authorize_additive_dense_overflow_adapter_repair",
+        "preserve_historical_v11_v12_r3_v13", "preserve_original_p02_lineage",
+        "preserve_5_arm_x_5_program_topology", "allow_partial_screen",
+        "allow_silent_truncation", "allow_provider_contact", "allow_measured_retrieval"
+      ],
+      "properties": {
+        "authorize_additive_dense_overflow_adapter_repair": {"const": true},
+        "preserve_historical_v11_v12_r3_v13": {"const": true},
+        "preserve_original_p02_lineage": {"const": true},
+        "preserve_5_arm_x_5_program_topology": {"const": true},
+        "allow_partial_screen": {"const": false},
+        "allow_silent_truncation": {"const": false},
+        "allow_provider_contact": {"const": false},
+        "allow_measured_retrieval": {"const": false}
+      }
+    },
+    "composition": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "fit_path", "overflow_scope", "logical_program_identity_changed",
+        "logical_unit_identity_changed", "source_token_domain", "template_semantics",
+        "window_order", "window_size", "overlap_tokens", "source_token_multiplicity",
+        "truncation_allowed", "omission_allowed", "alternate_field_fallback_allowed",
+        "physical_encoder", "aggregation", "aggregation_formula", "postprocessing",
+        "p03_physical_windows_become_retrieval_units"
+      ],
+      "properties": {
+        "fit_path": {"const": "preserve_existing_frozen_adapter_path_exactly"},
+        "overflow_scope": {"const": "physical_encoder_input_only"},
+        "logical_program_identity_changed": {"const": false},
+        "logical_unit_identity_changed": {"const": false},
+        "source_token_domain": {"const": "frozen_tokenizer_input_ids_without_special_tokens"},
+        "template_semantics": {"const": "exact_frozen_query_or_document_template_with_token_concatenation_parity"},
+        "window_order": {"const": "contiguous_source_order"},
+        "window_size": {"const": "longest_source_token_prefix_that_fits_effective_limit"},
+        "overlap_tokens": {"const": 0},
+        "source_token_multiplicity": {"const": 1},
+        "truncation_allowed": {"const": false},
+        "omission_allowed": {"const": false},
+        "alternate_field_fallback_allowed": {"const": false},
+        "physical_encoder": {"const": "unchanged_frozen_arm_adapter"},
+        "aggregation": {"const": "source_token_count_weighted_mean"},
+        "aggregation_formula": {"const": "sum(window_source_tokens * physical_window_vector) / sum(window_source_tokens)"},
+        "postprocessing": {"const": "preserve_arm_specific_frozen_logical_vector_postprocessing_after_weighted_mean"},
+        "p03_physical_windows_become_retrieval_units": {"const": false}
+      }
+    },
+    "arm_postprocessing": {"type": "object", "additionalProperties": false, "required": ["ARM-02", "ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-02": {"$ref": "#/$defs/arm_postprocessing_item"}, "ARM-03": {"$ref": "#/$defs/arm_postprocessing_item"}, "ARM-04": {"$ref": "#/$defs/arm_postprocessing_item"}, "ARM-05": {"$ref": "#/$defs/arm_postprocessing_item"}}},
+    "arm_postprocessing_item": {"type": "object", "additionalProperties": false, "required": ["adapter_receipt_sha256", "pooling", "physical_window_vector_postprocessing", "logical_vector_postprocessing"], "properties": {"adapter_receipt_sha256": {"$ref": "#/$defs/hash"}, "pooling": {"type": "string"}, "physical_window_vector_postprocessing": {"type": "string"}, "logical_vector_postprocessing": {"type": "string"}}},
+    "v9_lineage": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256", "receipt_sha256"], "properties": {"uri": {"type": "string"}, "file_sha256": {"$ref": "#/$defs/hash"}, "receipt_sha256": {"$ref": "#/$defs/hash"}}},
+    "publication_disclosure": {"type": "object", "additionalProperties": false, "required": ["required", "patembed_p00_description", "patembed_p00_corpus_overflow_incidence", "patembed_p00_rep_dev_query_overflow_incidence", "retrieval_quality_claim_authorized", "publication_claim_authorized"], "properties": {"required": {"const": true}, "patembed_p00_description": {"type": "string"}, "patembed_p00_corpus_overflow_incidence": {"type": "number", "minimum": 0, "maximum": 1}, "patembed_p00_rep_dev_query_overflow_incidence": {"type": "number", "minimum": 0, "maximum": 1}, "retrieval_quality_claim_authorized": {"const": false}, "publication_claim_authorized": {"const": false}}},
+    "requirements": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "compatible_program_arm_cells", "rep_dev_query_coverage_fraction",
+        "required_corpus_logical_unit_coverage_fraction",
+        "maximum_physical_window_must_not_exceed_effective_limit",
+        "source_token_drop_count", "source_token_overlap_count", "silent_truncation_count",
+        "fallback_count", "deterministic_replay_required", "fail_closed"
+      ],
+      "properties": {
+        "compatible_program_arm_cells": {"const": 25},
+        "rep_dev_query_coverage_fraction": {"const": 1.0},
+        "required_corpus_logical_unit_coverage_fraction": {"const": 1.0},
+        "maximum_physical_window_must_not_exceed_effective_limit": {"const": true},
+        "source_token_drop_count": {"const": 0},
+        "source_token_overlap_count": {"const": 0},
+        "silent_truncation_count": {"const": 0},
+        "fallback_count": {"const": 0},
+        "deterministic_replay_required": {"const": true},
+        "fail_closed": {"const": true}
+      }
+    },
+    "authorization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_contact_allowed", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed", "selection_allowed", "final_allowed", "paid_api_allowed"],
+      "properties": {
+        "provider_contact_allowed": {"const": false},
+        "launch_allowed": {"const": false},
+        "adopted_for_execution": {"const": false},
+        "measured_retrieval_allowed": {"const": false},
+        "selection_allowed": {"const": false},
+        "final_allowed": {"const": false},
+        "paid_api_allowed": {"const": false}
+      }
+    }
+  }
+}

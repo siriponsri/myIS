@@ -229,8 +229,12 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     model = build_read_model(ROOT)
     assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
     assert model["armindex"]["next_command"] == model["armindex"][
-        "a1_2_contract_scaffold"
-    ]["scientific_execution_request_v11"]["next_authorized_action"]
+        "a1_2_dense_overflow"
+    ]["next_authorized_action"]
+    assert model["armindex"]["local_adoption_input_status"] in {
+        "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
+        "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
+    }
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:
