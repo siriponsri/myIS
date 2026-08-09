@@ -33,6 +33,7 @@ ARM_CONFIG_OVERRIDES: dict[str, dict[str, Any]] = {
     }
 }
 _OPAQUE_ID_RE = re.compile(r"(?:F|Q)-[a-f0-9]{32}")
+_PASSAGE_VIEW_RE = re.compile(r"passage-[0-9]{4}")
 
 
 class MeasuredExecutorV16Error(ValueError):
@@ -250,7 +251,11 @@ def _validate_logical_inputs(
             raise MeasuredExecutorV16Error(
                 "logical input identity or physical plan is invalid"
             )
-        if item.view_id is not None and item.view_id not in P04_VIEW_IDS:
+        if (
+            item.view_id is not None
+            and item.view_id not in P04_VIEW_IDS
+            and _PASSAGE_VIEW_RE.fullmatch(item.view_id) is None
+        ):
             raise MeasuredExecutorV16Error("logical input view is invalid")
         for physical in item.physical_inputs:
             if (

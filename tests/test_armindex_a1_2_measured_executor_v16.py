@@ -92,6 +92,31 @@ def test_dense_family_max_rank_has_lexical_ties_and_hides_units() -> None:
     ]
 
 
+def test_dense_executor_accepts_frozen_passage_view_ids() -> None:
+    adapter = FakeAdapter({"passage": (1.0, 0.0), "query": (1.0, 0.0)})
+    index = build_dense_index(
+        arm_id="ARM-02",
+        adapter=adapter,
+        corpus=(
+            unit(
+                "passage-0001",
+                "F-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                ("passage", 1),
+                view_id="passage-0001",
+            ),
+        ),
+    )
+    ranks = search_dense(
+        index=index,
+        adapter=adapter,
+        query=unit("query", "Q-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ("query", 1)),
+        program_id="P03-PASSAGE",
+    )
+    assert [(row.family_token, row.rank) for row in ranks] == [
+        ("F-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 1)
+    ]
+
+
 def test_p04_uses_frozen_view_rrf_not_raw_score_fusion() -> None:
     family_a = "F-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     family_b = "F-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
