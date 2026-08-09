@@ -80,6 +80,58 @@ _BUNDLE_PREFIXES = (
     "schemas/armindex/a1.2-",
     "scripts/a1_2_vast/",
 )
+# V12 is a historical, hash-bound bundle.  These additive revisions were
+# introduced later and must remain in the v12-r3/v13/v15 lineage only.
+_BUNDLE_EXCLUDED_FILES = frozenset(
+    {
+        "control/armindex/a1.2/dense-overflow-adapter-repair.v14.json",
+        "control/armindex/a1.2/instance-disposition-policy.v13.json",
+        "control/armindex/a1.2/p02-first-claim-repair.v1.json",
+        "control/armindex/a1.2/protected-compiler-integration.v15.json",
+        "control/armindex/a1.2/publication-impact-contract.v13.json",
+        "control/armindex/a1.2/rep-harness-split-decision.v1.json",
+        "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
+        "control/armindex/a1.2/scientific-execution-adoption-inputs.v15.json",
+        "control/armindex/a1.2/whole-workload-budget-model.v15.json",
+        "schemas/armindex/a1.2-compiled-program-binding-set.v15.json",
+        "schemas/armindex/a1.2-dense-overflow-adapter-repair.v14.json",
+        "schemas/armindex/a1.2-instance-disposition-result.v13.json",
+        "schemas/armindex/a1.2-owner-local-protected-compilation-input.v12.json",
+        "schemas/armindex/a1.2-owner-local-protected-compilation-input.v15.json",
+        "schemas/armindex/a1.2-owner-local-protected-compiler-receipt.v12-r3.json",
+        "schemas/armindex/a1.2-owner-local-protected-compiler-receipt.v15.json",
+        "schemas/armindex/a1.2-protected-compiler-integration-audit.v15.json",
+        "schemas/armindex/a1.2-protected-compiler-integration.v15.json",
+        "schemas/armindex/a1.2-provider-destroy-readiness.v13.json",
+        "schemas/armindex/a1.2-publication-impact-contract.v13.json",
+        "schemas/armindex/a1.2-scientific-execution-adoption-inputs-receipt.v12-r3.json",
+        "schemas/armindex/a1.2-scientific-execution-adoption-inputs-receipt.v15.json",
+        "schemas/armindex/a1.2-scientific-execution-adoption-inputs.v12-r3.json",
+        "schemas/armindex/a1.2-scientific-execution-adoption-inputs.v15.json",
+        "schemas/armindex/a1.2-scientific-execution-bundle-receipt.v12-r3.json",
+        "schemas/armindex/a1.2-scientific-execution-bundle-receipt.v15.json",
+        "schemas/armindex/a1.2-scientific-execution-pre-adoption-anchor.v12-r3.json",
+        "schemas/armindex/a1.2-scientific-execution-pre-adoption-anchor.v15.json",
+        "schemas/armindex/a1.2-whole-workload-budget-model.v15.json",
+        "src/myis_research/armindex/a1_2_claim_parser_audit_v1.py",
+        "src/myis_research/armindex/a1_2_dense_overflow_adapter_v1.py",
+        "src/myis_research/armindex/a1_2_dense_overflow_composition_audit_v1.py",
+        "src/myis_research/armindex/a1_2_dense_overflow_contract_v14.py",
+        "src/myis_research/armindex/a1_2_dense_overflow_inventory_v1.py",
+        "src/myis_research/armindex/a1_2_effective_input_limit_audit_v1.py",
+        "src/myis_research/armindex/a1_2_instance_disposition_v13.py",
+        "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v12.py",
+        "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v15.py",
+        "src/myis_research/armindex/a1_2_owner_local_protected_materializer_v15.py",
+        "src/myis_research/armindex/a1_2_p02_first_claim_v1.py",
+        "src/myis_research/armindex/a1_2_protected_compiler_integration_audit_v15.py",
+        "src/myis_research/armindex/a1_2_publication_impact_v13.py",
+        "src/myis_research/armindex/a1_2_rep_harness_split_v1.py",
+        "src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v12_r3.py",
+        "src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v15.py",
+        "src/myis_research/armindex/a1_2_whole_workload_budget_model_v15.py",
+    }
+)
 _BUNDLE_EXACT_FILES = {
     "control/assets/dapfam-p1-source.v1.json",
     "control/budgets/a1.2-common-screen-scientific-request-v11.json",
@@ -196,6 +248,7 @@ def _bundle_paths(root: Path) -> list[str]:
     selected = sorted(
         path
         for path in tracked
+        if path not in _BUNDLE_EXCLUDED_FILES
         if path in _BUNDLE_REQUIRED_FILES
         or any(path.startswith(prefix) for prefix in _BUNDLE_PREFIXES)
     )

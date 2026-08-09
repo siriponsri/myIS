@@ -424,7 +424,7 @@ def _a12_dense_overflow_body(audit: Mapping[str, Any]) -> str:
     compiler_pass = audit.get("compiler_integration_status") == "PASS"
     local_adoption_pass = audit.get("local_adoption_input_status") == "PASS"
     result_text = (
-        "The complete additive v15 local adoption-input closure **PASS**. The clean pushed bundle, Owner-local anchor, all 25 protected bindings, whole-workload budget model, and synthetic watchdog/provider-destroy dry-run are validated; every live-provider input remains pending."
+        "`repair frozen, compiler integration PASS`. The complete additive v15 local adoption-input closure **PASS**. The clean pushed bundle, Owner-local anchor, all 25 protected bindings, whole-workload budget model, and synthetic watchdog/provider-destroy dry-run are validated; every live-provider input remains pending."
         if local_adoption_pass
         else "The additive repair and protected v15 compiler integration **PASS**. All 25 bindings, the protected handoff, transfer manifest, deterministic replay, effective-limit checks, and zero-silent-truncation evidence are materialized Owner-local."
         if compiler_pass
