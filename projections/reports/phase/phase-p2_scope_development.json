@@ -720,7 +720,7 @@
     }
   ],
   "generated_at": "2026-08-09T07:04:22Z",
-  "generated_from_revision": "005e23c20df9060e7f8185b3e9f33143915b9219c5675fb97fb60608a8ba4d22",
+  "generated_from_revision": "ebe1fbc4863a59b25f989ea41a0d0b3f52fbc7669d1c1ed681884a78beb6318c",
   "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
   "governance_status": {
     "d2": "waiting_owner",
@@ -800,12 +800,12 @@
   "language": "en",
   "last_material_update": "2026-08-09T07:04:22Z",
   "metric_references": [],
-  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
+  "next_authorized_action": "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "02fd2028d70595e0cf6eaa99b25e32110a762a417a18f53e5758b153a6a3c80b",
+  "report_sha256": "7f243b2f262dfba4bb2c53aed13fd1ae232bcb0697beaa9ff80781ef6d9bab2f",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

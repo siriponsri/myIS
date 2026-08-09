@@ -35,6 +35,7 @@ from ..armindex.constants import (
     A0_8_NEXT_AUTHORIZED_ACTION,
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
+    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
     A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
 )
@@ -2836,9 +2837,7 @@ def _a12_dense_overflow_projection(root: Path) -> dict[str, Any]:
     compiler_validated = compiler_audit is not None
     local_adoption_validated = final_receipt is not None
     next_action = (
-        "A separately authorized live-provider admission goal may obtain a fresh provider "
-        "identity and all-fee quote, evaluate live whole-workload budget admission, and "
-        "materialize a live provider admission receipt while every execution lock remains closed."
+        A1_LONG_RUN_NEXT_AUTHORIZED_ACTION
         if local_adoption_validated
         else (
             "Build and validate the additive clean pushed execution bundle, whole-workload "

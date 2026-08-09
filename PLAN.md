@@ -22,8 +22,9 @@ measurement, and production-constrained HarnessOpt.
   publication/disposition contracts validate without adoption; additive
   P02-FIRST-CLAIM coverage passes; the Owner-authorized dense-overflow repair is
   frozen, aggregate compatibility passes, and additive protected compiler v15
-  validates all 25 program-arm bindings without truncation; clean-bundle and
-  final local adoption-input closure are in progress)
+  validates all 25 program-arm bindings without truncation; the clean bundle,
+  whole-workload model, watchdog dry-run, and final local adoption-input receipt
+  now pass; live-provider admission and measured A1 execution have not started)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
 - Current evidence class: scientific execution adoption-request preparation over
   preserved v1-v10 engineering and provider-closeout lineage; scientific authority `false`
@@ -64,10 +65,14 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 ## Active phases
 
+There are exactly seven active phases. Progress is:
+
+`A0 complete -> A1 current -> A2 -> A3 -> A4 -> A5 -> A6`
+
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | A1.1 complete; A1.2 v9 synthetic live preflight PASS; v10 provider closeout PASS; v11 request plus v12-r3/v13 local adoption-input controls prepared for Owner review and launch-locked |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | current; A1.1 complete; A1.2 local adoption inputs validated; long-running measured screen pending |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -110,7 +115,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Runtime-minimal local stage complete; additive v9 live synthetic preflight PASS; additive v10 provider closeout PASS; additive v11 request and v12-r3/v13 local adoption-input controls prepared but not adopted; measured screen launch-locked |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | Local inputs validated through v15; measured screen not started; next goal runs A1 end to end and stops before A2 |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -281,10 +286,11 @@ truncation, partial-screen promotion, provider contact, or retrieval. Additive
 protected compiler v15 consumes the frozen physical-window plans, binds the
 source-token-count-weighted recomposition contract, and validates all 25/25
 bindings with deterministic replay, effective-limit compliance, zero silent
-truncation, and linked protected handoff/transfer/compiler receipts. The
-remaining local work is the clean pushed execution bundle, aggregate
-whole-workload budget model, synthetic watchdog/provider-destroy dry-run, and
-final local adoption-input receipt; every live-provider field remains pending.
+truncation, and linked protected handoff/transfer/compiler receipts. The clean
+pushed execution bundle, pre-adoption anchor, aggregate whole-workload budget
+model, synthetic watchdog/provider-destroy dry-run, and final local adoption-input
+receipt now pass. Fresh provider identity, all-fee quote, live whole-workload
+budget admission, provider admission, and measured execution remain pending.
 
 All registered Phase and Task reports are generated in detailed English from
 one validated read model using the canonical fifteen-section contract.
@@ -320,8 +326,10 @@ flowchart LR
 Protected qrels, membership, query IDs, rankings, per-query outcomes, raw
 provider payloads, and access material stay Owner-local. Git and every projection
 receive validated aggregates, hashes, counts, safe IDs, and pointers only.
-The migration does not authorize measured retrieval, model download, GPU
-scientific work, paid APIs, Selection, or Final.
+Migration evidence alone does not authorize measured retrieval. The next A1
+goal may proceed only in its declared order: live admission and adoption must
+pass before GPU scientific work starts. Runtime model download, paid APIs,
+provider fallback, Selection, Final, and A2 remain forbidden.
 
 ## Canonical details
 
@@ -335,16 +343,16 @@ scientific work, paid APIs, Selection, or Final.
 ## Next authorized action
 
 ```text
-/goal Close the additive v15 local adoption inputs after the protected compiler PASS. Build the clean pushed execution bundle and Owner-local anchor, validate the aggregate whole-workload budget model and synthetic watchdog/provider-destroy control path, publish the final local receipt, and keep all live-provider inputs pending. Do not contact a provider, adopt execution, run measured retrieval, access Selection or Final, use paid APIs, or change frozen scientific semantics.
+/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.
 ```
 
 The local runtime-minimal stage, v9 synthetic live preflight, safe collection,
 guest teardown, and v10 Owner-confirmed provider closeout are complete. The
-destroyed instance cannot be reused. v11 is prepared for Owner review but is not
-adopted. P02-FIRST-CLAIM coverage, dense-overflow compatibility, and additive
-protected compiler v15 are complete with 25/25 bindings and zero silent
-truncation. Scientific launch remains forbidden while the local bundle/final
-receipt are being closed and until a later live-provider admission succeeds.
-A future provider instance still requires a fresh identity, all-fee quote/live
-budget admission, provider admission receipt, artifact integrity, and an actual
-provider destroy capability check.
+destroyed instance cannot be reused. P02-FIRST-CLAIM coverage, dense-overflow
+compatibility, protected compiler v15, and final local adoption-input closure are
+complete with 25/25 bindings and zero silent truncation. The long-running goal
+does not skip admission: a future provider instance still requires a fresh
+identity, all-fee quote and live budget admission, provider/adoption receipts,
+artifact integrity, and an actual provider destroy capability check. Once those
+checks pass inside the same workflow, it continues through A1 closeout without
+stopping for documentation-only handoffs.

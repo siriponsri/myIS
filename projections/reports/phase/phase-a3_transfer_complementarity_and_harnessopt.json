@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-09T07:04:22Z",
-  "generated_from_revision": "005e23c20df9060e7f8185b3e9f33143915b9219c5675fb97fb60608a8ba4d22",
+  "generated_from_revision": "ebe1fbc4863a59b25f989ea41a0d0b3f52fbc7669d1c1ed681884a78beb6318c",
   "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
   "governance_status": {
     "d2": "waiting_owner",
@@ -60,11 +60,11 @@
   "language": "en",
   "last_material_update": "2026-08-09T07:04:22Z",
   "metric_references": [],
-  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
+  "next_authorized_action": "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.",
   "objective": "Analyze transfer, complementarity, and production-constrained harnesses.",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "phase-a3_transfer_complementarity_and_harnessopt",
-  "report_sha256": "1a4284fa7e61f4721d9b55632cba60334d600cc2c0fe56d739fda9a13f23929c",
+  "report_sha256": "77f6aa8569c366c011f2eaecef2a01fa036a23af81f6b2ce3f3dcb819a04d278",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

@@ -9,7 +9,7 @@ evidence.
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
 - Status: `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked`
-- Local adoption-input status: `PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY`
+- Local adoption-input status: `LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER`
 - Evidence class: scientific execution adoption-request preparation over preserved
   v1-v10 engineering and provider-closeout lineage; scientific authority `false`
 - ArmIndex measured runs: `0`
@@ -226,25 +226,26 @@ and composition audit pass. Additive protected compiler v15 now validates
 physical-window execution contracts, source-token-count-weighted vector
 recomposition semantics, all 25/25 compiled bindings, deterministic replay,
 effective input limits, zero silent truncation, and linked protected
-handoff/transfer/compiler receipts. The remaining local-only closure is the
-clean pushed bundle, pre-adoption anchor, aggregate budget model,
-watchdog/provider-destroy dry-run, and final local receipt. Fresh provider
-identity, quote, live budget admission, and live admission receipt remain
-`PENDING_LIVE_PROVIDER`. The destroyed instance cannot be reused.
+handoff/transfer/compiler receipts. The clean pushed bundle, pre-adoption anchor,
+aggregate budget model, watchdog/provider-destroy dry-run, and final local
+receipt now pass. Fresh provider identity, all-fee quote, live budget admission,
+provider admission, adoption, and measured execution remain pending. The
+destroyed instance cannot be reused.
 
 ## Active authorized action
 
-Complete the downstream local adoption-input closure without weakening the
-publication design. The exact next local action is:
+Run one governed workflow through A1 closeout without weakening the publication
+design or opening A2. The exact next action is:
 
 ```text
-/goal Close the additive v15 local adoption inputs after the protected compiler PASS. Build the clean pushed execution bundle and Owner-local anchor, validate the aggregate whole-workload budget model and synthetic watchdog/provider-destroy control path, publish the final local receipt, and keep all live-provider inputs pending. Do not contact a provider, adopt execution, run measured retrieval, access Selection or Final, use paid APIs, or change frozen scientific semantics.
+/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.
 ```
 
 The synthetic preflight, safe collection, guest teardown, Owner-confirmed
 provider closeout, v11 request preparation, frozen split, P02-FIRST-CLAIM
-coverage repair, dense-overflow compatibility audit, and additive protected
-compiler v15 are complete. No Vast instance remains available for reuse. The
-next goal is local bundle/final-receipt closure only; it does not open a
-provider, adopt execution, or authorize measured retrieval, optimization,
-Selection, Final, paid API work, or weight changes.
+coverage repair, dense-overflow compatibility audit, additive protected
+compiler v15, and final local adoption-input closure are complete. No Vast
+instance remains available for reuse. The next goal uses one fresh instance
+continuously through A1 only after provider and execution admission pass; it
+stops and destroys the instance before A2 and does not open HARNESS-DEV,
+Selection, Final, paid API work, provider fallback, or weight changes.

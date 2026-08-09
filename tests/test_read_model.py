@@ -14,6 +14,7 @@ from myis_research.armindex.constants import (
     A0_8_NEXT_AUTHORIZED_ACTION,
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
+    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
 )
 from myis_research.owner_local import build_receipt
@@ -231,6 +232,11 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     assert model["armindex"]["next_command"] == model["armindex"][
         "a1_2_dense_overflow"
     ]["next_authorized_action"]
+    if (
+        model["armindex"]["local_adoption_input_status"]
+        == "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER"
+    ):
+        assert model["armindex"]["next_command"] == A1_LONG_RUN_NEXT_AUTHORIZED_ACTION
     assert model["armindex"]["local_adoption_input_status"] in {
         "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
         "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",

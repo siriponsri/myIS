@@ -1,0 +1,95 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260809T080028Z-a1-long-run-plan-v1",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-09T08:00:28Z",
+  "scope": "Owner-directed replacement of the completed local-closure handoff with one governed long-running A1 closeout goal, plus synchronized aggregate-safe projections. No provider contact or measured execution occurred.",
+  "provenance": "agent-observed",
+  "owner_approvals": [],
+  "repository": {
+    "path": ".",
+    "revision": "75c1c089b98dc094b954c22668086e7d3d660c83",
+    "dirty_path_count": 281,
+    "dirty_paths": [
+      "PLAN.md",
+      "HANDOFF.md",
+      "src/myis_research/armindex/constants.py",
+      "src/myis_research/projections/read_model.py",
+      "tests/test_read_model.py",
+      "projections/",
+      "obsidian_report/",
+      "mlflow/generated/archive-index.v2.json",
+      "projections/sessions/20260809T080028Z-a1-long-run-plan-v1.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner clarified that the active vocabulary has seven phases, confirmed A1 as the current phase, and requested one long-running goal through A1 closeout rather than additional documentation-only handoffs.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "pivot",
+      "provenance": "owner-revised",
+      "summary": "The stale v15 local-closure goal was replaced with a continuous governed workflow that performs admission, the complete 25-cell A1.2 screen, deterministic promotion, A1 closeout, safe collection, and provider destruction before A2.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The long-running A1 goal was made a shared projection constant and synchronized through the validated read model and generated report surfaces.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "This planning change performed no provider contact, reservation, launch, retrieval, optimization, Selection, Final, paid API work, model download, or model-weight change; measured counters remain zero.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner requested commit, push, and freeze after validation of the long-running A1 plan change.",
+      "evidence_refs": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "status": "NEXT_AUTHORIZED_ACTION",
+      "summary": "Execute the frozen long-running A1 goal only after fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts pass."
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

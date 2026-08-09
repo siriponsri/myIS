@@ -44,3 +44,18 @@ A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION = (
     "path. Keep launch_allowed=false and adopted_for_execution=false; do not start measured "
     "retrieval, optimization, Selection, Final, paid API work, or weight changes."
 )
+
+A1_LONG_RUN_NEXT_AUTHORIZED_ACTION = (
+    "/goal Execute one governed long-running A1 closeout from the validated v15 local "
+    "adoption inputs. In one continuous workflow, create or validate the tracked runbook "
+    "and append-only execution ledger, complete fresh Vast identity, all-fee quote, "
+    "whole-workload budget admission, provider admission, and execution-adoption receipts, "
+    "then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm "
+    "results, collect and validate aggregate-safe receipts, deterministically promote at "
+    "most three arms, close A1, safely collect artifacts, and destroy the Vast instance. "
+    "Keep the same instance throughout A1 only while its identity, hashes, watchdog, "
+    "protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect "
+    "safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change "
+    "the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or "
+    "candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads."
+)
