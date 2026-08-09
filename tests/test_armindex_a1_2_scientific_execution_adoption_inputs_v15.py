@@ -44,6 +44,18 @@ def test_v15_budget_model_binds_physical_workload_and_hard_stops() -> None:
     assert model["live_admission"]["admitted"] is False
 
 
+def test_v15_preserves_v13_machine_ids_and_safe_publication_labels() -> None:
+    publication = json.loads(
+        (ROOT / "control/armindex/a1.2/publication-impact-contract.v13.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert v15._publication_outcomes(publication) == {
+        "primary": "OUT Recall@100",
+        "secondary": ["OUT nDCG@100", "OUT nDCG@10"],
+    }
+
+
 def test_v15_bundle_is_deterministic_and_complete(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

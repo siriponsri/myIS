@@ -593,6 +593,20 @@ def _validate_protected(
     return {"paths": paths, "values": values}
 
 
+def _publication_outcomes(publication: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate frozen V13 metric IDs and return safe publication labels."""
+    outcomes = publication.get("analysis", {}).get("outcomes", {})
+    if outcomes.get("primary") != "out_recall_at_100" or outcomes.get("secondary") != [
+        "out_ndcg_at_100",
+        "out_ndcg_at_10",
+    ]:
+        raise AdoptionInputsV15Error("publication v13 outcome semantics drift")
+    return {
+        "primary": "OUT Recall@100",
+        "secondary": ["OUT nDCG@100", "OUT nDCG@10"],
+    }
+
+
 def finalize(
     repository_root: Path,
     *,
@@ -664,12 +678,7 @@ def finalize(
     if physical_total != budget["workload"]["physical_window_total"]:
         raise AdoptionInputsV15Error("budget model physical-window total differs")
     publication = _load(root / V13_PATH, role="publication v13")
-    outcomes = publication["analysis"]["outcomes"]
-    if outcomes.get("primary") != "OUT Recall@100" or outcomes.get("secondary") != [
-        "OUT nDCG@100",
-        "OUT nDCG@10",
-    ]:
-        raise AdoptionInputsV15Error("publication v13 outcome semantics drift")
+    outcomes = _publication_outcomes(publication)
     compiler_receipt = protected["values"]["compiler_receipt"]
     handoff = protected["values"]["handoff"]
     body = {
@@ -720,8 +729,7 @@ def finalize(
         },
         "publication_v13": {
             "unchanged": True,
-            "primary": outcomes["primary"],
-            "secondary": outcomes["secondary"],
+            **outcomes,
             "interaction_complementarity_preregistered": True,
             "measured_or_publication_claim_authorized": False,
         },
