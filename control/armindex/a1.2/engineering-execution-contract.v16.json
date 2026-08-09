@@ -38,7 +38,7 @@
     "src/myis_research/armindex/a1_2_safe_return_v16.py": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8"
   },
   "executor_sources": {
-    "retrieval_executor": {"path": "src/myis_research/armindex/a1_2_measured_executor_v16.py", "sha256": "2699108149271d5e75a9d207bc16cff770b56ff8fa300a5cb8f9d9dc9df1f0bf"},
+    "retrieval_executor": {"path": "src/myis_research/armindex/a1_2_measured_executor_v16.py", "sha256": "ee6bf175aacd5da04561b457dc7a9542eceff32c937ca9fe967e1ff28a2d3536"},
     "execution_lifecycle": {"path": "src/myis_research/armindex/a1_2_execution_lifecycle_v16.py", "sha256": "a07e1c38f3a5a2547edf32258c52c452034a51edc6f6bb132a7be71b8a0d3b38"}
   },
   "support_sources": {
@@ -55,5 +55,5 @@
   "runtime_policy": {"runtime_downloads_forbidden": true, "model_bytes_owner_local_only": true, "protected_payload_in_bundle": false, "safe_aggregate_export_required": true},
   "authorization": {"provider_admission_receipt_pass": false, "execution_adoption_receipt_pass": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
   "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
-  "contract_sha256": "d5c765b5937766e0a1785704b1e7f8c7c6ae270176225bcfc8c8f7bceb7d0eac"
+  "contract_sha256": "c9709802a0202c75037768177d6b19ee00c87776d93725f4b433466e477965b3"
 }
