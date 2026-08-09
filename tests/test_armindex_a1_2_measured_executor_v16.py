@@ -133,6 +133,42 @@ def test_sentence_transformer_adapter_forwards_exact_ids_with_left_padding() -> 
     assert np.allclose(np.linalg.norm(values, axis=1), (1.0, 1.0))
 
 
+def test_sentence_transformer_adapter_batches_exact_ids_before_forward() -> None:
+    torch = pytest.importorskip("torch")
+
+    class Tokenizer:
+        pad_token_id = 0
+        padding_side = "right"
+
+    class Model:
+        tokenizer = Tokenizer()
+
+        def __init__(self) -> None:
+            self.widths: list[tuple[int, int]] = []
+
+        def parameters(self):
+            return iter(())
+
+        def tokenize(self, _inputs):
+            return {"input_ids": object()}
+
+        def eval(self):
+            return self
+
+        def forward(self, features):
+            ids = features["input_ids"]
+            self.widths.append(tuple(ids.shape))
+            return {"sentence_embedding": torch.ones((ids.shape[0], 2))}
+
+    model = Model()
+    values = SentenceTransformerDenseAdapter(
+        arm_id="ARM-02", model=model, batch_size=1
+    ).encode_token_ids(((11, 12), (21, 22, 23)))
+
+    assert model.widths == [(1, 2), (1, 3)]
+    assert values.shape == (2, 2)
+
+
 def test_dense_family_max_rank_has_lexical_ties_and_hides_units() -> None:
     adapter = FakeAdapter(
         {

@@ -100,6 +100,12 @@ def test_dense_fit_accepts_empty_template_prefix() -> None:
     )
     assert len(units) == 1 and len(units[0].physical_inputs) == 1
     assert units[0].physical_inputs[0].source_token_count > 0
+    query = materialize_raw_query(
+        {"work_token": "Q-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "text": "query words"},
+        arm_id="ARM-02",
+        adapter=adapter,
+    )
+    assert query.physical_inputs[0].token_ids
 
 
 def test_dense_overflow_has_zero_overlap_and_no_truncation() -> None:

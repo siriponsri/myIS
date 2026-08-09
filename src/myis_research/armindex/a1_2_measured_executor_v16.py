@@ -236,47 +236,55 @@ class SentenceTransformerDenseAdapter:
             for row in inputs
         ):
             raise MeasuredExecutorV16Error("dense token IDs are invalid")
-        width = max(len(row) for row in inputs)
         try:
             device = next(self.model.parameters()).device
         except (AttributeError, StopIteration):
             # SentenceTransformer has parameters in production.  The CPU
             # fallback makes the exact-ID forward contract testable in isolation.
             device = torch.device("cpu")
-        input_ids = torch.full(
-            (len(inputs), width), pad_id, dtype=torch.long, device=device
-        )
-        attention_mask = torch.zeros(
-            (len(inputs), width), dtype=torch.long, device=device
-        )
-        for index, row in enumerate(inputs):
-            values = torch.as_tensor(row, dtype=torch.long, device=device)
-            start = width - len(row) if padding_side == "left" else 0
-            input_ids[index, start : start + len(row)] = values
-            attention_mask[index, start : start + len(row)] = 1
-        features: dict[str, Any] = {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-        }
         try:
             probe = self.model.tokenize(["probe"])
         except Exception as error:
             raise MeasuredExecutorV16Error(
                 "dense tokenizer feature contract is unavailable"
             ) from error
-        if "token_type_ids" in probe:
-            features["token_type_ids"] = torch.zeros_like(input_ids)
+        include_token_type_ids = "token_type_ids" in probe
         self.model.eval()
-        try:
-            with torch.inference_mode():
-                output = self.model.forward(features)
-            values = np.asarray(
-                output["sentence_embedding"].detach().cpu().numpy(), dtype=np.float64
+        encoded_batches: list[np.ndarray] = []
+        for batch_start in range(0, len(inputs), self.batch_size):
+            batch = inputs[batch_start : batch_start + self.batch_size]
+            width = max(len(row) for row in batch)
+            input_ids = torch.full(
+                (len(batch), width), pad_id, dtype=torch.long, device=device
             )
-        except Exception as error:
-            raise MeasuredExecutorV16Error(
-                "dense token-ID encoding failed"
-            ) from error
+            attention_mask = torch.zeros(
+                (len(batch), width), dtype=torch.long, device=device
+            )
+            for index, row in enumerate(batch):
+                values = torch.as_tensor(row, dtype=torch.long, device=device)
+                start = width - len(row) if padding_side == "left" else 0
+                input_ids[index, start : start + len(row)] = values
+                attention_mask[index, start : start + len(row)] = 1
+            features: dict[str, Any] = {
+                "input_ids": input_ids,
+                "attention_mask": attention_mask,
+            }
+            if include_token_type_ids:
+                features["token_type_ids"] = torch.zeros_like(input_ids)
+            try:
+                with torch.inference_mode():
+                    output = self.model.forward(features)
+                batch_values = np.asarray(
+                    output["sentence_embedding"].detach().cpu().numpy(),
+                    dtype=np.float64,
+                )
+            except Exception as error:
+                raise MeasuredExecutorV16Error(
+                    "dense token-ID encoding failed"
+                ) from error
+            _validate_embedding_matrix(batch_values, expected_rows=len(batch))
+            encoded_batches.append(batch_values)
+        values = np.concatenate(encoded_batches, axis=0)
         _validate_embedding_matrix(values, expected_rows=len(inputs))
         norms = np.linalg.norm(values, axis=1, keepdims=True)
         values = values / norms

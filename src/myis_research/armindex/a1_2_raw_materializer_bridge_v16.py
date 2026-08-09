@@ -323,7 +323,7 @@ def materialize_raw_query(
     rendered = template.format(text=text)
     rendered_ids = _one_ids(tokenizer, rendered, add_special_tokens=False)
     full_ids = _one_ids(tokenizer, rendered, add_special_tokens=True)
-    prefix_ids = _one_ids(tokenizer, prefix, add_special_tokens=False)
+    prefix_ids = _optional_ids(tokenizer, prefix)
     suffix_ids = _optional_ids(tokenizer, suffix)
     limit = MAX_INPUT_TOKENS[arm_id]
     try:
