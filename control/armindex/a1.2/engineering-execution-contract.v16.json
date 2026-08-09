@@ -45,7 +45,7 @@
     "safe_return": {"path": "src/myis_research/armindex/a1_2_safe_return_v16.py", "sha256": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8"},
     "safe_return_builder": {"path": "src/myis_research/armindex/a1_2_safe_return_builder_v16.py", "sha256": "708c7e707d006f4318bb517b3f9e45fdb1cd52a66ca0a4e097b91a0f0449c8f4"},
     "raw_materializer_bridge": {"path": "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py", "sha256": "3d37ced5792936974896a5aa026ef437eb3da9c266b23b0cc8f0471765b39f3b"},
-    "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "fd9ecd56fc323cfb7b59c4549df21887d9e770f07935f19f06a1ae8d9a19c4be"},
+    "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "3b7971d9542a5cac55bdc1db5f981fed5e6fb7a6a2c9a6f36db78279128f887f"},
     "input_manifest": {"path": "src/myis_research/armindex/a1_2_owner_local_input_manifest_v16.py", "sha256": "2fa8b2e05066b5a7b224297966d892605ec0e7a166dd2b2e7534953c09b21703"},
     "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "d1029b44eadb54f9be113e327ca12e8219bc9a3ffdffe04254ed2962ba0d4f15"},
     "remote_arm_worker": {"path": "src/myis_research/armindex/a1_2_remote_arm_worker_v16.py", "sha256": "84383d286c262566b0a2cc6a4c39af19eb7bdb0f19d1d3021dd11d06727757ee"},
@@ -56,5 +56,5 @@
   "runtime_policy": {"runtime_downloads_forbidden": true, "model_bytes_owner_local_only": true, "protected_payload_in_bundle": false, "safe_aggregate_export_required": true},
   "authorization": {"provider_admission_receipt_pass": false, "execution_adoption_receipt_pass": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
   "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
-  "contract_sha256": "d0f4870fc383713de27f9f597f4c01947f5f1c24264a3e69d5449e58c6f6f16e"
+  "contract_sha256": "c78efa5bf7a08e1d7beedf21996b8ae81e907f08cc2be9ccba64c788a9c12c8f"
 }

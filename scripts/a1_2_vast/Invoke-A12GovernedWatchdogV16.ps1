@@ -34,6 +34,7 @@ $heartbeatPath = Join-Path $output 'heartbeat.json'
 $stopPath = Join-Path $output 'stop.requested'
 $knownHostsPath = Join-Path $output 'attempt-known_hosts'
 $lockStream = [IO.File]::Open($lockPath, [IO.FileMode]::OpenOrCreate, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+$rateComparisonTolerance = [decimal]::Parse('0.000000000000001', [Globalization.NumberStyles]::Number, [Globalization.CultureInfo]::InvariantCulture)
 
 function Get-Sha256Text([string]$Value) {
     $sha = [Security.Cryptography.SHA256]::Create()
@@ -46,6 +47,25 @@ function Get-OwnerFingerprint {
     $values = [regex]::Matches($text, 'SHA256:[A-Za-z0-9+/=]+') | ForEach-Object { $_.Value } | Select-Object -Unique
     if (@($values).Count -ne 1) { throw 'owner_fingerprint_pin_invalid' }
     return [string]$values
+}
+
+function Get-ProviderStatusText([object]$Value) {
+    if ($null -eq $Value) { return '' }
+    return ([string]$Value).Trim().ToLowerInvariant()
+}
+
+function Get-ProviderDecimal([string]$RawJson, [string]$Field) {
+    $pattern = '"' + [regex]::Escape($Field) + '"\s*:\s*(-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?)'
+    $match = [regex]::Match($RawJson, $pattern)
+    if (-not $match.Success) { throw "provider_numeric_field_missing_$Field" }
+    try {
+        return [decimal]::Parse(
+            $match.Groups[1].Value,
+            [Globalization.NumberStyles]::Number,
+            [Globalization.CultureInfo]::InvariantCulture
+        )
+    }
+    catch { throw "provider_numeric_field_invalid_$Field" }
 }
 
 function Ensure-HostKeyPin {
@@ -125,12 +145,18 @@ PY
                 $probeStage = 'provider'
                 $raw = & $VastCliPath vastai show instance $InstanceId --raw 2>$null
                 if ($LASTEXITCODE -ne 0 -or -not $raw) { throw 'provider_query_failed' }
-                $provider = (($raw -join "`n") | ConvertFrom-Json)
+                $rawJson = $raw -join "`n"
+                $provider = ($rawJson | ConvertFrom-Json)
                 if ($provider -is [array]) { $provider = $provider[0] }
-                $providerOk = ([int]$provider.id -eq $InstanceId -and $provider.actual_status -eq 'running' -and $provider.intended_status -eq 'running' -and $provider.verification -eq 'verified')
-                $rate = [decimal]$provider.dph_total
+                $providerOk = (
+                    [int]$provider.id -eq $InstanceId -and
+                    (Get-ProviderStatusText $provider.actual_status) -eq 'running' -and
+                    (Get-ProviderStatusText $provider.intended_status) -eq 'running' -and
+                    (Get-ProviderStatusText $provider.verification) -eq 'verified'
+                )
+                $rate = Get-ProviderDecimal $rawJson 'dph_total'
                 if (-not $providerOk) { $reason = 'provider_identity_or_status_mismatch' }
-                elseif ($rate -gt $MaximumTotalHourlyUsd) { $reason = 'provider_quote_increased' }
+                elseif ($rate -gt ($MaximumTotalHourlyUsd + $rateComparisonTolerance)) { $reason = 'provider_quote_increased' }
             }
         }
         catch {
