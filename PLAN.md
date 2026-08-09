@@ -15,19 +15,15 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (additive v9 attempt-scoped
-  live synthetic preflight passed; additive v10 records Owner-confirmed provider
-  destruction; additive v11 prepares the scientific execution request for Owner
-  review without adoption; additive v12-r3/v13 local adoption-input and
-  publication/disposition contracts validate without adoption; additive
-  P02-FIRST-CLAIM coverage passes; the Owner-authorized dense-overflow repair is
-  frozen, aggregate compatibility passes, and additive protected compiler v15
-  validates all 25 program-arm bindings without truncation; the clean bundle,
-  whole-workload model, watchdog dry-run, and final local adoption-input receipt
-  now pass; live-provider admission and measured A1 execution have not started)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (the Owner-approved v16
+  same-instance long-run is in bounded pre-measurement preparation on instance
+  `47256937`; additive v16 executor/lifecycle/launcher recovery, protected
+  25/25 bindings, budget extension, and 40-hour watchdog are validated; fresh
+  provider admission and execution adoption receipts are the remaining launch
+  transition, and measured work has not started)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: scientific execution adoption-request preparation over
-  preserved v1-v10 engineering and provider-closeout lineage; scientific authority `false`
+- Current evidence class: owner-approved live-provider preparation over preserved
+  v1-v15 lineage plus additive v16 engineering; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
@@ -115,7 +111,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | Local inputs validated through v15; measured screen not started; next goal runs A1 end to end and stops before A2 |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | v16 long-run preparation active on unchanged instance; measured screen remains pending provider admission and execution adoption |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five

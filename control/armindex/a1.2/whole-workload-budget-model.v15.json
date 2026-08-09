@@ -4,8 +4,8 @@
   "status": "LOCAL_MODEL_PENDING_LIVE_PROVIDER",
   "claim_boundary": "Aggregate-only whole-workload planning model derived from the protected v15 compiled binding summary. It includes no quote, provider identity, reservation, launch, measured execution, cost claim, retrieval result, or scientific/publication claim.",
   "source": {
-    "binding_set_relative_path": "v15/receipts/A1_2_COMPILED_PROGRAM_BINDINGS_V15.json",
-    "binding_set_sha256": "c8a6b3a9c784be23f7effe5a51e470259322e7e99a51fc13eacbc2c0b16f8760"
+    "binding_set_relative_path": "protected/receipts/A1_2_COMPILED_PROGRAM_BINDINGS_V15.json",
+    "binding_set_sha256": "8f15cf6a2069f37fbab59ff8b945afd9349a2760fc8cbdc6e512a0889f986bba"
   },
   "workload": {
     "arm_count": 5,
@@ -25,7 +25,7 @@
     "campaign": 100
   },
   "execution_window": {
-    "owner_ttl_hours": 6,
+    "owner_ttl_hours": 20,
     "whole_workload_required": true,
     "partial_arm_admission_allowed": false
   },
@@ -37,5 +37,5 @@
     "admitted": false,
     "launch_allowed": false
   },
-  "model_sha256": "cf671f163c83d63b0edf66150293a4509e0d2aca8e94afbd251272e544a30529"
+  "model_sha256": "5ad7e5255ef20bd428e8490275892c05f85252dfb65518a532b7a7405eb3eb3b"
 }

@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 import yaml
 
 from ..kernel.canonical import canonical_sha256
 from ..protection import assert_aggregate_only
 from .bm25s_adapter import adapter_lock_material
-
 
 SCAFFOLD_STATUS = "a1_2_contract_scaffold_complete_launch_locked"
 PREPARED_AT_UTC = "2026-08-05T14:30:18Z"
@@ -607,24 +607,135 @@ def materialize_a1_2_scaffold(repository_root: Path) -> ScaffoldValidation:
     return validate_a1_2_scaffold(root)
 
 
-def validate_a1_2_scaffold(repository_root: Path) -> ScaffoldValidation:
+_HISTORICAL_ARTIFACTS = frozenset(
+    {
+        CONTROL_ROOT / "execution-contract.v1.json",
+        CONTROL_ROOT / "launch-checklist.v1.json",
+        *(CONTROL_ROOT / "model-locks" / f"{arm}.v1.json" for arm in ("ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05")),
+        CONTROL_ROOT / "model-lockset.v1.json",
+        CONTROL_ROOT / "report-archive-audit.v1.json",
+        CONTROL_ROOT / "scaffold-inputs.v1.yaml",
+        CONTROL_ROOT / "shutdown-plan.v1.json",
+        Path("control/budgets/a1.2-common-screen-v1.json"),
+        Path("control/execution-envelope-a1.2-v1.yaml"),
+        ARM01_PARITY_RECEIPT_PATH,
+    }
+)
+_UNBOUND_HISTORICAL_ARTIFACTS = frozenset({LEDGER_PATH})
+_HISTORICAL_UNBOUND_SHA256 = {
+    LEDGER_PATH: "c0c2ab001460905e52a8d22606da3a2d44f7c8388612b1592d0b4fa05105273f",
+}
+_HISTORICAL_RECEIPT_SHA256 = "834ed83440b7d2c0809588f661739208ddb62d72d6d4cd582f192bd9f2cbff7d"
+
+
+def _historical_self_hash_field(relative: Path) -> str | None:
+    name = relative.name
+    if name == "scaffold-inputs.v1.yaml":
+        return "inputs_sha256"
+    if name == "execution-envelope-a1.2-v1.yaml":
+        return "envelope_sha256"
+    if name == "a1.2-common-screen-v1.json":
+        return "budget_profile_sha256"
+    if name == "launch-checklist.v1.json":
+        return "checklist_sha256"
+    if name == "execution-contract.v1.json":
+        return "contract_sha256"
+    if name == "model-lockset.v1.json":
+        return "lockset_sha256"
+    if name == "shutdown-plan.v1.json":
+        return "shutdown_plan_sha256"
+    if name == "report-archive-audit.v1.json":
+        return "audit_sha256"
+    if relative.parent.name == "model-locks" and name.endswith(".v1.json"):
+        return "lock_sha256"
+    if relative == ARM01_PARITY_RECEIPT_PATH:
+        return "receipt_sha256"
+    return None
+
+
+def _load_checked_in_scaffold_files(repository_root: Path) -> dict[Path, str]:
+    """Load the immutable v1 bytes through their checked-in receipt.
+
+    Historical v1 artifacts retain the source commitments from their original
+    preparation tree. Rebuilding them from the current HEAD would turn an
+    evidence-neutral source edit into historical artifact drift.
+    """
     root = repository_root.resolve()
-    expected = build_a1_2_scaffold_files(root)
-    for relative, text in expected.items():
+    receipt_path = root / RECEIPT_PATH
+    if not receipt_path.is_file():
+        raise FileNotFoundError(f"required A1.2 scaffold receipt is missing: {RECEIPT_PATH.as_posix()}")
+    if _file_sha256(receipt_path) != _HISTORICAL_RECEIPT_SHA256:
+        raise ValueError("A1.2 scaffold receipt hash drifted")
+    receipt_text = receipt_path.read_text(encoding="utf-8")
+    receipt = json.loads(receipt_text)
+    if not isinstance(receipt, Mapping):
+        raise TypeError("A1.2 scaffold receipt is not an object")
+    receipt_self_hash = receipt.get("receipt_sha256")
+    receipt_without_hash = dict(receipt)
+    receipt_without_hash.pop("receipt_sha256", None)
+    if receipt_self_hash != canonical_sha256(receipt_without_hash):
+        raise ValueError("A1.2 scaffold receipt self-hash is invalid")
+
+    bindings = receipt.get("artifact_bindings")
+    if not isinstance(bindings, list):
+        raise TypeError("A1.2 scaffold receipt artifact bindings are missing")
+    seen: set[Path] = set()
+    files: dict[Path, str] = {}
+    for binding in bindings:
+        if not isinstance(binding, Mapping) or not isinstance(binding.get("uri"), str) or not isinstance(binding.get("sha256"), str):
+            raise TypeError("A1.2 scaffold receipt contains an invalid artifact binding")
+        relative = Path(str(binding["uri"]))
+        if relative in seen or relative not in _HISTORICAL_ARTIFACTS:
+            raise ValueError(f"A1.2 scaffold receipt has an unexpected artifact binding: {relative.as_posix()}")
+        seen.add(relative)
         path = root / relative
-        if not path.is_file() or path.read_bytes() != text.encode("utf-8"):
-            raise ValueError(f"A1.2 scaffold artifact is missing or drifted: {relative.as_posix()}")
-        if relative.suffix in {".json", ".jsonl"}:
+        if not path.is_file():
+            raise FileNotFoundError(f"required A1.2 scaffold artifact is missing: {relative.as_posix()}")
+        text = path.read_text(encoding="utf-8")
+        if _raw_sha(text) != binding["sha256"]:
+            raise ValueError(f"A1.2 scaffold artifact hash drifted: {relative.as_posix()}")
+        files[relative] = text
+    if seen != _HISTORICAL_ARTIFACTS:
+        missing = sorted(path.as_posix() for path in _HISTORICAL_ARTIFACTS - seen)
+        raise ValueError(f"A1.2 scaffold receipt artifact set is incomplete: {', '.join(missing)}")
+    for relative in _UNBOUND_HISTORICAL_ARTIFACTS:
+        path = root / relative
+        if not path.is_file():
+            raise FileNotFoundError(f"required A1.2 scaffold artifact is missing: {relative.as_posix()}")
+        if _file_sha256(path) != _HISTORICAL_UNBOUND_SHA256[relative]:
+            raise ValueError(f"A1.2 scaffold artifact hash drifted: {relative.as_posix()}")
+        files[relative] = path.read_text(encoding="utf-8")
+    files[RECEIPT_PATH] = receipt_text
+    return files
+
+
+def _validate_checked_in_scaffold_hashes(files: Mapping[Path, str]) -> None:
+    for relative, text in files.items():
+        if relative == RECEIPT_PATH:
+            payloads = [json.loads(text)]
+        elif relative.suffix in {".json", ".jsonl"}:
             payloads = [json.loads(line) for line in text.splitlines() if line]
         else:
-            loaded = yaml.safe_load(text)
-            payloads = [loaded]
+            payloads = [yaml.safe_load(text)]
         for payload in payloads:
             if not isinstance(payload, Mapping):
-                raise ValueError(f"A1.2 scaffold artifact is not an object: {relative.as_posix()}")
+                raise TypeError(f"A1.2 scaffold artifact is not an object: {relative.as_posix()}")
             assert_aggregate_only(payload)
-    contract = json.loads(expected[CONTROL_ROOT / "execution-contract.v1.json"])
-    checklist = json.loads(expected[CONTROL_ROOT / "launch-checklist.v1.json"])
+            field = "receipt_sha256" if relative == RECEIPT_PATH else _historical_self_hash_field(relative)
+            if field is not None:
+                embedded = payload.get(field)
+                without_hash = dict(payload)
+                without_hash.pop(field, None)
+                if embedded != canonical_sha256(without_hash):
+                    raise ValueError(f"A1.2 scaffold artifact self-hash is invalid: {relative.as_posix()}")
+
+
+def validate_a1_2_scaffold(repository_root: Path) -> ScaffoldValidation:
+    root = repository_root.resolve()
+    checked_in = _load_checked_in_scaffold_files(root)
+    _validate_checked_in_scaffold_hashes(checked_in)
+    contract = json.loads(checked_in[CONTROL_ROOT / "execution-contract.v1.json"])
+    checklist = json.loads(checked_in[CONTROL_ROOT / "launch-checklist.v1.json"])
     if contract["launch_allowed"] is not False or checklist["launch_ready"] is not False:
         raise ValueError("A1.2 scaffold cannot authorize launch")
     if any(value != 0 for value in contract["real_counters"].values()):
@@ -633,7 +744,7 @@ def validate_a1_2_scaffold(repository_root: Path) -> ScaffoldValidation:
         raise ValueError("A1.2 scaffold resource counters must remain zero")
     return ScaffoldValidation(
         status=SCAFFOLD_STATUS,
-        file_count=len(expected),
+        file_count=len(checked_in),
         model_lock_count=5,
         launch_ready=False,
         measured_execution=False,

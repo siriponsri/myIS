@@ -6,13 +6,13 @@ from pathlib import Path
 
 import pytest
 
+from myis_research.armindex import a1_2_contract as contract_module
 from myis_research.armindex.a1_2_contract import (
     CONTROL_ROOT,
     MODEL_SOURCES,
     build_a1_2_scaffold_files,
     validate_a1_2_scaffold,
 )
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -70,15 +70,24 @@ def test_a12_all_model_sources_have_exact_resolved_revisions_and_critical_hashes
 
 
 def test_a12_scaffold_validation_rejects_tamper(tmp_path: Path) -> None:
-    files = build_a1_2_scaffold_files(ROOT)
+    files = contract_module._load_checked_in_scaffold_files(ROOT)
     for relative, text in files.items():
         path = tmp_path / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8", newline="")
-    # Source commitments are rebuilt from the repository root, so the copied
-    # bundle cannot be reinterpreted under a different source tree.
-    with pytest.raises(FileNotFoundError, match="required A1.2 scaffold source"):
+    contract_path = tmp_path / CONTROL_ROOT / "execution-contract.v1.json"
+    contract_path.write_text(contract_path.read_text(encoding="utf-8").replace('"launch_allowed":false', '"launch_allowed":true'), encoding="utf-8", newline="")
+    with pytest.raises(ValueError, match="artifact hash drifted"):
         validate_a1_2_scaffold(tmp_path)
+
+
+def test_a12_scaffold_validation_does_not_rebuild_from_current_head(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fail_if_called(_: Path) -> dict[Path, str]:
+        raise AssertionError("historical v1 validation must not rebuild scaffold files")
+
+    monkeypatch.setattr(contract_module, "build_a1_2_scaffold_files", fail_if_called)
+    validation = contract_module.validate_a1_2_scaffold(ROOT)
+    assert validation.launch_ready is False
 
 
 def test_a12_scaffold_checked_in_artifact_tamper_is_detected(monkeypatch, tmp_path: Path) -> None:

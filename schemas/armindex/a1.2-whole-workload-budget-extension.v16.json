@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-whole-workload-budget-extension.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "revision_id",
+    "status",
+    "claim_boundary",
+    "owner_decision",
+    "historical_v15",
+    "approved_limits",
+    "all_fee_admission",
+    "authorization",
+    "preparation_counters",
+    "policy_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-whole-workload-budget-extension.v16"},
+    "revision_id": {"const": "a1.2-whole-workload-budget-extension-v16"},
+    "status": {"const": "OWNER_APPROVED_PENDING_LIVE_PROVIDER"},
+    "claim_boundary": {"type": "string", "minLength": 160},
+    "owner_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "decision_date", "source", "rationale", "publication_impact_boundary"],
+      "properties": {
+        "decision": {"const": "EXTEND_A1_BUDGET_AND_TTL"},
+        "decision_date": {"const": "2026-08-09"},
+        "source": {"const": "Owner current-thread approval"},
+        "rationale": {"type": "string", "minLength": 40},
+        "publication_impact_boundary": {"type": "string", "minLength": 80}
+      }
+    },
+    "historical_v15": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_uri", "hard_stops_usd", "owner_ttl_hours", "semantics"],
+      "properties": {
+        "model_uri": {"const": "control/armindex/a1.2/whole-workload-budget-model.v15.json"},
+        "hard_stops_usd": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["common_screen", "a1_total", "campaign"],
+          "properties": {"common_screen": {"const": 18}, "a1_total": {"const": 23}, "campaign": {"const": 100}}
+        },
+        "owner_ttl_hours": {"const": 20},
+        "semantics": {"const": "PRESERVED_IMMUTABLE_REFERENCE"}
+      }
+    },
+    "approved_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "hard_stops_usd", "owner_ttl_hours", "ttl_basis", "whole_workload_required", "partial_arm_admission_allowed", "quote_max_age_seconds"],
+      "properties": {
+        "currency": {"const": "USD"},
+        "hard_stops_usd": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["common_screen", "a1_total", "campaign"],
+          "properties": {"common_screen": {"const": 27}, "a1_total": {"const": 32}, "campaign": {"const": 150}}
+        },
+        "owner_ttl_hours": {"const": 40},
+        "ttl_basis": {"const": "FROM_INSTANCE_PROVISION"},
+        "whole_workload_required": {"const": true},
+        "partial_arm_admission_allowed": {"const": false},
+        "quote_max_age_seconds": {"const": 900}
+      }
+    },
+    "all_fee_admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fresh_provider_identity_required", "fresh_quote_required", "required_quote_fields", "unknown_billable_component_allowed", "whole_workload_charge_must_fit_all_stops", "formula"],
+      "properties": {
+        "fresh_provider_identity_required": {"const": true},
+        "fresh_quote_required": {"const": true},
+        "required_quote_fields": {
+          "type": "array",
+          "const": ["quote_observed_at_utc", "compute_hourly_rate_usd", "billing_granularity_seconds", "minimum_billable_seconds", "storage_fee_usd", "network_fee_usd", "platform_or_other_fee_usd", "tax_or_surcharge_usd"]
+        },
+        "unknown_billable_component_allowed": {"const": false},
+        "whole_workload_charge_must_fit_all_stops": {"const": true},
+        "formula": {"type": "string", "minLength": 100}
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_contact_allowed", "admitted", "launch_allowed", "adopted_for_execution", "measured_retrieval_allowed"],
+      "properties": {
+        "provider_contact_allowed": {"const": false},
+        "admitted": {"const": false},
+        "launch_allowed": {"const": false},
+        "adopted_for_execution": {"const": false},
+        "measured_retrieval_allowed": {"const": false}
+      }
+    },
+    "preparation_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["charged_usd", "gpu_scientific_runs", "measured_runs", "model_downloads", "paid_api_calls"],
+      "properties": {"charged_usd": {"const": 0}, "gpu_scientific_runs": {"const": 0}, "measured_runs": {"const": 0}, "model_downloads": {"const": 0}, "paid_api_calls": {"const": 0}}
+    },
+    "policy_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

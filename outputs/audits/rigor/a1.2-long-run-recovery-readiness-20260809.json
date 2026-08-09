@@ -1,0 +1,68 @@
+{
+  "schema_version": "myis.armindex-a1.2-long-run-recovery-readiness.v1",
+  "audit_id": "a1.2-long-run-recovery-readiness-20260809",
+  "status": "READY_FOR_CLEAN_BUNDLE",
+  "evidence_class": "aggregate_safe_engineering_recovery_pre_measurement",
+  "scientific_authority": false,
+  "claim_boundary": "Aggregate-safe engineering recovery evidence only. It records hashes, counts, topology, budget, and gate state before a clean pushed bundle; it contains no protected identifiers, text, qrels, membership, rankings, per-query outcomes, credentials, raw provider payload, or scientific result.",
+  "scope": "A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2",
+  "recovery": {
+    "historical_blocker_preserved": "NO_HASH_BOUND_MEASURED_EXECUTOR_IN_FROZEN_V15",
+    "executor_integration_status": "READY_FOR_CLEAN_BUNDLE",
+    "engineering_contract_sha256": "1a194408f55b9877f56cac475c7cb06e43fcac77e22f90b3e9132146fab306a4",
+    "topology": {
+      "ARM-01": "owner_local_cpu",
+      "ARM-02": "remote_gpu_0",
+      "ARM-03": "remote_gpu_1",
+      "ARM-04": "remote_gpu_2",
+      "ARM-05": "remote_gpu_3"
+    },
+    "synthetic_checks": {
+      "v16_focused_tests_passed": 40,
+      "distributed_runner_tests_passed": 13,
+      "budget_tests_passed": 21,
+      "ruff": "PASS"
+    }
+  },
+  "protected_compilation": {
+    "status": "PASS",
+    "corpus_family_count": 45336,
+    "rep_dev_query_count": 150,
+    "reserved_harness_dev_count": 100,
+    "binding_count": 25,
+    "binding_set_sha256": "8f15cf6a2069f37fbab59ff8b945afd9349a2760fc8cbdc6e512a0889f986bba",
+    "compiler_receipt_sha256": "288b1c7e9642c95c64664d43fbc785337da7ffd284cce1232c3ab12161deb08c",
+    "compiler_audit_sha256": "de405e69168cfaab8adb6742bfec6eaa1fa3544eadbd69a13bc6cd853118f151",
+    "physical_window_total": 2581603,
+    "raw_overflow_logical_inputs": 140907,
+    "zero_silent_truncation": true,
+    "deterministic_replay": true,
+    "protected_boundary": "PASS"
+  },
+  "budget_and_ttl": {
+    "budget_model_sha256": "5ad7e5255ef20bd428e8490275892c05f85252dfb65518a532b7a7405eb3eb3b",
+    "quote_total_hourly_usd": 0.6294444444444445,
+    "ttl_total_hours": 20,
+    "ttl_deadline_utc": "2026-08-10T04:58:45Z",
+    "worst_case_total_usd": 12.588889,
+    "common_screen_cap_usd": 18,
+    "common_screen_margin_usd": 5.411111,
+    "watchdog_status": "PASS",
+    "provider_destroy_invoked": false
+  },
+  "authorization": {
+    "provider_admission_receipt_pass": false,
+    "execution_adoption_receipt_pass": false,
+    "measured_retrieval_allowed": false,
+    "selection_allowed": false,
+    "final_allowed": false
+  },
+  "counters": {
+    "measured_runs": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "next_authorized_action": "Run critical validation, commit and push the implementation, build the clean hash-bound v16 bundle, then repeat fresh provider admission and execution adoption before measured A1.2.",
+  "generated_at_utc": "2026-08-09T13:10:42Z",
+  "audit_sha256": "3c5930424c0c3ec490a57ace726982ac918b482050a08cc600a502c6734f837a"
+}

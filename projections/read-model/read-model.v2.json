@@ -1113,10 +1113,10 @@
       }
     },
     "a1_2_dense_overflow": {
-      "budget_model_file_sha256": "6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff",
-      "budget_model_sha256": "cf671f163c83d63b0edf66150293a4509e0d2aca8e94afbd251272e544a30529",
+      "budget_model_file_sha256": "c7f08deb18ea6934f4af188faacf728fdde792473411ac10b560f53a90c6e5de",
+      "budget_model_sha256": "5ad7e5255ef20bd428e8490275892c05f85252dfb65518a532b7a7405eb3eb3b",
       "budget_model_uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json",
-      "bundle_status": "PASS",
+      "bundle_status": "PENDING",
       "cells": {
         "ARM-02": {
           "P00-TAC-DOC": {
@@ -2249,8 +2249,8 @@
       },
       "claim_boundary": "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result.",
       "compiled_bindings_25_of_25": "PASS",
-      "compiler_audit_file_sha256": "c6fee2f284bdb6bd82e08fc757c6f1d6ee71797158d1c8a03608380bef76186a",
-      "compiler_audit_sha256": "1de6ecf6f0f9fb7f1e2a4465311a556e7c75e5aaed00dde893c811a2c2d98234",
+      "compiler_audit_file_sha256": "f915c3785f6ed677bcf226fc1deae46fb22aaa8668551724fed01cf4ccf89b5f",
+      "compiler_audit_sha256": "de405e69168cfaab8adb6742bfec6eaa1fa3544eadbd69a13bc6cd853118f151",
       "compiler_audit_uri": "outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json",
       "compiler_coverage": {
         "cells": [
@@ -2661,24 +2661,24 @@
       "figure_png_uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png",
       "figure_svg_sha256": "a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8",
       "figure_svg_uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.svg",
-      "final_receipt_file_sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
-      "final_receipt_sha256": "0586e9d0cec8ba33d945172acd589ff46cb858da76c4e9b93eed75c690be24cd",
+      "final_receipt_file_sha256": null,
+      "final_receipt_sha256": null,
       "final_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
       "inventory_file_sha256": "a9afaecb93d759af16684a84a60edc049c57ff2a7d2edf7cc53bf580df719867",
       "inventory_sha256": "d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634",
       "inventory_status": "PASS_RAW_COMPATIBILITY_INVENTORY",
       "inventory_uri": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json",
-      "local_adoption_input_status": "PASS",
-      "next_authorized_action": "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.",
+      "local_adoption_input_status": "PENDING",
+      "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
       "protected_handoff_status": "PASS",
       "protected_receipts": {
-        "binding_set_file_sha256": "bcb59805e7e19f0b5cabf3c1a8bf890fcdb3d750a893c2c5a19d637304cad9e0",
-        "binding_set_sha256": "c8a6b3a9c784be23f7effe5a51e470259322e7e99a51fc13eacbc2c0b16f8760",
-        "compiler_receipt_file_sha256": "ca03259d3de9d6965b79f0ca9d45bef7e554fe86fce9db9fa5577ecf9a2414c3",
-        "compiler_receipt_sha256": "ee18006e9b235c2362b7bd1016d8abcc36eed04e1713aa00d2becdf5456e949f",
-        "handoff_receipt_sha256": "0f05ec550ae27c57b529bdb03bc871f984bdb8f7b7317385f913e07ad363123d",
-        "pre_compilation_anchor_sha256": "4879944cb5241a3f630b78df6b81642b9cc4c9d0ea928397730edae3c446f7b5",
-        "transfer_manifest_sha256": "9b657808bbe3e0951b844832cc1ca56382bab30295d2e068a7e2603bb45dd818"
+        "binding_set_file_sha256": "07e1f3a9a6aec17f6710a91d6e5749107c388fe6635a0f890229514ee4ca4656",
+        "binding_set_sha256": "8f15cf6a2069f37fbab59ff8b945afd9349a2760fc8cbdc6e512a0889f986bba",
+        "compiler_receipt_file_sha256": "10cb72b9eca9392e25e4c15a210891f46ed4fe583e9f3203497d819297eec9cc",
+        "compiler_receipt_sha256": "288b1c7e9642c95c64664d43fbc785337da7ffd284cce1232c3ab12161deb08c",
+        "handoff_receipt_sha256": "6c2c698952d86133ad4aee7c4d65d8e8779a81943426f89ca505736246dde3ae",
+        "pre_compilation_anchor_sha256": "aded49cbf088f41e4097b708a761598bd57322e03b2f0b3f550d208d153536c6",
+        "transfer_manifest_sha256": "905ae648e97b0205ff4400f322fdb2d89e129d71296a07dabc85772df2d71c67"
       },
       "publication_method_disclosure": {
         "patembed_p00_corpus_overflow_incidence": 0.9243215113816834,
@@ -2688,7 +2688,7 @@
         "required": true,
         "retrieval_quality_claim_authorized": false
       },
-      "ready_for_live_provider_admission": true,
+      "ready_for_live_provider_admission": false,
       "repair_frozen": true,
       "requirements": {
         "compatible_cells_25_of_25": true,
@@ -2717,10 +2717,10 @@
         "dense_program_arm_cells": 20,
         "rep_dev_query_count": 150
       },
-      "status": "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
+      "status": "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
       "transfer_receipt_status": "PASS",
       "validated": true,
-      "watchdog_dry_run_status": "PASS"
+      "watchdog_dry_run_status": "PENDING"
     },
     "a1_2_p02_limit_audit": {
       "claim_boundary": "P02 coverage and deterministic replay passed, but frozen ARM-03 x P00 exceeds its effective input limit without truncation. No retrieval or provider work was performed.",
@@ -3495,8 +3495,8 @@
       "status": "complete",
       "validated": true
     },
-    "local_adoption_input_status": "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
-    "next_command": "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.",
+    "local_adoption_input_status": "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
+    "next_command": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -4775,7 +4775,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76",
+  "projection_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -4819,8 +4819,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76",
-  "read_model_sha256": "1c3a73212da8cff8e1fa340b344af7f565969e4cbaeb584f73ce0c40415cec57",
+  "read_model_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
+  "read_model_sha256": "1cf94eaf16d43a9e46da9948f65536385cde187a3ffefded31d0aea9fbc37f55",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

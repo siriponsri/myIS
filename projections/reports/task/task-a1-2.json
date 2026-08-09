@@ -203,7 +203,7 @@
       "artifact_type": "audit",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "c6fee2f284bdb6bd82e08fc757c6f1d6ee71797158d1c8a03608380bef76186a",
+      "content_sha256": "f915c3785f6ed677bcf226fc1deae46fb22aaa8668551724fed01cf4ccf89b5f",
       "evidence_class": "pre_measurement_owner_local_compatibility_validation",
       "explanation": "Records validated 25/25 bindings, protected handoff and transfer receipt hashes, deterministic replay, and zero silent truncation without exposing protected payloads.",
       "parent_artifact_hashes": {},
@@ -221,7 +221,7 @@
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff",
+      "content_sha256": "c7f08deb18ea6934f4af188faacf728fdde792473411ac10b560f53a90c6e5de",
       "evidence_class": "pre_measurement_owner_local_compatibility_validation",
       "explanation": "Binds the complete physical-window workload to frozen hard stops while keeping fresh quote and live budget admission pending.",
       "parent_artifact_hashes": {},
@@ -232,24 +232,6 @@
       "safe_uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json",
       "scientific_authority": false,
       "title": "A1.2 aggregate whole-workload budget model v15",
-      "validation_status": "validated"
-    },
-    {
-      "artifact_id": "a12-local-adoption-inputs-receipt-v15",
-      "artifact_type": "receipt",
-      "child_artifact_hashes": {},
-      "child_artifact_ids": [],
-      "content_sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
-      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
-      "explanation": "Binds the clean pushed bundle, protected compiler evidence, workload model, and synthetic watchdog dry-run without provider contact or execution adoption.",
-      "parent_artifact_hashes": {},
-      "parent_artifact_ids": [],
-      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-      "producing_task_id": "A1.2",
-      "retention_class": "repository_safe",
-      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
-      "scientific_authority": false,
-      "title": "A1.2 final local adoption-input receipt v15",
       "validation_status": "validated"
     },
     {
@@ -2352,18 +2334,13 @@
     },
     {
       "artifact_id": "a12-protected-compiler-audit-v15",
-      "sha256": "c6fee2f284bdb6bd82e08fc757c6f1d6ee71797158d1c8a03608380bef76186a",
+      "sha256": "f915c3785f6ed677bcf226fc1deae46fb22aaa8668551724fed01cf4ccf89b5f",
       "uri": "outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json"
     },
     {
       "artifact_id": "a12-whole-workload-budget-model-v15",
-      "sha256": "6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff",
+      "sha256": "c7f08deb18ea6934f4af188faacf728fdde792473411ac10b560f53a90c6e5de",
       "uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json"
-    },
-    {
-      "artifact_id": "a12-local-adoption-inputs-receipt-v15",
-      "sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
-      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json"
     },
     {
       "artifact_id": "a12-gpu-execution-proposal",
@@ -3074,7 +3051,7 @@
     }
   ],
   "generated_at": "2026-08-09T08:17:27Z",
-  "generated_from_revision": "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76",
+  "generated_from_revision": "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513",
   "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
   "governance_status": {
     "d2": "waiting_owner",
@@ -3617,11 +3594,11 @@
       "value": 0
     }
   ],
-  "next_authorized_action": "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.",
+  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "f6e05bde5236f91af65d70861663e69aa17cd0d9caa5667749d4608010b3f769",
+  "report_sha256": "b165919a5ee7cc33a12d9bd2b75074d8b8daf446454cbf8b5d81d27c528f2ce9",
   "report_type": "task",
   "result": {
     "decision": "blocked",
@@ -3655,7 +3632,6 @@
         "a12-protected-compiler-integration-v15",
         "a12-protected-compiler-audit-v15",
         "a12-whole-workload-budget-model-v15",
-        "a12-local-adoption-inputs-receipt-v15",
         "a12-gpu-execution-proposal",
         "a12-contract-scaffold-receipt",
         "a12-execution-contract",

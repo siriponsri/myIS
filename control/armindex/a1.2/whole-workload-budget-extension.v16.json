@@ -1,0 +1,68 @@
+{
+  "schema_version": "myis.armindex-a1.2-whole-workload-budget-extension.v16",
+  "revision_id": "a1.2-whole-workload-budget-extension-v16",
+  "status": "OWNER_APPROVED_PENDING_LIVE_PROVIDER",
+  "claim_boundary": "Aggregate-only Owner-approved A1.2 budget and TTL extension. This policy contains no provider identity, raw provider payload, reservation, launch, adoption, measured retrieval, retrieval result, or publication result.",
+  "owner_decision": {
+    "decision": "EXTEND_A1_BUDGET_AND_TTL",
+    "decision_date": "2026-08-09",
+    "source": "Owner current-thread approval",
+    "rationale": "Allow one governed long run and exact recovery while preserving the frozen scientific workload and all-fee admission requirement.",
+    "publication_impact_boundary": "The extension protects completeness and reproducibility of the A1 evidence package; it does not create a retrieval or publication claim."
+  },
+  "historical_v15": {
+    "model_uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json",
+    "hard_stops_usd": {
+      "common_screen": 18,
+      "a1_total": 23,
+      "campaign": 100
+    },
+    "owner_ttl_hours": 20,
+    "semantics": "PRESERVED_IMMUTABLE_REFERENCE"
+  },
+  "approved_limits": {
+    "currency": "USD",
+    "hard_stops_usd": {
+      "common_screen": 27,
+      "a1_total": 32,
+      "campaign": 150
+    },
+    "owner_ttl_hours": 40,
+    "ttl_basis": "FROM_INSTANCE_PROVISION",
+    "whole_workload_required": true,
+    "partial_arm_admission_allowed": false,
+    "quote_max_age_seconds": 900
+  },
+  "all_fee_admission": {
+    "fresh_provider_identity_required": true,
+    "fresh_quote_required": true,
+    "required_quote_fields": [
+      "quote_observed_at_utc",
+      "compute_hourly_rate_usd",
+      "billing_granularity_seconds",
+      "minimum_billable_seconds",
+      "storage_fee_usd",
+      "network_fee_usd",
+      "platform_or_other_fee_usd",
+      "tax_or_surcharge_usd"
+    ],
+    "unknown_billable_component_allowed": false,
+    "whole_workload_charge_must_fit_all_stops": true,
+    "formula": "ceil(ttl_seconds/billing_granularity_seconds)*billing_granularity_seconds/3600*compute_hourly_rate_usd+storage_fee_usd+network_fee_usd+platform_or_other_fee_usd+tax_or_surcharge_usd"
+  },
+  "authorization": {
+    "provider_contact_allowed": false,
+    "admitted": false,
+    "launch_allowed": false,
+    "adopted_for_execution": false,
+    "measured_retrieval_allowed": false
+  },
+  "preparation_counters": {
+    "charged_usd": 0,
+    "gpu_scientific_runs": 0,
+    "measured_runs": 0,
+    "model_downloads": 0,
+    "paid_api_calls": 0
+  },
+  "policy_sha256": "bf0eedc8aedcf1dd9d8ec28d3101681fc4a0e3c8623d0585eb6271b62fd44f06"
+}

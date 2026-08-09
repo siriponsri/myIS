@@ -1,0 +1,117 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a1.2-live-admission-readiness-20260809",
+  "artifact": "A1.2 v15 live-admission and execution-readiness package",
+  "artifact_path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
+  "artifact_sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
+  "review_status": "not_assessable",
+  "reviewed_at_utc": "2026-08-09T09:33:33Z",
+  "review_boundary": "Artifact-only pre-adoption review. No protected payload, measured retrieval, model inference, provider mutation, or execution repair was performed.",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": false,
+    "manifest_integrity_valid": false,
+    "blocking_findings": [
+      "F001",
+      "F002"
+    ]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "Provider authentication is the current live blocker; complete scientific execution reproducibility remains not assessable until adoption binds an executable measured runner.",
+    "strengths": [
+      "The v15 bundle hash, protected 25-cell compiler evidence, split counts, zero-truncation policy, runtime identity, SSH fingerprint, and four-RTX3090 topology have independent aggregate-safe checks.",
+      "Gate order remains intact because measured retrieval and execution adoption have not started."
+    ],
+    "weaknesses": [
+      "The provider API cannot currently return an authenticated fresh all-fee quote or prove destroy permission.",
+      "The frozen bundle contains contracts, compilers, validators, and planning code but no independently identifiable measured embedding/index/search/checkpoint executor."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": ["REP-DEV and metric roles are frozen."],
+      "weaknesses": ["No measured result exists."],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": ["Twenty-five-of-twenty-five, zero-drop, replay, budget, and lifecycle rejection conditions are explicit."],
+      "weaknesses": ["The executable path that would produce the receipts is not yet bound by an adoption receipt."],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": ["The request is limited to REP-DEV and stops before A2, HARNESS-DEV, Selection, and Final."],
+      "weaknesses": ["No scientific conclusion is assessable before execution."],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": ["The program, arm, split, metric, transfer, and aggregate-result contracts form a traceable design chain."],
+      "weaknesses": ["The design chain does not yet include a hash-bound measured runner and active adoption receipt."],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": ["Historical failed attempts and additive repairs remain preserved."],
+      "weaknesses": ["The current authentication hold has not closed."],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": ["Primary and secondary metrics, complete-cell requirement, deterministic replay, and protected evaluation boundary are preregistered."],
+      "weaknesses": ["A complete manifest tying the measured runner, provider quote, destroy capability, and adoption identity does not yet exist."],
+      "suggestions": []
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": "live provider admission",
+      "target_entity": "authenticated identity, quote, and destroy capability",
+      "evidence_locator": "Vast CLI responses on 2026-08-09 returned HTTP 401 requiring Owner-side two-factor authentication; no provider mutation succeeded.",
+      "observation": "The live instance is reachable over fingerprint-verified SSH, but the configured provider API key cannot currently inspect or destroy it.",
+      "reasoning": "The v11 budget and stop contracts require a fresh complete quote and a working provider destroy path before adoption. Runtime identity alone cannot satisfy provider admission.",
+      "suggestion": "Owner completes Vast 2FA locally without sharing credentials, then the same instance is re-queried for identity, complete fees, status, and non-destructive management capability before any adoption."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "frozen v15 execution bundle",
+      "target_entity": "measured executor identity",
+      "evidence_locator": "Frozen bundle SHA-256 e6674aa03b88f88988798b2f063e4bdf6b240f1cbfbc723dfa317b5c87bb4bb9 contains 76 regular members and 18 source members. Source inspection found contracts, compilers, validators, and planning code; no SentenceTransformer/AutoModel/bm25s retrieval, vector index/search, checkpoint, or safe-export executor implementation was present.",
+      "observation": "The package does not independently demonstrate which frozen executable will produce the required 25 program-arm ranking results.",
+      "reasoning": "Launching with current HEAD, historical v9 synthetic code, or a one-off script would substitute an unbound execution identity and violate the Owner's frozen-authority rule.",
+      "suggestion": "Before execution adoption can pass, prove an already-authorized hash-bound executor and its dependency/runtime bindings. If no such frozen executor exists, stop for an explicit Owner-governed additive repair rather than silently creating or substituting one."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "Owner long-running A1 goal and HOLD_CURRENT_INSTANCE_FOR_AUTH_REPAIR decision",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-a1.2-v2.yaml",
+    "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "control/armindex/a1.2/scientific-execution-adoption-inputs.v15.json",
+    "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
+    "control/armindex/a1.2/provider-admission-plan.v11.json",
+    "control/armindex/a1.2/stop-conditions.scientific-request.v11.json",
+    "control/armindex/a1.2/scientific-transfer-contract.v11.json",
+    "control/armindex/a1.2/aggregate-result-contract.v11.json",
+    "frozen v15-r3 bundle member and source-content inventory"
+  ]
+}

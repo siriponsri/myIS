@@ -173,6 +173,34 @@ and repository-relative pointers. It never bypasses Owner decisions, the
 protected-data boundary, credential rules, deletion approval, serial-writer
 lease, measured execution gates, or commit/push authorization.
 
+## Owner-authorized A1 acceleration
+
+For the bounded A1.2 long-run requested on 2026-08-09, the Owner authorizes
+additive engineering repair, integration, reuse of valid assets, and direct
+measured execution work needed to close A1 within the available seven-day
+window. This scoped instruction supersedes preparation-only next-action wording
+from earlier v11-v15 handoff projections while the same A1 closeout is active;
+it does not reinterpret historical receipts or open A2, HARNESS-DEV, Selection,
+Final, D2, or D3.
+
+To reduce delay, do not repeat validation that has an unchanged hash-bound
+receipt from the same attempt. Run only the smallest checks needed for the
+current transition, plus the required critical checks below. Never reduce or
+skip the protected-data boundary, credential redaction, frozen v11-v15
+scientific semantics, split/query reservation, whole-workload budget and TTL,
+SSH/provider identity, artifact integrity, safe return, or the 25/25 result
+requirement. A failure in any critical check remains fail-closed.
+
+Before code or plan edits, apply the local Karpathy guidelines: state
+assumptions, choose the smallest direct change, avoid speculative abstraction,
+and define a concrete verification command. For plans, architecture, or
+publication-impact decisions, use the `grill-with-docs` workflow when the local
+skill is available; otherwise record the equivalent questions, answers, ADR,
+and glossary in the relevant Thai documentation and link the external source:
+`https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs`.
+The Karpathy source is
+`https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md`.
+
 ## Mandatory reporting policy
 
 Every Phase and every Task MUST have one substantive generated Obsidian report.

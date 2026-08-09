@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76"
-read_model_sha256: "1c3a73212da8cff8e1fa340b344af7f565969e4cbaeb584f73ce0c40415cec57"
+read_model_revision: "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513"
+read_model_sha256: "1cf94eaf16d43a9e46da9948f65536385cde187a3ffefded31d0aea9fbc37f55"
 source_commit: "68540f68bc3ba47dafacdba4f4717d89147515f4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,9 +11,9 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76"
+generated_from_revision: "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513"
 last_material_update: "2026-08-09T08:17:27Z"
-next_authorized_action: "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads."
+next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -120,7 +120,7 @@ Status: **blocked**. A6_PUBLICATION_AND_RELEASE is blocked; ArmIndex measured ru
 
 ## Next Action
 
-/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.
+Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

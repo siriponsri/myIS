@@ -1,0 +1,59 @@
+{
+  "schema_version": "myis.armindex-a1.2-engineering-execution-contract.v16",
+  "revision_id": "a1.2-engineering-execution-v16",
+  "status": "READY_FOR_CLEAN_BUNDLE",
+  "preserves": {
+    "v11": "unchanged_scientific_request",
+    "v12_r3": "unchanged_adoption_inputs",
+    "v13": "unchanged_publication_contract",
+    "v14": "unchanged_dense_overflow_policy",
+    "v15": "unchanged_scientific_workload_budget_caps_execution_identity_rebound"
+  },
+  "frozen_file_sha256": {
+    "control/armindex/a1.2/aggregate-result-contract.v11.json": "e0e29bfa15286977d865679200dd3a8d66ec852f4239780f60226b5b9eea2c4b",
+    "control/armindex/a1.2/common-program-set.v11.json": "6bda78e024465944135ff6dff0883af37c86c31b9f004e01a195663467a527aa",
+    "control/armindex/a1.2/dense-overflow-adapter-repair.v14.json": "9b8504d94ad670fb1034d05a090c99dc8ba0624fc90fe05f69716b3633410490",
+    "control/armindex/a1.2/protected-compiler-integration.v15.json": "cc7d8d7e9ed623de03b96498a01095fe2180db9a3a596b19ef58062a19d3297e",
+    "control/armindex/a1.2/publication-impact-contract.v13.json": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
+    "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
+    "control/armindex/a1.2/scientific-execution-adoption-inputs.v15.json": "06dbd47c1a76af9992e8d84c9d8798b7eceb2fe71b29942961e2d48d17ef4d5b",
+    "control/armindex/a1.2/scientific-execution-adoption-request.v11.json": "d5eaec8bf7c78ec9a21f43a5f94f89ccc314eef79bad9b0e7629a1a7e902851d",
+    "control/armindex/a1.2/scientific-transfer-contract.v11.json": "21e4d9913056968cdf314382c12812ff8f4b1f01586c82294765a0ebd2a4777a",
+    "control/armindex/a1.2/stop-conditions.scientific-request.v11.json": "8a46db96a95d0f61caeb9fb2cd052daf07b35acdcf592a11e2336e17c88597d7",
+    "control/armindex/a1.2/whole-workload-budget-model.v15.json": "c7f08deb18ea6934f4af188faacf728fdde792473411ac10b560f53a90c6e5de",
+    "control/armindex/a1.2/whole-workload-budget-admission.v12.json": "69b72d14882a51d6737f57ba9b7fa09f4fc3dc273b31ca4315ef9256aefd4686",
+    "control/armindex/a1.2/whole-workload-budget-extension.v16.json": "701f6c50f1c9303e5652e8ba9cc549fb23327bcd963e543ff53fc23be9550405",
+    "control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json": "a838b19794c05b08a5b9f4efb3aef5805f5a174a37e92c5a9111b16a9e8b91fb",
+    "schemas/armindex/a1.2-compiled-program-binding-set.v15.json": "829491a46f0943b555bc03f5a9d1e51628a9102983d6a5c7895cfff188120d29",
+    "schemas/armindex/a1.2-owner-local-protected-compiler-receipt.v15.json": "77a91b45c629609cf7a8f0270f98799858ec95b07dc5da710b34da76ce410a48",
+    "schemas/armindex/a1.2-whole-workload-budget-model.v15.json": "be946388ae6cc84cefbe2c0516c3565726791dfdeb6f4947549428395fbcdc0c",
+    "schemas/armindex/a1.2-whole-workload-budget-extension.v16.json": "149536ccfc5763ea54ef9b115a29286a4e912118e913edb6f98d80197c51678c",
+    "schemas/armindex/a1.2-whole-workload-budget-extension-result.v16.json": "9172b90e2775d195b43d537ae5f1e3398f48c83225e83f44d2345b6906afd27d",
+    "src/myis_research/armindex/a1_2_whole_workload_budget_admission_v12.py": "63f30b3d8931b68fe666cacfe8fd0d90b19b870659027b27f8d2f9ac5f53d3f2",
+    "src/myis_research/armindex/a1_2_whole_workload_budget_model_v15.py": "b28de187ccaf6c2b08c3100443a19e966dbf0b0fdc3f338f2824d78952862be6",
+    "src/myis_research/armindex/a1_2_whole_workload_budget_extension_v16.py": "de90b0038e095a0e68f1693c29a4fb4f0bd9f517919629ee5b94e6b9e1b48369",
+    "outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json": "f915c3785f6ed677bcf226fc1deae46fb22aaa8668551724fed01cf4ccf89b5f",
+    "control/armindex/a1.2/scientific-safe-return-contract.v16.json": "f528645be0071b6b73da2e617fd006645eb4b150388a288808e47f5f50fd30b1",
+    "schemas/armindex/a1.2-scientific-safe-return-contract.v16.json": "ee5a3055324d3c5aad28d4e982a0c4252e6124e70009686f5f4769d67efe3fe9",
+    "src/myis_research/armindex/a1_2_safe_return_v16.py": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8"
+  },
+  "executor_sources": {
+    "retrieval_executor": {"path": "src/myis_research/armindex/a1_2_measured_executor_v16.py", "sha256": "a54ede6f3ba2ac6ce0bed51e0880395807b67659f27e93fb84885012dda2fff2"},
+    "execution_lifecycle": {"path": "src/myis_research/armindex/a1_2_execution_lifecycle_v16.py", "sha256": "a07e1c38f3a5a2547edf32258c52c452034a51edc6f6bb132a7be71b8a0d3b38"}
+  },
+  "support_sources": {
+    "safe_return": {"path": "src/myis_research/armindex/a1_2_safe_return_v16.py", "sha256": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8"},
+    "safe_return_builder": {"path": "src/myis_research/armindex/a1_2_safe_return_builder_v16.py", "sha256": "708c7e707d006f4318bb517b3f9e45fdb1cd52a66ca0a4e097b91a0f0449c8f4"},
+    "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "16bb950d17ffe5ad90c58d65f1ca9280ba22b69a843da63135a08069063160b5"},
+    "input_manifest": {"path": "src/myis_research/armindex/a1_2_owner_local_input_manifest_v16.py", "sha256": "2fa8b2e05066b5a7b224297966d892605ec0e7a166dd2b2e7534953c09b21703"},
+    "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "3910924f1cfa867d3be80351f61ea7fc1583002c3b1878741e6f0bcbd6a799e8"},
+    "remote_arm_worker": {"path": "src/myis_research/armindex/a1_2_remote_arm_worker_v16.py", "sha256": "84383d286c262566b0a2cc6a4c39af19eb7bdb0f19d1d3021dd11d06727757ee"},
+    "distributed_launcher": {"path": "src/myis_research/armindex/a1_2_remote_measured_launcher_v16.py", "sha256": "2faef191e44e4be7efb2ad7f0ac522f9087c6dd024a987f4795e2b484fc38971"},
+    "evaluator_promotion": {"path": "src/myis_research/armindex/a1_2_owner_local_evaluator_v16.py", "sha256": "4479affa0e3bfb0c87b26f6e54e258293a19e86df54a3e8b268478d375396e43"}
+  },
+  "required_adoption_bindings": ["provider_identity", "all_fee_quote", "whole_workload_budget", "provider_management_authority", "watchdog_ttl", "ssh_identity", "runtime_identity", "scientific_request", "adoption_inputs", "transfer", "workload", "common_programs", "model_lockset", "protected_compiler", "image", "git_commit_tree_bundle", "evaluator", "split", "qrels_commitment", "token_map", "safe_return", "compiled_bindings_25_of_25", "physical_coverage_35"],
+  "runtime_policy": {"runtime_downloads_forbidden": true, "model_bytes_owner_local_only": true, "protected_payload_in_bundle": false, "safe_aggregate_export_required": true},
+  "authorization": {"provider_admission_receipt_pass": false, "execution_adoption_receipt_pass": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
+  "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
+  "contract_sha256": "6a613d212a3113298602462478f341ca7a63c19313569af5628ad16982f6d34e"
+}

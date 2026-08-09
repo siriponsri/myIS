@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-whole-workload-budget-extension-result.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "revision_id", "status", "claim_boundary", "admitted", "policy_sha256", "input_sha256", "quote_age_seconds", "ttl_hours", "billable_seconds", "worst_case_ttl_charge_usd", "projected_spend_usd", "hard_stops_usd", "failure_reasons", "preparation_counters", "provider_contact_allowed", "launch_allowed", "adopted_for_execution", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-whole-workload-budget-extension-result.v16"},
+    "receipt_id": {"type": "string", "pattern": "^a1\\.2-whole-workload-budget-extension-[a-z0-9-]+-v16$"},
+    "revision_id": {"const": "a1.2-whole-workload-budget-extension-v16"},
+    "status": {"enum": ["PASS_BUDGET_ADMISSION_LOCKED", "BLOCKED_BUDGET"]},
+    "claim_boundary": {"type": "string", "minLength": 120},
+    "admitted": {"type": "boolean"},
+    "policy_sha256": {"$ref": "#/$defs/hash"},
+    "input_sha256": {"$ref": "#/$defs/hash"},
+    "quote_age_seconds": {"type": "number", "minimum": 0},
+    "ttl_hours": {"const": 40},
+    "billable_seconds": {"type": "integer", "minimum": 1},
+    "worst_case_ttl_charge_usd": {"type": "number", "minimum": 0},
+    "projected_spend_usd": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["common_screen", "a1_total", "campaign"],
+      "properties": {"common_screen": {"type": "number", "minimum": 0}, "a1_total": {"type": "number", "minimum": 0}, "campaign": {"type": "number", "minimum": 0}}
+    },
+    "hard_stops_usd": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["common_screen", "a1_total", "campaign"],
+      "properties": {"common_screen": {"const": 27}, "a1_total": {"const": 32}, "campaign": {"const": 150}}
+    },
+    "failure_reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "preparation_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["charged_usd", "gpu_scientific_runs", "measured_runs", "model_downloads", "paid_api_calls"],
+      "properties": {"charged_usd": {"const": 0}, "gpu_scientific_runs": {"const": 0}, "measured_runs": {"const": 0}, "model_downloads": {"const": 0}, "paid_api_calls": {"const": 0}}
+    },
+    "provider_contact_allowed": {"const": false},
+    "launch_allowed": {"const": false},
+    "adopted_for_execution": {"const": false},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

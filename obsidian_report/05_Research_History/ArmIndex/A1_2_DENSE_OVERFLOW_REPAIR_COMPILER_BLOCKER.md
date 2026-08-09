@@ -1,19 +1,19 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76"
-read_model_sha256: "1c3a73212da8cff8e1fa340b344af7f565969e4cbaeb584f73ce0c40415cec57"
+read_model_revision: "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513"
+read_model_sha256: "1cf94eaf16d43a9e46da9948f65536385cde187a3ffefded31d0aea9fbc37f55"
 source_commit: "68540f68bc3ba47dafacdba4f4717d89147515f4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
-source_manifest_sha256: ["a16294fa92e1b7a7bf3b4e571869751ea20e03a32580abea92819418d2e770eb","d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634","df09cc3c030d36ca13010aa00adb2cf78937717bf3d0ea9a3bcc6355d082d653","30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b","a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8","742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6","1de6ecf6f0f9fb7f1e2a4465311a556e7c75e5aaed00dde893c811a2c2d98234"]
+source_manifest_sha256: ["a16294fa92e1b7a7bf3b4e571869751ea20e03a32580abea92819418d2e770eb","d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634","df09cc3c030d36ca13010aa00adb2cf78937717bf3d0ea9a3bcc6355d082d653","30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b","a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8","742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6","de405e69168cfaab8adb6742bfec6eaa1fa3544eadbd69a13bc6cd853118f151"]
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_compatibility_validation"
 scientific_authority: false
 claim_boundary: "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result."
-generated_from_revision: "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76"
+generated_from_revision: "2c4b5f8d21effd19e29178026b05a316107d3313bfd7bf987752a7161dbb4513"
 last_material_update: "2026-08-09T08:17:27Z"
-next_authorized_action: "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads."
+next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -54,10 +54,10 @@ Validated contract self-hashes, immutable v11/v12-r3/v13/P02 lineage, implementa
 - PNG EDA: `outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png` (`30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b`)
 - SVG EDA: `outputs/figures/armindex/a1.2-dense-overflow-eda-v1.svg` (`a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8`)
 - Protected compiler integration: `control/armindex/a1.2/protected-compiler-integration.v15.json` (`742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6`)
-- Aggregate-safe compiler audit: `outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json` (`1de6ecf6f0f9fb7f1e2a4465311a556e7c75e5aaed00dde893c811a2c2d98234`)
+- Aggregate-safe compiler audit: `outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json` (`de405e69168cfaab8adb6742bfec6eaa1fa3544eadbd69a13bc6cd853118f151`)
 
-- Whole-workload budget model: `control/armindex/a1.2/whole-workload-budget-model.v15.json` (`cf671f163c83d63b0edf66150293a4509e0d2aca8e94afbd251272e544a30529`)
-- Final local adoption receipt: `campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json` (`0586e9d0cec8ba33d945172acd589ff46cb858da76c4e9b93eed75c690be24cd`)
+- Whole-workload budget model: `control/armindex/a1.2/whole-workload-budget-model.v15.json` (`5ad7e5255ef20bd428e8490275892c05f85252dfb65518a532b7a7405eb3eb3b`)
+- Final local adoption receipt: `campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json` (`None`)
 
 ## Metrics
 
@@ -84,11 +84,11 @@ Validated contract self-hashes, immutable v11/v12-r3/v13/P02 lineage, implementa
 | `ARM-05` | `P03` | 0.001% | 0.000% | 180,301 | 32,768 |
 | `ARM-05` | `P04` | 0.018% | 0.000% | 136,043 | 32,768 |
 
-Requirements: 25/25 compatible `True`; REP-DEV coverage `1.0`; corpus coverage `1.0`; zero drop `True`; zero truncation `True`. Compiler bindings `25/25`; compiler replay `True`; protected boundary `PASS`; raw overflow logical inputs `140907`; clean bundle `PASS`; watchdog dry-run `PASS`.
+Requirements: 25/25 compatible `True`; REP-DEV coverage `1.0`; corpus coverage `1.0`; zero drop `True`; zero truncation `True`. Compiler bindings `25/25`; compiler replay `True`; protected boundary `PASS`; raw overflow logical inputs `140907`; clean bundle `PENDING`; watchdog dry-run `PENDING`.
 
 ## Result
 
-`repair frozen, compiler integration PASS`. The complete additive v15 local adoption-input closure **PASS**. The clean pushed bundle, Owner-local anchor, all 25 protected bindings, whole-workload budget model, and synthetic watchdog/provider-destroy dry-run are validated; every live-provider input remains pending.
+The additive repair and protected v15 compiler integration **PASS**. All 25 bindings, the protected handoff, transfer manifest, deterministic replay, effective-limit checks, and zero-silent-truncation evidence are materialized Owner-local.
 
 ## Interpretation
 
@@ -112,17 +112,17 @@ The historical v12 compiler lacked the physical-window composition path and ther
 
 ## Decision
 
-`LOCAL_ADOPTION_INPUTS=PASS` and `READY_FOR_LIVE_PROVIDER_ADMISSION=true`. This readiness permits only a separately authorized live-provider admission goal; provider identity, quote, live budget admission, and live admission receipt remain pending, and scientific execution is not adopted.
+`repair frozen, compiler integration PASS`. `COMPILED_BINDINGS_25_OF_25=PASS`, `PROTECTED_HANDOFF=PASS`, `TRANSFER_RECEIPT=PASS`, and `ZERO_TRUNCATION_CHECK=PASS`. Continue only with the clean-tree bundle/final local receipt gates; live-provider admission remains pending.
 
 ## Next Action
 
-/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.
+Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.
 
 ## Evidence Links
 
 - Contract: `control/armindex/a1.2/dense-overflow-adapter-repair.v14.json`
 - Inventory: `outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json`
 - Composition: `outputs/audits/armindex/a1.2-dense-overflow-composition-20260808.json`
-- Binding set: `c8a6b3a9c784be23f7effe5a51e470259322e7e99a51fc13eacbc2c0b16f8760`
-- Compiler receipt: `ee18006e9b235c2362b7bd1016d8abcc36eed04e1713aa00d2becdf5456e949f`
+- Binding set: `8f15cf6a2069f37fbab59ff8b945afd9349a2760fc8cbdc6e512a0889f986bba`
+- Compiler receipt: `288b1c7e9642c95c64664d43fbc785337da7ffd284cce1232c3ab12161deb08c`
 - Figure: ![Dense overflow EDA](../../../outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png)

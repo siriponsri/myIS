@@ -15,11 +15,9 @@ from ..protection import assert_aggregate_only
 
 CONTROL_PATH = Path("control/armindex/a1.2/whole-workload-budget-model.v15.json")
 SCHEMA_PATH = Path("schemas/armindex/a1.2-whole-workload-budget-model.v15.json")
-STORE_BINDING_RELATIVE = (
-    "a1.2-v12-r3/protected/v15/receipts/A1_2_COMPILED_PROGRAM_BINDINGS_V15.json"
-)
+STORE_BINDING_RELATIVE = "protected/receipts/A1_2_COMPILED_PROGRAM_BINDINGS_V15.json"
 EXPECTED_BINDING_SHA256 = (
-    "c8a6b3a9c784be23f7effe5a51e470259322e7e99a51fc13eacbc2c0b16f8760"
+    "8f15cf6a2069f37fbab59ff8b945afd9349a2760fc8cbdc6e512a0889f986bba"
 )
 
 

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-scientific-safe-return-contract.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "status", "archive", "ranking_rows", "resource_receipts", "forbidden_members", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-scientific-safe-return-contract.v16"},
+    "contract_id": {"const": "a1.2-scientific-safe-return-v16"},
+    "status": {"const": "ENGINEERING_CONTRACT_NOT_ADOPTED"},
+    "archive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_member", "text_only", "maximum_member_bytes", "maximum_total_bytes", "regular_files_only", "no_extra_members"],
+      "properties": {
+        "manifest_member": {"const": "safe-return-manifest.v16.json"},
+        "text_only": {"const": true},
+        "maximum_member_bytes": {"const": 1048576},
+        "maximum_total_bytes": {"const": 16777216},
+        "regular_files_only": {"const": true},
+        "no_extra_members": {"const": true}
+      }
+    },
+    "ranking_rows": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result_cells", "rows_per_cell", "unique_family_tokens_per_work_token", "work_token_pattern", "family_token_pattern", "fields"],
+      "properties": {
+        "result_cells": {"const": 25},
+        "rows_per_cell": {"const": 150},
+        "unique_family_tokens_per_work_token": {"const": 100},
+        "work_token_pattern": {"const": "^Q-[a-f0-9]{32}$"},
+        "family_token_pattern": {"const": "^F-[a-f0-9]{32}$"},
+        "fields": {"const": ["work_token", "family_tokens"]}
+      }
+    },
+    "resource_receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["per_cell", "fields"],
+      "properties": {
+        "per_cell": {"const": 25},
+        "fields": {"const": ["schema_version", "attempt_id", "arm_id", "program_id", "status", "checkpoint_sha256", "ranking_sha256", "receipt_sha256"]}
+      }
+    },
+    "forbidden_members": {"const": ["logs", "model_weights", "embeddings", "caches", "tensor_checkpoints", "raw_inputs", "environment_dumps", "provider_payloads", "qrels", "membership", "query_ids", "ephemeral_token_map"]},
+    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

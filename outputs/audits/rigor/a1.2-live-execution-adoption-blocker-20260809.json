@@ -1,0 +1,87 @@
+{
+  "schema_version": "myis.armindex-a1.2-live-execution-adoption-blocker.v1",
+  "audit_id": "a1.2-live-execution-adoption-blocker-20260809",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "FAILED_CLOSED_PRE_ADOPTION",
+  "observed_at_utc": "2026-08-09T10:25:49Z",
+  "evidence_class": "aggregate_safe_live_admission_and_execution_adoption_blocker",
+  "scientific_authority": false,
+  "claim_boundary": "Aggregate-safe evidence that live provider, runtime, budget, frozen compiler, and watchdog checks passed but execution adoption failed before launch because the frozen v15 bundle contains no hash-bound measured embedding, indexing/search, checkpoint, and safe-export executor. No protected payload, credential, raw provider response, measured result, ranking, query identifier, or per-query outcome is included.",
+  "provider_admission": {
+    "authenticated_identity": true,
+    "live_status_verified": true,
+    "all_fee_quote_verified": true,
+    "management_destroy_prompt_reached_and_declined": true,
+    "instance_preserved": true,
+    "budget_status": "PASS_BUDGET_ADMISSION_LOCKED",
+    "worst_case_ttl_charge_usd": 4.427708333333333,
+    "projected_common_screen_usd": 14.314708333333334,
+    "hard_stop_common_screen_usd": 18,
+    "provider_admission_receipt_emitted": false
+  },
+  "frozen_validation": {
+    "bundle_sha256": "e6674aa03b88f88988798b2f063e4bdf6b240f1cbfbc723dfa317b5c87bb4bb9",
+    "frozen_commit": "cba9776346cdd5916446bf372f6db9c33e9397d3",
+    "frozen_tree": "bcf9e3efc0024c5b10820a5e0fc8728b3ff4d81a",
+    "compiled_bindings": 25,
+    "compiled_binding_set_sha256": "c8a6b3a9c784be23f7effe5a51e470259322e7e99a51fc13eacbc2c0b16f8760",
+    "protected_compiler_receipt_sha256": "ee18006e9b235c2362b7bd1016d8abcc36eed04e1713aa00d2becdf5456e949f",
+    "deterministic_replay": true,
+    "zero_silent_truncation": true,
+    "focused_tests_passed": 20
+  },
+  "execution_adoption": {
+    "adopted_for_execution": false,
+    "launch_allowed": false,
+    "measured_retrieval_allowed": false,
+    "blocker_code": "NO_HASH_BOUND_MEASURED_EXECUTOR_IN_FROZEN_V15",
+    "blocker_severity": "critical",
+    "frozen_regular_members": 76,
+    "frozen_source_members": 18,
+    "required_capabilities_missing": [
+      "dense_model_embedding_executor",
+      "bm25_measured_runtime",
+      "vector_index_and_search",
+      "durable_measured_checkpoint",
+      "allowlisted_safe_export_writer"
+    ],
+    "prohibited_substitutions": [
+      "current_HEAD",
+      "historical_v9_synthetic_executor",
+      "one_off_executor",
+      "unbound_App_code"
+    ]
+  },
+  "watchdog": {
+    "status": "PASS",
+    "os_lock_held": true,
+    "heartbeat_process_id": 29368,
+    "heartbeat_sha256_at_observation": "e287eb0ab996af584a13ca5723d7887f35dfd38f33fd81e1f5a5f24da4f87f06",
+    "provider_destroy_invoked": false
+  },
+  "remote_activity": {
+    "gpu_compute_process_count": 0,
+    "gpu_compute_memory_mib": 0,
+    "measured_work_started": false
+  },
+  "counters": {
+    "measured_runs": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "instance_disposition": {
+    "instance_id": 47256937,
+    "status": "PRESERVED_PENDING_OWNER_REVIEW",
+    "destroyed": false,
+    "reason": "Owner required destruction only at the A1 closeout gate; this checkpoint stopped before execution adoption."
+  },
+  "evidence_bindings": {
+    "provider_input_sha256": "0123fa2e7563c8e3fe8158fcc4c2eb011b7d3df52c08b8240400a64e408649d0",
+    "provider_validation_file_sha256": "6a4469634ee8a3619d4b27269540c8c2c3e3705856c360112f58a5833e661112",
+    "budget_receipt_sha256": "6d76b5e4375ae000ae01d438854574687e30a544a973466000bbe096d8f0703d",
+    "budget_file_sha256": "dec1e7ea504a9e2ca461e39d4f983b063af0118daf1a4ec76a13d1a93827d20f"
+  },
+  "next_authorized_action": "Owner review only. Do not launch measured A1.2 or substitute an executor. A separately authorized additive packaging repair must freeze and hash-bind the complete measured executor before execution adoption can be retried on any live instance.",
+  "receipt_sha256": "e5c184bdfeb52d9b4127e69b491b28ba78a56fb1fee4de4f9460feda1d649b48"
+}

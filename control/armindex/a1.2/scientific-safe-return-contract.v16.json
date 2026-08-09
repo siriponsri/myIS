@@ -1,0 +1,27 @@
+{
+  "schema_version": "myis.armindex-a1.2-scientific-safe-return-contract.v16",
+  "contract_id": "a1.2-scientific-safe-return-v16",
+  "status": "ENGINEERING_CONTRACT_NOT_ADOPTED",
+  "archive": {
+    "manifest_member": "safe-return-manifest.v16.json",
+    "text_only": true,
+    "maximum_member_bytes": 1048576,
+    "maximum_total_bytes": 16777216,
+    "regular_files_only": true,
+    "no_extra_members": true
+  },
+  "ranking_rows": {
+    "result_cells": 25,
+    "rows_per_cell": 150,
+    "unique_family_tokens_per_work_token": 100,
+    "work_token_pattern": "^Q-[a-f0-9]{32}$",
+    "family_token_pattern": "^F-[a-f0-9]{32}$",
+    "fields": ["work_token", "family_tokens"]
+  },
+  "resource_receipts": {
+    "per_cell": 25,
+    "fields": ["schema_version", "attempt_id", "arm_id", "program_id", "status", "checkpoint_sha256", "ranking_sha256", "receipt_sha256"]
+  },
+  "forbidden_members": ["logs", "model_weights", "embeddings", "caches", "tensor_checkpoints", "raw_inputs", "environment_dumps", "provider_payloads", "qrels", "membership", "query_ids", "ephemeral_token_map"],
+  "contract_sha256": "f7b532588ef892daa96075e2ccb01ca9f17a08b963e86890c6f102e2b20d8e1b"
+}

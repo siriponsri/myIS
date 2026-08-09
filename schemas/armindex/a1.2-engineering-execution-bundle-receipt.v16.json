@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-engineering-execution-bundle-receipt.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "revision_id", "status", "clean_worktree", "pushed_to_origin_main", "git_commit", "git_tree", "frozen_bundle_sha256", "bundle_manifest_sha256", "bundle_path_set_sha256", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-engineering-execution-bundle-receipt.v16"},
+    "revision_id": {"const": "a1.2-engineering-execution-v16"},
+    "status": {"const": "ENGINEERING_BUNDLE_BUILT_NOT_ADOPTED"},
+    "clean_worktree": {"const": true},
+    "pushed_to_origin_main": {"const": true},
+    "git_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "git_tree": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "frozen_bundle_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "bundle_manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "bundle_path_set_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -8,14 +8,14 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked`
-- Local adoption-input status: `LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER`
-- Evidence class: scientific execution adoption-request preparation over preserved
-  v1-v10 engineering and provider-closeout lineage; scientific authority `false`
+- Status: `a1_2_v16_same_instance_pre_measurement_preparation`
+- Local adoption-input status: `LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_V16_LIVE_ADMISSION`
+- Evidence class: owner-approved live-provider preparation over preserved v1-v15
+  lineage plus additive v16 engineering; scientific authority `false`
 - ArmIndex measured runs: `0`
 - Selection exposures: `0`
 - Final exposures: `0`
-- Migration cost: `$0`
+- Migration cost: `$0` (no measured charge recorded)
 - Final-872: closed
 - Owner gates: `D2_OPEN_FINAL`, `D3_SUBMIT_RELEASE`
 
@@ -228,9 +228,11 @@ recomposition semantics, all 25/25 compiled bindings, deterministic replay,
 effective input limits, zero silent truncation, and linked protected
 handoff/transfer/compiler receipts. The clean pushed bundle, pre-adoption anchor,
 aggregate budget model, watchdog/provider-destroy dry-run, and final local
-receipt now pass. Fresh provider identity, all-fee quote, live budget admission,
-provider admission, adoption, and measured execution remain pending. The
-destroyed instance cannot be reused.
+receipt now pass. The Owner-approved v16 policy extends the additive limits to
+`$27` common screen, `$32` A1, `$150` campaign, and 40 hours from provision
+without changing v11-v15 scientific semantics. Instance `47256937` remains
+the same live provider identity; fresh all-fee budget admission, provider
+admission, and execution adoption are being materialized before measured work.
 
 ## Active authorized action
 
@@ -244,8 +246,8 @@ design or opening A2. The exact next action is:
 The synthetic preflight, safe collection, guest teardown, Owner-confirmed
 provider closeout, v11 request preparation, frozen split, P02-FIRST-CLAIM
 coverage repair, dense-overflow compatibility audit, additive protected
-compiler v15, and final local adoption-input closure are complete. No Vast
-instance remains available for reuse. The next goal uses one fresh instance
-continuously through A1 only after provider and execution admission pass; it
-stops and destroys the instance before A2 and does not open HARNESS-DEV,
-Selection, Final, paid API work, provider fallback, or weight changes.
+compiler v15, and final local adoption-input closure are complete. The current
+workflow preserves instance `47256937` and continues through A1 only after
+provider and execution admission pass; it stops before A2, HARNESS-DEV,
+Selection, and Final, and does not use provider fallback, paid API work,
+runtime model downloads, or weight changes.

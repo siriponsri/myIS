@@ -1,0 +1,139 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a1.2-frozen-v15-execution-adoption-rigor-review-20260809",
+  "artifact": "A1.2 frozen v15 execution-adoption package",
+  "artifact_path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
+  "artifact_sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
+  "review_status": "blocked_structural",
+  "reviewed_at_utc": "2026-08-09T10:32:21Z",
+  "review_boundary": "Artifact-only review of execution adoption. No experiment, protected payload read, provider mutation, bundle repair, model inference, retrieval, or scientific evaluation was performed.",
+  "package_scope": {
+    "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "task_id": "A1.2",
+    "split": "REP-DEV only",
+    "requested_decision": "execution adoption before the frozen 25-cell common screen",
+    "claim_set": "operational readiness only; no retrieval-quality or publication claim"
+  },
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": false,
+    "blocking_findings": [
+      "F001"
+    ]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "Execution adoption is structurally blocked because the frozen v15 package does not bind a complete measured executor.",
+    "strengths": [
+      "The clean bundle identity, protected handoff, 25 compiled bindings, deterministic replay, zero-silent-truncation policy, live provider inputs, whole-workload budget, and watchdog are independently validated.",
+      "The gate order held: no measured retrieval or GPU scientific process began after the missing executor was identified."
+    ],
+    "weaknesses": [
+      "The frozen package has no manifest or source binding for the complete embedding, BM25, vector index/search, checkpoint, and safe-export execution path.",
+      "Historical App implementations are provenance references only and are explicitly unavailable as active runtime authority."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": [
+        "The REP-DEV role and OUT metric roles are frozen."
+      ],
+      "weaknesses": [
+        "No measured result can exist before a valid executor is adopted."
+      ],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": [
+        "The 25-of-25, replay, token-drop, budget, heartbeat, and safe-return rejection rules are explicit."
+      ],
+      "weaknesses": [
+        "Those rules are not independently executable without the missing runner."
+      ],
+      "suggestions": []
+    },
+    "D3_scope_calibration": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": [
+        "The request stops before A2, HARNESS-DEV, Selection, and Final."
+      ],
+      "weaknesses": [
+        "Scientific scope cannot be assessed from a non-runnable package."
+      ],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": [
+        "The program, overflow, compiler, split, metric, transfer, and result contracts form a traceable design chain."
+      ],
+      "weaknesses": [
+        "The chain ends at compiled inputs and never reaches a hash-bound measured execution implementation."
+      ],
+      "suggestions": []
+    },
+    "D5_exploration_integrity": {
+      "score": null,
+      "status": "not_assessable",
+      "strengths": [
+        "Failed watchdog attempts and the present adoption failure remain recorded."
+      ],
+      "weaknesses": [
+        "There is no adopted trial to evaluate."
+      ],
+      "suggestions": []
+    },
+    "D6_methodological_rigor": {
+      "score": null,
+      "status": "blocked_structural",
+      "strengths": [
+        "Frozen scientific semantics and protected boundaries remain intact."
+      ],
+      "weaknesses": [
+        "Reproducibility is incomplete because the measured executor identity and its entrypoint/dependency/checkpoint/export bindings are absent."
+      ],
+      "suggestions": [
+        "Under separate Owner authorization, package the complete executor additively and bind every executed byte without changing v11-v15 scientific semantics."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": "A1.2 frozen v15 execution bundle",
+      "target_entity": "measured executor identity",
+      "evidence_locator": "The bundle contains 76 regular members and 18 source members. Source inventory contains no dense model executor, bm25s runtime, vector index/search implementation, durable measured checkpoint implementation, or safe-export writer. Historical hashes 5629b397..., 3fb6e623..., aa17039b..., and 3a6aca14... are absent from the bundle; control/armindex/a0.10-legacy-code-harvest-ledger.v1.json classifies the relevant App code as reference/blocked and forbids runtime import.",
+      "observation": "The package can compile and validate 25 protected bindings but cannot independently produce the required ranking results.",
+      "reasoning": "Using current HEAD, v9 synthetic code, historical App code, or a one-off script would substitute an unbound execution identity after adoption inputs were frozen and would invalidate reproducibility and gate order.",
+      "suggestion": "Do not adopt or launch. Obtain an explicit Owner decision for an additive packaging repair that freezes the complete measured executor, entrypoint, dependency lock, checkpoint contract, safe-export contract, and hashes while preserving v11-v15 scientific semantics."
+    }
+  ],
+  "questions_for_owner": [
+    "Does the Owner authorize a separate additive execution-packaging repair that changes no v11-v15 scientific semantics but freezes the missing measured executor and adoption contract?"
+  ],
+  "read_order": [
+    "Owner governed A1 closeout goal",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-a1.2-v2.yaml",
+    "control/armindex/a1.2/scientific-execution-adoption-request.v11.json",
+    "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
+    "frozen v15 bundle member and source inventory",
+    "control/assets/reusable_assets.yaml",
+    "control/assets/REUSABLE_ASSET_MAP.md",
+    "control/armindex/a0.10-legacy-code-harvest-ledger.v1.json",
+    "sibling App source hashes only"
+  ]
+}
