@@ -96,6 +96,15 @@ def test_dense_fit_uses_frozen_template_and_source_weight() -> None:
     assert query.physical_inputs[0].text.startswith("encode query for different document retrieval:")
 
 
+def test_dense_fit_accepts_empty_template_prefix() -> None:
+    adapter = Adapter()
+    units = materialize_raw_corpus(
+        [_row()], arm_id="ARM-02", program_id="P00-TAC-DOC", adapter=adapter
+    )
+    assert len(units) == 1 and len(units[0].physical_inputs) == 1
+    assert units[0].physical_inputs[0].source_token_count > 0
+
+
 def test_dense_overflow_has_zero_overlap_and_no_truncation() -> None:
     adapter = Adapter()
     long_text = " ".join(f"token{i}" for i in range(700))

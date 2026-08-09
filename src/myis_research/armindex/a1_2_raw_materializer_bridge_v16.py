@@ -199,7 +199,9 @@ def _physical_texts(*, arm_id: str, text: str, adapter: Any) -> tuple[PhysicalIn
     rendered = template.format(text=text)
     rendered_ids = _one_ids(tokenizer, rendered, add_special_tokens=False)
     full_ids = _one_ids(tokenizer, rendered, add_special_tokens=True)
-    prefix_ids = _one_ids(tokenizer, prefix, add_special_tokens=False)
+    # Non-instruction dense arms use an empty template prefix; keep that
+    # valid while preserving the frozen token plan for non-empty prefixes.
+    prefix_ids = _optional_ids(tokenizer, prefix)
     suffix_ids = _optional_ids(tokenizer, suffix)
     limit = MAX_INPUT_TOKENS[arm_id]
     try:
