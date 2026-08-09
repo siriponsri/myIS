@@ -31,6 +31,16 @@ def test_v16_bundle_base_closure_binds_safe_return_and_watchdog() -> None:
     assert "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1" in v16._BASE_PATHS
 
 
+def test_v16_bundle_binds_runtime_import_closure_without_protected_compiler() -> None:
+    paths = set(v16.bundle_paths(ROOT))
+    assert {
+        "src/myis_research/kernel/canonical.py",
+        "src/myis_research/armindex/bm25s_adapter.py",
+        "src/myis_research/armindex/scientific_common_programs_v11.py",
+    } <= paths
+    assert "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v15.py" not in paths
+
+
 def test_v16_contract_rejects_frozen_hash_drift(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     value = json.loads((ROOT / v16.CONTRACT_PATH).read_text(encoding="utf-8"))
     value["frozen_file_sha256"]["control/armindex/a1.2/common-program-set.v11.json"] = "0" * 64

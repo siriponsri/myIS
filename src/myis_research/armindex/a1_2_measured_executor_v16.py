@@ -25,6 +25,13 @@ DENSE_ARM_IDS = frozenset({"ARM-02", "ARM-03", "ARM-04", "ARM-05"})
 P04_VIEW_IDS = frozenset({"title", "abstract", "claims"})
 L2_NORMALIZATION_ATOL = 1e-3
 MAX_INPUT_TOKENS = {"ARM-02": 8192, "ARM-03": 512, "ARM-04": 8192, "ARM-05": 32768}
+ARM_CONFIG_OVERRIDES: dict[str, dict[str, Any]] = {
+    "ARM-04": {
+        "attn_implementation": "sdpa",
+        "unpad_inputs": False,
+        "use_memory_efficient_attention": False,
+    }
+}
 _OPAQUE_ID_RE = re.compile(r"(?:F|Q)-[a-f0-9]{32}")
 
 
@@ -171,8 +178,6 @@ class SentenceTransformerDenseAdapter:
         try:
             import torch
             from sentence_transformers import SentenceTransformer
-
-            from .a1_2_live_preflight_runtime_v9 import ARM_CONFIG_OVERRIDES
         except ImportError as error:
             raise MeasuredExecutorV16Error(
                 "frozen dense runtime dependency is unavailable"
