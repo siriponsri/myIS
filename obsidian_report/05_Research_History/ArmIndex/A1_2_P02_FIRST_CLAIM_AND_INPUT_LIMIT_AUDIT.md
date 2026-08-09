@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98"
-read_model_sha256: "b6b684729dd0751d526494303f029aed5c319dbe199c5fd20779c258cc83b7e6"
+read_model_revision: "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62"
+read_model_sha256: "8fda366b47c292d04c5e4b0217f0307a0953356da2e98c494f9bd433a43cb55d"
 source_commit: "2bd76d36b418564b9f7494196e70a31251b552fb"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_input_validation"
 scientific_authority: false
 claim_boundary: "P02 coverage and deterministic replay passed, but frozen ARM-03 x P00 exceeds its effective input limit without truncation. No retrieval or provider work was performed."
-generated_from_revision: "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98"
+generated_from_revision: "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62"
 last_material_update: "2026-08-09T04:38:15Z"
 next_authorized_action: "Owner decides an additive pre-measurement program-limit compatibility repair or ARM-03 disposition; do not admit a provider or measured retrieval."
 managed_by: "myis-report"

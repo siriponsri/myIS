@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
   "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Protected owner-local CPU evidence import",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-3",
-  "report_sha256": "7622ab1d31950bc64f155f9de3f668989f3b0ceb2465ca4a841e53e75c2ab099",
+  "report_sha256": "ac003c0ce2b570b450194add478fbc0ae4e07fac15a7fa352ed0f73f92094a90",
   "report_type": "task",
   "result": {
     "decision": "completed",

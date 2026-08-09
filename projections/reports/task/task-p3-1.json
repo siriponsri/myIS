@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
   "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -47,11 +47,11 @@
   "language": "en",
   "last_material_update": "2026-08-09T04:38:15Z",
   "metric_references": [],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "795ec8e4eb72b512f6de91db8e05c48eaffc0c6913c2d4e74cdc818b806ae2a4",
+  "report_sha256": "50091210467f6926e874bf2c87785973c3bda071fccd100900dc055807bb3c0e",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

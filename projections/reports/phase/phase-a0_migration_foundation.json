@@ -506,7 +506,7 @@
     }
   ],
   "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
   "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -623,11 +623,11 @@
       "value": 156846
     }
   ],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "b0c5af484fdce782e0f40d89e88da64f32e517ab323def98c2c0af78c2bb938d",
+  "report_sha256": "2cec2afa62d617a86b188fa0b2f509100751bcf22a0f3dff36565b558a9d0803",
   "report_type": "phase",
   "result": {
     "decision": "completed",

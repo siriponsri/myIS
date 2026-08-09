@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
   "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -118,11 +118,11 @@
   "language": "en",
   "last_material_update": "2026-08-09T04:38:15Z",
   "metric_references": [],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Deterministic kernel and schema contracts",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-1",
-  "report_sha256": "e353931e4f1cfdaeb4672b79a908d4f733fdfafc5bfaa9d347c9725b1436b53d",
+  "report_sha256": "177ffb404f2bbb8190fb63c96032af65809f9a8c840db914cf82c8b5eae749ae",
   "report_type": "task",
   "result": {
     "decision": "completed",

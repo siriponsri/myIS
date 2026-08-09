@@ -235,6 +235,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "a12-local-adoption-inputs-receipt-v15",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
+      "evidence_class": "pre_measurement_owner_local_compatibility_validation",
+      "explanation": "Binds the clean pushed bundle, protected compiler evidence, workload model, and synthetic watchdog dry-run without provider contact or execution adoption.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
+      "scientific_authority": false,
+      "title": "A1.2 final local adoption-input receipt v15",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a11-adapter-task-receipt",
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
@@ -2433,6 +2451,11 @@
       "uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json"
     },
     {
+      "artifact_id": "a12-local-adoption-inputs-receipt-v15",
+      "sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json"
+    },
+    {
       "artifact_id": "a11-adapter-task-receipt",
       "sha256": "56d23bf3f6057272926a99f795c172b7fb5253134854ac70a038f154e2b32c83",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json"
@@ -3136,7 +3159,7 @@
     }
   ],
   "generated_at": "2026-08-09T04:38:15Z",
-  "generated_from_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "generated_from_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
   "git_commit": "2bd76d36b418564b9f7494196e70a31251b552fb",
   "governance_status": {
     "d2": "waiting_owner",
@@ -3371,11 +3394,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "16f228caca9e2b0e6b946639bee8bc228d1a247314b5858014ef763ad76bc47c",
+  "report_sha256": "9aa4f28af26576e234f32bc86018655839f113ad8283eb12e4f4a72b2e4f5ccd",
   "report_type": "phase",
   "result": {
     "decision": "active",
@@ -3409,6 +3432,7 @@
         "a12-protected-compiler-integration-v15",
         "a12-protected-compiler-audit-v15",
         "a12-whole-workload-budget-model-v15",
+        "a12-local-adoption-inputs-receipt-v15",
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
         "a11-adapter-fixture-receipt",

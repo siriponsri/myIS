@@ -1116,7 +1116,7 @@
       "budget_model_file_sha256": "6ad2e49f1fe7753a8d484e76e3dbe64bcf4d17f2cfc5b1c94e90d055601280ff",
       "budget_model_sha256": "cf671f163c83d63b0edf66150293a4509e0d2aca8e94afbd251272e544a30529",
       "budget_model_uri": "control/armindex/a1.2/whole-workload-budget-model.v15.json",
-      "bundle_status": "PENDING",
+      "bundle_status": "PASS",
       "cells": {
         "ARM-02": {
           "P00-TAC-DOC": {
@@ -2661,15 +2661,15 @@
       "figure_png_uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.png",
       "figure_svg_sha256": "a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8",
       "figure_svg_uri": "outputs/figures/armindex/a1.2-dense-overflow-eda-v1.svg",
-      "final_receipt_file_sha256": null,
-      "final_receipt_sha256": null,
+      "final_receipt_file_sha256": "4408675afffc96abf400d16bf52671472c5302327de78c8daf220935034eba0c",
+      "final_receipt_sha256": "0586e9d0cec8ba33d945172acd589ff46cb858da76c4e9b93eed75c690be24cd",
       "final_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json",
       "inventory_file_sha256": "a9afaecb93d759af16684a84a60edc049c57ff2a7d2edf7cc53bf580df719867",
       "inventory_sha256": "d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634",
       "inventory_status": "PASS_RAW_COMPATIBILITY_INVENTORY",
       "inventory_uri": "outputs/audits/armindex/a1.2-dense-overflow-inventory-20260808.json",
-      "local_adoption_input_status": "PENDING",
-      "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+      "local_adoption_input_status": "PASS",
+      "next_authorized_action": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
       "protected_handoff_status": "PASS",
       "protected_receipts": {
         "binding_set_file_sha256": "bcb59805e7e19f0b5cabf3c1a8bf890fcdb3d750a893c2c5a19d637304cad9e0",
@@ -2688,7 +2688,7 @@
         "required": true,
         "retrieval_quality_claim_authorized": false
       },
-      "ready_for_live_provider_admission": false,
+      "ready_for_live_provider_admission": true,
       "repair_frozen": true,
       "requirements": {
         "compatible_cells_25_of_25": true,
@@ -2717,10 +2717,10 @@
         "dense_program_arm_cells": 20,
         "rep_dev_query_count": 150
       },
-      "status": "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
+      "status": "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
       "transfer_receipt_status": "PASS",
       "validated": true,
-      "watchdog_dry_run_status": "PENDING"
+      "watchdog_dry_run_status": "PASS"
     },
     "a1_2_p02_limit_audit": {
       "claim_boundary": "P02 coverage and deterministic replay passed, but frozen ARM-03 x P00 exceeds its effective input limit without truncation. No retrieval or provider work was performed.",
@@ -3495,8 +3495,8 @@
       "status": "complete",
       "validated": true
     },
-    "local_adoption_input_status": "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
-    "next_command": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+    "local_adoption_input_status": "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
+    "next_command": "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -4775,7 +4775,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
+  "projection_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -4819,8 +4819,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98",
-  "read_model_sha256": "b6b684729dd0751d526494303f029aed5c319dbe199c5fd20779c258cc83b7e6",
+  "read_model_revision": "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62",
+  "read_model_sha256": "8fda366b47c292d04c5e4b0217f0307a0953356da2e98c494f9bd433a43cb55d",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

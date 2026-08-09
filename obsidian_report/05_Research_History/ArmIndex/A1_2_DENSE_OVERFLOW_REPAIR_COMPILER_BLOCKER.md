@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98"
-read_model_sha256: "b6b684729dd0751d526494303f029aed5c319dbe199c5fd20779c258cc83b7e6"
+read_model_revision: "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62"
+read_model_sha256: "8fda366b47c292d04c5e4b0217f0307a0953356da2e98c494f9bd433a43cb55d"
 source_commit: "2bd76d36b418564b9f7494196e70a31251b552fb"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,9 +11,9 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_compatibility_validation"
 scientific_authority: false
 claim_boundary: "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result."
-generated_from_revision: "078b468c553a99b260488a8a42dde50e325b9da667d0185560048245adfd9a98"
+generated_from_revision: "1a68cb9dad77ebac2e2420117992c1c3a2a7c813fbcd7660ba181526e2345f62"
 last_material_update: "2026-08-09T04:38:15Z"
-next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
+next_authorized_action: "A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -57,7 +57,7 @@ Validated contract self-hashes, immutable v11/v12-r3/v13/P02 lineage, implementa
 - Aggregate-safe compiler audit: `outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json` (`1de6ecf6f0f9fb7f1e2a4465311a556e7c75e5aaed00dde893c811a2c2d98234`)
 
 - Whole-workload budget model: `control/armindex/a1.2/whole-workload-budget-model.v15.json` (`cf671f163c83d63b0edf66150293a4509e0d2aca8e94afbd251272e544a30529`)
-- Final local adoption receipt: `campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json` (`None`)
+- Final local adoption receipt: `campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-inputs.receipt.v15.json` (`0586e9d0cec8ba33d945172acd589ff46cb858da76c4e9b93eed75c690be24cd`)
 
 ## Metrics
 
@@ -84,11 +84,11 @@ Validated contract self-hashes, immutable v11/v12-r3/v13/P02 lineage, implementa
 | `ARM-05` | `P03` | 0.001% | 0.000% | 180,301 | 32,768 |
 | `ARM-05` | `P04` | 0.018% | 0.000% | 136,043 | 32,768 |
 
-Requirements: 25/25 compatible `True`; REP-DEV coverage `1.0`; corpus coverage `1.0`; zero drop `True`; zero truncation `True`. Compiler bindings `25/25`; compiler replay `True`; protected boundary `PASS`; raw overflow logical inputs `140907`; clean bundle `PENDING`; watchdog dry-run `PENDING`.
+Requirements: 25/25 compatible `True`; REP-DEV coverage `1.0`; corpus coverage `1.0`; zero drop `True`; zero truncation `True`. Compiler bindings `25/25`; compiler replay `True`; protected boundary `PASS`; raw overflow logical inputs `140907`; clean bundle `PASS`; watchdog dry-run `PASS`.
 
 ## Result
 
-The additive repair and protected v15 compiler integration **PASS**. All 25 bindings, the protected handoff, transfer manifest, deterministic replay, effective-limit checks, and zero-silent-truncation evidence are materialized Owner-local.
+`repair frozen, compiler integration PASS`. The complete additive v15 local adoption-input closure **PASS**. The clean pushed bundle, Owner-local anchor, all 25 protected bindings, whole-workload budget model, and synthetic watchdog/provider-destroy dry-run are validated; every live-provider input remains pending.
 
 ## Interpretation
 
@@ -112,11 +112,11 @@ The historical v12 compiler lacked the physical-window composition path and ther
 
 ## Decision
 
-`repair frozen, compiler integration PASS`. `COMPILED_BINDINGS_25_OF_25=PASS`, `PROTECTED_HANDOFF=PASS`, `TRANSFER_RECEIPT=PASS`, and `ZERO_TRUNCATION_CHECK=PASS`. Continue only with the clean-tree bundle/final local receipt gates; live-provider admission remains pending.
+`LOCAL_ADOPTION_INPUTS=PASS` and `READY_FOR_LIVE_PROVIDER_ADMISSION=true`. This readiness permits only a separately authorized live-provider admission goal; provider identity, quote, live budget admission, and live admission receipt remain pending, and scientific execution is not adopted.
 
 ## Next Action
 
-Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.
+A separately authorized live-provider admission goal may obtain a fresh provider identity and all-fee quote, evaluate live whole-workload budget admission, and materialize a live provider admission receipt while every execution lock remains closed.
 
 ## Evidence Links
 
