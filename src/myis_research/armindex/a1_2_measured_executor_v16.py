@@ -18,9 +18,6 @@ from typing import Any, Protocol
 
 import numpy as np
 
-from .a1_2_owner_local_protected_compiler_v15 import (
-    aggregate_physical_window_vectors,
-)
 from .bm25s_adapter import BM25sAdapter
 from .scientific_common_programs_v11 import P04_VIEW_DEPTH, fuse_p04_view_rankings
 
@@ -33,6 +30,65 @@ _OPAQUE_ID_RE = re.compile(r"(?:F|Q)-[a-f0-9]{32}")
 
 class MeasuredExecutorV16Error(ValueError):
     """Fail-closed runtime input or adapter error without payload disclosure."""
+
+
+def aggregate_physical_window_vectors(
+    arm_id: str,
+    vectors: Sequence[Sequence[float]],
+    source_token_counts: Sequence[int],
+) -> tuple[float, ...]:
+    """Apply the frozen token-weighted mean and dense-arm L2 normalization.
+
+    This is the pure runtime portion of the v15 compiler contract. Keeping the
+    helper in the measured bundle avoids importing the protected compiler
+    module, whose broader Owner-local dependencies are intentionally excluded.
+    """
+
+    if arm_id not in DENSE_ARM_IDS:
+        raise MeasuredExecutorV16Error(
+            "weighted composition requires a dense arm"
+        )
+    if not vectors or len(vectors) != len(source_token_counts):
+        raise MeasuredExecutorV16Error(
+            "weighted composition inputs are incomplete"
+        )
+    dimension = len(vectors[0])
+    if dimension < 1 or any(len(vector) != dimension for vector in vectors):
+        raise MeasuredExecutorV16Error(
+            "physical window vector dimensions differ"
+        )
+    if any(
+        not isinstance(count, int) or count < 1
+        for count in source_token_counts
+    ):
+        raise MeasuredExecutorV16Error(
+            "physical window source-token weights are invalid"
+        )
+    if any(
+        not math.isfinite(float(value))
+        for vector in vectors
+        for value in vector
+    ):
+        raise MeasuredExecutorV16Error(
+            "physical window vectors contain non-finite values"
+        )
+    denominator = sum(source_token_counts)
+    weighted = [
+        sum(
+            float(vector[index]) * count
+            for vector, count in zip(
+                vectors, source_token_counts, strict=True
+            )
+        )
+        / denominator
+        for index in range(dimension)
+    ]
+    norm = math.sqrt(sum(value * value for value in weighted))
+    if not math.isfinite(norm) or norm <= 0:
+        raise MeasuredExecutorV16Error(
+            "weighted logical vector cannot be L2-normalized"
+        )
+    return tuple(value / norm for value in weighted)
 
 
 @dataclass(frozen=True)
