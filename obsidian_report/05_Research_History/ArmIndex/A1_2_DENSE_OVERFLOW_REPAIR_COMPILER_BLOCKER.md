@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ebe1fbc4863a59b25f989ea41a0d0b3f52fbc7669d1c1ed681884a78beb6318c"
-read_model_sha256: "1de480654495992f61ed1306b7296005528ff8888bcfd5940c84aa1743ffe194"
-source_commit: "b0963b8c1a5c72bd329d1760d3992ab7f694163b"
+read_model_revision: "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76"
+read_model_sha256: "1c3a73212da8cff8e1fa340b344af7f565969e4cbaeb584f73ce0c40415cec57"
+source_commit: "68540f68bc3ba47dafacdba4f4717d89147515f4"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: ["a16294fa92e1b7a7bf3b4e571869751ea20e03a32580abea92819418d2e770eb","d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634","df09cc3c030d36ca13010aa00adb2cf78937717bf3d0ea9a3bcc6355d082d653","30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b","a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8","742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6","1de6ecf6f0f9fb7f1e2a4465311a556e7c75e5aaed00dde893c811a2c2d98234"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_compatibility_validation"
 scientific_authority: false
 claim_boundary: "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result."
-generated_from_revision: "ebe1fbc4863a59b25f989ea41a0d0b3f52fbc7669d1c1ed681884a78beb6318c"
-last_material_update: "2026-08-09T07:04:22Z"
+generated_from_revision: "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76"
+last_material_update: "2026-08-09T08:17:27Z"
 next_authorized_action: "/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-09T07:04:22Z"
-updated_at: "2026-08-09T07:04:22Z"
+created_at: "2026-08-09T08:17:27Z"
+updated_at: "2026-08-09T08:17:27Z"
 note_id: "A1-2-DENSE-OVERFLOW-REPAIR-COMPILER-BLOCKER"
 note_type: "history_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"

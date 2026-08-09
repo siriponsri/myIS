@@ -3158,9 +3158,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-09T07:04:22Z",
-  "generated_from_revision": "ebe1fbc4863a59b25f989ea41a0d0b3f52fbc7669d1c1ed681884a78beb6318c",
-  "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
+  "generated_at": "2026-08-09T08:17:27Z",
+  "generated_from_revision": "b3c85a4db322dfc8bcf71ce866cd500b281d6bda9ac0e002de39c3d6a6aebd76",
+  "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3286,7 +3286,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "b0963b8c1a5c72bd329d1760d3992ab7f694163b",
+    "git_commit": "68540f68bc3ba47dafacdba4f4717d89147515f4",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3303,7 +3303,7 @@
   },
   "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. V12-r3 binds the unchanged request to local-only verification, while v13 makes OUT Recall@100 the primary candidate-exposure outcome and keeps instance disposition pending live-provider evidence. It does not establish retrieval quality, execution adoption, or scientific authorization.",
   "language": "en",
-  "last_material_update": "2026-08-09T07:04:22Z",
+  "last_material_update": "2026-08-09T08:17:27Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3398,7 +3398,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "d38f26365129dfc53dcb09e510cff749737bbfe9aac5c9eba8881ef0958b63b9",
+  "report_sha256": "4ace76f57c39c7080523de4dc8bf8d66518f6fac961afd161ea31ea57ee09f18",
   "report_type": "phase",
   "result": {
     "decision": "active",
