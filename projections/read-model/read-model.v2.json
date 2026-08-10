@@ -2969,6 +2969,68 @@
       "status": "BLOCKED_CONTRACT_DEFECT",
       "validated": true
     },
+    "a1_2_r13_failure": {
+      "attempt": {
+        "attempt_id": "a12-v16-20260810-r13",
+        "completed_logical_cells": 24,
+        "coverage_by_arm": {
+          "ARM-01": 5,
+          "ARM-02": 5,
+          "ARM-03": 5,
+          "ARM-04": 5,
+          "ARM-05": 4
+        },
+        "instance_id": 47256937,
+        "missing_logical_cell": "ARM-05--P04-SECTION-MULTIVIEW",
+        "partial_results_promotable": false,
+        "required_logical_cells": 25
+      },
+      "audit_file_sha256": "65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364",
+      "audit_id": "a1.2-v16-r13-failure-audit-20260810",
+      "audit_sha256": "ca5dda1c88cc8a275c1e24c0b0690c80f4c4f92fc0e89900b99c987d0e00c04e",
+      "audit_uri": "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json",
+      "claim_boundary": "Aggregate-safe audit of one incomplete live attempt. It is not a retrieval-quality result, promotion decision, A1 completion, or publication claim.",
+      "disposition": {
+        "instance_reuse_allowed": false,
+        "owner_confirmation_source": "active_codex_thread_owner_message_20260810",
+        "owner_destroy_confirmed": true,
+        "post_destroy_endpoint_observation": "connection_refused",
+        "post_destroy_endpoint_observed_at_utc": "2026-08-10T11:01:54Z"
+      },
+      "evidence_class": "aggregate_safe_live_attempt_failure",
+      "failure": {
+        "observed_error_class": "ssh_key_exchange_connection_closed",
+        "provider_destroy_invoked_by_worker": false,
+        "reason": "ssh_runtime_probe_failed",
+        "watchdog_status": "HARD_STOP",
+        "worker_failure_marker": "FAIL:143",
+        "workers_remaining": 0
+      },
+      "integrity": {
+        "allowlisted_member_count": 25,
+        "allowlisted_members_sha256": "b42f4c347688a7eecfa1f59c9221e5929af9a562a9615a2372d7a8b847f42b9b",
+        "cell_receipt_self_hashes_verified": 24,
+        "manifest_file_sha256": "982a379619ee78005e037dfc545e83360301cde389f2b82f563b691755cffa99",
+        "manifest_uri": "owner-store/a1.2-v16-20260809/failures/a12-v16-20260810-r13/allowlisted-failure-evidence-manifest.json",
+        "member_hash_recomputed": true,
+        "protected_data_exported": false,
+        "unsafe_field_scan": "PASS"
+      },
+      "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+      "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "publication_safety": {
+        "a1_closeout_authorized": false,
+        "owner_local_evaluation_started": false,
+        "promotion_started": false,
+        "publication_claim_authorized": false
+      },
+      "schema_version": "myis.armindex-a1.2-attempt-audit.v1",
+      "scientific_authority": false,
+      "status": "FAILED_CLOSED",
+      "task_id": "A1.2",
+      "timestamp_utc": "2026-08-10T11:01:54Z",
+      "validated": true
+    },
     "a1_2_rep_harness_claim_audit": {
       "audit_file_sha256": "54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c",
       "audit_id": "a1.2-rep-harness-and-claim-parser-audit-20260808-v1",
@@ -3574,8 +3636,8 @@
       "status": "complete",
       "validated": true
     },
-    "local_adoption_input_status": "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
-    "next_command": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+    "local_adoption_input_status": "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY",
+    "next_command": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -3659,7 +3721,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
+        "status": "a1_2_v16_r13_failed_closed_retry_required",
         "tasks": [
           {
             "status": "complete",
@@ -3667,7 +3729,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "scientific_execution_request_prepared_owner_review_launch_locked",
+            "status": "a1_2_v16_r13_failed_closed_retry_required",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -3755,7 +3817,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
+    "status": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -3787,7 +3849,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
+      "status": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -3946,7 +4008,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-09T18:37:03Z",
+  "generated_at": "2026-08-09T22:18:37Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -4854,7 +4916,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
+  "projection_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -4898,8 +4960,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
-  "read_model_sha256": "a8018fa0dba74c3a62bcb0b119f8183743f9987ab0f3c10cff3cef872d0f37dd",
+  "read_model_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
+  "read_model_sha256": "0ac6112f1480d45918de62ce2cd1c7e7f562fe9010ca26648fc37ce410b1328f",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -5032,7 +5094,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+  "source_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
   "tasks": [
     {
       "evidence_ids": [],

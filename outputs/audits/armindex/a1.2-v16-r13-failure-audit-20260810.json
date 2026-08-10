@@ -1,0 +1,59 @@
+{
+  "schema_version": "myis.armindex-a1.2-attempt-audit.v1",
+  "audit_id": "a1.2-v16-r13-failure-audit-20260810",
+  "timestamp_utc": "2026-08-10T11:01:54Z",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "FAILED_CLOSED",
+  "evidence_class": "aggregate_safe_live_attempt_failure",
+  "scientific_authority": false,
+  "claim_boundary": "Aggregate-safe audit of one incomplete live attempt. It is not a retrieval-quality result, promotion decision, A1 completion, or publication claim.",
+  "attempt": {
+    "attempt_id": "a12-v16-20260810-r13",
+    "instance_id": 47256937,
+    "required_logical_cells": 25,
+    "completed_logical_cells": 24,
+    "missing_logical_cell": "ARM-05--P04-SECTION-MULTIVIEW",
+    "partial_results_promotable": false,
+    "coverage_by_arm": {
+      "ARM-01": 5,
+      "ARM-02": 5,
+      "ARM-03": 5,
+      "ARM-04": 5,
+      "ARM-05": 4
+    }
+  },
+  "failure": {
+    "watchdog_status": "HARD_STOP",
+    "reason": "ssh_runtime_probe_failed",
+    "observed_error_class": "ssh_key_exchange_connection_closed",
+    "worker_failure_marker": "FAIL:143",
+    "workers_remaining": 0,
+    "provider_destroy_invoked_by_worker": false
+  },
+  "integrity": {
+    "manifest_uri": "owner-store/a1.2-v16-20260809/failures/a12-v16-20260810-r13/allowlisted-failure-evidence-manifest.json",
+    "manifest_file_sha256": "982a379619ee78005e037dfc545e83360301cde389f2b82f563b691755cffa99",
+    "allowlisted_member_count": 25,
+    "allowlisted_members_sha256": "b42f4c347688a7eecfa1f59c9221e5929af9a562a9615a2372d7a8b847f42b9b",
+    "member_hash_recomputed": true,
+    "cell_receipt_self_hashes_verified": 24,
+    "protected_data_exported": false,
+    "unsafe_field_scan": "PASS"
+  },
+  "disposition": {
+    "owner_confirmation_source": "active_codex_thread_owner_message_20260810",
+    "owner_destroy_confirmed": true,
+    "post_destroy_endpoint_observation": "connection_refused",
+    "post_destroy_endpoint_observed_at_utc": "2026-08-10T11:01:54Z",
+    "instance_reuse_allowed": false
+  },
+  "publication_safety": {
+    "owner_local_evaluation_started": false,
+    "promotion_started": false,
+    "a1_closeout_authorized": false,
+    "publication_claim_authorized": false
+  },
+  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "audit_sha256": "ca5dda1c88cc8a275c1e24c0b0690c80f4c4f92fc0e89900b99c987d0e00c04e"
+}

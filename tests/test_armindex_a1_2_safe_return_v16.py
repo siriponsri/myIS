@@ -90,6 +90,13 @@ def test_v16_watchdog_pins_attempt_known_hosts_and_requires_strict_checking() ->
     assert "platform.machine() == 'x86_64'" in source
     assert "ssh_runtime_probe_failed" in source and "provider_query_failed" in source
     assert "probeStage" in source and "watchdog_${probeStage}_failed" in source
+    assert "OwnerDashboardSsh" in source
+    assert "OwnerDashboardEvidenceSha256" in source
+    assert "OwnerManualDestroyReady" in source
+    assert "provider_authenticated = ($ProviderObservationMode -eq 'AuthenticatedCli')" in source
+    assert "gpu_uuid_set_sha256" in source and "runtime_identity_mismatch" in source
+    assert "& $VastCliPath show instance $InstanceId --raw" in source
+    assert "& $VastCliPath vastai show instance" not in source
 
 
 @pytest.mark.parametrize("member_name,member_type", [("../escape", tarfile.REGTYPE), ("rankings/link.jsonl", tarfile.SYMTYPE)])

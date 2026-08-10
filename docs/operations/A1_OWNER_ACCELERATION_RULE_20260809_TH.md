@@ -31,7 +31,9 @@ metrics, evaluator semantics, candidate rule หรือ promotion rule ขอ�
 
 ## Critical checks ที่ยังห้ามลด
 
-1. instance/provider/SSH identity ต้องตรงกับ `47256937` และ fingerprint ที่ pin ไว้
+1. instance/provider/SSH identity ต้องตรงกับ instance ใหม่ที่ fresh admission
+   bind ไว้และ fingerprint ที่ pin สำหรับ attempt นั้น; instance `47256937`
+   เป็น r13 ที่ถูกทำลายแล้วและห้าม reuse
 2. runtime ต้องเป็น linux/amd64, Python 3.11, Torch 2.6.0+cu118 และ 4x RTX 3090
 3. live all-fee quote และ whole-workload budget ต้องอยู่ใน active v16 limits:
    common screen `$27`, A1 `$32`, campaign `$150`; historical v15
@@ -64,9 +66,9 @@ per-query outcomes, credentials หรือ raw provider payload.
 
 ## Owner action
 
-Owner ดูแล Vast lifecycle และต้อง destroy `47256937` ที่ A1 closeout gate
-หลัง Codex ยืนยัน safe return และรายงานพร้อมแล้ว. ถ้า budget/TTL หรือ identity
-ไม่ปลอดภัย ให้หยุด, เก็บ aggregate-safe evidence และปิด instance.
+Owner ดูแล Vast lifecycle และต้อง destroy instance ที่ admission bind ไว้ที่ A1
+closeout gate หลัง Codex ยืนยัน safe return และรายงานพร้อมแล้ว. ถ้า budget/TTL
+หรือ identity ไม่ปลอดภัย ให้หยุด, เก็บ aggregate-safe evidence และปิด instance.
 
 ## External skill sources
 

@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1"
-read_model_sha256: "a8018fa0dba74c3a62bcb0b119f8183743f9987ab0f3c10cff3cef872d0f37dd"
-source_commit: "78b303f9a4c9fd562301c24a60b5a77431b8cce1"
+read_model_revision: "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5"
+read_model_sha256: "0ac6112f1480d45918de62ce2cd1c7e7f562fe9010ca26648fc37ce410b1328f"
+source_commit: "d5a1014bc053ece7389ebce05a137824b1560fb3"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1"
-last_material_update: "2026-08-09T18:37:03Z"
-next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
+generated_from_revision: "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5"
+last_material_update: "2026-08-09T22:18:37Z"
+next_authorized_action: "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-09T18:37:03Z"
-updated_at: "2026-08-09T18:37:03Z"
+created_at: "2026-08-09T22:18:37Z"
+updated_at: "2026-08-09T22:18:37Z"
 note_id: "A4_PRODUCTION_TRANSFER_AND_SELECTION-MASTER"
 note_type: "phase_report"
 phase_id: "A4_PRODUCTION_TRANSFER_AND_SELECTION"
@@ -40,7 +40,7 @@ Freeze FAST/BALANCED/DEEP profiles and expose Selection once.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked
+- `program_state`: a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
@@ -48,7 +48,7 @@ Freeze FAST/BALANCED/DEEP profiles and expose Selection once.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: 78b303f9a4c9fd562301c24a60b5a77431b8cce1
+- `git_commit`: d5a1014bc053ece7389ebce05a137824b1560fb3
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -120,7 +120,7 @@ Status: **blocked**. A4_PRODUCTION_TRANSFER_AND_SELECTION is blocked; ArmIndex m
 
 ## Next Action
 
-Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.
+PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

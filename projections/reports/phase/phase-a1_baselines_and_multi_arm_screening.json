@@ -253,6 +253,24 @@
       "validation_status": "validated"
     },
     {
+      "artifact_id": "a12-v16-r13-failed-closed-attempt-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364",
+      "evidence_class": "aggregate_safe_live_attempt_failure",
+      "explanation": "Records an incomplete 24/25 logical-cell attempt as failure provenance only. Partial outputs are not promotable; the official completed measured-run counter remains zero.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json",
+      "scientific_authority": false,
+      "title": "A1.2 v16 r13 failed-closed attempt audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a11-adapter-task-receipt",
       "artifact_type": "receipt",
       "child_artifact_hashes": {},
@@ -2377,13 +2395,13 @@
       "validation_status": "validated"
     }
   ],
-  "claim_boundary": "Local CPU-only preparation of a future A1.2 measured common-screen request; no provider contact, adoption, measured retrieval, optimization, Selection, Final, paid API work, model change, retrieval-quality result, or publication claim.",
+  "claim_boundary": "Aggregate-safe audit of one incomplete live attempt. It is not a retrieval-quality result, promotion decision, A1 completion, or publication claim.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; v12-r3 keeps the 25 compiled bindings, protected handoff/transfer receipts, clean pushed bundle, and 4 live-provider inputs pending. Measured ArmIndex, Selection, Final, and charged-resource counters remain zero.",
-    "status": "active"
+    "reason": "FAILED_CLOSED and retry-required: the incomplete 24/25 attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.",
+    "status": "FAILED_CLOSED_RETRY_REQUIRED"
   },
-  "evidence_class": "scientific_execution_adoption_request_preparation",
+  "evidence_class": "aggregate_safe_live_attempt_failure",
   "evidence_links": [
     {
       "artifact_id": "a12-rep-harness-claim-audit",
@@ -2454,6 +2472,11 @@
       "artifact_id": "a12-v16-exact-token-id-adapter-probe",
       "sha256": "b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d",
       "uri": "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json"
+    },
+    {
+      "artifact_id": "a12-v16-r13-failed-closed-attempt-audit",
+      "sha256": "65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364",
+      "uri": "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json"
     },
     {
       "artifact_id": "a11-adapter-task-receipt",
@@ -3048,6 +3071,49 @@
   ],
   "failure_recovery_references": [
     {
+      "completed_logical_cells": 24,
+      "counters_changed": false,
+      "failure_id": "a1.2-v16-r13-incomplete-24-of-25",
+      "failure_sha256": "65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364",
+      "failure_uri": "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json",
+      "partial_results_promotable": false,
+      "recovery_id": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+      "recovery_sha256": "65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364",
+      "recovery_uri": "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json",
+      "required_logical_cells": 25,
+      "status": "FAILED_CLOSED_RETRY_REQUIRED"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "v6-initial-wheelhouse-missing-pydantic",
+      "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "recovery_id": "preserved_immutable_additive_repair",
+      "recovery_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "status": "preserved_and_repaired_preflight_pending"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "v6-supplement-repair-mutated-pycache-tree",
+      "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "recovery_id": "preserved_immutable_additive_repair",
+      "recovery_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "status": "preserved_and_repaired_preflight_pending"
+    },
+    {
+      "counters_changed": false,
+      "failure_id": "v7-frozen-bundle-missing-validation-lineage",
+      "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "recovery_id": "preserved_immutable_additive_repair",
+      "recovery_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
+      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
+      "status": "preserved_and_repaired_preflight_pending"
+    },
+    {
       "counters_changed": false,
       "failure_id": "a1.2-unsynced-console-entrypoint-20260805",
       "failure_sha256": "dd20d4bf1c73eeeef23872e626444e9420791636403b4ac6b6f9f01942911d08",
@@ -3158,20 +3224,23 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-09T18:37:03Z",
-  "generated_from_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
-  "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+  "generated_at": "2026-08-09T22:18:37Z",
+  "generated_from_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
+  "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "scientific_execution_adoption_request_preparation",
+    "evidence_class": "aggregate_safe_live_attempt_failure",
     "final_split": "closed",
     "gpu": false,
     "measured_execution": false,
     "network_model_download": false,
+    "official_completed_measured_runs": 0,
     "paid_api": false,
     "protected_data_accessed": false,
     "provider_fallback": false,
+    "r13_attempt_status": "FAILED_CLOSED",
+    "r13_partial_results_promotable": false,
     "real_counters": {
       "candidate_count": 0,
       "final_accesses": 0,
@@ -3249,6 +3318,15 @@
       "sha256": "9bd32b7c22c82be6ccc1f2b0f5f7f9798213d57d1087230468474cc0cbe86482",
       "uri": "control/armindex/a1.2/shutdown-plan.v1.json"
     },
+    "a12_v16_r13_failed_closed_attempt": {
+      "audit_sha256": "ca5dda1c88cc8a275c1e24c0b0690c80f4c4f92fc0e89900b99c987d0e00c04e",
+      "completed_logical_cells": 24,
+      "partial_results_promotable": false,
+      "required_logical_cells": 25,
+      "sha256": "65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364",
+      "status": "FAILED_CLOSED",
+      "uri": "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json"
+    },
     "a12_vast_v2_budget": {
       "sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
       "uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json"
@@ -3286,7 +3364,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+    "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3301,9 +3379,9 @@
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The offline evidence preserves the v2 four-worker fixture and v3 correction, binds v5 to the direct official image manifest sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20, records v6 direct-container corrections, adds v7 same-instance repair controls, and uses v8 to close frozen validator lineage. The v9 result validates four synthetic adapter receipts, Qwen adapter-level 32768-token capacity, checkpoint/resume, safe export, and guest teardown. The v10 closeout binds the later Owner provider-UI attestation to a sanitized connection-refused observation and explicitly records that no independent Vast API or CLI record was obtained. The v11 request adds a protected scientific transfer, executable P00-P04 specifications, 150/100 REP-DEV/HARNESS-DEV separation, all-fee budget admission, and 25 mandatory aggregate receipts. V12-r3 binds the unchanged request to local-only verification, while v13 makes OUT Recall@100 the primary candidate-exposure outcome and keeps instance disposition pending live-provider evidence. It does not establish retrieval quality, execution adoption, or scientific authorization.",
+  "interpretation": "The partial cell receipts are failure provenance only. They do not constitute a common-screen result, deterministic promotion input, A1 closeout, or evidence for A2, Selection, Final, or publication.",
   "language": "en",
-  "last_material_update": "2026-08-09T18:37:03Z",
+  "last_material_update": "2026-08-09T22:18:37Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3394,16 +3472,16 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "19adbe4df07e46fea1ebfa8eb517e72d9d0f3e9b9d3591dc36e2c47c926b3497",
+  "report_sha256": "f090281f36385b372bfc6f0cf547ce56e57533dc1e21c691bdc1309360eccff0",
   "report_type": "phase",
   "result": {
-    "decision": "active",
-    "output": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, scientific execution request v11 is prepared for Owner review, and local adoption-input controls v12-r3 are validated.",
-    "result": "A1 request preparation is current through v11; the Owner destroyed the prior Vast instance and provider absence was observed. The v11 request freezes 25 logical program-arm results over 150 REP-DEV queries, but is not adopted; v12-r3 keeps the 25 compiled bindings, protected handoff/transfer receipts, clean pushed bundle, and 4 live-provider inputs pending. Measured ArmIndex, Selection, Final, and charged-resource counters remain zero."
+    "decision": "FAILED_CLOSED_RETRY_REQUIRED",
+    "output": "Aggregate-safe failed-attempt provenance records 24/25 completed logical cells before a hard stop.",
+    "result": "FAILED_CLOSED and retry-required: the incomplete 24/25 attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -3411,13 +3489,13 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
+    "program_state": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
     "task": null
   },
-  "status": "active",
+  "status": "blocked",
   "supported_claims": [
     {
-      "claim": "The phase contains a completed A1.1 five-arm synthetic adapter fixture, preserved A1.2 v1-v10 lineage for 5 arms, the earlier CPU preflight with status blocked_owner_input and 10 blocker group(s), and v9 execution-lifecycle repair preparation using pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime on linux/amd64. The additive v9 live synthetic result is PASS for 4 dense arms, provider closeout v10 is PASS, scientific execution request v11 is prepared for Owner review, and local adoption-input controls v12-r3 are validated.",
+      "claim": "Aggregate-safe failed-attempt provenance records 24/25 completed logical cells before a hard stop.",
       "evidence": [
         "a12-rep-harness-claim-audit",
         "a12-rep-harness-split-eda-png",
@@ -3433,6 +3511,7 @@
         "a12-protected-compiler-audit-v15",
         "a12-whole-workload-budget-model-v15",
         "a12-v16-exact-token-id-adapter-probe",
+        "a12-v16-r13-failed-closed-attempt-audit",
         "a11-adapter-task-receipt",
         "a11-adapter-fixture-manifest",
         "a11-adapter-fixture-receipt",
@@ -3558,7 +3637,8 @@
   "unsupported_claims": [
     "Measured P2 improvement or candidate superiority before a real measured run.",
     "Final-split generalization or publication release before D2 and D3.",
-    "Causal or legal conclusions from retrieval aggregates."
+    "Causal or legal conclusions from retrieval aggregates.",
+    "The incomplete 24/25 r13 attempt as a measured A1 result, promotion input, or completion claim."
   ],
   "validation_status": "validated",
   "work_summary": "A1.1 synthetic adapter evidence and the A1.2 v1-v10 preflight/closeout lineage are validated. The additive v11 request preserves that history and freezes a separate protected scientific transfer, executable P00-P04 compiler source/spec hashes, 150 REP-DEV queries with 100 reserved for HARNESS-DEV, 25 required aggregate result receipts, all-fee budget admission, and a fresh-provider plan. The prior instance is destroyed. Provider contact, adoption, measured retrieval, Selection, Final, and paid API work remain closed."

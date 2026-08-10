@@ -15,18 +15,18 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (the Owner-approved v16
-  same-instance long-run is in bounded pre-measurement preparation on instance
-  `47256937`; additive v16 executor/lifecycle/launcher recovery, protected
-  25/25 bindings, budget extension, and 40-hour watchdog are validated; fresh
-  provider admission and execution adoption receipts are the remaining launch
-  transition. The r8 raw-overflow text-round-trip blocker has an additive
-  exact-token-ID transport repair verified only with synthetic adapter probes;
-  a new clean bundle is required and measured work has not started)
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (v16 attempt
+  `a12-v16-20260810-r13` stopped fail-closed at `24/25` logical cells after the
+  watchdog reported `ssh_runtime_probe_failed`. Partial evaluation and promotion
+  are forbidden. Owner-confirmed destruction of instance `47256937` and a
+  post-destroy `connection_refused` observation close the provider disposition;
+  fresh A1 admission and a complete retry are required before A2.)
 - Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: owner-approved live-provider preparation over preserved
-  v1-v15 lineage plus additive v16 engineering; scientific authority `false`
-- ArmIndex measured runs: `0`
+- Current evidence class: aggregate-safe incomplete live-attempt failure over
+  preserved v1-v15 lineage plus additive v16 engineering; scientific authority
+  `false`
+- Admissible completed ArmIndex measured runs: `0`
+- Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
 - Final exposures: `0`
 - Migration spend: `$0`
@@ -70,7 +70,7 @@ There are exactly seven active phases. Progress is:
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | current; A1.1 complete; A1.2 local adoption inputs validated; long-running measured screen pending |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | current; A1.1 complete; A1.2 r13 failed closed at 24/25; fresh admissible retry required |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
@@ -113,7 +113,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | v16 long-run preparation active on unchanged instance; measured screen remains pending provider admission and execution adoption |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | r13 failed closed at 24/25; provider disposition confirmed; A2 blocked pending fresh admission and complete retry |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -341,16 +341,13 @@ provider fallback, Selection, Final, and A2 remain forbidden.
 ## Next authorized action
 
 ```text
-/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.
+/goal อ่าน docs/goal/A1_2_rerun_goal.md แล้วทำงานตามขั้นตอนทั้งหมด
 ```
 
-The local runtime-minimal stage, v9 synthetic live preflight, safe collection,
-guest teardown, and v10 Owner-confirmed provider closeout are complete. The
-destroyed instance cannot be reused. P02-FIRST-CLAIM coverage, dense-overflow
-compatibility, protected compiler v15, and final local adoption-input closure are
-complete with 25/25 bindings and zero silent truncation. The long-running goal
-does not skip admission: a future provider instance still requires a fresh
-identity, all-fee quote and live budget admission, provider/adoption receipts,
-artifact integrity, and an actual provider destroy capability check. Once those
-checks pass inside the same workflow, it continues through A1 closeout without
-stopping for documentation-only handoffs.
+The r13 audit is
+`outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json`. Its 25-file
+allowlisted evidence set hash is verified, but the 24/25 cells have no scientific
+authority and cannot be combined into a promotion result. Instance `47256937`
+is destroyed and cannot be reused. The next session follows
+`docs/goal/A1_2_rerun_goal.md` for the complete A1 retry. `docs/goal/A2_goal.md`
+is A2-only and remains blocked until A1 closeout evidence exists.

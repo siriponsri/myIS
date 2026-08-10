@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-09T18:37:03Z",
-  "generated_from_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
-  "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+  "generated_at": "2026-08-09T22:18:37Z",
+  "generated_from_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
+  "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+    "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
@@ -191,7 +191,7 @@
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-09T18:37:03Z",
+  "last_material_update": "2026-08-09T22:18:37Z",
   "metric_references": [
     {
       "arm": "R0-W",
@@ -278,11 +278,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "28335ea582585a9a36d6932740f4c1828bbc2f640333a0fffe5b5ce8537d025e",
+  "report_sha256": "1d8b670f992ab57ef34c2a4e79f9f0ed78a8f72fc4b74257dca04d8ccb3fc833",
   "report_type": "task",
   "result": {
     "decision": "completed",

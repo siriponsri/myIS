@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-09T18:37:03Z",
-  "generated_from_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
-  "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+  "generated_at": "2026-08-09T22:18:37Z",
+  "generated_from_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
+  "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+    "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
     "source_of_truth": {
       "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-09T18:37:03Z",
+  "last_material_update": "2026-08-09T22:18:37Z",
   "metric_references": [],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "44108e2907e840758a2b43e521477e56468d61f0290661d395de8a81ee089c54",
+  "report_sha256": "7fb3354fc7a26377a9d8b07086cf6da838d98c00251143e0477eddff02261c98",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

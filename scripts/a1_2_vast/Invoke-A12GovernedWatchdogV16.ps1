@@ -11,7 +11,11 @@ param(
     [Parameter(Mandatory = $true)][string]$ExpectedInstanceIdentitySha256,
     [Parameter(Mandatory = $true)][string]$ExpectedGpuUuidSetSha256,
     [Parameter(Mandatory = $true)][decimal]$MaximumTotalHourlyUsd,
-    [Parameter(Mandatory = $true)][string]$VastCliPath,
+    [ValidateSet('AuthenticatedCli', 'OwnerDashboardSsh')][string]$ProviderObservationMode = 'AuthenticatedCli',
+    [string]$VastCliPath = '',
+    [decimal]$OwnerDashboardTotalHourlyUsd = -1,
+    [string]$OwnerDashboardEvidenceSha256 = '',
+    [switch]$OwnerManualDestroyReady,
     [int]$IntervalSeconds = 30
 )
 
@@ -21,8 +25,24 @@ if ($IntervalSeconds -lt 10 -or $IntervalSeconds -gt 300) { throw 'IntervalSecon
 $ssh = 'C:\Windows\System32\OpenSSH\ssh.exe'
 $sshKeyscan = 'C:\Windows\System32\OpenSSH\ssh-keyscan.exe'
 $sshKeygen = 'C:\Windows\System32\OpenSSH\ssh-keygen.exe'
-foreach ($path in @($ssh, $sshKeyscan, $sshKeygen, $SshKeyPath, $OwnerConnectionFile, $VastCliPath)) {
+foreach ($path in @($ssh, $sshKeyscan, $sshKeygen, $SshKeyPath, $OwnerConnectionFile)) {
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Required watchdog input is unavailable: $path" }
+}
+if ($ProviderObservationMode -eq 'AuthenticatedCli') {
+    if (-not $VastCliPath -or -not (Test-Path -LiteralPath $VastCliPath -PathType Leaf)) {
+        throw 'AuthenticatedCli mode requires a valid VastCliPath.'
+    }
+}
+else {
+    if ($OwnerDashboardEvidenceSha256 -notmatch '^[0-9a-f]{64}$') {
+        throw 'OwnerDashboardSsh mode requires an aggregate-safe dashboard evidence SHA-256.'
+    }
+    if ($OwnerDashboardTotalHourlyUsd -lt 0) {
+        throw 'OwnerDashboardSsh mode requires the Owner-observed total hourly price.'
+    }
+    if (-not $OwnerManualDestroyReady.IsPresent) {
+        throw 'OwnerDashboardSsh mode requires Owner manual dashboard destroy readiness.'
+    }
 }
 if ($ExpectedInstanceIdentitySha256 -notmatch '^[0-9a-f]{64}$' -or $ExpectedGpuUuidSetSha256 -notmatch '^[0-9a-f]{64}$') {
     throw 'Expected identity commitments must be lowercase SHA-256 values.'
@@ -102,7 +122,14 @@ function Invoke-PinnedSsh([string]$Command) {
     if ($LASTEXITCODE -ne 0) { throw 'ssh_runtime_probe_failed' }
 }
 
-function Write-Heartbeat([string]$Status, [string]$Reason, [bool]$ProviderOk, [decimal]$Rate) {
+function Write-Heartbeat(
+    [string]$Status,
+    [string]$Reason,
+    [bool]$ProviderOk,
+    [decimal]$Rate,
+    [bool]$RuntimeOk,
+    [bool]$GpuOk
+) {
     $now = [DateTime]::UtcNow
     $process = Get-Process -Id $PID
     $body = [ordered]@{
@@ -110,7 +137,12 @@ function Write-Heartbeat([string]$Status, [string]$Reason, [bool]$ProviderOk, [d
         generated_at_utc = $now.ToString('o'); process_id = $PID
         process_created_at_utc = $process.StartTime.ToUniversalTime().ToString('o')
         instance_id = $InstanceId; instance_identity_sha256 = $ExpectedInstanceIdentitySha256
+        provider_observation_mode = $ProviderObservationMode
+        provider_authenticated = ($ProviderObservationMode -eq 'AuthenticatedCli')
         provider_status_match = $ProviderOk; quote_total_hourly_usd = $Rate
+        owner_dashboard_evidence_sha256 = if ($ProviderObservationMode -eq 'OwnerDashboardSsh') { $OwnerDashboardEvidenceSha256 } else { $null }
+        owner_manual_destroy_ready = ($ProviderObservationMode -eq 'OwnerDashboardSsh' -and $OwnerManualDestroyReady.IsPresent)
+        runtime_identity_match = $RuntimeOk; gpu_identity_4_of_4 = $GpuOk
         ttl_deadline_utc = $TtlDeadlineUtc.ToUniversalTime().ToString('o')
         ttl_remaining_seconds = [math]::Max(0, [math]::Floor(($TtlDeadlineUtc.ToUniversalTime() - $now).TotalSeconds))
         hard_stop_reason = $Reason; provider_destroy_invoked = $false; access_material_recorded = $false
@@ -125,7 +157,8 @@ function Write-Heartbeat([string]$Status, [string]$Reason, [bool]$ProviderOk, [d
 
 try {
     while ($true) {
-        $reason = $null; $providerOk = $false; $rate = [decimal]0; $probeStage = 'host_key'
+        $reason = $null; $providerOk = $false; $runtimeOk = $false; $gpuOk = $false
+        $rate = [decimal]0; $probeStage = 'host_key'
         try {
             if (Test-Path -LiteralPath $stopPath) { $reason = 'owner_local_stop_requested' }
             elseif ([DateTime]::UtcNow -ge $TtlDeadlineUtc.ToUniversalTime()) { $reason = 'ttl_expired' }
@@ -134,29 +167,68 @@ try {
                 $probeStage = 'ssh_runtime'
                 $runtimeProbe = @'
 PYTHONDONTWRITEBYTECODE=1 python - <<'PY'
-import platform, torch
+import hashlib, json, platform, socket, subprocess, torch
 assert platform.machine() == 'x86_64'
 assert torch.cuda.is_available()
 assert torch.cuda.device_count() == 4
-print('runtime_probe_ok')
+rows = subprocess.check_output(
+    ['nvidia-smi', '--query-gpu=uuid,name,memory.total', '--format=csv,noheader,nounits'],
+    text=True,
+).splitlines()
+parsed = []
+for row in rows:
+    uuid, name, memory = [part.strip() for part in row.split(',', 2)]
+    parsed.append({'uuid': uuid, 'name': name, 'memory_mib': int(memory)})
+uuid_hash = hashlib.sha256('\n'.join(sorted(x['uuid'] for x in parsed)).encode()).hexdigest()
+print(json.dumps({
+    'hostname': socket.gethostname(),
+    'python': platform.python_version(),
+    'torch': torch.__version__,
+    'cuda': torch.version.cuda,
+    'gpu_count': len(parsed),
+    'gpu_names_match': all(x['name'] == 'NVIDIA GeForce RTX 3090' for x in parsed),
+    'gpu_memory_min_mib': min(x['memory_mib'] for x in parsed),
+    'gpu_uuid_set_sha256': uuid_hash,
+}))
 PY
 '@
-                $runtime = Invoke-PinnedSsh $runtimeProbe
-                $probeStage = 'provider'
-                $raw = & $VastCliPath vastai show instance $InstanceId --raw 2>$null
-                if ($LASTEXITCODE -ne 0 -or -not $raw) { throw 'provider_query_failed' }
-                $rawJson = $raw -join "`n"
-                $provider = ($rawJson | ConvertFrom-Json)
-                if ($provider -is [array]) { $provider = $provider[0] }
-                $providerOk = (
-                    [int]$provider.id -eq $InstanceId -and
-                    (Get-ProviderStatusText $provider.actual_status) -eq 'running' -and
-                    (Get-ProviderStatusText $provider.intended_status) -eq 'running' -and
-                    (Get-ProviderStatusText $provider.verification) -eq 'verified'
+                $runtimeRaw = Invoke-PinnedSsh $runtimeProbe
+                $runtime = (($runtimeRaw -join "`n") | ConvertFrom-Json)
+                $runtimeOk = (
+                    $runtime.hostname -eq $ExpectedHostname -and
+                    $runtime.python -eq '3.11.11' -and
+                    $runtime.torch -eq '2.6.0+cu118' -and
+                    $runtime.cuda -eq '11.8'
                 )
-                $rate = Get-ProviderDecimal $rawJson 'dph_total'
-                if (-not $providerOk) { $reason = 'provider_identity_or_status_mismatch' }
-                elseif ($rate -gt ($MaximumTotalHourlyUsd + $rateComparisonTolerance)) { $reason = 'provider_quote_increased' }
+                $gpuOk = (
+                    $runtime.gpu_count -eq 4 -and
+                    $runtime.gpu_names_match -eq $true -and
+                    [int]$runtime.gpu_memory_min_mib -ge 24000 -and
+                    $runtime.gpu_uuid_set_sha256 -eq $ExpectedGpuUuidSetSha256
+                )
+                if (-not $runtimeOk) { $reason = 'runtime_identity_mismatch' }
+                elseif (-not $gpuOk) { $reason = 'gpu_identity_mismatch' }
+                $probeStage = 'provider'
+                if (-not $reason -and $ProviderObservationMode -eq 'AuthenticatedCli') {
+                    $raw = & $VastCliPath show instance $InstanceId --raw 2>$null
+                    if ($LASTEXITCODE -ne 0 -or -not $raw) { throw 'provider_query_failed' }
+                    $rawJson = $raw -join "`n"
+                    $provider = ($rawJson | ConvertFrom-Json)
+                    if ($provider -is [array]) { $provider = $provider[0] }
+                    $providerOk = (
+                        [int]$provider.id -eq $InstanceId -and
+                        (Get-ProviderStatusText $provider.actual_status) -eq 'running' -and
+                        (Get-ProviderStatusText $provider.intended_status) -eq 'running' -and
+                        (Get-ProviderStatusText $provider.verification) -eq 'verified'
+                    )
+                    $rate = Get-ProviderDecimal $rawJson 'dph_total'
+                }
+                elseif (-not $reason) {
+                    $providerOk = $OwnerManualDestroyReady.IsPresent
+                    $rate = $OwnerDashboardTotalHourlyUsd
+                }
+                if (-not $reason -and -not $providerOk) { $reason = 'provider_identity_or_status_mismatch' }
+                elseif (-not $reason -and $rate -gt ($MaximumTotalHourlyUsd + $rateComparisonTolerance)) { $reason = 'provider_quote_increased' }
             }
         }
         catch {
@@ -171,8 +243,8 @@ PY
                 if (-not $reason) { $reason = "watchdog_${probeStage}_failed" }
             }
         }
-        if ($reason) { Write-Heartbeat 'HARD_STOP' $reason $providerOk $rate; break }
-        Write-Heartbeat 'PASS' $null $providerOk $rate
+        if ($reason) { Write-Heartbeat 'HARD_STOP' $reason $providerOk $rate $runtimeOk $gpuOk; break }
+        Write-Heartbeat 'PASS' $null $providerOk $rate $runtimeOk $gpuOk
         Start-Sleep -Seconds $IntervalSeconds
     }
 }

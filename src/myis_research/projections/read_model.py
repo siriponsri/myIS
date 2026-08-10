@@ -440,6 +440,9 @@ A12_LOCAL_ADOPTION_INPUTS_RECEIPT_V15_PATH = Path(
 A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH = Path(
     "outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json"
 )
+A12_V16_R13_FAILURE_AUDIT_PATH = Path(
+    "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path(
     "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl"
@@ -508,6 +511,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a1_2_p02_limit_audit = _a12_p02_limit_audit_projection(root)
     a1_2_dense_overflow = _a12_dense_overflow_projection(root)
     a1_2_exact_token_id_probe = _a12_exact_token_id_adapter_probe_projection(root)
+    a1_2_r13_failure = _a12_r13_failure_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -519,6 +523,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_p02_limit_audit": a1_2_p02_limit_audit,
         "a1_2_dense_overflow": a1_2_dense_overflow,
         "a1_2_exact_token_id_adapter_probe": a1_2_exact_token_id_probe,
+        "a1_2_r13_failure": a1_2_r13_failure,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -527,7 +532,37 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         for task in phase.get("tasks", [])
         if isinstance(task, Mapping)
     )
-    if (
+    if a1_2_r13_failure.get("validated") is True:
+        armindex["status"] = (
+            "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed"
+        )
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = str(a1_2_r13_failure["next_authorized_action"])
+        armindex["phases"] = [
+            {
+                **phase,
+                "status": (
+                    "a1_2_v16_r13_failed_closed_retry_required"
+                    if phase.get("phase_id") == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+                    else phase.get("status")
+                ),
+                "tasks": [
+                    {
+                        **task,
+                        "status": (
+                            "a1_2_v16_r13_failed_closed_retry_required"
+                            if task.get("task_id") == "A1.2"
+                            else task.get("status")
+                        ),
+                    }
+                    for task in phase.get("tasks", [])
+                    if isinstance(task, Mapping)
+                ],
+            }
+            for phase in armindex.get("phases", [])
+            if isinstance(phase, Mapping)
+        ]
+    elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
         == "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked"
@@ -789,11 +824,14 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             armindex["status"] = "a0_closeout_invalid_fail_closed"
             armindex["current_phase"] = "A0_MIGRATION_FOUNDATION"
         armindex["next_command"] = A0_9_NEXT_AUTHORIZED_ACTION
-    if a1_2_dense_overflow.get("validated") is True:
+    if a1_2_r13_failure.get("validated") is True:
+        armindex["local_adoption_input_status"] = (
+            "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY"
+        )
+        armindex["next_command"] = a1_2_r13_failure["next_authorized_action"]
+    elif a1_2_dense_overflow.get("validated") is True:
         armindex["local_adoption_input_status"] = a1_2_dense_overflow["status"]
-        armindex["next_command"] = a1_2_dense_overflow[
-            "next_authorized_action"
-        ]
+        armindex["next_command"] = a1_2_dense_overflow["next_authorized_action"]
     elif a1_2_p02_limit_audit.get("validated") is True:
         armindex["local_adoption_input_status"] = "BLOCKED_CONTRACT_DEFECT"
         armindex["next_command"] = a1_2_p02_limit_audit["next_authorized_action"]
@@ -2544,8 +2582,7 @@ def _a12_exact_token_id_adapter_probe_projection(root: Path) -> dict[str, Any]:
             != "myis.armindex-a1.2-v16-exact-token-id-adapter-probe.v1"
             or audit.get("status") != "PASS_PRE_MEASUREMENT"
             or audit.get("scientific_authority") is not False
-            or audit.get("scope")
-            != "A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2"
+            or audit.get("scope") != "A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2"
             or audit.get("audit_sha256") != canonical_sha256(unsigned)
         ):
             raise ValueError("exact-token-ID probe identity or self-hash is invalid")
@@ -2599,6 +2636,100 @@ def _a12_exact_token_id_adapter_probe_projection(root: Path) -> dict[str, Any]:
         **dict(audit),
         "validated": True,
         "audit_uri": A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH.as_posix(),
+        "audit_file_sha256": _file_sha256(audit_path),
+    }
+
+
+def _a12_r13_failure_projection(root: Path) -> dict[str, Any]:
+    """Project the aggregate-safe failed r13 live attempt without scientific authority."""
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "evidence_class": "aggregate_safe_live_attempt_failure",
+        "scientific_authority": False,
+        "claim_boundary": (
+            "No complete A1.2 result, evaluation, promotion, A1 closeout, or "
+            "publication claim is represented."
+        ),
+        "audit_uri": A12_V16_R13_FAILURE_AUDIT_PATH.as_posix(),
+        "audit_file_sha256": None,
+        "audit_sha256": None,
+        "next_authorized_action": (
+            "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+        ),
+    }
+    audit_path = root / A12_V16_R13_FAILURE_AUDIT_PATH
+    if not audit_path.is_file():
+        return missing
+    try:
+        audit = json.loads(audit_path.read_text(encoding="ascii"))
+        if not isinstance(audit, Mapping):
+            raise TypeError("r13 failure audit must be an object")
+        assert_aggregate_only(audit)
+        unsigned = {key: value for key, value in audit.items() if key != "audit_sha256"}
+        if (
+            audit.get("schema_version") != "myis.armindex-a1.2-attempt-audit.v1"
+            or audit.get("audit_id") != "a1.2-v16-r13-failure-audit-20260810"
+            or audit.get("phase_id") != "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+            or audit.get("task_id") != "A1.2"
+            or audit.get("status") != "FAILED_CLOSED"
+            or audit.get("evidence_class") != "aggregate_safe_live_attempt_failure"
+            or audit.get("scientific_authority") is not False
+            or audit.get("audit_sha256") != canonical_sha256(unsigned)
+            or audit.get("next_authorized_action")
+            != "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+        ):
+            raise ValueError("r13 failure audit identity or self-hash is invalid")
+        attempt = audit.get("attempt")
+        failure = audit.get("failure")
+        integrity = audit.get("integrity")
+        disposition = audit.get("disposition")
+        publication = audit.get("publication_safety")
+        if (
+            not isinstance(attempt, Mapping)
+            or attempt.get("attempt_id") != "a12-v16-20260810-r13"
+            or not isinstance(attempt.get("instance_id"), int)
+            or attempt["instance_id"] <= 0
+            or attempt.get("required_logical_cells") != 25
+            or attempt.get("completed_logical_cells") != 24
+            or attempt.get("missing_logical_cell") != "ARM-05--P04-SECTION-MULTIVIEW"
+            or attempt.get("partial_results_promotable") is not False
+            or attempt.get("coverage_by_arm")
+            != {"ARM-01": 5, "ARM-02": 5, "ARM-03": 5, "ARM-04": 5, "ARM-05": 4}
+            or not isinstance(failure, Mapping)
+            or failure.get("watchdog_status") != "HARD_STOP"
+            or failure.get("reason") != "ssh_runtime_probe_failed"
+            or failure.get("workers_remaining") != 0
+            or failure.get("provider_destroy_invoked_by_worker") is not False
+            or not isinstance(integrity, Mapping)
+            or integrity.get("allowlisted_member_count") != 25
+            or integrity.get("cell_receipt_self_hashes_verified") != 24
+            or integrity.get("member_hash_recomputed") is not True
+            or integrity.get("protected_data_exported") is not False
+            or integrity.get("unsafe_field_scan") != "PASS"
+            or not isinstance(disposition, Mapping)
+            or disposition.get("owner_destroy_confirmed") is not True
+            or disposition.get("post_destroy_endpoint_observation")
+            != "connection_refused"
+            or disposition.get("instance_reuse_allowed") is not False
+            or not isinstance(publication, Mapping)
+            or any(value is not False for value in publication.values())
+        ):
+            raise ValueError("r13 failure audit boundary or coverage is invalid")
+        for field in ("manifest_file_sha256", "allowlisted_members_sha256"):
+            value = integrity.get(field)
+            if (
+                not isinstance(value, str)
+                or re.fullmatch(r"[a-f0-9]{64}", value) is None
+            ):
+                raise ValueError("r13 failure audit integrity hash is invalid")
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {**missing, "status": "invalid"}
+    return {
+        **dict(audit),
+        "validated": True,
+        "audit_uri": A12_V16_R13_FAILURE_AUDIT_PATH.as_posix(),
         "audit_file_sha256": _file_sha256(audit_path),
     }
 

@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1"
-read_model_sha256: "a8018fa0dba74c3a62bcb0b119f8183743f9987ab0f3c10cff3cef872d0f37dd"
-source_commit: "78b303f9a4c9fd562301c24a60b5a77431b8cce1"
+read_model_revision: "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5"
+read_model_sha256: "0ac6112f1480d45918de62ce2cd1c7e7f562fe9010ca26648fc37ce410b1328f"
+source_commit: "d5a1014bc053ece7389ebce05a137824b1560fb3"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: ["fc496db86bb03e72b64a7ccdc911d970854e2ab0e1d1831f7466ee23d99206d9","659d4631cc8ae850dc4c57e0cc726a001cc9296b1082cf4cf4f66cafa63b09ed","0365e61e7117cab0112568ffd26815cbebc7829a6478084d289d9b80145480c3"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_input_audit"
 scientific_authority: false
 claim_boundary: "Aggregate-safe local preparation only; no retrieval outcome, scientific result, publication claim, provider identity, or execution authorization."
-generated_from_revision: "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1"
-last_material_update: "2026-08-09T18:37:03Z"
+generated_from_revision: "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5"
+last_material_update: "2026-08-09T22:18:37Z"
 next_authorized_action: "Owner review additive P02-FIRST-CLAIM repair; protected compiler and measured retrieval remain blocked."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-09T18:37:03Z"
-updated_at: "2026-08-09T18:37:03Z"
+created_at: "2026-08-09T22:18:37Z"
+updated_at: "2026-08-09T22:18:37Z"
 note_id: "A1-2-REP-HARNESS-SPLIT-AUDIT"
 note_type: "history_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"

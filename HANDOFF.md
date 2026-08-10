@@ -8,11 +8,12 @@ evidence.
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2`
-- Status: `a1_2_v16_same_instance_pre_measurement_preparation`
-- Local adoption-input status: `LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_V16_LIVE_ADMISSION`
-- Evidence class: owner-approved live-provider preparation over preserved v1-v15
-  lineage plus additive v16 engineering; scientific authority `false`
-- ArmIndex measured runs: `0`
+- Status: `a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed`
+- Local adoption-input status: `REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY`
+- Evidence class: aggregate-safe incomplete live-attempt failure over preserved
+  v1-v15 lineage plus additive v16 engineering; scientific authority `false`
+- Admissible completed ArmIndex measured runs: `0`
+- Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
 - Final exposures: `0`
 - Migration cost: `$0` (no measured charge recorded)
@@ -230,16 +231,20 @@ handoff/transfer/compiler receipts. The clean pushed bundle, pre-adoption anchor
 aggregate budget model, watchdog/provider-destroy dry-run, and final local
 receipt now pass. The Owner-approved v16 policy extends the additive limits to
 `$27` common screen, `$32` A1, `$150` campaign, and 40 hours from provision
-without changing v11-v15 scientific semantics. Instance `47256937` remains
-the same live provider identity; fresh all-fee budget admission, provider
-admission, and execution adoption are being materialized before measured work.
+without changing v11-v15 scientific semantics. Attempt
+`a12-v16-20260810-r13` later stopped fail-closed at `24/25` cells when the
+watchdog reported `ssh_runtime_probe_failed`; ARM-05 ended at `4/5` and partial
+evaluation or promotion is forbidden.
 Attempt `a12-v16-r8` stopped before any result receipt when a real tokenizer
 could not round-trip one overflow token window through decoded text. The
 additive exact-token-ID transport repair now passes synthetic adapter checks on
 all four dense arms without retrieval; its aggregate-safe audit is
 `outputs/audits/rigor/a1.2-v16-exact-token-id-adapter-probe-20260809.json`.
-It still requires a clean bundle and fresh admission/adoption before measured
-work can resume.
+Owner confirmed destruction of instance `47256937`; a fresh SSH check observed
+`connection_refused`. The aggregate-safe failure audit is
+`outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json`. A fresh
+Owner-provisioned or approved instance, admission/adoption, and complete A1.2
+retry are required before A2.
 
 ## Active authorized action
 
@@ -247,14 +252,18 @@ Run one governed workflow through A1 closeout without weakening the publication
 design or opening A2. The exact next action is:
 
 ```text
-/goal Execute one governed long-running A1 closeout from the validated v15 local adoption inputs. In one continuous workflow, create or validate the tracked runbook and append-only execution ledger, complete fresh Vast identity, all-fee quote, whole-workload budget admission, provider admission, and execution-adoption receipts, then run the frozen A1.2 five-arm common screen end to end. Require all 25 program-arm results, collect and validate aggregate-safe receipts, deterministically promote at most three arms, close A1, safely collect artifacts, and destroy the Vast instance. Keep the same instance throughout A1 only while its identity, hashes, watchdog, protected scan, TTL, and all hard stops remain valid; otherwise checkpoint, collect safely, and destroy. Stop before A2, HARNESS-DEV, Selection, and Final. Do not change the frozen v11-v15 scientific semantics, model weights, evaluator, split, metrics, or candidate rules, and do not use paid APIs, provider fallback, or runtime model downloads.
+/goal อ่าน docs/goal/A1_2_rerun_goal.md แล้วทำงานตามขั้นตอนทั้งหมด
 ```
 
-The synthetic preflight, safe collection, guest teardown, Owner-confirmed
-provider closeout, v11 request preparation, frozen split, P02-FIRST-CLAIM
-coverage repair, dense-overflow compatibility audit, additive protected
-compiler v15, and final local adoption-input closure are complete. The current
-workflow preserves instance `47256937` and continues through A1 only after
-provider and execution admission pass; it stops before A2, HARNESS-DEV,
-Selection, and Final, and does not use provider fallback, paid API work,
-runtime model downloads, or weight changes.
+The valid v11-v16 engineering lineage remains reusable, but r13 itself is an
+incomplete failure attempt. Follow `docs/goal/A1_2_rerun_goal.md` for a fresh
+A1 admission/retry and require 25/25 before evaluation. `docs/goal/A2_goal.md`
+contains only the later A2 AutoIndex workflow and remains blocked until A1
+closeout. Retain the same protected-data and frozen-science boundaries.
+
+Provider observation prefers authenticated Vast CLI. If TFA/API is unavailable,
+the Owner-authorized `OwnerDashboardSsh` fallback accepts only aggregate-safe
+dashboard identity/all-fee/TTL evidence plus pinned SSH runtime/GPU checks and
+`OWNER_MANUAL_DASHBOARD_DESTROY_READY`; it records
+`provider_authenticated=false` and requires Owner manual dashboard destruction
+and post-closeout SSH unreachability.

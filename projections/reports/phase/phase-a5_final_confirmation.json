@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-09T18:37:03Z",
-  "generated_from_revision": "7e33f75b78fc3e6b61e555ed2a7a7a0a1500aebf7062f39daa5fbab1851920a1",
-  "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+  "generated_at": "2026-08-09T22:18:37Z",
+  "generated_from_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
+  "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "78b303f9a4c9fd562301c24a60b5a77431b8cce1",
+    "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-09T18:37:03Z",
+  "last_material_update": "2026-08-09T22:18:37Z",
   "metric_references": [],
-  "next_authorized_action": "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending.",
+  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Run one frozen confirmation only after D2_OPEN_FINAL.",
   "phase_id": "A5_FINAL_CONFIRMATION",
   "report_id": "phase-a5_final_confirmation",
-  "report_sha256": "6a9e1f57ca5a74c1df675ca57d1fc45c36ae69d3d1b874c4c989ef24fd3b3c01",
+  "report_sha256": "ef88a228d3c9cce9c63f53cbde99c74b423e25e6b7eaea405348f3131bab877a",
   "report_type": "phase",
   "result": {
     "decision": "blocked",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked",
+    "program_state": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
     "task": null
   },
   "status": "blocked",

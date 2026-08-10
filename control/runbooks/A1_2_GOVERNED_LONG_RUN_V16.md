@@ -1,7 +1,8 @@
 # A1.2 Governed Long Run v16
 
-This runbook is the tracked execution plan for the Owner-approved same-instance
-A1.2 closeout on Vast instance `47256937`. It is additive engineering
+This runbook is the tracked execution plan for one Owner-approved A1.2 attempt
+on a freshly provisioned instance. The instance identifier is supplied at
+admission time and must not be hardcoded in repository documentation. It is additive engineering
 integration over the frozen v11-v15 scientific request; it does not change
 models, programs, evaluator, split, metrics, promotion rule, or protected-data
 boundaries.
@@ -12,7 +13,7 @@ boundaries.
 - Task: `A1.2`
 - Workload: five arms x five frozen programs, `25/25` common-screen cells
 - Topology: `ARM-01` Owner-local CPU; `ARM-02` through `ARM-05` one GPU each
-- Provider: unchanged Vast instance `47256937`
+- Provider: Owner-provisioned and freshly admitted Vast instance
 - Owner-approved limits: common screen `$27`, A1 `$32`, campaign `$150`, TTL 40 hours
 - Scientific evidence remains closed until execution-adoption PASS
 
@@ -22,6 +23,11 @@ boundaries.
 2. Re-read authenticated provider identity, runtime/GPU identity, fresh all-fee
    quote, whole-workload budget admission, management dry-run, watchdog/TTL,
    protected compiler receipt, and all 25 frozen bindings.
+   If Vast TFA/API is unavailable, use the Owner-authorized
+   `OwnerDashboardSsh` watchdog mode: bind an aggregate-safe dashboard evidence
+   hash, Owner-observed all-fee rate, pinned SSH/runtime/GPU identity, and
+   `OWNER_MANUAL_DASHBOARD_DESTROY_READY`. This fallback must record
+   `provider_authenticated=false` and cannot invoke provider destruction.
 3. Write aggregate-safe provider-admission and execution-adoption receipts.
 4. Materialize an Owner-local v16 input manifest bound to the same attempt ID.
 5. Start the v16 lifecycle, run `ARM-01` locally, and launch the four remote
@@ -31,7 +37,8 @@ boundaries.
 7. Apply only the frozen deterministic promotion rule. Do not open A2,
    HARNESS-DEV, Selection, Final, `D2_OPEN_FINAL`, or `D3_SUBMIT_RELEASE`.
 8. Sync aggregate-safe evidence and reports, commit/push, tell Owner to destroy
-   instance `47256937` in the Vast dashboard, and verify SSH is unreachable.
+   the admitted instance in the Vast dashboard, and verify its SSH endpoint is
+   unreachable.
 
 ## Hard stops
 

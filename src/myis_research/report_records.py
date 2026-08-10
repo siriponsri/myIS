@@ -113,6 +113,7 @@ def _lifecycle(value: Any) -> str:
         "blocked",
         "blocked_until_p1",
         "contract_scaffold_complete_launch_locked",
+        "a1_2_v16_r13_failed_closed_retry_required",
     } or value.startswith("locked"):
         return "blocked"
     return "planned"
@@ -794,6 +795,7 @@ def _artifacts(
         exact_token_id_probe = model.get("armindex", {}).get(
             "a1_2_exact_token_id_adapter_probe", {}
         )
+        r13_failure = model.get("armindex", {}).get("a1_2_r13_failure", {})
         if (
             task_id in {None, "A1.2"}
             and isinstance(split_claim_audit, Mapping)
@@ -994,6 +996,29 @@ def _artifacts(
                         "probe across ARM-02 through ARM-05 while preserving frozen "
                         "v11-v15 semantics and keeping provider admission and "
                         "measured retrieval closed."
+                    ),
+                    producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                    producing_task_id="A1.2",
+                )
+            )
+        if (
+            task_id in {None, "A1.2"}
+            and isinstance(r13_failure, Mapping)
+            and r13_failure.get("validated") is True
+        ):
+            result.append(
+                _artifact(
+                    artifact_id="a12-v16-r13-failed-closed-attempt-audit",
+                    title="A1.2 v16 r13 failed-closed attempt audit",
+                    artifact_type="audit",
+                    evidence_class="aggregate_safe_live_attempt_failure",
+                    scientific_authority=False,
+                    safe_uri=str(r13_failure["audit_uri"]),
+                    content_sha256=str(r13_failure["audit_file_sha256"]),
+                    explanation=(
+                        "Records an incomplete 24/25 logical-cell attempt as "
+                        "failure provenance only. Partial outputs are not promotable; "
+                        "the official completed measured-run counter remains zero."
                     ),
                     producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
                     producing_task_id="A1.2",
@@ -3240,6 +3265,29 @@ def _bindings(
                         ),
                         "platform": vast_v5.get("platform"),
                     }
+    r13_failure = model.get("armindex", {}).get("a1_2_r13_failure", {})
+    if (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and task_id in {None, "A1.2"}
+        and isinstance(r13_failure, Mapping)
+        and r13_failure.get("validated") is True
+    ):
+        attempt = r13_failure.get("attempt", {})
+        bindings["a12_v16_r13_failed_closed_attempt"] = {
+            "uri": r13_failure.get("audit_uri"),
+            "sha256": r13_failure.get("audit_file_sha256"),
+            "audit_sha256": r13_failure.get("audit_sha256"),
+            "status": r13_failure.get("status"),
+            "completed_logical_cells": attempt.get("completed_logical_cells")
+            if isinstance(attempt, Mapping)
+            else None,
+            "required_logical_cells": attempt.get("required_logical_cells")
+            if isinstance(attempt, Mapping)
+            else None,
+            "partial_results_promotable": attempt.get("partial_results_promotable")
+            if isinstance(attempt, Mapping)
+            else None,
+        }
     return bindings
 
 
@@ -3262,6 +3310,7 @@ def _record_for(
     scientific = phase_id == "P1_CPU_BASELINE"
     adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
     scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
+    r13_failure = model.get("armindex", {}).get("a1_2_r13_failure", {})
     a11_validated = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and isinstance(adapter, Mapping)
@@ -3272,9 +3321,17 @@ def _record_for(
         and isinstance(scaffold, Mapping)
         and scaffold.get("validated") is True
     )
+    r13_failed_closed = (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and task_id in {None, "A1.2"}
+        and isinstance(r13_failure, Mapping)
+        and r13_failure.get("validated") is True
+    )
     evidence_class = (
         "train_selection_measured"
         if scientific
+        else "aggregate_safe_live_attempt_failure"
+        if r13_failed_closed
         else "fixture"
         if phase_id == "P2_SCOPE_DEVELOPMENT"
         and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status")
@@ -3292,6 +3349,8 @@ def _record_for(
     claim_boundary = (
         "train_selection_only"
         if scientific
+        else str(r13_failure.get("claim_boundary"))
+        if r13_failed_closed
         else str(scaffold.get("claim_boundary"))
         if a12_validated and task_id in {None, "A1.2"}
         else str(adapter.get("claim_boundary"))
@@ -3342,6 +3401,60 @@ def _record_for(
                     "counters_changed": False,
                 }
             )
+    if r13_failed_closed:
+        attempt = r13_failure.get("attempt", {})
+        failures.append(
+            {
+                "failure_id": "a1.2-v16-r13-incomplete-24-of-25",
+                "failure_uri": r13_failure.get("audit_uri"),
+                "failure_sha256": r13_failure.get("audit_file_sha256"),
+                "recovery_id": r13_failure.get("next_authorized_action"),
+                "recovery_uri": r13_failure.get("audit_uri"),
+                "recovery_sha256": r13_failure.get("audit_file_sha256"),
+                "status": "FAILED_CLOSED_RETRY_REQUIRED",
+                "counters_changed": False,
+                "completed_logical_cells": attempt.get("completed_logical_cells")
+                if isinstance(attempt, Mapping)
+                else None,
+                "required_logical_cells": attempt.get("required_logical_cells")
+                if isinstance(attempt, Mapping)
+                else None,
+                "partial_results_promotable": attempt.get("partial_results_promotable")
+                if isinstance(attempt, Mapping)
+                else None,
+            }
+        )
+        vast_v7 = scaffold.get("vast_preflight_v7", {})
+        vast_v8 = scaffold.get("vast_preflight_v8", {})
+        live_failures = (
+            vast_v8.get("preserved_live_failures", [])
+            if isinstance(vast_v8, Mapping)
+            and vast_v8.get("validated") is True
+            and isinstance(vast_v8.get("preserved_live_failures"), list)
+            else vast_v7.get("preserved_live_failures", [])
+            if isinstance(vast_v7, Mapping)
+            and isinstance(vast_v7.get("preserved_live_failures"), list)
+            else []
+        )
+        failure_source = (
+            vast_v8
+            if isinstance(vast_v8, Mapping) and vast_v8.get("validated") is True
+            else vast_v7
+        )
+        for item in live_failures:
+            if isinstance(item, Mapping):
+                failures.append(
+                    {
+                        "failure_id": item.get("failure_id"),
+                        "failure_uri": failure_source.get("receipt_uri"),
+                        "failure_sha256": failure_source.get("receipt_sha256"),
+                        "recovery_id": item.get("disposition"),
+                        "recovery_uri": failure_source.get("receipt_uri"),
+                        "recovery_sha256": failure_source.get("receipt_sha256"),
+                        "status": "preserved_and_repaired_preflight_pending",
+                        "counters_changed": False,
+                    }
+                )
     if (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and task_id in {None, "A1.2"}
@@ -3552,7 +3665,34 @@ def _record_for(
                     "counters_changed": False,
                 }
             )
-    if scientific:
+    if r13_failed_closed:
+        attempt = r13_failure.get("attempt", {})
+        completed = (
+            attempt.get("completed_logical_cells")
+            if isinstance(attempt, Mapping)
+            else "unknown"
+        )
+        required = (
+            attempt.get("required_logical_cells")
+            if isinstance(attempt, Mapping)
+            else "unknown"
+        )
+        output = (
+            "Aggregate-safe failed-attempt provenance records "
+            f"{completed}/{required} completed logical cells before a hard stop."
+        )
+        result = (
+            "FAILED_CLOSED and retry-required: the incomplete 24/25 attempt is "
+            "not promotable, has no Owner-local evaluation, and leaves the official "
+            "completed measured-run counter at zero."
+        )
+        interpretation = (
+            "The partial cell receipts are failure provenance only. They do not "
+            "constitute a common-screen result, deterministic promotion input, A1 "
+            "closeout, or evidence for A2, Selection, Final, or publication."
+        )
+        decision_status = "FAILED_CLOSED_RETRY_REQUIRED"
+    elif scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
         result = "P1 measured train/selection evidence is complete within its declared development boundary."
         interpretation = "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions."
@@ -3899,6 +4039,10 @@ def _record_for(
         "Final-split generalization or publication release before D2 and D3.",
         "Causal or legal conclusions from retrieval aggregates.",
     ]
+    if r13_failed_closed:
+        unsupported.append(
+            "The incomplete 24/25 r13 attempt as a measured A1 result, promotion input, or completion claim."
+        )
     armindex = (
         model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
     )
@@ -3943,6 +4087,10 @@ def _record_for(
             isinstance(p2.get("preflight"), Mapping)
             and p2.get("preflight", {}).get("safe_to_measure") is True
         )
+    if r13_failed_closed:
+        governance["r13_attempt_status"] = "FAILED_CLOSED"
+        governance["r13_partial_results_promotable"] = False
+        governance["official_completed_measured_runs"] = 0
     record = {
         "schema_version": REPORT_SCHEMA,
         "report_id": report_id,

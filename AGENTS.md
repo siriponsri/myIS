@@ -204,17 +204,61 @@ and glossary in the relevant Thai documentation and link the external source:
 The Karpathy source is
 `https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md`.
 
+## Artifact-first long-run workflow
+
+Owner decision 2026-08-10: long-running work prioritizes implementation and
+publication-impact evidence over repetitive documentation. `docs/goal/` holds
+short, Thai-first operational goal documents. A goal document is a work plan,
+not scientific authority: the active campaign, controls, schemas, manifests,
+and receipts remain canonical.
+
+- A high-reasoning planning session creates or refreshes
+  `docs/goal/<phase_or_task>_goal.md` only when a phase/task begins or its
+  material objective changes. It names the publication-facing hypothesis,
+  allowed implementation surface, success evidence, artifact plan, hard stops,
+  and smallest verification command.
+- An implementation session reads the active goal document, `PLAN.md`, and
+  only the controls needed for its task, then implements and measures without
+  waiting for historical-document sweeps. It appends run/checkpoint evidence
+  and changes the goal document only for a material decision or blocker.
+- Prefer work that improves a journal submission's reproducible evidence:
+  complete measured coverage, deterministic provenance, valid aggregate-safe
+  artifacts, clearly bounded claims, and reviewer-reproducible analysis. Do
+  not optimize wording, documentation volume, or outcomes instead of evidence.
+- Keep only these durable documents for a long run: one active goal document,
+  the tracked runbook and append-only ledger, canonical receipts/manifests,
+  and one generated Phase/Task report. Do not create parallel status notes,
+  duplicate metrics, or retrospective edits unless a canonical fact is wrong.
+- Preserve remote attempt roots and allowlisted artifacts until safe return and
+  checksum validation pass. Safe local return, hash manifests, aggregate
+  receipts, and reproducible analysis are the publication artifact set; raw
+  protected inputs and provider payloads remain Owner-local.
+- Reducing documentation never reduces the protected-data boundary, frozen
+  scientific semantics, identity/runtime checks, whole-workload budget and
+  TTL checks, safe return, deterministic replay, or complete-result rule.
+- A1 live monitoring prefers authenticated provider CLI. If Vast TFA/API is
+  unavailable, the Owner-authorized fallback is aggregate-safe dashboard
+  identity/price/TTL evidence plus independently pinned SSH runtime/GPU checks
+  and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`. This fallback records provider
+  authentication as false, never invokes API destruction, and requires Owner
+  confirmation plus an unreachable SSH endpoint at closeout.
+- Every active `docs/goal/*_goal.md` is an executable long-run guide. The Owner launches it
+  with `/goal อ่าน docs/goal/<file>.md แล้วทำงานตามขั้นตอนทั้งหมด`; the guide
+  must contain numbered steps, checkpoints, recovery, hard stops, required
+  artifacts, validation, commit/push, and terminal-report instructions. A goal
+  file may route to canonical controls, but it may not replace them or become a
+  second source of scientific metrics.
+
 ## Mandatory reporting policy
 
 Every Phase and every Task MUST have one substantive generated Obsidian report.
-The report is created when the work starts, updated after each material state
-change, run, failure, or decision, and finalized or marked blocked when the
-work closes. A Phase report summarizes its Tasks; it does not replace them.
-Meaningful runs, material failures/recoveries, and Owner/governance decisions
-also receive a generated report when canonical evidence exists. Report sync
-must regenerate all generated notes from one validated read-model object and
-must fail closed on missing, contradictory, stale, protected, or fixture-as-
-measured state.
+The report is created when the work starts, updated only for a measured run,
+material recovery/blocker, Owner decision, or closeout, and finalized or marked
+blocked when the work closes. A Phase report summarizes its Tasks; it does not
+replace them. Do not create a new report for an unchanged receipt, routine
+heartbeat, or engineering micro-change. Report sync must regenerate all
+generated notes from one validated read-model object and must fail closed on
+missing, contradictory, stale, protected, or fixture-as-measured state.
 
 Generated notes are reproducible and use `managed_by: myis-report` with
 `edit_policy: generated_do_not_edit`. Owner-authored notes live only under
@@ -236,20 +280,21 @@ Unsupported Claims; Failures and Recovery; Governance and Safety; Decision;
 Next Action; Evidence Links. Do not add a second numeric source of truth in
 prose.
 
-Before commit or push, run report schema/content validation, deterministic
-sync/check twice, artifact graph and checksum validation, protected/unsafe-path
-scans, session audit, Dashboard/API, repository-safe MLflow doctor, layout,
-assets, Brain literature validation, tests, scoped Ruff, and `git diff --check`.
-The current state must agree everywhere: ArmIndex is the active campaign,
-SCOPE is historical read-only, all A0 Tasks and A1.1 are complete, measured
-ArmIndex counters remain zero, Selection and Final remain closed, and the next
-action is exactly the local-only Owner review and adoption-input preparation
-for the unchanged A1.2 scientific execution request v11 in `HANDOFF.md`.
-Preparation must bind the clean pushed execution commit/tree and bundle,
-protected handoff and transfer receipts, all 25 compiled-program bindings, a
-fresh provider identity and all-fee quote, whole-workload budget admission,
-and watchdog/provider-destroy dry-run. It must not contact a provider, adopt
-execution, or start scientific execution.
+Before commit or push, run the smallest validation set that covers the changed
+surface: report schema/content and sync/check when a projection changes,
+artifact graph/checksum and protected-path scans when evidence changes, session
+audit, Dashboard/API, MLflow doctor, layout/assets/Brain literature validation
+when touched, focused tests, scoped Ruff, and `git diff --check`. Reuse a
+still-valid hash-bound receipt instead of rerunning an unchanged validation.
+The current state must agree everywhere: ArmIndex is active, SCOPE is
+historical read-only, A0 and A1.1 are complete, Selection and Final are closed,
+and A1.2 status/next action come only from its latest canonical receipt and
+active goal document. A pre-measurement receipt requires zero measured
+counters; a live A1.2 receipt may record only validated aggregate-safe
+progress/results and must retain the frozen v11-v15 boundary. The long run
+still requires the clean bound bundle, protected handoff/transfer receipts,
+25 compiled bindings, fresh provider identity/quote, whole-workload budget,
+and watchdog/destroy readiness before scientific work.
 Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
 fixture is `passed`, and measured P2 was not started. A stale narrative is a
 validation failure, not a documentation preference.
@@ -262,7 +307,6 @@ in `docs/observatory/REPORTING_POLICY.md` and
 
 Report the exact phase, task, status, checks, changed files, untouched
 protected surfaces, evidence class, blockers, and next automatic action. Do not
-claim P1 measured completion unless a protected Owner-local run actually
-completed. Keep the next action limited to the launch-locked local-only Owner
-review and adoption-input preparation for unchanged v11; `D2_OPEN_FINAL`
-remains closed and does not authorize A1.2 scientific execution.
+claim A1 measured completion unless the protected Owner-local run, safe return,
+and frozen evaluation actually completed. `D2_OPEN_FINAL` remains closed and
+does not authorize A2, Selection, or Final.
