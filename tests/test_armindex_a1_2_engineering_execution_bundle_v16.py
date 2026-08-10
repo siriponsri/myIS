@@ -32,6 +32,14 @@ def test_v16_bundle_base_closure_binds_safe_return_and_watchdog() -> None:
     assert "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1" in v16._BASE_PATHS
 
 
+def test_v16_watchdog_checkout_bytes_are_forced_to_lf() -> None:
+    attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8").splitlines()
+    assert (
+        "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1 text eol=lf"
+        in attributes
+    )
+
+
 def test_v16_bundle_binds_runtime_import_closure_without_protected_compiler() -> None:
     paths = set(v16.bundle_paths(ROOT))
     assert {

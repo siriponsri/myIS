@@ -119,3 +119,7 @@ tests/test_armindex_a1_2_*.py -text
 tests/test_armindex_bm25s_adapter.py -text
 pyproject.toml -text
 uv.lock -text
+
+# The v16 contract binds the watchdog by raw SHA-256. Force the committed LF
+# bytes in every checkout so Windows autocrlf cannot invalidate a clean bundle.
+scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1 text eol=lf
