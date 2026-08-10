@@ -47,6 +47,10 @@ Owner-local evaluation, aggregate receipts และ deterministic promotion ไ
   `connection_refused`; ห้าม reuse และห้ามรวม partial cells จาก r13
 - audit aggregate-safe อยู่ที่
   `outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json`
+- pre-admission audit ล่าสุดยืนยันว่า bundle ที่ freeze, assets ที่จะ transfer,
+  wheelhouse/model checksums และ v15 protected bindings `25/25` ยังผ่าน; ดู
+  `outputs/audits/armindex/a1.2-owner-local-transfer-readiness-20260810.json`
+  ห้ามใช้ audit นี้แทน fresh provider admission หรือ execution adoption
 - v16 Owner-approved limits ปัจจุบัน: common screen `$27`, A1 `$32`, campaign
   `$150`, TTL `40h`; ค่า v15 `$18/$23/$100` เป็น historical เท่านั้น
 - A1.1 complete, A2 และทุก phase หลัง A1 ยังปิดอยู่
@@ -137,6 +141,14 @@ uv run --no-sync python -m pytest -q `
 fail-closed; ห้าม launch เพื่อดูว่า outcome จะดีขึ้นหรือไม่
 
 ### ขั้นที่ 2: ทำ clean pushed bundle
+
+bundle ที่ใช้สำหรับ attempt ถัดไปถูก freeze แล้วที่ commit `69a056f7`, tree
+`e18bb967f6857e5d913d13170ef2bbc44cf73a8f` และ SHA-256
+`70077bfdbd7f821dc0ec67f99df90cdffe962f011ced3c3da2d50d76dd2e1bf5` ตาม
+pre-admission audit ข้างต้น หาก `HEAD` ใหม่กว่าเพราะมีเฉพาะ goal/audit/report
+aggregate-safe หลังสร้าง bundle ให้ตรวจ bundle จาก clean detached worktree ที่
+commit นี้และใช้ receipt เดิม ห้าม rebuild หรือ substitute bundle เพียงเพื่อให้
+ตรงกับ doc-only `HEAD`
 
 1. หาก `read_model.py`, `report_records.py` หรือ canonical failure receipt เปลี่ยน
    ให้รัน generated report sync/check จาก read-model เดียวก่อน commit; อัปเดต

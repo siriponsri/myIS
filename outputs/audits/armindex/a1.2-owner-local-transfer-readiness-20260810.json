@@ -1,0 +1,68 @@
+{
+  "schema_version": "myis.armindex-a1.2-owner-local-transfer-readiness.v1",
+  "audit_id": "a1.2-owner-local-transfer-readiness-20260810",
+  "status": "READY_FOR_FRESH_PROVIDER_ADMISSION",
+  "evidence_class": "aggregate_safe_engineering_pre_admission",
+  "scientific_authority": false,
+  "claim_boundary": "Aggregate-safe local readiness evidence only. It records artifact hashes, counts, and validation results before provider admission. It contains no protected text, membership, query identifiers, rankings, per-query outcomes, credentials, private-key material, raw provider payloads, model bytes, retrieval result, or scientific claim.",
+  "scope": "A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2",
+  "frozen_execution_bundle": {
+    "git_commit": "69a056f76ff429dd3305fa49cd39d8ed1a29d5c2",
+    "git_tree": "e18bb967f6857e5d913d13170ef2bbc44cf73a8f",
+    "bundle_sha256": "70077bfdbd7f821dc0ec67f99df90cdffe962f011ced3c3da2d50d76dd2e1bf5",
+    "bundle_receipt_sha256": "d425dd937c5a52262b49c15e3deff30ea1a30f357e75aeae90d6be54e429c711",
+    "status": "ENGINEERING_BUNDLE_BUILT_NOT_ADOPTED"
+  },
+  "owner_local_transfer_assets": {
+    "asset_root_label": "owner-local/a1.2-vast-20260806",
+    "asset_bytes": 6196151802,
+    "checksum_manifest_count": 7,
+    "checksummed_file_count": 79,
+    "missing_file_count": 0,
+    "mismatch_count": 0,
+    "unsafe_manifest_path_count": 0,
+    "checksum_status": "PASS",
+    "model_arm_count": 4,
+    "model_manifest_file_count_per_arm": 12,
+    "wheelhouse_validation": "PASS",
+    "supplement_wheelhouse_validation": "PASS",
+    "runtime_model_download_allowed": false
+  },
+  "frozen_protected_bindings": {
+    "v15_adoption_contract_status": "PASS",
+    "v15_adoption_contract_sha256": "eba073b2b9796e6ede6a4ad7b898b6455f9a945bc829a1236a7c2f74cf4f28d3",
+    "binding_count": 25,
+    "binding_set_sha256": "8f15cf6a2069f37fbab59ff8b945afd9349a2760fc8cbdc6e512a0889f986bba",
+    "compiler_receipt_sha256": "288b1c7e9642c95c64664d43fbc785337da7ffd284cce1232c3ab12161deb08c",
+    "protected_compiler_audit_sha256": "de405e69168cfaab8adb6742bfec6eaa1fa3544eadbd69a13bc6cd853118f151",
+    "deterministic_replay": true,
+    "zero_silent_truncation": true,
+    "protected_boundary": "PASS"
+  },
+  "engineering_validation": {
+    "v15_protected_tests_passed": 31,
+    "runtime_and_safe_return_tests_passed": 29,
+    "live_preflight_runtime_tests_passed": 16,
+    "v16_focused_tests_passed": 28,
+    "skipped_tests": 2,
+    "bundle_validator": "PASS"
+  },
+  "live_provider_state": {
+    "current_instance_verified": false,
+    "provider_admission": "PENDING_LIVE_PROVIDER",
+    "execution_adoption": "PENDING_LIVE_PROVIDER",
+    "measured_retrieval_allowed": false,
+    "historical_instance_reusable": false
+  },
+  "budget_and_ttl": {
+    "active_policy": "v16_owner_approved_extension",
+    "policy_sha256": "bf0eedc8aedcf1dd9d8ec28d3101681fc4a0e3c8623d0585eb6271b62fd44f06",
+    "common_screen_usd": 27,
+    "a1_total_usd": 32,
+    "campaign_usd": 150,
+    "ttl_hours": 40
+  },
+  "next_authorized_action": "Owner provisions or supplies a fresh live instance, all-fee quote, and aggregate-safe dashboard evidence. Then create fresh attempt-local provider-admission and execution-adoption receipts before measured A1.2 work.",
+  "generated_at_utc": "2026-08-10T15:00:54Z",
+  "audit_sha256": "922a15aefeb472c3ff875a44b3a3c6f85f3a269d6ec9cfc2166f82eee2643088"
+}

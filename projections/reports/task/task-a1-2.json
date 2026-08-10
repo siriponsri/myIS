@@ -3109,9 +3109,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-09T22:18:37Z",
-  "generated_from_revision": "f1f78f5842546caf21ea93adf6b62f37bc564440deb2224ec365dda820659ad5",
-  "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
+  "generated_at": "2026-08-10T14:10:14Z",
+  "generated_from_revision": "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d",
+  "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3249,7 +3249,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "d5a1014bc053ece7389ebce05a137824b1560fb3",
+    "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3266,7 +3266,7 @@
   },
   "interpretation": "The partial cell receipts are failure provenance only. They do not constitute a common-screen result, deterministic promotion input, A1 closeout, or evidence for A2, Selection, Final, or publication.",
   "language": "en",
-  "last_material_update": "2026-08-09T22:18:37Z",
+  "last_material_update": "2026-08-10T14:10:14Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -3669,7 +3669,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "cce823376f3fac9deb0285c54e657628f9a871504685bec31c6e6f3dcd3cd410",
+  "report_sha256": "2c829d7443a2949c802f417d719a999450709a3010aa935237d70f93aee15c72",
   "report_type": "task",
   "result": {
     "decision": "FAILED_CLOSED_RETRY_REQUIRED",
