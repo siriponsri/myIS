@@ -51,6 +51,7 @@
         "properties": {
           "evidence_class": {"const": "aggregate_safe_live_attempt_terminal"},
           "scientific_authority": {"const": true},
+          "provider_disposition_status": {"enum": ["DESTROYED", "REUSE_ELIGIBLE"]},
           "coverage": {"properties": {"completed_logical_cells": {"const": 25}}}
         },
         "not": {"required": ["failure_evidence_sha256"]}

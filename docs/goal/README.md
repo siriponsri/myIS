@@ -1,5 +1,17 @@
 # Goal Documents
 
+## Current goal registry
+
+| Goal document | Lifecycle | Status | Authorized use |
+|---|---|---|---|
+| [A1_2_goal.md](A1_2_goal.md) | `CLOSED` | `HISTORICAL_SUPERSEDED_BY_A1_2_RERUN_GOAL` | ประวัติ fail-closed ของ r13 เท่านั้น |
+| [A1_2_rerun_goal.md](A1_2_rerun_goal.md) | `CLOSED` | `CLOSED_PASS` | หลักฐานส่งต่อ A1.2 r15; ห้าม launch ซ้ำ |
+| [A2_goal.md](A2_goal.md) | `ACTIVE` | `READY` | goal ถัดไป; เริ่มด้วย A2 entry preflight และ fresh admission/adoption |
+
+เมื่อ canonical receipt/ledger/checkpoint ยืนยันการปิดงาน ให้แก้ทั้ง frontmatter,
+ตารางสถานะรายขั้น และทะเบียนนี้ใน session เดียวกัน ห้ามปิด goal จาก chat หรือ
+preview เพียงอย่างเดียว
+
 ทุกไฟล์ active `docs/goal/*_goal.md` เป็นคู่มือปฏิบัติงานแบบ executable สำหรับ long run
 ไม่ใช่บันทึกความคืบหน้าหรือแหล่งตัวเลขวิทยาศาสตร์ ให้เริ่มงานด้วยคำสั่งนี้:
 
@@ -36,3 +48,11 @@ credentials, token หรือ provider payload ใน goal, Git, report หร
 ห้ามใช้ launch และต้องชี้ไปยัง goal active ล่าสุด คู่มือมุ่งหลักฐานที่เพิ่ม publication impact เช่น measured coverage ครบ,
 deterministic provenance, aggregate-safe artifacts และ claim boundary ที่ชัด
 ไม่ใช่การเพิ่มปริมาณเอกสาร
+
+ทุก goal ต้องมี `lifecycle: ACTIVE | BLOCKED | CLOSED` ใน frontmatter และ goal
+ที่กำลังทำต้องมีตารางสถานะขั้นงานใกล้ต้นไฟล์ ใช้สถานะ `COMPLETE`,
+`IN_PROGRESS`, `IMPLEMENTED_PENDING_RESULT`, `PENDING` หรือ `BLOCKED` เท่านั้น
+อัปเดตจาก canonical receipt/ledger/checkpoint ที่ตรวจแล้ว ไม่ยกสถานะจาก chat,
+preview หรือไฟล์ที่เพียงเตรียม implementation ไว้ งานที่ปิดหรือถูก supersede ต้อง
+เปลี่ยน `lifecycle` ใน session เดียวกัน ส่วนตัวเลขวิทยาศาสตร์ยังอ้าง canonical
+artifact เท่านั้น ห้ามคัดลอกเป็น numeric source of truth ชุดที่สองใน goal

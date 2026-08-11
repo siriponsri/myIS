@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-provider-continuation-receipt.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "provider_continuation_status", "evidence_class", "scientific_authority", "claim_boundary", "instance_id", "expected_instance_identity_sha256", "provider_identity", "ssh_endpoint", "current_quote", "accrued_a1_charge_usd", "watchdog", "safe_return_archive_sha256", "evaluator_closeout_receipt_sha256", "next_phase", "access_counters", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-provider-continuation-receipt.v16"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}-provider-continuation-v16$"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "status": {"const": "PASS"},
+    "provider_continuation_status": {"const": "REUSE_ELIGIBLE"},
+    "evidence_class": {"const": "aggregate_safe_provider_continuation"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 40},
+    "instance_id": {"type": "string", "pattern": "^[1-9][0-9]{3,18}$"},
+    "expected_instance_identity_sha256": {"$ref": "#/$defs/hash"},
+    "provider_identity": {"$ref": "#/$defs/provider_identity"},
+    "ssh_endpoint": {"$ref": "#/$defs/ssh_endpoint"},
+    "current_quote": {"$ref": "#/$defs/current_quote"},
+    "accrued_a1_charge_usd": {"$ref": "#/$defs/amount"},
+    "watchdog": {"$ref": "#/$defs/watchdog"},
+    "safe_return_archive_sha256": {"$ref": "#/$defs/hash"},
+    "evaluator_closeout_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "next_phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase_id", "fresh_a2_provider_admission_required", "fresh_a2_execution_adoption_required", "new_isolated_remote_root_required"],
+      "properties": {
+        "phase_id": {"const": "A2_PER_ARM_AUTOINDEX"},
+        "fresh_a2_provider_admission_required": {"const": true},
+        "fresh_a2_execution_adoption_required": {"const": true},
+        "new_isolated_remote_root_required": {"const": true}
+      }
+    },
+    "access_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harness_dev_accesses", "selection_accesses", "final_accesses"],
+      "properties": {
+        "harness_dev_accesses": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0}
+      }
+    },
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"},
+    "amount": {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$"},
+    "provider_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_at_utc", "authenticated", "provider_status", "instance_identity_sha256", "provider_evidence_sha256"],
+      "properties": {
+        "observed_at_utc": {"$ref": "#/$defs/timestamp"},
+        "authenticated": {"const": true},
+        "provider_status": {"const": "RUNNING_VERIFIED"},
+        "instance_identity_sha256": {"$ref": "#/$defs/hash"},
+        "provider_evidence_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "ssh_endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_at_utc", "observation", "instance_identity_sha256", "ssh_evidence_sha256"],
+      "properties": {
+        "observed_at_utc": {"$ref": "#/$defs/timestamp"},
+        "observation": {"const": "reachable"},
+        "instance_identity_sha256": {"$ref": "#/$defs/hash"},
+        "ssh_evidence_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "current_quote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_at_utc", "quote_sha256", "all_fee_hourly_rate_usd"],
+      "properties": {
+        "observed_at_utc": {"$ref": "#/$defs/timestamp"},
+        "quote_sha256": {"$ref": "#/$defs/hash"},
+        "all_fee_hourly_rate_usd": {"$ref": "#/$defs/amount"}
+      }
+    },
+    "watchdog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_at_utc", "status", "remaining_ttl_seconds", "watchdog_evidence_sha256"],
+      "properties": {
+        "observed_at_utc": {"$ref": "#/$defs/timestamp"},
+        "status": {"const": "PASS"},
+        "remaining_ttl_seconds": {"type": "integer", "minimum": 1},
+        "watchdog_evidence_sha256": {"$ref": "#/$defs/hash"}
+      }
+    }
+  }
+}

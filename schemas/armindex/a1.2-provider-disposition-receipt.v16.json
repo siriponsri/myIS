@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-provider-disposition-receipt.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "instance_id", "observed_at_utc", "provider_authentication", "ssh_endpoint", "final_charge_usd", "final_quote_sha256", "access_counters", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-provider-disposition-receipt.v16"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}-provider-disposition-v16$"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "aggregate_safe_provider_disposition"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 40},
+    "instance_id": {"type": "string", "pattern": "^[1-9][0-9]{3,18}$"},
+    "observed_at_utc": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"},
+    "provider_authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authenticated", "destroy_outcome", "provider_absence_verified"],
+      "properties": {
+        "authenticated": {"const": true},
+        "destroy_outcome": {"const": "DESTROYED_CONFIRMED"},
+        "provider_absence_verified": {"const": true}
+      }
+    },
+    "ssh_endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["post_destroy_observation"],
+      "properties": {"post_destroy_observation": {"const": "connection_refused"}}
+    },
+    "final_charge_usd": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$"}]},
+    "final_quote_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
+    "access_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harness_dev_accesses", "selection_accesses", "final_accesses"],
+      "properties": {
+        "harness_dev_accesses": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0}
+      }
+    },
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

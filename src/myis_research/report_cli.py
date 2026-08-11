@@ -2280,6 +2280,48 @@ def _structured_report_body(record: Mapping[str, Any], model: Mapping[str, Any])
             "Owner prerequisites:\n\n"
             f"{owner_lines}{scaffold_note}"
         )
+        current_attempt = (
+            armindex.get("a1_2_current_attempt", {})
+            if isinstance(armindex.get("a1_2_current_attempt"), Mapping)
+            else {}
+        )
+        if (
+            record.get("task_id") in {None, "A1.2"}
+            and current_attempt.get("validated") is True
+            and current_attempt.get("status") == "PASS"
+        ):
+            summary = (
+                current_attempt.get("measured_result_summary", {})
+                if isinstance(current_attempt.get("measured_result_summary"), Mapping)
+                else {}
+            )
+            promoted = ", ".join(
+                str(item) for item in summary.get("promoted_arm_ids", [])
+            )
+            retention = (
+                armindex.get("a1_2_remote_retention", {})
+                if isinstance(armindex.get("a1_2_remote_retention"), Mapping)
+                else {}
+            )
+            remote_note = ""
+            if retention.get("validated") is True and retention.get("status") == "PASS":
+                packages = retention.get("packages", {})
+                remote_note = (
+                    " The unchanged A1 remote root retains hash-validated allowlisted "
+                    f"packages: baseline `{packages.get('a1_baseline', {}).get('remote_total_file_count', 0)}/29`, "
+                    f"journal EDA `{packages.get('a1_journal_eda', {}).get('remote_total_file_count', 0)}/8`, "
+                    f"and closeout `{packages.get('a1_closeout', {}).get('remote_total_file_count', 0)}/12`."
+                )
+            a1_note = (
+                "\n\n### A1.2 terminal closeout state\n\n"
+                "The current terminal attempt is `PASS` with complete `25/25` REP-DEV "
+                f"coverage and provider disposition `{current_attempt.get('provider_disposition_status')}`. "
+                f"The frozen deterministic rule promoted `{promoted}`.{remote_note} "
+                "Historical v1-v15 planning, preflight, and repair records remain immutable "
+                "lineage only and do not describe the current launch state. A2, HARNESS-DEV, "
+                "Selection, and Final have not started; A2 requires a fresh entry preflight, "
+                "provider admission, execution adoption, and a new isolated remote root."
+            )
     failures = record.get("failure_recovery_references", [])
     artifact_markdown = "\n".join(artifact_rows)
     metric_markdown = "\n".join(metric_rows)

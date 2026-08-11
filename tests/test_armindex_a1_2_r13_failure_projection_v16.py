@@ -61,8 +61,9 @@ def test_r13_failure_is_linked_to_a1_and_a12_records_without_authority() -> None
             for item in record["artifact_references"]
             if item["artifact_id"] == "a12-v16-r13-failed-closed-attempt-audit"
         )
-        assert record["status"] in {"active", "planned", "blocked"}
-        assert record["scientific_authority"] is False
+        assert record["status"] == "completed"
+        assert record["scientific_authority"] is True
+        assert artifact["scientific_authority"] is False
         assert (
             artifact["content_sha256"]
             == model["armindex"]["a1_2_r13_failure"]["audit_file_sha256"]

@@ -28,6 +28,11 @@ RESULT_SCHEMA_PATH = Path("schemas/armindex/a1.2-aggregate-result-receipt.v11.js
 RECEIPT_NAME = "evaluator-closeout.receipt.v16.json"
 _ATTEMPT = re.compile(r"^[a-z0-9][a-z0-9._-]{2,79}$")
 _HASH = re.compile(r"^[a-f0-9]{64}$")
+_CELL_SPECIFIC_LINEAGE_KEYS = {
+    "model_lock_file_sha256",
+    "program_spec_sha256",
+    "workload_manifest_sha256",
+}
 
 
 class EvaluatorCloseoutV16Error(ValueError):
@@ -150,29 +155,51 @@ def validate_evaluator_closeout_inputs(
     if not receipt_root.is_dir() or receipt_root.is_symlink():
         raise EvaluatorCloseoutV16Error("aggregate receipt directory is missing or unsafe")
     cell_hashes: dict[str, str] = {}
-    lineage: Mapping[str, Any] | None = None
+    shared_lineage: dict[str, Any] | None = None
+    lineage_by_cell: dict[str, dict[str, Any]] = {}
+    model_lock_by_arm: dict[str, str] = {}
+    workload_by_arm: dict[str, str] = {}
+    program_spec_by_program: dict[str, str] = {}
     safe_return_archive_sha256: str | None = None
     for cell in CELL_IDS:
         receipt, digest = _validate_cell(root, receipt_root / _cell_filename(cell), cell=cell, attempt_id=attempt_id)
-        candidate_lineage = receipt["lineage"]
+        candidate_lineage = dict(receipt["lineage"])
         candidate_safe_return = _hash(candidate_lineage["safe_return_archive_sha256"], "safe return archive")
-        if lineage is None:
-            lineage = candidate_lineage
+        candidate_shared = {
+            key: value
+            for key, value in candidate_lineage.items()
+            if key not in _CELL_SPECIFIC_LINEAGE_KEYS
+        }
+        if shared_lineage is None:
+            shared_lineage = candidate_shared
             safe_return_archive_sha256 = candidate_safe_return
-        elif candidate_lineage != lineage or candidate_safe_return != safe_return_archive_sha256:
+        elif candidate_shared != shared_lineage or candidate_safe_return != safe_return_archive_sha256:
             raise EvaluatorCloseoutV16Error("aggregate receipts do not share frozen lineage")
+        arm, program = cell.split("--", 1)
+        for bindings, key, identity in (
+            (model_lock_by_arm, "model_lock_file_sha256", arm),
+            (workload_by_arm, "workload_manifest_sha256", arm),
+            (program_spec_by_program, "program_spec_sha256", program),
+        ):
+            value = _hash(candidate_lineage[key], key)
+            if identity in bindings and bindings[identity] != value:
+                raise EvaluatorCloseoutV16Error(
+                    "aggregate receipts have inconsistent cell-specific lineage"
+                )
+            bindings[identity] = value
+        lineage_by_cell[cell] = candidate_lineage
         cell_hashes[cell] = digest
     if {path.name for path in receipt_root.iterdir()} != {
         _cell_filename(cell) for cell in CELL_IDS
     }:
         raise EvaluatorCloseoutV16Error("aggregate receipt directory has extra or missing members")
     promotion = _validate_promotion(attempt_root / "promotion.json")
-    if lineage is None or safe_return_archive_sha256 is None:
+    if shared_lineage is None or safe_return_archive_sha256 is None:
         raise EvaluatorCloseoutV16Error("aggregate receipt set is empty")
     return {
         "attempt_id": attempt_id,
         "safe_return_archive_sha256": safe_return_archive_sha256,
-        "evaluation_lineage_sha256": canonical_sha256(dict(lineage)),
+        "evaluation_lineage_sha256": canonical_sha256(lineage_by_cell),
         "cell_receipt_count": len(cell_hashes),
         "cell_receipt_set_sha256": canonical_sha256(cell_hashes),
         "promotion_receipt_sha256": promotion["receipt_sha256"],

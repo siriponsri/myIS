@@ -30,6 +30,16 @@ def _evaluation(tmp_path: Path) -> Path:
     return output / "a12-v16-evaluator-test"
 
 
+def _write_rehashed(path: Path, receipt: dict[str, object]) -> None:
+    receipt["receipt_sha256"] = canonical_sha256(
+        {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    )
+    path.write_text(
+        json.dumps(receipt, sort_keys=True, separators=(",", ":")) + "\n",
+        encoding="ascii",
+    )
+
+
 def test_closeout_binds_exactly_25_aggregate_receipts_and_promotion(tmp_path: Path) -> None:
     attempt_root = _evaluation(tmp_path)
 
@@ -45,6 +55,56 @@ def test_closeout_binds_exactly_25_aggregate_receipts_and_promotion(tmp_path: Pa
     assert validate_evaluator_closeout_inputs(ROOT, attempt_root)["promotion_receipt_sha256"] == receipt["promotion_receipt_sha256"]
     assert validate_evaluator_closeout_receipt(ROOT, receipt)["receipt_sha256"] == receipt["receipt_sha256"]
     assert write_evaluator_closeout_receipt(ROOT, attempt_root)["receipt_sha256"] == receipt["receipt_sha256"]
+
+
+def test_closeout_accepts_frozen_lineage_that_varies_by_arm_and_program(tmp_path: Path) -> None:
+    attempt_root = _evaluation(tmp_path)
+    for path in (attempt_root / "receipts").glob("*.json"):
+        receipt = json.loads(path.read_text(encoding="ascii"))
+        arm = receipt["arm_id"]
+        program = receipt["program_id"]
+        receipt["lineage"]["model_lock_file_sha256"] = canonical_sha256(
+            {"arm_id": arm, "role": "model_lock"}
+        )
+        receipt["lineage"]["workload_manifest_sha256"] = canonical_sha256(
+            {"arm_id": arm, "role": "workload"}
+        )
+        receipt["lineage"]["program_spec_sha256"] = canonical_sha256(
+            {"program_id": program, "role": "program"}
+        )
+        _write_rehashed(path, receipt)
+
+    values = validate_evaluator_closeout_inputs(ROOT, attempt_root)
+    assert values["cell_receipt_count"] == 25
+
+
+def test_closeout_rejects_inconsistent_cell_specific_lineage(tmp_path: Path) -> None:
+    attempt_root = _evaluation(tmp_path)
+    path = attempt_root / "receipts" / "ARM-01--P01-TA-DOC.json"
+    receipt = json.loads(path.read_text(encoding="ascii"))
+    receipt["lineage"]["model_lock_file_sha256"] = canonical_sha256(
+        {"arm_id": "ARM-01", "role": "different_model_lock"}
+    )
+    _write_rehashed(path, receipt)
+
+    with pytest.raises(
+        EvaluatorCloseoutV16Error,
+        match="inconsistent cell-specific lineage",
+    ):
+        validate_evaluator_closeout_inputs(ROOT, attempt_root)
+
+
+def test_closeout_rejects_inconsistent_shared_lineage(tmp_path: Path) -> None:
+    attempt_root = _evaluation(tmp_path)
+    path = attempt_root / "receipts" / "ARM-01--P01-TA-DOC.json"
+    receipt = json.loads(path.read_text(encoding="ascii"))
+    receipt["lineage"]["request_sha256"] = canonical_sha256(
+        {"request": "different"}
+    )
+    _write_rehashed(path, receipt)
+
+    with pytest.raises(EvaluatorCloseoutV16Error, match="do not share frozen lineage"):
+        validate_evaluator_closeout_inputs(ROOT, attempt_root)
 
 
 def test_closeout_rejects_tampered_cell_receipt(tmp_path: Path) -> None:

@@ -190,9 +190,10 @@ skip the protected-data boundary, credential redaction, frozen v11-v15
 scientific semantics, split/query reservation, whole-workload budget and TTL,
 SSH/provider identity, artifact integrity, safe return, or the 25/25 result
 requirement. A failure in any critical check remains fail-closed. The active
-Owner-approved v16 limits for this same-instance run are common screen `$27`,
-A1 `$32`, campaign `$150`, and TTL `40` hours; v15 values `$18/$23/$100` are
-historical only and must not be used for current admission.
+Owner-approved v17 limits for the current rerun are common screen `$55`, A1
+`$60`, campaign `$150`, and TTL `40` hours; v16 values `$27/$32/$150` and v15
+values `$18/$23/$100` are historical only and must not be used for current
+admission.
 
 Before code or plan edits, apply the local Karpathy guidelines: state
 assumptions, choose the smallest direct change, avoid speculative abstraction,
@@ -240,8 +241,16 @@ and receipts remain canonical.
   unavailable, the Owner-authorized fallback is aggregate-safe dashboard
   identity/price/TTL evidence plus independently pinned SSH runtime/GPU checks
   and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`. This fallback records provider
-  authentication as false, never invokes API destruction, and requires Owner
-  confirmation plus an unreachable SSH endpoint at closeout.
+  authentication as false and never invokes API destruction. At A1 closeout,
+  provider disposition is either validated `REUSE_ELIGIBLE` or actual
+  `DESTROYED`; destruction is not required solely to close A1.
+- Owner decision 2026-08-11 permits the current Vast instance to remain live
+  after A1 safe return and frozen evaluation pass. `REUSE_ELIGIBLE` requires a
+  fresh provider identity/status observation, all-fee quote, accrued A1 charge,
+  SSH reachability, remaining TTL, watchdog, and management-authority check.
+  It does not authorize A2 execution: A2 still requires fresh provider
+  admission, fresh execution adoption, and a new isolated remote root. Never
+  reuse the A1 adoption receipt or overwrite the A1 attempt root.
 - Every active `docs/goal/*_goal.md` is an executable long-run guide. The Owner launches it
   with `/goal อ่าน docs/goal/<file>.md แล้วทำงานตามขั้นตอนทั้งหมด`; the guide
   must contain numbered steps, checkpoints, recovery, hard stops, required
@@ -308,5 +317,7 @@ in `docs/observatory/REPORTING_POLICY.md` and
 Report the exact phase, task, status, checks, changed files, untouched
 protected surfaces, evidence class, blockers, and next automatic action. Do not
 claim A1 measured completion unless the protected Owner-local run, safe return,
-and frozen evaluation actually completed. `D2_OPEN_FINAL` remains closed and
-does not authorize A2, Selection, or Final.
+and frozen evaluation actually completed. Do not destroy a live instance merely
+to satisfy closeout; record validated `REUSE_ELIGIBLE` or actual `DESTROYED`
+disposition according to evidence. `D2_OPEN_FINAL` remains closed and does not
+authorize A2, Selection, or Final.

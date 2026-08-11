@@ -8,12 +8,13 @@ the only projection selector; receipt files themselves are write-once.
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
 import re
 import tempfile
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -192,6 +193,13 @@ def validate_terminal_attempt_receipt(
     if status == "PASS":
         if completed != 25 or receipt["scientific_authority"] is not True:
             raise TerminalAttemptV16Error("PASS requires complete 25/25 coverage and authority")
+        if receipt.get("provider_disposition_status") not in {
+            "DESTROYED",
+            "REUSE_ELIGIBLE",
+        }:
+            raise TerminalAttemptV16Error(
+                "PASS requires a completed provider disposition"
+            )
         for field in _SUCCESS_HASH_FIELDS:
             _require_hash(receipt.get(field), field)
         if "failure_evidence_sha256" in receipt:
@@ -334,6 +342,73 @@ def write_current_attempt_pointer(repository_root: Path, pointer: Mapping[str, A
     return path
 
 
+def main(argv: Sequence[str] | None = None) -> int:
+    """Write only validated aggregate-safe terminal evidence."""
+
+    parser = argparse.ArgumentParser(prog="myis-a1.2-terminal-attempt-v16")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    write = subparsers.add_parser("write")
+    write.add_argument("--repository-root", type=Path, default=Path("."))
+    write.add_argument("--attempt-id", required=True)
+    write.add_argument("--status", choices=("PASS", "FAILED_CLOSED"), required=True)
+    write.add_argument("--completed-logical-cells", type=int, required=True)
+    write.add_argument("--provider-disposition-receipt-sha256", required=True)
+    write.add_argument("--provider-disposition-status", required=True)
+    write.add_argument("--final-charge-usd", required=True)
+    write.add_argument("--claim-boundary", required=True)
+    write.add_argument("--safe-return-sha256")
+    write.add_argument("--evaluator-receipt-sha256")
+    write.add_argument("--promotion-receipt-sha256")
+    write.add_argument("--failure-evidence-sha256")
+    pointer = subparsers.add_parser("write-pointer")
+    pointer.add_argument("--repository-root", type=Path, default=Path("."))
+    pointer.add_argument("--attempt-id", required=True)
+    args = parser.parse_args(argv)
+
+    root = args.repository_root.resolve()
+    try:
+        if args.command == "write":
+            receipt = build_terminal_attempt_receipt(
+                repository_root=root,
+                attempt_id=args.attempt_id,
+                status=args.status,
+                completed_logical_cells=args.completed_logical_cells,
+                provider_disposition_receipt_sha256=args.provider_disposition_receipt_sha256,
+                provider_disposition_status=args.provider_disposition_status,
+                final_charge_usd=args.final_charge_usd,
+                claim_boundary=args.claim_boundary,
+                safe_return_sha256=args.safe_return_sha256,
+                evaluator_receipt_sha256=args.evaluator_receipt_sha256,
+                promotion_receipt_sha256=args.promotion_receipt_sha256,
+                failure_evidence_sha256=args.failure_evidence_sha256,
+            )
+            path = write_terminal_attempt_receipt(root, receipt)
+            result = {
+                "status": "PASS",
+                "receipt": receipt,
+                "receipt_uri": path.relative_to(root).as_posix(),
+                "receipt_file_sha256": _file_sha256(path),
+            }
+        else:
+            path = root / _terminal_uri(args.attempt_id)
+            receipt = validate_terminal_attempt_receipt(root, _load_json(path))
+            pointer_value = build_current_attempt_pointer(
+                receipt,
+                target_sha256=_file_sha256(path),
+            )
+            pointer_path = write_current_attempt_pointer(root, pointer_value)
+            result = {
+                "status": "PASS",
+                "pointer": pointer_value,
+                "pointer_uri": pointer_path.relative_to(root).as_posix(),
+                "pointer_file_sha256": _file_sha256(pointer_path),
+            }
+    except (OSError, TerminalAttemptV16Error) as error:
+        parser.error(str(error))
+    print(canonical_json(result))
+    return 0
+
+
 __all__ = [
     "CURRENT_POINTER_PATH",
     "POINTER_SCHEMA_PATH",
@@ -342,8 +417,13 @@ __all__ = [
     "TerminalAttemptV16Error",
     "build_current_attempt_pointer",
     "build_terminal_attempt_receipt",
+    "main",
     "validate_current_attempt_pointer",
     "validate_terminal_attempt_receipt",
     "write_current_attempt_pointer",
     "write_terminal_attempt_receipt",
 ]
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

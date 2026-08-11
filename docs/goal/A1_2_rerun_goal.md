@@ -2,20 +2,21 @@
 title: "A1.2 rerun goal: ปิด common screen 25/25 แบบ long run"
 phase_id: A1_BASELINES_AND_MULTI_ARM_SCREENING
 task_id: A1.2
-status: READY_FOR_FRESH_OWNER_ADMISSION
-evidence_class: aggregate_safe_execution_handoff
+status: CLOSED_PASS
+lifecycle: CLOSED
+evidence_class: aggregate_safe_terminal_handoff
 scientific_authority: false
-claim_boundary: "คู่มือปฏิบัติการนี้ไม่ใช่ผลวิทยาศาสตร์ ผลมี authority เฉพาะเมื่อ safe return และ Owner-local evaluation ผ่านครบ"
-last_material_update: 2026-08-10
-next_authorized_action: OWNER_PROVISION_APPROVE_AND_FRESH_ADMIT_A1_INSTANCE
+claim_boundary: "goal นี้เป็นเอกสารส่งต่อ; authority อยู่ที่ terminal receipt, evaluator closeout และ aggregate result summary ของ attempt r15"
+last_material_update: 2026-08-12
+next_authorized_action: START_A2_IN_FRESH_SESSION_FROM_A2_GOAL
 ---
 
 # A1.2 rerun: คู่มือให้ Luna Max ทำงานจนจบ
 
-เริ่มเอกสารนี้ด้วยคำสั่ง:
+goal นี้ปิด `PASS` แล้ว ห้ามใช้เพื่อ launch หรือ rerun A1.2 งานถัดไปให้เริ่มจาก:
 
 ```text
-/goal อ่าน docs/goal/A1_2_rerun_goal.md แล้วทำงานตามขั้นตอนทั้งหมด
+/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS แล้วทำงานตามขั้นตอนทั้งหมด โดยทำ fresh A2 provider admission/execution adoption และใช้ remote root ใหม่
 ```
 
 ทำตามหมายเลขเรียงลำดับ ห้ามข้าม checkpoint เพื่อประหยัดเวลา หากเกิด hard
@@ -25,6 +26,33 @@ stop ให้หยุดแบบ fail-closed เก็บเฉพาะห�
 checkpoint ในเอกสารนี้เป็นจุดตรวจ/บันทึกความคืบหน้า ไม่ใช่ micro-gate ใหม่
 อำนาจ launch และ measured work ยังมาจาก canonical receipts และ execution
 contract เท่านั้น
+
+## สถานะดำเนินงานปัจจุบัน
+
+ตารางนี้เป็น progress projection จาก Owner-local ledger/checkpoint ของ attempt
+`a12-v16-20260811-r15`; receipt และ artifact ที่ hash-bound ยังเป็น authority
+ห้ามใช้ตารางนี้แทนผล evaluation
+
+| ช่วงงาน | สถานะ | หลักฐาน/สิ่งที่เหลือ |
+|---|---|---|
+| ขั้น 0 ล็อกขอบเขตและ attempt | `COMPLETE` | attempt, instance และ remote root ใหม่ถูกบันทึกแล้ว |
+| ขั้น 1 audit/repair engineering | `COMPLETE` | reliability path และ focused validation ผ่านโดยไม่เปลี่ยน frozen science |
+| ขั้น 2 clean frozen bundle | `COMPLETE` | commit/tree/bundle hash ถูก bind ใน admission/adoption |
+| ขั้น 3 provider admission | `COMPLETE` | authenticated provider identity, fresh all-fee quote และ v17 budget PASS |
+| ขั้น 4 SSH/runtime/protected adoption | `COMPLETE` | SSH, 4xRTX3090, runtime, 48/48 model files และ protected boundary PASS |
+| ขั้น 5 watchdog/TTL | `COMPLETE` | watchdog generation `r15-repair2` PASS และยัง active |
+| ขั้น 6 Owner-local input manifest | `COMPLETE` | manifest READY, 25 cells และ 150 work tokens |
+| ขั้น 7 execution adoption | `COMPLETE` | measured execution เปิดเฉพาะ attempt r15 แล้ว |
+| ขั้น 8 common screen | `COMPLETE` | Owner-local ledger checkpoint ยืนยัน 25/25; ทุก arm = 5/5, dense worker success = 4/4, failure marker = 0 |
+| ขั้น 9 bounded recovery | `COMPLETE` | transient SSH watchdog failure ถูกเก็บไว้และ recovery ไม่ restart measured workers |
+| ขั้น 10 safe return | `COMPLETE` | production safe-return receipt เป็น `PASS`, archive ครบ 25 cells และ hash ของ archive/manifest ผ่านการตรวจ |
+| ขั้น 11 frozen evaluation/promotion | `COMPLETE` | evaluator closeout `PASS`, aggregate receipts ครบ 25 และ deterministic promotion เลือก 3 arms |
+| ขั้น 11E journal/presentation EDA | `COMPLETE` | EDA package ครบ 25 cells, local handoff 7 files และ remote mirror 8 files ผ่าน |
+| ขั้น 11A A2 baseline handoff | `COMPLETE` | local handoff 28 source files และ remote mirror 29 files ผ่าน; `a2_execution_authorized=false` |
+| ขั้น 12 terminal closeout/provider disposition | `COMPLETE` | terminal receipt `PASS`, ค่าใช้จ่ายรวม `$11.161632`, provider disposition `REUSE_ELIGIBLE`, remote mirrors `29/29 + 8/8 + 12/12` ผ่าน และ A2 ยังไม่เริ่ม |
+
+ทุกขั้นของ goal นี้ปิดแล้ว ห้ามแก้สถานะกลับเป็น active หรือรวม partial attempt เก่า
+เข้ากับผลนี้ งานถัดไปใช้ `A2_goal.md` และต้องทำ fresh A2 admission/adoption
 
 ## 1. เป้าหมายและคุณค่าต่อ publication
 
@@ -51,8 +79,9 @@ Owner-local evaluation, aggregate receipts และ deterministic promotion ไ
   wheelhouse/model checksums และ v15 protected bindings `25/25` ยังผ่าน; ดู
   `outputs/audits/armindex/a1.2-owner-local-transfer-readiness-20260810.json`
   ห้ามใช้ audit นี้แทน fresh provider admission หรือ execution adoption
-- v16 Owner-approved limits ปัจจุบัน: common screen `$27`, A1 `$32`, campaign
-  `$150`, TTL `40h`; ค่า v15 `$18/$23/$100` เป็น historical เท่านั้น
+- v17 Owner-approved limits ปัจจุบัน: common screen `$55`, A1 `$60`, campaign
+  `$150`, TTL `40h`; ค่า v15 `$18/$23/$100` และ v16 `$27/$32/$150`
+  เป็น historical เท่านั้น
 - A1.1 complete, A2 และทุก phase หลัง A1 ยังปิดอยู่
 
 ถ้าไฟล์ canonical ขัดกับข้อความนี้ ให้ยึด canonical receipt/control และบันทึก
@@ -197,16 +226,16 @@ attempt/bundle ใหม่ตามกติกา immutable
    destroy อัตโนมัติ
 
 ทั้งสอง mode เขียนเฉพาะ aggregate-safe provider receipt และ sanitized budget
-input ใน `OWNER_ROOT`; ใช้ v16 whole-workload evaluator เป็น authority ของ
-`40h/$27/$32/$150`:
+input ใน `OWNER_ROOT`; ใช้ v17 whole-workload evaluator เป็น authority ของ
+`40h/$55/$60/$150` โดยรวมค่าใช้จ่าย aggregate ของ attempt ก่อนหน้า:
 
 ```powershell
-uv run --no-sync python -m myis_research.armindex.a1_2_whole_workload_budget_extension_v16 evaluate `
-  --repository-root . --input <OWNER_ROOT>/budget-input.v16.json `
-  --receipt-id <a1.2-whole-workload-budget-extension-<attempt>-v16>
+uv run --no-sync python -m myis_research.armindex.a1_2_whole_workload_budget_extension_v17 evaluate `
+  --repository-root . --input <OWNER_ROOT>/budget-input.v17.json `
+  --receipt-id <a1.2-whole-workload-budget-extension-<attempt>-v17>
 ```
 
-v12 provider template ใช้ได้เฉพาะตรวจรูปแบบ identity/quote ที่ไม่ขัดกับ v16
+v12 provider template ใช้ได้เฉพาะตรวจรูปแบบ identity/quote ที่ไม่ขัดกับ v17
 extension; ห้ามใช้ค่า TTL `6h` historical เป็น admission input. ห้ามเก็บ raw
 provider payload ทั้งก้อน ตรวจและบันทึกเฉพาะ:
 
@@ -215,7 +244,7 @@ provider payload ทั้งก้อน ตรวจและบันทึ�
 - GPU เป็น RTX 3090 จำนวน 4 ใบ และ memory ต่อใบตาม contract
 - image/runtime revision ตรงกับ frozen runtime
 - fresh current price และ all-fee components (GPU, disk, storage, tax/other)
-- whole-workload estimate ไม่เกิน common `$27`, A1 `$32`, campaign `$150`
+- whole-workload estimate รวม attempt ก่อนหน้าแล้วไม่เกิน common `$55`, A1 `$60`, campaign `$150`
 - TTL จาก provision ไม่เกิน 40 ชั่วโมง และ watchdog deadline คำนวณได้
 - management authority/destroy capability อยู่ในสถานะ
   `READY_NOT_EXECUTED` หรือ `OWNER_MANUAL_DASHBOARD_DESTROY_READY`
@@ -287,7 +316,8 @@ PY
 เริ่ม watchdog ก่อนส่ง input และปล่อยให้ถือ advisory lock ตลอด run ใช้
 `scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1` พร้อม `INSTANCE_ID`, SSH
 host/port/key, Owner connection file, output directory, TTL deadline, expected
-hostname/identity/GPU commitments และ `$32` hourly ceiling. Mode หลักส่ง
+hostname/identity/GPU commitments และ live all-fee hourly rate ที่ bind ใน
+provider admission receipt; A1 hard stop คือ `$60`. Mode หลักส่ง
 `-ProviderObservationMode AuthenticatedCli -VastCliPath <path>`; fallback ส่ง
 `-ProviderObservationMode OwnerDashboardSsh -OwnerDashboardTotalHourlyUsd <rate>
 -OwnerDashboardEvidenceSha256 <sha256> -OwnerManualDestroyReady` โดยไม่ส่ง
@@ -394,10 +424,57 @@ uv run --no-sync python -m myis_research.armindex.a1_2_remote_measured_launcher_
    rankings หรือ per-query outcomes
 4. ใช้ promotion rule ที่ freeze เท่านั้น: เรียง Recall@100, nDCG@100,
    latency, cost, simplicity และ reject exact tie; promote ได้ไม่เกิน 3 arms
+5. หลัง evaluator closeout ผ่าน ให้สร้าง
+   `campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/<ATTEMPT_ID>.summary.v16.json`
+   ด้วย `a1_2_measured_result_summary_v16`; summary นี้เป็น numeric source ของ
+   รายงาน A1 โดยมีเฉพาะ aggregate ต่อ arm และ hash lineage ห้ามคัดลอก metric
+   ไปแก้ด้วยมือในเอกสารอื่น
 
 **Checkpoint 11:** มี 25 aggregate result receipts, promotion receipt self-hash
-ผ่าน, `scientific_authority=true` เฉพาะ Owner-local evaluator และไม่มี protected
-field ใน projection หาก evaluator ไม่ผ่านให้หยุด ไม่ซ่อมตาม outcome
+ผ่าน, measured-result summary self-hash/lineage ผ่าน, `scientific_authority=true`
+เฉพาะ aggregate result และไม่มี protected field ใน projection หาก evaluator
+ไม่ผ่านให้หยุด ไม่ซ่อมตาม outcome
+
+### ขั้นที่ 11E: สร้าง EDA สำหรับ presentation และ journal
+
+1. หลัง measured-result summary ผ่านเท่านั้น ให้รัน
+   `a1_2_cell_eda_package_v16` จาก Owner-local aggregate result receipts ครบ 25
+   รายการ ห้ามอ่านหรือ project raw qrels, membership, query IDs, rankings หรือ
+   per-query outcomes
+2. สร้าง canonical EDA JSON หนึ่งไฟล์, CSV ครบ 25 cells, quality figure แบบ
+   PNG/SVG, efficiency figure แบบ PNG/SVG และคู่มือภาษาไทยสำหรับ Owner
+3. Quality figure แสดง `OUT Recall@100`, `OUT nDCG@100`, `OUT nDCG@10` บนแกน
+   0-1 พร้อมตัวเลขในทุก cell; efficiency figure แสดง search p95, wall time และ
+   peak VRAM โดยระบุชัดว่าเป็น descriptive diagnostics ไม่ใช่ promotion override
+4. ตารางแต่ละ cell ต้องมี arm/program labels, frozen metrics, latency,
+   throughput, wall time, RAM/VRAM/index size, replay/retry/failure และ receipt
+   hashes โดยไม่มีตัวอย่างข้อมูลจริงหรือ identifier จาก protected store
+5. mirror exact EDA artifacts พร้อม manifest/SHA-256 ไปยัง Vast A1 remote root
+   ใต้ `handoff/a1-journal-eda/<ATTEMPT_ID>/` โดยไม่เขียนทับ measured outputs
+
+**Checkpoint 11E:** EDA package self-hash ผ่าน, artifacts ทุกไฟล์ hash ตรง,
+CSV มี 25 rows, figures render ไม่ว่างและอ่านได้, Thai report ไม่มี mojibake,
+protected scan ผ่าน และ remote mirror ตรงกับ local exact bytes
+
+### ขั้นที่ 11A: สร้าง A1 baseline handoff สำหรับ A2 โดยยังไม่เปิด A2
+
+1. ทำตาม `control/runbooks/A1_PROVIDER_REUSE_AND_A2_DATA_HANDOFF_V16.md`
+2. คัดลอก exact bytes เฉพาะ safe-return archive, aggregate receipts 25 รายการ,
+   promotion receipt และ evaluator-closeout receipt ไป Owner-local root
+   `04_Owner_Stores/armindex-a2/a1-baseline-safe-return/<ATTEMPT_ID>/`
+3. สร้าง `handoff-manifest.v16.json` ที่มี relative paths, sizes และ SHA-256;
+   manifest ต้องมี `a2_execution_authorized=false`
+4. ห้ามดึง embeddings, vector indexes, caches, tensor checkpoints, raw inputs,
+   logs, environment dumps, provider payloads หรือ model weights ซ้ำ
+5. ตรวจผ่าน SSH ว่า A1 remote root และ output ต้นฉบับยังอยู่บน instance ห้ามลบ
+   หรือเขียนทับ และห้ามใช้ A1 root เป็น A2 output root
+6. mirror handoff package ที่ผ่าน local validation ไปยัง
+   `<REMOTE_A1_ROOT>/handoff/a1-baseline/<ATTEMPT_ID>/` แล้วตรวจให้ครบ `29/29`
+   files และ SHA-256 ตรง; ห้าม upload protected evaluator inputs
+
+**Checkpoint 11A:** handoff มี source files `28` รายการและ self-hash ผ่าน,
+forbidden artifact classes ถูก exclude, remote mirror `29/29` hash ตรง, remote
+A1 artifacts ยังอยู่ และ A2 measured counters ยังเป็นศูนย์
 
 ### ขั้นที่ 12: A1 closeout และ provider disposition
 
@@ -408,14 +485,19 @@ field ใน projection หาก evaluator ไม่ผ่านให้หย
    report validation/sync เฉพาะ projection ที่เปลี่ยน และ `git diff --check`
 3. commit/push aggregate-safe evidence, receipts, hashes, goal/runbook/ledger
    ที่จำเป็นเท่านั้น; ห้าม commit protected archive หรือ credentials
-4. บอก Owner ให้ destroy `INSTANCE_ID` ใน Vast dashboard/API ตาม mode ที่
-   admission bind ไว้; fallback ต้องใช้ Owner manual dashboard destroy ห้าม
-   destroy ก่อน safe return/evaluation/commit ผ่าน
-5. รอ Owner ยืนยัน destruction แล้ว probe SSH endpoint ซ้ำ ต้อง unreachable
-   (`connection_refused` หรือ disposition ที่เทียบเท่า) และบันทึก
-   `OWNER_CONFIRMED_DESTROYED` พร้อม aggregate-safe evidence
+4. Owner decision 2026-08-11 ยกเลิกการบังคับ destroy หลัง A1. หาก Owner ต้องการ
+   reuse instance ให้ตรวจ provider identity/status, SSH, current all-fee quote,
+   accrued A1 charge, remaining TTL, watchdog และ management authority ซ้ำหลัง
+   safe return/evaluation PASS แล้วเขียน aggregate-safe provider-continuation
+   receipt เป็น `REUSE_ELIGIBLE`; receipt ต้องระบุว่า A2 ยังต้องทำ fresh provider
+   admission/execution adoption และต้องใช้ remote root ใหม่
+5. `REUSE_ELIGIBLE` อนุญาตเพียงให้คง instance live ระหว่างส่งต่องาน ไม่อนุญาตให้
+   เริ่ม A2 measured work, reuse A1 adoption receipt, เขียนทับ A1 remote root หรือ
+   เปลี่ยน A1 scientific result หาก continuation validation ไม่ผ่าน, TTL/งบไม่พอ
+   หรือ Owner ขอ destroy ให้ใช้ destruction path เดิมและบันทึก disposition ตามจริง
 
 **Checkpoint 12:** A1 closeout receipt, push commit และ provider disposition
+ (`REUSE_ELIGIBLE` หรือ `DESTROYED` ตามหลักฐานจริง)
 ครบแล้วเท่านั้น จึงทำให้ A2 มีสิทธิ์วางแผนตาม campaign `D1_START_CAMPAIGN`;
 การเปลี่ยน A2 จาก blocked เป็น ready ต้องมาจาก canonical receipt/read-model
 และ goal refresh ไม่ใช่การแก้ตัวเลขในเอกสารนี้ และห้ามเปิด A2 ใน session นี้โดยอัตโนมัติ
@@ -429,8 +511,17 @@ field ใน projection หาก evaluator ไม่ผ่านให้หย
   compiler receipts, ledger/checkpoints, cell receipts, safe-return archive,
   evaluator and promotion receipts; these are Owner-local unless a schema marks
   a sanitized aggregate pointer safe for Git
+- `04_Owner_Stores/armindex-a2/a1-baseline-safe-return/<ATTEMPT_ID>/`: exact
+  safe-return archive, 25 aggregate receipts, promotion/evaluator-closeout และ
+  `handoff-manifest.v16.json`; ห้ามสร้าง repository `data/` สำหรับ payload นี้
+- Vast A1 remote root: เก็บ `current/`, `output/`, checkpoints และ artifacts เดิม
+  ไว้แบบ read-only หลัง handoff จนกว่าจะมี provider disposition ใหม่
 - `campaigns/armindex-multiretriever-v2/evidence/`: only validated
   aggregate-safe canonical receipts and hashes
+- `campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/`,
+  `outputs/tables/armindex/`, `outputs/figures/armindex/` และ
+  `docs/operations/*CELL_EDA*_TH.md`: generated 25-cell aggregate EDA สำหรับ
+  journal/presentation; numeric source ยังคงเป็น canonical JSON
 - `outputs/audits/armindex/`: aggregate-safe failure/validation audits
 - `obsidian_report/` and Brain projections: generated pointers/aggregates only
 - `control/runbooks/` and `docs/goal/`: tracked execution instructions, not
@@ -475,6 +566,6 @@ next_action: <A1 closeout หรือ Owner action ที่อนุญาต>
 หยุดทันทีเมื่อพบอย่างใดอย่างหนึ่ง: instance identity เปลี่ยน, GPU ไม่ครบ 4x
 RTX3090, runtime/hash drift, quote/budget/TTL เกิน, watchdog ไม่ PASS, protected
 boundary fail, adoption ไม่ PASS, worker failure, safe return ไม่ครบ 25/25,
-archive checksum mismatch, evaluator/tie rule fail, หรือ Owner ยังไม่ยืนยัน
-destroy เมื่อถึง closeout gate ทุกกรณีต้องเก็บ aggregate-safe evidence และไม่
-เริ่ม A2 ต่อเอง
+archive checksum mismatch, evaluator/tie rule fail หรือยังไม่มี validated provider
+disposition เป็น `REUSE_ELIGIBLE`/`DESTROYED` เมื่อถึง closeout gate ทุกกรณีต้อง
+เก็บ aggregate-safe evidence และไม่เริ่ม A2 ต่อเอง

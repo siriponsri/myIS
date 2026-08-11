@@ -14,7 +14,7 @@ boundaries.
 - Workload: five arms x five frozen programs, `25/25` common-screen cells
 - Topology: `ARM-01` Owner-local CPU; `ARM-02` through `ARM-05` one GPU each
 - Provider: Owner-provisioned and freshly admitted Vast instance
-- Owner-approved limits: common screen `$27`, A1 `$32`, campaign `$150`, TTL 40 hours
+- Owner-approved v17 limits: common screen `$55`, A1 `$60`, campaign `$150`, TTL 40 hours
 - Scientific evidence remains closed until execution-adoption PASS
 
 ## Launch sequence
@@ -36,9 +36,11 @@ boundaries.
    receipts, validate checkpoints and safe return, then evaluate locally.
 7. Apply only the frozen deterministic promotion rule. Do not open A2,
    HARNESS-DEV, Selection, Final, `D2_OPEN_FINAL`, or `D3_SUBMIT_RELEASE`.
-8. Sync aggregate-safe evidence and reports, commit/push, tell Owner to destroy
-   the admitted instance in the Vast dashboard, and verify its SSH endpoint is
-   unreachable.
+8. Sync aggregate-safe evidence and reports, then classify the provider
+   disposition from fresh evidence. Record `REUSE_ELIGIBLE` when identity,
+   runtime, hashes, watchdog, TTL, budget, management authority, and retained
+   A1 artifacts remain valid. Destroy only when the disposition requires it or
+   the Owner explicitly requests it. A retained instance does not authorize A2.
 
 ## Hard stops
 
@@ -64,5 +66,7 @@ observed retrieval outcome.
 
 The ledger and generated reports must record the attempt ID, immutable bundle
 and manifest hashes, gate receipts, aggregate counts, safe-return hash, charge
-and TTL observations, closeout status, Owner destruction confirmation, and the
-final SSH disposition. They must not contain protected payloads or credentials.
+and TTL observations, closeout status, and validated provider disposition. For
+`REUSE_ELIGIBLE`, record that A2 still requires fresh admission, fresh adoption,
+and a new isolated remote root. They must not contain protected payloads or
+credentials.

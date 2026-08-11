@@ -15,21 +15,18 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (v16 attempt
-  `a12-v16-20260810-r13` stopped fail-closed at `24/25` logical cells after the
-  watchdog reported `ssh_runtime_probe_failed`. Partial evaluation and promotion
-  are forbidden. Owner-confirmed destruction of instance `47256937` and a
-  post-destroy `connection_refused` observation close the provider disposition;
-  fresh A1 admission and a complete retry are required before A2.)
-- Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING`
-- Current evidence class: aggregate-safe incomplete live-attempt failure over
-  preserved v1-v15 lineage plus additive v16 engineering; scientific authority
-  `false`
-- Admissible completed ArmIndex measured runs: `0`
+- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (`CLOSED_PASS`; attempt
+  `a12-v16-20260811-r15` closed at `25/25`. A2 is ready but not started and
+  requires fresh provider admission, execution adoption, entry preflight, and a
+  new isolated remote root.)
+- Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING` (complete)
+- Current evidence class: aggregate-safe measured development closeout for A1.2;
+  scientific authority `true`
+- Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
 - Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
 - Final exposures: `0`
-- Migration spend: `$0`
+- Recorded A1 measured charge: `$11.161632`
 - Owner gates: `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` only
 
 The canonical campaign record is
@@ -65,13 +62,13 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly seven active phases. Progress is:
 
-`A0 complete -> A1 current -> A2 -> A3 -> A4 -> A5 -> A6`
+`A0 complete -> A1 complete -> A2 ready -> A3 -> A4 -> A5 -> A6`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
-| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | current; A1.1 complete; A1.2 r13 failed closed at 24/25; fresh admissible retry required |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | not started |
+| `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | ready; not started; fresh A2 admission/adoption required |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -113,7 +110,7 @@ reference-only A1 assets and were not opened or used by A0.
 | Task | Purpose | Status |
 |---|---|---|
 | `A1.1` | Validate five adapter declarations and run the ARM-01 synthetic CPU path | complete |
-| `A1.2` | Reproduce baselines and run the common five-arm screen | r13 failed closed at 24/25; provider disposition confirmed; A2 blocked pending fresh admission and complete retry |
+| `A1.2` | Reproduce baselines and run the common five-arm screen | complete; r15 terminal PASS at 25/25; provider disposition REUSE_ELIGIBLE |
 
 Task `A1.1` completed the synthetic compile-index-search-evaluate path for
 `ARM-01` on CPU using the repository-local Okapi BM25 fixture backend. All five
@@ -324,10 +321,10 @@ flowchart LR
 Protected qrels, membership, query IDs, rankings, per-query outcomes, raw
 provider payloads, and access material stay Owner-local. Git and every projection
 receive validated aggregates, hashes, counts, safe IDs, and pointers only.
-Migration evidence alone does not authorize measured retrieval. The next A1
-goal may proceed only in its declared order: live admission and adoption must
-pass before GPU scientific work starts. Runtime model download, paid APIs,
-provider fallback, Selection, Final, and A2 remain forbidden.
+The completed A1 evidence does not authorize A2 measured retrieval by itself.
+A2 must pass its own entry preflight, fresh provider admission, and execution
+adoption in a new isolated remote root. Runtime model download, paid APIs,
+unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden.
 
 ## Canonical details
 
@@ -341,13 +338,14 @@ provider fallback, Selection, Final, and A2 remain forbidden.
 ## Next authorized action
 
 ```text
-/goal อ่าน docs/goal/A1_2_rerun_goal.md แล้วทำงานตามขั้นตอนทั้งหมด
+/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS แล้วทำงานตามขั้นตอนทั้งหมด โดยทำ fresh A2 provider admission/execution adoption และใช้ remote root ใหม่
 ```
 
-The r13 audit is
-`outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json`. Its 25-file
-allowlisted evidence set hash is verified, but the 24/25 cells have no scientific
-authority and cannot be combined into a promotion result. Instance `47256937`
-is destroyed and cannot be reused. The next session follows
-`docs/goal/A1_2_rerun_goal.md` for the complete A1 retry. `docs/goal/A2_goal.md`
-is A2-only and remains blocked until A1 closeout evidence exists.
+The r13 audit remains historical failed-attempt evidence and cannot be combined
+with r15. The current pointer binds the complete r15 terminal receipt, measured
+summary, EDA package, and `REUSE_ELIGIBLE` provider continuation. The next
+session follows `docs/goal/A2_goal.md`; A2 is ready but not yet started. The
+allowlisted remote handoff is retained on the unchanged instance with validated
+baseline `29/29`, journal EDA `8/8`, and closeout `12/12` packages. Post-finalize
+working directories were not recreated; details are recorded in
+`outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json`.

@@ -11,7 +11,6 @@ from jsonschema import Draft202012Validator
 
 from .projections.read_model import canonical_json, sha256
 
-
 REPORT_SCHEMA = "myis.phase-task-report.v1"
 REPORT_INDEX_SCHEMA = "myis.phase-task-report-index.v1"
 REPORT_ROOT = Path("projections/reports")
@@ -788,6 +787,67 @@ def _artifacts(
     elif phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING":
         adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
         scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
+        current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
+        if (
+            task_id in {None, "A1.2"}
+            and isinstance(current_attempt, Mapping)
+            and current_attempt.get("validated") is True
+            and current_attempt.get("status") == "PASS"
+            and isinstance(current_attempt.get("measured_result_summary"), Mapping)
+        ):
+            summary = current_attempt["measured_result_summary"]
+            result.append(
+                _artifact(
+                    artifact_id="a12-measured-result-summary-v16",
+                    title="A1.2 measured arm-level result summary",
+                    artifact_type="receipt",
+                    evidence_class="measured_development_aggregate",
+                    scientific_authority=True,
+                    safe_uri=str(summary.get("summary_uri")),
+                    content_sha256=str(summary.get("summary_file_sha256")),
+                    explanation="Projects the complete 25/25 REP-DEV result, primary and secondary arm aggregates, deterministic promotion, and zero protected-access counters without per-query data.",
+                    producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                    producing_task_id="A1.2",
+                )
+            )
+            eda = current_attempt.get("cell_eda_package")
+            if isinstance(eda, Mapping) and eda.get("status") == "PASS":
+                result.append(
+                    _artifact(
+                        artifact_id="a12-cell-eda-package-v16",
+                        title="A1.2 publication cell EDA package",
+                        artifact_type="figure_package",
+                        evidence_class="measured_development_aggregate_eda",
+                        scientific_authority=True,
+                        safe_uri=str(eda.get("package_uri")),
+                        content_sha256=str(eda.get("package_file_sha256")),
+                        explanation="Projects the complete 25-cell aggregate table, quality and efficiency figures, and Thai guide without per-query outcomes.",
+                        producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                        producing_task_id="A1.2",
+                    )
+                )
+            retention = model.get("armindex", {}).get(
+                "a1_2_remote_retention", {}
+            )
+            if (
+                isinstance(retention, Mapping)
+                and retention.get("validated") is True
+                and retention.get("status") == "PASS"
+            ):
+                result.append(
+                    _artifact(
+                        artifact_id="a12-r15-remote-retention-audit",
+                        title="A1.2 remote allowlisted handoff retention audit",
+                        artifact_type="audit",
+                        evidence_class="aggregate_safe_remote_retention_audit",
+                        scientific_authority=False,
+                        safe_uri=str(retention.get("audit_uri")),
+                        content_sha256=str(retention.get("audit_file_sha256")),
+                        explanation="Binds exact remote retention of the 29-file baseline, 8-file journal EDA, and 12-file closeout packages without provider payloads, credentials, or protected data.",
+                        producing_phase_id="A1_BASELINES_AND_MULTI_ARM_SCREENING",
+                        producing_task_id="A1.2",
+                    )
+                )
         split_claim_audit = model.get("armindex", {}).get(
             "a1_2_rep_harness_claim_audit", {}
         )
@@ -2415,6 +2475,50 @@ def _metrics(
                 )
         return rows
     if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.2"}:
+        current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
+        summary = (
+            current_attempt.get("measured_result_summary", {})
+            if isinstance(current_attempt, Mapping)
+            else {}
+        )
+        if (
+            current_attempt.get("validated") is True
+            and current_attempt.get("status") == "PASS"
+            and isinstance(summary, Mapping)
+            and summary.get("status") == "PASS"
+        ):
+            rows = []
+            for arm in summary.get("arm_results", []):
+                if not isinstance(arm, Mapping):
+                    continue
+                for name, source_key, cutoff in (
+                    ("out_recall_at_100_mean", "out_recall_at_100_mean", 100),
+                    ("out_ndcg_at_100_mean", "out_ndcg_at_100_mean", 100),
+                    ("out_ndcg_at_10_mean", "out_ndcg_at_10_mean", 10),
+                    (
+                        "search_latency_p95_ms_mean",
+                        "search_latency_p95_ms_mean",
+                        100,
+                    ),
+                    ("wall_seconds_sum", "wall_seconds_sum", 100),
+                    ("failure_rate_mean", "failure_rate_mean", 100),
+                ):
+                    rows.append(
+                        {
+                            "name": f"{arm.get('arm_id', 'unknown').lower()}_{name}",
+                            "cutoff": cutoff,
+                            "split": "REP-DEV",
+                            "scope": "A1.2",
+                            "value": arm.get(source_key),
+                            "n": arm.get("program_count"),
+                            "denominator": "mean_across_five_frozen_common_programs"
+                            if name != "wall_seconds_sum"
+                            else "sum_across_five_frozen_common_programs",
+                            "source_uri": summary.get("summary_uri"),
+                            "source_sha256": summary.get("summary_file_sha256"),
+                        }
+                    )
+            return rows
         scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
         if not isinstance(scaffold, Mapping) or scaffold.get("validated") is not True:
             return []
@@ -3311,6 +3415,31 @@ def _bindings(
             )
             if isinstance(current_attempt.get("coverage"), Mapping)
             else None,
+            "measured_result_summary_uri": current_attempt.get(
+                "measured_result_summary", {}
+            ).get("summary_uri")
+            if isinstance(current_attempt.get("measured_result_summary"), Mapping)
+            else None,
+            "measured_result_summary_sha256": current_attempt.get(
+                "measured_result_summary", {}
+            ).get("summary_file_sha256")
+            if isinstance(current_attempt.get("measured_result_summary"), Mapping)
+            else None,
+            "promoted_arm_ids": current_attempt.get(
+                "measured_result_summary", {}
+            ).get("promoted_arm_ids")
+            if isinstance(current_attempt.get("measured_result_summary"), Mapping)
+            else None,
+            "cell_eda_package_uri": current_attempt.get(
+                "cell_eda_package", {}
+            ).get("package_uri")
+            if isinstance(current_attempt.get("cell_eda_package"), Mapping)
+            else None,
+            "cell_eda_package_sha256": current_attempt.get(
+                "cell_eda_package", {}
+            ).get("package_file_sha256")
+            if isinstance(current_attempt.get("cell_eda_package"), Mapping)
+            else None,
         }
     return bindings
 
@@ -3720,9 +3849,15 @@ def _record_for(
         )
         decision_status = "FAILED_CLOSED_RETRY_REQUIRED"
     elif current_pass:
-        output = "A hash-bound current terminal receipt records complete 25/25 A1.2 coverage."
+        result_summary = current_attempt.get("measured_result_summary", {})
+        promoted = (
+            result_summary.get("promoted_arm_ids", [])
+            if isinstance(result_summary, Mapping)
+            else []
+        )
+        output = "A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms."
         result = "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes."
-        interpretation = "The terminal receipt establishes only the frozen A1.2 result boundary. It does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3."
+        interpretation = f"The frozen rule promoted {', '.join(str(item) for item in promoted)}. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3."
         decision_status = "PASS_25_OF_25"
     elif scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
@@ -4086,7 +4221,7 @@ def _record_for(
     governance = {
         "protected_data_accessed": scientific,
         "measured_execution": scientific,
-        "gpu": False,
+        "gpu": current_pass,
         "paid_api": False,
         "network_model_download": False,
         "provider_fallback": False,
@@ -4158,6 +4293,10 @@ def _record_for(
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
+            else "A1.1 and A1.2 are complete. Attempt r15 completed the frozen 25/25 REP-DEV common screen, safe return, Owner-local evaluation, deterministic promotion, aggregate result and EDA packaging, and a REUSE_ELIGIBLE provider closeout. Historical v1-v15 planning, preflight, and repair records remain immutable lineage only; A2, HARNESS-DEV, Selection, and Final have not started, and A2 still requires fresh admission, execution adoption, and a new isolated remote root."
+            if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+            and task_id in {None, "A1.2"}
+            and current_pass
             else "A1.1 synthetic adapter evidence and the A1.2 v1-v10 preflight/closeout lineage are validated. The additive v11 request preserves that history and freezes a separate protected scientific transfer, executable P00-P04 compiler source/spec hashes, 150 REP-DEV queries with 100 reserved for HARNESS-DEV, 25 required aggregate result receipts, all-fee budget admission, and a fresh-provider plan. The prior instance is destroyed. Provider contact, adoption, measured retrieval, Selection, Final, and paid API work remain closed."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
             and task_id is None

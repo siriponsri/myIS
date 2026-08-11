@@ -1,0 +1,67 @@
+{
+  "schema_version": "myis.armindex-a1.2-remote-retention-audit.v1",
+  "audit_id": "a1.2-r15-remote-retention-20260812",
+  "timestamp_utc": "2026-08-11T17:35:04Z",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "PASS",
+  "evidence_class": "aggregate_safe_remote_retention_audit",
+  "scientific_authority": false,
+  "claim_boundary": "This audit proves byte-for-byte retention of the allowlisted A1 baseline, journal EDA, and closeout handoff packages on the unchanged Vast instance. It contains no protected payload and does not authorize A2 execution or support a new scientific claim.",
+  "attempt": {
+    "attempt_id": "a12-v16-20260811-r15",
+    "instance_id": 47411176,
+    "provider_status": "running",
+    "provider_verification": "verified",
+    "all_fee_hourly_usd": 0.6027777777777777,
+    "provider_disposition": "REUSE_ELIGIBLE",
+    "remote_root_label": "/opt/myis/a1.2-v16-stage-20260811-47411176"
+  },
+  "packages": {
+    "a1_baseline": {
+      "remote_relative_path": "handoff/a1-baseline/a12-v16-20260811-r15",
+      "source_member_count": 28,
+      "remote_total_file_count": 29,
+      "manifest_file_sha256": "1a3fa0a426630a721c8593a54def60b3df4cdf603efded5f0d3d02b99819c257",
+      "manifest_sha256": "917e9031c65563c2486da351c04ca6ff0d557ded9c61e692f57dbeb6b385895d",
+      "remote_member_hash_validation": true
+    },
+    "a1_journal_eda": {
+      "remote_relative_path": "handoff/a1-journal-eda/a12-v16-20260811-r15",
+      "source_member_count": 7,
+      "remote_total_file_count": 8,
+      "manifest_file_sha256": "203ae2110cf09fccded87bd56d16f99d8ed6e729c0fb3a56ee8d42c53280e398",
+      "manifest_sha256": "e35d3e161e1b32cc1c23e3ecd19443f805e5eba4963b138c5e6687f6bf9f5621",
+      "remote_member_hash_validation": true
+    },
+    "a1_closeout": {
+      "remote_relative_path": "handoff/a1-closeout/a12-v16-20260811-r15",
+      "source_member_count": 11,
+      "remote_total_file_count": 12,
+      "manifest_file_sha256": "d4c305b9da041e73479d8e6c798f7ae7707000a07348bcc371355f43198bb89e",
+      "manifest_sha256": "3f290d141b8cdce330a77704af45603474d0a8383c3925c9aaa530eee36aa6f9",
+      "remote_member_hash_validation": true
+    }
+  },
+  "post_finalize_remote_state": {
+    "current_working_directory": "absent_after_finalize",
+    "output_working_directory": "absent_after_finalize",
+    "job_ledger_file_count": 4,
+    "frozen_execution_bundle_present": true,
+    "dense_model_root_count": 4,
+    "safe_return_archive_present": true,
+    "measured_working_directories_recreated": false
+  },
+  "safety": {
+    "protected_payload_exported_to_git": false,
+    "credentials_recorded": false,
+    "raw_provider_payload_recorded": false,
+    "instance_destroyed": false,
+    "a2_execution_started": false,
+    "harness_dev_accesses": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "next_authorized_action": "RUN_FRESH_A2_ENTRY_PREFLIGHT_PROVIDER_ADMISSION_AND_EXECUTION_ADOPTION_IN_A_NEW_ISOLATED_REMOTE_ROOT",
+  "audit_sha256": "2898f16ab1decab3194bccbe80b14fd96b39176507056081a808d98fcda4a74b"
+}

@@ -88,10 +88,17 @@ control/budgets/armindex-migration-v2.yaml -text
 control/migrations/armindex-*.yaml -text
 control/migration-map.v2.yaml -text
 campaigns/armindex-multiretriever-v2/evidence/*.json -text
+campaigns/armindex-multiretriever-v2/evidence/**/*.json -text
 archive/migration-records/armindex-20260804/** -text
 outputs/fixtures/armindex/**/*.json -text
 outputs/audits/repository/*.json -text
 outputs/audits/dashboard/*.json -text
+
+# Publication figures and exact aggregate tables are hash-bound artifacts.
+# SVGs are generated assets, so treat them as binary to preserve their bytes
+# and avoid interpreting path-data spacing as source-code whitespace.
+outputs/figures/armindex/*.svg binary
+outputs/tables/armindex/*.csv -text
 
 # A0 feasibility and phase-closeout evidence binds these files by raw SHA-256.
 # Preserve bytes for clean-checkout validation and the pointer-only Brain note.

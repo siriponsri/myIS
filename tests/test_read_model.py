@@ -1,21 +1,24 @@
 from __future__ import annotations
 
-import importlib.util
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 
 import pytest
 
-from myis_research.kernel.manifest import build_manifest
-from myis_research.kernel.manifest_validation import build_validation_report, capture_git_state
-from myis_research.kernel.canonical import canonical_sha256
 from myis_research.armindex.constants import (
     A0_8_NEXT_AUTHORIZED_ACTION,
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
-    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
+    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
+)
+from myis_research.kernel.canonical import canonical_sha256
+from myis_research.kernel.manifest import build_manifest
+from myis_research.kernel.manifest_validation import (
+    build_validation_report,
+    capture_git_state,
 )
 from myis_research.owner_local import build_receipt
 from myis_research.projections import read_model as read_model_module
@@ -25,17 +28,16 @@ from myis_research.projections.read_model import (
     A010_OUTPUT_ROOT_RELOCATION_RECEIPT_PATH,
     A010_REPOSITORY_HYGIENE_AUDIT_PATH,
     A010_SOURCE_VERIFICATION_RECEIPT_PATH,
+    _a010_legacy_code_harvest_projection,
     _a08_compute_storage_feasibility_projection,
     _a09_phase_closeout_projection,
     _a11_adapter_fixture_projection,
     _a12_contract_scaffold_projection,
-    _a010_legacy_code_harvest_projection,
     _legacy_file_commitment_matches,
     build_read_model,
     write_read_model,
 )
 from myis_research.report_cli import validate_read_model
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,6 +52,33 @@ def test_empty_campaign_read_model_is_safe(tmp_path: Path) -> None:
     assert model["publication_readiness"]["status"] == "blocked"
     output = write_read_model(tmp_path)
     assert json.loads(output.read_text(encoding="utf-8"))["projection_revision"] == model["projection_revision"]
+
+
+def test_a1_terminal_pass_unlocks_a2_planning(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        read_model_module,
+        "_a12_current_attempt_projection",
+        lambda _root: {
+            "validated": True,
+            "status": "PASS",
+            "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
+        },
+    )
+
+    model = build_read_model(ROOT)
+    phases = {
+        phase["phase_id"]: phase for phase in model["armindex"]["phases"]
+    }
+
+    assert phases["A1_BASELINES_AND_MULTI_ARM_SCREENING"]["status"] == "complete"
+    assert phases["A2_PER_ARM_AUTOINDEX"]["status"] == "planned"
+    assert model["armindex"]["next_command"] == "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
+    retention = model["armindex"]["a1_2_remote_retention"]
+    assert retention["validated"] is True
+    assert retention["status"] == "PASS"
+    assert retention["packages"]["a1_baseline"]["remote_total_file_count"] == 29
+    assert retention["packages"]["a1_journal_eda"]["remote_total_file_count"] == 8
+    assert retention["packages"]["a1_closeout"]["remote_total_file_count"] == 12
 
 
 def test_read_model_revision_ignores_postcommit_validation_git_identity(
@@ -247,6 +276,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
         "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
         "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
         "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY",
+        "A1_COMPLETE_25_OF_25",
     }
 
 

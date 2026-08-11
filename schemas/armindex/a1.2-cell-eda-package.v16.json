@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-cell-eda-package.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "package_id", "attempt_id", "phase_id", "task_id",
+    "status", "evidence_class", "scientific_authority", "claim_boundary",
+    "metric_contract", "coverage", "cells", "artifacts", "lineage",
+    "access_counters", "package_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-cell-eda-package.v16"},
+    "package_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}-cell-eda-v16$"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "phase_id": {"const": "A1_BASELINES_AND_MULTI_ARM_SCREENING"},
+    "task_id": {"const": "A1.2"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "measured_development_aggregate_eda"},
+    "scientific_authority": {"const": true},
+    "claim_boundary": {"type": "string", "minLength": 60},
+    "metric_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "secondary", "eda_role"],
+      "properties": {
+        "primary": {"const": "OUT Recall@100"},
+        "secondary": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "OUT nDCG@100"},
+            {"const": "OUT nDCG@10"}
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "eda_role": {"const": "descriptive_cell_level_no_per_query_projection"}
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_count", "program_count", "cell_count", "queries_per_cell", "top_k"],
+      "properties": {
+        "arm_count": {"const": 5},
+        "program_count": {"const": 5},
+        "cell_count": {"const": 25},
+        "queries_per_cell": {"const": 150},
+        "top_k": {"const": 100}
+      }
+    },
+    "cells": {
+      "type": "array",
+      "minItems": 25,
+      "maxItems": 25,
+      "items": {"$ref": "#/$defs/cell"}
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["csv", "quality_figure_png", "quality_figure_svg", "efficiency_figure_png", "efficiency_figure_svg", "thai_report"],
+      "properties": {
+        "csv": {"$ref": "#/$defs/artifact"},
+        "quality_figure_png": {"$ref": "#/$defs/artifact"},
+        "quality_figure_svg": {"$ref": "#/$defs/artifact"},
+        "efficiency_figure_png": {"$ref": "#/$defs/artifact"},
+        "efficiency_figure_svg": {"$ref": "#/$defs/artifact"},
+        "thai_report": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_result_summary_sha256", "cell_receipt_set_sha256", "promotion_receipt_sha256", "evaluator_closeout_receipt_sha256"],
+      "properties": {
+        "measured_result_summary_sha256": {"$ref": "#/$defs/hash"},
+        "cell_receipt_set_sha256": {"$ref": "#/$defs/hash"},
+        "promotion_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "evaluator_closeout_receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "access_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harness_dev_accesses", "selection_accesses", "final_accesses"],
+      "properties": {
+        "harness_dev_accesses": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0}
+      }
+    },
+    "package_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "nonnegative": {"type": "number", "minimum": 0},
+    "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+    "program_id": {"enum": ["P00-TAC-DOC", "P01-TA-DOC", "P02-CLAIM1", "P03-PASSAGE", "P04-SECTION-MULTIVIEW"]},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "file_sha256", "purpose"],
+      "properties": {
+        "uri": {"type": "string", "minLength": 1},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "purpose": {"type": "string", "minLength": 20}
+      }
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cell_id", "arm_id", "arm_label", "program_id", "program_label",
+        "out_recall_at_100", "out_ndcg_at_100", "out_ndcg_at_10",
+        "search_latency_p50_ms", "search_latency_p95_ms", "search_latency_p99_ms",
+        "throughput_qps", "wall_seconds", "peak_host_ram_bytes", "peak_vram_bytes",
+        "index_size_bytes", "replay_count", "retry_count", "failure_rate",
+        "receipt_sha256", "receipt_file_sha256"
+      ],
+      "properties": {
+        "cell_id": {"type": "string", "pattern": "^ARM-0[1-5]--P0[0-4]-[A-Z0-9-]+$"},
+        "arm_id": {"$ref": "#/$defs/arm_id"},
+        "arm_label": {"type": "string", "minLength": 3},
+        "program_id": {"$ref": "#/$defs/program_id"},
+        "program_label": {"type": "string", "minLength": 3},
+        "out_recall_at_100": {"$ref": "#/$defs/rate"},
+        "out_ndcg_at_100": {"$ref": "#/$defs/rate"},
+        "out_ndcg_at_10": {"$ref": "#/$defs/rate"},
+        "search_latency_p50_ms": {"$ref": "#/$defs/nonnegative"},
+        "search_latency_p95_ms": {"$ref": "#/$defs/nonnegative"},
+        "search_latency_p99_ms": {"$ref": "#/$defs/nonnegative"},
+        "throughput_qps": {"$ref": "#/$defs/nonnegative"},
+        "wall_seconds": {"$ref": "#/$defs/nonnegative"},
+        "peak_host_ram_bytes": {"type": "integer", "minimum": 0},
+        "peak_vram_bytes": {"type": "integer", "minimum": 0},
+        "index_size_bytes": {"type": "integer", "minimum": 0},
+        "replay_count": {"type": "integer", "minimum": 2},
+        "retry_count": {"type": "integer", "minimum": 0},
+        "failure_rate": {"$ref": "#/$defs/rate"},
+        "receipt_sha256": {"$ref": "#/$defs/hash"},
+        "receipt_file_sha256": {"$ref": "#/$defs/hash"}
+      }
+    }
+  }
+}

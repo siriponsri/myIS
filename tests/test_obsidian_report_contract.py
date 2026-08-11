@@ -247,8 +247,6 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         / "02_Tasks/ArmIndex/A1_BASELINES_AND_MULTI_ARM_SCREENING/A1.2.md"
     ]
     assert "A1.2 closeout validation audit" in a12_report
-    assert "passed `17` validation groups" in a12_report
-    assert "`7` bounded failure/recovery records" in a12_report
     assert "A1.2 Vast preflight closeout validation audit" in a12_report
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in a12_report
     assert "A1.2 Vast post-commit correction receipt v3" in a12_report
@@ -259,14 +257,19 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "A1.2 execution-lifecycle repair receipt v9" in a12_report
     assert "A1.2 Owner-local provider closeout receipt v10" in a12_report
     assert "A1.2 scientific execution and adoption request v11" in a12_report
-    assert "prepared for Owner review" in a12_report
-    assert "no independent Vast API or CLI record was obtained" in a12_report
+    assert "A1.2 remote allowlisted handoff retention audit" in a12_report
+    assert "A1.2 terminal closeout state" in a12_report
+    assert "complete `25/25` REP-DEV coverage" in a12_report
+    assert "provider disposition `REUSE_ELIGIBLE`" in a12_report
+    assert "baseline `29/29`" in a12_report
+    assert "journal EDA `8/8`" in a12_report
+    assert "closeout `12/12`" in a12_report
+    assert "request is prepared for Owner review only" not in a12_report
+    assert "remains conditional and is not authorized now" not in a12_report
     assert "v6-initial-wheelhouse-missing-pydantic" in a12_report
     assert "v6-supplement-repair-mutated-pycache-tree" in a12_report
     assert "v7-frozen-bundle-missing-validation-lineage" in a12_report
-    assert "vast_v7_preserved_live_failure_count" in a12_report
     assert "A1.2 Owner conditional instance-continuation policy" in a12_report
-    assert "vast_v6_live_quote_usd_per_instance_hour" in a12_report
     assert "a1.2-v2-postcommit-head-tree-regeneration-defect-20260806" in a12_report
     assert "A1.2 v3 deterministic projection stability repair" in a12_report
     assert "a1.2-v3-runtime-git-identity-projection-drift-20260806" in a12_report
@@ -280,8 +283,6 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert "a1.2-v2-pyproject-v1-source-binding-drift-20260806" in failure_ids
     assert "v6-initial-wheelhouse-missing-pydantic" in failure_ids
     assert "v6-supplement-repair-mutated-pycache-tree" in failure_ids
-    assert "vast_v6_live_quote_usd_per_instance_hour" in a12_report
-    assert "`0.656`" in a12_report
 
     sync_receipt = json.loads((ROOT / "projections/sync-receipt.v2.json").read_text(encoding="utf-8"))
     assert sync_receipt["source_receipt_uri"].endswith(

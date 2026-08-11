@@ -10,6 +10,250 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
+from ..armindex import ArmIndexContractError, build_armindex_projection
+from ..armindex.a1_2_cell_eda_package_v16 import (
+    CellEdaPackageV16Error,
+    validate_cell_eda_package_file,
+)
+from ..armindex.a1_2_cell_eda_package_v16 import (
+    package_path as a1_2_cell_eda_package_path,
+)
+from ..armindex.a1_2_contract import (
+    ARM01_PARITY_RECEIPT_PATH as A12_ARM01_PARITY_RECEIPT_PATH,
+)
+from ..armindex.a1_2_contract import (
+    CONTROL_ROOT as A12_CONTROL_ROOT,
+)
+from ..armindex.a1_2_contract import (
+    LEDGER_PATH as A12_LEDGER_PATH,
+)
+from ..armindex.a1_2_contract import (
+    RECEIPT_PATH as A12_RECEIPT_PATH,
+)
+from ..armindex.a1_2_contract import (
+    RUNBOOK_PATH as A12_RUNBOOK_PATH,
+)
+from ..armindex.a1_2_contract import (
+    validate_a1_2_scaffold,
+)
+from ..armindex.a1_2_instance_disposition_v13 import (
+    POLICY_PATH as A12_V13_DISPOSITION_POLICY_PATH,
+)
+from ..armindex.a1_2_instance_disposition_v13 import (
+    REVISION_ID as A12_V13_DISPOSITION_REVISION_ID,
+)
+from ..armindex.a1_2_instance_disposition_v13 import (
+    SCHEMA_PATH as A12_V13_DISPOSITION_SCHEMA_PATH,
+)
+from ..armindex.a1_2_instance_disposition_v13 import (
+    current_status as current_a1_2_v13_disposition_status,
+)
+from ..armindex.a1_2_live_preflight_execution_v9 import (
+    CONTRACT_PATH as A12_V9_CONTRACT_PATH,
+)
+from ..armindex.a1_2_live_preflight_execution_v9 import (
+    RECEIPT_PATH as A12_V9_RECEIPT_PATH,
+)
+from ..armindex.a1_2_live_preflight_execution_v9 import (
+    REVISION_ID as A12_V9_REVISION_ID,
+)
+from ..armindex.a1_2_live_preflight_execution_v9 import (
+    SCHEMA_PATH as A12_V9_SCHEMA_PATH,
+)
+from ..armindex.a1_2_live_preflight_execution_v9 import (
+    validate_revision as validate_a1_2_v9_execution_lifecycle,
+)
+from ..armindex.a1_2_live_preflight_packaging_v8 import (
+    CONTRACT_PATH as A12_V8_CONTRACT_PATH,
+)
+from ..armindex.a1_2_live_preflight_packaging_v8 import (
+    RECEIPT_PATH as A12_V8_RECEIPT_PATH,
+)
+from ..armindex.a1_2_live_preflight_packaging_v8 import (
+    REVISION_ID as A12_V8_REVISION_ID,
+)
+from ..armindex.a1_2_live_preflight_packaging_v8 import (
+    SCHEMA_PATH as A12_V8_SCHEMA_PATH,
+)
+from ..armindex.a1_2_live_preflight_packaging_v8 import (
+    validate_revision as validate_a1_2_v8_packaging_repair,
+)
+from ..armindex.a1_2_live_preflight_repair_v7 import (
+    CONTRACT_PATH as A12_V7_CONTRACT_PATH,
+)
+from ..armindex.a1_2_live_preflight_repair_v7 import (
+    RECEIPT_PATH as A12_V7_RECEIPT_PATH,
+)
+from ..armindex.a1_2_live_preflight_repair_v7 import (
+    REVISION_ID as A12_V7_REVISION_ID,
+)
+from ..armindex.a1_2_live_preflight_repair_v7 import (
+    SCHEMA_PATH as A12_V7_SCHEMA_PATH,
+)
+from ..armindex.a1_2_live_preflight_repair_v7 import (
+    validate_live_repair_v7 as validate_a1_2_v7_live_repair,
+)
+from ..armindex.a1_2_live_preflight_result_v9 import (
+    RECEIPT_PATH as A12_V9_RESULT_RECEIPT_PATH,
+)
+from ..armindex.a1_2_live_preflight_result_v9 import (
+    REVISION_ID as A12_V9_RESULT_REVISION_ID,
+)
+from ..armindex.a1_2_live_preflight_result_v9 import (
+    SCHEMA_PATH as A12_V9_RESULT_SCHEMA_PATH,
+)
+from ..armindex.a1_2_live_preflight_result_v9 import (
+    validate_result as validate_a1_2_v9_live_result,
+)
+from ..armindex.a1_2_live_preflight_revision import (
+    CONTRACT_PATH as A12_V6_CONTRACT_PATH,
+)
+from ..armindex.a1_2_live_preflight_revision import (
+    RECEIPT_PATH as A12_V6_RECEIPT_PATH,
+)
+from ..armindex.a1_2_live_preflight_revision import (
+    REVISION_ID as A12_V6_REVISION_ID,
+)
+from ..armindex.a1_2_live_preflight_revision import (
+    SCHEMA_PATH as A12_V6_SCHEMA_PATH,
+)
+from ..armindex.a1_2_live_preflight_revision import (
+    validate_live_revision as validate_a1_2_v6_live_revision,
+)
+from ..armindex.a1_2_measured_result_summary_v16 import (
+    MeasuredResultSummaryV16Error,
+    validate_measured_result_summary_file,
+)
+from ..armindex.a1_2_provider_closeout_result_v10 import (
+    RECEIPT_PATH as A12_V10_CLOSEOUT_RECEIPT_PATH,
+)
+from ..armindex.a1_2_provider_closeout_result_v10 import (
+    REVISION_ID as A12_V10_CLOSEOUT_REVISION_ID,
+)
+from ..armindex.a1_2_provider_closeout_result_v10 import (
+    SCHEMA_PATH as A12_V10_CLOSEOUT_SCHEMA_PATH,
+)
+from ..armindex.a1_2_provider_closeout_result_v10 import (
+    validate_closeout as validate_a1_2_v10_provider_closeout,
+)
+from ..armindex.a1_2_publication_impact_v13 import (
+    CONTRACT_PATH as A12_V13_PUBLICATION_CONTRACT_PATH,
+)
+from ..armindex.a1_2_publication_impact_v13 import (
+    DOCUMENTATION_PATH as A12_V13_PUBLICATION_DOCUMENTATION_PATH,
+)
+from ..armindex.a1_2_publication_impact_v13 import (
+    REVISION_ID as A12_V13_PUBLICATION_REVISION_ID,
+)
+from ..armindex.a1_2_publication_impact_v13 import (
+    SCHEMA_PATH as A12_V13_PUBLICATION_SCHEMA_PATH,
+)
+from ..armindex.a1_2_publication_impact_v13 import (
+    validate as validate_a1_2_v13_publication_impact,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    CONTRACT_PATH as A12_V5_CONTRACT_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    IMAGE_CONTRACT_PATH as A12_V5_IMAGE_CONTRACT_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    OWNER_RUNBOOK_PATH as A12_V5_OWNER_RUNBOOK_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    RECEIPT_PATH as A12_V5_RECEIPT_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    RUNTIME_LOCK_PATH as A12_V5_RUNTIME_LOCK_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    SCHEMA_PATH as A12_V5_SCHEMA_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    TOPOLOGY_PATH as A12_V5_TOPOLOGY_PATH,
+)
+from ..armindex.a1_2_runtime_minimal_direct_base import (
+    validate_direct_base_revision as validate_a1_2_v5_direct_base,
+)
+from ..armindex.a1_2_scientific_execution_adoption_inputs_v12_r3 import (
+    CONTRACT_PATH as A12_V12_R3_CONTRACT_PATH,
+)
+from ..armindex.a1_2_scientific_execution_adoption_inputs_v12_r3 import (
+    CONTRACT_SCHEMA_PATH as A12_V12_R3_CONTRACT_SCHEMA_PATH,
+)
+from ..armindex.a1_2_scientific_execution_adoption_inputs_v12_r3 import (
+    REVISION_ID as A12_V12_R3_REVISION_ID,
+)
+from ..armindex.a1_2_scientific_execution_adoption_inputs_v12_r3 import (
+    validate_contract as validate_a1_2_v12_r3_adoption_inputs,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    BUDGET_PATH as A12_V11_BUDGET_PATH,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    RECEIPT_PATH as A12_V11_RECEIPT_PATH,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    RECEIPT_SCHEMA_PATH as A12_V11_RECEIPT_SCHEMA_PATH,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    REQUEST_PATH as A12_V11_REQUEST_PATH,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    REQUEST_SCHEMA_PATH as A12_V11_REQUEST_SCHEMA_PATH,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    REVISION_ID as A12_V11_REVISION_ID,
+)
+from ..armindex.a1_2_scientific_execution_request_v11 import (
+    validate as validate_a1_2_v11_scientific_request,
+)
+from ..armindex.a1_2_terminal_attempt_v16 import (
+    CURRENT_POINTER_PATH as A12_CURRENT_ATTEMPT_POINTER_PATH,
+)
+from ..armindex.a1_2_terminal_attempt_v16 import (
+    TerminalAttemptV16Error,
+    validate_current_attempt_pointer,
+)
+from ..armindex.a1_2_vast import (
+    CONTROL_ROOT as A12_V2_CONTROL_ROOT,
+)
+from ..armindex.a1_2_vast import (
+    LEDGER_PATH as A12_V2_LEDGER_PATH,
+)
+from ..armindex.a1_2_vast import (
+    RECEIPT_PATH as A12_V2_RECEIPT_PATH,
+)
+from ..armindex.a1_2_vast import (
+    RUNBOOK_PATH as A12_V2_RUNBOOK_PATH,
+)
+from ..armindex.a1_2_vast import (
+    SYNTHETIC_RECEIPT_PATH as A12_V2_SYNTHETIC_RECEIPT_PATH,
+)
+from ..armindex.a1_2_vast import (
+    validate_preparation_receipt as validate_a1_2_vast_receipt,
+)
+from ..armindex.a1_2_vast_postcommit import (
+    CONTRACT_PATH as A12_V3_CONTRACT_PATH,
+)
+from ..armindex.a1_2_vast_postcommit import (
+    RECEIPT_PATH as A12_V3_RECEIPT_PATH,
+)
+from ..armindex.a1_2_vast_postcommit import (
+    validate_postcommit_revision as validate_a1_2_vast_postcommit,
+)
+from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
+from ..armindex.constants import (
+    A0_8_NEXT_AUTHORIZED_ACTION,
+    A0_9_NEXT_AUTHORIZED_ACTION,
+    A1_1_NEXT_AUTHORIZED_ACTION,
+    A1_2_NEXT_AUTHORIZED_ACTION,
+    A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
+    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
+)
+from ..armindex.contracts import parse_contract
+from ..armindex.feasibility import validate_compute_storage_artifacts
+from ..armindex.resource_proposal import load_and_validate_gpu_proposal
 from ..dapfam_p1 import DapfamP1Error, load_package
 from ..kernel.canonical import canonical_sha256
 from ..kernel.manifest import manifest_round_trip
@@ -17,6 +261,7 @@ from ..kernel.manifest_validation import (
     ManifestValidationError,
     validate_validation_report,
 )
+from ..observatory.projection import load_observatory_projection
 from ..owner_local import OwnerLocalContractError, validate_receipt
 from ..p2 import (
     P2ContractError,
@@ -29,125 +274,6 @@ from ..p2 import (
     validate_p2_preflight_receipt,
 )
 from ..protection import assert_aggregate_only
-from ..observatory.projection import load_observatory_projection
-from ..armindex import ArmIndexContractError, build_armindex_projection
-from ..armindex.constants import (
-    A0_8_NEXT_AUTHORIZED_ACTION,
-    A0_9_NEXT_AUTHORIZED_ACTION,
-    A1_1_NEXT_AUTHORIZED_ACTION,
-    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
-    A1_2_NEXT_AUTHORIZED_ACTION,
-    A1_2_SCAFFOLD_NEXT_AUTHORIZED_ACTION,
-)
-from ..armindex.a1_2_contract import (
-    ARM01_PARITY_RECEIPT_PATH as A12_ARM01_PARITY_RECEIPT_PATH,
-    CONTROL_ROOT as A12_CONTROL_ROOT,
-    LEDGER_PATH as A12_LEDGER_PATH,
-    RECEIPT_PATH as A12_RECEIPT_PATH,
-    RUNBOOK_PATH as A12_RUNBOOK_PATH,
-    validate_a1_2_scaffold,
-)
-from ..armindex.a1_2_vast import (
-    CONTROL_ROOT as A12_V2_CONTROL_ROOT,
-    LEDGER_PATH as A12_V2_LEDGER_PATH,
-    RECEIPT_PATH as A12_V2_RECEIPT_PATH,
-    RUNBOOK_PATH as A12_V2_RUNBOOK_PATH,
-    SYNTHETIC_RECEIPT_PATH as A12_V2_SYNTHETIC_RECEIPT_PATH,
-    validate_preparation_receipt as validate_a1_2_vast_receipt,
-)
-from ..armindex.a1_2_vast_postcommit import (
-    CONTRACT_PATH as A12_V3_CONTRACT_PATH,
-    RECEIPT_PATH as A12_V3_RECEIPT_PATH,
-    validate_postcommit_revision as validate_a1_2_vast_postcommit,
-)
-from ..armindex.a1_2_runtime_minimal_direct_base import (
-    CONTRACT_PATH as A12_V5_CONTRACT_PATH,
-    IMAGE_CONTRACT_PATH as A12_V5_IMAGE_CONTRACT_PATH,
-    OWNER_RUNBOOK_PATH as A12_V5_OWNER_RUNBOOK_PATH,
-    RECEIPT_PATH as A12_V5_RECEIPT_PATH,
-    RUNTIME_LOCK_PATH as A12_V5_RUNTIME_LOCK_PATH,
-    SCHEMA_PATH as A12_V5_SCHEMA_PATH,
-    TOPOLOGY_PATH as A12_V5_TOPOLOGY_PATH,
-    validate_direct_base_revision as validate_a1_2_v5_direct_base,
-)
-from ..armindex.a1_2_live_preflight_revision import (
-    CONTRACT_PATH as A12_V6_CONTRACT_PATH,
-    RECEIPT_PATH as A12_V6_RECEIPT_PATH,
-    REVISION_ID as A12_V6_REVISION_ID,
-    SCHEMA_PATH as A12_V6_SCHEMA_PATH,
-    validate_live_revision as validate_a1_2_v6_live_revision,
-)
-from ..armindex.a1_2_live_preflight_repair_v7 import (
-    CONTRACT_PATH as A12_V7_CONTRACT_PATH,
-    RECEIPT_PATH as A12_V7_RECEIPT_PATH,
-    REVISION_ID as A12_V7_REVISION_ID,
-    SCHEMA_PATH as A12_V7_SCHEMA_PATH,
-    validate_live_repair_v7 as validate_a1_2_v7_live_repair,
-)
-from ..armindex.a1_2_live_preflight_packaging_v8 import (
-    CONTRACT_PATH as A12_V8_CONTRACT_PATH,
-    RECEIPT_PATH as A12_V8_RECEIPT_PATH,
-    REVISION_ID as A12_V8_REVISION_ID,
-    SCHEMA_PATH as A12_V8_SCHEMA_PATH,
-    validate_revision as validate_a1_2_v8_packaging_repair,
-)
-from ..armindex.a1_2_live_preflight_execution_v9 import (
-    CONTRACT_PATH as A12_V9_CONTRACT_PATH,
-    RECEIPT_PATH as A12_V9_RECEIPT_PATH,
-    REVISION_ID as A12_V9_REVISION_ID,
-    SCHEMA_PATH as A12_V9_SCHEMA_PATH,
-    validate_revision as validate_a1_2_v9_execution_lifecycle,
-)
-from ..armindex.a1_2_live_preflight_result_v9 import (
-    RECEIPT_PATH as A12_V9_RESULT_RECEIPT_PATH,
-    REVISION_ID as A12_V9_RESULT_REVISION_ID,
-    SCHEMA_PATH as A12_V9_RESULT_SCHEMA_PATH,
-    validate_result as validate_a1_2_v9_live_result,
-)
-from ..armindex.a1_2_provider_closeout_result_v10 import (
-    RECEIPT_PATH as A12_V10_CLOSEOUT_RECEIPT_PATH,
-    REVISION_ID as A12_V10_CLOSEOUT_REVISION_ID,
-    SCHEMA_PATH as A12_V10_CLOSEOUT_SCHEMA_PATH,
-    validate_closeout as validate_a1_2_v10_provider_closeout,
-)
-from ..armindex.a1_2_scientific_execution_request_v11 import (
-    BUDGET_PATH as A12_V11_BUDGET_PATH,
-    RECEIPT_PATH as A12_V11_RECEIPT_PATH,
-    RECEIPT_SCHEMA_PATH as A12_V11_RECEIPT_SCHEMA_PATH,
-    REQUEST_PATH as A12_V11_REQUEST_PATH,
-    REQUEST_SCHEMA_PATH as A12_V11_REQUEST_SCHEMA_PATH,
-    REVISION_ID as A12_V11_REVISION_ID,
-    validate as validate_a1_2_v11_scientific_request,
-)
-from ..armindex.a1_2_scientific_execution_adoption_inputs_v12_r3 import (
-    CONTRACT_PATH as A12_V12_R3_CONTRACT_PATH,
-    CONTRACT_SCHEMA_PATH as A12_V12_R3_CONTRACT_SCHEMA_PATH,
-    REVISION_ID as A12_V12_R3_REVISION_ID,
-    validate_contract as validate_a1_2_v12_r3_adoption_inputs,
-)
-from ..armindex.a1_2_publication_impact_v13 import (
-    CONTRACT_PATH as A12_V13_PUBLICATION_CONTRACT_PATH,
-    DOCUMENTATION_PATH as A12_V13_PUBLICATION_DOCUMENTATION_PATH,
-    REVISION_ID as A12_V13_PUBLICATION_REVISION_ID,
-    SCHEMA_PATH as A12_V13_PUBLICATION_SCHEMA_PATH,
-    validate as validate_a1_2_v13_publication_impact,
-)
-from ..armindex.a1_2_instance_disposition_v13 import (
-    POLICY_PATH as A12_V13_DISPOSITION_POLICY_PATH,
-    REVISION_ID as A12_V13_DISPOSITION_REVISION_ID,
-    SCHEMA_PATH as A12_V13_DISPOSITION_SCHEMA_PATH,
-    current_status as current_a1_2_v13_disposition_status,
-)
-from ..armindex.a1_2_terminal_attempt_v16 import (
-    CURRENT_POINTER_PATH as A12_CURRENT_ATTEMPT_POINTER_PATH,
-    TerminalAttemptV16Error,
-    validate_current_attempt_pointer,
-)
-from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
-from ..armindex.contracts import parse_contract
-from ..armindex.feasibility import validate_compute_storage_artifacts
-from ..armindex.resource_proposal import load_and_validate_gpu_proposal
-
 
 READ_MODEL_SCHEMA = "myis.read-model.v2"
 PROJECTION_SCHEMA_VERSION = "myis.integrated-projection.v2"
@@ -448,6 +574,9 @@ A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH = Path(
 A12_V16_R13_FAILURE_AUDIT_PATH = Path(
     "outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json"
 )
+A12_R15_REMOTE_RETENTION_AUDIT_PATH = Path(
+    "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path(
     "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl"
@@ -518,6 +647,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a1_2_exact_token_id_probe = _a12_exact_token_id_adapter_probe_projection(root)
     a1_2_r13_failure = _a12_r13_failure_projection(root)
     a1_2_current_attempt = _a12_current_attempt_projection(root)
+    a1_2_remote_retention = _a12_r15_remote_retention_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -531,6 +661,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_exact_token_id_adapter_probe": a1_2_exact_token_id_probe,
         "a1_2_r13_failure": a1_2_r13_failure,
         "a1_2_current_attempt": a1_2_current_attempt,
+        "a1_2_remote_retention": a1_2_remote_retention,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -559,6 +690,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     )
                     if phase.get("phase_id")
                     == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+                    else "planned"
+                    if current_status == "PASS"
+                    and phase.get("phase_id") == "A2_PER_ARM_AUTOINDEX"
                     else phase.get("status")
                 ),
                 "tasks": [
@@ -581,6 +715,14 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             for phase in armindex.get("phases", [])
             if isinstance(phase, Mapping)
         ]
+        if current_status == "PASS":
+            counters = (
+                dict(armindex.get("counters", {}))
+                if isinstance(armindex.get("counters"), Mapping)
+                else {}
+            )
+            counters["measured_runs"] = 1
+            armindex["counters"] = counters
     elif a1_2_current_attempt.get("status") == "INVALID":
         armindex["status"] = "a1_2_current_terminal_pointer_invalid_fail_closed"
         armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -2693,7 +2835,46 @@ def _a12_current_attempt_projection(root: Path) -> dict[str, Any]:
         result = validate_current_attempt_pointer(root)
         pointer = result["pointer"]
         receipt = result["receipt"]
-    except TerminalAttemptV16Error:
+        measured_summary = None
+        cell_eda_package = None
+        if receipt["status"] == "PASS":
+            measured_summary = validate_measured_result_summary_file(
+                root, receipt["attempt_id"]
+            )
+            lineage = measured_summary.get("lineage")
+            if not isinstance(lineage, Mapping) or any(
+                lineage.get(summary_field) != receipt.get(receipt_field)
+                for summary_field, receipt_field in (
+                    ("safe_return_archive_sha256", "safe_return_sha256"),
+                    ("promotion_receipt_sha256", "promotion_receipt_sha256"),
+                    (
+                        "evaluator_closeout_receipt_sha256",
+                        "evaluator_receipt_sha256",
+                    ),
+                )
+            ):
+                raise MeasuredResultSummaryV16Error(
+                    "measured result summary does not bind the terminal receipt"
+                )
+            eda_path = root / a1_2_cell_eda_package_path(receipt["attempt_id"])
+            if eda_path.exists():
+                cell_eda_package = validate_cell_eda_package_file(
+                    root, receipt["attempt_id"]
+                )
+                if (
+                    cell_eda_package["lineage"]["measured_result_summary_sha256"]
+                    != measured_summary["summary_sha256"]
+                    or cell_eda_package["lineage"]["cell_receipt_set_sha256"]
+                    != measured_summary["lineage"]["cell_receipt_set_sha256"]
+                ):
+                    raise CellEdaPackageV16Error(
+                        "cell EDA package does not bind the measured summary"
+                    )
+    except (
+        TerminalAttemptV16Error,
+        MeasuredResultSummaryV16Error,
+        CellEdaPackageV16Error,
+    ):
         return {
             **missing,
             "status": "INVALID",
@@ -2709,6 +2890,8 @@ def _a12_current_attempt_projection(root: Path) -> dict[str, Any]:
         "pointer_file_sha256": result["pointer_file_sha256"],
         "receipt_uri": pointer["target_uri"],
         "receipt_file_sha256": result["receipt_file_sha256"],
+        "measured_result_summary": measured_summary,
+        "cell_eda_package": cell_eda_package,
         "next_authorized_action": (
             "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
             if receipt["status"] == "PASS"
@@ -2716,6 +2899,99 @@ def _a12_current_attempt_projection(root: Path) -> dict[str, Any]:
             if receipt.get("provider_disposition_status") == "REUSE_ELIGIBLE"
             else "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
         ),
+    }
+
+
+def _a12_r15_remote_retention_projection(root: Path) -> dict[str, Any]:
+    """Project the aggregate-safe, hash-validated remote A1 handoff audit."""
+
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "evidence_class": "aggregate_safe_remote_retention_audit",
+        "scientific_authority": False,
+        "claim_boundary": (
+            "No repository-safe remote retention audit is validated; provider "
+            "storage state cannot be inferred from chat or connection notes."
+        ),
+        "audit_uri": A12_R15_REMOTE_RETENTION_AUDIT_PATH.as_posix(),
+        "audit_file_sha256": None,
+        "audit_sha256": None,
+    }
+    audit_path = root / A12_R15_REMOTE_RETENTION_AUDIT_PATH
+    if not audit_path.is_file():
+        return missing
+    try:
+        audit = json.loads(audit_path.read_text(encoding="utf-8"))
+        unsigned = dict(audit)
+        unsigned.pop("audit_sha256", None)
+        packages = audit.get("packages")
+        post_finalize = audit.get("post_finalize_remote_state")
+        safety = audit.get("safety")
+        attempt = audit.get("attempt")
+        if (
+            audit.get("schema_version")
+            != "myis.armindex-a1.2-remote-retention-audit.v1"
+            or audit.get("status") != "PASS"
+            or audit.get("scientific_authority") is not False
+            or audit.get("audit_sha256") != canonical_sha256(unsigned)
+            or not isinstance(attempt, Mapping)
+            or attempt.get("attempt_id") != "a12-v16-20260811-r15"
+            or attempt.get("instance_id") != 47411176
+            or attempt.get("provider_status") != "running"
+            or attempt.get("provider_verification") != "verified"
+            or attempt.get("provider_disposition") != "REUSE_ELIGIBLE"
+            or not isinstance(packages, Mapping)
+            or not isinstance(post_finalize, Mapping)
+            or not isinstance(safety, Mapping)
+        ):
+            raise ValueError("remote retention audit identity or self-hash is invalid")
+        for package_id, source_count, total_count in (
+            ("a1_baseline", 28, 29),
+            ("a1_journal_eda", 7, 8),
+            ("a1_closeout", 11, 12),
+        ):
+            package = packages.get(package_id)
+            if (
+                not isinstance(package, Mapping)
+                or package.get("source_member_count") != source_count
+                or package.get("remote_total_file_count") != total_count
+                or package.get("remote_member_hash_validation") is not True
+                or not re.fullmatch(
+                    r"[a-f0-9]{64}", str(package.get("manifest_file_sha256", ""))
+                )
+                or not re.fullmatch(
+                    r"[a-f0-9]{64}", str(package.get("manifest_sha256", ""))
+                )
+            ):
+                raise ValueError("remote retention package validation drifted")
+        if (
+            post_finalize.get("current_working_directory")
+            != "absent_after_finalize"
+            or post_finalize.get("output_working_directory")
+            != "absent_after_finalize"
+            or post_finalize.get("job_ledger_file_count") != 4
+            or post_finalize.get("frozen_execution_bundle_present") is not True
+            or post_finalize.get("dense_model_root_count") != 4
+            or post_finalize.get("safe_return_archive_present") is not True
+            or post_finalize.get("measured_working_directories_recreated") is not False
+            or safety.get("protected_payload_exported_to_git") is not False
+            or safety.get("credentials_recorded") is not False
+            or safety.get("raw_provider_payload_recorded") is not False
+            or safety.get("instance_destroyed") is not False
+            or safety.get("a2_execution_started") is not False
+            or safety.get("harness_dev_accesses") != 0
+            or safety.get("selection_accesses") != 0
+            or safety.get("final_accesses") != 0
+        ):
+            raise ValueError("remote retention safety boundary drifted")
+    except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        return {**missing, "status": "invalid"}
+    return {
+        **dict(audit),
+        "validated": True,
+        "audit_uri": A12_R15_REMOTE_RETENTION_AUDIT_PATH.as_posix(),
+        "audit_file_sha256": _file_sha256(audit_path),
     }
 
 
