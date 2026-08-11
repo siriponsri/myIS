@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-11T04:06:59Z",
-  "generated_from_revision": "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7",
-  "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+  "generated_at": "2026-08-11T18:35:49Z",
+  "generated_from_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
+  "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+    "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
+      "sha256": "ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-11T04:06:59Z",
+  "last_material_update": "2026-08-11T18:35:49Z",
   "metric_references": [
     {
       "arm": "R0-W",
@@ -278,11 +278,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "1f8c1e6acd786e378ebca61cd88788da2054ae1bda229a96cd3f04aa023ceaa9",
+  "report_sha256": "03ecd3158183606d89fa6b8bc1121dc2ded6c4c75d5419ba63fc08131b8b717f",
   "report_type": "task",
   "result": {
     "decision": "completed",

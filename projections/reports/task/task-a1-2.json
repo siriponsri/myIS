@@ -1,6 +1,60 @@
 {
   "artifact_references": [
     {
+      "artifact_id": "a12-measured-result-summary-v16",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "evidence_class": "measured_development_aggregate",
+      "explanation": "Projects the complete 25/25 REP-DEV result, primary and secondary arm aggregates, deterministic promotion, and zero protected-access counters without per-query data.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "scientific_authority": true,
+      "title": "A1.2 measured arm-level result summary",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-cell-eda-package-v16",
+      "artifact_type": "figure_package",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+      "evidence_class": "measured_development_aggregate_eda",
+      "explanation": "Projects the complete 25-cell aggregate table, quality and efficiency figures, and Thai guide without per-query outcomes.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+      "scientific_authority": true,
+      "title": "A1.2 publication cell EDA package",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-r15-remote-retention-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+      "evidence_class": "aggregate_safe_remote_retention_audit",
+      "explanation": "Binds exact remote retention of the 29-file baseline, 8-file journal EDA, and 12-file closeout packages without provider payloads, credentials, or protected data.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+      "scientific_authority": false,
+      "title": "A1.2 remote allowlisted handoff retention audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a12-rep-harness-claim-audit",
       "artifact_type": "audit",
       "child_artifact_hashes": {},
@@ -2305,14 +2359,29 @@
       "validation_status": "validated"
     }
   ],
-  "claim_boundary": "Aggregate-safe engineering failure only; r14 has no dense result, safe return, evaluator result, promotion authority, or permission to enter A2.",
+  "claim_boundary": "Aggregate-safe A1.2 terminal closeout after validated 25/25 safe return and Owner-local evaluation; protected inputs, rankings, and per-query outcomes remain Owner-local.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.",
-    "status": "FAILED_CLOSED_RETRY_REQUIRED"
+    "reason": "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes.",
+    "status": "PASS_25_OF_25"
   },
-  "evidence_class": "aggregate_safe_live_attempt_failure",
+  "evidence_class": "aggregate_safe_live_attempt_terminal",
   "evidence_links": [
+    {
+      "artifact_id": "a12-measured-result-summary-v16",
+      "sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json"
+    },
+    {
+      "artifact_id": "a12-cell-eda-package-v16",
+      "sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json"
+    },
+    {
+      "artifact_id": "a12-r15-remote-retention-audit",
+      "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+      "uri": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json"
+    },
     {
       "artifact_id": "a12-rep-harness-claim-audit",
       "sha256": "54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c",
@@ -2956,19 +3025,6 @@
   ],
   "failure_recovery_references": [
     {
-      "completed_logical_cells": 5,
-      "counters_changed": false,
-      "failure_id": "a1.2-v16-a12-v16-20260811-r14-failed-closed",
-      "failure_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
-      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
-      "partial_results_promotable": false,
-      "recovery_id": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
-      "recovery_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
-      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
-      "required_logical_cells": 25,
-      "status": "FAILED_CLOSED_RETRY_REQUIRED"
-    },
-    {
       "counters_changed": false,
       "failure_id": "v6-initial-wheelhouse-missing-pydantic",
       "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
@@ -3109,31 +3165,28 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-11T04:06:59Z",
-  "generated_from_revision": "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7",
-  "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+  "generated_at": "2026-08-11T18:35:49Z",
+  "generated_from_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
+  "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
   "governance_status": {
-    "current_attempt_partial_results_promotable": false,
-    "current_attempt_status": "FAILED_CLOSED",
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "aggregate_safe_live_attempt_failure",
+    "evidence_class": "aggregate_safe_live_attempt_terminal",
     "final_split": "closed",
-    "gpu": false,
-    "measured_execution": false,
+    "gpu": true,
+    "measured_execution": true,
     "network_model_download": false,
-    "official_completed_measured_runs": 0,
     "paid_api": false,
-    "protected_data_accessed": false,
+    "protected_data_accessed": true,
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
       "final_accesses": 0,
-      "measured_runs": 0,
+      "measured_runs": 1,
       "selection_accesses": 0,
       "shortlist_count": 0
     },
-    "scientific_authority": false
+    "scientific_authority": true
   },
   "input_bindings": {
     "a11_fixture_manifest": {
@@ -3204,14 +3257,23 @@
       "uri": "control/armindex/a1.2/shutdown-plan.v1.json"
     },
     "a12_v16_current_terminal_attempt": {
-      "attempt_id": "a12-v16-20260811-r14",
-      "completed_logical_cells": 5,
-      "pointer_sha256": "eb8ba5c4a01ec9913b3a1f6bb9eab96ef63e002a7726b04510c9a49e8f9cd1b9",
+      "attempt_id": "a12-v16-20260811-r15",
+      "cell_eda_package_sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+      "cell_eda_package_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+      "completed_logical_cells": 25,
+      "measured_result_summary_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "measured_result_summary_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "pointer_sha256": "eb979675e3d667ad022307b7fff14dd953e71e8f7169af39f3e56226d5c4e3ec",
       "pointer_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json",
+      "promoted_arm_ids": [
+        "ARM-03",
+        "ARM-05",
+        "ARM-04"
+      ],
       "provider_disposition_status": "REUSE_ELIGIBLE",
-      "receipt_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
-      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
-      "status": "FAILED_CLOSED"
+      "receipt_sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+      "status": "PASS"
     },
     "a12_v16_r13_failed_closed_attempt": {
       "audit_sha256": "ca5dda1c88cc8a275c1e24c0b0690c80f4c4f92fc0e89900b99c987d0e00c04e",
@@ -3259,7 +3321,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+    "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3270,436 +3332,373 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
+      "sha256": "ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The partial cell receipts are failure provenance only. They do not constitute a common-screen result, deterministic promotion input, A1 closeout, or evidence for A2, Selection, Final, or publication.",
+  "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-11T04:06:59Z",
+  "last_material_update": "2026-08-11T18:35:49Z",
   "metric_references": [
     {
-      "cutoff": 0,
-      "denominator": "pending_owner_launch_checklist_items",
-      "n": 1,
-      "name": "owner_local_cpu_preflight_blocker_count",
-      "scope": "A1.2",
-      "source_sha256": "2c3ce75d23c8909f8d345295538a4eb230e436970f488b837d887405c754ca57",
-      "source_uri": "outputs/audits/armindex/a1.2-owner-local-preflight-20260806.json",
-      "split": "engineering_preflight",
-      "value": 10
-    },
-    {
-      "cutoff": 0,
-      "denominator": "frozen_live_owner_checklist_items",
-      "n": 1,
-      "name": "vast_v2_live_check_pending_count",
-      "scope": "A1.2",
-      "source_sha256": "f0539e0baa359b1b1218811097e2b1238eec44b9708db45347f982ab6fa61d16",
-      "source_uri": "control/armindex/a1.2/launch-checklist.v2.json",
-      "split": "engineering_preflight",
-      "value": 16
-    },
-    {
-      "cutoff": 0,
-      "denominator": "completed_synthetic_worker_processes",
-      "n": 4,
-      "name": "vast_v2_synthetic_worker_count",
-      "scope": "A1.2",
-      "source_sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
-      "source_uri": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
-      "split": "engineering_preflight",
-      "value": 4
-    },
-    {
-      "cutoff": 0,
-      "denominator": "synthetic_workers_started_in_parallel",
-      "n": 4,
-      "name": "vast_v2_synthetic_parallel_launch_count",
-      "scope": "A1.2",
-      "source_sha256": "fce41672173ff34e6f0be76b26b382fc7538b941da5fb06571e08e6661f136eb",
-      "source_uri": "outputs/fixtures/armindex/a1.2/vast-4x3090-preflight-v2/receipt.json",
-      "split": "engineering_preflight",
-      "value": 4
-    },
-    {
-      "cutoff": 0,
-      "denominator": "complete_four_rtx3090_instance",
-      "n": 1,
-      "name": "vast_v2_planning_rate_usd_per_instance_hour",
-      "scope": "A1.2",
-      "source_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
-      "source_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
-      "split": "engineering_preflight",
-      "value": 0.6
-    },
-    {
-      "cutoff": 0,
-      "denominator": "planning_estimate_not_authorization",
-      "n": 1,
-      "name": "vast_v2_estimated_instance_hours_min",
-      "scope": "A1.2",
-      "source_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
-      "source_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
-      "split": "engineering_preflight",
-      "value": 2
-    },
-    {
-      "cutoff": 0,
-      "denominator": "planning_estimate_not_authorization",
-      "n": 1,
-      "name": "vast_v2_estimated_instance_hours_max",
-      "scope": "A1.2",
-      "source_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
-      "source_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
-      "split": "engineering_preflight",
-      "value": 4
-    },
-    {
-      "cutoff": 0,
-      "denominator": "planning_estimate_not_authorization",
-      "n": 1,
-      "name": "vast_v2_estimated_raw_worker_usd_min",
-      "scope": "A1.2",
-      "source_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
-      "source_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
-      "split": "engineering_preflight",
-      "value": 1.2
-    },
-    {
-      "cutoff": 0,
-      "denominator": "planning_estimate_not_authorization",
-      "n": 1,
-      "name": "vast_v2_estimated_raw_worker_usd_max",
-      "scope": "A1.2",
-      "source_sha256": "21ba2439c599d3a23c9a2b1f9473e74e62476dcc314406c0c03830b79a4ea9b5",
-      "source_uri": "control/budgets/a1.2-common-screen-vast-4x3090-v2.json",
-      "split": "engineering_preflight",
-      "value": 2.4
-    },
-    {
-      "cutoff": 0,
-      "denominator": "complete_four_rtx3090_instance",
-      "n": 1,
-      "name": "vast_v3_planning_rate_usd_per_instance_hour",
-      "scope": "A1.2",
-      "source_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
-      "split": "engineering_preflight",
-      "value": 0.6
-    },
-    {
-      "cutoff": 0,
-      "denominator": "hard_stop_not_spend_authorization",
-      "n": 1,
-      "name": "vast_v3_common_screen_hard_stop_usd",
-      "scope": "A1.2",
-      "source_sha256": "f031a08a23d58b96e67461353d83b8f11243a5cf8ab4a2b571b8e1940876a8d0",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-vast-4x3090-postcommit-migration.receipt.v3.json",
-      "split": "engineering_preflight",
-      "value": 18
-    },
-    {
-      "cutoff": 0,
-      "denominator": "direct_base_live_preflight_checks",
-      "n": 1,
-      "name": "vast_v5_direct_base_live_check_pending_count",
-      "scope": "A1.2",
-      "source_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
-      "split": "engineering_preflight",
-      "value": 21
-    },
-    {
-      "cutoff": 0,
-      "denominator": "active_direct_base_path",
-      "n": 1,
-      "name": "vast_v5_custom_local_docker_build_removed",
-      "scope": "A1.2",
-      "source_sha256": "b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json",
-      "split": "engineering_preflight",
-      "value": 1
-    },
-    {
-      "cutoff": 0,
-      "denominator": "quoted_complete_four_rtx3090_instance_not_spend_authorization",
-      "n": 1,
-      "name": "vast_v6_live_quote_usd_per_instance_hour",
-      "scope": "A1.2",
-      "source_sha256": "29642d4d6a00f385e8a3fceedbf0c06c23ceae147f6da77a8bcd513ea1f420b0",
-      "source_uri": "control/armindex/a1.2/execution-contract.live-preflight.v6.json",
-      "split": "engineering_preflight",
-      "value": 0.656
-    },
-    {
-      "cutoff": 0,
-      "denominator": "live_correction_authorization_boundary",
-      "n": 1,
-      "name": "vast_v6_synthetic_preflight_only",
-      "scope": "A1.2",
-      "source_sha256": "3918f0c6e9699a3c66de3f70d2c1efc1daead8e86f03647f4236ddb37cdab9a9",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-correction.receipt.v6.json",
-      "split": "engineering_preflight",
-      "value": 1
-    },
-    {
-      "cutoff": 0,
-      "denominator": "preserved_same_instance_repair_failures",
-      "n": 1,
-      "name": "vast_v7_preserved_live_failure_count",
-      "scope": "A1.2",
-      "source_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
-      "split": "engineering_preflight",
-      "value": 2
-    },
-    {
-      "cutoff": 0,
-      "denominator": "fresh_same_instance_repair_root",
-      "n": 1,
-      "name": "vast_v7_bytecode_suppression_required",
-      "scope": "A1.2",
-      "source_sha256": "8790fca3ff8a5d4a0cdfa19d41c0534df00b3ae6d2597455b89b290ba4f39edd",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-repair.receipt.v7.json",
-      "split": "engineering_preflight",
-      "value": 1
-    },
-    {
-      "cutoff": 0,
-      "denominator": "preserved_validation_complete_bundle_failure_history",
-      "n": 1,
-      "name": "vast_v8_preserved_live_failure_count",
-      "scope": "A1.2",
-      "source_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
-      "split": "engineering_preflight",
-      "value": 3
-    },
-    {
-      "cutoff": 0,
-      "denominator": "frozen_bundle_historical_validator_lineage",
-      "n": 1,
-      "name": "vast_v8_validation_lineage_complete",
-      "scope": "A1.2",
-      "source_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json",
-      "split": "engineering_preflight",
-      "value": 1
-    },
-    {
-      "cutoff": 0,
-      "denominator": "hash_bound_execution_lifecycle_controls",
-      "n": 1,
-      "name": "vast_v9_required_lifecycle_control_count",
-      "scope": "A1.2",
-      "source_sha256": "0435823ca9e0e94695059c5aaba6c1f3406cc2873e6c2041ff132cc8f640fcbf",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
-      "split": "engineering_preflight",
-      "value": 6
-    },
-    {
-      "cutoff": 0,
-      "denominator": "additive_v9_runtime_and_orchestration_revision",
-      "n": 1,
-      "name": "vast_v9_implementation_validation_complete",
-      "scope": "A1.2",
-      "source_sha256": "0435823ca9e0e94695059c5aaba6c1f3406cc2873e6c2041ff132cc8f640fcbf",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-execution-lifecycle.receipt.v9.json",
-      "split": "engineering_preflight",
-      "value": 1
-    },
-    {
-      "cutoff": 0,
-      "denominator": "four_synthetic_gpu_worker_arm_receipts",
-      "n": 4,
-      "name": "vast_v9_live_arm_pass_count",
-      "scope": "A1.2",
-      "source_sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
-      "split": "engineering_preflight",
-      "value": 4
-    },
-    {
-      "cutoff": 32768,
-      "denominator": "synthetic_sentence_transformer_adapter_candidates",
-      "n": 3,
-      "name": "vast_v9_qwen_measured_adapter_max_input_tokens",
-      "scope": "A1.2",
-      "source_sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
-      "split": "engineering_preflight",
-      "value": 32768
-    },
-    {
-      "cutoff": 0,
-      "denominator": "synthetic_worker_checkpoint_resume_receipt",
-      "n": 1,
-      "name": "vast_v9_checkpoint_resume_pass",
-      "scope": "A1.2",
-      "source_sha256": "52d1d892c4ce034e3d4b0887a5bddbb362d9747c3b343e766ad2a4302c3f13d6",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json",
-      "split": "engineering_preflight",
-      "value": 1
-    },
-    {
-      "cutoff": 0,
-      "denominator": "frozen_five_arm_request_manifests",
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
       "n": 5,
-      "name": "v11_workload_manifest_count",
+      "name": "arm-01_out_recall_at_100_mean",
       "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 5
-    },
-    {
-      "cutoff": 0,
-      "denominator": "planned_logical_program_arm_results_not_measured_runs",
-      "n": 25,
-      "name": "v11_expected_program_arm_runs",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 25
-    },
-    {
-      "cutoff": 0,
-      "denominator": "planned_physical_program_view_paths_not_measured_runs",
-      "n": 35,
-      "name": "v11_expected_physical_program_view_paths",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 35
-    },
-    {
-      "cutoff": 0,
-      "denominator": "protected_rep_dev_count_commitment",
-      "n": 150,
-      "name": "v11_rep_dev_query_count",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 150
-    },
-    {
-      "cutoff": 0,
-      "denominator": "protected_harness_dev_reservation_count",
-      "n": 100,
-      "name": "v11_harness_dev_reserved_count",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 100
-    },
-    {
-      "cutoff": 0,
-      "denominator": "fail_closed_owner_adoption_requirements",
-      "n": 1,
-      "name": "v11_pending_adoption_requirement_count",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 9
-    },
-    {
-      "cutoff": 0,
-      "denominator": "hard_stop_not_spend_authorization",
-      "n": 1,
-      "name": "v11_a1_total_usd",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 23
-    },
-    {
-      "cutoff": 0,
-      "denominator": "hard_stop_not_spend_authorization",
-      "n": 1,
-      "name": "v11_campaign_usd",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 100
-    },
-    {
-      "cutoff": 0,
-      "denominator": "hard_stop_not_spend_authorization",
-      "n": 1,
-      "name": "v11_common_screen_usd",
-      "scope": "A1.2",
-      "source_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
-      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
-      "split": "request_preparation",
-      "value": 18
-    },
-    {
-      "cutoff": 0,
-      "denominator": "fresh_identity_quote_budget_and_admission_receipt_required",
-      "n": 1,
-      "name": "v12_r3_pending_live_provider_input_count",
-      "scope": "A1.2",
-      "source_sha256": "c17bb5f8e1886a176123b65a7461fcdb461e541acb2a47309d47dff97ba300c0",
-      "source_uri": "control/armindex/a1.2/scientific-execution-adoption-inputs.v12-r3.json",
-      "split": "adoption_input_preparation",
-      "value": 4
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.19120000000000012
     },
     {
       "cutoff": 100,
-      "denominator": "candidate_exposure_primary_development_outcome_not_measured_result",
-      "n": 1,
-      "name": "v13_out_recall_at_100_primary_metric_binding",
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-01_out_ndcg_at_100_mean",
       "scope": "A1.2",
-      "source_sha256": "8de6d3d4fa8ede8cfd7f6b938d37de77cdde7cc4aa5201ef447e795b2a58e811",
-      "source_uri": "control/armindex/a1.2/publication-impact-contract.v13.json",
-      "split": "publication_preregistration",
-      "value": 1
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.17271682110947598
     },
     {
-      "cutoff": 0,
-      "denominator": "current_provider_instance_not_reuse_eligibility",
-      "n": 1,
-      "name": "v13_current_live_instance_present",
+      "cutoff": 10,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-01_out_ndcg_at_10_mean",
       "scope": "A1.2",
-      "source_sha256": "57fa8a8329775fe2d7dd53cef51a96fac3e61cb414aa82e5ba1cb16e9664ede0",
-      "source_uri": "control/armindex/a1.2/instance-disposition-policy.v13.json",
-      "split": "instance_disposition_policy",
-      "value": 0
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.1600112259693816
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-01_search_latency_p95_ms_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 441.519629
+    },
+    {
+      "cutoff": 100,
+      "denominator": "sum_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-01_wall_seconds_sum",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 762.5326991000001
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-01_failure_rate_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.0
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-02_out_recall_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.2699333333333333
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-02_out_ndcg_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.2313770470357662
+    },
+    {
+      "cutoff": 10,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-02_out_ndcg_at_10_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.19849681557521714
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-02_search_latency_p95_ms_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 235.20347988999998
+    },
+    {
+      "cutoff": 100,
+      "denominator": "sum_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-02_wall_seconds_sum",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 19847.314656943
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-02_failure_rate_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.0
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-03_out_recall_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.41339999999999993
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-03_out_ndcg_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.34781228937939673
+    },
+    {
+      "cutoff": 10,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-03_out_ndcg_at_10_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.2898561259944869
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-03_search_latency_p95_ms_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 212.06153624999996
+    },
+    {
+      "cutoff": 100,
+      "denominator": "sum_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-03_wall_seconds_sum",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 29444.63952869
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-03_failure_rate_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.0
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-04_out_recall_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.3406666666666666
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-04_out_ndcg_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.2845455341110273
+    },
+    {
+      "cutoff": 10,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-04_out_ndcg_at_10_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.23553808703265489
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-04_search_latency_p95_ms_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 214.20683274999996
+    },
+    {
+      "cutoff": 100,
+      "denominator": "sum_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-04_wall_seconds_sum",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 15878.488335113001
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-04_failure_rate_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.0
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-05_out_recall_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.36373333333333335
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-05_out_ndcg_at_100_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.30793028114171794
+    },
+    {
+      "cutoff": 10,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-05_out_ndcg_at_10_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.2567055719988133
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-05_search_latency_p95_ms_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 217.09890646999997
+    },
+    {
+      "cutoff": 100,
+      "denominator": "sum_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-05_wall_seconds_sum",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 40309.513049866
+    },
+    {
+      "cutoff": 100,
+      "denominator": "mean_across_five_frozen_common_programs",
+      "n": 5,
+      "name": "arm-05_failure_rate_mean",
+      "scope": "A1.2",
+      "source_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "split": "REP-DEV",
+      "value": 0.0
     }
   ],
-  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "30135e668b0ff9853c01cadf28e261cfbfe881170b87fd833178e264ae68cc3a",
+  "report_sha256": "bae52c5ffc2b9fd4cc84fc49d1498173dd098c35df33f92a4ad8fa60ff2577a7",
   "report_type": "task",
   "result": {
-    "decision": "FAILED_CLOSED_RETRY_REQUIRED",
-    "output": "Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop.",
-    "result": "FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero."
+    "decision": "PASS_25_OF_25",
+    "output": "A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms.",
+    "result": "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes."
   },
   "schema_version": "myis.phase-task-report.v1",
-  "scientific_authority": false,
+  "scientific_authority": true,
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_terminal_failed_closed_retry_required",
+    "program_state": "a1_2_terminal_pass_25_of_25_closeout_recorded",
     "task": "A1.2"
   },
-  "status": "blocked",
+  "status": "completed",
   "supported_claims": [
     {
-      "claim": "Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop.",
+      "claim": "A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms.",
       "evidence": [
+        "a12-measured-result-summary-v16",
+        "a12-cell-eda-package-v16",
+        "a12-r15-remote-retention-audit",
         "a12-rep-harness-claim-audit",
         "a12-rep-harness-split-eda-png",
         "a12-rep-harness-split-eda-svg",
@@ -3835,9 +3834,8 @@
   "unsupported_claims": [
     "Measured P2 improvement or candidate superiority before a real measured run.",
     "Final-split generalization or publication release before D2 and D3.",
-    "Causal or legal conclusions from retrieval aggregates.",
-    "The incomplete current attempt as a measured A1 result, promotion input, or completion claim."
+    "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The A1.1 receipt anchors a validated A1.2 lineage through v10 provider closeout. The repaired additive v11 request binds the future protected transfer, exact five-program scientific compiler, five workload manifests, aggregate result schema, stop conditions, fresh-provider admission, and hard-stop budget. The request is prepared for Owner review only; launch and adoption remain false pending the unchanged request hash, protected handoff/transfer receipts, 25 compiled program bindings, fresh quote/identity, full-TTL budget fit, and watchdog/destroy validation."
+  "work_summary": "A1.1 and A1.2 are complete. Attempt r15 completed the frozen 25/25 REP-DEV common screen, safe return, Owner-local evaluation, deterministic promotion, aggregate result and EDA packaging, and a REUSE_ELIGIBLE provider closeout. Historical v1-v15 planning, preflight, and repair records remain immutable lineage only; A2, HARNESS-DEV, Selection, and Final have not started, and A2 still requires fresh admission, execution adoption, and a new isolated remote root."
 }

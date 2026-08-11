@@ -1,29 +1,29 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7"
-read_model_sha256: "37e1915f14effc9c9db7abad73a7fb2876c63489d593342c72ec58c8625b7af9"
-source_commit: "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df"
+read_model_revision: "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470"
+read_model_sha256: "51d653e98da327d370353c1a54d783783a9291c20a6420f9c82f94528cb2d700"
+source_commit: "68308c26f69d97b1cfc9f190a53269afb03201cb"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "aggregate_safe_live_attempt_failure"
-scientific_authority: false
-claim_boundary: "Aggregate-safe engineering failure only; r14 has no dense result, safe return, evaluator result, promotion authority, or permission to enter A2."
-generated_from_revision: "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7"
-last_material_update: "2026-08-11T04:06:59Z"
-next_authorized_action: "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+evidence_class: "aggregate_safe_live_attempt_terminal"
+scientific_authority: true
+claim_boundary: "Aggregate-safe A1.2 terminal closeout after validated 25/25 safe return and Owner-local evaluation; protected inputs, rankings, and per-query outcomes remain Owner-local."
+generated_from_revision: "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470"
+last_material_update: "2026-08-11T18:35:49Z"
+next_authorized_action: "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-11T04:06:59Z"
-updated_at: "2026-08-11T04:06:59Z"
+created_at: "2026-08-11T18:35:49Z"
+updated_at: "2026-08-11T18:35:49Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
 task_id: null
-workflow_status: "blocked"
+workflow_status: "complete"
 evidence_maturity: "non_scientific"
 claim_level: "none"
 ---
@@ -40,15 +40,15 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_terminal_failed_closed_retry_required
+- `program_state`: a1_2_terminal_pass_25_of_25_closeout_recorded
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: 485d27ae1ad7d3ca884ffc7c739b6dc616aec0df
+- `git_commit`: 68308c26f69d97b1cfc9f190a53269afb03201cb
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -73,37 +73,15 @@ Reproduce controls and screen the five adapters with common programs.
 - `a12_direct_base_v5_receipt`: `campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json`; SHA-256 `b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a`
 - `a12_direct_base_v5_execution_contract`: `control/armindex/a1.2/execution-contract.direct-base.v5.json`; SHA-256 `df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563`
 - `a12_v16_r13_failed_closed_attempt`: `outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json`; SHA-256 `65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364`
-- `a12_v16_current_terminal_attempt`: `{"attempt_id": "a12-v16-20260811-r14", "completed_logical_cells": 5, "pointer_sha256": "eb8ba5c4a01ec9913b3a1f6bb9eab96ef63e002a7726b04510c9a49e8f9cd1b9", "pointer_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json", "provider_disposition_status": "REUSE_ELIGIBLE", "receipt_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90", "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json", "status": "FAILED_CLOSED"}`
+- `a12_v16_current_terminal_attempt`: `{"attempt_id": "a12-v16-20260811-r15", "cell_eda_package_sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057", "cell_eda_package_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json", "completed_logical_cells": 25, "measured_result_summary_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1", "measured_result_summary_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json", "pointer_sha256": "eb979675e3d667ad022307b7fff14dd953e71e8f7169af39f3e56226d5c4e3ec", "pointer_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json", "promoted_arm_ids": ["ARM-03", "ARM-05", "ARM-04"], "provider_disposition_status": "REUSE_ELIGIBLE", "receipt_sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c", "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json", "status": "PASS"}`
 
 ## Work Performed
 
-A1.1 synthetic adapter evidence and the A1.2 v1-v10 preflight/closeout lineage are validated. The additive v11 request preserves that history and freezes a separate protected scientific transfer, executable P00-P04 compiler source/spec hashes, 150 REP-DEV queries with 100 reserved for HARNESS-DEV, 25 required aggregate result receipts, all-fee budget admission, and a fresh-provider plan. The prior instance is destroyed. Provider contact, adoption, measured retrieval, Selection, Final, and paid API work remain closed.
+A1.1 and A1.2 are complete. Attempt r15 completed the frozen 25/25 REP-DEV common screen, safe return, Owner-local evaluation, deterministic promotion, aggregate result and EDA packaging, and a REUSE_ELIGIBLE provider closeout. Historical v1-v15 planning, preflight, and repair records remain immutable lineage only; A2, HARNESS-DEV, Selection, and Final have not started, and A2 still requires fresh admission, execution adoption, and a new isolated remote root.
 
-### A1.2 resource planning boundary
+### A1.2 terminal closeout state
 
-The proposal remains `proposal_not_adopted_execution_locked`. It specifies `1` GPU with at least `24` GiB VRAM; preferred classes are RTX_4090_24GB, RTX_3090_24GB, L4_24GB, A10_24GB. A100/H100 required: `False`. The planning range is `8-16` GPU hours and `10-20` elapsed hours. Raw compute is estimated at USD `2.4-12.8`; hard stops are USD `5` for parity/pilot, USD `18` for the common screen, USD `23` for A1, and USD `100` for the campaign.
-
-Owner prerequisites:
-
-- make_owner_local_protected_root_available_to_the_runner
-- prestage_frozen_model_artifacts_without_agent_credential_access
-- ensure_Vast_or_equivalent_account_credit_and_credentials_are_available
-- intervene_only_if_provider_unavailable_hashes_conflict_or_budget_must_increase
-
-### A1.2 scaffold and launch state
-
-The offline scaffold is `a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked` with `5` model/source locks. ARM-01 has `1` offline CPU adapter lock ready; `4` dense Owner-local artifact manifests and `9` checklist items remain pending. Launch ready: `False`; measured execution: `False`. The closeout audit passed `17` validation groups and retained `7` bounded failure/recovery records.
-
-The immutable v2 preparation remains `offline_preparation_complete_live_owner_preflight_pending` and the v3 correction remains `postcommit_validator_prepared_live_owner_preflight_pending`. The active additive v5 direct-base revision is `direct_base_preflight_prepared_local_owner_stage_pending` with image `pytorch/pytorch:2.6.0-cuda11.8-cudnn9-runtime` at manifest `sha256:2428b92ebbaeceba5572b98c18c8a94e43162bead6e88588ad54471147c58a20` on `linux/amd64`. The additive v6 live-container correction is `live_correction_prepared_preflight_pending` and remains synthetic-only with launch `False` and adoption `False`. The additive v7 same-instance repair is `same_instance_repair_prepared_preflight_pending` with `2` preserved engineering failure(s), a fresh runtime root requirement `True`, and bytecode suppression `True`. The additive v8 validation-complete frozen-bundle repair is `validation_complete_bundle_repair_prepared_preflight_pending` with `3` preserved engineering failure(s), validation lineage complete `True`, and a fresh root `/opt/myis/a1.2-v8`. The additive v9 execution-lifecycle repair is `execution_lifecycle_repair_prepared_preflight_pending` with implementation validation `True`, live synthetic execution pending `True`, and fresh root `/opt/myis/a1.2-v9`. Collected live synthetic result: `PASS`; 4 arm receipts, Qwen measured adapter max `32768`, checkpoint/resume `PASS`, and guest teardown `PASS`. The v10 Owner-local provider closeout is `PASS`; no independent Vast API or CLI record was obtained, so the provider-absence claim is limited to the Owner UI attestation and endpoint-unreachable observation. It launches the official image directly, excludes custom-image build and nested-container steps, and does not authorize launch or adoption.
-
-The Owner continuity policy is `active_owner_policy`. Its default is `destroy_and_verify_provider_instance_absent`; `continue_next_goal_on_PLAN` remains conditional and is not authorized now.
-
-Owner-local prerequisites still required:
-
-- keep the protected root, qrels, membership, credentials, and evaluator payloads local;
-- preserve the safe export and all return artifacts under the Owner store;
-- prove provider destruction and TTL, or explicitly authorize the unchanged-instance continuation policy for a separately authorized next PLAN goal;
-- do not interpret this engineering PASS as retrieval-quality or publication evidence.
+The current terminal attempt is `PASS` with complete `25/25` REP-DEV coverage and provider disposition `REUSE_ELIGIBLE`. The frozen deterministic rule promoted `ARM-03, ARM-05, ARM-04`. The unchanged A1 remote root retains hash-validated allowlisted packages: baseline `29/29`, journal EDA `8/8`, and closeout `12/12`. Historical v1-v15 planning, preflight, and repair records remain immutable lineage only and do not describe the current launch state. A2, HARNESS-DEV, Selection, and Final have not started; A2 requires a fresh entry preflight, provider admission, execution adoption, and a new isolated remote root.
 
 ## Artifacts Produced
 
@@ -111,6 +89,9 @@ These references explain what each artifact is for; the bytes remain governed by
 
 | Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
 |---|---|---|---|---|---|
+| A1.2 measured arm-level result summary | `receipt` | `measured_development_aggregate` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json` | `e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1` | `validated` |
+| A1.2 publication cell EDA package | `figure_package` | `measured_development_aggregate_eda` | `campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json` | `0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057` | `validated` |
+| A1.2 remote allowlisted handoff retention audit | `audit` | `aggregate_safe_remote_retention_audit` | `outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json` | `81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0` | `validated` |
 | A1.2 REP-DEV/HARNESS-DEV and claim-parser audit | `audit` | `pre_measurement_owner_local_input_audit` | `outputs/audits/armindex/a1.2-rep-harness-claim-audit-20260808.json` | `54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c` | `validated` |
 | A1.2 aggregate-safe split EDA PNG | `figure` | `pre_measurement_owner_local_input_audit` | `outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.png` | `659d4631cc8ae850dc4c57e0cc726a001cc9296b1082cf4cf4f66cafa63b09ed` | `validated` |
 | A1.2 aggregate-safe split EDA SVG | `figure` | `pre_measurement_owner_local_input_audit` | `outputs/figures/armindex/a1.2-rep-harness-split-eda-v1.svg` | `0365e61e7117cab0112568ffd26815cbebc7829a6478084d289d9b80145480c3` | `validated` |
@@ -249,43 +230,41 @@ These references explain what each artifact is for; the bytes remain governed by
 
 | Metric | Split | Scope | Value | n | Denominator | Evidence |
 |---|---|---|---:|---:|---|---|
-| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_failure` |
-| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_failure` |
-| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_failure` |
-| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_failure` |
-| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_failure` |
-| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `aggregate_safe_live_attempt_failure` |
-| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `aggregate_safe_live_attempt_failure` |
-| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `aggregate_safe_live_attempt_failure` |
+| `fixture_compile_latency_p50_ms`@100 | `synthetic` | `A1.1` | `3.2813` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_index_build_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.8286` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_search_workload_latency_p50_ms`@100 | `synthetic` | `A1.1` | `0.7241` | `11` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_search_throughput_qps`@100 | `synthetic` | `A1.1` | `2449.58858` | `22` | `host_observed_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_peak_python_allocation_bytes`@100 | `synthetic` | `A1.1` | `111702` | `11` | `tracemalloc_peak_for_fixed_synthetic_adapter_workload` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_recall_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_relevant_families` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_ndcg_at_100`@100 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `aggregate_safe_live_attempt_terminal` |
+| `fixture_ndcg_at_10`@10 | `synthetic` | `A1.1` | `1.0` | `2` | `macro_mean_graded_family_relevance` | `aggregate_safe_live_attempt_terminal` |
 
 Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-**Output:** Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop.
+**Output:** A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms.
 
-**Result:** FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.
+**Result:** PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes.
 
-**Decision:** FAILED_CLOSED_RETRY_REQUIRED
+**Decision:** PASS_25_OF_25
 
 ## Interpretation
 
-The partial cell receipts are failure provenance only. They do not constitute a common-screen result, deterministic promotion input, A1 closeout, or evidence for A2, Selection, Final, or publication.
+The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.
 
 ## Supported Claims
 
-- Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop. (evidence: a12-rep-harness-claim-audit, a12-rep-harness-split-eda-png, a12-rep-harness-split-eda-svg, a12-p02-first-claim-repair, a12-effective-input-limit-blocker, a12-dense-overflow-contract, a12-dense-overflow-inventory, a12-dense-overflow-composition-audit, a12-dense-overflow-eda-png, a12-dense-overflow-eda-svg, a12-protected-compiler-integration-v15, a12-protected-compiler-audit-v15, a12-whole-workload-budget-model-v15, a12-v16-exact-token-id-adapter-probe, a12-v16-r13-failed-closed-attempt-audit, a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05, a12-adoption-inputs-v12-r3, a12-adoption-inputs-schema-v12-r3, a12-adoption-inputs-validator-v12-r3, a12-publication-impact-contract-v13, a12-publication-impact-schema-v13, a12-publication-impact-preregistration-v13, a12-instance-disposition-policy-v13, a12-instance-disposition-result-schema-v13)
+- A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms. (evidence: a12-measured-result-summary-v16, a12-cell-eda-package-v16, a12-r15-remote-retention-audit, a12-rep-harness-claim-audit, a12-rep-harness-split-eda-png, a12-rep-harness-split-eda-svg, a12-p02-first-claim-repair, a12-effective-input-limit-blocker, a12-dense-overflow-contract, a12-dense-overflow-inventory, a12-dense-overflow-composition-audit, a12-dense-overflow-eda-png, a12-dense-overflow-eda-svg, a12-protected-compiler-integration-v15, a12-protected-compiler-audit-v15, a12-whole-workload-budget-model-v15, a12-v16-exact-token-id-adapter-probe, a12-v16-r13-failed-closed-attempt-audit, a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05, a12-adoption-inputs-v12-r3, a12-adoption-inputs-schema-v12-r3, a12-adoption-inputs-validator-v12-r3, a12-publication-impact-contract-v13, a12-publication-impact-schema-v13, a12-publication-impact-preregistration-v13, a12-instance-disposition-policy-v13, a12-instance-disposition-result-schema-v13)
 
 ## Unsupported Claims
 
 - Measured P2 improvement or candidate superiority before a real measured run.
 - Final-split generalization or publication release before D2 and D3.
 - Causal or legal conclusions from retrieval aggregates.
-- The incomplete current attempt as a measured A1 result, promotion input, or completion claim.
 
 ## Failures and Recovery
 
-- `a1.2-v16-a12-v16-20260811-r14-failed-closed` -> `PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2`; status `FAILED_CLOSED_RETRY_REQUIRED`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json` / `2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json` / `2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90`
 - `v6-initial-wheelhouse-missing-pydantic` -> `preserved_immutable_additive_repair`; status `preserved_and_repaired_preflight_pending`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`
 - `v6-supplement-repair-mutated-pycache-tree` -> `preserved_immutable_additive_repair`; status `preserved_and_repaired_preflight_pending`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`
 - `v7-frozen-bundle-missing-validation-lineage` -> `preserved_immutable_additive_repair`; status `preserved_and_repaired_preflight_pending`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`
@@ -303,34 +282,34 @@ The partial cell receipts are failure provenance only. They do not constitute a 
 
 ## Governance and Safety
 
-- `protected_data_accessed`: False
-- `measured_execution`: False
-- `gpu`: False
+- `protected_data_accessed`: True
+- `measured_execution`: True
+- `gpu`: True
 - `paid_api`: False
 - `network_model_download`: False
 - `provider_fallback`: False
 - `d2`: waiting_owner
 - `d3`: waiting_owner
 - `final_split`: closed
-- `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
-- `evidence_class`: aggregate_safe_live_attempt_failure
-- `scientific_authority`: False
-- `current_attempt_status`: FAILED_CLOSED
-- `current_attempt_partial_results_promotable`: False
-- `official_completed_measured_runs`: 0
+- `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 1, "selection_accesses": 0, "shortlist_count": 0}`
+- `evidence_class`: aggregate_safe_live_attempt_terminal
+- `scientific_authority`: True
 
 ## Decision
 
-Status: **FAILED_CLOSED_RETRY_REQUIRED**. FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.
+Status: **PASS_25_OF_25**. PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes.
 
 ## Next Action
 
-PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
+A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
 ## Evidence Links
 
+- a12-measured-result-summary-v16
+- a12-cell-eda-package-v16
+- a12-r15-remote-retention-audit
 - a12-rep-harness-claim-audit
 - a12-rep-harness-split-eda-png
 - a12-rep-harness-split-eda-svg

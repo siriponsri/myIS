@@ -3,15 +3,15 @@
   "claim_boundary": "engineering_provenance_only",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A2_PER_ARM_AUTOINDEX is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.",
-    "status": "blocked"
+    "reason": "A2_PER_ARM_AUTOINDEX is planned; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "planned"
   },
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-11T04:06:59Z",
-  "generated_from_revision": "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7",
-  "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+  "generated_at": "2026-08-11T18:35:49Z",
+  "generated_from_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
+  "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -26,7 +26,7 @@
     "real_counters": {
       "candidate_count": 0,
       "final_accesses": 0,
-      "measured_runs": 0,
+      "measured_runs": 1,
       "selection_accesses": 0,
       "shortlist_count": 0
     },
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+    "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,24 +52,24 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
+      "sha256": "ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-11T04:06:59Z",
+  "last_material_update": "2026-08-11T18:35:49Z",
   "metric_references": [],
-  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
   "objective": "Search and freeze one representation program per promoted arm.",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "phase-a2_per_arm_autoindex",
-  "report_sha256": "50de9b8b2e86bab4a4ca08d23169c59d752a9cca2c149c59cb1a15a6b1b6539a",
+  "report_sha256": "b9ae95284c1b25e7f2b5a15c4d09bdffa9253fd60137769961e424c8aba2d050",
   "report_type": "phase",
   "result": {
-    "decision": "blocked",
+    "decision": "planned",
     "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-    "result": "A2_PER_ARM_AUTOINDEX is blocked; ArmIndex measured runs, Selection, and Final counters remain zero."
+    "result": "A2_PER_ARM_AUTOINDEX is planned; ArmIndex measured runs, Selection, and Final counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -77,10 +77,10 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_terminal_failed_closed_retry_required",
+    "program_state": "a1_2_terminal_pass_25_of_25_closeout_recorded",
     "task": null
   },
-  "status": "blocked",
+  "status": "planned",
   "supported_claims": [
     {
       "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",

@@ -1,6 +1,60 @@
 {
   "artifact_references": [
     {
+      "artifact_id": "a12-measured-result-summary-v16",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "evidence_class": "measured_development_aggregate",
+      "explanation": "Projects the complete 25/25 REP-DEV result, primary and secondary arm aggregates, deterministic promotion, and zero protected-access counters without per-query data.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "scientific_authority": true,
+      "title": "A1.2 measured arm-level result summary",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-cell-eda-package-v16",
+      "artifact_type": "figure_package",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+      "evidence_class": "measured_development_aggregate_eda",
+      "explanation": "Projects the complete 25-cell aggregate table, quality and efficiency figures, and Thai guide without per-query outcomes.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+      "scientific_authority": true,
+      "title": "A1.2 publication cell EDA package",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a12-r15-remote-retention-audit",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+      "evidence_class": "aggregate_safe_remote_retention_audit",
+      "explanation": "Binds exact remote retention of the 29-file baseline, 8-file journal EDA, and 12-file closeout packages without provider payloads, credentials, or protected data.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "producing_task_id": "A1.2",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+      "scientific_authority": false,
+      "title": "A1.2 remote allowlisted handoff retention audit",
+      "validation_status": "validated"
+    },
+    {
       "artifact_id": "a12-rep-harness-claim-audit",
       "artifact_type": "audit",
       "child_artifact_hashes": {},
@@ -2395,14 +2449,29 @@
       "validation_status": "validated"
     }
   ],
-  "claim_boundary": "Aggregate-safe engineering failure only; r14 has no dense result, safe return, evaluator result, promotion authority, or permission to enter A2.",
+  "claim_boundary": "Aggregate-safe A1.2 terminal closeout after validated 25/25 safe return and Owner-local evaluation; protected inputs, rankings, and per-query outcomes remain Owner-local.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.",
-    "status": "FAILED_CLOSED_RETRY_REQUIRED"
+    "reason": "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes.",
+    "status": "PASS_25_OF_25"
   },
-  "evidence_class": "aggregate_safe_live_attempt_failure",
+  "evidence_class": "aggregate_safe_live_attempt_terminal",
   "evidence_links": [
+    {
+      "artifact_id": "a12-measured-result-summary-v16",
+      "sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json"
+    },
+    {
+      "artifact_id": "a12-cell-eda-package-v16",
+      "sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+      "uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json"
+    },
+    {
+      "artifact_id": "a12-r15-remote-retention-audit",
+      "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+      "uri": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json"
+    },
     {
       "artifact_id": "a12-rep-harness-claim-audit",
       "sha256": "54014ef2f99f1fa38bc3fa754ecee4ea852f1a4bdc38097734f0e87fcd78169c",
@@ -3071,19 +3140,6 @@
   ],
   "failure_recovery_references": [
     {
-      "completed_logical_cells": 5,
-      "counters_changed": false,
-      "failure_id": "a1.2-v16-a12-v16-20260811-r14-failed-closed",
-      "failure_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
-      "failure_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
-      "partial_results_promotable": false,
-      "recovery_id": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
-      "recovery_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
-      "recovery_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
-      "required_logical_cells": 25,
-      "status": "FAILED_CLOSED_RETRY_REQUIRED"
-    },
-    {
       "counters_changed": false,
       "failure_id": "v6-initial-wheelhouse-missing-pydantic",
       "failure_sha256": "aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6",
@@ -3224,31 +3280,28 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-11T04:06:59Z",
-  "generated_from_revision": "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7",
-  "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+  "generated_at": "2026-08-11T18:35:49Z",
+  "generated_from_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
+  "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
   "governance_status": {
-    "current_attempt_partial_results_promotable": false,
-    "current_attempt_status": "FAILED_CLOSED",
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "aggregate_safe_live_attempt_failure",
+    "evidence_class": "aggregate_safe_live_attempt_terminal",
     "final_split": "closed",
-    "gpu": false,
-    "measured_execution": false,
+    "gpu": true,
+    "measured_execution": true,
     "network_model_download": false,
-    "official_completed_measured_runs": 0,
     "paid_api": false,
-    "protected_data_accessed": false,
+    "protected_data_accessed": true,
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
       "final_accesses": 0,
-      "measured_runs": 0,
+      "measured_runs": 1,
       "selection_accesses": 0,
       "shortlist_count": 0
     },
-    "scientific_authority": false
+    "scientific_authority": true
   },
   "input_bindings": {
     "a11_fixture_manifest": {
@@ -3319,14 +3372,23 @@
       "uri": "control/armindex/a1.2/shutdown-plan.v1.json"
     },
     "a12_v16_current_terminal_attempt": {
-      "attempt_id": "a12-v16-20260811-r14",
-      "completed_logical_cells": 5,
-      "pointer_sha256": "eb8ba5c4a01ec9913b3a1f6bb9eab96ef63e002a7726b04510c9a49e8f9cd1b9",
+      "attempt_id": "a12-v16-20260811-r15",
+      "cell_eda_package_sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+      "cell_eda_package_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+      "completed_logical_cells": 25,
+      "measured_result_summary_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+      "measured_result_summary_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "pointer_sha256": "eb979675e3d667ad022307b7fff14dd953e71e8f7169af39f3e56226d5c4e3ec",
       "pointer_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json",
+      "promoted_arm_ids": [
+        "ARM-03",
+        "ARM-05",
+        "ARM-04"
+      ],
       "provider_disposition_status": "REUSE_ELIGIBLE",
-      "receipt_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
-      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
-      "status": "FAILED_CLOSED"
+      "receipt_sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+      "status": "PASS"
     },
     "a12_v16_r13_failed_closed_attempt": {
       "audit_sha256": "ca5dda1c88cc8a275c1e24c0b0690c80f4c4f92fc0e89900b99c987d0e00c04e",
@@ -3374,7 +3436,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
+    "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3385,13 +3447,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e",
+      "sha256": "ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The partial cell receipts are failure provenance only. They do not constitute a common-screen result, deterministic promotion input, A1 closeout, or evidence for A2, Selection, Final, or publication.",
+  "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-11T04:06:59Z",
+  "last_material_update": "2026-08-11T18:35:49Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3482,31 +3544,34 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "a22330f92cae4073481fefd12e72fa4972d43d8c994967e8e53970c15255c4f7",
+  "report_sha256": "ea07bc33e5df9477ddca510a446659278086d96a22a2a308cc5aa05c518b8969",
   "report_type": "phase",
   "result": {
-    "decision": "FAILED_CLOSED_RETRY_REQUIRED",
-    "output": "Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop.",
-    "result": "FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero."
+    "decision": "PASS_25_OF_25",
+    "output": "A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms.",
+    "result": "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes."
   },
   "schema_version": "myis.phase-task-report.v1",
-  "scientific_authority": false,
+  "scientific_authority": true,
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_terminal_failed_closed_retry_required",
+    "program_state": "a1_2_terminal_pass_25_of_25_closeout_recorded",
     "task": null
   },
-  "status": "blocked",
+  "status": "completed",
   "supported_claims": [
     {
-      "claim": "Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop.",
+      "claim": "A hash-bound current terminal receipt and measured summary record complete 25/25 A1.2 coverage across all five arms.",
       "evidence": [
+        "a12-measured-result-summary-v16",
+        "a12-cell-eda-package-v16",
+        "a12-r15-remote-retention-audit",
         "a12-rep-harness-claim-audit",
         "a12-rep-harness-split-eda-png",
         "a12-rep-harness-split-eda-svg",
@@ -3647,9 +3712,8 @@
   "unsupported_claims": [
     "Measured P2 improvement or candidate superiority before a real measured run.",
     "Final-split generalization or publication release before D2 and D3.",
-    "Causal or legal conclusions from retrieval aggregates.",
-    "The incomplete current attempt as a measured A1 result, promotion input, or completion claim."
+    "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "A1.1 synthetic adapter evidence and the A1.2 v1-v10 preflight/closeout lineage are validated. The additive v11 request preserves that history and freezes a separate protected scientific transfer, executable P00-P04 compiler source/spec hashes, 150 REP-DEV queries with 100 reserved for HARNESS-DEV, 25 required aggregate result receipts, all-fee budget admission, and a fresh-provider plan. The prior instance is destroyed. Provider contact, adoption, measured retrieval, Selection, Final, and paid API work remain closed."
+  "work_summary": "A1.1 and A1.2 are complete. Attempt r15 completed the frozen 25/25 REP-DEV common screen, safe return, Owner-local evaluation, deterministic promotion, aggregate result and EDA packaging, and a REUSE_ELIGIBLE provider closeout. Historical v1-v15 planning, preflight, and repair records remain immutable lineage only; A2, HARNESS-DEV, Selection, and Final have not started, and A2 still requires fresh admission, execution adoption, and a new isolated remote root."
 }

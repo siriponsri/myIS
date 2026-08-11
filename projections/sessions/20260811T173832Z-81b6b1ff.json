@@ -1,0 +1,411 @@
+{
+  "schema_version": "myis.research-session.v2",
+  "session_id": "20260811T173832Z-81b6b1ff",
+  "run_id": "a12-v16-20260811-r15",
+  "goal_id": "A1_2_RERUN_GOAL",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-11T17:38:32Z",
+  "scope": "Complete the governed A1.2 common multi-arm screen on one admissible attempt, validate aggregate-only evaluation and deterministic promotion, retain publication and A2 handoff artifacts on the unchanged provider instance, close A1, and prepare the A2-only handoff without entering A2 measured execution, HARNESS-DEV, Selection, or Final.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread through 2026-08-12",
+      "scope": "Repair engineering defects without changing frozen scientific semantics, complete A1 measured execution and closeout, retain aggregate-safe publication artifacts, keep the current Vast instance available for a separately admitted A2 session, and commit and push validated repository-safe evidence."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "68308c26f69d97b1cfc9f190a53269afb03201cb",
+    "dirty_paths": [
+      ".agent-state/",
+      "mlflow/generated/archive-index.v2.json",
+      "obsidian_report/",
+      "projections/",
+      "projections/sessions/20260811T173832Z-81b6b1ff.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner prioritized completing measured A1 work over documentation expansion, authorized bounded engineering repair on the same phase, and later directed retention of the unchanged instance for a separately admitted A2 session.",
+      "evidence_refs": [],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "Attempt a12-v16-20260811-r15 completed the frozen A1.2 common screen, passed aggregate-only evaluation, and applied the preregistered deterministic promotion rule.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+          "sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+          "locator": "status, coverage, final_charge_usd, provider_disposition_status, access_counters"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+          "sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+          "locator": "coverage, promoted_arm_ids, metric_contract, lineage"
+        }
+      ],
+      "quantitative_claims": [
+        {
+          "claim_id": "QC0001",
+          "statement": "Completed logical cells in the admissible A1.2 attempt",
+          "value": 25,
+          "unit": "cells",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+            "sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+            "locator": "status, coverage, final_charge_usd, provider_disposition_status, access_counters"
+          }
+        },
+        {
+          "claim_id": "QC0002",
+          "statement": "Recorded all-fee A1 charge",
+          "value": 11.161632,
+          "unit": "USD",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+            "sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+            "locator": "status, coverage, final_charge_usd, provider_disposition_status, access_counters"
+          }
+        },
+        {
+          "claim_id": "QC0003",
+          "statement": "Arms promoted by the frozen deterministic rule",
+          "value": 3,
+          "unit": "arms",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+            "sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+            "locator": "coverage, promoted_arm_ids, metric_contract, lineage"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "A journal-oriented aggregate EDA package, exact cell table, and quality and efficiency figures were produced without exposing per-query outcomes or protected identifiers.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+          "sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+          "locator": "coverage, metric_contract, cells, artifacts, access_counters"
+        }
+      ],
+      "quantitative_claims": [
+        {
+          "claim_id": "QC0004",
+          "statement": "Aggregate cell records in the EDA package",
+          "value": 25,
+          "unit": "cells",
+          "evidence_ref": {
+            "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+            "sha256": "0fd5fefc5a1aa6c5cb1de43b45d6808443b1cee8675b1c947e2a197f3e62a057",
+            "locator": "coverage, metric_contract, cells, artifacts, access_counters"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The allowlisted A1 baseline, journal EDA, and closeout handoff packages were independently hash-validated on the unchanged live provider root after measured working directories were removed.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+          "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+          "locator": "attempt, packages, post_finalize_remote_state, safety, next_authorized_action"
+        }
+      ],
+      "quantitative_claims": [
+        {
+          "claim_id": "QC0005",
+          "statement": "Files in the remote A1 baseline handoff mirror",
+          "value": 29,
+          "unit": "files",
+          "evidence_ref": {
+            "path": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+            "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+            "locator": "attempt, packages, post_finalize_remote_state, safety, next_authorized_action"
+          }
+        },
+        {
+          "claim_id": "QC0006",
+          "statement": "Files in the remote journal EDA handoff mirror",
+          "value": 8,
+          "unit": "files",
+          "evidence_ref": {
+            "path": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+            "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+            "locator": "attempt, packages, post_finalize_remote_state, safety, next_authorized_action"
+          }
+        },
+        {
+          "claim_id": "QC0007",
+          "statement": "Files in the remote A1 closeout handoff mirror",
+          "value": 12,
+          "unit": "files",
+          "evidence_ref": {
+            "path": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+            "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+            "locator": "attempt, packages, post_finalize_remote_state, safety, next_authorized_action"
+          }
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Cell-specific model, workload, and program lineage must be validated within their arm or program identity rather than incorrectly requiring all 25 aggregate receipts to share those cell-specific hashes. The frozen execution bundle remains immutable and cannot be rebuilt from the repaired closeout source.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/armindex/a1_2_evaluator_closeout_v16.py",
+          "sha256": "7267b7080b419f5b6aeadec1addfa5e8d8e75a07cff6f05e982bee74ccd3933f",
+          "locator": "_CELL_SPECIFIC_LINEAGE_KEYS and validate_evaluator_closeout_inputs"
+        },
+        {
+          "path": "tests/test_armindex_a1_2_evaluator_closeout_v16.py",
+          "sha256": "9ab1ecd7d25a8901b05f1eb74b0e32b34bac44b75275a6568ee3de766e4f94e5",
+          "locator": "cell-specific lineage acceptance and inconsistency rejection tests"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "A1_BASELINES_AND_MULTI_ARM_SCREENING and task A1.2 are complete with scientific authority for the aggregate REP-DEV result. A2 measured execution, HARNESS-DEV, Selection, and Final remain unopened.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+          "sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+          "locator": "status, scientific_authority, coverage, access_counters"
+        },
+        {
+          "path": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+          "sha256": "81b6b1ffe38f10df3dca7388a5c4663478918fdba02fb77439d16d42141ff7b0",
+          "locator": "safety.a2_execution_started, safety.harness_dev_accesses, safety.selection_accesses, safety.final_accesses"
+        }
+      ],
+      "quantitative_claims": []
+    },
+    {
+      "event_id": "EV0007",
+      "sequence": 7,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The A1 historical and rerun goal documents were closed, and the A2-only guide was made the active ready handoff with fresh provider admission, execution adoption, and an isolated remote root required before A2 measurement.",
+      "evidence_refs": [
+        {
+          "path": "docs/goal/A1_2_rerun_goal.md",
+          "sha256": "05a0560cea6c25d206f19b8ddd51d69de02ec8acd2e68993b66df04d9728f196",
+          "locator": "frontmatter and current execution-status table"
+        },
+        {
+          "path": "docs/goal/A2_goal.md",
+          "sha256": "22ce856511353a69db7bb4eea547fd6f327bfdc22b2fae5b9b880ca36562bd58",
+          "locator": "frontmatter, current preparation status, and A2 entry conditions"
+        }
+      ],
+      "quantitative_claims": []
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+    "metrics": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "fresh-a2-admission-and-execution-adoption",
+      "provenance": "agent-observed",
+      "summary": "A2 must start from docs/goal/A2_goal.md in a new isolated remote root and must pass fresh provider identity, all-fee quote, whole-workload budget and TTL admission, watchdog, protected-boundary validation, and execution adoption before candidate measurement.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  },
+  "execution_snapshot": {
+    "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "task_id": "A1.2",
+    "gate_id": "D1_START_CAMPAIGN",
+    "gate_status": "approved"
+  },
+  "owner_brief_th": "A1.2 ปิด PASS แล้วด้วยผลครบ 25 จาก 25 cells ใน attempt เดียว เก็บผลรวม ตารางและรูปสำหรับ journal พร้อม mirror บน Vast ที่ตรวจ hash แล้ว อินสแตนซ์ยังคงอยู่และใช้ต่อได้เฉพาะหลัง A2 ผ่าน admission และ adoption ใหม่ งานถัดไปคือเริ่มจาก A2_goal.md โดยยังไม่เปิด HARNESS-DEV, Selection หรือ Final",
+  "owner_actions": [
+    {
+      "action_id": "start-a2-from-goal",
+      "priority": "required",
+      "action_th": "เริ่ม session ถัดไปด้วย docs/goal/A2_goal.md และทำ A2 entry preflight ก่อนสร้าง candidate หรือวัดผล",
+      "reason_th": "A1 ปิดแล้ว แต่ A2 ยังต้องมี provider admission, budget, TTL, watchdog และ execution adoption ชุดใหม่ใน remote root ใหม่",
+      "blocking_gate": null
+    },
+    {
+      "action_id": "retain-current-instance-until-a2-decision",
+      "priority": "required",
+      "action_th": "ยังไม่ทำลายอินสแตนซ์ปัจจุบันระหว่างส่งต่องาน A2 เว้นแต่ budget, TTL, identity หรือ safety drift",
+      "reason_th": "หลักฐาน retention ระบุว่า instance เป็น REUSE_ELIGIBLE แต่สถานะนี้ไม่อนุญาตให้เริ่ม A2 โดยอัตโนมัติ",
+      "blocking_gate": null
+    }
+  ],
+  "gate_request": {
+    "gate_id": "D1_START_CAMPAIGN",
+    "state": "draft",
+    "summary_th": "ปิด A1 ภายใต้อำนาจ campaign เดิมและส่งต่อ A2 โดยไม่สร้าง micro-gate ใหม่ ไม่ขอเปิด D2 หรือ D3",
+    "blocking_reason_th": null,
+    "evidence_refs": []
+  },
+  "next_resources": {
+    "status": "required",
+    "items": [
+      {
+        "resource_id": "fresh-a2-provider-evidence",
+        "description_th": "หลักฐาน provider identity, ราคาสดรวมทุก fee, งบทั้ง workload, TTL, watchdog และ management authority สำหรับ A2",
+        "purpose_th": "ยืนยันว่า instance เดิมยังเหมาะสมและปลอดภัยก่อนเปิด A2 measured execution"
+      },
+      {
+        "resource_id": "isolated-a2-runtime-root",
+        "description_th": "remote root ใหม่สำหรับ A2 พร้อม runtime, model, data และ protected-boundary hashes ที่ตรวจซ้ำแล้ว",
+        "purpose_th": "ป้องกันการปนกับ A1 working directories และรักษา provenance ของ A2 ให้ตรวจย้อนกลับได้"
+      }
+    ]
+  },
+  "closeout": {
+    "checks": [
+      {
+        "check_id": "a1-terminal-and-retention",
+        "status": "PASS",
+        "summary": "Terminal PASS, 25/25 coverage, aggregate summary, EDA package, deterministic promotion, provider continuation, and remote mirrors 29/29, 8/8, and 12/12 validated."
+      },
+      {
+        "check_id": "pytest-full",
+        "status": "PASS",
+        "summary": "Full repository suite passed 885 tests with two skips, one expected xfail, and one known deprecation warning."
+      },
+      {
+        "check_id": "focused-tests",
+        "status": "PASS",
+        "summary": "Focused closeout and read-model tests passed 94 cases; safety and Dashboard/API passed 44 cases; final EDA, summary, and A2-entry checks passed 15 cases."
+      },
+      {
+        "check_id": "reports-assets-layout-sessions",
+        "status": "PASS",
+        "summary": "Report check showed no drift; asset registry and map, layout, 56 Markdown link files, session audit, and policy scans passed."
+      },
+      {
+        "check_id": "mlflow-doctor",
+        "status": "PASS",
+        "summary": "The external repository-safe archived MLflow store passed SQLite, archive lineage, experiment, artifact-root, and backup-readiness checks."
+      },
+      {
+        "check_id": "brain-literature",
+        "status": "PASS",
+        "summary": "Brain literature validation passed 154 notes with unique stable IDs and SHA-256 values."
+      },
+      {
+        "check_id": "artifact-format-and-boundary",
+        "status": "PASS",
+        "summary": "The aggregate CSV contains 25 data rows, Thai handoff files contain no mojibake markers, staged sensitive-pattern scans found zero matches, and protected data remained outside Git."
+      },
+      {
+        "check_id": "git-core-commit",
+        "status": "PASS",
+        "summary": "Core A1 closeout and A2 handoff evidence was committed as 68308c26f69d97b1cfc9f190a53269afb03201cb with generated projections intentionally deferred to the session-bound commit."
+      }
+    ],
+    "changed_files": [
+      ".gitattributes",
+      "AGENTS.md",
+      "HANDOFF.md",
+      "PLAN.md",
+      "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/a12-v16-20260811-r15.eda.v16.json",
+      "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json",
+      "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+      "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+      "control/runbooks/A1_2_GOVERNED_LONG_RUN_V16.md",
+      "control/runbooks/A1_PROVIDER_REUSE_AND_A2_DATA_HANDOFF_V16.md",
+      "control/source-of-truth.yaml",
+      "docs/goal/A1_2_goal.md",
+      "docs/goal/A1_2_rerun_goal.md",
+      "docs/goal/A2_goal.md",
+      "docs/goal/README.md",
+      "docs/operations/A1_2_R15_CELL_EDA_20260811_TH.md",
+      "docs/operations/A1_2_R15_MEASURED_CLOSEOUT_20260811_TH.md",
+      "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json",
+      "outputs/figures/armindex/a12-v16-20260811-r15.efficiency-cell-eda.v16.png",
+      "outputs/figures/armindex/a12-v16-20260811-r15.efficiency-cell-eda.v16.svg",
+      "outputs/figures/armindex/a12-v16-20260811-r15.quality-cell-eda.v16.png",
+      "outputs/figures/armindex/a12-v16-20260811-r15.quality-cell-eda.v16.svg",
+      "outputs/tables/armindex/a12-v16-20260811-r15.cell-eda.v16.csv",
+      "schemas/armindex/a1.2-cell-eda-package.v16.json",
+      "schemas/armindex/a1.2-measured-result-summary.v16.json",
+      "schemas/armindex/a1.2-provider-continuation-receipt.v16.json",
+      "schemas/armindex/a1.2-provider-disposition-receipt.v16.json",
+      "schemas/armindex/a1.2-terminal-attempt-receipt.v16.json",
+      "src/myis_research/armindex/a1_2_a2_baseline_handoff_v16.py",
+      "src/myis_research/armindex/a1_2_cell_eda_package_v16.py",
+      "src/myis_research/armindex/a1_2_evaluator_closeout_v16.py",
+      "src/myis_research/armindex/a1_2_measured_result_summary_v16.py",
+      "src/myis_research/armindex/a1_2_owner_local_evaluation_manifest_quote_bridge_v16.py",
+      "src/myis_research/armindex/a1_2_provider_continuation_v16.py",
+      "src/myis_research/armindex/a1_2_provider_disposition_v16.py",
+      "src/myis_research/armindex/a1_2_scientific_execution_adoption_inputs_v12.py",
+      "src/myis_research/armindex/a1_2_terminal_attempt_v16.py",
+      "src/myis_research/armindex/a1_2_thai_closeout_projection_v16.py",
+      "src/myis_research/armindex/a2_entry_preflight_v16.py",
+      "src/myis_research/projections/read_model.py",
+      "src/myis_research/report_cli.py",
+      "src/myis_research/report_records.py",
+      "tests/test_armindex_a1_2_a2_baseline_handoff_v16.py",
+      "tests/test_armindex_a1_2_cell_eda_package_v16.py",
+      "tests/test_armindex_a1_2_engineering_execution_bundle_v16.py",
+      "tests/test_armindex_a1_2_evaluator_closeout_v16.py",
+      "tests/test_armindex_a1_2_measured_result_summary_v16.py",
+      "tests/test_armindex_a1_2_owner_local_evaluation_manifest_quote_bridge_v16.py",
+      "tests/test_armindex_a1_2_provider_continuation_v16.py",
+      "tests/test_armindex_a1_2_provider_disposition_v16.py",
+      "tests/test_armindex_a1_2_r13_failure_projection_v16.py",
+      "tests/test_armindex_a1_2_terminal_attempt_v16.py",
+      "tests/test_armindex_a1_2_thai_closeout_projection_v16.py",
+      "tests/test_armindex_a2_entry_preflight_v16.py",
+      "tests/test_obsidian_report_contract.py",
+      "tests/test_read_model.py",
+      "projections/sessions/20260811T173832Z-81b6b1ff.json"
+    ],
+    "untouched_protected_surfaces": [
+      "Owner-local DAPFAM corpus, split membership, qrels, query identifiers, and evaluator payloads",
+      "per-query rankings, outcomes, raw provider payloads, and protected prompts",
+      "credentials, SSH private keys, TFA material, Jupyter tokens, and inherited shell environments",
+      "model weights, tokenizer revisions, and frozen v11-v15 scientific semantics",
+      "A2 measured candidates, HARNESS-DEV, Selection, Final, D2_OPEN_FINAL, and D3_SUBMIT_RELEASE"
+    ]
+  },
+  "corrections": []
+}

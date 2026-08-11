@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7"
-read_model_sha256: "37e1915f14effc9c9db7abad73a7fb2876c63489d593342c72ec58c8625b7af9"
-source_commit: "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df"
+read_model_revision: "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470"
+read_model_sha256: "51d653e98da327d370353c1a54d783783a9291c20a6420f9c82f94528cb2d700"
+source_commit: "68308c26f69d97b1cfc9f190a53269afb03201cb"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7"
-last_material_update: "2026-08-11T04:06:59Z"
-next_authorized_action: "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+generated_from_revision: "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470"
+last_material_update: "2026-08-11T18:35:49Z"
+next_authorized_action: "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-11T04:06:59Z"
-updated_at: "2026-08-11T04:06:59Z"
+created_at: "2026-08-11T18:35:49Z"
+updated_at: "2026-08-11T18:35:49Z"
 note_id: "A0_MIGRATION_FOUNDATION-MASTER"
 note_type: "phase_report"
 phase_id: "A0_MIGRATION_FOUNDATION"
@@ -40,15 +40,15 @@ Migrate repository, freeze contracts, preserve evidence, and run compute-feasibi
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_terminal_failed_closed_retry_required
+- `program_state`: a1_2_terminal_pass_25_of_25_closeout_recorded
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: 485d27ae1ad7d3ca884ffc7c739b6dc616aec0df
+- `git_commit`: 68308c26f69d97b1cfc9f190a53269afb03201cb
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -135,7 +135,7 @@ This is engineering migration provenance only and supports no retrieval-quality,
 - `d2`: waiting_owner
 - `d3`: waiting_owner
 - `final_split`: closed
-- `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
+- `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 1, "selection_accesses": 0, "shortlist_count": 0}`
 - `evidence_class`: engineering
 - `scientific_authority`: False
 
@@ -145,7 +145,7 @@ Status: **completed**. A0_MIGRATION_FOUNDATION is completed; ArmIndex measured r
 
 ## Next Action
 
-PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
+A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
