@@ -63,6 +63,8 @@ _BATCH_KEYS = frozenset(
 _SHA256 = re.compile(r"^[a-f0-9]{64}$")
 _STABLE_ID = re.compile(r"^[a-z0-9][a-z0-9._-]+$")
 _METRIC_QUANTUM = Decimal("0.000000000001")
+_EXECUTION_BATCH_SCHEMA_VERSION = "myis.armindex-autoindex-execution-batch.v1"
+_EXECUTION_TERMINAL_SCHEMA_VERSION = "myis.armindex-autoindex-execution-terminal.v1"
 
 
 class AutoIndexError(ValueError):
@@ -97,7 +99,7 @@ def validate_autoindex_batch(
     batch = dict(value)
     if set(batch) != _BATCH_KEYS:
         raise AutoIndexError("AutoIndex batch fields do not match the v1 contract")
-    if batch["schema_version"] != "myis.armindex-autoindex-batch.v1":
+    if batch["schema_version"] != _EXECUTION_BATCH_SCHEMA_VERSION:
         raise AutoIndexError("unsupported AutoIndex batch schema")
     if batch["status"] != "frozen_before_evaluation":
         raise AutoIndexError("AutoIndex batch must be frozen before evaluation")
@@ -307,7 +309,7 @@ def build_autoindex_terminal_receipt(
     if not evidence_ids or len(evidence_ids) != len(set(evidence_ids)):
         raise AutoIndexError("terminal receipt requires unique evidence IDs")
     body: dict[str, Any] = {
-        "schema_version": "myis.armindex-autoindex-terminal.v1",
+        "schema_version": _EXECUTION_TERMINAL_SCHEMA_VERSION,
         "arm_id": state.arm_id,
         "terminal_state": state.terminal_state,
         "winner_candidate_id": state.incumbent_candidate_id,

@@ -71,7 +71,7 @@ def _autoindex_batch(state: AutoIndexState, iteration: int) -> dict[str, object]
             }
         )
     batch: dict[str, object] = {
-        "schema_version": "myis.armindex-autoindex-batch.v1",
+        "schema_version": "myis.armindex-autoindex-execution-batch.v1",
         "batch_id": f"a2-arm01-i{iteration:02d}",
         "arm_id": state.arm_id,
         "iteration": iteration,

@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-autoindex-execution-batch.v1",
+  "title": "ArmIndex AutoIndex execution batch.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "batch_id",
+    "arm_id",
+    "iteration",
+    "incumbent_program_sha256",
+    "frozen_bindings_sha256",
+    "status",
+    "candidates",
+    "batch_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "myis.armindex-autoindex-execution-batch.v1"
+    },
+    "batch_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]+$"
+    },
+    "arm_id": {
+      "enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]
+    },
+    "iteration": {
+      "enum": [1, 2, 3]
+    },
+    "incumbent_program_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "frozen_bindings_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "status": {
+      "const": "frozen_before_evaluation"
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/candidate"
+      }
+    },
+    "batch_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "role",
+        "hypothesis",
+        "declared_axis",
+        "program_sha256",
+        "compiled_sha256",
+        "scientific_payload_sha256",
+        "matched_ablation_id",
+        "compile_sha256s",
+        "verifier_status"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]+$"
+        },
+        "role": {
+          "enum": ["exploit", "matched_ablation", "orthogonal", "diversity"]
+        },
+        "hypothesis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "declared_axis": {
+          "enum": [
+            "source_fields",
+            "field_order",
+            "field_labels",
+            "unitization",
+            "independent_claim_extraction",
+            "passage_size",
+            "overlap",
+            "boundaries",
+            "packing",
+            "normalization",
+            "duplicate_handling",
+            "family_aggregation"
+          ]
+        },
+        "program_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "compiled_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scientific_payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "matched_ablation_id": {
+          "type": ["string", "null"]
+        },
+        "compile_sha256s": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/sha256"
+          }
+        },
+        "verifier_status": {
+          "const": "accepted"
+        }
+      }
+    }
+  }
+}
