@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-10T15:27:49Z",
-  "generated_from_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
-  "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
+  "generated_at": "2026-08-11T04:06:59Z",
+  "generated_from_revision": "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7",
+  "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
+    "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-10T15:27:49Z",
+  "last_material_update": "2026-08-11T04:06:59Z",
   "metric_references": [],
   "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Run one frozen confirmation only after D2_OPEN_FINAL.",
   "phase_id": "A5_FINAL_CONFIRMATION",
   "report_id": "phase-a5_final_confirmation",
-  "report_sha256": "d821faf5232d006830d4369ee02662a75bcb0e8d3fd55fb8c0380b184c974b68",
+  "report_sha256": "7c142539776a7d705ea2885a8850bc6e9f8844940cc52ca8c782a7f90d896072",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

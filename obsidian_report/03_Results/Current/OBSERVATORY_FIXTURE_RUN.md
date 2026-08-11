@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028"
-read_model_sha256: "564ef921af014ee4a9e771afb55e7c1ed442fe405c3a74050dfbe6f3e2d4319a"
-source_commit: "6f4c80625993ed3004ef1ed3dccd17f90d27f30f"
+read_model_revision: "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7"
+read_model_sha256: "37e1915f14effc9c9db7abad73a7fb2876c63489d593342c72ec58c8625b7af9"
+source_commit: "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["obs-run-parent"]
 source_manifest_sha256: ["51208da055a195c812b26b9bbd8fefa9844111634a0fe6d5b5d5ccbb430f52c1","6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028"
-last_material_update: "2026-08-10T15:27:49Z"
+generated_from_revision: "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7"
+last_material_update: "2026-08-11T04:06:59Z"
 next_authorized_action: "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-10T15:27:49Z"
-updated_at: "2026-08-10T15:27:49Z"
+created_at: "2026-08-11T04:06:59Z"
+updated_at: "2026-08-11T04:06:59Z"
 note_id: "OBSERVATORY-FIXTURE-RUN"
 note_type: "result_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"

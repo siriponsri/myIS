@@ -3224,9 +3224,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-10T15:27:49Z",
-  "generated_from_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
-  "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
+  "generated_at": "2026-08-11T04:06:59Z",
+  "generated_from_revision": "8970a6d79ca87ce16d7f1925b5684ce93dd9ccfe9817226cbdb08717122361d7",
+  "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
   "governance_status": {
     "current_attempt_partial_results_promotable": false,
     "current_attempt_status": "FAILED_CLOSED",
@@ -3374,7 +3374,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
+    "git_commit": "485d27ae1ad7d3ca884ffc7c739b6dc616aec0df",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3391,7 +3391,7 @@
   },
   "interpretation": "The partial cell receipts are failure provenance only. They do not constitute a common-screen result, deterministic promotion input, A1 closeout, or evidence for A2, Selection, Final, or publication.",
   "language": "en",
-  "last_material_update": "2026-08-10T15:27:49Z",
+  "last_material_update": "2026-08-11T04:06:59Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3486,7 +3486,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "7b037261b2e6169a030459e08a315874d71fe9434b5006e7e330c4603ceef5d1",
+  "report_sha256": "a22330f92cae4073481fefd12e72fa4972d43d8c994967e8e53970c15255c4f7",
   "report_type": "phase",
   "result": {
     "decision": "FAILED_CLOSED_RETRY_REQUIRED",
