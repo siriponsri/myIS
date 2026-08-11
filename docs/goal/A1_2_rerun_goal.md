@@ -463,6 +463,15 @@ next_action: <A1 closeout หรือ Owner action ที่อนุญาต>
 
 ## 8. Final hard-stop checklist
 
+### Owner decision: การกู้คืนบน instance เดิม
+
+- หากเป็นปัญหา transfer, SSH หรือ process ชั่วคราว และ code/hash/runtime/input
+  ไม่เปลี่ยน ให้ตรวจ checkpoint แล้ว resume attempt เดิมได้ทันที
+- หากต้องแก้ code หรือ execution identity ใด ๆ ให้ปิด attempt เดิมเป็น failure
+  evidence และเปิด `ATTEMPT_ID` ใหม่บน instance เดิมหลัง admission/adoption ผ่านซ้ำ
+- ห้ามรวม cell จากคนละ attempt และห้ามแก้ตาม metric หรือ outcome ที่เห็น
+- การกู้คืนแบบนี้ไม่อนุญาตให้ข้าม `25/25`, safe return หรือ Owner-local evaluation
+
 หยุดทันทีเมื่อพบอย่างใดอย่างหนึ่ง: instance identity เปลี่ยน, GPU ไม่ครบ 4x
 RTX3090, runtime/hash drift, quote/budget/TTL เกิน, watchdog ไม่ PASS, protected
 boundary fail, adoption ไม่ PASS, worker failure, safe return ไม่ครบ 25/25,

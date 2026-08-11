@@ -138,6 +138,11 @@ from ..armindex.a1_2_instance_disposition_v13 import (
     SCHEMA_PATH as A12_V13_DISPOSITION_SCHEMA_PATH,
     current_status as current_a1_2_v13_disposition_status,
 )
+from ..armindex.a1_2_terminal_attempt_v16 import (
+    CURRENT_POINTER_PATH as A12_CURRENT_ATTEMPT_POINTER_PATH,
+    TerminalAttemptV16Error,
+    validate_current_attempt_pointer,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.contracts import parse_contract
 from ..armindex.feasibility import validate_compute_storage_artifacts
@@ -512,6 +517,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a1_2_dense_overflow = _a12_dense_overflow_projection(root)
     a1_2_exact_token_id_probe = _a12_exact_token_id_adapter_probe_projection(root)
     a1_2_r13_failure = _a12_r13_failure_projection(root)
+    a1_2_current_attempt = _a12_current_attempt_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -524,6 +530,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_dense_overflow": a1_2_dense_overflow,
         "a1_2_exact_token_id_adapter_probe": a1_2_exact_token_id_probe,
         "a1_2_r13_failure": a1_2_r13_failure,
+        "a1_2_current_attempt": a1_2_current_attempt,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -532,25 +539,37 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         for task in phase.get("tasks", [])
         if isinstance(task, Mapping)
     )
-    if a1_2_r13_failure.get("validated") is True:
+    if a1_2_current_attempt.get("validated") is True:
+        current_status = a1_2_current_attempt["status"]
         armindex["status"] = (
-            "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed"
+            "a1_2_terminal_pass_25_of_25_closeout_recorded"
+            if current_status == "PASS"
+            else "a1_2_terminal_failed_closed_retry_required"
         )
         armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-        armindex["next_command"] = str(a1_2_r13_failure["next_authorized_action"])
+        armindex["next_command"] = str(a1_2_current_attempt["next_authorized_action"])
         armindex["phases"] = [
             {
                 **phase,
                 "status": (
-                    "a1_2_v16_r13_failed_closed_retry_required"
-                    if phase.get("phase_id") == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+                    (
+                        "complete"
+                        if current_status == "PASS"
+                        else "a1_2_terminal_failed_closed_retry_required"
+                    )
+                    if phase.get("phase_id")
+                    == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
                     else phase.get("status")
                 ),
                 "tasks": [
                     {
                         **task,
                         "status": (
-                            "a1_2_v16_r13_failed_closed_retry_required"
+                            (
+                                "complete"
+                                if current_status == "PASS"
+                                else "a1_2_terminal_failed_closed_retry_required"
+                            )
                             if task.get("task_id") == "A1.2"
                             else task.get("status")
                         ),
@@ -562,6 +581,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             for phase in armindex.get("phases", [])
             if isinstance(phase, Mapping)
         ]
+    elif a1_2_current_attempt.get("status") == "INVALID":
+        armindex["status"] = "a1_2_current_terminal_pointer_invalid_fail_closed"
+        armindex["current_phase"] = "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        armindex["next_command"] = a1_2_current_attempt["next_authorized_action"]
     elif (
         a1_2_scaffold.get("validated") is True
         and a1_2_scaffold.get("status")
@@ -824,11 +847,16 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             armindex["status"] = "a0_closeout_invalid_fail_closed"
             armindex["current_phase"] = "A0_MIGRATION_FOUNDATION"
         armindex["next_command"] = A0_9_NEXT_AUTHORIZED_ACTION
-    if a1_2_r13_failure.get("validated") is True:
+    if a1_2_current_attempt.get("validated") is True:
         armindex["local_adoption_input_status"] = (
-            "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY"
+            "A1_COMPLETE_25_OF_25"
+            if a1_2_current_attempt["status"] == "PASS"
+            else "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY"
         )
-        armindex["next_command"] = a1_2_r13_failure["next_authorized_action"]
+        armindex["next_command"] = a1_2_current_attempt["next_authorized_action"]
+    elif a1_2_current_attempt.get("status") == "INVALID":
+        armindex["local_adoption_input_status"] = "INVALID_CURRENT_A1_TERMINAL_POINTER"
+        armindex["next_command"] = a1_2_current_attempt["next_authorized_action"]
     elif a1_2_dense_overflow.get("validated") is True:
         armindex["local_adoption_input_status"] = a1_2_dense_overflow["status"]
         armindex["next_command"] = a1_2_dense_overflow["next_authorized_action"]
@@ -2637,6 +2665,57 @@ def _a12_exact_token_id_adapter_probe_projection(root: Path) -> dict[str, Any]:
         "validated": True,
         "audit_uri": A12_V16_EXACT_TOKEN_ID_ADAPTER_PROBE_PATH.as_posix(),
         "audit_file_sha256": _file_sha256(audit_path),
+    }
+
+
+def _a12_current_attempt_projection(root: Path) -> dict[str, Any]:
+    """Project only the explicit, hash-validated current A1.2 terminal attempt."""
+
+    missing = {
+        "status": "NOT_STARTED",
+        "validated": False,
+        "evidence_class": "none",
+        "scientific_authority": False,
+        "claim_boundary": (
+            "No current terminal attempt pointer is validated; historical attempt "
+            "records are provenance only and cannot set current A1 or A1.2 state."
+        ),
+        "pointer_uri": A12_CURRENT_ATTEMPT_POINTER_PATH.as_posix(),
+        "pointer_file_sha256": None,
+        "receipt_uri": None,
+        "receipt_file_sha256": None,
+        "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+    }
+    pointer_path = root / A12_CURRENT_ATTEMPT_POINTER_PATH
+    if not pointer_path.exists():
+        return missing
+    try:
+        result = validate_current_attempt_pointer(root)
+        pointer = result["pointer"]
+        receipt = result["receipt"]
+    except TerminalAttemptV16Error:
+        return {
+            **missing,
+            "status": "INVALID",
+            "pointer_file_sha256": (
+                _file_sha256(pointer_path) if pointer_path.is_file() else None
+            ),
+            "next_authorized_action": "REPAIR_OR_REMOVE_INVALID_CURRENT_A1_TERMINAL_POINTER_BEFORE_A2",
+        }
+    return {
+        **dict(receipt),
+        "validated": True,
+        "pointer_uri": A12_CURRENT_ATTEMPT_POINTER_PATH.as_posix(),
+        "pointer_file_sha256": result["pointer_file_sha256"],
+        "receipt_uri": pointer["target_uri"],
+        "receipt_file_sha256": result["receipt_file_sha256"],
+        "next_authorized_action": (
+            "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
+            if receipt["status"] == "PASS"
+            else "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+            if receipt.get("provider_disposition_status") == "REUSE_ELIGIBLE"
+            else "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+        ),
     }
 
 

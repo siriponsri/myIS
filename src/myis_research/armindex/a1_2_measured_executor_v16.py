@@ -11,6 +11,7 @@ from __future__ import annotations
 import math
 import os
 import re
+import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,6 +19,7 @@ from typing import Any, Protocol
 
 import numpy as np
 
+from ..kernel.canonical import canonical_sha256
 from .bm25s_adapter import BM25sAdapter
 from .scientific_common_programs_v11 import P04_VIEW_DEPTH, fuse_p04_view_rankings
 
@@ -130,6 +132,23 @@ class DenseIndex:
     arm_id: str
     logical_units: tuple[LogicalInput, ...]
     vectors: np.ndarray
+
+
+@dataclass(frozen=True)
+class InstrumentedBatchExecution:
+    """Unchanged ranks plus aggregate execution observations for one cell.
+
+    The measurement path intentionally keeps the built index and encoded query
+    vectors in memory for its deterministic replay.  It never serializes them.
+    """
+
+    rankings: dict[str, tuple[FamilyRank, ...]]
+    index_latency_ms: float
+    query_encode_latency_ms: float
+    search_latency_ms: tuple[float, ...]
+    index_size_bytes: int
+    replay_count: int
+    replay_ranking_sha256: str
 
 
 class DenseEmbeddingAdapter(Protocol):
@@ -654,6 +673,187 @@ def execute_program_cell_batch(
         else:
             raise MeasuredExecutorV16Error("unknown frozen common program")
     return result
+
+
+def _rank_scored_units(
+    *,
+    units: Sequence[LogicalInput],
+    scores: Sequence[float],
+    program_id: str,
+) -> tuple[FamilyRank, ...]:
+    """Apply the frozen family/P04 ranking rule to already computed scores."""
+
+    if program_id == "P04-SECTION-MULTIVIEW":
+        if {unit.view_id for unit in units} != P04_VIEW_IDS:
+            raise MeasuredExecutorV16Error("P04 corpus view coverage is incomplete")
+        return _p04_ranks(units, scores, limit=100)
+    if program_id not in {
+        "P00-TAC-DOC",
+        "P01-TA-DOC",
+        "P02-FIRST-CLAIM",
+        "P03-PASSAGE",
+    }:
+        raise MeasuredExecutorV16Error("unknown frozen common program")
+    return _family_max_ranks(units, scores, limit=100)
+
+
+def _rankings_sha256(
+    rankings: Mapping[str, Sequence[FamilyRank]],
+) -> str:
+    """Commit opaque ranks and scores in stable work-token order."""
+
+    return canonical_sha256(
+        [
+            canonical_sha256(
+                [
+                    {
+                        "family_token": row.family_token,
+                        "rank": row.rank,
+                        "score": float(row.score),
+                    }
+                    for row in rows
+                ]
+            )
+            for rows in rankings.values()
+        ]
+    )
+
+
+def _index_size_bytes(value: object, seen: set[int] | None = None) -> int:
+    """Count in-memory numeric index payloads without exporting index content."""
+
+    observed = seen if seen is not None else set()
+    identity = id(value)
+    if identity in observed:
+        return 0
+    observed.add(identity)
+    if isinstance(value, np.ndarray):
+        return int(value.nbytes)
+    if isinstance(value, Mapping):
+        return sum(_index_size_bytes(item, observed) for item in value.values())
+    if isinstance(value, (tuple, list, set, frozenset)):
+        return sum(_index_size_bytes(item, observed) for item in value)
+    values = getattr(value, "__dict__", None)
+    if isinstance(values, dict):
+        return _index_size_bytes(values, observed)
+    return 0
+
+
+def execute_program_cell_batch_instrumented(
+    *,
+    arm_id: str,
+    program_id: str,
+    corpus: Sequence[LogicalInput],
+    queries: Mapping[str, str | LogicalInput],
+    adapter: DenseEmbeddingAdapter | None = None,
+) -> InstrumentedBatchExecution:
+    """Run one cell and replay its ranks twice without rebuilding its inputs.
+
+    This is additive instrumentation.  It duplicates neither model encoding nor
+    index construction for replay, so the frozen ranking calculation remains
+    the authority and its output is byte-for-byte equivalent to the legacy
+    batch API.
+    """
+
+    _validate_frozen_depth(100)
+    if not isinstance(queries, Mapping) or not queries:
+        raise MeasuredExecutorV16Error("query mapping is empty")
+    query_items = tuple(queries.items())
+    if any(
+        not isinstance(token, str)
+        or _OPAQUE_ID_RE.fullmatch(token) is None
+        or not token.startswith("Q-")
+        for token, _ in query_items
+    ) or len({token for token, _ in query_items}) != len(query_items):
+        raise MeasuredExecutorV16Error("query mapping keys must be unique opaque Q tokens")
+    units = _validate_logical_inputs(corpus)
+    search_latencies: list[float] = []
+
+    if arm_id == "ARM-01":
+        if adapter is not None or any(not isinstance(query, str) for _, query in query_items):
+            raise MeasuredExecutorV16Error("ARM-01 batch requires string queries without a dense adapter")
+        documents = [
+            {"doc_id": unit.logical_id, "family_id": unit.family_token, "text": unit.physical_inputs[0].text}
+            for unit in units
+            if len(unit.physical_inputs) == 1
+        ]
+        if len(documents) != len(units):
+            raise MeasuredExecutorV16Error("ARM-01 must retain one physical input per logical unit")
+        bm25 = BM25sAdapter()
+        started = time.perf_counter_ns()
+        index = bm25.build_index(documents)
+        index_latency_ms = (time.perf_counter_ns() - started) / 1_000_000
+        by_id = {unit.logical_id: unit for unit in units}
+
+        def search(query: str) -> tuple[FamilyRank, ...]:
+            rows = bm25.search(index, query)
+            return _rank_scored_units(
+                units=[by_id[doc_id] for doc_id, _family, _score in rows],
+                scores=[score for _doc_id, _family, score in rows],
+                program_id=program_id,
+            )
+
+        result: dict[str, tuple[FamilyRank, ...]] = {}
+        for token, query in query_items:
+            started = time.perf_counter_ns()
+            result[token] = search(query)
+            search_latencies.append((time.perf_counter_ns() - started) / 1_000_000)
+        replay = {token: search(query) for token, query in query_items}
+        if _rankings_sha256(result) != _rankings_sha256(replay):
+            raise MeasuredExecutorV16Error("same-index ranking replay mismatch")
+        return InstrumentedBatchExecution(
+            rankings=result,
+            index_latency_ms=index_latency_ms,
+            query_encode_latency_ms=0.0,
+            search_latency_ms=tuple(search_latencies),
+            index_size_bytes=_index_size_bytes(index),
+            replay_count=2,
+            replay_ranking_sha256=_rankings_sha256(replay),
+        )
+
+    if (
+        arm_id not in DENSE_ARM_IDS
+        or adapter is None
+        or any(not isinstance(query, LogicalInput) for _, query in query_items)
+    ):
+        raise MeasuredExecutorV16Error("dense batch requires logical queries and a staged adapter")
+    started = time.perf_counter_ns()
+    index = build_dense_index(arm_id=arm_id, adapter=adapter, corpus=units)
+    index_latency_ms = (time.perf_counter_ns() - started) / 1_000_000
+    query_units = tuple(query for _, query in query_items)
+    started = time.perf_counter_ns()
+    query_vectors = encode_logical_inputs(arm_id=arm_id, adapter=adapter, logical_inputs=query_units)
+    query_encode_latency_ms = (time.perf_counter_ns() - started) / 1_000_000
+    if query_vectors.shape[1] != index.vectors.shape[1]:
+        raise MeasuredExecutorV16Error("query and corpus vector dimensions differ")
+
+    def search(vector: np.ndarray) -> tuple[FamilyRank, ...]:
+        return _rank_scored_units(
+            units=index.logical_units,
+            scores=np.matmul(index.vectors, vector),
+            program_id=program_id,
+        )
+
+    result = {}
+    for (token, _query), vector in zip(query_items, query_vectors, strict=True):
+        started = time.perf_counter_ns()
+        result[token] = search(vector)
+        search_latencies.append((time.perf_counter_ns() - started) / 1_000_000)
+    replay = {
+        token: search(vector)
+        for (token, _query), vector in zip(query_items, query_vectors, strict=True)
+    }
+    if _rankings_sha256(result) != _rankings_sha256(replay):
+        raise MeasuredExecutorV16Error("same-index/vector ranking replay mismatch")
+    return InstrumentedBatchExecution(
+        rankings=result,
+        index_latency_ms=index_latency_ms,
+        query_encode_latency_ms=query_encode_latency_ms,
+        search_latency_ms=tuple(search_latencies),
+        index_size_bytes=_index_size_bytes(index),
+        replay_count=2,
+        replay_ranking_sha256=_rankings_sha256(replay),
+    )
 
 
 def execute_program_cell(

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-a1.2-promotion-policy.v16",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "rule", "max_arms", "quality_aggregation", "latency_aggregation", "cost_allocation", "simplicity_by_arm", "exact_ties", "policy_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-promotion-policy.v16"},
+    "status": {"const": "READY"},
+    "rule": {"const": "lexicographic_recall_ndcg_latency_cost_simplicity"},
+    "max_arms": {"const": 3},
+    "quality_aggregation": {"type": "object", "additionalProperties": false, "required": ["method", "metrics", "programs_per_arm"], "properties": {"method": {"const": "macro_mean"}, "metrics": {"const": ["recall_at_100_out", "ndcg_at_100_out"]}, "programs_per_arm": {"const": 5}}},
+    "latency_aggregation": {"type": "object", "additionalProperties": false, "required": ["method", "metric"], "properties": {"method": {"const": "macro_mean"}, "metric": {"const": "search_latency_ms.p95"}}},
+    "cost_allocation": {"type": "object", "additionalProperties": false, "required": ["rule", "quote_source", "dense_gpu_count", "queries_per_arm", "arm_01_provider_cost_per_query_usd"], "properties": {"rule": {"const": "dense_arm_all_fee_hourly_x_measured_wall_seconds_div_4_div_750"}, "quote_source": {"const": "admitted_all_fee_quote_receipt"}, "dense_gpu_count": {"const": 4}, "queries_per_arm": {"const": 750}, "arm_01_provider_cost_per_query_usd": {"const": 0}}},
+    "simplicity_by_arm": {"type": "object", "additionalProperties": false, "required": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-01": {"const": 0}, "ARM-02": {"const": 1}, "ARM-03": {"const": 1}, "ARM-04": {"const": 1}, "ARM-05": {"const": 1}}},
+    "exact_ties": {"const": "reject"},
+    "policy_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

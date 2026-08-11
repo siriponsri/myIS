@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-current-attempt-pointer.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "pointer_id", "attempt_id", "status", "target_uri", "target_sha256", "pointer_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-current-attempt-pointer.v16"},
+    "pointer_id": {"const": "a1.2-current-attempt-v16"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "status": {"enum": ["PASS", "FAILED_CLOSED"]},
+    "target_uri": {"type": "string", "pattern": "^campaigns/armindex-multiretriever-v2/evidence/a1\\.2-terminal-attempts/[a-z0-9][a-z0-9._-]{2,79}\\.receipt\\.v16\\.json$"},
+    "target_sha256": {"$ref": "#/$defs/hash"},
+    "pointer_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

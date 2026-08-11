@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-10T14:10:14Z",
-  "generated_from_revision": "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d",
-  "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+  "generated_at": "2026-08-10T15:27:49Z",
+  "generated_from_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
+  "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+    "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-10T14:10:14Z",
+  "last_material_update": "2026-08-10T15:27:49Z",
   "metric_references": [],
-  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Cross-arm transfer matrix",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-1",
-  "report_sha256": "2636ebc1a843b1fc00880d21202b31076607145801af0de8702ed246822b9c94",
+  "report_sha256": "843dc17871d627bdf33d6631af9b7dd8f2eee1efd6534b3e6624e538548cffa7",
   "report_type": "task",
   "result": {
     "decision": "planned",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
+    "program_state": "a1_2_terminal_failed_closed_retry_required",
     "task": "A3.1"
   },
   "status": "planned",

@@ -1,0 +1,75 @@
+{
+  "schema_version": "myis.armindex-a1.2-whole-workload-budget-extension.v17",
+  "revision_id": "a1.2-whole-workload-budget-extension-v17",
+  "status": "OWNER_APPROVED_PENDING_LIVE_PROVIDER",
+  "claim_boundary": "Aggregate-only Owner-approved fresh-rerun budget policy. It requires conservative aggregate accounting for the prior destroyed attempt and the current 40-hour all-fee projection. It contains no provider identity, raw provider payload, reservation, launch, adoption, measured retrieval, retrieval result, or publication result.",
+  "owner_decision": {
+    "decision": "EXTEND_FRESH_RERUN_BUDGET_WITH_PRIOR_ATTEMPT_ACCOUNTING",
+    "decision_date": "2026-08-11",
+    "source": "Owner current-thread approval",
+    "rationale": "The fresh rerun must admit both the destroyed incomplete attempt's all-fee aggregate and the new 40-hour whole-workload exposure without changing frozen scientific semantics.",
+    "publication_impact_boundary": "The policy protects completion and reproducibility evidence for A1.2; it does not create, select, or improve a retrieval or publication result."
+  },
+  "historical_v16": {
+    "policy_uri": "control/armindex/a1.2/whole-workload-budget-extension.v16.json",
+    "policy_sha256": "bf0eedc8aedcf1dd9d8ec28d3101681fc4a0e3c8623d0585eb6271b62fd44f06",
+    "hard_stops_usd": {
+      "common_screen": 27,
+      "a1_total": 32,
+      "campaign": 150
+    },
+    "owner_ttl_hours": 40,
+    "semantics": "PRESERVED_IMMUTABLE_REFERENCE"
+  },
+  "approved_limits": {
+    "currency": "USD",
+    "hard_stops_usd": {
+      "common_screen": 55,
+      "a1_total": 60,
+      "campaign": 150
+    },
+    "owner_ttl_hours": 40,
+    "ttl_basis": "FROM_INSTANCE_PROVISION",
+    "whole_workload_required": true,
+    "partial_arm_admission_allowed": false,
+    "quote_max_age_seconds": 900
+  },
+  "prior_attempt_accounting": {
+    "required_prior_attempt_count": 1,
+    "accounting_basis": "ALL_FEE_DESTROYED_ATTEMPT_TOTAL",
+    "current_ttl_charge_added_to_every_hard_stop": true,
+    "aggregate_only": true
+  },
+  "all_fee_admission": {
+    "fresh_provider_identity_required": true,
+    "fresh_quote_required": true,
+    "required_quote_fields": [
+      "quote_observed_at_utc",
+      "compute_hourly_rate_usd",
+      "billing_granularity_seconds",
+      "minimum_billable_seconds",
+      "storage_fee_usd",
+      "network_fee_usd",
+      "platform_or_other_fee_usd",
+      "tax_or_surcharge_usd"
+    ],
+    "unknown_billable_component_allowed": false,
+    "whole_workload_charge_must_fit_all_stops": true,
+    "formula": "ceil(ttl_seconds/billing_granularity_seconds)*billing_granularity_seconds/3600*compute_hourly_rate_usd+storage_fee_usd+network_fee_usd+platform_or_other_fee_usd+tax_or_surcharge_usd"
+  },
+  "authorization": {
+    "provider_contact_allowed": false,
+    "admitted": false,
+    "launch_allowed": false,
+    "adopted_for_execution": false,
+    "measured_retrieval_allowed": false
+  },
+  "preparation_counters": {
+    "charged_usd": 0,
+    "gpu_scientific_runs": 0,
+    "measured_runs": 0,
+    "model_downloads": 0,
+    "paid_api_calls": 0
+  },
+  "policy_sha256": "9c2fde9f9cecf1d5ba349a1613cb4bccde576ff2ad8c443a9577c2cc4d9fdb09"
+}

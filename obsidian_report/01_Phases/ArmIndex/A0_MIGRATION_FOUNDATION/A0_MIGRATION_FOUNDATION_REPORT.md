@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d"
-read_model_sha256: "8bd46c506c88658166d4bbd4e43ba72f15152fddd70c8e772d68e83bdaa88724"
-source_commit: "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa"
+read_model_revision: "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028"
+read_model_sha256: "564ef921af014ee4a9e771afb55e7c1ed442fe405c3a74050dfbe6f3e2d4319a"
+source_commit: "6f4c80625993ed3004ef1ed3dccd17f90d27f30f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d"
-last_material_update: "2026-08-10T14:10:14Z"
-next_authorized_action: "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+generated_from_revision: "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028"
+last_material_update: "2026-08-10T15:27:49Z"
+next_authorized_action: "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-10T14:10:14Z"
-updated_at: "2026-08-10T14:10:14Z"
+created_at: "2026-08-10T15:27:49Z"
+updated_at: "2026-08-10T15:27:49Z"
 note_id: "A0_MIGRATION_FOUNDATION-MASTER"
 note_type: "phase_report"
 phase_id: "A0_MIGRATION_FOUNDATION"
@@ -40,7 +40,7 @@ Migrate repository, freeze contracts, preserve evidence, and run compute-feasibi
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed
+- `program_state`: a1_2_terminal_failed_closed_retry_required
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
@@ -48,7 +48,7 @@ Migrate repository, freeze contracts, preserve evidence, and run compute-feasibi
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: a5624a701ed9cf0666bba0e9914b88ac88d7b0aa
+- `git_commit`: 6f4c80625993ed3004ef1ed3dccd17f90d27f30f
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -145,7 +145,7 @@ Status: **completed**. A0_MIGRATION_FOUNDATION is completed; ArmIndex measured r
 
 ## Next Action
 
-PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
+PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

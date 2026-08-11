@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-10T14:10:14Z",
-  "generated_from_revision": "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d",
-  "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+  "generated_at": "2026-08-10T15:27:49Z",
+  "generated_from_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
+  "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+    "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
@@ -191,7 +191,7 @@
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-10T14:10:14Z",
+  "last_material_update": "2026-08-10T15:27:49Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "phase-p1_cpu_baseline",
-  "report_sha256": "b32e626dee1b3adfb816a98210c47c05bfdf5943a90f248c1850d7223b61b4e6",
+  "report_sha256": "63cde602bd43f1133ae59d3fc46748a6689586dc71a050b6a7b67c04bd0796a6",
   "report_type": "phase",
   "result": {
     "decision": "completed",

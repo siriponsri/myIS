@@ -49,6 +49,17 @@ responses, query identifiers, rankings, or per-query outcomes to Git or
 projections. A failed worker cancels/reaps its siblings and emits a failure
 marker before the run is considered failed closed.
 
+## Same-instance recovery
+
+The Owner authorizes immediate engineering recovery on the admitted instance.
+Resume the same attempt only after a transient transport or process interruption
+when the frozen code, manifests, inputs, hashes, runtime, and scientific semantics
+remain identical and the durable checkpoints validate. If any code byte or other
+execution identity changes, close the interrupted attempt as failure evidence and
+start a fresh attempt ID on the same instance after repeating admission/adoption.
+Never combine cells from different attempts or repair behavior in response to an
+observed retrieval outcome.
+
 ## Required evidence
 
 The ledger and generated reports must record the attempt ID, immutable bundle

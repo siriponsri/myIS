@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-a1.2-cell-performance-failure-metrics.v16",
+  "title": "A1.2 aggregate-safe failed-cell performance metrics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "cell_id", "status", "aggregate_safe", "manifest_sha256", "attempt_binding_sha256", "binding_sha256", "performance", "resources", "reliability", "metrics_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-cell-performance-failure-metrics.v16"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "cell_id": {"type": "string", "pattern": "^ARM-0[1-5]--P0[0-4]-(?:TAC-DOC|TA-DOC|CLAIM1|PASSAGE|SECTION-MULTIVIEW)$"},
+    "status": {"const": "FAILED"},
+    "aggregate_safe": {"const": true},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "attempt_binding_sha256": {"$ref": "#/$defs/sha256"},
+    "binding_sha256": {"$ref": "#/$defs/sha256"},
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compile_latency_ms", "wall_seconds"],
+      "properties": {
+        "compile_latency_ms": {"type": "number", "minimum": 0},
+        "wall_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["peak_host_ram_bytes", "peak_vram_bytes"],
+      "properties": {
+        "peak_host_ram_bytes": {"type": "integer", "minimum": 0},
+        "peak_vram_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "reliability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retry_count", "oom_count", "failure_category"],
+      "properties": {
+        "retry_count": {"type": "integer", "minimum": 0},
+        "oom_count": {"type": "integer", "minimum": 0, "maximum": 1},
+        "failure_category": {"enum": ["oom", "input", "runtime", "unknown"]}
+      }
+    },
+    "metrics_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

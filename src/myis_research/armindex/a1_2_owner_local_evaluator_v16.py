@@ -226,9 +226,25 @@ def _receipt(cell: str, value: Mapping[str, Any], quality: Mapping[str, Any], ar
 
 def _promotion(value: Mapping[str, Any], receipts: list[Mapping[str, Any]]) -> dict[str, Any]:
     promotion = value["promotion"]
-    required = {"rule", "max_arms", "arms"}
+    required = {"rule", "max_arms", "policy_sha256", "quote_receipt_sha256", "quote_sha256", "allocation", "allocation_sha256", "arms"}
     if not isinstance(promotion, Mapping) or set(promotion) != required or promotion.get("rule") != PROMOTION_RULE or promotion.get("max_arms") != 3 or not isinstance(promotion["arms"], list) or len(promotion["arms"]) != 5:
         raise OwnerLocalEvaluatorV16Error("frozen promotion rule is invalid")
+    for key in ("policy_sha256", "quote_receipt_sha256", "quote_sha256", "allocation_sha256"):
+        _hash(promotion.get(key), role=f"promotion {key}")
+    allocation = promotion["allocation"]
+    allocation_required = {"rule", "policy_sha256", "quote_receipt_sha256", "quote_sha256", "all_fee_usd_per_hour", "dense_gpu_count", "queries_per_arm", "wall_seconds_by_arm", "cost_per_query_usd_by_arm", "allocation_sha256"}
+    if not isinstance(allocation, Mapping) or set(allocation) != allocation_required or allocation.get("rule") != "dense_arm_all_fee_hourly_x_measured_wall_seconds_div_4_div_750" or allocation.get("dense_gpu_count") != 4 or allocation.get("queries_per_arm") != 750:
+        raise OwnerLocalEvaluatorV16Error("promotion allocation policy is invalid")
+    if any(allocation.get(key) != promotion[key] for key in ("policy_sha256", "quote_receipt_sha256", "quote_sha256", "allocation_sha256")):
+        raise OwnerLocalEvaluatorV16Error("promotion allocation provenance is not bound")
+    allocation_body = {key: item for key, item in allocation.items() if key != "allocation_sha256"}
+    if allocation["allocation_sha256"] != canonical_sha256(allocation_body):
+        raise OwnerLocalEvaluatorV16Error("promotion allocation self-hash mismatch")
+    hourly_rate = _number(allocation.get("all_fee_usd_per_hour"), role="promotion all-fee hourly quote")
+    wall_seconds = allocation.get("wall_seconds_by_arm")
+    costs = allocation.get("cost_per_query_usd_by_arm")
+    if not isinstance(wall_seconds, Mapping) or not isinstance(costs, Mapping) or set(wall_seconds) != set(ARM_IDS) or set(costs) != set(ARM_IDS):
+        raise OwnerLocalEvaluatorV16Error("promotion allocation arms are incomplete")
     scores: list[tuple[tuple[float, float, float, float, float], str]] = []
     seen: set[str] = set()
     by_arm: dict[str, list[Mapping[str, Any]]] = {arm: [] for arm in ARM_IDS}
@@ -242,13 +258,17 @@ def _promotion(value: Mapping[str, Any], receipts: list[Mapping[str, Any]]) -> d
         arm_receipts = by_arm[row["arm_id"]]
         expected_recall = sum(item["quality"]["recall_at_100_out"] for item in arm_receipts) / len(arm_receipts)
         expected_ndcg = sum(item["quality"]["ndcg_at_100_out"] for item in arm_receipts) / len(arm_receipts)
-        if abs(score[0] - expected_recall) > 1e-12 or abs(score[1] - expected_ndcg) > 1e-12:
+        expected_latency = sum(item["performance"]["search_latency_ms"]["p95"] for item in arm_receipts) / len(arm_receipts)
+        expected_wall_seconds = sum(item["performance"]["wall_seconds"] for item in arm_receipts)
+        expected_cost = 0.0 if row["arm_id"] == "ARM-01" else hourly_rate * expected_wall_seconds / 3600.0 / 4.0 / 750.0
+        expected_simplicity = 0.0 if row["arm_id"] == "ARM-01" else 1.0
+        if abs(score[0] - expected_recall) > 1e-12 or abs(score[1] - expected_ndcg) > 1e-12 or abs(score[2] - expected_latency) > 1e-12 or abs(score[3] - expected_cost) > 1e-12 or abs(score[4] - expected_simplicity) > 1e-12 or abs(_number(wall_seconds[row["arm_id"]], role="promotion wall seconds") - expected_wall_seconds) > 1e-12 or abs(_number(costs[row["arm_id"]], role="promotion cost allocation") - expected_cost) > 1e-12:
             raise OwnerLocalEvaluatorV16Error("promotion quality scores do not derive from evaluated receipts")
         scores.append((score, row["arm_id"]))
     if seen != set(ARM_IDS) or len({score for score, _arm in scores}) != 5:
         raise OwnerLocalEvaluatorV16Error("frozen promotion rule rejects exact ties")
     ordered = sorted(scores, key=lambda item: (-item[0][0], -item[0][1], item[0][2], item[0][3], item[0][4]))
-    return {"schema_version": "myis.armindex-a1.2-arm-promotion.v16", "status": "PASS", "rule": PROMOTION_RULE, "max_promoted_arms": 3, "promoted_arm_ids": [arm for _score, arm in ordered[:3]], "candidate_arm_count": 5, "tie_rejected": True}
+    return {"schema_version": "myis.armindex-a1.2-arm-promotion.v16", "status": "PASS", "rule": PROMOTION_RULE, "policy_sha256": promotion["policy_sha256"], "quote_receipt_sha256": promotion["quote_receipt_sha256"], "quote_sha256": promotion["quote_sha256"], "allocation_sha256": promotion["allocation_sha256"], "max_promoted_arms": 3, "promoted_arm_ids": [arm for _score, arm in ordered[:3]], "candidate_arm_count": 5, "tie_rejected": True}
 
 
 def _write(path: Path, value: Mapping[str, Any]) -> None:

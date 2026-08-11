@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-a1.2-admitted-all-fee-quote-receipt.v16",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_kind", "receipt_id", "attempt_id", "status", "claim_boundary", "provider_admission_receipt_sha256", "currency", "all_fee_usd_per_hour", "quote_sha256", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-admitted-all-fee-quote-receipt.v16"},
+    "receipt_kind": {"const": "admitted_all_fee_quote"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9._-]+-all-fee-quote-v16$"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "status": {"const": "PASS_ADMITTED_ALL_FEE_QUOTE"},
+    "claim_boundary": {"type": "string", "minLength": 120},
+    "provider_admission_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "currency": {"const": "USD"},
+    "all_fee_usd_per_hour": {"type": "number", "minimum": 0},
+    "quote_sha256": {"$ref": "#/$defs/hash"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d"
-read_model_sha256: "8bd46c506c88658166d4bbd4e43ba72f15152fddd70c8e772d68e83bdaa88724"
-source_commit: "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa"
+read_model_revision: "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028"
+read_model_sha256: "564ef921af014ee4a9e771afb55e7c1ed442fe405c3a74050dfbe6f3e2d4319a"
+source_commit: "6f4c80625993ed3004ef1ed3dccd17f90d27f30f"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -10,15 +10,15 @@ related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "aggregate_safe_live_attempt_failure"
 scientific_authority: false
-claim_boundary: "Aggregate-safe audit of one incomplete live attempt. It is not a retrieval-quality result, promotion decision, A1 completion, or publication claim."
-generated_from_revision: "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d"
-last_material_update: "2026-08-10T14:10:14Z"
-next_authorized_action: "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
+claim_boundary: "Aggregate-safe engineering failure only; r14 has no dense result, safe return, evaluator result, promotion authority, or permission to enter A2."
+generated_from_revision: "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028"
+last_material_update: "2026-08-10T15:27:49Z"
+next_authorized_action: "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-10T14:10:14Z"
-updated_at: "2026-08-10T14:10:14Z"
+created_at: "2026-08-10T15:27:49Z"
+updated_at: "2026-08-10T15:27:49Z"
 note_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING-MASTER"
 note_type: "phase_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -40,7 +40,7 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `phase`: A1_BASELINES_AND_MULTI_ARM_SCREENING
 - `task`: None
-- `program_state`: a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed
+- `program_state`: a1_2_terminal_failed_closed_retry_required
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
@@ -48,7 +48,7 @@ Reproduce controls and screen the five adapters with common programs.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `18656081f8923c19ab9b9ffd922169681283df6dd02e99ee60b61a3f0ea8398e`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040`
-- `git_commit`: a5624a701ed9cf0666bba0e9914b88ac88d7b0aa
+- `git_commit`: 6f4c80625993ed3004ef1ed3dccd17f90d27f30f
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
@@ -73,6 +73,7 @@ Reproduce controls and screen the five adapters with common programs.
 - `a12_direct_base_v5_receipt`: `campaigns/armindex-multiretriever-v2/evidence/a1.2-runtime-minimal-direct-base-migration.receipt.v5.json`; SHA-256 `b8b71e4fab7faa0ace7fdb8857f9ec41bc344781eb416c5d7ceaa947b352859a`
 - `a12_direct_base_v5_execution_contract`: `control/armindex/a1.2/execution-contract.direct-base.v5.json`; SHA-256 `df7b1232554b6fe320f396bb290419a75f41b2e70ba463a6caf64bc0d08dc563`
 - `a12_v16_r13_failed_closed_attempt`: `outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json`; SHA-256 `65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364`
+- `a12_v16_current_terminal_attempt`: `{"attempt_id": "a12-v16-20260811-r14", "completed_logical_cells": 5, "pointer_sha256": "eb8ba5c4a01ec9913b3a1f6bb9eab96ef63e002a7726b04510c9a49e8f9cd1b9", "pointer_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json", "provider_disposition_status": "REUSE_ELIGIBLE", "receipt_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90", "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json", "status": "FAILED_CLOSED"}`
 
 ## Work Performed
 
@@ -261,9 +262,9 @@ Fixture values are synthetic engineering diagnostics and are never reported as m
 
 ## Result
 
-**Output:** Aggregate-safe failed-attempt provenance records 24/25 completed logical cells before a hard stop.
+**Output:** Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop.
 
-**Result:** FAILED_CLOSED and retry-required: the incomplete 24/25 attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.
+**Result:** FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.
 
 **Decision:** FAILED_CLOSED_RETRY_REQUIRED
 
@@ -273,18 +274,18 @@ The partial cell receipts are failure provenance only. They do not constitute a 
 
 ## Supported Claims
 
-- Aggregate-safe failed-attempt provenance records 24/25 completed logical cells before a hard stop. (evidence: a12-rep-harness-claim-audit, a12-rep-harness-split-eda-png, a12-rep-harness-split-eda-svg, a12-p02-first-claim-repair, a12-effective-input-limit-blocker, a12-dense-overflow-contract, a12-dense-overflow-inventory, a12-dense-overflow-composition-audit, a12-dense-overflow-eda-png, a12-dense-overflow-eda-svg, a12-protected-compiler-integration-v15, a12-protected-compiler-audit-v15, a12-whole-workload-budget-model-v15, a12-v16-exact-token-id-adapter-probe, a12-v16-r13-failed-closed-attempt-audit, a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05, a12-adoption-inputs-v12-r3, a12-adoption-inputs-schema-v12-r3, a12-adoption-inputs-validator-v12-r3, a12-publication-impact-contract-v13, a12-publication-impact-schema-v13, a12-publication-impact-preregistration-v13, a12-instance-disposition-policy-v13, a12-instance-disposition-result-schema-v13)
+- Aggregate-safe failed-attempt provenance records 5/25 completed logical cells before a hard stop. (evidence: a12-rep-harness-claim-audit, a12-rep-harness-split-eda-png, a12-rep-harness-split-eda-svg, a12-p02-first-claim-repair, a12-effective-input-limit-blocker, a12-dense-overflow-contract, a12-dense-overflow-inventory, a12-dense-overflow-composition-audit, a12-dense-overflow-eda-png, a12-dense-overflow-eda-svg, a12-protected-compiler-integration-v15, a12-protected-compiler-audit-v15, a12-whole-workload-budget-model-v15, a12-v16-exact-token-id-adapter-probe, a12-v16-r13-failed-closed-attempt-audit, a11-adapter-task-receipt, a11-adapter-fixture-manifest, a11-adapter-fixture-receipt, a11-adapter-runbook, a11-adapter-ledger, a12-gpu-execution-proposal, a12-contract-scaffold-receipt, a12-execution-contract, a12-arm01-rank-parity, a12-budget-profile, a12-execution-envelope, a12-model-lockset, a12-launch-checklist, a12-shutdown-plan, a12-scaffold-runbook, a12-scaffold-ledger, a12-report-archive-audit, a12-closeout-validation-audit, a12-owner-local-preflight, a12-owner-local-mlflow-registration, a12-vast-v2-migration-receipt, a12-vast-v2-execution-contract, a12-vast-v2-synthetic-receipt, a12-vast-v2-budget, a12-vast-v2-topology, a12-vast-v2-runtime, a12-vast-v2-image, a12-vast-v2-checklist, a12-vast-v2-shutdown, a12-vast-v2-allowlist, a12-vast-v2-runbook, a12-vast-v2-owner-runbook, a12-vast-v2-coordinator, a12-vast-v2-watchdog, a12-vast-v2-ledger, a12-vast-v2-closeout-audit, a12-vast-v2-job-arm-02, a12-vast-v2-job-arm-03, a12-vast-v2-job-arm-04, a12-vast-v2-job-arm-05, a12-vast-v3-correction-receipt, a12-vast-v3-execution-contract, a12-vast-v3-control-runbook, a12-vast-v3-owner-runbook, a12-vast-v3-schema, a12-vast-v3-validator, a12-vast-v3-projection-stability-repair, a12-direct-base-v5-receipt, a12-direct-base-v5-contract, a12-direct-base-v5-runtime-lock, a12-direct-base-v5-image-contract, a12-direct-base-v5-topology, a12-direct-base-v5-schema, a12-direct-base-v5-runbook, a12-direct-base-v5-module, a12-live-preflight-v6-receipt, a12-live-preflight-v6-contract, a12-live-preflight-v6-schema, a12-live-preflight-v6-validator, a12-live-preflight-v6-preflight-module, a12-live-preflight-v6-owner-runbook, a12-owner-instance-continuation-policy-v1, a12-live-preflight-v7-receipt, a12-live-preflight-v7-contract, a12-live-preflight-v7-schema, a12-live-preflight-v7-validator, a12-live-preflight-v7-owner-runbook, a12-live-preflight-v7-coordinator, a12-live-preflight-v7-bootstrap, a12-live-preflight-v7-supplement-validator, a12-live-preflight-v7-supplement-requirements, a12-live-preflight-v7-supplement-workflow, a12-live-preflight-v8-receipt, a12-live-preflight-v8-contract, a12-live-preflight-v8-schema, a12-live-preflight-v8-validator, a12-live-preflight-v8-owner-runbook, a12-live-preflight-v8-coordinator, a12-live-preflight-v8-bootstrap, a12-live-preflight-v9-receipt, a12-live-preflight-v9-contract, a12-live-preflight-v9-schema, a12-live-preflight-v9-validator, a12-live-preflight-v9-runtime, a12-live-preflight-v9-owner-runbook, a12-live-preflight-v9-coordinator, a12-live-preflight-v9-bootstrap, a12-live-preflight-v9-launcher, a12-live-synthetic-preflight-result-v9, a12-provider-closeout-result-v10, a12-scientific-request-v11, a12-scientific-request-receipt-v11, a12-scientific-request-schema-v11, a12-scientific-request-receipt-schema-v11, a12-scientific-request-runbook-v11, a12-scientific-request-ledger-v11, a12-scientific-request-rigor-v11, a12-v11-aggregate-result-contract, a12-v11-budget, a12-v11-common-program-set, a12-v11-protected-evaluator-handoff, a12-v11-provider-admission, a12-v11-scientific-transfer, a12-v11-stop-conditions, a12-v11-workload-set, a12-v11-job-arm-01, a12-v11-job-arm-02, a12-v11-job-arm-03, a12-v11-job-arm-04, a12-v11-job-arm-05, a12-adoption-inputs-v12-r3, a12-adoption-inputs-schema-v12-r3, a12-adoption-inputs-validator-v12-r3, a12-publication-impact-contract-v13, a12-publication-impact-schema-v13, a12-publication-impact-preregistration-v13, a12-instance-disposition-policy-v13, a12-instance-disposition-result-schema-v13)
 
 ## Unsupported Claims
 
 - Measured P2 improvement or candidate superiority before a real measured run.
 - Final-split generalization or publication release before D2 and D3.
 - Causal or legal conclusions from retrieval aggregates.
-- The incomplete 24/25 r13 attempt as a measured A1 result, promotion input, or completion claim.
+- The incomplete current attempt as a measured A1 result, promotion input, or completion claim.
 
 ## Failures and Recovery
 
-- `a1.2-v16-r13-incomplete-24-of-25` -> `PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2`; status `FAILED_CLOSED_RETRY_REQUIRED`; counters changed `False`; failure `outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json` / `65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364`; recovery `outputs/audits/armindex/a1.2-v16-r13-failure-audit-20260810.json` / `65339fe7fa173c7c6372548fc4daa8dd13f28a24c448e3bdb7399eed4d99a364`
+- `a1.2-v16-a12-v16-20260811-r14-failed-closed` -> `PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2`; status `FAILED_CLOSED_RETRY_REQUIRED`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json` / `2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json` / `2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90`
 - `v6-initial-wheelhouse-missing-pydantic` -> `preserved_immutable_additive_repair`; status `preserved_and_repaired_preflight_pending`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`
 - `v6-supplement-repair-mutated-pycache-tree` -> `preserved_immutable_additive_repair`; status `preserved_and_repaired_preflight_pending`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`
 - `v7-frozen-bundle-missing-validation-lineage` -> `preserved_immutable_additive_repair`; status `preserved_and_repaired_preflight_pending`; counters changed `False`; failure `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`; recovery `campaigns/armindex-multiretriever-v2/evidence/a1.2-live-preflight-packaging-repair.receipt.v8.json` / `aaa15d54d73d78fd6237f71d99f9068579b2bc4451a6af15417024e345e076a6`
@@ -314,17 +315,17 @@ The partial cell receipts are failure provenance only. They do not constitute a 
 - `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
 - `evidence_class`: aggregate_safe_live_attempt_failure
 - `scientific_authority`: False
-- `r13_attempt_status`: FAILED_CLOSED
-- `r13_partial_results_promotable`: False
+- `current_attempt_status`: FAILED_CLOSED
+- `current_attempt_partial_results_promotable`: False
 - `official_completed_measured_runs`: 0
 
 ## Decision
 
-Status: **FAILED_CLOSED_RETRY_REQUIRED**. FAILED_CLOSED and retry-required: the incomplete 24/25 attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.
+Status: **FAILED_CLOSED_RETRY_REQUIRED**. FAILED_CLOSED and retry-required: the incomplete current attempt is not promotable, has no Owner-local evaluation, and leaves the official completed measured-run counter at zero.
 
 ## Next Action
 
-PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
+PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

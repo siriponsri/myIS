@@ -13,9 +13,11 @@ from myis_research.armindex.a1_2_measured_executor_v16 import (
     encode_logical_inputs,
     execute_program_cell,
     execute_program_cell_batch,
+    execute_program_cell_batch_instrumented,
     search_bm25,
     search_dense,
 )
+from myis_research.kernel.canonical import canonical_sha256
 
 
 class FakeAdapter(DenseEmbeddingAdapter):
@@ -366,3 +368,35 @@ def test_batch_bm25_builds_one_index_and_preserves_query_order() -> None:
         "Q-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa02",
     ]
     assert result["Q-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa01"][0].family_token.startswith("F-")
+
+
+def test_instrumented_batch_preserves_ranks_and_receipt_hash_domain() -> None:
+    corpus = tuple(
+        unit(f"doc-{index}", f"F-{index:032x}", ("alpha", 1))
+        for index in range(101)
+    )
+    queries = {
+        f"Q-{index:032x}": "alpha"
+        for index in range(2)
+    }
+    ordinary = execute_program_cell_batch(
+        arm_id="ARM-01", program_id="P00-TAC-DOC", corpus=corpus, queries=queries
+    )
+    instrumented = execute_program_cell_batch_instrumented(
+        arm_id="ARM-01", program_id="P00-TAC-DOC", corpus=corpus, queries=queries
+    )
+    receipt_ranking_set_sha256 = canonical_sha256(
+        [
+            canonical_sha256(
+                [
+                    {"family_token": row.family_token, "rank": row.rank, "score": float(row.score)}
+                    for row in instrumented.rankings[token]
+                ]
+            )
+            for token in queries
+        ]
+    )
+    assert instrumented.rankings == ordinary
+    assert instrumented.replay_count == 2
+    assert instrumented.replay_ranking_sha256 == receipt_ranking_set_sha256
+    assert len(instrumented.search_latency_ms) == len(queries)

@@ -147,6 +147,7 @@ _BUNDLE_EXCLUDED_FILES = frozenset(
         "src/myis_research/armindex/a1_2_owner_local_evaluator_v16.py",
         "src/myis_research/armindex/a1_2_owner_local_input_manifest_v16.py",
         "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py",
+        "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py",
         "src/myis_research/armindex/a1_2_remote_arm_worker_v16.py",
         "src/myis_research/armindex/a1_2_remote_measured_launcher_v16.py",
         "src/myis_research/armindex/a1_2_safe_return_builder_v16.py",

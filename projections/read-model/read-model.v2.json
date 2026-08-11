@@ -1112,6 +1112,38 @@
         "validator_uri": "src/myis_research/armindex/a1_2_live_preflight_execution_v9.py"
       }
     },
+    "a1_2_current_attempt": {
+      "access_counters": {
+        "final_accesses": 0,
+        "harness_dev_accesses": 0,
+        "selection_accesses": 0
+      },
+      "attempt_id": "a12-v16-20260811-r14",
+      "claim_boundary": "Aggregate-safe engineering failure only; r14 has no dense result, safe return, evaluator result, promotion authority, or permission to enter A2.",
+      "coverage": {
+        "completed_logical_cells": 5,
+        "partial_results_promotable": false,
+        "required_logical_cells": 25
+      },
+      "evidence_class": "aggregate_safe_live_attempt_failure",
+      "failure_evidence_sha256": "7c4a71e909184a246c2927bfcea14a8e6f78cf747831f8c47d739366eb00c25a",
+      "final_charge_usd": "0.550891",
+      "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+      "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+      "pointer_file_sha256": "eb8ba5c4a01ec9913b3a1f6bb9eab96ef63e002a7726b04510c9a49e8f9cd1b9",
+      "pointer_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-current-attempt.v16.json",
+      "provider_disposition_receipt_sha256": "7c4a71e909184a246c2927bfcea14a8e6f78cf747831f8c47d739366eb00c25a",
+      "provider_disposition_status": "REUSE_ELIGIBLE",
+      "receipt_file_sha256": "2217aa4be3ee90a03511427fbe80d3c9d69eed2421034e87f1ccb1f64df92c90",
+      "receipt_id": "a12-v16-20260811-r14-terminal-v16",
+      "receipt_sha256": "230cc02af9b1d7193ef16ef6c6a94f768116601d86621a86b6063e03e415fbcb",
+      "receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r14.receipt.v16.json",
+      "schema_version": "myis.armindex-a1.2-terminal-attempt-receipt.v16",
+      "scientific_authority": false,
+      "status": "FAILED_CLOSED",
+      "task_id": "A1.2",
+      "validated": true
+    },
     "a1_2_dense_overflow": {
       "budget_model_file_sha256": "c7f08deb18ea6934f4af188faacf728fdde792473411ac10b560f53a90c6e5de",
       "budget_model_sha256": "5ad7e5255ef20bd428e8490275892c05f85252dfb65518a532b7a7405eb3eb3b",
@@ -3637,7 +3669,7 @@
       "validated": true
     },
     "local_adoption_input_status": "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY",
-    "next_command": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+    "next_command": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -3721,7 +3753,7 @@
       {
         "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
         "purpose": "Reproduce controls and screen the five adapters with common programs.",
-        "status": "a1_2_v16_r13_failed_closed_retry_required",
+        "status": "a1_2_terminal_failed_closed_retry_required",
         "tasks": [
           {
             "status": "complete",
@@ -3729,7 +3761,7 @@
             "title": "Adapter fixture validation"
           },
           {
-            "status": "a1_2_v16_r13_failed_closed_retry_required",
+            "status": "a1_2_terminal_failed_closed_retry_required",
             "task_id": "A1.2",
             "title": "Common multi-arm screen"
           }
@@ -3817,7 +3849,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
+    "status": "a1_2_terminal_failed_closed_retry_required",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -3849,7 +3881,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
+      "status": "a1_2_terminal_failed_closed_retry_required",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -4008,7 +4040,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-10T14:10:14Z",
+  "generated_at": "2026-08-10T15:27:49Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -4916,7 +4948,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d",
+  "projection_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -4960,8 +4992,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d",
-  "read_model_sha256": "8bd46c506c88658166d4bbd4e43ba72f15152fddd70c8e772d68e83bdaa88724",
+  "read_model_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
+  "read_model_sha256": "564ef921af014ee4a9e771afb55e7c1ed442fe405c3a74050dfbe6f3e2d4319a",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -5094,7 +5126,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+  "source_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
   "tasks": [
     {
       "evidence_ids": [],

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-terminal-attempt-receipt.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "phase_id", "task_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "coverage", "provider_disposition_receipt_sha256", "provider_disposition_status", "access_counters", "final_charge_usd", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-terminal-attempt-receipt.v16"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}-terminal-v16$"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "phase_id": {"const": "A1_BASELINES_AND_MULTI_ARM_SCREENING"},
+    "task_id": {"const": "A1.2"},
+    "status": {"enum": ["PASS", "FAILED_CLOSED"]},
+    "evidence_class": {"enum": ["aggregate_safe_live_attempt_terminal", "aggregate_safe_live_attempt_failure"]},
+    "scientific_authority": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 40},
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_logical_cells", "completed_logical_cells", "partial_results_promotable"],
+      "properties": {
+        "required_logical_cells": {"const": 25},
+        "completed_logical_cells": {"type": "integer", "minimum": 0, "maximum": 25},
+        "partial_results_promotable": {"const": false}
+      }
+    },
+    "safe_return_sha256": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "evaluator_receipt_sha256": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "promotion_receipt_sha256": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "failure_evidence_sha256": {"$ref": "#/$defs/hash"},
+    "provider_disposition_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "provider_disposition_status": {"enum": ["DESTROYED", "DESTROY_REQUIRED", "REUSE_ELIGIBLE"]},
+    "access_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harness_dev_accesses", "selection_accesses", "final_accesses"],
+      "properties": {
+        "harness_dev_accesses": {"type": "integer", "minimum": 0},
+        "selection_accesses": {"type": "integer", "minimum": 0},
+        "final_accesses": {"type": "integer", "minimum": 0}
+      }
+    },
+    "final_charge_usd": {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "PASS"}}, "required": ["status"]},
+      "then": {
+        "required": ["safe_return_sha256", "evaluator_receipt_sha256", "promotion_receipt_sha256"],
+        "properties": {
+          "evidence_class": {"const": "aggregate_safe_live_attempt_terminal"},
+          "scientific_authority": {"const": true},
+          "coverage": {"properties": {"completed_logical_cells": {"const": 25}}}
+        },
+        "not": {"required": ["failure_evidence_sha256"]}
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "FAILED_CLOSED"}}, "required": ["status"]},
+      "then": {
+        "required": ["failure_evidence_sha256"],
+        "properties": {
+          "evidence_class": {"const": "aggregate_safe_live_attempt_failure"},
+          "scientific_authority": {"const": false},
+          "safe_return_sha256": {"type": "null"},
+          "evaluator_receipt_sha256": {"type": "null"},
+          "promotion_receipt_sha256": {"type": "null"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

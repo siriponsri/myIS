@@ -114,6 +114,7 @@ def _lifecycle(value: Any) -> str:
         "blocked_until_p1",
         "contract_scaffold_complete_launch_locked",
         "a1_2_v16_r13_failed_closed_retry_required",
+        "a1_2_terminal_failed_closed_retry_required",
     } or value.startswith("locked"):
         return "blocked"
     return "planned"
@@ -3288,6 +3289,29 @@ def _bindings(
             if isinstance(attempt, Mapping)
             else None,
         }
+    current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
+    if (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and task_id in {None, "A1.2"}
+        and isinstance(current_attempt, Mapping)
+        and current_attempt.get("validated") is True
+    ):
+        bindings["a12_v16_current_terminal_attempt"] = {
+            "pointer_uri": current_attempt.get("pointer_uri"),
+            "pointer_sha256": current_attempt.get("pointer_file_sha256"),
+            "receipt_uri": current_attempt.get("receipt_uri"),
+            "receipt_sha256": current_attempt.get("receipt_file_sha256"),
+            "attempt_id": current_attempt.get("attempt_id"),
+            "status": current_attempt.get("status"),
+            "provider_disposition_status": current_attempt.get(
+                "provider_disposition_status"
+            ),
+            "completed_logical_cells": current_attempt.get("coverage", {}).get(
+                "completed_logical_cells"
+            )
+            if isinstance(current_attempt.get("coverage"), Mapping)
+            else None,
+        }
     return bindings
 
 
@@ -3307,10 +3331,18 @@ def _record_for(
         else f"phase-{phase_id.lower()}"
     )
     status = _lifecycle(task.get("status") if task else phase.get("status"))
-    scientific = phase_id == "P1_CPU_BASELINE"
     adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
     scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
-    r13_failure = model.get("armindex", {}).get("a1_2_r13_failure", {})
+    current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
+    current_terminal = (
+        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+        and task_id in {None, "A1.2"}
+        and isinstance(current_attempt, Mapping)
+        and current_attempt.get("validated") is True
+    )
+    current_failed_closed = current_terminal and current_attempt.get("status") == "FAILED_CLOSED"
+    current_pass = current_terminal and current_attempt.get("status") == "PASS"
+    scientific = phase_id == "P1_CPU_BASELINE" or current_pass
     a11_validated = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and isinstance(adapter, Mapping)
@@ -3321,17 +3353,11 @@ def _record_for(
         and isinstance(scaffold, Mapping)
         and scaffold.get("validated") is True
     )
-    r13_failed_closed = (
-        phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-        and task_id in {None, "A1.2"}
-        and isinstance(r13_failure, Mapping)
-        and r13_failure.get("validated") is True
-    )
     evidence_class = (
-        "train_selection_measured"
+        str(current_attempt.get("evidence_class"))
+        if current_terminal
+        else "train_selection_measured"
         if scientific
-        else "aggregate_safe_live_attempt_failure"
-        if r13_failed_closed
         else "fixture"
         if phase_id == "P2_SCOPE_DEVELOPMENT"
         and model.get("p2_readiness", {}).get("fixture_pilot", {}).get("status")
@@ -3347,10 +3373,10 @@ def _record_for(
         else "planned"
     )
     claim_boundary = (
-        "train_selection_only"
+        str(current_attempt.get("claim_boundary"))
+        if current_terminal
+        else "train_selection_only"
         if scientific
-        else str(r13_failure.get("claim_boundary"))
-        if r13_failed_closed
         else str(scaffold.get("claim_boundary"))
         if a12_validated and task_id in {None, "A1.2"}
         else str(adapter.get("claim_boundary"))
@@ -3401,29 +3427,30 @@ def _record_for(
                     "counters_changed": False,
                 }
             )
-    if r13_failed_closed:
-        attempt = r13_failure.get("attempt", {})
+    if current_failed_closed:
+        coverage = current_attempt.get("coverage", {})
         failures.append(
             {
-                "failure_id": "a1.2-v16-r13-incomplete-24-of-25",
-                "failure_uri": r13_failure.get("audit_uri"),
-                "failure_sha256": r13_failure.get("audit_file_sha256"),
-                "recovery_id": r13_failure.get("next_authorized_action"),
-                "recovery_uri": r13_failure.get("audit_uri"),
-                "recovery_sha256": r13_failure.get("audit_file_sha256"),
+                "failure_id": f"a1.2-v16-{current_attempt.get('attempt_id')}-failed-closed",
+                "failure_uri": current_attempt.get("receipt_uri"),
+                "failure_sha256": current_attempt.get("receipt_file_sha256"),
+                "recovery_id": current_attempt.get("next_authorized_action"),
+                "recovery_uri": current_attempt.get("receipt_uri"),
+                "recovery_sha256": current_attempt.get("receipt_file_sha256"),
                 "status": "FAILED_CLOSED_RETRY_REQUIRED",
                 "counters_changed": False,
-                "completed_logical_cells": attempt.get("completed_logical_cells")
-                if isinstance(attempt, Mapping)
+                "completed_logical_cells": coverage.get("completed_logical_cells")
+                if isinstance(coverage, Mapping)
                 else None,
-                "required_logical_cells": attempt.get("required_logical_cells")
-                if isinstance(attempt, Mapping)
+                "required_logical_cells": coverage.get("required_logical_cells")
+                if isinstance(coverage, Mapping)
                 else None,
-                "partial_results_promotable": attempt.get("partial_results_promotable")
-                if isinstance(attempt, Mapping)
+                "partial_results_promotable": coverage.get("partial_results_promotable")
+                if isinstance(coverage, Mapping)
                 else None,
             }
         )
+    if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.2"}:
         vast_v7 = scaffold.get("vast_preflight_v7", {})
         vast_v8 = scaffold.get("vast_preflight_v8", {})
         live_failures = (
@@ -3665,16 +3692,16 @@ def _record_for(
                     "counters_changed": False,
                 }
             )
-    if r13_failed_closed:
-        attempt = r13_failure.get("attempt", {})
+    if current_failed_closed:
+        coverage = current_attempt.get("coverage", {})
         completed = (
-            attempt.get("completed_logical_cells")
-            if isinstance(attempt, Mapping)
+            coverage.get("completed_logical_cells")
+            if isinstance(coverage, Mapping)
             else "unknown"
         )
         required = (
-            attempt.get("required_logical_cells")
-            if isinstance(attempt, Mapping)
+            coverage.get("required_logical_cells")
+            if isinstance(coverage, Mapping)
             else "unknown"
         )
         output = (
@@ -3682,7 +3709,7 @@ def _record_for(
             f"{completed}/{required} completed logical cells before a hard stop."
         )
         result = (
-            "FAILED_CLOSED and retry-required: the incomplete 24/25 attempt is "
+            "FAILED_CLOSED and retry-required: the incomplete current attempt is "
             "not promotable, has no Owner-local evaluation, and leaves the official "
             "completed measured-run counter at zero."
         )
@@ -3692,6 +3719,11 @@ def _record_for(
             "closeout, or evidence for A2, Selection, Final, or publication."
         )
         decision_status = "FAILED_CLOSED_RETRY_REQUIRED"
+    elif current_pass:
+        output = "A hash-bound current terminal receipt records complete 25/25 A1.2 coverage."
+        result = "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes."
+        interpretation = "The terminal receipt establishes only the frozen A1.2 result boundary. It does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3."
+        decision_status = "PASS_25_OF_25"
     elif scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
         result = "P1 measured train/selection evidence is complete within its declared development boundary."
@@ -4039,9 +4071,9 @@ def _record_for(
         "Final-split generalization or publication release before D2 and D3.",
         "Causal or legal conclusions from retrieval aggregates.",
     ]
-    if r13_failed_closed:
+    if current_failed_closed:
         unsupported.append(
-            "The incomplete 24/25 r13 attempt as a measured A1 result, promotion input, or completion claim."
+            "The incomplete current attempt as a measured A1 result, promotion input, or completion claim."
         )
     armindex = (
         model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
@@ -4087,9 +4119,9 @@ def _record_for(
             isinstance(p2.get("preflight"), Mapping)
             and p2.get("preflight", {}).get("safe_to_measure") is True
         )
-    if r13_failed_closed:
-        governance["r13_attempt_status"] = "FAILED_CLOSED"
-        governance["r13_partial_results_promotable"] = False
+    if current_failed_closed:
+        governance["current_attempt_status"] = "FAILED_CLOSED"
+        governance["current_attempt_partial_results_promotable"] = False
         governance["official_completed_measured_runs"] = 0
     record = {
         "schema_version": REPORT_SCHEMA,

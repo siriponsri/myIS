@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-a1.2-cell-performance-metrics.v16",
+  "title": "A1.2 aggregate-safe cell performance metrics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "attempt_id",
+    "cell_id",
+    "status",
+    "aggregate_safe",
+    "manifest_sha256",
+    "attempt_binding_sha256",
+    "binding_sha256",
+    "cell_receipt_sha256",
+    "ranking_file_sha256",
+    "ranking_set_sha256",
+    "performance",
+    "resources",
+    "resource_sampling",
+    "reliability",
+    "metrics_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-cell-performance-metrics.v16"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "cell_id": {"type": "string", "pattern": "^ARM-0[1-5]--P0[0-4]-(?:TAC-DOC|TA-DOC|CLAIM1|PASSAGE|SECTION-MULTIVIEW)$"},
+    "status": {"const": "PASS"},
+    "aggregate_safe": {"const": true},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "attempt_binding_sha256": {"$ref": "#/$defs/sha256"},
+    "binding_sha256": {"$ref": "#/$defs/sha256"},
+    "cell_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "ranking_file_sha256": {"$ref": "#/$defs/sha256"},
+    "ranking_set_sha256": {"$ref": "#/$defs/sha256"},
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compile_latency_ms", "index_latency_ms", "query_encode_latency_ms", "search_latency_ms", "throughput_qps", "wall_seconds"],
+      "properties": {
+        "compile_latency_ms": {"type": "number", "minimum": 0},
+        "index_latency_ms": {"type": "number", "minimum": 0},
+        "query_encode_latency_ms": {"type": "number", "minimum": 0},
+        "search_latency_ms": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p50", "p95", "p99"],
+          "properties": {
+            "p50": {"type": "number", "minimum": 0},
+            "p95": {"type": "number", "minimum": 0},
+            "p99": {"type": "number", "minimum": 0}
+          }
+        },
+        "throughput_qps": {"type": "number", "exclusiveMinimum": 0},
+        "wall_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["peak_host_ram_bytes", "peak_vram_bytes", "index_size_bytes"],
+      "properties": {
+        "peak_host_ram_bytes": {"type": "integer", "minimum": 0},
+        "peak_vram_bytes": {"type": "integer", "minimum": 0},
+        "index_size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "resource_sampling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_rss", "vram"],
+      "properties": {
+        "host_rss": {"const": "current_process_50ms"},
+        "vram": {"const": "pytorch_allocator_50ms_and_peak"}
+      }
+    },
+    "reliability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replay_count", "replay_ranking_sha256", "ranking_replay_match", "retry_count", "oom_count", "failure_category"],
+      "properties": {
+        "replay_count": {"type": "integer", "minimum": 2},
+        "replay_ranking_sha256": {"$ref": "#/$defs/sha256"},
+        "ranking_replay_match": {"const": true},
+        "retry_count": {"type": "integer", "minimum": 0},
+        "oom_count": {"const": 0},
+        "failure_category": {"const": "none"}
+      }
+    },
+    "metrics_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

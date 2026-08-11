@@ -46,6 +46,8 @@ myis-legacy-dapfam = "myis_research.legacy_dapfam_cli:main"
 myis-p1-dapfam = "myis_research.dapfam_p1_cli:main"
 myis-armindex = "myis_research.armindex.cli:main"
 "myis-a1.2" = "myis_research.armindex.a1_2_cli:main"
+"myis-a1.2-owner-input-manifest-v16" = "myis_research.armindex.a1_2_owner_local_cli_v16:input_manifest_main"
+"myis-a1.2-owner-evaluator-v16" = "myis_research.armindex.a1_2_owner_local_cli_v16:evaluator_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

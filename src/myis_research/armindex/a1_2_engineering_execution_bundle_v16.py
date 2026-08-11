@@ -39,6 +39,9 @@ _BASE_PATHS = (
     CONTRACT_PATH.as_posix(),
     CONTRACT_SCHEMA_PATH.as_posix(),
     BUNDLE_SCHEMA_PATH.as_posix(),
+    "schemas/armindex/a1.2-cell-performance-metrics.v16.json",
+    "schemas/armindex/a1.2-cell-performance-failure-metrics.v16.json",
+    "schemas/armindex/a1.2-owner-local-cell-commit.v16.json",
     "src/myis_research/kernel/canonical.py",
     "src/myis_research/armindex/bm25s_adapter.py",
     "src/myis_research/armindex/scientific_common_programs_v11.py",
@@ -177,6 +180,8 @@ def validate_contract(repository_root: Path, *, require_ready: bool = False) -> 
         "remote_arm_worker",
         "distributed_launcher",
         "evaluator_promotion",
+        "evaluation_manifest_builder",
+        "evaluator_closeout",
     )
     support_sources = _source_paths(
         contract,
@@ -213,7 +218,7 @@ def bundle_paths(repository_root: Path) -> tuple[str, ...]:
     support_sources = _source_paths(
         contract,
         field="support_sources",
-        roles=("safe_return", "safe_return_builder", "watchdog", "input_manifest", "measured_runner", "remote_arm_worker", "distributed_launcher", "evaluator_promotion"),
+        roles=("safe_return", "safe_return_builder", "watchdog", "input_manifest", "measured_runner", "remote_arm_worker", "distributed_launcher", "evaluator_promotion", "evaluation_manifest_builder", "evaluator_closeout"),
         require_ready=True,
     )
     paths = tuple(dict.fromkeys((*sorted(contract["frozen_file_sha256"]), *_BASE_PATHS, *executor_sources, *support_sources)))

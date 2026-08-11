@@ -22,6 +22,9 @@ def test_ready_v16_contract_has_complete_bundle_closure() -> None:
     assert contract["support_sources"]["raw_materializer_bridge"]["sha256"]
     assert contract["support_sources"]["remote_arm_worker"]["sha256"]
     assert contract["support_sources"]["distributed_launcher"]["sha256"]
+    assert contract["support_sources"]["evaluation_manifest_builder"]["sha256"]
+    assert contract["support_sources"]["evaluator_closeout"]["sha256"]
+    assert "control/armindex/a1.2/promotion-policy.v16.json" in contract["frozen_file_sha256"]
 
 
 def test_v16_bundle_base_closure_binds_safe_return_and_watchdog() -> None:
@@ -30,6 +33,8 @@ def test_v16_bundle_base_closure_binds_safe_return_and_watchdog() -> None:
         in v16._BASE_PATHS
     )
     assert "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1" in v16._BASE_PATHS
+    assert "schemas/armindex/a1.2-cell-performance-metrics.v16.json" in v16._BASE_PATHS
+    assert "schemas/armindex/a1.2-owner-local-cell-commit.v16.json" in v16._BASE_PATHS
 
 
 def test_v16_watchdog_checkout_bytes_are_forced_to_lf() -> None:
@@ -48,6 +53,8 @@ def test_v16_bundle_binds_runtime_import_closure_without_protected_compiler() ->
         "src/myis_research/armindex/scientific_common_programs_v11.py",
         "src/myis_research/armindex/a1_2_dense_overflow_adapter_v1.py",
         "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py",
+        "src/myis_research/armindex/a1_2_owner_local_evaluation_manifest_builder_v16.py",
+        "src/myis_research/armindex/a1_2_evaluator_closeout_v16.py",
     } <= paths
     assert "src/myis_research/armindex/a1_2_owner_local_protected_compiler_v15.py" not in paths
 

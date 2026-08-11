@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a1.2-evaluator-closeout-receipt.v16.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "safe_return_archive_sha256", "evaluation_lineage_sha256", "cell_receipt_count", "cell_receipt_set_sha256", "promotion_receipt_sha256", "promotion_policy_sha256", "admitted_quote_receipt_sha256", "admitted_quote_sha256", "cost_allocation_sha256", "promoted_arm_ids", "access_counters", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a1.2-evaluator-closeout-receipt.v16"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}-evaluator-closeout-v16$"},
+    "attempt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "measured_development_aggregate"},
+    "scientific_authority": {"const": true},
+    "claim_boundary": {"type": "string", "minLength": 60},
+    "safe_return_archive_sha256": {"$ref": "#/$defs/hash"},
+    "evaluation_lineage_sha256": {"$ref": "#/$defs/hash"},
+    "cell_receipt_count": {"const": 25},
+    "cell_receipt_set_sha256": {"$ref": "#/$defs/hash"},
+    "promotion_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "promotion_policy_sha256": {"$ref": "#/$defs/hash"},
+    "admitted_quote_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "admitted_quote_sha256": {"$ref": "#/$defs/hash"},
+    "cost_allocation_sha256": {"$ref": "#/$defs/hash"},
+    "promoted_arm_ids": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]}
+    },
+    "access_counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harness_dev_accesses", "selection_accesses", "final_accesses"],
+      "properties": {
+        "harness_dev_accesses": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0}
+      }
+    },
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

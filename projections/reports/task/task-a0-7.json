@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-10T14:10:14Z",
-  "generated_from_revision": "d7411cc6999f0690cc7c980919acec6997dd49a60621b11cc198e52d767dec5d",
-  "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+  "generated_at": "2026-08-10T15:27:49Z",
+  "generated_from_revision": "abefbef02f4c4a1e07f5c6e11938a2f005874060ff2b8d5f68577bf485bbd028",
+  "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "a5624a701ed9cf0666bba0e9914b88ac88d7b0aa",
+    "git_commit": "6f4c80625993ed3004ef1ed3dccd17f90d27f30f",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -198,13 +198,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-10T14:10:14Z",
+  "last_material_update": "2026-08-10T15:27:49Z",
   "metric_references": [],
-  "next_authorized_action": "PREPARE_FRESH_A1_PROVIDER_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
+  "next_authorized_action": "PREPARE_FRESH_A1_SAME_INSTANCE_ADMISSION_AND_RETRY_25_OF_25_BEFORE_A2",
   "objective": "Model and arm declarations and license registry",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-7",
-  "report_sha256": "e0c0e2efc393e9383ee45a1eea2373857959373ad8600e986b11250c3a086d54",
+  "report_sha256": "72623b21bb0789a0ba607f6636324781b3b423c80ae140f17c8272f205faa15d",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -217,7 +217,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_v16_r13_failed_closed_24_of_25_provider_disposition_confirmed",
+    "program_state": "a1_2_terminal_failed_closed_retry_required",
     "task": "A0.7"
   },
   "status": "completed",

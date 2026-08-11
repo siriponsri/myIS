@@ -35,10 +35,14 @@
     "outputs/audits/armindex/a1.2-protected-compiler-integration-20260809-v15.json": "f915c3785f6ed677bcf226fc1deae46fb22aaa8668551724fed01cf4ccf89b5f",
     "control/armindex/a1.2/scientific-safe-return-contract.v16.json": "f528645be0071b6b73da2e617fd006645eb4b150388a288808e47f5f50fd30b1",
     "schemas/armindex/a1.2-scientific-safe-return-contract.v16.json": "ee5a3055324d3c5aad28d4e982a0c4252e6124e70009686f5f4769d67efe3fe9",
-    "src/myis_research/armindex/a1_2_safe_return_v16.py": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8"
+    "src/myis_research/armindex/a1_2_safe_return_v16.py": "8012f58e9fbd0ccb22b92828f5b9da5703d340a738b7a82ccbd5a62e7edb3df8",
+    "control/armindex/a1.2/promotion-policy.v16.json": "4f50ade271869151f3dcb28ba0a70b99c9730f79fa8c2d3cc37650ecd6286f6e",
+    "schemas/armindex/a1.2-promotion-policy.v16.json": "e360ef9913672b98fb3dabbeca3a9c2d49f614dd958d30062e0314db5c20bcae",
+    "schemas/armindex/a1.2-admitted-all-fee-quote-receipt.v16.json": "0b1e09afd3e6237b67667917706ccd7f1b88a6f76bced89d8ecefbb50bb106b8",
+    "schemas/armindex/a1.2-evaluator-closeout-receipt.v16.json": "84dd881575ca88363f5638f385b0849bfa8746d5c45d966feb09cfeb665a1787"
   },
   "executor_sources": {
-    "retrieval_executor": {"path": "src/myis_research/armindex/a1_2_measured_executor_v16.py", "sha256": "905e8b4ca8cbfc88f5ff2e1a5cea04d2a971ae7c655ad2ee748242aab6d85c3d"},
+    "retrieval_executor": {"path": "src/myis_research/armindex/a1_2_measured_executor_v16.py", "sha256": "88435d875def3317cb8d3f313f6fc823bcaf42ef5c0649ddc5f7cc5215e27e0f"},
     "execution_lifecycle": {"path": "src/myis_research/armindex/a1_2_execution_lifecycle_v16.py", "sha256": "a07e1c38f3a5a2547edf32258c52c452034a51edc6f6bb132a7be71b8a0d3b38"}
   },
   "support_sources": {
@@ -47,14 +51,16 @@
     "raw_materializer_bridge": {"path": "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py", "sha256": "3d37ced5792936974896a5aa026ef437eb3da9c266b23b0cc8f0471765b39f3b"},
     "watchdog": {"path": "scripts/a1_2_vast/Invoke-A12GovernedWatchdogV16.ps1", "sha256": "4666232d6e496a1ad942304c9761c4e85bfcb4a88ef845fdf6cd94b335222c34"},
     "input_manifest": {"path": "src/myis_research/armindex/a1_2_owner_local_input_manifest_v16.py", "sha256": "2fa8b2e05066b5a7b224297966d892605ec0e7a166dd2b2e7534953c09b21703"},
-    "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "d1029b44eadb54f9be113e327ca12e8219bc9a3ffdffe04254ed2962ba0d4f15"},
+    "measured_runner": {"path": "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py", "sha256": "adabc042c8e1bd46b1283370d995ad914929aa9477074acd7751b53b89f1a340"},
     "remote_arm_worker": {"path": "src/myis_research/armindex/a1_2_remote_arm_worker_v16.py", "sha256": "84383d286c262566b0a2cc6a4c39af19eb7bdb0f19d1d3021dd11d06727757ee"},
     "distributed_launcher": {"path": "src/myis_research/armindex/a1_2_remote_measured_launcher_v16.py", "sha256": "2faef191e44e4be7efb2ad7f0ac522f9087c6dd024a987f4795e2b484fc38971"},
-    "evaluator_promotion": {"path": "src/myis_research/armindex/a1_2_owner_local_evaluator_v16.py", "sha256": "4479affa0e3bfb0c87b26f6e54e258293a19e86df54a3e8b268478d375396e43"}
+    "evaluator_promotion": {"path": "src/myis_research/armindex/a1_2_owner_local_evaluator_v16.py", "sha256": "2e90c15eafec15c0a607437cf6261f69bc550b23d7a8c3902e2dba35eed9893d"},
+    "evaluation_manifest_builder": {"path": "src/myis_research/armindex/a1_2_owner_local_evaluation_manifest_builder_v16.py", "sha256": "a13b4f7f57181777606c0a731ed47622b7ce256c5f70feb779983b79d24bcee3"},
+    "evaluator_closeout": {"path": "src/myis_research/armindex/a1_2_evaluator_closeout_v16.py", "sha256": "74667a0144f7f9c5cdb21a6615915915af5f110f18e9dbfc9883987b9311f98e"}
   },
-  "required_adoption_bindings": ["provider_identity", "all_fee_quote", "whole_workload_budget", "provider_management_authority", "watchdog_ttl", "ssh_identity", "runtime_identity", "scientific_request", "adoption_inputs", "transfer", "workload", "common_programs", "model_lockset", "protected_compiler", "image", "git_commit_tree_bundle", "evaluator", "split", "qrels_commitment", "token_map", "safe_return", "compiled_bindings_25_of_25", "physical_coverage_35"],
+  "required_adoption_bindings": ["provider_identity", "all_fee_quote", "whole_workload_budget", "provider_management_authority", "watchdog_ttl", "ssh_identity", "runtime_identity", "scientific_request", "adoption_inputs", "transfer", "workload", "common_programs", "model_lockset", "protected_compiler", "image", "git_commit_tree_bundle", "evaluator", "split", "qrels_commitment", "token_map", "safe_return", "compiled_bindings_25_of_25", "physical_coverage_35", "promotion_policy"],
   "runtime_policy": {"runtime_downloads_forbidden": true, "model_bytes_owner_local_only": true, "protected_payload_in_bundle": false, "safe_aggregate_export_required": true},
   "authorization": {"provider_admission_receipt_pass": false, "execution_adoption_receipt_pass": false, "measured_retrieval_allowed": false, "selection_allowed": false, "final_allowed": false, "paid_api_allowed": false},
   "counters": {"measured_runs": 0, "selection_accesses": 0, "final_accesses": 0},
-  "contract_sha256": "09a194613eea50aaa96b402eeb9a960794fa47d6f73cd5bfccb6659eea8ec1c3"
+  "contract_sha256": "660db173f6ed95b606bfef987cb60caba3c638d48ab5b47305f26f8dc16c1dd9"
 }

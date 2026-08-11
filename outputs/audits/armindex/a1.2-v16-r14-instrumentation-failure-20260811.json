@@ -1,0 +1,50 @@
+{
+  "schema_version": "myis.armindex-a1.2-r14-instrumentation-failure-audit.v1",
+  "audit_id": "a1.2-v16-r14-instrumentation-failure-20260811",
+  "attempt_id": "a12-v16-20260811-r14",
+  "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+  "task_id": "A1.2",
+  "status": "FAILED_CLOSED",
+  "evidence_class": "aggregate_safe_live_attempt_failure",
+  "scientific_authority": false,
+  "claim_boundary": "Engineering failure evidence only. No dense result, retrieval-quality claim, promotion, A2 access, HARNESS-DEV access, Selection access, or Final access is supported.",
+  "failure_class": "missing_mandatory_performance_resource_and_reliability_instrumentation",
+  "detection_phase": "before_dense_cell_receipt",
+  "coverage": {
+    "required_logical_cells": 25,
+    "local_arm_01_cells_complete": 5,
+    "remote_dense_cells_complete": 0,
+    "remote_worker_failure_markers": 4,
+    "partial_results_promotable": false
+  },
+  "failure_marker_sha256": "cb2ad4f05ca6d131d248b6313dbde7e60a77696494e28105b5db58ea39e1e9ec",
+  "instance": {
+    "instance_id": 47411176,
+    "instance_identity_sha256": "346800ef8ec3882e728256c5fdc09832888d3e349b6b6fd8e601a8e8434113b5",
+    "retained_for_fresh_attempt": true,
+    "provider_destroy_invoked": false
+  },
+  "watchdog": {
+    "status": "PASS",
+    "heartbeat_sha256": "5f8888d7bbccd2fae203d117f0fdcd714d214c7d5951af10eab3c6e06ac8e517",
+    "generated_at_utc": "2026-08-11T02:44:02.1061884Z",
+    "ttl_remaining_seconds": 128871
+  },
+  "budget": {
+    "all_fee_hourly_usd": 0.6027777777777777,
+    "admission_started_at_utc": "2026-08-11T01:25:55.311092Z",
+    "failure_closed_at_utc": "2026-08-11T02:20:45.426729Z",
+    "estimated_attempt_exposure_usd": 0.550891,
+    "budget_admission_remains_safe": true
+  },
+  "protected_boundary": {
+    "qrels_exported": false,
+    "membership_exported": false,
+    "query_ids_projected": false,
+    "per_query_outcomes_projected": false,
+    "raw_provider_payloads_recorded": false,
+    "credentials_recorded": false
+  },
+  "next_action": "Repair instrumentation and evaluation-manifest tooling, create a fresh attempt ID on the unchanged instance, repeat admission/adoption, and do not combine r14 cells with the fresh attempt.",
+  "audit_sha256": "7c4a71e909184a246c2927bfcea14a8e6f78cf747831f8c47d739366eb00c25a"
+}
