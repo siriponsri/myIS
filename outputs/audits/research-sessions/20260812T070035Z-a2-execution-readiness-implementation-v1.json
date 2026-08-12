@@ -1,0 +1,145 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260812T070035Z-a2-execution-readiness-implementation-v1",
+  "run_id": null,
+  "goal_id": "A2_PER_ARM_AUTOINDEX",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-12T07:00:35Z",
+  "scope": "Implement and validate A2 frozen-five-arm execution readiness, repair post-freeze preflight/report state, and stop before provider admission or measured A2.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-12",
+      "scope": "Implement A2 runbook, ledger, schemas, measured runner mechanics, lifecycle, aggregate evaluation, safe return, provider admission/adoption, focused synthetic tests, commit/push, bundle, fresh provider evidence, and staging without launching measured A2. Do not mutate candidates, rerun A1, access REP-DEV for measurement, destroy the instance, or open later phases."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "5ddfa92416e5b6c1679d8a40c269715aec0a5462",
+    "dirty_paths": [
+      "AGENTS.md",
+      "A2 execution-readiness code, controls, schemas, tests, and goal",
+      "generated read-model, MLflow, Obsidian, Dashboard, Brain, and Paper projections",
+      "this append-only session capsule"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "A2 must consume the immutable 40 matched plus 12 dormant five-arm manifest; ARM-01 and ARM-02 remain diagnostic non-advancing, and no candidate may be generated or mutated.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+          "sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
+          "locator": "candidate_count, matched_candidate_count, conditional_reserve_candidate_count, arms"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+          "sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
+          "locator": "receipt_sha256, measured_a2_started"
+        },
+        {
+          "path": "control/armindex/a2/candidate-freeze.lock.v1.json",
+          "sha256": "0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc",
+          "locator": "lock_sha256, locked_operations"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The A2 runtime now validates frozen membership, lifecycle/checkpoint/resume, append-only material-ledger self-hashes, synthetic train and aggregate winner evaluation, exact-tie rejection, safe return, clean bundles, provider admission/adoption, and inert staging/watchdog plans.",
+      "evidence_refs": [
+        {
+          "path": "src/myis_research/armindex/a2_execution_readiness.py",
+          "sha256": "7806c1276583511e9eae1a50d7684f4efffc895b0d483656cb3fdd5b803b2c57",
+          "locator": "public A2 execution-readiness functions"
+        },
+        {
+          "path": "control/armindex/a2/execution-readiness-contract.v1.json",
+          "sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+          "locator": "candidate_design, execution_policy, measured_execution_allowed"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "An append-only ledger is not hash-bound unless each entry self-hash is recomputed in addition to validating its schema and previous-entry link.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a2/execution-ledger.v1.jsonl",
+          "sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+          "locator": "A2EXEC-EV0001.entry_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Focused A2 tests passed 29 cases; report/read-model integration passed 44 cases; scoped Ruff, report drift, asset, MLflow, layout, session, and Git whitespace checks passed.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "A2 is ready only for fresh provider admission and isolated staging; provider admission, execution adoption, staging, candidate evaluation, and measured A2 are all still false or zero.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "6c0b63f178071926d34d016409e87a1d22a4aa85eeb011464811ee034d45a5b8",
+          "locator": "program_state, a2_candidate_freeze, a2_execution_readiness"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "02a0b154d78d883e36c67375c06163941771882ae3a86a91194196aa877ed35c",
+          "locator": "read_model_revision, read_model_sha256, projection_events"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": "control/armindex/a2/execution-ledger.v1.jsonl",
+    "result": "projections/sync-receipt.v2.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "projections/read-model/read-model.v2.json",
+    "manifest": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-proposed",
+      "summary": "After a clean pushed commit, build the hash-bound bundle and collect one fresh provider/SSH evidence round. Stage into a new isolated root and create admission/adoption receipts only if identity, all-fee quote, whole-workload budget, management authority, TTL, and watchdog checks pass.",
+      "blocking_gate": null
+    },
+    {
+      "thread_id": "OT0002",
+      "provenance": "agent-proposed",
+      "summary": "Measured A2 remains closed and requires a separate explicitly authorized execution session after valid adoption.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

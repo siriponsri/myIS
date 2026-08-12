@@ -35,11 +35,36 @@
       "relation": "replays",
       "source": "schemas-armindex-a2-candidate-freeze-replay-validation-v1-json",
       "target": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json"
+    },
+    {
+      "relation": "binds",
+      "source": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json",
+      "target": "control-armindex-a2-execution-readiness-contract-v1-json"
+    },
+    {
+      "relation": "binds",
+      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "target": "control-execution-envelope-a2-readiness-v1-yaml"
+    },
+    {
+      "relation": "binds",
+      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "target": "control-budgets-a2-execution-readiness-v1-json"
+    },
+    {
+      "relation": "binds",
+      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "target": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md"
+    },
+    {
+      "relation": "binds",
+      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "target": "control-armindex-a2-execution-ledger-v1-jsonl"
     }
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "76e2528ebde68c7c273ee1b3191ed737b48a62a07b3b0de71358a33cae76114e",
+  "graph_sha256": "3df2017465f734ff5e7e8aea77d50184442b70b11848aef2c3f8ac7551912649",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -95,8 +120,22 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-armindex-a2-execution-contract-v1-json",
-      "sha256": "c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f",
+      "sha256": "ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d",
       "uri": "../../../01_Research/control/armindex/a2/execution-contract.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-armindex-a2-execution-ledger-v1-jsonl",
+      "sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "uri": "../../../01_Research/control/armindex/a2/execution-readiness-contract.v1.json"
     },
     {
       "classification": "metadata",
@@ -108,16 +147,37 @@
     {
       "classification": "metadata",
       "kind": "control",
+      "node_id": "control-budgets-a2-execution-readiness-v1-json",
+      "sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
+      "uri": "../../../01_Research/control/budgets/a2-execution-readiness-v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
       "node_id": "control-budgets-a2-per-arm-autoindex-v1-json",
-      "sha256": "7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166",
+      "sha256": "b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1",
       "uri": "../../../01_Research/control/budgets/a2-per-arm-autoindex-v1.json"
     },
     {
       "classification": "metadata",
       "kind": "control",
+      "node_id": "control-execution-envelope-a2-readiness-v1-yaml",
+      "sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
+      "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v1.yaml"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
       "node_id": "control-execution-envelope-a2-v1-yaml",
-      "sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+      "sha256": "de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7",
       "uri": "../../../01_Research/control/execution-envelope-a2-v1.yaml"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
+      "sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "classification": "metadata",
@@ -150,6 +210,20 @@
     {
       "classification": "metadata",
       "kind": "receipt",
+      "node_id": "schemas-armindex-a2-execution-adoption-receipt-v1-json",
+      "sha256": "ca54f3732cf9b4475885342444b84048668cb98ee7cbffb5b8a05ff69cd3380b",
+      "uri": "../../../01_Research/schemas/armindex/a2-execution-adoption-receipt.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "receipt",
+      "node_id": "schemas-armindex-a2-execution-bundle-receipt-v1-json",
+      "sha256": "399deaf591d975c5d4b0fbe0b81e4dc1a060f9963fa47a00500cee8692cbe4a3",
+      "uri": "../../../01_Research/schemas/armindex/a2-execution-bundle-receipt.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "receipt",
       "node_id": "schemas-armindex-a2-independent-freeze-audit-receipt-v1-json",
       "sha256": "7dedb36ef4af3bb866187aabe7706913933a8bf318fafd030e4a757bd6fc08e3",
       "uri": "../../../01_Research/schemas/armindex/a2-independent-freeze-audit-receipt.v1.json"
@@ -160,6 +234,13 @@
       "node_id": "schemas-armindex-a2-official-codex-final-credit-check-receipt-v1-json",
       "sha256": "9f0a258f9c2b039b8fcdbd36e7dfc96ed2129a15d712f4f7e0fee18451de9ec7",
       "uri": "../../../01_Research/schemas/armindex/a2-official-codex-final-credit-check-receipt.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "receipt",
+      "node_id": "schemas-armindex-a2-provider-admission-receipt-v1-json",
+      "sha256": "a717714c4f2c685fd2bff7dadd287e2dc26128841d3c4b04fc9fc4ea06ee1b74",
+      "uri": "../../../01_Research/schemas/armindex/a2-provider-admission-receipt.v1.json"
     },
     {
       "classification": "metadata",

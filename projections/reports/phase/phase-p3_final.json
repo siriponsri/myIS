@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -47,11 +47,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [],
-  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "1f344af6082677df0bc9e7b2fde29925e84006115faf65451f6b7965a224d8ac",
+  "report_sha256": "5f95f206b617629d8d7a82ab16be2a77069e97aea42b1add804484476220bb5f",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

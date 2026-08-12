@@ -143,6 +143,96 @@
       "scientific_authority": false,
       "title": "Official Codex post-audit final credit check",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-contract-v1",
+      "artifact_type": "contract",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Binds the immutable 40 matched plus 12 dormant universe to a measurement-locked readiness policy.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "scientific_authority": false,
+      "title": "A2 frozen-five-arm execution readiness contract",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-envelope-v1",
+      "artifact_type": "control",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Authorizes fresh admission and isolated staging while keeping measured A2 closed.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/execution-envelope-a2-readiness-v1.yaml",
+      "scientific_authority": false,
+      "title": "A2 execution readiness envelope",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-budget-v1",
+      "artifact_type": "budget",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Requires a fresh all-fee quote for the whole frozen workload under the USD 35 forward hard stop.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/budgets/a2-execution-readiness-v1.json",
+      "scientific_authority": false,
+      "title": "A2 whole-workload readiness budget",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-runbook-v1",
+      "artifact_type": "runbook",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Defines checkpoint, recovery, safe-return, staging, and no-destroy behavior.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
+      "scientific_authority": false,
+      "title": "A2 execution readiness runbook",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-ledger-v1",
+      "artifact_type": "ledger",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Records material readiness transitions without candidate outcomes or protected payloads.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a2/execution-ledger.v1.jsonl",
+      "scientific_authority": false,
+      "title": "A2 append-only execution ledger",
+      "validation_status": "validated"
     }
   ],
   "claim_boundary": "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim",
@@ -192,11 +282,36 @@
       "artifact_id": "a2-official-final-credit-check-v1",
       "sha256": "9bc6d88e0ba0fbdd27ebdaad22977cd71279d9d4ae00669b8d3f3cf0035445a7",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-contract-v1",
+      "sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "uri": "control/armindex/a2/execution-readiness-contract.v1.json"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-envelope-v1",
+      "sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
+      "uri": "control/execution-envelope-a2-readiness-v1.yaml"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-budget-v1",
+      "sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
+      "uri": "control/budgets/a2-execution-readiness-v1.json"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-runbook-v1",
+      "sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
+    },
+    {
+      "artifact_id": "a2-execution-readiness-ledger-v1",
+      "sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "uri": "control/armindex/a2/execution-ledger.v1.jsonl"
     }
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -243,18 +358,28 @@
         "uri": "control/armindex/a2/official-codex-bridge.v1.json"
       },
       {
-        "sha256": "c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f",
+        "sha256": "ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d",
         "uri": "control/armindex/a2/execution-contract.v1.json"
       },
       {
-        "sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+        "sha256": "de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7",
         "uri": "control/execution-envelope-a2-v1.yaml"
       },
       {
-        "sha256": "7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166",
+        "sha256": "b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1",
         "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
       }
     ],
+    "execution_readiness": {
+      "budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af",
+      "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
+      "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace",
+      "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "forward_hard_stop_usd": 35,
+      "measured_a2_started": false,
+      "owner_ttl_hours": 40,
+      "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED"
+    },
     "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
@@ -369,13 +494,57 @@
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
       "split": "premeasurement",
       "value": 0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "all_fee_whole_workload",
+      "n": 1,
+      "name": "a2_forward_hard_stop_usd",
+      "scope": "A2 execution readiness",
+      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "split": "premeasurement",
+      "value": 35
+    },
+    {
+      "cutoff": 0,
+      "denominator": "provider_watchdog",
+      "n": 1,
+      "name": "a2_owner_ttl_hours",
+      "scope": "A2 execution readiness",
+      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "split": "premeasurement",
+      "value": 40
+    },
+    {
+      "cutoff": 0,
+      "denominator": "current_attempt",
+      "n": 1,
+      "name": "a2_provider_admissions",
+      "scope": "A2 execution readiness",
+      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "split": "premeasurement",
+      "value": 0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "current_attempt",
+      "n": 1,
+      "name": "a2_execution_adoptions",
+      "scope": "A2 execution readiness",
+      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "split": "premeasurement",
+      "value": 0
     }
   ],
   "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "028b5ffa38479ddbbfd7faee384d37d4774731ef5d98b43d17c7b8b77f5d8387",
+  "report_sha256": "f183b8aa5a316089bafb61810718cabfc83b50e96fbd29a596294c2b57f503d4",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",
@@ -388,7 +557,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_candidate_freeze_audit_passed_measured_a2_closed",
+    "program_state": "a2_execution_readiness_complete_fresh_admission_required",
     "task": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
   "status": "completed",
@@ -403,7 +572,12 @@
         "a2-official-credit-preflight-receipt-v1",
         "a2-official-credit-closeout-correction-v1",
         "a2-independent-freeze-audit-v1",
-        "a2-official-final-credit-check-v1"
+        "a2-official-final-credit-check-v1",
+        "a2-execution-readiness-contract-v1",
+        "a2-execution-readiness-envelope-v1",
+        "a2-execution-readiness-budget-v1",
+        "a2-execution-readiness-runbook-v1",
+        "a2-execution-readiness-ledger-v1"
       ]
     }
   ],

@@ -58,26 +58,26 @@
     },
     {
       "artifact_id": "control-armindex-a2-execution-contract-v1-json",
-      "bytes": 5257,
+      "bytes": 5396,
       "classification": "metadata",
       "media_type": "application/json",
-      "sha256": "c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f",
+      "sha256": "ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d",
       "uri": "../../../01_Research/control/armindex/a2/execution-contract.v1.json"
     },
     {
       "artifact_id": "control-execution-envelope-a2-v1-yaml",
-      "bytes": 2698,
+      "bytes": 2778,
       "classification": "metadata",
       "media_type": "application/yaml",
-      "sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+      "sha256": "de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7",
       "uri": "../../../01_Research/control/execution-envelope-a2-v1.yaml"
     },
     {
       "artifact_id": "control-budgets-a2-per-arm-autoindex-v1-json",
-      "bytes": 3173,
+      "bytes": 3253,
       "classification": "metadata",
       "media_type": "application/json",
-      "sha256": "7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166",
+      "sha256": "b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1",
       "uri": "../../../01_Research/control/budgets/a2-per-arm-autoindex-v1.json"
     },
     {
@@ -145,6 +145,70 @@
       "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json"
     },
     {
+      "artifact_id": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "bytes": 5407,
+      "classification": "metadata",
+      "media_type": "application/json",
+      "sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "uri": "../../../01_Research/control/armindex/a2/execution-readiness-contract.v1.json"
+    },
+    {
+      "artifact_id": "control-execution-envelope-a2-readiness-v1-yaml",
+      "bytes": 3048,
+      "classification": "metadata",
+      "media_type": "application/yaml",
+      "sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
+      "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v1.yaml"
+    },
+    {
+      "artifact_id": "control-budgets-a2-execution-readiness-v1-json",
+      "bytes": 2635,
+      "classification": "metadata",
+      "media_type": "application/json",
+      "sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
+      "uri": "../../../01_Research/control/budgets/a2-execution-readiness-v1.json"
+    },
+    {
+      "artifact_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
+      "bytes": 2382,
+      "classification": "metadata",
+      "media_type": "text/markdown",
+      "sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
+    },
+    {
+      "artifact_id": "control-armindex-a2-execution-ledger-v1-jsonl",
+      "bytes": 838,
+      "classification": "metadata",
+      "media_type": "text/plain",
+      "sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
+    },
+    {
+      "artifact_id": "schemas-armindex-a2-execution-bundle-receipt-v1-json",
+      "bytes": 1315,
+      "classification": "metadata",
+      "media_type": "application/json",
+      "sha256": "399deaf591d975c5d4b0fbe0b81e4dc1a060f9963fa47a00500cee8692cbe4a3",
+      "uri": "../../../01_Research/schemas/armindex/a2-execution-bundle-receipt.v1.json"
+    },
+    {
+      "artifact_id": "schemas-armindex-a2-provider-admission-receipt-v1-json",
+      "bytes": 3547,
+      "classification": "metadata",
+      "media_type": "application/json",
+      "sha256": "a717714c4f2c685fd2bff7dadd287e2dc26128841d3c4b04fc9fc4ea06ee1b74",
+      "uri": "../../../01_Research/schemas/armindex/a2-provider-admission-receipt.v1.json"
+    },
+    {
+      "artifact_id": "schemas-armindex-a2-execution-adoption-receipt-v1-json",
+      "bytes": 2059,
+      "classification": "metadata",
+      "media_type": "application/json",
+      "sha256": "ca54f3732cf9b4475885342444b84048668cb98ee7cbffb5b8a05ff69cd3380b",
+      "uri": "../../../01_Research/schemas/armindex/a2-execution-adoption-receipt.v1.json"
+    },
+    {
       "artifact_id": "outputs-audits-armindex-a2-five-arm-candidate-freeze-replay-validation-v1-json",
       "bytes": 1310,
       "classification": "aggregate",
@@ -163,7 +227,7 @@
     "status": "candidate_freeze_audit_passed_measured_a2_closed",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "4319f02d1183c39922cf63cbe8f7127e726df7a408ffbd8059b64cd51f09c273",
+  "index_sha256": "8b9a420c70dc89cd1d5368f709c3439af10cf06f5f26b1dea4d9aac59c33bff4",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"

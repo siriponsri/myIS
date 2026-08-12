@@ -265,6 +265,85 @@ def _artifacts(
                     producing_task_id="OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
                 )
             )
+        readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
+        if isinstance(readiness, Mapping) and readiness.get("validated") is True:
+            for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+                (
+                    "a2-execution-readiness-contract-v1",
+                    "A2 frozen-five-arm execution readiness contract",
+                    "contract",
+                    "contract_uri",
+                    "contract_file_sha256",
+                    "Binds the immutable 40 matched plus 12 dormant universe to a measurement-locked readiness policy.",
+                ),
+                (
+                    "a2-execution-readiness-envelope-v1",
+                    "A2 execution readiness envelope",
+                    "control",
+                    "envelope_uri",
+                    "envelope_file_sha256",
+                    "Authorizes fresh admission and isolated staging while keeping measured A2 closed.",
+                ),
+                (
+                    "a2-execution-readiness-budget-v1",
+                    "A2 whole-workload readiness budget",
+                    "budget",
+                    "budget_uri",
+                    "budget_file_sha256",
+                    "Requires a fresh all-fee quote for the whole frozen workload under the USD 35 forward hard stop.",
+                ),
+                (
+                    "a2-execution-readiness-runbook-v1",
+                    "A2 execution readiness runbook",
+                    "runbook",
+                    "runbook_uri",
+                    "runbook_sha256",
+                    "Defines checkpoint, recovery, safe-return, staging, and no-destroy behavior.",
+                ),
+                (
+                    "a2-execution-readiness-ledger-v1",
+                    "A2 append-only execution ledger",
+                    "ledger",
+                    "ledger_uri",
+                    "ledger_sha256",
+                    "Records material readiness transitions without candidate outcomes or protected payloads.",
+                ),
+            ):
+                result.append(
+                    _artifact(
+                        artifact_id=artifact_id,
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="engineering_execution_readiness",
+                        scientific_authority=False,
+                        safe_uri=str(readiness[uri_key]),
+                        content_sha256=str(readiness[sha_key]),
+                        explanation=explanation,
+                        producing_phase_id="A2_PER_ARM_AUTOINDEX",
+                        producing_task_id="A2.1",
+                    )
+                )
+            for key, title in (
+                ("bundle_receipt", "Clean hash-bound A2 execution bundle receipt"),
+                ("provider_admission_receipt", "Fresh A2 provider admission receipt"),
+                ("execution_adoption_receipt", "A2 isolated staging and execution adoption receipt"),
+            ):
+                receipt = readiness.get(key)
+                if isinstance(receipt, Mapping):
+                    result.append(
+                        _artifact(
+                            artifact_id=f"a2-{key.replace('_', '-')}-v1",
+                            title=title,
+                            artifact_type="receipt",
+                            evidence_class="engineering_execution_readiness",
+                            scientific_authority=False,
+                            safe_uri=str(receipt["uri"]),
+                            content_sha256=str(receipt["file_sha256"]),
+                            explanation="Validates the current staged-not-launched A2 attempt without authorizing measured retrieval.",
+                            producing_phase_id="A2_PER_ARM_AUTOINDEX",
+                            producing_task_id="A2.1",
+                        )
+                    )
         return result
     p1 = phase_id == "P1_CPU_BASELINE"
     if p1:
@@ -2518,7 +2597,7 @@ def _metrics(
             ),
             ("measured_a2_runs", 0, "measured_A2"),
         )
-        return [
+        rows = [
             {
                 "name": name,
                 "cutoff": 0,
@@ -2536,6 +2615,50 @@ def _metrics(
             }
             for name, value, denominator in specs
         ]
+        readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
+        if isinstance(readiness, Mapping) and readiness.get("validated") is True:
+            rows.extend(
+                {
+                    "name": name,
+                    "cutoff": 0,
+                    "split": "premeasurement",
+                    "scope": "A2 execution readiness",
+                    "value": value,
+                    "n": 1,
+                    "denominator": denominator,
+                    "source_uri": readiness.get("contract_uri"),
+                    "source_sha256": readiness.get("contract_file_sha256"),
+                }
+                for name, value, denominator in (
+                    (
+                        "a2_forward_hard_stop_usd",
+                        readiness.get("forward_hard_stop_usd"),
+                        "all_fee_whole_workload",
+                    ),
+                    (
+                        "a2_owner_ttl_hours",
+                        readiness.get("owner_ttl_hours"),
+                        "provider_watchdog",
+                    ),
+                    (
+                        "a2_provider_admissions",
+                        int(bool(readiness.get("provider_admission_performed"))),
+                        "current_attempt",
+                    ),
+                    (
+                        "a2_execution_adoptions",
+                        int(
+                            bool(
+                                readiness.get(
+                                    "provider_execution_adoption_performed"
+                                )
+                            )
+                        ),
+                        "current_attempt",
+                    ),
+                )
+            )
+        return rows
     if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}:
         adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
         if not isinstance(adapter, Mapping) or adapter.get("validated") is not True:
@@ -3257,6 +3380,26 @@ def _bindings(
                 "uri": "../03_Paper/01_ArmIndex",
                 "authority": "projection_only",
             }
+        readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
+        if isinstance(readiness, Mapping) and readiness.get("validated") is True:
+            bindings["execution_readiness"] = {
+                "status": readiness.get("status"),
+                "contract_uri": readiness.get("contract_uri"),
+                "contract_sha256": readiness.get("contract_sha256"),
+                "budget_uri": readiness.get("budget_uri"),
+                "budget_profile_sha256": readiness.get("budget_profile_sha256"),
+                "forward_hard_stop_usd": readiness.get("forward_hard_stop_usd"),
+                "owner_ttl_hours": readiness.get("owner_ttl_hours"),
+                "measured_a2_started": readiness.get("measured_a2_started"),
+            }
+            if readiness.get("attempt_id"):
+                bindings["current_staged_attempt"] = {
+                    "attempt_id": readiness.get("attempt_id"),
+                    "pointer_uri": readiness.get("current_execution_pointer_uri"),
+                    "pointer_sha256": readiness.get(
+                        "current_execution_pointer_sha256"
+                    ),
+                }
     elif phase_id == "P1_CPU_BASELINE":
         bindings["execution_envelope"] = {
             "uri": "control/execution-envelope.yaml",
@@ -3623,12 +3766,19 @@ def _record_for(
     scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
     current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
     a2_freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
+    a2_readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
     a2_freeze_valid = (
         phase_id == "A2_PER_ARM_AUTOINDEX"
         and task_id
         in {None, "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE", "A2.1"}
         and isinstance(a2_freeze, Mapping)
         and a2_freeze.get("validated") is True
+    )
+    a2_readiness_valid = (
+        phase_id == "A2_PER_ARM_AUTOINDEX"
+        and task_id in {None, "A2.1"}
+        and isinstance(a2_readiness, Mapping)
+        and a2_readiness.get("validated") is True
     )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -3652,6 +3802,8 @@ def _record_for(
     evidence_class = (
         str(current_attempt.get("evidence_class"))
         if current_terminal
+        else str(a2_readiness.get("evidence_class"))
+        if a2_readiness_valid
         else str(a2_freeze.get("evidence_class"))
         if a2_freeze_valid
         else "train_selection_measured"
@@ -3673,6 +3825,8 @@ def _record_for(
     claim_boundary = (
         str(current_attempt.get("claim_boundary"))
         if current_terminal
+        else str(a2_readiness.get("claim_boundary"))
+        if a2_readiness_valid
         else str(a2_freeze.get("claim_boundary"))
         if a2_freeze_valid
         else "train_selection_only"
@@ -4553,7 +4707,9 @@ def _record_for(
             "reason": result,
             "owner_decisions_unchanged": True,
         },
-        "next_authorized_action": str(a2_freeze.get("next_authorized_action"))
+        "next_authorized_action": str(a2_readiness.get("next_authorized_action"))
+        if a2_readiness_valid
+        else str(a2_freeze.get("next_authorized_action"))
         if a2_freeze_valid
         else _next_action(model),
         "evidence_links": [

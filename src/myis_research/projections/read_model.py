@@ -248,6 +248,11 @@ from ..armindex.a2_candidate_freeze import (
     A2CandidateFreezeError,
     validate_candidate_freeze,
 )
+from ..armindex.a2_execution_readiness import (
+    A2ExecutionReadinessError,
+    validate_execution_adoption_receipt,
+    validate_provider_admission_receipt,
+)
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.constants import (
     A0_8_NEXT_AUTHORIZED_ACTION,
@@ -621,6 +626,20 @@ A2_OFFICIAL_BRIDGE_CONTROL_PATH = Path(
 A2_EXECUTION_CONTRACT_PATH = Path("control/armindex/a2/execution-contract.v1.json")
 A2_EXECUTION_ENVELOPE_PATH = Path("control/execution-envelope-a2-v1.yaml")
 A2_BUDGET_PROFILE_PATH = Path("control/budgets/a2-per-arm-autoindex-v1.json")
+A2_READINESS_CONTRACT_PATH = Path(
+    "control/armindex/a2/execution-readiness-contract.v1.json"
+)
+A2_READINESS_ENVELOPE_PATH = Path(
+    "control/execution-envelope-a2-readiness-v1.yaml"
+)
+A2_READINESS_BUDGET_PATH = Path("control/budgets/a2-execution-readiness-v1.json")
+A2_READINESS_RUNBOOK_PATH = Path(
+    "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
+)
+A2_READINESS_LEDGER_PATH = Path("control/armindex/a2/execution-ledger.v1.jsonl")
+A2_CURRENT_EXECUTION_POINTER_PATH = Path(
+    "control/armindex/a2/current-execution-attempt.v1.json"
+)
 A2_FREEZE_NEXT_AUTHORIZED_ACTION = (
     "RUN_INDEPENDENT_A2_FREEZE_AUDIT_STOP_BEFORE_MEASURED_A2"
 )
@@ -710,7 +729,7 @@ def _validate_json_receipt(
     return payload
 
 
-def _a2_candidate_freeze_projection(root: Path) -> dict[str, Any]:
+def _a2_candidate_freeze_missing(root: Path) -> dict[str, Any]:
     missing = {
         "status": "not_started",
         "validated": False,
@@ -736,6 +755,260 @@ def _a2_candidate_freeze_projection(root: Path) -> dict[str, Any]:
         "final_credit_receipt_uri": A2_FINAL_CREDIT_RECEIPT_PATH.as_posix(),
         "next_authorized_action": A2_FREEZE_NEXT_AUTHORIZED_ACTION,
     }
+    return missing
+
+
+def _a2_execution_readiness_projection(
+    root: Path, freeze: Mapping[str, Any]
+) -> dict[str, Any]:
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "phase_id": "A2_PER_ARM_AUTOINDEX",
+        "task_id": "A2.1",
+        "evidence_class": "engineering_execution_readiness",
+        "scientific_authority": False,
+        "claim_boundary": (
+            "frozen_52_candidate_execution_readiness_only_no_candidate_"
+            "evaluation_or_measured_a2_claim"
+        ),
+        "contract_uri": A2_READINESS_CONTRACT_PATH.as_posix(),
+        "envelope_uri": A2_READINESS_ENVELOPE_PATH.as_posix(),
+        "budget_uri": A2_READINESS_BUDGET_PATH.as_posix(),
+        "runbook_uri": A2_READINESS_RUNBOOK_PATH.as_posix(),
+        "ledger_uri": A2_READINESS_LEDGER_PATH.as_posix(),
+        "current_execution_pointer_uri": (
+            A2_CURRENT_EXECUTION_POINTER_PATH.as_posix()
+        ),
+        "provider_admission_performed": False,
+        "provider_execution_adoption_performed": False,
+        "remote_staging_performed": False,
+        "measured_a2_started": False,
+        "next_authorized_action": (
+            "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING"
+        ),
+    }
+    paths = (
+        A2_READINESS_CONTRACT_PATH,
+        A2_READINESS_ENVELOPE_PATH,
+        A2_READINESS_BUDGET_PATH,
+        A2_READINESS_RUNBOOK_PATH,
+        A2_READINESS_LEDGER_PATH,
+    )
+    if not any((root / path).exists() for path in paths):
+        return missing
+    if not all((root / path).is_file() for path in paths):
+        return {**missing, "status": "INVALID"}
+    try:
+        contract = json.loads(
+            (root / A2_READINESS_CONTRACT_PATH).read_text(encoding="utf-8")
+        )
+        budget = json.loads(
+            (root / A2_READINESS_BUDGET_PATH).read_text(encoding="utf-8")
+        )
+        envelope = _load_yaml_like(root / A2_READINESS_ENVELOPE_PATH)
+        if not all(isinstance(item, Mapping) for item in (contract, budget, envelope)):
+            raise ValueError("A2 readiness controls must be objects")
+        if contract.get("contract_sha256") != canonical_sha256(
+            {key: value for key, value in contract.items() if key != "contract_sha256"}
+        ):
+            raise ValueError("A2 readiness contract self-hash mismatch")
+        if budget.get("budget_profile_sha256") != canonical_sha256(
+            {
+                key: value
+                for key, value in budget.items()
+                if key != "budget_profile_sha256"
+            }
+        ):
+            raise ValueError("A2 readiness budget self-hash mismatch")
+        freeze_bindings = contract.get("freeze_bindings", {})
+        if (
+            not isinstance(freeze_bindings, Mapping)
+            or freeze_bindings.get("manifest_sha256") != freeze.get("manifest_sha256")
+            or freeze_bindings.get("freeze_receipt_sha256")
+            != freeze.get("freeze_receipt_sha256")
+            or freeze_bindings.get("lock_sha256") != freeze.get("lock_sha256")
+        ):
+            raise ValueError("A2 readiness freeze binding mismatch")
+        design = contract.get("candidate_design", {})
+        arm_policy = contract.get("arm_policy", {})
+        counters = contract.get("counters", {})
+        policy = contract.get("execution_policy", {})
+        if (
+            not isinstance(design, Mapping)
+            or design.get("candidate_count") != 52
+            or design.get("matched_candidate_count") != 40
+            or design.get("conditional_reserve_candidate_count") != 12
+            or design.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
+            or design.get("primary_advancement_arms") != ["ARM-03", "ARM-05", "ARM-04"]
+            or contract.get("candidate_evaluation_allowed") is not False
+            or not isinstance(arm_policy, Mapping)
+            or any(
+                arm_policy.get(arm_id, {}).get("diagnostic_non_advancing") is not True
+                or arm_policy.get(arm_id, {}).get("advancement_eligible") is not False
+                for arm_id in ("ARM-01", "ARM-02")
+            )
+            or not isinstance(counters, Mapping)
+            or any(value != 0 for value in counters.values())
+            or contract.get("launch_allowed") is not False
+            or contract.get("measured_execution_allowed") is not False
+            or not isinstance(policy, Mapping)
+            or policy.get("forward_hard_stop_usd") != 35
+            or policy.get("owner_ttl_hours") != 40
+            or policy.get("provider_instance_id") != "47411176"
+        ):
+            raise ValueError("A2 readiness contract boundary drift")
+        admission = budget.get("admission", {})
+        preparation = budget.get("preparation_counters", {})
+        scope = envelope.get("scope", {})
+        authority = envelope.get("authority", {})
+        if (
+            budget.get("status") != "READY_FOR_FRESH_ALL_FEE_ADMISSION"
+            or not isinstance(admission, Mapping)
+            or admission.get("forward_hard_stop_usd") != 35
+            or admission.get("whole_workload_admission_required") is not True
+            or admission.get("fresh_all_fee_quote_required") is not True
+            or admission.get("adopted_for_execution") is not False
+            or admission.get("launch_allowed") is not False
+            or not isinstance(preparation, Mapping)
+            or any(value != 0 for value in preparation.values())
+            or envelope.get("status")
+            != "ready_for_fresh_provider_admission_measurement_locked"
+            or not isinstance(scope, Mapping)
+            or scope.get("frozen_candidate_count") != 52
+            or scope.get("candidate_generation_or_mutation") != "forbidden"
+            or scope.get("candidate_evaluation_allowed") is not False
+            or not isinstance(authority, Mapping)
+            or authority.get("measured_a2_authorized") is not False
+        ):
+            raise ValueError("A2 readiness envelope or budget boundary drift")
+
+        result = {
+            **missing,
+            "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
+            "validated": True,
+            "contract_sha256": str(contract["contract_sha256"]),
+            "contract_file_sha256": _file_sha256(root / A2_READINESS_CONTRACT_PATH),
+            "envelope_file_sha256": _file_sha256(root / A2_READINESS_ENVELOPE_PATH),
+            "budget_profile_sha256": str(budget["budget_profile_sha256"]),
+            "budget_file_sha256": _file_sha256(root / A2_READINESS_BUDGET_PATH),
+            "runbook_sha256": _file_sha256(root / A2_READINESS_RUNBOOK_PATH),
+            "ledger_sha256": _file_sha256(root / A2_READINESS_LEDGER_PATH),
+            "candidate_count": 52,
+            "matched_candidate_count": 40,
+            "conditional_reserve_candidate_count": 12,
+            "diagnostic_non_advancing_arms": ["ARM-01", "ARM-02"],
+            "primary_advancement_arms": ["ARM-03", "ARM-05", "ARM-04"],
+            "forward_hard_stop_usd": 35,
+            "owner_ttl_hours": 40,
+            "freeze_bindings": dict(freeze_bindings),
+            "counters": dict(counters),
+        }
+        pointer_path = root / A2_CURRENT_EXECUTION_POINTER_PATH
+        if not pointer_path.exists():
+            return result
+        pointer = _validate_json_receipt(
+            root,
+            relative_path=A2_CURRENT_EXECUTION_POINTER_PATH,
+            schema_path=Path("schemas/armindex/a2-current-execution-attempt.v1.json"),
+            self_hash_field="pointer_sha256",
+        )
+        receipts: dict[str, dict[str, Any]] = {}
+        for label, uri_key, hash_key, schema_name in (
+            (
+                "bundle",
+                "bundle_receipt_uri",
+                "bundle_receipt_file_sha256",
+                "a2-execution-bundle-receipt.v1.json",
+            ),
+            (
+                "provider_admission",
+                "provider_admission_receipt_uri",
+                "provider_admission_receipt_file_sha256",
+                "a2-provider-admission-receipt.v1.json",
+            ),
+            (
+                "execution_adoption",
+                "execution_adoption_receipt_uri",
+                "execution_adoption_receipt_file_sha256",
+                "a2-execution-adoption-receipt.v1.json",
+            ),
+        ):
+            relative = Path(str(pointer[uri_key]))
+            receipt = _validate_json_receipt(
+                root,
+                relative_path=relative,
+                schema_path=Path("schemas/armindex") / schema_name,
+            )
+            if _file_sha256(root / relative) != pointer[hash_key]:
+                raise ValueError(f"A2 {label} receipt file hash mismatch")
+            receipts[label] = receipt
+        provider = validate_provider_admission_receipt(
+            root, receipts["provider_admission"]
+        )
+        adoption = validate_execution_adoption_receipt(
+            root, receipts["execution_adoption"]
+        )
+        bundle = receipts["bundle"]
+        attempt_id = pointer["attempt_id"]
+        if (
+            any(receipt.get("attempt_id") != attempt_id for receipt in receipts.values())
+            or adoption.get("provider_admission_receipt_sha256")
+            != provider.get("receipt_sha256")
+            or adoption.get("bundle_receipt_sha256") != bundle.get("receipt_sha256")
+            or adoption.get("bundle_sha256") != bundle.get("bundle_sha256")
+            or adoption.get("measured_retrieval_allowed") is not False
+            or pointer.get("measured_a2_started") is not False
+        ):
+            raise ValueError("A2 staged receipt chain is inconsistent")
+        return {
+            **result,
+            "status": "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED",
+            "attempt_id": attempt_id,
+            "current_execution_pointer_sha256": pointer["pointer_sha256"],
+            "current_execution_pointer_file_sha256": _file_sha256(pointer_path),
+            "bundle_receipt": {
+                "uri": pointer["bundle_receipt_uri"],
+                "file_sha256": pointer["bundle_receipt_file_sha256"],
+                "receipt_sha256": bundle["receipt_sha256"],
+                "bundle_sha256": bundle["bundle_sha256"],
+                "git_commit": bundle["git_commit"],
+                "git_tree": bundle["git_tree"],
+            },
+            "provider_admission_receipt": {
+                "uri": pointer["provider_admission_receipt_uri"],
+                "file_sha256": pointer["provider_admission_receipt_file_sha256"],
+                "receipt_sha256": provider["receipt_sha256"],
+                "instance_id": provider["provider_instance_id"],
+                "whole_workload_total_usd": provider["whole_workload_total_usd"],
+            },
+            "execution_adoption_receipt": {
+                "uri": pointer["execution_adoption_receipt_uri"],
+                "file_sha256": pointer["execution_adoption_receipt_file_sha256"],
+                "receipt_sha256": adoption["receipt_sha256"],
+                "remote_root": adoption["remote_root"],
+                "watchdog_deadline_utc": adoption["watchdog_deadline_utc"],
+            },
+            "provider_admission_performed": True,
+            "provider_execution_adoption_performed": True,
+            "remote_staging_performed": True,
+            "next_authorized_action": (
+                "OWNER_AUTHORIZATION_FOR_SEPARATE_MEASURED_A2_SESSION"
+            ),
+        }
+    except (
+        A2ExecutionReadinessError,
+        OSError,
+        UnicodeError,
+        json.JSONDecodeError,
+        TypeError,
+        ValueError,
+    ):
+        return {**missing, "status": "INVALID"}
+
+
+def _a2_candidate_freeze_projection(root: Path) -> dict[str, Any]:
+    missing = _a2_candidate_freeze_missing(root)
     required = (
         A2_CANDIDATE_MANIFEST_PATH,
         A2_CANDIDATE_FREEZE_RECEIPT_PATH,
@@ -987,6 +1260,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a1_2_current_attempt = _a12_current_attempt_projection(root)
     a1_2_remote_retention = _a12_r15_remote_retention_projection(root)
     a2_candidate_freeze = _a2_candidate_freeze_projection(root)
+    a2_execution_readiness = _a2_execution_readiness_projection(
+        root, a2_candidate_freeze
+    )
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -1002,6 +1278,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_current_attempt": a1_2_current_attempt,
         "a1_2_remote_retention": a1_2_remote_retention,
         "a2_candidate_freeze": a2_candidate_freeze,
+        "a2_execution_readiness": a2_execution_readiness,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -1344,23 +1621,46 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         and a2_candidate_freeze.get("validated") is True
     ):
         armindex["status"] = (
-            "a2_candidate_freeze_audit_passed_measured_a2_closed"
+            "a2_staged_not_launched_measured_a2_locked"
+            if a2_execution_readiness.get("status")
+            == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+            else "a2_execution_readiness_complete_fresh_admission_required"
+            if a2_execution_readiness.get("validated") is True
+            else "a2_candidate_freeze_audit_passed_measured_a2_closed"
             if a2_candidate_freeze.get("independent_audit_status") == "PASS"
             else "a2_candidate_freeze_complete_auditor_review_required"
         )
         armindex["current_phase"] = "A2_PER_ARM_AUTOINDEX"
-        armindex["next_command"] = a2_candidate_freeze["next_authorized_action"]
+        armindex["next_command"] = (
+            a2_execution_readiness["next_authorized_action"]
+            if a2_execution_readiness.get("validated") is True
+            else a2_candidate_freeze["next_authorized_action"]
+        )
         armindex["phases"] = [
             {
                 **phase,
-                "status": "blocked"
+                "status": (
+                    "staged"
+                    if a2_execution_readiness.get("status")
+                    == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+                    else "ready"
+                    if a2_execution_readiness.get("validated") is True
+                    else "blocked"
+                )
                 if phase.get("phase_id") == "A2_PER_ARM_AUTOINDEX"
                 else phase.get("status"),
                 "tasks": (
                     [
                         {
                             **task,
-                            "status": "blocked"
+                            "status": (
+                                "staged"
+                                if a2_execution_readiness.get("status")
+                                == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+                                else "ready"
+                                if a2_execution_readiness.get("validated") is True
+                                else "blocked"
+                            )
                             if task.get("task_id") == "A2.1"
                             else task.get("status"),
                         }

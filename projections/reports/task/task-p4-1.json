@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -47,11 +47,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [],
-  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Manuscript and release package",
   "phase_id": "P4_PUBLICATION",
   "report_id": "task-p4-1",
-  "report_sha256": "542295e5aa903897d7930e150c3a9eee7e77c167fbd8c95ec89df7b3f754c378",
+  "report_sha256": "5f31668f194de2a2213ac679eae350d6d757f94dbdc8e7b279fc80a9d569aec6",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

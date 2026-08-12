@@ -720,7 +720,7 @@
     }
   ],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -800,12 +800,12 @@
   "language": "en",
   "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [],
-  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "42fa0f046e7a2937bd9aa9f4fa537c46648ad525944868d825fe0394ce49caaf",
+  "report_sha256": "2ecda70cbad1e8611defe7cdbf7a2f1c4a5337234e492d0fdbed93d169c299fb",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

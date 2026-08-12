@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec"
-read_model_sha256: "3b7b89569fb51d8312efa1dbb95c79fc0ddd44eabf3abbb9086c8903f2b0480b"
+read_model_revision: "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441"
+read_model_sha256: "2cb81ec58008bcdfb9735182868eb65faf2e80205d8717e4e4169f2a6cd792c3"
 source_commit: "1304d21bce5066fb296d17dfe63e32791fa69d26"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "aggregate_safe_synthetic_runtime_preparation"
 scientific_authority: false
 claim_boundary: "This is a synthetic adapter-level preparation check. It contains no protected source text, query identifiers, memberships, qrels, rankings, per-query outcomes, credentials, raw provider payloads, or A1 retrieval result."
-generated_from_revision: "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec"
+generated_from_revision: "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441"
 last_material_update: "2026-08-12T04:27:31Z"
 next_authorized_action: "Commit and push the hash-bound repair, build a clean v16 bundle, re-run provider admission and execution adoption, then resume only the frozen 25/25 A1.2 screen."
 managed_by: "myis-report"

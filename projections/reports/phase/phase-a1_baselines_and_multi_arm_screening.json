@@ -3281,7 +3281,7 @@
     }
   ],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -3544,11 +3544,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "ce093b672e023f04ceabcd86a3f9f17c16d167e3c27c188f846ec3439c788c26",
+  "report_sha256": "e1a83199c69f3ef01806dec35f4ec2302079c4aa03b06f76b3a30f37537fff50",
   "report_type": "phase",
   "result": {
     "decision": "PASS_25_OF_25",
@@ -3561,7 +3561,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_candidate_freeze_audit_passed_measured_a2_closed",
+    "program_state": "a2_execution_readiness_complete_fresh_admission_required",
     "task": null
   },
   "status": "completed",

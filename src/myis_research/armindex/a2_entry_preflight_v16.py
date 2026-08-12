@@ -7,6 +7,7 @@ It only reports the preparation still required after a complete A1 closeout.
 from __future__ import annotations
 
 import argparse
+import re
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
@@ -23,6 +24,36 @@ _SUCCESS_HASHES = (
     "safe_return_sha256",
     "evaluator_receipt_sha256",
     "promotion_receipt_sha256",
+)
+_SHA256_PATTERN = re.compile(r"[a-f0-9]{64}")
+_POST_FREEZE_STATUS = "complete_audit_passed_measured_a2_closed"
+_POST_FREEZE_COUNTS = {
+    "candidate_count": 52,
+    "matched_candidate_count": 40,
+    "conditional_reserve_candidate_count": 12,
+}
+_POST_FREEZE_HASHES = (
+    "manifest_sha256",
+    "manifest_file_sha256",
+    "freeze_receipt_sha256",
+    "freeze_receipt_file_sha256",
+    "lock_sha256",
+    "lock_file_sha256",
+    "independent_audit_receipt_sha256",
+    "independent_audit_receipt_file_sha256",
+)
+_POST_FREEZE_FALSE_FLAGS = (
+    "measured_a2_started",
+    "rep_dev_accessed_for_measurement",
+    "gpu_work_performed",
+    "provider_admission_performed",
+    "provider_execution_adoption_performed",
+    "protected_data_accessed",
+)
+_POST_FREEZE_ZERO_COUNTERS = (
+    "harness_dev_accesses",
+    "selection_accesses",
+    "final_accesses",
 )
 
 
@@ -41,6 +72,58 @@ def _phase(model: Mapping[str, Any], phase_id: str) -> Mapping[str, Any]:
         if isinstance(phase, Mapping) and phase.get("phase_id") == phase_id:
             return phase
     raise A2EntryPreflightV16Error(f"read model phase is missing: {phase_id}")
+
+
+def _validated_post_freeze_state(armindex: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Require the only blocked A2 state that is safe to prepare from."""
+
+    freeze = armindex.get("a2_candidate_freeze")
+    if not isinstance(freeze, Mapping):
+        raise A2EntryPreflightV16Error("A2 blocked phase is missing candidate-freeze evidence")
+    if (
+        freeze.get("validated") is not True
+        or freeze.get("status") != _POST_FREEZE_STATUS
+        or freeze.get("independent_audit_status") != "PASS"
+    ):
+        raise A2EntryPreflightV16Error("A2 blocked phase lacks a validated PASS candidate-freeze audit")
+    if any(freeze.get(key) != value for key, value in _POST_FREEZE_COUNTS.items()):
+        raise A2EntryPreflightV16Error("A2 blocked phase candidate-freeze counts are not exactly 40+12")
+    if any(
+        not isinstance(freeze.get(key), str)
+        or _SHA256_PATTERN.fullmatch(freeze[key]) is None
+        for key in _POST_FREEZE_HASHES
+    ):
+        raise A2EntryPreflightV16Error("A2 blocked phase immutable candidate-freeze hashes are invalid")
+    if any(freeze.get(key) is not False for key in _POST_FREEZE_FALSE_FLAGS):
+        raise A2EntryPreflightV16Error("A2 blocked phase candidate-freeze safety flags are invalid")
+    if any(freeze.get(key) != 0 for key in _POST_FREEZE_ZERO_COUNTERS):
+        raise A2EntryPreflightV16Error("A2 blocked phase candidate-freeze access counters are invalid")
+    return freeze
+
+
+def _validated_execution_readiness(armindex: Mapping[str, Any]) -> Mapping[str, Any]:
+    readiness = armindex.get("a2_execution_readiness")
+    if (
+        not isinstance(readiness, Mapping)
+        or readiness.get("validated") is not True
+        or readiness.get("status")
+        != "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED"
+        or readiness.get("candidate_count") != 52
+        or readiness.get("matched_candidate_count") != 40
+        or readiness.get("conditional_reserve_candidate_count") != 12
+        or readiness.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
+        or readiness.get("provider_admission_performed") is not False
+        or readiness.get("provider_execution_adoption_performed") is not False
+        or readiness.get("remote_staging_performed") is not False
+        or readiness.get("measured_a2_started") is not False
+    ):
+        raise A2EntryPreflightV16Error(
+            "A2 ready phase lacks validated measurement-locked execution readiness"
+        )
+    counters = readiness.get("counters")
+    if not isinstance(counters, Mapping) or any(value != 0 for value in counters.values()):
+        raise A2EntryPreflightV16Error("A2 readiness counters must remain zero")
+    return readiness
 
 
 def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
@@ -114,7 +197,14 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
     a2_phase = _phase(model, "A2_PER_ARM_AUTOINDEX")
     if a1_phase.get("status") != "complete":
         raise A2EntryPreflightV16Error("A1 phase is not complete in the read model")
-    if a2_phase.get("status") != "planned":
+    post_freeze = None
+    readiness = None
+    if a2_phase.get("status") == "blocked":
+        post_freeze = _validated_post_freeze_state(armindex)
+    elif a2_phase.get("status") == "ready":
+        post_freeze = _validated_post_freeze_state(armindex)
+        readiness = _validated_execution_readiness(armindex)
+    elif a2_phase.get("status") != "planned":
         raise A2EntryPreflightV16Error(
             "A2 phase must be planned and no longer locked until A1"
         )
@@ -157,6 +247,7 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
         "fresh_a2_execution_adoption_required": True,
         "new_isolated_remote_root_required": True,
         "a2_execution_authorized": False,
+        "candidate_evaluation_authorized": False,
         "safe_return_sha256": receipt["safe_return_sha256"],
         "evaluator_receipt_sha256": receipt["evaluator_receipt_sha256"],
         "promotion_receipt_sha256": receipt["promotion_receipt_sha256"],
@@ -168,6 +259,34 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
         "read_model_revision": model["read_model_revision"],
         "a1_report_sha256": a1_report["report_sha256"],
         "a2_phase_status": a2_phase["status"],
+        "candidate_freeze": (
+            {
+                "status": post_freeze["status"],
+                "independent_audit_status": post_freeze["independent_audit_status"],
+                **_POST_FREEZE_COUNTS,
+                "diagnostic_non_advancing_arms": ["ARM-01", "ARM-02"],
+                **{key: post_freeze[key] for key in _POST_FREEZE_HASHES},
+            }
+            if post_freeze is not None
+            else None
+        ),
+        "execution_readiness": (
+            {
+                "status": readiness["status"],
+                "candidate_count": readiness["candidate_count"],
+                "matched_candidate_count": readiness["matched_candidate_count"],
+                "conditional_reserve_candidate_count": readiness[
+                    "conditional_reserve_candidate_count"
+                ],
+                "diagnostic_non_advancing_arms": readiness[
+                    "diagnostic_non_advancing_arms"
+                ],
+                "forward_hard_stop_usd": readiness["forward_hard_stop_usd"],
+                "owner_ttl_hours": readiness["owner_ttl_hours"],
+            }
+            if readiness is not None
+            else None
+        ),
         "access_counters": {
             "harness_dev_accesses": 0,
             "selection_accesses": 0,

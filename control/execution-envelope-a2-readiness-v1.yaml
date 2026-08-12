@@ -1,0 +1,84 @@
+schema_version: myis.execution-envelope-a2-readiness.v1
+envelope_id: a2-five-arm-autoindex-execution-readiness-v1
+revision_id: a2-five-arm-execution-readiness-v1
+status: ready_for_fresh_provider_admission_measurement_locked
+authority:
+  standing_decision: D1_START_CAMPAIGN
+  active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  preparation_authorized: true
+  provider_admission_authorized: true
+  execution_adoption_authorized: true
+  remote_staging_authorized: true
+  measured_a2_authorized: false
+scope:
+  campaign_id: armindex-multiretriever-v2
+  phase_id: A2_PER_ARM_AUTOINDEX
+  task_id: A2.1
+  allowed_arms: [ARM-01, ARM-02, ARM-03, ARM-04, ARM-05]
+  primary_advancement_arms: [ARM-03, ARM-05, ARM-04]
+  diagnostic_non_advancing_arms: [ARM-01, ARM-02]
+  frozen_matched_candidate_count: 40
+  frozen_dormant_conditional_reserve_count: 12
+  frozen_candidate_count: 52
+  candidate_generation_or_mutation: forbidden
+  candidate_evaluation_allowed: false
+resources:
+  provider_instance_id: "47411176"
+  isolated_remote_root_pattern: "^/opt/myis/a2-[a-z0-9][a-z0-9-]{7,63}$"
+  owner_ttl_hours: 40
+  forward_hard_stop_usd: 35
+  gpu_scientific_work: false
+  remote_staging: true
+  provider_admission: true
+  provider_execution_adoption: true
+  network_model_download: false
+  measured_retrieval: false
+provider_evidence:
+  preferred: authenticated_vast_cli
+  fallback: OwnerDashboardSsh
+  fallback_requires: [aggregate_safe_dashboard_identity_quote_ttl, pinned_ssh_runtime_gpu_hashes, OWNER_MANUAL_DASHBOARD_DESTROY_READY]
+  login_logout_forbidden: true
+  destroy_forbidden: true
+protected_boundary:
+  output_mode: aggregate_hash_count_and_safe_candidate_payload_only
+  qrels: forbidden
+  membership: forbidden
+  query_ids: forbidden
+  rankings: forbidden
+  per_query_outcomes: forbidden
+  final_split: forbidden
+  credentials: forbidden
+  raw_provider_payloads: forbidden
+  inherited_full_environment: forbidden
+  rep_dev_measurement: forbidden
+freeze:
+  manifest_uri: campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json
+  receipt_uri: campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json
+  lock_uri: control/armindex/a2/candidate-freeze.lock.v1.json
+  compile_twice_verified: true
+  independent_audit_passed: true
+  reserve_lifecycle: dormant_conditional
+  mutation_after_freeze: new_campaign_revision_required_no_reinterpretation
+entry_requirements_for_future_measurement:
+  clean_hash_bound_bundle: required
+  fresh_provider_identity: required
+  fresh_all_fee_quote: required
+  whole_workload_budget_admission: required
+  fresh_a2_provider_admission: required
+  fresh_a2_execution_adoption: required
+  new_isolated_remote_root: required
+  fresh_ttl_watchdog_40h: required
+  a1_root: read_only
+prohibited_actions:
+  - candidate_generation
+  - candidate_mutation
+  - measured_a2_execution
+  - rep_dev_measurement
+  - a1_rerun
+  - a1_root_mutation
+  - harness_dev_access
+  - selection_access
+  - final_access
+  - D2_OPEN_FINAL
+  - D3_SUBMIT_RELEASE
+  - provider_destroy

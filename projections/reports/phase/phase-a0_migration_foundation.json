@@ -506,7 +506,7 @@
     }
   ],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -623,11 +623,11 @@
       "value": 156846
     }
   ],
-  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "a6732fb42526f56d2623cef8eaf22185dbd8429d5fa3242855ae3ab01e36bedf",
+  "report_sha256": "e1c1aaf6a89dbf0a2150cdc61c090c1b01ae61b1db1acc5f82780ac672a2729a",
   "report_type": "phase",
   "result": {
     "decision": "completed",
@@ -640,7 +640,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_candidate_freeze_audit_passed_measured_a2_closed",
+    "program_state": "a2_execution_readiness_complete_fresh_admission_required",
     "task": null
   },
   "status": "completed",

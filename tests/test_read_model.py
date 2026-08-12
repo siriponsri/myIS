@@ -311,6 +311,23 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     assert model["armindex"]["a2_candidate_freeze"]["status"] == (
         "complete_audit_passed_measured_a2_closed"
     )
+    readiness = model["armindex"]["a2_execution_readiness"]
+    assert readiness["status"] == (
+        "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED"
+    )
+    assert readiness["candidate_count"] == 52
+    assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
+    assert readiness["provider_admission_performed"] is False
+    assert readiness["provider_execution_adoption_performed"] is False
+    a2 = next(
+        phase
+        for phase in model["armindex"]["phases"]
+        if phase["phase_id"] == "A2_PER_ARM_AUTOINDEX"
+    )
+    assert a2["status"] == "ready"
+    assert next(task for task in a2["tasks"] if task["task_id"] == "A2.1")[
+        "status"
+    ] == "ready"
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:

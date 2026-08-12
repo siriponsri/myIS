@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec"
-read_model_sha256: "3b7b89569fb51d8312efa1dbb95c79fc0ddd44eabf3abbb9086c8903f2b0480b"
+read_model_revision: "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441"
+read_model_sha256: "2cb81ec58008bcdfb9735182868eb65faf2e80205d8717e4e4169f2a6cd792c3"
 source_commit: "1304d21bce5066fb296d17dfe63e32791fa69d26"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_compatibility_validation"
 scientific_authority: false
 claim_boundary: "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result."
-generated_from_revision: "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec"
+generated_from_revision: "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441"
 last_material_update: "2026-08-12T04:27:31Z"
 next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
 managed_by: "myis-report"

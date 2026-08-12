@@ -4008,15 +4008,15 @@
           "uri": "control/armindex/a2/official-codex-bridge.v1.json"
         },
         {
-          "sha256": "c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f",
+          "sha256": "ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d",
           "uri": "control/armindex/a2/execution-contract.v1.json"
         },
         {
-          "sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+          "sha256": "de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7",
           "uri": "control/execution-envelope-a2-v1.yaml"
         },
         {
-          "sha256": "7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166",
+          "sha256": "b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1",
           "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
         }
       ],
@@ -4083,6 +4083,67 @@
       "smoke_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-bridge-smoke.receipt.v2.json",
       "status": "complete_audit_passed_measured_a2_closed",
       "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+      "validated": true
+    },
+    "a2_execution_readiness": {
+      "budget_file_sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
+      "budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af",
+      "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
+      "candidate_count": 52,
+      "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
+      "conditional_reserve_candidate_count": 12,
+      "contract_file_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace",
+      "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "counters": {
+        "candidate_evaluations": 0,
+        "final_accesses": 0,
+        "gpu_scientific_runs": 0,
+        "harness_dev_accesses": 0,
+        "measured_a2_runs": 0,
+        "provider_admissions": 0,
+        "provider_execution_adoptions": 0,
+        "rep_dev_measurements": 0,
+        "selection_accesses": 0
+      },
+      "current_execution_pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json",
+      "diagnostic_non_advancing_arms": [
+        "ARM-01",
+        "ARM-02"
+      ],
+      "envelope_file_sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
+      "envelope_uri": "control/execution-envelope-a2-readiness-v1.yaml",
+      "evidence_class": "engineering_execution_readiness",
+      "forward_hard_stop_usd": 35,
+      "freeze_bindings": {
+        "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+        "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+        "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952",
+        "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json",
+        "manifest_file_sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
+        "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+        "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"
+      },
+      "ledger_sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "ledger_uri": "control/armindex/a2/execution-ledger.v1.jsonl",
+      "matched_candidate_count": 40,
+      "measured_a2_started": false,
+      "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
+      "owner_ttl_hours": 40,
+      "phase_id": "A2_PER_ARM_AUTOINDEX",
+      "primary_advancement_arms": [
+        "ARM-03",
+        "ARM-05",
+        "ARM-04"
+      ],
+      "provider_admission_performed": false,
+      "provider_execution_adoption_performed": false,
+      "remote_staging_performed": false,
+      "runbook_sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "runbook_uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
+      "scientific_authority": false,
+      "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
+      "task_id": "A2.1",
       "validated": true
     },
     "adapter_fixture_validation": {
@@ -4572,7 +4633,7 @@
       "validated": true
     },
     "local_adoption_input_status": "A1_COMPLETE_25_OF_25",
-    "next_command": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+    "next_command": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -4673,10 +4734,10 @@
       {
         "phase_id": "A2_PER_ARM_AUTOINDEX",
         "purpose": "Search and freeze one representation program per promoted arm.",
-        "status": "blocked",
+        "status": "ready",
         "tasks": [
           {
-            "status": "blocked",
+            "status": "ready",
             "task_id": "A2.1",
             "title": "Per-arm AutoIndex"
           },
@@ -4757,7 +4818,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a2_candidate_freeze_audit_passed_measured_a2_closed",
+    "status": "a2_execution_readiness_complete_fresh_admission_required",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -4789,7 +4850,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a2_candidate_freeze_audit_passed_measured_a2_closed",
+      "status": "a2_execution_readiness_complete_fresh_admission_required",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -5856,7 +5917,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "projection_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5900,8 +5961,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
-  "read_model_sha256": "3b7b89569fb51d8312efa1dbb95c79fc0ddd44eabf3abbb9086c8903f2b0480b",
+  "read_model_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
+  "read_model_sha256": "2cb81ec58008bcdfb9735182868eb65faf2e80205d8717e4e4169f2a6cd792c3",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

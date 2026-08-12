@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
   "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
@@ -385,11 +385,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Adapter fixture validation",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-1",
-  "report_sha256": "eac19644cfe0bf80d95de243c347c043be2aeb13c13b45ef4404ecc2b72caa23",
+  "report_sha256": "1433a4a66e47a86c06d2d354c8b22749c4d637c10159781e31f4fb1a2f8181bd",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -402,7 +402,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_candidate_freeze_audit_passed_measured_a2_closed",
+    "program_state": "a2_execution_readiness_complete_fresh_admission_required",
     "task": "A1.1"
   },
   "status": "completed",

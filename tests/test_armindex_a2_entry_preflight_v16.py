@@ -64,8 +64,39 @@ def _write_current(root: Path, *, disposition: str = "REUSE_ELIGIBLE", status: s
     write_current_attempt_pointer(root, pointer)
 
 
+def _post_freeze_projection() -> dict[str, object]:
+    return {
+        "validated": True,
+        "status": "complete_audit_passed_measured_a2_closed",
+        "independent_audit_status": "PASS",
+        "candidate_count": 52,
+        "matched_candidate_count": 40,
+        "conditional_reserve_candidate_count": 12,
+        "manifest_sha256": "a" * 64,
+        "manifest_file_sha256": "b" * 64,
+        "freeze_receipt_sha256": "c" * 64,
+        "freeze_receipt_file_sha256": "d" * 64,
+        "lock_sha256": "e" * 64,
+        "lock_file_sha256": "f" * 64,
+        "independent_audit_receipt_sha256": "1" * 64,
+        "independent_audit_receipt_file_sha256": "2" * 64,
+        "measured_a2_started": False,
+        "rep_dev_accessed_for_measurement": False,
+        "gpu_work_performed": False,
+        "provider_admission_performed": False,
+        "provider_execution_adoption_performed": False,
+        "protected_data_accessed": False,
+        "harness_dev_accesses": 0,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+    }
+
+
 def _mock_closeout_projection(
-    monkeypatch: pytest.MonkeyPatch, *, disposition: str = "REUSE_ELIGIBLE"
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    disposition: str = "REUSE_ELIGIBLE",
+    post_freeze: dict[str, object] | None = None,
 ) -> None:
     def build_model(_: Path) -> dict[str, object]:
         return {
@@ -99,9 +130,10 @@ def _mock_closeout_projection(
                     },
                     {
                         "phase_id": "A2_PER_ARM_AUTOINDEX",
-                        "status": "planned",
+                        "status": "blocked" if post_freeze is not None else "planned",
                     },
                 ],
+                "a2_candidate_freeze": post_freeze,
             },
         }
 
@@ -142,7 +174,9 @@ def test_preflight_requires_pass_25_of_25_and_reports_provider_preparation(
     assert result["fresh_a2_execution_adoption_required"] is True
     assert result["new_isolated_remote_root_required"] is True
     assert result["a2_execution_authorized"] is False
+    assert result["candidate_evaluation_authorized"] is False
     assert result["a2_phase_status"] == "planned"
+    assert result["candidate_freeze"] is None
     assert result["read_model_revision"] == "f" * 64
     assert result["a1_report_sha256"] == "9" * 64
     assert result["measured_result_summary_sha256"] == "7" * 64
@@ -196,6 +230,64 @@ def test_preflight_rejects_a2_still_locked(
     monkeypatch.setattr(preflight_module, "build_read_model", locked_model)
 
     with pytest.raises(A2EntryPreflightV16Error, match="no longer locked"):
+        evaluate_a2_entry_preflight(root)
+
+
+def test_preflight_accepts_only_audited_post_freeze_blocked_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _root(tmp_path)
+    _write_current(root)
+    _mock_closeout_projection(monkeypatch, post_freeze=_post_freeze_projection())
+
+    result = evaluate_a2_entry_preflight(root)
+
+    assert result["status"] == "PASS_A2_ENTRY_PREFLIGHT"
+    assert result["a2_phase_status"] == "blocked"
+    assert result["a2_execution_authorized"] is False
+    assert result["candidate_evaluation_authorized"] is False
+    assert result["candidate_freeze"] == {
+        "status": "complete_audit_passed_measured_a2_closed",
+        "independent_audit_status": "PASS",
+        "candidate_count": 52,
+        "matched_candidate_count": 40,
+        "conditional_reserve_candidate_count": 12,
+        "diagnostic_non_advancing_arms": ["ARM-01", "ARM-02"],
+        "manifest_sha256": "a" * 64,
+        "manifest_file_sha256": "b" * 64,
+        "freeze_receipt_sha256": "c" * 64,
+        "freeze_receipt_file_sha256": "d" * 64,
+        "lock_sha256": "e" * 64,
+        "lock_file_sha256": "f" * 64,
+        "independent_audit_receipt_sha256": "1" * 64,
+        "independent_audit_receipt_file_sha256": "2" * 64,
+    }
+
+
+@pytest.mark.parametrize(
+    ("key", "value", "message"),
+    [
+        ("independent_audit_status", "REVISE", "PASS candidate-freeze audit"),
+        ("candidate_count", 51, "exactly 40\\+12"),
+        ("manifest_sha256", "not-a-hash", "immutable candidate-freeze hashes"),
+        ("provider_admission_performed", True, "safety flags"),
+        ("selection_accesses", 1, "access counters"),
+    ],
+)
+def test_preflight_rejects_invalid_post_freeze_blocked_state(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    key: str,
+    value: object,
+    message: str,
+) -> None:
+    root = _root(tmp_path)
+    _write_current(root)
+    post_freeze = _post_freeze_projection()
+    post_freeze[key] = value
+    _mock_closeout_projection(monkeypatch, post_freeze=post_freeze)
+
+    with pytest.raises(A2EntryPreflightV16Error, match=message):
         evaluate_a2_entry_preflight(root)
 
 

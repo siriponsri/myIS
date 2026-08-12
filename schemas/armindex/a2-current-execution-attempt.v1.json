@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-current-execution-attempt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pointer_id",
+    "attempt_id",
+    "status",
+    "bundle_receipt_uri",
+    "bundle_receipt_file_sha256",
+    "provider_admission_receipt_uri",
+    "provider_admission_receipt_file_sha256",
+    "execution_adoption_receipt_uri",
+    "execution_adoption_receipt_file_sha256",
+    "measured_a2_started",
+    "pointer_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "myis.armindex-a2-current-execution-attempt.v1"
+    },
+    "pointer_id": {
+      "const": "a2-current-execution-attempt-v1"
+    },
+    "attempt_id": {
+      "pattern": "^a2-[a-z0-9-]{7,63}$"
+    },
+    "status": {
+      "const": "STAGED_NOT_LAUNCHED"
+    },
+    "bundle_receipt_uri": {
+      "$ref": "#/$defs/receiptUri"
+    },
+    "bundle_receipt_file_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "provider_admission_receipt_uri": {
+      "$ref": "#/$defs/receiptUri"
+    },
+    "provider_admission_receipt_file_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "execution_adoption_receipt_uri": {
+      "$ref": "#/$defs/receiptUri"
+    },
+    "execution_adoption_receipt_file_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "measured_a2_started": {
+      "const": false
+    },
+    "pointer_sha256": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receiptUri": {
+      "type": "string",
+      "pattern": "^campaigns/armindex-multiretriever-v2/evidence/a2-[a-z0-9.-]+\\.json$"
+    }
+  }
+}

@@ -4036,7 +4036,7 @@ def _armindex_paper_artifact_contents(
     provenance_root = paper_root / "provenance"
     canonical_root = root / "outputs/publication/armindex/a2-candidate-freeze"
     canonical_provenance_root = canonical_root / "provenance"
-    artifact_specs = (
+    artifact_specs = [
             ("control/source-of-truth.yaml", "metadata"),
             ("schemas/artifact-index.v2.json", "metadata"),
             ("schemas/artifact-provenance-graph.v1.json", "metadata"),
@@ -4094,7 +4094,34 @@ def _armindex_paper_artifact_contents(
                 "a2-official-codex-final-credit-check.receipt.v1.json",
                 "aggregate",
             ),
+        ]
+    readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
+    readiness_valid = (
+        isinstance(readiness, Mapping) and readiness.get("validated") is True
+    )
+    if readiness_valid:
+        # Readiness is an additive engineering projection; freeze artifacts stay
+        # the publication source of candidate identity and measured status.
+        artifact_specs.extend(
+            (
+                ("control/armindex/a2/execution-readiness-contract.v1.json", "metadata"),
+                ("control/execution-envelope-a2-readiness-v1.yaml", "metadata"),
+                ("control/budgets/a2-execution-readiness-v1.json", "metadata"),
+                ("control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md", "metadata"),
+                ("control/armindex/a2/execution-ledger.v1.jsonl", "metadata"),
+                ("schemas/armindex/a2-execution-bundle-receipt.v1.json", "metadata"),
+                ("schemas/armindex/a2-provider-admission-receipt.v1.json", "metadata"),
+                ("schemas/armindex/a2-execution-adoption-receipt.v1.json", "metadata"),
+            )
         )
+        for receipt_key in (
+            "bundle_receipt",
+            "provider_admission_receipt",
+            "execution_adoption_receipt",
+        ):
+            receipt = readiness.get(receipt_key)
+            if isinstance(receipt, Mapping) and isinstance(receipt.get("uri"), str):
+                artifact_specs.append((receipt["uri"], "aggregate"))
     artifacts = [
         _artifact_file(root, relative, classification)
         for relative, classification in artifact_specs
@@ -4158,6 +4185,9 @@ def _armindex_paper_artifact_contents(
             if fragment in uri
         )
 
+    def node_for_relative(relative: str) -> str:
+        return node_by_uri[f"../../../01_Research/{relative}"]["node_id"]
+
     graph = {
         "schema_version": "myis.artifact-provenance-graph.v1",
         "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
@@ -4186,6 +4216,59 @@ def _armindex_paper_artifact_contents(
             else []
         ),
     }
+    if readiness_valid:
+        graph["edges"].extend(
+            [
+                {
+                    "source": node_id("candidate-freeze.receipt"),
+                    "target": node_id("execution-readiness-contract"),
+                    "relation": "binds",
+                },
+                {
+                    "source": node_id("execution-readiness-contract"),
+                    "target": node_id("execution-envelope-a2-readiness"),
+                    "relation": "binds",
+                },
+                {
+                    "source": node_id("execution-readiness-contract"),
+                    "target": node_id("a2-execution-readiness-v1"),
+                    "relation": "binds",
+                },
+                {
+                    "source": node_id("execution-readiness-contract"),
+                    "target": node_id("A2_PER_ARM_AUTOINDEX_EXECUTION_V1"),
+                    "relation": "binds",
+                },
+                {
+                    "source": node_id("execution-readiness-contract"),
+                    "target": node_id("execution-ledger"),
+                    "relation": "binds",
+                },
+            ]
+        )
+        bundle = readiness.get("bundle_receipt")
+        provider = readiness.get("provider_admission_receipt")
+        adoption = readiness.get("execution_adoption_receipt")
+        if all(isinstance(item, Mapping) and isinstance(item.get("uri"), str) for item in (bundle, provider, adoption)):
+            graph["edges"].extend(
+                [
+                    {
+                        "source": node_id("execution-readiness-contract"),
+                        "target": node_for_relative(str(bundle["uri"])),
+                        "relation": "binds",
+                    },
+                    {
+                        "source": node_for_relative(str(bundle["uri"])),
+                        "target": node_for_relative(str(provider["uri"])),
+                        "relation": "binds",
+                    },
+                    {
+                        "source": node_for_relative(str(provider["uri"])),
+                        "target": node_for_relative(str(adoption["uri"])),
+                        "relation": "binds",
+                    },
+                ]
+            )
     graph["graph_sha256"] = sha256(canonical_json(graph))
     credit = freeze["official_credit"]
     summary = (
@@ -4203,7 +4286,8 @@ def _armindex_paper_artifact_contents(
         f"- Limit reached: `{str(credit['limit_reached']).lower()}`\n"
         "- Measured A2: `not started`\n"
         f"- Independent audit: `{freeze.get('independent_audit_status', 'pending')}`\n"
-        "- Next action: fresh A2-goal preflight; measured A2 remains closed\n\n"
+        f"- Execution readiness: `{readiness.get('status', 'not validated')}`\n"
+        "- Next action: fresh provider admission and isolated staging; measured A2 remains closed\n\n"
         "Raw Official prompts, responses, events, and credit snapshots remain "
         "Owner-local and are not copied here.\n"
     )
