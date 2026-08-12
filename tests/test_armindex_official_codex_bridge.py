@@ -139,6 +139,8 @@ def test_operation_schemas_are_strict_and_structured_output_compatible() -> None
         Draft202012Validator.check_schema(schema)
         _assert_openai_schema_shape(schema)
         assert schema["additionalProperties"] is False
+        if ".response." in path.name:
+            assert "uniqueItems" not in path.read_text(encoding="utf-8")
 
 
 def test_child_environment_is_explicit_and_does_not_mutate_parent(
