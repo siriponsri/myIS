@@ -261,8 +261,33 @@ def test_runner_gate_is_locked_without_adoption() -> None:
         require_execution_adoption({"status": "PENDING", "launch_allowed": False})
 
 
-def test_bundle_requires_clean_pushed_repository(tmp_path: Path) -> None:
+def test_bundle_requires_clean_pushed_repository(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    def dirty_git(_root: Path, *args: str) -> str:
+        if args[0] == "status":
+            return " M PLAN.md"
+        return "a" * 40
+
+    monkeypatch.setattr(
+        "myis_research.armindex.a2_execution_readiness._git", dirty_git
+    )
     with pytest.raises(A2ExecutionReadinessError, match="clean worktree"):
+        build_execution_bundle(
+            ROOT, attempt_id=ATTEMPT, output_path=tmp_path / "bundle.tar.gz"
+        )
+
+    def unpushed_git(_root: Path, *args: str) -> str:
+        if args[0] == "status":
+            return ""
+        if args == ("rev-parse", "origin/main"):
+            return "b" * 40
+        return "a" * 40
+
+    monkeypatch.setattr(
+        "myis_research.armindex.a2_execution_readiness._git", unpushed_git
+    )
+    with pytest.raises(A2ExecutionReadinessError, match="synchronized with origin/main"):
         build_execution_bundle(
             ROOT, attempt_id=ATTEMPT, output_path=tmp_path / "bundle.tar.gz"
         )

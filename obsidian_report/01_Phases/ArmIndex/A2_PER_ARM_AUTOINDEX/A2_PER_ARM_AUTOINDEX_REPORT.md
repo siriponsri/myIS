@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "515a056d2b2df90b3016a312637fc12f75d9c9e28aaad45074fd0e0a392842da"
-read_model_sha256: "e6cd5847a88364fdb13238533650eb9d2f171a327e29617673ca275703608289"
-source_commit: "eadf27d5559b58fde026ccc624100c7a472ebb33"
+read_model_revision: "8c49d51c8e07abd471d5f06dfc907203db8f6fcb9535adc46be5e9bc3b60ee8c"
+read_model_sha256: "cb00dd6e1b06105398aedf981442a055e6b6771fd57925334eccfd9a725f97f5"
+source_commit: "374e0a8070452de67a0b72fe29fe464914627264"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_execution_readiness"
 scientific_authority: false
 claim_boundary: "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim"
-generated_from_revision: "515a056d2b2df90b3016a312637fc12f75d9c9e28aaad45074fd0e0a392842da"
-last_material_update: "2026-08-12T10:43:03Z"
+generated_from_revision: "8c49d51c8e07abd471d5f06dfc907203db8f6fcb9535adc46be5e9bc3b60ee8c"
+last_material_update: "2026-08-12T10:50:19Z"
 next_authorized_action: "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T10:43:03Z"
-updated_at: "2026-08-12T10:43:03Z"
+created_at: "2026-08-12T10:50:19Z"
+updated_at: "2026-08-12T10:50:19Z"
 note_id: "A2_PER_ARM_AUTOINDEX-MASTER"
 note_type: "phase_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -48,7 +48,7 @@ Search and freeze one representation program per promoted arm.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: eadf27d5559b58fde026ccc624100c7a472ebb33
+- `git_commit`: 374e0a8070452de67a0b72fe29fe464914627264
 - `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
 - `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`
 - `official_credit_closeout`: `{"limit_reached": false, "model_name": "gpt-5.6-sol", "plan_type": "plus", "rate_limit_reached_type": null, "remaining_percent": 87, "reset_credit_available_count": 1, "reset_credit_consumed": false, "resets_at_utc": "2026-08-18T00:45:40Z", "snapshot_sha256": "6d9c634dfd82c4d1017994611ac5461dd34752534a816de895677ca363460a7f", "used_percent": 13}`
