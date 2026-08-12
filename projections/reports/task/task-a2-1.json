@@ -195,9 +195,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T02:15:10Z",
-  "generated_from_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
-  "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+  "generated_at": "2026-08-12T04:27:31Z",
+  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -255,7 +255,7 @@
         "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
       }
     ],
-    "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+    "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -285,13 +285,13 @@
       "uri": "../03_Paper/01_ArmIndex"
     },
     "source_of_truth": {
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T02:15:10Z",
+  "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -375,7 +375,7 @@
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "d6e4803d314d7a52d6516c39e15920537e99af8072ea01c2e8ba6d8056222b97",
+  "report_sha256": "e9219b8100e55ee03a779d94f376b24db90412976c37ffb59e503337b0b30ee8",
   "report_type": "task",
   "result": {
     "decision": "READY_FOR_FRESH_A2_GOAL_PREFLIGHT",

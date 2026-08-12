@@ -39,7 +39,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "0c7cac6c9e64ebea601d9dbd0cbc302baff119b904a12be5a2bdbbeda3248185",
+  "graph_sha256": "76e2528ebde68c7c273ee1b3191ed737b48a62a07b3b0de71358a33cae76114e",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -123,14 +123,14 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-source-of-truth-yaml",
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "../../../01_Research/control/source-of-truth.yaml"
     },
     {
       "classification": "aggregate",
       "kind": "validation",
       "node_id": "outputs-audits-armindex-a2-five-arm-candidate-freeze-replay-validation-v1-json",
-      "sha256": "0c605e63f450a8633a98cd0428d87226ed3ba2dae84144262f751ae759d71857",
+      "sha256": "c5b95cddb02f7ea1388afcd5df3dc878c231c72355f00d5ad90cc7ed41a5ae70",
       "uri": "../../../01_Research/outputs/audits/armindex/a2-five-arm-candidate-freeze-replay-validation.v1.json"
     },
     {

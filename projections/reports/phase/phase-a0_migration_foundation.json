@@ -505,9 +505,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-12T02:15:10Z",
-  "generated_from_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
-  "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+  "generated_at": "2026-08-12T04:27:31Z",
+  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -537,7 +537,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+    "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -548,13 +548,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T02:15:10Z",
+  "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [
     {
       "cutoff": 32,
@@ -627,7 +627,7 @@
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "f0feda2dbfc4e88eaa943a00640868ed0b476ed2c70d10a26cdd40ed3c8d735d",
+  "report_sha256": "a6732fb42526f56d2623cef8eaf22185dbd8429d5fa3242855ae3ab01e36bedf",
   "report_type": "phase",
   "result": {
     "decision": "completed",

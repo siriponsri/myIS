@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "content_sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T02:15:10Z",
-  "generated_from_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
-  "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+  "generated_at": "2026-08-12T04:27:31Z",
+  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,21 +108,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+    "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
     "source_of_truth": {
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-12T02:15:10Z",
+  "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [],
   "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "eebb2ccc993682dd8128b689b3520ef7b60ecb329f570b6274d918a8dbd2dfb8",
+  "report_sha256": "f47b16c976f3ec094b8a51dec79300f8f1fe8ecaa41156d74696860e6bec0c69",
   "report_type": "task",
   "result": {
     "decision": "completed",

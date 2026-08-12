@@ -1,0 +1,153 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260812T035607Z-a2-projection-stability-closeout-v1",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-12T03:56:07Z",
+  "scope": "Stabilize the post-commit A2 report projections, add a root source-identity regression, validate the aggregate-safe publication projections, record the final Official Codex credit state, and stop before measured A2.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-12",
+      "scope": "Use up to four subagents, store journal-writing schemas and artifacts in the Owner-designated ArmIndex publication workspace, and record the Official Codex model, plan, credit, reset, and limit state after the round. This does not open measured A2, HARNESS-DEV, Selection, Final, D2_OPEN_FINAL, or D3_SUBMIT_RELEASE."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "1304d21bce5066fb296d17dfe63e32791fa69d26",
+    "dirty_paths": [
+      "tests/test_read_model.py",
+      "mlflow/generated/archive-index.v2.json",
+      "obsidian_report generated projections",
+      "projections generated read-model and report outputs"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The first report check after the A2 scientific-source commit detected expected metadata drift because stored projections still referenced the parent source commit; no scientific or governance state changed.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "heuristic",
+      "provenance": "agent-observed",
+      "summary": "Root report source identity remains tied to the latest canonical projection-source commit and ignores a later projection-only commit.",
+      "evidence_refs": [
+        {
+          "path": "tests/test_read_model.py",
+          "sha256": "8d33c3cb4869fb346ad76f137196f1fac4a688390878a8d03c112a784606abb7",
+          "locator": "test_source_commit_metadata_ignores_projection_only_commits"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "One shared read model regenerated 312 reports and passed a zero-drift check with source commit 1304d21bce5066fb296d17dfe63e32791fa69d26.",
+      "evidence_refs": [
+        {
+          "path": "projections/read-model/read-model.v2.json",
+          "sha256": "05f831c7cc1649f07c366b3dc6997928780dde21e00ed5d71f848678da8395c4",
+          "locator": "source_commit, read_model_revision, read_model_sha256"
+        },
+        {
+          "path": "projections/sync-receipt.v2.json",
+          "sha256": "1caf981727a563814743f262ba84430c55ca8c42250d8cd76c6f570a513f036d",
+          "locator": "report_count, read_model_revision, sinks"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The post-validation Official Codex check recorded gpt-5.6-sol with high reasoning, SDK/CLI 0.144.4, Plus plan, 13 percent used, 87 percent remaining, reset at 2026-08-18T00:45:39Z, and no active limit.",
+      "evidence_refs": [
+        {
+          "path": "owner-local://official-codex/a2-prep-20260812-official-codex-freeze-v1/credit-snapshots/a2projection-20260812t035456z-credit.json",
+          "sha256": "73527cda7eb05a3a56fb00bc3f40366f37c774b850f686d26c9555cd036ae347",
+          "locator": "model_name, sdk_version, plan_type, primary.used_percent, primary.remaining_percent, primary.resets_at_utc, limit_reached"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "The immutable A2 manifest, freeze receipt, and lock file hashes remained unchanged, and measured A2 stayed closed.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+          "sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
+          "locator": "manifest_sha256, candidate_count, measured_execution_performed"
+        },
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+          "sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
+          "locator": "receipt_sha256, measured_a2_started"
+        },
+        {
+          "path": "control/armindex/a2/candidate-freeze.lock.v1.json",
+          "sha256": "0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc",
+          "locator": "lock_sha256, locked_operations"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The canonical artifact index and provenance graph remained byte-identical to the Owner-designated 03_Paper/01_ArmIndex publication workspace.",
+      "evidence_refs": [
+        {
+          "path": "outputs/publication/armindex/a2-candidate-freeze/provenance/artifact-index.v2.json",
+          "sha256": "243b240a22da67755953426f83d728ff4b8453fd04453de30e1b4e3308abe20f",
+          "locator": "artifacts, artifact_index_sha256"
+        },
+        {
+          "path": "outputs/publication/armindex/a2-candidate-freeze/provenance/artifact-provenance-graph.v1.json",
+          "sha256": "27232abb1874b84c4fc2b34847bbe1b345ee19561ce2a9c7b116c98b9d6f447c",
+          "locator": "status, nodes, edges, graph_sha256"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "projections/sync-receipt.v2.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json",
+    "manifest": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-proposed",
+      "summary": "Measured A2 remains unopened; the next authorized session must use docs/goal/A2_goal.md and complete fresh provider admission, execution adoption, isolated-root, budget, TTL, watchdog, and entry-preflight checks before scientific work.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

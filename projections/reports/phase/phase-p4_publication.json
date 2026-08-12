@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T02:15:10Z",
-  "generated_from_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
-  "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+  "generated_at": "2026-08-12T04:27:31Z",
+  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,21 +37,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+    "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
     "source_of_truth": {
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-12T02:15:10Z",
+  "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [],
   "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
   "objective": "Deliver the P4_PUBLICATION research phase with an auditable evidence boundary.",
   "phase_id": "P4_PUBLICATION",
   "report_id": "phase-p4_publication",
-  "report_sha256": "6a50c3f3ba9167f901ba5f8b324ae89fdcbcce5affef590ec7e143eea2852e0e",
+  "report_sha256": "4fec41e78f174d5fb8fa28abacc41bd7159176bd6e403329057a78c20d4b6040",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

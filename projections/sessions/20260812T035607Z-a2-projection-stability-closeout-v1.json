@@ -1,0 +1,121 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260812T035607Z-a2-projection-stability-closeout-v1",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-12T03:56:07Z",
+  "scope": "Stabilize the post-commit A2 report projections, validate the aggregate-safe publication projections, record the final Official Codex credit state, and stop before measured A2.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "D1_START_CAMPAIGN",
+      "source": "Owner instructions in the active Codex thread on 2026-08-12",
+      "scope": "Use the Owner-designated ArmIndex publication workspace, record Official Codex model and credit state after the round, and keep measured A2, HARNESS-DEV, Selection, Final, D2_OPEN_FINAL, and D3_SUBMIT_RELEASE closed."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "c7e42a967cf9571dc2d9a2db6f8dad5dcdaf9755",
+    "dirty_paths": [
+      "tests/test_read_model.py",
+      "projections generated outputs",
+      "obsidian_report generated outputs",
+      "mlflow/generated/archive-index.v2.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The A2 candidate freeze remained immutable at 40 matched candidates plus 12 dormant conditional-reserve candidates while post-commit report projections were regenerated from one shared read model.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+          "sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
+          "locator": "candidate_count, matched_candidate_count, conditional_reserve_candidate_count, measured_a2_started"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "The final Official Codex check recorded model gpt-5.6-sol, Plus plan, 13 percent used, 87 percent remaining, reset at 2026-08-18T00:45:40Z, and no active limit after the independent audit.",
+      "evidence_refs": [
+        {
+          "path": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json",
+          "sha256": "9bc6d88e0ba0fbdd27ebdaad22977cd71279d9d4ae00669b8d3f3cf0035445a7",
+          "locator": "model_name, reasoning_effort, plan_type, used_percent, remaining_percent, resets_at_utc, limit_reached"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "Measured A2, REP-DEV measurement, GPU work, provider admission, execution adoption, HARNESS-DEV, Selection, and Final remain closed or zero.",
+      "evidence_refs": [
+        {
+          "path": "control/armindex/a2/candidate-freeze.lock.v1.json",
+          "sha256": "0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc",
+          "locator": "lock_sha256, locked_operations, safety boundary"
+        },
+        {
+          "path": "outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json",
+          "sha256": "64458c0705aa257b3a6a5e088360c3e3ee965d2275d4a927a85264600c1a43da",
+          "locator": "status, finding_count, safety"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The publication artifact index and provenance graph remain byte-identical between canonical Research and the Owner-designated 03_Paper/01_ArmIndex workspace.",
+      "evidence_refs": [
+        {
+          "path": "outputs/publication/armindex/a2-candidate-freeze/provenance/artifact-index.v2.json",
+          "sha256": "9dfa04fc3a3f40aca795ae66c8de19bb1e65f2c09a6b0ab2b2fd85f10d4efdc5",
+          "locator": "artifact_index_sha256"
+        },
+        {
+          "path": "outputs/publication/armindex/a2-candidate-freeze/provenance/artifact-provenance-graph.v1.json",
+          "sha256": "2486c1d55f3804dc00bbb87149ebe20b04aa168e09d5b759edc6a9cf1c95b868",
+          "locator": "graph_sha256"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": "outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json",
+    "manifest": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "thread_id": "OT0001",
+      "provenance": "agent-observed",
+      "summary": "Measured A2 remains unopened; the next authorized session must complete fresh provider admission, execution adoption, isolated-root, budget, TTL, watchdog, and entry-preflight checks before scientific work.",
+      "blocking_gate": null
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

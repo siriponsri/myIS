@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T02:15:10Z",
-  "generated_from_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
-  "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+  "generated_at": "2026-08-12T04:27:31Z",
+  "generated_from_revision": "481e60641d3155face8c1a5df997969f2be53689efb48aa0aa48ffca6e2dc4ec",
+  "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
+    "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-12T02:15:10Z",
+  "last_material_update": "2026-08-12T04:27:31Z",
   "metric_references": [
     {
       "arm": "R0-W",
@@ -282,7 +282,7 @@
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "6e2a37f6a2595ef0dfc4623f463d31a7f9e96c9dfadbc5d72b4c8e32fcc24425",
+  "report_sha256": "8e3141bf2dff2688f2033de48810cf76778a0e905f30d3511b524a31739ca987",
   "report_type": "task",
   "result": {
     "decision": "completed",
