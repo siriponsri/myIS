@@ -141,11 +141,19 @@ def test_source_commit_metadata_ignores_projection_only_commits(
     git("commit", "-m", "add canonical source")
     source_commit = git("rev-parse", "HEAD")
 
-    projection = tmp_path / "projections" / "read-model" / "read-model.v2.json"
-    projection.parent.mkdir(parents=True)
-    projection.write_text("{}\n", encoding="utf-8")
-    git("add", "projections/read-model/read-model.v2.json")
-    git("commit", "-m", "sync projection")
+    generated_paths = (
+        tmp_path / "projections" / "read-model" / "read-model.v2.json",
+        tmp_path
+        / "outputs"
+        / "audits"
+        / "armindex"
+        / "a2-five-arm-candidate-freeze-replay-validation.v1.json",
+    )
+    for path in generated_paths:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n", encoding="utf-8")
+    git("add", *(path.relative_to(tmp_path).as_posix() for path in generated_paths))
+    git("commit", "-m", "sync generated projections")
 
     commit, _timestamp = _source_commit_metadata(tmp_path)
 

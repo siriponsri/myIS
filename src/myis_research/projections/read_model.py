@@ -349,6 +349,7 @@ PROJECTION_SOURCE_PATHS = (
     "control/assets/dapfam-p1-source.v1.json",
     "outputs/audits/rigor",
     "outputs/audits/armindex",
+    ":(exclude)outputs/audits/armindex/a2-five-arm-candidate-freeze-replay-validation.v1.json",
     "evidence/legacy-dapfam-inventory.v1.json",
     "schemas/read-model.v2.json",
     "schemas/p2-budget-profile.v1.json",
