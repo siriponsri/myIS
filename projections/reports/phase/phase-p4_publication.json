@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T16:55:09Z",
-  "generated_from_revision": "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a",
-  "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
+  "generated_at": "2026-08-12T18:49:01Z",
+  "generated_from_revision": "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a",
+  "git_commit": "62a91784740519f2943e520be82c4405752ce293",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
+    "git_commit": "62a91784740519f2943e520be82c4405752ce293",
     "source_of_truth": {
       "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-12T16:55:09Z",
+  "last_material_update": "2026-08-12T18:49:01Z",
   "metric_references": [],
   "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Deliver the P4_PUBLICATION research phase with an auditable evidence boundary.",
   "phase_id": "P4_PUBLICATION",
   "report_id": "phase-p4_publication",
-  "report_sha256": "736fe98e48abe718d39238a27c449ab2b241f1a222b8630c8d3dc46d1bd7c644",
+  "report_sha256": "1d6f4edfac0f5629fbe328a6f5d961c024b4efdb0814590f21681d72c521bf8c",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

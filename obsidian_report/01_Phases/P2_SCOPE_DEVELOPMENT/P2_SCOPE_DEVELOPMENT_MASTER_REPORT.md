@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a"
-read_model_sha256: "c6cef36cd22a79a463f4392da5009e3c6fb279ae9a963b66c2c3ed8137fa1b7b"
-source_commit: "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8"
+read_model_revision: "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a"
+read_model_sha256: "384b35f9ec0eb32aea8ff05c4c75811c71a1b67249b79c741971264e34ace262"
+source_commit: "62a91784740519f2943e520be82c4405752ce293"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a"
-last_material_update: "2026-08-12T16:55:09Z"
+generated_from_revision: "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a"
+last_material_update: "2026-08-12T18:49:01Z"
 next_authorized_action: "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T16:55:09Z"
-updated_at: "2026-08-12T16:55:09Z"
+created_at: "2026-08-12T18:49:01Z"
+updated_at: "2026-08-12T18:49:01Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -48,7 +48,7 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8
+- `git_commit`: 62a91784740519f2943e520be82c4405752ce293
 - `budget_profile`: `control/budgets/p2-r1-primary-v2.yaml`; SHA-256 `9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324`
 - `execution_envelope`: `control/execution-envelope-p2-v2.yaml`; SHA-256 `dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d`
 - `campaign_revision_record`: `control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml`; SHA-256 `5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822`

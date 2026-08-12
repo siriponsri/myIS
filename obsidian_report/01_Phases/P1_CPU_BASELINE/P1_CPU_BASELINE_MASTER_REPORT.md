@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a"
-read_model_sha256: "c6cef36cd22a79a463f4392da5009e3c6fb279ae9a963b66c2c3ed8137fa1b7b"
-source_commit: "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8"
+read_model_revision: "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a"
+read_model_sha256: "384b35f9ec0eb32aea8ff05c4c75811c71a1b67249b79c741971264e34ace262"
+source_commit: "62a91784740519f2943e520be82c4405752ce293"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a"
-last_material_update: "2026-08-12T16:55:09Z"
+generated_from_revision: "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a"
+last_material_update: "2026-08-12T18:49:01Z"
 next_authorized_action: "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T16:55:09Z"
-updated_at: "2026-08-12T16:55:09Z"
+created_at: "2026-08-12T18:49:01Z"
+updated_at: "2026-08-12T18:49:01Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -48,7 +48,7 @@ Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8
+- `git_commit`: 62a91784740519f2943e520be82c4405752ce293
 - `execution_envelope`: `control/execution-envelope.yaml`; SHA-256 `e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af`
 - `request_id`: dapfam-p1-fulltext-c058a3aa7357c782
 - `protected_payloads`: owner-local; aggregate hashes only in this report
