@@ -3,10 +3,11 @@
   "$id": "urn:myis:armindex:a2-measured-execution-authority:v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "authority_id", "status", "attempt_id", "source_goal_uri", "source_goal_sha256", "execution_adoption_receipt_sha256", "measured_a2_authorized", "candidate_generation_allowed", "candidate_mutation_allowed", "rep_dev_measurement_allowed", "a3_allowed", "selection_allowed", "final_allowed", "active_reserve_candidate_ids", "reserve_activation_evidence_sha256", "freeze_bindings", "scientific_authority", "authority_sha256"],
+  "required": ["schema_version", "authority_id", "authority_uri", "status", "attempt_id", "source_goal_uri", "source_goal_sha256", "execution_adoption_receipt_sha256", "measured_a2_authorized", "candidate_generation_allowed", "candidate_mutation_allowed", "rep_dev_measurement_allowed", "a3_allowed", "selection_allowed", "final_allowed", "active_reserve_candidate_ids", "reserve_activation_evidence_sha256", "freeze_bindings", "scientific_authority", "authority_sha256"],
   "properties": {
     "schema_version": {"const": "myis.armindex-a2-measured-execution-authority.v1"},
     "authority_id": {"const": "a2-measured-execution-authority-v1"},
+    "authority_uri": {"pattern": "^control/armindex/a2/measured-authority/a2-[a-z0-9-]{7,63}\\.authority\\.v1\\.json$"},
     "status": {"const": "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"},
     "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
     "source_goal_uri": {"pattern": "^docs/goal/A2[^/]*\\.md$"},

@@ -133,6 +133,7 @@ def _authority(adoption: Mapping[str, object]) -> dict[str, object]:
     body: dict[str, object] = {
         "schema_version": "myis.armindex-a2-measured-execution-authority.v1",
         "authority_id": "a2-measured-execution-authority-v1",
+        "authority_uri": f"control/armindex/a2/measured-authority/{ATTEMPT}.authority.v1.json",
         "status": "PASS_A2_MEASURED_EXECUTION_AUTHORIZED",
         "attempt_id": ATTEMPT,
         "source_goal_uri": "docs/goal/A2_goal.md",
@@ -169,6 +170,8 @@ def test_synthetic_operational_dry_run_covers_frozen_universe_without_measuremen
         deadline_utc="2099-01-01T00:00:00Z",
     )
     assert "/proc/$pid/stat" in watchdog["script"]
+    assert "heartbeats/watchdog" in watchdog["script"]
+    assert "sleep 2" in watchdog["script"]
     assert "kill -TERM" in watchdog["script"]
     assert "kill -KILL" in watchdog["script"]
 
@@ -194,6 +197,41 @@ def test_candidate_result_rejects_hash_drift_protected_member_and_false_measurem
             ROOT,
             result=_candidate_row(candidate_id),
             evidence_class="measured_development_aggregate",
+        )
+
+
+def test_measurement_authority_rejects_self_hashed_untracked_control() -> None:
+    adoption = _adoption()
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="not canonical and tracked",
+    ):
+        operational.validate_measurement_authority(
+            ROOT,
+            _authority(adoption),
+            attempt_id=ATTEMPT,
+            execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        )
+
+
+def test_measurement_authority_rejects_non_authorizing_goal(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    adoption = _adoption()
+    monkeypatch.setattr(
+        operational,
+        "_validate_measurement_authority_provenance",
+        lambda *_args, **_kwargs: None,
+    )
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="goal does not authorize execution",
+    ):
+        operational.validate_measurement_authority(
+            ROOT,
+            _authority(adoption),
+            attempt_id=ATTEMPT,
+            execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
         )
 
 
@@ -323,7 +361,10 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
     )
     outputs = iter(("", "", "", "dead-watchdog"))
 
-    def runner(*_args: object, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+    commands: list[list[str]] = []
+
+    def runner(*args: object, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        commands.append(list(args[0]))  # type: ignore[arg-type]
         return subprocess.CompletedProcess([], 0, next(outputs), "")
 
     with pytest.raises(operational.A2OperationalExecutorError, match="watchdog process identity"):
@@ -338,6 +379,11 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
             owner_connection_path=connection,
             runner=runner,
         )
+    verify_command = commands[-1][-1]
+    assert "/lifecycle/watchdog.identity" in verify_command
+    assert "/lifecycle/processes/watchdog.identity" not in verify_command
+    assert "while test ! -s" in verify_command
+    assert "test \"$actual\" = \"$start\"" in verify_command
 
 
 def test_safe_return_rejects_member_checksum_drift(tmp_path: Path) -> None:
@@ -367,10 +413,21 @@ def test_safe_return_rejects_member_checksum_drift(tmp_path: Path) -> None:
 
 
 def test_external_executor_interruption_resumes_from_durable_candidate_receipts(
+    monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
     adoption = _adoption()
     authority = _authority(adoption)
+    monkeypatch.setattr(
+        operational,
+        "_validate_measurement_authority_provenance",
+        lambda *_args, **_kwargs: None,
+    )
+    monkeypatch.setattr(
+        operational,
+        "_validate_measurement_goal",
+        lambda *_args, **_kwargs: None,
+    )
     output = tmp_path / "owner-local-output"
     ledger = tmp_path / "lifecycle.jsonl"
     calls: list[str] = []

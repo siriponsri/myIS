@@ -17,6 +17,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Callable
 
+import yaml
 from jsonschema import Draft202012Validator
 
 from ..kernel.canonical import canonical_sha256, file_sha256
@@ -290,6 +291,61 @@ def _native(
     return result.stdout.strip()
 
 
+def _git(repository_root: Path, *args: str) -> str:
+    result = subprocess.run(
+        ["git", "-C", str(repository_root), *args],
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if result.returncode != 0:
+        raise A2OperationalExecutorError("measurement authority Git provenance is invalid")
+    return result.stdout.strip()
+
+
+def _validate_measurement_authority_provenance(
+    repository_root: Path, authority: Mapping[str, Any]
+) -> None:
+    authority_uri = str(authority["authority_uri"])
+    authority_path = repository_root / authority_uri
+    if authority_path.is_symlink() or not authority_path.is_file():
+        raise A2OperationalExecutorError("measurement authority is not canonical and tracked")
+    if _load_json(authority_path, role="measurement authority") != dict(authority):
+        raise A2OperationalExecutorError("measurement authority bytes differ from canonical control")
+    if _git(repository_root, "rev-parse", "--abbrev-ref", "HEAD") != "main":
+        raise A2OperationalExecutorError("measurement authority requires main")
+    head = _git(repository_root, "rev-parse", "HEAD^{commit}")
+    if _git(repository_root, "rev-parse", "origin/main^{commit}") != head:
+        raise A2OperationalExecutorError("measurement authority requires pushed origin/main")
+    if _git(repository_root, "status", "--porcelain=v1"):
+        raise A2OperationalExecutorError("measurement authority requires a clean worktree")
+    _git(repository_root, "ls-files", "--error-unmatch", "--", authority_uri)
+    if _git(repository_root, "hash-object", "--", authority_uri) != _git(
+        repository_root, "rev-parse", f"HEAD:{authority_uri}"
+    ):
+        raise A2OperationalExecutorError("measurement authority is not bound to HEAD")
+
+
+def _validate_measurement_goal(authority: Mapping[str, Any], goal_path: Path) -> None:
+    try:
+        text = goal_path.read_text(encoding="utf-8")
+        if not text.startswith("---\n"):
+            raise ValueError("missing front matter")
+        goal = yaml.safe_load(text.split("---\n", 2)[1])
+    except (OSError, UnicodeError, ValueError, yaml.YAMLError) as error:
+        raise A2OperationalExecutorError("measurement authority goal is invalid") from error
+    if (
+        not isinstance(goal, Mapping)
+        or goal.get("scientific_authority") is not True
+        or goal.get("measured_a2_authorized") is not True
+        or goal.get("measurement_authority_uri") != authority["authority_uri"]
+        or goal.get("status") != "READY_FOR_MEASURED_EXECUTION"
+    ):
+        raise A2OperationalExecutorError("measurement authority goal does not authorize execution")
+
+
 def validate_measurement_authority(
     repository_root: Path,
     authority: Mapping[str, Any],
@@ -322,6 +378,7 @@ def validate_measurement_authority(
         )
     ):
         raise A2OperationalExecutorError("measured execution authority is not adopted")
+    _validate_measurement_authority_provenance(root, checked)
     goal_path = root / checked["source_goal_uri"]
     if (
         not goal_path.is_file()
@@ -329,6 +386,7 @@ def validate_measurement_authority(
         or file_sha256(goal_path) != checked["source_goal_sha256"]
     ):
         raise A2OperationalExecutorError("measured execution authority goal binding drift")
+    _validate_measurement_goal(checked, goal_path)
     candidates = frozen_candidates(root)
     active_reserves = checked["active_reserve_candidate_ids"]
     if any(
@@ -1006,8 +1064,14 @@ def perform_remote_stage(
             f"nohup {remote_root}/incoming/watchdog.sh </dev/null >{remote_root}/lifecycle/watchdog.stdout "
             f"2>{remote_root}/lifecycle/watchdog.stderr & pid=$!; "
             "start=$(sed 's/.*) //' /proc/$pid/stat | awk '{print $20}'); "
-            f"printf '%s:%s\\n' \"$pid\" \"$start\" >{remote_root}/lifecycle/processes/watchdog.identity; "
-            f"printf '%s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >{remote_root}/lifecycle/heartbeats/watchdog; "
+            f"printf '%s:%s\\n' \"$pid\" \"$start\" >{remote_root}/lifecycle/watchdog.identity; "
+            f"i=0; while test ! -s {remote_root}/lifecycle/heartbeats/watchdog; do "
+            "test \"$i\" -lt 20; test -r /proc/$pid/stat; i=$((i+1)); sleep 1; done; "
+            "actual=$(sed 's/.*) //' /proc/$pid/stat | awk '{print $20}'); "
+            "test \"$actual\" = \"$start\"; "
+            f"heartbeat=$(cat {remote_root}/lifecycle/heartbeats/watchdog); "
+            "age=$(( $(date -u +%s) - $(date -u -d \"$heartbeat\" +%s) )); "
+            "test \"$age\" -ge 0; test \"$age\" -le 5; "
             "printf '%s:%s' \"$pid\" \"$start\""
         )
         identity = _native("ssh", [*ssh, verify], role="remote stage verification", runner=runner)
