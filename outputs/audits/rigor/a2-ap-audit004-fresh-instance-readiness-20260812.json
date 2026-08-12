@@ -1,0 +1,128 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-ap-audit004-fresh-instance-readiness-20260812",
+  "artifact": "A2 fresh-instance deployment readiness plan",
+  "artifact_path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_004.md",
+  "artifact_sha256": "79af3bb6e13d80dc851388d021bcba5fec3d7e70619ee3c198675947187ded98",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "Fresh-instance provider binding and isolated staging are incomplete; measured A2 remains closed."
+    ]
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.0,
+    "one_line_summary": "The remediation plan is evidence-grounded and publication-calibrated, but it is not an A2 launch approval.",
+    "strengths": [
+      "Preserves the frozen 52-candidate design and protected boundary.",
+      "Separates historical A1 disposition from fresh A2 provider admission.",
+      "Requires a hash-bound CPU-local deployment package before remote staging.",
+      "Limits publication claims to readiness and reproducibility until measured receipts exist."
+    ],
+    "weaknesses": [
+      "The active provider schemas and readiness controls still bind the retired instance identity.",
+      "The final deployment bundle and receipt do not yet include the AP staging-path repairs."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": ["Live process/root checks and local asset hashes directly support destroy and deployment-readiness decisions."],
+      "weaknesses": ["No fresh-instance evidence exists yet."],
+      "suggestions": ["Bind the next review to fresh admission, isolated staging, and adoption receipts."]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["The audit defines explicit failure conditions for provider identity, TTL, budget, hashes, and staging."],
+      "weaknesses": ["The new deployment package validator is not implemented yet."],
+      "suggestions": ["Make each package component and staging checkpoint independently executable and fail closed."]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": ["Claims are restricted to engineering readiness; no A2 effectiveness or superiority claim is made."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": ["Owner fresh-instance decision, destroy evidence, provider rebinding, package construction, and later staging form a traceable chain."],
+      "weaknesses": ["The preflight still displays inherited A1 reuse wording that can confuse projections."],
+      "suggestions": ["Make the additive A2 revision distinguish A1 disposition from current A2 routing."]
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": ["The incomplete r13 attempt and pre-measurement status remain explicit and are not combined with r15."],
+      "weaknesses": ["The timed-out local pytest attempts are not durable scientific evidence."],
+      "suggestions": ["Retain only the final passing focused test result in handoff claims."]
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": ["Freeze hashes, budget floor, watchdog, recovery, safe return, and protected-output constraints are predeclared."],
+      "weaknesses": ["Fresh provider evidence, final bundle validation, and measured execution receipts remain absent by design."],
+      "suggestions": ["Complete audit 004 through IM, then require a short AP readiness pass before creating an LO goal."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "target_entity": "execution_policy.provider_instance_id",
+      "evidence_locator": "provider_instance_id is fixed to 47411176 in the contract, envelope, schemas, validator, runbook, and active goal",
+      "observation": "The current A2 readiness stack cannot validate a newly provisioned instance without an additive current revision.",
+      "reasoning": "Reusing or mutating the old binding would break provider identity provenance and make launch evidence non-reproducible.",
+      "suggestion": "Create an additive provider-neutral current revision with runtime-supplied instance binding while preserving historical receipts byte-for-byte."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D2_falsifiability",
+      "severity": "major",
+      "target_artifact": "Owner-local A2 deployment package",
+      "target_entity": "bundle and reusable asset closure",
+      "evidence_locator": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_004.md findings 3 and 5",
+      "observation": "The validated audit003 bundle predates bounded staging repairs and does not package model or protected input bytes.",
+      "reasoning": "A new instance cannot be staged reproducibly until code, model manifests, wheelhouse, runtime, and A1 handoffs are bound by one validated receipt.",
+      "suggestion": "Implement and validate a hash-only CPU-local deployment manifest/package, then rebuild from clean pushed HEAD."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D3_scope_calibration",
+      "severity": "minor",
+      "target_artifact": "A2 entry preflight output",
+      "target_entity": "provider_disposition_status",
+      "evidence_locator": "PASS_A2_ENTRY_PREFLIGHT reports provider_disposition_status=REUSE_ELIGIBLE and a2_execution_authorized=false",
+      "observation": "The inherited A1 reuse disposition can be mistaken for current A2 launch readiness.",
+      "reasoning": "That ambiguity could lead operational or publication projections to overstate the evidence boundary.",
+      "suggestion": "Keep A1 disposition as lineage but expose the current A2 route as DESTROY_REQUIRED and fresh admission required."
+    },
+    {
+      "finding_id": "F004",
+      "dimension": "D4_argument_coherence",
+      "severity": "minor",
+      "target_artifact": "generated A2 phase and task reports",
+      "target_entity": "next_authorized_action and current status prose",
+      "evidence_locator": "generated reports still state that the production adapter and matched-first reserve lifecycle are pending",
+      "observation": "The projection validator passes a shared revision, but its A2 source mapping does not reflect the completed IM 003 adapter/lifecycle work or audit004 fresh-instance route.",
+      "reasoning": "A structurally valid but operationally stale projection can mislead launch planning and publication readiness interpretation.",
+      "suggestion": "Repair the canonical report-record source and regenerate projections after IM completes the new-instance rebind."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-a2-readiness-v1.yaml",
+    "control/budgets/a2-execution-readiness-v1.json",
+    "control/armindex/a2/execution-readiness-contract.v1.json",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_003_001.md",
+    "docs/audit/A2_PER_ARM_AUTOINDEX_audit_004.md"
+  ]
+}

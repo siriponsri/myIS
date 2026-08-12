@@ -531,6 +531,140 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
     assert "test \"$actual\" = \"$start\"" in verify_command
 
 
+def test_remote_stage_plan_revalidates_the_immutable_bundle_receipt(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    bundle = tmp_path / "bundle.tar.gz"
+    bundle.write_bytes(b"bundle")
+    bundle_receipt = {
+        "attempt_id": ATTEMPT,
+        "bundle_sha256": "a" * 64,
+        "git_commit": "b" * 40,
+        "git_tree": "c" * 40,
+        "receipt_sha256": "d" * 64,
+    }
+    validated = {**bundle_receipt, "validation_status": "PASS"}
+    receipts_seen: list[Mapping[str, object]] = []
+
+    def validate_bundle(
+        _root: Path, *, bundle_path: Path, receipt: Mapping[str, object]
+    ) -> dict[str, object]:
+        assert bundle_path == bundle
+        receipts_seen.append(receipt)
+        if "validation_status" in receipt:
+            raise AssertionError("derived validation fields must not be revalidated")
+        return dict(validated)
+
+    monkeypatch.setattr(operational, "validate_execution_bundle", validate_bundle)
+    monkeypatch.setattr(
+        operational,
+        "validate_provider_admission_receipt",
+        lambda *_args, **_kwargs: {
+            "attempt_id": ATTEMPT,
+            "ttl_deadline_utc": "2026-08-14T08:00:00Z",
+        },
+    )
+    monkeypatch.setattr(
+        operational,
+        "build_lifecycle_checkpoint",
+        lambda *_args, **_kwargs: {"checkpoint_sha256": "e" * 64},
+    )
+    plan_receipts: list[Mapping[str, object]] = []
+
+    def stop_after_plan(
+        _root: Path, *, bundle_receipt: Mapping[str, object], **_kwargs: object
+    ) -> dict[str, object]:
+        plan_receipts.append(bundle_receipt)
+        raise RuntimeError("stop after plan")
+
+    monkeypatch.setattr(
+        operational,
+        "build_remote_stage_plan",
+        stop_after_plan,
+    )
+
+    with pytest.raises(RuntimeError, match="stop after plan"):
+        operational.perform_remote_stage(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_admission_receipt={},
+            bundle_receipt=bundle_receipt,
+            bundle_path=bundle,
+            remote_root=f"/opt/myis/{ATTEMPT}",
+            watchdog_deadline_utc="2026-08-13T08:00:00Z",
+            owner_connection_path=tmp_path / "unused-connection",
+            provider_observation_path=tmp_path / "unused-observation",
+            source_artifact_paths={},
+            remote_identity_paths={
+                "provider_instance_id": "/opt/myis/identity/instance-id",
+                "runtime": "/opt/myis/identity/runtime.json",
+                "model_lockset": "/opt/myis/identity/model-lockset.json",
+                "data_handoff": "/opt/myis/identity/data-handoff.json",
+            },
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+    assert receipts_seen == [bundle_receipt]
+    assert plan_receipts == [bundle_receipt]
+
+
+def test_live_remote_probe_accepts_bounded_remote_clock_lead(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    known = tmp_path / "known_hosts"
+    known.write_text("aggregate-safe ssh host key\n", encoding="ascii")
+    provider = {
+        "provider_instance_id": "47411176",
+        "ssh_host_key_sha256": file_sha256(known),
+        "runtime_sha256": "a" * 64,
+        "gpu_uuid_set_sha256": "b" * 64,
+        "model_lockset_sha256": "c" * 64,
+        "data_handoff_sha256": "d" * 64,
+        "ttl_deadline_utc": "2026-08-14T08:05:00Z",
+    }
+    body = {
+        "schema_version": "myis.armindex-a2-live-remote-probe-receipt.v1",
+        "receipt_id": f"{ATTEMPT}-live-remote-probe-v1",
+        "attempt_id": ATTEMPT,
+        "status": "PASS_A2_LIVE_REMOTE_PROBE",
+        "observed_at_utc": "2026-08-12T08:05:30Z",
+        "provider_instance_id": provider["provider_instance_id"],
+        "ssh_host_key_sha256": provider["ssh_host_key_sha256"],
+        "runtime_sha256": provider["runtime_sha256"],
+        "gpu_uuid_set_sha256": provider["gpu_uuid_set_sha256"],
+        "gpu_count": 4,
+        "gpu_model": "RTX3090",
+        "vram_mib_each": 24576,
+        "gpu_compute_process_count": 0,
+        "a2_process_count": 0,
+        "model_lockset_sha256": provider["model_lockset_sha256"],
+        "data_handoff_sha256": provider["data_handoff_sha256"],
+        "bundle_sha256": "e" * 64,
+        "remote_root": f"/opt/myis/{ATTEMPT}",
+        "remote_root_absent": True,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"],
+        "remaining_ttl_seconds": 172800,
+    }
+    probe = {**body, "receipt_sha256": canonical_sha256(body)}
+
+    monkeypatch.setattr(
+        operational,
+        "validate_provider_admission_receipt",
+        lambda *_args, **_kwargs: dict(provider),
+    )
+
+    checked = operational.validate_live_remote_probe(
+        ROOT,
+        attempt_id=ATTEMPT,
+        probe=probe,
+        provider_admission_receipt=provider,
+        bundle_sha256="e" * 64,
+        remote_root=f"/opt/myis/{ATTEMPT}",
+        known_hosts_path=known,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert checked["observed_at_utc"] == "2026-08-12T08:05:30Z"
+
+
 @pytest.mark.parametrize(
     ("field", "value", "message"),
     [

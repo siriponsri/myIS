@@ -7,9 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION READY_FOR_AP_STAGING_MEASUREMENT_LOCKED`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_production_adapter_and_matched_first_reserve_complete_fresh_ap_staging_pending`
+- Status: `a2_old_instance_destroy_ready_new_instance_cpu_bundle_rebind_pending`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: A1 aggregate-safe measured development closeout has validated
   25/25 coverage and scientific authority `true`; A2 remains immutable
@@ -259,8 +259,15 @@ the frozen runtime interpreter, per-arm CUDA devices, measured latency/cost, and
 resume receipts to the current attempt/adoption/authority. Bundle closure is
 verified by isolated extraction/import, and the fresh checkpoint admission is
 available as the `reserve-admit` CLI. Focused validation reports `64 passed`.
-Fresh provider admission/adoption and isolated staging remain incomplete, and no
-remote A2 root, protected-data access, or measured worker was started.
+AP audit 004 assigned the old instance `DESTROY_REQUIRED`. A1 r15 has terminal
+safe return, live A1/A2/GPU worker counts are zero, and local Owner stores match
+the remote model manifests, Linux wheelhouse, safe-return archive, A1 handoffs,
+and frozen A1 execution bundle. No additional pull is required before the Owner
+destroys instance `47411176`. Fresh provider admission/adoption and isolated
+staging remain incomplete, and no remote A2 measured root, protected-data access,
+or measured worker was started.
+The entry preflight's `REUSE_ELIGIBLE` field is inherited A1 disposition, not
+fresh A2 admission, readiness, or measured authority.
 
 ## Active authorized action
 
@@ -272,10 +279,12 @@ APPROVED: 48 hours remaining under the unchanged USD 35 A2 forward hard stop.
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-Audit 002 implementation is complete and AP-validated. Audit 003 implementation
-is complete and returns a clean final bundle. The next route is AP read-back,
-fresh admission/staging, and only then a separate measured LO goal and authority;
-no additional Owner decision is required by the current plan.
+Audit 002 and audit 003 implementation are complete. The Owner changed the
+provider route to a fresh instance. The next route is IM audit 004 to revise the
+obsolete instance binding, finish bounded staging repairs, and build one clean
+CPU-local deployment package from existing hash-validated assets. AP fresh-instance
+admission/staging follows; only then may AP create a separate measured LO goal and
+tracked authority.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 

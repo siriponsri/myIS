@@ -241,9 +241,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T14:37:20Z",
-  "generated_from_revision": "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5",
-  "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
+  "generated_at": "2026-08-12T15:31:53Z",
+  "generated_from_revision": "facfa2c510c0c0d56bec04c240113e42a0b45a4eeaf5b674f3f6a5e4b93a38f2",
+  "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -281,7 +281,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
+    "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -298,13 +298,13 @@
   },
   "interpretation": "The closeout establishes repository and safety readiness for a synthetic/offline A1.1 adapter fixture scaffold. It does not authorize measured retrieval, model download, dense execution, or a scientific claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T14:37:20Z",
+  "last_material_update": "2026-08-12T15:31:53Z",
   "metric_references": [],
   "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Validation, safety, and closeout",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-9",
-  "report_sha256": "384a718305cea03d715f47d77ca30eefeb3f746beba4de4ceb83ecb57c42a072",
+  "report_sha256": "1e9e3d7ee958ccf83bbf55c5f6bcbcf563efbe0782e9ffa4505ca9c25e266ba5",
   "report_type": "task",
   "result": {
     "decision": "completed",

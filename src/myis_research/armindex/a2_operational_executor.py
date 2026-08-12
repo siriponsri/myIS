@@ -1185,7 +1185,11 @@ def validate_live_remote_probe(
     observed = datetime.fromisoformat(str(checked["observed_at_utc"]).replace("Z", "+00:00"))
     deadline = datetime.fromisoformat(str(checked["ttl_deadline_utc"]).replace("Z", "+00:00"))
     current = now_utc.astimezone(timezone.utc)
-    if observed.tzinfo is None or observed > current or (current - observed).total_seconds() > 900:
+    if (
+        observed.tzinfo is None
+        or observed > current + timedelta(minutes=1)
+        or (current - observed).total_seconds() > 900
+    ):
         raise A2OperationalExecutorError("live remote probe is stale")
     remaining = int((deadline.astimezone(timezone.utc) - current).total_seconds())
     if remaining < 40 * 3600 or checked.get("remaining_ttl_seconds") != remaining:
@@ -1619,7 +1623,7 @@ def perform_remote_stage(
         root,
         attempt_id=attempt_id,
         remote_root=remote_root,
-        bundle_receipt=checked_bundle,
+        bundle_receipt=bundle_receipt,
         bundle_path=bundle_path,
         watchdog=watchdog,
     )
@@ -1630,7 +1634,6 @@ def perform_remote_stage(
     bundle_hash = checked_bundle["bundle_sha256"]
     watchdog_hash = watchdog["watchdog_sha256"]
     watchdog_file = bundle_path.parent / f"{attempt_id}.watchdog.sh"
-    current = (now_utc or datetime.now(timezone.utc)).astimezone(timezone.utc)
     live_probe = _run_live_remote_probe(
         ssh=ssh,
         remote_root=remote_root,
@@ -1639,6 +1642,7 @@ def perform_remote_stage(
         remote_identity_paths=remote_identity_paths,
         runner=runner,
     )
+    current = (now_utc or datetime.now(timezone.utc)).astimezone(timezone.utc)
     probe_file = bundle_path.parent / f"{attempt_id}.live-remote-probe.receipt.v1.json"
     _write_json(probe_file, live_probe)
     live_probe_file_hash = file_sha256(probe_file)
@@ -1732,7 +1736,7 @@ def perform_remote_stage(
         root,
         attempt_id=attempt_id,
         provider_admission_receipt=provider,
-        bundle_receipt=checked_bundle,
+        bundle_receipt=bundle_receipt,
         remote_root=remote_root,
         staged_bundle_sha256=bundle_hash,
         watchdog_sha256=watchdog_hash,
