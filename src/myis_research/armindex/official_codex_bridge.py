@@ -375,8 +375,12 @@ def _run_worker(
     stdout = completed.stdout.encode("utf-8")
     stderr = completed.stderr.encode("utf-8")
     if completed.returncode != 0:
+        error_type = completed.stderr.strip()
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]{0,127}", error_type):
+            error_type = "UnknownWorkerError"
         raise OfficialCodexBridgeError(
-            f"Official Codex SDK worker failed with exit {completed.returncode}"
+            "Official Codex SDK worker failed with exit "
+            f"{completed.returncode}: {error_type}"
         )
     try:
         response = json.loads(completed.stdout)

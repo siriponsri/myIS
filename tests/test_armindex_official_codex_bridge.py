@@ -227,6 +227,34 @@ def test_operation_retries_worker_failure_without_scientific_fallback(
     assert [event["verdict"] for event in events] == ["retry", "accepted"]
 
 
+def test_worker_failure_exposes_only_sanitized_error_type(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    config = _load_config(tmp_path)
+
+    def failed_run(*_args: object, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(
+            args=["worker"],
+            returncode=70,
+            stdout="",
+            stderr="CodexAppServerError\n",
+        )
+
+    monkeypatch.setattr(bridge.subprocess, "run", failed_run)
+
+    with pytest.raises(
+        bridge.OfficialCodexBridgeError,
+        match=r"exit 70: CodexAppServerError$",
+    ):
+        bridge._run_worker(
+            config,
+            {
+                "request_id": "a2-worker-error-0001",
+                "operation": "engineering_refactor_review",
+            },
+        )
+
+
 def test_freeze_lock_rejects_scientific_operations(tmp_path: Path) -> None:
     lock = tmp_path / "candidate-freeze.lock.v1.json"
     lock.write_text("{}\n", encoding="utf-8")
