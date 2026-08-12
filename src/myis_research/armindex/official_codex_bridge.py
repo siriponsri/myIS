@@ -26,6 +26,7 @@ BRIDGE_SCHEMA_VERSION = "myis.armindex-official-codex-bridge.v1"
 REQUEST_ENVELOPE_VERSION = "myis.armindex-official-codex-request.v1"
 RESPONSE_ENVELOPE_VERSION = "myis.armindex-official-codex-response.v1"
 EVENT_SCHEMA_VERSION = "myis.armindex-official-codex-event.v1"
+CREDIT_SNAPSHOT_SCHEMA_VERSION = "myis.armindex-official-codex-credit-snapshot.v1"
 SDK_PACKAGE = "openai-codex"
 SDK_VERSION = "0.144.4"
 MODEL = "gpt-5.6-sol"
@@ -356,6 +357,15 @@ def _worker_command() -> list[str]:
     ]
 
 
+def _credit_worker_command() -> list[str]:
+    return [
+        sys.executable,
+        "-m",
+        "myis_research.armindex.official_codex_bridge",
+        "credit-worker",
+    ]
+
+
 def _run_worker(
     config: BridgeConfig,
     worker_input: Mapping[str, Any],
@@ -389,6 +399,105 @@ def _run_worker(
     if not isinstance(response, dict):
         raise OfficialCodexBridgeError("Official Codex SDK worker response must be an object")
     return response, stdout, stderr, completed.returncode
+
+
+def capture_official_credit_snapshot(
+    config: BridgeConfig,
+    checkpoint_id: str,
+) -> dict[str, Any]:
+    if not _REQUEST_ID.fullmatch(checkpoint_id):
+        raise OfficialCodexBridgeError("credit checkpoint_id is not stable")
+    completed = subprocess.run(
+        _credit_worker_command(),
+        input=canonical_json(
+            {
+                "schema_version": "myis.armindex-official-codex-credit-request.v1",
+                "checkpoint_id": checkpoint_id,
+                "model_name": MODEL,
+                "sdk_version": SDK_VERSION,
+            }
+        ),
+        cwd=config.repository_root,
+        env=build_child_environment(config.official_home),
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        timeout=60,
+    )
+    if completed.returncode != 0:
+        error_type = completed.stderr.strip()
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]{0,127}", error_type):
+            error_type = "UnknownCreditWorkerError"
+        raise OfficialCodexBridgeError(
+            f"Official Codex credit check failed with exit {completed.returncode}: "
+            f"{error_type}"
+        )
+    try:
+        snapshot = json.loads(completed.stdout)
+    except json.JSONDecodeError as exc:
+        raise OfficialCodexBridgeError(
+            "Official Codex credit worker returned invalid JSON"
+        ) from exc
+    if not isinstance(snapshot, dict):
+        raise OfficialCodexBridgeError("Official Codex credit snapshot must be an object")
+    required = {
+        "schema_version",
+        "checkpoint_id",
+        "observed_at_utc",
+        "model_name",
+        "sdk_version",
+        "plan_type",
+        "primary",
+        "rate_limit_reached_type",
+        "credits",
+        "reset_credit_available_count",
+        "limit_reached",
+        "protected_data_accessed",
+        "measured_execution_performed",
+    }
+    if set(snapshot) != required:
+        raise OfficialCodexBridgeError("Official Codex credit snapshot shape changed")
+    if (
+        snapshot["schema_version"] != CREDIT_SNAPSHOT_SCHEMA_VERSION
+        or snapshot["checkpoint_id"] != checkpoint_id
+        or snapshot["model_name"] != MODEL
+        or snapshot["sdk_version"] != SDK_VERSION
+        or snapshot["protected_data_accessed"] is not False
+        or snapshot["measured_execution_performed"] is not False
+    ):
+        raise OfficialCodexBridgeError("Official Codex credit snapshot identity changed")
+    primary = snapshot.get("primary")
+    if not isinstance(primary, dict) or set(primary) != {
+        "used_percent",
+        "remaining_percent",
+        "window_duration_mins",
+        "resets_at",
+        "resets_at_utc",
+    }:
+        raise OfficialCodexBridgeError("Official Codex primary limit window is unavailable")
+    if (
+        snapshot.get("limit_reached") is not False
+        or snapshot.get("rate_limit_reached_type") is not None
+        or not isinstance(primary.get("remaining_percent"), int)
+        or primary["remaining_percent"] <= 0
+        or not isinstance(primary.get("resets_at"), int)
+        or not str(primary.get("resets_at_utc", "")).endswith("Z")
+    ):
+        raise OfficialCodexBridgeError("Official Codex credit or rate limit is exhausted")
+    snapshot["snapshot_sha256"] = canonical_sha256(snapshot)
+    target = config.event_root / "credit-snapshots" / f"{checkpoint_id}.json"
+    _write_exclusive(
+        target,
+        (canonical_json(snapshot) + "\n").encode("ascii"),
+    )
+    return {
+        **snapshot,
+        "snapshot_pointer": (
+            f"{config.event_store_pointer.removesuffix('/events.jsonl')}"
+            f"/credit-snapshots/{checkpoint_id}.json"
+        ),
+    }
 
 
 def invoke_operation(
@@ -657,6 +766,96 @@ def _sdk_worker(worker_input: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def _credit_worker(worker_input: Mapping[str, Any]) -> dict[str, Any]:
+    if (
+        worker_input.get("sdk_version") != SDK_VERSION
+        or worker_input.get("model_name") != MODEL
+    ):
+        raise OfficialCodexBridgeError("credit worker model or SDK identity changed")
+    checkpoint_id = str(worker_input.get("checkpoint_id", ""))
+    if not _REQUEST_ID.fullmatch(checkpoint_id):
+        raise OfficialCodexBridgeError("credit worker checkpoint_id is invalid")
+    if os.environ.get("CODEX_HOME") is None:
+        raise OfficialCodexBridgeError("credit worker CODEX_HOME is missing")
+    if any(
+        key in os.environ
+        for key in (
+            "MYIS_STORE",
+            "MYIS_MLFLOW_STORE",
+            "OPENAI_API_KEY",
+            "ANTHROPIC_API_KEY",
+            "GOOGLE_API_KEY",
+            "AZURE_OPENAI_API_KEY",
+        )
+    ):
+        raise OfficialCodexBridgeError(
+            "credit worker inherited a forbidden environment variable"
+        )
+
+    from openai_codex import Codex, CodexConfig
+    from openai_codex.generated.v2_all import GetAccountRateLimitsResponse
+
+    with Codex(
+        CodexConfig(
+            cwd=str(Path.cwd()),
+            env={"CODEX_HOME": os.environ["CODEX_HOME"]},
+            client_name="myis_official_codex_bridge",
+            client_title="myIS Official Codex Credit Check",
+            client_version=SDK_VERSION,
+        )
+    ) as codex:
+        response = codex._client.request(
+            "account/rateLimits/read",
+            None,
+            response_model=GetAccountRateLimitsResponse,
+        )
+    value = response.model_dump(mode="json", by_alias=True)
+    rate_limits = value.get("rateLimits")
+    if not isinstance(rate_limits, dict):
+        raise OfficialCodexBridgeError("credit worker rate limits are missing")
+    primary = rate_limits.get("primary")
+    if not isinstance(primary, dict):
+        raise OfficialCodexBridgeError("credit worker primary window is missing")
+    used_percent = primary.get("usedPercent")
+    resets_at = primary.get("resetsAt")
+    if not isinstance(used_percent, int) or not isinstance(resets_at, int):
+        raise OfficialCodexBridgeError("credit worker primary window is incomplete")
+    credits = rate_limits.get("credits")
+    credit_summary = credits if isinstance(credits, dict) else {}
+    reset_credits = value.get("rateLimitResetCredits")
+    reset_summary = reset_credits if isinstance(reset_credits, dict) else {}
+    reached_type = rate_limits.get("rateLimitReachedType")
+    return {
+        "schema_version": CREDIT_SNAPSHOT_SCHEMA_VERSION,
+        "checkpoint_id": checkpoint_id,
+        "observed_at_utc": _utc_now(),
+        "model_name": MODEL,
+        "sdk_version": importlib.metadata.version(SDK_PACKAGE),
+        "plan_type": rate_limits.get("planType"),
+        "primary": {
+            "used_percent": used_percent,
+            "remaining_percent": 100 - used_percent,
+            "window_duration_mins": primary.get("windowDurationMins"),
+            "resets_at": resets_at,
+            "resets_at_utc": datetime.fromtimestamp(resets_at, UTC)
+            .replace(microsecond=0)
+            .isoformat()
+            .replace("+00:00", "Z"),
+        },
+        "rate_limit_reached_type": reached_type,
+        "credits": {
+            "has_credits": bool(credit_summary.get("hasCredits", False)),
+            "unlimited": bool(credit_summary.get("unlimited", False)),
+        },
+        "reset_credit_available_count": int(
+            reset_summary.get("availableCount", 0)
+        ),
+        "limit_reached": reached_type is not None or used_percent >= 100,
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+    }
+
+
 def _temporary_schema_path(schema: Mapping[str, Any], work_directory: Path) -> Path:
     path = work_directory / f"schema-{canonical_sha256(dict(schema))}.json"
     if not path.exists():
@@ -736,6 +935,7 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         if command == "serve":
             sub.add_argument("--port", type=int, default=8765)
     subparsers.add_parser("worker")
+    subparsers.add_parser("credit-worker")
     return parser.parse_args(argv)
 
 
@@ -747,6 +947,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             if not isinstance(raw, dict):
                 raise OfficialCodexBridgeError("worker input must be an object")
             sys.stdout.write(canonical_json(_sdk_worker(raw)) + "\n")
+            return 0
+        except Exception as exc:  # noqa: BLE001 - worker boundary must fail closed
+            sys.stderr.write(type(exc).__name__ + "\n")
+            return 70
+    if args.command == "credit-worker":
+        try:
+            raw = json.loads(sys.stdin.read())
+            if not isinstance(raw, dict):
+                raise OfficialCodexBridgeError("credit worker input must be an object")
+            sys.stdout.write(canonical_json(_credit_worker(raw)) + "\n")
             return 0
         except Exception as exc:  # noqa: BLE001 - worker boundary must fail closed
             sys.stderr.write(type(exc).__name__ + "\n")

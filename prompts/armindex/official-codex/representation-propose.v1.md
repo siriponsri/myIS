@@ -23,7 +23,11 @@ processing. Keep each candidate attributable to its declared axis and explain
 it in language suitable for a journal ablation. For conditional reserve slots,
 state that the candidate remains dormant unless the frozen activation predicate
 is satisfied. Apply every reviewer_required_changes item to its named candidate
-while keeping the other slots independently valid.
+while keeping the other slots independently valid. On revision rounds,
+accepted_candidate_ids are immutable: copy those candidates from
+previous_candidates byte-for-byte, including their hypothesis, program,
+expected_effect, and failure_risk. Revise only candidate IDs that are not in
+accepted_candidate_ids. Return all four slots in the canonical order.
 
 Operation payload:
 

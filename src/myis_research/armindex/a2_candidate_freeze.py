@@ -22,6 +22,7 @@ from .compiler import RepresentationCompileError, compile_program
 from .official_codex_bridge import (
     BridgeConfig,
     OfficialCodexBridgeError,
+    capture_official_credit_snapshot,
     invoke_operation,
     load_bridge_config,
 )
@@ -124,6 +125,7 @@ class BatchSpec:
 
 
 InvokeOperation = Callable[[BridgeConfig, str, Mapping[str, Any]], dict[str, Any]]
+CreditCheck = Callable[[BridgeConfig, str], dict[str, Any]]
 
 
 def _utc_now() -> str:
@@ -361,6 +363,8 @@ def _propose_request(
     generation_attempt_id: str,
     revision_round: int,
     reviewer_required_changes: Sequence[str],
+    previous_candidates: Sequence[Mapping[str, Any]],
+    accepted_candidate_ids: Sequence[str],
 ) -> dict[str, Any]:
     return {
         "schema_version": "myis.armindex-representation-propose-request.v1",
@@ -371,6 +375,8 @@ def _propose_request(
         "batch_index": spec.batch_index,
         "revision_round": revision_round,
         "reviewer_required_changes": list(reviewer_required_changes),
+        "previous_candidates": [dict(candidate) for candidate in previous_candidates],
+        "accepted_candidate_ids": list(accepted_candidate_ids),
         "candidate_slots": [dict(slot) for slot in spec.candidate_slots],
         "allowed_source_fields": list(ALLOWED_SOURCE_FIELDS),
         "allowed_axes": list(ALLOWED_AXES),
@@ -398,6 +404,7 @@ def _review_request(
     *,
     generation_attempt_id: str,
     review_round: int,
+    previously_accepted_candidate_ids: Sequence[str],
 ) -> dict[str, Any]:
     return {
         "schema_version": "myis.armindex-representation-review-request.v1",
@@ -406,6 +413,9 @@ def _review_request(
         "tier": spec.tier,
         "batch_id": spec.batch_id,
         "review_round": review_round,
+        "previously_accepted_candidate_ids": list(
+            previously_accepted_candidate_ids
+        ),
         "arm_context": _arm_context(spec),
         "candidates": [dict(candidate) for candidate in candidates],
         "review_criteria": list(REVIEW_CRITERIA),
@@ -506,6 +516,51 @@ def _review_acceptance(
             else:
                 feedback.append(f"{candidate}: {review.get('rationale', 'revise')!s}")
     return accepted, feedback, by_id
+
+
+def _accepted_review_ids(reviews: Mapping[str, Mapping[str, Any]]) -> set[str]:
+    required_checks = (
+        "falsifiable",
+        "role_fit",
+        "duplicate_free",
+        "protected_boundary_safe",
+        "arm_compatible",
+        "deterministic",
+        "publication_interpretable",
+    )
+    return {
+        candidate_id
+        for candidate_id, review in reviews.items()
+        if review.get("verdict") == "accept"
+        and all(review.get(check) is True for check in required_checks)
+    }
+
+
+def _validate_accepted_candidate_preservation(
+    previous_candidates: Sequence[Mapping[str, Any]],
+    candidates: Sequence[Mapping[str, Any]],
+    accepted_candidate_ids: set[str],
+) -> None:
+    if not accepted_candidate_ids:
+        return
+    previous_by_id = {
+        str(candidate["candidate_id"]): dict(candidate)
+        for candidate in previous_candidates
+    }
+    current_by_id = {
+        str(candidate["candidate_id"]): dict(candidate) for candidate in candidates
+    }
+    for candidate_id in accepted_candidate_ids:
+        if candidate_id not in previous_by_id or candidate_id not in current_by_id:
+            raise A2CandidateFreezeError(
+                "accepted candidate disappeared during bounded revision"
+            )
+        if canonical_sha256(previous_by_id[candidate_id]) != canonical_sha256(
+            current_by_id[candidate_id]
+        ):
+            raise A2CandidateFreezeError(
+                "Official proposer changed a previously accepted candidate"
+            )
 
 
 def _normalize_program(spec: BatchSpec, candidate: Mapping[str, Any]) -> dict[str, Any]:
@@ -706,8 +761,12 @@ def _generate_batch(
     bindings: Mapping[str, str],
     generation_attempt_id: str,
     invoke: InvokeOperation,
+    credit_check: CreditCheck,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     feedback: list[str] = []
+    previous_candidates: list[dict[str, Any]] = []
+    accepted_candidate_ids: set[str] = set()
+    credit_snapshots: list[dict[str, Any]] = []
     last_error: Exception | None = None
     for revision_round in range(MAX_BATCH_REVISION_ROUNDS):
         proposer_request = _propose_request(
@@ -716,6 +775,12 @@ def _generate_batch(
             generation_attempt_id=generation_attempt_id,
             revision_round=revision_round,
             reviewer_required_changes=feedback,
+            previous_candidates=previous_candidates,
+            accepted_candidate_ids=[
+                slot["candidate_id"]
+                for slot in spec.candidate_slots
+                if slot["candidate_id"] in accepted_candidate_ids
+            ],
         )
         try:
             proposer_response = invoke(
@@ -723,6 +788,11 @@ def _generate_batch(
             )
             proposer_identity = _official_identity(proposer_response)
             candidates = _validate_proposal_response(spec, proposer_response)
+            _validate_accepted_candidate_preservation(
+                previous_candidates,
+                candidates,
+                accepted_candidate_ids,
+            )
         except (A2CandidateFreezeError, OfficialCodexBridgeError) as exc:
             last_error = exc
             feedback = [f"schema/compiler compatibility repair: {type(exc).__name__}"]
@@ -733,6 +803,11 @@ def _generate_batch(
             bindings,
             generation_attempt_id=generation_attempt_id,
             review_round=revision_round,
+            previously_accepted_candidate_ids=[
+                slot["candidate_id"]
+                for slot in spec.candidate_slots
+                if slot["candidate_id"] in accepted_candidate_ids
+            ],
         )
         try:
             reviewer_response = invoke(
@@ -744,7 +819,37 @@ def _generate_batch(
             last_error = exc
             feedback = [f"review integration repair: {type(exc).__name__}"]
             continue
+        try:
+            credit_snapshot = credit_check(
+                bridge_config,
+                f"{reviewer_request['request_id']}-credit",
+            )
+            credit_snapshots.append(
+                {
+                    "checkpoint_id": credit_snapshot["checkpoint_id"],
+                    "snapshot_sha256": credit_snapshot["snapshot_sha256"],
+                    "snapshot_pointer": credit_snapshot["snapshot_pointer"],
+                    "model_name": credit_snapshot["model_name"],
+                    "plan_type": credit_snapshot["plan_type"],
+                    "remaining_percent": credit_snapshot["primary"][
+                        "remaining_percent"
+                    ],
+                    "resets_at_utc": credit_snapshot["primary"]["resets_at_utc"],
+                    "rate_limit_reached_type": credit_snapshot[
+                        "rate_limit_reached_type"
+                    ],
+                    "reset_credit_available_count": credit_snapshot[
+                        "reset_credit_available_count"
+                    ],
+                }
+            )
+        except OfficialCodexBridgeError as exc:
+            raise A2CandidateFreezeError(
+                "Official credit check failed after reviewer round"
+            ) from exc
         if not accepted:
+            previous_candidates = candidates
+            accepted_candidate_ids.update(_accepted_review_ids(reviews))
             last_error = A2CandidateFreezeError("Official reviewer requested revision")
             continue
         try:
@@ -777,6 +882,11 @@ def _generate_batch(
             "reviewer_event_sha256": reviewer_response["event_sha256"],
             "revision_round": revision_round,
             "status": "accepted_frozen_before_measurement",
+            "credit_check_count": len(credit_snapshots),
+            "credit_snapshot_sha256s": [
+                snapshot["snapshot_sha256"] for snapshot in credit_snapshots
+            ],
+            "final_credit_snapshot": credit_snapshots[-1],
         }
         batch["batch_sha256"] = canonical_sha256(batch)
         return records, {
@@ -881,6 +991,7 @@ def generate_and_freeze(
     *,
     bridge_config: BridgeConfig | None = None,
     invoke: InvokeOperation = invoke_operation,
+    credit_check: CreditCheck = capture_official_credit_snapshot,
     manifest_path: Path | None = None,
     receipt_path: Path | None = None,
     lock_path: Path | None = None,
@@ -928,6 +1039,7 @@ def generate_and_freeze(
                 bindings,
                 generation_attempt_id,
                 invoke,
+                credit_check,
             )
             candidates.extend(records)
             batches.append(batch)
@@ -943,6 +1055,9 @@ def generate_and_freeze(
                     "candidate_count": 4,
                     "proposer_event_sha256": batch["proposer_event_sha256"],
                     "reviewer_event_sha256": batch["reviewer_event_sha256"],
+                    "final_credit_snapshot_sha256": batch[
+                        "final_credit_snapshot"
+                    ]["snapshot_sha256"],
                 },
             )
     except Exception as exc:
@@ -958,6 +1073,11 @@ def generate_and_freeze(
     candidates.sort(key=lambda item: str(item["candidate_id"]))
     batches.sort(key=lambda item: str(item["batch_id"]))
     payload_hashes = [str(item["scientific_payload_sha256"]) for item in candidates]
+    credit_snapshots = [
+        snapshot
+        for batch in batches
+        for snapshot in batch["credit_snapshot_sha256s"]
+    ]
     if len(candidates) != 52 or len(payload_hashes) != len(set(payload_hashes)):
         raise A2CandidateFreezeError("candidate universe is incomplete or duplicated")
     design = validate_design()
@@ -999,6 +1119,11 @@ def generate_and_freeze(
         "batches": batches,
         "candidates": candidates,
         "official_call_binding_count": len(batches) * 2,
+        "official_credit_check_count": len(credit_snapshots),
+        "official_credit_snapshot_set_sha256": canonical_sha256(
+            sorted(credit_snapshots)
+        ),
+        "final_official_credit_snapshot": batches[-1]["final_credit_snapshot"],
         "protected_data_accessed": False,
         "rep_dev_accessed_for_measurement": False,
         "measured_execution_performed": False,
@@ -1047,6 +1172,13 @@ def generate_and_freeze(
         "official_sdk_version": "0.144.4",
         "official_cli_version": "0.144.4",
         "official_provider": "openai",
+        "official_credit_check_count": len(credit_snapshots),
+        "official_credit_snapshot_set_sha256": manifest[
+            "official_credit_snapshot_set_sha256"
+        ],
+        "final_official_credit_snapshot": manifest[
+            "final_official_credit_snapshot"
+        ],
         "source_commit": source_commit,
         "source_tree": source_tree,
         "protected_data_accessed": False,

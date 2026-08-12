@@ -257,6 +257,105 @@ def test_worker_failure_exposes_only_sanitized_error_type(
         )
 
 
+def test_credit_snapshot_is_model_bound_sanitized_and_write_once(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    config = _load_config(tmp_path)
+    worker_snapshot = {
+        "schema_version": bridge.CREDIT_SNAPSHOT_SCHEMA_VERSION,
+        "checkpoint_id": "a2-credit-check-0001",
+        "observed_at_utc": "2026-08-12T00:00:00Z",
+        "model_name": "gpt-5.6-sol",
+        "sdk_version": "0.144.4",
+        "plan_type": "plus",
+        "primary": {
+            "used_percent": 10,
+            "remaining_percent": 90,
+            "window_duration_mins": 10080,
+            "resets_at": 1787013939,
+            "resets_at_utc": "2026-08-18T00:45:39Z",
+        },
+        "rate_limit_reached_type": None,
+        "credits": {"has_credits": False, "unlimited": False},
+        "reset_credit_available_count": 1,
+        "limit_reached": False,
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+    }
+
+    def successful_run(
+        *_args: object, **_kwargs: object
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(
+            args=["credit-worker"],
+            returncode=0,
+            stdout=json.dumps(worker_snapshot),
+            stderr="",
+        )
+
+    monkeypatch.setattr(bridge.subprocess, "run", successful_run)
+    result = bridge.capture_official_credit_snapshot(
+        config, "a2-credit-check-0001"
+    )
+
+    assert result["model_name"] == "gpt-5.6-sol"
+    assert result["plan_type"] == "plus"
+    assert result["primary"]["remaining_percent"] == 90
+    assert result["primary"]["resets_at_utc"] == "2026-08-18T00:45:39Z"
+    stored = json.loads(
+        (
+            config.event_root
+            / "credit-snapshots"
+            / "a2-credit-check-0001.json"
+        ).read_text(encoding="ascii")
+    )
+    assert "balance" not in json.dumps(stored)
+    assert "account" not in json.dumps(stored)
+    assert "email" not in json.dumps(stored)
+    with pytest.raises(bridge.OfficialCodexBridgeError, match="already exists"):
+        bridge.capture_official_credit_snapshot(config, "a2-credit-check-0001")
+
+
+def test_credit_snapshot_fails_closed_at_limit(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    config = _load_config(tmp_path)
+    exhausted = {
+        "schema_version": bridge.CREDIT_SNAPSHOT_SCHEMA_VERSION,
+        "checkpoint_id": "a2-credit-limited-0001",
+        "observed_at_utc": "2026-08-12T00:00:00Z",
+        "model_name": "gpt-5.6-sol",
+        "sdk_version": "0.144.4",
+        "plan_type": "plus",
+        "primary": {
+            "used_percent": 100,
+            "remaining_percent": 0,
+            "window_duration_mins": 10080,
+            "resets_at": 1787013939,
+            "resets_at_utc": "2026-08-18T00:45:39Z",
+        },
+        "rate_limit_reached_type": "rate_limit_reached",
+        "credits": {"has_credits": False, "unlimited": False},
+        "reset_credit_available_count": 1,
+        "limit_reached": True,
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+    }
+    monkeypatch.setattr(
+        bridge.subprocess,
+        "run",
+        lambda *_args, **_kwargs: subprocess.CompletedProcess(
+            args=["credit-worker"],
+            returncode=0,
+            stdout=json.dumps(exhausted),
+            stderr="",
+        ),
+    )
+
+    with pytest.raises(bridge.OfficialCodexBridgeError, match="exhausted"):
+        bridge.capture_official_credit_snapshot(config, "a2-credit-limited-0001")
+
+
 def test_freeze_lock_rejects_scientific_operations(tmp_path: Path) -> None:
     lock = tmp_path / "candidate-freeze.lock.v1.json"
     lock.write_text("{}\n", encoding="utf-8")

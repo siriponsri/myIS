@@ -117,6 +117,39 @@ def _fake_invoke(
     }
 
 
+def _fake_credit_check(
+    _config: bridge.BridgeConfig,
+    checkpoint_id: str,
+) -> dict[str, Any]:
+    snapshot = {
+        "schema_version": bridge.CREDIT_SNAPSHOT_SCHEMA_VERSION,
+        "checkpoint_id": checkpoint_id,
+        "observed_at_utc": "2026-08-12T00:00:00Z",
+        "model_name": bridge.MODEL,
+        "sdk_version": bridge.SDK_VERSION,
+        "plan_type": "plus",
+        "primary": {
+            "used_percent": 10,
+            "remaining_percent": 90,
+            "window_duration_mins": 10080,
+            "resets_at": 1787013939,
+            "resets_at_utc": "2026-08-18T00:45:39Z",
+        },
+        "rate_limit_reached_type": None,
+        "credits": {"has_credits": False, "unlimited": False},
+        "reset_credit_available_count": 1,
+        "limit_reached": False,
+        "protected_data_accessed": False,
+        "measured_execution_performed": False,
+    }
+    snapshot["snapshot_sha256"] = canonical_sha256(snapshot)
+    snapshot["snapshot_pointer"] = (
+        "owner-local://official-codex/test/credit-snapshots/"
+        f"{checkpoint_id}.json"
+    )
+    return snapshot
+
+
 def test_generate_freeze_and_replay_exact_40_plus_12(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -140,6 +173,7 @@ def test_generate_freeze_and_replay_exact_40_plus_12(
         ROOT,
         bridge_config=config,
         invoke=_fake_invoke,
+        credit_check=_fake_credit_check,
         manifest_path=manifest_path,
         receipt_path=receipt_path,
         lock_path=lock_path,
@@ -171,6 +205,10 @@ def test_generate_freeze_and_replay_exact_40_plus_12(
     assert len({item["candidate_id"] for item in candidates}) == 52
     assert len({item["scientific_payload_sha256"] for item in candidates}) == 52
     assert manifest["measured_execution_performed"] is False
+    assert manifest["official_credit_check_count"] == 13
+    assert manifest["final_official_credit_snapshot"]["model_name"] == "gpt-5.6-sol"
+    assert manifest["final_official_credit_snapshot"]["plan_type"] == "plus"
+    assert manifest["final_official_credit_snapshot"]["remaining_percent"] == 90
     assert ledger_events[0]["event_type"] == "candidate_generation_start"
     assert ledger_events[-1]["event_type"] == "candidate_freeze_closeout"
 
@@ -227,3 +265,161 @@ def test_batch_revision_budget_is_bounded_and_schema_aligned() -> None:
         ]
         >= 400
     )
+
+
+def test_previously_accepted_candidate_must_be_preserved() -> None:
+    spec = freeze.build_batch_specs()[0]
+    previous = [
+        {
+            "candidate_id": slot["candidate_id"],
+            "role": slot["role"],
+            "hypothesis": f"Stable falsifiable hypothesis for {slot['candidate_id']}.",
+            "declared_axis": "field_selection",
+            "program": _program(),
+            "expected_effect": "A bounded within-arm effect can be measured later.",
+            "failure_risk": "The candidate may not improve the frozen metric.",
+        }
+        for slot in spec.candidate_slots
+    ]
+    current = json.loads(json.dumps(previous))
+    accepted_id = str(previous[0]["candidate_id"])
+
+    freeze._validate_accepted_candidate_preservation(
+        previous, current, {accepted_id}
+    )
+    current[0]["hypothesis"] = "Changed after independent acceptance."
+    with pytest.raises(freeze.A2CandidateFreezeError, match="previously accepted"):
+        freeze._validate_accepted_candidate_preservation(
+            previous, current, {accepted_id}
+        )
+
+
+def test_partial_acceptance_revises_only_rejected_candidate(tmp_path: Path) -> None:
+    spec = freeze.build_batch_specs()[0]
+    config = bridge.load_bridge_config(
+        ROOT,
+        event_root=tmp_path / "owner-events",
+    )
+    bindings = {
+        "campaign_sha256": "a" * 64,
+        "a1_terminal_receipt_sha256": "b" * 64,
+        "promotion_receipt_sha256": "c" * 64,
+        "representation_schema_sha256": "d" * 64,
+        "evaluator_sha256": "e" * 64,
+        "primary_metric": "recall_at_100/out",
+    }
+    proposed_rounds: list[list[dict[str, Any]]] = []
+
+    def candidate(slot: Mapping[str, Any], revision_round: int) -> dict[str, Any]:
+        item = {
+            "candidate_id": slot["candidate_id"],
+            "role": slot["role"],
+            "hypothesis": (
+                f"Candidate {slot['candidate_id']} changes one declared axis "
+                "and remains falsifiable against the frozen baseline."
+            ),
+            "declared_axis": "field_selection",
+            "program": _program(),
+            "expected_effect": "Improve bounded retrieval coverage without evaluator changes.",
+            "failure_risk": "The representation may add noise and fail comparison.",
+        }
+        if revision_round == 1 and slot == spec.candidate_slots[-1]:
+            item["hypothesis"] = (
+                f"Revised candidate {slot['candidate_id']} changes one declared axis "
+                "and isolates the reviewer-requested failure mode."
+            )
+        return item
+
+    def invoke(
+        _config: bridge.BridgeConfig,
+        operation: str,
+        request: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        request_id = str(request["request_id"])
+        revision_round = int(request.get("revision_round", request.get("review_round", 0)))
+        if operation == "representation_propose":
+            candidates = [candidate(slot, revision_round) for slot in spec.candidate_slots]
+            if revision_round == 1:
+                assert request["accepted_candidate_ids"] == [
+                    slot["candidate_id"] for slot in spec.candidate_slots[:3]
+                ]
+                assert request["previous_candidates"] == proposed_rounds[0]
+                assert candidates[:3] == proposed_rounds[0][:3]
+                assert candidates[3] != proposed_rounds[0][3]
+            proposed_rounds.append(candidates)
+            result = {
+                "schema_version": "myis.armindex-representation-propose-response.v1",
+                "request_id": request_id,
+                "arm_id": spec.arm_id,
+                "tier": spec.tier,
+                "batch_id": spec.batch_id,
+                "candidates": candidates,
+                "protected_data_accessed": False,
+                "measured_execution_performed": False,
+            }
+        elif operation == "representation_review":
+            assert request["previously_accepted_candidate_ids"] == (
+                []
+                if revision_round == 0
+                else [slot["candidate_id"] for slot in spec.candidate_slots[:3]]
+            )
+            reviews = []
+            for index, item in enumerate(request["candidates"]):
+                revise = revision_round == 0 and index == 3
+                reviews.append(
+                    {
+                        "candidate_id": item["candidate_id"],
+                        "verdict": "revise" if revise else "accept",
+                        "falsifiable": not revise,
+                        "role_fit": True,
+                        "duplicate_free": True,
+                        "protected_boundary_safe": True,
+                        "arm_compatible": True,
+                        "deterministic": True,
+                        "publication_interpretable": True,
+                        "rationale": "The candidate is bounded and independently testable.",
+                        "required_changes": (
+                            ["Isolate the requested failure mode."] if revise else []
+                        ),
+                    }
+                )
+            result = {
+                "schema_version": "myis.armindex-representation-review-response.v1",
+                "request_id": request_id,
+                "arm_id": spec.arm_id,
+                "tier": spec.tier,
+                "batch_id": spec.batch_id,
+                "reviews": reviews,
+                "protected_data_accessed": False,
+                "measured_execution_performed": False,
+            }
+        else:
+            raise AssertionError(f"unexpected operation: {operation}")
+        return {
+            "request_id": request_id,
+            "operation": operation,
+            "result": result,
+            "identity": _identity(),
+            "event_sha256": canonical_sha256(
+                {"operation": operation, "request_id": request_id, "result": result}
+            ),
+            "status": "accepted",
+            "retry_count": 0,
+            "protected_data_accessed": False,
+            "measured_execution_performed": False,
+        }
+
+    records, batch = freeze._generate_batch(
+        ROOT,
+        config,
+        spec,
+        bindings,
+        "a2-preservation-test",
+        invoke,
+        _fake_credit_check,
+    )
+
+    assert len(records) == 4
+    assert batch["revision_round"] == 1
+    assert batch["credit_check_count"] == 2
+    assert batch["final_credit_snapshot"]["model_name"] == "gpt-5.6-sol"

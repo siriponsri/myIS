@@ -11,6 +11,12 @@ specific and must not alter the frozen evaluator, metrics, A1 promotion, model
 weights, protected split, or diagnostic non-advancement. Do not expose hidden
 reasoning.
 
+previously_accepted_candidate_ids were accepted in an earlier independent
+review and are required to be byte-identical in this round. Recheck them, but
+do not request stylistic changes or reinterpret their scientific semantics.
+Reject a previously accepted candidate only for a concrete newly observed
+safety, determinism, duplication, or contract defect.
+
 Operation payload:
 
 {{OPERATION_PAYLOAD_JSON}}
