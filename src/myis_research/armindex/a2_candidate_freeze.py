@@ -555,12 +555,31 @@ def _validate_accepted_candidate_preservation(
             raise A2CandidateFreezeError(
                 "accepted candidate disappeared during bounded revision"
             )
-        if canonical_sha256(previous_by_id[candidate_id]) != canonical_sha256(
-            current_by_id[candidate_id]
-        ):
+        previous_bytes = canonical_json(previous_by_id[candidate_id]).encode("ascii")
+        current_bytes = canonical_json(current_by_id[candidate_id]).encode("ascii")
+        if previous_bytes != current_bytes:
             raise A2CandidateFreezeError(
                 "Official proposer changed a previously accepted candidate"
             )
+
+
+def _credit_snapshot_summary(snapshot: Mapping[str, Any]) -> dict[str, Any]:
+    primary = snapshot.get("primary")
+    if not isinstance(primary, dict):
+        raise A2CandidateFreezeError("Official credit snapshot primary window is missing")
+    return {
+        "checkpoint_id": snapshot["checkpoint_id"],
+        "snapshot_sha256": snapshot["snapshot_sha256"],
+        "snapshot_pointer": snapshot["snapshot_pointer"],
+        "model_name": snapshot["model_name"],
+        "plan_type": snapshot["plan_type"],
+        "remaining_percent": primary["remaining_percent"],
+        "resets_at_utc": primary["resets_at_utc"],
+        "rate_limit_reached_type": snapshot["rate_limit_reached_type"],
+        "reset_credit_available_count": snapshot[
+            "reset_credit_available_count"
+        ],
+    }
 
 
 def _normalize_program(spec: BatchSpec, candidate: Mapping[str, Any]) -> dict[str, Any]:
@@ -824,25 +843,7 @@ def _generate_batch(
                 bridge_config,
                 f"{reviewer_request['request_id']}-credit",
             )
-            credit_snapshots.append(
-                {
-                    "checkpoint_id": credit_snapshot["checkpoint_id"],
-                    "snapshot_sha256": credit_snapshot["snapshot_sha256"],
-                    "snapshot_pointer": credit_snapshot["snapshot_pointer"],
-                    "model_name": credit_snapshot["model_name"],
-                    "plan_type": credit_snapshot["plan_type"],
-                    "remaining_percent": credit_snapshot["primary"][
-                        "remaining_percent"
-                    ],
-                    "resets_at_utc": credit_snapshot["primary"]["resets_at_utc"],
-                    "rate_limit_reached_type": credit_snapshot[
-                        "rate_limit_reached_type"
-                    ],
-                    "reset_credit_available_count": credit_snapshot[
-                        "reset_credit_available_count"
-                    ],
-                }
-            )
+            credit_snapshots.append(_credit_snapshot_summary(credit_snapshot))
         except OfficialCodexBridgeError as exc:
             raise A2CandidateFreezeError(
                 "Official credit check failed after reviewer round"
@@ -1014,6 +1015,17 @@ def generate_and_freeze(
         raise A2CandidateFreezeError("candidate freeze artifacts are write-once")
     bindings = _frozen_bindings(root, controls)
     source_commit, source_tree = _git_identity(root)
+    try:
+        pre_generation_credit = _credit_snapshot_summary(
+            credit_check(
+                config,
+                f"{generation_attempt_id}-pre-generation-credit",
+            )
+        )
+    except OfficialCodexBridgeError as exc:
+        raise A2CandidateFreezeError(
+            "Official credit check failed before candidate generation"
+        ) from exc
     append_preparation_ledger_event(
         root,
         generation_attempt_id=generation_attempt_id,
@@ -1026,6 +1038,10 @@ def generate_and_freeze(
             "candidate_count": 52,
             "matched_candidate_count": 40,
             "conditional_reserve_candidate_count": 12,
+            "pre_generation_credit_snapshot_sha256": pre_generation_credit[
+                "snapshot_sha256"
+            ],
+            "model_name": pre_generation_credit["model_name"],
         },
     )
     candidates: list[dict[str, Any]] = []
@@ -1073,10 +1089,14 @@ def generate_and_freeze(
     candidates.sort(key=lambda item: str(item["candidate_id"]))
     batches.sort(key=lambda item: str(item["batch_id"]))
     payload_hashes = [str(item["scientific_payload_sha256"]) for item in candidates]
-    credit_snapshots = [
+    reviewer_credit_snapshots = [
         snapshot
         for batch in batches
         for snapshot in batch["credit_snapshot_sha256s"]
+    ]
+    credit_snapshots = [
+        pre_generation_credit["snapshot_sha256"],
+        *reviewer_credit_snapshots,
     ]
     if len(candidates) != 52 or len(payload_hashes) != len(set(payload_hashes)):
         raise A2CandidateFreezeError("candidate universe is incomplete or duplicated")
@@ -1123,6 +1143,7 @@ def generate_and_freeze(
         "official_credit_snapshot_set_sha256": canonical_sha256(
             sorted(credit_snapshots)
         ),
+        "pre_generation_official_credit_snapshot": pre_generation_credit,
         "final_official_credit_snapshot": batches[-1]["final_credit_snapshot"],
         "protected_data_accessed": False,
         "rep_dev_accessed_for_measurement": False,
@@ -1175,6 +1196,9 @@ def generate_and_freeze(
         "official_credit_check_count": len(credit_snapshots),
         "official_credit_snapshot_set_sha256": manifest[
             "official_credit_snapshot_set_sha256"
+        ],
+        "pre_generation_official_credit_snapshot": manifest[
+            "pre_generation_official_credit_snapshot"
         ],
         "final_official_credit_snapshot": manifest[
             "final_official_credit_snapshot"

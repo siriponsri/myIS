@@ -205,7 +205,10 @@ def test_generate_freeze_and_replay_exact_40_plus_12(
     assert len({item["candidate_id"] for item in candidates}) == 52
     assert len({item["scientific_payload_sha256"] for item in candidates}) == 52
     assert manifest["measured_execution_performed"] is False
-    assert manifest["official_credit_check_count"] == 13
+    assert manifest["official_credit_check_count"] == 14
+    assert manifest["pre_generation_official_credit_snapshot"]["model_name"] == (
+        "gpt-5.6-sol"
+    )
     assert manifest["final_official_credit_snapshot"]["model_name"] == "gpt-5.6-sol"
     assert manifest["final_official_credit_snapshot"]["plan_type"] == "plus"
     assert manifest["final_official_credit_snapshot"]["remaining_percent"] == 90
@@ -218,6 +221,60 @@ def test_generate_freeze_and_replay_exact_40_plus_12(
             "representation_propose",
             {"request_id": "a2-locked-after-freeze"},
         )
+
+
+def test_pre_generation_credit_failure_stops_before_generation_or_persistence(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    ledger_events: list[dict[str, Any]] = []
+    invoke_calls: list[str] = []
+    monkeypatch.setattr(
+        freeze,
+        "append_preparation_ledger_event",
+        lambda *_args, **kwargs: ledger_events.append(dict(kwargs)),
+    )
+    config = bridge.load_bridge_config(
+        ROOT,
+        event_root=tmp_path / "owner-events",
+    )
+    manifest_path = tmp_path / "candidate-manifest.json"
+    receipt_path = tmp_path / "freeze-receipt.json"
+    lock_path = tmp_path / "freeze-lock.json"
+    config = replace(config, freeze_lock=lock_path)
+
+    def forbidden_invoke(
+        _config: bridge.BridgeConfig,
+        operation: str,
+        _request: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        invoke_calls.append(operation)
+        raise AssertionError("proposer/reviewer must not start")
+
+    def unavailable_credit(
+        _config: bridge.BridgeConfig,
+        _checkpoint_id: str,
+    ) -> dict[str, Any]:
+        raise bridge.OfficialCodexBridgeError("OFFICIAL_CREDIT_UNAVAILABLE")
+
+    with pytest.raises(
+        freeze.A2CandidateFreezeError,
+        match="before candidate generation",
+    ):
+        freeze.generate_and_freeze(
+            ROOT,
+            bridge_config=config,
+            invoke=forbidden_invoke,
+            credit_check=unavailable_credit,
+            manifest_path=manifest_path,
+            receipt_path=receipt_path,
+            lock_path=lock_path,
+        )
+
+    assert ledger_events == []
+    assert invoke_calls == []
+    assert not manifest_path.exists()
+    assert not receipt_path.exists()
+    assert not lock_path.exists()
 
 
 def test_design_has_no_reserve_for_diagnostic_arms() -> None:

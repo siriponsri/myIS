@@ -429,15 +429,24 @@ def capture_official_credit_snapshot(
         error_type = completed.stderr.strip()
         if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]{0,127}", error_type):
             error_type = "UnknownCreditWorkerError"
+        normalized = error_type.casefold()
+        if any(token in normalized for token in ("auth", "unauthorized", "forbidden")):
+            failure_code = "OFFICIAL_CREDIT_AUTHENTICATION_FAILED"
+        elif any(
+            token in normalized
+            for token in ("connection", "network", "timeout", "transport")
+        ):
+            failure_code = "OFFICIAL_CREDIT_TRANSPORT_FAILED"
+        else:
+            failure_code = "OFFICIAL_CREDIT_UNAVAILABLE"
         raise OfficialCodexBridgeError(
-            f"Official Codex credit check failed with exit {completed.returncode}: "
-            f"{error_type}"
+            f"{failure_code}: worker exit {completed.returncode}"
         )
     try:
         snapshot = json.loads(completed.stdout)
     except json.JSONDecodeError as exc:
         raise OfficialCodexBridgeError(
-            "Official Codex credit worker returned invalid JSON"
+            "OFFICIAL_CREDIT_MALFORMED_RESPONSE"
         ) from exc
     if not isinstance(snapshot, dict):
         raise OfficialCodexBridgeError("Official Codex credit snapshot must be an object")

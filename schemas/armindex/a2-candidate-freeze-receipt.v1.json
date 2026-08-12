@@ -3,7 +3,7 @@
   "$id": "urn:myis:armindex:a2-candidate-freeze-receipt:v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "receipt_id", "campaign_id", "phase_id", "task_id", "revision_id", "generation_attempt_id", "status", "manifest_sha256", "manifest_file_sha256", "lock_sha256", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "accepted_candidate_count", "compile_twice_candidate_count", "diagnostic_non_advancing_arms", "primary_advancement_arms", "official_model", "official_reasoning_effort", "official_sdk_version", "official_cli_version", "official_provider", "official_credit_check_count", "official_credit_snapshot_set_sha256", "final_official_credit_snapshot", "source_commit", "source_tree", "protected_data_accessed", "rep_dev_accessed_for_measurement", "measured_a2_started", "gpu_work_performed", "provider_admission_performed", "provider_execution_adoption_performed", "selection_accesses", "final_accesses", "harness_dev_accesses", "receipt_sha256"],
+  "required": ["schema_version", "receipt_id", "campaign_id", "phase_id", "task_id", "revision_id", "generation_attempt_id", "status", "manifest_sha256", "manifest_file_sha256", "lock_sha256", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "accepted_candidate_count", "compile_twice_candidate_count", "diagnostic_non_advancing_arms", "primary_advancement_arms", "official_model", "official_reasoning_effort", "official_sdk_version", "official_cli_version", "official_provider", "official_credit_check_count", "official_credit_snapshot_set_sha256", "pre_generation_official_credit_snapshot", "final_official_credit_snapshot", "source_commit", "source_tree", "protected_data_accessed", "rep_dev_accessed_for_measurement", "measured_a2_started", "gpu_work_performed", "provider_admission_performed", "provider_execution_adoption_performed", "selection_accesses", "final_accesses", "harness_dev_accesses", "receipt_sha256"],
   "properties": {
     "schema_version": {"type": "string", "const": "myis.armindex-a2-candidate-freeze-receipt.v1"},
     "receipt_id": {"type": "string", "const": "a2-five-arm-candidate-freeze-v1"},
@@ -28,8 +28,24 @@
     "official_sdk_version": {"type": "string", "const": "0.144.4"},
     "official_cli_version": {"type": "string", "const": "0.144.4"},
     "official_provider": {"type": "string", "const": "openai"},
-    "official_credit_check_count": {"type": "integer", "minimum": 13},
+    "official_credit_check_count": {"type": "integer", "minimum": 14},
     "official_credit_snapshot_set_sha256": {"$ref": "#/$defs/sha256"},
+    "pre_generation_official_credit_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkpoint_id", "snapshot_sha256", "snapshot_pointer", "model_name", "plan_type", "remaining_percent", "resets_at_utc", "rate_limit_reached_type", "reset_credit_available_count"],
+      "properties": {
+        "checkpoint_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "snapshot_pointer": {"type": "string", "pattern": "^owner-local://official-codex/"},
+        "model_name": {"type": "string", "const": "gpt-5.6-sol"},
+        "plan_type": {"type": "string"},
+        "remaining_percent": {"type": "integer", "minimum": 1, "maximum": 100},
+        "resets_at_utc": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+        "rate_limit_reached_type": {"type": "null"},
+        "reset_credit_available_count": {"type": "integer", "minimum": 0}
+      }
+    },
     "final_official_credit_snapshot": {
       "type": "object",
       "additionalProperties": false,

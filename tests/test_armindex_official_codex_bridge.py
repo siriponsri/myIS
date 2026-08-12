@@ -356,6 +356,64 @@ def test_credit_snapshot_fails_closed_at_limit(
         bridge.capture_official_credit_snapshot(config, "a2-credit-limited-0001")
 
 
+@pytest.mark.parametrize(
+    ("worker_error", "failure_code"),
+    [
+        ("AuthenticationError", "OFFICIAL_CREDIT_AUTHENTICATION_FAILED"),
+        ("TransportTimeoutError", "OFFICIAL_CREDIT_TRANSPORT_FAILED"),
+        ("AccountRateLimitsUnavailable", "OFFICIAL_CREDIT_UNAVAILABLE"),
+    ],
+)
+def test_credit_snapshot_failure_classes_are_stable(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    worker_error: str,
+    failure_code: str,
+) -> None:
+    config = _load_config(tmp_path)
+    monkeypatch.setattr(
+        bridge.subprocess,
+        "run",
+        lambda *_args, **_kwargs: subprocess.CompletedProcess(
+            args=["credit-worker"],
+            returncode=70,
+            stdout="",
+            stderr=worker_error,
+        ),
+    )
+
+    with pytest.raises(bridge.OfficialCodexBridgeError, match=failure_code):
+        bridge.capture_official_credit_snapshot(
+            config,
+            f"a2-credit-{failure_code.casefold().replace('_', '-')}",
+        )
+
+
+def test_credit_snapshot_rejects_malformed_response(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    config = _load_config(tmp_path)
+    monkeypatch.setattr(
+        bridge.subprocess,
+        "run",
+        lambda *_args, **_kwargs: subprocess.CompletedProcess(
+            args=["credit-worker"],
+            returncode=0,
+            stdout="not-json",
+            stderr="",
+        ),
+    )
+
+    with pytest.raises(
+        bridge.OfficialCodexBridgeError,
+        match="OFFICIAL_CREDIT_MALFORMED_RESPONSE",
+    ):
+        bridge.capture_official_credit_snapshot(
+            config,
+            "a2-credit-malformed-response",
+        )
+
+
 def test_freeze_lock_rejects_scientific_operations(tmp_path: Path) -> None:
     lock = tmp_path / "candidate-freeze.lock.v1.json"
     lock.write_text("{}\n", encoding="utf-8")
