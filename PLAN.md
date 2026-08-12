@@ -15,13 +15,14 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A1.2_COMMON_MULTI_ARM_SCREENING` (`CLOSED_PASS`; attempt
-  `a12-v16-20260811-r15` closed at `25/25`. A2 is ready but not started and
-  requires fresh provider admission, execution adoption, entry preflight, and a
-  new isolated remote root.)
-- Current phase: `A1_BASELINES_AND_MULTI_ARM_SCREENING` (complete)
-- Current evidence class: aggregate-safe measured development closeout for A1.2;
-  scientific authority `true`
+- Current task: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` (`CLOSED_PASS`;
+  independent audit passed with zero findings. A2 candidate evaluation and
+  measured execution are not started.)
+- Current phase: `A2_PER_ARM_AUTOINDEX` (ready for Owner launch; fresh provider
+  admission, execution adoption, entry preflight, and a new isolated remote root
+  are still required before measurement.)
+- Current evidence class: engineering validation and immutable pre-measurement
+  candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
 - Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
@@ -338,15 +339,16 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-/goal อ่าน docs/goal/A2_official_codex_bridge_goal.md แล้วทำงานตามขั้นตอนทั้งหมดจน bridge และ five-arm candidate freeze ผ่าน จากนั้น commit/push และหยุดก่อน measured A2
+/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS ก่อน แล้ว implement และทำงานตามขั้นตอนทั้งหมดจน A2 closeout โดยไม่เข้า A3, HARNESS-DEV, Selection หรือ Final
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
 with r15. The current pointer binds the complete r15 terminal receipt, measured
-summary, EDA package, and `REUSE_ELIGIBLE` provider continuation. The next
-session follows `docs/goal/A2_official_codex_bridge_goal.md`; A2 is ready but
-not yet started. The preparation session must stop before measured A2 and leave
-`docs/goal/A2_goal.md` blocked pending auditor review. The
+summary, EDA package, and `REUSE_ELIGIBLE` provider continuation. The Official
+Codex bridge and five-arm candidate freeze are closed `PASS`, and the independent
+audit found zero findings. The next session follows `docs/goal/A2_goal.md`; it
+must complete fresh A2 entry preflight, provider admission, execution adoption,
+and isolated-root checks before candidate evaluation or measured execution. The
 allowlisted remote handoff is retained on the unchanged instance with validated
 baseline `29/29`, journal EDA `8/8`, and closeout `12/12` packages. Post-finalize
 working directories were not recreated; details are recorded in
