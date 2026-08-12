@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -122,7 +122,7 @@
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "639d7e2d2327d712343a9f4ddba7272453ce574b7f97febe286d5c667679de80",
+  "report_sha256": "50dcbf01726f4bf80db85fcab294b365d5811c9be7bd8803523beff5ac40bc8b",
   "report_type": "phase",
   "result": {
     "decision": "completed",

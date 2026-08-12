@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -204,7 +204,7 @@
   "objective": "Scientific contracts and schemas",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-6",
-  "report_sha256": "0621212a59f1b390395c09b063947687b7ef0dd00747bf1e98b7cd8b94b57b04",
+  "report_sha256": "8a80891cbd80464231a03d8601fd34c5d40adf7898db2ec76f953236360db6b6",
   "report_type": "task",
   "result": {
     "decision": "completed",

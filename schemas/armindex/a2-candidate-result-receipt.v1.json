@@ -40,7 +40,7 @@
   "allOf": [
     {"if": {"properties": {"evidence_class": {"const": "engineering_synthetic"}}}, "then": {"properties": {"scientific_authority": {"const": false}}}},
     {"if": {"properties": {"evidence_class": {"const": "measured_development_aggregate"}}}, "then": {"properties": {"scientific_authority": {"const": true}}}},
-    {"if": {"properties": {"reserve_activation_passed": {"const": true}}}, "then": {"properties": {"reserve_activation_evidence_sha256": {"$ref": "#/$defs/hash"}}}, "else": {"properties": {"reserve_activation_evidence_sha256": {"type": "null"}}}}
+    {"if": {"properties": {"tier": {"const": "conditional_reserve"}}}, "then": {"properties": {"reserve_activation_evidence_sha256": {"$ref": "#/$defs/hash"}}}, "else": {"properties": {"reserve_activation_passed": {"const": false}, "reserve_activation_evidence_sha256": {"type": "null"}}}}
   ],
   "$defs": {
     "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},

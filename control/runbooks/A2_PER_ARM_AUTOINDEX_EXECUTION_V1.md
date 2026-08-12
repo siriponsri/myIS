@@ -25,13 +25,41 @@ and non-advancing.
 5. Create `/opt/myis/a2-<attempt-id>` only after provider admission passes,
    stage the immutable bundle, and install a new TTL/watchdog receipt. Never
    mutate or reuse an A1 remote root.
-6. Write append-only lifecycle checkpoints. Resume only from the last
-   hash-linked checkpoint in the same attempt. A failure cancels work and
-   preserves aggregate-safe evidence.
-7. Train evaluation emits aggregate-only receipts; it never measures REP-DEV.
+6. Launch with `control/armindex/a2/measured-command-argv.v1.json` and the
+   hash-bound Owner-local input manifest. Execute and durably receipt exactly
+   the 40 matched candidates first. Resume never reruns a durable receipt.
+7. At the matched barrier, stop with
+   `MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED` until a fresh admission still
+   proves at least 40 hours remaining and the unchanged USD 35 hard stop.
+8. Derive the three primary-arm decisions from the frozen batch order,
+   Owner-local A1 v16 incumbents, strict primary improvement, and the actual
+   four frozen reserve axes. Persist one decision and one continuation receipt.
+   Each reserve arm is then either four active results or four dormant receipts.
+9. Evaluation emits aggregate-only receipts; it never measures REP-DEV.
    Winner selection rejects exact ties and cannot advance ARM-01 or ARM-02.
-8. Safe return validates archive hashes and excludes protected payloads. Do not
+10. Safe return validates archive hashes and excludes protected payloads. Do not
    destroy the provider instance.
+
+## Measured Commands
+
+The Owner-local manifest must validate against
+`schemas/armindex/a2-owner-local-measured-input.v1.json`, bind the A1 v16
+runtime/model/data/evaluator artifacts, protected corpus/query/qrels/membership
+files by Owner-local relative path and SHA-256, the four staged dense-model
+directories, the engine source hash, and the A1 incumbent candidate, program
+hash, and aggregate primary metric for ARM-03, ARM-05, and ARM-04. The tracked
+command contract invokes the repository-owned production engine; fixture or
+caller-selected engine commands fail closed.
+
+```powershell
+uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repository-root . --attempt-id <attempt> execute --execution-adoption-receipt <owner-local-adoption.json> --measurement-authority <tracked-authority.json> --command-argv-json control/armindex/a2/measured-command-argv.v1.json --owner-root <owner-local-root> --owner-input-manifest <owner-local-root/input.json> --output-directory <owner-local-output> --checkpoint-ledger <owner-local-ledger.jsonl>
+```
+
+The first call ends at the matched barrier. After AP/LO creates the fresh
+reserve-budget admission, rerun the same command with
+`--reserve-budget-admission <owner-local-reserve-admission.json>`. Attempt,
+adoption, authority, freeze, matched receipt-set, decision, and continuation
+identities must remain unchanged.
 
 ## Hard Stops
 

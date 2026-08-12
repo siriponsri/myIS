@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -122,7 +122,7 @@
   "objective": "Integrity preflight and protected boundary",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-2",
-  "report_sha256": "74343d3c38ff0b576e644c5737bcf76ae7d05b5190370f6284423accdc67c560",
+  "report_sha256": "fe219c8f0b25c6cc49980e9e5c1cd2ceb4827047d1a78cd985388000b6a571ca",
   "report_type": "task",
   "result": {
     "decision": "completed",

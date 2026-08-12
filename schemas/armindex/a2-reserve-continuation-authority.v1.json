@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-reserve-continuation-authority:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "continuation_id", "attempt_id", "initial_measurement_authority_sha256", "execution_adoption_receipt_sha256", "matched_candidate_result_set_sha256", "reserve_activation_decision_receipt_sha256", "active_reserve_candidate_ids", "freeze_bindings", "continuation_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-reserve-continuation-authority.v1"},
+    "continuation_id": {"pattern": "^a2-[a-z0-9-]+-reserve-continuation-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "initial_measurement_authority_sha256": {"$ref": "#/$defs/hash"},
+    "execution_adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "matched_candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+    "reserve_activation_decision_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "active_reserve_candidate_ids": {"type": "array", "uniqueItems": true, "items": {"pattern": "^a2-arm-0[3-5]-reserve-b3-(exploit|matched-ablation|orthogonal|diversity)$"}},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "continuation_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}}
+}

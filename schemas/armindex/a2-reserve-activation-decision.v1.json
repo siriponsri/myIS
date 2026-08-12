@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-reserve-activation-decision:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "execution_adoption_receipt_sha256", "initial_measurement_authority_sha256", "matched_candidate_result_set_sha256", "matched_candidate_count", "reserve_budget_admission_receipt_sha256", "decisions", "active_reserve_candidate_ids", "freeze_bindings", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-reserve-activation-decision.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-reserve-activation-decision-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_RESERVE_ACTIVATION_DECISION"},
+    "execution_adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "initial_measurement_authority_sha256": {"$ref": "#/$defs/hash"},
+    "matched_candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+    "matched_candidate_count": {"const": 40},
+    "reserve_budget_admission_receipt_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
+    "decisions": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"$ref": "#/$defs/decision"}},
+    "active_reserve_candidate_ids": {"type": "array", "uniqueItems": true, "items": {"pattern": "^a2-arm-0[3-5]-reserve-b3-(exploit|matched-ablation|orthogonal|diversity)$"}},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "decimal": {"type": "string", "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"},
+    "decision": {"type": "object", "additionalProperties": false, "required": ["arm_id", "matched_batch_receipt_sha256s", "batch_one_best_candidate_id", "batch_one_best_primary_metric", "batch_two_best_candidate_id", "batch_two_best_primary_metric", "strict_primary_improvement", "grounded_axes_remaining", "fresh_budget_admission_pass", "activation_passed", "reserve_candidate_ids"], "properties": {"arm_id": {"enum": ["ARM-03", "ARM-05", "ARM-04"]}, "matched_batch_receipt_sha256s": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"$ref": "#/$defs/hash"}}, "batch_one_best_candidate_id": {"type": "string"}, "batch_one_best_primary_metric": {"$ref": "#/$defs/decimal"}, "batch_two_best_candidate_id": {"type": "string"}, "batch_two_best_primary_metric": {"$ref": "#/$defs/decimal"}, "strict_primary_improvement": {"type": "boolean"}, "grounded_axes_remaining": {"type": "boolean"}, "fresh_budget_admission_pass": {"type": "boolean"}, "activation_passed": {"type": "boolean"}, "reserve_candidate_ids": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"pattern": "^a2-arm-0[3-5]-reserve-b3-(exploit|matched-ablation|orthogonal|diversity)$"}}}},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

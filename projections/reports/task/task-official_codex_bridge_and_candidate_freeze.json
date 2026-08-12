@@ -203,7 +203,7 @@
       "artifact_type": "runbook",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74",
+      "content_sha256": "079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Defines checkpoint, recovery, safe-return, staging, and no-destroy behavior.",
       "parent_artifact_hashes": {},
@@ -300,7 +300,7 @@
     },
     {
       "artifact_id": "a2-execution-readiness-runbook-v1",
-      "sha256": "edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74",
+      "sha256": "079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f",
       "uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
@@ -311,7 +311,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -544,7 +544,7 @@
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "c9aba1f54d8e4168eefacf81f6b480b01855f648adfdb0889010db04d08def17",
+  "report_sha256": "419bb59f3f03a9cdf1a4845203466c7e0f08c5250eed30bf7be1aa2d6843c583",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",

@@ -128,9 +128,22 @@ def _candidate_row(candidate_id: str, *, score: str = "1") -> dict[str, object]:
 def _candidate_receipts() -> dict[str, dict[str, object]]:
     receipts: dict[str, dict[str, object]] = {}
     for index, candidate_id in enumerate(frozen_candidates(ROOT), start=1):
+        row = _candidate_row(candidate_id, score=str(index))
+        candidate = frozen_candidates(ROOT)[candidate_id]
+        if candidate["tier"] == "conditional_reserve":
+            row["reserve_activation_passed"] = True
+            row["reserve_activation_evidence_sha256"] = "7" * 64
+            row["primary_metric"] = {"name": "recall_at_100/out", "value": str(index)}
+            row["secondary_metrics"] = {
+                "ndcg_at_100/out": str(index),
+                "ndcg_at_10/out": str(index),
+            }
+            row["latency"] = {"wall_seconds": "1", "search_p95_seconds": "0.1"}
+            row["cost"] = {"charged_usd": "0", "currency": "USD"}
+            row["coverage"] = {"expected_units": 1, "completed_units": 1}
         receipts[candidate_id] = operational.build_candidate_result_receipt(
             ROOT,
-            result=_candidate_row(candidate_id, score=str(index)),
+            result=row,
             evidence_class="engineering_synthetic",
         )
     return receipts
@@ -191,6 +204,48 @@ def _authority(adoption: Mapping[str, object]) -> dict[str, object]:
         "scientific_authority": True,
     }
     return {**body, "authority_sha256": canonical_sha256(body)}
+
+
+def _reserve_budget_admission(
+    adoption: Mapping[str, object], authority: Mapping[str, object]
+) -> dict[str, object]:
+    body = {
+        "schema_version": "myis.armindex-a2-reserve-budget-admission.v1",
+        "receipt_id": f"{ATTEMPT}-reserve-budget-admission-v1",
+        "attempt_id": ATTEMPT,
+        "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
+        "initial_measurement_authority_sha256": authority["authority_sha256"],
+        "provider_admission_receipt_sha256": adoption["provider_admission_receipt_sha256"],
+        "observed_at_utc": "2026-08-12T08:05:00Z",
+        "ttl_deadline_utc": "2026-08-14T08:00:00Z",
+        "whole_workload_total_usd": "33",
+        "forward_hard_stop_usd": "35",
+        "freeze_bindings": operational._freeze_bindings(ROOT),
+    }
+    return {**body, "receipt_sha256": canonical_sha256(body)}
+
+
+def _arm_incumbents() -> dict[str, dict[str, str]]:
+    return {
+        "ARM-03": {"candidate_id": "a1-arm-03-incumbent", "program_sha256": "3" * 64, "primary_metric": "0"},
+        "ARM-05": {"candidate_id": "a1-arm-05-incumbent", "program_sha256": "5" * 64, "primary_metric": "0"},
+        "ARM-04": {"candidate_id": "a1-arm-04-incumbent", "program_sha256": "4" * 64, "primary_metric": "0"},
+    }
+
+
+def _executed_candidate_row(candidate_id: str, *, score: str) -> dict[str, object]:
+    row = _candidate_row(candidate_id, score=score)
+    if frozen_candidates(ROOT)[candidate_id]["tier"] == "conditional_reserve":
+        row.update(
+            {
+                "primary_metric": {"name": "recall_at_100/out", "value": score},
+                "secondary_metrics": {"ndcg_at_100/out": score, "ndcg_at_10/out": score},
+                "latency": {"wall_seconds": "1", "search_p95_seconds": "0.1"},
+                "cost": {"charged_usd": "0", "currency": "USD"},
+                "coverage": {"expected_units": 1, "completed_units": 1},
+            }
+        )
+    return row
 
 
 def test_synthetic_operational_dry_run_covers_frozen_universe_without_measurement() -> None:
@@ -642,11 +697,8 @@ def test_external_executor_interruption_resumes_from_durable_candidate_receipts(
         "_validate_measurement_authority_provenance",
         lambda *_args, **_kwargs: None,
     )
-    monkeypatch.setattr(
-        operational,
-        "_validate_measurement_goal",
-        lambda *_args, **_kwargs: None,
-    )
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_args, **_kwargs: None)
+    budget = _reserve_budget_admission(adoption, authority)
     output = tmp_path / "owner-local-output"
     ledger = tmp_path / "lifecycle.jsonl"
     calls: list[str] = []
@@ -658,7 +710,7 @@ def test_external_executor_interruption_resumes_from_durable_candidate_receipts(
         calls.append(candidate_id)
         if len(calls) == 2:
             raise RuntimeError("injected interruption")
-        return _candidate_row(candidate_id, score="100")
+        return _executed_candidate_row(candidate_id, score="100")
 
     with pytest.raises(RuntimeError, match="injected interruption"):
         operational.execute_external_candidate_set(
@@ -683,7 +735,7 @@ def test_external_executor_interruption_resumes_from_durable_candidate_receipts(
     def resumed(command: list[str], **_kwargs: object) -> Mapping[str, object]:
         candidate_id = command[1]
         resumed_calls.append(candidate_id)
-        return _candidate_row(candidate_id, score=scores[candidate_id])
+        return _executed_candidate_row(candidate_id, score=scores[candidate_id])
 
     result = operational.execute_external_candidate_set(
         ROOT,
@@ -693,14 +745,179 @@ def test_external_executor_interruption_resumes_from_durable_candidate_receipts(
         command_template=["executor", "{candidate_id}"],
         output_directory=output,
         checkpoint_ledger=ledger,
+        reserve_budget_admission=budget,
+        arm_incumbents=_arm_incumbents(),
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
         executor=resumed,
     )
 
     assert result["status"] == "PASS_A2_EXACT_COVERAGE"
     assert result["candidate_count"] == 52
     assert first_candidate not in resumed_calls
-    assert len(resumed_calls) == 39
+    assert len(resumed_calls) == 51
     assert result["workers_reaped"] is True
+
+
+def test_matched_completion_waits_for_fresh_reserve_admission(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+    calls: list[str] = []
+
+    def executor(command: list[str], **_kwargs: object) -> Mapping[str, object]:
+        candidate_id = command[1]
+        calls.append(candidate_id)
+        return _executed_candidate_row(candidate_id, score="1")
+
+    output = tmp_path / "owner-local-output"
+    result = operational.execute_external_candidate_set(
+        ROOT,
+        attempt_id=ATTEMPT,
+        adoption_receipt=adoption,
+        measurement_authority=authority,
+        command_template=["executor", "{candidate_id}"],
+        output_directory=output,
+        checkpoint_ledger=tmp_path / "ledger.jsonl",
+        executor=executor,
+    )
+    assert result["status"] == "MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED"
+    assert len(calls) == 40
+    assert not list((output / "receipts").glob("*reserve*.json"))
+
+
+def test_reserve_admission_and_continuation_drift_fail_closed(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+    stale = _reserve_budget_admission(adoption, authority)
+    with pytest.raises(operational.A2OperationalExecutorError, match="stale or identity-drifted"):
+        operational.validate_reserve_budget_admission(
+            ROOT,
+            stale,
+            attempt_id=ATTEMPT,
+            adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            authority_sha256=str(authority["authority_sha256"]),
+            provider_admission_receipt_sha256=str(
+                adoption["provider_admission_receipt_sha256"]
+            ),
+            now_utc=datetime(2026, 8, 12, 8, 21, tzinfo=timezone.utc),
+        )
+
+    matched = {
+        candidate_id: receipt
+        for candidate_id, receipt in _candidate_receipts().items()
+        if receipt["tier"] == "matched"
+    }
+    budget = _reserve_budget_admission(adoption, authority)
+    decision = operational.build_reserve_activation_decision(
+        ROOT,
+        attempt_id=ATTEMPT,
+        receipts_by_candidate=matched,
+        adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        authority_sha256=str(authority["authority_sha256"]),
+        provider_admission_receipt_sha256=str(
+            adoption["provider_admission_receipt_sha256"]
+        ),
+        arm_incumbents=_arm_incumbents(),
+        reserve_budget_admission=budget,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert all(len(item["reserve_candidate_ids"]) == 4 for item in decision["decisions"])
+    continuation = operational.build_reserve_continuation(
+        ROOT,
+        attempt_id=ATTEMPT,
+        adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        authority_sha256=str(authority["authority_sha256"]),
+        decision=decision,
+    )
+    assert continuation["matched_candidate_result_set_sha256"] == decision["matched_candidate_result_set_sha256"]
+
+
+def test_reserve_decision_rejects_tie_and_derives_grounding_from_frozen_quartet(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    matched = {
+        candidate_id: receipt
+        for candidate_id, receipt in _candidate_receipts().items()
+        if receipt["tier"] == "matched"
+    }
+    for candidate_id, receipt in tuple(matched.items()):
+        row = _candidate_row(candidate_id, score="0")
+        matched[candidate_id] = operational.build_candidate_result_receipt(
+            ROOT, result=row, evidence_class="engineering_synthetic"
+        )
+    incumbents = _arm_incumbents()
+    for incumbent in incumbents.values():
+        incumbent["primary_metric"] = "1"
+    decision = operational.build_reserve_activation_decision(
+        ROOT,
+        attempt_id=ATTEMPT,
+        receipts_by_candidate=matched,
+        adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        authority_sha256=str(authority["authority_sha256"]),
+        provider_admission_receipt_sha256=str(
+            adoption["provider_admission_receipt_sha256"]
+        ),
+        arm_incumbents=incumbents,
+        reserve_budget_admission=_reserve_budget_admission(adoption, authority),
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert decision["active_reserve_candidate_ids"] == []
+    assert all(item["strict_primary_improvement"] is False for item in decision["decisions"])
+
+    repeated_axes = copy.deepcopy(frozen_candidates(ROOT))
+    for candidate in repeated_axes.values():
+        if candidate["tier"] == "conditional_reserve":
+            candidate["declared_axis"] = "source_fields"
+    monkeypatch.setattr(operational, "frozen_candidates", lambda _root: repeated_axes)
+    grounded = operational.build_reserve_activation_decision(
+        ROOT,
+        attempt_id=ATTEMPT,
+        receipts_by_candidate=matched,
+        adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        authority_sha256=str(authority["authority_sha256"]),
+        provider_admission_receipt_sha256=str(
+            adoption["provider_admission_receipt_sha256"]
+        ),
+        arm_incumbents=incumbents,
+        reserve_budget_admission=_reserve_budget_admission(adoption, authority),
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert all(item["grounded_axes_remaining"] is True for item in grounded["decisions"])
+
+
+def test_exact_52_rejects_partial_reserve_quartet_and_decision_hash_drift() -> None:
+    receipts = _candidate_receipts()
+    reserve_id = next(
+        candidate_id
+        for candidate_id, candidate in frozen_candidates(ROOT).items()
+        if candidate["arm_id"] == "ARM-03" and candidate["tier"] == "conditional_reserve"
+    )
+    dormant = _candidate_row(reserve_id)
+    dormant["reserve_activation_evidence_sha256"] = "7" * 64
+    receipts[reserve_id] = operational.build_candidate_result_receipt(
+        ROOT, result=dormant, evidence_class="engineering_synthetic"
+    )
+    with pytest.raises(operational.A2OperationalExecutorError, match="complete arm quartet"):
+        operational.evaluate_candidate_receipts(ROOT, receipts_by_candidate=receipts)
+
+    receipts = _candidate_receipts()
+    drifted = _executed_candidate_row(reserve_id, score="100")
+    drifted["reserve_activation_passed"] = True
+    drifted["reserve_activation_evidence_sha256"] = "8" * 64
+    receipts[reserve_id] = operational.build_candidate_result_receipt(
+        ROOT, result=drifted, evidence_class="engineering_synthetic"
+    )
+    with pytest.raises(operational.A2OperationalExecutorError, match="complete arm quartet"):
+        operational.evaluate_candidate_receipts(ROOT, receipts_by_candidate=receipts)
 
 
 def test_execute_cli_fails_closed_without_measured_authority(
@@ -710,9 +927,11 @@ def test_execute_cli_fails_closed_without_measured_authority(
     adoption = tmp_path / "adoption.json"
     authority = tmp_path / "authority.json"
     argv = tmp_path / "argv.json"
+    owner_input = tmp_path / "owner-input.json"
     adoption.write_text("{}", encoding="ascii")
     authority.write_text("{}", encoding="ascii")
     argv.write_text('["external-executor"]', encoding="ascii")
+    owner_input.write_text("{}", encoding="ascii")
     assert operational.main(
         [
             "--repository-root",
@@ -726,6 +945,10 @@ def test_execute_cli_fails_closed_without_measured_authority(
             str(authority),
             "--command-argv-json",
             str(argv),
+            "--owner-root",
+            str(tmp_path),
+            "--owner-input-manifest",
+            str(owner_input),
             "--output-directory",
             str(tmp_path / "output"),
             "--checkpoint-ledger",
@@ -734,4 +957,8 @@ def test_execute_cli_fails_closed_without_measured_authority(
     ) == 2
     result = json.loads(capsys.readouterr().out)
     assert result["status"] == "FAILED_CLOSED"
-    assert "receipt_sha256 is invalid" in result["error"]
+    assert result["error"] in {
+        "external executor argv must match tracked measured adapter",
+        "receipt_sha256 is invalid",
+        "Owner-local measured input manifest is missing or invalid",
+    }

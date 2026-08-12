@@ -15,14 +15,14 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_MEASURED_ADAPTER_AND_RESERVE_LIFECYCLE`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_AP_STAGING_MEASUREMENT_LOCKED`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 002 provider/adoption hardening
   passed AP read-back. Owner approved a 48-hour TTL target under the unchanged
   USD 35 A2 forward hard stop and exceptionally authorized AP staging, but AP
-  audit 003 found that the production A2 adapter and matched-first reserve
-  lifecycle are not yet implemented.)
+  audit 003 implementation now provides the production A2 adapter and
+  matched-first reserve lifecycle; fresh AP admission/staging remains pending.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -65,13 +65,13 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly seven active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 implementation required -> A3 -> A4 -> A5 -> A6`
+`A0 complete -> A1 complete -> A2 staging/measurement pending -> A3 -> A4 -> A5 -> A6`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | implementation required; not started; production adapter and reserve lifecycle pending |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | implementation complete; not started; fresh AP admission/staging and measured authority pending |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -361,15 +361,13 @@ receipt self-hash is
 Owner approved 48 hours remaining under the unchanged USD 35 A2 forward hard
 stop. At the last observed USD 0.6027777778/hour compute-plus-storage rate plus
 the USD 0.30 network reserve, the projected 48-hour liability is USD 29.2333.
-Owner also authorized AP to bypass IM for admission/staging. AP did not use that
-exception because audit 003 found two structural launch blockers: the repository
-has no concrete production adapter for the frozen A2 representation programs,
-and reserve activation is fixed in authority before the matched outcomes needed
-by the frozen predicate exist. Staging the current bundle would be invalidated by
-the required implementation and would spend TTL without a valid measured path.
-The next session is IM and reads
-`docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md`. Fresh provider admission,
-execution adoption, isolated-root staging, measured A2, and protected-data access
-remain unstarted. The unchanged instance retains the validated A1 baseline
+Owner also authorized AP to bypass IM for admission/staging. Audit 003 IM now
+closes the two structural blockers with a repository-owned production adapter
+for every frozen A2 program and a decision-bound matched-first reserve lifecycle.
+The tracked command, Owner-local input schema, resume path, fresh reserve admission,
+decision/continuation receipts, and exact-52 quartet validation are bundle-bound.
+The next session is AP read-back followed by fresh provider admission and isolated
+staging. Execution adoption, measured A2, and protected-data access remain unstarted.
+The unchanged instance retains the validated A1 baseline
 `29/29`, journal EDA `8/8`, and closeout `12/12` packages; details are recorded
 in `outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json`.

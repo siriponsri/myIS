@@ -12,7 +12,7 @@ import tempfile
 import time
 from collections.abc import Mapping, Sequence
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Callable
@@ -38,6 +38,11 @@ from .a2_execution_readiness import (
     validate_execution_adoption_receipt,
     validate_execution_bundle,
     validate_provider_admission_receipt,
+)
+from .autoindex import (
+    AutoIndexState,
+    advance_autoindex,
+    strict_primary_improvement,
 )
 
 _HASH = re.compile(r"^[a-f0-9]{64}$")
@@ -387,19 +392,14 @@ def validate_measurement_authority(
     ):
         raise A2OperationalExecutorError("measured execution authority goal binding drift")
     _validate_measurement_goal(checked, goal_path)
-    candidates = frozen_candidates(root)
-    active_reserves = checked["active_reserve_candidate_ids"]
-    if any(
-        candidate_id not in candidates
-        or candidates[candidate_id]["tier"] != "conditional_reserve"
-        or candidates[candidate_id]["arm_id"] not in {"ARM-03", "ARM-04", "ARM-05"}
-        for candidate_id in active_reserves
-    ):
-        raise A2OperationalExecutorError("authority activates a non-reserve candidate")
-    for arm_id in ("ARM-03", "ARM-04", "ARM-05"):
-        count = sum(candidates[candidate_id]["arm_id"] == arm_id for candidate_id in active_reserves)
-        if count not in {0, 4}:
-            raise A2OperationalExecutorError("reserve activation must cover a complete arm batch")
+    # The AP authority starts the measured attempt only.  It must not decide a
+    # conditional batch before the two frozen matched batches have outcomes.
+    if checked["active_reserve_candidate_ids"] or checked[
+        "reserve_activation_evidence_sha256"
+    ] is not None:
+        raise A2OperationalExecutorError(
+            "initial measurement authority cannot pre-activate conditional reserves"
+        )
     return checked
 
 
@@ -542,6 +542,11 @@ def execute_external_candidate_set(
     command_template: Sequence[str],
     output_directory: Path,
     checkpoint_ledger: Path,
+    owner_local_root: Path | None = None,
+    owner_input_manifest: str | None = None,
+    reserve_budget_admission: Mapping[str, Any] | None = None,
+    arm_incumbents: Mapping[str, Mapping[str, Any]] | None = None,
+    now_utc: datetime | None = None,
     timeout_seconds: int = 21600,
     executor: Callable[..., Mapping[str, Any]] = _run_executor_process,
 ) -> dict[str, Any]:
@@ -562,6 +567,10 @@ def execute_external_candidate_set(
         raise A2OperationalExecutorError("external executor working output must remain Owner-local")
     if not command_template or any(not isinstance(item, str) or not item for item in command_template):
         raise A2OperationalExecutorError("external executor argv template is invalid")
+    if ("{owner_local_root}" in command_template or "{owner_local_input_manifest}" in command_template) and (
+        owner_local_root is None or owner_input_manifest is None
+    ):
+        raise A2OperationalExecutorError("production adapter requires Owner-local input binding")
     candidates = frozen_candidates(root)
     receipts_directory = output / "receipts"
     processes_directory = output / "processes"
@@ -601,100 +610,194 @@ def execute_external_candidate_set(
         append_lifecycle_checkpoint(ledger, genesis)
         sequence = 1
         previous = genesis["checkpoint_sha256"]
+    matched_ids = _matched_candidate_ids(candidates)
+    reserve_ids = tuple(
+        candidate_id for candidate_id in candidates if candidate_id not in matched_ids
+    )
+    if any(candidate_id in completed for candidate_id in reserve_ids) and not (
+        output / "reserve-activation-decision.v1.json"
+    ).is_file():
+        raise A2OperationalExecutorError("reserve receipt exists before activation decision")
+
+    def record(candidate_id: str, *, active_reserve: bool = False, decision_sha256: str | None = None) -> None:
+        nonlocal sequence, previous
+        candidate = candidates[candidate_id]
+        if candidate["tier"] == "conditional_reserve" and not active_reserve:
+            row: dict[str, Any] = {
+                "schema_version": "myis.armindex-a2-external-candidate-result.v1",
+                "attempt_id": attempt_id,
+                "candidate_id": candidate_id,
+                "arm_id": candidate["arm_id"],
+                "program_sha256": candidate["program_sha256"],
+                "executor_output_sha256": canonical_sha256([candidate_id, "dormant"]),
+                "evaluator_input_sha256": canonical_sha256([candidate_id, "dormant-input"]),
+                "evaluator_sha256": authority["authority_sha256"],
+                "code_sha256": adoption["bundle_sha256"],
+                "model_sha256": "0" * 64,
+                "data_sha256": "0" * 64,
+                "primary_metric": None,
+                "secondary_metrics": None,
+                "latency": None,
+                "cost": None,
+                "coverage": {"expected_units": 1, "completed_units": 0},
+                "resume_count": 0,
+                "failure_count": 0,
+                "reserve_activation_passed": False,
+                "reserve_activation_evidence_sha256": decision_sha256,
+                "train_only": True,
+                "rep_dev_measured": False,
+                "protected_payload_included": False,
+                "per_query_outcomes_included": False,
+            }
+        else:
+            command = [
+                item.format(
+                    candidate_id=candidate_id,
+                    arm_id=candidate["arm_id"],
+                    program_sha256=candidate["program_sha256"],
+                    owner_local_root=(
+                        str(owner_local_root.resolve())
+                        if owner_local_root is not None
+                        else ""
+                    ),
+                    owner_local_input_manifest=owner_input_manifest or "",
+                )
+                for item in command_template
+            ]
+            try:
+                row = dict(
+                    executor(
+                        command,
+                        environment=_executor_environment(candidate),
+                        heartbeat_path=heartbeats_directory
+                        / f"{candidate_id}.attempt-{sequence + 1:04d}.json",
+                        process_path=processes_directory
+                        / f"{candidate_id}.attempt-{sequence + 1:04d}.json",
+                        timeout_seconds=timeout_seconds,
+                    )
+                )
+            except BaseException:
+                paused = build_lifecycle_checkpoint(
+                    root, attempt_id=attempt_id, sequence=sequence + 1, status="PAUSED",
+                    completed_candidate_count=len(completed), failed_candidate_count=1,
+                    resume_allowed=True, previous_checkpoint_sha256=previous,
+                )
+                append_lifecycle_checkpoint(ledger, paused)
+                raise
+            if active_reserve:
+                row["reserve_activation_passed"] = True
+                row["reserve_activation_evidence_sha256"] = decision_sha256
+        receipt = build_candidate_result_receipt(
+            root, result=row, evidence_class="measured_development_aggregate",
+            measurement_authority=authority, execution_adoption_receipt=adoption,
+        )
+        _write_json(receipts_directory / f"{candidate_id}.json", receipt)
+        completed[candidate_id] = receipt
+        sequence += 1
+        checkpoint = build_lifecycle_checkpoint(
+            root, attempt_id=attempt_id, sequence=sequence, status="RUNNING",
+            completed_candidate_count=len(completed), failed_candidate_count=0,
+            resume_allowed=True, previous_checkpoint_sha256=previous,
+        )
+        append_lifecycle_checkpoint(ledger, checkpoint)
+        previous = checkpoint["checkpoint_sha256"]
+
+    decision_path = output / "reserve-activation-decision.v1.json"
+    continuation_path = output / "reserve-continuation-authority.v1.json"
     with _attempt_lock(output / "attempt.lock"):
-        for candidate_id, candidate in candidates.items():
-            if candidate_id in completed:
-                continue
-            reserve = candidate["tier"] == "conditional_reserve"
-            active_reserves = authority.get("active_reserve_candidate_ids", [])
-            if reserve and candidate_id not in active_reserves:
-                row = {
-                    "schema_version": "myis.armindex-a2-external-candidate-result.v1",
-                    "attempt_id": attempt_id,
-                    "candidate_id": candidate_id,
-                    "arm_id": candidate["arm_id"],
-                    "program_sha256": candidate["program_sha256"],
-                    "executor_output_sha256": canonical_sha256([candidate_id, "dormant"]),
-                    "evaluator_input_sha256": canonical_sha256([candidate_id, "dormant-input"]),
-                    "evaluator_sha256": authority["authority_sha256"],
-                    "code_sha256": adoption["bundle_sha256"],
-                    "model_sha256": "0" * 64,
-                    "data_sha256": "0" * 64,
-                    "primary_metric": None,
-                    "secondary_metrics": None,
-                    "latency": None,
-                    "cost": None,
-                    "coverage": {"expected_units": 1, "completed_units": 0},
-                    "resume_count": 0,
-                    "failure_count": 0,
-                    "reserve_activation_passed": False,
-                    "reserve_activation_evidence_sha256": None,
-                    "train_only": True,
-                    "rep_dev_measured": False,
-                    "protected_payload_included": False,
-                    "per_query_outcomes_included": False,
-                }
-            else:
-                command = [
-                    item.format(
-                        candidate_id=candidate_id,
-                        arm_id=candidate["arm_id"],
-                        program_sha256=candidate["program_sha256"],
-                    )
-                    for item in command_template
-                ]
-                try:
-                    row = dict(
-                        executor(
-                            command,
-                            environment=_executor_environment(candidate),
-                            heartbeat_path=heartbeats_directory
-                            / f"{candidate_id}.attempt-{sequence + 1:04d}.json",
-                            process_path=processes_directory
-                            / f"{candidate_id}.attempt-{sequence + 1:04d}.json",
-                            timeout_seconds=timeout_seconds,
-                        )
-                    )
-                except BaseException:
-                    paused = build_lifecycle_checkpoint(
-                        root,
-                        attempt_id=attempt_id,
-                        sequence=sequence + 1,
-                        status="PAUSED",
-                        completed_candidate_count=len(completed),
-                        failed_candidate_count=1,
-                        resume_allowed=True,
-                        previous_checkpoint_sha256=previous,
-                    )
-                    append_lifecycle_checkpoint(ledger, paused)
-                    raise
-                if reserve:
-                    row["reserve_activation_passed"] = True
-                    row["reserve_activation_evidence_sha256"] = authority[
-                        "reserve_activation_evidence_sha256"
-                    ]
-            receipt = build_candidate_result_receipt(
-                root,
-                result=row,
-                evidence_class="measured_development_aggregate",
-                measurement_authority=authority,
-                execution_adoption_receipt=adoption,
-            )
-            _write_json(receipts_directory / f"{candidate_id}.json", receipt)
-            completed[candidate_id] = receipt
-            sequence += 1
-            checkpoint = build_lifecycle_checkpoint(
+        # Stage one never runs or marks a reserve until every frozen matched cell is durable.
+        for candidate_id in matched_ids:
+            if candidate_id not in completed:
+                record(candidate_id)
+        if reserve_budget_admission is None:
+            return {
+                "status": "MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED",
+                "attempt_id": attempt_id,
+                "matched_candidate_count": 40,
+                "matched_candidate_result_set_sha256": _matched_result_set_sha256(completed),
+                "checkpoint_sha256": previous,
+                "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
+                "measurement_authority_sha256": authority["authority_sha256"],
+                "workers_reaped": True,
+            }
+        if decision_path.exists():
+            decision = _load_json(decision_path, role="reserve activation decision")
+            _validate(root, "a2-reserve-activation-decision.v1.json", decision)
+            if (
+                decision.get("receipt_sha256")
+                != canonical_sha256(
+                    {key: value for key, value in decision.items() if key != "receipt_sha256"}
+                )
+                or decision.get("matched_candidate_result_set_sha256")
+                != _matched_result_set_sha256(completed)
+                or decision.get("execution_adoption_receipt_sha256") != adoption["receipt_sha256"]
+                or decision.get("initial_measurement_authority_sha256") != authority["authority_sha256"]
+            ):
+                raise A2OperationalExecutorError("reserve activation decision identity drift")
+            if arm_incumbents is None:
+                raise A2OperationalExecutorError(
+                    "reserve continuation requires Owner-local A1 incumbent bindings"
+                )
+            expected_decision = build_reserve_activation_decision(
                 root,
                 attempt_id=attempt_id,
-                sequence=sequence,
-                status="RUNNING",
-                completed_candidate_count=len(completed),
-                failed_candidate_count=0,
-                resume_allowed=True,
-                previous_checkpoint_sha256=previous,
+                receipts_by_candidate=completed,
+                adoption_receipt_sha256=adoption["receipt_sha256"],
+                authority_sha256=authority["authority_sha256"],
+                provider_admission_receipt_sha256=adoption[
+                    "provider_admission_receipt_sha256"
+                ],
+                arm_incumbents=arm_incumbents,
+                reserve_budget_admission=reserve_budget_admission,
+                now_utc=now_utc,
             )
-            append_lifecycle_checkpoint(ledger, checkpoint)
-            previous = checkpoint["checkpoint_sha256"]
+            if decision != expected_decision:
+                raise A2OperationalExecutorError("reserve continuation decision drift")
+        else:
+            if arm_incumbents is None:
+                raise A2OperationalExecutorError(
+                    "reserve continuation requires Owner-local A1 incumbent bindings"
+                )
+            decision = build_reserve_activation_decision(
+                root,
+                attempt_id=attempt_id,
+                receipts_by_candidate=completed,
+                adoption_receipt_sha256=adoption["receipt_sha256"],
+                authority_sha256=authority["authority_sha256"],
+                provider_admission_receipt_sha256=adoption[
+                    "provider_admission_receipt_sha256"
+                ],
+                arm_incumbents=arm_incumbents,
+                reserve_budget_admission=reserve_budget_admission,
+                now_utc=now_utc,
+            )
+            _write_json(decision_path, decision)
+        continuation = build_reserve_continuation(
+            root,
+            attempt_id=attempt_id,
+            adoption_receipt_sha256=adoption["receipt_sha256"],
+            authority_sha256=authority["authority_sha256"],
+            decision=decision,
+        )
+        _write_json(continuation_path, continuation)
+        active_reserves = set(continuation["active_reserve_candidate_ids"])
+        decision_hash = continuation["reserve_activation_decision_receipt_sha256"]
+        for candidate_id in reserve_ids:
+            existing = completed.get(candidate_id)
+            if existing is None:
+                continue
+            if existing.get("reserve_activation_evidence_sha256") != decision_hash:
+                raise A2OperationalExecutorError("reserve receipt continuation binding drift")
+            expected_active = candidate_id in active_reserves
+            if existing.get("reserve_activation_passed") is not expected_active:
+                raise A2OperationalExecutorError("reserve receipt activation decision drift")
+        for candidate_id in reserve_ids:
+            if candidate_id not in completed:
+                record(
+                    candidate_id,
+                    active_reserve=candidate_id in active_reserves,
+                    decision_sha256=decision_hash,
+                )
     coverage = evaluate_candidate_receipts(root, receipts_by_candidate=completed)
     return {
         **coverage,
@@ -702,6 +805,8 @@ def execute_external_candidate_set(
         "checkpoint_sha256": previous,
         "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
         "measurement_authority_sha256": authority["authority_sha256"],
+        "reserve_activation_decision_receipt_sha256": decision["receipt_sha256"],
+        "reserve_continuation_authority_sha256": continuation["continuation_sha256"],
         "workers_reaped": True,
     }
 
@@ -769,10 +874,10 @@ def build_candidate_result_receipt(
     reserve = candidate["tier"] == "conditional_reserve"
     active = row.get("reserve_activation_passed") is True
     activation_evidence = row.get("reserve_activation_evidence_sha256")
-    if active:
+    if reserve:
         _hash(activation_evidence, role="reserve activation evidence")
-    elif activation_evidence is not None:
-        raise A2OperationalExecutorError("dormant reserve has activation evidence")
+    elif active or activation_evidence is not None:
+        raise A2OperationalExecutorError("matched candidate has reserve activation state")
     if reserve and not active:
         if any(row.get(field) is not None for field in ("primary_metric", "secondary_metrics", "latency", "cost")):
             raise A2OperationalExecutorError("dormant reserve contains an outcome")
@@ -892,6 +997,28 @@ def evaluate_candidate_receipts(
         elif receipt["status"] != "PASS_A2_CANDIDATE_RESULT":
             raise A2OperationalExecutorError("active candidate lacks a PASS result")
         receipt_hashes.append(receipt["receipt_sha256"])
+    for arm_id in ("ARM-03", "ARM-05", "ARM-04"):
+        reserve_receipts = [
+            receipts_by_candidate[candidate_id]
+            for candidate_id, candidate in candidates.items()
+            if candidate["arm_id"] == arm_id
+            and candidate["tier"] == "conditional_reserve"
+        ]
+        statuses = {receipt["status"] for receipt in reserve_receipts}
+        decision_hashes = {
+            receipt["reserve_activation_evidence_sha256"]
+            for receipt in reserve_receipts
+        }
+        if (
+            len(reserve_receipts) != 4
+            or len(statuses) != 1
+            or len(decision_hashes) != 1
+            or statuses
+            not in ({"PASS_A2_CANDIDATE_RESULT"}, {"DORMANT_CONDITIONAL_RESERVE"})
+        ):
+            raise A2OperationalExecutorError(
+                "conditional reserve must be one decision-bound complete arm quartet"
+            )
     for arm_id in ("ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"):
         scored: list[tuple[Decimal, str]] = []
         for candidate_id, candidate in candidates.items():
@@ -1100,6 +1227,321 @@ def _run_live_remote_probe(
     return value
 
 
+def _candidate_manifest(root: Path) -> dict[str, Any]:
+    return _load_json(
+        root
+        / "campaigns/armindex-multiretriever-v2/manifests/"
+        "a2-five-arm-candidate-manifest.v1.json",
+        role="candidate manifest",
+    )
+
+
+def _matched_candidate_ids(
+    candidates: Mapping[str, Mapping[str, Any]],
+) -> tuple[str, ...]:
+    return tuple(
+        candidate_id
+        for candidate_id, candidate in candidates.items()
+        if candidate["tier"] == "matched"
+    )
+
+
+def _matched_result_set_sha256(receipts: Mapping[str, Mapping[str, Any]]) -> str:
+    matched = {
+        candidate_id: receipt["receipt_sha256"]
+        for candidate_id, receipt in receipts.items()
+        if receipt.get("tier") == "matched"
+    }
+    if len(matched) != 40:
+        raise A2OperationalExecutorError("reserve decision requires all 40 matched receipts")
+    return canonical_sha256(dict(sorted(matched.items())))
+
+
+def _primary_value(receipt: Mapping[str, Any]) -> str:
+    metric = receipt.get("primary_metric")
+    if not isinstance(metric, Mapping) or metric.get("name") != "recall_at_100/out":
+        raise A2OperationalExecutorError("matched receipt lacks the frozen primary metric")
+    return _decimal(metric.get("value"), role="matched primary metric")
+
+
+def _batch_best(
+    candidate_ids: Sequence[str], receipts: Mapping[str, Mapping[str, Any]]
+) -> tuple[str, str]:
+    scored = [(_decimal(_primary_value(receipts[candidate_id]), role="primary"), candidate_id) for candidate_id in candidate_ids]
+    winner = min(scored, key=lambda item: (-Decimal(item[0]), item[1]))
+    return winner[1], winner[0]
+
+
+def build_reserve_budget_admission(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    adoption_receipt: Mapping[str, Any],
+    measurement_authority: Mapping[str, Any],
+    provider_admission_receipt_sha256: str,
+    observed_at_utc: str,
+    ttl_deadline_utc: str,
+    whole_workload_total_usd: object,
+    now_utc: datetime | None = None,
+) -> dict[str, Any]:
+    """Create the fresh reserve-checkpoint admission without provider contact."""
+
+    root = repository_root.resolve()
+    adoption = validate_execution_adoption_receipt(root, adoption_receipt)
+    authority = validate_measurement_authority(
+        root,
+        measurement_authority,
+        attempt_id=attempt_id,
+        execution_adoption_receipt_sha256=adoption["receipt_sha256"],
+    )
+    _hash(provider_admission_receipt_sha256, role="provider admission receipt")
+    body = {
+        "schema_version": "myis.armindex-a2-reserve-budget-admission.v1",
+        "receipt_id": f"{attempt_id}-reserve-budget-admission-v1",
+        "attempt_id": attempt_id,
+        "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
+        "initial_measurement_authority_sha256": authority["authority_sha256"],
+        "provider_admission_receipt_sha256": provider_admission_receipt_sha256,
+        "observed_at_utc": observed_at_utc,
+        "ttl_deadline_utc": ttl_deadline_utc,
+        "whole_workload_total_usd": _decimal(
+            whole_workload_total_usd, role="whole workload total"
+        ),
+        "forward_hard_stop_usd": "35",
+        "freeze_bindings": _freeze_bindings(root),
+    }
+    receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+    return validate_reserve_budget_admission(
+        root,
+        receipt,
+        attempt_id=attempt_id,
+        adoption_receipt_sha256=adoption["receipt_sha256"],
+        authority_sha256=authority["authority_sha256"],
+        provider_admission_receipt_sha256=adoption[
+            "provider_admission_receipt_sha256"
+        ],
+        now_utc=now_utc,
+    )
+
+
+def validate_reserve_budget_admission(
+    repository_root: Path,
+    receipt: Mapping[str, Any],
+    *,
+    attempt_id: str,
+    adoption_receipt_sha256: str,
+    authority_sha256: str,
+    provider_admission_receipt_sha256: str,
+    now_utc: datetime | None = None,
+) -> dict[str, Any]:
+    root = repository_root.resolve()
+    checked = dict(receipt)
+    _validate(root, "a2-reserve-budget-admission.v1.json", checked)
+    now = now_utc or datetime.now(timezone.utc)
+    try:
+        observed = datetime.fromisoformat(checked["observed_at_utc"].replace("Z", "+00:00"))
+        deadline = datetime.fromisoformat(checked["ttl_deadline_utc"].replace("Z", "+00:00"))
+    except (TypeError, ValueError) as error:
+        raise A2OperationalExecutorError("reserve budget admission timestamps are invalid") from error
+    if (
+        checked["attempt_id"] != attempt_id
+        or checked["execution_adoption_receipt_sha256"] != adoption_receipt_sha256
+        or checked["initial_measurement_authority_sha256"] != authority_sha256
+        or checked["provider_admission_receipt_sha256"]
+        != provider_admission_receipt_sha256
+        or checked["freeze_bindings"] != _freeze_bindings(root)
+        or checked["receipt_sha256"]
+        != canonical_sha256({key: value for key, value in checked.items() if key != "receipt_sha256"})
+        or Decimal(checked["whole_workload_total_usd"]) > Decimal("35")
+        or checked["forward_hard_stop_usd"] != "35"
+        or now - observed > timedelta(minutes=15)
+        or observed > now + timedelta(minutes=1)
+        or (deadline - now).total_seconds() < 40 * 3600
+    ):
+        raise A2OperationalExecutorError("reserve budget admission is stale or identity-drifted")
+    return checked
+
+
+def build_reserve_activation_decision(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    receipts_by_candidate: Mapping[str, Mapping[str, Any]],
+    adoption_receipt_sha256: str,
+    authority_sha256: str,
+    provider_admission_receipt_sha256: str,
+    arm_incumbents: Mapping[str, Mapping[str, Any]],
+    reserve_budget_admission: Mapping[str, Any],
+    now_utc: datetime | None = None,
+) -> dict[str, Any]:
+    root = repository_root.resolve()
+    budget = validate_reserve_budget_admission(
+        root,
+        reserve_budget_admission,
+        attempt_id=attempt_id,
+        adoption_receipt_sha256=adoption_receipt_sha256,
+        authority_sha256=authority_sha256,
+        provider_admission_receipt_sha256=provider_admission_receipt_sha256,
+        now_utc=now_utc,
+    )
+    manifest = _candidate_manifest(root)
+    candidates = frozen_candidates(root)
+    matched_set = _matched_result_set_sha256(receipts_by_candidate)
+    decisions: list[dict[str, Any]] = []
+    active: list[str] = []
+    frozen_bindings_sha256 = canonical_sha256(_freeze_bindings(root))
+    batches = {row["batch_id"]: row for row in manifest["batches"]}
+    for arm_id in ("ARM-03", "ARM-05", "ARM-04"):
+        incumbent = arm_incumbents.get(arm_id)
+        if not isinstance(incumbent, Mapping):
+            raise A2OperationalExecutorError("Owner-local A1 incumbent binding is missing")
+        state = AutoIndexState(
+            arm_id=arm_id,
+            incumbent_candidate_id=str(incumbent["candidate_id"]),
+            incumbent_program_sha256=_hash(incumbent["program_sha256"], role="incumbent program"),
+            incumbent_primary=Decimal(str(incumbent["primary_metric"])),
+            frozen_bindings_sha256=frozen_bindings_sha256,
+        )
+        batch_results: list[tuple[str, str]] = []
+        arm_receipt_hashes: list[str] = []
+        reserve_id = f"a2-{arm_id.lower()}-reserve-b3"
+        reserve_ids = list(batches[reserve_id]["candidate_ids"])
+        reserve_rows = [candidates[candidate_id] for candidate_id in reserve_ids]
+        grounded = (
+            len(reserve_rows) == 4
+            and all(row["tier"] == "conditional_reserve" for row in reserve_rows)
+            and all(row["batch_index"] == 3 for row in reserve_rows)
+            and all(row["advancement_eligible"] is True for row in reserve_rows)
+            and all(row["verifier_status"] == "accepted" for row in reserve_rows)
+            and all(
+                isinstance(row["declared_axis"], str) and bool(row["declared_axis"].strip())
+                for row in reserve_rows
+            )
+            and len({row["scientific_payload_sha256"] for row in reserve_rows}) == 4
+            and len({row["program_sha256"] for row in reserve_rows}) == 4
+        )
+        last_decision = None
+        for batch_index in (1, 2):
+            batch_id = f"a2-{arm_id.lower()}-matched-b{batch_index}"
+            frozen_batch = batches[batch_id]
+            candidate_ids = list(frozen_batch["candidate_ids"])
+            arm_receipt_hashes.extend(receipts_by_candidate[item]["receipt_sha256"] for item in candidate_ids)
+            derived_candidates = [
+                {
+                    key: candidates[candidate_id][key]
+                    for key in (
+                        "candidate_id", "role", "hypothesis", "declared_axis", "program_sha256",
+                        "compiled_sha256", "scientific_payload_sha256", "matched_ablation_id",
+                        "compile_sha256s", "verifier_status",
+                    )
+                }
+                for candidate_id in candidate_ids
+            ]
+            batch_body = {
+                "schema_version": "myis.armindex-autoindex-execution-batch.v1",
+                "batch_id": batch_id,
+                "arm_id": arm_id,
+                "iteration": batch_index,
+                "incumbent_program_sha256": state.incumbent_program_sha256,
+                "frozen_bindings_sha256": frozen_bindings_sha256,
+                "status": "frozen_before_evaluation",
+                "candidates": derived_candidates,
+            }
+            batch = {**batch_body, "batch_sha256": canonical_sha256(batch_body)}
+            scores = {candidate_id: _primary_value(receipts_by_candidate[candidate_id]) for candidate_id in candidate_ids}
+            last_decision = advance_autoindex(
+                state,
+                batch,
+                scores,
+                remaining_budget=True,
+                grounded_axes_remaining=grounded,
+            )
+            state = last_decision.state
+            batch_results.append(_batch_best(candidate_ids, receipts_by_candidate))
+        assert last_decision is not None
+        # ``advance_autoindex`` owns the frozen two-batch transition.  Bind the
+        # predicate to its retained incumbent rather than requiring the second
+        # batch alone to beat the first: a batch-one improvement followed by a
+        # flat batch-two remains a valid, grounded third-batch continuation.
+        improvement = strict_primary_improvement(
+            state.incumbent_primary, Decimal(str(incumbent["primary_metric"]))
+        )
+        activation = improvement and grounded and last_decision.next_action == "run_gated_third_batch"
+        if activation:
+            active.extend(reserve_ids)
+        decisions.append(
+            {
+                "arm_id": arm_id,
+                "matched_batch_receipt_sha256s": arm_receipt_hashes,
+                "batch_one_best_candidate_id": batch_results[0][0],
+                "batch_one_best_primary_metric": batch_results[0][1],
+                "batch_two_best_candidate_id": batch_results[1][0],
+                "batch_two_best_primary_metric": batch_results[1][1],
+                "strict_primary_improvement": improvement,
+                "grounded_axes_remaining": grounded,
+                "fresh_budget_admission_pass": True,
+                "activation_passed": activation,
+                "reserve_candidate_ids": reserve_ids,
+            }
+        )
+    body = {
+        "schema_version": "myis.armindex-a2-reserve-activation-decision.v1",
+        "receipt_id": f"{attempt_id}-reserve-activation-decision-v1",
+        "attempt_id": attempt_id,
+        "status": "PASS_A2_RESERVE_ACTIVATION_DECISION",
+        "execution_adoption_receipt_sha256": adoption_receipt_sha256,
+        "initial_measurement_authority_sha256": authority_sha256,
+        "matched_candidate_result_set_sha256": matched_set,
+        "matched_candidate_count": 40,
+        "reserve_budget_admission_receipt_sha256": budget["receipt_sha256"],
+        "decisions": decisions,
+        "active_reserve_candidate_ids": active,
+        "freeze_bindings": _freeze_bindings(root),
+    }
+    receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+    _validate(root, "a2-reserve-activation-decision.v1.json", receipt)
+    return receipt
+
+
+def build_reserve_continuation(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    adoption_receipt_sha256: str,
+    authority_sha256: str,
+    decision: Mapping[str, Any],
+) -> dict[str, Any]:
+    root = repository_root.resolve()
+    checked = dict(decision)
+    _validate(root, "a2-reserve-activation-decision.v1.json", checked)
+    if (
+        checked.get("receipt_sha256")
+        != canonical_sha256(
+            {key: value for key, value in checked.items() if key != "receipt_sha256"}
+        )
+        or checked.get("attempt_id") != attempt_id
+        or checked.get("execution_adoption_receipt_sha256")
+        != adoption_receipt_sha256
+        or checked.get("initial_measurement_authority_sha256") != authority_sha256
+        or checked.get("freeze_bindings") != _freeze_bindings(root)
+    ):
+        raise A2OperationalExecutorError("reserve continuation decision binding drift")
+    body = {
+        "schema_version": "myis.armindex-a2-reserve-continuation-authority.v1",
+        "continuation_id": f"{attempt_id}-reserve-continuation-v1",
+        "attempt_id": attempt_id,
+        "initial_measurement_authority_sha256": authority_sha256,
+        "execution_adoption_receipt_sha256": adoption_receipt_sha256,
+        "matched_candidate_result_set_sha256": checked["matched_candidate_result_set_sha256"],
+        "reserve_activation_decision_receipt_sha256": checked["receipt_sha256"],
+        "active_reserve_candidate_ids": list(checked["active_reserve_candidate_ids"]),
+        "freeze_bindings": _freeze_bindings(root),
+    }
+    continuation = {**body, "continuation_sha256": canonical_sha256(body)}
+    _validate(root, "a2-reserve-continuation-authority.v1.json", continuation)
+    return continuation
+
+
 def perform_remote_stage(
     repository_root: Path,
     *,
@@ -1288,6 +1730,18 @@ def run_synthetic_dry_run(repository_root: Path, *, attempt_id: str) -> dict[str
         raise A2OperationalExecutorError("dry-run attempt ID is invalid")
     candidates = frozen_candidates(root)
     receipts: dict[str, dict[str, Any]] = {}
+    synthetic_reserve_decision_sha256 = canonical_sha256(
+        {
+            "attempt_id": attempt_id,
+            "evidence_class": "engineering_synthetic",
+            "active_reserve_candidate_ids": [],
+            "conditional_reserve_candidate_ids": [
+                candidate_id
+                for candidate_id, candidate in candidates.items()
+                if candidate["tier"] == "conditional_reserve"
+            ],
+        }
+    )
     for index, (candidate_id, candidate) in enumerate(candidates.items(), start=1):
         dormant = candidate["tier"] == "conditional_reserve"
         row = {
@@ -1310,7 +1764,9 @@ def run_synthetic_dry_run(repository_root: Path, *, attempt_id: str) -> dict[str
             "resume_count": 0,
             "failure_count": 0,
             "reserve_activation_passed": False,
-            "reserve_activation_evidence_sha256": None,
+            "reserve_activation_evidence_sha256": (
+                synthetic_reserve_decision_sha256 if dormant else None
+            ),
             "train_only": True,
             "rep_dev_measured": False,
             "protected_payload_included": False,
@@ -1461,6 +1917,9 @@ def _parser() -> argparse.ArgumentParser:
     execute.add_argument("--execution-adoption-receipt", type=Path, required=True)
     execute.add_argument("--measurement-authority", type=Path, required=True)
     execute.add_argument("--command-argv-json", type=Path, required=True)
+    execute.add_argument("--owner-root", type=Path, required=True)
+    execute.add_argument("--owner-input-manifest", type=Path, required=True)
+    execute.add_argument("--reserve-budget-admission", type=Path)
     execute.add_argument("--output-directory", type=Path, required=True)
     execute.add_argument("--checkpoint-ledger", type=Path, required=True)
     execute.add_argument("--timeout-seconds", type=int, default=21600)
@@ -1559,6 +2018,32 @@ def main(argv: Sequence[str] | None = None) -> int:
             argv_value = json.loads(args.command_argv_json.read_text(encoding="utf-8"))
             if not isinstance(argv_value, list):
                 raise A2OperationalExecutorError("external executor argv JSON must be a list")
+            try:
+                expected_argv = json.loads(
+                    (root / "control/armindex/a2/measured-command-argv.v1.json").read_text(
+                        encoding="utf-8"
+                    )
+                )
+            except (OSError, UnicodeError, json.JSONDecodeError) as error:
+                raise A2OperationalExecutorError(
+                    "tracked measured command argv is invalid"
+                ) from error
+            if not isinstance(expected_argv, list):
+                raise A2OperationalExecutorError("tracked measured command argv is invalid")
+            if argv_value != expected_argv:
+                raise A2OperationalExecutorError("external executor argv must match tracked measured adapter")
+            owner_root = args.owner_root.resolve(strict=True)
+            if owner_root.is_relative_to(root) or owner_root.is_symlink() or not owner_root.is_dir():
+                raise A2OperationalExecutorError("Owner-local root is unsafe")
+            owner_manifest = args.owner_input_manifest.resolve(strict=True)
+            if owner_manifest.is_symlink() or not owner_manifest.is_file():
+                raise A2OperationalExecutorError("Owner-local input manifest is unsafe")
+            try:
+                manifest_relative = owner_manifest.relative_to(owner_root).as_posix()
+            except ValueError as error:
+                raise A2OperationalExecutorError(
+                    "Owner-local input manifest must be within Owner-local root"
+                ) from error
             result = execute_external_candidate_set(
                 root,
                 attempt_id=args.attempt_id,
@@ -1573,6 +2058,16 @@ def main(argv: Sequence[str] | None = None) -> int:
                 command_template=argv_value,
                 output_directory=args.output_directory,
                 checkpoint_ledger=args.checkpoint_ledger,
+                owner_local_root=owner_root,
+                owner_input_manifest=manifest_relative,
+                reserve_budget_admission=(
+                    _load_json(args.reserve_budget_admission, role="reserve budget admission")
+                    if args.reserve_budget_admission is not None
+                    else None
+                ),
+                arm_incumbents=_load_json(owner_manifest, role="Owner-local measured input manifest").get(
+                    "arm_incumbents"
+                ),
                 timeout_seconds=args.timeout_seconds,
             )
         elif command == "resume":

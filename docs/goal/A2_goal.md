@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: BLOCKED_PENDING_MEASURED_ADAPTER_AND_RESERVE_LIFECYCLE
+status: READY_FOR_AP_STAGING
 lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
 claim_boundary: "This guide consumes the immutable 52-candidate freeze only. It does not generate or mutate candidates, and it does not authorize measured A2 until fresh admission and adoption receipts pass."
 last_material_update: 2026-08-12
-next_authorized_action: RUN_IM_AUDIT_003_DO_NOT_LAUNCH_THIS_GOAL
+next_authorized_action: AP_READ_BACK_THEN_FRESH_ADMISSION_AND_STAGING_DO_NOT_LAUNCH_MEASUREMENT
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -30,12 +30,13 @@ protected boundary, count/role/non-advancement, manifest/freeze hashes และ
 work. Auditor แก้ได้เฉพาะ engineering/test/pointer/documentation mismatch ขนาดเล็ก;
 ห้าม mutate candidate หรือเปิด measured A2.
 
-Goal นี้ยังห้าม launch. AP audit 003 พบว่า production measured adapter และ
-matched-first reserve lifecycle ยังไม่ครบ; staging bundle ปัจจุบันจะถูก invalidated
-ทันทีเมื่อแก้สองส่วนนี้. ใช้ `docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md` กับ IM ก่อน.
+Audit 003 implementation เสร็จแล้ว: tracked production adapter ตรวจ frozen program bytes,
+ใช้ A1 v16 runtime/model/materialization/evaluator bindings และปล่อยเฉพาะ aggregate-safe
+result; executor รัน 40 matched ก่อนสร้าง fresh reserve decision/continuation เสมอ.
+Goal นี้ยังห้าม launch จน AP read-back, fresh admission/staging และ measured authority ผ่าน.
 
 ```text
-DO_NOT_LAUNCH: return to IM audit 003.
+DO_NOT_LAUNCH: return to AP read-back and fresh staging; measured authority is absent.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -113,7 +114,7 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, audit 003 is an engineering repair loop only. Preserve append-only evidence;
+- Before LO, AP must read back audit 003 implementation and create fresh staging evidence. Preserve append-only evidence;
   do not alter frozen candidate bytes or the v1 campaign/envelope/budget/execution contract.
 - During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,
   missing management authority, wrong instance/GPU/runtime/model/data hash, protected output,

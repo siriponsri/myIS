@@ -3281,7 +3281,7 @@
     }
   ],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -3548,7 +3548,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "2c322c64eadc5ff6fe6a0108ac8dae36422a15c40c22ccb3ec6ce9803c556abc",
+  "report_sha256": "62110b0351976106a0baaf4de07dcdc82e86444f67f7da35f667f5f4b3318898",
   "report_type": "phase",
   "result": {
     "decision": "PASS_25_OF_25",

@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Cross-arm transfer matrix",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-1",
-  "report_sha256": "dfc1a8e805ce9c6042a652afe6ee32d8f13284370696de3c91ccf8f36d58946b",
+  "report_sha256": "dad6c1bae0a02398367db0f1f277b641d453b28eaa765f5c5cb1d513831ecfeb",
   "report_type": "task",
   "result": {
     "decision": "planned",

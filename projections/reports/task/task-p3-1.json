@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
   "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
@@ -51,7 +51,7 @@
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "c26125dbc449e7c7055707396b49d63874a8b96cde861f707e0c2803a1fbe013",
+  "report_sha256": "2bb3f00adb2f7348df4aca7b3f2f4f9b269a4d822738c6fb653e0dc45ace7693",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

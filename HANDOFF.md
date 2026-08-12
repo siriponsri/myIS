@@ -7,9 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION NEEDS_IM_MEASURED_ADAPTER_AND_RESERVE_LIFECYCLE`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION READY_FOR_AP_STAGING_MEASUREMENT_LOCKED`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_provider_stage_hardened_but_production_adapter_and_two_stage_reserve_pending`
+- Status: `a2_production_adapter_and_matched_first_reserve_complete_fresh_ap_staging_pending`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: A1 aggregate-safe measured development closeout has validated
   25/25 coverage and scientific authority `true`; A2 remains immutable
@@ -248,14 +248,13 @@ The manifest, freeze receipt, and lock self-hashes remain
 `ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10`,
 and `c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952`.
 IM commits through `1eb6e8c7` close provider-provenance, absolute-TTL, live-probe,
-watchdog, and adoption gaps; focused A2 tests report `44 passed`. AP launch audit
-003 then found that no concrete production adapter currently evaluates the frozen
-A2 representation programs: the ArmIndex compiler is fixture-only and A1 v16
-accepts only its historical common programs. The executor also fixes active
-reserve IDs before the matched outcomes required by the frozen activation
-predicate exist. These are launch-critical implementation gaps, not new Owner
-gates. Fresh provider admission/adoption and isolated staging remain incomplete,
-and no remote A2 root or measured worker was started.
+watchdog, and adoption gaps; focused A2 tests report `44 passed`. Audit 003 IM
+then adds the production A2 program compiler/engine, tracked Owner-local adapter
+contract, and matched-first conditional-reserve lifecycle. The initial authority
+cannot pre-activate reserve work; after 40 durable matched receipts, a fresh
+absolute-deadline/USD-35 admission binds deterministic per-arm decisions and one
+immutable continuation. Fresh provider admission/adoption and isolated staging
+remain incomplete, and no remote A2 root or measured worker was started.
 
 ## Active authorized action
 
@@ -267,13 +266,10 @@ APPROVED: 48 hours remaining under the unchanged USD 35 A2 forward hard stop.
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-Audit 002 implementation is complete and AP-validated. Owner additionally
-authorized exceptional AP staging, but AP intentionally deferred it because the
-current bundle lacks the measured adapter and matched-first reserve lifecycle and
-would be invalidated by the required implementation. The next route is IM via
-`docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md`; after IM returns a clean final
-bundle, AP may perform fresh admission/staging and open one measured LO goal
-without another Owner decision.
+Audit 002 implementation is complete and AP-validated. Audit 003 implementation
+is complete and returns a clean final bundle. The next route is AP read-back,
+fresh admission/staging, and only then a separate measured LO goal and authority;
+no additional Owner decision is required by the current plan.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 

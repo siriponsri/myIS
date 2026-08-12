@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-reserve-budget-admission:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "execution_adoption_receipt_sha256", "initial_measurement_authority_sha256", "provider_admission_receipt_sha256", "observed_at_utc", "ttl_deadline_utc", "whole_workload_total_usd", "forward_hard_stop_usd", "freeze_bindings", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-reserve-budget-admission.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-reserve-budget-admission-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "execution_adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "initial_measurement_authority_sha256": {"$ref": "#/$defs/hash"},
+    "provider_admission_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "observed_at_utc": {"type": "string", "format": "date-time"},
+    "ttl_deadline_utc": {"type": "string", "format": "date-time"},
+    "whole_workload_total_usd": {"$ref": "#/$defs/money"},
+    "forward_hard_stop_usd": {"const": "35"},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "money": {"type": "string", "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73"
-read_model_sha256: "7bdecffb3521d83744069331d13b051fecaf386b548dd0f5683e4e8f70d38f1d"
+read_model_revision: "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd"
+read_model_sha256: "e6614bc79e9a6cf663f3c50d7015f05693c9d9d0215bfdb6569a79a4e5cc0580"
 source_commit: "0d4a51a81d411cff0e70baf293e8edc9dd0dba85"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_validation"
 scientific_authority: false
 claim_boundary: "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim"
-generated_from_revision: "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73"
+generated_from_revision: "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd"
 last_material_update: "2026-08-12T13:08:25Z"
 next_authorized_action: "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT"
 managed_by: "myis-report"
@@ -78,7 +78,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | A2 frozen-five-arm execution readiness contract | `contract` | `engineering_execution_readiness` | `control/armindex/a2/execution-readiness-contract.v1.json` | `ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97` | `validated` |
 | A2 execution readiness envelope | `control` | `engineering_execution_readiness` | `control/execution-envelope-a2-readiness-v1.yaml` | `8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a` | `validated` |
 | A2 whole-workload readiness budget | `budget` | `engineering_execution_readiness` | `control/budgets/a2-execution-readiness-v1.json` | `be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de` | `validated` |
-| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74` | `validated` |
+| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f` | `validated` |
 | A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e` | `validated` |
 
 ## Metrics

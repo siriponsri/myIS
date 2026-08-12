@@ -1,0 +1,11 @@
+[
+  "python",
+  "-m",
+  "myis_research.armindex.a2_measured_adapter",
+  "--repository-root",
+  ".",
+  "--owner-root",
+  "{owner_local_root}",
+  "--input-manifest",
+  "{owner_local_input_manifest}"
+]
