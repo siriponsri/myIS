@@ -1,0 +1,62 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-im-operational-readiness-ap-review-20260812",
+  "artifact": "A2 IM operational executor package",
+  "artifact_path": "docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md",
+  "artifact_sha256": "1981d5eb44e56b623ba866f6d129830fa03ebeed7b4e5188cda2a03547999324",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": false,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "Fresh provider TTL evidence does not meet the A2 minimum or 40-hour admission requirement."
+    ]
+  },
+  "overall": {
+    "grade": "Reject",
+    "mean_score": 2.67,
+    "one_line_summary": "The executor and authority guards are materially improved, but provider admission and remote adoption are not yet evidentially bound strongly enough for LO.",
+    "strengths": [
+      "Operational lifecycle commands and exact-coverage/resume logic are implemented and focused tests pass.",
+      "Measured execution requires canonical tracked and pushed authority plus a matching authorizing goal.",
+      "Candidate freeze, protected boundary, diagnostic-arm policy, and journal evidence separation remain intact."
+    ],
+    "weaknesses": [
+      "Admission accepts bare hash values without validating source artifacts.",
+      "TTL is a caller-supplied number rather than remaining time computed from a fresh deadline.",
+      "Remote stage does not re-probe live GPU workers and runtime/model/data bindings before adoption."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {"score": 3, "strengths": ["The schemas cover provider, stage, candidate, safe-return, and closeout evidence."], "weaknesses": ["Provider and remote-stage facts are not sufficiently source-bound."], "suggestions": ["Bind admission and stage to validated source artifacts and live probes."]},
+    "D2_falsifiability": {"score": 3, "strengths": ["Stale quote, budget, ties, coverage, protected output, and lifecycle failures have fail-closed tests."], "weaknesses": ["Arbitrary valid hashes and stale real TTL can still satisfy current admission fields."], "suggestions": ["Add provenance and absolute-deadline failure tests."]},
+    "D3_scope_calibration": {"score": 4, "strengths": ["The package keeps measured A2, A3, Selection, and Final closed."], "weaknesses": [], "suggestions": []},
+    "D4_argument_coherence": {"score": 3, "strengths": ["Bundle, admission, stage, execution, safe return, and closeout now form one executable lifecycle."], "weaknesses": ["The admission-to-stage evidence chain does not yet prove the same live runtime and resources."], "suggestions": ["Carry source and live-probe commitments across both receipts."]},
+    "D5_exploration_integrity": {"score": 2, "strengths": ["The prior failed admission and current blocked state are preserved."], "weaknesses": ["The current external blocker is reported without exposing that the recorded TTL is already below the declared minimum."], "suggestions": ["Record TTL disposition explicitly and distinguish provider absence from insufficient remaining TTL."]},
+    "D6_methodological_rigor": {"score": 1, "strengths": ["Exact candidate coverage and measured authority controls are strong."], "weaknesses": ["Unbound input hashes, caller-declared TTL, and missing live GPU/runtime re-verification undermine launch evidence."], "suggestions": ["Harden provider observation, source provenance, and remote-stage revalidation before LO."]}
+  },
+  "findings": [
+    {"finding_id": "F001", "dimension": "D6_methodological_rigor", "severity": "critical", "target_artifact": "src/myis_research/armindex/a2_execution_readiness.py", "target_entity": "build_provider_admission_receipt", "evidence_locator": "runtime_sha256/model_lockset_sha256/data_handoff_sha256/management_authority_sha256 arguments", "observation": "The function checks that caller-supplied values look like SHA-256 hashes but does not validate source artifacts or bytes.", "reasoning": "A PASS admission can bind arbitrary 64-hex values rather than the actual runtime, model, data, and management evidence.", "suggestion": "Accept validated source artifacts and compute/bind their hashes internally."},
+    {"finding_id": "F002", "dimension": "D2_falsifiability", "severity": "major", "target_artifact": "src/myis_research/armindex/a2_execution_readiness.py", "target_entity": "provider TTL admission", "evidence_locator": "provider_evidence.ttl_hours == 40", "observation": "Admission trusts a numeric TTL field and does not validate an absolute deadline or remaining time.", "reasoning": "The current owner-local deadline left about 3.38 hours at review time, below the 32.873-hour minimum and 40-hour contract, yet a caller could submit ttl_hours=40.", "suggestion": "Require a fresh deadline and compute remaining TTL during admission and stage."},
+    {"finding_id": "F003", "dimension": "D4_argument_coherence", "severity": "major", "target_artifact": "src/myis_research/armindex/a2_operational_executor.py", "target_entity": "perform_remote_stage", "evidence_locator": "pgrep check and zero_workers_before_stage=true", "observation": "Stage checks A2 process names but not GPU compute processes and does not revalidate runtime/model/data identity against admission before adoption.", "reasoning": "The adoption receipt can claim a clean, matching live environment without directly proving it at staging time.", "suggestion": "Create and bind a live remote-probe receipt covering GPU workers and all admission identities."}
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "HANDOFF.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "docs/audit/A2_PER_ARM_AUTOINDEX_audit_001.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md",
+    "control/execution-envelope-a2-readiness-v1.yaml",
+    "control/budgets/a2-execution-readiness-v1.json",
+    "control/armindex/a2/execution-readiness-contract.v1.json",
+    "src/myis_research/armindex/a2_execution_readiness.py",
+    "src/myis_research/armindex/a2_operational_executor.py",
+    "tests/test_armindex_a2_operational_executor.py",
+    "vast-ssh.md aggregate-safe lifecycle fields"
+  ]
+}

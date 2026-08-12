@@ -15,12 +15,12 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`IM_HARDENED_NEEDS_AP`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`AP_REVIEW_NEEDS_IM`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (operational executor implementation
-  passed focused validation; fresh provider admission/adoption and isolated
-  staging remain blocked until complete current provider evidence is available.)
+  passed focused validation, but provider evidence provenance, absolute TTL and
+  live remote-stage identity checks require one bounded IM repair before LO.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -339,7 +339,7 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-ตอนนี้ทำ AP ตาม AGENTS.md อ่าน docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md แล้วตรวจ measured-authority provenance, watchdog lifecycle และ remote blocker โดยยังไม่เริ่ม measured A2
+ตอนนี้ทำ IM ตาม AGENTS.md อ่าน docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md แล้วแก้ provider-evidence provenance, absolute TTL และ live remote-stage bindings ให้ครบ โดยยังไม่เริ่ม measured A2
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
@@ -349,8 +349,10 @@ Codex bridge and five-arm candidate freeze are closed `PASS`, and the independen
 audit found zero findings. IM commits `4b7d84d4` and `eadf27d5` implement and
 harden the operational executor; the focused A2 suite passes and measured
 authority now requires canonical tracked/pushed provenance plus an authorizing
-goal. The next session is AP and reads
-`docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md`. Fresh provider
+goal. AP review found that provider admission still accepts unbound hash inputs,
+does not derive remaining TTL from an absolute deadline, and remote stage does
+not re-probe GPU workers plus runtime/model/data bindings. The next session is
+IM and reads `docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md`. Fresh provider
 admission, execution adoption, and isolated-root staging remain incomplete. The
 allowlisted remote handoff is retained on the unchanged instance with validated
 baseline `29/29`, journal EDA `8/8`, and closeout `12/12` packages. Post-finalize

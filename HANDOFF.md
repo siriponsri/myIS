@@ -7,9 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION IM_HARDENED_NEEDS_AP`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION AP_REVIEW_NEEDS_IM`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_operational_executor_implemented_remote_admission_blocked_measured_a2_closed`
+- Status: `a2_executor_validated_provider_evidence_hardening_required_measured_a2_closed`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: aggregate-safe measured development closeout with validated
   25/25 coverage, frozen promotion, and provider continuation; scientific authority `true`
@@ -251,24 +251,26 @@ requires canonical tracked/pushed measured authority plus an explicitly
 authorizing goal. The watchdog now emits its own heartbeat, stays outside the
 worker registry and must pass PID/start-time and freshness checks before stage
 adoption. Focused tests and synthetic dry-run pass without provider contact or
-measured A2. Fresh provider admission/adoption, isolated root and
-remote watchdog staging remain incomplete because authenticated provider CLI
-and fresh complete quote/TTL/management evidence were unavailable. These facts
-must not be inferred from `vast-ssh.md`.
+measured A2. AP review found three launch-critical evidence gaps: admission accepts
+bare hashes without source-artifact validation, TTL is caller-declared rather
+than computed from a fresh absolute deadline, and stage does not re-probe GPU
+workers plus runtime/model/data identity before adoption. The recorded Owner-local
+deadline left only about 3.38 hours at review time, below the A2 minimum and 40-hour
+contract. Fresh provider admission/adoption and isolated staging remain incomplete.
 
 ## Active authorized action
 
-The next session is AP. The exact next action is:
+The next session is IM. The exact next action is:
 
 ```text
-ตอนนี้ทำ AP ตาม AGENTS.md อ่าน docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md แล้วตรวจ measured-authority provenance, watchdog lifecycle และ remote blocker โดยยังไม่เริ่ม measured A2
+ตอนนี้ทำ IM ตาม AGENTS.md อ่าน docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md แล้วแก้ provider-evidence provenance, absolute TTL และ live remote-stage bindings ให้ครบ โดยยังไม่เริ่ม measured A2
 ```
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
 `docs/goal/A2_goal.md` remains the A2 readiness guide, but LO is not the next
-route until AP reviews IM and fresh A2 provider admission/adoption plus isolated
-staging are complete.
+route until IM closes audit 002 and fresh A2 provider admission/adoption plus
+isolated staging are evidentially valid.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 
