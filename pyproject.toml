@@ -51,6 +51,7 @@ myis-armindex = "myis_research.armindex.cli:main"
 "myis-a1.2-owner-evaluator-v16" = "myis_research.armindex.a1_2_owner_local_cli_v16:evaluator_main"
 myis-official-codex-bridge = "myis_research.armindex.official_codex_bridge:main"
 myis-a2-candidate-freeze = "myis_research.armindex.a2_candidate_freeze:main"
+myis-a2-executor = "myis_research.armindex.a2_operational_executor:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -9,6 +9,7 @@ separate adopted runner may use later.
 from __future__ import annotations
 
 import gzip
+import hashlib
 import json
 import os
 import re
@@ -62,7 +63,11 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-execution-adoption-receipt.v1.json",
     "schemas/armindex/a2-execution-bundle-receipt.v1.json",
     "schemas/armindex/a2-execution-ledger-entry.v1.json",
+    "schemas/armindex/a2-candidate-result-receipt.v1.json",
+    "schemas/armindex/a2-execution-closeout-receipt.v1.json",
+    "schemas/armindex/a2-remote-stage-receipt.v1.json",
     "schemas/armindex/a2-lifecycle-checkpoint.v1.json",
+    "schemas/armindex/a2-measured-execution-authority.v1.json",
     "schemas/armindex/a2-provider-admission-receipt.v1.json",
     "schemas/armindex/a2-safe-return-receipt.v1.json",
     "schemas/armindex/a2-train-evaluation-receipt.v1.json",
@@ -73,6 +78,7 @@ _BUNDLE_CLOSURE = (
     "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
     "src/myis_research/armindex/a2_candidate_freeze.py",
     "src/myis_research/armindex/a2_execution_readiness.py",
+    "src/myis_research/armindex/a2_operational_executor.py",
     "src/myis_research/kernel/canonical.py",
     "src/myis_research/protection.py",
 )
@@ -619,7 +625,7 @@ def validate_execution_bundle(repository_root: Path, *, bundle_path: Path, recei
             stream = archive.extractfile(row["path"])
             if stream is None or file_sha256_from_stream(stream) != row["sha256"]:
                 raise A2ExecutionReadinessError("execution bundle member hash drift")
-    return {"status": "PASS", "bundle_sha256": checked["bundle_sha256"]}
+    return {**checked, "validation_status": "PASS"}
 
 
 def file_sha256_from_stream(stream: Any) -> str:
@@ -976,7 +982,7 @@ def build_remote_staging_plan(
 def build_watchdog_script(
     *, attempt_id: str, remote_root: str, deadline_utc: str
 ) -> dict[str, Any]:
-    """Build an inert watchdog shell script; callers decide whether to stage it."""
+    """Build a bounded watchdog that signals only same-identity registered children."""
 
     if _ATTEMPT.fullmatch(attempt_id) is None or _REMOTE_ROOT.fullmatch(remote_root) is None:
         raise A2ExecutionReadinessError("watchdog attempt or root is invalid")
@@ -990,13 +996,34 @@ def build_watchdog_script(
         "test -d \"$remote_root\"\n"
         "test -n \"$attempt_id\"\n"
         "test -n \"$deadline_utc\"\n"
+        "deadline_epoch=$(date -u -d \"$deadline_utc\" +%s)\n"
+        "while test \"$(date -u +%s)\" -lt \"$deadline_epoch\"; do sleep 30; done\n"
+        "registry=\"$remote_root/lifecycle/processes\"\n"
+        "test -d \"$registry\" || exit 0\n"
+        "for identity in \"$registry\"/*.identity; do\n"
+        "  test -f \"$identity\" || continue\n"
+        "  IFS=: read -r pid start_tick <\"$identity\"\n"
+        "  case \"$pid:$start_tick\" in *[!0-9:]*) exit 70;; esac\n"
+        "  test -r \"/proc/$pid/stat\" || continue\n"
+        "  actual=$(sed 's/.*) //' \"/proc/$pid/stat\" | awk '{print $20}')\n"
+        "  test \"$actual\" = \"$start_tick\" || continue\n"
+        "  kill -TERM \"$pid\" 2>/dev/null || true\n"
+        "done\n"
+        "sleep 15\n"
+        "for identity in \"$registry\"/*.identity; do\n"
+        "  test -f \"$identity\" || continue\n"
+        "  IFS=: read -r pid start_tick <\"$identity\"\n"
+        "  test -r \"/proc/$pid/stat\" || continue\n"
+        "  actual=$(sed 's/.*) //' \"/proc/$pid/stat\" | awk '{print $20}')\n"
+        "  test \"$actual\" = \"$start_tick\" && kill -KILL \"$pid\" 2>/dev/null || true\n"
+        "done\n"
     )
     return {
         "attempt_id": attempt_id,
         "remote_root": remote_root,
         "deadline_utc": deadline.isoformat().replace("+00:00", "Z"),
         "script": body,
-        "watchdog_sha256": canonical_sha256({"script": body}),
+        "watchdog_sha256": hashlib.sha256(body.encode("ascii")).hexdigest(),
         "ssh_called": False,
         "provider_contacted": False,
     }

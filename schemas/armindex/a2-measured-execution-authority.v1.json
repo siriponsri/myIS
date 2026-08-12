@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-measured-execution-authority:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority_id", "status", "attempt_id", "source_goal_uri", "source_goal_sha256", "execution_adoption_receipt_sha256", "measured_a2_authorized", "candidate_generation_allowed", "candidate_mutation_allowed", "rep_dev_measurement_allowed", "a3_allowed", "selection_allowed", "final_allowed", "active_reserve_candidate_ids", "reserve_activation_evidence_sha256", "freeze_bindings", "scientific_authority", "authority_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-measured-execution-authority.v1"},
+    "authority_id": {"const": "a2-measured-execution-authority-v1"},
+    "status": {"const": "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "source_goal_uri": {"pattern": "^docs/goal/A2[^/]*\\.md$"},
+    "source_goal_sha256": {"$ref": "#/$defs/hash"},
+    "execution_adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "measured_a2_authorized": {"const": true},
+    "candidate_generation_allowed": {"const": false},
+    "candidate_mutation_allowed": {"const": false},
+    "rep_dev_measurement_allowed": {"const": false},
+    "a3_allowed": {"const": false},
+    "selection_allowed": {"const": false},
+    "final_allowed": {"const": false},
+    "active_reserve_candidate_ids": {"type": "array", "uniqueItems": true, "items": {"pattern": "^a2-arm-0[3-5]-reserve-b3-(exploit|matched-ablation|orthogonal|diversity)$"}},
+    "reserve_activation_evidence_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "scientific_authority": {"const": true},
+    "authority_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {"if": {"properties": {"active_reserve_candidate_ids": {"maxItems": 0}}}, "then": {"properties": {"reserve_activation_evidence_sha256": {"type": "null"}}}, "else": {"properties": {"reserve_activation_evidence_sha256": {"$ref": "#/$defs/hash"}}}}
+  ],
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}}
+}

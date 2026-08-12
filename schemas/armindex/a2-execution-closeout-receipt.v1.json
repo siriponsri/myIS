@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-execution-closeout-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "evidence_class", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "arm_winner_receipt_sha256s", "candidate_result_set_sha256", "safe_return_receipt_sha256", "terminal_checkpoint_sha256", "workers_reaped", "protected_scan_passed", "diagnostic_non_advancing_arms", "primary_advancement_arms", "claim_evidence_pointers", "freeze_bindings", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-execution-closeout-receipt.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-execution-closeout-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_EXECUTION_CLOSEOUT"},
+    "evidence_class": {"enum": ["engineering_synthetic", "measured_development_aggregate"]},
+    "candidate_count": {"const": 52},
+    "matched_candidate_count": {"const": 40},
+    "conditional_reserve_candidate_count": {"const": 12},
+    "arm_winner_receipt_sha256s": {"type": "object", "additionalProperties": false, "required": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-01": {"$ref": "#/$defs/hash"}, "ARM-02": {"$ref": "#/$defs/hash"}, "ARM-03": {"$ref": "#/$defs/hash"}, "ARM-04": {"$ref": "#/$defs/hash"}, "ARM-05": {"$ref": "#/$defs/hash"}}},
+    "candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+    "safe_return_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "terminal_checkpoint_sha256": {"$ref": "#/$defs/hash"},
+    "workers_reaped": {"const": true},
+    "protected_scan_passed": {"const": true},
+    "diagnostic_non_advancing_arms": {"const": ["ARM-01", "ARM-02"]},
+    "primary_advancement_arms": {"const": ["ARM-03", "ARM-05", "ARM-04"]},
+    "claim_evidence_pointers": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"}},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}}
+}

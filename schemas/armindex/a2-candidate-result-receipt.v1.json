@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-candidate-result-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "evidence_class", "scientific_authority", "candidate_id", "arm_id", "tier", "program_sha256", "executor_output_sha256", "evaluator_input_sha256", "evaluator_sha256", "code_sha256", "model_sha256", "data_sha256", "primary_metric", "secondary_metrics", "latency", "cost", "coverage", "resume_count", "failure_count", "reserve_activation_passed", "reserve_activation_evidence_sha256", "train_only", "rep_dev_measured", "protected_payload_included", "per_query_outcomes_included", "freeze_bindings", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-candidate-result-receipt.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-candidate-result-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"enum": ["PASS_A2_CANDIDATE_RESULT", "DORMANT_CONDITIONAL_RESERVE"]},
+    "evidence_class": {"enum": ["engineering_synthetic", "measured_development_aggregate"]},
+    "scientific_authority": {"type": "boolean"},
+    "candidate_id": {"pattern": "^a2-arm-0[1-5]-(matched|reserve)-b[1-3]-(exploit|matched-ablation|orthogonal|diversity)$"},
+    "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+    "tier": {"enum": ["matched", "conditional_reserve"]},
+    "program_sha256": {"$ref": "#/$defs/hash"},
+    "executor_output_sha256": {"$ref": "#/$defs/hash"},
+    "evaluator_input_sha256": {"$ref": "#/$defs/hash"},
+    "evaluator_sha256": {"$ref": "#/$defs/hash"},
+    "code_sha256": {"$ref": "#/$defs/hash"},
+    "model_sha256": {"$ref": "#/$defs/hash"},
+    "data_sha256": {"$ref": "#/$defs/hash"},
+    "primary_metric": {"anyOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["name", "value"], "properties": {"name": {"const": "recall_at_100/out"}, "value": {"$ref": "#/$defs/decimal"}}}]},
+    "secondary_metrics": {"anyOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["ndcg_at_100/out", "ndcg_at_10/out"], "properties": {"ndcg_at_100/out": {"$ref": "#/$defs/decimal"}, "ndcg_at_10/out": {"$ref": "#/$defs/decimal"}}}]},
+    "latency": {"anyOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["wall_seconds", "search_p95_seconds"], "properties": {"wall_seconds": {"$ref": "#/$defs/decimal"}, "search_p95_seconds": {"$ref": "#/$defs/decimal"}}}]},
+    "cost": {"anyOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["charged_usd", "currency"], "properties": {"charged_usd": {"$ref": "#/$defs/decimal"}, "currency": {"const": "USD"}}}]},
+    "coverage": {"type": "object", "additionalProperties": false, "required": ["expected_units", "completed_units"], "properties": {"expected_units": {"type": "integer", "minimum": 1}, "completed_units": {"type": "integer", "minimum": 0}}},
+    "resume_count": {"type": "integer", "minimum": 0},
+    "failure_count": {"type": "integer", "minimum": 0},
+    "reserve_activation_passed": {"type": "boolean"},
+    "reserve_activation_evidence_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
+    "train_only": {"const": true},
+    "rep_dev_measured": {"const": false},
+    "protected_payload_included": {"const": false},
+    "per_query_outcomes_included": {"const": false},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {"if": {"properties": {"evidence_class": {"const": "engineering_synthetic"}}}, "then": {"properties": {"scientific_authority": {"const": false}}}},
+    {"if": {"properties": {"evidence_class": {"const": "measured_development_aggregate"}}}, "then": {"properties": {"scientific_authority": {"const": true}}}},
+    {"if": {"properties": {"reserve_activation_passed": {"const": true}}}, "then": {"properties": {"reserve_activation_evidence_sha256": {"$ref": "#/$defs/hash"}}}, "else": {"properties": {"reserve_activation_evidence_sha256": {"type": "null"}}}}
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "decimal": {"type": "string", "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}
