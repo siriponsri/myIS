@@ -212,6 +212,10 @@ def test_generate_freeze_and_replay_exact_40_plus_12(
     assert manifest["final_official_credit_snapshot"]["model_name"] == "gpt-5.6-sol"
     assert manifest["final_official_credit_snapshot"]["plan_type"] == "plus"
     assert manifest["final_official_credit_snapshot"]["remaining_percent"] == 90
+    assert manifest["final_official_credit_snapshot"]["checkpoint_id"] == (
+        f"{manifest['generation_attempt_id']}-review-arm-04-"
+        "conditional_reserve-b3-r0-credit"
+    )
     assert ledger_events[0]["event_type"] == "candidate_generation_start"
     assert ledger_events[-1]["event_type"] == "candidate_freeze_closeout"
 

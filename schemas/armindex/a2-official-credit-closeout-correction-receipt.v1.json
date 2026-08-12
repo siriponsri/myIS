@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-official-credit-closeout-correction-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "campaign_id", "phase_id", "task_id", "generation_attempt_id", "status", "evidence_class", "scientific_authority", "correction_scope", "manifest_sha256", "manifest_file_sha256", "freeze_receipt_sha256", "freeze_receipt_file_sha256", "lock_sha256", "lock_file_sha256", "official_credit_check_count", "official_credit_snapshot_set_sha256", "manifest_recorded_final_snapshot_sha256", "chronological_final_reviewer_credit", "post_freeze_closeout_credit", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "candidate_universe_changed", "freeze_artifacts_mutated", "protected_data_accessed", "measured_a2_started", "provider_admission_performed", "provider_execution_adoption_performed", "selection_accesses", "final_accesses", "harness_dev_accesses", "source_commit", "source_tree", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "myis.armindex-a2-official-credit-closeout-correction-receipt.v1"},
+    "receipt_id": {"type": "string", "const": "a2-official-credit-closeout-correction-v1"},
+    "campaign_id": {"type": "string", "const": "armindex-multiretriever-v2"},
+    "phase_id": {"type": "string", "const": "A2_PER_ARM_AUTOINDEX"},
+    "task_id": {"type": "string", "const": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"},
+    "generation_attempt_id": {"type": "string", "pattern": "^a2freeze-[0-9]{8}t[0-9]{6}z$"},
+    "status": {"type": "string", "const": "PASS_ADDITIVE_CREDIT_CLOSEOUT_CORRECTION"},
+    "evidence_class": {"type": "string", "const": "engineering_validation"},
+    "scientific_authority": {"type": "boolean", "const": false},
+    "correction_scope": {"type": "string", "minLength": 80},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "manifest_file_sha256": {"$ref": "#/$defs/sha256"},
+    "freeze_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "freeze_receipt_file_sha256": {"$ref": "#/$defs/sha256"},
+    "lock_sha256": {"$ref": "#/$defs/sha256"},
+    "lock_file_sha256": {"$ref": "#/$defs/sha256"},
+    "official_credit_check_count": {"type": "integer", "minimum": 14},
+    "official_credit_snapshot_set_sha256": {"$ref": "#/$defs/sha256"},
+    "manifest_recorded_final_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "chronological_final_reviewer_credit": {"$ref": "#/$defs/creditSnapshot"},
+    "post_freeze_closeout_credit": {"$ref": "#/$defs/closeoutCreditSnapshot"},
+    "candidate_count": {"type": "integer", "const": 52},
+    "matched_candidate_count": {"type": "integer", "const": 40},
+    "conditional_reserve_candidate_count": {"type": "integer", "const": 12},
+    "candidate_universe_changed": {"type": "boolean", "const": false},
+    "freeze_artifacts_mutated": {"type": "boolean", "const": false},
+    "protected_data_accessed": {"type": "boolean", "const": false},
+    "measured_a2_started": {"type": "boolean", "const": false},
+    "provider_admission_performed": {"type": "boolean", "const": false},
+    "provider_execution_adoption_performed": {"type": "boolean", "const": false},
+    "selection_accesses": {"type": "integer", "const": 0},
+    "final_accesses": {"type": "integer", "const": 0},
+    "harness_dev_accesses": {"type": "integer", "const": 0},
+    "source_commit": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+    "source_tree": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "creditSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkpoint_id", "observed_at_utc", "snapshot_sha256", "snapshot_pointer", "model_name", "plan_type", "used_percent", "remaining_percent", "window_duration_mins", "resets_at_utc", "rate_limit_reached_type", "reset_credit_available_count", "limit_reached"],
+      "properties": {
+        "checkpoint_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{7,127}$"},
+        "observed_at_utc": {"$ref": "#/$defs/timestamp"},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "snapshot_pointer": {"type": "string", "pattern": "^owner-local://official-codex/"},
+        "model_name": {"type": "string", "const": "gpt-5.6-sol"},
+        "plan_type": {"type": "string", "minLength": 1},
+        "used_percent": {"type": "integer", "minimum": 0, "maximum": 99},
+        "remaining_percent": {"type": "integer", "minimum": 1, "maximum": 100},
+        "window_duration_mins": {"type": "integer", "minimum": 1},
+        "resets_at_utc": {"$ref": "#/$defs/timestamp"},
+        "rate_limit_reached_type": {"type": "null"},
+        "reset_credit_available_count": {"type": "integer", "minimum": 0},
+        "reset_credit_consumed": {"type": "boolean", "const": false},
+        "limit_reached": {"type": "boolean", "const": false}
+      }
+    },
+    "closeoutCreditSnapshot": {
+      "allOf": [
+        {"$ref": "#/$defs/creditSnapshot"},
+        {
+          "type": "object",
+          "required": ["reset_credit_consumed"],
+          "properties": {
+            "reset_credit_consumed": {"type": "boolean", "const": false}
+          }
+        }
+      ]
+    }
+  }
+}

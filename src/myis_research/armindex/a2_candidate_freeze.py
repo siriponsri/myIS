@@ -1086,6 +1086,7 @@ def generate_and_freeze(
             evidence={"failure_type": type(exc).__name__},
         )
         raise
+    chronological_final_credit = batches[-1]["final_credit_snapshot"]
     candidates.sort(key=lambda item: str(item["candidate_id"]))
     batches.sort(key=lambda item: str(item["batch_id"]))
     payload_hashes = [str(item["scientific_payload_sha256"]) for item in candidates]
@@ -1144,7 +1145,7 @@ def generate_and_freeze(
             sorted(credit_snapshots)
         ),
         "pre_generation_official_credit_snapshot": pre_generation_credit,
-        "final_official_credit_snapshot": batches[-1]["final_credit_snapshot"],
+        "final_official_credit_snapshot": chronological_final_credit,
         "protected_data_accessed": False,
         "rep_dev_accessed_for_measurement": False,
         "measured_execution_performed": False,
