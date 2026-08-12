@@ -4,7 +4,7 @@ phase: A2_PER_ARM_AUTOINDEX
 task: A2.1_FROZEN_FIVE_ARM_EXECUTION
 session_mode: IM
 source_audit: docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md
-revision: pending_final_commit
+revision: 4a2ba332c596ae2d256d8c6897276cb5207ec336
 status: IMPLEMENTED_VALIDATED_TTL_EXTENSION_REQUIRED
 ---
 
@@ -43,7 +43,15 @@ protected-data access, candidate evaluation or measured A2 execution occurred.
 AP's last aggregate-safe evidence had about 3.38 hours remaining, below the
 mandatory 40-hour threshold. No admission/adoption/live evidence was fabricated.
 
-Final revision and clean bundle bindings are appended after final pushed HEAD.
+## Clean pushed bundle
+
+- Pushed implementation revision: `4a2ba332c596ae2d256d8c6897276cb5207ec336`
+- Git tree: `beeaa90ff662f5712bd6cde944eb67b4c25b6148`
+- Owner-local path: `../04_Owner_Stores/armindex/a2/a2-im-audit002-20260812/`
+- Bundle SHA-256: `73d7668237ac9fa26cecc2b520bced63f21a338f928151cd30bf2d5b4bf49515`
+- Receipt SHA-256: `8202676c7e251eaa9de6ad8c40f26d5fe3bba75add0d04d8bbb50aeb753d90f3`
+- Receipt status: `PASS_CLEAN_HASH_BOUND_A2_BUNDLE`; clean worktree and
+  `main == origin/main` were verified by the bundle builder.
 
 ## Routing
 
