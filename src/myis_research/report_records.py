@@ -3780,6 +3780,11 @@ def _record_for(
         and isinstance(a2_readiness, Mapping)
         and a2_readiness.get("validated") is True
     )
+    a2_provider_admission_failed_closed = (
+        a2_readiness_valid
+        and a2_readiness.get("status")
+        == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
+    )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and task_id in {None, "A1.2"}
@@ -4239,6 +4244,8 @@ def _record_for(
         decision_status = (
             "CLOSED_PASS_INDEPENDENT_AUDIT"
             if audit_passed and task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+            else "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE"
+            if audit_passed and a2_provider_admission_failed_closed
             else "READY_FOR_FRESH_A2_GOAL_PREFLIGHT"
             if audit_passed
             else "COMPLETE_AUDITOR_REVIEW_REQUIRED"

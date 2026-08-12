@@ -229,6 +229,15 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     assert sum(record["report_type"] == "task" for record in records) == 28
     assert {record["language"] for record in records} == {"en"}
 
+    a2_task = next(record for record in records if record["report_id"] == "task-a2-1")
+    a2_freeze_task = next(
+        record
+        for record in records
+        if record["report_id"] == "task-official_codex_bridge_and_candidate_freeze"
+    )
+    assert a2_task["result"]["decision"] == "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE"
+    assert a2_freeze_task["result"]["decision"] == "CLOSED_PASS_INDEPENDENT_AUDIT"
+
     outputs = projection_report_contents(ROOT, model)
     task_path = (
         ROOT
