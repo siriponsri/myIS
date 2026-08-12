@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T11:14:59Z",
-  "generated_from_revision": "b5589b7a4747ebd5ad0c90040234cb689a81157edb268bc3e59e8d0beaddd415",
-  "git_commit": "07ec01023a8692646d21514954beef18e62fd58c",
+  "generated_at": "2026-08-12T11:56:21Z",
+  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -277,7 +277,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "07ec01023a8692646d21514954beef18e62fd58c",
+    "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -294,7 +294,7 @@
   },
   "interpretation": "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.",
   "language": "en",
-  "last_material_update": "2026-08-12T11:14:59Z",
+  "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -389,7 +389,7 @@
   "objective": "Adapter fixture validation",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-1",
-  "report_sha256": "43940179afce422bce82cd5c8782619bfea477b605f684645e6ab0b4b8e4041e",
+  "report_sha256": "cc4fed45e8c4700c5e377feac8932d7be92aef1dbb9e3cec670197b2e2169953",
   "report_type": "task",
   "result": {
     "decision": "completed",

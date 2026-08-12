@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "b5589b7a4747ebd5ad0c90040234cb689a81157edb268bc3e59e8d0beaddd415"
-read_model_sha256: "6ebdba6643a45ffab264fd9b75c9b309044cd57c9df488b480e2321ebfeedc60"
-source_commit: "07ec01023a8692646d21514954beef18e62fd58c"
+read_model_revision: "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8"
+read_model_sha256: "941e13668f48ee86b86491310a86720a9adedd611da621a1afb50b3a4de0d5f8"
+source_commit: "4a2ba332c596ae2d256d8c6897276cb5207ec336"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "b5589b7a4747ebd5ad0c90040234cb689a81157edb268bc3e59e8d0beaddd415"
-last_material_update: "2026-08-12T11:14:59Z"
+generated_from_revision: "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8"
+last_material_update: "2026-08-12T11:56:21Z"
 next_authorized_action: "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T11:14:59Z"
-updated_at: "2026-08-12T11:14:59Z"
+created_at: "2026-08-12T11:56:21Z"
+updated_at: "2026-08-12T11:56:21Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "P2_SCOPE_DEVELOPMENT"
