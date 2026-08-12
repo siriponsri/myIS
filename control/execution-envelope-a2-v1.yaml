@@ -1,0 +1,80 @@
+schema_version: myis.execution-envelope-a2.v1
+envelope_id: a2-five-arm-autoindex-premeasurement-v1
+revision_id: a2-five-arm-premeasurement-freeze-v1
+status: preparation_active_measurement_locked
+authority:
+  standing_decision: D1_START_CAMPAIGN
+  active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
+  preparation_authorized: true
+  measured_a2_authorized: false
+scope:
+  campaign_id: armindex-multiretriever-v2
+  phase_id: A2_PER_ARM_AUTOINDEX
+  task_id: OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE
+  allowed_arms: [ARM-01, ARM-02, ARM-03, ARM-04, ARM-05]
+  primary_advancement_arms: [ARM-03, ARM-05, ARM-04]
+  diagnostic_non_advancing_arms: [ARM-01, ARM-02]
+  matched_candidates_per_arm: 8
+  conditional_reserve_candidates_per_primary_arm: 4
+  matched_candidate_count: 40
+  conditional_reserve_candidate_count: 12
+  candidate_count: 52
+  candidate_evaluation_allowed: false
+resources:
+  local_bridge_only: true
+  official_codex_sdk_allowed: true
+  official_codex_paid_api_key_allowed: false
+  gpu_scientific_work: false
+  provider_admission: false
+  provider_execution_adoption: false
+  network_model_download: false
+  measured_retrieval: false
+protected_boundary:
+  output_mode: aggregate_hash_count_and_safe_candidate_payload_only
+  qrels: forbidden
+  membership: forbidden
+  query_ids: forbidden
+  rankings: forbidden
+  per_query_outcomes: forbidden
+  final_split: forbidden
+  credentials: forbidden
+  raw_provider_payloads: forbidden
+  inherited_full_environment: forbidden
+  rep_dev_measurement: forbidden
+official_codex_bridge:
+  host: 127.0.0.1
+  profile: owner_local_official
+  sdk_package: openai-codex
+  sdk_version: 0.144.4
+  runtime_source: sdk_bundled_pinned_runtime
+  model: gpt-5.6-sol
+  reasoning_effort: high
+  operations: [representation_propose, representation_review, engineering_refactor_review]
+freeze:
+  generate_before_measurement: true
+  compile_twice_required: true
+  independent_review_required: true
+  independent_verifier_required: true
+  reserve_lifecycle: dormant_conditional
+  mutation_after_freeze: new_campaign_revision_required_no_reinterpretation
+entry_requirements_for_future_measurement:
+  fresh_provider_identity: required
+  fresh_all_fee_quote: required
+  whole_workload_budget_admission: required
+  owner_ttl_plus_six_hour_reserve: required
+  fresh_a2_provider_admission: required
+  fresh_a2_execution_adoption: required
+  new_isolated_remote_root: required
+  a1_root: read_only
+prohibited_actions:
+  - measured_a2_execution
+  - rep_dev_measurement
+  - gpu_scientific_work
+  - provider_admission
+  - provider_execution_adoption
+  - a1_root_mutation
+  - harness_dev_access
+  - selection_access
+  - final_access
+  - D2_OPEN_FINAL
+  - D3_SUBMIT_RELEASE

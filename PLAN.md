@@ -338,13 +338,15 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS แล้วทำงานตามขั้นตอนทั้งหมด โดยทำ fresh A2 provider admission/execution adoption และใช้ remote root ใหม่
+/goal อ่าน docs/goal/A2_official_codex_bridge_goal.md แล้วทำงานตามขั้นตอนทั้งหมดจน bridge และ five-arm candidate freeze ผ่าน จากนั้น commit/push และหยุดก่อน measured A2
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
 with r15. The current pointer binds the complete r15 terminal receipt, measured
 summary, EDA package, and `REUSE_ELIGIBLE` provider continuation. The next
-session follows `docs/goal/A2_goal.md`; A2 is ready but not yet started. The
+session follows `docs/goal/A2_official_codex_bridge_goal.md`; A2 is ready but
+not yet started. The preparation session must stop before measured A2 and leave
+`docs/goal/A2_goal.md` blocked pending auditor review. The
 allowlisted remote handoff is retained on the unchanged instance with validated
 baseline `29/29`, journal EDA `8/8`, and closeout `12/12` packages. Post-finalize
 working directories were not recreated; details are recorded in

@@ -1,0 +1,139 @@
+{
+  "schema_version": "myis.armindex-a2-execution-contract.v1",
+  "contract_id": "a2-five-arm-premeasurement-freeze-v1",
+  "revision_id": "a2-five-arm-premeasurement-freeze-v1",
+  "campaign_id": "armindex-multiretriever-v2",
+  "phase_id": "A2_PER_ARM_AUTOINDEX",
+  "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+  "status": "preparation_active_measurement_locked",
+  "evidence_class": "engineering_preparation_with_a1_terminal_lineage",
+  "scientific_authority": false,
+  "launch_allowed": false,
+  "measured_execution_allowed": false,
+  "candidate_design": {
+    "arms": [
+      "ARM-01",
+      "ARM-02",
+      "ARM-03",
+      "ARM-04",
+      "ARM-05"
+    ],
+    "primary_advancement_arms": [
+      "ARM-03",
+      "ARM-05",
+      "ARM-04"
+    ],
+    "diagnostic_non_advancing_arms": [
+      "ARM-01",
+      "ARM-02"
+    ],
+    "roles": [
+      "exploit",
+      "matched_ablation",
+      "orthogonal",
+      "diversity"
+    ],
+    "matched_batches_per_arm": 2,
+    "matched_candidates_per_arm": 8,
+    "conditional_reserve_candidates_per_primary_arm": 4,
+    "matched_candidate_count": 40,
+    "conditional_reserve_candidate_count": 12,
+    "candidate_count": 52,
+    "batch_count": 13,
+    "reserve_activation_predicate": "after_two_complete_matched_batches AND strict_primary_improvement AND grounded_axis_remaining AND fresh_budget_admission_pass",
+    "stable_id_pattern": "^a2-arm-(0[1-5])-(matched|reserve)-b([1-3])-(exploit|matched-ablation|orthogonal|diversity)$"
+  },
+  "arm_policy": {
+    "ARM-01": {
+      "tier_count": 2,
+      "candidate_count": 8,
+      "diagnostic_non_advancing": true,
+      "advancement_eligible": false
+    },
+    "ARM-02": {
+      "tier_count": 2,
+      "candidate_count": 8,
+      "diagnostic_non_advancing": true,
+      "advancement_eligible": false
+    },
+    "ARM-03": {
+      "tier_count": 3,
+      "candidate_count": 12,
+      "diagnostic_non_advancing": false,
+      "advancement_eligible": true
+    },
+    "ARM-04": {
+      "tier_count": 3,
+      "candidate_count": 12,
+      "diagnostic_non_advancing": false,
+      "advancement_eligible": true
+    },
+    "ARM-05": {
+      "tier_count": 3,
+      "candidate_count": 12,
+      "diagnostic_non_advancing": false,
+      "advancement_eligible": true
+    }
+  },
+  "bindings": {
+    "campaign_uri": "control/campaigns/armindex-multiretriever-v2.yaml",
+    "campaign_sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+    "execution_envelope_uri": "control/execution-envelope-a2-v1.yaml",
+    "execution_envelope_sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+    "budget_profile_uri": "control/budgets/a2-per-arm-autoindex-v1.json",
+    "budget_profile_sha256": "53e47d78c804a8ec99a6fa1f5c9524a97c8b58acbb1311f12b24f7e12b900e71",
+    "official_bridge_uri": "control/armindex/a2/official-codex-bridge.v1.json",
+    "official_bridge_file_sha256": "817fc0046de9b7ab7568b353e062edbde73a8716951209401157d4cc557bdf6c",
+    "official_bridge_config_sha256": "8df898ebc39d5efbe5326d774f85ebfa4d26b745c1b87e307360edfa9ae2015c",
+    "a1_summary_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+    "a1_summary_file_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
+    "a1_terminal_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
+    "a1_terminal_file_sha256": "e508919991b86ef93c6fc0b4b5caf232989ea8c24f015d89e9cea46bd214345c",
+    "a1_terminal_receipt_sha256": "efd836c775b9bfabeadeb6d22c37cc16bfc3790d43d389ad1d277169a52b7bb7",
+    "a1_promotion_receipt_sha256": "eed9d52d70484c4bc4bf1b6b58bd1885ce9002ff3404ce484701de075556c788",
+    "a1_evaluator_receipt_sha256": "5e29b7e645d171b45cd62fc750998a950afab7a0d71fee5f4eaa7b71eef42145",
+    "primary_metric": "recall_at_100/out"
+  },
+  "allowed_preparation_actions": [
+    "official_codex_bridge_smoke",
+    "representation_propose",
+    "representation_review",
+    "synthetic_compile_twice",
+    "candidate_manifest_freeze",
+    "candidate_freeze_replay",
+    "aggregate_safe_projection"
+  ],
+  "future_measurement_entry_requirements": [
+    "auditor_pass",
+    "fresh_provider_identity",
+    "fresh_all_fee_quote",
+    "whole_workload_budget_admission",
+    "owner_ttl_plus_six_hour_reserve",
+    "fresh_a2_provider_admission",
+    "fresh_a2_execution_adoption",
+    "new_isolated_remote_root",
+    "a1_root_read_only"
+  ],
+  "prohibited_actions": [
+    "rep_dev_measurement",
+    "gpu_scientific_work",
+    "provider_admission",
+    "provider_execution_adoption",
+    "a1_root_mutation",
+    "harness_dev_access",
+    "selection_access",
+    "final_access"
+  ],
+  "counters": {
+    "measured_a2_runs": 0,
+    "rep_dev_measurements": 0,
+    "gpu_scientific_runs": 0,
+    "provider_admissions": 0,
+    "provider_execution_adoptions": 0,
+    "harness_dev_accesses": 0,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "next_authorized_action": "Complete Official candidate generation, independent review, compile-twice verification, immutable freeze, and auditor review; do not start measured A2.",
+  "contract_sha256": "daeeffc86510e684a1f4b36278bbe886c1f8238fc8643257022c2434af3349c6"
+}

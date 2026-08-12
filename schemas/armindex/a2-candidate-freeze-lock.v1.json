@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-candidate-freeze-lock:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "lock_id", "campaign_id", "revision_id", "manifest_sha256", "candidate_count", "locked_operations", "mutation_policy", "created_at", "measured_execution_performed", "lock_sha256"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "myis.armindex-a2-candidate-freeze-lock.v1"},
+    "lock_id": {"type": "string", "const": "a2-five-arm-candidate-freeze-lock-v1"},
+    "campaign_id": {"type": "string", "const": "armindex-multiretriever-v2"},
+    "revision_id": {"type": "string", "const": "a2-five-arm-premeasurement-freeze-v1"},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_count": {"type": "integer", "const": 52},
+    "locked_operations": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string", "enum": ["representation_propose", "representation_review"]}},
+    "mutation_policy": {"type": "string", "const": "new_campaign_revision_required_no_reinterpretation"},
+    "created_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "measured_execution_performed": {"type": "boolean", "const": false},
+    "lock_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

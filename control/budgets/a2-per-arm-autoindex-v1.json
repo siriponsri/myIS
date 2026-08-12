@@ -1,0 +1,80 @@
+{
+  "schema_version": "myis.armindex-a2-budget-profile.v1",
+  "profile_id": "a2-per-arm-autoindex-v1",
+  "revision_id": "a2-five-arm-premeasurement-freeze-v1",
+  "status": "prepared_not_adopted_fresh_quote_required",
+  "currency": "USD",
+  "source_measurement": {
+    "attempt_id": "a12-v16-20260811-r15",
+    "summary_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
+    "summary_sha256": "a765de9a6cede2aff10510e909551fc880c982924632dc44a11279f35e4efb2f",
+    "measured_programs_per_arm": 5,
+    "wall_seconds_sum_by_arm": {
+      "ARM-01": 762.5326991000001,
+      "ARM-02": 19847.314656943,
+      "ARM-03": 29444.63952869,
+      "ARM-04": 15878.488335113001,
+      "ARM-05": 40309.513049866
+    }
+  },
+  "candidate_design": {
+    "matched_candidate_count": 40,
+    "conditional_reserve_candidate_count": 12,
+    "candidate_count": 52
+  },
+  "runtime_projection": {
+    "method": "linear_wall_seconds_per_completed_a1_program",
+    "candidate_count_by_arm": {
+      "ARM-01": 8,
+      "ARM-02": 8,
+      "ARM-03": 12,
+      "ARM-04": 12,
+      "ARM-05": 12
+    },
+    "projected_wall_seconds_by_arm": {
+      "ARM-01": 1220.0523185600002,
+      "ARM-02": 31755.7034511088,
+      "ARM-03": 70667.134868856,
+      "ARM-04": 38108.3720042712,
+      "ARM-05": 96742.8313196784
+    },
+    "matched_dense_parallel_critical_path_seconds": 64495.2208797856,
+    "worst_case_dense_parallel_critical_path_seconds": 96742.8313196784,
+    "worst_case_dense_gpu_seconds": 237274.0416439144,
+    "local_cpu_seconds": 1220.0523185600002,
+    "owner_ttl_reserve_seconds": 21600,
+    "minimum_owner_ttl_seconds": 118342.8313196784,
+    "minimum_owner_ttl_hours": 32.87300869991066,
+    "concurrency_assumption": "one isolated worker for each of ARM-02 through ARM-05; ARM-01 remains local CPU",
+    "conditional_reserve_policy": "all 12 dormant candidates are included in worst-case quote and TTL admission even if never activated"
+  },
+  "hard_stops": {
+    "campaign_usd": 150,
+    "recorded_a1_charge_usd": 11.161632,
+    "remaining_campaign_ceiling_usd": 138.838368
+  },
+  "admission": {
+    "adopted_for_execution": false,
+    "launch_allowed": false,
+    "fresh_provider_identity_required": true,
+    "fresh_all_fee_quote_required": true,
+    "fresh_a2_execution_adoption_required": true,
+    "new_isolated_remote_root_required": true,
+    "whole_workload_admission_required": true,
+    "partial_arm_admission_allowed": false,
+    "no_default_inference": true,
+    "unknown_billable_component_allowed": false,
+    "quote_max_age_seconds": 900,
+    "projected_ttl_charge_must_fit_campaign_ceiling": true,
+    "required_formula": "ceil(ttl_seconds/billing_granularity_seconds)*billing_granularity_seconds/3600*compute_hourly_rate_usd+storage_fee_usd+network_fee_usd+platform_or_other_fee_usd+tax_or_surcharge_usd"
+  },
+  "preparation_counters": {
+    "charged_usd": 0,
+    "gpu_scientific_runs": 0,
+    "measured_runs": 0,
+    "paid_api_calls": 0,
+    "provider_admissions": 0,
+    "provider_execution_adoptions": 0
+  },
+  "budget_profile_sha256": "53e47d78c804a8ec99a6fa1f5c9524a97c8b58acbb1311f12b24f7e12b900e71"
+}

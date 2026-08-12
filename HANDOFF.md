@@ -233,16 +233,17 @@ preserved failed attempt and cannot be combined with r15.
 
 ## Active authorized action
 
-Start the A2 workflow from its ready goal without reopening A1. The exact next
-action is:
+Prepare A2 without starting measured execution. The exact next action is:
 
 ```text
-/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS แล้วทำงานตามขั้นตอนทั้งหมด โดยทำ fresh A2 provider admission/execution adoption และใช้ remote root ใหม่
+/goal อ่าน docs/goal/A2_official_codex_bridge_goal.md แล้วทำงานตามขั้นตอนทั้งหมดจน bridge และ five-arm candidate freeze ผ่าน จากนั้น commit/push และหยุดก่อน measured A2
 ```
 
-`docs/goal/A1_2_rerun_goal.md` is closed `PASS`. Follow `docs/goal/A2_goal.md`
-for A2 only. Retain the same protected-data and frozen-science boundaries; do
-not enter A3, HARNESS-DEV, Selection, or Final.
+`docs/goal/A1_2_rerun_goal.md` is closed `PASS`. The preparation goal must stop
+with measured A2 not started and route to auditor review. `docs/goal/A2_goal.md`
+remains blocked until that audit passes; only then may Luna Max run A2. Retain
+the protected-data and frozen-science boundaries and do not enter A3,
+HARNESS-DEV, Selection, or Final.
 
 Provider observation prefers authenticated Vast CLI. If TFA/API is unavailable,
 the Owner-authorized `OwnerDashboardSsh` fallback accepts only aggregate-safe

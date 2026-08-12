@@ -9,6 +9,7 @@ description = "Governed infrastructure for myIS publication research"
 requires-python = ">=3.11,<3.12"
 dependencies = [
     "jsonschema==4.25.1",
+    "openai-codex==0.144.4",
     "pydantic==2.13.4",
     "pyyaml==6.0.2",
     "structlog==26.1.0",
@@ -48,6 +49,8 @@ myis-armindex = "myis_research.armindex.cli:main"
 "myis-a1.2" = "myis_research.armindex.a1_2_cli:main"
 "myis-a1.2-owner-input-manifest-v16" = "myis_research.armindex.a1_2_owner_local_cli_v16:input_manifest_main"
 "myis-a1.2-owner-evaluator-v16" = "myis_research.armindex.a1_2_owner_local_cli_v16:evaluator_main"
+myis-official-codex-bridge = "myis_research.armindex.official_codex_bridge:main"
+myis-a2-candidate-freeze = "myis_research.armindex.a2_candidate_freeze:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

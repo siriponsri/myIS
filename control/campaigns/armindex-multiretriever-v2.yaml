@@ -1,10 +1,10 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked
-  evidence_class: scientific_execution_adoption_request_preparation
+  status: a2_official_codex_candidate_freeze_preparation_active
+  evidence_class: engineering_preparation_with_a1_terminal_lineage
   scientific_authority: false
-  claim_boundary: local_request_preparation_only_prior_provider_destroyed_no_adoption_execution_retrieval_quality_or_publication_claim
+  claim_boundary: a1_r15_terminal_pass_preserved_a2_bridge_and_candidate_freeze_preparation_only_no_a2_measurement
   migration_measured_runs: 0
   selection_accesses: 0
   final_accesses: 0
@@ -74,6 +74,13 @@ contracts:
   a1_2_common_program_set: control/armindex/a1.2/common-program-set.v11.json
   a1_2_aggregate_result_contract: control/armindex/a1.2/aggregate-result-contract.v11.json
   a1_2_scientific_workload_set: control/armindex/a1.2/workload-manifest-set.scientific-request.v11.json
+  a2_execution_envelope: control/execution-envelope-a2-v1.yaml
+  a2_execution_contract: control/armindex/a2/execution-contract.v1.json
+  a2_budget_profile: control/budgets/a2-per-arm-autoindex-v1.json
+  a2_official_codex_bridge: control/armindex/a2/official-codex-bridge.v1.json
+  a2_candidate_manifest_schema: schemas/armindex/a2-candidate-manifest.v1.json
+  a2_candidate_freeze_receipt_schema: schemas/armindex/a2-candidate-freeze-receipt.v1.json
+  a2_candidate_freeze_lock_schema: schemas/armindex/a2-candidate-freeze-lock.v1.json
 
 phases:
   - id: A0_MIGRATION_FOUNDATION
@@ -93,14 +100,14 @@ phases:
       - {id: A0.10, title: Legacy code harvest and phase-ready scaffolding, status: complete}
   - id: A1_BASELINES_AND_MULTI_ARM_SCREENING
     purpose: Reproduce controls and screen the five adapters with common programs.
-    status: a1_2_scientific_execution_adoption_request_prepared_owner_review_launch_locked
-    measured_retrieval: false
-    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: scientific_execution_request_prepared_owner_review_launch_locked}]
+    status: complete
+    measured_retrieval: true
+    tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: complete}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
-    status: locked_until_A1
+    status: official_codex_candidate_freeze_preparation_active
     measured_retrieval: false
-    tasks: [{id: A2.1, title: Per-arm AutoIndex, status: planned}]
+    tasks: [{id: A2.1, title: Per-arm AutoIndex, status: blocked_pending_official_codex_candidate_freeze_and_auditor_review}]
   - id: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
     purpose: Analyze transfer, complementarity, and production-constrained harnesses.
     status: locked_until_A2
@@ -133,7 +140,7 @@ budget:
   profile_id: armindex-migration-v2
   currency: USD
   migration_cost_actual_usd: 0
-  hard_stop_usd: 100
+  hard_stop_usd: 150
   cpu_only: true
   paid_api: false
   gpu_scientific_run: false

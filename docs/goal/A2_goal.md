@@ -1,16 +1,21 @@
 ---
 title: "A2 goal: Per-arm AutoIndex เพื่อเพิ่ม publication impact"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: READY
-lifecycle: ACTIVE
+status: BLOCKED_PENDING_OFFICIAL_CODEX_FREEZE_AND_AUDITOR_REVIEW
+lifecycle: BLOCKED
 evidence_class: planning_handoff_only
 scientific_authority: false
 claim_boundary: "คู่มือ A2 เท่านั้น; A1 terminal PASS แล้ว แต่ A2 candidate generation และ measured execution ยังไม่เริ่ม"
 last_material_update: 2026-08-12
-next_authorized_action: RUN_A2_ENTRY_PREFLIGHT_AND_FRESH_PROVIDER_ADMISSION
+next_authorized_action: COMPLETE_OFFICIAL_CODEX_FREEZE_THEN_AUDITOR_REVIEW
 ---
 
 # A2: Per-arm AutoIndex long-run guide
+
+> **Current routing:** ห้าม launch A2 จากไฟล์นี้จนกว่า
+> [`A2_official_codex_bridge_goal.md`](A2_official_codex_bridge_goal.md) จะปิด `CLOSED_PASS`
+> และ auditor จะตรวจ candidate freeze/bridge readiness ผ่าน แล้วเปลี่ยน goal นี้กลับเป็น `ACTIVE`.
+> Preparation session ต้องหยุดก่อน measured A2 และห้าม activate goal นี้เอง
 
 เริ่มเมื่อ Owner สั่ง:
 
