@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -33,6 +34,7 @@ from myis_research.projections.read_model import (
     _a11_adapter_fixture_projection,
     _a12_contract_scaffold_projection,
     _legacy_file_commitment_matches,
+    _source_commit_metadata,
     build_read_model,
     write_read_model,
 )
@@ -114,6 +116,41 @@ def test_read_model_revision_ignores_postcommit_validation_git_identity(
         vast_v3 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v3"]
         assert "validation_git_commit" not in vast_v3
         assert "validation_git_tree" not in vast_v3
+
+
+def test_source_commit_metadata_ignores_projection_only_commits(
+    tmp_path: Path,
+) -> None:
+    def git(*args: str) -> str:
+        completed = subprocess.run(
+            ["git", *args],
+            cwd=tmp_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return completed.stdout.strip()
+
+    git("init")
+    git("config", "user.email", "tests@myis.invalid")
+    git("config", "user.name", "myIS tests")
+    source = tmp_path / "control" / "source-of-truth.yaml"
+    source.parent.mkdir(parents=True)
+    source.write_text("program: armindex\n", encoding="utf-8")
+    git("add", "control/source-of-truth.yaml")
+    git("commit", "-m", "add canonical source")
+    source_commit = git("rev-parse", "HEAD")
+
+    projection = tmp_path / "projections" / "read-model" / "read-model.v2.json"
+    projection.parent.mkdir(parents=True)
+    projection.write_text("{}\n", encoding="utf-8")
+    git("add", "projections/read-model/read-model.v2.json")
+    git("commit", "-m", "sync projection")
+
+    commit, _timestamp = _source_commit_metadata(tmp_path)
+
+    assert git("rev-parse", "HEAD") != source_commit
+    assert commit == source_commit
 
 
 def test_read_model_validation_rejects_unknown_field_and_non_object(tmp_path: Path) -> None:
