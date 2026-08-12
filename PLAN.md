@@ -341,7 +341,7 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-IM implements and validates the production A2 measured adapter plus matched-first conditional-reserve lifecycle from docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md; provider contact, staging, and measured A2 remain closed in IM.
+AP reads docs/implementation/A2_PER_ARM_AUTOINDEX_im_003_001.md, validates the final pushed-HEAD Owner-local bundle receipt, then performs fresh provider admission and isolated staging only; measured A2 remains closed until a separate LO goal and tracked authority exist.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
@@ -366,6 +366,13 @@ closes the two structural blockers with a repository-owned production adapter
 for every frozen A2 program and a decision-bound matched-first reserve lifecycle.
 The tracked command, Owner-local input schema, resume path, fresh reserve admission,
 decision/continuation receipts, and exact-52 quartet validation are bundle-bound.
+The hardened adapter also binds canonical A1 v16 incumbents, REP-DEV handoff
+commitments, exact dense-model file manifests, frozen Python/PyTorch/CUDA identity,
+and the four-GPU device map. The reserve checkpoint uses a concrete `reserve-admit`
+command that rebuilds provider evidence from fresh source artifacts and an absolute
+deadline. Focused audit validation passes 64 tests, Ruff, isolated bundle
+extraction/import, A2 entry preflight, the 52-candidate synthetic dry-run, asset
+validation, report drift, and whitespace checks.
 The next session is AP read-back followed by fresh provider admission and isolated
 staging. Execution adoption, measured A2, and protected-data access remain unstarted.
 The unchanged instance retains the validated A1 baseline

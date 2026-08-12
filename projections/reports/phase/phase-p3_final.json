@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
-  "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+  "generated_at": "2026-08-12T14:37:20Z",
+  "generated_from_revision": "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5",
+  "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+    "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
     "source_of_truth": {
       "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-12T13:08:25Z",
+  "last_material_update": "2026-08-12T14:37:20Z",
   "metric_references": [],
   "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "9b3a6664a613b1de8781afce6c2e26bcdb5ddec06e69220c89332b4b743ed544",
+  "report_sha256": "02b2ed795c4e090caa65a7518422b985f1aad89de6d399c05590f8f0d559e231",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

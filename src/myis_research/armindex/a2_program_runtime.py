@@ -67,7 +67,7 @@ def compile_program(
 ) -> CompiledProgram:
     """Compile every source row without caps, truncation, or fixture shortcuts."""
 
-    seen_content: set[str] = set()
+    seen_content_by_family: dict[str, set[str]] = {}
     per_family: dict[str, list[tuple[str, str]]] = {}
     for ordinal, row in enumerate(rows):
         family = row.get("family_token")
@@ -79,6 +79,7 @@ def compile_program(
         rendered = _render(row, program)
         content_hash = hashlib.sha256(rendered.encode("utf-8")).hexdigest()
         if program["duplicate_policy"] == "content_hash_first":
+            seen_content = seen_content_by_family.setdefault(family, set())
             if content_hash in seen_content:
                 continue
             seen_content.add(content_hash)

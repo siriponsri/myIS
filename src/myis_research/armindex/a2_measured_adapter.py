@@ -15,7 +15,6 @@ import json
 import os
 import re
 import subprocess
-import sys
 import tempfile
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -73,6 +72,12 @@ _A1_SUMMARY = Path(
     "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/"
     "a12-v16-20260811-r15.summary.v16.json"
 )
+_A1_CELL_EDA = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/a1.2-cell-eda/"
+    "a12-v16-20260811-r15.eda.v16.json"
+)
+_A1_PROGRAMS = Path("control/armindex/a1.2/common-program-set.v11.json")
+_A1_HANDOFF_REQUEST = Path("control/owner-local/a1.2-evaluator-handoff-request.v11.json")
 
 
 class A2MeasuredAdapterError(ValueError):
@@ -139,6 +144,111 @@ def _a1_v16_bindings(repository_root: Path) -> dict[str, str]:
     return {key: _hash(value, role=f"A1 v16 {key}") for key, value in expected.items()}
 
 
+def canonical_a1_incumbents(repository_root: Path) -> dict[str, dict[str, str]]:
+    """Derive the three A2 incumbents from immutable A1 v16 aggregate evidence."""
+
+    root = repository_root.resolve()
+    eda = _load_json(root / _A1_CELL_EDA, role="A1 v16 cell EDA")
+    programs = _load_json(root / _A1_PROGRAMS, role="A1 v16 common programs")
+    if (
+        eda.get("status") != "PASS"
+        or eda.get("attempt_id") != "a12-v16-20260811-r15"
+        or eda.get("scientific_authority") is not True
+    ):
+        raise A2MeasuredAdapterError("A1 v16 incumbent evidence is not authoritative")
+    program_hashes = {
+        row["program_key"]: row["program_spec_sha256"] for row in programs["programs"]
+    }
+    result: dict[str, dict[str, str]] = {}
+    for arm_id in ("ARM-03", "ARM-05", "ARM-04"):
+        rows = [row for row in eda["cells"] if row.get("arm_id") == arm_id]
+        if len(rows) != 5:
+            raise A2MeasuredAdapterError("A1 v16 incumbent coverage drift")
+        best = min(
+            rows,
+            key=lambda row: (-float(row["out_recall_at_100"]), str(row["program_id"])),
+        )
+        result[arm_id] = {
+            "candidate_id": str(best["program_id"]),
+            "program_sha256": _hash(
+                program_hashes.get(str(best["program_id"])), role=f"{arm_id} incumbent program"
+            ),
+            "primary_metric": str(best["out_recall_at_100"]),
+        }
+    return result
+
+
+def _verify_model_manifest(
+    repository_root: Path, *, arm_id: str, model_root: Path, manifest_path: Path
+) -> None:
+    manifest = _load_json(manifest_path, role="Owner-local model file manifest")
+    files = manifest.get("files")
+    if not isinstance(files, list) or not files:
+        raise A2MeasuredAdapterError("Owner-local model file manifest is incomplete")
+    lock = _load_json(
+        repository_root / "control" / "armindex" / "a1.2" / "model-locks" / f"{arm_id}.v1.json",
+        role=f"frozen {arm_id} model lock",
+    )
+    if (
+        manifest.get("arm_id") != arm_id
+        or manifest.get("model_lock_sha256") != lock.get("lock_sha256")
+        or manifest.get("model_id") != lock.get("model_id")
+        or manifest.get("resolved_revision") != lock.get("resolved_revision")
+    ):
+        raise A2MeasuredAdapterError("Owner-local model manifest binding drift")
+    critical = lock.get("critical_artifacts")
+    if not isinstance(critical, list) or any(
+        not isinstance(row, Mapping)
+        or not isinstance(row.get("path"), str)
+        or not isinstance(row.get("sha256"), str)
+        for row in critical
+    ):
+        raise A2MeasuredAdapterError("frozen model lock is incomplete")
+    expected_critical = {str(row["path"]): str(row["sha256"]) for row in critical}
+    expected: set[str] = set()
+    for row in files:
+        if not isinstance(row, Mapping):
+            raise A2MeasuredAdapterError("Owner-local model file manifest is invalid")
+        path = _safe_relative_file(model_root, row.get("path"), role="model file", protected=True)
+        if file_sha256(path) != row.get("sha256"):
+            raise A2MeasuredAdapterError("Owner-local model file hash drift")
+        expected.add(path.relative_to(model_root).as_posix())
+    actual = {
+        path.relative_to(model_root).as_posix()
+        for path in model_root.rglob("*")
+        if path.is_file() and not path.is_symlink()
+    }
+    if actual != expected:
+        raise A2MeasuredAdapterError("Owner-local model file set drift")
+    observed = {str(row["path"]): str(row["sha256"]) for row in files if isinstance(row, Mapping)}
+    if any(observed.get(path) != digest for path, digest in expected_critical.items()):
+        raise A2MeasuredAdapterError("Owner-local model critical artifact drift")
+
+
+def _runtime_python_identity(root: Path, executable: Path) -> None:
+    runtime = _load_json(root / _A1_RUNTIME, role="frozen A1 runtime lock")
+    try:
+        process = subprocess.run(
+            [str(executable), "-c", "import json,platform,torch;print(json.dumps({'python':platform.python_version(),'pytorch':torch.__version__,'cuda':torch.version.cuda}))"],
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            timeout=30,
+            env={"PATH": os.environ.get("PATH", ""), "PYTHONDONTWRITEBYTECODE": "1"},
+        )
+        identity = json.loads(process.stdout) if process.returncode == 0 else None
+    except (OSError, subprocess.SubprocessError, json.JSONDecodeError) as error:
+        raise A2MeasuredAdapterError("frozen runtime interpreter cannot be verified") from error
+    if (
+        not isinstance(identity, Mapping)
+        or not str(identity.get("python", "")).startswith("3.11.")
+        or identity.get("pytorch") != runtime["pytorch"]
+        or identity.get("cuda") != runtime["cuda"]
+    ):
+        raise A2MeasuredAdapterError("frozen runtime interpreter identity drift")
+
+
 def _validate_schema(repository_root: Path, value: Mapping[str, Any]) -> None:
     schema = _load_json(
         repository_root / "schemas/armindex/a2-owner-local-measured-input.v1.json",
@@ -176,10 +286,8 @@ def validate_owner_local_input(
         raise A2MeasuredAdapterError("Owner-local input manifest is not READY")
     if manifest.get("a1_v16_bindings") != _a1_v16_bindings(root):
         raise A2MeasuredAdapterError("frozen A1 v16 binding drift")
-    for arm_id, incumbent in manifest["arm_incumbents"].items():
-        if arm_id not in {"ARM-03", "ARM-05", "ARM-04"}:
-            raise A2MeasuredAdapterError("Owner-local incumbent arm is invalid")
-        _hash(incumbent["program_sha256"], role=f"{arm_id} incumbent program")
+    if manifest["arm_incumbents"] != canonical_a1_incumbents(root):
+        raise A2MeasuredAdapterError("Owner-local A1 incumbent binding drift")
     artifacts = manifest["owner_artifacts"]
     expected_bindings = _a1_v16_bindings(root)
     binding_names = {
@@ -205,6 +313,30 @@ def validate_owner_local_input(
         if file_sha256(artifact) != item["sha256"]:
             raise A2MeasuredAdapterError(f"{name} artifact hash drift")
         _hash(item["binding_sha256"], role=f"{name} binding")
+    handoff_request = _load_json(root / _A1_HANDOFF_REQUEST, role="A1 handoff contract")
+    data_receipt = _load_json(
+        _safe_relative_file(local_root, artifacts["data_handoff"]["path"], role="data handoff", protected=True),
+        role="Owner-local data handoff",
+    )
+    if (
+        data_receipt.get("status") != "PASS"
+        or data_receipt.get("source_contract_sha256")
+        != handoff_request["handoff_contract_sha256"]
+        or data_receipt.get("split_role") != "REP-DEV"
+        or data_receipt.get("query_count") != 150
+        or data_receipt.get("reserved_harness_dev_count") != 100
+        or any(
+            data_receipt.get(field) != artifacts[name]["binding_sha256"]
+            for field, name in (
+                ("corpus_bundle_sha256", "corpus"),
+                ("query_bundle_sha256", "queries"),
+                ("qrels_commitment_sha256", "qrels"),
+                ("split_commitment_sha256", "membership"),
+                ("evaluator_sha256", "evaluator"),
+            )
+        )
+    ):
+        raise A2MeasuredAdapterError("Owner-local REP-DEV data handoff drift")
     engine = manifest["engine"]
     argv = engine["argv"]
     if not argv or any(not isinstance(item, str) or not item for item in argv):
@@ -213,12 +345,21 @@ def validate_owner_local_input(
         raise A2MeasuredAdapterError("fixture adapter is forbidden for measured A2")
     if "{program_path}" not in argv:
         raise A2MeasuredAdapterError("Owner-local retriever/evaluator must receive the frozen program")
+    python_executable = Path(engine["python_executable"])
     if argv[:3] != [
-        sys.executable,
+        str(python_executable),
         "-m",
         "myis_research.armindex.a2_owner_local_engine",
     ]:
         raise A2MeasuredAdapterError("measured A2 requires the production Owner-local engine")
+    _runtime_python_identity(root, python_executable)
+    if engine["device_by_arm"] != {
+        "ARM-02": "cuda:0",
+        "ARM-03": "cuda:1",
+        "ARM-04": "cuda:2",
+        "ARM-05": "cuda:3",
+    }:
+        raise A2MeasuredAdapterError("frozen dense-arm device topology drift")
     for arm_id, relative in engine["model_directories"].items():
         model = local_root / relative
         if arm_id not in {"ARM-02", "ARM-03", "ARM-04", "ARM-05"} or model.is_symlink():
@@ -229,6 +370,13 @@ def validate_owner_local_input(
             raise A2MeasuredAdapterError("Owner-local model directory is unavailable") from error
         if not resolved.is_dir() or not resolved.is_relative_to(local_root):
             raise A2MeasuredAdapterError("Owner-local model directory is unsafe")
+        manifest_relative = engine["model_manifests"][arm_id]
+        model_manifest = _safe_relative_file(
+            local_root, manifest_relative, role=f"{arm_id} model manifest", protected=True
+        )
+        _verify_model_manifest(
+            root, arm_id=arm_id, model_root=resolved, manifest_path=model_manifest
+        )
     output_root = local_root / engine["output_root"]
     output_root.mkdir(parents=True, exist_ok=True)
     if output_root.is_symlink() or not output_root.resolve().is_relative_to(local_root):
@@ -303,8 +451,8 @@ def _validate_result(
     for name in ("executor_output_sha256", "evaluator_input_sha256"):
         _hash(row.get(name), role=name)
     if (
-        row.get("train_only") is not True
-        or row.get("rep_dev_measured") is not False
+        row.get("train_only") is not False
+        or row.get("rep_dev_measured") is not True
         or row.get("protected_payload_included") is not False
         or row.get("per_query_outcomes_included") is not False
     ):
@@ -434,6 +582,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 __all__ = [
     "A2MeasuredAdapterError",
     "frozen_program_for_candidate",
+    "canonical_a1_incumbents",
     "run_candidate_adapter",
     "validate_owner_local_input",
 ]

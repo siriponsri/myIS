@@ -178,16 +178,19 @@ def _evaluation_inputs(qrels_path: Path, membership_path: Path, tokens: set[str]
     return qrels, eligible
 
 
-def _rank_arm01(units: Sequence[Any], queries: Mapping[str, str], method: str) -> dict[str, tuple[Any, ...]]:
+def _rank_arm01(units: Sequence[Any], queries: Mapping[str, str], method: str) -> tuple[dict[str, tuple[Any, ...]], tuple[float, ...]]:
     documents = [{"doc_id": unit.logical_id, "family_id": unit.family_token, "text": unit.physical_inputs[0].text} for unit in units]
     index = BM25sAdapter().build_index(documents)
     by_id = {unit.logical_id: unit for unit in units}
     result: dict[str, tuple[Any, ...]] = {}
+    latencies: list[float] = []
     for token, query in queries.items():
+        started = time.perf_counter_ns()
         rows = BM25sAdapter().search(index, query)
+        latencies.append((time.perf_counter_ns() - started) / 1_000_000_000)
         ranked_units = [by_id[row[0]] for row in rows]
         result[token] = aggregate_family_scores(ranked_units, [row[2] for row in rows], method=method)
-    return result
+    return result, tuple(latencies)
 
 
 def _dense_units(compiled: Sequence[Any], *, arm_id: str, adapter: Any) -> tuple[Any, ...]:
@@ -198,16 +201,19 @@ def _dense_units(compiled: Sequence[Any], *, arm_id: str, adapter: Any) -> tuple
     return tuple(result)
 
 
-def _rank_dense(units: Sequence[Any], queries: Mapping[str, str], *, arm_id: str, model_directory: Path, method: str, adapter_factory: Callable[..., Any]) -> dict[str, tuple[Any, ...]]:
-    adapter = adapter_factory(arm_id=arm_id, model_directory=model_directory, device="cuda:0", batch_size=1)
+def _rank_dense(units: Sequence[Any], queries: Mapping[str, str], *, arm_id: str, model_directory: Path, device: str, method: str, adapter_factory: Callable[..., Any]) -> tuple[dict[str, tuple[Any, ...]], tuple[float, ...]]:
+    adapter = adapter_factory(arm_id=arm_id, model_directory=model_directory, device=device, batch_size=1)
     materialized = _dense_units(units, arm_id=arm_id, adapter=adapter)
     index = build_dense_index(arm_id=arm_id, adapter=adapter, corpus=materialized)
     result: dict[str, tuple[Any, ...]] = {}
+    latencies: list[float] = []
     for token, text in queries.items():
         query = materialize_raw_query({"work_token": token, "text": text}, arm_id=arm_id, adapter=adapter)
         vector = encode_logical_inputs(arm_id=arm_id, adapter=adapter, logical_inputs=(query,))[0]
+        started = time.perf_counter_ns()
         result[token] = aggregate_family_scores(index.logical_units, np.matmul(index.vectors, vector), method=method)
-    return result
+        latencies.append((time.perf_counter_ns() - started) / 1_000_000_000)
+    return result, tuple(latencies)
 
 
 def _metrics(rankings: Mapping[str, Sequence[Any]], qrels: Mapping[str, Mapping[str, int]], eligible: set[str]) -> tuple[float, float, float]:
@@ -263,13 +269,26 @@ def run_owner_local_engine(
         raise A2OwnerLocalEngineError("frozen A2 program compilation failed") from error
     started = time.perf_counter()
     if arm_id == "ARM-01":
-        rankings = _rank_arm01(compiled.units, queries, compiled.family_aggregation)
+        rankings, search_latencies = _rank_arm01(compiled.units, queries, compiled.family_aggregation)
     elif arm_id in DENSE_ARM_IDS:
         model_directory = owner / manifest["engine"]["model_directories"][arm_id]
-        rankings = _rank_dense(compiled.units, queries, arm_id=arm_id, model_directory=model_directory, method=compiled.family_aggregation, adapter_factory=adapter_factory)
+        rankings, search_latencies = _rank_dense(
+            compiled.units,
+            queries,
+            arm_id=arm_id,
+            model_directory=model_directory,
+            device=manifest["engine"]["device_by_arm"][arm_id],
+            method=compiled.family_aggregation,
+            adapter_factory=adapter_factory,
+        )
     else:
         raise A2OwnerLocalEngineError("frozen arm identity is invalid")
     wall_seconds = time.perf_counter() - started
+    ordered_latencies = sorted(search_latencies)
+    p95_index = max(0, math.ceil(0.95 * len(ordered_latencies)) - 1)
+    search_p95_seconds = ordered_latencies[p95_index]
+    hourly = float(manifest["engine"]["all_fee_usd_per_hour"])
+    charged_usd = 0.0 if arm_id == "ARM-01" else hourly * wall_seconds / 3600.0 / 4.0
     primary, ndcg100, ndcg10 = _metrics(rankings, qrels, eligible)
     ranking_commitment = canonical_sha256({token: [{"family_token": row.family_token, "rank": row.rank, "score": float(row.score)} for row in rows] for token, rows in rankings.items()})
     evaluator_input = canonical_sha256({"qrels_sha256": manifest["owner_artifacts"]["qrels"]["sha256"], "membership_sha256": manifest["owner_artifacts"]["membership"]["sha256"], "ranking_sha256": ranking_commitment})
@@ -289,16 +308,16 @@ def run_owner_local_engine(
         "secondary_metrics": {"ndcg_at_100/out": _decimal(ndcg100), "ndcg_at_10/out": _decimal(ndcg10)},
         "latency": {
             "wall_seconds": _decimal(wall_seconds),
-            "search_p95_seconds": _decimal(wall_seconds / len(queries)),
+            "search_p95_seconds": _decimal(search_p95_seconds),
         },
-        "cost": {"charged_usd": "0", "currency": "USD"},
+        "cost": {"charged_usd": _decimal(charged_usd), "currency": "USD"},
         "coverage": {"expected_units": len(queries), "completed_units": len(rankings)},
         "resume_count": 0,
         "failure_count": 0,
         "reserve_activation_passed": False,
         "reserve_activation_evidence_sha256": None,
-        "train_only": True,
-        "rep_dev_measured": False,
+        "train_only": False,
+        "rep_dev_measured": True,
         "protected_payload_included": False,
         "per_query_outcomes_included": False,
     }

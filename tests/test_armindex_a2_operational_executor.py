@@ -88,7 +88,7 @@ def _provider_observation_paths(tmp_path: Path) -> tuple[Path, dict[str, Path]]:
     return path, sources
 
 
-def _candidate_row(candidate_id: str, *, score: str = "1") -> dict[str, object]:
+def _candidate_row(candidate_id: str, *, score: str = "1", measured: bool = False) -> dict[str, object]:
     candidate = frozen_candidates(ROOT)[candidate_id]
     dormant = candidate["tier"] == "conditional_reserve"
     return {
@@ -118,8 +118,8 @@ def _candidate_row(candidate_id: str, *, score: str = "1") -> dict[str, object]:
         "failure_count": 0,
         "reserve_activation_passed": False,
         "reserve_activation_evidence_sha256": None,
-        "train_only": True,
-        "rep_dev_measured": False,
+        "train_only": not measured,
+        "rep_dev_measured": measured,
         "protected_payload_included": False,
         "per_query_outcomes_included": False,
     }
@@ -209,13 +209,23 @@ def _authority(adoption: Mapping[str, object]) -> dict[str, object]:
 def _reserve_budget_admission(
     adoption: Mapping[str, object], authority: Mapping[str, object]
 ) -> dict[str, object]:
+    fresh_provider_receipt_sha256 = "9" * 64
     body = {
         "schema_version": "myis.armindex-a2-reserve-budget-admission.v1",
         "receipt_id": f"{ATTEMPT}-reserve-budget-admission-v1",
         "attempt_id": ATTEMPT,
         "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
         "initial_measurement_authority_sha256": authority["authority_sha256"],
-        "provider_admission_receipt_sha256": adoption["provider_admission_receipt_sha256"],
+        "provider_admission_receipt_sha256": fresh_provider_receipt_sha256,
+        "provider_observation_sha256": "8" * 64,
+        "provider_observation_file_sha256": "7" * 64,
+        "source_artifact_sha256": {
+            "runtime": "1" * 64,
+            "model_lockset": "2" * 64,
+            "data_handoff": "3" * 64,
+            "ssh_host_key": "4" * 64,
+            "management_authority": "5" * 64,
+        },
         "observed_at_utc": "2026-08-12T08:05:00Z",
         "ttl_deadline_utc": "2026-08-14T08:00:00Z",
         "whole_workload_total_usd": "33",
@@ -226,15 +236,13 @@ def _reserve_budget_admission(
 
 
 def _arm_incumbents() -> dict[str, dict[str, str]]:
-    return {
-        "ARM-03": {"candidate_id": "a1-arm-03-incumbent", "program_sha256": "3" * 64, "primary_metric": "0"},
-        "ARM-05": {"candidate_id": "a1-arm-05-incumbent", "program_sha256": "5" * 64, "primary_metric": "0"},
-        "ARM-04": {"candidate_id": "a1-arm-04-incumbent", "program_sha256": "4" * 64, "primary_metric": "0"},
-    }
+    return operational.canonical_a1_incumbents(ROOT)
 
 
 def _executed_candidate_row(candidate_id: str, *, score: str) -> dict[str, object]:
-    row = _candidate_row(candidate_id, score=score)
+    row = _candidate_row(candidate_id, score=score, measured=True)
+    row["evaluator_sha256"] = _authority(_adoption())["authority_sha256"]
+    row["code_sha256"] = _adoption()["bundle_sha256"]
     if frozen_candidates(ROOT)[candidate_id]["tier"] == "conditional_reserve":
         row.update(
             {
@@ -289,7 +297,7 @@ def test_candidate_result_rejects_hash_drift_protected_member_and_false_measurem
     with pytest.raises(operational.A2OperationalExecutorError, match="lacks adopted authority"):
         operational.build_candidate_result_receipt(
             ROOT,
-            result=_candidate_row(candidate_id),
+            result=_candidate_row(candidate_id, measured=True),
             evidence_class="measured_development_aggregate",
         )
 
@@ -803,9 +811,7 @@ def test_reserve_admission_and_continuation_drift_fail_closed(
             attempt_id=ATTEMPT,
             adoption_receipt_sha256=str(adoption["receipt_sha256"]),
             authority_sha256=str(authority["authority_sha256"]),
-            provider_admission_receipt_sha256=str(
-                adoption["provider_admission_receipt_sha256"]
-            ),
+            provider_admission_receipt_sha256=str(stale["provider_admission_receipt_sha256"]),
             now_utc=datetime(2026, 8, 12, 8, 21, tzinfo=timezone.utc),
         )
 
@@ -821,9 +827,7 @@ def test_reserve_admission_and_continuation_drift_fail_closed(
         receipts_by_candidate=matched,
         adoption_receipt_sha256=str(adoption["receipt_sha256"]),
         authority_sha256=str(authority["authority_sha256"]),
-        provider_admission_receipt_sha256=str(
-            adoption["provider_admission_receipt_sha256"]
-        ),
+        provider_admission_receipt_sha256=str(budget["provider_admission_receipt_sha256"]),
         arm_incumbents=_arm_incumbents(),
         reserve_budget_admission=budget,
         now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
@@ -837,6 +841,54 @@ def test_reserve_admission_and_continuation_drift_fail_closed(
         decision=decision,
     )
     assert continuation["matched_candidate_result_set_sha256"] == decision["matched_candidate_result_set_sha256"]
+
+
+def test_reserve_admission_builder_rebinds_fresh_provider_sources(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+    observation_path, sources = _provider_observation_paths(tmp_path)
+    receipt = operational.build_reserve_budget_admission(
+        ROOT,
+        attempt_id=ATTEMPT,
+        adoption_receipt=adoption,
+        measurement_authority=authority,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert receipt["provider_admission_receipt_sha256"] != adoption["provider_admission_receipt_sha256"]
+    assert receipt["source_artifact_sha256"] == {
+        name: file_sha256(path) for name, path in sources.items()
+    }
+
+
+def test_reserve_decision_rejects_caller_incumbent_drift() -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    budget = _reserve_budget_admission(adoption, authority)
+    matched = {
+        candidate_id: receipt
+        for candidate_id, receipt in _candidate_receipts().items()
+        if receipt["tier"] == "matched"
+    }
+    drifted = _arm_incumbents()
+    drifted["ARM-03"] = {**drifted["ARM-03"], "primary_metric": "0"}
+    with pytest.raises(operational.A2OperationalExecutorError, match="incumbent binding drift"):
+        operational.build_reserve_activation_decision(
+            ROOT,
+            attempt_id=ATTEMPT,
+            receipts_by_candidate=matched,
+            adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            authority_sha256=str(authority["authority_sha256"]),
+            provider_admission_receipt_sha256=str(budget["provider_admission_receipt_sha256"]),
+            arm_incumbents=drifted,
+            reserve_budget_admission=budget,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
 
 
 def test_reserve_decision_rejects_tie_and_derives_grounding_from_frozen_quartet(
@@ -855,19 +907,16 @@ def test_reserve_decision_rejects_tie_and_derives_grounding_from_frozen_quartet(
             ROOT, result=row, evidence_class="engineering_synthetic"
         )
     incumbents = _arm_incumbents()
-    for incumbent in incumbents.values():
-        incumbent["primary_metric"] = "1"
+    budget = _reserve_budget_admission(adoption, authority)
     decision = operational.build_reserve_activation_decision(
         ROOT,
         attempt_id=ATTEMPT,
         receipts_by_candidate=matched,
         adoption_receipt_sha256=str(adoption["receipt_sha256"]),
         authority_sha256=str(authority["authority_sha256"]),
-        provider_admission_receipt_sha256=str(
-            adoption["provider_admission_receipt_sha256"]
-        ),
+        provider_admission_receipt_sha256=str(budget["provider_admission_receipt_sha256"]),
         arm_incumbents=incumbents,
-        reserve_budget_admission=_reserve_budget_admission(adoption, authority),
+        reserve_budget_admission=budget,
         now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
     )
     assert decision["active_reserve_candidate_ids"] == []
@@ -884,11 +933,9 @@ def test_reserve_decision_rejects_tie_and_derives_grounding_from_frozen_quartet(
         receipts_by_candidate=matched,
         adoption_receipt_sha256=str(adoption["receipt_sha256"]),
         authority_sha256=str(authority["authority_sha256"]),
-        provider_admission_receipt_sha256=str(
-            adoption["provider_admission_receipt_sha256"]
-        ),
+        provider_admission_receipt_sha256=str(budget["provider_admission_receipt_sha256"]),
         arm_incumbents=incumbents,
-        reserve_budget_admission=_reserve_budget_admission(adoption, authority),
+        reserve_budget_admission=budget,
         now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
     )
     assert all(item["grounded_axes_remaining"] is True for item in grounded["decisions"])
@@ -910,9 +957,14 @@ def test_exact_52_rejects_partial_reserve_quartet_and_decision_hash_drift() -> N
         operational.evaluate_candidate_receipts(ROOT, receipts_by_candidate=receipts)
 
     receipts = _candidate_receipts()
-    drifted = _executed_candidate_row(reserve_id, score="100")
+    drifted = _candidate_row(reserve_id, score="100")
     drifted["reserve_activation_passed"] = True
     drifted["reserve_activation_evidence_sha256"] = "8" * 64
+    drifted["primary_metric"] = {"name": "recall_at_100/out", "value": "100"}
+    drifted["secondary_metrics"] = {"ndcg_at_100/out": "100", "ndcg_at_10/out": "100"}
+    drifted["latency"] = {"wall_seconds": "1", "search_p95_seconds": "0.1"}
+    drifted["cost"] = {"charged_usd": "0", "currency": "USD"}
+    drifted["coverage"] = {"expected_units": 1, "completed_units": 1}
     receipts[reserve_id] = operational.build_candidate_result_receipt(
         ROOT, result=drifted, evidence_class="engineering_synthetic"
     )

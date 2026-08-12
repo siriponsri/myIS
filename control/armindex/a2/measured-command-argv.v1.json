@@ -1,9 +1,9 @@
 [
-  "python",
+  "{python_executable}",
   "-m",
   "myis_research.armindex.a2_measured_adapter",
   "--repository-root",
-  ".",
+  "{repository_root}",
   "--owner-root",
   "{owner_local_root}",
   "--input-manifest",

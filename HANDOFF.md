@@ -253,8 +253,14 @@ then adds the production A2 program compiler/engine, tracked Owner-local adapter
 contract, and matched-first conditional-reserve lifecycle. The initial authority
 cannot pre-activate reserve work; after 40 durable matched receipts, a fresh
 absolute-deadline/USD-35 admission binds deterministic per-arm decisions and one
-immutable continuation. Fresh provider admission/adoption and isolated staging
-remain incomplete, and no remote A2 root or measured worker was started.
+immutable continuation. The final repair binds canonical A1 v16 incumbents,
+REP-DEV split/artifact commitments, exact dense-model file manifests and locks,
+the frozen runtime interpreter, per-arm CUDA devices, measured latency/cost, and
+resume receipts to the current attempt/adoption/authority. Bundle closure is
+verified by isolated extraction/import, and the fresh checkpoint admission is
+available as the `reserve-admit` CLI. Focused validation reports `64 passed`.
+Fresh provider admission/adoption and isolated staging remain incomplete, and no
+remote A2 root, protected-data access, or measured worker was started.
 
 ## Active authorized action
 

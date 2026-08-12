@@ -64,7 +64,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "768de424f800e65c1989e040b5aae6bd600ed1c5d2d424a4c7ebcb7b253d8d43",
+  "graph_sha256": "b598a494992c07205bf8827c8c238125fc49ba3443b3cfa545a68f1034f1b40d",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -176,7 +176,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "sha256": "079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f",
+      "sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {

@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
-  "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+  "generated_at": "2026-08-12T14:37:20Z",
+  "generated_from_revision": "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5",
+  "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+    "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -198,13 +198,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T13:08:25Z",
+  "last_material_update": "2026-08-12T14:37:20Z",
   "metric_references": [],
   "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Brain, read-model, and Obsidian migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-3",
-  "report_sha256": "ec6ed9adcf41beece69b9f96f23940bd3e340dc4438fc24ff07f6b216417816d",
+  "report_sha256": "cca615619626a7c3f4621568c0cf9a3a605c176815b1125971e7af398da564f8",
   "report_type": "task",
   "result": {
     "decision": "completed",

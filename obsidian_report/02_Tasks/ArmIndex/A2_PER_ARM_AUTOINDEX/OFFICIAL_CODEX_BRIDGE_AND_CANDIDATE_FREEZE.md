@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd"
-read_model_sha256: "e6614bc79e9a6cf663f3c50d7015f05693c9d9d0215bfdb6569a79a4e5cc0580"
-source_commit: "0d4a51a81d411cff0e70baf293e8edc9dd0dba85"
+read_model_revision: "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5"
+read_model_sha256: "6cb77c56b56a044f04acdb9dfbe12a42f7338a194fe1628314451d87d8489d96"
+source_commit: "9973d89281c67d85573759ccad75a85da886bdd2"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_validation"
 scientific_authority: false
 claim_boundary: "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim"
-generated_from_revision: "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd"
-last_material_update: "2026-08-12T13:08:25Z"
+generated_from_revision: "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5"
+last_material_update: "2026-08-12T14:37:20Z"
 next_authorized_action: "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T13:08:25Z"
-updated_at: "2026-08-12T13:08:25Z"
+created_at: "2026-08-12T14:37:20Z"
+updated_at: "2026-08-12T14:37:20Z"
 note_id: "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
 note_type: "task_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -48,7 +48,7 @@ Official Codex bridge and five-arm candidate freeze
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 0d4a51a81d411cff0e70baf293e8edc9dd0dba85
+- `git_commit`: 9973d89281c67d85573759ccad75a85da886bdd2
 - `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
 - `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`
 - `official_credit_closeout`: `{"limit_reached": false, "model_name": "gpt-5.6-sol", "plan_type": "plus", "rate_limit_reached_type": null, "remaining_percent": 87, "reset_credit_available_count": 1, "reset_credit_consumed": false, "resets_at_utc": "2026-08-18T00:45:40Z", "snapshot_sha256": "6d9c634dfd82c4d1017994611ac5461dd34752534a816de895677ca363460a7f", "used_percent": 13}`
@@ -78,7 +78,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | A2 frozen-five-arm execution readiness contract | `contract` | `engineering_execution_readiness` | `control/armindex/a2/execution-readiness-contract.v1.json` | `ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97` | `validated` |
 | A2 execution readiness envelope | `control` | `engineering_execution_readiness` | `control/execution-envelope-a2-readiness-v1.yaml` | `8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a` | `validated` |
 | A2 whole-workload readiness budget | `budget` | `engineering_execution_readiness` | `control/budgets/a2-execution-readiness-v1.json` | `be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de` | `validated` |
-| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f` | `validated` |
+| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70` | `validated` |
 | A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e` | `validated` |
 
 ## Metrics

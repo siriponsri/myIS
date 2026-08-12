@@ -35,7 +35,8 @@ and non-advancing.
    Owner-local A1 v16 incumbents, strict primary improvement, and the actual
    four frozen reserve axes. Persist one decision and one continuation receipt.
    Each reserve arm is then either four active results or four dormant receipts.
-9. Evaluation emits aggregate-only receipts; it never measures REP-DEV.
+9. Evaluation measures the frozen REP-DEV view and emits aggregate-only receipts;
+   query IDs, qrels, membership, rankings, and per-query outcomes remain Owner-local.
    Winner selection rejects exact ties and cannot advance ARM-01 or ARM-02.
 10. Safe return validates archive hashes and excludes protected payloads. Do not
    destroy the provider instance.
@@ -56,17 +57,22 @@ uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repo
 ```
 
 The first call ends at the matched barrier. After AP/LO creates the fresh
-reserve-budget admission, rerun the same command with
+reserve-budget admission from a new provider observation and its exact source
+artifacts, rerun the same command with
 `--reserve-budget-admission <owner-local-reserve-admission.json>`. Attempt,
 adoption, authority, freeze, matched receipt-set, decision, and continuation
 identities must remain unchanged.
+
+```powershell
+uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repository-root . --attempt-id <attempt> reserve-admit --execution-adoption-receipt <owner-local-adoption.json> --measurement-authority <tracked-authority.json> --provider-observation <fresh-provider-observation.json> --runtime-source <runtime-source-artifact> --model-lockset-source <model-lockset-source-artifact> --data-handoff-source <data-handoff-source-artifact> --ssh-host-key-source <ssh-host-key-source-artifact> --management-authority-source <management-authority-source-artifact> --output <owner-local-reserve-admission.json>
+```
 
 ## Hard Stops
 
 Stop before staging or execution on a hash mismatch, stale quote, price above
 USD 35, TTL below 40 hours remaining, missing management authority, unexpected GPU
 identity, model/data/runtime hash drift, candidate mutation, protected output,
-or any request for A3, HARNESS-DEV, Selection, Final, or REP-DEV measurement.
+or any request for A3, HARNESS-DEV, Selection, or Final access.
 
 ## Ledger
 

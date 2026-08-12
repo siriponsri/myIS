@@ -3,7 +3,7 @@
   "$id": "urn:myis:armindex:a2-reserve-budget-admission:v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "receipt_id", "attempt_id", "execution_adoption_receipt_sha256", "initial_measurement_authority_sha256", "provider_admission_receipt_sha256", "observed_at_utc", "ttl_deadline_utc", "whole_workload_total_usd", "forward_hard_stop_usd", "freeze_bindings", "receipt_sha256"],
+  "required": ["schema_version", "receipt_id", "attempt_id", "execution_adoption_receipt_sha256", "initial_measurement_authority_sha256", "provider_admission_receipt_sha256", "provider_observation_sha256", "provider_observation_file_sha256", "source_artifact_sha256", "observed_at_utc", "ttl_deadline_utc", "whole_workload_total_usd", "forward_hard_stop_usd", "freeze_bindings", "receipt_sha256"],
   "properties": {
     "schema_version": {"const": "myis.armindex-a2-reserve-budget-admission.v1"},
     "receipt_id": {"pattern": "^a2-[a-z0-9-]+-reserve-budget-admission-v1$"},
@@ -11,6 +11,9 @@
     "execution_adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
     "initial_measurement_authority_sha256": {"$ref": "#/$defs/hash"},
     "provider_admission_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "provider_observation_sha256": {"$ref": "#/$defs/hash"},
+    "provider_observation_file_sha256": {"$ref": "#/$defs/hash"},
+    "source_artifact_sha256": {"type": "object", "additionalProperties": false, "required": ["runtime", "model_lockset", "data_handoff", "ssh_host_key", "management_authority"], "properties": {"runtime": {"$ref": "#/$defs/hash"}, "model_lockset": {"$ref": "#/$defs/hash"}, "data_handoff": {"$ref": "#/$defs/hash"}, "ssh_host_key": {"$ref": "#/$defs/hash"}, "management_authority": {"$ref": "#/$defs/hash"}}},
     "observed_at_utc": {"type": "string", "format": "date-time"},
     "ttl_deadline_utc": {"type": "string", "format": "date-time"},
     "whole_workload_total_usd": {"$ref": "#/$defs/money"},

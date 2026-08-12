@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-12T13:08:25Z",
-  "generated_from_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
-  "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+  "generated_at": "2026-08-12T14:37:20Z",
+  "generated_from_revision": "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5",
+  "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+    "git_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T13:08:25Z",
+  "last_material_update": "2026-08-12T14:37:20Z",
   "metric_references": [],
   "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "15cfe5a049c139ad94bc0c1d89e376825bbf10cc54c5333027ee4f22e93af932",
+  "report_sha256": "3f4dad8dee71d99418fcdb431ea28c8cd50486c4914d255092ee069215c34147",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

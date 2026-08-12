@@ -22,7 +22,6 @@ from jsonschema import Draft202012Validator
 
 from ..kernel.canonical import canonical_sha256, file_sha256
 from ..protection import assert_aggregate_only
-from .a2_entry_preflight_v16 import evaluate_a2_entry_preflight
 from .a2_execution_readiness import (
     A2ExecutionReadinessError,
     append_lifecycle_checkpoint,
@@ -44,6 +43,7 @@ from .autoindex import (
     advance_autoindex,
     strict_primary_improvement,
 )
+from .a2_measured_adapter import canonical_a1_incumbents, validate_owner_local_input
 
 _HASH = re.compile(r"^[a-f0-9]{64}$")
 _ATTEMPT = re.compile(r"^a2-[a-z0-9-]{7,63}$")
@@ -544,6 +544,7 @@ def execute_external_candidate_set(
     checkpoint_ledger: Path,
     owner_local_root: Path | None = None,
     owner_input_manifest: str | None = None,
+    python_executable: str | None = None,
     reserve_budget_admission: Mapping[str, Any] | None = None,
     arm_incumbents: Mapping[str, Mapping[str, Any]] | None = None,
     now_utc: datetime | None = None,
@@ -567,10 +568,23 @@ def execute_external_candidate_set(
         raise A2OperationalExecutorError("external executor working output must remain Owner-local")
     if not command_template or any(not isinstance(item, str) or not item for item in command_template):
         raise A2OperationalExecutorError("external executor argv template is invalid")
+    allowed_template_fields = {
+        "{candidate_id}",
+        "{arm_id}",
+        "{program_sha256}",
+        "{owner_local_root}",
+        "{owner_local_input_manifest}",
+        "{python_executable}",
+        "{repository_root}",
+    }
+    if any("{" in item and item not in allowed_template_fields for item in command_template):
+        raise A2OperationalExecutorError("external executor argv contains an unknown placeholder")
     if ("{owner_local_root}" in command_template or "{owner_local_input_manifest}" in command_template) and (
         owner_local_root is None or owner_input_manifest is None
     ):
         raise A2OperationalExecutorError("production adapter requires Owner-local input binding")
+    if "{python_executable}" in command_template and not python_executable:
+        raise A2OperationalExecutorError("production adapter requires a validated runtime interpreter")
     candidates = frozen_candidates(root)
     receipts_directory = output / "receipts"
     processes_directory = output / "processes"
@@ -587,6 +601,17 @@ def execute_external_candidate_set(
             {key: value for key, value in receipt.items() if key != "receipt_sha256"}
         ):
             raise A2OperationalExecutorError("resume receipt hash drift")
+        if (
+            receipt.get("attempt_id") != attempt_id
+            or receipt.get("evidence_class") != "measured_development_aggregate"
+            or receipt.get("scientific_authority") is not True
+            or receipt.get("code_sha256") != adoption["bundle_sha256"]
+            or receipt.get("evaluator_sha256") != authority["authority_sha256"]
+            or receipt.get("freeze_bindings") != _freeze_bindings(root)
+        ):
+            raise A2OperationalExecutorError(
+                "resume receipt differs from attempt, adoption, or authority"
+            )
         completed[str(candidate_id)] = receipt
     ledger = checkpoint_ledger.resolve()
     sequence = 0
@@ -644,8 +669,8 @@ def execute_external_candidate_set(
                 "failure_count": 0,
                 "reserve_activation_passed": False,
                 "reserve_activation_evidence_sha256": decision_sha256,
-                "train_only": True,
-                "rep_dev_measured": False,
+                "train_only": False,
+                "rep_dev_measured": True,
                 "protected_payload_included": False,
                 "per_query_outcomes_included": False,
             }
@@ -661,6 +686,8 @@ def execute_external_candidate_set(
                         else ""
                     ),
                     owner_local_input_manifest=owner_input_manifest or "",
+                    python_executable=python_executable or "",
+                    repository_root=str(root),
                 )
                 for item in command_template
             ]
@@ -734,17 +761,13 @@ def execute_external_candidate_set(
                 or decision.get("initial_measurement_authority_sha256") != authority["authority_sha256"]
             ):
                 raise A2OperationalExecutorError("reserve activation decision identity drift")
-            if arm_incumbents is None:
-                raise A2OperationalExecutorError(
-                    "reserve continuation requires Owner-local A1 incumbent bindings"
-                )
             expected_decision = build_reserve_activation_decision(
                 root,
                 attempt_id=attempt_id,
                 receipts_by_candidate=completed,
                 adoption_receipt_sha256=adoption["receipt_sha256"],
                 authority_sha256=authority["authority_sha256"],
-                provider_admission_receipt_sha256=adoption[
+                provider_admission_receipt_sha256=reserve_budget_admission[
                     "provider_admission_receipt_sha256"
                 ],
                 arm_incumbents=arm_incumbents,
@@ -754,17 +777,13 @@ def execute_external_candidate_set(
             if decision != expected_decision:
                 raise A2OperationalExecutorError("reserve continuation decision drift")
         else:
-            if arm_incumbents is None:
-                raise A2OperationalExecutorError(
-                    "reserve continuation requires Owner-local A1 incumbent bindings"
-                )
             decision = build_reserve_activation_decision(
                 root,
                 attempt_id=attempt_id,
                 receipts_by_candidate=completed,
                 adoption_receipt_sha256=adoption["receipt_sha256"],
                 authority_sha256=authority["authority_sha256"],
-                provider_admission_receipt_sha256=adoption[
+                provider_admission_receipt_sha256=reserve_budget_admission[
                     "provider_admission_receipt_sha256"
                 ],
                 arm_incumbents=arm_incumbents,
@@ -847,8 +866,12 @@ def build_candidate_result_receipt(
         "data_sha256",
     ):
         _hash(row.get(field), role=field)
-    if row.get("train_only") is not True or row.get("rep_dev_measured") is not False:
-        raise A2OperationalExecutorError("candidate result crosses the train-only boundary")
+    measured = evidence_class == "measured_development_aggregate"
+    if (
+        row.get("train_only") is not (not measured)
+        or row.get("rep_dev_measured") is not measured
+    ):
+        raise A2OperationalExecutorError("candidate result data-role declaration drift")
     if (
         row.get("protected_payload_included") is not False
         or row.get("per_query_outcomes_included") is not False
@@ -951,8 +974,8 @@ def build_candidate_result_receipt(
         "failure_count": row["failure_count"],
         "reserve_activation_passed": active,
         "reserve_activation_evidence_sha256": activation_evidence,
-        "train_only": True,
-        "rep_dev_measured": False,
+        "train_only": not measured,
+        "rep_dev_measured": measured,
         "protected_payload_included": False,
         "per_query_outcomes_included": False,
         "freeze_bindings": _freeze_bindings(root),
@@ -1278,10 +1301,8 @@ def build_reserve_budget_admission(
     attempt_id: str,
     adoption_receipt: Mapping[str, Any],
     measurement_authority: Mapping[str, Any],
-    provider_admission_receipt_sha256: str,
-    observed_at_utc: str,
-    ttl_deadline_utc: str,
-    whole_workload_total_usd: object,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
     now_utc: datetime | None = None,
 ) -> dict[str, Any]:
     """Create the fresh reserve-checkpoint admission without provider contact."""
@@ -1294,19 +1315,26 @@ def build_reserve_budget_admission(
         attempt_id=attempt_id,
         execution_adoption_receipt_sha256=adoption["receipt_sha256"],
     )
-    _hash(provider_admission_receipt_sha256, role="provider admission receipt")
+    fresh_provider = build_provider_admission_receipt(
+        root,
+        attempt_id=attempt_id,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+        now_utc=now_utc or datetime.now(timezone.utc),
+    )
     body = {
         "schema_version": "myis.armindex-a2-reserve-budget-admission.v1",
         "receipt_id": f"{attempt_id}-reserve-budget-admission-v1",
         "attempt_id": attempt_id,
         "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
         "initial_measurement_authority_sha256": authority["authority_sha256"],
-        "provider_admission_receipt_sha256": provider_admission_receipt_sha256,
-        "observed_at_utc": observed_at_utc,
-        "ttl_deadline_utc": ttl_deadline_utc,
-        "whole_workload_total_usd": _decimal(
-            whole_workload_total_usd, role="whole workload total"
-        ),
+        "provider_admission_receipt_sha256": fresh_provider["receipt_sha256"],
+        "provider_observation_sha256": fresh_provider["provider_observation_sha256"],
+        "provider_observation_file_sha256": fresh_provider["provider_observation_file_sha256"],
+        "source_artifact_sha256": fresh_provider["source_artifact_sha256"],
+        "observed_at_utc": fresh_provider["observed_at_utc"],
+        "ttl_deadline_utc": fresh_provider["ttl_deadline_utc"],
+        "whole_workload_total_usd": fresh_provider["whole_workload_total_usd"],
         "forward_hard_stop_usd": "35",
         "freeze_bindings": _freeze_bindings(root),
     }
@@ -1317,9 +1345,7 @@ def build_reserve_budget_admission(
         attempt_id=attempt_id,
         adoption_receipt_sha256=adoption["receipt_sha256"],
         authority_sha256=authority["authority_sha256"],
-        provider_admission_receipt_sha256=adoption[
-            "provider_admission_receipt_sha256"
-        ],
+        provider_admission_receipt_sha256=fresh_provider["receipt_sha256"],
         now_utc=now_utc,
     )
 
@@ -1347,8 +1373,8 @@ def validate_reserve_budget_admission(
         checked["attempt_id"] != attempt_id
         or checked["execution_adoption_receipt_sha256"] != adoption_receipt_sha256
         or checked["initial_measurement_authority_sha256"] != authority_sha256
-        or checked["provider_admission_receipt_sha256"]
-        != provider_admission_receipt_sha256
+        or checked["provider_admission_receipt_sha256"] != provider_admission_receipt_sha256
+        or not isinstance(checked.get("source_artifact_sha256"), Mapping)
         or checked["freeze_bindings"] != _freeze_bindings(root)
         or checked["receipt_sha256"]
         != canonical_sha256({key: value for key, value in checked.items() if key != "receipt_sha256"})
@@ -1370,7 +1396,7 @@ def build_reserve_activation_decision(
     adoption_receipt_sha256: str,
     authority_sha256: str,
     provider_admission_receipt_sha256: str,
-    arm_incumbents: Mapping[str, Mapping[str, Any]],
+    arm_incumbents: Mapping[str, Mapping[str, Any]] | None = None,
     reserve_budget_admission: Mapping[str, Any],
     now_utc: datetime | None = None,
 ) -> dict[str, Any]:
@@ -1385,6 +1411,9 @@ def build_reserve_activation_decision(
         now_utc=now_utc,
     )
     manifest = _candidate_manifest(root)
+    canonical_incumbents = canonical_a1_incumbents(root)
+    if arm_incumbents is not None and dict(arm_incumbents) != canonical_incumbents:
+        raise A2OperationalExecutorError("Owner-local A1 incumbent binding drift")
     candidates = frozen_candidates(root)
     matched_set = _matched_result_set_sha256(receipts_by_candidate)
     decisions: list[dict[str, Any]] = []
@@ -1392,7 +1421,7 @@ def build_reserve_activation_decision(
     frozen_bindings_sha256 = canonical_sha256(_freeze_bindings(root))
     batches = {row["batch_id"]: row for row in manifest["batches"]}
     for arm_id in ("ARM-03", "ARM-05", "ARM-04"):
-        incumbent = arm_incumbents.get(arm_id)
+        incumbent = canonical_incumbents.get(arm_id)
         if not isinstance(incumbent, Mapping):
             raise A2OperationalExecutorError("Owner-local A1 incumbent binding is missing")
         state = AutoIndexState(
@@ -1895,6 +1924,16 @@ def _parser() -> argparse.ArgumentParser:
     admission.add_argument("--ssh-host-key-source", type=Path, required=True)
     admission.add_argument("--management-authority-source", type=Path, required=True)
     admission.add_argument("--output", type=Path)
+    reserve_admission = commands.add_parser("reserve-admit")
+    reserve_admission.add_argument("--execution-adoption-receipt", type=Path, required=True)
+    reserve_admission.add_argument("--measurement-authority", type=Path, required=True)
+    reserve_admission.add_argument("--provider-observation", type=Path, required=True)
+    reserve_admission.add_argument("--runtime-source", type=Path, required=True)
+    reserve_admission.add_argument("--model-lockset-source", type=Path, required=True)
+    reserve_admission.add_argument("--data-handoff-source", type=Path, required=True)
+    reserve_admission.add_argument("--ssh-host-key-source", type=Path, required=True)
+    reserve_admission.add_argument("--management-authority-source", type=Path, required=True)
+    reserve_admission.add_argument("--output", type=Path, required=True)
     stage = commands.add_parser("stage")
     stage.add_argument("--provider-admission-receipt", type=Path, required=True)
     stage.add_argument("--bundle-receipt", type=Path, required=True)
@@ -1946,6 +1985,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.dry_run or command is None:
             result = run_synthetic_dry_run(root, attempt_id=args.attempt_id)
         elif command == "preflight":
+            from .a2_entry_preflight_v16 import evaluate_a2_entry_preflight
+
             result = evaluate_a2_entry_preflight(root)
         elif command == "bundle":
             result = build_execution_bundle(root, attempt_id=args.attempt_id, output_path=args.output)
@@ -1967,6 +2008,27 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             if args.output is not None:
                 _write_json(args.output, result)
+        elif command == "reserve-admit":
+            result = build_reserve_budget_admission(
+                root,
+                attempt_id=args.attempt_id,
+                adoption_receipt=_load_json(
+                    args.execution_adoption_receipt, role="execution adoption receipt"
+                ),
+                measurement_authority=_load_json(
+                    args.measurement_authority, role="measurement authority"
+                ),
+                provider_observation_path=args.provider_observation,
+                source_artifact_paths={
+                    "runtime": args.runtime_source,
+                    "model_lockset": args.model_lockset_source,
+                    "data_handoff": args.data_handoff_source,
+                    "ssh_host_key": args.ssh_host_key_source,
+                    "management_authority": args.management_authority_source,
+                },
+                now_utc=datetime.now(timezone.utc),
+            )
+            _write_json(args.output, result)
         elif command == "stage":
             stage_source_values = {
                 "runtime": args.runtime_source,
@@ -2044,6 +2106,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise A2OperationalExecutorError(
                     "Owner-local input manifest must be within Owner-local root"
                 ) from error
+            validated_owner_manifest = validate_owner_local_input(
+                root,
+                owner_root=owner_root,
+                manifest_relative_path=manifest_relative,
+            )
             result = execute_external_candidate_set(
                 root,
                 attempt_id=args.attempt_id,
@@ -2060,14 +2127,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 checkpoint_ledger=args.checkpoint_ledger,
                 owner_local_root=owner_root,
                 owner_input_manifest=manifest_relative,
+                python_executable=str(validated_owner_manifest["engine"]["python_executable"]),
                 reserve_budget_admission=(
                     _load_json(args.reserve_budget_admission, role="reserve budget admission")
                     if args.reserve_budget_admission is not None
                     else None
                 ),
-                arm_incumbents=_load_json(owner_manifest, role="Owner-local measured input manifest").get(
-                    "arm_incumbents"
-                ),
+                arm_incumbents=validated_owner_manifest.get("arm_incumbents"),
                 timeout_seconds=args.timeout_seconds,
             )
         elif command == "resume":

@@ -38,7 +38,8 @@ def test_compile_program_duplicate_modes_and_family_unitization() -> None:
     ]
     deduped = compile_program(rows, _program(unitization={"kind": "family", "logical_size": None, "overlap": 0}, family_aggregation="single_unit"))
     preserved = compile_program(rows, _program(unitization={"kind": "family", "logical_size": None, "overlap": 0}, family_aggregation="single_unit", duplicate_policy="preserve_all"))
-    assert len(deduped.units) == 1
+    # Equal text in different families must not collapse family identity.
+    assert len(deduped.units) == 2
     assert len(preserved.units) == 2
 
 

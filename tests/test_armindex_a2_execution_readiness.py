@@ -5,6 +5,8 @@ from datetime import datetime, timezone
 import io
 import json
 import hashlib
+import subprocess
+import sys
 import tarfile
 from pathlib import Path
 
@@ -30,6 +32,7 @@ from myis_research.armindex.a2_execution_readiness import (
     validate_execution_ledger,
     validate_provider_admission_receipt,
     build_watchdog_script,
+    _BUNDLE_CLOSURE,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -330,6 +333,34 @@ def test_bundle_requires_clean_pushed_repository(
             ROOT, attempt_id=ATTEMPT, output_path=tmp_path / "bundle.tar.gz"
         )
 
+
+def test_bundle_closure_imports_in_isolated_extraction(tmp_path: Path) -> None:
+    archive_path = tmp_path / "bundle.tar.gz"
+    with tarfile.open(archive_path, "w:gz") as archive:
+        for relative in _BUNDLE_CLOSURE:
+            archive.add(ROOT / relative, arcname=relative)
+    extracted = tmp_path / "extracted"
+    with tarfile.open(archive_path, "r:gz") as archive:
+        archive.extractall(extracted, filter="data")
+    script = """
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root / 'src'))
+from myis_research.armindex import a2_measured_adapter, a2_owner_local_engine
+for module in (a2_measured_adapter, a2_owner_local_engine):
+    assert pathlib.Path(module.__file__).resolve().is_relative_to(root)
+schema = json.loads((root / 'schemas/armindex/representation-program.v1.json').read_text(encoding='utf-8'))
+assert schema['$schema'].endswith('schema')
+"""
+    result = subprocess.run(
+        [sys.executable, "-I", "-c", script, str(extracted)],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
 
 def test_provider_admission_adoption_and_runner_staging_are_side_effect_free(
     tmp_path: Path,

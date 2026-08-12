@@ -170,10 +170,10 @@
     },
     {
       "artifact_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "bytes": 4414,
+      "bytes": 5191,
       "classification": "metadata",
       "media_type": "text/markdown",
-      "sha256": "079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f",
+      "sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
@@ -227,7 +227,7 @@
     "status": "candidate_freeze_audit_passed_measured_a2_closed",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "fab94142cac578ab88fc6eafcc25add8cda309979d98fe2164d6fc130017825e",
+  "index_sha256": "5de6f687df7ba9d89d37d79361f5a51a104d6a73be5433fc3f6ab2839e71439e",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"

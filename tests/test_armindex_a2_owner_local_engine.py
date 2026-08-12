@@ -60,7 +60,9 @@ def _manifest(owner: Path) -> dict[str, object]:
             "engine_id": "myis.armindex-a2-owner-local-retriever-evaluator.v1",
             "argv": ["python", "-m", "myis_research.armindex.a2_owner_local_engine", "{program_path}"],
             "code_sha256": file_sha256(Path(engine.__file__)),
+            "all_fee_usd_per_hour": "0.6",
             "model_directories": {arm: f"models/{arm}" for arm in ("ARM-02", "ARM-03", "ARM-04", "ARM-05")},
+            "device_by_arm": {"ARM-02": "cuda:0", "ARM-03": "cuda:1", "ARM-04": "cuda:2", "ARM-05": "cuda:3"},
             "output_root": "output",
         },
     }
@@ -76,10 +78,10 @@ def test_engine_compiles_frozen_program_and_exports_only_aggregate_result(tmp_pa
     def fake_validate(*_args: object, **_kwargs: object) -> dict[str, object]:
         return manifest
 
-    def fake_rank(units: object, queries: object, method: str) -> dict[str, tuple[FamilyRank, ...]]:
+    def fake_rank(units: object, queries: object, method: str) -> tuple[dict[str, tuple[FamilyRank, ...]], tuple[float, ...]]:
         observed["texts"] = [unit.physical_inputs[0].text for unit in units]
         observed["method"] = method
-        return {"Q-" + "b" * 32: tuple(FamilyRank(f"F-{index:032x}", index + 1, float(100 - index)) for index in range(100))}
+        return ({"Q-" + "b" * 32: tuple(FamilyRank(f"F-{index:032x}", index + 1, float(100 - index)) for index in range(100))}, (0.25,))
 
     monkeypatch.setattr(engine, "validate_owner_local_input", fake_validate)
     monkeypatch.setattr(engine, "_rank_arm01", fake_rank)
@@ -89,6 +91,9 @@ def test_engine_compiles_frozen_program_and_exports_only_aggregate_result(tmp_pa
     assert observed["texts"]
     assert result["primary_metric"]["name"] == "recall_at_100/out"
     assert result["coverage"] == {"expected_units": 1, "completed_units": 1}
+    assert result["latency"]["search_p95_seconds"] == "0.25"
+    assert result["train_only"] is False
+    assert result["rep_dev_measured"] is True
     assert not ({"query_ids", "qrels", "membership", "per_query_outcomes"} & set(result))
 
 

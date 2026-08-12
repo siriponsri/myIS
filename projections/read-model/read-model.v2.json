@@ -4143,7 +4143,7 @@
       "provider_admission_status": "DEFERRED_PENDING_IMPLEMENTATION",
       "provider_execution_adoption_performed": false,
       "remote_staging_performed": false,
-      "runbook_sha256": "079bd32b71668efa3d37689fc9436811e7d0edf6fab1a9d2404c14a23660942f",
+      "runbook_sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
       "runbook_uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
       "scientific_authority": false,
       "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
@@ -5013,7 +5013,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-12T13:08:25Z",
+  "generated_at": "2026-08-12T14:37:20Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -5921,7 +5921,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
+  "projection_revision": "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5965,8 +5965,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "4e46e4a7d87dca88a53ef2e6d9a9ecd590cf4241ccb6b54bf08c94df9840d2dd",
-  "read_model_sha256": "e6614bc79e9a6cf663f3c50d7015f05693c9d9d0215bfdb6569a79a4e5cc0580",
+  "read_model_revision": "bca8ea5efe0b2e81b6f09ffd7bdd8d17db55d0acb68686efda7184054cc211d5",
+  "read_model_sha256": "6cb77c56b56a044f04acdb9dfbe12a42f7338a194fe1628314451d87d8489d96",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -6099,7 +6099,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
+  "source_commit": "9973d89281c67d85573759ccad75a85da886bdd2",
   "tasks": [
     {
       "evidence_ids": [],
