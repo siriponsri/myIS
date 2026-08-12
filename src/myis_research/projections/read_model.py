@@ -251,6 +251,7 @@ from ..armindex.a2_candidate_freeze import (
 from ..armindex.a2_execution_readiness import (
     A2ExecutionReadinessError,
     validate_execution_adoption_receipt,
+    validate_execution_ledger,
     validate_provider_admission_receipt,
 )
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
@@ -883,6 +884,8 @@ def _a2_execution_readiness_projection(
         ):
             raise ValueError("A2 readiness envelope or budget boundary drift")
 
+        ledger = validate_execution_ledger(root, root / A2_READINESS_LEDGER_PATH)
+        latest_ledger_entry = ledger[-1]
         result = {
             **missing,
             "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
@@ -903,7 +906,22 @@ def _a2_execution_readiness_projection(
             "owner_ttl_hours": 40,
             "freeze_bindings": dict(freeze_bindings),
             "counters": dict(counters),
+            "latest_ledger_entry_id": latest_ledger_entry["entry_id"],
+            "latest_ledger_entry_sha256": latest_ledger_entry["entry_sha256"],
+            "provider_admission_status": "NOT_ATTEMPTED",
+            "provider_admission_attempted": False,
         }
+        if latest_ledger_entry["status"] == "FAILED_CLOSED":
+            return {
+                **result,
+                "status": "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
+                "provider_admission_status": "FAILED_CLOSED",
+                "provider_admission_attempted": True,
+                "next_authorized_action": (
+                    "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_"
+                    "AUTHORITY_THEN_RERUN_ADMISSION_ONLY"
+                ),
+            }
         pointer_path = root / A2_CURRENT_EXECUTION_POINTER_PATH
         if not pointer_path.exists():
             return result
@@ -1624,6 +1642,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "a2_staged_not_launched_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+            else "a2_provider_admission_failed_closed_measured_a2_locked"
+            if a2_execution_readiness.get("status")
+            == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
             else "a2_execution_readiness_complete_fresh_admission_required"
             if a2_execution_readiness.get("validated") is True
             else "a2_candidate_freeze_audit_passed_measured_a2_closed"
@@ -1643,6 +1664,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     "staged"
                     if a2_execution_readiness.get("status")
                     == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+                    else "blocked"
+                    if a2_execution_readiness.get("status")
+                    == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
                     else "ready"
                     if a2_execution_readiness.get("validated") is True
                     else "blocked"
@@ -1657,6 +1681,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                                 "staged"
                                 if a2_execution_readiness.get("status")
                                 == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+                                else "blocked"
+                                if a2_execution_readiness.get("status")
+                                == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
                                 else "ready"
                                 if a2_execution_readiness.get("validated") is True
                                 else "blocked"

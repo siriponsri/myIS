@@ -8,34 +8,27 @@ written.
 ## Read order
 
 1. Read `HANDOFF.md` for orientation only.
-2. Read `PLAN.md`.
-3. Read only the files owned by the active task.
-4. Read additional control files only when required by the conditional rules below.
+2. Read `PLAN.md` for the current Phase, Task, and next authorized action.
+3. Read only the files needed by the active task.
+4. Read the active campaign/control, schema, manifest, receipt, or runbook only
+   when the task actually depends on it.
 
-`HANDOFF.md` is a concise orientation document, not a canonical source. It cannot override plans, control files, schemas, manifests, receipts, or measured evidence.
+`HANDOFF.md` is orientation, not authority. It cannot override canonical
+controls, manifests, receipts, schemas, or measured evidence.
 
 ### Conditional reads
 
-- Read `control/assets/reusable_assets.yaml` and
-  `control/assets/REUSABLE_ASSET_MAP.md` only when discovering, selecting, or
-  adapting reusable App assets.
-- Read `control/campaigns/scope-autoindex-v1.yaml` before changing or executing
-  the active campaign.
-- Read `control/execution-envelope.yaml` before starting an experiment,
-  measured run, or execution-policy change.
-- Read `control/execution-envelope-p2.yaml`,
-  `control/execution-envelope-p2-v2.yaml`,
-  `control/budgets/p2-r1-primary-v1.yaml`,
-  `control/budgets/p2-r1-primary-v2.yaml`, and
-  `control/runbooks/P2_MEASURED_AUTORESEARCH_V2.md` before changing P2
-  execution policy or preparing a P2 request. The P1 and P2-v1 envelopes
-  remain hash-bound historical authorization and must not be overwritten.
-- Read `control/source-of-truth.yaml` before report sync, projection writes,
-  publication work, or resolving conflicting facts.
-- Read schemas, manifests, receipts, and evidence files only when the active
-  task uses or changes them.
-- Before writing, verify every canonical file relevant to that specific write.
-- Do not re-read an unchanged file repeatedly within the same session.
+- Read `control/source-of-truth.yaml` before report/projection sync,
+  publication-facing writes, or resolving conflicting canonical facts.
+- Read the active ArmIndex campaign/control before changing scientific
+  execution policy or starting measured work.
+- Read schemas, manifests, receipts, budgets, and runbooks only when the task
+  uses or changes them.
+- Historical SCOPE/P1/P2 controls are read-only context. Do not load their full
+  execution stack for current ArmIndex work unless the task explicitly concerns
+  historical evidence or compatibility.
+- Before writing, verify the canonical files relevant to that write.
+- Do not repeatedly re-read unchanged files within the same session.
 
 ## Active vocabulary
 
@@ -51,66 +44,98 @@ readable only as historical SCOPE/P1/P2 vocabulary and evidence lineage.
 
 ## Safety boundary
 
-- CPU-only, zero paid API, no GPU, no network model download, and no provider
-  fallback through A0 migration and any separately approved deterministic
-  ArmIndex run.
-- Final split, qrels, membership, query IDs, per-query outcomes, credentials,
-  and raw provider payloads stay in the Owner-local protected store.
+- Compute, GPU, paid API, model download, and provider use follow the current
+  active execution contract and budget. Do not infer broader authority from
+  historical runs.
+- Final/Selection protected membership, qrels, query IDs, per-query outcomes,
+  credentials, and raw provider payloads stay Owner-local.
 - Git, MLflow, Dashboard, Brain, Obsidian, and Paper receive only validated
-  aggregates, hashes, counts, and pointers.
-- Never treat fixture evidence as measured evidence or a dashboard preview as
-  authorization. This is decision support, not legal advice.
+  aggregate-safe facts, hashes, counts, safe IDs, and pointers.
+- Never treat fixture/synthetic evidence as measured evidence.
+- Never silently change frozen scientific semantics after measured exposure.
+- Safety rules protect evidence; they should not be expanded into new
+  engineering approval gates.
 
 ## Historical P2 lifecycle and freeze barrier
 
-- These rules remain binding for any historical P2 request or continuation and
-  do not authorize new P2 execution.
-- A P2 request must bind `budget_profile_id` and `budget_profile_sha256`; no
-  runtime may infer missing limits from a default.
-- One P2 scientific run proceeds through candidate generation, train
-  evaluation, deterministic shortlist, immutable shortlist-freeze receipt, and
-  at most one selection exposure.
-- The shortlist receipt must bind candidate IDs, SCOPE spec hashes,
-  compiler/config/retriever/evaluator hashes, campaign revision, and budget
-  profile hash before selection can open.
-- Baseline reproduction, train evaluation, or freeze validation failure stops
-  before selection. After selection exposure, candidate/spec/rule/search
-  mutation is forbidden.
-- Exact ties are rejected. A budget change after the first measured run needs a
-  new campaign revision and cannot reinterpret the old result.
+Historical SCOPE/P1/P2 records remain immutable evidence lineage.
+
+- They may be read when needed for provenance, compatibility, or publication
+  history.
+- They do not authorize current ArmIndex execution and must not be used as
+  active default policy.
+- Never rewrite historical receipts or reinterpret an old measured result using
+  a newer budget, rule, or campaign revision.
+
+Current work follows `PLAN.md`, the active ArmIndex campaign/control, and the
+latest applicable receipt.
 
 ## Engineering rules
 
-- `control/`, schemas, deterministic kernel, manifests, and receipts are
-  canonical. MLflow is an additive mirror; Dashboard and Obsidian are
-  projections.
-- Use the reusable-asset registry before adapting App material. Keep App data
-  in place and use pointers.
-- Use canonical JSON and SHA-256 commitments. Stable IDs and lexical tie-breaks
-  are mandatory for deterministic output.
-- One report sync builds one read-model object and passes that object to every
-  projection writer. Never copy metric values into manually edited notes.
-- Preserve history. Archive before removing. Delete only exact, verified paths.
-- Before commit/push run tests, layout, report drift, MLflow doctor, Brain
-  literature validation when touched, and `git diff --check`.
-- Before a long-running worker or implementation begins, create a tracked
-  runbook plus append-only ledger/checkpoint. Chat state and ignored inbox
-  files are launchers only and cannot be the sole execution plan.
+- `control/`, schemas, deterministic kernel, manifests, and receipts remain
+  canonical. MLflow, Dashboard, Brain, Obsidian, and Paper are projections.
+- Use canonical JSON and SHA-256 commitments where the existing protocol
+  requires them. Preserve stable IDs and deterministic tie-breaks.
+- Preserve history. Archive before removing. Delete only exact verified paths.
+- One report sync should use one validated read-model object; do not manually
+  maintain duplicate metric values.
+- Validate the changed surface, not the whole repository.
+- Before commit/push, run focused tests plus `git diff --check`. Run report,
+  MLflow, Dashboard, Brain, layout, artifact-graph, or full-suite validation
+  only when that surface was changed or the active goal explicitly requires it.
+- Reuse a still-valid hash-bound validation receipt instead of rerunning the
+  same check.
+- A tracked runbook and append-only ledger/checkpoint are required for measured
+  or genuinely long-running work. Small implementation tasks do not need a new
+  runbook.
 - On Windows, never use `os.kill(pid, 0)` as a liveness probe. Long-running
-  measured workers use an OS-held advisory lock and process creation identity.
+  workers use a reliable lock/process-identity mechanism.
+- Engineering defects inside the current scientific design should be repaired
+  directly by IM without a new Owner approval.
 
 ## Provider-neutral rules
 
-- Agents may record a sanitized provider label for engineering provenance, but
-  may not login, logout, copy credentials, edit keyrings, or switch the active
-  provider without an explicit Owner action.
-- Never print, archive, or pass through a complete inherited shell environment.
-  Long-running workers, candidate subprocesses, and proposer subprocesses use
-  explicit environment allowlists. Credential rotation remains an Owner action.
-- Provider-specific user configuration is not canonical project authority.
-- Any future LLM-in-the-loop measurement must freeze provider/model/revision,
-  instructions, hashes, budget, seed, Git commit, and request hash under a
-  separate execution contract. Provider switching is not scientific evidence.
+- Never print, archive, or pass through complete credentials or inherited shell
+  environments.
+- Credential rotation, login/logout, and Owner-controlled account changes
+  remain Owner actions.
+- Provider/pool choice is operational configuration, not scientific authority.
+- A predeclared model fallback may be used at a safe checkpoint when the agent
+  is only orchestrating a frozen deterministic executor.
+- If the LLM itself generates, scores, judges, selects, or otherwise changes a
+  measured scientific unit, its model/provider binding is part of the
+  experiment and must follow the frozen execution contract.
+
+### Session model routing and provider fallback
+
+Use economical defaults:
+
+- `AP`: GPT-5.6 Sol High.
+- `AP_CRITICAL`: GPT-5.6 Sol XHigh only for high-consequence scientific,
+  launch, post-measurement, or publication judgment.
+- `IM`: GPT-5.6 Sol Medium.
+- `IM_COMPLEX`: GPT-5.6 Sol High for difficult architecture, lifecycle,
+  recovery, remote, or cross-platform debugging.
+- `LO`: GPT-5.6 Terra XHigh.
+- `LO_FALLBACK`: GPT-5.6 Sol Medium.
+- `LO_ECONOMY`: GPT-5.6 Terra High for highly deterministic mature execution.
+- GPT-5.6 Luna is optional when a healthy pool is deliberately selected; no
+  goal or recovery path may depend on Luna availability.
+
+Do not use Terra Max, Sol High, or Sol XHigh as routine LO profiles merely to
+compensate for unfinished architecture.
+
+If an LO model/pool fails:
+
+1. stop at a safe checkpoint;
+2. preserve the ledger/checkpoint, attempt root, hashes, and safe-return state;
+3. resume on the declared fallback when the agent is only orchestrating a
+   frozen deterministic executor;
+4. return to AP before changing model/provider when the LLM is part of the
+   measured scientific unit.
+
+Fallback never expands budget, TTL, scientific scope, protected-data access, or
+Owner authority.
 
 ## Token-efficient operations
 
@@ -183,153 +208,260 @@ budget contract, or Owner-only decisions.
 
 ### AP — Auditor and Planner
 
-Preferred profile: MaxPlus GPT-5.6 Sol XHigh.
+Preferred profile: MaxPlus GPT-5.6 Sol High.
 
-AP is the evidence auditor, scientific planner, and launch-readiness authority.
+Use Sol XHigh only for critical scientific-design review, ambiguous measured
+launch readiness, post-measurement interpretation, or publication-facing
+closeout.
 
-AP MUST:
-- inspect evidence and repository readiness read-only by default;
-- analyze scientific consistency, blockers, budget, TTL, lifecycle safety,
-  execution adoption, reproducibility, and publication impact;
-- verify that proposed work remains consistent with frozen manifests,
-  campaigns, schemas, receipts, and claim boundaries;
-- create or materially update the relevant `docs/goal/<task>_goal.md`;
-- produce a bounded implementation prompt for IM when engineering work remains;
-- audit IM output and remote readiness before a long run;
-- activate or refresh the goal only when launch readiness is satisfied;
-- audit measured results after LO closeout and prepare the next phase/task goal.
+AP decides what should be done and whether measured work is scientifically
+ready.
 
-AP MAY:
-- make planning/documentation changes needed to keep the active goal correct;
-- repair minor planning inconsistencies that do not alter scientific semantics;
-- route minor engineering mismatches directly to IM without asking the Owner.
+AP SHOULD:
+- inspect current evidence and repository state;
+- check scientific consistency and frozen bindings;
+- identify blockers that materially affect validity, cost, or publication
+  value;
+- create `docs/audit/<PHASE>_audit_<INDEX>.md` when IM has actionable work;
+- create or materially refresh `docs/goal/<PHASE>_goal_<INDEX>.md` when LO is
+  ready to execute;
+- read the latest relevant IM/LO result documents before deciding the next
+  action;
+- audit measured results after LO closeout.
 
-AP MUST NOT:
-- start a measured experiment;
-- consume paid execution budget merely to validate a plan;
-- redesign frozen scientific semantics after measurement exposure;
-- bypass Owner-only decisions, protected boundaries, or execution admission.
+AP is read-only by default for code and measured execution, but may repair
+small planning/documentation inconsistencies that do not change scientific
+semantics.
 
-AP launch-readiness audit is intentionally narrow. Before activating a goal for
-LO, verify only the critical axes:
+AP MUST NOT start a measured experiment.
 
-1. Scientific design and frozen manifest are mutually consistent.
-2. Runner, lifecycle, safe-return path, and focused tests exist and pass.
-3. Protected boundaries remain closed and aggregate-safe.
-4. Fresh provider identity, quote, budget, TTL, and watchdog evidence exist.
-5. The execution bundle is correctly staged and execution adoption passes.
+Before a new measured LO launch, AP checks only the essentials:
+1. frozen scientific design/bindings agree;
+2. runner, checkpoint/recovery, and safe return exist;
+3. focused tests pass;
+4. protected boundary is intact;
+5. provider/budget/TTL/watchdog evidence required by the active contract is
+   current.
 
-Do not turn minor engineering mismatches into new governance gates. If an issue
-is engineering-only and does not alter scientific semantics, protected
-boundaries, Owner decisions, budget authority, or measured interpretation,
-return it directly to IM.
+Do not create a new gate for minor engineering issues. Send them directly to
+IM.
 
-AP should finish with exactly one operational disposition:
-
+End with one practical routing note:
 - `READY_FOR_LO`
-- `RETURN_TO_IM`
-- `OWNER_DECISION_REQUIRED`
+- `NEEDS_IM`
+- `NEEDS_OWNER`
 - `BLOCKED_EXTERNAL`
 
-These are routing dispositions, not new scientific gates or Owner decisions.
+These are routing notes, not scientific approval objects.
 
 ### IM — Implementation
 
-Preferred profile: MaxPlus GPT-5.6 Sol XHigh.
+Preferred profile: MaxPlus GPT-5.6 Sol Medium.
 
-IM is the bounded engineering and staging session.
+Escalate to Sol High only for materially difficult architecture, lifecycle,
+recovery, concurrency, remote-execution, or cross-platform debugging.
 
-IM is launched with a normal prompt, not `/goal`.
+IM makes the executor work. IM uses a normal prompt, not `/goal`.
 
-IM MUST:
-- implement or repair architecture, runners, schemas, lifecycle controls,
-  recovery paths, tests, artifact generation, and remote staging requested by
-  the AP/Owner prompt;
-- preserve frozen scientific semantics and protected boundaries;
-- run the smallest focused validation sufficient for the changed surface;
-- prepare remote execution without silently starting measured work;
-- commit/push when authorized and required by the task;
-- leave a concise Luna-ready handoff containing exact commit, staged bundle,
-  checks, remaining blockers, and launch command/context.
+IM MAY:
+- build or repair architecture, runners, schemas, lifecycle, recovery, tests,
+  artifacts, and remote staging;
+- fix engineering defects discovered during the task;
+- run focused validation;
+- commit/push when the task allows it.
 
-IM MAY read the active goal document for constraints and context when relevant,
-but MUST NOT treat it as an executable `/goal` instruction.
+IM may read the active goal for constraints but does not execute it as a
+long-run instruction.
 
-IM MAY immediately fix engineering-only mismatches discovered during its work
-without returning to the Owner, provided the fix:
-- does not alter frozen scientific design;
-- does not increase or reinterpret budget authority;
-- does not cross the protected-data boundary;
-- does not change provider credentials or Owner-controlled provider state;
-- does not open Selection, Final, D2, D3, or another closed phase;
+IM may continue without Owner approval when a repair:
+- preserves frozen scientific semantics;
+- stays inside the protected boundary;
+- does not expand budget/TTL authority;
+- does not change Owner-controlled credentials/account state;
+- does not open D2, D3, Selection, Final, or another closed scientific boundary;
 - does not reinterpret measured evidence.
 
-IM MUST stop before measured execution unless the Owner's current prompt
-explicitly authorizes that measured execution under an already-valid execution
-contract.
+Validate the changed surface first. Use the broader suite only when justified.
 
-A task-scoped explicit Owner authorization may override the default
-pre-measurement stop for that specific task only. Never infer such an override
-from historical authorization.
+IM stops before measured execution unless the current Owner prompt explicitly
+asks IM to run an already-authorized measurement.
+
+IM finishes by writing
+`docs/implementation/<PHASE>_im_<AUDIT_INDEX>_<INDEX>.md` with the exact
+revision, changed surface, focused checks, staged execution path, known
+limitations, and recommended next action for AP.
 
 ### LO — Long Run
 
-Preferred profile when Luna is available:
-MaxPlus GPT-5.6 Luna Max.
+Preferred profile: MaxPlus GPT-5.6 Terra XHigh.
 
-Use Luna Max by default for measured work with long execution, recovery,
-checkpointing, safe return, evaluation, and multi-step closeout.
+Fallback: MaxPlus GPT-5.6 Sol Medium.
 
-Luna XHigh may be used when the workload is highly deterministic, the executor
-and recovery path are already complete, and the goal primarily requires
-execution rather than architectural reasoning.
+Terra High is allowed for a highly deterministic mature executor. Luna is
+optional when a healthy Luna-capable pool is intentionally selected.
 
-When uncertain, prefer Luna Max for measured Phase/Task closeout.
-
-LO is launched only with:
+LO executes an already-ready plan and starts only with:
 
 `/goal อ่าน docs/goal/<file>.md แล้วทำงานตามขั้นตอนทั้งหมด`
 
-LO MUST:
-- treat the referenced goal as its operational execution guide;
-- follow its numbered steps, checkpoints, recovery rules, hard stops,
-  validation, safe return, artifact creation, commit/push, and terminal report;
-- obey canonical campaigns, controls, schemas, manifests, receipts, budget
-  profiles, and protected-data rules over the goal document;
-- continue through recoverable execution states defined by the goal without
-  unnecessary Owner interaction;
-- perform measured closeout only within the authority already granted by the
-  canonical execution contract.
+LO SHOULD:
+- follow the goal through execution and closeout;
+- checkpoint enough state to survive session/provider failure;
+- use bounded recovery without repeatedly asking the Owner;
+- preserve the remote attempt root until safe return/checksum validation;
+- produce aggregate-safe artifacts and canonical evidence;
+- continue through recoverable engineering/runtime issues covered by the goal.
 
-LO MUST NOT:
-- redesign architecture during a measured run;
-- silently change scientific semantics, manifests, evaluator behavior,
-  selection rules, provider identity, budget authority, or protected boundary;
-- invent missing launch authority;
-- treat the goal document as a second source of scientific truth.
+LO MUST NOT redesign the scientific experiment during the measured run.
 
-If LO discovers an architectural or scientific blocker that is not covered by
-the goal's bounded recovery instructions, it stops safely and returns the work
-to AP/IM with exact evidence.
+If architecture is materially broken, return to IM.
+If scientific interpretation or authority is ambiguous, return to AP/Owner as
+appropriate.
+
+For model/provider failure, use the safe-checkpoint fallback rules in
+`Provider-neutral rules`.
+
+Before ending, LO writes
+`docs/long_run/<PHASE>_lo_<GOAL_INDEX>_<INDEX>.md` so AP can review the exact
+execution result without depending on chat history.
 
 ### Session workflow
 
-The normal execution loop is:
+Default workflow:
 
-AP audit and plan
--> IM implementation/readiness work using a normal prompt
--> AP implementation + remote-readiness audit
--> AP marks/refines the goal as ACTIVE and returns `READY_FOR_LO`
--> LO executes `/goal` through measured closeout
--> AP audits measured evidence and publication impact
--> AP prepares the next Phase/Task goal
+`AP -> IM -> LO -> AP`
 
-The objective is separation of concerns:
+Use a second AP readiness pass between IM and LO only when IM materially changed
+a launch-critical surface: scientific binding, evaluator/runner semantics,
+protected boundary, provider/budget/TTL policy, or recovery/safe-return logic.
 
-- AP decides whether the work is scientifically and operationally ready.
-- IM makes the executor ready.
-- LO executes an already-ready measured plan.
-- The Owner is involved only where Owner authority is actually required.
+Otherwise, if the active goal remains current and ready, the Owner may launch
+LO directly after IM.
+
+Shortcuts are intentional:
+- skip IM when nothing needs implementation;
+- skip repeated AP audit when no launch-critical fact changed;
+- do not create approval documents between routine transitions.
+
+The Owner is involved only where actual Owner authority is required.
+
+### Cross-session communication
+
+AP, IM, and LO communicate through small repository handoff documents rather
+than relying on chat history.
+
+Use the canonical Phase ID from `PLAN.md` as `<PHASE>`, for example
+`A2_PER_ARM_AUTOINDEX`.
+
+Use a zero-padded three-digit running index within each document family:
+`001`, `002`, `003`, ...
+
+#### AP -> IM: audit handoff
+
+When AP finds implementation work that IM should perform, create:
+
+`docs/audit/<PHASE>_audit_<INDEX>.md`
+
+Example:
+
+`docs/audit/A2_PER_ARM_AUTOINDEX_audit_001.md`
+
+The audit handoff should contain only:
+- objective;
+- evidence inspected;
+- findings that matter;
+- implementation work requested;
+- scientific/protected boundaries that must remain unchanged;
+- smallest useful validation;
+- expected IM output.
+
+Do not create an audit handoff when AP has no actionable work for IM.
+
+#### AP -> LO: goal handoff
+
+When measured or long-running execution is ready, create:
+
+`docs/goal/<PHASE>_goal_<INDEX>.md`
+
+Example:
+
+`docs/goal/A2_PER_ARM_AUTOINDEX_goal_001.md`
+
+This is the file launched with:
+
+`/goal อ่าน docs/goal/<PHASE>_goal_<INDEX>.md แล้วทำงานตามขั้นตอนทั้งหมด`
+
+The goal must contain the executable steps, checkpoints, bounded recovery,
+hard stops, required artifacts, validation, safe return, and closeout
+instructions needed by LO.
+
+Do not create a new goal index for routine wording changes. Create a new index
+only when the executable plan materially changes.
+
+#### IM -> AP: implementation result
+
+IM writes one result document for each audit handoff it materially acts on:
+
+`docs/implementation/<PHASE>_im_<AUDIT_INDEX>_<INDEX>.md`
+
+Example:
+
+`docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_001.md`
+
+The IM result should contain:
+- source audit path;
+- implementation summary;
+- changed files/artifacts;
+- focused checks and results;
+- unresolved limitations or blockers;
+- remote/staging state when relevant;
+- recommended next action for AP.
+
+Multiple IM result documents may reference the same audit index when a repair
+requires more than one bounded implementation attempt.
+
+#### LO -> AP: long-run result
+
+LO writes one result document for each goal it executes:
+
+`docs/long_run/<PHASE>_lo_<GOAL_INDEX>_<INDEX>.md`
+
+Example:
+
+`docs/long_run/A2_PER_ARM_AUTOINDEX_lo_001_001.md`
+
+The LO result should contain:
+- source goal path;
+- execution summary;
+- checkpoints/recovery used;
+- measured or operational evidence created;
+- safe-return/provider disposition when relevant;
+- blockers or incomplete work;
+- exact closeout state;
+- recommended next action for AP.
+
+Multiple LO result documents may reference the same goal index only when the
+goal explicitly supports resume/recovery attempts.
+
+#### AP read-back rule
+
+At the start of AP work, inspect only the latest relevant files under:
+
+- `docs/implementation/<PHASE>_im_*.md`
+- `docs/long_run/<PHASE>_lo_*.md`
+
+AP then decides whether to:
+- close the task;
+- issue a new audit handoff to IM;
+- issue or refresh a goal for LO;
+- ask the Owner only when actual Owner authority is required.
+
+These handoff documents are communication artifacts, not new approval gates and
+not new sources of scientific metrics. Numeric claims still come from canonical
+receipts/manifests/evidence.
+
+Keep them short. Do not duplicate full logs, datasets, metrics tables, or
+canonical receipts inside them; link to those artifacts instead.
 
 ## Memory lifecycle
 
@@ -341,258 +473,140 @@ cannot override run facts.
 
 ### Brain synchronization and YOLO mode
 
-Any change to this `AGENTS.md` MUST update or create the corresponding
-pointer-only Brain note in the same session, with a link back to this file and
-the canonical source. If the Brain serial-writer lease cannot be acquired or
-validated, stop before commit or push and report the blocker.
+Brain is supporting memory, not a commit gate for unrelated work.
 
-Brain YOLO mode is effective immediately for safe pointer-only memory work:
-after acquiring the Brain serial-writer lease, an agent may write/update the
-required Brain note without another confirmation prompt. YOLO mode is limited
-to aggregate-safe status, decisions, lessons, failed-attempt summaries, hashes,
-and repository-relative pointers. It never bypasses Owner decisions, the
-protected-data boundary, credential rules, deletion approval, serial-writer
-lease, measured execution gates, or commit/push authorization.
+When `AGENTS.md` or a material project decision changes, update the
+corresponding pointer-only Brain note when the Brain writer is available.
 
-## Owner-authorized A1 acceleration
+If the Brain lease/writer is temporarily unavailable:
+- record the pending sync in the session closeout or handoff;
+- continue ordinary engineering work and commit/push when its own validations
+  pass;
+- retry Brain sync in the next suitable session.
 
-For the bounded A1.2 long-run requested on 2026-08-09, the Owner authorizes
-additive engineering repair, integration, reuse of valid assets, and direct
-measured execution work needed to close A1 within the available seven-day
-window. This scoped instruction supersedes preparation-only next-action wording
-from earlier v11-v15 handoff projections while the same A1 closeout is active;
-it does not reinterpret historical receipts or open A2, HARNESS-DEV, Selection,
-Final, D2, or D3.
+Brain availability becomes blocking only when the active task itself changes
+Brain authority/schema, depends on Brain as an input, or publication/report
+synchronization cannot be correct without it.
 
-To reduce delay, do not repeat validation that has an unchanged hash-bound
-receipt from the same attempt. Run only the smallest checks needed for the
-current transition, plus the required critical checks below. Never reduce or
-skip the protected-data boundary, credential redaction, frozen v11-v15
-scientific semantics, split/query reservation, whole-workload budget and TTL,
-SSH/provider identity, artifact integrity, safe return, or the 25/25 result
-requirement. A failure in any critical check remains fail-closed. The active
-Owner-approved v17 limits for the current rerun are common screen `$55`, A1
-`$60`, campaign `$150`, and TTL `40` hours; v16 values `$27/$32/$150` and v15
-values `$18/$23/$100` are historical only and must not be used for current
-admission.
+Safe pointer-only Brain writes may proceed without another Owner confirmation.
+They never bypass protected-data, credential, scientific, or Owner-decision
+boundaries.
 
-Before code or plan edits, apply the local Karpathy guidelines: state
-assumptions, choose the smallest direct change, avoid speculative abstraction,
-and define a concrete verification command. For plans, architecture, or
-publication-impact decisions, use the `grill-with-docs` workflow when the local
-skill is available; otherwise record the equivalent questions, answers, ADR,
-and glossary in the relevant Thai documentation and link the external source:
-`https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs`.
-The Karpathy source is
-`https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md`.
+## Historical A1 compatibility
+
+A1 is historical/completed work. Its detailed acceleration rules, old Vast
+limits, and v11-v17 execution lineage remain in canonical receipts, runbooks,
+and reports.
+
+Do not load or enforce A1-specific budgets, readiness checks, or closeout rules
+for current A2+ work unless the active task explicitly audits A1 history or
+reuses an A1 artifact.
+
+Current execution follows `PLAN.md`, the active ArmIndex campaign/control, the
+latest applicable receipt, and the active goal.
+
+For code or plan edits, prefer the smallest direct change and define a concrete
+verification command. Supporting local skills may be used when useful; they are
+not mandatory ceremony for routine engineering.
 
 ## Artifact-first long-run workflow
 
-Owner decision 2026-08-10: long-running work prioritizes implementation and
-publication-impact evidence over repetitive documentation. `docs/goal/` holds
-short, Thai-first operational goal documents. A goal document is an operational
-execution guide, not scientific authority: the active campaign, controls,
-schemas, manifests, execution envelopes, budget contracts, and receipts remain
-canonical.
+Long-running work prioritizes implementation, measured evidence, and
+publication-impact artifacts over repetitive governance documentation.
 
-Long-running work follows the session separation defined in
-`Session operating modes`:
+`docs/goal/` holds short Thai-first operational guides. A goal is not
+scientific authority; canonical controls, schemas, manifests, budgets, and
+receipts remain authoritative.
 
-`AP audit/plan -> IM implement/stage -> AP launch-readiness audit -> LO /goal -> AP closeout audit`
+Normal flow:
 
-* The AP session creates or materially refreshes
-  `docs/goal/<phase_or_task>_goal.md` only when a Phase/Task begins, its material
-  objective changes, or measured closeout requires a new execution plan. The
-  goal names the publication-facing hypothesis, allowed implementation surface,
-  required evidence, artifact plan, numbered execution steps, checkpoints,
-  recovery rules, hard stops, validation, commit/push requirements, terminal
-  reporting, and the smallest useful verification command.
+`AP plan -> IM build/stage -> LO execute -> AP interpret/close`
 
-* When engineering work is still required, AP produces a bounded implementation
-  prompt for IM. The prompt should identify the exact implementation objective,
-  allowed files/surfaces, frozen scientific constraints, focused validation,
-  staging requirements, and expected Luna-ready handoff. It must not delegate
-  unresolved scientific design or Owner-only decisions to IM.
+A short AP recheck is required before LO only when IM materially changed a
+launch-critical surface. Do not repeat a broad historical audit when bindings
+and evidence are unchanged.
 
-* IM uses a normal prompt rather than `/goal`. IM reads `PLAN.md`, the active
-  goal when relevant for constraints and context, and only the canonical controls
-  required by the implementation task. IM builds or repairs architecture,
-  runners, schemas, lifecycle controls, recovery, tests, artifact generation,
-  execution bundles, and remote staging without waiting for historical-document
-  sweeps.
+- AP creates or materially refreshes one goal when a Phase/Task begins, the
+  objective changes, a material blocker changes execution, or closeout requires
+  the next plan.
+- IM implements/tests/stages the executor and fixes engineering-only mismatches
+  directly.
+- LO follows the goal through checkpoints, bounded recovery, safe return,
+  validation, evidence generation, and closeout.
+- AP reviews the resulting measured evidence and publication claim boundary.
 
-* IM may fix engineering-only mismatches immediately when the fix does not alter
-  frozen scientific semantics, protected boundaries, budget authority, provider
-  identity, measured interpretation, or Owner-only decisions. Minor engineering
-  mismatches do not require a new Owner gate.
+Keep durable artifacts minimal:
+- the latest relevant AP audit handoff when IM work exists;
+- one active goal;
+- the IM/LO result handoff needed for AP read-back;
+- one tracked runbook for measured/long work;
+- one append-only ledger/checkpoint;
+- canonical manifests/receipts;
+- one substantive generated Phase/Task report when there is material evidence
+  to report.
 
-* IM runs the smallest focused validation set that covers the changed surface,
-  commits/pushes when authorized by the task, and leaves a Luna-ready handoff
-  containing the exact revision, staged execution bundle, checks performed,
-  remaining blockers, and execution context needed by AP/LO.
+Do not create parallel status notes, duplicate metrics, repeated approval
+receipts, or retrospective prose merely to prove that an agent worked.
 
-* IM stops before measured execution by default. It must not start a measured
-  experiment merely because the executor is ready or because a goal document
-  exists. Measured execution from IM requires explicit authorization in the
-  Owner's current task under an already-valid execution contract.
+A goal intended for LO must contain enough numbered steps, checkpoints,
+recovery, hard stops, required artifacts, validation, safe return, and terminal
+closeout instructions to run without relying on chat history.
 
-* After IM completes, AP performs a focused launch-readiness audit rather than
-  a broad historical re-audit. The critical launch axes are:
+Provider-specific historical A1 instructions remain historical. Current remote
+identity, price, budget, TTL, watchdog, adoption, and safe-return requirements
+come from the active execution contract/goal.
 
-  1. Scientific design and frozen manifests remain mutually consistent.
-  2. Runner, lifecycle, safe-return path, and focused tests exist and pass.
-  3. The protected boundary remains closed and aggregate-safe.
-  4. Fresh provider identity, quote, budget, TTL, and watchdog evidence exist.
-  5. The execution bundle is correctly staged and execution adoption passes.
+## Reporting policy
 
-* AP does not create new micro-gates for minor implementation details. An
-  engineering-only mismatch returns directly to IM. Escalation to the Owner is
-  reserved for an actual change to scientific semantics, protected boundaries,
-  budget/authority, provider-controlled state, or an Owner-only decision.
+Reporting exists to preserve material evidence, not to create work for every
+engineering change.
 
-* When launch readiness passes, AP ensures that exactly one active executable
-  goal exists for the Phase/Task, that its canonical bindings are current, and
-  that no known architecture work remains unresolved. AP then routes the task
-  to LO with disposition `READY_FOR_LO`.
+Create or materially update a generated Phase/Task report when one of these
+occurs:
+- measured execution;
+- material recovery or blocker;
+- Owner decision that changes the research path;
+- Phase/Task closeout;
+- publication-facing evidence or claim update.
 
-* LO is the measured long-run execution session. The Owner launches LO with:
+Do NOT create or regenerate reports for:
+- routine heartbeat;
+- unchanged receipts;
+- small engineering repairs;
+- formatting-only changes;
+- repeated validation with unchanged bindings.
 
-  `/goal อ่าน docs/goal/<file>.md แล้วทำงานตามขั้นตอนทั้งหมด`
+When a formal generated report is produced, continue to use the canonical
+report schema/structure in `docs/observatory/REPORTING_POLICY.md` and
+`schemas/phase-task-report.v1.json`, and expose only aggregate-safe facts.
 
-* LO treats the referenced goal as its operational execution guide and follows
-  its numbered steps through checkpointing, bounded recovery, measured
-  execution, safe return, evaluation, artifact generation, validation,
-  commit/push, reporting, and terminal closeout.
+Report/projection validation is required when the report/projection surface or
+measured evidence changes. A report-sync problem should not block an unrelated
+engineering commit unless that commit would make canonical evidence or a
+publication-facing projection incorrect.
 
-* LO does not redesign architecture or scientific semantics during measured
-  execution. Canonical campaigns, controls, schemas, manifests, receipts,
-  execution envelopes, budget contracts, and protected-data rules override the
-  goal document whenever there is a conflict. A goal may route to canonical
-  controls, but it may not replace them or become a second source of scientific
-  metrics.
+Before commit/push, run the smallest validation set that covers the changed
+surface. Reuse valid hash-bound checks. Do not require Dashboard, MLflow,
+Brain, report, layout, literature, or full-suite validation when those surfaces
+were untouched.
 
-* If LO encounters a blocker covered by the goal's bounded recovery procedure,
-  it executes that recovery and continues. If the blocker requires architectural
-  redesign, scientific reinterpretation, new authority, budget expansion,
-  provider-state modification, or protected-boundary change, LO stops safely
-  and returns exact evidence for AP/IM or Owner review.
-
-* After LO terminates, AP audits the measured closeout before preparing the next
-  Phase/Task goal. AP verifies canonical evidence, completeness, reproducibility,
-  claim boundaries, publication impact, safe return, provider disposition, and
-  the next authorized action. Measured results are not promoted into the next
-  scientific decision merely from chat state or an LO narrative.
-
-* Prefer work that improves a journal submission's reproducible evidence:
-  complete measured coverage, deterministic provenance, valid aggregate-safe
-  artifacts, clearly bounded claims, and reviewer-reproducible analysis. Do not
-  optimize wording, documentation volume, or outcomes instead of evidence.
-
-* Keep only these durable documents for a long run: one active goal document,
-  the tracked runbook and append-only ledger/checkpoint, canonical
-  receipts/manifests, and one generated Phase/Task report. Do not create parallel
-  status notes, duplicate metrics, redundant approval documents, or retrospective
-  edits unless a canonical fact is wrong.
-
-* Preserve remote attempt roots and allowlisted artifacts until safe return and
-  checksum validation pass. Safe local return, hash manifests, aggregate
-  receipts, and reproducible analysis are the publication artifact set; raw
-  protected inputs and provider payloads remain Owner-local.
-
-* Reducing documentation or separating work across AP, IM, and LO never reduces
-  the protected-data boundary, frozen scientific semantics, identity/runtime
-  checks, whole-workload budget and TTL checks, execution adoption, watchdog,
-  safe return, deterministic replay, or complete-result rule.
-
-* A1 live monitoring prefers authenticated provider CLI. If Vast TFA/API is
-  unavailable, the Owner-authorized fallback is aggregate-safe dashboard
-  identity/price/TTL evidence plus independently pinned SSH runtime/GPU checks
-  and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`. This fallback records provider
-  authentication as false and never invokes API destruction. At A1 closeout,
-  provider disposition is either validated `REUSE_ELIGIBLE` or actual
-  `DESTROYED`; destruction is not required solely to close A1.
-
-* Owner decision 2026-08-11 permits the current Vast instance to remain live
-  after A1 safe return and frozen evaluation pass. `REUSE_ELIGIBLE` requires a
-  fresh provider identity/status observation, all-fee quote, accrued A1 charge,
-  SSH reachability, remaining TTL, watchdog, and management-authority check.
-  It does not authorize A2 execution: A2 still requires fresh provider
-  admission, fresh execution adoption, and a new isolated remote root. Never
-  reuse the A1 adoption receipt or overwrite the A1 attempt root.
-
-* Every active `docs/goal/*_goal.md` intended for LO is an executable long-run
-  guide. It must contain numbered steps, checkpoints, recovery, hard stops,
-  required artifacts, validation, commit/push, and terminal-report instructions.
-  Goal activation means the execution plan is ready for LO; it does not itself
-  grant scientific authority, budget authority, access to a closed Phase, or an
-  Owner-only decision.
-
-* Session state is not durable project authority. AP findings, IM readiness, LO
-  progress, recovery state, and measured closeout must be carried between
-  sessions through the repository's canonical artifacts, runbook,
-  ledger/checkpoints, receipts, generated report, and bounded handoff rather
-  than relying on chat history alone.
-
-## Mandatory reporting policy
-
-Every Phase and every Task MUST have one substantive generated Obsidian report.
-The report is created when the work starts, updated only for a measured run,
-material recovery/blocker, Owner decision, or closeout, and finalized or marked
-blocked when the work closes. A Phase report summarizes its Tasks; it does not
-replace them. Do not create a new report for an unchanged receipt, routine
-heartbeat, or engineering micro-change. Report sync must regenerate all
-generated notes from one validated read-model object and must fail closed on
-missing, contradictory, stale, protected, or fixture-as-measured state.
-
-Generated notes are reproducible and use `managed_by: myis-report` with
-`edit_policy: generated_do_not_edit`. Owner-authored notes live only under
-`obsidian_report/80_Owner_Notes/` (or the explicitly separated Owner area) and
-must never be overwritten by sync. Generated notes expose only aggregate-safe
-IDs, hashes, counts, safe pointers, and claim boundaries; qrels, membership,
-query IDs, rankings, per-query outcomes, secrets, absolute personal paths,
-provider payloads, and full protected prompts remain Owner-local.
-
-Every Phase and Task report carries lifecycle fields
-`status`, `evidence_class`, `scientific_authority`, `claim_boundary`,
-`generated_from_revision`, `last_material_update`, and
-`next_authorized_action`. Its canonical machine record and Markdown projection
-must agree and must contain the fifteen-section structure defined in
-[`docs/observatory/REPORTING_POLICY.md`](docs/observatory/REPORTING_POLICY.md):
-Objective; Starting State; Inputs and Frozen Bindings; Work Performed;
-Artifacts Produced; Metrics; Result; Interpretation; Supported Claims;
-Unsupported Claims; Failures and Recovery; Governance and Safety; Decision;
-Next Action; Evidence Links. Do not add a second numeric source of truth in
-prose.
-
-Before commit or push, run the smallest validation set that covers the changed
-surface: report schema/content and sync/check when a projection changes,
-artifact graph/checksum and protected-path scans when evidence changes, session
-audit, Dashboard/API, MLflow doctor, layout/assets/Brain literature validation
-when touched, focused tests, scoped Ruff, and `git diff --check`. Reuse a
-still-valid hash-bound receipt instead of rerunning an unchanged validation.
-The current state must agree everywhere: ArmIndex is active, SCOPE is
-historical read-only, A0 and A1.1 are complete, Selection and Final are closed,
-and A1.2 status/next action come only from its latest canonical receipt and
-active goal document. A pre-measurement receipt requires zero measured
-counters; a live A1.2 receipt may record only validated aggregate-safe
-progress/results and must retain the frozen v11-v15 boundary. The long run
-still requires the clean bound bundle, protected handoff/transfer receipts,
-25 compiled bindings, fresh provider identity/quote, whole-workload budget,
-and watchdog/destroy readiness before scientific work.
-Historical facts still agree that accepted SCOPE Round 3 is `accept`, the P2
-fixture is `passed`, and measured P2 was not started. A stale narrative is a
-validation failure, not a documentation preference.
-
-The authoritative report structure and machine-field contract are maintained
-in `docs/observatory/REPORTING_POLICY.md` and
-`schemas/phase-task-report.v1.json`.
+Temporary current-state facts belong in `PLAN.md`, the active campaign/control,
+and the latest receipt—not in this policy.
 
 ## Closeout
 
-Report the exact phase, task, status, checks, changed files, untouched
-protected surfaces, evidence class, blockers, and next automatic action. Do not
-claim A1 measured completion unless the protected Owner-local run, safe return,
-and frozen evaluation actually completed. Do not destroy a live instance merely
-to satisfy closeout; record validated `REUSE_ELIGIBLE` or actual `DESTROYED`
-disposition according to evidence. `D2_OPEN_FINAL` remains closed and does not
-authorize A2, Selection, or Final.
+Report concisely:
+- session mode;
+- Phase/Task;
+- work completed;
+- checks run and result;
+- evidence created/used;
+- blockers that still matter;
+- protected surfaces left untouched;
+- next practical action.
+
+Do not claim measured completion without the required measured evidence,
+safe-return state, and canonical closeout artifacts.
+
+Do not destroy a live remote instance merely to make closeout look complete;
+record the provider disposition that actually exists.

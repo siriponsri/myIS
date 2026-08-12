@@ -236,13 +236,15 @@ def test_material_execution_ledger_is_schema_bound_and_append_only() -> None:
         ROOT, ROOT / "control/armindex/a2/execution-ledger.v1.jsonl"
     )
 
-    assert len(rows) == 1
+    assert len(rows) == 2
     assert rows[0]["status"] == "MEASUREMENT_LOCKED"
+    assert rows[1]["status"] == "FAILED_CLOSED"
+    assert rows[1]["previous_entry_sha256"] == rows[0]["entry_sha256"]
 
 
 def test_material_execution_ledger_rejects_rewritten_entry(tmp_path: Path) -> None:
     source = ROOT / "control/armindex/a2/execution-ledger.v1.jsonl"
-    row = json.loads(source.read_text(encoding="utf-8"))
+    row = json.loads(source.read_text(encoding="utf-8").splitlines()[0])
     row["summary"] = "rewritten history"
     rewritten = tmp_path / "rewritten-ledger.jsonl"
     rewritten.write_text(json.dumps(row) + "\n", encoding="utf-8")
