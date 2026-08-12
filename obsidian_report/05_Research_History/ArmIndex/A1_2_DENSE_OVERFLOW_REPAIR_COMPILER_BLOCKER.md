@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021"
-read_model_sha256: "4e6c31bacdc8986390998e99ea2068835e3922d01cacedf5bb85ffd99ec14d80"
-source_commit: "4a2ba332c596ae2d256d8c6897276cb5207ec336"
+read_model_revision: "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73"
+read_model_sha256: "7bdecffb3521d83744069331d13b051fecaf386b548dd0f5683e4e8f70d38f1d"
+source_commit: "0d4a51a81d411cff0e70baf293e8edc9dd0dba85"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: ["a16294fa92e1b7a7bf3b4e571869751ea20e03a32580abea92819418d2e770eb","d9a75f605995f0d8b29fb93b7401e1c54d7b700e5309424b86f647dc613b1634","df09cc3c030d36ca13010aa00adb2cf78937717bf3d0ea9a3bcc6355d082d653","30d806fb200d0f38fd233c6078c769c3482c8b7d2d752ecab66df6117057154b","a6760da763265de8a6caf1cbb256fbb8fe33f4eb0eb75b4d44eb87875abcbac8","742b38916b194950515ffcb911c9f6b9f44f458b962c376db6a187c8b971a2e6","de405e69168cfaab8adb6742bfec6eaa1fa3544eadbd69a13bc6cd853118f151"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "pre_measurement_owner_local_compatibility_validation"
 scientific_authority: false
 claim_boundary: "Aggregate-safe validation of the Owner-local additive v15 compiler integration. It proves protected receipt linkage, exact 25-cell topology, deterministic tokenizer-level physical-window compatibility, and zero silent truncation only; it exposes no protected identifiers, text, qrels, membership, ranking, per-query outcome, provider payload, or scientific/publication result."
-generated_from_revision: "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021"
-last_material_update: "2026-08-12T11:56:21Z"
+generated_from_revision: "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73"
+last_material_update: "2026-08-12T13:08:25Z"
 next_authorized_action: "Build and validate the additive clean pushed execution bundle, whole-workload budget model, watchdog/provider-destroy synthetic dry-runs, and final local adoption receipt while all live-provider inputs remain pending."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T11:56:21Z"
-updated_at: "2026-08-12T11:56:21Z"
+created_at: "2026-08-12T13:08:25Z"
+updated_at: "2026-08-12T13:08:25Z"
 note_id: "A1-2-DENSE-OVERFLOW-REPAIR-COMPILER-BLOCKER"
 note_type: "history_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"

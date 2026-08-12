@@ -310,9 +310,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
-  "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
+  "generated_at": "2026-08-12T13:08:25Z",
+  "generated_from_revision": "da7598fb59cd3f16150cfff8b246906439a11fbe97981926d2fa636cb0680f73",
+  "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -380,7 +380,7 @@
       "owner_ttl_hours": 40,
       "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
     },
-    "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
+    "git_commit": "0d4a51a81d411cff0e70baf293e8edc9dd0dba85",
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -416,7 +416,7 @@
   },
   "interpretation": "This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T11:56:21Z",
+  "last_material_update": "2026-08-12T13:08:25Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -544,7 +544,7 @@
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "90704d65ac789622fbac285a3a57672fd4796ae5c73a1e178666d76d4e654486",
+  "report_sha256": "0dfb1341f178029a721c6c54f16e1d62f7fab42d156248e9b23307f05857a281",
   "report_type": "task",
   "result": {
     "decision": "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE",
