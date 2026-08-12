@@ -221,7 +221,7 @@
       "artifact_type": "ledger",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "content_sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Records material readiness transitions without candidate outcomes or protected payloads.",
       "parent_artifact_hashes": {},
@@ -305,14 +305,14 @@
     },
     {
       "artifact_id": "a2-execution-readiness-ledger-v1",
-      "sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
       "uri": "control/armindex/a2/execution-ledger.v1.jsonl"
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T07:03:07Z",
-  "generated_from_revision": "272effdbae6bd673d898b467c81218064facc92b2f87340546656c2a6c97d85d",
-  "git_commit": "46c06c3af8813fe24753d96a846bd7063ae11144",
+  "generated_at": "2026-08-12T10:43:03Z",
+  "generated_from_revision": "515a056d2b2df90b3016a312637fc12f75d9c9e28aaad45074fd0e0a392842da",
+  "git_commit": "eadf27d5559b58fde026ccc624100c7a472ebb33",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -378,9 +378,9 @@
       "forward_hard_stop_usd": 35,
       "measured_a2_started": false,
       "owner_ttl_hours": 40,
-      "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED"
+      "status": "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
     },
-    "git_commit": "46c06c3af8813fe24753d96a846bd7063ae11144",
+    "git_commit": "eadf27d5559b58fde026ccc624100c7a472ebb33",
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -416,7 +416,7 @@
   },
   "interpretation": "This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T07:03:07Z",
+  "last_material_update": "2026-08-12T10:43:03Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -544,7 +544,7 @@
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "98c4c2e3096259f5be9bfdd3ee95b796a56958af117c5349cc8def0bbed49e3e",
+  "report_sha256": "d519084a50b97edd2eea8e3f749b986c4981ebabca322bb032ea73051d00dc5b",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",
@@ -557,7 +557,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_execution_readiness_complete_fresh_admission_required",
+    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
     "task": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
   "status": "completed",

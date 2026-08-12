@@ -7,8 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_candidate_freeze_audit_passed_measured_a2_closed`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION IM_HARDENED_NEEDS_AP`
+- Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
+- Status: `a2_operational_executor_implemented_remote_admission_blocked_measured_a2_closed`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: aggregate-safe measured development closeout with validated
   25/25 coverage, frozen promotion, and provider continuation; scientific authority `true`
@@ -245,21 +246,29 @@ The manifest, freeze receipt, and lock self-hashes remain
 `f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e`,
 `ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10`,
 and `c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952`.
-Measured A2 remains closed because fresh provider admission/adoption, isolated
-root, budget/TTL/watchdog, and entry preflight have not been performed for A2.
+IM commit `4b7d84d4` adds the operational executor, and repair commit `eadf27d5`
+requires canonical tracked/pushed measured authority plus an explicitly
+authorizing goal. The watchdog now emits its own heartbeat, stays outside the
+worker registry and must pass PID/start-time and freshness checks before stage
+adoption. Focused tests and synthetic dry-run pass without provider contact or
+measured A2. Fresh provider admission/adoption, isolated root and
+remote watchdog staging remain incomplete because authenticated provider CLI
+and fresh complete quote/TTL/management evidence were unavailable. These facts
+must not be inferred from `vast-ssh.md`.
 
 ## Active authorized action
 
-Owner may launch the A2 long-run guide. The exact next action is:
+The next session is AP. The exact next action is:
 
 ```text
-/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS และ A2 candidate-freeze audit PASS ก่อน แล้วทำงานตามขั้นตอนทั้งหมดจน A2 closeout โดยไม่เข้า A3, HARNESS-DEV, Selection หรือ Final
+ตอนนี้ทำ AP ตาม AGENTS.md อ่าน docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md แล้วตรวจ measured-authority provenance, watchdog lifecycle และ remote blocker โดยยังไม่เริ่ม measured A2
 ```
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-`docs/goal/A2_goal.md` is the active executable guide, but it must perform fresh
-A2 provider admission/adoption and entry preflight before any measured work.
+`docs/goal/A2_goal.md` remains the A2 readiness guide, but LO is not the next
+route until AP reviews IM and fresh A2 provider admission/adoption plus isolated
+staging are complete.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 

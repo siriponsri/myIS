@@ -15,12 +15,12 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` (`CLOSED_PASS`;
-  independent audit passed with zero findings. A2 candidate evaluation and
-  measured execution are not started.)
-- Current phase: `A2_PER_ARM_AUTOINDEX` (ready for Owner launch; fresh provider
-  admission, execution adoption, entry preflight, and a new isolated remote root
-  are still required before measurement.)
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`IM_HARDENED_NEEDS_AP`;
+  `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
+  candidate evaluation and measured execution are not started.)
+- Current phase: `A2_PER_ARM_AUTOINDEX` (operational executor implementation
+  passed focused validation; fresh provider admission/adoption and isolated
+  staging remain blocked until complete current provider evidence is available.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -339,16 +339,19 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS ก่อน แล้ว implement และทำงานตามขั้นตอนทั้งหมดจน A2 closeout โดยไม่เข้า A3, HARNESS-DEV, Selection หรือ Final
+ตอนนี้ทำ AP ตาม AGENTS.md อ่าน docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md แล้วตรวจ measured-authority provenance, watchdog lifecycle และ remote blocker โดยยังไม่เริ่ม measured A2
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
 with r15. The current pointer binds the complete r15 terminal receipt, measured
 summary, EDA package, and `REUSE_ELIGIBLE` provider continuation. The Official
 Codex bridge and five-arm candidate freeze are closed `PASS`, and the independent
-audit found zero findings. The next session follows `docs/goal/A2_goal.md`; it
-must complete fresh A2 entry preflight, provider admission, execution adoption,
-and isolated-root checks before candidate evaluation or measured execution. The
+audit found zero findings. IM commits `4b7d84d4` and `eadf27d5` implement and
+harden the operational executor; the focused A2 suite passes and measured
+authority now requires canonical tracked/pushed provenance plus an authorizing
+goal. The next session is AP and reads
+`docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md`. Fresh provider
+admission, execution adoption, and isolated-root staging remain incomplete. The
 allowlisted remote handoff is retained on the unchanged instance with validated
 baseline `29/29`, journal EDA `8/8`, and closeout `12/12` packages. Post-finalize
 working directories were not recreated; details are recorded in

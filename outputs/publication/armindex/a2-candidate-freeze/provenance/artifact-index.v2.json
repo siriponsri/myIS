@@ -178,10 +178,10 @@
     },
     {
       "artifact_id": "control-armindex-a2-execution-ledger-v1-jsonl",
-      "bytes": 838,
+      "bytes": 1867,
       "classification": "metadata",
       "media_type": "text/plain",
-      "sha256": "5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280",
+      "sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
       "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
     },
     {
@@ -227,7 +227,7 @@
     "status": "candidate_freeze_audit_passed_measured_a2_closed",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "8b9a420c70dc89cd1d5368f709c3439af10cf06f5f26b1dea4d9aac59c33bff4",
+  "index_sha256": "0b3e7e8005b6f508c7038621c693c1dc5848d455acc41e3eddcff9c2a0ccb392",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"

@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T07:03:07Z",
-  "generated_from_revision": "272effdbae6bd673d898b467c81218064facc92b2f87340546656c2a6c97d85d",
-  "git_commit": "46c06c3af8813fe24753d96a846bd7063ae11144",
+  "generated_at": "2026-08-12T10:43:03Z",
+  "generated_from_revision": "515a056d2b2df90b3016a312637fc12f75d9c9e28aaad45074fd0e0a392842da",
+  "git_commit": "eadf27d5559b58fde026ccc624100c7a472ebb33",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "46c06c3af8813fe24753d96a846bd7063ae11144",
+    "git_commit": "eadf27d5559b58fde026ccc624100c7a472ebb33",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T07:03:07Z",
+  "last_material_update": "2026-08-12T10:43:03Z",
   "metric_references": [],
-  "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
+  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
   "objective": "Cross-arm transfer matrix",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-1",
-  "report_sha256": "e9ad1fa79f8883708b1de24b3787a253b38e77d04fa674bd9bd4e5d6f8903322",
+  "report_sha256": "702a2faa7789eed1f5047b0a188ca4d50b4910e205e6dc05b078e998e3420461",
   "report_type": "task",
   "result": {
     "decision": "planned",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_execution_readiness_complete_fresh_admission_required",
+    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
     "task": "A3.1"
   },
   "status": "planned",

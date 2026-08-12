@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "272effdbae6bd673d898b467c81218064facc92b2f87340546656c2a6c97d85d"
-read_model_sha256: "afc84b2ca6d81262e20f3626855549413db0ee3beda2b92806dd04abb3de6a8f"
-source_commit: "46c06c3af8813fe24753d96a846bd7063ae11144"
+read_model_revision: "515a056d2b2df90b3016a312637fc12f75d9c9e28aaad45074fd0e0a392842da"
+read_model_sha256: "e6cd5847a88364fdb13238533650eb9d2f171a327e29617673ca275703608289"
+source_commit: "eadf27d5559b58fde026ccc624100c7a472ebb33"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,19 +11,19 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_execution_readiness"
 scientific_authority: false
 claim_boundary: "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim"
-generated_from_revision: "272effdbae6bd673d898b467c81218064facc92b2f87340546656c2a6c97d85d"
-last_material_update: "2026-08-12T07:03:07Z"
-next_authorized_action: "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING"
+generated_from_revision: "515a056d2b2df90b3016a312637fc12f75d9c9e28aaad45074fd0e0a392842da"
+last_material_update: "2026-08-12T10:43:03Z"
+next_authorized_action: "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T07:03:07Z"
-updated_at: "2026-08-12T07:03:07Z"
+created_at: "2026-08-12T10:43:03Z"
+updated_at: "2026-08-12T10:43:03Z"
 note_id: "A2_PER_ARM_AUTOINDEX-MASTER"
 note_type: "phase_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
 task_id: null
-workflow_status: "ready"
+workflow_status: "blocked"
 evidence_maturity: "non_scientific"
 claim_level: "none"
 ---
@@ -40,7 +40,7 @@ Search and freeze one representation program per promoted arm.
 
 - `phase`: A2_PER_ARM_AUTOINDEX
 - `task`: None
-- `program_state`: a2_execution_readiness_complete_fresh_admission_required
+- `program_state`: a2_provider_admission_failed_closed_measured_a2_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
@@ -48,14 +48,14 @@ Search and freeze one representation program per promoted arm.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 46c06c3af8813fe24753d96a846bd7063ae11144
+- `git_commit`: eadf27d5559b58fde026ccc624100c7a472ebb33
 - `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
 - `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`
 - `official_credit_closeout`: `{"limit_reached": false, "model_name": "gpt-5.6-sol", "plan_type": "plus", "rate_limit_reached_type": null, "remaining_percent": 87, "reset_credit_available_count": 1, "reset_credit_consumed": false, "resets_at_utc": "2026-08-18T00:45:40Z", "snapshot_sha256": "6d9c634dfd82c4d1017994611ac5461dd34752534a816de895677ca363460a7f", "used_percent": 13}`
 - `independent_audit`: `outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json`; SHA-256 `141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0`
 - `control_bindings`: [{'uri': 'control/armindex/a2/official-codex-bridge.v1.json', 'sha256': 'f5fdd0479c8cfd472839f53a56355e810763251d45f777ef19ec7da2dbb578d9'}, {'uri': 'control/armindex/a2/execution-contract.v1.json', 'sha256': 'ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d'}, {'uri': 'control/execution-envelope-a2-v1.yaml', 'sha256': 'de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7'}, {'uri': 'control/budgets/a2-per-arm-autoindex-v1.json', 'sha256': 'b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1'}]
 - `publication_workspace`: `../03_Paper/01_ArmIndex`; SHA-256 `None`
-- `execution_readiness`: `{"budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af", "budget_uri": "control/budgets/a2-execution-readiness-v1.json", "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace", "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json", "forward_hard_stop_usd": 35, "measured_a2_started": false, "owner_ttl_hours": 40, "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED"}`
+- `execution_readiness`: `{"budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af", "budget_uri": "control/budgets/a2-execution-readiness-v1.json", "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace", "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json", "forward_hard_stop_usd": 35, "measured_a2_started": false, "owner_ttl_hours": 40, "status": "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"}`
 
 ## Work Performed
 
@@ -79,7 +79,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | A2 execution readiness envelope | `control` | `engineering_execution_readiness` | `control/execution-envelope-a2-readiness-v1.yaml` | `8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a` | `validated` |
 | A2 whole-workload readiness budget | `budget` | `engineering_execution_readiness` | `control/budgets/a2-execution-readiness-v1.json` | `be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de` | `validated` |
 | A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76` | `validated` |
-| A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `5966a09344856dc8085b6c2b3d6c2e9370bbc99b5c41e1801429d1bc33bd5280` | `validated` |
+| A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65` | `validated` |
 
 ## Metrics
 
@@ -105,7 +105,7 @@ Fixture values are synthetic engineering diagnostics and are never reported as m
 
 **Result:** Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
 
-**Decision:** READY_FOR_FRESH_A2_GOAL_PREFLIGHT
+**Decision:** BLOCKED_EXTERNAL_PROVIDER_EVIDENCE
 
 ## Interpretation
 
@@ -147,11 +147,11 @@ This engineering evidence prevents outcome-driven candidate generation and prese
 
 ## Decision
 
-Status: **READY_FOR_FRESH_A2_GOAL_PREFLIGHT**. Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
+Status: **BLOCKED_EXTERNAL_PROVIDER_EVIDENCE**. Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
 
 ## Next Action
 
-BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING
+OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

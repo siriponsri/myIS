@@ -1,0 +1,121 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-operational-readiness-ap-review-20260812",
+  "artifact": "A2 operational readiness package",
+  "artifact_path": "docs/goal/A2_goal.md",
+  "artifact_sha256": "df4f268973dabfeaaf9a191588d4c6a9df1afcf2e2b8b4310315b58a8ec69fd7",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": []
+  },
+  "overall": {
+    "grade": "Weak Accept",
+    "mean_score": 3.0,
+    "one_line_summary": "The frozen A2 preparation package is internally guarded, but it is not ready for LO because the operational executor is absent and measured A2 remains locked.",
+    "strengths": [
+      "Immutable 52-candidate bindings and arm roles replay under focused validation.",
+      "Fresh provider, budget, TTL, isolated-root, protected-boundary, and safe-return requirements are explicit and fail closed.",
+      "The package preserves zero measured A2, REP-DEV, Selection, and Final exposure."
+    ],
+    "weaknesses": [
+      "The current runner is an in-memory readiness state machine and has no production process/provider executor.",
+      "Production train evaluation and result receipts are not implemented; current helpers accept synthetic fixtures only.",
+      "The active measured authorization remains false and the standing D1 record has historical SCOPE/P1/P2 scope."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": ["The package binds the A1 measured source, A2 candidate freeze, budget model, and lifecycle evidence needed for readiness."],
+      "weaknesses": ["No production measured-result path exists to substantiate future A2 journal claims."],
+      "suggestions": ["Implement an aggregate-safe production evaluator and claim-evidence receipt chain before LO."]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["Hard stops cover stale or partial quote, hash drift, incomplete coverage, exact ties, protected output, and lifecycle failure."],
+      "weaknesses": ["Several hard stops are library contracts rather than exercised operational controls."],
+      "suggestions": ["Add end-to-end failure-injection tests around the real orchestrator."]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": ["The package consistently labels readiness as engineering evidence and keeps measured A2, A3, Selection, and Final closed."],
+      "weaknesses": ["PLAN and HANDOFF previously routed directly to LO despite the executor gap."],
+      "suggestions": ["Use the AP-to-IM routing recorded in docs/audit/A2_PER_ARM_AUTOINDEX_audit_001.md."]
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": ["Freeze, admission, adoption, staging, and safe-return concepts form a clear intended lifecycle."],
+      "weaknesses": ["The lifecycle narrative reaches external execution, but the implementation explicitly starts no process and requires a missing injected executor."],
+      "suggestions": ["Implement one CLI/orchestrator whose state transitions and receipts match the runbook end to end."]
+    },
+    "D5_exploration_integrity": {
+      "score": 3,
+      "strengths": ["The failed provider admission is preserved in the append-only ledger and is not reinterpreted as PASS."],
+      "weaknesses": ["Operational failed paths and recovery have not yet been exercised for A2."],
+      "suggestions": ["Preserve failure-injection, resume, and remote-attempt evidence in append-only checkpoints."]
+    },
+    "D6_methodological_rigor": {
+      "score": 2,
+      "strengths": ["Candidate coverage, deterministic tie rejection, diagnostic-arm non-advancement, budget, and evidence schemas are predeclared."],
+      "weaknesses": ["There is no production measured evaluator, exact-coverage runner, operational watchdog, or safe-return closeout path."],
+      "suggestions": ["Complete and validate the production execution path before any measured authorization or journal claim."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "src/myis_research/armindex/a2_execution_readiness.py",
+      "target_entity": "A2MeasuredRunner",
+      "evidence_locator": "class A2MeasuredRunner docstring and call_injected_executor",
+      "observation": "The runner is an in-memory state machine, starts no process or provider call, and has no executor of its own.",
+      "reasoning": "LO cannot execute or recover A2 from the current package, so direct LO routing would spend provider time without an operational path.",
+      "suggestion": "Implement and failure-test a production CLI/orchestrator before LO."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/armindex/a2_execution_readiness.py",
+      "target_entity": "build_train_evaluation_receipt and evaluate_aggregate_train_results",
+      "evidence_locator": "synthetic-fixture guards in both functions",
+      "observation": "Production callers are rejected and only explicitly marked synthetic fixtures can create readiness evaluation objects.",
+      "reasoning": "Synthetic evidence cannot become measured evidence or support journal claims.",
+      "suggestion": "Add a separate production adapter that validates complete frozen output and emits aggregate-safe canonical receipts."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D3_scope_calibration",
+      "severity": "major",
+      "target_artifact": "control/execution-envelope-a2-readiness-v1.yaml",
+      "target_entity": "authority.measured_a2_authorized",
+      "evidence_locator": "authority.measured_a2_authorized=false; execution contract measured_execution_allowed=false",
+      "observation": "Preparation, provider admission, adoption, and staging are authorized, but candidate evaluation and measured A2 are not.",
+      "reasoning": "IM may finish engineering and staging but cannot legally turn readiness into measured execution.",
+      "suggestion": "Return to AP after IM for an authority-consistent goal refresh; do not mutate Owner decisions or invent a micro-gate."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "HANDOFF.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/decisions/D1_START_CAMPAIGN.yaml",
+    "docs/goal/A2_goal.md",
+    "control/execution-envelope-a2-readiness-v1.yaml",
+    "control/budgets/a2-execution-readiness-v1.json",
+    "control/armindex/a2/execution-readiness-contract.v1.json",
+    "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
+    "control/armindex/a2/execution-ledger.v1.jsonl",
+    "outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json",
+    "src/myis_research/armindex/a2_execution_readiness.py",
+    "tests/test_armindex_a2_execution_readiness.py"
+  ]
+}
