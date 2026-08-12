@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-12T04:27:31Z",
-  "generated_from_revision": "a41dc5f14a62c240bfab30796b4bbdfcb6c1975fda3cce96114831686131c441",
-  "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
+  "generated_at": "2026-08-12T07:03:07Z",
+  "generated_from_revision": "272effdbae6bd673d898b467c81218064facc92b2f87340546656c2a6c97d85d",
+  "git_commit": "46c06c3af8813fe24753d96a846bd7063ae11144",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "1304d21bce5066fb296d17dfe63e32791fa69d26",
+    "git_commit": "46c06c3af8813fe24753d96a846bd7063ae11144",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T04:27:31Z",
+  "last_material_update": "2026-08-12T07:03:07Z",
   "metric_references": [],
   "next_authorized_action": "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "89a39425e1295179af699d7e03331d1fa6b5a20eae2b61874a4eeb1245a4b16c",
+  "report_sha256": "ced374f16aa4a50ee19602cf244e5be50962c82e1d9bdae0139cdb03b602b4a2",
   "report_type": "task",
   "result": {
     "decision": "not_started",
