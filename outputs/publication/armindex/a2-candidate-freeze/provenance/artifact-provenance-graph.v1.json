@@ -64,7 +64,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "5d5c949fe05835db167c71144de3ad71b2fdd75c41894aa7d79862fe814c328e",
+  "graph_sha256": "bbf9dd4bce93907a0001c2de682a93b73f5dff2bd0c9113289f6b9e2038133fd",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -211,7 +211,7 @@
       "classification": "metadata",
       "kind": "receipt",
       "node_id": "schemas-armindex-a2-execution-adoption-receipt-v1-json",
-      "sha256": "ca54f3732cf9b4475885342444b84048668cb98ee7cbffb5b8a05ff69cd3380b",
+      "sha256": "dd62b03b75373dc18ed7e4722cc4b31a76cd89aa53170025c52dc80f4ed8de48",
       "uri": "../../../01_Research/schemas/armindex/a2-execution-adoption-receipt.v1.json"
     },
     {
@@ -239,7 +239,7 @@
       "classification": "metadata",
       "kind": "receipt",
       "node_id": "schemas-armindex-a2-provider-admission-receipt-v1-json",
-      "sha256": "a717714c4f2c685fd2bff7dadd287e2dc26128841d3c4b04fc9fc4ea06ee1b74",
+      "sha256": "b8d7cd75dbeba4ac177f192c41d623b96d917d9d496dc6e9b06fe8b0a83bcee6",
       "uri": "../../../01_Research/schemas/armindex/a2-provider-admission-receipt.v1.json"
     },
     {

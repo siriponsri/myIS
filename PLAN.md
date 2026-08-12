@@ -15,12 +15,12 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`AP_REVIEW_NEEDS_IM`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`IM_IMPLEMENTATION_COMPLETE_TTL_EXTENSION_REQUIRED`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started.)
-- Current phase: `A2_PER_ARM_AUTOINDEX` (operational executor implementation
-  passed focused validation, but provider evidence provenance, absolute TTL and
-  live remote-stage identity checks require one bounded IM repair before LO.)
+- Current phase: `A2_PER_ARM_AUTOINDEX` (audit 002 implementation is complete;
+  fresh provider evidence must expose at least 40 hours remaining before
+  provider admission, live staging, or LO launch.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -339,7 +339,7 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-ตอนนี้ทำ IM ตาม AGENTS.md อ่าน docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md แล้วแก้ provider-evidence provenance, absolute TTL และ live remote-stage bindings ให้ครบ โดยยังไม่เริ่ม measured A2
+Owner extends the current Vast absolute TTL sufficiently for a fresh admission observation to retain at least 40 hours; measured A2 remains closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined

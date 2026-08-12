@@ -7,9 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION AP_REVIEW_NEEDS_IM`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION IM_COMPLETE_TTL_EXTENSION_REQUIRED`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_executor_validated_provider_evidence_hardening_required_measured_a2_closed`
+- Status: `a2_executor_provider_provenance_ttl_live_probe_hardened_measured_a2_closed`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: aggregate-safe measured development closeout with validated
   25/25 coverage, frozen promotion, and provider continuation; scientific authority `true`
@@ -260,10 +260,10 @@ contract. Fresh provider admission/adoption and isolated staging remain incomple
 
 ## Active authorized action
 
-The next session is IM. The exact next action is:
+The only remaining Owner action is:
 
 ```text
-ตอนนี้ทำ IM ตาม AGENTS.md อ่าน docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md แล้วแก้ provider-evidence provenance, absolute TTL และ live remote-stage bindings ให้ครบ โดยยังไม่เริ่ม measured A2
+NEEDS_OWNER_TTL_EXTENSION
 ```
 
 `docs/goal/A1_2_rerun_goal.md` and

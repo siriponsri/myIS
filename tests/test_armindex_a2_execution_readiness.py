@@ -61,8 +61,8 @@ def _provider_evidence() -> dict[str, object]:
         "management_mode": "OWNER_MANUAL_DASHBOARD_DESTROY_READY",
         "owner_manual_dashboard_destroy_ready": True,
         "provider_destroy_performed": False,
-        "ttl_hours": 40,
         "quote_observed_at_utc": "2026-08-12T08:00:00Z",
+        "ttl_deadline_utc": "2026-08-14T08:00:00Z",
         "all_fee_components_usd": {
             "compute_usd": "30.00",
             "storage_usd": "1.00",
@@ -72,6 +72,42 @@ def _provider_evidence() -> dict[str, object]:
         },
         "whole_workload_total_usd": "33.00",
     }
+
+
+def _provider_observation_paths(tmp_path: Path, *, deadline: str = "2026-08-14T08:00:00Z") -> tuple[Path, dict[str, Path]]:
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    sources: dict[str, Path] = {}
+    for name in ("runtime", "model_lockset", "data_handoff", "ssh_host_key", "management_authority"):
+        path = tmp_path / f"{name}.txt"
+        path.write_text(f"aggregate-safe {name}\n", encoding="ascii")
+        sources[name] = path
+    hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+    observation = _provider_evidence()
+    observation.update(
+        {
+            "schema_version": "myis.armindex-a2-provider-observation.v1",
+            "observation_id": f"{ATTEMPT}-provider-observation-v1",
+            "attempt_id": ATTEMPT,
+            "source_mode": observation.pop("evidence_mode"),
+            "ttl_deadline_utc": deadline,
+            "remaining_ttl_seconds": int((datetime.fromisoformat(deadline.replace("Z", "+00:00")) - datetime(2026, 8, 12, 8, tzinfo=timezone.utc)).total_seconds()),
+            "gpu_uuid_set_sha256": "e" * 64,
+            "runtime_sha256": hashes["runtime"],
+            "model_lockset_sha256": hashes["model_lockset"],
+            "data_handoff_sha256": hashes["data_handoff"],
+            "ssh_host_key_sha256": hashes["ssh_host_key"],
+            "management_authority_sha256": hashes["management_authority"],
+            "source_artifact_sha256": hashes,
+            "source_artifacts": {
+                name: {"uri": f"owner-store/a2-test/{path.name}", "file_sha256": hashes[name]}
+                for name, path in sources.items()
+            },
+        }
+    )
+    observation["observation_sha256"] = canonical_sha256(observation)
+    path = tmp_path / "provider-observation.json"
+    path.write_text(json.dumps(observation), encoding="ascii")
+    return path, sources
 
 
 def _aggregate_results() -> dict[str, dict[str, object]]:
@@ -296,14 +332,12 @@ def test_bundle_requires_clean_pushed_repository(
 def test_provider_admission_adoption_and_runner_staging_are_side_effect_free(
     tmp_path: Path,
 ) -> None:
+    observation_path, source_paths = _provider_observation_paths(tmp_path)
     admission = build_provider_admission_receipt(
         ROOT,
         attempt_id=ATTEMPT,
-        provider_evidence=_provider_evidence(),
-        runtime_sha256="a" * 64,
-        model_lockset_sha256="b" * 64,
-        data_handoff_sha256="c" * 64,
-        management_authority_sha256="d" * 64,
+        provider_observation_path=observation_path,
+        source_artifact_paths=source_paths,
         now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
     )
     assert validate_provider_admission_receipt(ROOT, admission)["status"] == "PASS_A2_PROVIDER_ADMISSION"
@@ -335,6 +369,8 @@ def test_provider_admission_adoption_and_runner_staging_are_side_effect_free(
         watchdog_sha256="e" * 64,
         watchdog_deadline_utc="2026-08-13T23:59:00Z",
         lifecycle_genesis_checkpoint_sha256="f" * 64,
+        live_probe_receipt_sha256="1" * 64,
+        live_probe_file_sha256="2" * 64,
     )
 
     plan = A2MeasuredRunner(ATTEMPT).stage(ROOT, adoption).request_external_execution()
@@ -360,7 +396,12 @@ def test_remote_staging_watchdog_and_injected_executor_are_inert(tmp_path: Path)
         "remote_root_created_fresh": True,
         "staged_bundle_sha256": "c" * 64,
         "staged_bundle_verified": True,
-        "ttl_hours": 40,
+        "provider_observation_sha256": "1" * 64,
+        "provider_observation_file_sha256": "2" * 64,
+        "live_probe_receipt_sha256": "3" * 64,
+        "live_probe_file_sha256": "4" * 64,
+        "ttl_deadline_utc": "2026-08-14T00:00:00Z",
+        "remaining_ttl_seconds_at_admission": 144000,
         "watchdog_installed": True,
         "watchdog_deadline_utc": "2026-08-13T23:59:00Z",
         "watchdog_sha256": "f" * 64,
@@ -422,20 +463,18 @@ def test_remote_staging_watchdog_and_injected_executor_are_inert(tmp_path: Path)
     ]
 
 
-def test_provider_admission_rejects_stale_or_over_budget_quote() -> None:
-    stale = _provider_evidence()
+def test_provider_admission_rejects_stale_or_over_budget_quote(tmp_path: Path) -> None:
+    observation_path, source_paths = _provider_observation_paths(tmp_path)
     with pytest.raises(A2ExecutionReadinessError, match="not fresh"):
         build_provider_admission_receipt(
             ROOT,
             attempt_id=ATTEMPT,
-            provider_evidence=stale,
-            runtime_sha256="a" * 64,
-            model_lockset_sha256="b" * 64,
-            data_handoff_sha256="c" * 64,
-            management_authority_sha256="d" * 64,
+            provider_observation_path=observation_path,
+            source_artifact_paths=source_paths,
             now_utc=datetime(2026, 8, 12, 9, 0, tzinfo=timezone.utc),
         )
-    over_budget = _provider_evidence()
+    over_path, over_sources = _provider_observation_paths(tmp_path / "over")
+    over_budget = json.loads(over_path.read_text(encoding="ascii"))
     over_budget["whole_workload_total_usd"] = "36.00"
     over_budget["all_fee_components_usd"] = {
         "compute_usd": "33.00",
@@ -444,16 +483,59 @@ def test_provider_admission_rejects_stale_or_over_budget_quote() -> None:
         "platform_or_other_fee_usd": "0.50",
         "tax_or_surcharge_usd": "0.50",
     }
+    unsigned = {key: value for key, value in over_budget.items() if key != "observation_sha256"}
+    over_budget["observation_sha256"] = canonical_sha256(unsigned)
+    over_path.write_text(json.dumps(over_budget), encoding="ascii")
     with pytest.raises(A2ExecutionReadinessError, match="exceeds"):
         build_provider_admission_receipt(
             ROOT,
             attempt_id=ATTEMPT,
-            provider_evidence=over_budget,
-            runtime_sha256="a" * 64,
-            model_lockset_sha256="b" * 64,
-            data_handoff_sha256="c" * 64,
-            management_authority_sha256="d" * 64,
+            provider_observation_path=over_path,
+            source_artifact_paths=over_sources,
             now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+
+def test_provider_admission_rejects_source_mutation_and_short_absolute_ttl(tmp_path: Path) -> None:
+    observation_path, source_paths = _provider_observation_paths(tmp_path)
+    source_paths["runtime"].write_text("mutated\n", encoding="ascii")
+    with pytest.raises(A2ExecutionReadinessError, match="bytes drift"):
+        build_provider_admission_receipt(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_observation_path=observation_path,
+            source_artifact_paths=source_paths,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+    ttl_path, ttl_sources = _provider_observation_paths(
+        tmp_path / "ttl", deadline="2026-08-12T11:23:00Z"
+    )
+    with pytest.raises(A2ExecutionReadinessError, match="NEEDS_OWNER_TTL_EXTENSION"):
+        build_provider_admission_receipt(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_observation_path=ttl_path,
+            source_artifact_paths=ttl_sources,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+
+def test_provider_admission_validation_rejects_post_receipt_source_mutation(tmp_path: Path) -> None:
+    observation_path, source_paths = _provider_observation_paths(tmp_path)
+    receipt = build_provider_admission_receipt(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=source_paths,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    source_paths["data_handoff"].write_text("changed\n", encoding="ascii")
+    with pytest.raises(A2ExecutionReadinessError, match="source artifact (bytes drift|mutation)"):
+        validate_provider_admission_receipt(
+            ROOT,
+            receipt,
+            provider_observation_path=observation_path,
+            source_artifact_paths=source_paths,
         )
 
 

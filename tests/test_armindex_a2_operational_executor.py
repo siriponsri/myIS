@@ -5,6 +5,7 @@ import io
 import json
 import subprocess
 import tarfile
+import hashlib
 from collections.abc import Mapping
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,7 +42,7 @@ def _provider_evidence() -> dict[str, object]:
         "management_mode": "OWNER_MANUAL_DASHBOARD_DESTROY_READY",
         "owner_manual_dashboard_destroy_ready": True,
         "provider_destroy_performed": False,
-        "ttl_hours": 40,
+        "ttl_deadline_utc": "2026-08-14T08:00:00Z",
         "quote_observed_at_utc": "2026-08-12T08:00:00Z",
         "all_fee_components_usd": {
             "compute_usd": "30",
@@ -52,6 +53,39 @@ def _provider_evidence() -> dict[str, object]:
         },
         "whole_workload_total_usd": "33",
     }
+
+
+def _provider_observation_paths(tmp_path: Path) -> tuple[Path, dict[str, Path]]:
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    sources: dict[str, Path] = {}
+    for name in ("runtime", "model_lockset", "data_handoff", "ssh_host_key", "management_authority"):
+        path = tmp_path / f"{name}.txt"
+        path.write_text(f"aggregate-safe {name}\n", encoding="ascii")
+        sources[name] = path
+    hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+    observation = _provider_evidence()
+    observation.update({
+        "schema_version": "myis.armindex-a2-provider-observation.v1",
+        "observation_id": f"{ATTEMPT}-provider-observation-v1",
+        "attempt_id": ATTEMPT,
+        "source_mode": observation.pop("evidence_mode"),
+        "remaining_ttl_seconds": 172800,
+        "gpu_uuid_set_sha256": "e" * 64,
+        "runtime_sha256": hashes["runtime"],
+        "model_lockset_sha256": hashes["model_lockset"],
+        "data_handoff_sha256": hashes["data_handoff"],
+        "ssh_host_key_sha256": hashes["ssh_host_key"],
+        "management_authority_sha256": hashes["management_authority"],
+        "source_artifact_sha256": hashes,
+        "source_artifacts": {
+            name: {"uri": f"owner-store/a2-test/{path.name}", "file_sha256": hashes[name]}
+            for name, path in sources.items()
+        },
+    })
+    observation["observation_sha256"] = canonical_sha256(observation)
+    path = tmp_path / "provider-observation.json"
+    path.write_text(json.dumps(observation), encoding="ascii")
+    return path, sources
 
 
 def _candidate_row(candidate_id: str, *, score: str = "1") -> dict[str, object]:
@@ -117,7 +151,12 @@ def _adoption() -> dict[str, object]:
         "remote_root_created_fresh": True,
         "staged_bundle_sha256": "c" * 64,
         "staged_bundle_verified": True,
-        "ttl_hours": 40,
+        "provider_observation_sha256": "1" * 64,
+        "provider_observation_file_sha256": "2" * 64,
+        "live_probe_receipt_sha256": "3" * 64,
+        "live_probe_file_sha256": "4" * 64,
+        "ttl_deadline_utc": "2026-08-14T08:00:00Z",
+        "remaining_ttl_seconds_at_admission": 172800,
         "watchdog_installed": True,
         "watchdog_deadline_utc": "2026-08-13T08:00:00Z",
         "watchdog_sha256": "f" * 64,
@@ -273,29 +312,29 @@ def test_exact_coverage_rejects_missing_candidate_and_exact_tie() -> None:
         operational.evaluate_candidate_receipts(ROOT, receipts_by_candidate=tied)
 
 
-def test_provider_admission_rejects_stale_and_partial_quote() -> None:
+def test_provider_admission_rejects_stale_and_partial_quote(tmp_path: Path) -> None:
+    observation_path, sources = _provider_observation_paths(tmp_path)
     with pytest.raises(A2ExecutionReadinessError, match="not fresh"):
         build_provider_admission_receipt(
             ROOT,
             attempt_id=ATTEMPT,
-            provider_evidence=_provider_evidence(),
-            runtime_sha256="a" * 64,
-            model_lockset_sha256="b" * 64,
-            data_handoff_sha256="c" * 64,
-            management_authority_sha256="d" * 64,
+            provider_observation_path=observation_path,
+            source_artifact_paths=sources,
             now_utc=datetime(2026, 8, 12, 9, 0, tzinfo=timezone.utc),
         )
-    partial = _provider_evidence()
+    partial_path, partial_sources = _provider_observation_paths(tmp_path / "partial")
+    partial = json.loads(partial_path.read_text(encoding="ascii"))
     partial["all_fee_components_usd"].pop("tax_or_surcharge_usd")  # type: ignore[union-attr]
-    with pytest.raises(A2ExecutionReadinessError, match="all required quote"):
+    partial["observation_sha256"] = canonical_sha256(
+        {key: value for key, value in partial.items() if key != "observation_sha256"}
+    )
+    partial_path.write_text(json.dumps(partial), encoding="ascii")
+    with pytest.raises(A2ExecutionReadinessError, match="required property"):
         build_provider_admission_receipt(
             ROOT,
             attempt_id=ATTEMPT,
-            provider_evidence=partial,
-            runtime_sha256="a" * 64,
-            model_lockset_sha256="b" * 64,
-            data_handoff_sha256="c" * 64,
-            management_authority_sha256="d" * 64,
+            provider_observation_path=partial_path,
+            source_artifact_paths=partial_sources,
             now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
         )
 
@@ -336,7 +375,7 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
     key = tmp_path / "key"
     known = tmp_path / "known_hosts"
     key.write_text("owner-local", encoding="ascii")
-    known.write_text("pinned", encoding="ascii")
+    known.write_text("aggregate-safe ssh host key\n", encoding="ascii")
     connection.write_text(
         "\n".join(
             (
@@ -349,16 +388,48 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
         ),
         encoding="utf-8",
     )
+    observation_path, sources = _provider_observation_paths(tmp_path / "provider")
+    sources["ssh_host_key"].write_bytes(known.read_bytes())
+    observation = json.loads(observation_path.read_text(encoding="ascii"))
+    known_hash = hashlib.sha256(known.read_bytes()).hexdigest()
+    observation["ssh_host_key_sha256"] = known_hash
+    observation["source_artifact_sha256"]["ssh_host_key"] = known_hash
+    observation["source_artifacts"]["ssh_host_key"]["file_sha256"] = known_hash
+    observation["observation_sha256"] = canonical_sha256(
+        {key: value for key, value in observation.items() if key != "observation_sha256"}
+    )
+    observation_path.write_text(json.dumps(observation), encoding="ascii")
     provider = build_provider_admission_receipt(
         ROOT,
         attempt_id=ATTEMPT,
-        provider_evidence=_provider_evidence(),
-        runtime_sha256="a" * 64,
-        model_lockset_sha256="b" * 64,
-        data_handoff_sha256="c" * 64,
-        management_authority_sha256="d" * 64,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
         now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
     )
+    probe_body = {
+        "schema_version": "myis.armindex-a2-live-remote-probe-receipt.v1",
+        "receipt_id": f"{ATTEMPT}-live-remote-probe-v1",
+        "attempt_id": ATTEMPT,
+        "status": "PASS_A2_LIVE_REMOTE_PROBE",
+        "observed_at_utc": "2026-08-12T08:05:00Z",
+        "provider_instance_id": "47411176",
+        "ssh_host_key_sha256": known_hash,
+        "runtime_sha256": provider["runtime_sha256"],
+        "gpu_uuid_set_sha256": provider["gpu_uuid_set_sha256"],
+        "gpu_count": 4,
+        "gpu_model": "RTX3090",
+        "vram_mib_each": 24576,
+        "gpu_compute_process_count": 0,
+        "a2_process_count": 0,
+        "model_lockset_sha256": provider["model_lockset_sha256"],
+        "data_handoff_sha256": provider["data_handoff_sha256"],
+        "bundle_sha256": bundle_receipt["bundle_sha256"],
+        "remote_root": f"/opt/myis/{ATTEMPT}",
+        "remote_root_absent": True,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"],
+        "remaining_ttl_seconds": 172500,
+    }
+    probe = {**probe_body, "receipt_sha256": canonical_sha256(probe_body)}
     outputs = iter(("", "", "", "dead-watchdog"))
 
     commands: list[list[str]] = []
@@ -366,6 +437,8 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
     def runner(*args: object, **_kwargs: object) -> subprocess.CompletedProcess[str]:
         commands.append(list(args[0]))  # type: ignore[arg-type]
         return subprocess.CompletedProcess([], 0, next(outputs), "")
+
+    monkeypatch.setattr(operational, "_run_live_remote_probe", lambda **_kwargs: probe)
 
     with pytest.raises(operational.A2OperationalExecutorError, match="watchdog process identity"):
         operational.perform_remote_stage(
@@ -377,6 +450,15 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
             remote_root=f"/opt/myis/{ATTEMPT}",
             watchdog_deadline_utc="2026-08-13T08:00:00Z",
             owner_connection_path=connection,
+            provider_observation_path=observation_path,
+            source_artifact_paths=sources,
+            remote_identity_paths={
+                "provider_instance_id": "/opt/myis/identity/instance-id",
+                "runtime": "/opt/myis/identity/runtime.json",
+                "model_lockset": "/opt/myis/identity/model-lockset.json",
+                "data_handoff": "/opt/myis/identity/data-handoff.json",
+            },
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
             runner=runner,
         )
     verify_command = commands[-1][-1]
@@ -384,6 +466,143 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
     assert "/lifecycle/processes/watchdog.identity" not in verify_command
     assert "while test ! -s" in verify_command
     assert "test \"$actual\" = \"$start\"" in verify_command
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("runtime_sha256", "0" * 64, "runtime drift"),
+        ("gpu_uuid_set_sha256", "0" * 64, "GPU UUID set drift"),
+        ("model_lockset_sha256", "0" * 64, "model lockset drift"),
+        ("data_handoff_sha256", "0" * 64, "data handoff drift"),
+        ("gpu_compute_process_count", 1, "validation failed"),
+        ("a2_process_count", 1, "validation failed"),
+        ("remote_root_absent", False, "validation failed"),
+        ("ssh_host_key_sha256", "0" * 64, "SSH host-key drift"),
+    ],
+)
+def test_live_remote_probe_failures_close_before_stage(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    field: str,
+    value: object,
+    message: str,
+) -> None:
+    known = tmp_path / "known_hosts"
+    known.write_text("aggregate-safe ssh host key\n", encoding="ascii")
+    host_hash = file_sha256(known)
+    provider = {
+        "provider_instance_id": "47411176",
+        "ssh_host_key_sha256": host_hash,
+        "runtime_sha256": "a" * 64,
+        "gpu_uuid_set_sha256": "b" * 64,
+        "model_lockset_sha256": "c" * 64,
+        "data_handoff_sha256": "d" * 64,
+        "ttl_deadline_utc": "2026-08-14T08:00:00Z",
+    }
+    monkeypatch.setattr(
+        operational,
+        "validate_provider_admission_receipt",
+        lambda *_args, **_kwargs: dict(provider),
+    )
+    body = {
+        "schema_version": "myis.armindex-a2-live-remote-probe-receipt.v1",
+        "receipt_id": f"{ATTEMPT}-live-remote-probe-v1",
+        "attempt_id": ATTEMPT,
+        "status": "PASS_A2_LIVE_REMOTE_PROBE",
+        "observed_at_utc": "2026-08-12T08:05:00Z",
+        "provider_instance_id": "47411176",
+        "ssh_host_key_sha256": host_hash,
+        "runtime_sha256": provider["runtime_sha256"],
+        "gpu_uuid_set_sha256": provider["gpu_uuid_set_sha256"],
+        "gpu_count": 4,
+        "gpu_model": "RTX3090",
+        "vram_mib_each": 24576,
+        "gpu_compute_process_count": 0,
+        "a2_process_count": 0,
+        "model_lockset_sha256": provider["model_lockset_sha256"],
+        "data_handoff_sha256": provider["data_handoff_sha256"],
+        "bundle_sha256": "e" * 64,
+        "remote_root": f"/opt/myis/{ATTEMPT}",
+        "remote_root_absent": True,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"],
+        "remaining_ttl_seconds": 172500,
+    }
+    body[field] = value
+    probe = {**body, "receipt_sha256": canonical_sha256(body)}
+    with pytest.raises(operational.A2OperationalExecutorError, match=message):
+        operational.validate_live_remote_probe(
+            ROOT,
+            attempt_id=ATTEMPT,
+            probe=probe,
+            provider_admission_receipt=provider,
+            bundle_sha256="e" * 64,
+            remote_root=f"/opt/myis/{ATTEMPT}",
+            known_hosts_path=known,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+
+def test_live_remote_probe_command_hashes_remote_identity_artifacts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: list[str] = []
+    body = {
+        "schema_version": "myis.armindex-a2-live-remote-probe-receipt.v1",
+        "receipt_id": f"{ATTEMPT}-live-remote-probe-v1",
+        "attempt_id": ATTEMPT,
+        "status": "PASS_A2_LIVE_REMOTE_PROBE",
+        "observed_at_utc": "2026-08-12T08:05:00Z",
+        "provider_instance_id": "47411176",
+        "ssh_host_key_sha256": "f" * 64,
+        "runtime_sha256": "a" * 64,
+        "gpu_uuid_set_sha256": "b" * 64,
+        "gpu_count": 4,
+        "gpu_model": "RTX3090",
+        "vram_mib_each": 24576,
+        "gpu_compute_process_count": 0,
+        "a2_process_count": 0,
+        "model_lockset_sha256": "c" * 64,
+        "data_handoff_sha256": "d" * 64,
+        "bundle_sha256": "e" * 64,
+        "remote_root": f"/opt/myis/{ATTEMPT}",
+        "remote_root_absent": True,
+        "ttl_deadline_utc": "2026-08-14T08:00:00Z",
+        "remaining_ttl_seconds": 172500,
+    }
+    result = {**body, "receipt_sha256": canonical_sha256(body)}
+
+    def native(_executable: str, arguments: list[str], **_kwargs: object) -> str:
+        captured.append(arguments[-1])
+        return json.dumps(result)
+
+    monkeypatch.setattr(operational, "_native", native)
+    operational._run_live_remote_probe(
+        ssh=["root@example"],
+        remote_root=f"/opt/myis/{ATTEMPT}",
+        provider={
+            "attempt_id": ATTEMPT,
+            "provider_instance_id": "47411176",
+            "ttl_deadline_utc": "2026-08-14T08:00:00Z",
+            "ssh_host_key_sha256": "f" * 64,
+            "runtime_sha256": "a" * 64,
+            "gpu_uuid_set_sha256": "b" * 64,
+            "model_lockset_sha256": "c" * 64,
+            "data_handoff_sha256": "d" * 64,
+        },
+        bundle_sha256="e" * 64,
+        remote_identity_paths={
+            "provider_instance_id": "/opt/myis/identity/instance-id",
+            "runtime": "/opt/myis/identity/runtime.json",
+            "model_lockset": "/opt/myis/identity/model-lockset.json",
+            "data_handoff": "/opt/myis/identity/data-handoff.json",
+        },
+        runner=subprocess.run,
+    )
+    assert "digest(paths['runtime'])" in captured[0]
+    assert "digest(paths['model_lockset'])" in captured[0]
+    assert "digest(paths['data_handoff'])" in captured[0]
+    assert "nvidia-smi" in captured[0]
 
 
 def test_safe_return_rejects_member_checksum_drift(tmp_path: Path) -> None:

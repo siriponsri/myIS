@@ -53,6 +53,16 @@ _REQUIRED_QUOTE_COMPONENTS = frozenset(
         "tax_or_surcharge_usd",
     }
 )
+_REQUIRED_PROVIDER_SOURCES = frozenset(
+    {
+        "runtime",
+        "model_lockset",
+        "data_handoff",
+        "ssh_host_key",
+        "management_authority",
+    }
+)
+_REQUIRED_TTL_SECONDS = 40 * 60 * 60
 _BUNDLE_CLOSURE = (
     "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
     "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
@@ -67,8 +77,10 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-execution-closeout-receipt.v1.json",
     "schemas/armindex/a2-remote-stage-receipt.v1.json",
     "schemas/armindex/a2-lifecycle-checkpoint.v1.json",
+    "schemas/armindex/a2-live-remote-probe-receipt.v1.json",
     "schemas/armindex/a2-measured-execution-authority.v1.json",
     "schemas/armindex/a2-provider-admission-receipt.v1.json",
+    "schemas/armindex/a2-provider-observation.v1.json",
     "schemas/armindex/a2-safe-return-receipt.v1.json",
     "schemas/armindex/a2-train-evaluation-receipt.v1.json",
     "schemas/armindex/a2-winner-selection-receipt.v1.json",
@@ -664,15 +676,65 @@ def _validate_freeze_bindings(root: Path, value: Mapping[str, Any]) -> None:
         raise A2ExecutionReadinessError("receipt freeze bindings drift")
 
 
+def _source_hashes(paths: Mapping[str, Path]) -> dict[str, str]:
+    if set(paths) != _REQUIRED_PROVIDER_SOURCES:
+        raise A2ExecutionReadinessError("provider source artifact set is incomplete")
+    result: dict[str, str] = {}
+    for name in sorted(paths):
+        path = Path(paths[name]).resolve()
+        if not path.is_file() or path.is_symlink():
+            raise A2ExecutionReadinessError(f"provider {name} source artifact is unsafe")
+        result[name] = file_sha256(path)
+    return result
+
+
+def _provider_observation(
+    root: Path,
+    *,
+    attempt_id: str,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
+) -> tuple[dict[str, Any], str, dict[str, str]]:
+    path = provider_observation_path.resolve()
+    if not path.is_file() or path.is_symlink():
+        raise A2ExecutionReadinessError("provider observation artifact is unsafe")
+    observation = _load_json(path)
+    assert_aggregate_only(observation)
+    _self_hash(observation, "observation_sha256")
+    _validate(root, "a2-provider-observation.v1.json", observation)
+    if observation["attempt_id"] != attempt_id:
+        raise A2ExecutionReadinessError("provider observation attempt differs from admission")
+    source_hashes = _source_hashes(source_artifact_paths)
+    if observation["source_artifact_sha256"] != source_hashes:
+        raise A2ExecutionReadinessError("provider source artifact bytes drift")
+    bindings = observation.get("source_artifacts")
+    if not isinstance(bindings, Mapping) or set(bindings) != _REQUIRED_PROVIDER_SOURCES:
+        raise A2ExecutionReadinessError("provider source artifact provenance is incomplete")
+    for name, field in (
+        ("runtime", "runtime_sha256"),
+        ("model_lockset", "model_lockset_sha256"),
+        ("data_handoff", "data_handoff_sha256"),
+        ("ssh_host_key", "ssh_host_key_sha256"),
+        ("management_authority", "management_authority_sha256"),
+    ):
+        if observation[field] != source_hashes[name]:
+            raise A2ExecutionReadinessError(f"provider {name} observation binding drift")
+        binding = bindings[name]
+        if (
+            not isinstance(binding, Mapping)
+            or binding.get("file_sha256") != source_hashes[name]
+            or not isinstance(binding.get("uri"), str)
+        ):
+            raise A2ExecutionReadinessError(f"provider {name} source provenance drift")
+    return observation, file_sha256(path), source_hashes
+
+
 def build_provider_admission_receipt(
     repository_root: Path,
     *,
     attempt_id: str,
-    provider_evidence: Mapping[str, Any],
-    runtime_sha256: str,
-    model_lockset_sha256: str,
-    data_handoff_sha256: str,
-    management_authority_sha256: str,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
     now_utc: datetime,
     maximum_quote_age: timedelta = timedelta(minutes=15),
 ) -> dict[str, Any]:
@@ -686,8 +748,12 @@ def build_provider_admission_receipt(
     root = repository_root.resolve()
     if now_utc.tzinfo is None:
         raise A2ExecutionReadinessError("now_utc must include an offset")
-    evidence = dict(provider_evidence)
-    assert_aggregate_only(evidence)
+    evidence, observation_file_sha256, source_hashes = _provider_observation(
+        root,
+        attempt_id=attempt_id,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+    )
     if evidence.get("provider_instance_id") != "47411176":
         raise A2ExecutionReadinessError("provider instance is not 47411176")
     if evidence.get("provider_status") != "RUNNING" or evidence.get(
@@ -698,9 +764,7 @@ def build_provider_admission_receipt(
         raise A2ExecutionReadinessError("provider GPU identity is not 4x RTX3090")
     if evidence.get("vram_mib_each") != 24576:
         raise A2ExecutionReadinessError("provider GPU VRAM identity is not 24576 MiB")
-    if evidence.get("ttl_hours") != 40:
-        raise A2ExecutionReadinessError("provider TTL must be exactly 40 hours")
-    mode = evidence.get("evidence_mode")
+    mode = evidence.get("source_mode")
     if mode not in {"authenticated_vast_cli", "OwnerDashboardSsh"}:
         raise A2ExecutionReadinessError("provider evidence mode is unsupported")
     authenticated = evidence.get("provider_authenticated")
@@ -720,6 +784,13 @@ def build_provider_admission_receipt(
         or current - observed > maximum_quote_age
     ):
         raise A2ExecutionReadinessError("provider quote is not fresh")
+    ttl_deadline = _timestamp(evidence.get("ttl_deadline_utc"), "provider TTL deadline")
+    remaining_ttl_seconds = int((ttl_deadline - current).total_seconds())
+    if remaining_ttl_seconds < _REQUIRED_TTL_SECONDS:
+        raise A2ExecutionReadinessError("NEEDS_OWNER_TTL_EXTENSION")
+    expected_remaining = int((ttl_deadline - observed_at).total_seconds())
+    if evidence.get("remaining_ttl_seconds") != expected_remaining:
+        raise A2ExecutionReadinessError("provider observation remaining TTL drift")
     components = evidence.get("all_fee_components_usd")
     if not isinstance(components, Mapping) or set(components) != _REQUIRED_QUOTE_COMPONENTS:
         raise A2ExecutionReadinessError("all required quote fee components are required")
@@ -730,7 +801,7 @@ def build_provider_admission_receipt(
     quote_body = {
         "provider_instance_id": evidence["provider_instance_id"],
         "quote_observed_at_utc": evidence["quote_observed_at_utc"],
-        "ttl_hours": evidence["ttl_hours"],
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"],
         "all_fee_components_usd": dict(components),
         "whole_workload_total_usd": str(declared_total),
     }
@@ -738,14 +809,6 @@ def build_provider_admission_receipt(
     budget_sha256 = canonical_sha256(
         {"quote_sha256": quote_sha256, "whole_workload_total_usd": str(total), "hard_stop_usd": "35"}
     )
-    for value, label in (
-        (runtime_sha256, "runtime"),
-        (model_lockset_sha256, "model lockset"),
-        (data_handoff_sha256, "data handoff"),
-        (evidence.get("ssh_host_key_sha256"), "SSH host key"),
-        (management_authority_sha256, "management authority"),
-    ):
-        _require_hash(value, label)
     management_mode = evidence.get("management_mode")
     manual_ready = evidence.get("owner_manual_dashboard_destroy_ready")
     if mode == "authenticated_vast_cli":
@@ -774,10 +837,11 @@ def build_provider_admission_receipt(
         "gpu_count": 4,
         "gpu_model": "RTX3090",
         "vram_mib_each": 24576,
-        "runtime_sha256": runtime_sha256,
-        "model_lockset_sha256": model_lockset_sha256,
-        "data_handoff_sha256": data_handoff_sha256,
-        "ssh_host_key_sha256": evidence["ssh_host_key_sha256"],
+        "gpu_uuid_set_sha256": evidence["gpu_uuid_set_sha256"],
+        "runtime_sha256": source_hashes["runtime"],
+        "model_lockset_sha256": source_hashes["model_lockset"],
+        "data_handoff_sha256": source_hashes["data_handoff"],
+        "ssh_host_key_sha256": source_hashes["ssh_host_key"],
         "all_fee_components_usd": {
             name: str(_money(components[name], name)) for name in sorted(components)
         },
@@ -785,10 +849,14 @@ def build_provider_admission_receipt(
         "quote_sha256": quote_sha256,
         "whole_workload_budget_sha256": budget_sha256,
         "management_mode": management_mode,
-        "management_authority_sha256": management_authority_sha256,
+        "management_authority_sha256": source_hashes["management_authority"],
         "owner_manual_dashboard_destroy_ready": bool(manual_ready),
         "provider_destroy_performed": False,
-        "ttl_hours": 40,
+        "provider_observation_sha256": evidence["observation_sha256"],
+        "provider_observation_file_sha256": observation_file_sha256,
+        "source_artifact_sha256": source_hashes,
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"],
+        "remaining_ttl_seconds": remaining_ttl_seconds,
         "forward_hard_stop_usd": 35,
         "freeze_bindings": _freeze_bindings(root),
     }
@@ -798,15 +866,39 @@ def build_provider_admission_receipt(
 
 
 def validate_provider_admission_receipt(
-    repository_root: Path, receipt: Mapping[str, Any]
+    repository_root: Path,
+    receipt: Mapping[str, Any],
+    *,
+    provider_observation_path: Path | None = None,
+    source_artifact_paths: Mapping[str, Path] | None = None,
 ) -> dict[str, Any]:
-    """Validate the schema, self-hash, and immutable freeze binding of admission."""
+    """Validate admission and, when supplied, its current source artifact bytes."""
 
     root = repository_root.resolve()
     checked = dict(receipt)
     _self_hash(checked, "receipt_sha256")
     _validate(root, "a2-provider-admission-receipt.v1.json", checked)
     _validate_freeze_bindings(root, checked["freeze_bindings"])
+    if (provider_observation_path is None) != (source_artifact_paths is None):
+        raise A2ExecutionReadinessError("provider admission source paths are incomplete")
+    if provider_observation_path is not None and source_artifact_paths is not None:
+        try:
+            observation, observation_file_hash, source_hashes = _provider_observation(
+                root,
+                attempt_id=str(checked["attempt_id"]),
+                provider_observation_path=provider_observation_path,
+                source_artifact_paths=source_artifact_paths,
+            )
+        except A2ExecutionReadinessError as error:
+            raise A2ExecutionReadinessError(
+                "provider admission source artifact bytes drift after receipt mutation"
+            ) from error
+        if (
+            observation["observation_sha256"] != checked["provider_observation_sha256"]
+            or observation_file_hash != checked["provider_observation_file_sha256"]
+            or source_hashes != checked["source_artifact_sha256"]
+        ):
+            raise A2ExecutionReadinessError("provider admission source artifact mutation")
     return checked
 
 
@@ -821,6 +913,8 @@ def build_execution_adoption_receipt(
     watchdog_sha256: str,
     watchdog_deadline_utc: str,
     lifecycle_genesis_checkpoint_sha256: str,
+    live_probe_receipt_sha256: str,
+    live_probe_file_sha256: str,
 ) -> dict[str, Any]:
     """Bind validated admission, bundle, isolated root, and watchdog for staging."""
 
@@ -838,16 +932,22 @@ def build_execution_adoption_receipt(
         raise A2ExecutionReadinessError("staged bundle hash differs from the local bundle")
     _require_hash(watchdog_sha256, "watchdog")
     deadline = _timestamp(watchdog_deadline_utc, "watchdog deadline")
-    admitted = _timestamp(provider["observed_at_utc"], "provider admission")
-    if deadline <= admitted or deadline - admitted > timedelta(hours=40):
-        raise A2ExecutionReadinessError("watchdog deadline exceeds the 40-hour TTL")
+    ttl_deadline = _timestamp(provider["ttl_deadline_utc"], "provider TTL deadline")
+    if deadline >= ttl_deadline:
+        raise A2ExecutionReadinessError("watchdog deadline must precede provider TTL deadline")
     _require_hash(lifecycle_genesis_checkpoint_sha256, "lifecycle genesis checkpoint")
+    _require_hash(live_probe_receipt_sha256, "live remote probe receipt")
+    _require_hash(live_probe_file_sha256, "live remote probe file")
     body = {
         "schema_version": "myis.armindex-a2-execution-adoption-receipt.v1",
         "receipt_id": _receipt_id(attempt_id, "execution-adoption"),
         "attempt_id": attempt_id,
         "status": "PASS_A2_EXECUTION_ADOPTION",
         "provider_admission_receipt_sha256": provider["receipt_sha256"],
+        "provider_observation_sha256": provider["provider_observation_sha256"],
+        "provider_observation_file_sha256": provider["provider_observation_file_sha256"],
+        "live_probe_receipt_sha256": live_probe_receipt_sha256,
+        "live_probe_file_sha256": live_probe_file_sha256,
         "bundle_receipt_sha256": bundle["receipt_sha256"],
         "bundle_sha256": bundle["bundle_sha256"],
         "git_commit": bundle["git_commit"],
@@ -856,7 +956,8 @@ def build_execution_adoption_receipt(
         "remote_root_created_fresh": True,
         "staged_bundle_sha256": staged_bundle_sha256,
         "staged_bundle_verified": True,
-        "ttl_hours": 40,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"],
+        "remaining_ttl_seconds_at_admission": provider["remaining_ttl_seconds"],
         "watchdog_installed": True,
         "watchdog_deadline_utc": watchdog_deadline_utc,
         "watchdog_sha256": watchdog_sha256,
