@@ -10,7 +10,7 @@
     "arm_id": {"type": "string", "enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
     "tier": {"type": "string", "enum": ["matched", "conditional_reserve"]},
     "batch_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
-    "review_round": {"type": "integer", "minimum": 0, "maximum": 2},
+    "review_round": {"type": "integer", "minimum": 0, "maximum": 4},
     "arm_context": {"$ref": "#/$defs/armContext"},
     "candidates": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/candidate"}},
     "review_criteria": {"type": "array", "minItems": 7, "maxItems": 7, "uniqueItems": true, "items": {"type": "string", "enum": ["falsifiability", "role_fit", "duplication", "protected_boundary", "arm_compatibility", "determinism", "publication_interpretability"]}},

@@ -191,3 +191,39 @@ def test_design_has_no_reserve_for_diagnostic_arms() -> None:
         for spec in specs
         if spec.arm_id in freeze.DIAGNOSTIC_NON_ADVANCING_ARMS
     )
+
+
+def test_batch_revision_budget_is_bounded_and_schema_aligned() -> None:
+    propose_schema = json.loads(
+        (
+            ROOT
+            / "schemas/armindex/official-codex/representation-propose.request.v1.json"
+        ).read_text(encoding="utf-8")
+    )
+    review_schema = json.loads(
+        (
+            ROOT
+            / "schemas/armindex/official-codex/representation-review.request.v1.json"
+        ).read_text(encoding="utf-8")
+    )
+    manifest_schema = json.loads(
+        (ROOT / "schemas/armindex/a2-candidate-manifest.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    maximum_round = freeze.MAX_BATCH_REVISION_ROUNDS - 1
+    assert propose_schema["properties"]["revision_round"]["maximum"] == maximum_round
+    assert review_schema["properties"]["review_round"]["maximum"] == maximum_round
+    assert (
+        manifest_schema["$defs"]["batch"]["properties"]["revision_round"][
+            "maximum"
+        ]
+        == maximum_round
+    )
+    assert (
+        propose_schema["properties"]["reviewer_required_changes"]["items"][
+            "maxLength"
+        ]
+        >= 400
+    )

@@ -83,8 +83,8 @@
     "budget_profile_uri": "control/budgets/a2-per-arm-autoindex-v1.json",
     "budget_profile_sha256": "53e47d78c804a8ec99a6fa1f5c9524a97c8b58acbb1311f12b24f7e12b900e71",
     "official_bridge_uri": "control/armindex/a2/official-codex-bridge.v1.json",
-    "official_bridge_file_sha256": "70e1af34e1aad638c59cd39767c5d27497aa7bf286019202dd8938b4256c2790",
-    "official_bridge_config_sha256": "922e2fb90b37d37c0945da43915149a12f08f192dbdaaef828d1d19ae720a2c4",
+    "official_bridge_file_sha256": "df7d6ac83b7e5b7ba003a0ece41eb2b14b5d9a898d873bdd33bd18b85c1400f5",
+    "official_bridge_config_sha256": "d89292c6462760339eae639efcd947c19eeee1fd1bee975593dbcb933373f11c",
     "a1_summary_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-result-summaries/a12-v16-20260811-r15.summary.v16.json",
     "a1_summary_file_sha256": "e092ff9b3d9436fc3cb1d738b04a5e766b9131151ff4756cbd36eeac8731bad1",
     "a1_terminal_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-terminal-attempts/a12-v16-20260811-r15.receipt.v16.json",
@@ -135,5 +135,5 @@
     "final_accesses": 0
   },
   "next_authorized_action": "Complete Official candidate generation, independent review, compile-twice verification, immutable freeze, and auditor review; do not start measured A2.",
-  "contract_sha256": "7be97a9391bc7b14debf155393c74aa39d0da5ccb6978ee1b3be6d5a2676bf91"
+  "contract_sha256": "244aba47fda37113b69a8a108d491ddb68d1d6a63f92d3d2e76863e7b2e1d7f8"
 }

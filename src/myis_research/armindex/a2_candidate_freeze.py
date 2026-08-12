@@ -37,6 +37,7 @@ PHASE_ID = "A2_PER_ARM_AUTOINDEX"
 TASK_ID = "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
 REVISION_ID = "a2-five-arm-premeasurement-freeze-v1"
 SEED = 20260812
+MAX_BATCH_REVISION_ROUNDS = 5
 ARMS = ("ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05")
 PRIMARY_ADVANCEMENT_ARMS = ("ARM-03", "ARM-05", "ARM-04")
 DIAGNOSTIC_NON_ADVANCING_ARMS = ("ARM-01", "ARM-02")
@@ -708,7 +709,7 @@ def _generate_batch(
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     feedback: list[str] = []
     last_error: Exception | None = None
-    for revision_round in range(3):
+    for revision_round in range(MAX_BATCH_REVISION_ROUNDS):
         proposer_request = _propose_request(
             spec,
             bindings,

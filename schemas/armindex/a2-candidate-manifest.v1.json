@@ -97,7 +97,7 @@
         "proposer_event_sha256": {"$ref": "#/$defs/sha256"},
         "reviewer_request_sha256": {"$ref": "#/$defs/sha256"},
         "reviewer_event_sha256": {"$ref": "#/$defs/sha256"},
-        "revision_round": {"type": "integer", "minimum": 0, "maximum": 2},
+        "revision_round": {"type": "integer", "minimum": 0, "maximum": 4},
         "status": {"type": "string", "const": "accepted_frozen_before_measurement"},
         "batch_sha256": {"$ref": "#/$defs/sha256"},
         "proposer_identity_sha256": {"$ref": "#/$defs/sha256"},

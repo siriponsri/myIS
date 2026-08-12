@@ -15,6 +15,16 @@ contains exactly the same fields once. Keep logical passage sizes conservative
 for the declared arm limit. ARM-01 and ARM-02 candidates are diagnostic only
 when the payload says advancement_eligible=false.
 
+Every hypothesis must identify one deterministic representation intervention,
+the frozen within-arm comparator, the expected direction that can later be
+falsified, and a concrete failure condition without claiming improvement.
+Avoid learned, adaptive, data-dependent, ranking-dependent, or unspecified
+processing. Keep each candidate attributable to its declared axis and explain
+it in language suitable for a journal ablation. For conditional reserve slots,
+state that the candidate remains dormant unless the frozen activation predicate
+is satisfied. Apply every reviewer_required_changes item to its named candidate
+while keeping the other slots independently valid.
+
 Operation payload:
 
 {{OPERATION_PAYLOAD_JSON}}

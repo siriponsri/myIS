@@ -1,6 +1,6 @@
 {
   "bridge_id": "a2-official-codex-python-bridge-v1",
-  "config_sha256": "922e2fb90b37d37c0945da43915149a12f08f192dbdaaef828d1d19ae720a2c4",
+  "config_sha256": "d89292c6462760339eae639efcd947c19eeee1fd1bee975593dbcb933373f11c",
   "event_store_id": "a2-prep-20260812-official-codex-freeze-v1",
   "event_store_pointer": "owner-local://official-codex/a2-prep-20260812-official-codex-freeze-v1/events.jsonl",
   "freeze_lock_path": "control/armindex/a2/candidate-freeze.lock.v1.json",
@@ -19,9 +19,9 @@
     },
     "representation_propose": {
       "prompt_template": "prompts/armindex/official-codex/representation-propose.v1.md",
-      "prompt_template_sha256": "c9a732fbc3ccc6dc0dd8149c6186e86ce5010b079cc80000b0afaa528d58a1f1",
+      "prompt_template_sha256": "d59d8d48a31661603a6c37869e3113ca6531f859f471821297527cc56b9d1561",
       "request_schema": "schemas/armindex/official-codex/representation-propose.request.v1.json",
-      "request_schema_sha256": "3b3f2672dac72bc33833a87b5c4a391cea5e20ab92f8cb2f7e9714a9ddb8c811",
+      "request_schema_sha256": "e6ba27af3cb9bf5f42100baded3a0d4b2d2023aedf17f35359a16a4f44032f30",
       "response_schema": "schemas/armindex/official-codex/representation-propose.response.v1.json",
       "response_schema_sha256": "95523cd1b8e3eb052b5d468427bc2e711b3238dcb2d730903079aac6877bd6bc"
     },
@@ -29,7 +29,7 @@
       "prompt_template": "prompts/armindex/official-codex/representation-review.v1.md",
       "prompt_template_sha256": "45659c0cd49cd9260fa4b04d86821cf8709cc0b610fc6942f02683230e17946f",
       "request_schema": "schemas/armindex/official-codex/representation-review.request.v1.json",
-      "request_schema_sha256": "2b9706bcf983fcbf1a1daab6b6ff4d45f733a43c7593433971e302cc6722db54",
+      "request_schema_sha256": "bcc41ed2028a0ca3f2fe6f16c50b374d37064b11ab2f69a904b07c59c2f57e5f",
       "response_schema": "schemas/armindex/official-codex/representation-review.response.v1.json",
       "response_schema_sha256": "7be7acf92bd48ade27b17daa387c640cd96d84aac0c846a1e370ed7d51be4153"
     }
