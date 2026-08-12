@@ -124,6 +124,17 @@ records:
     supporting_authority: [control/armindex/a1.2/execution-contract.live-preflight.v6.json, control/armindex/a1.2/execution-contract.live-preflight-repair.v7.json, control/armindex/a1.2/execution-contract.live-preflight-packaging-repair.v8.json, control/armindex/a1.2/execution-contract.live-preflight-execution-lifecycle.v9.json, campaigns/armindex-multiretriever-v2/evidence/a1.2-live-synthetic-preflight-result.receipt.v9.json]
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [owner_policy_only, additive_to_v1_v6, default_destroy_remains, continuation_requires_complete_live_preflight_and_separate_next_goal_authorization, launch_locked, adopted_for_execution_false, measured_counters_zero, selection_closed, final_closed, no_protected_data]
+  - id: armindex_a2_official_bridge_and_candidate_freeze_v1
+    authority: campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json
+    supporting_authority: [campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json, control/armindex/a2/candidate-freeze.lock.v1.json, campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-bridge-smoke.receipt.v2.json, campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-credit-preflight.receipt.v1.json, campaigns/armindex-multiretriever-v2/evidence/a2-official-credit-closeout-correction.receipt.v1.json, outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json, campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json, control/armindex/a2/official-codex-bridge.v1.json, control/armindex/a2/execution-contract.v1.json, control/execution-envelope-a2-v1.yaml, control/budgets/a2-per-arm-autoindex-v1.json]
+    projections: [projections/read-model, projections/reports, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [engineering_premeasurement_freeze_only, exactly_40_matched_and_12_dormant_reserve, official_model_gpt_5_6_sol, independent_auditor_passed_2026_08_12, frozen_bytes_immutable, no_candidate_evaluation, no_rep_dev_measurement, no_gpu, no_provider_admission, no_execution_adoption, measured_a2_counters_zero, harness_dev_selection_final_closed, no_protected_data]
+  - id: armindex_publication_workspace
+    authority: ../03_Paper/01_ArmIndex
+    canonical_source: control/source-of-truth.yaml
+    supporting_authority: [outputs/publication/armindex/a2-candidate-freeze/provenance/artifact-index.v2.json, outputs/publication/armindex/a2-candidate-freeze/provenance/artifact-provenance-graph.v1.json]
+    projections: [paper]
+    restrictions: [owner_authorized_projection_target_2026_08_12, canonical_indexes_remain_tracked_in_research, publication_workspace_not_scientific_authority, numbers_resolve_to_research_receipts, aggregate_safe_only, no_raw_official_payloads, no_credit_snapshot_payloads, no_protected_data]
   - id: phase_task_reporting_contract
     authority: [docs/observatory/REPORTING_POLICY.md, schemas/phase-task-report.v1.json]
     projections: [projections/reports, obsidian]

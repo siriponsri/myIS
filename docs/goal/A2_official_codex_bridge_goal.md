@@ -1,16 +1,26 @@
 ---
 title: "A2 preparation goal: Official Codex Bridge and five-arm candidate freeze"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: READY
-lifecycle: ACTIVE
-evidence_class: planning_handoff_only
+status: CLOSED_PASS
+lifecycle: COMPLETE
+evidence_class: engineering_validation
 scientific_authority: false
 claim_boundary: "Engineering preparation and immutable representation-candidate freeze only; no candidate evaluation or measured A2"
 last_material_update: 2026-08-12
-next_authorized_action: IMPLEMENT_OFFICIAL_CODEX_BRIDGE_AND_FREEZE_FIVE_ARM_CANDIDATES
+next_authorized_action: OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT
 ---
 
 # A2 preparation: Official Codex Bridge and five-arm candidate freeze
+
+> **Closeout 2026-08-12:** `CLOSED_PASS`. Official bridge identity is
+> `gpt-5.6-sol` / `high` / SDK+CLI `0.144.4`; the immutable universe is
+> `40 matched + 12 dormant reserve`. Independent audit
+> `141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0`
+> passed with zero findings. Final Official credit is Plus, `13%` used,
+> `87%` remaining, reset `2026-08-18T00:45:40Z`, limit not reached. Measured A2,
+> REP-DEV measurement, GPU, provider admission/adoption, HARNESS-DEV, Selection,
+> and Final remain unopened. The publication projection target is
+> `../03_Paper/01_ArmIndex`; canonical artifact indexes remain in Research.
 
 Owner launch command:
 

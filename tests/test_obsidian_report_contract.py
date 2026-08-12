@@ -7,12 +7,14 @@ from pathlib import Path
 
 import pytest
 import yaml
+from jsonschema import Draft202012Validator
 
 from myis_research.projections.read_model import build_read_model, canonical_json, sha256
 from myis_research.report_records import build_report_records
 from myis_research.report_cli import (
     VAULT_RELATIVE_PATH,
     _a010_projection_lifecycle,
+    _armindex_paper_artifact_contents,
     _brain_report_contents,
     _check,
     _compatibility_report_contents,
@@ -222,9 +224,9 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     model = build_read_model(ROOT)
     records = build_report_records(ROOT, model)
 
-    assert len(records) == 39
+    assert len(records) == 40
     assert sum(record["report_type"] == "phase" for record in records) == 12
-    assert sum(record["report_type"] == "task" for record in records) == 27
+    assert sum(record["report_type"] == "task" for record in records) == 28
     assert {record["language"] for record in records} == {"en"}
 
     outputs = projection_report_contents(ROOT, model)
@@ -372,7 +374,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
             or "/02_Tasks/ArmIndex/" in path.as_posix()
         )
     ]
-    assert len(phase_task_paths) == 39
+    assert len(phase_task_paths) == 40
     for path in phase_task_paths:
         content = outputs[path]
         assert re.search(r"[\u0e00-\u0e7f]", content) is None
@@ -494,6 +496,44 @@ def test_brain_and_paper_projections_share_current_v2_read_model_without_protect
     assert source_lock["read_model_revision"] == model["read_model_revision"]
     assert source_lock["read_model_sha256"] == model["read_model_sha256"]
     assert source_lock["claim_boundary"] == "train_selection_only"
+
+
+def test_a2_publication_artifacts_preserve_v1_and_bind_resolvable_v2_uris() -> None:
+    legacy_schema = json.loads((ROOT / "schemas/artifact-index.v1.json").read_text())
+    legacy_index = {
+        "schema_version": "myis.artifact-index.v1",
+        "run_id": "legacy-run",
+        "artifacts": [],
+    }
+    assert list(Draft202012Validator(legacy_schema).iter_errors(legacy_index)) == []
+
+    model = build_read_model(ROOT)
+    outputs = _armindex_paper_artifact_contents(ROOT, model)
+    paper_provenance = (ROOT.parent / "03_Paper/01_ArmIndex/provenance").resolve()
+    canonical_provenance = (
+        ROOT / "outputs/publication/armindex/a2-candidate-freeze/provenance"
+    ).resolve()
+    paper_index_path = paper_provenance / "artifact-index.v2.json"
+    canonical_index_path = canonical_provenance / "artifact-index.v2.json"
+    paper_graph_path = paper_provenance / "artifact-provenance-graph.v1.json"
+    canonical_graph_path = canonical_provenance / "artifact-provenance-graph.v1.json"
+
+    assert outputs[paper_index_path] == outputs[canonical_index_path]
+    assert outputs[paper_graph_path] == outputs[canonical_graph_path]
+    index = json.loads(outputs[paper_index_path])
+    graph = json.loads(outputs[paper_graph_path])
+    index_schema = json.loads((ROOT / "schemas/artifact-index.v2.json").read_text())
+    graph_schema = json.loads(
+        (ROOT / "schemas/artifact-provenance-graph.v1.json").read_text()
+    )
+    assert list(Draft202012Validator(index_schema).iter_errors(index)) == []
+    assert list(Draft202012Validator(graph_schema).iter_errors(graph)) == []
+
+    for artifact in index["artifacts"]:
+        resolved = (paper_provenance / artifact["uri"]).resolve()
+        assert resolved.is_relative_to(ROOT)
+        assert resolved.is_file()
+        assert hashlib.sha256(resolved.read_bytes()).hexdigest() == artifact["sha256"]
 
 
 def test_two_syncs_are_idempotent_and_preserve_owner_files(tmp_path: Path) -> None:

@@ -1,0 +1,114 @@
+{
+  "audit_id": "a2-official-codex-candidate-freeze-independent-audit-20260812",
+  "audit_scope": [
+    "official_identity_and_profile_isolation",
+    "candidate_universe_and_arm_roles",
+    "immutable_freeze_hashes",
+    "official_credit_closeout",
+    "zero_measured_and_protected_work"
+  ],
+  "audit_sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
+  "auditor": "codex-subagent-a2-final-audit",
+  "campaign_id": "armindex-multiretriever-v2",
+  "candidate_universe": {
+    "advancement_eligible_arms": [
+      "ARM-03",
+      "ARM-05",
+      "ARM-04"
+    ],
+    "candidate_count": 52,
+    "diagnostic_non_advancing_arms": [
+      "ARM-01",
+      "ARM-02"
+    ],
+    "dormant_reserve_candidate_count": 12,
+    "matched_candidate_count": 40
+  },
+  "checks": [
+    {
+      "check_id": "official_identity_and_profile_isolation",
+      "detail": "Official and MaxPlus profiles exist and resolve to distinct paths; model, reasoning, SDK, and CLI identity match the frozen bridge.",
+      "status": "PASS"
+    },
+    {
+      "check_id": "candidate_universe_and_arm_roles",
+      "detail": "The immutable manifest contains exactly 40 matched candidates and 12 dormant reserve candidates with diagnostic and advancement roles unchanged.",
+      "status": "PASS"
+    },
+    {
+      "check_id": "immutable_freeze_hash_replay",
+      "detail": "Manifest, freeze receipt, and lock self-hashes replay and current file hashes match their recorded bindings.",
+      "status": "PASS"
+    },
+    {
+      "check_id": "official_credit_closeout",
+      "detail": "The closeout records model, plan, usage, reset time, and a non-limited state without account identifiers or raw payloads.",
+      "status": "PASS"
+    },
+    {
+      "check_id": "zero_measured_and_protected_work",
+      "detail": "A2 measurement, REP-DEV measurement, GPU, provider admission/adoption, HARNESS-DEV, Selection, Final, and protected-data access remain false or zero.",
+      "status": "PASS"
+    },
+    {
+      "check_id": "publication_provenance_resolution",
+      "detail": "All 15 audited Paper provenance URIs resolve to Research files and canonical Research copies are byte-identical to Paper projections.",
+      "status": "PASS"
+    },
+    {
+      "check_id": "focused_validation",
+      "detail": "Freeze replay, bridge preflight, artifact provenance, 37 focused tests, and git diff whitespace validation passed in the independent read-only audit.",
+      "status": "PASS"
+    }
+  ],
+  "credit_closeout": {
+    "limit_reached": false,
+    "model_name": "gpt-5.6-sol",
+    "plan_type": "plus",
+    "remaining_percent": 87,
+    "resets_at_utc": "2026-08-18T00:45:40Z",
+    "snapshot_sha256": "70ac110bb0ad670e94998a61bb80dae374ca35521103846152308ac90a2784ce",
+    "used_percent": 13
+  },
+  "evidence_class": "engineering_validation",
+  "finding_count": 0,
+  "findings": [],
+  "freeze_bindings": {
+    "freeze_receipt_file_sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_file_sha256": "0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952",
+    "manifest_file_sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"
+  },
+  "official_identity": {
+    "cli_version": "0.144.4",
+    "model_name": "gpt-5.6-sol",
+    "profiles_distinct": true,
+    "reasoning_effort": "high",
+    "sdk_version": "0.144.4"
+  },
+  "phase_id": "A2_PER_ARM_AUTOINDEX",
+  "publication_projection": {
+    "audited_artifact_count": 15,
+    "canonical_research_copy_byte_identical": true,
+    "uri_prefix": "../../../01_Research/",
+    "workspace": "../03_Paper/01_ArmIndex"
+  },
+  "recorded_at_utc": "2026-08-12T03:09:30Z",
+  "safety": {
+    "final_accesses": 0,
+    "gpu_work_performed": false,
+    "harness_dev_accesses": 0,
+    "measured_a2_started": false,
+    "protected_data_accessed": false,
+    "provider_admission_performed": false,
+    "provider_execution_adoption_performed": false,
+    "rep_dev_accessed_for_measurement": false,
+    "selection_accesses": 0
+  },
+  "schema_version": "myis.armindex-a2-independent-freeze-audit-receipt.v1",
+  "scientific_authority": false,
+  "status": "PASS",
+  "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+}

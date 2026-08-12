@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:artifact-provenance-graph:v1",
+  "title": "myIS aggregate-safe artifact provenance graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "graph_id", "uri_base", "phase_id", "task_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "model_name", "nodes", "edges", "graph_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.artifact-provenance-graph.v1"},
+    "graph_id": {"type": "string", "minLength": 1},
+    "uri_base": {"const": "03_Paper/01_ArmIndex/provenance"},
+    "phase_id": {"type": "string", "const": "A2_PER_ARM_AUTOINDEX"},
+    "task_id": {"type": "string", "const": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"},
+    "status": {"type": "string", "const": "candidate_freeze_audit_passed_measured_a2_closed"},
+    "evidence_class": {"type": "string", "const": "engineering_validation"},
+    "scientific_authority": {"type": "boolean", "const": false},
+    "claim_boundary": {"type": "string", "minLength": 20},
+    "model_name": {"type": "string", "const": "gpt-5.6-sol"},
+    "nodes": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["node_id", "uri", "sha256", "kind", "classification"],
+        "properties": {
+          "node_id": {"type": "string", "minLength": 1},
+          "uri": {"type": "string", "pattern": "^\\.\\./\\.\\./\\.\\./01_Research/"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "kind": {"type": "string", "enum": ["control", "schema", "receipt", "manifest", "lock", "validation"]},
+          "classification": {"type": "string", "enum": ["aggregate", "metadata", "publication"]}
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "target", "relation"],
+        "properties": {
+          "source": {"type": "string"},
+          "target": {"type": "string"},
+          "relation": {"type": "string", "enum": ["governs", "validates", "binds", "locks", "corrects", "replays"]}
+        }
+      }
+    },
+    "graph_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

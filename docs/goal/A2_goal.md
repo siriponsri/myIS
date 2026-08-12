@@ -1,21 +1,22 @@
 ---
 title: "A2 goal: Per-arm AutoIndex เพื่อเพิ่ม publication impact"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: BLOCKED_PENDING_OFFICIAL_CODEX_FREEZE_AND_AUDITOR_REVIEW
-lifecycle: BLOCKED
+status: READY_FOR_OWNER_LAUNCH_FRESH_PREFLIGHT_REQUIRED
+lifecycle: ACTIVE
 evidence_class: planning_handoff_only
 scientific_authority: false
-claim_boundary: "คู่มือ A2 เท่านั้น; A1 terminal PASS แล้ว แต่ A2 candidate generation และ measured execution ยังไม่เริ่ม"
+claim_boundary: "คู่มือ A2 เท่านั้น; A1 terminal PASS และ A2 candidate freeze/audit PASS แล้ว แต่ candidate evaluation และ measured A2 ยังไม่เริ่ม"
 last_material_update: 2026-08-12
-next_authorized_action: COMPLETE_OFFICIAL_CODEX_FREEZE_THEN_AUDITOR_REVIEW
+next_authorized_action: OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT
 ---
 
 # A2: Per-arm AutoIndex long-run guide
 
-> **Current routing:** ห้าม launch A2 จากไฟล์นี้จนกว่า
-> [`A2_official_codex_bridge_goal.md`](A2_official_codex_bridge_goal.md) จะปิด `CLOSED_PASS`
-> และ auditor จะตรวจ candidate freeze/bridge readiness ผ่าน แล้วเปลี่ยน goal นี้กลับเป็น `ACTIVE`.
-> Preparation session ต้องหยุดก่อน measured A2 และห้าม activate goal นี้เอง
+> **Current routing:** [`A2_official_codex_bridge_goal.md`](A2_official_codex_bridge_goal.md)
+> ปิด `CLOSED_PASS` และ independent audit ผ่านแล้ว Owner จึง launch goal นี้ได้
+> แต่การ launch goal ยังไม่ใช่อำนาจ measured execution: ต้องผ่าน fresh A2 entry preflight,
+> provider admission, execution adoption, isolated remote root, budget/TTL/watchdog และ
+> protected-boundary checks ในขั้นที่ 0 ก่อน candidate evaluation หรือ REP-DEV measurement
 
 เริ่มเมื่อ Owner สั่ง:
 
@@ -35,10 +36,13 @@ semantics
 | A2 entry preflight validator | `COMPLETE` | ต้องรันกับ terminal pointer/read-model จริงหลัง A1 closeout |
 | A1 terminal pointer และ baseline handoff | `COMPLETE` | terminal `PASS`; local source 28 files, remote mirror 29 files และ lineage ผ่าน |
 | A2 provider reuse policy และ isolated-root plan | `COMPLETE` | ต้องทำ fresh A2 admission/adoption; ห้าม reuse A1 receipt |
-| A2 canonical contracts, schemas, candidate runner และ measured execution | `PENDING` | เริ่มตามขั้น 0; ต้องผ่าน entry preflight และ fresh A2 admission/adoption ก่อนวัด |
+| Official Codex bridge และ immutable candidate freeze | `CLOSED_PASS` | `40 matched + 12 dormant reserve`; audit finding `0` |
+| Official credit หลัง audit | `PASS` | `gpt-5.6-sol`, Plus, used `13%`, remaining `87%`, reset `2026-08-18T00:45:40Z`, limit `false` |
+| A2 candidate evaluation และ measured execution | `NOT_STARTED` | เริ่มตามขั้น 0; ต้องผ่าน fresh entry preflight และ fresh A2 admission/adoption ก่อนวัด |
 
-ดังนั้น A2 พร้อมเริ่มใน session ถัดไป แต่ยังไม่มี A2 candidate, measured run,
-HARNESS-DEV, Selection หรือ Final exposure
+ดังนั้นคู่มือ A2 พร้อมให้ Owner launch ใน session ถัดไป Candidate universe ถูก freeze แล้ว
+แต่ยังไม่มี candidate evaluation, measured A2 run, REP-DEV measurement, HARNESS-DEV,
+Selection หรือ Final exposure
 
 ## 1. Publication question
 

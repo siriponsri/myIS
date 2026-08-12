@@ -196,6 +196,7 @@ def projection_report_contents(
     external_outputs = {
         **_brain_report_contents(root, model),
         **_paper_report_contents(root, model),
+        **_armindex_paper_artifact_contents(root, model),
         **_compatibility_report_contents(root, model),
     }
     _validate_external_projection_contents(external_outputs)
@@ -4004,6 +4005,215 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         )
         + body,
         source_lock_path: _json_text(source_lock),
+    }
+
+
+def _artifact_file(root: Path, relative: str, classification: str) -> dict[str, Any]:
+    path = root / relative
+    return {
+        "artifact_id": relative.replace("/", "-").replace(".", "-"),
+        "uri": f"../../../01_Research/{relative}",
+        "sha256": sha256(path.read_bytes()),
+        "bytes": path.stat().st_size,
+        "media_type": "application/json"
+        if path.suffix.lower() == ".json"
+        else "application/yaml"
+        if path.suffix.lower() in {".yaml", ".yml"}
+        else "text/markdown"
+        if path.suffix.lower() == ".md"
+        else "text/plain",
+        "classification": classification,
+    }
+
+
+def _armindex_paper_artifact_contents(
+    root: Path, model: Mapping[str, Any]
+) -> dict[Path, str]:
+    freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
+    if not isinstance(freeze, Mapping) or freeze.get("validated") is not True:
+        return {}
+    paper_root = (root.parent / "03_Paper/01_ArmIndex").resolve()
+    provenance_root = paper_root / "provenance"
+    canonical_root = root / "outputs/publication/armindex/a2-candidate-freeze"
+    canonical_provenance_root = canonical_root / "provenance"
+    artifact_specs = (
+            ("control/source-of-truth.yaml", "metadata"),
+            ("schemas/artifact-index.v2.json", "metadata"),
+            ("schemas/artifact-provenance-graph.v1.json", "metadata"),
+            (
+                "schemas/armindex/"
+                "a2-candidate-freeze-replay-validation.v1.json",
+                "metadata",
+            ),
+            (
+                "schemas/armindex/a2-independent-freeze-audit-receipt.v1.json",
+                "metadata",
+            ),
+            (
+                "schemas/armindex/"
+                "a2-official-codex-final-credit-check-receipt.v1.json",
+                "metadata",
+            ),
+            ("control/armindex/a2/official-codex-bridge.v1.json", "metadata"),
+            ("control/armindex/a2/execution-contract.v1.json", "metadata"),
+            ("control/execution-envelope-a2-v1.yaml", "metadata"),
+            ("control/budgets/a2-per-arm-autoindex-v1.json", "metadata"),
+            (
+                "campaigns/armindex-multiretriever-v2/evidence/"
+                "a2-official-codex-bridge-smoke.receipt.v2.json",
+                "aggregate",
+            ),
+            (
+                "campaigns/armindex-multiretriever-v2/evidence/"
+                "a2-official-codex-credit-preflight.receipt.v1.json",
+                "aggregate",
+            ),
+            (
+                "campaigns/armindex-multiretriever-v2/manifests/"
+                "a2-five-arm-candidate-manifest.v1.json",
+                "aggregate",
+            ),
+            (
+                "campaigns/armindex-multiretriever-v2/evidence/"
+                "a2-five-arm-candidate-freeze.receipt.v1.json",
+                "aggregate",
+            ),
+            ("control/armindex/a2/candidate-freeze.lock.v1.json", "aggregate"),
+            (
+                "campaigns/armindex-multiretriever-v2/evidence/"
+                "a2-official-credit-closeout-correction.receipt.v1.json",
+                "aggregate",
+            ),
+            (
+                "outputs/audits/rigor/"
+                "a2-official-codex-candidate-freeze-independent-audit-20260812.json",
+                "aggregate",
+            ),
+            (
+                "campaigns/armindex-multiretriever-v2/evidence/"
+                "a2-official-codex-final-credit-check.receipt.v1.json",
+                "aggregate",
+            ),
+        )
+    artifacts = [
+        _artifact_file(root, relative, classification)
+        for relative, classification in artifact_specs
+    ]
+    replay_path = root / (
+        "outputs/audits/armindex/"
+        "a2-five-arm-candidate-freeze-replay-validation.v1.json"
+    )
+    if replay_path.is_file():
+        artifacts.append(
+            _artifact_file(
+                root,
+                "outputs/audits/armindex/"
+                "a2-five-arm-candidate-freeze-replay-validation.v1.json",
+                "aggregate",
+            )
+        )
+    index = {
+        "schema_version": "myis.artifact-index.v2",
+        "run_id": str(freeze["generation_attempt_id"]),
+        "uri_base": "03_Paper/01_ArmIndex/provenance",
+        "context": {
+            "phase_id": "A2_PER_ARM_AUTOINDEX",
+            "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+            "status": "candidate_freeze_audit_passed_measured_a2_closed",
+            "evidence_class": "engineering_validation",
+            "scientific_authority": False,
+            "claim_boundary": str(freeze["claim_boundary"]),
+            "model_name": str(freeze["official_identity"]["model_name"]),
+            "source_receipt_sha256": str(freeze["freeze_receipt_sha256"]),
+        },
+        "artifacts": artifacts,
+    }
+    index["index_sha256"] = sha256(canonical_json(index))
+    node_by_uri = {
+        str(item["uri"]): {
+            "node_id": str(item["artifact_id"]),
+            "uri": str(item["uri"]),
+            "sha256": str(item["sha256"]),
+            "kind": "receipt"
+            if "receipt" in str(item["uri"])
+            else "manifest"
+            if "/manifests/" in str(item["uri"])
+            else "lock"
+            if "freeze.lock" in str(item["uri"])
+            else "validation"
+            if "replay-validation" in str(item["uri"])
+            else "schema"
+            if "/schemas/" in str(item["uri"])
+            else "control",
+            "classification": "publication"
+            if item["classification"] == "publication"
+            else str(item["classification"]),
+        }
+        for item in artifacts
+    }
+    def node_id(fragment: str) -> str:
+        return next(
+            node["node_id"]
+            for uri, node in node_by_uri.items()
+            if fragment in uri
+        )
+
+    graph = {
+        "schema_version": "myis.artifact-provenance-graph.v1",
+        "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
+        "uri_base": "03_Paper/01_ArmIndex/provenance",
+        "phase_id": "A2_PER_ARM_AUTOINDEX",
+        "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+        "status": "candidate_freeze_audit_passed_measured_a2_closed",
+        "evidence_class": "engineering_validation",
+        "scientific_authority": False,
+        "claim_boundary": str(freeze["claim_boundary"]),
+        "model_name": str(freeze["official_identity"]["model_name"]),
+        "nodes": sorted(node_by_uri.values(), key=lambda item: item["node_id"]),
+        "edges": [
+            {"source": node_id("source-of-truth"), "target": node_id("execution-contract"), "relation": "governs"},
+            {"source": node_id("official-codex-bridge.v1"), "target": node_id("bridge-smoke"), "relation": "validates"},
+            {"source": node_id("credit-preflight"), "target": node_id("candidate-manifest"), "relation": "binds"},
+            {"source": node_id("candidate-manifest"), "target": node_id("candidate-freeze.receipt"), "relation": "binds"},
+            {"source": node_id("candidate-freeze.receipt"), "target": node_id("candidate-freeze.lock"), "relation": "locks"},
+            {"source": node_id("credit-closeout-correction"), "target": node_id("candidate-freeze.receipt"), "relation": "corrects"},
+        ]
+        + (
+            [
+                {"source": node_id("replay-validation"), "target": node_id("candidate-freeze.receipt"), "relation": "replays"}
+            ]
+            if replay_path.is_file()
+            else []
+        ),
+    }
+    graph["graph_sha256"] = sha256(canonical_json(graph))
+    credit = freeze["official_credit"]
+    summary = (
+        "# ArmIndex A2 Candidate-Freeze Publication Artifacts\n\n"
+        "This directory is an aggregate-safe publication projection. Canonical "
+        "authority remains in `01_Research`.\n\n"
+        "- Phase: `A2_PER_ARM_AUTOINDEX`\n"
+        "- Task: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE`\n"
+        f"- Model: `{freeze['official_identity']['model_name']}`\n"
+        f"- Candidate universe: `{freeze['matched_candidate_count']} matched + "
+        f"{freeze['conditional_reserve_candidate_count']} dormant reserve`\n"
+        f"- Plan: `{credit['plan_type']}`\n"
+        f"- Credit remaining: `{credit['remaining_percent']}%`\n"
+        f"- Reset time: `{credit['resets_at_utc']}`\n"
+        f"- Limit reached: `{str(credit['limit_reached']).lower()}`\n"
+        "- Measured A2: `not started`\n"
+        f"- Independent audit: `{freeze.get('independent_audit_status', 'pending')}`\n"
+        "- Next action: fresh A2-goal preflight; measured A2 remains closed\n\n"
+        "Raw Official prompts, responses, events, and credit snapshots remain "
+        "Owner-local and are not copied here.\n"
+    )
+    return {
+        canonical_provenance_root / "artifact-index.v2.json": _json_text(index),
+        canonical_provenance_root
+        / "artifact-provenance-graph.v1.json": _json_text(graph),
+        provenance_root / "artifact-index.v2.json": _json_text(index),
+        provenance_root / "artifact-provenance-graph.v1.json": _json_text(graph),
+        paper_root / "A2_CANDIDATE_FREEZE_ARTIFACTS.md": summary,
     }
 
 

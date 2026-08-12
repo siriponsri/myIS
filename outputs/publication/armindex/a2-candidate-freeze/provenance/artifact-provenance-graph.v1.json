@@ -1,0 +1,185 @@
+{
+  "claim_boundary": "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim",
+  "edges": [
+    {
+      "relation": "governs",
+      "source": "control-source-of-truth-yaml",
+      "target": "control-armindex-a2-execution-contract-v1-json"
+    },
+    {
+      "relation": "validates",
+      "source": "control-armindex-a2-official-codex-bridge-v1-json",
+      "target": "campaigns-armindex-multiretriever-v2-evidence-a2-official-codex-bridge-smoke-receipt-v2-json"
+    },
+    {
+      "relation": "binds",
+      "source": "campaigns-armindex-multiretriever-v2-evidence-a2-official-codex-credit-preflight-receipt-v1-json",
+      "target": "campaigns-armindex-multiretriever-v2-manifests-a2-five-arm-candidate-manifest-v1-json"
+    },
+    {
+      "relation": "binds",
+      "source": "campaigns-armindex-multiretriever-v2-manifests-a2-five-arm-candidate-manifest-v1-json",
+      "target": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json"
+    },
+    {
+      "relation": "locks",
+      "source": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json",
+      "target": "control-armindex-a2-candidate-freeze-lock-v1-json"
+    },
+    {
+      "relation": "corrects",
+      "source": "campaigns-armindex-multiretriever-v2-evidence-a2-official-credit-closeout-correction-receipt-v1-json",
+      "target": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json"
+    },
+    {
+      "relation": "replays",
+      "source": "schemas-armindex-a2-candidate-freeze-replay-validation-v1-json",
+      "target": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json"
+    }
+  ],
+  "evidence_class": "engineering_validation",
+  "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
+  "graph_sha256": "0c7cac6c9e64ebea601d9dbd0cbc302baff119b904a12be5a2bdbbeda3248185",
+  "model_name": "gpt-5.6-sol",
+  "nodes": [
+    {
+      "classification": "aggregate",
+      "kind": "receipt",
+      "node_id": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json",
+      "sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
+      "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "receipt",
+      "node_id": "campaigns-armindex-multiretriever-v2-evidence-a2-official-codex-bridge-smoke-receipt-v2-json",
+      "sha256": "895823874d1f742f448035c4dd00c18733cd58bda185add722e3e57ba6fe7edc",
+      "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-bridge-smoke.receipt.v2.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "receipt",
+      "node_id": "campaigns-armindex-multiretriever-v2-evidence-a2-official-codex-credit-preflight-receipt-v1-json",
+      "sha256": "ef2f6979b7ae1fea502be1f06df6cbb0d0480533f4b3a4e7d02a474b8f7b0616",
+      "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-credit-preflight.receipt.v1.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "receipt",
+      "node_id": "campaigns-armindex-multiretriever-v2-evidence-a2-official-codex-final-credit-check-receipt-v1-json",
+      "sha256": "9bc6d88e0ba0fbdd27ebdaad22977cd71279d9d4ae00669b8d3f3cf0035445a7",
+      "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "receipt",
+      "node_id": "campaigns-armindex-multiretriever-v2-evidence-a2-official-credit-closeout-correction-receipt-v1-json",
+      "sha256": "5c663417bf8483b3a1ed9373fd8bd241b7a162074c148c7fee711dd670840081",
+      "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/evidence/a2-official-credit-closeout-correction.receipt.v1.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "manifest",
+      "node_id": "campaigns-armindex-multiretriever-v2-manifests-a2-five-arm-candidate-manifest-v1-json",
+      "sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
+      "uri": "../../../01_Research/campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "lock",
+      "node_id": "control-armindex-a2-candidate-freeze-lock-v1-json",
+      "sha256": "0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc",
+      "uri": "../../../01_Research/control/armindex/a2/candidate-freeze.lock.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-armindex-a2-execution-contract-v1-json",
+      "sha256": "c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f",
+      "uri": "../../../01_Research/control/armindex/a2/execution-contract.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-armindex-a2-official-codex-bridge-v1-json",
+      "sha256": "f5fdd0479c8cfd472839f53a56355e810763251d45f777ef19ec7da2dbb578d9",
+      "uri": "../../../01_Research/control/armindex/a2/official-codex-bridge.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-budgets-a2-per-arm-autoindex-v1-json",
+      "sha256": "7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166",
+      "uri": "../../../01_Research/control/budgets/a2-per-arm-autoindex-v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-execution-envelope-a2-v1-yaml",
+      "sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+      "uri": "../../../01_Research/control/execution-envelope-a2-v1.yaml"
+    },
+    {
+      "classification": "metadata",
+      "kind": "control",
+      "node_id": "control-source-of-truth-yaml",
+      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
+      "uri": "../../../01_Research/control/source-of-truth.yaml"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "validation",
+      "node_id": "outputs-audits-armindex-a2-five-arm-candidate-freeze-replay-validation-v1-json",
+      "sha256": "0c605e63f450a8633a98cd0428d87226ed3ba2dae84144262f751ae759d71857",
+      "uri": "../../../01_Research/outputs/audits/armindex/a2-five-arm-candidate-freeze-replay-validation.v1.json"
+    },
+    {
+      "classification": "aggregate",
+      "kind": "control",
+      "node_id": "outputs-audits-rigor-a2-official-codex-candidate-freeze-independent-audit-20260812-json",
+      "sha256": "64458c0705aa257b3a6a5e088360c3e3ee965d2275d4a927a85264600c1a43da",
+      "uri": "../../../01_Research/outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "validation",
+      "node_id": "schemas-armindex-a2-candidate-freeze-replay-validation-v1-json",
+      "sha256": "9aefc88d4f0e2d6c946abf64936d995841ad3570f481ef4f2da81f0a6b0d75ee",
+      "uri": "../../../01_Research/schemas/armindex/a2-candidate-freeze-replay-validation.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "receipt",
+      "node_id": "schemas-armindex-a2-independent-freeze-audit-receipt-v1-json",
+      "sha256": "7dedb36ef4af3bb866187aabe7706913933a8bf318fafd030e4a757bd6fc08e3",
+      "uri": "../../../01_Research/schemas/armindex/a2-independent-freeze-audit-receipt.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "receipt",
+      "node_id": "schemas-armindex-a2-official-codex-final-credit-check-receipt-v1-json",
+      "sha256": "9f0a258f9c2b039b8fcdbd36e7dfc96ed2129a15d712f4f7e0fee18451de9ec7",
+      "uri": "../../../01_Research/schemas/armindex/a2-official-codex-final-credit-check-receipt.v1.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "schema",
+      "node_id": "schemas-artifact-index-v2-json",
+      "sha256": "78f18d134650b2d2d07e69ec6ef4457ba18d0d6decdda1fc6e7ffff2db386803",
+      "uri": "../../../01_Research/schemas/artifact-index.v2.json"
+    },
+    {
+      "classification": "metadata",
+      "kind": "schema",
+      "node_id": "schemas-artifact-provenance-graph-v1-json",
+      "sha256": "a0a3efe0f045764358203545637ef7eb5d18529912a0f5f74613269b4b96015e",
+      "uri": "../../../01_Research/schemas/artifact-provenance-graph.v1.json"
+    }
+  ],
+  "phase_id": "A2_PER_ARM_AUTOINDEX",
+  "schema_version": "myis.artifact-provenance-graph.v1",
+  "scientific_authority": false,
+  "status": "candidate_freeze_audit_passed_measured_a2_closed",
+  "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+  "uri_base": "03_Paper/01_ArmIndex/provenance"
+}

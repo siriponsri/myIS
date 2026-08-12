@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470"
-read_model_sha256: "51d653e98da327d370353c1a54d783783a9291c20a6420f9c82f94528cb2d700"
-source_commit: "68308c26f69d97b1cfc9f190a53269afb03201cb"
+read_model_revision: "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43"
+read_model_sha256: "54dbf7e31279dfb480883ece6cd3d187dbb1dc1bf273ec5f5b55c8cb91dd5332"
+source_commit: "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470"
-last_material_update: "2026-08-11T18:35:49Z"
-next_authorized_action: "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
+generated_from_revision: "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43"
+last_material_update: "2026-08-12T02:15:10Z"
+next_authorized_action: "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-11T18:35:49Z"
-updated_at: "2026-08-11T18:35:49Z"
+created_at: "2026-08-12T02:15:10Z"
+updated_at: "2026-08-12T02:15:10Z"
 note_id: "P2_SCOPE_DEVELOPMENT-MASTER"
 note_type: "phase_report"
 phase_id: "P2_SCOPE_DEVELOPMENT"
@@ -46,9 +46,9 @@ Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without star
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 68308c26f69d97b1cfc9f190a53269afb03201cb
+- `git_commit`: aa826e8ee4dc986d0571cfd3a22ce2d646082ff9
 - `budget_profile`: `control/budgets/p2-r1-primary-v2.yaml`; SHA-256 `9d9f51d24c825162f5ee299c91339de1ca6cbfad03cc5e77904006565567f324`
 - `execution_envelope`: `control/execution-envelope-p2-v2.yaml`; SHA-256 `dcbe3afd1b724f8a99a112f4d9c81a6d8c5abfdfa4278586f103602bd41acc9d`
 - `campaign_revision_record`: `control/campaigns/scope-autoindex-p2-r1-primary-v2.yaml`; SHA-256 `5850288a9273b4fdcfbd3f4ce2863317df14bfac679843d7c9982553a6d36822`
@@ -165,7 +165,7 @@ Status: **not_started**. The minimum preflight enablement is validated as engine
 
 ## Next Action
 
-A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2
+OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

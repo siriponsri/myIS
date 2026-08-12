@@ -12,7 +12,6 @@ from myis_research.armindex.constants import (
     A0_9_NEXT_AUTHORIZED_ACTION,
     A1_1_NEXT_AUTHORIZED_ACTION,
     A1_2_NEXT_AUTHORIZED_ACTION,
-    A1_LONG_RUN_NEXT_AUTHORIZED_ACTION,
 )
 from myis_research.kernel.canonical import canonical_sha256
 from myis_research.kernel.manifest import build_manifest
@@ -63,6 +62,11 @@ def test_a1_terminal_pass_unlocks_a2_planning(monkeypatch: pytest.MonkeyPatch) -
             "status": "PASS",
             "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
         },
+    )
+    monkeypatch.setattr(
+        read_model_module,
+        "_a2_candidate_freeze_projection",
+        lambda _root: {"status": "not_started", "validated": False},
     )
 
     model = build_read_model(ROOT)
@@ -257,27 +261,11 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     assert projection["next_authorized_action"] == A1_1_NEXT_AUTHORIZED_ACTION
 
     model = build_read_model(ROOT)
-    assert model["armindex"]["current_phase"] == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
-    current_attempt = model["armindex"]["a1_2_current_attempt"]
-    if current_attempt["validated"] is True:
-        assert model["armindex"]["next_command"] == current_attempt[
-            "next_authorized_action"
-        ]
-    elif (
-        model["armindex"]["local_adoption_input_status"]
-        == "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER"
-    ):
-        assert model["armindex"]["next_command"] == A1_LONG_RUN_NEXT_AUTHORIZED_ACTION
-    else:
-        assert model["armindex"]["next_command"] == model["armindex"][
-            "a1_2_dense_overflow"
-        ]["next_authorized_action"]
-    assert model["armindex"]["local_adoption_input_status"] in {
-        "PASS_PROTECTED_COMPILER_INTEGRATION_LOCAL_ONLY",
-        "LOCAL_ADOPTION_INPUTS_VALIDATED_PENDING_LIVE_PROVIDER",
-        "REQUIRES_FRESH_A1_ADMISSION_AND_COMPLETE_RETRY",
-        "A1_COMPLETE_25_OF_25",
-    }
+    assert model["armindex"]["phase_closeout"] == projection
+    assert model["armindex"]["current_phase"] == "A2_PER_ARM_AUTOINDEX"
+    assert model["armindex"]["a2_candidate_freeze"]["status"] == (
+        "complete_audit_passed_measured_a2_closed"
+    )
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:

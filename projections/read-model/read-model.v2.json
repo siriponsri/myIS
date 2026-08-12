@@ -3998,6 +3998,93 @@
       "status": "SPLIT_PASS_P02_BLOCKED",
       "validated": true
     },
+    "a2_candidate_freeze": {
+      "candidate_count": 52,
+      "claim_boundary": "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim",
+      "conditional_reserve_candidate_count": 12,
+      "control_bindings": [
+        {
+          "sha256": "f5fdd0479c8cfd472839f53a56355e810763251d45f777ef19ec7da2dbb578d9",
+          "uri": "control/armindex/a2/official-codex-bridge.v1.json"
+        },
+        {
+          "sha256": "c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f",
+          "uri": "control/armindex/a2/execution-contract.v1.json"
+        },
+        {
+          "sha256": "577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a",
+          "uri": "control/execution-envelope-a2-v1.yaml"
+        },
+        {
+          "sha256": "7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166",
+          "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
+        }
+      ],
+      "credit_check_count": 18,
+      "credit_correction_receipt_file_sha256": "5c663417bf8483b3a1ed9373fd8bd241b7a162074c148c7fee711dd670840081",
+      "credit_correction_receipt_sha256": "826fd41ee847b100d189ec07135463ed2985be372754ec716a2bbeeb1c5e65cf",
+      "credit_correction_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-credit-closeout-correction.receipt.v1.json",
+      "credit_preflight_receipt_file_sha256": "ef2f6979b7ae1fea502be1f06df6cbb0d0480533f4b3a4e7d02a474b8f7b0616",
+      "credit_preflight_receipt_sha256": "4cb2358098353e03cc8594cab08ec8abda25150968816988107620b57dc324a8",
+      "credit_preflight_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-credit-preflight.receipt.v1.json",
+      "credit_snapshot_set_sha256": "27272959ce935289be54d37aaed8bbca3f34860d55b5917d68e6920379a79ac5",
+      "evidence_class": "engineering_validation",
+      "final_accesses": 0,
+      "final_credit_receipt_file_sha256": "9bc6d88e0ba0fbdd27ebdaad22977cd71279d9d4ae00669b8d3f3cf0035445a7",
+      "final_credit_receipt_sha256": "887b7912cfc293e4ecc5086f379d3362579cd2916140d59d457aac85696b51d2",
+      "final_credit_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json",
+      "freeze_receipt_file_sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
+      "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+      "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+      "generation_attempt_id": "a2freeze-20260812t014444z",
+      "gpu_work_performed": false,
+      "harness_dev_accesses": 0,
+      "independent_audit_receipt_file_sha256": "64458c0705aa257b3a6a5e088360c3e3ee965d2275d4a927a85264600c1a43da",
+      "independent_audit_receipt_sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
+      "independent_audit_receipt_uri": "outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json",
+      "independent_audit_status": "PASS",
+      "lock_file_sha256": "0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc",
+      "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952",
+      "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json",
+      "manifest_file_sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
+      "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+      "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+      "matched_candidate_count": 40,
+      "measured_a2_started": false,
+      "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
+      "official_credit": {
+        "limit_reached": false,
+        "model_name": "gpt-5.6-sol",
+        "plan_type": "plus",
+        "rate_limit_reached_type": null,
+        "remaining_percent": 87,
+        "reset_credit_available_count": 1,
+        "reset_credit_consumed": false,
+        "resets_at_utc": "2026-08-18T00:45:40Z",
+        "snapshot_sha256": "6d9c634dfd82c4d1017994611ac5461dd34752534a816de895677ca363460a7f",
+        "used_percent": 13
+      },
+      "official_identity": {
+        "cli_version": "0.144.4",
+        "model_name": "gpt-5.6-sol",
+        "provider": "openai",
+        "reasoning_effort": "high",
+        "sdk_version": "0.144.4"
+      },
+      "phase_id": "A2_PER_ARM_AUTOINDEX",
+      "protected_data_accessed": false,
+      "provider_admission_performed": false,
+      "provider_execution_adoption_performed": false,
+      "rep_dev_accessed_for_measurement": false,
+      "scientific_authority": false,
+      "selection_accesses": 0,
+      "smoke_receipt_file_sha256": "895823874d1f742f448035c4dd00c18733cd58bda185add722e3e57ba6fe7edc",
+      "smoke_receipt_sha256": "f9ebb880acbd49261915dd7a034f02228d895a95354f4b0895a928f92462ee25",
+      "smoke_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-bridge-smoke.receipt.v2.json",
+      "status": "complete_audit_passed_measured_a2_closed",
+      "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+      "validated": true
+    },
     "adapter_fixture_validation": {
       "arm01_backend": {
         "arm_id": "ARM-01",
@@ -4422,7 +4509,7 @@
       "measured_runs": 1,
       "selection_accesses": 0
     },
-    "current_phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "current_phase": "A2_PER_ARM_AUTOINDEX",
     "gates": [
       {
         "gate_id": "D2_OPEN_FINAL",
@@ -4485,7 +4572,7 @@
       "validated": true
     },
     "local_adoption_input_status": "A1_COMPLETE_25_OF_25",
-    "next_command": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
+    "next_command": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -4586,12 +4673,17 @@
       {
         "phase_id": "A2_PER_ARM_AUTOINDEX",
         "purpose": "Search and freeze one representation program per promoted arm.",
-        "status": "planned",
+        "status": "blocked",
         "tasks": [
           {
-            "status": "planned",
+            "status": "blocked",
             "task_id": "A2.1",
             "title": "Per-arm AutoIndex"
+          },
+          {
+            "status": "complete",
+            "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+            "title": "Official Codex bridge and five-arm candidate freeze"
           }
         ]
       },
@@ -4665,7 +4757,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a1_2_terminal_pass_25_of_25_closeout_recorded",
+    "status": "a2_candidate_freeze_audit_passed_measured_a2_closed",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -4697,7 +4789,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a1_2_terminal_pass_25_of_25_closeout_recorded",
+      "status": "a2_candidate_freeze_audit_passed_measured_a2_closed",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -4856,7 +4948,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-11T18:35:49Z",
+  "generated_at": "2026-08-12T02:15:10Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -5751,7 +5843,7 @@
   "project": {
     "active_campaign_id": "armindex-multiretriever-v2",
     "active_direction": "ArmIndex",
-    "active_phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "active_phase": "A2_PER_ARM_AUTOINDEX",
     "campaign_id": "scope-autoindex-v1",
     "current_phase": "P2_SCOPE_DEVELOPMENT",
     "current_task": "P2.1",
@@ -5764,7 +5856,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
+  "projection_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5808,8 +5900,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
-  "read_model_sha256": "51d653e98da327d370353c1a54d783783a9291c20a6420f9c82f94528cb2d700",
+  "read_model_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
+  "read_model_sha256": "54dbf7e31279dfb480883ece6cd3d187dbb1dc1bf273ec5f5b55c8cb91dd5332",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -5942,7 +6034,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
+  "source_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
   "tasks": [
     {
       "evidence_ids": [],

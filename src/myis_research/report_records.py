@@ -179,6 +179,93 @@ def _artifacts(
     task_id: str | None = None,
 ) -> list[dict[str, Any]]:
     result: list[dict[str, Any]] = []
+    if phase_id == "A2_PER_ARM_AUTOINDEX":
+        freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
+        if not isinstance(freeze, Mapping) or freeze.get("validated") is not True:
+            return result
+        for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
+            (
+                "a2-five-arm-candidate-manifest-v1",
+                "A2 immutable five-arm candidate manifest",
+                "manifest",
+                "manifest_uri",
+                "manifest_file_sha256",
+                "Binds exactly 40 matched and 12 dormant reserve candidates before measurement.",
+            ),
+            (
+                "a2-five-arm-candidate-freeze-receipt-v1",
+                "A2 candidate-freeze receipt",
+                "receipt",
+                "freeze_receipt_uri",
+                "freeze_receipt_file_sha256",
+                "Records the validated immutable freeze, Official identity, and zero measured A2 work.",
+            ),
+            (
+                "a2-five-arm-candidate-freeze-lock-v1",
+                "A2 candidate-freeze lock",
+                "lock",
+                "lock_uri",
+                "lock_file_sha256",
+                "Rejects proposer and reviewer mutation after the premeasurement freeze.",
+            ),
+            (
+                "a2-official-codex-smoke-receipt-v2",
+                "Official Codex bridge smoke receipt",
+                "receipt",
+                "smoke_receipt_uri",
+                "smoke_receipt_file_sha256",
+                "Binds the accepted synthetic smoke to the observed Official model and runtime identity.",
+            ),
+            (
+                "a2-official-credit-preflight-receipt-v1",
+                "Official Codex credit preflight receipt",
+                "receipt",
+                "credit_preflight_receipt_uri",
+                "credit_preflight_receipt_file_sha256",
+                "Records the pre-generation model, plan, availability, reset time, and non-limited state by safe aggregate.",
+            ),
+            (
+                "a2-official-credit-closeout-correction-v1",
+                "Official Codex credit closeout correction",
+                "receipt",
+                "credit_correction_receipt_uri",
+                "credit_correction_receipt_file_sha256",
+                "Additively identifies the chronological reviewer-final and post-freeze credit snapshots without changing frozen bytes.",
+            ),
+            (
+                "a2-independent-freeze-audit-v1",
+                "Independent A2 candidate-freeze audit",
+                "audit",
+                "independent_audit_receipt_uri",
+                "independent_audit_receipt_file_sha256",
+                "Records the independent identity, 40+12 universe, freeze-hash, credit, and zero-measured-work audit.",
+            ),
+            (
+                "a2-official-final-credit-check-v1",
+                "Official Codex post-audit final credit check",
+                "receipt",
+                "final_credit_receipt_uri",
+                "final_credit_receipt_file_sha256",
+                "Records the final model, plan, usage, reset time, and non-limited state after the independent audit.",
+            ),
+        ):
+            if not freeze.get(uri_key) or not freeze.get(sha_key):
+                continue
+            result.append(
+                _artifact(
+                    artifact_id=artifact_id,
+                    title=title,
+                    artifact_type=artifact_type,
+                    evidence_class="engineering_validation",
+                    scientific_authority=False,
+                    safe_uri=str(freeze[uri_key]),
+                    content_sha256=str(freeze[sha_key]),
+                    explanation=explanation,
+                    producing_phase_id="A2_PER_ARM_AUTOINDEX",
+                    producing_task_id="OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+                )
+            )
+        return result
     p1 = phase_id == "P1_CPU_BASELINE"
     if p1:
         for run in model.get("runs", []):
@@ -2405,6 +2492,50 @@ def _artifacts(
 def _metrics(
     model: Mapping[str, Any], phase_id: str, task_id: str | None
 ) -> list[dict[str, Any]]:
+    if phase_id == "A2_PER_ARM_AUTOINDEX":
+        freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
+        if not isinstance(freeze, Mapping) or freeze.get("validated") is not True:
+            return []
+        credit = (
+            freeze.get("official_credit", {})
+            if isinstance(freeze.get("official_credit"), Mapping)
+            else {}
+        )
+        specs = (
+            ("frozen_candidate_count", freeze.get("candidate_count"), "candidate_universe"),
+            ("matched_candidate_count", freeze.get("matched_candidate_count"), "matched_tier"),
+            (
+                "dormant_reserve_candidate_count",
+                freeze.get("conditional_reserve_candidate_count"),
+                "conditional_reserve_tier",
+            ),
+            ("official_credit_check_count", freeze.get("credit_check_count"), "credit_checkpoints"),
+            ("official_credit_used_percent", credit.get("used_percent"), "official_credit_window"),
+            (
+                "official_credit_remaining_percent",
+                credit.get("remaining_percent"),
+                "official_credit_window",
+            ),
+            ("measured_a2_runs", 0, "measured_A2"),
+        )
+        return [
+            {
+                "name": name,
+                "cutoff": 0,
+                "split": "premeasurement",
+                "scope": "A2 candidate freeze",
+                "value": value,
+                "n": 1,
+                "denominator": denominator,
+                "source_uri": freeze.get("credit_correction_receipt_uri")
+                if name.startswith("official_credit")
+                else freeze.get("freeze_receipt_uri"),
+                "source_sha256": freeze.get("credit_correction_receipt_file_sha256")
+                if name.startswith("official_credit")
+                else freeze.get("freeze_receipt_file_sha256"),
+            }
+            for name, value, denominator in specs
+        ]
     if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}:
         adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
         if not isinstance(adapter, Mapping) or adapter.get("validated") is not True:
@@ -3098,7 +3229,35 @@ def _bindings(
         },
         "git_commit": model.get("source_commit"),
     }
-    if phase_id == "P1_CPU_BASELINE":
+    if phase_id == "A2_PER_ARM_AUTOINDEX":
+        freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
+        if isinstance(freeze, Mapping) and freeze.get("validated") is True:
+            bindings["candidate_freeze"] = {
+                "generation_attempt_id": freeze.get("generation_attempt_id"),
+                "manifest_uri": freeze.get("manifest_uri"),
+                "manifest_sha256": freeze.get("manifest_sha256"),
+                "freeze_receipt_uri": freeze.get("freeze_receipt_uri"),
+                "freeze_receipt_sha256": freeze.get("freeze_receipt_sha256"),
+                "lock_uri": freeze.get("lock_uri"),
+                "lock_sha256": freeze.get("lock_sha256"),
+            }
+            bindings["official_identity"] = dict(freeze.get("official_identity", {}))
+            bindings["official_credit_closeout"] = dict(
+                freeze.get("official_credit", {})
+            )
+            bindings["independent_audit"] = {
+                "status": freeze.get("independent_audit_status"),
+                "uri": freeze.get("independent_audit_receipt_uri"),
+                "sha256": freeze.get("independent_audit_receipt_sha256"),
+            }
+            bindings["control_bindings"] = list(
+                freeze.get("control_bindings", [])
+            )
+            bindings["publication_workspace"] = {
+                "uri": "../03_Paper/01_ArmIndex",
+                "authority": "projection_only",
+            }
+    elif phase_id == "P1_CPU_BASELINE":
         bindings["execution_envelope"] = {
             "uri": "control/execution-envelope.yaml",
             "sha256": _hash_file(root, "control/execution-envelope.yaml"),
@@ -3463,6 +3622,14 @@ def _record_for(
     adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
     scaffold = model.get("armindex", {}).get("a1_2_contract_scaffold", {})
     current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
+    a2_freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
+    a2_freeze_valid = (
+        phase_id == "A2_PER_ARM_AUTOINDEX"
+        and task_id
+        in {None, "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE", "A2.1"}
+        and isinstance(a2_freeze, Mapping)
+        and a2_freeze.get("validated") is True
+    )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and task_id in {None, "A1.2"}
@@ -3485,6 +3652,8 @@ def _record_for(
     evidence_class = (
         str(current_attempt.get("evidence_class"))
         if current_terminal
+        else str(a2_freeze.get("evidence_class"))
+        if a2_freeze_valid
         else "train_selection_measured"
         if scientific
         else "fixture"
@@ -3504,6 +3673,8 @@ def _record_for(
     claim_boundary = (
         str(current_attempt.get("claim_boundary"))
         if current_terminal
+        else str(a2_freeze.get("claim_boundary"))
+        if a2_freeze_valid
         else "train_selection_only"
         if scientific
         else str(scaffold.get("claim_boundary"))
@@ -3875,6 +4046,51 @@ def _record_for(
         result = "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero."
         interpretation = "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
         decision_status = str(p2.get("preflight_status", "not_started"))
+    elif a2_freeze_valid:
+        identity = (
+            a2_freeze.get("official_identity", {})
+            if isinstance(a2_freeze.get("official_identity"), Mapping)
+            else {}
+        )
+        credit = (
+            a2_freeze.get("official_credit", {})
+            if isinstance(a2_freeze.get("official_credit"), Mapping)
+            else {}
+        )
+        output = (
+            "The Official Codex bridge and immutable A2 candidate universe are "
+            f"validated for model {identity.get('model_name', 'not_recorded')}: "
+            f"{a2_freeze.get('matched_candidate_count', 0)} matched and "
+            f"{a2_freeze.get('conditional_reserve_candidate_count', 0)} dormant "
+            "reserve candidates, with compile-twice replay and freeze-lock bindings."
+        )
+        audit_passed = a2_freeze.get("independent_audit_status") == "PASS"
+        result = (
+            "Candidate-freeze preparation and the independent audit are complete; "
+            "measured A2 remains closed until a fresh A2-goal preflight. "
+            if audit_passed
+            else "Candidate-freeze preparation is complete and measured A2 remains blocked pending one independent audit. "
+        ) + (
+            "The final post-audit Official credit check "
+            f"records plan {credit.get('plan_type', 'not_recorded')}, "
+            f"{credit.get('remaining_percent', 'not_recorded')}% remaining, reset "
+            f"at {credit.get('resets_at_utc', 'not_recorded')}, and no active limit."
+        )
+        interpretation = (
+            "This engineering evidence prevents outcome-driven candidate generation "
+            "and preserves a reviewer-reproducible representation universe. It does "
+            "not evaluate a candidate, access REP-DEV for measurement, start an A2 "
+            "run, authorize provider execution, or support a retrieval-quality claim."
+        )
+        decision_status = (
+            "CLOSED_PASS_INDEPENDENT_AUDIT"
+            if audit_passed and task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+            else "READY_FOR_FRESH_A2_GOAL_PREFLIGHT"
+            if audit_passed
+            else "COMPLETE_AUDITOR_REVIEW_REQUIRED"
+            if task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+            else "BLOCKED_PENDING_INDEPENDENT_AUDIT"
+        )
     elif phase_id == "P0_FOUNDATION":
         output = (
             "Canonical control, schema, protected-boundary, and projection contracts."
@@ -4219,8 +4435,8 @@ def _record_for(
         else {}
     )
     governance = {
-        "protected_data_accessed": scientific,
-        "measured_execution": scientific,
+        "protected_data_accessed": False if a2_freeze_valid else scientific,
+        "measured_execution": False if a2_freeze_valid else scientific,
         "gpu": current_pass,
         "paid_api": False,
         "network_model_download": False,
@@ -4229,10 +4445,14 @@ def _record_for(
         "d3": "waiting_owner",
         "final_split": "closed",
         "real_counters": {
-            "measured_runs": int(armindex_counters.get("measured_runs", 0))
+            "measured_runs": 0
+            if a2_freeze_valid
+            else int(armindex_counters.get("measured_runs", 0))
             if phase_id.startswith("A")
             else int(p2.get("measured_runs", 0)),
-            "candidate_count": int(armindex_counters.get("candidate_count", 0))
+            "candidate_count": 0
+            if a2_freeze_valid
+            else int(armindex_counters.get("candidate_count", 0))
             if phase_id.startswith("A")
             else int(p2.get("candidate_count", 0)),
             "shortlist_count": 0
@@ -4258,6 +4478,15 @@ def _record_for(
         governance["current_attempt_status"] = "FAILED_CLOSED"
         governance["current_attempt_partial_results_promotable"] = False
         governance["official_completed_measured_runs"] = 0
+    if a2_freeze_valid:
+        governance["gpu"] = False
+        governance["official_model_name"] = a2_freeze.get(
+            "official_identity", {}
+        ).get("model_name")
+        governance["provider_admission_performed"] = False
+        governance["provider_execution_adoption_performed"] = False
+        governance["rep_dev_accessed_for_measurement"] = False
+        governance["independent_auditor_required"] = True
     record = {
         "schema_version": REPORT_SCHEMA,
         "report_id": report_id,
@@ -4291,6 +4520,8 @@ def _record_for(
         "work_summary": (
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
+            else "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
+            if a2_freeze_valid
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
             else "A1.1 and A1.2 are complete. Attempt r15 completed the frozen 25/25 REP-DEV common screen, safe return, Owner-local evaluation, deterministic promotion, aggregate result and EDA packaging, and a REUSE_ELIGIBLE provider closeout. Historical v1-v15 planning, preflight, and repair records remain immutable lineage only; A2, HARNESS-DEV, Selection, and Final have not started, and A2 still requires fresh admission, execution adoption, and a new isolated remote root."
@@ -4322,7 +4553,9 @@ def _record_for(
             "reason": result,
             "owner_decisions_unchanged": True,
         },
-        "next_authorized_action": _next_action(model),
+        "next_authorized_action": str(a2_freeze.get("next_authorized_action"))
+        if a2_freeze_valid
+        else _next_action(model),
         "evidence_links": [
             {
                 "artifact_id": item["artifact_id"],

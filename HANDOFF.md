@@ -7,8 +7,8 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A1_BASELINES_AND_MULTI_ARM_SCREENING / A1.2 CLOSED_PASS`
-- Status: `a1_2_v16_r15_terminal_pass_a2_ready`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
+- Status: `a2_candidate_freeze_audit_passed_measured_a2_closed`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: aggregate-safe measured development closeout with validated
   25/25 coverage, frozen promotion, and provider continuation; scientific authority `true`
@@ -17,6 +17,12 @@ evidence.
 - Selection exposures: `0`
 - Final exposures: `0`
 - Recorded A1 measured charge: `$11.161632`
+- A2 candidate universe: `40 matched + 12 dormant reserve` (`52` total)
+- Official Codex identity: `gpt-5.6-sol`, reasoning `high`, SDK/CLI `0.144.4`
+- Final Official credit: Plus, used `13%`, remaining `87%`, reset
+  `2026-08-18T00:45:40Z`, limit reached `false`
+- Publication workspace: `../03_Paper/01_ArmIndex` (projection only; canonical
+  schemas, indexes, receipts, and facts remain in Research)
 - Final-872: closed
 - Owner gates: `D2_OPEN_FINAL`, `D3_SUBMIT_RELEASE`
 
@@ -231,18 +237,30 @@ A2 must begin in a new isolated remote root with fresh provider admission,
 fresh execution adoption, and the A2 entry preflight. Historical r13 remains a
 preserved failed attempt and cannot be combined with r15.
 
+The A2 Official Codex bridge and immutable candidate freeze are complete. The
+independent read-only audit passed with zero findings and is recorded at
+`outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json`
+(`141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0`).
+The manifest, freeze receipt, and lock self-hashes remain
+`f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e`,
+`ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10`,
+and `c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952`.
+Measured A2 remains closed because fresh provider admission/adoption, isolated
+root, budget/TTL/watchdog, and entry preflight have not been performed for A2.
+
 ## Active authorized action
 
-Prepare A2 without starting measured execution. The exact next action is:
+Owner may launch the A2 long-run guide. The exact next action is:
 
 ```text
-/goal อ่าน docs/goal/A2_official_codex_bridge_goal.md แล้วทำงานตามขั้นตอนทั้งหมดจน bridge และ five-arm candidate freeze ผ่าน จากนั้น commit/push และหยุดก่อน measured A2
+/goal อ่าน docs/goal/A2_goal.md ตรวจ A1 terminal PASS และ A2 candidate-freeze audit PASS ก่อน แล้วทำงานตามขั้นตอนทั้งหมดจน A2 closeout โดยไม่เข้า A3, HARNESS-DEV, Selection หรือ Final
 ```
 
-`docs/goal/A1_2_rerun_goal.md` is closed `PASS`. The preparation goal must stop
-with measured A2 not started and route to auditor review. `docs/goal/A2_goal.md`
-remains blocked until that audit passes; only then may Luna Max run A2. Retain
-the protected-data and frozen-science boundaries and do not enter A3,
+`docs/goal/A1_2_rerun_goal.md` and
+`docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
+`docs/goal/A2_goal.md` is the active executable guide, but it must perform fresh
+A2 provider admission/adoption and entry preflight before any measured work.
+Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 
 Provider observation prefers authenticated Vast CLI. If TFA/API is unavailable,

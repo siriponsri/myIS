@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-independent-freeze-audit-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "campaign_id", "phase_id", "task_id", "status", "evidence_class", "scientific_authority", "auditor", "audit_scope", "finding_count", "findings", "official_identity", "candidate_universe", "freeze_bindings", "credit_closeout", "publication_projection", "safety", "checks", "recorded_at_utc", "audit_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-independent-freeze-audit-receipt.v1"},
+    "audit_id": {"const": "a2-official-codex-candidate-freeze-independent-audit-20260812"},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"const": "A2_PER_ARM_AUTOINDEX"},
+    "task_id": {"const": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"},
+    "status": {"const": "PASS"},
+    "evidence_class": {"const": "engineering_validation"},
+    "scientific_authority": {"const": false},
+    "auditor": {"const": "codex-subagent-a2-final-audit"},
+    "audit_scope": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {"enum": ["official_identity_and_profile_isolation", "candidate_universe_and_arm_roles", "immutable_freeze_hashes", "official_credit_closeout", "zero_measured_and_protected_work"]}
+    },
+    "finding_count": {"const": 0},
+    "findings": {"type": "array", "maxItems": 0},
+    "official_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_name", "reasoning_effort", "sdk_version", "cli_version", "profiles_distinct"],
+      "properties": {
+        "model_name": {"const": "gpt-5.6-sol"},
+        "reasoning_effort": {"const": "high"},
+        "sdk_version": {"const": "0.144.4"},
+        "cli_version": {"const": "0.144.4"},
+        "profiles_distinct": {"const": true}
+      }
+    },
+    "candidate_universe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_count", "matched_candidate_count", "dormant_reserve_candidate_count", "diagnostic_non_advancing_arms", "advancement_eligible_arms"],
+      "properties": {
+        "candidate_count": {"const": 52},
+        "matched_candidate_count": {"const": 40},
+        "dormant_reserve_candidate_count": {"const": 12},
+        "diagnostic_non_advancing_arms": {"const": ["ARM-01", "ARM-02"]},
+        "advancement_eligible_arms": {"const": ["ARM-03", "ARM-05", "ARM-04"]}
+      }
+    },
+    "freeze_bindings": {"$ref": "#/$defs/freezeBindings"},
+    "credit_closeout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_name", "plan_type", "used_percent", "remaining_percent", "resets_at_utc", "limit_reached", "snapshot_sha256"],
+      "properties": {
+        "model_name": {"const": "gpt-5.6-sol"},
+        "plan_type": {"type": "string", "minLength": 1},
+        "used_percent": {"type": "integer", "minimum": 0, "maximum": 99},
+        "remaining_percent": {"type": "integer", "minimum": 1, "maximum": 100},
+        "resets_at_utc": {"$ref": "#/$defs/timestamp"},
+        "limit_reached": {"const": false},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "publication_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workspace", "audited_artifact_count", "uri_prefix", "canonical_research_copy_byte_identical"],
+      "properties": {
+        "workspace": {"const": "../03_Paper/01_ArmIndex"},
+        "audited_artifact_count": {"const": 15},
+        "uri_prefix": {"const": "../../../01_Research/"},
+        "canonical_research_copy_byte_identical": {"const": true}
+      }
+    },
+    "safety": {"$ref": "#/$defs/safety"},
+    "checks": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check_id", "status"],
+        "properties": {
+          "check_id": {"type": "string", "minLength": 1},
+          "status": {"const": "PASS"},
+          "detail": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "recorded_at_utc": {"$ref": "#/$defs/timestamp"},
+    "audit_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "freezeBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "manifest_file_sha256", "freeze_receipt_sha256", "freeze_receipt_file_sha256", "lock_sha256", "lock_file_sha256"],
+      "properties": {
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "manifest_file_sha256": {"$ref": "#/$defs/sha256"},
+        "freeze_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "freeze_receipt_file_sha256": {"$ref": "#/$defs/sha256"},
+        "lock_sha256": {"$ref": "#/$defs/sha256"},
+        "lock_file_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_a2_started", "rep_dev_accessed_for_measurement", "gpu_work_performed", "provider_admission_performed", "provider_execution_adoption_performed", "protected_data_accessed", "harness_dev_accesses", "selection_accesses", "final_accesses"],
+      "properties": {
+        "measured_a2_started": {"const": false},
+        "rep_dev_accessed_for_measurement": {"const": false},
+        "gpu_work_performed": {"const": false},
+        "provider_admission_performed": {"const": false},
+        "provider_execution_adoption_performed": {"const": false},
+        "protected_data_accessed": {"const": false},
+        "harness_dev_accesses": {"const": 0},
+        "selection_accesses": {"const": 0},
+        "final_accesses": {"const": 0}
+      }
+    }
+  }
+}

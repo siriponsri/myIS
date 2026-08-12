@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
+from jsonschema import Draft202012Validator
+
 from ..armindex import ArmIndexContractError, build_armindex_projection
 from ..armindex.a1_2_cell_eda_package_v16 import (
     CellEdaPackageV16Error,
@@ -241,6 +243,10 @@ from ..armindex.a1_2_vast_postcommit import (
 )
 from ..armindex.a1_2_vast_postcommit import (
     validate_postcommit_revision as validate_a1_2_vast_postcommit,
+)
+from ..armindex.a2_candidate_freeze import (
+    A2CandidateFreezeError,
+    validate_candidate_freeze,
 )
 from ..armindex.adapter_fixture import validate_adapter_fixture_artifacts
 from ..armindex.constants import (
@@ -577,6 +583,49 @@ A12_V16_R13_FAILURE_AUDIT_PATH = Path(
 A12_R15_REMOTE_RETENTION_AUDIT_PATH = Path(
     "outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json"
 )
+A2_CANDIDATE_MANIFEST_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/manifests/"
+    "a2-five-arm-candidate-manifest.v1.json"
+)
+A2_CANDIDATE_FREEZE_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a2-five-arm-candidate-freeze.receipt.v1.json"
+)
+A2_CANDIDATE_FREEZE_LOCK_PATH = Path(
+    "control/armindex/a2/candidate-freeze.lock.v1.json"
+)
+A2_OFFICIAL_SMOKE_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a2-official-codex-bridge-smoke.receipt.v2.json"
+)
+A2_OFFICIAL_CREDIT_PREFLIGHT_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a2-official-codex-credit-preflight.receipt.v1.json"
+)
+A2_OFFICIAL_CREDIT_CORRECTION_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a2-official-credit-closeout-correction.receipt.v1.json"
+)
+A2_INDEPENDENT_AUDIT_RECEIPT_PATH = Path(
+    "outputs/audits/rigor/"
+    "a2-official-codex-candidate-freeze-independent-audit-20260812.json"
+)
+A2_FINAL_CREDIT_RECEIPT_PATH = Path(
+    "campaigns/armindex-multiretriever-v2/evidence/"
+    "a2-official-codex-final-credit-check.receipt.v1.json"
+)
+A2_OFFICIAL_BRIDGE_CONTROL_PATH = Path(
+    "control/armindex/a2/official-codex-bridge.v1.json"
+)
+A2_EXECUTION_CONTRACT_PATH = Path("control/armindex/a2/execution-contract.v1.json")
+A2_EXECUTION_ENVELOPE_PATH = Path("control/execution-envelope-a2-v1.yaml")
+A2_BUDGET_PROFILE_PATH = Path("control/budgets/a2-per-arm-autoindex-v1.json")
+A2_FREEZE_NEXT_AUTHORIZED_ACTION = (
+    "RUN_INDEPENDENT_A2_FREEZE_AUDIT_STOP_BEFORE_MEASURED_A2"
+)
+A2_AUDIT_PASS_NEXT_AUTHORIZED_ACTION = (
+    "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT"
+)
 A08_RUNBOOK_PATH = Path("control/runbooks/A0_8_COMPUTE_STORAGE_FEASIBILITY_FIXTURES.md")
 A08_LEDGER_PATH = Path(
     "control/armindex/a0.8-compute-storage-feasibility-ledger.v1.jsonl"
@@ -630,6 +679,294 @@ def sha256(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
+def _validate_json_receipt(
+    root: Path,
+    *,
+    relative_path: Path,
+    schema_path: Path,
+    self_hash_field: str = "receipt_sha256",
+) -> dict[str, Any]:
+    path = root / relative_path
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    schema = json.loads((root / schema_path).read_text(encoding="utf-8"))
+    if not isinstance(payload, dict) or not isinstance(schema, dict):
+        raise ValueError(f"invalid JSON object: {relative_path.as_posix()}")
+    errors = sorted(
+        Draft202012Validator(schema).iter_errors(payload),
+        key=lambda error: tuple(str(item) for item in error.absolute_path),
+    )
+    if errors:
+        raise ValueError(
+            f"schema validation failed for {relative_path.as_posix()}: "
+            f"{errors[0].message}"
+        )
+    expected = canonical_sha256(
+        {key: value for key, value in payload.items() if key != self_hash_field}
+    )
+    if payload.get(self_hash_field) != expected:
+        raise ValueError(f"self-hash mismatch: {relative_path.as_posix()}")
+    assert_aggregate_only(payload)
+    return payload
+
+
+def _a2_candidate_freeze_projection(root: Path) -> dict[str, Any]:
+    missing = {
+        "status": "not_started",
+        "validated": False,
+        "phase_id": "A2_PER_ARM_AUTOINDEX",
+        "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+        "evidence_class": "engineering_validation",
+        "scientific_authority": False,
+        "claim_boundary": (
+            "premeasurement_candidate_freeze_only_no_candidate_evaluation_"
+            "or_retrieval_quality_claim"
+        ),
+        "manifest_uri": A2_CANDIDATE_MANIFEST_PATH.as_posix(),
+        "freeze_receipt_uri": A2_CANDIDATE_FREEZE_RECEIPT_PATH.as_posix(),
+        "lock_uri": A2_CANDIDATE_FREEZE_LOCK_PATH.as_posix(),
+        "smoke_receipt_uri": A2_OFFICIAL_SMOKE_RECEIPT_PATH.as_posix(),
+        "credit_preflight_receipt_uri": (
+            A2_OFFICIAL_CREDIT_PREFLIGHT_RECEIPT_PATH.as_posix()
+        ),
+        "credit_correction_receipt_uri": (
+            A2_OFFICIAL_CREDIT_CORRECTION_RECEIPT_PATH.as_posix()
+        ),
+        "independent_audit_receipt_uri": A2_INDEPENDENT_AUDIT_RECEIPT_PATH.as_posix(),
+        "final_credit_receipt_uri": A2_FINAL_CREDIT_RECEIPT_PATH.as_posix(),
+        "next_authorized_action": A2_FREEZE_NEXT_AUTHORIZED_ACTION,
+    }
+    required = (
+        A2_CANDIDATE_MANIFEST_PATH,
+        A2_CANDIDATE_FREEZE_RECEIPT_PATH,
+        A2_CANDIDATE_FREEZE_LOCK_PATH,
+        A2_OFFICIAL_SMOKE_RECEIPT_PATH,
+        A2_OFFICIAL_CREDIT_PREFLIGHT_RECEIPT_PATH,
+        A2_OFFICIAL_CREDIT_CORRECTION_RECEIPT_PATH,
+    )
+    if not any((root / path).exists() for path in required):
+        return missing
+    if not all((root / path).is_file() for path in required):
+        return {**missing, "status": "INVALID"}
+    try:
+        replay = validate_candidate_freeze(root)
+        receipt = json.loads(
+            (root / A2_CANDIDATE_FREEZE_RECEIPT_PATH).read_text(encoding="ascii")
+        )
+        smoke = _validate_json_receipt(
+            root,
+            relative_path=A2_OFFICIAL_SMOKE_RECEIPT_PATH,
+            schema_path=Path(
+                "schemas/armindex/a2-official-codex-bridge-smoke-receipt.v2.json"
+            ),
+        )
+        credit_preflight = _validate_json_receipt(
+            root,
+            relative_path=A2_OFFICIAL_CREDIT_PREFLIGHT_RECEIPT_PATH,
+            schema_path=Path(
+                "schemas/armindex/"
+                "a2-official-codex-credit-preflight-receipt.v1.json"
+            ),
+        )
+        correction = _validate_json_receipt(
+            root,
+            relative_path=A2_OFFICIAL_CREDIT_CORRECTION_RECEIPT_PATH,
+            schema_path=Path(
+                "schemas/armindex/"
+                "a2-official-credit-closeout-correction-receipt.v1.json"
+            ),
+        )
+        closeout_paths = (
+            A2_INDEPENDENT_AUDIT_RECEIPT_PATH,
+            A2_FINAL_CREDIT_RECEIPT_PATH,
+        )
+        if any((root / path).exists() for path in closeout_paths) and not all(
+            (root / path).is_file() for path in closeout_paths
+        ):
+            raise ValueError("A2 audit closeout receipt set is incomplete")
+        audit = None
+        final_credit = None
+        if all((root / path).is_file() for path in closeout_paths):
+            audit = _validate_json_receipt(
+                root,
+                relative_path=A2_INDEPENDENT_AUDIT_RECEIPT_PATH,
+                schema_path=Path(
+                    "schemas/armindex/a2-independent-freeze-audit-receipt.v1.json"
+                ),
+                self_hash_field="audit_sha256",
+            )
+            final_credit = _validate_json_receipt(
+                root,
+                relative_path=A2_FINAL_CREDIT_RECEIPT_PATH,
+                schema_path=Path(
+                    "schemas/armindex/"
+                    "a2-official-codex-final-credit-check-receipt.v1.json"
+                ),
+            )
+        if (
+            correction.get("manifest_sha256") != replay["manifest_sha256"]
+            or correction.get("freeze_receipt_sha256") != replay["receipt_sha256"]
+            or correction.get("lock_sha256") != replay["lock_sha256"]
+            or correction.get("freeze_artifacts_mutated") is not False
+            or correction.get("candidate_universe_changed") is not False
+        ):
+            raise ValueError("A2 credit correction freeze binding is invalid")
+        identity = smoke.get("identity", {})
+        closeout_credit = correction.get("post_freeze_closeout_credit", {})
+        if final_credit is not None:
+            closeout_credit = final_credit
+        if (
+            not isinstance(identity, Mapping)
+            or not isinstance(closeout_credit, Mapping)
+            or identity.get("model_name") != receipt.get("official_model")
+            or closeout_credit.get("model_name") != receipt.get("official_model")
+            or closeout_credit.get("limit_reached") is not False
+            or closeout_credit.get("rate_limit_reached_type") is not None
+            or credit_preflight.get("model_name") != receipt.get("official_model")
+        ):
+            raise ValueError("A2 Official identity or credit closeout is invalid")
+        if audit is not None and final_credit is not None:
+            audit_bindings = audit.get("freeze_bindings", {})
+            final_bindings = final_credit.get("freeze_bindings", {})
+            if (
+                audit.get("status") != "PASS"
+                or audit_bindings.get("manifest_sha256") != replay["manifest_sha256"]
+                or audit_bindings.get("freeze_receipt_sha256") != replay["receipt_sha256"]
+                or audit_bindings.get("lock_sha256") != replay["lock_sha256"]
+                or final_credit.get("audit_sha256") != audit.get("audit_sha256")
+                or final_bindings.get("manifest_sha256") != replay["manifest_sha256"]
+                or final_bindings.get("freeze_receipt_sha256") != replay["receipt_sha256"]
+                or final_bindings.get("lock_sha256") != replay["lock_sha256"]
+                or final_credit.get("prior_credit_snapshot_set_sha256")
+                != correction.get("official_credit_snapshot_set_sha256")
+            ):
+                raise ValueError("A2 independent audit or final credit binding is invalid")
+        for path in (
+            A2_OFFICIAL_BRIDGE_CONTROL_PATH,
+            A2_EXECUTION_CONTRACT_PATH,
+            A2_EXECUTION_ENVELOPE_PATH,
+            A2_BUDGET_PROFILE_PATH,
+        ):
+            if not (root / path).is_file():
+                raise ValueError(f"missing A2 control: {path.as_posix()}")
+    except (
+        A2CandidateFreezeError,
+        OSError,
+        UnicodeError,
+        json.JSONDecodeError,
+        TypeError,
+        ValueError,
+    ):
+        return {**missing, "status": "INVALID"}
+    audit_passed = audit is not None and final_credit is not None
+    return {
+        **missing,
+        "status": (
+            "complete_audit_passed_measured_a2_closed"
+            if audit_passed
+            else "complete_auditor_review_required"
+        ),
+        "next_authorized_action": (
+            A2_AUDIT_PASS_NEXT_AUTHORIZED_ACTION
+            if audit_passed
+            else A2_FREEZE_NEXT_AUTHORIZED_ACTION
+        ),
+        "validated": True,
+        "generation_attempt_id": receipt["generation_attempt_id"],
+        "candidate_count": replay["candidate_count"],
+        "matched_candidate_count": replay["matched_candidate_count"],
+        "conditional_reserve_candidate_count": replay[
+            "conditional_reserve_candidate_count"
+        ],
+        "manifest_sha256": replay["manifest_sha256"],
+        "manifest_file_sha256": _file_sha256(root / A2_CANDIDATE_MANIFEST_PATH),
+        "freeze_receipt_sha256": replay["receipt_sha256"],
+        "freeze_receipt_file_sha256": _file_sha256(
+            root / A2_CANDIDATE_FREEZE_RECEIPT_PATH
+        ),
+        "lock_sha256": replay["lock_sha256"],
+        "lock_file_sha256": _file_sha256(root / A2_CANDIDATE_FREEZE_LOCK_PATH),
+        "smoke_receipt_sha256": smoke["receipt_sha256"],
+        "smoke_receipt_file_sha256": _file_sha256(
+            root / A2_OFFICIAL_SMOKE_RECEIPT_PATH
+        ),
+        "credit_preflight_receipt_sha256": credit_preflight["receipt_sha256"],
+        "credit_preflight_receipt_file_sha256": _file_sha256(
+            root / A2_OFFICIAL_CREDIT_PREFLIGHT_RECEIPT_PATH
+        ),
+        "credit_correction_receipt_sha256": correction["receipt_sha256"],
+        "credit_correction_receipt_file_sha256": _file_sha256(
+            root / A2_OFFICIAL_CREDIT_CORRECTION_RECEIPT_PATH
+        ),
+        "independent_audit_status": "PASS" if audit_passed else "pending",
+        "independent_audit_receipt_sha256": (
+            audit["audit_sha256"] if audit is not None else None
+        ),
+        "independent_audit_receipt_file_sha256": (
+            _file_sha256(root / A2_INDEPENDENT_AUDIT_RECEIPT_PATH)
+            if audit is not None
+            else None
+        ),
+        "final_credit_receipt_sha256": (
+            final_credit["receipt_sha256"] if final_credit is not None else None
+        ),
+        "final_credit_receipt_file_sha256": (
+            _file_sha256(root / A2_FINAL_CREDIT_RECEIPT_PATH)
+            if final_credit is not None
+            else None
+        ),
+        "official_identity": {
+            "provider": identity["model_provider"],
+            "model_name": identity["model_name"],
+            "reasoning_effort": identity["reasoning_effort"],
+            "sdk_version": identity["sdk_version"],
+            "cli_version": identity["cli_version"],
+        },
+        "official_credit": {
+            key: closeout_credit[key]
+            for key in (
+                "snapshot_sha256",
+                "model_name",
+                "plan_type",
+                "used_percent",
+                "remaining_percent",
+                "resets_at_utc",
+                "rate_limit_reached_type",
+                "reset_credit_available_count",
+                "reset_credit_consumed",
+                "limit_reached",
+            )
+        },
+        "credit_check_count": (
+            final_credit["official_credit_check_count_total"]
+            if final_credit is not None
+            else correction["official_credit_check_count"]
+        ),
+        "credit_snapshot_set_sha256": (
+            final_credit["credit_snapshot_chain_sha256"]
+            if final_credit is not None
+            else correction["official_credit_snapshot_set_sha256"]
+        ),
+        "control_bindings": [
+            {"uri": path.as_posix(), "sha256": _file_sha256(root / path)}
+            for path in (
+                A2_OFFICIAL_BRIDGE_CONTROL_PATH,
+                A2_EXECUTION_CONTRACT_PATH,
+                A2_EXECUTION_ENVELOPE_PATH,
+                A2_BUDGET_PROFILE_PATH,
+            )
+        ],
+        "measured_a2_started": False,
+        "rep_dev_accessed_for_measurement": False,
+        "gpu_work_performed": False,
+        "provider_admission_performed": False,
+        "provider_execution_adoption_performed": False,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+        "harness_dev_accesses": 0,
+        "protected_data_accessed": False,
+    }
+
+
 def build_read_model(repository_root: Path) -> dict[str, Any]:
     root = repository_root.resolve()
     campaign_id = "scope-autoindex-v1"
@@ -648,6 +985,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a1_2_r13_failure = _a12_r13_failure_projection(root)
     a1_2_current_attempt = _a12_current_attempt_projection(root)
     a1_2_remote_retention = _a12_r15_remote_retention_projection(root)
+    a2_candidate_freeze = _a2_candidate_freeze_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -662,6 +1000,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_r13_failure": a1_2_r13_failure,
         "a1_2_current_attempt": a1_2_current_attempt,
         "a1_2_remote_retention": a1_2_remote_retention,
+        "a2_candidate_freeze": a2_candidate_freeze,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -998,11 +1337,68 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         armindex["next_command"] = a1_2_current_attempt["next_authorized_action"]
     elif a1_2_current_attempt.get("status") == "INVALID":
         armindex["local_adoption_input_status"] = "INVALID_CURRENT_A1_TERMINAL_POINTER"
+    if (
+        a1_2_current_attempt.get("validated") is True
+        and a1_2_current_attempt.get("status") == "PASS"
+        and a2_candidate_freeze.get("validated") is True
+    ):
+        armindex["status"] = (
+            "a2_candidate_freeze_audit_passed_measured_a2_closed"
+            if a2_candidate_freeze.get("independent_audit_status") == "PASS"
+            else "a2_candidate_freeze_complete_auditor_review_required"
+        )
+        armindex["current_phase"] = "A2_PER_ARM_AUTOINDEX"
+        armindex["next_command"] = a2_candidate_freeze["next_authorized_action"]
+        armindex["phases"] = [
+            {
+                **phase,
+                "status": "blocked"
+                if phase.get("phase_id") == "A2_PER_ARM_AUTOINDEX"
+                else phase.get("status"),
+                "tasks": (
+                    [
+                        {
+                            **task,
+                            "status": "blocked"
+                            if task.get("task_id") == "A2.1"
+                            else task.get("status"),
+                        }
+                        for task in phase.get("tasks", [])
+                        if isinstance(task, Mapping)
+                    ]
+                    + [
+                        {
+                            "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
+                            "title": "Official Codex bridge and five-arm candidate freeze",
+                            "status": "complete",
+                        }
+                    ]
+                    if phase.get("phase_id") == "A2_PER_ARM_AUTOINDEX"
+                    else [
+                        dict(task)
+                        for task in phase.get("tasks", [])
+                        if isinstance(task, Mapping)
+                    ]
+                ),
+            }
+            for phase in armindex.get("phases", [])
+            if isinstance(phase, Mapping)
+        ]
+    elif a2_candidate_freeze.get("status") == "INVALID":
+        armindex["status"] = "a2_candidate_freeze_invalid_fail_closed"
+        armindex["current_phase"] = "A2_PER_ARM_AUTOINDEX"
+        armindex["next_command"] = "REPAIR_A2_FREEZE_PROJECTION_BEFORE_AUDIT"
         armindex["next_command"] = a1_2_current_attempt["next_authorized_action"]
-    elif a1_2_dense_overflow.get("validated") is True:
+    elif (
+        a1_2_current_attempt.get("validated") is not True
+        and a1_2_dense_overflow.get("validated") is True
+    ):
         armindex["local_adoption_input_status"] = a1_2_dense_overflow["status"]
         armindex["next_command"] = a1_2_dense_overflow["next_authorized_action"]
-    elif a1_2_p02_limit_audit.get("validated") is True:
+    elif (
+        a1_2_current_attempt.get("validated") is not True
+        and a1_2_p02_limit_audit.get("validated") is True
+    ):
         armindex["local_adoption_input_status"] = "BLOCKED_CONTRACT_DEFECT"
         armindex["next_command"] = a1_2_p02_limit_audit["next_authorized_action"]
     campaign_config = _load_yaml_like(

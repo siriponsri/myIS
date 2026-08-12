@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-official-codex-final-credit-check-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "campaign_id", "phase_id", "task_id", "status", "evidence_class", "scientific_authority", "audit_sha256", "freeze_bindings", "checkpoint_id", "observed_at_utc", "snapshot_sha256", "snapshot_pointer", "model_name", "reasoning_effort", "sdk_version", "cli_version", "plan_type", "used_percent", "remaining_percent", "window_duration_mins", "resets_at_utc", "rate_limit_reached_type", "reset_credit_available_count", "reset_credit_consumed", "limit_reached", "official_credit_check_count_total", "prior_credit_snapshot_set_sha256", "credit_snapshot_chain_sha256", "protected_data_accessed", "measured_execution_performed", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-official-codex-final-credit-check-receipt.v1"},
+    "receipt_id": {"const": "a2-official-codex-post-audit-final-credit-v1"},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"const": "A2_PER_ARM_AUTOINDEX"},
+    "task_id": {"const": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"},
+    "status": {"const": "PASS_OFFICIAL_CREDIT_AVAILABLE_AFTER_AUDIT"},
+    "evidence_class": {"const": "engineering_validation"},
+    "scientific_authority": {"const": false},
+    "audit_sha256": {"$ref": "#/$defs/sha256"},
+    "freeze_bindings": {"$ref": "#/$defs/freezeBindings"},
+    "checkpoint_id": {"const": "a2freeze-20260812t014444z-post-audit-final-credit"},
+    "observed_at_utc": {"$ref": "#/$defs/timestamp"},
+    "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "snapshot_pointer": {"type": "string", "pattern": "^owner-local://official-codex/"},
+    "model_name": {"const": "gpt-5.6-sol"},
+    "reasoning_effort": {"const": "high"},
+    "sdk_version": {"const": "0.144.4"},
+    "cli_version": {"const": "0.144.4"},
+    "plan_type": {"type": "string", "minLength": 1},
+    "used_percent": {"type": "integer", "minimum": 0, "maximum": 99},
+    "remaining_percent": {"type": "integer", "minimum": 1, "maximum": 100},
+    "window_duration_mins": {"type": "integer", "minimum": 1},
+    "resets_at_utc": {"$ref": "#/$defs/timestamp"},
+    "rate_limit_reached_type": {"type": "null"},
+    "reset_credit_available_count": {"type": "integer", "minimum": 0},
+    "reset_credit_consumed": {"const": false},
+    "limit_reached": {"const": false},
+    "official_credit_check_count_total": {"type": "integer", "minimum": 18},
+    "prior_credit_snapshot_set_sha256": {"$ref": "#/$defs/sha256"},
+    "credit_snapshot_chain_sha256": {"$ref": "#/$defs/sha256"},
+    "protected_data_accessed": {"const": false},
+    "measured_execution_performed": {"const": false},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "freezeBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"],
+      "properties": {
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "freeze_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "lock_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

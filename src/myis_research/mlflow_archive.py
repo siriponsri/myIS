@@ -11,14 +11,14 @@ import json
 import os
 import re
 import shutil
+import sqlite3
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping, Sequence
+from urllib.parse import unquote, urlparse
 
 from .mlflow_mirror import (
-    CAMPAIGN_EXPERIMENT,
-    SYSTEM_EXPERIMENT,
     MLflowMirror,
     MirrorArtifact,
     MirrorKind,
@@ -498,11 +498,56 @@ class MLflowEvidenceArchive:
             raise ArchiveContractError("MLflow archive receipt has no run ID")
         if not isinstance(self.mirror, MLflowMirror):
             return
-        run_root = self.store_root / "artifacts" / (SYSTEM_EXPERIMENT if run.run_kind in {"projection_sync", "system_check"} else CAMPAIGN_EXPERIMENT) / mlflow_run_id / "artifacts" / "mirror"
+        run_root = _mlflow_artifact_root(self.store_root, mlflow_run_id) / "mirror"
         for artifact in artifacts:
             stored = run_root / artifact.kind.value / artifact.relative_path
             if stored.is_symlink() or not stored.is_file() or hashlib.sha256(stored.read_bytes()).hexdigest() != artifact.sha256:
                 raise ArchiveContractError(f"stored MLflow artifact hash mismatch: {artifact.relative_path}")
+
+
+def _mlflow_artifact_root(store_root: Path, run_id: str) -> Path:
+    database = store_root / "database/mlflow.db"
+    try:
+        with sqlite3.connect(
+            f"file:{database.resolve().as_posix()}?mode=ro", uri=True
+        ) as connection:
+            row = connection.execute(
+                "select artifact_uri from runs where run_uuid=? and lifecycle_stage='active'",
+                (run_id,),
+            ).fetchone()
+    except sqlite3.Error as error:
+        raise ArchiveContractError("MLflow artifact URI lookup failed") from error
+    if row is None:
+        raise ArchiveContractError("MLflow archive run is missing")
+    parsed = urlparse(str(row[0]))
+    if parsed.scheme != "file":
+        raise ArchiveContractError("MLflow artifact URI is not local file storage")
+    raw = unquote(parsed.path)
+    if parsed.netloc:
+        raw = f"//{parsed.netloc}{raw}"
+    if re.match(r"^/[A-Za-z]:/", raw):
+        raw = raw[1:]
+    path = Path(raw)
+    try:
+        return path.resolve(strict=True)
+    except FileNotFoundError:
+        store = store_root.resolve(strict=True)
+        matching_indexes = [
+            index
+            for index, part in enumerate(path.parts)
+            if part.casefold() == store.name.casefold()
+        ]
+        if not matching_indexes:
+            raise ArchiveContractError("MLflow artifact URI target is missing")
+        relative = Path(*path.parts[matching_indexes[-1] + 1 :])
+        try:
+            relocated = (store / relative).resolve(strict=True)
+            relocated.relative_to(store)
+        except (FileNotFoundError, ValueError) as error:
+            raise ArchiveContractError(
+                "relocated MLflow artifact URI is invalid"
+            ) from error
+        return relocated
 
 
 def _metric_registry(run: ArchiveRun) -> dict[str, Any]:

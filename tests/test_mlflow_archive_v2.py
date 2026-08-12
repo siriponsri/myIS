@@ -20,6 +20,7 @@ from myis_research.mlflow_archive import (
     RegistrySnapshot,
     RULE_REGISTRY_SCHEMA,
     SCHEMA_REGISTRY_SCHEMA,
+    _mlflow_artifact_root,
     validate_cross_projection_receipt,
 )
 from myis_research.mlflow_mirror import MirrorReceipt, MirrorSpec, MirrorStage, MirrorValidationError
@@ -116,6 +117,23 @@ def test_v2_archive_writes_hash_bound_safe_artifacts_and_is_idempotent(tmp_path:
     assert len(mirror.calls) == 1
     staged = next((tmp_path / "staging").glob("*/freeze/bundle.json"))
     assert json.loads(staged.read_text(encoding="utf-8"))["schema_version"] == "myis.freeze-bundle.v2"
+
+
+def test_archive_resolves_recorded_mlflow_artifact_uri(tmp_path: Path) -> None:
+    store = tmp_path / "configured-store"
+    database = store / "database/mlflow.db"
+    database.parent.mkdir(parents=True)
+    artifact_root = tmp_path / "historical-owner-store/artifacts/run-1/artifacts"
+    artifact_root.mkdir(parents=True)
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "create table runs (run_uuid text, artifact_uri text, lifecycle_stage text)"
+        )
+        connection.execute(
+            "insert into runs values (?, ?, ?)",
+            ("run-1", artifact_root.as_uri(), "active"),
+        )
+    assert _mlflow_artifact_root(store, "run-1") == artifact_root.resolve()
 
 
 def test_archive_uses_armindex_a0_stage_and_campaign_for_receipt_driven_closeout(tmp_path: Path) -> None:

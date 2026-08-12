@@ -1,0 +1,157 @@
+---
+schema_version: "myis.obsidian-note.v2"
+read_model_revision: "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43"
+read_model_sha256: "54dbf7e31279dfb480883ece6cd3d187dbb1dc1bf273ec5f5b55c8cb91dd5332"
+source_commit: "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9"
+projection_schema_version: "myis.integrated-projection.v2"
+source_run_ids: []
+source_manifest_sha256: []
+related_literature_ids: []
+related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering_validation"
+scientific_authority: false
+claim_boundary: "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim"
+generated_from_revision: "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43"
+last_material_update: "2026-08-12T02:15:10Z"
+next_authorized_action: "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT"
+managed_by: "myis-report"
+edit_policy: "generated_do_not_edit"
+safe_to_present: true
+created_at: "2026-08-12T02:15:10Z"
+updated_at: "2026-08-12T02:15:10Z"
+note_id: "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+note_type: "task_report"
+phase_id: "A2_PER_ARM_AUTOINDEX"
+task_id: "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+workflow_status: "complete"
+evidence_maturity: "non_scientific"
+claim_level: "none"
+---
+
+# A2_PER_ARM_AUTOINDEX / OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE
+
+Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.
+
+## Objective
+
+Official Codex bridge and five-arm candidate freeze
+
+## Starting State
+
+- `phase`: A2_PER_ARM_AUTOINDEX
+- `task`: OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE
+- `program_state`: a2_candidate_freeze_audit_passed_measured_a2_closed
+- `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
+- `claim_boundary`: No unsupported scientific claim
+
+## Inputs and Frozen Bindings
+
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a`
+- `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
+- `git_commit`: aa826e8ee4dc986d0571cfd3a22ce2d646082ff9
+- `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
+- `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`
+- `official_credit_closeout`: `{"limit_reached": false, "model_name": "gpt-5.6-sol", "plan_type": "plus", "rate_limit_reached_type": null, "remaining_percent": 87, "reset_credit_available_count": 1, "reset_credit_consumed": false, "resets_at_utc": "2026-08-18T00:45:40Z", "snapshot_sha256": "6d9c634dfd82c4d1017994611ac5461dd34752534a816de895677ca363460a7f", "used_percent": 13}`
+- `independent_audit`: `outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json`; SHA-256 `141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0`
+- `control_bindings`: [{'uri': 'control/armindex/a2/official-codex-bridge.v1.json', 'sha256': 'f5fdd0479c8cfd472839f53a56355e810763251d45f777ef19ec7da2dbb578d9'}, {'uri': 'control/armindex/a2/execution-contract.v1.json', 'sha256': 'c0a9ed37c83a111eceb34cf32036c99662e6fd179988d522db20b1b7baac8e6f'}, {'uri': 'control/execution-envelope-a2-v1.yaml', 'sha256': '577ef123648b18c6ecba1f986f9cfb0eae563a5532a1f11d890b58fac4daa66a'}, {'uri': 'control/budgets/a2-per-arm-autoindex-v1.json', 'sha256': '7d93e267166b71cf3d6569b13257fbbfebe704d012a1c0b3a35865211e46f166'}]
+- `publication_workspace`: `../03_Paper/01_ArmIndex`; SHA-256 `None`
+
+## Work Performed
+
+The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots.
+
+## Artifacts Produced
+
+These references explain what each artifact is for; the bytes remain governed by canonical paths.
+
+| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
+|---|---|---|---|---|---|
+| A2 immutable five-arm candidate manifest | `manifest` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json` | `a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133` | `validated` |
+| A2 candidate-freeze receipt | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json` | `67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed` | `validated` |
+| A2 candidate-freeze lock | `lock` | `engineering_validation` | `control/armindex/a2/candidate-freeze.lock.v1.json` | `0c5f7d950c0666acdc444e96f1bf701b539d2e1fd9c9aea73bb4fc528c04bafc` | `validated` |
+| Official Codex bridge smoke receipt | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-bridge-smoke.receipt.v2.json` | `895823874d1f742f448035c4dd00c18733cd58bda185add722e3e57ba6fe7edc` | `validated` |
+| Official Codex credit preflight receipt | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-credit-preflight.receipt.v1.json` | `ef2f6979b7ae1fea502be1f06df6cbb0d0480533f4b3a4e7d02a474b8f7b0616` | `validated` |
+| Official Codex credit closeout correction | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-official-credit-closeout-correction.receipt.v1.json` | `5c663417bf8483b3a1ed9373fd8bd241b7a162074c148c7fee711dd670840081` | `validated` |
+| Independent A2 candidate-freeze audit | `audit` | `engineering_validation` | `outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json` | `64458c0705aa257b3a6a5e088360c3e3ee965d2275d4a927a85264600c1a43da` | `validated` |
+| Official Codex post-audit final credit check | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json` | `9bc6d88e0ba0fbdd27ebdaad22977cd71279d9d4ae00669b8d3f3cf0035445a7` | `validated` |
+
+## Metrics
+
+| Metric | Split | Scope | Value | n | Denominator | Evidence |
+|---|---|---|---:|---:|---|---|
+| `frozen_candidate_count`@0 | `premeasurement` | `A2 candidate freeze` | `52` | `1` | `candidate_universe` | `engineering_validation` |
+| `matched_candidate_count`@0 | `premeasurement` | `A2 candidate freeze` | `40` | `1` | `matched_tier` | `engineering_validation` |
+| `dormant_reserve_candidate_count`@0 | `premeasurement` | `A2 candidate freeze` | `12` | `1` | `conditional_reserve_tier` | `engineering_validation` |
+| `official_credit_check_count`@0 | `premeasurement` | `A2 candidate freeze` | `18` | `1` | `credit_checkpoints` | `engineering_validation` |
+| `official_credit_used_percent`@0 | `premeasurement` | `A2 candidate freeze` | `13` | `1` | `official_credit_window` | `engineering_validation` |
+| `official_credit_remaining_percent`@0 | `premeasurement` | `A2 candidate freeze` | `87` | `1` | `official_credit_window` | `engineering_validation` |
+| `measured_a2_runs`@0 | `premeasurement` | `A2 candidate freeze` | `0` | `1` | `measured_A2` | `engineering_validation` |
+
+Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
+
+## Result
+
+**Output:** The Official Codex bridge and immutable A2 candidate universe are validated for model gpt-5.6-sol: 40 matched and 12 dormant reserve candidates, with compile-twice replay and freeze-lock bindings.
+
+**Result:** Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
+
+**Decision:** CLOSED_PASS_INDEPENDENT_AUDIT
+
+## Interpretation
+
+This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.
+
+## Supported Claims
+
+- The Official Codex bridge and immutable A2 candidate universe are validated for model gpt-5.6-sol: 40 matched and 12 dormant reserve candidates, with compile-twice replay and freeze-lock bindings. (evidence: a2-five-arm-candidate-manifest-v1, a2-five-arm-candidate-freeze-receipt-v1, a2-five-arm-candidate-freeze-lock-v1, a2-official-codex-smoke-receipt-v2, a2-official-credit-preflight-receipt-v1, a2-official-credit-closeout-correction-v1, a2-independent-freeze-audit-v1, a2-official-final-credit-check-v1)
+
+## Unsupported Claims
+
+- Measured P2 improvement or candidate superiority before a real measured run.
+- Final-split generalization or publication release before D2 and D3.
+- Causal or legal conclusions from retrieval aggregates.
+
+## Failures and Recovery
+
+- No material failure is recorded for this Phase or Task.
+
+## Governance and Safety
+
+- `protected_data_accessed`: False
+- `measured_execution`: False
+- `gpu`: False
+- `paid_api`: False
+- `network_model_download`: False
+- `provider_fallback`: False
+- `d2`: waiting_owner
+- `d3`: waiting_owner
+- `final_split`: closed
+- `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 0, "selection_accesses": 0, "shortlist_count": 0}`
+- `evidence_class`: engineering_validation
+- `scientific_authority`: False
+- `official_model_name`: gpt-5.6-sol
+- `provider_admission_performed`: False
+- `provider_execution_adoption_performed`: False
+- `rep_dev_accessed_for_measurement`: False
+- `independent_auditor_required`: True
+
+## Decision
+
+Status: **CLOSED_PASS_INDEPENDENT_AUDIT**. Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
+
+## Next Action
+
+OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT
+
+Measured P2, real selection, and final evaluation must not start automatically from this report.
+
+## Evidence Links
+
+- a2-five-arm-candidate-manifest-v1
+- a2-five-arm-candidate-freeze-receipt-v1
+- a2-five-arm-candidate-freeze-lock-v1
+- a2-official-codex-smoke-receipt-v2
+- a2-official-credit-preflight-receipt-v1
+- a2-official-credit-closeout-correction-v1
+- a2-independent-freeze-audit-v1
+- a2-official-final-credit-check-v1

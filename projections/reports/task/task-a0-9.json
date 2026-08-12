@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
+      "content_sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -191,7 +191,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
+      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -241,9 +241,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-11T18:35:49Z",
-  "generated_from_revision": "7963de57b78a03a0dafa3113dd96d3e8a1f2c6a8b4f692d92f92d0c060f8e470",
-  "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
+  "generated_at": "2026-08-12T02:15:10Z",
+  "generated_from_revision": "5ec7346f520623d5c21e0ff68ccca82829378d7ee873e0f0d345dc065b997e43",
+  "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -278,10 +278,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "6b23dfd06b44fee58de20b1e86523f6b3da6f7f95b5e9e1c05f6ecb4c4c7e040",
+      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "68308c26f69d97b1cfc9f190a53269afb03201cb",
+    "git_commit": "aa826e8ee4dc986d0571cfd3a22ce2d646082ff9",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -292,19 +292,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "ef993b88474373d8315f920a46eac64584ed656ea3252f8d2ebb62ae5f0a3e4b",
+      "sha256": "2f5e191ca969679157054781a1703cb7e2e028c8a52ee366ec8619747940e66a",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The closeout establishes repository and safety readiness for a synthetic/offline A1.1 adapter fixture scaffold. It does not authorize measured retrieval, model download, dense execution, or a scientific claim.",
   "language": "en",
-  "last_material_update": "2026-08-11T18:35:49Z",
+  "last_material_update": "2026-08-12T02:15:10Z",
   "metric_references": [],
-  "next_authorized_action": "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2",
+  "next_authorized_action": "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT",
   "objective": "Validation, safety, and closeout",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-9",
-  "report_sha256": "c6b7543680c441c63b126c01ae43e7d2ad6b88d0d926fa9183104e087ca35e12",
+  "report_sha256": "1cf72ddeadb3134dc4729843c94e599f756656258a4f26b0b059a2a745ed14b5",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -316,8 +316,8 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
-    "program_state": "a1_2_terminal_pass_25_of_25_closeout_recorded",
+    "phase": "A2_PER_ARM_AUTOINDEX",
+    "program_state": "a2_candidate_freeze_audit_passed_measured_a2_closed",
     "task": "A0.9"
   },
   "status": "completed",

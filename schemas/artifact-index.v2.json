@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:artifact-index:v2",
+  "title": "myIS publication artifact index with context and self-hash",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "uri_base", "context", "artifacts", "index_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.artifact-index.v2"},
+    "run_id": {"type": "string"},
+    "uri_base": {"const": "03_Paper/01_ArmIndex/provenance"},
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase_id", "task_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "model_name", "source_receipt_sha256"],
+      "properties": {
+        "phase_id": {"type": "string"},
+        "task_id": {"type": "string"},
+        "status": {"type": "string"},
+        "evidence_class": {"type": "string"},
+        "scientific_authority": {"type": "boolean"},
+        "claim_boundary": {"type": "string"},
+        "model_name": {"type": "string"},
+        "source_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact_id", "uri", "sha256", "bytes", "media_type", "classification"],
+        "properties": {
+          "artifact_id": {"type": "string"},
+          "uri": {"type": "string", "pattern": "^\\.\\./\\.\\./\\.\\./01_Research/"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "media_type": {"type": "string"},
+          "classification": {"enum": ["fixture", "aggregate", "metadata", "publication", "external_reference"]}
+        }
+      }
+    },
+    "index_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
