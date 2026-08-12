@@ -313,15 +313,15 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     )
     readiness = model["armindex"]["a2_execution_readiness"]
     assert readiness["status"] == (
-        "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
+        "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
     )
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
     assert readiness["provider_admission_performed"] is False
     assert readiness["provider_execution_adoption_performed"] is False
     assert readiness["provider_admission_attempted"] is True
-    assert readiness["provider_admission_status"] == "FAILED_CLOSED"
-    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0002"
+    assert readiness["provider_admission_status"] == "DEFERRED_PENDING_IMPLEMENTATION"
+    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0003"
     a2 = next(
         phase
         for phase in model["armindex"]["phases"]

@@ -3166,7 +3166,7 @@
     }
   ],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -3671,11 +3671,11 @@
       "value": 0.0
     }
   ],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "952633d347b4470efd60187e6f4453b99154ff3e4f1657d6a25a2e07ea532ecc",
+  "report_sha256": "f9aa617e75325d8e39e6ab7db282fc7cb0f04728fe35e65527bf3c2661f19d70",
   "report_type": "task",
   "result": {
     "decision": "PASS_25_OF_25",
@@ -3688,7 +3688,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
+    "program_state": "a2_implementation_blocked_measured_a2_locked",
     "task": "A1.2"
   },
   "status": "completed",

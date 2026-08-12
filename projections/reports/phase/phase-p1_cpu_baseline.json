@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "phase-p1_cpu_baseline",
-  "report_sha256": "272f982f443985873c146ba9bfbb390e61171abb0db33221aa719391664bad5c",
+  "report_sha256": "c81ea6816156a81e3d863f188f9160cf05ac5426c662f9827c59c4c5edde7d48",
   "report_type": "phase",
   "result": {
     "decision": "completed",

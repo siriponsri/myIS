@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -47,11 +47,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "3fe1d712ac72a3ac2798c643e82510eb0e3f5edbddf5bfb778aa609f56e47f6b",
+  "report_sha256": "04c6b61099be26032bd2c1feb9e85a69b248ace22ae6ad9f4b4c4331a130e286",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

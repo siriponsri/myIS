@@ -720,7 +720,7 @@
     }
   ],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -800,12 +800,12 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "599b0957732d5a5093fdadc7ce505c51fb638fa029db0f0d0732882123d38554",
+  "report_sha256": "3c15211c650dfae60b9d349053fbc1b978ba90f5c6fdd0342b564e4624386b86",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

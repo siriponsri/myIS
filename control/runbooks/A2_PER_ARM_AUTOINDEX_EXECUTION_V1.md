@@ -19,8 +19,9 @@ and non-advancing.
    all-fee quote, whole-workload budget, management authority, and SSH evidence
    for instance 47411176. Vast CLI is preferred; `OwnerDashboardSsh` is valid
    only with pinned SSH evidence and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
-4. Require a forward all-fee hard stop no greater than USD 35 and TTL exactly
-   40 hours. Reject unknown fees or a partial-arm quote.
+4. Require a forward all-fee hard stop no greater than USD 35 and at least
+   40 hours remaining from a fresh absolute TTL deadline. The Owner-approved
+   staging target is 48 hours remaining. Reject unknown fees or a partial-arm quote.
 5. Create `/opt/myis/a2-<attempt-id>` only after provider admission passes,
    stage the immutable bundle, and install a new TTL/watchdog receipt. Never
    mutate or reuse an A1 remote root.
@@ -35,7 +36,7 @@ and non-advancing.
 ## Hard Stops
 
 Stop before staging or execution on a hash mismatch, stale quote, price above
-USD 35, TTL other than 40 hours, missing management authority, unexpected GPU
+USD 35, TTL below 40 hours remaining, missing management authority, unexpected GPU
 identity, model/data/runtime hash drift, candidate mutation, protected output,
 or any request for A3, HARNESS-DEV, Selection, Final, or REP-DEV measurement.
 

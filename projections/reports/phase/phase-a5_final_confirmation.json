@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -60,11 +60,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Run one frozen confirmation only after D2_OPEN_FINAL.",
   "phase_id": "A5_FINAL_CONFIRMATION",
   "report_id": "phase-a5_final_confirmation",
-  "report_sha256": "4d593b941720c0606461044fb1a0b4672a07b92b8e84b55519d1bef1ef1fae98",
+  "report_sha256": "d6d3f4eea83a8b314d19afd7de9380b07d6dae92e7a3bfa170d2032c55048462",
   "report_type": "phase",
   "result": {
     "decision": "blocked",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
+    "program_state": "a2_implementation_blocked_measured_a2_locked",
     "task": null
   },
   "status": "blocked",

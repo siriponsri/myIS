@@ -15,12 +15,14 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`IM_IMPLEMENTATION_COMPLETE_TTL_EXTENSION_REQUIRED`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_MEASURED_ADAPTER_AND_RESERVE_LIFECYCLE`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started.)
-- Current phase: `A2_PER_ARM_AUTOINDEX` (audit 002 implementation is complete;
-  fresh provider evidence must expose at least 40 hours remaining before
-  provider admission, live staging, or LO launch.)
+- Current phase: `A2_PER_ARM_AUTOINDEX` (audit 002 provider/adoption hardening
+  passed AP read-back. Owner approved a 48-hour TTL target under the unchanged
+  USD 35 A2 forward hard stop and exceptionally authorized AP staging, but AP
+  audit 003 found that the production A2 adapter and matched-first reserve
+  lifecycle are not yet implemented.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -63,13 +65,13 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly seven active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 ready -> A3 -> A4 -> A5 -> A6`
+`A0 complete -> A1 complete -> A2 implementation required -> A3 -> A4 -> A5 -> A6`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | ready; not started; fresh A2 admission/adoption required |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | implementation required; not started; production adapter and reserve lifecycle pending |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -339,22 +341,35 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-Owner extends the current Vast absolute TTL sufficiently for a fresh admission observation to retain at least 40 hours; measured A2 remains closed.
+IM implements and validates the production A2 measured adapter plus matched-first conditional-reserve lifecycle from docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md; provider contact, staging, and measured A2 remain closed in IM.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
 with r15. The current pointer binds the complete r15 terminal receipt, measured
 summary, EDA package, and `REUSE_ELIGIBLE` provider continuation. The Official
 Codex bridge and five-arm candidate freeze are closed `PASS`, and the independent
-audit found zero findings. IM commits `4b7d84d4` and `eadf27d5` implement and
-harden the operational executor; the focused A2 suite passes and measured
-authority now requires canonical tracked/pushed provenance plus an authorizing
-goal. AP review found that provider admission still accepts unbound hash inputs,
-does not derive remaining TTL from an absolute deadline, and remote stage does
-not re-probe GPU workers plus runtime/model/data bindings. The next session is
-IM and reads `docs/audit/A2_PER_ARM_AUTOINDEX_audit_002.md`. Fresh provider
-admission, execution adoption, and isolated-root staging remain incomplete. The
-allowlisted remote handoff is retained on the unchanged instance with validated
-baseline `29/29`, journal EDA `8/8`, and closeout `12/12` packages. Post-finalize
-working directories were not recreated; details are recorded in
-`outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json`.
+audit found zero findings. IM commits `4a2ba332`, `fde25fa4`, and `1eb6e8c7`
+close audit 002 by binding admission to source artifacts, deriving remaining
+TTL from a fresh absolute deadline, and requiring a pinned-SSH live probe of
+runtime, model, data, GPU/process, root, and host-key identity before adoption.
+AP reran the focused A2 suite (`44 passed`), Ruff, entry preflight, synthetic
+dry-run, asset validation, report drift, and whitespace validation; all passed
+with measured authority still `false`. The current-HEAD clean bundle SHA-256 is
+`428f636bccfe612f1e555b8d21edca9489371404a6964d018060c7f2e723e82b` and its
+receipt self-hash is
+`afef74f5d808e057a2414f46e5acef76129605b7ab2b5078256c2cabedec1bfd`.
+Owner approved 48 hours remaining under the unchanged USD 35 A2 forward hard
+stop. At the last observed USD 0.6027777778/hour compute-plus-storage rate plus
+the USD 0.30 network reserve, the projected 48-hour liability is USD 29.2333.
+Owner also authorized AP to bypass IM for admission/staging. AP did not use that
+exception because audit 003 found two structural launch blockers: the repository
+has no concrete production adapter for the frozen A2 representation programs,
+and reserve activation is fixed in authority before the matched outcomes needed
+by the frozen predicate exist. Staging the current bundle would be invalidated by
+the required implementation and would spend TTL without a valid measured path.
+The next session is IM and reads
+`docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md`. Fresh provider admission,
+execution adoption, isolated-root staging, measured A2, and protected-data access
+remain unstarted. The unchanged instance retains the validated A1 baseline
+`29/29`, journal EDA `8/8`, and closeout `12/12` packages; details are recorded
+in `outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json`.

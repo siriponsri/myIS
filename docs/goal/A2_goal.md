@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: READY_FOR_EXTERNAL_EXECUTION_REQUEST
-lifecycle: READY
+status: BLOCKED_PENDING_MEASURED_ADAPTER_AND_RESERVE_LIFECYCLE
+lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
 claim_boundary: "This guide consumes the immutable 52-candidate freeze only. It does not generate or mutate candidates, and it does not authorize measured A2 until fresh admission and adoption receipts pass."
 last_material_update: 2026-08-12
-next_authorized_action: RUN_LO_READINESS_AND_STOP_BEFORE_MEASURED_A2
+next_authorized_action: RUN_IM_AUDIT_003_DO_NOT_LAUNCH_THIS_GOAL
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -30,10 +30,12 @@ protected boundary, count/role/non-advancement, manifest/freeze hashes และ
 work. Auditor แก้ได้เฉพาะ engineering/test/pointer/documentation mismatch ขนาดเล็ก;
 ห้าม mutate candidate หรือเปิด measured A2.
 
-หลัง `AP audit PASS` เท่านั้น Owner จึง launch ได้ด้วยข้อความ exact นี้:
+Goal นี้ยังห้าม launch. AP audit 003 พบว่า production measured adapter และ
+matched-first reserve lifecycle ยังไม่ครบ; staging bundle ปัจจุบันจะถูก invalidated
+ทันทีเมื่อแก้สองส่วนนี้. ใช้ `docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md` กับ IM ก่อน.
 
 ```text
-/goal อ่าน docs/goal/A2_goal.md แล้วทำงานตามขั้นตอนทั้งหมด โดยใช้ candidate freeze เดิม 40 matched + 12 dormant เท่านั้น ผ่าน AP audit และ LO readiness ก่อน จากนั้นหยุดที่ EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED รอ Owner อนุญาต measured A2
+DO_NOT_LAUNCH: return to IM audit 003.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -74,7 +76,7 @@ Selection, Final, D2 หรือ D3.
    measured A2, provider admission/adoption, GPU scientific work, or REP-DEV measurement.
    On failure, repair only the failing engineering surface and rerun AP. Do not launch LO.
 
-2. LO: fresh readiness and staging only
+2. Deferred until IM audit 003 closes: fresh readiness and staging
 
    1. Re-run the A2 entry preflight. It must report A1 terminal PASS, planned A2,
       `a2_execution_authorized=false`, fresh A2 provider admission/adoption required and
@@ -85,8 +87,10 @@ Selection, Final, D2 หรือ D3.
       4x RTX 3090, runtime/model/data hashes, SSH evidence, all-fee quote and management
       authority. Prefer authenticated Vast CLI. `OwnerDashboardSsh` is valid only with
       pinned SSH runtime/GPU evidence and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
-   4. Require all-fee whole-workload admission for all 52 candidates, exact TTL `40`
-      hours, USD `35` forward hard stop, no unknown fee and no partial-arm quote. Do not
+   4. Apply the Owner-approved target of `48` hours remaining and require all-fee
+      whole-workload admission for all 52 candidates with at least `40` hours
+      remaining from the fresh absolute deadline, USD `35` forward hard stop,
+      no unknown fee and no partial-arm quote. Do not
       login/logout, destroy/reprovision the provider, infer a budget default or reuse an
       A1 admission/adoption receipt.
    5. Only after admission PASS, create a new `/opt/myis/a2-<attempt-id>` root, stage and
@@ -95,7 +99,7 @@ Selection, Final, D2 หรือ D3.
    6. Emit `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`, append one material ledger entry,
       and stop. This is the terminal state for the launch/readiness session.
 
-   Checkpoint LO: bundle, provider-admission, isolated root, watchdog and adoption receipts
+   Checkpoint after IM and AP restaging: bundle, provider-admission, isolated root, watchdog and adoption receipts
    are hash-bound to the immutable freeze. `measured_retrieval_allowed=false`; no child
    worker, retrieval, candidate evaluation, REP-DEV measurement or result receipt exists.
 
@@ -109,9 +113,9 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, an AP failure is an engineering repair loop only. Preserve append-only evidence;
+- Before LO, audit 003 is an engineering repair loop only. Preserve append-only evidence;
   do not alter frozen candidate bytes or the v1 campaign/envelope/budget/execution contract.
-- During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL not `40`,
+- During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,
   missing management authority, wrong instance/GPU/runtime/model/data hash, protected output,
   manifest/receipt/lock drift or any nonzero measured counter.
 - Stop immediately on a request to create/mutate candidates, access REP-DEV for measurement,

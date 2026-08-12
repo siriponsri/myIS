@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Protected owner-local CPU evidence import",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-3",
-  "report_sha256": "bce762f5defde94a9145d38fd9ac516c349d913e4bafd6174e1da495e66bf659",
+  "report_sha256": "3664bc0c0527c3239dff2c5c8b99912ffb3e23738ebc5ae6d0f8050da29bc5eb",
   "report_type": "task",
   "result": {
     "decision": "completed",

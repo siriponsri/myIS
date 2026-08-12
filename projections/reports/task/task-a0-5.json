@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -200,11 +200,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Phase, Research Flow, and Owner-gate migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-5",
-  "report_sha256": "7b8ca354473cbf80c28cf536b035a2df8e7f2e9308dc81112f2d796d746fe115",
+  "report_sha256": "7c13d16ea02b01401c25fd691111cc1632b809a35083a615dbbf4e40722c63ff",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -217,7 +217,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
+    "program_state": "a2_implementation_blocked_measured_a2_locked",
     "task": "A0.5"
   },
   "status": "completed",

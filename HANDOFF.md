@@ -7,12 +7,13 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION IM_COMPLETE_TTL_EXTENSION_REQUIRED`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION NEEDS_IM_MEASURED_ADAPTER_AND_RESERVE_LIFECYCLE`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_executor_provider_provenance_ttl_live_probe_hardened_measured_a2_closed`
+- Status: `a2_provider_stage_hardened_but_production_adapter_and_two_stage_reserve_pending`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
-- Evidence class: aggregate-safe measured development closeout with validated
-  25/25 coverage, frozen promotion, and provider continuation; scientific authority `true`
+- Evidence class: A1 aggregate-safe measured development closeout has validated
+  25/25 coverage and scientific authority `true`; A2 remains immutable
+  pre-measurement engineering evidence with scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
 - Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
@@ -246,31 +247,33 @@ The manifest, freeze receipt, and lock self-hashes remain
 `f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e`,
 `ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10`,
 and `c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952`.
-IM commit `4b7d84d4` adds the operational executor, and repair commit `eadf27d5`
-requires canonical tracked/pushed measured authority plus an explicitly
-authorizing goal. The watchdog now emits its own heartbeat, stays outside the
-worker registry and must pass PID/start-time and freshness checks before stage
-adoption. Focused tests and synthetic dry-run pass without provider contact or
-measured A2. AP review found three launch-critical evidence gaps: admission accepts
-bare hashes without source-artifact validation, TTL is caller-declared rather
-than computed from a fresh absolute deadline, and stage does not re-probe GPU
-workers plus runtime/model/data identity before adoption. The recorded Owner-local
-deadline left only about 3.38 hours at review time, below the A2 minimum and 40-hour
-contract. Fresh provider admission/adoption and isolated staging remain incomplete.
+IM commits through `1eb6e8c7` close provider-provenance, absolute-TTL, live-probe,
+watchdog, and adoption gaps; focused A2 tests report `44 passed`. AP launch audit
+003 then found that no concrete production adapter currently evaluates the frozen
+A2 representation programs: the ArmIndex compiler is fixture-only and A1 v16
+accepts only its historical common programs. The executor also fixes active
+reserve IDs before the matched outcomes required by the frozen activation
+predicate exist. These are launch-critical implementation gaps, not new Owner
+gates. Fresh provider admission/adoption and isolated staging remain incomplete,
+and no remote A2 root or measured worker was started.
 
 ## Active authorized action
 
-The only remaining Owner action is:
+Owner decision completed:
 
 ```text
-NEEDS_OWNER_TTL_EXTENSION
+APPROVED: 48 hours remaining under the unchanged USD 35 A2 forward hard stop.
 ```
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-`docs/goal/A2_goal.md` remains the A2 readiness guide, but LO is not the next
-route until IM closes audit 002 and fresh A2 provider admission/adoption plus
-isolated staging are evidentially valid.
+Audit 002 implementation is complete and AP-validated. Owner additionally
+authorized exceptional AP staging, but AP intentionally deferred it because the
+current bundle lacks the measured adapter and matched-first reserve lifecycle and
+would be invalidated by the required implementation. The next route is IM via
+`docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md`; after IM returns a clean final
+bundle, AP may perform fresh admission/staging and open one measured LO goal
+without another Owner decision.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 

@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -60,11 +60,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Build publication and release artifacts only after D3_SUBMIT_RELEASE.",
   "phase_id": "A6_PUBLICATION_AND_RELEASE",
   "report_id": "phase-a6_publication_and_release",
-  "report_sha256": "5d8e03a698080222ca6dcc7575fc1c539657dcea2ab638085be8e25f651a3e0c",
+  "report_sha256": "f179fc742a4a280c125364085950eb15b010a3169fafe2563a91e8683d57635e",
   "report_type": "phase",
   "result": {
     "decision": "blocked",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
+    "program_state": "a2_implementation_blocked_measured_a2_locked",
     "task": null
   },
   "status": "blocked",

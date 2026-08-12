@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8"
-read_model_sha256: "941e13668f48ee86b86491310a86720a9adedd611da621a1afb50b3a4de0d5f8"
+read_model_revision: "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021"
+read_model_sha256: "4e6c31bacdc8986390998e99ea2068835e3922d01cacedf5bb85ffd99ec14d80"
 source_commit: "4a2ba332c596ae2d256d8c6897276cb5207ec336"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
@@ -11,9 +11,9 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_execution_readiness"
 scientific_authority: false
 claim_boundary: "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim"
-generated_from_revision: "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8"
+generated_from_revision: "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021"
 last_material_update: "2026-08-12T11:56:21Z"
-next_authorized_action: "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY"
+next_authorized_action: "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
@@ -40,7 +40,7 @@ Search and freeze one representation program per promoted arm.
 
 - `phase`: A2_PER_ARM_AUTOINDEX
 - `task`: None
-- `program_state`: a2_provider_admission_failed_closed_measured_a2_locked
+- `program_state`: a2_implementation_blocked_measured_a2_locked
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
@@ -55,7 +55,7 @@ Search and freeze one representation program per promoted arm.
 - `independent_audit`: `outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json`; SHA-256 `141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0`
 - `control_bindings`: [{'uri': 'control/armindex/a2/official-codex-bridge.v1.json', 'sha256': 'f5fdd0479c8cfd472839f53a56355e810763251d45f777ef19ec7da2dbb578d9'}, {'uri': 'control/armindex/a2/execution-contract.v1.json', 'sha256': 'ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d'}, {'uri': 'control/execution-envelope-a2-v1.yaml', 'sha256': 'de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7'}, {'uri': 'control/budgets/a2-per-arm-autoindex-v1.json', 'sha256': 'b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1'}]
 - `publication_workspace`: `../03_Paper/01_ArmIndex`; SHA-256 `None`
-- `execution_readiness`: `{"budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af", "budget_uri": "control/budgets/a2-execution-readiness-v1.json", "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace", "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json", "forward_hard_stop_usd": 35, "measured_a2_started": false, "owner_ttl_hours": 40, "status": "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"}`
+- `execution_readiness`: `{"budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af", "budget_uri": "control/budgets/a2-execution-readiness-v1.json", "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace", "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json", "forward_hard_stop_usd": 35, "measured_a2_started": false, "owner_ttl_hours": 40, "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"}`
 
 ## Work Performed
 
@@ -78,8 +78,8 @@ These references explain what each artifact is for; the bytes remain governed by
 | A2 frozen-five-arm execution readiness contract | `contract` | `engineering_execution_readiness` | `control/armindex/a2/execution-readiness-contract.v1.json` | `ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97` | `validated` |
 | A2 execution readiness envelope | `control` | `engineering_execution_readiness` | `control/execution-envelope-a2-readiness-v1.yaml` | `8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a` | `validated` |
 | A2 whole-workload readiness budget | `budget` | `engineering_execution_readiness` | `control/budgets/a2-execution-readiness-v1.json` | `be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de` | `validated` |
-| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76` | `validated` |
-| A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65` | `validated` |
+| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74` | `validated` |
+| A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e` | `validated` |
 
 ## Metrics
 
@@ -103,9 +103,9 @@ Fixture values are synthetic engineering diagnostics and are never reported as m
 
 **Output:** The Official Codex bridge and immutable A2 candidate universe are validated for model gpt-5.6-sol: 40 matched and 12 dormant reserve candidates, with compile-twice replay and freeze-lock bindings.
 
-**Result:** Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
+**Result:** Candidate-freeze preparation and the independent audit are complete; measured A2 and staging remain closed pending the production adapter and matched-first conditional-reserve lifecycle. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
 
-**Decision:** BLOCKED_EXTERNAL_PROVIDER_EVIDENCE
+**Decision:** BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE
 
 ## Interpretation
 
@@ -147,11 +147,11 @@ This engineering evidence prevents outcome-driven candidate generation and prese
 
 ## Decision
 
-Status: **BLOCKED_EXTERNAL_PROVIDER_EVIDENCE**. Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
+Status: **BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE**. Candidate-freeze preparation and the independent audit are complete; measured A2 and staging remain closed pending the production adapter and matched-first conditional-reserve lifecycle. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.
 
 ## Next Action
 
-OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY
+IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

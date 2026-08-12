@@ -235,7 +235,9 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         for record in records
         if record["report_id"] == "task-official_codex_bridge_and_candidate_freeze"
     )
-    assert a2_task["result"]["decision"] == "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE"
+    assert a2_task["result"]["decision"] == (
+        "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
+    )
     assert a2_freeze_task["result"]["decision"] == "CLOSED_PASS_INDEPENDENT_AUDIT"
 
     outputs = projection_report_contents(ROOT, model)

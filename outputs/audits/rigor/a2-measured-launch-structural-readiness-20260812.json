@@ -1,0 +1,86 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-measured-launch-structural-readiness-20260812",
+  "artifact": "A2 measured launch package after IM audit 002",
+  "artifact_path": "docs/implementation/A2_PER_ARM_AUTOINDEX_im_002_001.md",
+  "artifact_sha256": "4f46a9a8e359f06c85089331fca8f5b17eed7114e63b882d37c6f6744a23ba54",
+  "review_status": "blocked_structural",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "No concrete production adapter currently evaluates the frozen A2 representation programs against the bound retrievers and evaluator.",
+      "Reserve activation is fixed in measured authority before the matched outcomes needed by the frozen activation predicate exist."
+    ]
+  },
+  "overall": {
+    "grade": null,
+    "mean_score": null,
+    "one_line_summary": "Owner authority and provider-readiness mechanics are sufficient for staging, but the measured package is structurally incomplete and cannot yet support a valid A2 launch.",
+    "strengths": [
+      "The 52-candidate freeze, arm roles, provider provenance, absolute TTL, live probe, watchdog, adoption, checkpoint, safe-return, and authority provenance guards are explicit and tested.",
+      "The Owner approved a 48-hour TTL target within the unchanged USD 35 A2 forward hard stop and explicitly allowed AP staging.",
+      "No measured A2, protected-data access, provider mutation, or remote A2 root creation occurred during this review."
+    ],
+    "weaknesses": [
+      "The only ArmIndex representation compiler is explicitly fixture-only and does not resolve measured model adapters.",
+      "The A1 v16 runner accepts only the five historical common-program IDs and cannot execute the frozen A2 program schema without a new adapter.",
+      "The single-pass executor cannot derive reserve activation after two matched batches while preserving exact-52 accounting."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {"score": null, "strengths": [], "weaknesses": ["Measured result production is not assessable without a production A2 adapter."], "suggestions": ["Implement and fixture-test the exact candidate-to-retriever-to-evaluator path."]},
+    "D2_falsifiability": {"score": null, "strengths": ["Strict metric comparison and fail-closed authority checks exist."], "weaknesses": ["The reserve predicate is not executable at the correct outcome checkpoint."], "suggestions": ["Add a hash-bound matched-first reserve decision and failure-injection tests."]},
+    "D3_scope_calibration": {"score": null, "strengths": ["The package remains pre-measurement engineering evidence."], "weaknesses": [], "suggestions": []},
+    "D4_argument_coherence": {"score": null, "strengths": ["Admission through closeout is represented as one lifecycle."], "weaknesses": ["The lifecycle lacks the concrete scientific executor and places reserve authority before its evidentiary inputs."], "suggestions": ["Bind a concrete command and two-stage authority continuation into the lifecycle."]},
+    "D5_exploration_integrity": {"score": null, "strengths": ["The blocker is recorded before spending the approved TTL on a disposable stage."], "weaknesses": [], "suggestions": []},
+    "D6_methodological_rigor": {"score": null, "strengths": ["Frozen bindings, protected boundaries, exact coverage, and safe return are strongly specified."], "weaknesses": ["The measured scientific unit is not implemented end to end."], "suggestions": ["Complete the production adapter and reserve state machine before AP staging and LO authorization."]}
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": "src/myis_research/armindex/compiler.py",
+      "target_entity": "compile_program",
+      "evidence_locator": "line 109: fixture-only; does not resolve model adapters",
+      "observation": "The compiler used to validate frozen candidates is explicitly synthetic and has no production retriever/evaluator binding.",
+      "reasoning": "A generic external command cannot be assumed to measure the intended A2 scientific unit, and the A1 v16 runner only recognizes its historical common programs.",
+      "suggestion": "Implement a production A2 adapter that consumes frozen program bytes and reuses the exact A1 v16 model, data, and evaluator bindings."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D4_argument_coherence",
+      "severity": "critical",
+      "target_artifact": "src/myis_research/armindex/a2_operational_executor.py",
+      "target_entity": "validate_measurement_authority and execute_external_candidate_set",
+      "evidence_locator": "lines 391 and 605-610",
+      "observation": "Active reserve IDs are fixed by authority before execution, and the executor accounts for all candidates in one pass.",
+      "reasoning": "The frozen predicate requires results from two complete matched batches before deciding whether each primary arm's third batch runs.",
+      "suggestion": "Add matched-first checkpoint evidence and an attempt-bound authority continuation that activates complete four-candidate reserve batches only after the predicate passes."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "HANDOFF.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_002_001.md",
+    "control/armindex/a2/execution-readiness-contract.v1.json",
+    "control/armindex/a2/execution-contract.v1.json",
+    "control/budgets/a2-execution-readiness-v1.json",
+    "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
+    "src/myis_research/armindex/a2_operational_executor.py",
+    "src/myis_research/armindex/a2_execution_readiness.py",
+    "src/myis_research/armindex/compiler.py",
+    "src/myis_research/armindex/autoindex.py",
+    "src/myis_research/armindex/a1_2_owner_local_measured_runner_v16.py",
+    "src/myis_research/armindex/a1_2_raw_materializer_bridge_v16.py",
+    "tests/test_armindex_a2_operational_executor.py",
+    "vast-ssh.md aggregate-safe fields"
+  ]
+}

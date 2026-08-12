@@ -265,7 +265,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -394,11 +394,11 @@
       "value": 156846
     }
   ],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Compute and storage feasibility fixtures",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-8",
-  "report_sha256": "0f44b7e96f5956f5b3ecf9fc85e48fe7dd822869ded188f76b09835718e5c094",
+  "report_sha256": "2bbbc58da5ff5f321287f5f353a11d391debd5e78ed5fd26dca74ea21945dc0e",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -411,7 +411,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
+    "program_state": "a2_implementation_blocked_measured_a2_locked",
     "task": "A0.8"
   },
   "status": "completed",

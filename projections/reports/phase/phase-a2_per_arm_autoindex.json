@@ -203,7 +203,7 @@
       "artifact_type": "runbook",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "content_sha256": "edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Defines checkpoint, recovery, safe-return, staging, and no-destroy behavior.",
       "parent_artifact_hashes": {},
@@ -221,7 +221,7 @@
       "artifact_type": "ledger",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
+      "content_sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Records material readiness transitions without candidate outcomes or protected payloads.",
       "parent_artifact_hashes": {},
@@ -238,8 +238,8 @@
   "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.",
-    "status": "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE"
+    "reason": "Candidate-freeze preparation and the independent audit are complete; measured A2 and staging remain closed pending the production adapter and matched-first conditional-reserve lifecycle. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.",
+    "status": "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
   },
   "evidence_class": "engineering_execution_readiness",
   "evidence_links": [
@@ -300,18 +300,18 @@
     },
     {
       "artifact_id": "a2-execution-readiness-runbook-v1",
-      "sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "sha256": "edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74",
       "uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "artifact_id": "a2-execution-readiness-ledger-v1",
-      "sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
+      "sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
       "uri": "control/armindex/a2/execution-ledger.v1.jsonl"
     }
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -378,7 +378,7 @@
       "forward_hard_stop_usd": 35,
       "measured_a2_started": false,
       "owner_ttl_hours": 40,
-      "status": "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
+      "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
     },
     "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
     "independent_audit": {
@@ -540,16 +540,16 @@
       "value": 0
     }
   ],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Search and freeze one representation program per promoted arm.",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "phase-a2_per_arm_autoindex",
-  "report_sha256": "4e960c54b34ab15d9c231d3594f2768edb83a2d83815d8246ace9610d6c73b70",
+  "report_sha256": "a3010dde5fed4398391ca3c2bc7d78655c8f2b8483724cc99323b27af772e9c8",
   "report_type": "phase",
   "result": {
-    "decision": "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE",
+    "decision": "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE",
     "output": "The Official Codex bridge and immutable A2 candidate universe are validated for model gpt-5.6-sol: 40 matched and 12 dormant reserve candidates, with compile-twice replay and freeze-lock bindings.",
-    "result": "Candidate-freeze preparation and the independent audit are complete; measured A2 remains closed until a fresh A2-goal preflight. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit."
+    "result": "Candidate-freeze preparation and the independent audit are complete; measured A2 and staging remain closed pending the production adapter and matched-first conditional-reserve lifecycle. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -557,7 +557,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_provider_admission_failed_closed_measured_a2_locked",
+    "program_state": "a2_implementation_blocked_measured_a2_locked",
     "task": null
   },
   "status": "blocked",

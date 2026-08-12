@@ -64,7 +64,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "bbf9dd4bce93907a0001c2de682a93b73f5dff2bd0c9113289f6b9e2038133fd",
+  "graph_sha256": "85157408157261fc586a44a9897dcf74814d142d5b9ba897a1a4d3b6508b538b",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -127,7 +127,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-armindex-a2-execution-ledger-v1-jsonl",
-      "sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
+      "sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
       "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
     },
     {
@@ -176,7 +176,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "sha256": "edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {

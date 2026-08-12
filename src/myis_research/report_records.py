@@ -3785,6 +3785,11 @@ def _record_for(
         and a2_readiness.get("status")
         == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
     )
+    a2_implementation_blocked = (
+        a2_readiness_valid
+        and a2_readiness.get("status")
+        == "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
+    )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and task_id in {None, "A1.2"}
@@ -4226,7 +4231,12 @@ def _record_for(
         audit_passed = a2_freeze.get("independent_audit_status") == "PASS"
         result = (
             "Candidate-freeze preparation and the independent audit are complete; "
-            "measured A2 remains closed until a fresh A2-goal preflight. "
+            + (
+                "measured A2 and staging remain closed pending the production adapter "
+                "and matched-first conditional-reserve lifecycle. "
+                if a2_implementation_blocked
+                else "measured A2 remains closed until a fresh A2-goal preflight. "
+            )
             if audit_passed
             else "Candidate-freeze preparation is complete and measured A2 remains blocked pending one independent audit. "
         ) + (
@@ -4244,6 +4254,8 @@ def _record_for(
         decision_status = (
             "CLOSED_PASS_INDEPENDENT_AUDIT"
             if audit_passed and task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+            else "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
+            if audit_passed and a2_implementation_blocked
             else "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE"
             if audit_passed and a2_provider_admission_failed_closed
             else "READY_FOR_FRESH_A2_GOAL_PREFLIGHT"

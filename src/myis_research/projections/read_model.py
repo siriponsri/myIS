@@ -911,6 +911,17 @@ def _a2_execution_readiness_projection(
             "provider_admission_status": "NOT_ATTEMPTED",
             "provider_admission_attempted": False,
         }
+        if latest_ledger_entry["status"] == "IMPLEMENTATION_BLOCKED":
+            return {
+                **result,
+                "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
+                "provider_admission_status": "DEFERRED_PENDING_IMPLEMENTATION",
+                "provider_admission_attempted": True,
+                "next_authorized_action": (
+                    "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_"
+                    "CONDITIONAL_RESERVE_LIFECYCLE"
+                ),
+            }
         if latest_ledger_entry["status"] == "FAILED_CLOSED":
             return {
                 **result,
@@ -1645,6 +1656,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             else "a2_provider_admission_failed_closed_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
+            else "a2_implementation_blocked_measured_a2_locked"
+            if a2_execution_readiness.get("status")
+            == "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
             else "a2_execution_readiness_complete_fresh_admission_required"
             if a2_execution_readiness.get("validated") is True
             else "a2_candidate_freeze_audit_passed_measured_a2_closed"
@@ -1666,7 +1680,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
                     else "blocked"
                     if a2_execution_readiness.get("status")
-                    == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
+                    in {
+                        "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
+                        "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
+                    }
                     else "ready"
                     if a2_execution_readiness.get("validated") is True
                     else "blocked"
@@ -1683,7 +1700,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                                 == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
                                 else "blocked"
                                 if a2_execution_readiness.get("status")
-                                == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
+                                in {
+                                    "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
+                                    "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
+                                }
                                 else "ready"
                                 if a2_execution_readiness.get("validated") is True
                                 else "blocked"

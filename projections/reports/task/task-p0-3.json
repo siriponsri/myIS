@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -118,11 +118,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "2908fa32219e985c9f103f837c3d3e4308ad8096c5a8109fd04856aa5a8f6d09",
+  "report_sha256": "835ab61c8b71319e7d2fd8481c708b779bd609cc4257e6ae79b7eeb834d80762",
   "report_type": "task",
   "result": {
     "decision": "completed",

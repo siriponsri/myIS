@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-12T11:56:21Z",
-  "generated_from_revision": "17298a67b3504fbf08ad43a1d540932993a3df83db2c3a9cf96cdbd02ab477e8",
+  "generated_from_revision": "4a60f7b751391ebd084e1176cfe8891f39cb4426074706643485d3b6b7022021",
   "git_commit": "4a2ba332c596ae2d256d8c6897276cb5207ec336",
   "governance_status": {
     "d2": "waiting_owner",
@@ -118,11 +118,11 @@
   "language": "en",
   "last_material_update": "2026-08-12T11:56:21Z",
   "metric_references": [],
-  "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
+  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
   "objective": "Deterministic kernel and schema contracts",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-1",
-  "report_sha256": "8ca05e16a08f67df430f6b3e61cdc11e79753ccc83da8def1592a4f6030c502a",
+  "report_sha256": "4a8c1cb07df774bf60d3e9f6e8ea187292c2a2fd10cb05d8cf5b182a602199f0",
   "report_type": "task",
   "result": {
     "decision": "completed",

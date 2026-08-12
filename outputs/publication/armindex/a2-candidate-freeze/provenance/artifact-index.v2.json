@@ -170,18 +170,18 @@
     },
     {
       "artifact_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "bytes": 2382,
+      "bytes": 2489,
       "classification": "metadata",
       "media_type": "text/markdown",
-      "sha256": "2684f60a3f975959a490ecde1765bb523d9f8f50052b9da36606eed6e8063a76",
+      "sha256": "edd3ed81782c11ab867b847ae9b699305907fc2d3f492fc929c88cf1f46eea74",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "artifact_id": "control-armindex-a2-execution-ledger-v1-jsonl",
-      "bytes": 1867,
+      "bytes": 2902,
       "classification": "metadata",
       "media_type": "text/plain",
-      "sha256": "d45c0b9612adc0bb59dc3a8452ed0ae924d5c99f6747eeb16268551ab018be65",
+      "sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
       "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
     },
     {
@@ -227,7 +227,7 @@
     "status": "candidate_freeze_audit_passed_measured_a2_closed",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "ba15639f8c2064e4ae2083a773f5a6b05cbdb5687a88609d11fe42ef25c59204",
+  "index_sha256": "bc5b1653709705f14dfa61c8b0a73bc32091446c4a31edd0804b7a32c7445ac2",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"
