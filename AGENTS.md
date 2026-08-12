@@ -42,6 +42,38 @@ Use only `A0_MIGRATION_FOUNDATION`,
 Do not add micro-gates. The P0-P4 phases and `R0`, `R0-W`, and `R1` arms remain
 readable only as historical SCOPE/P1/P2 vocabulary and evidence lineage.
 
+## Project priorities and Owner support
+
+All sessions optimize for the strongest defensible publication impact for the
+target NLP journal while preserving scientific validity, reproducibility, and
+claim discipline.
+
+Publication impact means prioritizing work that can materially improve:
+- novelty and clarity of the research contribution;
+- strength and completeness of measured evidence;
+- reviewer-defensible experimental design;
+- reproducibility and provenance;
+- useful ablations, diagnostics, negative results, and limitations;
+- quality of figures, tables, analysis, and publication-facing interpretation.
+
+Do not optimize for a positive result. A strong negative or boundary finding is
+valuable when it is well measured, well explained, and publication-relevant.
+
+The Owner is low-dev and should not be used as an engineering router. Agents
+should reduce Owner workload throughout the project by:
+- resolving routine engineering choices independently;
+- presenting technical decisions in plain Thai when reporting to the Owner;
+- recommending one preferred next action instead of a long undifferentiated
+  option list;
+- giving exact copy-paste prompts and commands whenever the Owner must start a
+  new session or run a local/provider action;
+- naming the recommended session mode and model profile;
+- explaining briefly why that route is recommended;
+- asking the Owner only for decisions that truly require Owner authority.
+
+When several valid paths exist, recommend the path with the best expected
+publication value per unit of time, compute, money, and Owner effort.
+
 ## Safety boundary
 
 - Compute, GPU, paid API, model download, and provider use follow the current
@@ -246,6 +278,69 @@ Before a new measured LO launch, AP checks only the essentials:
 Do not create a new gate for minor engineering issues. Send them directly to
 IM.
 
+### AP Owner-facing status and next-session recommendation
+
+At the end of every substantive AP session, report the current status to the
+Owner in plain Thai and recommend exactly one primary next session.
+
+The Owner-facing handoff should include:
+- current Phase/Task and one-sentence status;
+- what AP found or changed;
+- why the next action matters for publication impact;
+- recommended next session: `AP`, `IM`, or `LO`;
+- recommended model/profile for that session;
+- exact copy-paste prompt to start the next session;
+- any command that must be run before or together with that prompt;
+- what success should look like;
+- Owner action required, if any.
+
+Prefer a compact format such as:
+
+```text
+สถานะ: <PHASE/TASK + short status>
+ผลกระทบต่อ paper: <why this matters>
+
+แนะนำ session ถัดไป: <IM | LO | AP>
+โมเดล: <recommended model/profile>
+
+ถ้ามี command ให้รันก่อน:
+<exact copy-paste command>
+
+Prompt สำหรับ session ถัดไป:
+<exact copy-paste prompt>
+
+คาดหวังผลลัพธ์:
+<short expected outcome>
+
+Owner ต้องตัดสินใจ:
+<none | exact Owner-only decision>
+```
+
+Examples:
+
+```text
+แนะนำ session ถัดไป: IM
+โมเดล: GPT-5.6 Sol High
+Prompt:
+ตอนนี้คุณคือ IM ตาม AGENTS.md
+อ่าน docs/audit/A2_PER_ARM_AUTOINDEX_audit_003.md
+แล้ว implement, validate, commit/push และเขียน IM result handoff ตาม contract
+```
+
+```text
+แนะนำ session ถัดไป: LO
+โมเดล: GPT-5.6 Terra XHigh
+Prompt:
+/goal อ่าน docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md แล้วทำงานตามขั้นตอนทั้งหมด
+```
+
+If a shell, SSH, provider, Git, or local setup command is required before the
+next prompt, show that command first and make it copy-paste ready. Do not assume
+the Owner will infer omitted CLI steps.
+
+AP should recommend a stronger model only when the expected reasoning benefit
+justifies the additional token/credit cost.
+
 End with one practical routing note:
 - `READY_FOR_LO`
 - `NEEDS_IM`
@@ -291,6 +386,88 @@ IM finishes by writing
 revision, changed surface, focused checks, staged execution path, known
 limitations, and recommended next action for AP.
 
+### IM Owner-facing status and next-session recommendation
+
+At the end of every substantive IM session, report the implementation status to
+the Owner in plain Thai and recommend exactly one primary next session.
+
+The Owner-facing handoff should include:
+- current Phase/Task and short implementation status;
+- source audit and IM result document path;
+- what was implemented or repaired;
+- focused validation result;
+- whether a launch-critical surface changed;
+- recommended next session and model/profile;
+- exact copy-paste prompt for that session;
+- any command the Owner must run first;
+- Owner action required, if any.
+
+Use these routing defaults:
+
+- If implementation is complete, the active goal is still current, and no
+  launch-critical surface changed -> recommend `LO` with GPT-5.6 Terra XHigh.
+- If IM materially changed scientific bindings, evaluator/runner semantics,
+  protected boundary, provider/budget/TTL policy, or recovery/safe-return logic
+  -> recommend `AP` with GPT-5.6 Sol High for a short readiness review.
+- If difficult implementation work remains -> recommend another `IM` session
+  using Sol Medium by default or Sol High only when the remaining engineering
+  problem is materially complex.
+- Recommend `NEEDS_OWNER` only when actual Owner authority is required.
+
+Prefer this compact Owner-facing format:
+
+```text
+สถานะ: <PHASE/TASK + implementation status>
+IM result: <docs/implementation/...>
+Validation: <short result>
+
+แนะนำ session ถัดไป: <LO | AP | IM>
+โมเดล: <recommended model/profile>
+
+ถ้ามี command ให้รันก่อน:
+<exact copy-paste command>
+
+Prompt สำหรับ session ถัดไป:
+<exact copy-paste prompt>
+
+คาดหวังผลลัพธ์:
+<short expected outcome>
+
+Owner ต้องตัดสินใจ:
+<none | exact Owner-only decision>
+````
+
+When recommending LO, provide the exact `/goal` command rather than asking the
+Owner to construct it.
+
+Example:
+
+```text
+แนะนำ session ถัดไป: LO
+โมเดล: GPT-5.6 Terra XHigh
+
+Prompt:
+/goal อ่าน docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md แล้วทำงานตามขั้นตอนทั้งหมด
+```
+
+When recommending AP, point AP directly to the latest IM result document.
+
+Example:
+
+```text
+แนะนำ session ถัดไป: AP
+โมเดล: GPT-5.6 Sol High
+
+Prompt:
+ตอนนี้คุณคือ AP ตาม AGENTS.md
+อ่าน docs/implementation/A2_PER_ARM_AUTOINDEX_im_003_001.md
+ตรวจผล implementation และ launch readiness เฉพาะส่วนที่เปลี่ยน
+จากนั้นแนะนำ next session พร้อม exact prompt ตาม AGENTS.md
+```
+
+Do not duplicate full implementation logs in the Owner-facing message. Point to
+the IM result document and summarize only what the Owner needs to continue
+
 ### LO — Long Run
 
 Preferred profile: MaxPlus GPT-5.6 Terra XHigh.
@@ -324,6 +501,81 @@ For model/provider failure, use the safe-checkpoint fallback rules in
 Before ending, LO writes
 `docs/long_run/<PHASE>_lo_<GOAL_INDEX>_<INDEX>.md` so AP can review the exact
 execution result without depending on chat history.
+
+### LO Owner-facing status and next-session recommendation
+
+At the end of every substantive LO session, report the long-run status to the
+Owner in plain Thai and recommend exactly one primary next session.
+
+The Owner-facing handoff should include:
+- current Phase/Task and execution status;
+- source goal and LO result document path;
+- whether execution completed, partially completed, or stopped;
+- measured/operational evidence created;
+- recovery used, if any;
+- safe-return and provider/remote disposition when relevant;
+- recommended next session and model/profile;
+- exact copy-paste prompt for that session;
+- any command the Owner must run first;
+- Owner action required, if any.
+
+Use these routing defaults:
+
+- After successful measured or long-run closeout -> recommend `AP`.
+- Use GPT-5.6 Sol High for normal evidence review and next-phase planning.
+- Recommend GPT-5.6 Sol XHigh when the result requires high-consequence
+  scientific interpretation, publication-facing claim judgment, or major Phase
+  closeout.
+- If LO stops because architecture/recovery is materially broken -> recommend
+  `IM` using Sol Medium or Sol High according to engineering complexity.
+- If LO stops because scientific semantics or authority are ambiguous ->
+  recommend `AP`.
+- Recommend `NEEDS_OWNER` only when actual Owner authority is required.
+
+Prefer this compact Owner-facing format:
+
+```text
+สถานะ: <PHASE/TASK + execution status>
+Goal: <docs/goal/...>
+LO result: <docs/long_run/...>
+
+Measured/operational result:
+<short aggregate-safe summary>
+
+Safe return / provider:
+<short status>
+
+แนะนำ session ถัดไป: <AP | IM>
+โมเดล: <recommended model/profile>
+
+ถ้ามี command ให้รันก่อน:
+<exact copy-paste command>
+
+Prompt สำหรับ session ถัดไป:
+<exact copy-paste prompt>
+
+คาดหวังผลลัพธ์:
+<short expected outcome>
+
+Owner ต้องตัดสินใจ:
+<none | exact Owner-only decision>
+````
+
+Example after successful closeout:
+
+```text
+แนะนำ session ถัดไป: AP
+โมเดล: GPT-5.6 Sol XHigh
+
+Prompt:
+ตอนนี้คุณคือ AP ตาม AGENTS.md
+อ่าน docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md
+ตรวจ measured closeout, claim boundary และ publication impact
+จากนั้นกำหนด next Phase/Task และแนะนำ session ถัดไปพร้อม exact prompt
+```
+
+Do not make scientific interpretations in the Owner-facing LO summary beyond
+what the canonical evidence supports. Publication interpretation belongs to AP.
 
 ### Session workflow
 
@@ -604,6 +856,11 @@ Report concisely:
 - blockers that still matter;
 - protected surfaces left untouched;
 - next practical action.
+
+When the closing session is AP, also include the Owner-facing next-session
+package defined in `AP Owner-facing status and next-session recommendation`:
+recommended session, recommended model, exact copy-paste prompt, and any
+required command.
 
 Do not claim measured completion without the required measured evidence,
 safe-return state, and canonical closeout artifacts.
