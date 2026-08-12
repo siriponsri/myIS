@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T15:31:53Z",
-  "generated_from_revision": "facfa2c510c0c0d56bec04c240113e42a0b45a4eeaf5b674f3f6a5e4b93a38f2",
-  "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+  "generated_at": "2026-08-12T16:55:09Z",
+  "generated_from_revision": "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a",
+  "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+    "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,19 +52,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
+      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T15:31:53Z",
+  "last_material_update": "2026-08-12T16:55:09Z",
   "metric_references": [],
-  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
+  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Analyze transfer, complementarity, and production-constrained harnesses.",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "phase-a3_transfer_complementarity_and_harnessopt",
-  "report_sha256": "438e5f08112a194d7d7b881c71a00916bfbf1b4169920f70a655052b9fde89a3",
+  "report_sha256": "4e67ee24b1a69187985d78751e1e5f4aef86ec997b02fcebb409e207e13eff24",
   "report_type": "phase",
   "result": {
     "decision": "blocked",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_implementation_blocked_measured_a2_locked",
+    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
     "task": null
   },
   "status": "blocked",

@@ -666,6 +666,83 @@ def test_live_remote_probe_accepts_bounded_remote_clock_lead(
 
 
 @pytest.mark.parametrize(
+    ("observed_at", "remaining", "message"),
+    [
+        ("2026-08-12T08:05:30Z", 172770, None),
+        ("2026-08-12T08:06:01Z", 172739, "clock skew"),
+        ("2026-08-12T08:05:30Z", 172800, "remaining TTL drift"),
+    ],
+)
+def test_v2_live_probe_uses_remote_observation_for_ttl_and_local_time_for_floor(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    observed_at: str,
+    remaining: int,
+    message: str | None,
+) -> None:
+    known = tmp_path / "known_hosts"
+    known.write_text("aggregate-safe ssh host key\n", encoding="ascii")
+    provider = {
+        "provider_instance_id": "58881234",
+        "provider_instance_binding_sha256": "9" * 64,
+        "ssh_host_key_sha256": file_sha256(known),
+        "runtime_sha256": "a" * 64,
+        "gpu_uuid_set_sha256": "b" * 64,
+        "model_lockset_sha256": "c" * 64,
+        "data_handoff_sha256": "d" * 64,
+        "ttl_deadline_utc": "2026-08-14T08:05:00Z",
+    }
+    body = {
+        "schema_version": "myis.armindex-a2-live-remote-probe-receipt.v2",
+        "receipt_id": f"{ATTEMPT}-live-remote-probe-v2",
+        "attempt_id": ATTEMPT,
+        "status": "PASS_A2_LIVE_REMOTE_PROBE",
+        "observed_at_utc": observed_at,
+        "provider_instance_id": provider["provider_instance_id"],
+        "provider_instance_binding_sha256": provider["provider_instance_binding_sha256"],
+        "ssh_host_key_sha256": provider["ssh_host_key_sha256"],
+        "runtime_sha256": provider["runtime_sha256"],
+        "gpu_uuid_set_sha256": provider["gpu_uuid_set_sha256"],
+        "gpu_count": 4,
+        "gpu_model": "RTX3090",
+        "vram_mib_each": 24576,
+        "gpu_compute_process_count": 0,
+        "a2_process_count": 0,
+        "model_lockset_sha256": provider["model_lockset_sha256"],
+        "data_handoff_sha256": provider["data_handoff_sha256"],
+        "bundle_sha256": "e" * 64,
+        "remote_root": f"/opt/myis/{ATTEMPT}",
+        "remote_root_absent": True,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"],
+        "remaining_ttl_seconds": remaining,
+    }
+    probe = {**body, "receipt_sha256": canonical_sha256(body)}
+    monkeypatch.setattr(
+        operational,
+        "validate_provider_admission_receipt_v2",
+        lambda *_args, **_kwargs: dict(provider),
+    )
+
+    def validate() -> dict[str, object]:
+        return operational.validate_live_remote_probe_v2(
+            ROOT,
+            attempt_id=ATTEMPT,
+            probe=probe,
+            provider_admission_receipt=provider,
+            bundle_sha256="e" * 64,
+            remote_root=f"/opt/myis/{ATTEMPT}",
+            known_hosts_path=known,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+    if message is None:
+        assert validate()["remaining_ttl_seconds"] == 172770
+    else:
+        with pytest.raises(operational.A2OperationalExecutorError, match=message):
+            validate()
+
+
+@pytest.mark.parametrize(
     ("field", "value", "message"),
     [
         ("runtime_sha256", "0" * 64, "runtime drift"),
@@ -1147,4 +1224,47 @@ def test_execute_cli_fails_closed_without_measured_authority(
         "external executor argv must match tracked measured adapter",
         "receipt_sha256 is invalid",
         "Owner-local measured input manifest is missing or invalid",
+    }
+
+
+def test_stage_cli_rejects_partial_remote_identity_paths(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    inputs = {}
+    for name in (
+        "provider-admission",
+        "bundle-receipt",
+        "bundle",
+        "connection",
+        "observation",
+        "runtime",
+        "model",
+        "data",
+        "host-key",
+        "management",
+    ):
+        path = tmp_path / name
+        path.write_text("{}", encoding="ascii")
+        inputs[name] = path
+    args = [
+        "--repository-root", str(ROOT), "--attempt-id", ATTEMPT, "stage",
+        "--provider-admission-receipt", str(inputs["provider-admission"]),
+        "--bundle-receipt", str(inputs["bundle-receipt"]),
+        "--bundle", str(inputs["bundle"]),
+        "--remote-root", f"/opt/myis/{ATTEMPT}",
+        "--watchdog-deadline-utc", "2026-08-13T08:00:00Z",
+        "--owner-connection", str(inputs["connection"]),
+        "--provider-observation", str(inputs["observation"]),
+        "--runtime-source", str(inputs["runtime"]),
+        "--model-lockset-source", str(inputs["model"]),
+        "--data-handoff-source", str(inputs["data"]),
+        "--ssh-host-key-source", str(inputs["host-key"]),
+        "--management-authority-source", str(inputs["management"]),
+        "--remote-instance-id-path", "/opt/myis/identity/instance-id",
+    ]
+    assert operational.main(args) == 2
+    result = json.loads(capsys.readouterr().out)
+    assert result == {
+        "error": "remote stage requires every remote identity path",
+        "status": "FAILED_CLOSED",
     }

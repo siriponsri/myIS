@@ -39,32 +39,32 @@
     {
       "relation": "binds",
       "source": "campaigns-armindex-multiretriever-v2-evidence-a2-five-arm-candidate-freeze-receipt-v1-json",
-      "target": "control-armindex-a2-execution-readiness-contract-v1-json"
+      "target": "control-armindex-a2-execution-readiness-contract-v2-json"
     },
     {
       "relation": "binds",
-      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
-      "target": "control-execution-envelope-a2-readiness-v1-yaml"
+      "source": "control-armindex-a2-execution-readiness-contract-v2-json",
+      "target": "control-execution-envelope-a2-readiness-v2-yaml"
     },
     {
       "relation": "binds",
-      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "source": "control-armindex-a2-execution-readiness-contract-v2-json",
       "target": "control-budgets-a2-execution-readiness-v1-json"
     },
     {
       "relation": "binds",
-      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "source": "control-armindex-a2-execution-readiness-contract-v2-json",
       "target": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md"
     },
     {
       "relation": "binds",
-      "source": "control-armindex-a2-execution-readiness-contract-v1-json",
+      "source": "control-armindex-a2-execution-readiness-contract-v2-json",
       "target": "control-armindex-a2-execution-ledger-v1-jsonl"
     }
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "b598a494992c07205bf8827c8c238125fc49ba3443b3cfa545a68f1034f1b40d",
+  "graph_sha256": "3383df2c5f72752fda97a3776361d963e3b5aebc44cbc57e43beac7c83ad70cc",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -127,15 +127,15 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-armindex-a2-execution-ledger-v1-jsonl",
-      "sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
+      "sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
       "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
     },
     {
       "classification": "metadata",
       "kind": "control",
-      "node_id": "control-armindex-a2-execution-readiness-contract-v1-json",
-      "sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "uri": "../../../01_Research/control/armindex/a2/execution-readiness-contract.v1.json"
+      "node_id": "control-armindex-a2-execution-readiness-contract-v2-json",
+      "sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "uri": "../../../01_Research/control/armindex/a2/execution-readiness-contract.v2.json"
     },
     {
       "classification": "metadata",
@@ -161,9 +161,9 @@
     {
       "classification": "metadata",
       "kind": "control",
-      "node_id": "control-execution-envelope-a2-readiness-v1-yaml",
-      "sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
-      "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v1.yaml"
+      "node_id": "control-execution-envelope-a2-readiness-v2-yaml",
+      "sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v2.yaml"
     },
     {
       "classification": "metadata",
@@ -176,14 +176,14 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
+      "sha256": "a02d0cf2701c09938bb69b5a4de624d8b28c8b09cbecee76809afb915403d62f",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-source-of-truth-yaml",
-      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
+      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "../../../01_Research/control/source-of-truth.yaml"
     },
     {

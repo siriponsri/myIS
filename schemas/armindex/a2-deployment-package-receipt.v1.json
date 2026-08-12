@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-deployment-package-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "attempt_id", "status", "package_sha256",
+    "deployment_manifest_sha256", "a2_bundle_receipt_sha256", "a2_bundle_sha256",
+    "frozen_a1_bundle_sha256", "model_file_counts", "wheelhouse_declared_file_count",
+    "handoff_source_file_counts", "provider_instance_binding_status",
+    "scientific_authority", "measured_execution_authorized",
+    "protected_payload_included", "model_or_wheel_bytes_included", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-deployment-package-receipt.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-deployment-package-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_CPU_LOCAL_A2_DEPLOYMENT_PACKAGE"},
+    "package_sha256": {"$ref": "#/$defs/hash"},
+    "deployment_manifest_sha256": {"$ref": "#/$defs/hash"},
+    "a2_bundle_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "a2_bundle_sha256": {"$ref": "#/$defs/hash"},
+    "frozen_a1_bundle_sha256": {"$ref": "#/$defs/hash"},
+    "model_file_counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ARM-02", "ARM-03", "ARM-04", "ARM-05"],
+      "properties": {
+        "ARM-02": {"const": 12}, "ARM-03": {"const": 12},
+        "ARM-04": {"const": 12}, "ARM-05": {"const": 12}
+      }
+    },
+    "wheelhouse_declared_file_count": {"const": 14},
+    "handoff_source_file_counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["baseline", "journal", "closeout"],
+      "properties": {
+        "baseline": {"const": 28}, "journal": {"const": 7}, "closeout": {"const": 11}
+      }
+    },
+    "provider_instance_binding_status": {"const": "UNBOUND_FRESH_INSTANCE_REQUIRED"},
+    "scientific_authority": {"const": false},
+    "measured_execution_authorized": {"const": false},
+    "protected_payload_included": {"const": false},
+    "model_or_wheel_bytes_included": {"const": false},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

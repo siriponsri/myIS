@@ -15,14 +15,14 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
-  destroy instance `47411176` and provision a fresh instance. Audit 004 assigned
-  the old instance `DESTROY_REQUIRED`, but the CPU-local provider binding, staging
-  repairs, and new deployment bundle must be completed before fresh admission.)
+  destroy instance `47411176` and provision a fresh instance. Audit 004 implementation
+  completed the additive v2 provider binding, staging repairs and CPU-local deployment
+  package. Fresh AP admission/staging remains pending.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -341,10 +341,9 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-IM performs `docs/audit/A2_PER_ARM_AUTOINDEX_audit_004.md`: remove the obsolete
-instance-47411176 launch binding through an additive current revision, finish the
-bounded staging repairs, validate the existing local model/wheelhouse/A1 handoff
-assets, and create a clean new-instance deployment bundle. Measured A2 remains closed.
+AP reads `docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md`, validates the
+Owner-local pushed-HEAD bundle/deployment receipt, and performs fresh-instance
+admission plus isolated staging only. Measured A2 remains closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
@@ -383,10 +382,13 @@ validate `12/12` declared files each; the Linux wheelhouse validates `14/14`.
 No further remote pull is required before the Owner destroys instance `47411176`.
 The A2 entry preflight still exposes the historical A1 `REUSE_ELIGIBLE` field;
 that field is not fresh A2 admission and does not override the Owner route.
-The current A2 admission schemas/validator/goal still hard-bind that old instance,
-and the bundle `a4279056...63e563` predates bounded stage-path repairs. Therefore
-the next session is IM audit 004 for CPU-local new-instance rebinding and bundle
-preparation, not LO. Provider admission, execution adoption, measured A2, and
-protected-data access remain unstarted.
+Audit 004 implementation now preserves v1 history while adding a runtime-supplied
+v2 binding chain through admission, live probe, stage and adoption. Remote TTL is
+derived from observation time while the post-probe local clock independently
+enforces the 40-hour floor with a 60-second skew bound. The CPU-local deployment
+package revalidates four 12-file model manifests, the 14-file Linux wheelhouse,
+A1 safe return/handoffs/runtime/frozen bundle, and the final A2 bundle while
+containing metadata and hashes only. Provider admission, execution adoption,
+measured A2, and protected-data access remain unstarted.
 Publication claims remain limited to freeze integrity, reproducibility, provider
 lifecycle, and readiness until measured receipts and safe return exist.

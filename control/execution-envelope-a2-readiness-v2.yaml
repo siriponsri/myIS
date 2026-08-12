@@ -1,0 +1,37 @@
+schema_version: myis.execution-envelope-a2-readiness.v2
+envelope_id: a2-fresh-instance-rebind-v2
+revision_id: a2-fresh-instance-rebind-v2
+status: needs_im_new_instance_rebind_measurement_locked
+authority:
+  standing_decision: D1_START_CAMPAIGN
+  preparation_authorized: true
+  provider_admission_authorized: true
+  remote_staging_authorized: true
+  measured_a2_authorized: false
+scope:
+  campaign_id: armindex-multiretriever-v2
+  phase_id: A2_PER_ARM_AUTOINDEX
+  task_id: A2.1
+  frozen_candidate_count: 52
+  diagnostic_non_advancing_arms: [ARM-01, ARM-02]
+resources:
+  provider: Vast
+  provider_instance_id: runtime_supplied_from_fresh_binding
+  provider_instance_binding_required: true
+  gpu_count: 4
+  gpu_model: RTX3090
+  vram_mib_each: 24576
+  target_ttl_hours: 48
+  owner_ttl_hours: 40
+  remote_clock_skew_max_seconds: 60
+  forward_hard_stop_usd: 35
+  network_model_download: false
+  remote_staging: true
+  measured_retrieval: false
+protected_boundary:
+  qrels: forbidden
+  membership: forbidden
+  query_ids: forbidden
+  per_query_outcomes: forbidden
+  credentials: forbidden
+  raw_provider_payloads: forbidden

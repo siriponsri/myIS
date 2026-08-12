@@ -4104,8 +4104,8 @@ def _armindex_paper_artifact_contents(
         # the publication source of candidate identity and measured status.
         artifact_specs.extend(
             (
-                ("control/armindex/a2/execution-readiness-contract.v1.json", "metadata"),
-                ("control/execution-envelope-a2-readiness-v1.yaml", "metadata"),
+                ("control/armindex/a2/execution-readiness-contract.v2.json", "metadata"),
+                ("control/execution-envelope-a2-readiness-v2.yaml", "metadata"),
                 ("control/budgets/a2-execution-readiness-v1.json", "metadata"),
                 ("control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md", "metadata"),
                 ("control/armindex/a2/execution-ledger.v1.jsonl", "metadata"),

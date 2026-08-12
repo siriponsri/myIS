@@ -313,15 +313,19 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     )
     readiness = model["armindex"]["a2_execution_readiness"]
     assert readiness["status"] == (
-        "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
+        "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     )
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
     assert readiness["provider_admission_performed"] is False
     assert readiness["provider_execution_adoption_performed"] is False
-    assert readiness["provider_admission_attempted"] is True
-    assert readiness["provider_admission_status"] == "DEFERRED_PENDING_IMPLEMENTATION"
-    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0003"
+    assert readiness["provider_admission_attempted"] is False
+    assert readiness["provider_admission_status"] == "NOT_ATTEMPTED_NEW_INSTANCE_REQUIRED"
+    assert readiness["next_authorized_action"] == (
+        "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_"
+        "THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
+    )
+    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0004"
     a2 = next(
         phase
         for phase in model["armindex"]["phases"]

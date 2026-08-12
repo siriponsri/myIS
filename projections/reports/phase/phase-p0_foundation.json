@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
+      "content_sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
+      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T15:31:53Z",
-  "generated_from_revision": "facfa2c510c0c0d56bec04c240113e42a0b45a4eeaf5b674f3f6a5e4b93a38f2",
-  "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+  "generated_at": "2026-08-12T16:55:09Z",
+  "generated_from_revision": "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a",
+  "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,21 +108,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+    "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
     "source_of_truth": {
-      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
+      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-12T15:31:53Z",
+  "last_material_update": "2026-08-12T16:55:09Z",
   "metric_references": [],
-  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
+  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "e40ca82666fccdbfd2fc7fa2d58e7546fe2a40a59fa512119c0e4875cf1fbb50",
+  "report_sha256": "5710609aa46174259c20a74410e7a8955492f12a2ad5175629a00f4b045ce84c",
   "report_type": "phase",
   "result": {
     "decision": "completed",

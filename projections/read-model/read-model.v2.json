@@ -4092,45 +4092,36 @@
       "candidate_count": 52,
       "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
       "conditional_reserve_candidate_count": 12,
-      "contract_file_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace",
-      "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "contract_file_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "contract_sha256": "f38e32e4f40102bac4a4be11c22ee71b0e81db9aee47bd5b6ea90dc07bbab101",
+      "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "counters": {
         "candidate_evaluations": 0,
-        "final_accesses": 0,
-        "gpu_scientific_runs": 0,
-        "harness_dev_accesses": 0,
         "measured_a2_runs": 0,
         "provider_admissions": 0,
-        "provider_execution_adoptions": 0,
-        "rep_dev_measurements": 0,
-        "selection_accesses": 0
+        "provider_execution_adoptions": 0
       },
       "current_execution_pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json",
       "diagnostic_non_advancing_arms": [
         "ARM-01",
         "ARM-02"
       ],
-      "envelope_file_sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
-      "envelope_uri": "control/execution-envelope-a2-readiness-v1.yaml",
+      "envelope_file_sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "envelope_uri": "control/execution-envelope-a2-readiness-v2.yaml",
       "evidence_class": "engineering_execution_readiness",
       "forward_hard_stop_usd": 35,
       "freeze_bindings": {
         "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
-        "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
         "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952",
-        "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json",
-        "manifest_file_sha256": "a49967760488971470169b97dd4a7638e045a72b6d20b119645eb0f9261f3133",
-        "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
-        "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"
+        "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"
       },
-      "latest_ledger_entry_id": "A2EXEC-EV0003",
-      "latest_ledger_entry_sha256": "88ce202f1ed012a83dddb5dd4194dfe46957d24ecd6be1514e934fff0d3bc61d",
-      "ledger_sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
+      "latest_ledger_entry_id": "A2EXEC-EV0004",
+      "latest_ledger_entry_sha256": "e4167b11c93f97d3c8db24f8150e844b60e8c64c667ea12b30cb26f99fa0078c",
+      "ledger_sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
       "ledger_uri": "control/armindex/a2/execution-ledger.v1.jsonl",
       "matched_candidate_count": 40,
       "measured_a2_started": false,
-      "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
+      "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
       "owner_ttl_hours": 40,
       "phase_id": "A2_PER_ARM_AUTOINDEX",
       "primary_advancement_arms": [
@@ -4138,15 +4129,15 @@
         "ARM-05",
         "ARM-04"
       ],
-      "provider_admission_attempted": true,
+      "provider_admission_attempted": false,
       "provider_admission_performed": false,
-      "provider_admission_status": "DEFERRED_PENDING_IMPLEMENTATION",
+      "provider_admission_status": "NOT_ATTEMPTED_NEW_INSTANCE_REQUIRED",
       "provider_execution_adoption_performed": false,
       "remote_staging_performed": false,
-      "runbook_sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
+      "runbook_sha256": "a02d0cf2701c09938bb69b5a4de624d8b28c8b09cbecee76809afb915403d62f",
       "runbook_uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
       "scientific_authority": false,
-      "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
+      "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
       "task_id": "A2.1",
       "validated": true
     },
@@ -4637,7 +4628,7 @@
       "validated": true
     },
     "local_adoption_input_status": "A1_COMPLETE_25_OF_25",
-    "next_command": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
+    "next_command": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -4822,7 +4813,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a2_implementation_blocked_measured_a2_locked",
+    "status": "a2_new_instance_rebind_required_measured_a2_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -4854,7 +4845,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a2_implementation_blocked_measured_a2_locked",
+      "status": "a2_new_instance_rebind_required_measured_a2_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -5013,7 +5004,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-12T15:31:53Z",
+  "generated_at": "2026-08-12T16:55:09Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -5921,7 +5912,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "facfa2c510c0c0d56bec04c240113e42a0b45a4eeaf5b674f3f6a5e4b93a38f2",
+  "projection_revision": "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5965,8 +5956,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "facfa2c510c0c0d56bec04c240113e42a0b45a4eeaf5b674f3f6a5e4b93a38f2",
-  "read_model_sha256": "9e0554ce0c201200bef136ec827a028e2d9f758097a92234ebff4c0dd9026002",
+  "read_model_revision": "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a",
+  "read_model_sha256": "c6cef36cd22a79a463f4392da5009e3c6fb279ae9a963b66c2c3ed8137fa1b7b",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -6099,7 +6090,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+  "source_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
   "tasks": [
     {
       "evidence_ids": [],

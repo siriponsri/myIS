@@ -63,6 +63,8 @@ _REQUIRED_PROVIDER_SOURCES = frozenset(
     }
 )
 _REQUIRED_TTL_SECONDS = 40 * 60 * 60
+_FRESH_INSTANCE_ID = re.compile(r"^[1-9][0-9]{3,19}$")
+_DESTROYED_PROVIDER_INSTANCE_IDS = frozenset({"47411176"})
 _BUNDLE_CLOSURE = (
     "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
     "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json",
@@ -72,6 +74,7 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-candidate-manifest.v1.json",
     "schemas/armindex/a2-execution-adoption-receipt.v1.json",
     "schemas/armindex/a2-execution-bundle-receipt.v1.json",
+    "schemas/armindex/a2-deployment-package-receipt.v1.json",
     "schemas/armindex/a2-execution-ledger-entry.v1.json",
     "schemas/armindex/a2-candidate-result-receipt.v1.json",
     "schemas/armindex/a2-execution-closeout-receipt.v1.json",
@@ -83,6 +86,12 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/representation-program.v1.json",
     "schemas/armindex/a2-provider-admission-receipt.v1.json",
     "schemas/armindex/a2-provider-observation.v1.json",
+    "schemas/armindex/a2-provider-instance-binding.v1.json",
+    "schemas/armindex/a2-provider-observation.v2.json",
+    "schemas/armindex/a2-provider-admission-receipt.v2.json",
+    "schemas/armindex/a2-live-remote-probe-receipt.v2.json",
+    "schemas/armindex/a2-remote-stage-receipt.v2.json",
+    "schemas/armindex/a2-execution-adoption-receipt.v2.json",
     "schemas/armindex/a2-reserve-activation-decision.v1.json",
     "schemas/armindex/a2-reserve-budget-admission.v1.json",
     "schemas/armindex/a2-reserve-continuation-authority.v1.json",
@@ -90,12 +99,14 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-train-evaluation-receipt.v1.json",
     "schemas/armindex/a2-winner-selection-receipt.v1.json",
     "control/armindex/a2/execution-readiness-contract.v1.json",
+    "control/armindex/a2/execution-readiness-contract.v2.json",
     "control/armindex/a2/measured-command-argv.v1.json",
     "control/budgets/a2-execution-readiness-v1.json",
     "control/execution-envelope-a2-readiness-v1.yaml",
     "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
     "src/myis_research/armindex/a2_candidate_freeze.py",
     "src/myis_research/armindex/a2_execution_readiness.py",
+    "src/myis_research/armindex/a2_deployment_package.py",
     "src/myis_research/armindex/a2_measured_adapter.py",
     "src/myis_research/armindex/a2_owner_local_engine.py",
     "src/myis_research/armindex/a2_operational_executor.py",
@@ -347,7 +358,18 @@ def validate_execution_ledger(
         if row.get("attempt_id") != attempt_id:
             raise A2ExecutionReadinessError("execution ledger attempt identity drift")
         _self_hash(row, "entry_sha256")
-        _validate(root, "a2-execution-ledger-entry.v1.json", row)
+        schema_version = row.get("schema_version")
+        schema_name = {
+            "myis.armindex-a2-execution-ledger-entry.v1": (
+                "a2-execution-ledger-entry.v1.json"
+            ),
+            "myis.armindex-a2-execution-ledger-entry.v2": (
+                "a2-execution-ledger-entry.v2.json"
+            ),
+        }.get(schema_version)
+        if schema_name is None:
+            raise A2ExecutionReadinessError("execution ledger schema version is invalid")
+        _validate(root, schema_name, row)
         _validate_freeze_bindings(root, row["freeze_bindings"])
         if row.get("previous_entry_sha256") != prior:
             raise A2ExecutionReadinessError("execution ledger chain drift")
@@ -936,6 +958,289 @@ def validate_provider_admission_receipt(
     return checked
 
 
+def _provider_observation_v2(
+    root: Path,
+    *,
+    attempt_id: str,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
+) -> tuple[dict[str, Any], str, dict[str, str]]:
+    """Load a fresh-instance observation without accepting caller-supplied hashes."""
+
+    path = provider_observation_path.resolve()
+    if not path.is_file() or path.is_symlink():
+        raise A2ExecutionReadinessError("provider observation artifact is unsafe")
+    observation = _load_json(path)
+    assert_aggregate_only(observation)
+    _self_hash(observation, "observation_sha256")
+    _validate(root, "a2-provider-observation.v2.json", observation)
+    if observation["attempt_id"] != attempt_id:
+        raise A2ExecutionReadinessError("provider observation attempt differs from admission")
+    if (
+        _FRESH_INSTANCE_ID.fullmatch(str(observation["provider_instance_id"])) is None
+        or str(observation["provider_instance_id"]) in _DESTROYED_PROVIDER_INSTANCE_IDS
+    ):
+        raise A2ExecutionReadinessError("provider instance ID is unsafe")
+    source_hashes = _source_hashes(source_artifact_paths)
+    if observation["source_artifact_sha256"] != source_hashes:
+        raise A2ExecutionReadinessError("provider source artifact bytes drift")
+    bindings = observation.get("source_artifacts")
+    if not isinstance(bindings, Mapping) or set(bindings) != _REQUIRED_PROVIDER_SOURCES:
+        raise A2ExecutionReadinessError("provider source artifact provenance is incomplete")
+    for name, field in (
+        ("runtime", "runtime_sha256"),
+        ("model_lockset", "model_lockset_sha256"),
+        ("data_handoff", "data_handoff_sha256"),
+        ("ssh_host_key", "ssh_host_key_sha256"),
+        ("management_authority", "management_authority_sha256"),
+    ):
+        binding = bindings[name]
+        if (
+            observation[field] != source_hashes[name]
+            or not isinstance(binding, Mapping)
+            or binding.get("file_sha256") != source_hashes[name]
+            or not isinstance(binding.get("uri"), str)
+        ):
+            raise A2ExecutionReadinessError(f"provider {name} observation binding drift")
+    return observation, file_sha256(path), source_hashes
+
+
+def build_provider_instance_binding(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
+) -> dict[str, Any]:
+    """Bind one newly observed Vast instance to its immutable local evidence."""
+
+    root = repository_root.resolve()
+    observation, observation_file_sha256, source_hashes = _provider_observation_v2(
+        root,
+        attempt_id=attempt_id,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+    )
+    body = {
+        "schema_version": "myis.armindex-a2-provider-instance-binding.v1",
+        "binding_id": _receipt_id(attempt_id, "provider-instance-binding"),
+        "attempt_id": attempt_id,
+        "status": "PASS_A2_FRESH_INSTANCE_BINDING",
+        "provider_label": "Vast",
+        "provider_instance_id": observation["provider_instance_id"],
+        "observed_at_utc": observation["observed_at_utc"],
+        "provider_observation_sha256": observation["observation_sha256"],
+        "provider_observation_file_sha256": observation_file_sha256,
+        "source_artifact_sha256": source_hashes,
+    }
+    binding = {**body, "binding_sha256": canonical_sha256(body)}
+    _validate(root, "a2-provider-instance-binding.v1.json", binding)
+    return binding
+
+
+def validate_provider_instance_binding(
+    repository_root: Path,
+    binding: Mapping[str, Any],
+    *,
+    provider_observation_path: Path | None = None,
+    source_artifact_paths: Mapping[str, Path] | None = None,
+) -> dict[str, Any]:
+    """Validate a fresh binding and, when available, its immutable source bytes."""
+
+    root = repository_root.resolve()
+    checked = dict(binding)
+    _self_hash(checked, "binding_sha256")
+    _validate(root, "a2-provider-instance-binding.v1.json", checked)
+    if str(checked["provider_instance_id"]) in _DESTROYED_PROVIDER_INSTANCE_IDS:
+        raise A2ExecutionReadinessError(
+            "provider instance binding targets a destroyed instance"
+        )
+    if (provider_observation_path is None) != (source_artifact_paths is None):
+        raise A2ExecutionReadinessError("provider binding source paths are incomplete")
+    if provider_observation_path is not None and source_artifact_paths is not None:
+        observation, observation_file_sha256, source_hashes = _provider_observation_v2(
+            root,
+            attempt_id=str(checked["attempt_id"]),
+            provider_observation_path=provider_observation_path,
+            source_artifact_paths=source_artifact_paths,
+        )
+        if (
+            observation["provider_instance_id"] != checked["provider_instance_id"]
+            or observation["observation_sha256"] != checked["provider_observation_sha256"]
+            or observation_file_sha256 != checked["provider_observation_file_sha256"]
+            or source_hashes != checked["source_artifact_sha256"]
+        ):
+            raise A2ExecutionReadinessError("provider instance binding source artifact mutation")
+    return checked
+
+
+def build_provider_admission_receipt_v2(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
+    instance_binding: Mapping[str, Any],
+    now_utc: datetime,
+    maximum_quote_age: timedelta = timedelta(minutes=15),
+) -> dict[str, Any]:
+    """Admit only the runtime-supplied instance authenticated by a v2 binding."""
+
+    root = repository_root.resolve()
+    if now_utc.tzinfo is None:
+        raise A2ExecutionReadinessError("now_utc must include an offset")
+    evidence, observation_file_sha256, source_hashes = _provider_observation_v2(
+        root,
+        attempt_id=attempt_id,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+    )
+    binding = validate_provider_instance_binding(
+        root,
+        instance_binding,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+    )
+    if binding["attempt_id"] != attempt_id or binding["provider_instance_id"] != evidence["provider_instance_id"]:
+        raise A2ExecutionReadinessError("fresh provider instance binding drift")
+    if evidence.get("provider_status") != "RUNNING" or evidence.get("provider_verification") != "VERIFIED":
+        raise A2ExecutionReadinessError("provider instance is not running and verified")
+    if (evidence.get("gpu_count"), evidence.get("gpu_model"), evidence.get("vram_mib_each")) != (4, "RTX3090", 24576):
+        raise A2ExecutionReadinessError("provider GPU identity is not 4x RTX3090 with 24576 MiB")
+    mode = evidence.get("source_mode")
+    authenticated = evidence.get("provider_authenticated")
+    if mode not in {"authenticated_vast_cli", "OwnerDashboardSsh"} or not isinstance(authenticated, bool):
+        raise A2ExecutionReadinessError("provider evidence mode is unsupported")
+    if (mode == "OwnerDashboardSsh" and authenticated) or evidence.get("login_or_logout_performed") is not False:
+        raise A2ExecutionReadinessError("provider authentication evidence is inconsistent")
+    current = now_utc.astimezone(timezone.utc)
+    observed_at = _timestamp(evidence.get("observed_at_utc"), "provider observation")
+    quote_observed = _timestamp(evidence.get("quote_observed_at_utc"), "quote")
+    if any(value > current or current - value > maximum_quote_age for value in (observed_at, quote_observed)):
+        raise A2ExecutionReadinessError("provider quote is not fresh")
+    ttl_deadline = _timestamp(evidence.get("ttl_deadline_utc"), "provider TTL deadline")
+    remaining_ttl_seconds = int((ttl_deadline - current).total_seconds())
+    if remaining_ttl_seconds < _REQUIRED_TTL_SECONDS:
+        raise A2ExecutionReadinessError("NEEDS_OWNER_TTL_EXTENSION")
+    if evidence.get("remaining_ttl_seconds") != int((ttl_deadline - observed_at).total_seconds()):
+        raise A2ExecutionReadinessError("provider observation remaining TTL drift")
+    components = evidence.get("all_fee_components_usd")
+    if not isinstance(components, Mapping) or set(components) != _REQUIRED_QUOTE_COMPONENTS:
+        raise A2ExecutionReadinessError("all required quote fee components are required")
+    total = sum((_money(components[name], name) for name in sorted(components)), Decimal())
+    declared_total = _money(evidence.get("whole_workload_total_usd"), "whole workload total")
+    if total != declared_total or total > Decimal("35"):
+        raise A2ExecutionReadinessError("whole-workload all-fee quote exceeds the A2 hard stop")
+    management_mode = evidence.get("management_mode")
+    manual_ready = evidence.get("owner_manual_dashboard_destroy_ready")
+    if mode == "authenticated_vast_cli":
+        management_ok = authenticated is True and management_mode == "AUTHENTICATED_CLI"
+    else:
+        management_ok = management_mode == "OWNER_MANUAL_DASHBOARD_DESTROY_READY" and manual_ready is True
+    if not management_ok or evidence.get("provider_destroy_performed") is not False:
+        raise A2ExecutionReadinessError("provider management authority is invalid")
+    quote_sha256 = canonical_sha256({
+        "provider_instance_id": evidence["provider_instance_id"], "quote_observed_at_utc": evidence["quote_observed_at_utc"],
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"], "all_fee_components_usd": dict(components),
+        "whole_workload_total_usd": str(declared_total),
+    })
+    budget_sha256 = canonical_sha256({"quote_sha256": quote_sha256, "whole_workload_total_usd": str(total), "hard_stop_usd": "35"})
+    body = {
+        "schema_version": "myis.armindex-a2-provider-admission-receipt.v2",
+        "receipt_id": _receipt_id(attempt_id, "provider-admission").removesuffix("-v1") + "-v2",
+        "attempt_id": attempt_id, "status": "PASS_A2_PROVIDER_ADMISSION",
+        "observed_at_utc": evidence["observed_at_utc"], "quote_observed_at_utc": evidence["quote_observed_at_utc"],
+        "provider_instance_id": evidence["provider_instance_id"], "provider_instance_binding_sha256": binding["binding_sha256"],
+        "provider_status": "RUNNING", "provider_verification": "VERIFIED", "evidence_mode": mode,
+        "provider_authenticated": authenticated, "login_or_logout_performed": False,
+        "gpu_count": 4, "gpu_model": "RTX3090", "vram_mib_each": 24576, "gpu_uuid_set_sha256": evidence["gpu_uuid_set_sha256"],
+        "runtime_sha256": source_hashes["runtime"], "model_lockset_sha256": source_hashes["model_lockset"], "data_handoff_sha256": source_hashes["data_handoff"], "ssh_host_key_sha256": source_hashes["ssh_host_key"],
+        "all_fee_components_usd": {name: str(_money(components[name], name)) for name in sorted(components)},
+        "whole_workload_total_usd": str(declared_total), "quote_sha256": quote_sha256, "whole_workload_budget_sha256": budget_sha256,
+        "management_mode": management_mode, "management_authority_sha256": source_hashes["management_authority"], "owner_manual_dashboard_destroy_ready": bool(manual_ready), "provider_destroy_performed": False,
+        "provider_observation_sha256": evidence["observation_sha256"], "provider_observation_file_sha256": observation_file_sha256, "source_artifact_sha256": source_hashes,
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"], "remaining_ttl_seconds": remaining_ttl_seconds, "forward_hard_stop_usd": 35, "freeze_bindings": _freeze_bindings(root),
+    }
+    receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+    _validate(root, "a2-provider-admission-receipt.v2.json", receipt)
+    return receipt
+
+
+def validate_provider_admission_receipt_v2(repository_root: Path, receipt: Mapping[str, Any]) -> dict[str, Any]:
+    root = repository_root.resolve()
+    checked = dict(receipt)
+    _self_hash(checked, "receipt_sha256")
+    _validate(root, "a2-provider-admission-receipt.v2.json", checked)
+    if str(checked["provider_instance_id"]) in _DESTROYED_PROVIDER_INSTANCE_IDS:
+        raise A2ExecutionReadinessError("provider admission targets a destroyed instance")
+    _validate_freeze_bindings(root, checked["freeze_bindings"])
+    return checked
+
+
+def build_execution_adoption_receipt_v2(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    provider_admission_receipt: Mapping[str, Any],
+    bundle_receipt: Mapping[str, Any],
+    remote_root: str,
+    staged_bundle_sha256: str,
+    watchdog_sha256: str,
+    watchdog_deadline_utc: str,
+    lifecycle_genesis_checkpoint_sha256: str,
+    live_probe_receipt_sha256: str,
+    live_probe_file_sha256: str,
+) -> dict[str, Any]:
+    """Create an adoption receipt that cannot be reused across fresh instances."""
+
+    root = repository_root.resolve()
+    provider = validate_provider_admission_receipt_v2(root, provider_admission_receipt)
+    bundle = dict(bundle_receipt)
+    _self_hash(bundle, "receipt_sha256")
+    _validate(root, "a2-execution-bundle-receipt.v1.json", bundle)
+    _validate_freeze_bindings(root, bundle["freeze_bindings"])
+    if bundle["attempt_id"] != attempt_id or provider["attempt_id"] != attempt_id:
+        raise A2ExecutionReadinessError("adoption attempt identity differs from inputs")
+    if _REMOTE_ROOT.fullmatch(remote_root) is None or not remote_root.endswith(attempt_id):
+        raise A2ExecutionReadinessError("adoption requires its isolated A2 remote root")
+    if staged_bundle_sha256 != bundle["bundle_sha256"]:
+        raise A2ExecutionReadinessError("staged bundle hash differs from the local bundle")
+    _require_hash(watchdog_sha256, "watchdog")
+    if _timestamp(watchdog_deadline_utc, "watchdog deadline") >= _timestamp(provider["ttl_deadline_utc"], "provider TTL deadline"):
+        raise A2ExecutionReadinessError("watchdog deadline must precede provider TTL deadline")
+    _require_hash(lifecycle_genesis_checkpoint_sha256, "lifecycle genesis checkpoint")
+    _require_hash(live_probe_receipt_sha256, "live remote probe receipt")
+    _require_hash(live_probe_file_sha256, "live remote probe file")
+    body = {
+        "schema_version": "myis.armindex-a2-execution-adoption-receipt.v2",
+        "receipt_id": _receipt_id(attempt_id, "execution-adoption").removesuffix("-v1") + "-v2",
+        "attempt_id": attempt_id, "status": "PASS_A2_EXECUTION_ADOPTION",
+        "provider_admission_receipt_sha256": provider["receipt_sha256"], "provider_instance_id": provider["provider_instance_id"], "provider_instance_binding_sha256": provider["provider_instance_binding_sha256"],
+        "provider_observation_sha256": provider["provider_observation_sha256"], "provider_observation_file_sha256": provider["provider_observation_file_sha256"],
+        "live_probe_receipt_sha256": live_probe_receipt_sha256, "live_probe_file_sha256": live_probe_file_sha256,
+        "bundle_receipt_sha256": bundle["receipt_sha256"], "bundle_sha256": bundle["bundle_sha256"], "git_commit": bundle["git_commit"], "git_tree": bundle["git_tree"],
+        "remote_root": remote_root, "remote_root_created_fresh": True, "staged_bundle_sha256": staged_bundle_sha256, "staged_bundle_verified": True,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"], "remaining_ttl_seconds_at_admission": provider["remaining_ttl_seconds"],
+        "watchdog_installed": True, "watchdog_deadline_utc": watchdog_deadline_utc, "watchdog_sha256": watchdog_sha256,
+        "lifecycle_genesis_checkpoint_sha256": lifecycle_genesis_checkpoint_sha256, "freeze_bindings": _freeze_bindings(root),
+        "launch_allowed": True, "measured_retrieval_allowed": False,
+    }
+    receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+    _validate(root, "a2-execution-adoption-receipt.v2.json", receipt)
+    return receipt
+
+
+def validate_execution_adoption_receipt_v2(
+    repository_root: Path, receipt: Mapping[str, Any]
+) -> dict[str, Any]:
+    root = repository_root.resolve()
+    checked = dict(receipt)
+    _self_hash(checked, "receipt_sha256")
+    _validate(root, "a2-execution-adoption-receipt.v2.json", checked)
+    _validate_freeze_bindings(root, checked["freeze_bindings"])
+    return checked
+
+
 def build_execution_adoption_receipt(
     repository_root: Path,
     *,
@@ -1010,6 +1315,8 @@ def validate_execution_adoption_receipt(
 ) -> dict[str, Any]:
     """Validate an adoption receipt without contacting or launching anything."""
 
+    if receipt.get("schema_version") == "myis.armindex-a2-execution-adoption-receipt.v2":
+        return validate_execution_adoption_receipt_v2(repository_root, receipt)
     root = repository_root.resolve()
     checked = dict(receipt)
     _self_hash(checked, "receipt_sha256")
@@ -1260,8 +1567,11 @@ __all__ = [
     "append_lifecycle_checkpoint",
     "build_execution_bundle",
     "build_execution_adoption_receipt",
+    "build_execution_adoption_receipt_v2",
     "build_lifecycle_checkpoint",
     "build_provider_admission_receipt",
+    "build_provider_admission_receipt_v2",
+    "build_provider_instance_binding",
     "build_remote_staging_plan",
     "build_safe_return_receipt",
     "build_train_evaluation_receipt",
@@ -1273,7 +1583,10 @@ __all__ = [
     "required_execution_bundle_paths",
     "resume_checkpoint",
     "validate_execution_adoption_receipt",
+    "validate_execution_adoption_receipt_v2",
     "validate_execution_bundle",
     "validate_execution_ledger",
     "validate_provider_admission_receipt",
+    "validate_provider_admission_receipt_v2",
+    "validate_provider_instance_binding",
 ]

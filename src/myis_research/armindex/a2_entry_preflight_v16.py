@@ -107,7 +107,10 @@ def _validated_execution_readiness(armindex: Mapping[str, Any]) -> Mapping[str, 
         not isinstance(readiness, Mapping)
         or readiness.get("validated") is not True
         or readiness.get("status")
-        != "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED"
+        not in {
+            "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
+            "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+        }
         or readiness.get("candidate_count") != 52
         or readiness.get("matched_candidate_count") != 40
         or readiness.get("conditional_reserve_candidate_count") != 12
@@ -201,6 +204,8 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
     readiness = None
     if a2_phase.get("status") == "blocked":
         post_freeze = _validated_post_freeze_state(armindex)
+        if isinstance(armindex.get("a2_execution_readiness"), Mapping):
+            readiness = _validated_execution_readiness(armindex)
     elif a2_phase.get("status") == "ready":
         post_freeze = _validated_post_freeze_state(armindex)
         readiness = _validated_execution_readiness(armindex)

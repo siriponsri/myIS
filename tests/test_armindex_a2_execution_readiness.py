@@ -21,6 +21,8 @@ from myis_research.armindex.a2_execution_readiness import (
     build_execution_adoption_receipt,
     build_lifecycle_checkpoint,
     build_provider_admission_receipt,
+    build_provider_admission_receipt_v2,
+    build_provider_instance_binding,
     build_remote_staging_plan,
     build_safe_return_receipt,
     build_train_evaluation_receipt,
@@ -109,6 +111,24 @@ def _provider_observation_paths(tmp_path: Path, *, deadline: str = "2026-08-14T0
     )
     observation["observation_sha256"] = canonical_sha256(observation)
     path = tmp_path / "provider-observation.json"
+    path.write_text(json.dumps(observation), encoding="ascii")
+    return path, sources
+
+
+def _provider_observation_paths_v2(
+    tmp_path: Path, *, instance_id: str = "58881234"
+) -> tuple[Path, dict[str, Path]]:
+    path, sources = _provider_observation_paths(tmp_path)
+    observation = json.loads(path.read_text(encoding="ascii"))
+    observation.update(
+        {
+            "schema_version": "myis.armindex-a2-provider-observation.v2",
+            "observation_id": f"{ATTEMPT}-provider-observation-v2",
+            "provider_instance_id": instance_id,
+        }
+    )
+    observation.pop("observation_sha256")
+    observation["observation_sha256"] = canonical_sha256(observation)
     path.write_text(json.dumps(observation), encoding="ascii")
     return path, sources
 
@@ -275,12 +295,15 @@ def test_material_execution_ledger_is_schema_bound_and_append_only() -> None:
         ROOT, ROOT / "control/armindex/a2/execution-ledger.v1.jsonl"
     )
 
-    assert len(rows) == 3
+    assert len(rows) == 4
     assert rows[0]["status"] == "MEASUREMENT_LOCKED"
     assert rows[1]["status"] == "FAILED_CLOSED"
     assert rows[1]["previous_entry_sha256"] == rows[0]["entry_sha256"]
     assert rows[2]["status"] == "IMPLEMENTATION_BLOCKED"
     assert rows[2]["previous_entry_sha256"] == rows[1]["entry_sha256"]
+    assert rows[3]["status"] == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+    assert rows[3]["event_type"] == "implementation_completed"
+    assert rows[3]["previous_entry_sha256"] == rows[2]["entry_sha256"]
 
 
 def test_material_execution_ledger_rejects_rewritten_entry(tmp_path: Path) -> None:
@@ -292,6 +315,56 @@ def test_material_execution_ledger_rejects_rewritten_entry(tmp_path: Path) -> No
 
     with pytest.raises(A2ExecutionReadinessError, match="entry_sha256 is invalid"):
         validate_execution_ledger(ROOT, rewritten)
+
+
+def test_fresh_instance_binding_drives_v2_admission_and_rejects_instance_drift(
+    tmp_path: Path,
+) -> None:
+    observation_path, sources = _provider_observation_paths_v2(tmp_path)
+    binding = build_provider_instance_binding(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+    )
+    admission = build_provider_admission_receipt_v2(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+        instance_binding=binding,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert admission["provider_instance_id"] == "58881234"
+    assert admission["provider_instance_binding_sha256"] == binding["binding_sha256"]
+
+    drifted = json.loads(observation_path.read_text(encoding="ascii"))
+    drifted["provider_instance_id"] = "58881235"
+    drifted.pop("observation_sha256")
+    drifted["observation_sha256"] = canonical_sha256(drifted)
+    observation_path.write_text(json.dumps(drifted), encoding="ascii")
+    with pytest.raises(A2ExecutionReadinessError, match="binding drift|mutation"):
+        build_provider_admission_receipt_v2(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_observation_path=observation_path,
+            source_artifact_paths=sources,
+            instance_binding=binding,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+
+def test_fresh_instance_binding_rejects_destroyed_instance(tmp_path: Path) -> None:
+    observation_path, sources = _provider_observation_paths_v2(
+        tmp_path, instance_id="47411176"
+    )
+    with pytest.raises(A2ExecutionReadinessError, match="instance ID is unsafe"):
+        build_provider_instance_binding(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_observation_path=observation_path,
+            source_artifact_paths=sources,
+        )
 
 
 def test_runner_gate_is_locked_without_adoption() -> None:

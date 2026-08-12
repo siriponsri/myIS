@@ -7,9 +7,9 @@ evidence.
 ## Current state
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_old_instance_destroy_ready_new_instance_cpu_bundle_rebind_pending`
+- Status: `a2_cpu_local_rebind_and_deployment_ready_fresh_ap_staging_pending`
 - Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
 - Evidence class: A1 aggregate-safe measured development closeout has validated
   25/25 coverage and scientific authority `true`; A2 remains immutable
@@ -266,6 +266,14 @@ and frozen A1 execution bundle. No additional pull is required before the Owner
 destroys instance `47411176`. Fresh provider admission/adoption and isolated
 staging remain incomplete, and no remote A2 measured root, protected-data access,
 or measured worker was started.
+Audit 004 implementation preserves all v1 historical receipts and adds current
+v2 fresh-instance observation/binding/admission/probe/stage/adoption artifacts.
+The live probe verifies GPU compute/A2 process absence and runtime/model/data/GPU
+identity, derives remote remaining TTL from the observed clock, and independently
+requires at least 40 hours at post-probe local validation with a 60-second skew
+bound. A hash-only deployment package validates the existing four model roots,
+Linux wheelhouse, A1 safe return/handoffs/runtime/frozen bundle and final A2
+pushed-HEAD bundle without copying model or protected bytes.
 The entry preflight's `REUSE_ELIGIBLE` field is inherited A1 disposition, not
 fresh A2 admission, readiness, or measured authority.
 
@@ -279,11 +287,10 @@ APPROVED: 48 hours remaining under the unchanged USD 35 A2 forward hard stop.
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-Audit 002 and audit 003 implementation are complete. The Owner changed the
-provider route to a fresh instance. The next route is IM audit 004 to revise the
-obsolete instance binding, finish bounded staging repairs, and build one clean
-CPU-local deployment package from existing hash-validated assets. AP fresh-instance
-admission/staging follows; only then may AP create a separate measured LO goal and
+Audit 002, audit 003 and audit 004 implementation are complete. The Owner changed
+the provider route to a fresh instance. The next route is AP read-back followed by
+fresh-instance admission and isolated staging using the v2 binding and Owner-local
+deployment receipt. Only after that may AP create a separate measured LO goal and
 tracked authority.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.

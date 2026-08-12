@@ -235,9 +235,23 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         for record in records
         if record["report_id"] == "task-official_codex_bridge_and_candidate_freeze"
     )
-    assert a2_task["result"]["decision"] == (
-        "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
+    a2_phase = next(
+        record
+        for record in records
+        if record["report_id"] == "phase-a2_per_arm_autoindex"
     )
+    assert a2_task["result"]["decision"] == (
+        "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+    )
+    assert "additive fresh-instance binding" in a2_task["result"]["result"]
+    assert "pending AP fresh-instance admission and isolated staging" in a2_task["result"]["result"]
+    assert "pending the production adapter" not in a2_task["result"]["result"]
+    assert "deployment-package validation. " not in a2_task["result"]["result"]
+    assert a2_task["scientific_authority"] is False
+    assert a2_phase["result"]["decision"] == (
+        "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+    )
+    assert a2_phase["scientific_authority"] is False
     assert a2_freeze_task["result"]["decision"] == "CLOSED_PASS_INDEPENDENT_AUDIT"
 
     outputs = projection_report_contents(ROOT, model)

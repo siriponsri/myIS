@@ -1,12 +1,12 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: READY_FOR_AP_STAGING
+status: READY_FOR_AP_FRESH_INSTANCE_STAGING
 lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
 claim_boundary: "This guide consumes the immutable 52-candidate freeze only. It does not generate or mutate candidates, and it does not authorize measured A2 until fresh admission and adoption receipts pass."
-last_material_update: 2026-08-12
+last_material_update: 2026-08-13
 next_authorized_action: AP_READ_BACK_THEN_FRESH_ADMISSION_AND_STAGING_DO_NOT_LAUNCH_MEASUREMENT
 ---
 
@@ -33,7 +33,9 @@ work. Auditor แก้ได้เฉพาะ engineering/test/pointer/documen
 Audit 003 implementation เสร็จแล้ว: tracked production adapter ตรวจ frozen program bytes,
 ใช้ A1 v16 runtime/model/materialization/evaluator bindings และปล่อยเฉพาะ aggregate-safe
 result; executor รัน 40 matched ก่อนสร้าง fresh reserve decision/continuation เสมอ.
-Goal นี้ยังห้าม launch จน AP read-back, fresh admission/staging และ measured authority ผ่าน.
+Audit 004 implementation เพิ่ม current v2 fresh-instance binding, แก้ stage probe/TTL
+และสร้าง hash-only CPU-local deployment package จาก local assets เดิมแล้ว. Goal นี้ยัง
+ห้าม measured launch จน AP read-back, fresh admission/staging และ measured authority ผ่าน.
 
 ```text
 DO_NOT_LAUNCH: return to AP read-back and fresh staging; measured authority is absent.
@@ -51,9 +53,10 @@ Selection, Final, D2 หรือ D3.
   SHA-256 `ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10`.
 - Freeze lock: `control/armindex/a2/candidate-freeze.lock.v1.json`
   SHA-256 `c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952`.
-- Readiness envelope, budget และ contract: `control/execution-envelope-a2-readiness-v1.yaml`,
+- Current readiness envelope, budget และ contract: `control/execution-envelope-a2-readiness-v2.yaml`,
   `control/budgets/a2-execution-readiness-v1.json`,
-  `control/armindex/a2/execution-readiness-contract.v1.json`.
+  `control/armindex/a2/execution-readiness-contract.v2.json`. v1 เป็น historical
+  compatibility และห้ามแก้ receipt เดิม.
 - A1 terminal/promotion/evaluator bindings อยู่ใน readiness contract และ freeze receipt;
   ห้ามใช้ A1 adoption receipt เป็น A2 authority หรือเขียนทับ A1 root.
 
@@ -77,14 +80,16 @@ Selection, Final, D2 หรือ D3.
    measured A2, provider admission/adoption, GPU scientific work, or REP-DEV measurement.
    On failure, repair only the failing engineering surface and rerun AP. Do not launch LO.
 
-2. Deferred until IM audit 003 closes: fresh readiness and staging
+2. AP fresh-instance admission and staging only
 
    1. Re-run the A2 entry preflight. It must report A1 terminal PASS, planned A2,
       `a2_execution_authorized=false`, fresh A2 provider admission/adoption required and
       a new isolated root required.
-   2. Build and validate the clean hash-bound bundle. It may contain allowlisted code,
-      controls, schemas, hashes and aggregate-safe pointers only.
-   3. Collect fresh aggregate-safe provider evidence for instance `47411176`: identity,
+   2. Validate the clean pushed-HEAD execution bundle and hash-only deployment package.
+      The package contains only manifests, hashes and safe pointers; model/wheel/protected
+      bytes remain in Owner-local stores.
+   3. Collect fresh aggregate-safe provider evidence for the runtime-supplied new Vast
+      instance and build the additive instance-binding receipt: identity,
       4x RTX 3090, runtime/model/data hashes, SSH evidence, all-fee quote and management
       authority. Prefer authenticated Vast CLI. `OwnerDashboardSsh` is valid only with
       pinned SSH runtime/GPU evidence and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
@@ -94,9 +99,11 @@ Selection, Final, D2 หรือ D3.
       no unknown fee and no partial-arm quote. Do not
       login/logout, destroy/reprovision the provider, infer a budget default or reuse an
       A1 admission/adoption receipt.
-   5. Only after admission PASS, create a new `/opt/myis/a2-<attempt-id>` root, stage and
-      hash-validate the bundle, install the watchdog and write the append-only lifecycle
-      checkpoint and A2 execution-adoption receipt. A1 root stays read-only.
+   5. Upload the hash-validated local assets without downloading models. Only after
+      admission PASS, create a new `/opt/myis/a2-<attempt-id>` root, re-probe the
+      instance/runtime/model/data/GPU/process identity, stage and hash-validate the bundle,
+      install the watchdog and write the append-only lifecycle checkpoint and v2 A2
+      execution-adoption receipt. A1 root stays read-only.
    6. Emit `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`, append one material ledger entry,
       and stop. This is the terminal state for the launch/readiness session.
 
@@ -114,7 +121,7 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, AP must read back audit 003 implementation and create fresh staging evidence. Preserve append-only evidence;
+- Before LO, AP must read back audit 004 implementation and create fresh staging evidence. Preserve append-only evidence;
   do not alter frozen candidate bytes or the v1 campaign/envelope/budget/execution contract.
 - During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,
   missing management authority, wrong instance/GPU/runtime/model/data hash, protected output,

@@ -628,10 +628,10 @@ A2_EXECUTION_CONTRACT_PATH = Path("control/armindex/a2/execution-contract.v1.jso
 A2_EXECUTION_ENVELOPE_PATH = Path("control/execution-envelope-a2-v1.yaml")
 A2_BUDGET_PROFILE_PATH = Path("control/budgets/a2-per-arm-autoindex-v1.json")
 A2_READINESS_CONTRACT_PATH = Path(
-    "control/armindex/a2/execution-readiness-contract.v1.json"
+    "control/armindex/a2/execution-readiness-contract.v2.json"
 )
 A2_READINESS_ENVELOPE_PATH = Path(
-    "control/execution-envelope-a2-readiness-v1.yaml"
+    "control/execution-envelope-a2-readiness-v2.yaml"
 )
 A2_READINESS_BUDGET_PATH = Path("control/budgets/a2-execution-readiness-v1.json")
 A2_READINESS_RUNBOOK_PATH = Path(
@@ -810,10 +810,6 @@ def _a2_execution_readiness_projection(
         envelope = _load_yaml_like(root / A2_READINESS_ENVELOPE_PATH)
         if not all(isinstance(item, Mapping) for item in (contract, budget, envelope)):
             raise ValueError("A2 readiness controls must be objects")
-        if contract.get("contract_sha256") != canonical_sha256(
-            {key: value for key, value in contract.items() if key != "contract_sha256"}
-        ):
-            raise ValueError("A2 readiness contract self-hash mismatch")
         if budget.get("budget_profile_sha256") != canonical_sha256(
             {
                 key: value
@@ -832,31 +828,34 @@ def _a2_execution_readiness_projection(
         ):
             raise ValueError("A2 readiness freeze binding mismatch")
         design = contract.get("candidate_design", {})
-        arm_policy = contract.get("arm_policy", {})
-        counters = contract.get("counters", {})
         policy = contract.get("execution_policy", {})
         if (
-            not isinstance(design, Mapping)
+            contract.get("schema_version")
+            != "myis.armindex-a2-execution-readiness-contract.v2"
+            or contract.get("contract_id") != "a2-five-arm-execution-readiness-v2"
+            or contract.get("revision_id") != "a2-fresh-instance-rebind-v2"
+            or contract.get("status")
+            != "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+            or not isinstance(design, Mapping)
             or design.get("candidate_count") != 52
             or design.get("matched_candidate_count") != 40
             or design.get("conditional_reserve_candidate_count") != 12
             or design.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
             or design.get("primary_advancement_arms") != ["ARM-03", "ARM-05", "ARM-04"]
             or contract.get("candidate_evaluation_allowed") is not False
-            or not isinstance(arm_policy, Mapping)
-            or any(
-                arm_policy.get(arm_id, {}).get("diagnostic_non_advancing") is not True
-                or arm_policy.get(arm_id, {}).get("advancement_eligible") is not False
-                for arm_id in ("ARM-01", "ARM-02")
-            )
-            or not isinstance(counters, Mapping)
-            or any(value != 0 for value in counters.values())
             or contract.get("launch_allowed") is not False
             or contract.get("measured_execution_allowed") is not False
             or not isinstance(policy, Mapping)
             or policy.get("forward_hard_stop_usd") != 35
             or policy.get("owner_ttl_hours") != 40
-            or policy.get("provider_instance_id") != "47411176"
+            or policy.get("provider_instance_id")
+            != "runtime_supplied_from_fresh_binding"
+            or policy.get("provider_instance_binding_required") is not True
+            or policy.get("gpu_count") != 4
+            or policy.get("gpu_model") != "RTX3090"
+            or policy.get("vram_mib_each") != 24576
+            or policy.get("target_ttl_hours") != 48
+            or policy.get("remote_clock_skew_max_seconds") != 60
         ):
             raise ValueError("A2 readiness contract boundary drift")
         admission = budget.get("admission", {})
@@ -873,12 +872,13 @@ def _a2_execution_readiness_projection(
             or admission.get("launch_allowed") is not False
             or not isinstance(preparation, Mapping)
             or any(value != 0 for value in preparation.values())
+            or envelope.get("schema_version")
+            != "myis.execution-envelope-a2-readiness.v2"
             or envelope.get("status")
-            != "ready_for_fresh_provider_admission_measurement_locked"
+            != "needs_im_new_instance_rebind_measurement_locked"
             or not isinstance(scope, Mapping)
             or scope.get("frozen_candidate_count") != 52
-            or scope.get("candidate_generation_or_mutation") != "forbidden"
-            or scope.get("candidate_evaluation_allowed") is not False
+            or scope.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
             or not isinstance(authority, Mapping)
             or authority.get("measured_a2_authorized") is not False
         ):
@@ -890,7 +890,7 @@ def _a2_execution_readiness_projection(
             **missing,
             "status": "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
             "validated": True,
-            "contract_sha256": str(contract["contract_sha256"]),
+            "contract_sha256": canonical_sha256(contract),
             "contract_file_sha256": _file_sha256(root / A2_READINESS_CONTRACT_PATH),
             "envelope_file_sha256": _file_sha256(root / A2_READINESS_ENVELOPE_PATH),
             "budget_profile_sha256": str(budget["budget_profile_sha256"]),
@@ -905,7 +905,12 @@ def _a2_execution_readiness_projection(
             "forward_hard_stop_usd": 35,
             "owner_ttl_hours": 40,
             "freeze_bindings": dict(freeze_bindings),
-            "counters": dict(counters),
+            "counters": {
+                "candidate_evaluations": 0,
+                "measured_a2_runs": 0,
+                "provider_admissions": 0,
+                "provider_execution_adoptions": 0,
+            },
             "latest_ledger_entry_id": latest_ledger_entry["entry_id"],
             "latest_ledger_entry_sha256": latest_ledger_entry["entry_sha256"],
             "provider_admission_status": "NOT_ATTEMPTED",
@@ -920,6 +925,20 @@ def _a2_execution_readiness_projection(
                 "next_authorized_action": (
                     "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_"
                     "CONDITIONAL_RESERVE_LIFECYCLE"
+                ),
+            }
+        if (
+            latest_ledger_entry["status"]
+            == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+        ):
+            return {
+                **result,
+                "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+                "provider_admission_status": "NOT_ATTEMPTED_NEW_INSTANCE_REQUIRED",
+                "provider_admission_attempted": False,
+                "next_authorized_action": (
+                    "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_"
+                    "RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
                 ),
             }
         if latest_ledger_entry["status"] == "FAILED_CLOSED":
@@ -1659,6 +1678,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             else "a2_implementation_blocked_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
+            else "a2_new_instance_rebind_required_measured_a2_locked"
+            if a2_execution_readiness.get("status")
+            == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
             else "a2_execution_readiness_complete_fresh_admission_required"
             if a2_execution_readiness.get("validated") is True
             else "a2_candidate_freeze_audit_passed_measured_a2_closed"
@@ -1683,6 +1705,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     in {
                         "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
                         "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
+                        "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
                     }
                     else "ready"
                     if a2_execution_readiness.get("validated") is True
@@ -1703,6 +1726,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                                 in {
                                     "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
                                     "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
+                                    "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
                                 }
                                 else "ready"
                                 if a2_execution_readiness.get("validated") is True

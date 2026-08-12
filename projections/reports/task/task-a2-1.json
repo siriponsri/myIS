@@ -145,11 +145,11 @@
       "validation_status": "validated"
     },
     {
-      "artifact_id": "a2-execution-readiness-contract-v1",
+      "artifact_id": "a2-execution-readiness-contract-v2",
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
+      "content_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Binds the immutable 40 matched plus 12 dormant universe to a measurement-locked readiness policy.",
       "parent_artifact_hashes": {},
@@ -157,17 +157,17 @@
       "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
       "producing_task_id": "A2.1",
       "retention_class": "repository_safe",
-      "safe_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "safe_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "scientific_authority": false,
-      "title": "A2 frozen-five-arm execution readiness contract",
+      "title": "A2 fresh-instance execution readiness contract",
       "validation_status": "validated"
     },
     {
-      "artifact_id": "a2-execution-readiness-envelope-v1",
+      "artifact_id": "a2-execution-readiness-envelope-v2",
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
+      "content_sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Authorizes fresh admission and isolated staging while keeping measured A2 closed.",
       "parent_artifact_hashes": {},
@@ -175,9 +175,9 @@
       "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
       "producing_task_id": "A2.1",
       "retention_class": "repository_safe",
-      "safe_uri": "control/execution-envelope-a2-readiness-v1.yaml",
+      "safe_uri": "control/execution-envelope-a2-readiness-v2.yaml",
       "scientific_authority": false,
-      "title": "A2 execution readiness envelope",
+      "title": "A2 fresh-instance execution readiness envelope",
       "validation_status": "validated"
     },
     {
@@ -203,7 +203,7 @@
       "artifact_type": "runbook",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
+      "content_sha256": "a02d0cf2701c09938bb69b5a4de624d8b28c8b09cbecee76809afb915403d62f",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Defines checkpoint, recovery, safe-return, staging, and no-destroy behavior.",
       "parent_artifact_hashes": {},
@@ -221,7 +221,7 @@
       "artifact_type": "ledger",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
+      "content_sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Records material readiness transitions without candidate outcomes or protected payloads.",
       "parent_artifact_hashes": {},
@@ -238,8 +238,8 @@
   "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "Candidate-freeze preparation and the independent audit are complete; measured A2 and staging remain closed pending the production adapter and matched-first conditional-reserve lifecycle. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.",
-    "status": "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
+    "reason": "Candidate-freeze preparation and the independent audit are complete; the production adapter and matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; measured A2 remains locked pending AP fresh-instance admission and isolated staging. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.",
+    "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
   },
   "evidence_class": "engineering_execution_readiness",
   "evidence_links": [
@@ -284,14 +284,14 @@
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json"
     },
     {
-      "artifact_id": "a2-execution-readiness-contract-v1",
-      "sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "uri": "control/armindex/a2/execution-readiness-contract.v1.json"
+      "artifact_id": "a2-execution-readiness-contract-v2",
+      "sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "uri": "control/armindex/a2/execution-readiness-contract.v2.json"
     },
     {
-      "artifact_id": "a2-execution-readiness-envelope-v1",
-      "sha256": "8c379f39e05559455de09adee50b09b386b6cd1907e85381c0f2674bf6726b8a",
-      "uri": "control/execution-envelope-a2-readiness-v1.yaml"
+      "artifact_id": "a2-execution-readiness-envelope-v2",
+      "sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "uri": "control/execution-envelope-a2-readiness-v2.yaml"
     },
     {
       "artifact_id": "a2-execution-readiness-budget-v1",
@@ -300,19 +300,19 @@
     },
     {
       "artifact_id": "a2-execution-readiness-runbook-v1",
-      "sha256": "4c59e67a485d900a13451fad584101d0576d4eaee9c423cc1149b3ede1811e70",
+      "sha256": "a02d0cf2701c09938bb69b5a4de624d8b28c8b09cbecee76809afb915403d62f",
       "uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "artifact_id": "a2-execution-readiness-ledger-v1",
-      "sha256": "0b23119e4839274ea07f4d00c2ade4c6ed65e71737d4ff58150ced1f8a0f7c9e",
+      "sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
       "uri": "control/armindex/a2/execution-ledger.v1.jsonl"
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T15:31:53Z",
-  "generated_from_revision": "facfa2c510c0c0d56bec04c240113e42a0b45a4eeaf5b674f3f6a5e4b93a38f2",
-  "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+  "generated_at": "2026-08-12T16:55:09Z",
+  "generated_from_revision": "ae9fde5ab53e42ae8589fddb12475487decf7aa7e10678e7bb9a9b8e4a60b57a",
+  "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -373,14 +373,14 @@
     "execution_readiness": {
       "budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af",
       "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
-      "contract_sha256": "941eb45bb479c111b4d9bc80c379ea3315a8c4e7ef3c7bd684088accb685eace",
-      "contract_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "contract_sha256": "f38e32e4f40102bac4a4be11c22ee71b0e81db9aee47bd5b6ea90dc07bbab101",
+      "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "forward_hard_stop_usd": 35,
       "measured_a2_started": false,
       "owner_ttl_hours": 40,
-      "status": "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
+      "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     },
-    "git_commit": "f2674e3e44ade4521fd1b61877e20211bd5b4406",
+    "git_commit": "e64711fa3f1708a5277e7a54f5116fdbb0c3aeb8",
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -410,13 +410,13 @@
       "uri": "../03_Paper/01_ArmIndex"
     },
     "source_of_truth": {
-      "sha256": "48d66afbdbbc3bafc3c65555463db2c9e2b8f8d95463d68ae6bc69fd6cde8c46",
+      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T15:31:53Z",
+  "last_material_update": "2026-08-12T16:55:09Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -501,8 +501,8 @@
       "n": 1,
       "name": "a2_forward_hard_stop_usd",
       "scope": "A2 execution readiness",
-      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 35
     },
@@ -512,8 +512,8 @@
       "n": 1,
       "name": "a2_owner_ttl_hours",
       "scope": "A2 execution readiness",
-      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 40
     },
@@ -523,8 +523,8 @@
       "n": 1,
       "name": "a2_provider_admissions",
       "scope": "A2 execution readiness",
-      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 0
     },
@@ -534,22 +534,22 @@
       "n": 1,
       "name": "a2_execution_adoptions",
       "scope": "A2 execution readiness",
-      "source_sha256": "ad95e57b9c156d3fe06a3a59e655acb1397a73e0a9ee766a916703f17a902a97",
-      "source_uri": "control/armindex/a2/execution-readiness-contract.v1.json",
+      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 0
     }
   ],
-  "next_authorized_action": "IMPLEMENT_PRODUCTION_A2_ADAPTER_AND_MATCHED_FIRST_CONDITIONAL_RESERVE_LIFECYCLE",
+  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "8c9e4f42f7ed7dbd8ebfd796dbe5d7e8311952f66557df6444300061b8e04d3f",
+  "report_sha256": "fc7b22874587bc692613a70fd49a99fb1b89dcc1cbe45c062b52506dea285ddb",
   "report_type": "task",
   "result": {
-    "decision": "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE",
+    "decision": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
     "output": "The Official Codex bridge and immutable A2 candidate universe are validated for model gpt-5.6-sol: 40 matched and 12 dormant reserve candidates, with compile-twice replay and freeze-lock bindings.",
-    "result": "Candidate-freeze preparation and the independent audit are complete; measured A2 and staging remain closed pending the production adapter and matched-first conditional-reserve lifecycle. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit."
+    "result": "Candidate-freeze preparation and the independent audit are complete; the production adapter and matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; measured A2 remains locked pending AP fresh-instance admission and isolated staging. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
@@ -557,7 +557,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_implementation_blocked_measured_a2_locked",
+    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
     "task": "A2.1"
   },
   "status": "blocked",
@@ -573,8 +573,8 @@
         "a2-official-credit-closeout-correction-v1",
         "a2-independent-freeze-audit-v1",
         "a2-official-final-credit-check-v1",
-        "a2-execution-readiness-contract-v1",
-        "a2-execution-readiness-envelope-v1",
+        "a2-execution-readiness-contract-v2",
+        "a2-execution-readiness-envelope-v2",
         "a2-execution-readiness-budget-v1",
         "a2-execution-readiness-runbook-v1",
         "a2-execution-readiness-ledger-v1"
@@ -588,5 +588,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
+  "work_summary": "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The production adapter, matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; A2 remains measurement-locked pending AP fresh-instance admission and isolated staging. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
 }

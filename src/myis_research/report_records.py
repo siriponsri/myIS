@@ -269,16 +269,16 @@ def _artifacts(
         if isinstance(readiness, Mapping) and readiness.get("validated") is True:
             for artifact_id, title, artifact_type, uri_key, sha_key, explanation in (
                 (
-                    "a2-execution-readiness-contract-v1",
-                    "A2 frozen-five-arm execution readiness contract",
+                    "a2-execution-readiness-contract-v2",
+                    "A2 fresh-instance execution readiness contract",
                     "contract",
                     "contract_uri",
                     "contract_file_sha256",
                     "Binds the immutable 40 matched plus 12 dormant universe to a measurement-locked readiness policy.",
                 ),
                 (
-                    "a2-execution-readiness-envelope-v1",
-                    "A2 execution readiness envelope",
+                    "a2-execution-readiness-envelope-v2",
+                    "A2 fresh-instance execution readiness envelope",
                     "control",
                     "envelope_uri",
                     "envelope_file_sha256",
@@ -3790,6 +3790,11 @@ def _record_for(
         and a2_readiness.get("status")
         == "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
     )
+    a2_new_instance_rebind_required = (
+        a2_readiness_valid
+        and a2_readiness.get("status")
+        == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+    )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and task_id in {None, "A1.2"}
@@ -4232,6 +4237,12 @@ def _record_for(
         result = (
             "Candidate-freeze preparation and the independent audit are complete; "
             + (
+                "the production adapter and matched-first conditional-reserve "
+                "lifecycle, additive fresh-instance binding, and CPU-local "
+                "deployment-package validation are complete; measured A2 remains "
+                "locked pending AP fresh-instance admission and isolated staging. "
+                if a2_new_instance_rebind_required
+                else
                 "measured A2 and staging remain closed pending the production adapter "
                 "and matched-first conditional-reserve lifecycle. "
                 if a2_implementation_blocked
@@ -4254,6 +4265,8 @@ def _record_for(
         decision_status = (
             "CLOSED_PASS_INDEPENDENT_AUDIT"
             if audit_passed and task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+            else "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+            if audit_passed and a2_new_instance_rebind_required
             else "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
             if audit_passed and a2_implementation_blocked
             else "BLOCKED_EXTERNAL_PROVIDER_EVIDENCE"
@@ -4693,7 +4706,7 @@ def _record_for(
         "work_summary": (
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
-            else "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
+            else "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The production adapter, matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; A2 remains measurement-locked pending AP fresh-instance admission and isolated staging. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
             if a2_freeze_valid
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
             if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id == "A1.1"
