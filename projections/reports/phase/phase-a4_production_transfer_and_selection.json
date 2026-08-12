@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T10:50:19Z",
-  "generated_from_revision": "8c49d51c8e07abd471d5f06dfc907203db8f6fcb9535adc46be5e9bc3b60ee8c",
-  "git_commit": "374e0a8070452de67a0b72fe29fe464914627264",
+  "generated_at": "2026-08-12T11:14:59Z",
+  "generated_from_revision": "b5589b7a4747ebd5ad0c90040234cb689a81157edb268bc3e59e8d0beaddd415",
+  "git_commit": "07ec01023a8692646d21514954beef18e62fd58c",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "374e0a8070452de67a0b72fe29fe464914627264",
+    "git_commit": "07ec01023a8692646d21514954beef18e62fd58c",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T10:50:19Z",
+  "last_material_update": "2026-08-12T11:14:59Z",
   "metric_references": [],
   "next_authorized_action": "OBTAIN_FRESH_COMPLETE_PROVIDER_QUOTE_TTL_AND_MANAGEMENT_AUTHORITY_THEN_RERUN_ADMISSION_ONLY",
   "objective": "Freeze FAST/BALANCED/DEEP profiles and expose Selection once.",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "phase-a4_production_transfer_and_selection",
-  "report_sha256": "f2a4b735ead2233d88006fb3f28551fd5ad8e8edb1825b4d1efa75a9f3420697",
+  "report_sha256": "8cff0df1643f29661cdf489d58878a82ada8f2f725582d96b4e83b10bff7ccf6",
   "report_type": "phase",
   "result": {
     "decision": "blocked",
