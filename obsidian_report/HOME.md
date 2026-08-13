@@ -1,71 +1,75 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a"
-read_model_sha256: "384b35f9ec0eb32aea8ff05c4c75811c71a1b67249b79c741971264e34ace262"
-source_commit: "62a91784740519f2943e520be82c4405752ce293"
+read_model_revision: "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385"
+read_model_sha256: "5a6c11ad31aa2c3c5b7a7a458bba29d763722b617624b7ea96e7b9f279d1a8c3"
+source_commit: "a49c545d779eae29d6e14ecee8b492584a235a23"
 projection_schema_version: "myis.integrated-projection.v2"
-source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
-source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
+source_run_ids: []
+source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a"
-last_material_update: "2026-08-12T18:49:01Z"
+generated_from_revision: "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385"
+last_material_update: "2026-08-13T11:22:37Z"
 next_authorized_action: "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-12T18:49:01Z"
-updated_at: "2026-08-12T18:49:01Z"
+created_at: "2026-08-13T11:22:37Z"
+updated_at: "2026-08-13T11:22:37Z"
 note_id: "HOME"
 note_type: "home"
-phase_id: "P2_SCOPE_DEVELOPMENT"
-task_id: "P2.1"
-workflow_status: "complete"
-evidence_maturity: "measured_selection"
-claim_level: "descriptive"
+phase_id: "A2_PER_ARM_AUTOINDEX"
+task_id: "A2.1"
+workflow_status: "verification_needed"
+evidence_maturity: "engineering"
+claim_level: "none"
 ---
 
 # myIS Research Report
 
-รายงานนี้สร้างจาก validated shared read model; การแก้มืออาจถูกแทนที่ ให้บันทึกความเห็นส่วนตัวใน Owner Note
-
-## Thesis
-
-Can a patent-native grounded representation compiler improve family-level DAPFAM retrieval while the retriever, evaluator, and budget remain fixed?
+หน้านี้เป็น current view ที่สร้างจาก shared read model; PLAN.md และ canonical controls/receipts ยังคงเป็น authority.
 
 ## สถานะตอนนี้
 
-- Phase: `P2_SCOPE_DEVELOPMENT`
-- Task: `P2.1`
-- State: **P1_CPU_MEASURED_COMPLETE**
+- Phase: `A2_PER_ARM_AUTOINDEX`
+- Task/Sub-stage: `A2.1 / FROZEN_FIVE_ARM_EXECUTION`
+- Status: `a2_new_instance_rebind_required_measured_a2_locked`
+- Evidence: immutable candidate freeze and pre-measurement engineering readiness; A2 candidate evaluation and measured A2 are not started.
 
-## สิ่งที่ทำแล้ว
+## หลักฐานและขอบเขต
 
-P1 CPU baseline ผ่าน four-slot manifest, validation reports, package binding และ artifact-only rigor review สำหรับ train/selection แล้ว ดูรายละเอียดที่ [[P1_CPU_BASELINE_RESULT]].
+- Scientific authority: `False`
+- Claim boundary: `frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim`
+- A1 measured evidence remains historical canonical lineage; it does not make A2 measured.
+- Selection and Final remain closed; D2 and D3 are Owner-only.
 
-## สิ่งที่ Owner ต้องทำ
+## การส่งต่องาน
 
-- Owner-local P2 measured preflight
-- Do not start measured P2 or selection exposure automatically; preflight requires the Owner-local protected store
-
-## ขอบเขตที่ยังไม่แตะ
-
-ผลนี้รองรับเฉพาะ development train/selection. ชุด final 872 ยังปิด และ historical exposure ทำให้ห้ามอ้างว่า final split ไม่เคยถูกแตะทั่วทั้งโครงการ
+- Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md`
+- Next authorized action: `AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING`
+- Use `uv run --no-sync myis-status` for the current canonical owner status.
 
 ## Navigate
 
-- [[P0_FOUNDATION_MASTER_REPORT]]
-- [[P1_CPU_BASELINE_MASTER_REPORT]]
-- [[P1_CPU_BASELINE_RESULT]]
-- [[CURRENT_ADVISOR_UPDATE]]
-- [[LITERATURE_INDEX]]
+- [[ARM_INDEX_HOME]]
+- [[A2_PER_ARM_AUTOINDEX_REPORT]]
+- [[A2.1]]
 - [[RESEARCH_HISTORY_INDEX]]
 
 
-## P2 Readiness
+## Historical P1 summary
+
+Historical P1 state: `P1_CPU_MEASURED_COMPLETE`. Its validated aggregate evidence remains preserved without reinterpretation; see [[P1_CPU_BASELINE_RESULT]].
+
+## Execution progress / observability
+
+Historical P1 execution details remain in the canonical receipt-linked P1 report.
+
+
+## Historical P2 readiness
 
 | Check | Value |
 |---|---|
@@ -84,5 +88,3 @@ P1 CPU baseline ผ่าน four-slot manifest, validation reports, package bin
 | Scientific claim | no_measured_claim |
 | Resources | GPU 0 USD; paid API 0 USD; model download False |
 | Next step | Owner-local measured preflight |
-
-P2 remains planned and not measured; selection access is zero.

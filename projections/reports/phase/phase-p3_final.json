@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T18:49:01Z",
-  "generated_from_revision": "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a",
-  "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+  "generated_at": "2026-08-13T11:22:37Z",
+  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+    "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
     "source_of_truth": {
       "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-12T18:49:01Z",
+  "last_material_update": "2026-08-13T11:22:37Z",
   "metric_references": [],
   "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "589b5d891457a70bd509231557d5ad1c99ced5f4fb4c3d4427a8ab6055fe5f0c",
+  "report_sha256": "9a3f4609711f93be84daff1fb389e4190977159fa71e7d928db0d649172628e1",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",
@@ -63,9 +63,9 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "P2_SCOPE_DEVELOPMENT",
+    "phase": "A2_PER_ARM_AUTOINDEX",
     "program_state": "P1_CPU_MEASURED_COMPLETE",
-    "task": "P2.1"
+    "task": "A2.1"
   },
   "status": "blocked",
   "supported_claims": [

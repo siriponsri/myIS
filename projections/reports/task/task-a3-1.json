@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T18:49:01Z",
-  "generated_from_revision": "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a",
-  "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+  "generated_at": "2026-08-13T11:22:37Z",
+  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+    "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T18:49:01Z",
+  "last_material_update": "2026-08-13T11:22:37Z",
   "metric_references": [],
   "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Cross-arm transfer matrix",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-1",
-  "report_sha256": "600fcfd0f6f44edf7cd51bcbd87120a5a1694c4382a6518d61c8deed339b692a",
+  "report_sha256": "63b4f97fb91ca1fab1c21d3919d2508573e1f195581832735ec43b3af0dd7db6",
   "report_type": "task",
   "result": {
     "decision": "planned",

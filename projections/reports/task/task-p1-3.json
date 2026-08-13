@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T18:49:01Z",
-  "generated_from_revision": "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a",
-  "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+  "generated_at": "2026-08-13T11:22:37Z",
+  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+    "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
@@ -191,7 +191,7 @@
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-12T18:49:01Z",
+  "last_material_update": "2026-08-13T11:22:37Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -366,7 +366,7 @@
   "objective": "Protected owner-local CPU evidence import",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-3",
-  "report_sha256": "0394f335a9a423c73af49146a87189e9a5d9d70dc31857ca5c84549517e1801a",
+  "report_sha256": "5ad6a510b1193e720f95b83257762fcf859ed445518284ad21a093937fc0d10e",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -378,9 +378,9 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "P2_SCOPE_DEVELOPMENT",
+    "phase": "A2_PER_ARM_AUTOINDEX",
     "program_state": "P1_CPU_MEASURED_COMPLETE",
-    "task": "P2.1"
+    "task": "A2.1"
   },
   "status": "completed",
   "supported_claims": [

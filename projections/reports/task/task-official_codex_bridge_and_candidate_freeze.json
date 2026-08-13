@@ -310,9 +310,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-12T18:49:01Z",
-  "generated_from_revision": "97338cab2df65a89dd98e5a933ca601a24e9d63432811d30c09c46479e13816a",
-  "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+  "generated_at": "2026-08-13T11:22:37Z",
+  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -380,7 +380,7 @@
       "owner_ttl_hours": 40,
       "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     },
-    "git_commit": "62a91784740519f2943e520be82c4405752ce293",
+    "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -416,7 +416,7 @@
   },
   "interpretation": "This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-12T18:49:01Z",
+  "last_material_update": "2026-08-13T11:22:37Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -544,7 +544,7 @@
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "ef90e4896ba9f547a042541fd4aa0d2fc5e1524abf5118cbe4461f03acb7ff50",
+  "report_sha256": "323f3848368a6f8f02d5d65e560d19e3bee2e9bd0d8056de488c60c71e499570",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",
