@@ -89,7 +89,7 @@ def verify(root: Path) -> dict[str, object]:
         "readme_has_no_unmeasured_benchmark_claim": (
             "No ArmIndex benchmark result exists yet." in readme
             and "does not claim a win" in readme
-            and "Production and benchmark validation are pending." in readme
+            and "These are target domains, not claims" in readme
         ),
         "license_decision_remains_owner_follow_up": (
             "Repository license decision pending." in readme

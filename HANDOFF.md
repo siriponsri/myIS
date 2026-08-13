@@ -4,7 +4,13 @@ This file is orientation only. Canonical authority lives in `PLAN.md`,
 `control/`, versioned schemas, immutable manifests, receipts, and measured
 evidence.
 
-## Current state
+Workspace mental model: `01_Research` is truth and the primary Owner surface,
+`02_Brain` is memory, `03_Paper` is publication work, and `04_Owner_Stores` is
+private operational reality for protected or large files. Supporting
+workspaces never override canonical Research evidence, and raw Owner Store
+contents are non-distributable.
+
+## Current state (orientation only)
 
 - Active campaign: `armindex-multiretriever-v2`
 - Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`
@@ -27,6 +33,11 @@ evidence.
   schemas, indexes, receipts, and facts remain in Research)
 - Final-872: closed
 - Owner gates: `D2_OPEN_FINAL`, `D3_SUBMIT_RELEASE`
+
+Fresh sessions should read `PLAN.md`, then the latest relevant handoff and
+task-specific controls. Use `uv run --no-sync myis-status` for the current
+Owner-facing status. Canonical state remains in PLAN, controls, manifests,
+receipts, and measured evidence.
 
 ## Done
 

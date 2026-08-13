@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -15,6 +17,17 @@ CONTRACT_PATH = ROOT / "control/armindex/a2/execution-contract.v1.json"
 
 def _load(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _tracked_blob_sha256(relative_path: str) -> str:
+    return hashlib.sha256(
+        subprocess.run(
+            ["git", "show", f"HEAD:{relative_path}"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        ).stdout
+    ).hexdigest()
 
 
 def test_a2_contract_binds_exact_five_arm_design_and_controls() -> None:
@@ -44,8 +57,8 @@ def test_a2_contract_binds_exact_five_arm_design_and_controls() -> None:
     assert bindings["campaign_sha256"] == file_sha256(
         ROOT / bindings["campaign_uri"]
     )
-    assert bindings["execution_envelope_sha256"] == file_sha256(
-        ROOT / bindings["execution_envelope_uri"]
+    assert bindings["execution_envelope_sha256"] == _tracked_blob_sha256(
+        bindings["execution_envelope_uri"]
     )
     assert bindings["budget_profile_sha256"] == budget["budget_profile_sha256"]
     assert bindings["official_bridge_file_sha256"] == file_sha256(

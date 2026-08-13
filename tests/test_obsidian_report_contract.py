@@ -74,7 +74,12 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "## Interpretation" in result_report
     assert "## Execution progress / observability" in result_report
     assert "## Execution progress / observability" in phase_report
-    assert "P1_CPU_MEASURED_COMPLETE" in contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
+    home_report = contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
+    assert "Task/Sub-stage: `A2.1 / FROZEN_FIVE_ARM_EXECUTION`" in home_report
+    assert (
+        "Status: `a2_new_instance_rebind_required_measured_a2_locked`" in home_report
+    )
+    assert "P1_CPU_MEASURED_COMPLETE" in home_report
     assert "## สถานะตอนนี้" in audit_report
     assert "Round `3`" in audit_report
     assert "**accept**" in audit_report

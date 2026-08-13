@@ -105,6 +105,14 @@ validated for legal decisions or production deployment.
 
 ## Repository structure
 
+At the project-root level, `01_Research` is the canonical scientific control
+plane and primary Owner surface; `02_Brain` is project memory; `03_Paper` is the
+publication workspace; and `04_Owner_Stores` holds private operational,
+protected, or large files. Supporting workspaces cannot override Research
+evidence. Owner Store contents are accessible and mutable when a task requires
+them, but only approved aggregate-safe hashes, counts, manifests, or pointers
+may leave that workspace.
+
 ```text
 control/                 canonical program, campaign, model, budget, and gate records
 campaigns/               immutable campaign artifacts and migration state
@@ -140,12 +148,10 @@ does not start MLflow automatically.
 
 ## Current status
 
-- Repository infrastructure was migrated in place on the existing Git history.
-- Historical measured P1 R0/R0-W evidence is preserved without reinterpretation.
-- Every Task in `A0_MIGRATION_FOUNDATION` and synthetic/offline Task `A1.1` is complete. The `A1.2` offline contract scaffold, ARM-01 `bm25s` CPU rank-parity receipt, budget, source locks, checklist, and shutdown plan are validated; the scientific common screen and every GPU reservation remain launch-locked.
-- ArmIndex measured runs, Selection exposures, and Final exposures are zero.
-- Final-872 is closed; `D2_OPEN_FINAL` and `D3_SUBMIT_RELEASE` remain the only Owner gates.
-- Production and benchmark validation are pending.
+Live phase/task and next action are authoritative in [`PLAN.md`](PLAN.md) and
+the current ArmIndex controls. Use `uv run --no-sync myis-status` for a
+read-only Owner status rendering; this README remains a stable research
+overview and does not duplicate volatile counters.
 
 ## Reproducibility and governance
 

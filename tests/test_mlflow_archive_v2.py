@@ -24,6 +24,7 @@ from myis_research.mlflow_archive import (
     validate_cross_projection_receipt,
 )
 from myis_research.mlflow_mirror import MirrorReceipt, MirrorSpec, MirrorStage, MirrorValidationError
+from myis_research.mlflow_mirror import MLflowMirror
 
 
 def _digest(label: str) -> str:
@@ -47,6 +48,25 @@ class FakeMirror:
             artifact_hashes={},
             mlflow_run_id="synthetic-mlflow-run",
         )
+
+
+class RetryBackend:
+    def __init__(self, *, fail: bool) -> None:
+        self.fail = fail
+
+    def ensure_experiments(self, names, artifact_root) -> None:
+        return None
+
+    def find_run(self, experiment_name: str, mirror_key: str) -> str | None:
+        return None
+
+    def log_run(self, **kwargs) -> str:
+        if self.fail:
+            raise RuntimeError("synthetic deferred sync")
+        return "retry-success-run"
+
+    def close(self) -> None:
+        return None
 
 
 def _freeze(*, metrics: dict[str, tuple[float, int, MetricDefinition]] | None = None) -> FreezeBundle:
@@ -117,6 +137,29 @@ def test_v2_archive_writes_hash_bound_safe_artifacts_and_is_idempotent(tmp_path:
     assert len(mirror.calls) == 1
     staged = next((tmp_path / "staging").glob("*/freeze/bundle.json"))
     assert json.loads(staged.read_text(encoding="utf-8"))["schema_version"] == "myis.freeze-bundle.v2"
+
+
+def test_deferred_mirror_receipt_retries_append_only(tmp_path: Path) -> None:
+    spec = MirrorSpec(
+        stage=MirrorStage.P0_FOUNDATION,
+        run_name="projection retry",
+        git_commit="a" * 40,
+        canonical_source_sha256=_digest("source"),
+        phase="P0_FOUNDATION",
+    )
+    first = MLflowMirror(tmp_path, backend=RetryBackend(fail=True)).sync(spec)
+    assert first.status == "sync_deferred"
+    primary = next((tmp_path / "receipts/mlflow").glob("mlflow-mirror-*.json"))
+    primary_bytes = primary.read_bytes()
+
+    retry = MLflowMirror(tmp_path, backend=RetryBackend(fail=False)).sync(spec)
+    assert retry.status == "synced"
+    assert retry.mlflow_run_id == "retry-success-run"
+    assert primary.read_bytes() == primary_bytes
+    assert (tmp_path / "receipts/mlflow/retries" / primary.name).is_file()
+
+    repeated = MLflowMirror(tmp_path, backend=RetryBackend(fail=True)).sync(spec)
+    assert repeated == retry
 
 
 def test_archive_resolves_recorded_mlflow_artifact_uri(tmp_path: Path) -> None:

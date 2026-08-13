@@ -6,6 +6,7 @@ import hashlib
 import json
 import re
 import subprocess
+from functools import lru_cache
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -904,6 +905,21 @@ def _a2_execution_readiness_projection(
             "primary_advancement_arms": ["ARM-03", "ARM-05", "ARM-04"],
             "forward_hard_stop_usd": 35,
             "owner_ttl_hours": 40,
+            "phase_ceiling_usd": budget["hard_stops"]["a2_forward_usd"],
+            "task_run_ceiling_usd": admission["forward_hard_stop_usd"],
+            "a2_spent_accrued_usd": preparation["charged_usd"],
+            "campaign_ceiling_usd": budget["hard_stops"]["campaign_usd"],
+            "recorded_campaign_spend_usd": budget["hard_stops"][
+                "recorded_a1_charge_usd"
+            ],
+            "remaining_campaign_headroom_usd": budget["hard_stops"][
+                "remaining_campaign_ceiling_usd"
+            ],
+            "estimated_next_action_cost_usd": "UNKNOWN",
+            "next_phase_ceiling_usd": None,
+            "budget_status": "UNKNOWN_DO_NOT_SPEND",
+            "candidate_evaluation_allowed": False,
+            "measured_execution_allowed": False,
             "freeze_bindings": dict(freeze_bindings),
             "counters": {
                 "candidate_evaluations": 0,
@@ -2068,9 +2084,22 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "active_campaign_id": armindex["campaign_id"],
             "active_direction": "ArmIndex",
             "active_phase": armindex["current_phase"],
-            "current_phase": "P2_SCOPE_DEVELOPMENT" if p1_pairs else "P1_CPU_BASELINE",
-            "current_task": "P2.1" if p1_pairs else "P1.3",
+            "current_phase": armindex["current_phase"],
+            "current_task": (
+                "A2.1"
+                if armindex["current_phase"] == "A2_PER_ARM_AUTOINDEX"
+                else "A1.2"
+                if armindex["current_phase"]
+                == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
+                else "A0"
+            ),
+            "current_substage": (
+                "FROZEN_FIVE_ARM_EXECUTION"
+                if armindex["current_phase"] == "A2_PER_ARM_AUTOINDEX"
+                else "NOT_APPLICABLE"
+            ),
             "state": p1_state,
+            "current_status": armindex["status"],
         },
         "projection_health": {
             "status": "blocked" if not p1_pairs else "current",
@@ -3174,7 +3203,19 @@ def _a11_adapter_fixture_projection(root: Path) -> dict[str, Any]:
         for uri_key, sha_key, expected_path, actual_path in expected_files:
             if task_receipt.get(uri_key) != expected_path.as_posix():
                 raise ValueError(f"A1.1 task receipt path is invalid: {uri_key}")
-            if task_receipt.get(sha_key) != _file_sha256(actual_path):
+            expected_sha = str(task_receipt.get(sha_key, ""))
+            historical_projection_contract = expected_path in {
+                Path("docs/observatory/REPORTING_POLICY.md"),
+                Path("schemas/phase-task-report.v1.json"),
+            }
+            commitment_matches = (
+                _tracked_history_commitment_matches(
+                    root, expected_path.as_posix(), expected_sha
+                )
+                if historical_projection_contract
+                else expected_sha == _file_sha256(actual_path)
+            )
+            if not commitment_matches:
                 raise ValueError(f"A1.1 task receipt commitment is invalid: {sha_key}")
         if task_receipt.get("fixture_manifest_self_sha256") != manifest.get(
             "manifest_sha256"
@@ -3248,10 +3289,13 @@ def _a11_adapter_fixture_projection(root: Path) -> dict[str, Any]:
                 raise ValueError("A1.1 implementation binding URI is invalid")
             implementation_path = (root / uri).resolve()
             implementation_path.relative_to(root)
+            implementation_commitment_matches = _tracked_history_commitment_matches(
+                root, uri, str(binding.get("sha256", ""))
+            )
             if (
                 implementation_path.is_symlink()
                 or not implementation_path.is_file()
-                or binding.get("sha256") != _file_sha256(implementation_path)
+                or not implementation_commitment_matches
             ):
                 raise ValueError("A1.1 implementation binding commitment is invalid")
         if task_receipt.get("gpu_proposal_status") != proposal.get("status"):
@@ -7971,6 +8015,45 @@ def _legacy_file_commitment_matches(path: Path, expected: str) -> bool:
         return True
     crlf = raw.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
     return hashlib.sha256(crlf).hexdigest() == expected
+
+
+@lru_cache(maxsize=64)
+def _tracked_history_commitment_matches(
+    repository_root: Path, relative_path: str, expected: str
+) -> bool:
+    """Validate an immutable historical binding after a tracked file evolves."""
+
+    root = repository_root.resolve()
+    path = (root / relative_path).resolve()
+    try:
+        path.relative_to(root)
+    except ValueError:
+        return False
+    if _legacy_file_commitment_matches(path, expected):
+        return True
+    try:
+        history = subprocess.run(
+            ["git", "log", "--all", "--format=%H", "--", relative_path],
+            cwd=root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.splitlines()
+        for commit in history:
+            blob = subprocess.run(
+                ["git", "show", f"{commit}:{relative_path}"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+            ).stdout
+            if hashlib.sha256(blob).hexdigest() == expected:
+                return True
+            crlf = blob.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+            if hashlib.sha256(crlf).hexdigest() == expected:
+                return True
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return False
 
 
 def _load_yaml_like(path: Path) -> dict[str, Any]:

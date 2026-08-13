@@ -34,6 +34,7 @@ from myis_research.projections.read_model import (
     _a11_adapter_fixture_projection,
     _a12_contract_scaffold_projection,
     _legacy_file_commitment_matches,
+    _tracked_history_commitment_matches,
     _source_commit_metadata,
     build_read_model,
     write_read_model,
@@ -116,6 +117,20 @@ def test_read_model_revision_ignores_postcommit_validation_git_identity(
         vast_v3 = model["armindex"]["a1_2_contract_scaffold"]["vast_preflight_v3"]
         assert "validation_git_commit" not in vast_v3
         assert "validation_git_tree" not in vast_v3
+
+
+def test_historical_tracked_commitment_survives_current_projection_edit() -> None:
+    relative = "docs/observatory/REPORTING_POLICY.md"
+    historical = subprocess.run(
+        ["git", "show", f"800a50baba209ffdc78551d78f9c8e5e8044428a:{relative}"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
+    expected = hashlib.sha256(historical).hexdigest()
+
+    assert hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected
+    assert _tracked_history_commitment_matches(ROOT, relative, expected)
 
 
 def test_source_commit_metadata_ignores_projection_only_commits(

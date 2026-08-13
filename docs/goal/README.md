@@ -4,10 +4,15 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
+| [A2_goal.md](A2_goal.md) | `CURRENT_BLOCKED` | `READY_FOR_AP_FRESH_INSTANCE_STAGING` | Current A2 guide pending AP routing; measured execution remains closed |
+
+## Historical goal registry
+
+| Goal document | Lifecycle | Status | Authorized use |
+|---|---|---|---|
 | [A1_2_goal.md](A1_2_goal.md) | `CLOSED` | `HISTORICAL_SUPERSEDED_BY_A1_2_RERUN_GOAL` | ประวัติ fail-closed ของ r13 เท่านั้น |
 | [A1_2_rerun_goal.md](A1_2_rerun_goal.md) | `CLOSED` | `CLOSED_PASS` | หลักฐานส่งต่อ A1.2 r15; ห้าม launch ซ้ำ |
-| [A2_official_codex_bridge_goal.md](A2_official_codex_bridge_goal.md) | `ACTIVE` | `READY` | สร้าง Official Codex Bridge, adopt five-arm design และ freeze 52 candidates; หยุดก่อน measured A2 |
-| [A2_goal.md](A2_goal.md) | `BLOCKED` | `BLOCKED_PENDING_OFFICIAL_CODEX_FREEZE_AND_AUDITOR_REVIEW` | Luna long run หลัง preparation `CLOSED_PASS` และ auditor เปิด goal เท่านั้น |
+| [A2_official_codex_bridge_goal.md](A2_official_codex_bridge_goal.md) | `CLOSED` | `CLOSED_PASS` | Historical bridge and candidate freeze; preserved for provenance only |
 
 เมื่อ canonical receipt/ledger/checkpoint ยืนยันการปิดงาน ให้แก้ทั้ง frontmatter,
 ตารางสถานะรายขั้น และทะเบียนนี้ใน session เดียวกัน ห้ามปิด goal จาก chat หรือ

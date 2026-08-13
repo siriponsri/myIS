@@ -7,10 +7,12 @@ rebuildable explanation of those records.
 
 ## Lifecycle
 
-Create a Phase and Task report at start, update it after each material state
-change, meaningful run, failure/recovery, or decision, and finalize it or mark
-it blocked at close. Generated reports are deterministic and are never edited
-by hand. Owner notes are separate and are preserved by sync.
+Create or update a Phase and Task report for material state changes, meaningful
+runs, failure/recovery, decisions, handoffs, and phase closeout. Do not create
+large reports for formatting, minor refactors, unchanged validation, repeated
+read-back, projection-only cleanup, routine commits, or heartbeats. Generated
+reports are deterministic and are never edited by hand. Owner notes are
+separate and are preserved by sync.
 
 Every generated Phase and Task report is written in detailed technical English.
 The generator may retain stable identifiers, paths, hashes, and quoted canonical

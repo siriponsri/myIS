@@ -1891,6 +1891,42 @@ def _p1_home_body(model: Mapping[str, Any], next_lines: str) -> str:
     )
 
 
+def _armindex_home_body(model: Mapping[str, Any]) -> str:
+    project = model["project"]
+    armindex = model["armindex"]
+    readiness = armindex.get("a2_execution_readiness", {})
+    if not isinstance(readiness, Mapping):
+        readiness = {}
+    task_substage = " / ".join(
+        str(value)
+        for value in (project.get("current_task"), project.get("current_substage"))
+        if value and value != "NOT_APPLICABLE"
+    )
+    return (
+        "# myIS Research Report\n\n"
+        "หน้านี้เป็น current view ที่สร้างจาก shared read model; PLAN.md และ canonical controls/receipts ยังคงเป็น authority.\n\n"
+        "## สถานะตอนนี้\n\n"
+        f"- Phase: `{project['current_phase']}`\n"
+        f"- Task/Sub-stage: `{task_substage or 'UNKNOWN'}`\n"
+        f"- Status: `{project.get('current_status', 'UNKNOWN')}`\n"
+        "- Evidence: immutable candidate freeze and pre-measurement engineering readiness; A2 candidate evaluation and measured A2 are not started.\n\n"
+        "## หลักฐานและขอบเขต\n\n"
+        f"- Scientific authority: `{readiness.get('scientific_authority', False)}`\n"
+        f"- Claim boundary: `{readiness.get('claim_boundary', 'UNKNOWN')}`\n"
+        "- A1 measured evidence remains historical canonical lineage; it does not make A2 measured.\n"
+        "- Selection and Final remain closed; D2 and D3 are Owner-only.\n\n"
+        "## การส่งต่องาน\n\n"
+        "- Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md`\n"
+        f"- Next authorized action: `{armindex.get('next_command', 'UNKNOWN')}`\n"
+        "- Use `uv run --no-sync myis-status` for the current canonical owner status.\n\n"
+        "## Navigate\n\n"
+        "- [[ARM_INDEX_HOME]]\n"
+        "- [[A2_PER_ARM_AUTOINDEX_REPORT]]\n"
+        "- [[A2.1]]\n"
+        "- [[RESEARCH_HISTORY_INDEX]]\n"
+    )
+
+
 def _p1_phase_body(
     model: Mapping[str, Any], phase: Mapping[str, Any], revision: str
 ) -> str:
@@ -2404,8 +2440,6 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "updated_at": model["generated_at"],
     }
     project = model["project"]
-    inbox = model.get("owner_inbox", [])
-    next_lines = "\n".join(f"- {item.get('label')}" for item in inbox) or "- ไม่มีรายการ"
     p1_run_ids = _p1_run_ids(model)
     p1_manifest_hashes = _p1_manifest_hashes(model)
     outputs: dict[Path, str] = {}
@@ -2416,20 +2450,16 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "note_type": "home",
             "phase_id": project["current_phase"],
             "task_id": project["current_task"],
-            "workflow_status": "blocked"
-            if project["state"] == "P1_BLOCKED_WITH_EVIDENCE"
-            else "complete",
-            "evidence_maturity": "measured_selection"
-            if _p1_measured(model)
-            else "non_scientific",
-            "claim_level": "descriptive" if _p1_measured(model) else "none",
-            "source_run_ids": p1_run_ids,
-            "source_manifest_sha256": p1_manifest_hashes,
+            "workflow_status": _workflow_status(project["state"]),
+            "evidence_maturity": "engineering",
+            "claim_level": "none",
         },
-        _p1_home_body(model, next_lines)
-        + "\n\n## P2 Readiness\n\n"
-        + _p2_readiness_table(model)
-        + "\n\nP2 remains planned and not measured; selection access is zero.\n",
+        _armindex_home_body(model)
+        + "\n\n## Historical P1 summary\n\n"
+        + "Historical P1 state: `P1_CPU_MEASURED_COMPLETE`. Its validated aggregate evidence remains preserved without reinterpretation; see [[P1_CPU_BASELINE_RESULT]].\n\n"
+        + "## Execution progress / observability\n\nHistorical P1 execution details remain in the canonical receipt-linked P1 report.\n"
+        + "\n\n## Historical P2 readiness\n\n"
+        + _p2_readiness_table(model),
     )
 
     armindex_phases = [

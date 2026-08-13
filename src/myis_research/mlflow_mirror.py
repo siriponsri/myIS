@@ -611,8 +611,15 @@ class MLflowMirror:
         mirror_key = spec.mirror_key(selected)
         receipt_root = receipt_dir or self.store_root / "receipts" / "mlflow"
         receipt_path = receipt_root / f"mlflow-mirror-{mirror_key}.json"
+        retry_receipt_path = (
+            receipt_root / "retries" / f"mlflow-mirror-{mirror_key}.json"
+        )
         if receipt_path.exists():
-            return _load_receipt(receipt_path, mirror_key)
+            existing_receipt = _load_receipt(receipt_path, mirror_key)
+            if existing_receipt.status != "sync_deferred":
+                return existing_receipt
+            if retry_receipt_path.exists():
+                return _load_receipt(retry_receipt_path, mirror_key)
 
         artifact_hashes = {
             f"{item.kind.value}/{item.relative_path}": item.sha256.lower()
@@ -699,7 +706,11 @@ class MLflowMirror:
                     backend.close()
                 except Exception:
                     pass
-        _write_receipt_once(receipt_path, receipt)
+        if receipt_path.exists():
+            if receipt.status in {"synced", "already_synced"}:
+                _write_receipt_once(retry_receipt_path, receipt)
+        else:
+            _write_receipt_once(receipt_path, receipt)
         return receipt
 
 

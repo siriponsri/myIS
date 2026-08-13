@@ -113,6 +113,11 @@ projections/read-model/** -text
 projections/sessions/** -text
 projections/sync-receipt.v2.json -text
 
+# A2 controls are raw-SHA-256 bound. Keep canonical LF bytes on every platform.
+control/armindex/a2/** text eol=lf
+control/budgets/a2-*.json text eol=lf
+control/execution-envelope-a2-*.yaml text eol=lf
+
 # A1.2 scaffold inputs and nested artifacts are raw-SHA-256 bound. Preserve LF
 # bytes so clean Windows and POSIX checkouts validate the same commitments.
 control/armindex/a1.2/** -text

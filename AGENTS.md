@@ -7,10 +7,12 @@ written.
 
 ## Read order
 
-1. Read `HANDOFF.md` for orientation only.
-2. Read `PLAN.md` for the current Phase, Task, and next authorized action.
-3. Read only the files needed by the active task.
-4. Read the active campaign/control, schema, manifest, receipt, or runbook only
+1. Read `PLAN.md` for the current Phase, Task, and next authorized action.
+2. Read the latest relevant AP/IM/LO handoff for the active Phase.
+3. Read only the task-specific canonical controls, schemas, manifests, receipts,
+   or runbook needed by the active task.
+4. Read `HANDOFF.md` only when broader orientation or history is necessary.
+5. Read the active campaign/control, schema, manifest, receipt, or runbook only
    when the task actually depends on it.
 
 `HANDOFF.md` is orientation, not authority. It cannot override canonical
@@ -813,6 +815,14 @@ Intended normal path:
 
 A second AP readiness pass before LO is exceptional and delta-only.
 
+Projection-only defects are repaired in the projection/read-model layer. A stale
+or contradictory Obsidian, MLflow, Dashboard, README, HANDOFF, generated
+Markdown, or projection-metadata surface does not reopen implementation
+acceptance, invalidate canonical evidence, block an otherwise-ready LO, or
+create an Owner approval. Return to IM only when executable code, scientific
+semantics, protected-data handling, runner/recovery, safe return, provider
+lifecycle, or another launch-critical implementation is defective.
+
 ### Cross-session communication
 
 AP, IM, and LO communicate through small repository handoff documents rather
@@ -886,6 +896,11 @@ The IM result should contain:
 - unresolved limitations or blockers;
 - remote/staging state when relevant;
 - recommended next action for AP.
+
+When routing to another session, include the exact session mode, model,
+reasoning effort/profile, one-sentence reason, command before prompt when
+needed, exact copy-paste prompt, and exact Owner-only action if any. Owner
+should not be asked to choose an IM/LO model or reasoning effort.
 
 Multiple IM result documents may reference the same audit index when a repair
 requires more than one bounded implementation attempt.
