@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
-  "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
+  "generated_at": "2026-08-13T12:11:50Z",
+  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,7 +37,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
+    "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
     "source_of_truth": {
       "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
@@ -45,13 +45,13 @@
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-13T11:22:37Z",
+  "last_material_update": "2026-08-13T12:11:50Z",
   "metric_references": [],
   "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Frozen final evaluation",
   "phase_id": "P3_FINAL",
   "report_id": "task-p3-1",
-  "report_sha256": "fbd2ec6a495d7cbd123bcee8004089c1a7308eaa0796e71db3e1fbcc266fce5b",
+  "report_sha256": "70b429209f5b279392357363481da22425a2b2f80205d9b280a2ba5b169648d4",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",
