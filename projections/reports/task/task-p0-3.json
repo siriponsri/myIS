@@ -81,7 +81,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -122,7 +122,7 @@
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "fc4a7a8dd603ed2a3adb49ae82345cea24f031195cc06fd700dc8084735e9462",
+  "report_sha256": "8eae17e3c0ca58fb0c5b2f3e40daf451f76ba98d884c1cab2a61fb8a88dc21ee",
   "report_type": "task",
   "result": {
     "decision": "completed",

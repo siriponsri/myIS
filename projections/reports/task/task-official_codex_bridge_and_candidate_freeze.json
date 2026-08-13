@@ -311,7 +311,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -340,8 +340,8 @@
   },
   "input_bindings": {
     "campaign": {
-      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
-      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "candidate_freeze": {
       "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
@@ -381,6 +381,11 @@
       "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     },
     "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
+    "historical_scope": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "status": "historical_read_only",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -544,7 +549,7 @@
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "323f3848368a6f8f02d5d65e560d19e3bee2e9bd0d8056de488c60c71e499570",
+  "report_sha256": "5b13a744c8b9671ab23a78829ae6d565b1cc3763664f0c330a627a9d06eec6ab",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",
@@ -557,7 +562,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
+    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "task": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
   "status": "completed",

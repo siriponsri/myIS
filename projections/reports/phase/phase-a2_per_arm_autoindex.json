@@ -239,7 +239,7 @@
   "decision": {
     "owner_decisions_unchanged": true,
     "reason": "Candidate-freeze preparation and the independent audit are complete; the production adapter and matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; measured A2 remains locked pending AP fresh-instance admission and isolated staging. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit.",
-    "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+    "status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
   },
   "evidence_class": "engineering_execution_readiness",
   "evidence_links": [
@@ -311,7 +311,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -340,8 +340,8 @@
   },
   "input_bindings": {
     "campaign": {
-      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
-      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "candidate_freeze": {
       "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
@@ -381,6 +381,11 @@
       "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     },
     "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
+    "historical_scope": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "status": "historical_read_only",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
       "status": "PASS",
@@ -544,10 +549,10 @@
   "objective": "Search and freeze one representation program per promoted arm.",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "phase-a2_per_arm_autoindex",
-  "report_sha256": "ba22cc786e3362c7326a1d88797d42556588d5b4973531c547e84b9953056b60",
+  "report_sha256": "8c29feea1c0d844e8180df6e86c6d06993c73111dcf7175ec69b21c3abb0efde",
   "report_type": "phase",
   "result": {
-    "decision": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+    "decision": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
     "output": "The Official Codex bridge and immutable A2 candidate universe are validated for model gpt-5.6-sol: 40 matched and 12 dormant reserve candidates, with compile-twice replay and freeze-lock bindings.",
     "result": "Candidate-freeze preparation and the independent audit are complete; the production adapter and matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; measured A2 remains locked pending AP fresh-instance admission and isolated staging. The final post-audit Official credit check records plan plus, 87% remaining, reset at 2026-08-18T00:45:40Z, and no active limit."
   },
@@ -557,7 +562,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
+    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "task": null
   },
   "status": "blocked",

@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -51,7 +51,7 @@
   "objective": "Manuscript and release package",
   "phase_id": "P4_PUBLICATION",
   "report_id": "task-p4-1",
-  "report_sha256": "a44136f025bb7b8337bfddd2b2260df793040c5f61a71c174775857b5b20f4e0",
+  "report_sha256": "85a929ed5c3278dddb6a9b0b2a04823a6e090bb8693b9d1c14beb467e483e7ed",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

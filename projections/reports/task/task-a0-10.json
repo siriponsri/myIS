@@ -299,7 +299,7 @@
     }
   ],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -377,7 +377,7 @@
   "objective": "Legacy code harvest and phase-ready scaffolding",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-10",
-  "report_sha256": "74560bff5d6d2bd686eff0dce96f0291ad09d9a0d0d753cc39bff8a0b378647c",
+  "report_sha256": "10fcd7a63e84d8fca6db7f907f5983e52acb7b449db220f855307c11d41e6c55",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -390,7 +390,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
+    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "task": "A0.10"
   },
   "status": "completed",

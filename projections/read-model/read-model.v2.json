@@ -4106,6 +4106,8 @@
         "provider_execution_adoptions": 0
       },
       "current_execution_pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json",
+      "current_route": "AP",
+      "current_status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
       "diagnostic_non_advancing_arms": [
         "ARM-01",
         "ARM-02"
@@ -4120,6 +4122,9 @@
         "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952",
         "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"
       },
+      "gpu_decision": "UNKNOWN",
+      "gpu_decision_reason": "canonical provider admission evidence is not present",
+      "historical_status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
       "latest_ledger_entry_id": "A2EXEC-EV0004",
       "latest_ledger_entry_sha256": "e4167b11c93f97d3c8db24f8150e844b60e8c64c667ea12b30cb26f99fa0078c",
       "ledger_sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
@@ -4824,7 +4829,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a2_new_instance_rebind_required_measured_a2_locked",
+    "status": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -4856,7 +4861,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a2_new_instance_rebind_required_measured_a2_locked",
+      "status": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -5913,7 +5918,7 @@
     "active_phase": "A2_PER_ARM_AUTOINDEX",
     "campaign_id": "scope-autoindex-v1",
     "current_phase": "A2_PER_ARM_AUTOINDEX",
-    "current_status": "a2_new_instance_rebind_required_measured_a2_locked",
+    "current_status": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "current_substage": "FROZEN_FIVE_ARM_EXECUTION",
     "current_task": "A2.1",
     "display_name": "myIS Research",
@@ -5925,7 +5930,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "projection_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5969,8 +5974,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
-  "read_model_sha256": "5a6c11ad31aa2c3c5b7a7a458bba29d763722b617624b7ea96e7b9f279d1a8c3",
+  "read_model_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
+  "read_model_sha256": "af66c16d818807ed7f1faefdb262fe0b93af77573795d58c6ebc0c029a155a19",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

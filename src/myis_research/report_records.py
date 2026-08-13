@@ -3353,6 +3353,19 @@ def _bindings(
         "git_commit": model.get("source_commit"),
     }
     if phase_id == "A2_PER_ARM_AUTOINDEX":
+        # Active ArmIndex reports must bind the active campaign; SCOPE is
+        # retained below only as explicitly historical provenance.
+        bindings["campaign"] = {
+            "uri": "control/campaigns/armindex-multiretriever-v2.yaml",
+            "sha256": _hash_file(
+                root, "control/campaigns/armindex-multiretriever-v2.yaml"
+            ),
+        }
+        bindings["historical_scope"] = {
+            "uri": "control/campaigns/scope-autoindex-v1.yaml",
+            "sha256": _hash_file(root, "control/campaigns/scope-autoindex-v1.yaml"),
+            "status": "historical_read_only",
+        }
         freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
         if isinstance(freeze, Mapping) and freeze.get("validated") is True:
             bindings["candidate_freeze"] = {
@@ -3794,6 +3807,11 @@ def _record_for(
         a2_readiness_valid
         and a2_readiness.get("status")
         == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+    )
+    a2_current_route_status = (
+        str(a2_readiness.get("current_status"))
+        if isinstance(a2_readiness, Mapping) and a2_readiness.get("current_status")
+        else "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
@@ -4265,7 +4283,7 @@ def _record_for(
         decision_status = (
             "CLOSED_PASS_INDEPENDENT_AUDIT"
             if audit_passed and task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
-            else "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+            else a2_current_route_status
             if audit_passed and a2_new_instance_rebind_required
             else "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
             if audit_passed and a2_implementation_blocked

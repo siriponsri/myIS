@@ -720,7 +720,7 @@
     }
   ],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -805,7 +805,7 @@
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "eaea8d7252b9ce7610b867863b1011ce868f7703c08a465be90e14e68541ef32",
+  "report_sha256": "2f89945cdb5c75d29dc84b13606889c06fafd1ad88f2d10866df0c3a8cdc203e",
   "report_type": "task",
   "result": {
     "decision": "not_started",

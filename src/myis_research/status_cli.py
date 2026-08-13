@@ -23,32 +23,30 @@ def _active_goal(root: Path) -> str:
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
             continue
-        frontmatter = text.split("---", 2)[1]
-        data = yaml.safe_load(frontmatter)
-        if not isinstance(data, Mapping):
-            continue
-        if data.get("lifecycle") in {"ACTIVE", "READY"}:
+        data = yaml.safe_load(text.split("---", 2)[1])
+        if isinstance(data, Mapping) and data.get("lifecycle") == "ACTIVE":
             candidates.append(path)
-    return (
-        sorted(candidates)[-1].relative_to(root).as_posix()
-        if candidates
-        else "NONE"
-    )
+    return sorted(candidates)[-1].relative_to(root).as_posix() if candidates else "NONE"
 
 
 def _projection_status(root: Path, model: Mapping[str, Any]) -> dict[str, str]:
     expected_revision = model["read_model_revision"]
-    read_model_path = root / "projections/read-model/read-model.v2.json"
-    home_path = root / "obsidian_report/HOME.md"
-    archive_path = root / "mlflow/generated/archive-index.v2.json"
     try:
-        stored = json.loads(read_model_path.read_text(encoding="utf-8"))
+        stored = json.loads(
+            (root / "projections/read-model/read-model.v2.json").read_text(
+                encoding="utf-8"
+            )
+        )
         read_model_current = stored.get("read_model_revision") == expected_revision
     except (OSError, UnicodeError, json.JSONDecodeError):
         read_model_current = False
-    obsidian_ok = read_model_current and home_path.is_file()
+    obsidian_ok = read_model_current and (root / "obsidian_report/HOME.md").is_file()
     try:
-        archive = json.loads(archive_path.read_text(encoding="utf-8"))
+        archive = json.loads(
+            (root / "mlflow/generated/archive-index.v2.json").read_text(
+                encoding="utf-8"
+            )
+        )
         mlflow_ok = archive.get("read_model_revision") == expected_revision
     except (OSError, UnicodeError, json.JSONDecodeError):
         mlflow_ok = False
@@ -58,36 +56,102 @@ def _projection_status(root: Path, model: Mapping[str, Any]) -> dict[str, str]:
     }
 
 
+def _gpu_state(readiness: Mapping[str, Any]) -> dict[str, str]:
+    """Render only provider-safe lifecycle data present in the read model."""
+    provider = readiness.get("provider_admission_receipt", {})
+    provider = provider if isinstance(provider, Mapping) else {}
+    instance = provider.get("instance_id")
+    if instance:
+        measured_active = bool(readiness.get("measured_a2_started"))
+        return {
+            "decision": "GPU_ACTIVE" if measured_active else "UNKNOWN",
+            "reason": (
+                "canonical readiness marks measured execution active"
+                if measured_active
+                else "canonical staged provider receipt is present; measured A2 remains locked"
+            ),
+            "instance": str(instance),
+            "hourly_rate_usd": str(provider.get("hourly_rate_usd", "UNKNOWN")),
+            "accrued_gpu_cost_usd": str(
+                provider.get("whole_workload_total_usd", "UNKNOWN")
+            ),
+            "keep_destroy_condition": str(
+                readiness.get("gpu_keep_until", "UNKNOWN")
+            ),
+        }
+    return {
+        "decision": str(readiness.get("gpu_decision", "UNKNOWN")),
+        "reason": str(
+            readiness.get(
+                "gpu_decision_reason",
+                "canonical provider admission evidence is not present",
+            )
+        ),
+        "instance": "NONE",
+        "hourly_rate_usd": "UNKNOWN",
+        "accrued_gpu_cost_usd": "UNKNOWN",
+        "keep_destroy_condition": "NOT_APPLICABLE",
+    }
+
+
+def _routing(readiness: Mapping[str, Any], active_goal: str) -> dict[str, str]:
+    route = str(readiness.get("current_route", ""))
+    status = str(readiness.get("current_status", readiness.get("status", "")))
+    if active_goal != "NONE":
+        return {
+            "recommended_next_session": "LO",
+            "recommended_model": "GPT-5.6 Terra XHigh",
+            "reasoning_effort": "XHigh",
+            "reason": "an ACTIVE goal is executable under the canonical lifecycle contract",
+            "command_before_prompt": "NONE",
+            "copy_paste_prompt": f"/goal อ่าน {active_goal} แล้วทำงานตามขั้นตอนทั้งหมด",
+            "owner_decision_required": "NONE",
+        }
+    if route == "IM" or "IMPLEMENTATION_BLOCKED" in status:
+        return {
+            "recommended_next_session": "IM",
+            "recommended_model": "GPT-5.6 Sol Medium",
+            "reasoning_effort": "Medium",
+            "reason": "canonical readiness identifies a launch-critical implementation blocker",
+            "command_before_prompt": "NONE",
+            "copy_paste_prompt": "ตอนนี้คุณคือ IM ตาม AGENTS.md; อ่าน PLAN.md และ latest A2 implementation handoff แล้วแก้เฉพาะ blocker",
+            "owner_decision_required": "NONE",
+        }
+    if route == "LO":
+        return {
+            "recommended_next_session": "LO",
+            "recommended_model": "GPT-5.6 Terra XHigh",
+            "reasoning_effort": "XHigh",
+            "reason": "canonical readiness marks an executable long-run route",
+            "command_before_prompt": "NONE",
+            "copy_paste_prompt": "/goal อ่าน docs/goal/<PHASE>_goal_<INDEX>.md แล้วทำงานตามขั้นตอนทั้งหมด",
+            "owner_decision_required": "NONE",
+        }
+    return {
+        "recommended_next_session": "AP",
+        "recommended_model": "GPT-5.6 Sol High",
+        "reasoning_effort": "High",
+        "reason": "canonical readiness requires a fresh AP admission/staging judgment",
+        "command_before_prompt": "NONE",
+        "copy_paste_prompt": "ตอนนี้คุณคือ AP ตาม AGENTS.md; อ่าน PLAN.md และ latest A2 implementation handoff, ตรวจ budget/GPU lifecycle แล้วเลือก ONE route: IM หรือ LO",
+        "owner_decision_required": "NONE",
+    }
+
+
 def build_owner_status(repository_root: Path) -> dict[str, Any]:
     root = repository_root.resolve()
     model = build_read_model(root)
     project = model["project"]
-    armindex = model["armindex"]
-    readiness = armindex.get("a2_execution_readiness", {})
-    if not isinstance(readiness, Mapping):
-        readiness = {}
+    readiness = model["armindex"].get("a2_execution_readiness", {})
+    readiness = readiness if isinstance(readiness, Mapping) else {}
     counters = readiness.get("counters", {})
-    if not isinstance(counters, Mapping):
-        counters = {}
-    projections = _projection_status(root, model)
-    prompt = (
-        "ตอนนี้คุณคือ AP ตาม AGENTS.md; restructure is CLOSED และห้าม reopen restructure. "
-        "เริ่มจาก PLAN.md และ A2 canonical current state, ตรวจ current budget กับ GPU/Vast lifecycle, "
-        "ประเมิน publication-value next action แล้วเลือก ONE route: IM หรือ LO. "
-        "ถ้าเลือก IM ให้ระบุ exact model/reasoning/prompt; ถ้าเลือก LO ให้ระบุ exact model/reasoning "
-        "และ exact /goal command. Owner ไม่ต้องเลือก model เอง."
-    )
+    counters = counters if isinstance(counters, Mapping) else {}
+    active_goal = _active_goal(root)
     return {
         "project": {
             "phase": project.get("current_phase", "UNKNOWN"),
-            "task": (
-                f"{project.get('current_task', 'UNKNOWN')} / "
-                f"{project.get('current_substage', 'UNKNOWN')}"
-            ),
-            "status_th": (
-                "A2 candidate freeze ปิดผ่านแล้ว; ตอนนี้เป็น pre-measurement "
-                "engineering readiness และยังไม่เริ่ม candidate evaluation หรือ measured A2"
-            ),
+            "task": f"{project.get('current_task', 'UNKNOWN')} / {project.get('current_substage', 'UNKNOWN')}",
+            "status_th": f"สถานะปัจจุบันจาก canonical read model: {project.get('current_status', 'UNKNOWN')}",
             "evidence_class": readiness.get("evidence_class", "UNKNOWN"),
             "scientific_authority": readiness.get("scientific_authority", "UNKNOWN"),
             "supported_claim_boundary": readiness.get("claim_boundary", "UNKNOWN"),
@@ -97,57 +161,25 @@ def build_owner_status(repository_root: Path) -> dict[str, Any]:
             "task_run_ceiling_usd": readiness.get("task_run_ceiling_usd", "UNKNOWN"),
             "spent_accrued_usd": readiness.get("a2_spent_accrued_usd", "UNKNOWN"),
             "campaign_ceiling_usd": readiness.get("campaign_ceiling_usd", "UNKNOWN"),
-            "remaining_headroom_usd": readiness.get(
-                "remaining_campaign_headroom_usd", "UNKNOWN"
-            ),
-            "estimated_next_action_cost_usd": readiness.get(
-                "estimated_next_action_cost_usd", "UNKNOWN"
-            ),
-            "next_phase_ceiling_usd": readiness.get(
-                "next_phase_ceiling_usd", "NOT_BOUND"
-            ),
+            "remaining_headroom_usd": readiness.get("remaining_campaign_headroom_usd", "UNKNOWN"),
+            "estimated_next_action_cost_usd": readiness.get("estimated_next_action_cost_usd", "UNKNOWN"),
+            "next_phase_ceiling_usd": readiness.get("next_phase_ceiling_usd", "NOT_BOUND"),
             "status": readiness.get("budget_status", "UNKNOWN_DO_NOT_SPEND"),
         },
-        "gpu_vast": {
-            "decision": "UNKNOWN",
-            "reason": (
-                "fresh runtime instance binding and all-fee quote are not present; "
-                "AP must resolve lifecycle state before provider use"
-            ),
-            "instance": "NONE",
-            "hourly_rate_usd": "UNKNOWN",
-            "accrued_gpu_cost_usd": "UNKNOWN",
-            "keep_destroy_condition": "NOT_APPLICABLE",
-        },
+        "gpu_vast": _gpu_state(readiness),
         "handoffs": {
-            "latest_ap": _latest(
-                root, "docs/audit", "A2_PER_ARM_AUTOINDEX_audit_[0-9][0-9][0-9].md"
-            ),
-            "latest_im": _latest(
-                root,
-                "docs/implementation",
-                "A2_PER_ARM_AUTOINDEX_im_[0-9][0-9][0-9]_[0-9][0-9][0-9].md",
-            ),
-            "latest_lo": _latest(
-                root,
-                "docs/long_run",
-                "A2_PER_ARM_AUTOINDEX_lo_[0-9][0-9][0-9]_[0-9][0-9][0-9].md",
-            ),
-            "active_goal": _active_goal(root),
+            "latest_ap": _latest(root, "docs/audit", "A2_PER_ARM_AUTOINDEX_audit_[0-9][0-9][0-9].md"),
+            "latest_im": _latest(root, "docs/implementation", "A2_PER_ARM_AUTOINDEX_im_[0-9][0-9][0-9]_[0-9][0-9][0-9].md"),
+            "latest_lo": _latest(root, "docs/long_run", "A2_PER_ARM_AUTOINDEX_lo_[0-9][0-9][0-9]_[0-9][0-9][0-9].md"),
+            "active_goal": active_goal,
         },
-        "projections": projections,
-        "routing": {
-            "recommended_next_session": "AP",
-            "recommended_model": "GPT-5.6 Sol High",
-            "reasoning_effort": "High",
-            "reason": "A2 needs one current budget/GPU lifecycle judgment before choosing IM or LO.",
-            "command_before_prompt": "NONE",
-            "copy_paste_prompt": prompt,
-            "owner_decision_required": "NONE",
-        },
+        "projections": _projection_status(root, model),
+        "routing": _routing(readiness, active_goal),
         "boundaries": {
             "candidate_evaluations": counters.get("candidate_evaluations", "UNKNOWN"),
             "measured_a2_runs": counters.get("measured_a2_runs", "UNKNOWN"),
+            "provider_admissions": counters.get("provider_admissions", "UNKNOWN"),
+            "provider_execution_adoptions": counters.get("provider_execution_adoptions", "UNKNOWN"),
             "selection": "CLOSED",
             "final": "CLOSED",
         },
@@ -163,59 +195,25 @@ def _value(value: Any, *, money: bool = False) -> str:
 
 
 def render_owner_status(status: Mapping[str, Any]) -> str:
-    project = status["project"]
-    budget = status["budget"]
-    gpu = status["gpu_vast"]
-    handoffs = status["handoffs"]
-    projections = status["projections"]
-    routing = status["routing"]
-    return "\n".join(
-        [
-            "สถานะโครงการ",
-            f"Phase: {project['phase']}",
-            f"Task/Sub-stage: {project['task']}",
-            f"สถานะสั้น ๆ: {project['status_th']}",
-            f"Evidence class: {project['evidence_class']}",
-            f"Scientific authority: {project['scientific_authority']}",
-            f"Supported claim boundary: {project['supported_claim_boundary']}",
-            "",
-            "Budget:",
-            f"Phase ceiling: {_value(budget['phase_ceiling_usd'], money=True)}",
-            f"Current Task/Run ceiling: {_value(budget['task_run_ceiling_usd'], money=True)}",
-            f"Spent/Accrued: {_value(budget['spent_accrued_usd'], money=True)}",
-            f"Campaign ceiling: {_value(budget['campaign_ceiling_usd'], money=True)}",
-            f"Remaining headroom: {_value(budget['remaining_headroom_usd'], money=True)}",
-            f"Estimated next-action cost: {_value(budget['estimated_next_action_cost_usd'], money=True)}",
-            f"Next Phase ceiling: {_value(budget['next_phase_ceiling_usd'], money=True)}",
-            f"Budget status: {budget['status']}",
-            "",
-            "GPU / Vast:",
-            f"GPU decision: {gpu['decision']}",
-            f"Reason: {gpu['reason']}",
-            f"Instance: {gpu['instance']}",
-            f"Hourly rate / accrued: {gpu['hourly_rate_usd']} / {gpu['accrued_gpu_cost_usd']}",
-            f"Keep-until / destroy condition: {gpu['keep_destroy_condition']}",
-            "",
-            "Handoffs:",
-            f"Latest AP: {handoffs['latest_ap']}",
-            f"Latest IM: {handoffs['latest_im']}",
-            f"Latest LO: {handoffs['latest_lo']}",
-            f"Active goal: {handoffs['active_goal']}",
-            "",
-            "Projections:",
-            f"Obsidian: {projections['obsidian']}",
-            f"MLflow: {projections['mlflow']}",
-            "",
-            "Routing:",
-            f"Recommended next session: {routing['recommended_next_session']}",
-            f"Recommended model: {routing['recommended_model']}",
-            f"Reasoning effort: {routing['reasoning_effort']}",
-            f"Reason: {routing['reason']}",
-            f"Command before prompt: {routing['command_before_prompt']}",
-            f"Copy-paste prompt: {routing['copy_paste_prompt']}",
-            f"Owner decision required: {routing['owner_decision_required']}",
-        ]
-    )
+    project, budget = status["project"], status["budget"]
+    gpu, handoffs = status["gpu_vast"], status["handoffs"]
+    projections, routing = status["projections"], status["routing"]
+    return "\n".join([
+        "สถานะโครงการ", f"Phase: {project['phase']}", f"Task/Sub-stage: {project['task']}",
+        f"สถานะสั้น ๆ: {project['status_th']}", f"Evidence class: {project['evidence_class']}",
+        f"Scientific authority: {project['scientific_authority']}", f"Supported claim boundary: {project['supported_claim_boundary']}", "",
+        "Budget:", f"Phase ceiling: {_value(budget['phase_ceiling_usd'], money=True)}", f"Current Task/Run ceiling: {_value(budget['task_run_ceiling_usd'], money=True)}",
+        f"Spent/Accrued: {_value(budget['spent_accrued_usd'], money=True)}", f"Campaign ceiling: {_value(budget['campaign_ceiling_usd'], money=True)}",
+        f"Remaining headroom: {_value(budget['remaining_headroom_usd'], money=True)}", f"Estimated next-action cost: {_value(budget['estimated_next_action_cost_usd'], money=True)}",
+        f"Next Phase ceiling: {_value(budget['next_phase_ceiling_usd'], money=True)}", f"Budget status: {budget['status']}", "",
+        "GPU / Vast:", f"GPU decision: {gpu['decision']}", f"Reason: {gpu['reason']}", f"Instance: {gpu['instance']}",
+        f"Hourly rate / accrued: {gpu['hourly_rate_usd']} / {gpu['accrued_gpu_cost_usd']}", f"Keep-until / destroy condition: {gpu['keep_destroy_condition']}", "",
+        "Handoffs:", f"Latest AP: {handoffs['latest_ap']}", f"Latest IM: {handoffs['latest_im']}", f"Latest LO: {handoffs['latest_lo']}", f"Active goal: {handoffs['active_goal']}", "",
+        "Projections:", f"Obsidian: {projections['obsidian']}", f"MLflow: {projections['mlflow']}", "",
+        "Routing:", f"Recommended next session: {routing['recommended_next_session']}", f"Recommended model: {routing['recommended_model']}",
+        f"Reasoning effort: {routing['reasoning_effort']}", f"Reason: {routing['reason']}", f"Command before prompt: {routing['command_before_prompt']}",
+        f"Copy-paste prompt: {routing['copy_paste_prompt']}", f"Owner decision required: {routing['owner_decision_required']}",
+    ])
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -224,11 +222,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     status = build_owner_status(args.repository_root)
-    print(
-        json.dumps(status, ensure_ascii=False, indent=2)
-        if args.json
-        else render_owner_status(status)
-    )
+    print(json.dumps(status, ensure_ascii=False, indent=2) if args.json else render_owner_status(status))
     return 0
 
 

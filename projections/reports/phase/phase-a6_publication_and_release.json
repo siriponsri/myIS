@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Build publication and release artifacts only after D3_SUBMIT_RELEASE.",
   "phase_id": "A6_PUBLICATION_AND_RELEASE",
   "report_id": "phase-a6_publication_and_release",
-  "report_sha256": "184b35fd78b978bb90dbc79f5857356a2a2acef2882b3e8f13ffba5c43d3346d",
+  "report_sha256": "39cdc9c6e7ddedf2a7d5e0b5ef8ffeb339e5a56ec19e90dd680458b7281782c5",
   "report_type": "phase",
   "result": {
     "decision": "blocked",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
+    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "task": null
   },
   "status": "blocked",

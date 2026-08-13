@@ -4,7 +4,7 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A2_goal.md](A2_goal.md) | `CURRENT_BLOCKED` | `READY_FOR_AP_FRESH_INSTANCE_STAGING` | Current A2 guide pending AP routing; measured execution remains closed |
+| [A2_goal.md](A2_goal.md) | `BLOCKED` | `READY_FOR_AP_FRESH_INSTANCE_STAGING` | Current A2 guide pending AP routing; measured execution remains closed |
 
 ## Historical goal registry
 

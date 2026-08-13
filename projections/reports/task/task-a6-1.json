@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Manuscript and release package",
   "phase_id": "A6_PUBLICATION_AND_RELEASE",
   "report_id": "task-a6-1",
-  "report_sha256": "210e4bf76d29a395ec0fa8633ec6c259afc2cc4d7ba07e2ab54adfb1638dba69",
+  "report_sha256": "1db8f6ef4337db5d076358262318e9c411366254f9c3938450d8b25a2776d798",
   "report_type": "task",
   "result": {
     "decision": "blocked",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
+    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "task": "A6.1"
   },
   "status": "blocked",

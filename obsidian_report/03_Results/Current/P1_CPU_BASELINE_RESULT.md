@@ -1,7 +1,7 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385"
-read_model_sha256: "5a6c11ad31aa2c3c5b7a7a458bba29d763722b617624b7ea96e7b9f279d1a8c3"
+read_model_revision: "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad"
+read_model_sha256: "af66c16d818807ed7f1faefdb262fe0b93af77573795d58c6ebc0c029a155a19"
 source_commit: "a49c545d779eae29d6e14ecee8b492584a235a23"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
@@ -11,7 +11,7 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385"
+generated_from_revision: "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad"
 last_material_update: "2026-08-13T11:22:37Z"
 next_authorized_action: "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
 managed_by: "myis-report"

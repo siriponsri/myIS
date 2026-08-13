@@ -34,9 +34,12 @@ controls, manifests, receipts, schemas, or measured evidence.
 
 ## Workspace paths and projection management
 
-Project root:
+Portable project root notation:
 
-`C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS`
+`<MYIS_ROOT>/`
+
+The actual local root is supplied by the current environment or by Codex
+`-C` / `--add-dir`; do not encode a user profile in tracked documentation.
 
 Use `01_Research` as the default working directory and primary project surface.
 The other top-level workspaces are supporting areas that agents may manage as
@@ -44,10 +47,10 @@ needed.
 
 | Workspace | Canonical path | Role |
 |---|---|---|
-| Research | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/01_Research` | Primary working directory and canonical scientific control plane. Plans, controls, schemas, source code, manifests, receipts, measured evidence, and official research facts live here. The repository also contains the Owner-facing `obsidian_report/` projection and `mlflow/` evidence archive. |
-| Brain | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/02_Brain` | Project memory for decisions, evidence pointers, lessons, failed attempts, and active context. It supports retrieval and continuity but cannot override canonical Research evidence. |
-| Paper | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/03_Paper` | Publication workspace for manuscripts, figures, tables, PDFs, QA, and release bundles. Quantitative claims must trace directly to canonical Research evidence. |
-| Owner Stores | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/04_Owner_Stores` | Owner-local operational storage for protected data, exact membership/qrels, model files, large artifacts, staging bundles, checkpoints, safe-return archives, provider artifacts, and other non-Git material. |
+| Research | `<MYIS_ROOT>/01_Research` | Primary working directory and canonical scientific control plane. Plans, controls, schemas, source code, manifests, receipts, measured evidence, and official research facts live here. The repository also contains the Owner-facing `obsidian_report/` projection and `mlflow/` evidence archive. |
+| Brain | `<MYIS_ROOT>/02_Brain` | Project memory for decisions, evidence pointers, lessons, failed attempts, and active context. It supports retrieval and continuity but cannot override canonical Research evidence. |
+| Paper | `<MYIS_ROOT>/03_Paper` | Publication workspace for manuscripts, figures, tables, PDFs, QA, and release bundles. Quantitative claims must trace directly to canonical Research evidence. |
+| Owner Stores | `<MYIS_ROOT>/04_Owner_Stores` | Owner-local operational storage for protected data, exact membership/qrels, model files, large artifacts, staging bundles, checkpoints, safe-return archives, provider artifacts, and other non-Git material. |
 
 ### Research-side projections
 

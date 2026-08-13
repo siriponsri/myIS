@@ -786,6 +786,10 @@ def _a2_execution_readiness_projection(
         "provider_execution_adoption_performed": False,
         "remote_staging_performed": False,
         "measured_a2_started": False,
+        "current_status": "NOT_STARTED",
+        "current_route": "AP",
+        "gpu_decision": "UNKNOWN",
+        "gpu_decision_reason": "canonical provider admission evidence is not present",
         "next_authorized_action": (
             "BUILD_CLEAN_A2_BUNDLE_THEN_FRESH_PROVIDER_ADMISSION_AND_STAGING"
         ),
@@ -950,6 +954,9 @@ def _a2_execution_readiness_projection(
             return {
                 **result,
                 "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+                "historical_status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+                "current_status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
+                "current_route": "AP",
                 "provider_admission_status": "NOT_ATTEMPTED_NEW_INSTANCE_REQUIRED",
                 "provider_admission_attempted": False,
                 "next_authorized_action": (
@@ -1028,6 +1035,9 @@ def _a2_execution_readiness_projection(
         return {
             **result,
             "status": "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED",
+            "historical_status": "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED",
+            "current_status": "READY_FOR_AP_MEASUREMENT_AUTHORIZATION_LOCKED",
+            "current_route": "AP",
             "attempt_id": attempt_id,
             "current_execution_pointer_sha256": pointer["pointer_sha256"],
             "current_execution_pointer_file_sha256": _file_sha256(pointer_path),
@@ -1056,6 +1066,11 @@ def _a2_execution_readiness_projection(
             "provider_admission_performed": True,
             "provider_execution_adoption_performed": True,
             "remote_staging_performed": True,
+            "gpu_decision": "UNKNOWN",
+            "gpu_decision_reason": (
+                "provider staging is recorded, but no measured execution or "
+                "post-staging keep/destroy authority is present"
+            ),
             "next_authorized_action": (
                 "OWNER_AUTHORIZATION_FOR_SEPARATE_MEASURED_A2_SESSION"
             ),
@@ -1694,7 +1709,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             else "a2_implementation_blocked_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
-            else "a2_new_instance_rebind_required_measured_a2_locked"
+            else "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
             else "a2_execution_readiness_complete_fresh_admission_required"

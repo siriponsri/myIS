@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T11:22:37Z",
-  "generated_from_revision": "2b7e4d6c66a287d077b65866b6f1f6a78c61e886b4e4f0224ce9589714c3b385",
+  "generated_from_revision": "1f77cf682f305d31e169780479c4088f57c578189e4aeff7207802e1d569eaad",
   "git_commit": "a49c545d779eae29d6e14ecee8b492584a235a23",
   "governance_status": {
     "d2": "waiting_owner",
@@ -204,7 +204,7 @@
   "objective": "Model and arm declarations and license registry",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-7",
-  "report_sha256": "2b99f54cd2a3dfb603f04d4d1f8888f76b9335fcdbd2f2aca4665c1af2dfc8c7",
+  "report_sha256": "0618eee0ee834a3c56893e2d1e1ef7bd15a421e891b9c7cb942f8bad9170c543",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -217,7 +217,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_new_instance_rebind_required_measured_a2_locked",
+    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
     "task": "A0.7"
   },
   "status": "completed",

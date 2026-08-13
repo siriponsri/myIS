@@ -2,7 +2,7 @@
 title: "A2 preparation goal: Official Codex Bridge and five-arm candidate freeze"
 phase_id: A2_PER_ARM_AUTOINDEX
 status: CLOSED_PASS
-lifecycle: COMPLETE
+lifecycle: CLOSED
 evidence_class: engineering_validation
 scientific_authority: false
 claim_boundary: "Engineering preparation and immutable representation-candidate freeze only; no candidate evaluation or measured A2"
@@ -22,7 +22,7 @@ next_authorized_action: OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT
 > and Final remain unopened. The publication projection target is
 > `../03_Paper/01_ArmIndex`; canonical artifact indexes remain in Research.
 
-Owner launch command:
+Historical launch command - DO NOT RE-RUN:
 
 ```text
 /goal อ่าน docs/goal/A2_official_codex_bridge_goal.md แล้วทำงานตามขั้นตอนทั้งหมดจน bridge และ five-arm candidate freeze ผ่าน จากนั้น commit/push และหยุดก่อน measured A2

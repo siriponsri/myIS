@@ -330,6 +330,11 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     assert readiness["status"] == (
         "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     )
+    assert readiness["historical_status"] == readiness["status"]
+    assert readiness["current_status"] == (
+        "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
+    )
+    assert readiness["current_route"] == "AP"
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
     assert readiness["provider_admission_performed"] is False
