@@ -30,6 +30,72 @@ controls, manifests, receipts, schemas, or measured evidence.
 - Before writing, verify the canonical files relevant to that write.
 - Do not repeatedly re-read unchanged files within the same session.
 
+## Workspace paths and projection management
+
+Project root:
+
+`C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS`
+
+Use `01_Research` as the default working directory and primary project surface.
+The other top-level workspaces are supporting areas that agents may manage as
+needed.
+
+| Workspace | Canonical path | Role |
+|---|---|---|
+| Research | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/01_Research` | Primary working directory and canonical scientific control plane. Plans, controls, schemas, source code, manifests, receipts, measured evidence, and official research facts live here. The repository also contains the Owner-facing `obsidian_report/` projection and `mlflow/` evidence archive. |
+| Brain | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/02_Brain` | Project memory for decisions, evidence pointers, lessons, failed attempts, and active context. It supports retrieval and continuity but cannot override canonical Research evidence. |
+| Paper | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/03_Paper` | Publication workspace for manuscripts, figures, tables, PDFs, QA, and release bundles. Quantitative claims must trace directly to canonical Research evidence. |
+| Owner Stores | `C:/Users/Siripon Sri/Desktop/My_Research/00_Projects/00_myIS/04_Owner_Stores` | Owner-local operational storage for protected data, exact membership/qrels, model files, large artifacts, staging bundles, checkpoints, safe-return archives, provider artifacts, and other non-Git material. |
+
+### Research-side projections
+
+Within `01_Research`, two important Owner-facing projections are:
+
+- `obsidian_report/` — the Research Reporting Vault for Phase/Task narrative,
+  results, runs, advisor updates, literature links, decisions, and Owner-facing
+  research status.
+- `mlflow/` — the MLflow evidence archive and generated inspection surface for
+  run history, safe artifacts, freeze snapshots, metrics, lineage, checks,
+  failures, and claim-boundary context.
+
+These are part of the Research repository but remain projections. They do not
+replace canonical controls, manifests, receipts, schemas, or measured evidence.
+
+### Workspace operating rule
+
+Use **`01_Research` first; let agents manage supporting workspaces as needed**.
+
+AP, IM, and LO may read and write across `02_Brain`, `03_Paper`, and
+`04_Owner_Stores` when the active task benefits from it. Do not create an Owner
+approval step merely because a supporting workspace is used.
+
+Keep these boundaries:
+
+- `01_Research/control/`, schemas, campaigns, manifests, receipts, and measured
+  evidence remain authoritative.
+- `01_Research/obsidian_report/`, `01_Research/mlflow/`, Dashboard,
+  `02_Brain`, and `03_Paper` are projections or supporting workspaces; they
+  cannot override canonical Research facts.
+- `03_Paper` quantitative claims must trace directly to canonical evidence in
+  `01_Research`.
+- `04_Owner_Stores` is accessible and mutable when needed, but protected or
+  large contents must not be distributed to Git, Brain, Paper, MLflow,
+  Dashboard, chat, or external providers unless the active protected-data rule
+  explicitly allows the derived artifact.
+- Aggregate-safe outputs, hashes, counts, approved manifests, and safe pointers
+  may move from `04_Owner_Stores` into the appropriate Research/projection
+  surfaces.
+- Prefer the narrowest useful subpath, but do not make path scoping a new gate.
+- Agents may create, organize, archive, and clean supporting-workspace files
+  when doing so is safe and useful. Preserve unique evidence, protected inputs,
+  checkpoints, and safe-return packages.
+
+The Owner should be able to understand the project primarily from
+`01_Research`, especially `PLAN.md`, the current handoffs/evidence, the
+`obsidian_report/` vault, and the `mlflow/` evidence archive. The remaining
+workspaces should be managed by agents unless an Owner-only action is truly
+required.
+
 ## Active vocabulary
 
 Use only `A0_MIGRATION_FOUNDATION`,
@@ -74,6 +140,91 @@ should reduce Owner workload throughout the project by:
 When several valid paths exist, recommend the path with the best expected
 publication value per unit of time, compute, money, and Owner effort.
 
+## Owner project status card
+
+Every substantive AP, IM, and LO closeout MUST begin with one compact
+Owner-facing status card in plain Thai. Its purpose is orientation, not
+governance.
+
+Do not make the Owner reconstruct project state from filenames, logs, or prior
+chat sessions.
+
+Use canonical state from `PLAN.md`, the active campaign/control, the active
+goal/audit, latest applicable receipt, and current budget/execution contract.
+Do not hard-code temporary budget numbers in `AGENTS.md`.
+
+Required fields:
+
+```text
+สถานะโครงการ:
+Phase: <canonical Phase ID>
+Task/Sub-stage: <canonical task/sub-stage, or current numbered goal step>
+สถานะสั้น ๆ: <one plain-Thai sentence explaining where the project is now>
+
+Publication impact:
+<why the current work matters to the target NLP journal, or "no material change">
+
+Budget:
+Phase ceiling: <amount + source, or UNKNOWN>
+Current Task/Run ceiling: <amount + source, or NOT_APPLICABLE>
+Spent/Accrued: <amount, or UNKNOWN>
+Remaining headroom: <amount, or UNKNOWN>
+Estimated cost of next action: <amount/range, ZERO, or UNKNOWN>
+Next Phase ceiling: <amount + source if already canonically bound, otherwise NOT_BOUND>
+Budget status: <NO_SPEND | WITHIN_CAP | NEEDS_OWNER_BUDGET | UNKNOWN_DO_NOT_SPEND>
+
+GPU / Vast:
+GPU decision: <NO_GPU_NEEDED | NEED_GPU_NOW | GPU_ACTIVE | KEEP_GPU | DESTROY_GPU | OWNER_ACTION_DESTROY | UNKNOWN>
+Reason: <one sentence>
+Instance: <provider-safe instance ID/status if relevant, otherwise NONE>
+Hourly rate / accrued GPU cost: <known aggregate-safe values or UNKNOWN>
+Keep-until / destroy condition: <timestamp/condition or NOT_APPLICABLE>
+
+Session routing:
+Recommended next session: <AP | IM | LO | NONE>
+Recommended model: <profile>
+Command before prompt: <exact command or NONE>
+Copy-paste prompt: <exact prompt or NONE>
+Owner decision required: <NONE or exact Owner-only decision>
+
+Projections:
+Obsidian report (`01_Research/obsidian_report/`): <OK | PENDING | UNCHANGED>
+MLflow (`01_Research/mlflow/`): <OK | PENDING | UNCHANGED>
+```
+
+Budget reporting rules:
+- Report the current Phase ceiling and current Task/Run ceiling separately.
+- Also report the next Phase ceiling only when it is already bound by a
+  canonical budget/control; otherwise write `NOT_BOUND`.
+- Never infer a paid-work budget from historical runs or chat memory.
+- If a paid next action has no verified ceiling, use
+  `UNKNOWN_DO_NOT_SPEND` and do not launch it.
+- When a live GPU exists, include accrued cost and estimated idle cost when
+  those values are available from current provider evidence.
+
+GPU lifecycle rules:
+- `NO_GPU_NEEDED`: current and next authorized action do not require a live GPU.
+- `NEED_GPU_NOW`: the next authorized action requires GPU and the executor,
+  budget, and launch inputs are ready enough to justify opening/using one.
+- `GPU_ACTIVE`: an authorized GPU run or required recovery/safe-return work is active.
+- `KEEP_GPU`: no run is active, but a specifically named next authorized GPU
+  action will reuse the same instance. State the reason and a concrete
+  keep-until condition. Do not keep a GPU alive merely because a later Phase
+  might need GPU.
+- `DESTROY_GPU`: no active work remains, safe return/checksum requirements are
+  satisfied, and no immediate authorized reuse justifies continued spend.
+- `OWNER_ACTION_DESTROY`: same as `DESTROY_GPU`, but provider credentials, 2FA,
+  or dashboard-only lifecycle control requires the Owner to destroy it.
+- `UNKNOWN`: evidence is insufficient. Give the exact check/command needed to
+  resolve the decision.
+
+If `DESTROY_GPU` or `OWNER_ACTION_DESTROY` is reported, give the Owner an exact
+copy-paste action or dashboard instruction when known.
+
+The status card is informational. It MUST NOT become a new approval gate or a
+second source of scientific metrics.
+
+
 ## Safety boundary
 
 - Compute, GPU, paid API, model download, and provider use follow the current
@@ -113,8 +264,10 @@ latest applicable receipt.
   maintain duplicate metric values.
 - Validate the changed surface, not the whole repository.
 - Before commit/push, run focused tests plus `git diff --check`. Run report,
-  MLflow, Dashboard, Brain, layout, artifact-graph, or full-suite validation
-  only when that surface was changed or the active goal explicitly requires it.
+  Dashboard, layout, artifact-graph, or full-suite validation only when that
+  surface was changed or the active goal explicitly requires it. Obsidian/Brain
+  and MLflow should be refreshed after substantive state changes when practical,
+  but projection availability is not a commit gate.
 - Reuse a still-valid hash-bound validation receipt instead of rerunning the
   same check.
 - A tracked runbook and append-only ledger/checkpoint are required for measured
@@ -280,8 +433,9 @@ IM.
 
 ### AP Owner-facing status and next-session recommendation
 
-At the end of every substantive AP session, report the current status to the
-Owner in plain Thai and recommend exactly one primary next session.
+At the end of every substantive AP session, begin with the global
+`Owner project status card`, then report the AP-specific status and recommend
+exactly one primary next session.
 
 The Owner-facing handoff should include:
 - current Phase/Task and one-sentence status;
@@ -341,6 +495,11 @@ the Owner will infer omitted CLI steps.
 AP should recommend a stronger model only when the expected reasoning benefit
 justifies the additional token/credit cost.
 
+AP must also make compute state explicit before recommending LO or another paid
+action: GPU needed now or not, verified Phase and Task/Run budget ceilings,
+estimated next-action cost, and whether any live GPU should be kept or
+destroyed, with one plain-Thai reason.
+
 End with one practical routing note:
 - `READY_FOR_LO`
 - `NEEDS_IM`
@@ -388,8 +547,9 @@ limitations, and recommended next action for AP.
 
 ### IM Owner-facing status and next-session recommendation
 
-At the end of every substantive IM session, report the implementation status to
-the Owner in plain Thai and recommend exactly one primary next session.
+At the end of every substantive IM session, begin with the global
+`Owner project status card`, then report the implementation status and
+recommend exactly one primary next session.
 
 The Owner-facing handoff should include:
 - current Phase/Task and short implementation status;
@@ -435,7 +595,7 @@ Prompt สำหรับ session ถัดไป:
 
 Owner ต้องตัดสินใจ:
 <none | exact Owner-only decision>
-````
+```
 
 When recommending LO, provide the exact `/goal` command rather than asking the
 Owner to construct it.
@@ -504,8 +664,9 @@ execution result without depending on chat history.
 
 ### LO Owner-facing status and next-session recommendation
 
-At the end of every substantive LO session, report the long-run status to the
-Owner in plain Thai and recommend exactly one primary next session.
+At the end of every substantive LO session, begin with the global
+`Owner project status card`, then report the long-run status and recommend
+exactly one primary next session.
 
 The Owner-facing handoff should include:
 - current Phase/Task and execution status;
@@ -559,7 +720,7 @@ Prompt สำหรับ session ถัดไป:
 
 Owner ต้องตัดสินใจ:
 <none | exact Owner-only decision>
-````
+```
 
 Example after successful closeout:
 
@@ -576,6 +737,10 @@ Prompt:
 
 Do not make scientific interpretations in the Owner-facing LO summary beyond
 what the canonical evidence supports. Publication interpretation belongs to AP.
+
+LO must still make the operational compute disposition explicit at closeout:
+`KEEP_GPU`, `DESTROY_GPU`, `OWNER_ACTION_DESTROY`, or another status from
+`Owner project status card`, with the evidence/reason required by that status.
 
 ### Session workflow
 
@@ -596,6 +761,57 @@ Shortcuts are intentional:
 - do not create approval documents between routine transitions.
 
 The Owner is involved only where actual Owner authority is required.
+
+### Convergence and anti-loop policy
+
+The AP/IM workflow must converge. Do not allow repeated broad
+`AP -> IM -> AP -> IM` review cycles.
+
+1. **AP batches findings.** One AP audit contains all currently known actionable
+   engineering findings for that scope. Do not drip-feed one minor finding per
+   audit.
+
+2. **Every audit has finite acceptance criteria.**
+   `docs/audit/<PHASE>_audit_<INDEX>.md` must state a short observable checklist
+   that means IM is done.
+
+3. **IM owns bounded engineering retries.** Once IM accepts an audit, IM should
+   repair, test, and retry within the same implementation session until the
+   acceptance criteria pass or a true blocker outside IM authority is reached.
+   Do not return to AP after every failed test.
+
+4. **AP read-back is delta-only.** After IM reports completion, AP checks only
+   the original audit acceptance criteria plus any launch-critical regression
+   introduced by IM. AP does not restart a broad repository audit.
+
+5. **No new non-critical blockers during read-back.** Newly noticed cleanup,
+   refactoring, documentation polish, optional validation, or other
+   non-launch-critical improvements are deferred and do not send the current
+   task back to IM.
+
+6. **Return to IM only for material failure.** AP sends work back only when an
+   explicit acceptance criterion is still failing, IM introduced a
+   launch-critical regression, runner/recovery/safe-return is not executable,
+   protected boundaries are violated, or proceeding would invalidate measured
+   evidence.
+
+7. **Retry the same scope without inventing a new audit.** Reuse the same audit
+   reference and let the IM result index represent the retry. Create a new audit
+   index only when engineering scope materially changes.
+
+8. **Prefer forward progress with bounded debt.** If the remaining issue is
+   non-critical and the current goal is executable, route forward to LO and
+   record the item as deferred instead of reopening implementation.
+
+9. **Model escalation is not a convergence strategy.** Do not repeatedly raise
+   reasoning effort to compensate for unclear acceptance criteria. Clarify the
+   audit once, then execute it.
+
+Intended normal path:
+
+`AP audit once -> IM repair until acceptance -> LO -> AP closeout`
+
+A second AP readiness pass before LO is exceptional and delta-only.
 
 ### Cross-session communication
 
@@ -624,8 +840,10 @@ The audit handoff should contain only:
 - findings that matter;
 - implementation work requested;
 - scientific/protected boundaries that must remain unchanged;
+- finite acceptance criteria for IM completion;
 - smallest useful validation;
-- expected IM output.
+- expected IM output;
+- deferred/non-blocking items, if any.
 
 Do not create an audit handoff when AP has no actionable work for IM.
 
@@ -744,6 +962,98 @@ Safe pointer-only Brain writes may proceed without another Owner confirmation.
 They never bypass protected-data, credential, scientific, or Owner-decision
 boundaries.
 
+### Obsidian report and MLflow synchronization
+
+`obsidian_report/` and `mlflow/` live inside `01_Research`. They are
+Owner-facing projections of the same canonical Research state.
+
+Keep them reasonably current after substantive work, but do not turn projection
+synchronization into a scientific, engineering, commit, or launch gate.
+
+#### Obsidian report
+
+For a substantive AP, IM, or LO session that materially changes project state,
+refresh the relevant report surfaces under:
+
+`01_Research/obsidian_report/`
+
+Follow the existing vault structure and `obsidian_report/OBSIDIAN_DESIGN.md`
+rather than inventing a parallel status hierarchy.
+
+Prefer updating the smallest relevant existing surface, for example:
+- Phase status/report under `obsidian_report/01_Phases/`;
+- Task status/report under `obsidian_report/02_Tasks/`;
+- measured/result summary under `obsidian_report/03_Results/`;
+- run-oriented note under `obsidian_report/03_Runs/`;
+- advisor-facing update when the active task actually requires one.
+
+The update should make the Owner able to understand:
+- current Phase and Task/Sub-stage;
+- plain-Thai current status;
+- important change since the previous substantive update;
+- Output / Result / Interpretation when applicable;
+- publication impact;
+- budget and GPU/Vast state when relevant;
+- canonical evidence and handoff pointers;
+- recommended next session, model, command, and copy-paste prompt.
+
+Do not create a new report merely because a session occurred. Prefer updating
+the existing Phase/Task/Run/Result surface that already represents the work.
+
+Do not copy raw protected data, per-query outcomes, verbose logs, or duplicate
+canonical metric tables into Obsidian. Generated numeric facts must remain
+traceable to the canonical Research read model/evidence.
+
+If the Obsidian projection cannot be refreshed without disproportionate work,
+record `OBSIDIAN_SYNC_PENDING` in the Research-side handoff/closeout and
+continue. Repairing the projection later must not reopen an already-complete
+AP/IM/LO task.
+
+#### MLflow
+
+Use the existing Research-side MLflow archive:
+
+`01_Research/mlflow/`
+
+Follow `mlflow/MLFLOW_DESIGN.md` and the existing generated/archive conventions
+when materially updating MLflow. Do not create a second MLflow hierarchy.
+
+MLflow is the Owner's searchable run/freeze/artifact history, but canonical
+Research evidence remains the authority.
+
+After substantive work that creates or materially changes useful run/evidence
+state, synchronize the safe metadata/artifacts that improve traceability when
+MLflow is available. Typical useful fields include:
+- Phase;
+- Task/Sub-stage;
+- session mode;
+- Git commit/revision;
+- source audit/goal path when applicable;
+- IM/LO handoff path when applicable;
+- run/evidence status;
+- canonical manifest/receipt/evidence pointer;
+- aggregate-safe metrics, checks, and artifacts actually produced.
+
+AP planning sessions do not need invented experiment metrics. A safe
+audit/goal/freeze snapshot or metadata update is enough when useful.
+
+Never send protected membership, qrels, raw query IDs, per-query outcomes,
+credentials, raw provider payloads, or prohibited Owner Store contents into
+MLflow.
+
+If MLflow is temporarily unavailable, preserve the canonical Research artifacts
+first, record `MLFLOW_SYNC_PENDING`, and continue. Projection repair may happen
+later without restarting scientific or implementation work.
+
+For closeout, report projection state concisely when relevant:
+
+`Obsidian report: OK | PENDING | UNCHANGED`
+
+`MLflow: OK | PENDING | UNCHANGED`
+
+These statuses are informative only. They do not block commit, push, LO launch,
+measured closeout, or forward routing when canonical Research evidence is valid.
+
 ## Historical A1 compatibility
 
 A1 is historical/completed work. Its detailed acceleration rules, old Vast
@@ -855,6 +1165,7 @@ Report concisely:
 - evidence created/used;
 - blockers that still matter;
 - protected surfaces left untouched;
+- Obsidian/MLflow projection state when relevant;
 - next practical action.
 
 When the closing session is AP, also include the Owner-facing next-session
