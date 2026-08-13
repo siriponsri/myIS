@@ -265,7 +265,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -398,7 +398,7 @@
   "objective": "Compute and storage feasibility fixtures",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-8",
-  "report_sha256": "3de457281422e96c60af4d045f68c04c4acf3d968193421d8d20ae02f99f134b",
+  "report_sha256": "c5f5a048346ce73c4a6e1e890f71dd4dac519bf8d59d87dcb8048d2e9fc1fd6c",
   "report_type": "task",
   "result": {
     "decision": "completed",

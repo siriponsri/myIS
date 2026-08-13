@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Manuscript and release package",
   "phase_id": "A6_PUBLICATION_AND_RELEASE",
   "report_id": "task-a6-1",
-  "report_sha256": "e4941be4111be7083326c5688d177c5f929006a8449c45d42fcdfa7c38ee2c83",
+  "report_sha256": "7065448b3bcb595d0b59e3c63d91fe7575040b0c403a40e533a9e2deadb3d811",
   "report_type": "task",
   "result": {
     "decision": "blocked",

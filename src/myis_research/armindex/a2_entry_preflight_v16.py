@@ -109,7 +109,7 @@ def _validated_execution_readiness(armindex: Mapping[str, Any]) -> Mapping[str, 
         or readiness.get("status")
         not in {
             "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
-            "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+            "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
         }
         or readiness.get("candidate_count") != 52
         or readiness.get("matched_candidate_count") != 40
@@ -247,7 +247,10 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
         "a1_terminal_receipt_file_sha256": current["receipt_file_sha256"],
         "a1_terminal_receipt_sha256": receipt["receipt_sha256"],
         "provider_disposition_status": disposition,
-        "reuse_existing_instance_permitted": disposition == "REUSE_ELIGIBLE",
+        "a1_provider_disposition_status": disposition,
+        "a1_reuse_lineage_eligible": disposition == "REUSE_ELIGIBLE",
+        "a2_provider_disposition_status": "FRESH_INSTANCE_REQUIRED",
+        "reuse_existing_instance_permitted": False,
         "fresh_a2_provider_admission_required": True,
         "fresh_a2_execution_adoption_required": True,
         "new_isolated_remote_root_required": True,

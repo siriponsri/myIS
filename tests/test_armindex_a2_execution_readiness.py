@@ -31,6 +31,7 @@ from myis_research.armindex.a2_execution_readiness import (
     frozen_candidates,
     require_execution_adoption,
     resume_checkpoint,
+    validate_execution_bundle,
     validate_execution_ledger,
     validate_provider_admission_receipt,
     build_watchdog_script,
@@ -295,7 +296,7 @@ def test_material_execution_ledger_is_schema_bound_and_append_only() -> None:
         ROOT, ROOT / "control/armindex/a2/execution-ledger.v1.jsonl"
     )
 
-    assert len(rows) == 4
+    assert len(rows) == 5
     assert rows[0]["status"] == "MEASUREMENT_LOCKED"
     assert rows[1]["status"] == "FAILED_CLOSED"
     assert rows[1]["previous_entry_sha256"] == rows[0]["entry_sha256"]
@@ -304,6 +305,9 @@ def test_material_execution_ledger_is_schema_bound_and_append_only() -> None:
     assert rows[3]["status"] == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     assert rows[3]["event_type"] == "implementation_completed"
     assert rows[3]["previous_entry_sha256"] == rows[2]["entry_sha256"]
+    assert rows[4]["status"] == "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
+    assert rows[4]["event_type"] == "readiness_closure_completed"
+    assert rows[4]["previous_entry_sha256"] == rows[3]["entry_sha256"]
 
 
 def test_material_execution_ledger_rejects_rewritten_entry(tmp_path: Path) -> None:
@@ -434,6 +438,56 @@ assert schema['$schema'].endswith('schema')
         check=False,
     )
     assert result.returncode == 0, result.stderr
+
+
+def test_bundle_closure_requires_both_readiness_envelopes_and_ledger_schemas() -> None:
+    closure = set(_BUNDLE_CLOSURE)
+    assert {
+        "control/execution-envelope-a2-readiness-v1.yaml",
+        "control/execution-envelope-a2-readiness-v2.yaml",
+        "schemas/armindex/a2-execution-ledger-entry.v1.json",
+        "schemas/armindex/a2-execution-ledger-entry.v2.json",
+        "schemas/armindex/a2-execution-ledger-entry.v3.json",
+    } <= closure
+
+
+@pytest.mark.parametrize(
+    "required_path",
+    (
+        "control/execution-envelope-a2-readiness-v1.yaml",
+        "control/execution-envelope-a2-readiness-v2.yaml",
+    ),
+)
+def test_bundle_validation_rejects_required_envelope_drift(
+    tmp_path: Path, required_path: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def clean_pushed_git(_root: Path, *args: str) -> str:
+        if args[0] == "status":
+            return ""
+        return "a" * 40
+
+    monkeypatch.setattr(
+        "myis_research.armindex.a2_execution_readiness._git", clean_pushed_git
+    )
+    output = tmp_path / "bundle.tar.gz"
+    built = build_execution_bundle(ROOT, attempt_id=ATTEMPT, output_path=output)
+    receipt = built["receipt"]
+    extracted = tmp_path / "extracted"
+    with tarfile.open(output, "r:gz") as archive:
+        archive.extractall(extracted, filter="data")
+    target = extracted / required_path
+    target.write_bytes(target.read_bytes() + b"\n# drift\n")
+    drifted = tmp_path / "drifted.tar.gz"
+    with tarfile.open(drifted, "w:gz") as archive:
+        for relative in _BUNDLE_CLOSURE:
+            archive.add(extracted / relative, arcname=relative)
+        archive.add(
+            extracted / "BUNDLE_MANIFEST.json",
+            arcname="BUNDLE_MANIFEST.json",
+        )
+    with pytest.raises(A2ExecutionReadinessError, match="bundle hash drift"):
+        validate_execution_bundle(ROOT, bundle_path=drifted, receipt=receipt)
+
 
 def test_provider_admission_adoption_and_runner_staging_are_side_effect_free(
     tmp_path: Path,

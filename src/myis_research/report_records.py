@@ -3806,12 +3806,12 @@ def _record_for(
     a2_new_instance_rebind_required = (
         a2_readiness_valid
         and a2_readiness.get("status")
-        == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+        == "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
     )
     a2_current_route_status = (
         str(a2_readiness.get("current_status"))
         if isinstance(a2_readiness, Mapping) and a2_readiness.get("current_status")
-        else "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+        else "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
     )
     current_terminal = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"

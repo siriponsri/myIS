@@ -840,7 +840,7 @@ def _a2_execution_readiness_projection(
             or contract.get("contract_id") != "a2-five-arm-execution-readiness-v2"
             or contract.get("revision_id") != "a2-fresh-instance-rebind-v2"
             or contract.get("status")
-            != "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+            != "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
             or not isinstance(design, Mapping)
             or design.get("candidate_count") != 52
             or design.get("matched_candidate_count") != 40
@@ -880,7 +880,7 @@ def _a2_execution_readiness_projection(
             or envelope.get("schema_version")
             != "myis.execution-envelope-a2-readiness.v2"
             or envelope.get("status")
-            != "needs_im_new_instance_rebind_measurement_locked"
+            != "ready_for_ap_fresh_instance_staging_measurement_locked"
             or not isinstance(scope, Mapping)
             or scope.get("frozen_candidate_count") != 52
             or scope.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
@@ -949,14 +949,17 @@ def _a2_execution_readiness_projection(
             }
         if (
             latest_ledger_entry["status"]
-            == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+            == "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
         ):
             return {
                 **result,
-                "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+                "status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
                 "historical_status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
                 "current_status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
                 "current_route": "AP",
+                "a1_provider_disposition_status": "REUSE_ELIGIBLE",
+                "a2_provider_disposition_status": "FRESH_INSTANCE_REQUIRED",
+                "reuse_existing_instance_permitted": False,
                 "provider_admission_status": "NOT_ATTEMPTED_NEW_INSTANCE_REQUIRED",
                 "provider_admission_attempted": False,
                 "next_authorized_action": (
@@ -1711,7 +1714,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             == "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED"
             else "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked"
             if a2_execution_readiness.get("status")
-            == "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+            == "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
             else "a2_execution_readiness_complete_fresh_admission_required"
             if a2_execution_readiness.get("validated") is True
             else "a2_candidate_freeze_audit_passed_measured_a2_closed"
@@ -1736,7 +1739,6 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     in {
                         "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
                         "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
-                        "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
                     }
                     else "ready"
                     if a2_execution_readiness.get("validated") is True
@@ -1757,7 +1759,6 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                                 in {
                                     "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
                                     "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
-                                    "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
                                 }
                                 else "ready"
                                 if a2_execution_readiness.get("validated") is True

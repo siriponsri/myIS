@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -51,7 +51,7 @@
   "objective": "Deliver the P3_FINAL research phase with an auditable evidence boundary.",
   "phase_id": "P3_FINAL",
   "report_id": "phase-p3_final",
-  "report_sha256": "ec5e71e48f60e02d77e5fc8d0c02ec35a72cb37bba134c5f61b6b117c72dfd17",
+  "report_sha256": "1ac553bc39435548aa60f71b9b1cfcc562fc5b18bfdb82c32bc7bef4b6518845",
   "report_type": "phase",
   "result": {
     "decision": "waiting_owner",

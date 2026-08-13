@@ -287,6 +287,13 @@ Linux wheelhouse, A1 safe return/handoffs/runtime/frozen bundle and final A2
 pushed-HEAD bundle without copying model or protected bytes.
 The entry preflight's `REUSE_ELIGIBLE` field is inherited A1 disposition, not
 fresh A2 admission, readiness, or measured authority.
+Audit 005 IM closes that remaining canonical ambiguity. The bundle closure now
+contains both readiness envelopes and ledger schemas v1-v3; append-only entry
+`A2EXEC-EV0005` makes the post-IM state
+`READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`. Preflight retains the
+A1 `REUSE_ELIGIBLE` value only as lineage and reports current A2 disposition
+`FRESH_INSTANCE_REQUIRED` with reuse false. Provider contact/provisioning,
+remote staging, measured A2, and protected-data access remain unstarted.
 
 ## Active authorized action
 
@@ -298,7 +305,7 @@ APPROVED: 48 hours remaining under the unchanged USD 35 A2 forward hard stop.
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-Audit 002, audit 003 and audit 004 implementation are complete. The Owner changed
+Audit 002 through audit 005 implementation are complete. The Owner changed
 the provider route to a fresh instance. The next route is AP read-back followed by
 fresh-instance admission and isolated staging using the v2 binding and Owner-local
 deployment receipt. Only after that may AP create a separate measured LO goal and

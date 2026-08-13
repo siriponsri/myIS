@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Freeze FAST/BALANCED/DEEP profiles and expose Selection once.",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "phase-a4_production_transfer_and_selection",
-  "report_sha256": "8504014fe863ddc46537653b01164200ad67ee4d840a883b7e55df192ac6f40e",
+  "report_sha256": "8f1987db326357dcaf619ef7e10445348697fe4ee86df4937e7c9b5813f5e252",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

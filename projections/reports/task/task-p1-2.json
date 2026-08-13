@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -282,7 +282,7 @@
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "7d4a07c3d4b9d32c12b70e8b1a2fc4fa59fd0e560cd820a30a05adcaa79fea12",
+  "report_sha256": "b26d0867df2f8e1d39ba262b457619dbe7a2c4e158522cc8489289fc7ec603f4",
   "report_type": "task",
   "result": {
     "decision": "completed",

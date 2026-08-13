@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -204,7 +204,7 @@
   "objective": "Brain, read-model, and Obsidian migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-3",
-  "report_sha256": "de0a17b0e2a371c1ca13f5311083af5a56e95b42eabf4bd59708d833e42817fb",
+  "report_sha256": "92684eb28710753af86ebaaf85f28b5a518796468e2903795956d80870e21d0d",
   "report_type": "task",
   "result": {
     "decision": "completed",

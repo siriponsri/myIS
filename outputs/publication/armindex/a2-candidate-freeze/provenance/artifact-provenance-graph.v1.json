@@ -64,7 +64,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "3383df2c5f72752fda97a3776361d963e3b5aebc44cbc57e43beac7c83ad70cc",
+  "graph_sha256": "dc4a2d2a075c589ffb51e10dcde03d0d9ef92c64cb8a93ccc35fae6e413d0658",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -127,14 +127,14 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-armindex-a2-execution-ledger-v1-jsonl",
-      "sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
+      "sha256": "5a243e4ff46d4053a3c9d2b21fec843752dc8b5a9a13f3bec746f1f8ee517945",
       "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
     },
     {
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-armindex-a2-execution-readiness-contract-v2-json",
-      "sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "uri": "../../../01_Research/control/armindex/a2/execution-readiness-contract.v2.json"
     },
     {
@@ -162,7 +162,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-execution-envelope-a2-readiness-v2-yaml",
-      "sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "sha256": "37c1ce868aebd509341f462a5751ea25d34ed53f35b55fb82ae60039af6fe3e0",
       "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v2.yaml"
     },
     {

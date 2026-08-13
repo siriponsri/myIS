@@ -299,7 +299,7 @@
     }
   ],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -377,7 +377,7 @@
   "objective": "Legacy code harvest and phase-ready scaffolding",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-10",
-  "report_sha256": "864a0059db19eb71d4932160728b889bf0126e45e30d2754d0c0011229448393",
+  "report_sha256": "a08a6d0b78b15c2b60fbd010a17e30752d316df2a8320c362d7b1d59780c1add",
   "report_type": "task",
   "result": {
     "decision": "completed",

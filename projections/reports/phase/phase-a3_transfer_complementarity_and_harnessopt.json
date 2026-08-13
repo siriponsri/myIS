@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Analyze transfer, complementarity, and production-constrained harnesses.",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "phase-a3_transfer_complementarity_and_harnessopt",
-  "report_sha256": "00bb4123123eb9f48133fca226b207864188a6d3bdd8d66527f513cbf81dcfb4",
+  "report_sha256": "34b2b88145454aaf1a42b913d4f944399d8920f85e80fb03b6b10581c0eded4f",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

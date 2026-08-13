@@ -149,7 +149,7 @@
       "artifact_type": "contract",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "content_sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Binds the immutable 40 matched plus 12 dormant universe to a measurement-locked readiness policy.",
       "parent_artifact_hashes": {},
@@ -167,7 +167,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "content_sha256": "37c1ce868aebd509341f462a5751ea25d34ed53f35b55fb82ae60039af6fe3e0",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Authorizes fresh admission and isolated staging while keeping measured A2 closed.",
       "parent_artifact_hashes": {},
@@ -221,7 +221,7 @@
       "artifact_type": "ledger",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
+      "content_sha256": "5a243e4ff46d4053a3c9d2b21fec843752dc8b5a9a13f3bec746f1f8ee517945",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Records material readiness transitions without candidate outcomes or protected payloads.",
       "parent_artifact_hashes": {},
@@ -285,12 +285,12 @@
     },
     {
       "artifact_id": "a2-execution-readiness-contract-v2",
-      "sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "uri": "control/armindex/a2/execution-readiness-contract.v2.json"
     },
     {
       "artifact_id": "a2-execution-readiness-envelope-v2",
-      "sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "sha256": "37c1ce868aebd509341f462a5751ea25d34ed53f35b55fb82ae60039af6fe3e0",
       "uri": "control/execution-envelope-a2-readiness-v2.yaml"
     },
     {
@@ -305,13 +305,13 @@
     },
     {
       "artifact_id": "a2-execution-readiness-ledger-v1",
-      "sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
+      "sha256": "5a243e4ff46d4053a3c9d2b21fec843752dc8b5a9a13f3bec746f1f8ee517945",
       "uri": "control/armindex/a2/execution-ledger.v1.jsonl"
     }
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -373,12 +373,12 @@
     "execution_readiness": {
       "budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af",
       "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
-      "contract_sha256": "f38e32e4f40102bac4a4be11c22ee71b0e81db9aee47bd5b6ea90dc07bbab101",
+      "contract_sha256": "da286fef76f8b176b8e07f4c2da6c17b7b88545de422189002c1e49d23ba449f",
       "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "forward_hard_stop_usd": 35,
       "measured_a2_started": false,
       "owner_ttl_hours": 40,
-      "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
+      "status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
     },
     "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
     "historical_scope": {
@@ -506,7 +506,7 @@
       "n": 1,
       "name": "a2_forward_hard_stop_usd",
       "scope": "A2 execution readiness",
-      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 35
@@ -517,7 +517,7 @@
       "n": 1,
       "name": "a2_owner_ttl_hours",
       "scope": "A2 execution readiness",
-      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 40
@@ -528,7 +528,7 @@
       "n": 1,
       "name": "a2_provider_admissions",
       "scope": "A2 execution readiness",
-      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 0
@@ -539,7 +539,7 @@
       "n": 1,
       "name": "a2_execution_adoptions",
       "scope": "A2 execution readiness",
-      "source_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
+      "source_sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 0
@@ -549,7 +549,7 @@
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "4a76c6091da84e0956b67cba79eeb96e06f2e39a5cfcd17512edd5f66681f295",
+  "report_sha256": "ed319290253415de28bc8125f8b4e0e973ad780b16cc34b09d12cd7d582b6f6d",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",

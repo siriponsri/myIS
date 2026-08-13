@@ -3166,7 +3166,7 @@
     }
   ],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -3675,7 +3675,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "9834a020f3517b56b05847ba110231355f673d68a263746c5ecde4a0bcb2a8df",
+  "report_sha256": "d1c807d7c46c8001e30bdda03af773a210c199bbc12a3db5587c650d535b9805",
   "report_type": "task",
   "result": {
     "decision": "PASS_25_OF_25",

@@ -36,6 +36,9 @@ result; executor รัน 40 matched ก่อนสร้าง fresh reserve 
 Audit 004 implementation เพิ่ม current v2 fresh-instance binding, แก้ stage probe/TTL
 และสร้าง hash-only CPU-local deployment package จาก local assets เดิมแล้ว. Goal นี้ยัง
 ห้าม measured launch จน AP read-back, fresh admission/staging และ measured authority ผ่าน.
+Audit 005 implementation ปิด canonical bundle closure โดยรวมทั้ง v1/v2 envelope,
+เพิ่ม append-only readiness successor และระบุ A2 disposition เป็น
+`FRESH_INSTANCE_REQUIRED` โดยตรง; A1 `REUSE_ELIGIBLE` คงอยู่เป็น lineage เท่านั้น.
 
 ```text
 DO_NOT_LAUNCH: return to AP read-back and fresh staging; measured authority is absent.

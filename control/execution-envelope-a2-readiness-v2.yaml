@@ -1,7 +1,7 @@
 schema_version: myis.execution-envelope-a2-readiness.v2
 envelope_id: a2-fresh-instance-rebind-v2
 revision_id: a2-fresh-instance-rebind-v2
-status: needs_im_new_instance_rebind_measurement_locked
+status: ready_for_ap_fresh_instance_staging_measurement_locked
 authority:
   standing_decision: D1_START_CAMPAIGN
   preparation_authorized: true

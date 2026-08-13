@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Run one frozen confirmation only after D2_OPEN_FINAL.",
   "phase_id": "A5_FINAL_CONFIRMATION",
   "report_id": "phase-a5_final_confirmation",
-  "report_sha256": "0907e7cb5cc4dbf0f1ddd988a11bfd389fedc39dbadbd55c1a904e5dd8918b05",
+  "report_sha256": "662769799d842ec302f6bca9c6c926c555f998b9bc844dd6cef4b62076a059da",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

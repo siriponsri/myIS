@@ -1,0 +1,127 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-canonical-readiness-budget-ap-review-20260813",
+  "artifact": "A2 canonical readiness and budget package",
+  "artifact_path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_005.md",
+  "artifact_sha256": null,
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "The immutable A2 execution bundle omits the current v2 readiness envelope.",
+      "The current authoritative readiness status still reports that the already completed fresh-instance rebind needs IM."
+    ]
+  },
+  "overall": {
+    "grade": "Weak Accept",
+    "mean_score": 3.5,
+    "one_line_summary": "The frozen design and local deployment package are strong, but fresh provider staging is blocked by an incomplete authority closure and inconsistent current status.",
+    "strengths": [
+      "The 52-candidate freeze, non-advancing arms, budget hard stop, and measured lock remain intact.",
+      "The production adapter and metadata-only deployment package pass focused local validation.",
+      "No provider, GPU, protected, candidate-evaluation, or measured action occurred during review."
+    ],
+    "weaknesses": [
+      "The current v2 readiness envelope is not carried in the execution bundle.",
+      "Canonical status artifacts disagree about whether the rebind remains an IM task or AP staging is next.",
+      "The preflight exposes A1 reuse lineage without an equally explicit current A2 fresh-instance disposition."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": ["The reviewed controls and receipts directly govern A2 admission, staging, budget, and lifecycle."],
+      "weaknesses": ["No fresh provider evidence exists by design."],
+      "suggestions": ["Repair the local authority package before collecting provider evidence."]
+    },
+    "D2_falsifiability": {
+      "score": 3,
+      "strengths": ["Hash, TTL, quote, topology, and protected-boundary failure conditions are explicit."],
+      "weaknesses": ["The bundle validator cannot fail on absence of the current v2 envelope because that file is not in its required closure."],
+      "suggestions": ["Require and test both historical v1 and current v2 readiness envelopes."]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": ["Claims remain limited to engineering readiness and do not imply A2 effectiveness."],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": ["PLAN and the goal identify fresh AP staging as the intended next action."],
+      "weaknesses": ["The current authoritative contract, envelope, and ledger still encode NEEDS_IM_NEW_INSTANCE_REBIND after IM completed that work."],
+      "suggestions": ["Publish one additive, internally consistent current readiness state before provider contact."]
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": ["Incomplete attempts, zero A2 measured counters, and missing provider evidence remain explicit."],
+      "weaknesses": ["A1 REUSE_ELIGIBLE lineage can be mistaken for current A2 lifecycle state."],
+      "suggestions": ["Expose a distinct current A2 FRESH_INSTANCE_REQUIRED disposition."]
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": ["Focused tests, Ruff, preflight, immutable hashes, watchdog design, recovery, and safe-return boundaries are present."],
+      "weaknesses": ["Independent staging replay lacks the current v2 envelope in the immutable code/control closure."],
+      "suggestions": ["Rebuild the bundle and package from clean pushed HEAD after the bounded repair."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D2_falsifiability",
+      "severity": "major",
+      "target_artifact": "src/myis_research/armindex/a2_execution_readiness.py",
+      "target_entity": "_BUNDLE_CLOSURE",
+      "evidence_locator": "The closure includes execution-readiness-contract.v2.json and execution-envelope-a2-readiness-v1.yaml, but not execution-envelope-a2-readiness-v2.yaml.",
+      "observation": "The validated immutable execution bundle omits the current v2 readiness envelope named by source-of-truth and the active goal.",
+      "reasoning": "Fresh-instance admission and staging would not carry the complete current authority package, weakening replay and gate-order evidence.",
+      "suggestion": "Add the v2 envelope to closure, test inclusion and drift rejection, then rebuild both Owner-local artifacts."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "control/armindex/a2/execution-readiness-contract.v2.json",
+      "target_entity": "status",
+      "evidence_locator": "status=NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED while IM 004 and PLAN report the rebind implementation complete and route to AP staging.",
+      "observation": "Current canonical authority and Owner-facing planning disagree on the active readiness state.",
+      "reasoning": "AP cannot safely cross into paid provider admission while canonical status is internally contradictory.",
+      "suggestion": "Create the smallest additive/current post-IM status correction across contract, envelope, ledger successor, goal/read model, and projections."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D5_exploration_integrity",
+      "severity": "minor",
+      "target_artifact": "A2 entry preflight",
+      "target_entity": "provider disposition",
+      "evidence_locator": "provider_disposition_status=REUSE_ELIGIBLE and reuse_existing_instance_permitted=true are inherited from A1 while current A2 requires a fresh instance.",
+      "observation": "Historical reuse lineage is not clearly separated from the current A2 lifecycle decision in machine-readable output.",
+      "reasoning": "Automation or Owner-facing summaries can overstate readiness or target the wrong instance.",
+      "suggestion": "Retain A1 lineage but emit an explicit current A2 FRESH_INSTANCE_REQUIRED/reuse=false field."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_001.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_001_002.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_002_001.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_003_001.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md",
+    "control/campaigns/armindex-multiretriever-v2.yaml",
+    "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
+    "control/armindex/a2/execution-readiness-contract.v2.json",
+    "control/execution-envelope-a2-readiness-v2.yaml",
+    "control/budgets/a2-execution-readiness-v1.json",
+    "control/armindex/a2/execution-ledger.v1.jsonl",
+    "docs/goal/A2_goal.md",
+    "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
+    "Owner-local execution bundle and deployment-package receipts"
+  ]
+}

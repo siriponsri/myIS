@@ -4086,6 +4086,8 @@
       "validated": true
     },
     "a2_execution_readiness": {
+      "a1_provider_disposition_status": "REUSE_ELIGIBLE",
+      "a2_provider_disposition_status": "FRESH_INSTANCE_REQUIRED",
       "a2_spent_accrued_usd": 0,
       "budget_file_sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
       "budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af",
@@ -4096,8 +4098,8 @@
       "candidate_evaluation_allowed": false,
       "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
       "conditional_reserve_candidate_count": 12,
-      "contract_file_sha256": "2ff9b9ef1ed0e03c65a404842fa75434852caa5f1810d5d5a197df08ec64308c",
-      "contract_sha256": "f38e32e4f40102bac4a4be11c22ee71b0e81db9aee47bd5b6ea90dc07bbab101",
+      "contract_file_sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
+      "contract_sha256": "da286fef76f8b176b8e07f4c2da6c17b7b88545de422189002c1e49d23ba449f",
       "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "counters": {
         "candidate_evaluations": 0,
@@ -4112,7 +4114,7 @@
         "ARM-01",
         "ARM-02"
       ],
-      "envelope_file_sha256": "2ef718a090c4460af1015b3641496601f7921a2fac32c3a33623214ec838a78f",
+      "envelope_file_sha256": "37c1ce868aebd509341f462a5751ea25d34ed53f35b55fb82ae60039af6fe3e0",
       "envelope_uri": "control/execution-envelope-a2-readiness-v2.yaml",
       "estimated_next_action_cost_usd": "UNKNOWN",
       "evidence_class": "engineering_execution_readiness",
@@ -4125,9 +4127,9 @@
       "gpu_decision": "UNKNOWN",
       "gpu_decision_reason": "canonical provider admission evidence is not present",
       "historical_status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
-      "latest_ledger_entry_id": "A2EXEC-EV0004",
-      "latest_ledger_entry_sha256": "e4167b11c93f97d3c8db24f8150e844b60e8c64c667ea12b30cb26f99fa0078c",
-      "ledger_sha256": "3152cf07ad5890f56d82cb7456b4e4a30fdfaf98263a2cad30ca256a9e4a10e1",
+      "latest_ledger_entry_id": "A2EXEC-EV0005",
+      "latest_ledger_entry_sha256": "865f4075a6dcb2c0f8113e454b084b9eb983ba02fbe0d1139371c3944bbf125e",
+      "ledger_sha256": "5a243e4ff46d4053a3c9d2b21fec843752dc8b5a9a13f3bec746f1f8ee517945",
       "ledger_uri": "control/armindex/a2/execution-ledger.v1.jsonl",
       "matched_candidate_count": 40,
       "measured_a2_started": false,
@@ -4149,10 +4151,11 @@
       "recorded_campaign_spend_usd": 11.161632,
       "remaining_campaign_headroom_usd": 138.838368,
       "remote_staging_performed": false,
+      "reuse_existing_instance_permitted": false,
       "runbook_sha256": "a02d0cf2701c09938bb69b5a4de624d8b28c8b09cbecee76809afb915403d62f",
       "runbook_uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
       "scientific_authority": false,
-      "status": "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED",
+      "status": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
       "task_id": "A2.1",
       "task_run_ceiling_usd": 35,
       "validated": true
@@ -4745,10 +4748,10 @@
       {
         "phase_id": "A2_PER_ARM_AUTOINDEX",
         "purpose": "Search and freeze one representation program per promoted arm.",
-        "status": "blocked",
+        "status": "ready",
         "tasks": [
           {
-            "status": "blocked",
+            "status": "ready",
             "task_id": "A2.1",
             "title": "Per-arm AutoIndex"
           },
@@ -5930,7 +5933,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "projection_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5974,8 +5977,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
-  "read_model_sha256": "11a7f04cbdee7029735f0593848263215a152d0dbf9e0232ccccc31aae31954c",
+  "read_model_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
+  "read_model_sha256": "0ddf017fd0bbd317a46d7b3ddba95095cc00c9e99618f491f46c25c7ab8ec702",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",

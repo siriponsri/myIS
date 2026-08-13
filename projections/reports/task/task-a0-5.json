@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -204,7 +204,7 @@
   "objective": "Phase, Research Flow, and Owner-gate migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-5",
-  "report_sha256": "038f34e3c2eb75767fa8b7c6de170153fd992d36435bd1f785e1669b4bd7793b",
+  "report_sha256": "57329bc968fc1a0f3a95fc28549bf5095437dbf97bfde2983b004cadc8acf9eb",
   "report_type": "task",
   "result": {
     "decision": "completed",

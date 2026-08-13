@@ -76,6 +76,8 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-execution-bundle-receipt.v1.json",
     "schemas/armindex/a2-deployment-package-receipt.v1.json",
     "schemas/armindex/a2-execution-ledger-entry.v1.json",
+    "schemas/armindex/a2-execution-ledger-entry.v2.json",
+    "schemas/armindex/a2-execution-ledger-entry.v3.json",
     "schemas/armindex/a2-candidate-result-receipt.v1.json",
     "schemas/armindex/a2-execution-closeout-receipt.v1.json",
     "schemas/armindex/a2-remote-stage-receipt.v1.json",
@@ -103,6 +105,7 @@ _BUNDLE_CLOSURE = (
     "control/armindex/a2/measured-command-argv.v1.json",
     "control/budgets/a2-execution-readiness-v1.json",
     "control/execution-envelope-a2-readiness-v1.yaml",
+    "control/execution-envelope-a2-readiness-v2.yaml",
     "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
     "src/myis_research/armindex/a2_candidate_freeze.py",
     "src/myis_research/armindex/a2_execution_readiness.py",
@@ -365,6 +368,9 @@ def validate_execution_ledger(
             ),
             "myis.armindex-a2-execution-ledger-entry.v2": (
                 "a2-execution-ledger-entry.v2.json"
+            ),
+            "myis.armindex-a2-execution-ledger-entry.v3": (
+                "a2-execution-ledger-entry.v3.json"
             ),
         }.get(schema_version)
         if schema_name is None:

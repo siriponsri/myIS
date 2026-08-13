@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -204,7 +204,7 @@
   "objective": "Canonical authority and professional documentation",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-2",
-  "report_sha256": "cdd6435690396f9751f87f80507211a6fad8cc1d172ebadbe178f4b2362ffe79",
+  "report_sha256": "e8f0aef474f98d6cbb9828c533c4a485f540c3a1e795e4327d171eb7913c4bae",
   "report_type": "task",
   "result": {
     "decision": "completed",

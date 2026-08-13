@@ -150,7 +150,7 @@
   ],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -204,7 +204,7 @@
   "objective": "MLflow and Dashboard migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-4",
-  "report_sha256": "a8299fd4c786398493c342e468a15ea0e6be26c40fc76570bd9ea7724297c7ff",
+  "report_sha256": "34534dd821029a5a4eae4e9af081ab8ab6cb77fce4d282dda6ed1c1d2ecd051d",
   "report_type": "task",
   "result": {
     "decision": "completed",

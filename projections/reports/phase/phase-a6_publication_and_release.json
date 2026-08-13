@@ -10,7 +10,7 @@
   "evidence_links": [],
   "failure_recovery_references": [],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -64,7 +64,7 @@
   "objective": "Build publication and release artifacts only after D3_SUBMIT_RELEASE.",
   "phase_id": "A6_PUBLICATION_AND_RELEASE",
   "report_id": "phase-a6_publication_and_release",
-  "report_sha256": "356290867a30ff63752c24b5d7f428df0ef824926cdb85f8b7c42059c32d4dbc",
+  "report_sha256": "5cfebfaf7ff68836eee1ee791a366ae40b26a78f748538c8e0671f413dee5234",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

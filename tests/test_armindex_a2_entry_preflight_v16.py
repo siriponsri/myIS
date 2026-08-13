@@ -169,7 +169,10 @@ def test_preflight_requires_pass_25_of_25_and_reports_provider_preparation(
 
     assert result["status"] == "PASS_A2_ENTRY_PREFLIGHT"
     assert result["provider_disposition_status"] == disposition
-    assert result["reuse_existing_instance_permitted"] is reuse
+    assert result["a1_provider_disposition_status"] == disposition
+    assert result["a1_reuse_lineage_eligible"] is reuse
+    assert result["a2_provider_disposition_status"] == "FRESH_INSTANCE_REQUIRED"
+    assert result["reuse_existing_instance_permitted"] is False
     assert result["fresh_a2_provider_admission_required"] is True
     assert result["fresh_a2_execution_adoption_required"] is True
     assert result["new_isolated_remote_root_required"] is True

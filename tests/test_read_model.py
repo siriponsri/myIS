@@ -328,13 +328,18 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     )
     readiness = model["armindex"]["a2_execution_readiness"]
     assert readiness["status"] == (
+        "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
+    )
+    assert readiness["historical_status"] == (
         "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
     )
-    assert readiness["historical_status"] == readiness["status"]
     assert readiness["current_status"] == (
         "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
     )
     assert readiness["current_route"] == "AP"
+    assert readiness["a1_provider_disposition_status"] == "REUSE_ELIGIBLE"
+    assert readiness["a2_provider_disposition_status"] == "FRESH_INSTANCE_REQUIRED"
+    assert readiness["reuse_existing_instance_permitted"] is False
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
     assert readiness["provider_admission_performed"] is False
@@ -345,16 +350,16 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
         "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_"
         "THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
     )
-    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0004"
+    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0005"
     a2 = next(
         phase
         for phase in model["armindex"]["phases"]
         if phase["phase_id"] == "A2_PER_ARM_AUTOINDEX"
     )
-    assert a2["status"] == "blocked"
+    assert a2["status"] == "ready"
     assert next(task for task in a2["tasks"] if task["task_id"] == "A2.1")[
         "status"
-    ] == "blocked"
+    ] == "ready"
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:

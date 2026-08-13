@@ -506,7 +506,7 @@
     }
   ],
   "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "901203a4ca5772b676dbfd5fd7c3f7c2b20f0fb0b008dafd36c599f075723f12",
+  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
   "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
   "governance_status": {
     "d2": "waiting_owner",
@@ -627,7 +627,7 @@
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "2f881666e33c9eaf3561dbaf5a16c564370df92857ad34abbf8f24fbd558bdbb",
+  "report_sha256": "2d5ef282ae687e21336bf1d50c60d7f218d3898dbdb6a066818c8e3723dd3c30",
   "report_type": "phase",
   "result": {
     "decision": "completed",
