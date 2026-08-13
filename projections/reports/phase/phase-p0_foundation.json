@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-13T12:11:50Z",
-  "generated_from_revision": "941dc4128f794d2b837a77d6d5690ddc5a6e9610e2e080cb32e268390c66409f",
-  "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
+  "generated_at": "2026-08-13T12:56:29Z",
+  "generated_from_revision": "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a",
+  "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,7 +108,7 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "52f0bbc8a944c98e845074b753cc91d2c7771a2f",
+    "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
     "source_of_truth": {
       "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
       "uri": "control/source-of-truth.yaml"
@@ -116,13 +116,13 @@
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-13T12:11:50Z",
+  "last_material_update": "2026-08-13T12:56:29Z",
   "metric_references": [],
   "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
   "objective": "Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.",
   "phase_id": "P0_FOUNDATION",
   "report_id": "phase-p0_foundation",
-  "report_sha256": "ff3b23b16d6dec6ad72df0487ef26df93361e1250bef44e4316b68bc407f133d",
+  "report_sha256": "53b452d0abda512ddaa548fea960e179b7e1bd7e402bc14083472c61c47eafed",
   "report_type": "phase",
   "result": {
     "decision": "completed",
