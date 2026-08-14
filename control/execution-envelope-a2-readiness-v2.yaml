@@ -21,7 +21,7 @@ resources:
   gpu_count: 4
   gpu_model: RTX3090
   vram_mib_each: 24576
-  target_ttl_hours: 48
+  target_ttl_hours: 60
   owner_ttl_hours: 40
   remote_clock_skew_max_seconds: 60
   forward_hard_stop_usd: 35
