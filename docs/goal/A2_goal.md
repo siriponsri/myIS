@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT
+status: NEEDS_IM_PROVENANCE_AND_REMOTE_RECOVERY_REPAIR
 lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
-claim_boundary: "Fresh admission and isolated staging passed without measurement. This guide still does not authorize measured A2 until IM completes the canonical remote execution transport and AP adopts a separate tracked measurement authority."
-last_material_update: 2026-08-14
-next_authorized_action: IM_IMPLEMENT_REMOTE_MEASURED_EXECUTION_TRANSPORT_OWNER_INPUT_MANIFEST_AND_RESERVE_CHECKPOINT_TTL_DO_NOT_MEASURE
+claim_boundary: "Fresh admission, isolated staging, Owner-local manifest, and non-measured remote transport are implemented and validated. This guide still does not authorize measured A2 until IM repairs attempt/bundle/authority provenance and durable remote recovery, then AP performs a short readiness review."
+last_material_update: 2026-08-15
+next_authorized_action: IM_REPAIR_ATTEMPT_BUNDLE_AUTHORITY_PROVENANCE_AND_REMOTE_RECOVERY_DO_NOT_MEASURE
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -41,16 +41,16 @@ Audit 005 implementation ปิด canonical bundle closure โดยรวม�
 `FRESH_INSTANCE_REQUIRED` โดยตรง; A1 `REUSE_ELIGIBLE` คงอยู่เป็น lineage เท่านั้น.
 
 Audit 006 passed fresh v2 admission and isolated staging on Vast instance
-`47700074`, ending at `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`. It also found
-that the canonical measured `execute` path has no production remote transport
-to the staged four-GPU host and no real Owner-local measured input manifest.
-The next session is IM; measured LO remains closed.
-IM must also separate the 40-hour initial admission floor from the matched-barrier
-checkpoint floor derived from the frozen unfinished-work runtime projection plus
-the existing six-hour reserve. The USD 35 hard stop remains unchanged.
+`47700074`, ending at `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`. IM 006 then
+added the production remote transport and real Owner-local measured input
+manifest, and separated the 40-hour initial floor from the frozen-runtime
+reserve floor. Audit 007 found that measured LO remains closed because attempt
+identity, final pushed-HEAD bundle, canonical authority, and durable remote
+recovery are not yet bound end to end. The USD 35 hard stop and frozen
+scientific semantics remain unchanged.
 
 ```text
-DO_NOT_LAUNCH: isolated staging passed, but remote measured execution transport and tracked authority are absent.
+DO_NOT_LAUNCH: transport and Owner-local manifest exist, but attempt/bundle/authority provenance and durable remote recovery remain incomplete.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -105,7 +105,7 @@ Selection, Final, D2 หรือ D3.
       4x RTX 3090, runtime/model/data hashes, SSH evidence, all-fee quote and management
       authority. Prefer authenticated Vast CLI. `OwnerDashboardSsh` is valid only with
       pinned SSH runtime/GPU evidence and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
-   4. Apply the Owner-approved target of `48` hours remaining and require all-fee
+   4. Apply the Owner-approved target of `60` hours total and require all-fee
       whole-workload admission for all 52 candidates with at least `40` hours
       remaining from the fresh absolute deadline, USD `35` forward hard stop,
       no unknown fee and no partial-arm quote. Do not
@@ -133,7 +133,7 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, IM must complete audit 006 without changing frozen scientific semantics,
+- Before LO, IM must complete audit 007 without changing frozen scientific semantics,
   then AP must perform a short launch-readiness review and create the separate tracked
   measurement authority/LO goal. Preserve append-only evidence and do not alter frozen
   candidate bytes or the v1/v2 campaign/envelope/budget/execution contract.

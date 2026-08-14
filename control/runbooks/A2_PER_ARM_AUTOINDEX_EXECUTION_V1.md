@@ -24,7 +24,7 @@ and non-advancing.
    `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
 4. Require a forward all-fee hard stop no greater than USD 35 and at least
    40 hours remaining from a fresh absolute TTL deadline. The Owner-approved
-   staging target is 48 hours remaining. Reject unknown fees or a partial-arm quote.
+   total instance TTL is 60 hours. Reject unknown fees or a partial-arm quote.
 5. Create `/opt/myis/a2-<attempt-id>` only after provider admission passes,
    stage the immutable bundle, and install a new TTL/watchdog receipt. Never
    mutate or reuse an A1 remote root.
@@ -33,7 +33,10 @@ and non-advancing.
    the 40 matched candidates first. Resume never reruns a durable receipt.
 7. At the matched barrier, stop with
    `MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED` until a fresh admission still
-   proves at least 40 hours remaining and the unchanged USD 35 hard stop.
+   proves at least the deterministic reserve floor
+   `ceil(worst_case_dense_parallel_critical_path_seconds - matched_dense_parallel_critical_path_seconds + owner_ttl_reserve_seconds) = 53848s`
+   and the unchanged USD 35 hard stop. The initial admission floor remains 40h
+   and is not reused for reserve admission.
 8. Derive the three primary-arm decisions from the frozen batch order,
    Owner-local A1 v16 incumbents, strict primary improvement, and the actual
    four frozen reserve axes. Persist one decision and one continuation receipt.

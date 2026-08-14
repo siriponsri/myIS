@@ -15,11 +15,12 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_PROVENANCE_AND_REMOTE_RECOVERY_REPAIR`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started. Audit 006 passed
-  fresh admission and isolated staging, then found the missing production remote
-  measured-launch transport and real Owner-local measured input manifest.)
+  fresh admission and isolated staging. IM 006 added the remote transport and
+  real Owner-local manifest; audit 007 found remaining provenance and recovery
+  blockers.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
   destroy instance `47411176` and provision a fresh instance. Audit 004 implementation
@@ -27,7 +28,8 @@ measurement, and production-constrained HarnessOpt.
   package. Audit 005 added the missing v2 envelope to the immutable bundle,
   appended the post-IM readiness successor, and made the current A2 disposition
   `FRESH_INSTANCE_REQUIRED` with reuse false. Fresh AP admission/staging now passes
-  on instance `47700074`; measured execution remains locked pending audit 006 IM.)
+  on instance `47700074`; measured execution remains locked pending audit 007 IM
+  and one short AP readiness review.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -346,12 +348,12 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-IM reads `docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md` and implements the
-canonical hash-bound remote measured-execution transport plus the real
-Owner-local measured input manifest, and separates the 40-hour initial admission
-floor from the frozen-runtime-derived reserve checkpoint floor. Reuse the staged
-instance/assets, run only non-measured transport validation, commit/push, and
-return to AP. Measured A2 remains closed.
+IM reads `docs/audit/A2_PER_ARM_AUTOINDEX_audit_007.md` and repairs the remaining
+attempt/bundle/authority provenance and durable remote recovery surfaces. Reuse
+the staged instance/assets, refresh the Owner-approved 60-hour TTL metadata and
+USD 35 hard stop, run only synthetic/non-measured transport and interruption
+validation, commit/push, and return to AP for one short pass/fail review.
+Measured A2 remains closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
@@ -422,3 +424,13 @@ after the projected 17.92-hour matched critical path; the frozen runtime project
 and six-hour reserve imply about 14.95 hours for unfinished reserve work. These
 launch-critical engineering gaps route to IM without changing candidate, metric,
 budget ceiling, or scientific design.
+
+Audit 007 reviewed IM 006 at pushed HEAD `be9db975ee0b9045520eaf4f85dfe43903dda643`.
+The bundle, Owner-local input manifest, and fresh non-measured transport check
+are valid, but attempt IDs differ across adoption/transport/manifest, adoption
+still binds the older bundle, canonical measurement-authority equality is not
+enforced, and remote per-candidate process/heartbeat recovery is incomplete.
+Owner approved a 60-hour total TTL for instance `47700074`; the projected
+aggregate envelope remains about USD 34.85 including the existing USD 0.30
+network reserve and below the unchanged USD 35 hard stop. Audit 007 routes to
+one IM repair session; no measured authority or LO goal exists.

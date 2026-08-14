@@ -1,0 +1,147 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-im-audit006-launch-readiness-ap-review-20260815",
+  "artifact": "A2 IM 006 remote transport launch-readiness package",
+  "artifact_path": "docs/implementation/A2_PER_ARM_AUTOINDEX_im_006_001.md",
+  "artifact_sha256": "b5862f04a482ddada02a975d66afb1fa27539330e6034d61a98db86982b44269",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "Adoption, transport, Owner manifest, and execution do not share one attempt identity.",
+      "The current adoption binds an older execution bundle than the pushed-HEAD transport bundle.",
+      "Remote transport does not enforce equality with the canonical measurement-authority commitment.",
+      "Remote per-candidate process identity and heartbeat are discarded, preventing duplicate-safe interruption recovery."
+    ]
+  },
+  "overall": {
+    "grade": "Reject",
+    "mean_score": 3.33,
+    "one_line_summary": "The non-measured transport and Owner-local manifest are structurally strong, but the attempt, bundle, authority, and remote recovery chain is not safe for measured launch.",
+    "strengths": [
+      "The pushed-HEAD bundle and Owner-local manifest validate with explicit SHA-256 commitments.",
+      "Focused tests, Ruff, preflight, synthetic 52/52 dry-run, and fresh non-measured transport validation pass.",
+      "Protected qrels, membership, credentials, and per-query evidence remain Owner-local."
+    ],
+    "weaknesses": [
+      "The execution receipt chain can describe a different attempt and bundle from the code actually transported.",
+      "Canonical measurement-authority equality is prospective rather than enforced.",
+      "A multi-hour remote candidate cannot be recovered or reaped with durable process identity after interruption."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 4,
+      "strengths": ["The review directly tests launch provenance, protected-boundary behavior, and recovery evidence."],
+      "weaknesses": ["No measured result exists, so scientific effectiveness is intentionally not assessable."],
+      "suggestions": ["Keep the next review limited to the launch-critical changed surface."]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": ["Bundle, manifest, transport, process-zero, and non-measurement states have executable checks."],
+      "weaknesses": ["The current checks do not falsify adoption/transport bundle inequality or canonical authority inequality."],
+      "suggestions": ["Add explicit pre-launch equality and negative mismatch tests."]
+    },
+    "D3_scope_calibration": {
+      "score": 4,
+      "strengths": ["Claims remain limited to engineering readiness and do not claim measured A2 results."],
+      "weaknesses": ["The IM handoff understates the remaining launch-critical recovery gap."],
+      "suggestions": ["State launch readiness as closed until durable remote recovery passes."]
+    },
+    "D4_argument_coherence": {
+      "score": 2,
+      "strengths": ["The intended local-evaluation/remote-retrieval boundary is coherent."],
+      "weaknesses": ["Attempt and bundle identities diverge across adoption, manifest, transport, and final bundle."],
+      "suggestions": ["Use one attempt identity and require bundle commit/tree/hash equality end to end."]
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": ["The package preserves non-measured checks, prior bundle identity, and explicit limitations."],
+      "weaknesses": ["The REP-DEV flag name can be misread after remote retrieval but before Owner-local evaluation."],
+      "suggestions": ["Rename or split retrieval-complete from evaluation-complete state, or prove all consumers interpret it correctly."]
+    },
+    "D6_methodological_rigor": {
+      "score": 2,
+      "strengths": ["Protected evaluation remains local and the frozen 52-candidate semantics are preserved."],
+      "weaknesses": ["Authority provenance is not enforced and remote interruption can duplicate or orphan candidate work."],
+      "suggestions": ["Add durable process/heartbeat/cancellation/reaping/recovery semantics and non-measured interruption tests before LO."]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D4_argument_coherence",
+      "severity": "critical",
+      "target_artifact": "src/myis_research/armindex/a2_operational_executor.py",
+      "target_entity": "execute_external_candidate_set",
+      "evidence_locator": "lines 2424 and Owner-local attempt IDs a2-im-audit005-final, a2-im-audit006-20260815, a2-im-audit006-final",
+      "observation": "The adoption, manifest/transport, and final bundle use three attempt identities; execution requires equality with adoption.",
+      "reasoning": "The current launch fails closed or produces an incoherent attempt lineage.",
+      "suggestion": "Rebuild all current receipts under one attempt ID without mutating historical receipts."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D6_methodological_rigor",
+      "severity": "critical",
+      "target_artifact": "src/myis_research/armindex/a2_operational_executor.py",
+      "target_entity": "adoption-to-transport provenance",
+      "evidence_locator": "lines 585 and 1420; adoption bundle 2ba3793e775734f0620850bec088222124d5cf9ed8d972285512bad58ce3d7e2 versus pushed-HEAD bundle d404dfdf07277d694a79fedebd190ecc7181c5c18edf52208d11e895450cf497",
+      "observation": "The execute path does not require transport bundle SHA, Git commit, and tree to equal adoption.",
+      "reasoning": "Measured receipts could claim an old adopted bundle while new code executes.",
+      "suggestion": "Enforce bundle hash/commit/tree equality before worker launch and receipt emission."
+    },
+    {
+      "finding_id": "F003",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/armindex/a2_remote_transport.py",
+      "target_entity": "measurement authority validation",
+      "evidence_locator": "line 242 and prospective authority SHA-256 6ff16323959c04812fda68e099e7a942b9147ba62c34ea253d5693cc4d479e6d",
+      "observation": "Transport validates its config internally but does not compare the config authority hash to the canonical authority object.",
+      "reasoning": "The remote host cannot prove it consumed the authority reviewed by AP.",
+      "suggestion": "Require exact canonical authority equality and negative mismatch tests."
+    },
+    {
+      "finding_id": "F004",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "src/myis_research/armindex/a2_remote_transport.py",
+      "target_entity": "RemoteExecutor.__call__",
+      "evidence_locator": "line 242; heartbeat_path and process_path are discarded",
+      "observation": "Remote candidate execution has no durable process identity, heartbeat, cancellation, reaping, or recovery evidence.",
+      "reasoning": "An interrupted multi-hour candidate can be orphaned or duplicated on resume.",
+      "suggestion": "Implement attempt/candidate-bound lifecycle evidence and non-measured interruption recovery tests."
+    },
+    {
+      "finding_id": "F005",
+      "dimension": "D5_exploration_integrity",
+      "severity": "minor",
+      "target_artifact": "src/myis_research/armindex/a2_remote_retriever.py",
+      "target_entity": "remote retrieval completion state",
+      "evidence_locator": "line 121, rep_dev_measured=false",
+      "observation": "Remote retrieval over REP-DEV inputs reports rep_dev_measured=false until Owner-local evaluation later changes the aggregate state.",
+      "reasoning": "The flag is valid only if it means evaluation-complete, but the name can mislead interrupted-run consumers.",
+      "suggestion": "Rename/split the state or prove no canonical closeout interprets remote retrieval as unmeasured."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "AGENTS.md",
+    "PLAN.md",
+    "control/source-of-truth.yaml",
+    "control/execution-envelope-a2-readiness-v2.yaml",
+    "control/budgets/a2-execution-readiness-v1.json",
+    "control/armindex/a2/execution-readiness-contract.v2.json",
+    "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_006_001.md",
+    "Owner-local pushed-HEAD bundle and input/transport receipts",
+    "src/myis_research/armindex/a2_operational_executor.py",
+    "src/myis_research/armindex/a2_remote_transport.py",
+    "src/myis_research/armindex/a2_remote_retriever.py",
+    "focused validation receipts and test output"
+  ]
+}
