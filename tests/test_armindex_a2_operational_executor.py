@@ -525,6 +525,8 @@ def test_stage_plan_rejects_wrong_root_and_transport_rejects_dead_watchdog(
             runner=runner,
         )
     verify_command = commands[-1][-1]
+    prepare_command = commands[0][-1]
+    assert "pgrep -f '[m]yis_research.armindex.a2_'" in prepare_command
     assert "/lifecycle/watchdog.identity" in verify_command
     assert "/lifecycle/processes/watchdog.identity" not in verify_command
     assert "while test ! -s" in verify_command

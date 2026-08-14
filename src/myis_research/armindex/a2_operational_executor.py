@@ -1763,7 +1763,7 @@ def perform_remote_stage(
     try:
         prepare = (
             "set -eu; "
-            "test -z \"$(pgrep -f 'myis_research.armindex.a2_' || true)\"; "
+            "test -z \"$(pgrep -f '[m]yis_research.armindex.a2_' || true)\"; "
             f"test ! -e {shlex.quote(remote_root)}; "
             f"mkdir -p {shlex.quote(remote_root)}/incoming {shlex.quote(remote_root)}/current "
             f"{shlex.quote(remote_root)}/lifecycle/processes {shlex.quote(remote_root)}/lifecycle/heartbeats"
