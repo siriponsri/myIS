@@ -967,6 +967,37 @@ def _a2_execution_readiness_projection(
                     "RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
                 ),
             }
+        if (
+            latest_ledger_entry["status"]
+            == "EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED"
+        ):
+            return {
+                **result,
+                "status": "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING",
+                "historical_status": (
+                    "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
+                ),
+                "current_status": "NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT",
+                "current_route": "IM",
+                "a1_provider_disposition_status": "REUSE_ELIGIBLE",
+                "a2_provider_disposition_status": "STAGED_FRESH_INSTANCE",
+                "reuse_existing_instance_permitted": True,
+                "provider_admission_performed": True,
+                "provider_execution_adoption_performed": True,
+                "remote_staging_performed": True,
+                "provider_admission_status": "PASS_OWNER_LOCAL_V2",
+                "provider_admission_attempted": True,
+                "gpu_decision": "KEEP_GPU",
+                "gpu_decision_reason": (
+                    "fresh isolated staging and asset upload passed; immediate IM "
+                    "remote-transport validation can reuse the instance"
+                ),
+                "next_authorized_action": (
+                    "IM_IMPLEMENT_HASH_BOUND_REMOTE_MEASURED_EXECUTION_TRANSPORT_"
+                    "REAL_OWNER_LOCAL_INPUT_MANIFEST_AND_RESERVE_CHECKPOINT_TTL_"
+                    "DO_NOT_MEASURE"
+                ),
+            }
         if latest_ledger_entry["status"] == "FAILED_CLOSED":
             return {
                 **result,
@@ -1706,6 +1737,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "a2_staged_not_launched_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+            else "a2_staged_not_launched_remote_transport_pending"
+            if a2_execution_readiness.get("status")
+            == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
             else "a2_provider_admission_failed_closed_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED"
@@ -1736,6 +1770,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
                     else "blocked"
                     if a2_execution_readiness.get("status")
+                    == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
+                    else "blocked"
+                    if a2_execution_readiness.get("status")
                     in {
                         "PROVIDER_ADMISSION_FAILED_CLOSED_MEASUREMENT_LOCKED",
                         "IMPLEMENTATION_BLOCKED_MEASUREMENT_LOCKED",
@@ -1754,6 +1791,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                                 "staged"
                                 if a2_execution_readiness.get("status")
                                 == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
+                                else "blocked"
+                                if a2_execution_readiness.get("status")
+                                == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
                                 else "blocked"
                                 if a2_execution_readiness.get("status")
                                 in {

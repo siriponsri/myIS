@@ -328,38 +328,38 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     )
     readiness = model["armindex"]["a2_execution_readiness"]
     assert readiness["status"] == (
-        "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
+        "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
     )
     assert readiness["historical_status"] == (
-        "NEEDS_IM_NEW_INSTANCE_REBIND_MEASUREMENT_LOCKED"
-    )
-    assert readiness["current_status"] == (
         "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
     )
-    assert readiness["current_route"] == "AP"
+    assert readiness["current_status"] == "NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT"
+    assert readiness["current_route"] == "IM"
     assert readiness["a1_provider_disposition_status"] == "REUSE_ELIGIBLE"
-    assert readiness["a2_provider_disposition_status"] == "FRESH_INSTANCE_REQUIRED"
-    assert readiness["reuse_existing_instance_permitted"] is False
+    assert readiness["a2_provider_disposition_status"] == "STAGED_FRESH_INSTANCE"
+    assert readiness["reuse_existing_instance_permitted"] is True
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
-    assert readiness["provider_admission_performed"] is False
-    assert readiness["provider_execution_adoption_performed"] is False
-    assert readiness["provider_admission_attempted"] is False
-    assert readiness["provider_admission_status"] == "NOT_ATTEMPTED_NEW_INSTANCE_REQUIRED"
+    assert readiness["provider_admission_performed"] is True
+    assert readiness["provider_execution_adoption_performed"] is True
+    assert readiness["remote_staging_performed"] is True
+    assert readiness["provider_admission_attempted"] is True
+    assert readiness["provider_admission_status"] == "PASS_OWNER_LOCAL_V2"
     assert readiness["next_authorized_action"] == (
-        "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_"
-        "THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
+        "IM_IMPLEMENT_HASH_BOUND_REMOTE_MEASURED_EXECUTION_TRANSPORT_"
+        "REAL_OWNER_LOCAL_INPUT_MANIFEST_AND_RESERVE_CHECKPOINT_TTL_"
+        "DO_NOT_MEASURE"
     )
-    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0005"
+    assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0006"
     a2 = next(
         phase
         for phase in model["armindex"]["phases"]
         if phase["phase_id"] == "A2_PER_ARM_AUTOINDEX"
     )
-    assert a2["status"] == "ready"
+    assert a2["status"] == "blocked"
     assert next(task for task in a2["tasks"] if task["task_id"] == "A2.1")[
         "status"
-    ] == "ready"
+    ] == "blocked"
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:

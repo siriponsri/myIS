@@ -13,10 +13,10 @@ contents are non-distributable.
 ## Current state (orientation only)
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_cpu_local_rebind_and_deployment_ready_fresh_ap_staging_pending`
-- Local adoption-input status: `REQUIRES_FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION`
+- Status: `a2_fresh_staging_pass_not_launched_remote_measured_transport_pending`
+- Local adoption-input status: `FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION_PASS_MEASURED_AUTHORITY_ABSENT`
 - Evidence class: A1 aggregate-safe measured development closeout has validated
   25/25 coverage and scientific authority `true`; A2 remains immutable
   pre-measurement engineering evidence with scientific authority `false`
@@ -295,6 +295,24 @@ A1 `REUSE_ELIGIBLE` value only as lineage and reports current A2 disposition
 `FRESH_INSTANCE_REQUIRED` with reuse false. Provider contact/provisioning,
 remote staging, measured A2, and protected-data access remain unstarted.
 
+Audit 006 validates pushed HEAD `daf124ace981e070d012cca6d8c0feaed607d41a`,
+fresh Vast instance `47700074`, the USD `27.939255` all-fee quote, complete
+uploaded asset hashes, and isolated root `/opt/myis/a2-im-audit005-final`.
+Provider admission, live probe, remote stage, watchdog, genesis checkpoint, and
+execution adoption pass with zero GPU/A2 workers and
+`measured_a2_started=false`. Ledger entry `A2EXEC-EV0006` records
+`EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`.
+
+Measured LO is not ready: the canonical `execute` path launches the production
+adapter as a local subprocess while the four CUDA devices/models are remote;
+the staged extraction has no Git measurement-authority provenance surface and
+no real Owner-local measured input manifest exists. Audit 006 routes this
+launch-critical engineering gap to IM without changing frozen science.
+The same audit finds that `reserve-admit` incorrectly reuses the 40-hour initial
+floor after the matched critical path. IM must derive the checkpoint floor from
+the frozen unfinished-work projection plus its existing six-hour reserve while
+keeping the initial 40-hour floor and USD 35 hard stop unchanged.
+
 ## Active authorized action
 
 Owner decision completed:
@@ -305,11 +323,13 @@ APPROVED: 48 hours remaining under the unchanged USD 35 A2 forward hard stop.
 
 `docs/goal/A1_2_rerun_goal.md` and
 `docs/goal/A2_official_codex_bridge_goal.md` are closed `PASS`.
-Audit 002 through audit 005 implementation are complete. The Owner changed
-the provider route to a fresh instance. The next route is AP read-back followed by
-fresh-instance admission and isolated staging using the v2 binding and Owner-local
-deployment receipt. Only after that may AP create a separate measured LO goal and
-tracked authority.
+Audit 002 through audit 005 implementation and audit 006 fresh staging are
+complete. The next route is IM on
+`docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md`: implement the hash-bound remote
+measured transport and real Owner-local input manifest, reuse instance
+`47700074` and the uploaded assets, repair the reserve-checkpoint TTL derivation,
+perform only non-measured transport checks, then return to AP. Only that AP review
+may create the separate measured LO goal and tracked authority.
 Retain the protected-data and frozen-science boundaries and do not enter A3,
 HARNESS-DEV, Selection, or Final.
 

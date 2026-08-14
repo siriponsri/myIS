@@ -1,0 +1,148 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260814T174704Z-a2ap006",
+  "run_id": null,
+  "goal_id": "A2_PER_ARM_AUTOINDEX_audit_006",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-14T17:47:04Z",
+  "scope": "AP review of A2 canonical readiness closure, pushed-HEAD receipts, fresh provider admission, isolated staging, launch blockers, and next-session routing without measured execution",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "SESSION_SCOPE",
+      "source": "Current Owner prompt authorizing bounded AP documentation and small non-architectural repairs",
+      "scope": "Complete audit 006, validate fresh staging evidence, and prepare the exact next session without starting measured A2"
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "daf124ace981e070d012cca6d8c0feaed607d41a",
+    "dirty_paths": [
+      "HANDOFF.md",
+      "PLAN.md",
+      "control/armindex/a2/execution-ledger.v1.jsonl",
+      "control/source-of-truth.yaml",
+      "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+      "docs/goal/A2_goal.md",
+      "outputs/audits/rigor/a2-fresh-provider-admission-blocked-external-20260813.json",
+      "src/myis_research/armindex/a2_entry_preflight_v16.py",
+      "src/myis_research/projections/read_model.py",
+      "tests/test_armindex_a2_execution_readiness.py",
+      "tests/test_read_model.py"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Validated the final pushed-HEAD execution bundle and metadata-only deployment package before provider admission.",
+      "evidence_refs": [
+        {
+          "path": "docs/implementation/A2_PER_ARM_AUTOINDEX_im_005_001.md",
+          "sha256": "5c39791a15dfa0588e31656d966a27844f8d83f153366e2a302803898a1e2ef3",
+          "locator": "Final pushed-HEAD bundle and deployment package"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Fresh provider admission and isolated staging passed on instance 47700074 with zero measured workers and a live watchdog.",
+      "evidence_refs": [
+        {
+          "path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+          "sha256": "92c9c1e7c96a867172eaececb3dee0533a9a825139b5abcf587228c9259d1842",
+          "locator": "Provider admission and isolated staging"
+        },
+        {
+          "path": "control/armindex/a2/execution-ledger.v1.jsonl",
+          "sha256": "6dad2987d6cc57b166d9ea13fb4111b5504e2ffb9b7d7440fa055a85564553d4",
+          "locator": "entry_id A2EXEC-EV0006"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "Measured LO cannot start because the canonical executor launches the CUDA adapter locally while the admitted GPUs and models are remote, and no real Owner-local measured input manifest exists.",
+      "evidence_refs": [
+        {
+          "path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+          "sha256": "92c9c1e7c96a867172eaececb3dee0533a9a825139b5abcf587228c9259d1842",
+          "locator": "AP decision and IM work required before measured LO"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "Reserve admission incorrectly reapplies the 40-hour initial floor after the matched barrier instead of deriving the floor from frozen unfinished reserve work plus six hours.",
+      "evidence_refs": [
+        {
+          "path": "outputs/audits/rigor/a2-fresh-provider-admission-blocked-external-20260813.json",
+          "sha256": "8ad5f131171f6aacbf5d5e1f90185802b9ee420c87f962de77a5917e1be17e50",
+          "locator": "finding_id F002"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "observation",
+      "provenance": "agent-observed",
+      "summary": "ARM-02 transferred more slowly because its 2.293 GB tree is 1.66-1.90 times larger than the other dense arms and required resumable recovery; its final SHA-256 validation passed.",
+      "evidence_refs": [
+        {
+          "path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+          "sha256": "92c9c1e7c96a867172eaececb3dee0533a9a825139b5abcf587228c9259d1842",
+          "locator": "Upload and ARM-02 transfer note"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Focused validation completed with 99 tests passing, Ruff passing, preflight passing in staged-but-unauthorized state, and a 52-of-52 synthetic dry-run with no provider contact or measurement.",
+      "evidence_refs": [
+        {
+          "path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+          "sha256": "92c9c1e7c96a867172eaececb3dee0533a9a825139b5abcf587228c9259d1842",
+          "locator": "AP closeout validation"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    "IM must implement canonical hash-bound remote measured-execution transport and a real Owner-local measured input manifest without starting measured A2.",
+    "IM must separate the unchanged 40-hour initial admission floor from the frozen-runtime-derived reserve-checkpoint TTL while preserving the USD 35 hard stop.",
+    "AP must perform a short launch-readiness review after IM before creating measured authority or an LO goal."
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

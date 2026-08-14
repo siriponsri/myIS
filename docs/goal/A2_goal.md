@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: READY_FOR_AP_FRESH_INSTANCE_STAGING
+status: NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT
 lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
-claim_boundary: "This guide consumes the immutable 52-candidate freeze only. It does not generate or mutate candidates, and it does not authorize measured A2 until fresh admission and adoption receipts pass."
-last_material_update: 2026-08-13
-next_authorized_action: AP_READ_BACK_THEN_FRESH_ADMISSION_AND_STAGING_DO_NOT_LAUNCH_MEASUREMENT
+claim_boundary: "Fresh admission and isolated staging passed without measurement. This guide still does not authorize measured A2 until IM completes the canonical remote execution transport and AP adopts a separate tracked measurement authority."
+last_material_update: 2026-08-14
+next_authorized_action: IM_IMPLEMENT_REMOTE_MEASURED_EXECUTION_TRANSPORT_OWNER_INPUT_MANIFEST_AND_RESERVE_CHECKPOINT_TTL_DO_NOT_MEASURE
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -40,8 +40,17 @@ Audit 005 implementation ปิด canonical bundle closure โดยรวม�
 เพิ่ม append-only readiness successor และระบุ A2 disposition เป็น
 `FRESH_INSTANCE_REQUIRED` โดยตรง; A1 `REUSE_ELIGIBLE` คงอยู่เป็น lineage เท่านั้น.
 
+Audit 006 passed fresh v2 admission and isolated staging on Vast instance
+`47700074`, ending at `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`. It also found
+that the canonical measured `execute` path has no production remote transport
+to the staged four-GPU host and no real Owner-local measured input manifest.
+The next session is IM; measured LO remains closed.
+IM must also separate the 40-hour initial admission floor from the matched-barrier
+checkpoint floor derived from the frozen unfinished-work runtime projection plus
+the existing six-hour reserve. The USD 35 hard stop remains unchanged.
+
 ```text
-DO_NOT_LAUNCH: return to AP read-back and fresh staging; measured authority is absent.
+DO_NOT_LAUNCH: isolated staging passed, but remote measured execution transport and tracked authority are absent.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -124,8 +133,10 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, AP must read back audit 004 implementation and create fresh staging evidence. Preserve append-only evidence;
-  do not alter frozen candidate bytes or the v1 campaign/envelope/budget/execution contract.
+- Before LO, IM must complete audit 006 without changing frozen scientific semantics,
+  then AP must perform a short launch-readiness review and create the separate tracked
+  measurement authority/LO goal. Preserve append-only evidence and do not alter frozen
+  candidate bytes or the v1/v2 campaign/envelope/budget/execution contract.
 - During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,
   missing management authority, wrong instance/GPU/runtime/model/data hash, protected output,
   manifest/receipt/lock drift or any nonzero measured counter.

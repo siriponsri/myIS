@@ -1,0 +1,134 @@
+{
+  "schema_version": "myis.rigor-review.v1",
+  "review_id": "a2-fresh-staging-launch-path-audit-20260814",
+  "artifact": "A2 fresh provider admission, isolated staging, and measured launch readiness",
+  "artifact_path": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+  "artifact_sha256": "92c9c1e7c96a867172eaececb3dee0533a9a825139b5abcf587228c9259d1842",
+  "review_status": "complete",
+  "governance": {
+    "approval_valid": true,
+    "split_isolation_valid": true,
+    "gate_order_valid": true,
+    "budget_valid": true,
+    "manifest_integrity_valid": true,
+    "blocking_findings": [
+      "Fresh admission and isolated staging pass, but the canonical measured execute path has no production remote transport to the staged four-GPU instance and no real Owner-local measured input manifest.",
+      "Reserve admission incorrectly reuses the 40-hour initial-admission floor at the matched barrier instead of deriving the remaining-work floor from the frozen runtime projection plus its six-hour reserve."
+    ]
+  },
+  "overall": {
+    "grade": "Accept",
+    "mean_score": 4.167,
+    "one_line_summary": "The AP audit conclusion is well supported: staging passes without measurement, while measured LO remains blocked pending the remote transport and reserve-checkpoint repair.",
+    "strengths": [
+      "The clean pushed-HEAD bundle and metadata-only deployment package validate against the current canonical closure.",
+      "Instance 47700074 passed fresh v2 admission and isolated staging with zero GPU/A2 workers and a live watchdog.",
+      "All four model roots and supporting A1/runtime assets are already uploaded and hash-validated."
+    ],
+    "weaknesses": [
+      "The canonical execute command launches a local subprocess although the required CUDA devices and models are remote.",
+      "No production Owner-local measured input manifest exists, and the staged extraction is not a Git worktree capable of validating tracked measurement authority provenance.",
+      "The matched barrier cannot pass the current reserve admission after consuming the projected matched critical path, even though the full workload quote remains within the USD 35 hard stop."
+    ]
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 5,
+      "strengths": [
+        "The review binds pushed-HEAD receipts, provider admission, remote stage, adoption, process counts, watchdog state, and the exact executor launch path to the readiness decision."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": [
+        "The required IM work is expressed as executable pass/fail obligations for transport, provenance, input manifest, TTL derivation, and fail-closed tests."
+      ],
+      "weaknesses": [
+        "The real Owner-local measured input manifest cannot be independently assessed until IM materializes it."
+      ],
+      "suggestions": [
+        "Bind the next AP review to the exact manifest hash and remote synthetic transport receipt."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 5,
+      "strengths": [
+        "The audit limits its conclusion to engineering launch readiness and explicitly denies measured, Selection, Final, and publication authority."
+      ],
+      "weaknesses": [],
+      "suggestions": []
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": [
+        "The evidence chain from local-subprocess behavior and remote CUDA placement to the NEEDS_IM route is direct and traceable."
+      ],
+      "weaknesses": [
+        "The checkpoint TTL value is a derived target that still requires canonical implementation and regression tests."
+      ],
+      "suggestions": [
+        "Have IM emit the exact frozen inputs and formula used for the reserve-checkpoint TTL."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 4,
+      "strengths": [
+        "Failed stage probes, the self-matching process check, resumable ARM-02 transfer, and the launch blockers are preserved rather than hidden."
+      ],
+      "weaknesses": [
+        "No remote measured transport alternative has yet been validated, which is appropriate for AP but leaves implementation choice open."
+      ],
+      "suggestions": [
+        "Record rejected transport approaches in the IM handoff if they materially affect recovery or provenance."
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": [
+        "Frozen candidate membership, evaluator semantics, protected boundaries, budget hard stop, watchdog, checkpoint, and aggregate-safe receipts remain intact."
+      ],
+      "weaknesses": [
+        "Measured execution is not reproducibly launchable on the admitted host until remote transport, tracked provenance, the real input manifest, and checkpoint TTL logic are implemented."
+      ],
+      "suggestions": [
+        "Complete audit 006 through IM and require a short AP launch-readiness review before creating measured authority."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F001",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_artifact": "A2 measured execution path",
+      "target_entity": "operational executor, measured adapter, remote staged root, and measurement authority provenance",
+      "evidence_locator": "src/myis_research/armindex/a2_operational_executor.py execute path; src/myis_research/armindex/a2_measured_adapter.py CUDA/device validation; Owner-local stage receipt b6e690226b572e350686201315d561f9215626500f0e80e59c50abf22efa50bb",
+      "observation": "The orchestrator starts the production adapter on its own host, while the validated four-GPU runtime and models are on Vast. The staged remote root is not a Git checkout and no real measured input manifest is present.",
+      "reasoning": "Creating a measured authority or starting LO before a canonical remote transport exists would either fail closed or risk executing on the wrong host, invalidating runtime and provenance bindings.",
+      "suggestion": "IM implements a narrowly scoped hash-bound remote measured transport, materializes the real Owner-local manifest, validates only synthetic/non-measured transport, and returns to AP before LO."
+    },
+    {
+      "finding_id": "F002",
+      "dimension": "D4_argument_coherence",
+      "severity": "major",
+      "target_artifact": "A2 reserve checkpoint admission",
+      "target_entity": "reserve-admit TTL policy and frozen runtime projection",
+      "evidence_locator": "control/budgets/a2-execution-readiness-v1.json runtime_projection; control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md matched barrier; src/myis_research/armindex/a2_execution_readiness.py provider admission floor reused by reserve-admit",
+      "observation": "Initial admission requires 40 hours and the same 40-hour floor is reapplied after the projected 17.92-hour matched critical path. The frozen full critical path is about 26.87 hours with a six-hour reserve.",
+      "reasoning": "A second 40-hour floor at the matched barrier makes the planned continuation unreachable within the already admitted workload, while a deterministic unfinished-work floor of about 14.95 hours preserves the frozen runtime reserve and USD 35 hard stop.",
+      "suggestion": "IM separates initial and checkpoint TTL validation, deriving the checkpoint floor from the frozen unfinished reserve critical path plus the existing six-hour reserve, with focused fail-closed tests."
+    }
+  ],
+  "questions_for_owner": [],
+  "read_order": [
+    "PLAN.md",
+    "docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md",
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_005_001.md",
+    "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
+    "control/armindex/a2/execution-readiness-contract.v2.json",
+    "control/armindex/a2/execution-ledger.v1.jsonl",
+    "Owner-local stage-r2 receipts and pushed-HEAD bundle/deployment receipts"
+  ]
+}

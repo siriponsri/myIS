@@ -296,7 +296,7 @@ def test_material_execution_ledger_is_schema_bound_and_append_only() -> None:
         ROOT, ROOT / "control/armindex/a2/execution-ledger.v1.jsonl"
     )
 
-    assert len(rows) == 5
+    assert len(rows) == 6
     assert rows[0]["status"] == "MEASUREMENT_LOCKED"
     assert rows[1]["status"] == "FAILED_CLOSED"
     assert rows[1]["previous_entry_sha256"] == rows[0]["entry_sha256"]
@@ -308,6 +308,9 @@ def test_material_execution_ledger_is_schema_bound_and_append_only() -> None:
     assert rows[4]["status"] == "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
     assert rows[4]["event_type"] == "readiness_closure_completed"
     assert rows[4]["previous_entry_sha256"] == rows[3]["entry_sha256"]
+    assert rows[5]["status"] == "EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED"
+    assert rows[5]["event_type"] == "external_execution_requested"
+    assert rows[5]["previous_entry_sha256"] == rows[4]["entry_sha256"]
 
 
 def test_material_execution_ledger_rejects_rewritten_entry(tmp_path: Path) -> None:

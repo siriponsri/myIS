@@ -15,17 +15,19 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
-  candidate evaluation and measured execution are not started. Audit 005 IM
-  closed the canonical v1/v2 bundle authority set and current readiness chain.)
+  candidate evaluation and measured execution are not started. Audit 006 passed
+  fresh admission and isolated staging, then found the missing production remote
+  measured-launch transport and real Owner-local measured input manifest.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
   destroy instance `47411176` and provision a fresh instance. Audit 004 implementation
   completed the additive v2 provider binding, staging repairs and CPU-local deployment
   package. Audit 005 added the missing v2 envelope to the immutable bundle,
   appended the post-IM readiness successor, and made the current A2 disposition
-  `FRESH_INSTANCE_REQUIRED` with reuse false. Fresh AP admission/staging remains pending.)
+  `FRESH_INSTANCE_REQUIRED` with reuse false. Fresh AP admission/staging now passes
+  on instance `47700074`; measured execution remains locked pending audit 006 IM.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -74,7 +76,7 @@ There are exactly seven active phases. Progress is:
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | implementation complete; not started; fresh AP admission/staging and measured authority pending |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | staged not launched; remote measured transport implementation and AP authority review pending |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -344,9 +346,12 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-AP reads `docs/implementation/A2_PER_ARM_AUTOINDEX_im_005_001.md`, validates the
-Owner-local pushed-HEAD bundle/deployment receipt, and performs fresh-instance
-admission plus isolated staging only. Measured A2 remains closed.
+IM reads `docs/audit/A2_PER_ARM_AUTOINDEX_audit_006.md` and implements the
+canonical hash-bound remote measured-execution transport plus the real
+Owner-local measured input manifest, and separates the 40-hour initial admission
+floor from the frozen-runtime-derived reserve checkpoint floor. Reuse the staged
+instance/assets, run only non-measured transport validation, commit/push, and
+return to AP. Measured A2 remains closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
@@ -402,3 +407,18 @@ records `READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED`; A1
 remote staging, measured execution, or protected-data access occurred.
 Publication claims remain limited to freeze integrity, reproducibility, provider
 lifecycle, and readiness until measured receipts and safe return exist.
+
+Audit 006 then validated pushed HEAD `daf124ace981e070d012cca6d8c0feaed607d41a`,
+fresh Vast instance `47700074`, the USD `27.939255` all-fee quote, complete remote
+asset hashes, and isolated root `/opt/myis/a2-im-audit005-final`. Provider admission,
+live probe, remote stage, watchdog, genesis checkpoint, and execution adoption all
+pass with zero GPU/A2 workers and `measured_a2_started=false`; ledger successor
+`A2EXEC-EV0006` records `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`. AP did not
+create measured authority because the canonical `execute` path still launches a
+local subprocess while CUDA/models are remote, the staged extraction has no Git
+authority-provenance surface, and no real Owner-local measured input manifest exists.
+The reserve checkpoint also incorrectly reuses the 40-hour initial-admission floor
+after the projected 17.92-hour matched critical path; the frozen runtime projection
+and six-hour reserve imply about 14.95 hours for unfinished reserve work. These
+launch-critical engineering gaps route to IM without changing candidate, metric,
+budget ceiling, or scientific design.

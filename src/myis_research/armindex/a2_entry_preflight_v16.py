@@ -103,21 +103,24 @@ def _validated_post_freeze_state(armindex: Mapping[str, Any]) -> Mapping[str, An
 
 def _validated_execution_readiness(armindex: Mapping[str, Any]) -> Mapping[str, Any]:
     readiness = armindex.get("a2_execution_readiness")
+    status = readiness.get("status") if isinstance(readiness, Mapping) else None
+    staged = status == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
     if (
         not isinstance(readiness, Mapping)
         or readiness.get("validated") is not True
-        or readiness.get("status")
+        or status
         not in {
             "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
             "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
+            "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING",
         }
         or readiness.get("candidate_count") != 52
         or readiness.get("matched_candidate_count") != 40
         or readiness.get("conditional_reserve_candidate_count") != 12
         or readiness.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
-        or readiness.get("provider_admission_performed") is not False
-        or readiness.get("provider_execution_adoption_performed") is not False
-        or readiness.get("remote_staging_performed") is not False
+        or readiness.get("provider_admission_performed") is not staged
+        or readiness.get("provider_execution_adoption_performed") is not staged
+        or readiness.get("remote_staging_performed") is not staged
         or readiness.get("measured_a2_started") is not False
     ):
         raise A2EntryPreflightV16Error(
@@ -241,6 +244,11 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
         raise A2EntryPreflightV16Error(
             "validated completed A1.2 report with claim boundary is missing"
         )
+    staged = (
+        isinstance(readiness, Mapping)
+        and readiness.get("status")
+        == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
+    )
     return {
         "status": "PASS_A2_ENTRY_PREFLIGHT",
         "a1_attempt_id": receipt["attempt_id"],
@@ -249,11 +257,13 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
         "provider_disposition_status": disposition,
         "a1_provider_disposition_status": disposition,
         "a1_reuse_lineage_eligible": disposition == "REUSE_ELIGIBLE",
-        "a2_provider_disposition_status": "FRESH_INSTANCE_REQUIRED",
-        "reuse_existing_instance_permitted": False,
-        "fresh_a2_provider_admission_required": True,
-        "fresh_a2_execution_adoption_required": True,
-        "new_isolated_remote_root_required": True,
+        "a2_provider_disposition_status": (
+            "STAGED_FRESH_INSTANCE" if staged else "FRESH_INSTANCE_REQUIRED"
+        ),
+        "reuse_existing_instance_permitted": staged,
+        "fresh_a2_provider_admission_required": not staged,
+        "fresh_a2_execution_adoption_required": not staged,
+        "new_isolated_remote_root_required": not staged,
         "a2_execution_authorized": False,
         "candidate_evaluation_authorized": False,
         "safe_return_sha256": receipt["safe_return_sha256"],
