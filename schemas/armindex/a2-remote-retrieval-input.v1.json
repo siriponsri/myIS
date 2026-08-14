@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-remote-retrieval-input:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "attempt_id", "owner_manifest_sha256", "corpus", "queries", "model_directories", "model_manifests", "device_by_arm", "retriever_code_sha256", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-remote-retrieval-input.v1"},
+    "status": {"const": "READY_REMOTE_RETRIEVAL_ONLY"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "owner_manifest_sha256": {"$ref": "#/$defs/hash"},
+    "corpus": {"$ref": "#/$defs/path_hash"},
+    "queries": {"$ref": "#/$defs/path_hash"},
+    "model_directories": {"$ref": "#/$defs/arms"},
+    "model_manifests": {"$ref": "#/$defs/arms"},
+    "device_by_arm": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ARM-02", "ARM-03", "ARM-04", "ARM-05"],
+      "properties": {"ARM-02": {"const": "cuda:0"}, "ARM-03": {"const": "cuda:1"}, "ARM-04": {"const": "cuda:2"}, "ARM-05": {"const": "cuda:3"}}
+    },
+    "retriever_code_sha256": {"$ref": "#/$defs/hash"},
+    "manifest_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "path_hash": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/hash"}}},
+    "arms": {"type": "object", "additionalProperties": false, "required": ["ARM-02", "ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-02": {"type": "string", "minLength": 1}, "ARM-03": {"type": "string", "minLength": 1}, "ARM-04": {"type": "string", "minLength": 1}, "ARM-05": {"type": "string", "minLength": 1}}}
+  }
+}

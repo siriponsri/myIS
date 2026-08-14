@@ -55,6 +55,13 @@ from .autoindex import (
     strict_primary_improvement,
 )
 from .a2_measured_adapter import canonical_a1_incumbents, validate_owner_local_input
+from .a2_remote_transport import (
+    A2RemoteTransportError,
+    RemoteExecutor,
+    RemoteTransportConfig,
+    build_remote_validation_command,
+    validate_remote_transport_result,
+)
 
 _HASH = re.compile(r"^[a-f0-9]{64}$")
 _ATTEMPT = re.compile(r"^a2-[a-z0-9-]{7,63}$")
@@ -68,6 +75,8 @@ _OWNER_KEYS = {
     "SSH_KEY_PATH",
     "LOCAL_KNOWN_HOSTS_FILE",
 }
+_INITIAL_ADMISSION_TTL_SECONDS = 40 * 60 * 60
+_RESERVE_TTL_RESERVE_SECONDS = 6 * 60 * 60
 _RESULT_FIELDS = {
     "schema_version",
     "attempt_id",
@@ -1204,7 +1213,11 @@ def validate_live_remote_probe(
     ):
         raise A2OperationalExecutorError("live remote probe is stale")
     remaining = int((deadline.astimezone(timezone.utc) - current).total_seconds())
-    if remaining < 40 * 3600 or checked.get("remaining_ttl_seconds") != remaining:
+    try:
+        validate_initial_admission_ttl(remaining)
+    except A2OperationalExecutorError as error:
+        raise A2OperationalExecutorError("NEEDS_OWNER_TTL_EXTENSION") from error
+    if checked.get("remaining_ttl_seconds") != remaining:
         raise A2OperationalExecutorError("NEEDS_OWNER_TTL_EXTENSION")
     return checked
 
@@ -1262,8 +1275,10 @@ def validate_live_remote_probe_v2(
     local_remaining = int((deadline.astimezone(timezone.utc) - current).total_seconds())
     if checked.get("remaining_ttl_seconds") != remote_remaining:
         raise A2OperationalExecutorError("live remote probe remaining TTL drift")
-    if local_remaining < 40 * 3600:
-        raise A2OperationalExecutorError("NEEDS_OWNER_TTL_EXTENSION")
+    try:
+        validate_initial_admission_ttl(local_remaining)
+    except A2OperationalExecutorError as error:
+        raise A2OperationalExecutorError("NEEDS_OWNER_TTL_EXTENSION") from error
     return checked
 
 
@@ -1369,6 +1384,97 @@ def _batch_best(
     scored = [(_decimal(_primary_value(receipts[candidate_id]), role="primary"), candidate_id) for candidate_id in candidate_ids]
     winner = min(scored, key=lambda item: (-Decimal(item[0]), item[1]))
     return winner[1], winner[0]
+
+
+def reserve_checkpoint_ttl_seconds(repository_root: Path) -> int:
+    """Derive the post-matched checkpoint floor from the frozen runtime model.
+
+    Initial provider admission remains a separate 40-hour requirement.  At the
+    matched barrier only the unfinished conditional-reserve critical path plus
+    the frozen six-hour reserve is required.
+    """
+
+    profile_path = repository_root.resolve() / "control/budgets/a2-execution-readiness-v1.json"
+    try:
+        profile = json.loads(profile_path.read_text(encoding="utf-8"))
+        projection = profile["runtime_projection"]
+        worst = Decimal(str(projection["worst_case_dense_parallel_critical_path_seconds"]))
+        matched = Decimal(str(projection["matched_dense_parallel_critical_path_seconds"]))
+        reserve = Decimal(str(projection.get("owner_ttl_reserve_seconds", _RESERVE_TTL_RESERVE_SECONDS)))
+    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, InvalidOperation) as error:
+        raise A2OperationalExecutorError("frozen runtime projection is unavailable") from error
+    unfinished = worst - matched
+    if unfinished < 0 or reserve < 0:
+        raise A2OperationalExecutorError("frozen runtime projection is inconsistent")
+    # Decimal ceiling avoids under-admitting a fractional projected second.
+    return int((unfinished + reserve).to_integral_value(rounding="ROUND_CEILING"))
+
+
+def validate_initial_admission_ttl(remaining_ttl_seconds: int) -> None:
+    """Keep the fresh provider admission floor explicit and unchanged."""
+
+    if remaining_ttl_seconds < _INITIAL_ADMISSION_TTL_SECONDS:
+        raise A2OperationalExecutorError("initial provider admission requires 40 hours remaining")
+
+
+def _load_remote_transport_config(
+    path: Path,
+    *,
+    repository_root: Path,
+    attempt_id: str,
+    owner_root: Path | None = None,
+    owner_manifest: Path | None = None,
+) -> tuple[RemoteTransportConfig, dict[str, Any]]:
+    try:
+        raw = json.loads(path.resolve(strict=True).read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise A2OperationalExecutorError("remote transport config is missing or invalid") from error
+    if not isinstance(raw, Mapping):
+        raise A2OperationalExecutorError("remote transport config must be an object")
+    try:
+        config = RemoteTransportConfig(
+            provider_instance_id=str(raw["provider_instance_id"]),
+            host=str(raw["host"]),
+            port=int(raw["port"]),
+            user=str(raw.get("user", "root")),
+            key_path=Path(str(raw["key_path"])).resolve(strict=True),
+            known_hosts_path=Path(str(raw["known_hosts_path"])).resolve(strict=True),
+            remote_root=str(raw["remote_root"]),
+            remote_repository_root=str(raw["remote_repository_root"]),
+            remote_owner_root=str(raw["remote_owner_root"]),
+            remote_input_manifest=str(raw["remote_input_manifest"]),
+            remote_bundle_path=str(raw["remote_bundle_path"]),
+            remote_python_executable=str(raw["remote_python_executable"]),
+            bundle_sha256=str(raw["bundle_sha256"]),
+            bundle_receipt_sha256=str(raw["bundle_receipt_sha256"]),
+            git_commit=str(raw["git_commit"]),
+            git_tree=str(raw["git_tree"]),
+            measurement_authority_sha256=str(raw["measurement_authority_sha256"]),
+            owner_manifest_sha256=str(raw["owner_manifest_sha256"]),
+            remote_input_manifest_sha256=str(raw["remote_input_manifest_sha256"]),
+            local_repository_root=str(repository_root.resolve()),
+            local_owner_root=str(owner_root.resolve()) if owner_root is not None else None,
+            local_python_executable=str(raw.get("local_python_executable", "")) or None,
+            local_input_manifest=(
+                owner_manifest.resolve().relative_to(owner_root.resolve()).as_posix()
+                if owner_manifest is not None and owner_root is not None
+                else None
+            ),
+        )
+    except (KeyError, TypeError, ValueError, A2RemoteTransportError) as error:
+        raise A2OperationalExecutorError("remote transport config binding is invalid") from error
+    request = raw.get("request")
+    if not isinstance(request, Mapping):
+        raise A2OperationalExecutorError("remote transport request is missing")
+    try:
+        from .a2_remote_transport import validate_transport_request
+
+        validate_transport_request(request, config, attempt_id=attempt_id)
+    except A2RemoteTransportError as error:
+        raise A2OperationalExecutorError("remote transport request is not hash-bound") from error
+    if owner_manifest is not None and file_sha256(owner_manifest.resolve(strict=True)) != config.owner_manifest_sha256:
+        raise A2OperationalExecutorError("Owner-local manifest hash differs from remote transport binding")
+    return config, dict(raw)
 
 
 def build_reserve_budget_admission(
@@ -1479,7 +1585,7 @@ def validate_reserve_budget_admission(
         or checked["forward_hard_stop_usd"] != "35"
         or now - observed > timedelta(minutes=15)
         or observed > now + timedelta(minutes=1)
-        or (deadline - now).total_seconds() < 40 * 3600
+        or (deadline - now).total_seconds() < reserve_checkpoint_ttl_seconds(root)
     ):
         raise A2OperationalExecutorError("reserve budget admission is stale or identity-drifted")
     return checked
@@ -2121,7 +2227,10 @@ def _parser() -> argparse.ArgumentParser:
     execute.add_argument("--reserve-budget-admission", type=Path)
     execute.add_argument("--output-directory", type=Path, required=True)
     execute.add_argument("--checkpoint-ledger", type=Path, required=True)
+    execute.add_argument("--remote-transport", type=Path)
     execute.add_argument("--timeout-seconds", type=int, default=21600)
+    transport_check = commands.add_parser("transport-check")
+    transport_check.add_argument("--remote-transport", type=Path, required=True)
     resume = commands.add_parser("resume")
     resume.add_argument("--ledger", type=Path, required=True)
     safe_return = commands.add_parser("safe-return")
@@ -2247,6 +2356,109 @@ def main(argv: Sequence[str] | None = None) -> int:
                 },
             )
             _write_json(args.output, result)
+        elif command == "transport-check":
+            config, _ = _load_remote_transport_config(
+                args.remote_transport,
+                repository_root=root,
+                attempt_id=args.attempt_id,
+            )
+            completed = subprocess.run(
+                [*config.ssh_argv(), build_remote_validation_command(config, attempt_id=args.attempt_id)],
+                check=False,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=120,
+            )
+            if completed.returncode != 0:
+                raise A2OperationalExecutorError("remote transport validation failed closed")
+            try:
+                result = validate_remote_transport_result(
+                    json.loads(completed.stdout.strip().splitlines()[-1]),
+                    config,
+                    attempt_id=args.attempt_id,
+                )
+            except (IndexError, json.JSONDecodeError, A2RemoteTransportError) as error:
+                raise A2OperationalExecutorError("remote transport validation returned invalid evidence") from error
+        elif command == "execute":
+            argv_value = json.loads(args.command_argv_json.read_text(encoding="utf-8"))
+            if not isinstance(argv_value, list):
+                raise A2OperationalExecutorError("external executor argv JSON must be a list")
+            try:
+                expected_argv = json.loads(
+                    (root / "control/armindex/a2/measured-command-argv.v1.json").read_text(
+                        encoding="utf-8"
+                    )
+                )
+            except (OSError, UnicodeError, json.JSONDecodeError) as error:
+                raise A2OperationalExecutorError(
+                    "tracked measured command argv is invalid"
+                ) from error
+            if not isinstance(expected_argv, list):
+                raise A2OperationalExecutorError("tracked measured command argv is invalid")
+            if argv_value != expected_argv:
+                raise A2OperationalExecutorError("external executor argv must match tracked measured adapter")
+            owner_root = args.owner_root.resolve(strict=True)
+            if owner_root.is_relative_to(root) or owner_root.is_symlink() or not owner_root.is_dir():
+                raise A2OperationalExecutorError("Owner-local root is unsafe")
+            owner_manifest = args.owner_input_manifest.resolve(strict=True)
+            if owner_manifest.is_symlink() or not owner_manifest.is_file():
+                raise A2OperationalExecutorError("Owner-local input manifest is unsafe")
+            try:
+                manifest_relative = owner_manifest.relative_to(owner_root).as_posix()
+            except ValueError as error:
+                raise A2OperationalExecutorError(
+                    "Owner-local input manifest must be within Owner-local root"
+                ) from error
+            validated_owner_manifest = validate_owner_local_input(
+                root,
+                owner_root=owner_root,
+                manifest_relative_path=manifest_relative,
+                validate_runtime_identity=False,
+            )
+            if args.remote_transport is None:
+                raise A2OperationalExecutorError(
+                    "production measured adapter requires hash-bound remote transport"
+                )
+            config, _ = _load_remote_transport_config(
+                args.remote_transport,
+                repository_root=root,
+                attempt_id=args.attempt_id,
+                owner_root=owner_root,
+                owner_manifest=owner_manifest,
+            )
+            result = execute_external_candidate_set(
+                root,
+                attempt_id=args.attempt_id,
+                adoption_receipt=_load_json(
+                    args.execution_adoption_receipt,
+                    role="execution adoption receipt",
+                ),
+                measurement_authority=_load_json(
+                    args.measurement_authority,
+                    role="measurement authority",
+                ),
+                command_template=argv_value,
+                output_directory=args.output_directory,
+                checkpoint_ledger=args.checkpoint_ledger,
+                owner_local_root=owner_root,
+                owner_input_manifest=manifest_relative,
+                python_executable=str(validated_owner_manifest["engine"]["python_executable"]),
+                reserve_budget_admission=(
+                    _load_json(args.reserve_budget_admission, role="reserve budget admission")
+                    if args.reserve_budget_admission is not None
+                    else None
+                ),
+                arm_incumbents=validated_owner_manifest.get("arm_incumbents"),
+                timeout_seconds=args.timeout_seconds,
+                executor=RemoteExecutor(
+                    config=config,
+                    attempt_id=args.attempt_id,
+                    owner_root=owner_root,
+                    manifest_relative_path=manifest_relative,
+                ),
+            )
         elif command == "reserve-admit":
             result = build_reserve_budget_admission(
                 root,
@@ -2349,66 +2561,6 @@ def main(argv: Sequence[str] | None = None) -> int:
                     output / f"execution-adoption.receipt.{adoption_version}.json",
                     result["execution_adoption_receipt"],
                 )
-        elif command == "execute":
-            argv_value = json.loads(args.command_argv_json.read_text(encoding="utf-8"))
-            if not isinstance(argv_value, list):
-                raise A2OperationalExecutorError("external executor argv JSON must be a list")
-            try:
-                expected_argv = json.loads(
-                    (root / "control/armindex/a2/measured-command-argv.v1.json").read_text(
-                        encoding="utf-8"
-                    )
-                )
-            except (OSError, UnicodeError, json.JSONDecodeError) as error:
-                raise A2OperationalExecutorError(
-                    "tracked measured command argv is invalid"
-                ) from error
-            if not isinstance(expected_argv, list):
-                raise A2OperationalExecutorError("tracked measured command argv is invalid")
-            if argv_value != expected_argv:
-                raise A2OperationalExecutorError("external executor argv must match tracked measured adapter")
-            owner_root = args.owner_root.resolve(strict=True)
-            if owner_root.is_relative_to(root) or owner_root.is_symlink() or not owner_root.is_dir():
-                raise A2OperationalExecutorError("Owner-local root is unsafe")
-            owner_manifest = args.owner_input_manifest.resolve(strict=True)
-            if owner_manifest.is_symlink() or not owner_manifest.is_file():
-                raise A2OperationalExecutorError("Owner-local input manifest is unsafe")
-            try:
-                manifest_relative = owner_manifest.relative_to(owner_root).as_posix()
-            except ValueError as error:
-                raise A2OperationalExecutorError(
-                    "Owner-local input manifest must be within Owner-local root"
-                ) from error
-            validated_owner_manifest = validate_owner_local_input(
-                root,
-                owner_root=owner_root,
-                manifest_relative_path=manifest_relative,
-            )
-            result = execute_external_candidate_set(
-                root,
-                attempt_id=args.attempt_id,
-                adoption_receipt=_load_json(
-                    args.execution_adoption_receipt,
-                    role="execution adoption receipt",
-                ),
-                measurement_authority=_load_json(
-                    args.measurement_authority,
-                    role="measurement authority",
-                ),
-                command_template=argv_value,
-                output_directory=args.output_directory,
-                checkpoint_ledger=args.checkpoint_ledger,
-                owner_local_root=owner_root,
-                owner_input_manifest=manifest_relative,
-                python_executable=str(validated_owner_manifest["engine"]["python_executable"]),
-                reserve_budget_admission=(
-                    _load_json(args.reserve_budget_admission, role="reserve budget admission")
-                    if args.reserve_budget_admission is not None
-                    else None
-                ),
-                arm_incumbents=validated_owner_manifest.get("arm_incumbents"),
-                timeout_seconds=args.timeout_seconds,
-            )
         elif command == "resume":
             result = resume_checkpoint(args.ledger, attempt_id=args.attempt_id)
         elif command == "safe-return":

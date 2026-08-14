@@ -18,6 +18,7 @@ import os
 import re
 import time
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
@@ -38,6 +39,7 @@ from .a2_measured_adapter import (
     frozen_program_for_candidate,
     validate_owner_local_input,
 )
+from .a2_execution_readiness import frozen_candidates
 from .a2_program_runtime import A2ProgramRuntimeError, aggregate_family_scores, compile_program
 from .bm25s_adapter import BM25sAdapter
 
@@ -48,6 +50,13 @@ _RESULT_SCHEMA = "myis.armindex-a2-external-candidate-result.v1"
 
 class A2OwnerLocalEngineError(ValueError):
     """Raised without exposing an Owner-local protected payload."""
+
+
+@dataclass(frozen=True)
+class _RemoteRank:
+    family_token: str
+    rank: int
+    score: float
 
 
 def _load_json(path: Path, *, role: str) -> dict[str, Any]:
@@ -232,6 +241,140 @@ def _metrics(rankings: Mapping[str, Sequence[Any]], qrels: Mapping[str, Mapping[
     )
 
 
+def evaluate_remote_retrieval_result(
+    repository_root: Path,
+    *,
+    owner_root: Path,
+    manifest_relative_path: str,
+    retrieval_result: Mapping[str, Any],
+    candidate_id: str,
+) -> dict[str, Any]:
+    """Evaluate opaque remote rankings while qrels and membership stay local."""
+
+    root = repository_root.resolve()
+    owner = owner_root.resolve(strict=True)
+    manifest = validate_owner_local_input(
+        root,
+        owner_root=owner,
+        manifest_relative_path=manifest_relative_path,
+        validate_runtime_identity=False,
+    )
+    candidates = frozen_candidates(root)
+    candidate = candidates.get(candidate_id)
+    checked = dict(retrieval_result)
+    unsigned = {key: value for key, value in checked.items() if key != "receipt_sha256"}
+    if checked.get("receipt_sha256") != canonical_sha256(unsigned):
+        raise A2OwnerLocalEngineError("remote retrieval receipt hash drift")
+    if (
+        checked.get("schema_version") != "myis.armindex-a2-remote-retrieval-result.v1"
+        or checked.get("status") != "PASS_A2_REMOTE_RETRIEVAL"
+        or not isinstance(candidate, Mapping)
+        or checked.get("attempt_id") != manifest["attempt_id"]
+        or checked.get("candidate_id") != candidate_id
+        or checked.get("arm_id") != candidate["arm_id"]
+        or checked.get("program_sha256") != candidate["program_sha256"]
+        or checked.get("rep_dev_measured") is not False
+        or checked.get("qrels_opened") is not False
+        or checked.get("membership_opened") is not False
+    ):
+        raise A2OwnerLocalEngineError("remote retrieval identity or boundary drift")
+    raw_rankings = checked.get("rankings")
+    if not isinstance(raw_rankings, Mapping):
+        raise A2OwnerLocalEngineError("remote retrieval rankings are invalid")
+    rankings: dict[str, tuple[_RemoteRank, ...]] = {}
+    for query_token, raw_rows in raw_rankings.items():
+        if (
+            not isinstance(query_token, str)
+            or _TOKEN.fullmatch(query_token) is None
+            or not query_token.startswith("Q-")
+            or not isinstance(raw_rows, list)
+            or len(raw_rows) != 100
+        ):
+            raise A2OwnerLocalEngineError("remote retrieval rankings are invalid")
+        rows: list[_RemoteRank] = []
+        for expected_rank, raw in enumerate(raw_rows, start=1):
+            if not isinstance(raw, Mapping) or set(raw) != {"family_token", "rank", "score"}:
+                raise A2OwnerLocalEngineError("remote retrieval ranking row is invalid")
+            family = raw["family_token"]
+            score = raw["score"]
+            if (
+                not isinstance(family, str)
+                or _TOKEN.fullmatch(family) is None
+                or not family.startswith("F-")
+                or raw["rank"] != expected_rank
+                or isinstance(score, bool)
+                or not isinstance(score, (int, float))
+                or not math.isfinite(float(score))
+            ):
+                raise A2OwnerLocalEngineError("remote retrieval ranking row is invalid")
+            rows.append(_RemoteRank(family, expected_rank, float(score)))
+        if len({row.family_token for row in rows}) != 100:
+            raise A2OwnerLocalEngineError("remote retrieval ranking duplicates a family")
+        rankings[query_token] = tuple(rows)
+    ranking_sha256 = canonical_sha256(raw_rankings)
+    if checked.get("ranking_sha256") != ranking_sha256:
+        raise A2OwnerLocalEngineError("remote retrieval ranking commitment drift")
+    queries = _queries(_artifact_path(owner, manifest, "queries"))
+    if set(rankings) != set(queries):
+        raise A2OwnerLocalEngineError("remote retrieval query coverage drift")
+    qrels, eligible = _evaluation_inputs(
+        _artifact_path(owner, manifest, "qrels"),
+        _artifact_path(owner, manifest, "membership"),
+        set(queries),
+    )
+    primary, ndcg100, ndcg10 = _metrics(rankings, qrels, eligible)
+    latency = checked.get("latency")
+    if (
+        not isinstance(latency, Mapping)
+        or not isinstance(latency.get("wall_seconds"), (int, float))
+        or not isinstance(latency.get("search_p95_seconds"), (int, float))
+        or float(latency["wall_seconds"]) < 0
+        or float(latency["search_p95_seconds"]) < 0
+    ):
+        raise A2OwnerLocalEngineError("remote retrieval latency is invalid")
+    wall_seconds = float(latency["wall_seconds"])
+    hourly = float(manifest["engine"]["all_fee_usd_per_hour"])
+    charged_usd = 0.0 if candidate["arm_id"] == "ARM-01" else hourly * wall_seconds / 3600.0 / 4.0
+    return {
+        "schema_version": _RESULT_SCHEMA,
+        "attempt_id": manifest["attempt_id"],
+        "candidate_id": candidate_id,
+        "arm_id": candidate["arm_id"],
+        "program_sha256": candidate["program_sha256"],
+        "executor_output_sha256": ranking_sha256,
+        "evaluator_input_sha256": canonical_sha256(
+            {
+                "qrels_sha256": manifest["owner_artifacts"]["qrels"]["sha256"],
+                "membership_sha256": manifest["owner_artifacts"]["membership"]["sha256"],
+                "ranking_sha256": ranking_sha256,
+            }
+        ),
+        "evaluator_sha256": manifest["owner_artifacts"]["evaluator"]["binding_sha256"],
+        "code_sha256": manifest["engine"]["code_sha256"],
+        "model_sha256": manifest["owner_artifacts"]["model_lockset"]["binding_sha256"],
+        "data_sha256": manifest["owner_artifacts"]["data_handoff"]["binding_sha256"],
+        "primary_metric": {"name": "recall_at_100/out", "value": _decimal(primary)},
+        "secondary_metrics": {
+            "ndcg_at_100/out": _decimal(ndcg100),
+            "ndcg_at_10/out": _decimal(ndcg10),
+        },
+        "latency": {
+            "wall_seconds": _decimal(wall_seconds),
+            "search_p95_seconds": _decimal(float(latency["search_p95_seconds"])),
+        },
+        "cost": {"charged_usd": _decimal(charged_usd), "currency": "USD"},
+        "coverage": {"expected_units": len(queries), "completed_units": len(rankings)},
+        "resume_count": 0,
+        "failure_count": 0,
+        "reserve_activation_passed": False,
+        "reserve_activation_evidence_sha256": None,
+        "train_only": False,
+        "rep_dev_measured": True,
+        "protected_payload_included": False,
+        "per_query_outcomes_included": False,
+    }
+
+
 def run_owner_local_engine(
     repository_root: Path,
     *,
@@ -355,4 +498,8 @@ if __name__ == "__main__":
     raise SystemExit(main())
 
 
-__all__ = ["A2OwnerLocalEngineError", "run_owner_local_engine"]
+__all__ = [
+    "A2OwnerLocalEngineError",
+    "evaluate_remote_retrieval_result",
+    "run_owner_local_engine",
+]

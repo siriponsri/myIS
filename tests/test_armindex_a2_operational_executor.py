@@ -7,7 +7,7 @@ import subprocess
 import tarfile
 import hashlib
 from collections.abc import Mapping
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -1054,6 +1054,66 @@ def test_reserve_admission_and_continuation_drift_fail_closed(
         decision=decision,
     )
     assert continuation["matched_candidate_result_set_sha256"] == decision["matched_candidate_result_set_sha256"]
+
+
+def test_initial_and_reserve_ttl_floors_are_separate() -> None:
+    reserve_seconds = operational.reserve_checkpoint_ttl_seconds(ROOT)
+    assert reserve_seconds == 53848
+    assert reserve_seconds < 40 * 60 * 60
+
+    operational.validate_initial_admission_ttl(40 * 60 * 60)
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="40 hours",
+    ):
+        operational.validate_initial_admission_ttl(40 * 60 * 60 - 1)
+
+
+def test_reserve_admission_uses_frozen_unfinished_projection_floor() -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    now = datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc)
+    budget = _reserve_budget_admission(adoption, authority)
+    required = operational.reserve_checkpoint_ttl_seconds(ROOT)
+
+    for remaining, accepted in ((required, True), (required - 1, False)):
+        candidate = copy.deepcopy(budget)
+        candidate["ttl_deadline_utc"] = (now + timedelta(seconds=remaining)).isoformat().replace(
+            "+00:00", "Z"
+        )
+        unsigned = {
+            key: value for key, value in candidate.items() if key != "receipt_sha256"
+        }
+        candidate["receipt_sha256"] = canonical_sha256(unsigned)
+        if accepted:
+            checked = operational.validate_reserve_budget_admission(
+                ROOT,
+                candidate,
+                attempt_id=ATTEMPT,
+                adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+                authority_sha256=str(authority["authority_sha256"]),
+                provider_admission_receipt_sha256=str(
+                    candidate["provider_admission_receipt_sha256"]
+                ),
+                now_utc=now,
+            )
+            assert checked["forward_hard_stop_usd"] == "35"
+        else:
+            with pytest.raises(
+                operational.A2OperationalExecutorError,
+                match="stale or identity-drifted",
+            ):
+                operational.validate_reserve_budget_admission(
+                    ROOT,
+                    candidate,
+                    attempt_id=ATTEMPT,
+                    adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+                    authority_sha256=str(authority["authority_sha256"]),
+                    provider_admission_receipt_sha256=str(
+                        candidate["provider_admission_receipt_sha256"]
+                    ),
+                    now_utc=now,
+                )
 
 
 def test_reserve_admission_builder_rebinds_fresh_provider_sources(

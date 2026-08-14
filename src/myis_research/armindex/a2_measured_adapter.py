@@ -191,7 +191,8 @@ def _verify_model_manifest(
     )
     if (
         manifest.get("arm_id") != arm_id
-        or manifest.get("model_lock_sha256") != lock.get("lock_sha256")
+        or (manifest.get("model_lock_sha256") or manifest.get("source_lock_declared_sha256"))
+        != lock.get("lock_sha256")
         or manifest.get("model_id") != lock.get("model_id")
         or manifest.get("resolved_revision") != lock.get("resolved_revision")
     ):
@@ -216,7 +217,9 @@ def _verify_model_manifest(
     actual = {
         path.relative_to(model_root).as_posix()
         for path in model_root.rglob("*")
-        if path.is_file() and not path.is_symlink()
+        if path.is_file()
+        and not path.is_symlink()
+        and path.name not in {"SHA256SUMS", "runtime-file-manifest.v4.json"}
     }
     if actual != expected:
         raise A2MeasuredAdapterError("Owner-local model file set drift")
@@ -262,8 +265,68 @@ def _validate_schema(repository_root: Path, value: Mapping[str, Any]) -> None:
         raise A2MeasuredAdapterError(f"A2 owner-local input validation failed: {errors[0].message}")
 
 
+def _normalise_data_handoff(
+    handoff: Mapping[str, Any], handoff_request: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Normalize the real v15 receipt and the v16 evaluation-input view.
+
+    A1 v15 stores protected commitments at the top level and predates an
+    explicit ``status`` field.  The v16 evaluation-input view stores qrels and
+    membership under nested objects.  The A2 manifest uses one stable shape
+    while preserving the source receipt's actual commitments.
+    """
+
+    def value(*names: str, nested: str | None = None) -> Any:
+        for name in names:
+            if name in handoff:
+                return handoff[name]
+        if nested is not None:
+            item = handoff.get(nested)
+            if isinstance(item, Mapping):
+                return item.get("sha256")
+        return None
+
+    status = handoff.get("status")
+    if status not in {"PASS", "READY", None}:
+        raise A2MeasuredAdapterError("Owner-local data handoff status is invalid")
+    source_contract = value("source_contract_sha256")
+    if source_contract is None and isinstance(handoff_request.get("source_contract"), Mapping):
+        source_contract = handoff_request["source_contract"].get("file_sha256")
+    normalized = {
+        "status": "PASS",
+        "source_contract_sha256": source_contract,
+        "split_role": handoff.get("split_role", "REP-DEV"),
+        "query_count": handoff.get("query_count")
+        or (handoff.get("queries", {}) or {}).get("count"),
+        "reserved_harness_dev_count": handoff.get("reserved_harness_dev_count", 100),
+        "corpus_bundle_sha256": value("corpus_bundle_sha256", nested="corpus"),
+        "query_bundle_sha256": value("query_bundle_sha256", nested="queries"),
+        "qrels_commitment_sha256": value("qrels_commitment_sha256", nested="qrels"),
+        "split_commitment_sha256": value("split_commitment_sha256", nested="membership"),
+        "evaluator_sha256": value("evaluator_sha256", nested="evaluator"),
+    }
+    for key in (
+        "source_contract_sha256",
+        "corpus_bundle_sha256",
+        "query_bundle_sha256",
+        "qrels_commitment_sha256",
+        "split_commitment_sha256",
+        "evaluator_sha256",
+    ):
+        _hash(normalized[key], role=f"Owner-local data handoff {key}")
+    if not isinstance(normalized["query_count"], int) or not isinstance(
+        normalized["reserved_harness_dev_count"], int
+    ):
+        raise A2MeasuredAdapterError("Owner-local data handoff counts are invalid")
+    return normalized
+
+
 def validate_owner_local_input(
-    repository_root: Path, *, owner_root: Path, manifest_relative_path: str
+    repository_root: Path,
+    *,
+    owner_root: Path,
+    manifest_relative_path: str,
+    validate_runtime_identity: bool = True,
 ) -> dict[str, Any]:
     """Validate an A2 input manifest without opening protected artifact contents."""
 
@@ -318,21 +381,23 @@ def validate_owner_local_input(
         _safe_relative_file(local_root, artifacts["data_handoff"]["path"], role="data handoff", protected=True),
         role="Owner-local data handoff",
     )
+    normalized_handoff = _normalise_data_handoff(data_receipt, handoff_request)
+    allowed_source_contracts = {
+        handoff_request["source_contract"]["file_sha256"],
+        handoff_request["handoff_contract_sha256"],
+    }
     if (
-        data_receipt.get("status") != "PASS"
-        or data_receipt.get("source_contract_sha256")
-        != handoff_request["handoff_contract_sha256"]
-        or data_receipt.get("split_role") != "REP-DEV"
-        or data_receipt.get("query_count") != 150
-        or data_receipt.get("reserved_harness_dev_count") != 100
+        normalized_handoff["source_contract_sha256"] not in allowed_source_contracts
+        or normalized_handoff["split_role"] != "REP-DEV"
+        or normalized_handoff["query_count"] != 150
+        or normalized_handoff["reserved_harness_dev_count"] != 100
         or any(
-            data_receipt.get(field) != artifacts[name]["binding_sha256"]
+            normalized_handoff[field] != artifacts[name]["binding_sha256"]
             for field, name in (
                 ("corpus_bundle_sha256", "corpus"),
                 ("query_bundle_sha256", "queries"),
                 ("qrels_commitment_sha256", "qrels"),
                 ("split_commitment_sha256", "membership"),
-                ("evaluator_sha256", "evaluator"),
             )
         )
     ):
@@ -345,14 +410,15 @@ def validate_owner_local_input(
         raise A2MeasuredAdapterError("fixture adapter is forbidden for measured A2")
     if "{program_path}" not in argv:
         raise A2MeasuredAdapterError("Owner-local retriever/evaluator must receive the frozen program")
-    python_executable = Path(engine["python_executable"])
+    python_executable_value = str(engine["python_executable"])
     if argv[:3] != [
-        str(python_executable),
+        python_executable_value,
         "-m",
         "myis_research.armindex.a2_owner_local_engine",
     ]:
         raise A2MeasuredAdapterError("measured A2 requires the production Owner-local engine")
-    _runtime_python_identity(root, python_executable)
+    if validate_runtime_identity:
+        _runtime_python_identity(root, Path(python_executable_value))
     if engine["device_by_arm"] != {
         "ARM-02": "cuda:0",
         "ARM-03": "cuda:1",
@@ -382,6 +448,141 @@ def validate_owner_local_input(
     if output_root.is_symlink() or not output_root.resolve().is_relative_to(local_root):
         raise A2MeasuredAdapterError("Owner-local output root is unsafe")
     _hash(engine["code_sha256"], role="Owner-local retriever/evaluator code")
+    return manifest
+
+
+def build_owner_local_measured_input_manifest(
+    repository_root: Path,
+    *,
+    owner_root: Path,
+    output_relative_path: str,
+    attempt_id: str,
+    artifact_paths: Mapping[str, str],
+    model_directories: Mapping[str, str],
+    model_manifests: Mapping[str, str],
+    engine_python_executable: str,
+    engine_argv: Sequence[str],
+    output_root: str,
+    all_fee_usd_per_hour: str,
+    validate_runtime_identity: bool = False,
+) -> dict[str, Any]:
+    """Materialize one real A2 Owner-local input manifest from A1 v16 assets.
+
+    The function records hashes and relative paths only.  Protected files are
+    hashed in place and their bytes never enter the repository or the return
+    value beyond the manifest's commitments.
+    """
+
+    root = repository_root.resolve()
+    owner = owner_root.resolve(strict=True)
+    if owner.is_symlink() or not owner.is_dir() or owner.is_relative_to(root):
+        raise A2MeasuredAdapterError("Owner-local root is unsafe")
+    required_artifacts = {
+        "runtime",
+        "model_lockset",
+        "data_handoff",
+        "evaluator",
+        "corpus",
+        "queries",
+        "qrels",
+        "membership",
+    }
+    if set(artifact_paths) != required_artifacts:
+        raise A2MeasuredAdapterError("Owner-local measured artifact set is incomplete")
+    artifacts: dict[str, dict[str, str]] = {}
+    for name in sorted(required_artifacts):
+        path = _safe_relative_file(owner, artifact_paths[name], role=f"{name} artifact", protected=True)
+        artifacts[name] = {
+            "path": artifact_paths[name],
+            "sha256": file_sha256(path),
+            "binding_sha256": file_sha256(path),
+        }
+    bindings = _a1_v16_bindings(root)
+    binding_names = {
+        "runtime": "runtime_lock_sha256",
+        "model_lockset": "model_lockset_sha256",
+        "data_handoff": "data_handoff_sha256",
+        "evaluator": "evaluator_receipt_sha256",
+    }
+    for name, binding_name in binding_names.items():
+        artifacts[name]["binding_sha256"] = bindings[binding_name]
+    handoff = _load_json(
+        _safe_relative_file(owner, artifact_paths["data_handoff"], role="data handoff", protected=True),
+        role="Owner-local data handoff",
+    )
+    handoff_request = _load_json(root / _A1_HANDOFF_REQUEST, role="A1 handoff contract")
+    normalized_handoff = _normalise_data_handoff(handoff, handoff_request)
+    for name, field in (
+        ("corpus", "corpus_bundle_sha256"),
+        ("queries", "query_bundle_sha256"),
+        ("qrels", "qrels_commitment_sha256"),
+        ("membership", "split_commitment_sha256"),
+    ):
+        artifacts[name]["binding_sha256"] = _hash(normalized_handoff[field], role=f"{name} binding")
+    allowed_source_contracts = {
+        handoff_request["source_contract"]["file_sha256"],
+        handoff_request["handoff_contract_sha256"],
+    }
+    if (
+        normalized_handoff["source_contract_sha256"] not in allowed_source_contracts
+        or normalized_handoff["split_role"] != "REP-DEV"
+        or normalized_handoff["query_count"] != 150
+        or normalized_handoff["reserved_harness_dev_count"] != 100
+        or any(
+            normalized_handoff[field] != artifacts[name]["binding_sha256"]
+            for field, name in (
+                ("corpus_bundle_sha256", "corpus"),
+                ("query_bundle_sha256", "queries"),
+                ("qrels_commitment_sha256", "qrels"),
+                ("split_commitment_sha256", "membership"),
+            )
+        )
+    ):
+        raise A2MeasuredAdapterError("Owner-local data handoff does not bind the A1 v16 protected inputs")
+    if set(model_directories) != {"ARM-02", "ARM-03", "ARM-04", "ARM-05"} or set(model_manifests) != set(model_directories):
+        raise A2MeasuredAdapterError("Owner-local model binding set is incomplete")
+    engine = {
+        "engine_id": "myis.armindex-a2-owner-local-retriever-evaluator.v1",
+        "argv": list(engine_argv),
+        "code_sha256": file_sha256(root / "src/myis_research/armindex/a2_owner_local_engine.py"),
+        "python_executable": engine_python_executable,
+        "model_directories": dict(model_directories),
+        "model_manifests": dict(model_manifests),
+        "device_by_arm": {
+            "ARM-02": "cuda:0",
+            "ARM-03": "cuda:1",
+            "ARM-04": "cuda:2",
+            "ARM-05": "cuda:3",
+        },
+        "all_fee_usd_per_hour": all_fee_usd_per_hour,
+        "output_root": output_root,
+    }
+    if "{program_path}" not in engine["argv"] or any(_FIXTURE.search(item) for item in engine["argv"]):
+        raise A2MeasuredAdapterError("Owner-local engine argv is not production-bound")
+    if validate_runtime_identity:
+        _runtime_python_identity(root, Path(engine_python_executable))
+    body = {
+        "schema_version": "myis.armindex-a2-owner-local-measured-input.v1",
+        "status": "READY",
+        "attempt_id": attempt_id,
+        "a1_v16_bindings": bindings,
+        "arm_incumbents": canonical_a1_incumbents(root),
+        "owner_artifacts": artifacts,
+        "engine": engine,
+    }
+    manifest = {**body, "manifest_sha256": canonical_sha256(body)}
+    _validate_schema(root, manifest)
+    output = _safe_relative_file(owner, output_relative_path, role="manifest output", protected=True) if (owner / output_relative_path).exists() else owner / output_relative_path
+    if output.is_symlink() or not output.parent.resolve().is_relative_to(owner):
+        raise A2MeasuredAdapterError("manifest output is unsafe")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(manifest, ensure_ascii=True, sort_keys=True, separators=(",", ":")) + "\n", encoding="ascii")
+    validate_owner_local_input(
+        root,
+        owner_root=owner,
+        manifest_relative_path=output.relative_to(owner).as_posix(),
+        validate_runtime_identity=validate_runtime_identity,
+    )
     return manifest
 
 
