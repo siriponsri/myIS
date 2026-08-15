@@ -15,7 +15,7 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_PREAUTHORITY_ADMISSION`;
+- Current task: `A2.1 / successor v3 pre-authority closeout` (`STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started. Audit 006 passed
   fresh admission and isolated staging. IM 006 added the remote transport and
@@ -29,8 +29,13 @@ measurement, and production-constrained HarnessOpt.
   because v2 forbade the Owner-local evaluation required by the frozen reserve
   and winner lifecycle. IM 010 added the separate v3 local aggregate-evaluation
   closure; AP audit 011 created the clean successor bundle and Goal 003 for
-  fresh provider admission/staging. Measured execution remains closed until AP
-  can bind those fresh facts into authority v3 and a measured successor goal.
+  fresh provider admission/staging. Goal 003 then stopped before stage because
+  its exact target root already existed; no measured execution occurred. Goal
+  003's attempt identity and receipts remain closed lineage, but the Owner may
+  authorize exact-root forensic recovery on instance `47782993` when a new
+  attempt ID, new receipt chain, and new authority bind the continuation. A
+  fresh Goal 004 is the recommended one-session continuation; destroy remains
+  the fallback if forensic checks fail.
   The Owner approved an 84-hour total successor TTL and raised the current A2
   forward hard stop to USD 50; the USD 150 campaign ceiling, 40-hour initial
   floor, and deterministic 53,848-second reserve floor remain unchanged.)
@@ -43,8 +48,9 @@ measurement, and production-constrained HarnessOpt.
   `FRESH_INSTANCE_REQUIRED` with reuse false. Fresh AP admission/staging now passes
   on instance `47700074`; IM 007 rebinds the final pushed-HEAD attempt and adds
   durable process identity, heartbeat, cancellation, reaping, and recovery.
-  Measured execution is authorized only through a future AP v3 authority after
-  Goal 003 fresh admission/staging.)
+  Goal 003 is now a closed pre-authority stop; measured execution remains closed
+  until Goal 004 binds a new attempt, exact-root recovery or a clean replacement
+  root, fresh provider evidence, and authority v3.)
 - Current evidence class: pre-authority operational preparation for frozen A2;
   scientific authority `false` pending a future v3 authority
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -93,7 +99,7 @@ There are exactly seven active phases. Progress is:
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | Goal 003 pre-authority admission/staging ready; measured execution remains closed pending fresh v3 bindings |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | Goal 004 one-session recovery, v3 authority, and measured closeout pending Owner-authorized exact-root recovery or destroy fallback |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -348,7 +354,9 @@ provider payloads, and access material stay Owner-local. Git and every projectio
 receive validated aggregates, hashes, counts, safe IDs, and pointers only.
 The completed A1 evidence does not authorize A2 measured retrieval by itself.
 A2 must pass its own entry preflight, fresh provider admission, and execution
-adoption in a new isolated remote root. Runtime model download, paid APIs,
+adoption under a new attempt. Goal 004 may use an exact root only after
+Owner-authorized forensic recovery proves it is worker-free and safely cleared;
+otherwise it must use a replacement root. Runtime model download, paid APIs,
 unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden.
 
 ## Canonical details
@@ -363,10 +371,10 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-LO reads `docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md` and obtains only the
-fresh provider binding/admission, isolated stage, and non-measured transport
-evidence needed for AP to issue authority v3. Candidate retrieval and evaluation,
-REP-DEV measurement, A3, Selection, and Final remain closed.
+LO reads `docs/goal/A2_PER_ARM_AUTOINDEX_goal_004.md` and executes the one-session
+recovery, fresh binding/admission, isolated stage, v3 authority, measured A2,
+safe return, evidence audit, and post-closeout publication-figure workflow.
+Candidate mutation, A3, Selection, and Final remain closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined

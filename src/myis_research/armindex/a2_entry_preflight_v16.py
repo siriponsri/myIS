@@ -55,6 +55,10 @@ _POST_FREEZE_ZERO_COUNTERS = (
     "selection_accesses",
     "final_accesses",
 )
+_STAGED_READINESS_STATUS = "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
+_RECOVERY_READY_READINESS_STATUS = (
+    "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
+)
 
 
 class A2EntryPreflightV16Error(ValueError):
@@ -104,7 +108,9 @@ def _validated_post_freeze_state(armindex: Mapping[str, Any]) -> Mapping[str, An
 def _validated_execution_readiness(armindex: Mapping[str, Any]) -> Mapping[str, Any]:
     readiness = armindex.get("a2_execution_readiness")
     status = readiness.get("status") if isinstance(readiness, Mapping) else None
-    staged = status == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
+    staged = status == _STAGED_READINESS_STATUS
+    recovery_ready = status == _RECOVERY_READY_READINESS_STATUS
+    provider_admission_performed = staged or recovery_ready
     if (
         not isinstance(readiness, Mapping)
         or readiness.get("validated") is not True
@@ -112,13 +118,14 @@ def _validated_execution_readiness(armindex: Mapping[str, Any]) -> Mapping[str, 
         not in {
             "READY_FOR_FRESH_ADMISSION_AND_STAGING_MEASUREMENT_LOCKED",
             "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED",
-            "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING",
+            _STAGED_READINESS_STATUS,
+            _RECOVERY_READY_READINESS_STATUS,
         }
         or readiness.get("candidate_count") != 52
         or readiness.get("matched_candidate_count") != 40
         or readiness.get("conditional_reserve_candidate_count") != 12
         or readiness.get("diagnostic_non_advancing_arms") != ["ARM-01", "ARM-02"]
-        or readiness.get("provider_admission_performed") is not staged
+        or readiness.get("provider_admission_performed") is not provider_admission_performed
         or readiness.get("provider_execution_adoption_performed") is not staged
         or readiness.get("remote_staging_performed") is not staged
         or readiness.get("measured_a2_started") is not False
@@ -247,7 +254,11 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
     staged = (
         isinstance(readiness, Mapping)
         and readiness.get("status")
-        == "STAGED_NOT_LAUNCHED_REMOTE_MEASURED_TRANSPORT_PENDING"
+        == _STAGED_READINESS_STATUS
+    )
+    recovery_ready = (
+        isinstance(readiness, Mapping)
+        and readiness.get("status") == _RECOVERY_READY_READINESS_STATUS
     )
     return {
         "status": "PASS_A2_ENTRY_PREFLIGHT",
@@ -260,6 +271,7 @@ def evaluate_a2_entry_preflight(repository_root: Path) -> dict[str, Any]:
         "a2_provider_disposition_status": (
             "STAGED_FRESH_INSTANCE" if staged else "FRESH_INSTANCE_REQUIRED"
         ),
+        "a2_recovery_ready": recovery_ready,
         "reuse_existing_instance_permitted": staged,
         "fresh_a2_provider_admission_required": not staged,
         "fresh_a2_execution_adoption_required": not staged,

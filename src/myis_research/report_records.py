@@ -114,6 +114,7 @@ def _lifecycle(value: Any) -> str:
         "contract_scaffold_complete_launch_locked",
         "a1_2_v16_r13_failed_closed_retry_required",
         "a1_2_terminal_failed_closed_retry_required",
+        "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED",
     } or value.startswith("locked"):
         return "blocked"
     return "planned"
@@ -340,6 +341,49 @@ def _artifacts(
                             safe_uri=str(receipt["uri"]),
                             content_sha256=str(receipt["file_sha256"]),
                             explanation="Validates the current staged-not-launched A2 attempt without authorizing measured retrieval.",
+                            producing_phase_id="A2_PER_ARM_AUTOINDEX",
+                            producing_task_id="A2.1",
+                        )
+                    )
+            for key, title, artifact_type, explanation in (
+                (
+                    "source_goal",
+                    "A2 Goal 003 terminal closeout",
+                    "goal",
+                    "Closed pre-authority goal; retained as immutable stop provenance and not reusable for launch.",
+                ),
+                (
+                    "source_lo_handoff",
+                    "A2 LO 003 pre-authority stop handoff",
+                    "long_run_handoff",
+                    "Records the unsafe-root stop, safe-return result, and absence of measured A2 exposure.",
+                ),
+                (
+                    "source_audit",
+                    "A2 Audit 012 unsafe-root decision",
+                    "audit",
+                    "Binds the Owner destroy disposition and fresh-attempt requirement.",
+                ),
+                (
+                    "research_session",
+                    "A2 Goal 003 research-session capsule",
+                    "session_capsule",
+                    "Validated aggregate-safe session record with reference and integrity checks.",
+                ),
+            ):
+                uri = readiness.get(f"{key}_uri")
+                digest = readiness.get(f"{key}_sha256")
+                if uri and digest:
+                    result.append(
+                        _artifact(
+                            artifact_id=f"a2-{key.replace('_', '-')}-goal003-stop-v1",
+                            title=title,
+                            artifact_type=artifact_type,
+                            evidence_class="engineering_execution_readiness",
+                            scientific_authority=False,
+                            safe_uri=str(uri),
+                            content_sha256=str(digest),
+                            explanation=explanation,
                             producing_phase_id="A2_PER_ARM_AUTOINDEX",
                             producing_task_id="A2.1",
                         )
@@ -3413,6 +3457,18 @@ def _bindings(
                         "current_execution_pointer_sha256"
                     ),
                 }
+            if readiness.get("source_goal_uri"):
+                bindings["current_preauthority_closeout"] = {
+                    "status": readiness.get("status"),
+                    "goal_uri": readiness.get("source_goal_uri"),
+                    "goal_sha256": readiness.get("source_goal_sha256"),
+                    "lo_handoff_uri": readiness.get("source_lo_handoff_uri"),
+                    "lo_handoff_sha256": readiness.get("source_lo_handoff_sha256"),
+                    "audit_uri": readiness.get("source_audit_uri"),
+                    "audit_sha256": readiness.get("source_audit_sha256"),
+                    "research_session_uri": readiness.get("research_session_uri"),
+                    "research_session_sha256": readiness.get("research_session_sha256"),
+                }
     elif phase_id == "P1_CPU_BASELINE":
         bindings["execution_envelope"] = {
             "uri": "control/execution-envelope.yaml",
@@ -3813,6 +3869,12 @@ def _record_for(
         a2_readiness_valid
         and a2_readiness.get("status")
         == "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
+    )
+    a2_unsafe_root_stop = (
+        a2_readiness_valid
+        and task_id in {None, "A2.1"}
+        and a2_readiness.get("status")
+        == "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
     )
     a2_current_route_status = (
         str(a2_readiness.get("current_status"))
@@ -4239,6 +4301,22 @@ def _record_for(
         result = "The minimum preflight enablement is validated as engineering evidence while measured runs, real candidates, freeze, and selection remain zero."
         interpretation = "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim."
         decision_status = str(p2.get("preflight_status", "not_started"))
+    elif a2_unsafe_root_stop:
+        output = (
+            "Goal 003 completed fresh provider admission preparation but stopped "
+            "before isolated staging because its exact target remote root already existed."
+        )
+        result = (
+            "The pre-authority attempt is closed and non-promotable; no candidate "
+            "retrieval, evaluation, reserve, winner, Selection, Final, or publication "
+            "metric was produced."
+        )
+        interpretation = (
+            "The unsafe-root finding is operational provenance only. It supports a "
+            "fresh-attempt requirement and Owner destroy disposition, not an A2 quality, "
+            "latency, cost, or superiority claim."
+        )
+        decision_status = "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT"
     elif a2_freeze_valid:
         identity = (
             a2_freeze.get("official_identity", {})
@@ -4744,6 +4822,8 @@ def _record_for(
         "work_summary": (
             "The interrupted runtime attempt and earlier P2 audits were preserved; the v2 runbook, profile, envelope, journal, lock, supervisor, resume, and proposer contracts were implemented with no Owner-local preflight or measured execution started."
             if phase_id == "P2_SCOPE_DEVELOPMENT"
+            else "Goal 003 completed fresh provider admission preparation but stopped before isolated staging because the exact target remote root already existed; the stop, safe return, and Owner destroy disposition are retained as aggregate-safe provenance. No candidate retrieval, evaluation, measured A2, or publication metric was produced."
+            if a2_unsafe_root_stop
             else "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The production adapter, matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; A2 remains measurement-locked pending AP fresh-instance admission and isolated staging. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
             if a2_freeze_valid
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."

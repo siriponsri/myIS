@@ -3165,9 +3165,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T10:37:05Z",
-  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
-  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+  "generated_at": "2026-08-15T10:55:31Z",
+  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
+  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3321,7 +3321,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3332,13 +3332,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
+      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:37:05Z",
+  "last_material_update": "2026-08-15T10:55:31Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3671,11 +3671,11 @@
       "value": 0.0
     }
   ],
-  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
+  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "27e6e7352b8af8bd616104e2b3abfe98da1cb337659018c01b035d0d17180eca",
+  "report_sha256": "57a0d5044fc593078c1ab658105b3f42549889a5924717130e8754691f21175d",
   "report_type": "task",
   "result": {
     "decision": "PASS_25_OF_25",
@@ -3688,7 +3688,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_ready_for_measured_execution_authorized",
+    "program_state": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
     "task": "A1.2"
   },
   "status": "completed",

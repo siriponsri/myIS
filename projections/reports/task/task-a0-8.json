@@ -264,9 +264,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T10:37:05Z",
-  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
-  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+  "generated_at": "2026-08-15T10:55:31Z",
+  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
+  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -308,7 +308,7 @@
       "sha256": "730c019a0bc5dd27f5014e0938ce3f0691ebb7aa9421d2585494472d7d4a6ac5",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a0.8-compute-storage-feasibility.receipt.v1.json"
     },
-    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -319,13 +319,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
+      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The fixture proves that the A0.8 scaffold executes within its bounded synthetic CPU scope on the observed host. It does not estimate production bm25s capacity, retrieval quality, or dense-arm readiness.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:37:05Z",
+  "last_material_update": "2026-08-15T10:55:31Z",
   "metric_references": [
     {
       "cutoff": 32,
@@ -394,11 +394,11 @@
       "value": 156846
     }
   ],
-  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
+  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
   "objective": "Compute and storage feasibility fixtures",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-8",
-  "report_sha256": "45fc27dee84b8ae6d085b9c957e94b0226a98f9feaa3f84ab1919e5980a2d956",
+  "report_sha256": "c59d5c84b6478bde6e04b104cb0495d92fa134aad89bd6a58bbb5a73f9d845bb",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -411,7 +411,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_ready_for_measured_execution_authorized",
+    "program_state": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
     "task": "A0.8"
   },
   "status": "completed",

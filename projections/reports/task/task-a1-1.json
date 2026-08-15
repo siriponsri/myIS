@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T10:37:05Z",
-  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
-  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+  "generated_at": "2026-08-15T10:55:31Z",
+  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
+  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -277,7 +277,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -288,13 +288,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
+      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The result establishes deterministic adapter-interface, lineage, fail-closed dense-arm, and CPU scaffold readiness. Synthetic metrics and host timings do not establish bm25s parity, production capacity, dense-model quality, or scientific retrieval performance.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:37:05Z",
+  "last_material_update": "2026-08-15T10:55:31Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -385,11 +385,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
+  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
   "objective": "Adapter fixture validation",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-1",
-  "report_sha256": "7a347c115343f1eb7b3c3580520c064f623eb495880a3c73c754df7513d2b2a7",
+  "report_sha256": "32166a70f97abfd971492d95ba83a04c2b8aee349bbbf15cb7d659d1d5eeeb3b",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -402,7 +402,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_ready_for_measured_execution_authorized",
+    "program_state": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
     "task": "A1.1"
   },
   "status": "completed",

@@ -233,6 +233,78 @@
       "scientific_authority": false,
       "title": "A2 append-only execution ledger",
       "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-source-goal-goal003-stop-v1",
+      "artifact_type": "goal",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Closed pre-authority goal; retained as immutable stop provenance and not reusable for launch.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md",
+      "scientific_authority": false,
+      "title": "A2 Goal 003 terminal closeout",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-source-lo-handoff-goal003-stop-v1",
+      "artifact_type": "long_run_handoff",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Records the unsafe-root stop, safe-return result, and absence of measured A2 exposure.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
+      "scientific_authority": false,
+      "title": "A2 LO 003 pre-authority stop handoff",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-source-audit-goal003-stop-v1",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Binds the Owner destroy disposition and fresh-attempt requirement.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md",
+      "scientific_authority": false,
+      "title": "A2 Audit 012 unsafe-root decision",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-research-session-goal003-stop-v1",
+      "artifact_type": "session_capsule",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
+      "evidence_class": "engineering_execution_readiness",
+      "explanation": "Validated aggregate-safe session record with reference and integrity checks.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json",
+      "scientific_authority": false,
+      "title": "A2 Goal 003 research-session capsule",
+      "validation_status": "validated"
     }
   ],
   "claim_boundary": "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim",
@@ -307,12 +379,32 @@
       "artifact_id": "a2-execution-readiness-ledger-v1",
       "sha256": "6dad2987d6cc57b166d9ea13fb4111b5504e2ffb9b7d7440fa055a85564553d4",
       "uri": "control/armindex/a2/execution-ledger.v1.jsonl"
+    },
+    {
+      "artifact_id": "a2-source-goal-goal003-stop-v1",
+      "sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
+      "uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md"
+    },
+    {
+      "artifact_id": "a2-source-lo-handoff-goal003-stop-v1",
+      "sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
+      "uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md"
+    },
+    {
+      "artifact_id": "a2-source-audit-goal003-stop-v1",
+      "sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
+      "uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md"
+    },
+    {
+      "artifact_id": "a2-research-session-goal003-stop-v1",
+      "sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
+      "uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json"
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T10:37:05Z",
-  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
-  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+  "generated_at": "2026-08-15T10:55:31Z",
+  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
+  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -370,8 +462,19 @@
         "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
       }
     ],
+    "current_preauthority_closeout": {
+      "audit_sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
+      "audit_uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md",
+      "goal_sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
+      "goal_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md",
+      "lo_handoff_sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
+      "lo_handoff_uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
+      "research_session_sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
+      "research_session_uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json",
+      "status": "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
+    },
     "current_staged_attempt": {
-      "attempt_id": "a2-im-audit008-provenance-v2",
+      "attempt_id": "a2-ap-audit011-v3-full-a2",
       "pointer_sha256": null,
       "pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json"
     },
@@ -383,9 +486,9 @@
       "forward_hard_stop_usd": 50,
       "measured_a2_started": false,
       "owner_ttl_hours": 40,
-      "status": "READY_FOR_MEASURED_EXECUTION"
+      "status": "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
     },
-    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -420,13 +523,13 @@
       "uri": "../03_Paper/01_ArmIndex"
     },
     "source_of_truth": {
-      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
+      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This engineering evidence prevents outcome-driven candidate generation and preserves a reviewer-reproducible representation universe. It does not evaluate a candidate, access REP-DEV for measurement, start an A2 run, authorize provider execution, or support a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:37:05Z",
+  "last_material_update": "2026-08-15T10:55:31Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -536,7 +639,7 @@
       "source_sha256": "189e7a467b2272c7c6024c995f3c54f97f914c1bf45b0a4843abac22b5728bcc",
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
-      "value": 0
+      "value": 1
     },
     {
       "cutoff": 0,
@@ -554,7 +657,7 @@
   "objective": "Official Codex bridge and five-arm candidate freeze",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-official_codex_bridge_and_candidate_freeze",
-  "report_sha256": "8932acb8ca9a04848db5c2e22754340c881ece63d5583a4cf4a6556fa61ff78b",
+  "report_sha256": "fddf720ff94ee82af2396a1b1f673838459c3625a8da8835f706da88b8660f7a",
   "report_type": "task",
   "result": {
     "decision": "CLOSED_PASS_INDEPENDENT_AUDIT",
@@ -567,7 +670,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_ready_for_measured_execution_authorized",
+    "program_state": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
     "task": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
   "status": "completed",
@@ -587,7 +690,11 @@
         "a2-execution-readiness-envelope-v2",
         "a2-execution-readiness-budget-v1",
         "a2-execution-readiness-runbook-v1",
-        "a2-execution-readiness-ledger-v1"
+        "a2-execution-readiness-ledger-v1",
+        "a2-source-goal-goal003-stop-v1",
+        "a2-source-lo-handoff-goal003-stop-v1",
+        "a2-source-audit-goal003-stop-v1",
+        "a2-research-session-goal003-stop-v1"
       ]
     }
   ],

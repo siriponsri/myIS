@@ -652,6 +652,25 @@ A2_PROVENANCE_CONFLICT_LO_PATH = Path(
 A2_PROVENANCE_REPAIR_IM_PATH = Path(
     "docs/implementation/A2_PER_ARM_AUTOINDEX_im_008_001.md"
 )
+A2_CURRENT_GOAL_003_PATH = Path(
+    "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md"
+)
+A2_CURRENT_LO_003_PATH = Path(
+    "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md"
+)
+A2_CURRENT_AUDIT_012_PATH = Path(
+    "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md"
+)
+A2_CURRENT_SESSION_CAPSULE_PATH = Path(
+    "outputs/audits/research-sessions/"
+    "a2-ap-audit011-v3-full-a2-lo003-20260815.json"
+)
+A2_PREAUTHORITY_STOP_STATUS = (
+    "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
+)
+A2_PREAUTHORITY_STOP_NEXT_ACTION = (
+    "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT"
+)
 A2_FREEZE_NEXT_AUTHORIZED_ACTION = (
     "RUN_INDEPENDENT_A2_FREEZE_AUDIT_STOP_BEFORE_MEASURED_A2"
 )
@@ -946,6 +965,76 @@ def _a2_execution_readiness_projection(
             "provider_admission_status": "NOT_ATTEMPTED",
             "provider_admission_attempted": False,
         }
+
+        # Goal 003 is a terminal pre-authority stop. Keep the historical v2
+        # authority and ledger immutable, but let projections follow the
+        # validated current closeout instead of presenting the old LO route.
+        goal_path = root / A2_CURRENT_GOAL_003_PATH
+        lo_path = root / A2_CURRENT_LO_003_PATH
+        audit_path = root / A2_CURRENT_AUDIT_012_PATH
+        capsule_path = root / A2_CURRENT_SESSION_CAPSULE_PATH
+        try:
+            goal_text = goal_path.read_text(encoding="utf-8")
+            lo_text = lo_path.read_text(encoding="utf-8")
+            audit_text = audit_path.read_text(encoding="utf-8")
+            capsule = json.loads(capsule_path.read_text(encoding="utf-8"))
+            goal_is_closed_stop = (
+                re.search(r"^status:\s*STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT\s*$", goal_text, re.MULTILINE)
+                and re.search(r"^lifecycle:\s*CLOSED\s*$", goal_text, re.MULTILINE)
+            )
+            closeout_is_bound = (
+                "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT" in lo_text
+                and (
+                    "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_OR_DESTROY_FALLBACK"
+                    in audit_text
+                    or "NEEDS_OWNER_DESTROY_AND_FRESH_ATTEMPT" in audit_text
+                )
+                and capsule.get("schema_version") == "myis.research-session.v1"
+                and capsule.get("goal_id") == A2_CURRENT_GOAL_003_PATH.as_posix()
+                and capsule.get("integrity", {}).get("all_refs_exist") is True
+                and capsule.get("integrity", {}).get("all_hashes_match") is True
+                and capsule.get("integrity", {}).get("contains_protected_payload") is False
+                and capsule.get("integrity", {}).get("contains_secrets") is False
+            )
+        except (OSError, TypeError, ValueError, json.JSONDecodeError):
+            goal_is_closed_stop = False
+            closeout_is_bound = False
+        if goal_is_closed_stop and closeout_is_bound:
+            return {
+                **result,
+                "status": A2_PREAUTHORITY_STOP_STATUS,
+                "current_status": "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT",
+                "current_route": "OWNER_ACTION_REQUIRED",
+                "historical_status": latest_ledger_entry["status"],
+                "attempt_id": str(capsule.get("run_id")),
+                "scientific_authority": False,
+                "measured_a2_authorized": False,
+                "measured_execution_allowed": False,
+                "candidate_generation_allowed": False,
+                "candidate_mutation_allowed": False,
+                "rep_dev_measurement_allowed": False,
+                "provider_admission_performed": True,
+                "provider_admission_attempted": True,
+                "provider_admission_status": "PASS_PREAUTHORITY_STOP_BEFORE_STAGE",
+                "provider_execution_adoption_performed": False,
+                "remote_staging_performed": False,
+                "gpu_decision": "KEEP_GPU",
+                "gpu_decision_reason": (
+                    "Owner-authorized forensic root recovery is the immediate next "
+                    "action; destroy only if exact-root checks fail"
+                ),
+                "next_authorized_action": A2_PREAUTHORITY_STOP_NEXT_ACTION,
+                "source_goal_uri": A2_CURRENT_GOAL_003_PATH.as_posix(),
+                "source_goal_sha256": _file_sha256(goal_path),
+                "source_lo_handoff_uri": A2_CURRENT_LO_003_PATH.as_posix(),
+                "source_lo_handoff_sha256": _file_sha256(lo_path),
+                "source_audit_uri": A2_CURRENT_AUDIT_012_PATH.as_posix(),
+                "source_audit_sha256": _file_sha256(audit_path),
+                "research_session_uri": A2_CURRENT_SESSION_CAPSULE_PATH.as_posix(),
+                "research_session_sha256": _file_sha256(capsule_path),
+                "provider_instance_id": "47782993",
+                "unsafe_remote_root": "/opt/myis/a2-ap-audit011-v3-full-a2",
+            }
 
         # The append-only readiness ledger records staging history, while the
         # current AP-adopted authority is the source of truth for the next
@@ -1863,6 +1952,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "a2_ready_for_measured_execution_authorized"
             if a2_execution_readiness.get("status")
             == "READY_FOR_MEASURED_EXECUTION"
+            else "a2_preauthority_stop_unsafe_remote_root_owner_action_required"
+            if a2_execution_readiness.get("status")
+            == A2_PREAUTHORITY_STOP_STATUS
             else "a2_provenance_v2_pending_ap_review_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "READY_FOR_AP_PROVENANCE_REVIEW"
@@ -1901,6 +1993,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                     "ready_for_measured_execution"
                     if a2_execution_readiness.get("status")
                     == "READY_FOR_MEASURED_EXECUTION"
+                    else "blocked"
+                    if a2_execution_readiness.get("status")
+                    == A2_PREAUTHORITY_STOP_STATUS
                     else
                     "staged"
                     if a2_execution_readiness.get("status")
@@ -1928,6 +2023,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                                 "ready_for_measured_execution"
                                 if a2_execution_readiness.get("status")
                                 == "READY_FOR_MEASURED_EXECUTION"
+                                else "blocked"
+                                if a2_execution_readiness.get("status")
+                                == A2_PREAUTHORITY_STOP_STATUS
                                 else
                                 "staged"
                                 if a2_execution_readiness.get("status")

@@ -13,10 +13,10 @@ contents are non-distributable.
 ## Current state (orientation only)
 
 - Active campaign: `armindex-multiretriever-v2`
-- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION NEEDS_IM_REMOTE_MEASURED_EXECUTION_TRANSPORT`
+- Active phase/task: `A2_PER_ARM_AUTOINDEX / A2.1 successor v3 pre-authority closeout`
 - Completed prerequisite: `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE CLOSED_PASS`
-- Status: `a2_fresh_staging_pass_not_launched_remote_measured_transport_pending`
-- Local adoption-input status: `FRESH_A2_ADMISSION_AND_EXECUTION_ADOPTION_PASS_MEASURED_AUTHORITY_ABSENT`
+- Status: `STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT`; Goal 003 is closed and no measured A2 started
+- Local adoption-input status: fresh admission passed, isolated stage blocked by a pre-existing target root
 - Evidence class: A1 aggregate-safe measured development closeout has validated
   25/25 coverage and scientific authority `true`; A2 remains immutable
   pre-measurement engineering evidence with scientific authority `false`
@@ -26,6 +26,8 @@ contents are non-distributable.
 - Final exposures: `0`
 - Recorded A1 measured charge: `$11.161632`
 - A2 candidate universe: `40 matched + 12 dormant reserve` (`52` total)
+- Current provider disposition: Goal 003's attempt identity is closed, but Owner-authorized exact-root forensic recovery may reuse instance `47782993` under a new attempt and receipt chain; destroy is the fallback if checks fail
+- Recommended continuation: run one Goal 004 session covering recovery, v3 authority, the full A2 measured closeout, safe return, and publication artifacts
 - Official Codex identity: `gpt-5.6-sol`, reasoning `high`, SDK/CLI `0.144.4`
 - Final Official credit: Plus, used `13%`, remaining `87%`, reset
   `2026-08-18T00:45:40Z`, limit reached `false`
@@ -246,9 +248,11 @@ baseline `29/29`, journal EDA `8/8`, and closeout `12/12`. The measured
 were not recreated; the safe-return archive, frozen execution bundle, four
 dense model roots, and four job-ledger files remain. The aggregate-safe audit is
 `outputs/audits/armindex/a1.2-r15-remote-retention-20260812.json`.
-A2 must begin in a new isolated remote root with fresh provider admission,
-fresh execution adoption, and the A2 entry preflight. Historical r13 remains a
-preserved failed attempt and cannot be combined with r15.
+A2 must begin under a new attempt with fresh provider admission, fresh execution
+adoption, and the A2 entry preflight. Goal 004 may recover the exact stopped
+root only after Owner-authorized forensic checks and a recorded clear; otherwise
+it must use a replacement root. Historical r13 remains a preserved failed
+attempt and cannot be combined with r15.
 
 The A2 Official Codex bridge and immutable candidate freeze are complete. The
 independent read-only audit passed with zero findings and is recorded at

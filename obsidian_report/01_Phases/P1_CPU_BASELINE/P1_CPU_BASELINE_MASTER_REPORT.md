@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e"
-read_model_sha256: "ad8494db943dd929e98adaa5b26ef1ea1f83270ee7714529d006ab30f79b70f0"
-source_commit: "dd1999613f4ba62b118bce6b68ce3e11033c1f52"
+read_model_revision: "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769"
+read_model_sha256: "a6313c65aa7617a4dd6e29d048ca128d2ea4c20a8d493945177737d622f5bfb8"
+source_commit: "82ca6be739beab4c3561d3c75cfc81b0acfb0da2"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: ["p1-r0-selection-d9533ba623ce","p1-r0-train-d9533ba623ce","p1-r0ww-selection-d9533ba623ce","p1-r0ww-train-d9533ba623ce"]
 source_manifest_sha256: ["31e875e1864cfbf0d7c39cf632b7506e168e753afdc49b7f27ce131d21b4a0f3","6100a8240bcd94ceb5740e805701ea69255a0f2d9e15609b52bc1921c8ae1ff6","8e3e52bf41d49d89f11416b7d9eebaf0cba1be9b2345871c07f152551c386f58","cb8ee4bfa971146ea80ecbe0c9e4b9b2c17f54f7952cb4b6de436bc2beeb12e1"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e"
-last_material_update: "2026-08-15T10:37:05Z"
-next_authorized_action: "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
+generated_from_revision: "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769"
+last_material_update: "2026-08-15T10:55:31Z"
+next_authorized_action: "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-15T10:37:05Z"
-updated_at: "2026-08-15T10:37:05Z"
+created_at: "2026-08-15T10:55:31Z"
+updated_at: "2026-08-15T10:55:31Z"
 note_id: "P1_CPU_BASELINE-MASTER"
 note_type: "phase_report"
 phase_id: "P1_CPU_BASELINE"
@@ -46,9 +46,9 @@ Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: dd1999613f4ba62b118bce6b68ce3e11033c1f52
+- `git_commit`: 82ca6be739beab4c3561d3c75cfc81b0acfb0da2
 - `execution_envelope`: `control/execution-envelope.yaml`; SHA-256 `e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af`
 - `request_id`: dapfam-p1-fulltext-c058a3aa7357c782
 - `protected_payloads`: owner-local; aggregate hashes only in this report
@@ -139,7 +139,7 @@ Status: **completed**. P1 measured train/selection evidence is complete within i
 
 ## Next Action
 
-LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN
+OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

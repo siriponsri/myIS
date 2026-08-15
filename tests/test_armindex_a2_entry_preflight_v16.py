@@ -97,6 +97,7 @@ def _mock_closeout_projection(
     *,
     disposition: str = "REUSE_ELIGIBLE",
     post_freeze: dict[str, object] | None = None,
+    readiness: dict[str, object] | None = None,
 ) -> None:
     def build_model(_: Path) -> dict[str, object]:
         return {
@@ -134,6 +135,7 @@ def _mock_closeout_projection(
                     },
                 ],
                 "a2_candidate_freeze": post_freeze,
+                "a2_execution_readiness": readiness,
             },
         }
 
@@ -265,6 +267,50 @@ def test_preflight_accepts_only_audited_post_freeze_blocked_state(
         "independent_audit_receipt_sha256": "1" * 64,
         "independent_audit_receipt_file_sha256": "2" * 64,
     }
+
+
+def test_preflight_accepts_unsafe_remote_root_stop_as_recovery_ready(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _root(tmp_path)
+    _write_current(root)
+    readiness = {
+        "validated": True,
+        "status": "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED",
+        "candidate_count": 52,
+        "matched_candidate_count": 40,
+        "conditional_reserve_candidate_count": 12,
+        "diagnostic_non_advancing_arms": ["ARM-01", "ARM-02"],
+        "provider_admission_performed": True,
+        "provider_execution_adoption_performed": False,
+        "remote_staging_performed": False,
+        "measured_a2_started": False,
+        "counters": {
+            "candidate_evaluations": 0,
+            "measured_a2_runs": 0,
+            "provider_admissions": 0,
+            "provider_execution_adoptions": 0,
+        },
+        "forward_hard_stop_usd": 50,
+        "owner_ttl_hours": 40,
+    }
+    _mock_closeout_projection(
+        monkeypatch,
+        post_freeze=_post_freeze_projection(),
+        readiness=readiness,
+    )
+
+    result = evaluate_a2_entry_preflight(root)
+
+    assert result["status"] == "PASS_A2_ENTRY_PREFLIGHT"
+    assert result["a2_phase_status"] == "blocked"
+    assert result["a2_recovery_ready"] is True
+    assert result["a2_execution_authorized"] is False
+    assert result["candidate_evaluation_authorized"] is False
+    assert result["fresh_a2_provider_admission_required"] is True
+    assert result["fresh_a2_execution_adoption_required"] is True
+    assert result["new_isolated_remote_root_required"] is True
+    assert result["reuse_existing_instance_permitted"] is False
 
 
 @pytest.mark.parametrize(

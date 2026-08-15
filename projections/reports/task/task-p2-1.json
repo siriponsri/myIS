@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T10:37:05Z",
-  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
-  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+  "generated_at": "2026-08-15T10:55:31Z",
+  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
+  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
+    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -788,7 +788,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
+      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:37:05Z",
+  "last_material_update": "2026-08-15T10:55:31Z",
   "metric_references": [],
-  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
+  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "977cfd257f6c65bd2929a564a3e08a20295436213b8606b9d49488e106cb62d2",
+  "report_sha256": "c610b87dcd9015ff10ad6d8dada3f7106bcfba22796f67126ef4752e638ab07e",
   "report_type": "task",
   "result": {
     "decision": "not_started",

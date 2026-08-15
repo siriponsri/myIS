@@ -2,13 +2,13 @@
 title: "A2 v3 successor fresh-admission and staging preparation"
 phase_id: A2_PER_ARM_AUTOINDEX
 task_id: A2.1
-status: READY_FOR_PREAUTHORITY_ADMISSION
-lifecycle: ACTIVE
+status: STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT
+lifecycle: CLOSED
 evidence_class: operational_preauthority_preparation
 scientific_authority: false
 measured_a2_authorized: false
 last_material_update: 2026-08-15
-next_authorized_action: LO_CAPTURE_FRESH_PROVIDER_BINDING_ADMISSION_AND_STAGE
+next_authorized_action: LO_EXECUTE_A2_PER_ARM_AUTOINDEX_GOAL_004
 ---
 
 # A2 v3 successor fresh-admission and staging preparation

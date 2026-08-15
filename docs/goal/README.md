@@ -4,7 +4,9 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A2_PER_ARM_AUTOINDEX_goal_003.md](A2_PER_ARM_AUTOINDEX_goal_003.md) | `ACTIVE` | `READY_FOR_PREAUTHORITY_ADMISSION` | Fresh provider admission/staging only; measured execution remains closed |
+| [A2_PER_ARM_AUTOINDEX_goal_004.md](A2_PER_ARM_AUTOINDEX_goal_004.md) | `ACTIVE` | `READY_FOR_LO_ONE_SESSION` | One-session exact-root recovery or destroy fallback, fresh rebind, v3 authority, measured A2, safe return, and publication closeout |
+
+| [A2_PER_ARM_AUTOINDEX_goal_003.md](A2_PER_ARM_AUTOINDEX_goal_003.md) | `CLOSED` | `STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT` | Historical pre-authority stop; its attempt identity and receipts are never reused |
 
 ## Historical goal registry
 
@@ -15,6 +17,26 @@
 | [A2_official_codex_bridge_goal.md](A2_official_codex_bridge_goal.md) | `CLOSED` | `CLOSED_PASS` | Historical bridge and candidate freeze; preserved for provenance only |
 | [A2_PER_ARM_AUTOINDEX_goal_001.md](A2_PER_ARM_AUTOINDEX_goal_001.md) | `CLOSED` | `HISTORICAL_PRELAUNCH_STOP` | Historical cyclic-provenance prelaunch stop |
 | [A2_PER_ARM_AUTOINDEX_goal_002.md](A2_PER_ARM_AUTOINDEX_goal_002.md) | `CLOSED` | `HISTORICAL_PRELAUNCH_AUTHORITY_CONTRADICTION` | Historical v2 prelaunch stop; never reuse for execution |
+
+## Documentation backlog disposition (2026-08-15)
+
+- The A2 handoff chain is retained in place: audits `001`-`012`, implementation
+  handoffs `im_001_001` through `im_010_001`, and long-run handoffs `lo_001_001`
+  through `lo_003_001` remain readable provenance. They are referenced by the
+  canonical source-of-truth record, validators, or successor documents, so none
+  qualifies for archival under `docs/observatory/REPORTING_POLICY.md`.
+- Goal 003 is the terminal record for the stopped attempt. It must not be
+  resumed or reused. Its attempt identity and receipts are closed lineage;
+  exact-root recovery, if authorized, belongs to Goal 004 under a new identity.
+- Goal 004 is the one-session continuation. It covers Owner-authorized
+  exact-root forensic recovery or destroy fallback, fresh provider admission,
+  isolated stage, v3 authority binding, measured A2, safe return, evidence
+  audit, and publication closeout. Its LO prompt is:
+
+  `/goal อ่าน docs/goal/A2_PER_ARM_AUTOINDEX_goal_004.md แล้วทำงานตามขั้นตอนทั้งหมดใน one orchestrated session`
+- Generated Obsidian/report projections are rebuilt from the shared read model;
+  no generated Markdown is edited by hand. No publication figure is generated
+  from the stopped pre-authority attempt.
 
 เมื่อ canonical receipt/ledger/checkpoint ยืนยันการปิดงาน ให้แก้ทั้ง frontmatter,
 ตารางสถานะรายขั้น และทะเบียนนี้ใน session เดียวกัน ห้ามปิด goal จาก chat หรือ

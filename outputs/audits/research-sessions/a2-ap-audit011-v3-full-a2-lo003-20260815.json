@@ -1,0 +1,110 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260815T114424Z-a2lo003",
+  "run_id": "a2-ap-audit011-v3-full-a2",
+  "goal_id": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md",
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-15T11:44:24.2306746Z",
+  "scope": "Fresh provider admission and non-measured pre-authority staging for A2 successor v3.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "LO_SESSION",
+      "source": "Owner instruction in the current session activating LO and continuing A2 long run.",
+      "scope": "Execute the active Goal 003 pre-authority sequence within canonical controls."
+    },
+    {
+      "gate": "VAST_PARALLEL_SETUP",
+      "source": "Owner instruction in the current session approving parallel work on Vast.",
+      "scope": "Permit parallel pre-stage and transport preparation; it does not override the absent v3 measured authority."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+    "dirty_paths": [
+      "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
+      "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "Parallel Vast setup was used only for Goal 003 pre-authority preparation.",
+      "evidence_refs": [
+        {
+          "path": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
+          "sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
+          "locator": "GPU / Vast and Completed pre-authority work sections"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "experiment",
+      "provenance": "agent-observed",
+      "summary": "Fresh provider observation and v2 admission passed for the new instance; no candidate worker started.",
+      "evidence_refs": [
+        {
+          "path": "../04_Owner_Stores/armindex/a2/a2-ap-audit011-v3-preauthority-20260815/provider-evidence/provider-observation.v2.json",
+          "sha256": "910afa90b27969216b061554a14cda9ee4cde73683220ddc4a0298067a7353e9",
+          "locator": "observation_sha256"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "dead_end",
+      "provenance": "agent-observed",
+      "summary": "The exact Goal 003 remote root existed before stage and therefore failed the fresh-isolated-root requirement.",
+      "evidence_refs": [
+        {
+          "path": "../04_Owner_Stores/armindex/a2/a2-ap-audit011-v3-preauthority-20260815/unsafe-remote-root-observation.receipt.v1.json",
+          "sha256": "3adc6eca712c1210d8eac07f7c02491a766b5cfef89ffea64e8194af0ab2ac27",
+          "locator": "status"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The incoming directory created by this session was verified by exact file ownership and hashes, then removed; the unexpected root was preserved.",
+      "evidence_refs": [
+        {
+          "path": "../04_Owner_Stores/armindex/a2/a2-ap-audit011-v3-preauthority-20260815/remote-prestage-incoming-safe-return.receipt.v1.json",
+          "sha256": "11c0fbc46c5a2c450255f1b1fc34fc190e37684f2ebffc739929b3f5fbf6bb92",
+          "locator": "status"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    "AP must decide whether a fresh remote root and successor attempt are justified by publication impact.",
+    "Provider instance 47782993 remains running with no worker; destroy disposition requires Owner/AP confirmation."
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}
