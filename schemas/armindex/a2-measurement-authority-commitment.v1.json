@@ -12,7 +12,7 @@
     "measured_a2_authorized": {"const": false},
     "authority_file_present": {"const": false},
     "authority_creation_role": {"const": "AP"},
-    "authority_schema_uri": {"const": "schemas/armindex/a2-measured-execution-authority.v1.json"},
+    "authority_schema_uri": {"const": "schemas/armindex/a2-measured-execution-authority.v2.json"},
     "transport_schema_version": {"const": "myis.armindex-a2-remote-measured-transport.v2"},
     "required_equalities": {
       "const": [
@@ -20,13 +20,15 @@
         "bundle_sha256:transport=adoption",
         "bundle_receipt_sha256:transport=adoption",
         "bundle_receipt_file_sha256:transport=remote_file",
-        "git_commit:transport=adoption",
-        "git_tree:transport=adoption",
+        "git_commit:transport=adoption=measurement_authority.execution_bundle_git_commit",
+        "git_tree:transport=adoption=measurement_authority.execution_bundle_git_tree",
+        "bundle_git_commit:is_ancestor_of_current_authority_head",
+        "execution_bundle_closure:bundle_commit=current_authority_head",
         "execution_adoption_receipt_sha256:measurement_authority=adoption",
         "measurement_authority_commitment_file_sha256:transport=canonical_tracked_file"
       ]
     },
-    "required_bundle_state": {"const": "clean_pushed_origin_main"},
+    "required_bundle_state": {"const": "clean_pushed_bundle_ancestor_of_clean_pushed_authority_head"},
     "commitment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
   }
 }

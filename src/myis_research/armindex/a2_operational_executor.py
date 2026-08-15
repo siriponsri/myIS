@@ -42,6 +42,7 @@ from .a2_execution_readiness import (
     build_winner_receipt,
     build_watchdog_script,
     frozen_candidates,
+    required_execution_bundle_paths,
     resume_checkpoint,
     validate_execution_adoption_receipt,
     validate_execution_adoption_receipt_v2,
@@ -78,6 +79,9 @@ _OWNER_KEYS = {
 }
 _INITIAL_ADMISSION_TTL_SECONDS = 40 * 60 * 60
 _RESERVE_TTL_RESERVE_SECONDS = 6 * 60 * 60
+_AUTHORITY_PROVENANCE_POLICY = (
+    "bundle_ancestor_with_unchanged_execution_closure_v1"
+)
 _RESULT_FIELDS = {
     "schema_version",
     "attempt_id",
@@ -353,6 +357,42 @@ def _validate_measurement_authority_provenance(
         repository_root, "rev-parse", f"HEAD:{authority_uri}"
     ):
         raise A2OperationalExecutorError("measurement authority is not bound to HEAD")
+    _validate_bundle_authority_lineage(repository_root, authority, head=head)
+
+
+def _validate_bundle_authority_lineage(
+    repository_root: Path,
+    authority: Mapping[str, Any],
+    *,
+    head: str,
+) -> None:
+    """Allow post-bundle authority commits without allowing executor drift."""
+
+    bundle_commit = str(authority["execution_bundle_git_commit"])
+    bundle_tree = str(authority["execution_bundle_git_tree"])
+    if authority.get("provenance_policy") != _AUTHORITY_PROVENANCE_POLICY:
+        raise A2OperationalExecutorError("measurement authority provenance policy drift")
+    if _git(repository_root, "rev-parse", f"{bundle_commit}^{{commit}}") != bundle_commit:
+        raise A2OperationalExecutorError("measurement authority bundle commit is unavailable")
+    if _git(repository_root, "rev-parse", f"{bundle_commit}^{{tree}}") != bundle_tree:
+        raise A2OperationalExecutorError("measurement authority bundle tree drift")
+    if _git(repository_root, "merge-base", bundle_commit, head) != bundle_commit:
+        raise A2OperationalExecutorError(
+            "measurement authority bundle commit is not an ancestor of HEAD"
+        )
+    changed = _git(
+        repository_root,
+        "diff",
+        "--name-only",
+        bundle_commit,
+        head,
+        "--",
+        *required_execution_bundle_paths(),
+    )
+    if changed:
+        raise A2OperationalExecutorError(
+            "measurement authority execution bundle closure drift"
+        )
 
 
 def _validate_measurement_goal(authority: Mapping[str, Any], goal_path: Path) -> None:
@@ -379,18 +419,27 @@ def validate_measurement_authority(
     *,
     attempt_id: str,
     execution_adoption_receipt_sha256: str,
+    execution_bundle_git_commit: str,
+    execution_bundle_git_tree: str,
 ) -> dict[str, Any]:
     """Validate the separate AP-adopted authority required after staging."""
 
     root = repository_root.resolve()
     checked = dict(authority)
-    _validate(root, "a2-measured-execution-authority.v1.json", checked)
+    if checked.get("schema_version") != "myis.armindex-a2-measured-execution-authority.v2":
+        raise A2OperationalExecutorError(
+            "measured execution authority provenance v1 is superseded"
+        )
+    _validate(root, "a2-measured-execution-authority.v2.json", checked)
     if (
-        checked["schema_version"] != "myis.armindex-a2-measured-execution-authority.v1"
+        checked["authority_id"] != "a2-measured-execution-authority-v2"
         or checked["status"] != "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"
         or checked["attempt_id"] != attempt_id
         or checked["execution_adoption_receipt_sha256"]
         != execution_adoption_receipt_sha256
+        or checked["execution_bundle_git_commit"] != execution_bundle_git_commit
+        or checked["execution_bundle_git_tree"] != execution_bundle_git_tree
+        or checked["provenance_policy"] != _AUTHORITY_PROVENANCE_POLICY
         or checked["measured_a2_authorized"] is not True
         or checked["candidate_generation_allowed"] is not False
         or checked["candidate_mutation_allowed"] is not False
@@ -582,6 +631,8 @@ def execute_external_candidate_set(
         measurement_authority,
         attempt_id=attempt_id,
         execution_adoption_receipt_sha256=adoption["receipt_sha256"],
+        execution_bundle_git_commit=adoption["git_commit"],
+        execution_bundle_git_tree=adoption["git_tree"],
     )
     if adoption["attempt_id"] != attempt_id:
         raise A2OperationalExecutorError("executor attempt differs from adoption")
@@ -919,6 +970,8 @@ def build_candidate_result_receipt(
                 dict(measurement_authority or {}),
                 attempt_id=str(attempt_id),
                 execution_adoption_receipt_sha256=adoption["receipt_sha256"],
+                execution_bundle_git_commit=adoption["git_commit"],
+                execution_bundle_git_tree=adoption["git_tree"],
             )
         except (A2ExecutionReadinessError, A2OperationalExecutorError):
             raise A2OperationalExecutorError("measured candidate result lacks adopted authority")
@@ -1510,6 +1563,8 @@ def validate_remote_execution_binding(
         measurement_authority,
         attempt_id=attempt_id,
         execution_adoption_receipt_sha256=adoption["receipt_sha256"],
+        execution_bundle_git_commit=adoption["git_commit"],
+        execution_bundle_git_tree=adoption["git_tree"],
     )
     commitment_path = (root / config.measurement_authority_commitment_uri).resolve()
     if (
@@ -1619,6 +1674,8 @@ def build_reserve_budget_admission(
         measurement_authority,
         attempt_id=attempt_id,
         execution_adoption_receipt_sha256=adoption["receipt_sha256"],
+        execution_bundle_git_commit=adoption["git_commit"],
+        execution_bundle_git_tree=adoption["git_tree"],
     )
     if adoption_v2:
         fresh_provider = build_provider_admission_receipt_v2(
@@ -1644,7 +1701,7 @@ def build_reserve_budget_admission(
         "observed_at_utc": fresh_provider["observed_at_utc"],
         "ttl_deadline_utc": fresh_provider["ttl_deadline_utc"],
         "whole_workload_total_usd": fresh_provider["whole_workload_total_usd"],
-        "forward_hard_stop_usd": "35",
+        "forward_hard_stop_usd": "45",
         "freeze_bindings": _freeze_bindings(root),
     }
     receipt = {**body, "receipt_sha256": canonical_sha256(body)}
@@ -1687,8 +1744,8 @@ def validate_reserve_budget_admission(
         or checked["freeze_bindings"] != _freeze_bindings(root)
         or checked["receipt_sha256"]
         != canonical_sha256({key: value for key, value in checked.items() if key != "receipt_sha256"})
-        or Decimal(checked["whole_workload_total_usd"]) > Decimal("35")
-        or checked["forward_hard_stop_usd"] != "35"
+        or Decimal(checked["whole_workload_total_usd"]) > Decimal("45")
+        or checked["forward_hard_stop_usd"] != "45"
         or now - observed > timedelta(minutes=15)
         or observed > now + timedelta(minutes=1)
         or (deadline - now).total_seconds() < reserve_checkpoint_ttl_seconds(root)

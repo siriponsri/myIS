@@ -644,7 +644,13 @@ A2_CURRENT_EXECUTION_POINTER_PATH = Path(
 )
 A2_MEASURED_AUTHORITY_PATH = Path(
     "control/armindex/a2/measured-authority/"
-    "a2-im-audit007-final-r3.authority.v1.json"
+    "a2-im-audit008-provenance-v2.authority.v2.json"
+)
+A2_PROVENANCE_CONFLICT_LO_PATH = Path(
+    "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_001_001.md"
+)
+A2_PROVENANCE_REPAIR_IM_PATH = Path(
+    "docs/implementation/A2_PER_ARM_AUTOINDEX_im_008_001.md"
 )
 A2_FREEZE_NEXT_AUTHORIZED_ACTION = (
     "RUN_INDEPENDENT_A2_FREEZE_AUDIT_STOP_BEFORE_MEASURED_A2"
@@ -855,7 +861,7 @@ def _a2_execution_readiness_projection(
             or contract.get("launch_allowed") is not False
             or contract.get("measured_execution_allowed") is not False
             or not isinstance(policy, Mapping)
-            or policy.get("forward_hard_stop_usd") != 35
+            or policy.get("forward_hard_stop_usd") != 45
             or policy.get("owner_ttl_hours") != 40
             or policy.get("provider_instance_id")
             != "runtime_supplied_from_fresh_binding"
@@ -874,7 +880,7 @@ def _a2_execution_readiness_projection(
         if (
             budget.get("status") != "READY_FOR_FRESH_ALL_FEE_ADMISSION"
             or not isinstance(admission, Mapping)
-            or admission.get("forward_hard_stop_usd") != 35
+            or admission.get("forward_hard_stop_usd") != 45
             or admission.get("whole_workload_admission_required") is not True
             or admission.get("fresh_all_fee_quote_required") is not True
             or admission.get("adopted_for_execution") is not False
@@ -911,7 +917,7 @@ def _a2_execution_readiness_projection(
             "conditional_reserve_candidate_count": 12,
             "diagnostic_non_advancing_arms": ["ARM-01", "ARM-02"],
             "primary_advancement_arms": ["ARM-03", "ARM-05", "ARM-04"],
-            "forward_hard_stop_usd": 35,
+            "forward_hard_stop_usd": 45,
             "owner_ttl_hours": 40,
             "phase_ceiling_usd": budget["hard_stops"]["a2_forward_usd"],
             "task_run_ceiling_usd": admission["forward_hard_stop_usd"],
@@ -951,7 +957,7 @@ def _a2_execution_readiness_projection(
                     root,
                     relative_path=A2_MEASURED_AUTHORITY_PATH,
                     schema_path=Path(
-                        "schemas/armindex/a2-measured-execution-authority.v1.json"
+                        "schemas/armindex/a2-measured-execution-authority.v2.json"
                     ),
                     self_hash_field="authority_sha256",
                 )
@@ -967,7 +973,11 @@ def _a2_execution_readiness_projection(
                 )
                 authority_is_current = (
                     authority.get("status") == "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"
-                    and authority.get("attempt_id") == "a2-im-audit007-final-r3"
+                    and authority.get("schema_version")
+                    == "myis.armindex-a2-measured-execution-authority.v2"
+                    and authority.get("provenance_policy")
+                    == "bundle_ancestor_with_unchanged_execution_closure_v1"
+                    and authority.get("attempt_id") == "a2-im-audit008-provenance-v2"
                     and authority.get("measured_a2_authorized") is True
                     and authority.get("candidate_generation_allowed") is False
                     and authority.get("candidate_mutation_allowed") is False
@@ -1016,6 +1026,42 @@ def _a2_execution_readiness_projection(
                     "source_goal_uri": authority["source_goal_uri"],
                     "source_goal_sha256": authority["source_goal_sha256"],
                 }
+        if (
+            (root / A2_PROVENANCE_CONFLICT_LO_PATH).is_file()
+            and (root / A2_PROVENANCE_REPAIR_IM_PATH).is_file()
+            and (root / "schemas/armindex/a2-measured-execution-authority.v2.json").is_file()
+        ):
+            return {
+                **result,
+                "status": "READY_FOR_AP_PROVENANCE_REVIEW",
+                "validated": True,
+                "evidence_class": "engineering_execution_readiness",
+                "scientific_authority": False,
+                "claim_boundary": (
+                    "provenance_contract_v2_implemented_measurement_remains_closed"
+                ),
+                "current_status": "READY_FOR_AP_PROVENANCE_REVIEW",
+                "current_route": "AP",
+                "historical_status": latest_ledger_entry["status"],
+                "attempt_id": "a2-im-audit008-provenance-v2",
+                "measured_a2_authorized": False,
+                "measured_execution_allowed": False,
+                "candidate_generation_allowed": False,
+                "candidate_mutation_allowed": False,
+                "rep_dev_measurement_allowed": False,
+                "provider_admission_status": "SUCCESSOR_ADOPTION_REQUIRED",
+                "provider_admission_attempted": False,
+                "gpu_decision": "KEEP_GPU",
+                "gpu_decision_reason": (
+                    "the Owner authorized the USD 45 successor route; instance 47700074 "
+                    "may be reused only after fresh v2 observation and admission"
+                ),
+                "next_authorized_action": (
+                    "AP_REVIEW_PROVENANCE_V2_THEN_ROUTE_SUCCESSOR_STAGING"
+                ),
+                "source_lo_handoff_uri": A2_PROVENANCE_CONFLICT_LO_PATH.as_posix(),
+                "source_im_handoff_uri": A2_PROVENANCE_REPAIR_IM_PATH.as_posix(),
+            }
         if latest_ledger_entry["status"] == "IMPLEMENTATION_BLOCKED":
             return {
                 **result,
@@ -1817,6 +1863,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "a2_ready_for_measured_execution_authorized"
             if a2_execution_readiness.get("status")
             == "READY_FOR_MEASURED_EXECUTION"
+            else "a2_provenance_v2_pending_ap_review_measured_a2_locked"
+            if a2_execution_readiness.get("status")
+            == "READY_FOR_AP_PROVENANCE_REVIEW"
             else
             "a2_staged_not_launched_measured_a2_locked"
             if a2_execution_readiness.get("status")

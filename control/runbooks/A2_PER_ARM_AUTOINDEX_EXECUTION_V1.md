@@ -22,7 +22,7 @@ and non-advancing.
    instance or relax a v1 receipt. Vast CLI is preferred; `OwnerDashboardSsh`
    is valid only with pinned SSH evidence and
    `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
-4. Require a forward all-fee hard stop no greater than USD 35 and at least
+4. Require a forward all-fee hard stop no greater than USD 45 and at least
    40 hours remaining from a fresh absolute TTL deadline. The Owner-approved
    total instance TTL is 60 hours. Reject unknown fees or a partial-arm quote.
 5. Create `/opt/myis/a2-<attempt-id>` only after provider admission passes,
@@ -35,8 +35,8 @@ and non-advancing.
    `MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED` until a fresh admission still
    proves at least the deterministic reserve floor
    `ceil(worst_case_dense_parallel_critical_path_seconds - matched_dense_parallel_critical_path_seconds + owner_ttl_reserve_seconds) = 53848s`
-   and the unchanged USD 35 hard stop. The initial admission floor remains 40h
-   and is not reused for reserve admission.
+   and the Owner-expanded USD 45 hard stop. The initial admission floor remains
+   40h and is not reused for reserve admission.
 8. Derive the three primary-arm decisions from the frozen batch order,
    Owner-local A1 v16 incumbents, strict primary improvement, and the actual
    four frozen reserve axes. Persist one decision and one continuation receipt.
@@ -45,16 +45,26 @@ and non-advancing.
    ledger, and derived receipts must use one attempt ID. Before every worker,
    fail closed unless bundle SHA, bundle receipt SHA, Git commit/tree, remote
    root, false tracked authority commitment, and remote input hashes agree.
+   A measured authority must use provenance v2: its adoption commit/tree must
+   equal transport/adoption, the bundle commit must be an ancestor of the clean
+   pushed authority HEAD, and every path in the immutable execution bundle
+   closure must be unchanged between those revisions. Authority v1 is
+   historical failed-launch lineage and cannot authorize execution.
 10. Each remote candidate uses an OS-released supervisor lock plus PID/start-time
     identity, attempt-bound heartbeat, durable cancellation, result-before-relaunch
     recovery, and verified reaping. A durable result is never launched again.
 
 Audit 007 IM acceptance is engineering readiness only. Measured execution stays
 closed until AP separately writes a tracked measured authority and current LO goal.
-9. Evaluation measures the frozen REP-DEV view and emits aggregate-only receipts;
+LO 001 proved that exact `HEAD == bundle git_commit` is cyclic because the
+authority and goal are necessarily committed after bundle/adoption. IM 008
+replaces that predicate with the versioned ancestor-plus-unchanged-closure
+contract. Measured execution remains closed until AP approves the repair, a
+successor bundle/adoption exists, and AP writes authority v2 plus a new LO goal.
+11. Evaluation measures the frozen REP-DEV view and emits aggregate-only receipts;
    query IDs, qrels, membership, rankings, and per-query outcomes remain Owner-local.
    Winner selection rejects exact ties and cannot advance ARM-01 or ARM-02.
-10. Safe return validates archive hashes and excludes protected payloads. Do not
+12. Safe return validates archive hashes and excludes protected payloads. Do not
    destroy the provider instance.
 
 ## Fresh-instance staging commands
@@ -134,12 +144,14 @@ uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repo
 ## Hard Stops
 
 Stop before initial staging or execution on a hash mismatch, stale quote, price
-above USD 35, TTL below 40 hours remaining, missing management authority,
+above USD 45, TTL below 40 hours remaining, missing management authority,
 unexpected GPU identity, model/data/runtime hash drift, candidate mutation,
 protected output, or any request for A3, HARNESS-DEV, Selection, or Final
 access. At the matched reserve checkpoint, use the fresh deterministic `53848s`
 floor instead of the initial 40-hour floor; all other hash, quote, hard-stop,
 identity, and protected-boundary checks remain mandatory.
+Reject measured authority v1, a bundle commit that is not an ancestor of the
+current clean pushed authority HEAD, or any changed execution-closure path.
 
 ## Ledger
 

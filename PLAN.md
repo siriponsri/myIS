@@ -15,14 +15,18 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_MEASURED_EXECUTION`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_AP_PROVENANCE_REVIEW_AFTER_IM_008`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started. Audit 006 passed
   fresh admission and isolated staging. IM 006 added the remote transport and
   real Owner-local manifest; IM 007 repairs the audit 007 attempt/bundle/authority
   provenance and durable per-candidate recovery blockers. AP audit 008 passed
   the final-r3 successor artifacts and created the separate measured authority
-  and LO goal; measured execution is now authorized only through that goal.)
+  and LO goal. LO 001 then stopped before launch on the cyclic bundle/authority
+  Git equality. IM 008 adds the versioned non-cyclic provenance contract;
+  measured execution remains closed pending AP review and successor adoption.
+  The Owner expanded the successor A2 forward hard stop by USD 10 to USD 45;
+  the USD 150 campaign ceiling and TTL semantics remain unchanged.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
   destroy instance `47411176` and provision a fresh instance. Audit 004 implementation
@@ -82,7 +86,7 @@ There are exactly seven active phases. Progress is:
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | staged not launched; remote measured transport implementation and AP authority review pending |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | staged not launched; provenance v2 implemented, AP review and successor adoption pending |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -352,11 +356,13 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-LO executes `/goal docs/goal/A2_PER_ARM_AUTOINDEX_goal_001.md` after fresh
-provider admission on instance `47700074`. It must preserve the frozen 52-item
-universe, use remote-only transport, checkpoint and safely return aggregate-safe
-artifacts, and write the long-run handoff plus projection refresh. Candidate
-evaluation and REP-DEV measurement remain closed by the current authority.
+AP reads `docs/implementation/A2_PER_ARM_AUTOINDEX_im_008_001.md` and
+`docs/long_run/A2_PER_ARM_AUTOINDEX_lo_001_001.md`, then reviews the provenance
+v2 implementation. The review must verify that authority v1 is fail-closed,
+the successor bundle commit is an ancestor of the clean pushed authority HEAD,
+and every execution-bundle-closure path is byte-unchanged between them. AP then
+routes successor staging/adoption before issuing a new authority v2 and LO goal.
+Measured A2, candidate evaluation, and REP-DEV measurement remain closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
@@ -438,3 +444,8 @@ aggregate envelope remains about USD 34.85 including the existing USD 0.30
 network reserve and below the unchanged USD 35 hard stop. Audit 008 passed
 IM 007 final-r3, created the current measured authority and LO goal, and routes
 to one explicit LO session.
+
+After LO 001 stopped prelaunch, the Owner expanded the successor A2 task/run
+hard stop from USD 35 to USD 45. This does not rewrite the historical final-r3
+admission or change the USD 150 campaign ceiling, 60-hour target TTL, 40-hour
+initial floor, or deterministic 53,848-second reserve floor.

@@ -24,7 +24,7 @@ resources:
   target_ttl_hours: 60
   owner_ttl_hours: 40
   remote_clock_skew_max_seconds: 60
-  forward_hard_stop_usd: 35
+  forward_hard_stop_usd: 45
   network_model_download: false
   remote_staging: true
   measured_retrieval: false

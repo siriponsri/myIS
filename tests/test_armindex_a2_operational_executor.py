@@ -184,14 +184,17 @@ def _adoption() -> dict[str, object]:
 
 def _authority(adoption: Mapping[str, object]) -> dict[str, object]:
     body: dict[str, object] = {
-        "schema_version": "myis.armindex-a2-measured-execution-authority.v1",
-        "authority_id": "a2-measured-execution-authority-v1",
-        "authority_uri": f"control/armindex/a2/measured-authority/{ATTEMPT}.authority.v1.json",
+        "schema_version": "myis.armindex-a2-measured-execution-authority.v2",
+        "authority_id": "a2-measured-execution-authority-v2",
+        "authority_uri": f"control/armindex/a2/measured-authority/{ATTEMPT}.authority.v2.json",
         "status": "PASS_A2_MEASURED_EXECUTION_AUTHORIZED",
         "attempt_id": ATTEMPT,
         "source_goal_uri": "docs/goal/A2_goal.md",
         "source_goal_sha256": file_sha256(ROOT / "docs/goal/A2_goal.md"),
         "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
+        "execution_bundle_git_commit": adoption["git_commit"],
+        "execution_bundle_git_tree": adoption["git_tree"],
+        "provenance_policy": "bundle_ancestor_with_unchanged_execution_closure_v1",
         "measured_a2_authorized": True,
         "candidate_generation_allowed": False,
         "candidate_mutation_allowed": False,
@@ -230,7 +233,7 @@ def _reserve_budget_admission(
         "observed_at_utc": "2026-08-12T08:05:00Z",
         "ttl_deadline_utc": "2026-08-14T08:00:00Z",
         "whole_workload_total_usd": "33",
-        "forward_hard_stop_usd": "35",
+        "forward_hard_stop_usd": "45",
         "freeze_bindings": operational._freeze_bindings(ROOT),
     }
     return {**body, "receipt_sha256": canonical_sha256(body)}
@@ -314,6 +317,8 @@ def test_measurement_authority_rejects_self_hashed_untracked_control() -> None:
             _authority(adoption),
             attempt_id=ATTEMPT,
             execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            execution_bundle_git_commit=str(adoption["git_commit"]),
+            execution_bundle_git_tree=str(adoption["git_tree"]),
         )
 
 
@@ -335,7 +340,129 @@ def test_measurement_authority_rejects_non_authorizing_goal(
             _authority(adoption),
             attempt_id=ATTEMPT,
             execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            execution_bundle_git_commit=str(adoption["git_commit"]),
+            execution_bundle_git_tree=str(adoption["git_tree"]),
         )
+
+
+def test_measurement_authority_v1_is_superseded() -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    authority["schema_version"] = "myis.armindex-a2-measured-execution-authority.v1"
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="provenance v1 is superseded",
+    ):
+        operational.validate_measurement_authority(
+            ROOT,
+            authority,
+            attempt_id=ATTEMPT,
+            execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            execution_bundle_git_commit=str(adoption["git_commit"]),
+            execution_bundle_git_tree=str(adoption["git_tree"]),
+        )
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["execution_bundle_git_commit", "execution_bundle_git_tree"],
+)
+def test_measurement_authority_rejects_adoption_bundle_identity_mismatch(
+    field: str,
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    authority[field] = "0" * 40
+    authority["authority_sha256"] = canonical_sha256(
+        {key: value for key, value in authority.items() if key != "authority_sha256"}
+    )
+
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="measured execution authority is not adopted",
+    ):
+        operational.validate_measurement_authority(
+            ROOT,
+            authority,
+            attempt_id=ATTEMPT,
+            execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            execution_bundle_git_commit=str(adoption["git_commit"]),
+            execution_bundle_git_tree=str(adoption["git_tree"]),
+        )
+
+
+def test_bundle_authority_lineage_accepts_descendant_with_unchanged_closure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    head = "f" * 40
+
+    def fake_git(_root: Path, *args: str) -> str:
+        if args == ("rev-parse", f"{adoption['git_commit']}^{{commit}}"):
+            return str(adoption["git_commit"])
+        if args == ("rev-parse", f"{adoption['git_commit']}^{{tree}}"):
+            return str(adoption["git_tree"])
+        if args == ("merge-base", str(adoption["git_commit"]), head):
+            return str(adoption["git_commit"])
+        if args[:4] == (
+            "diff",
+            "--name-only",
+            str(adoption["git_commit"]),
+            head,
+        ):
+            return ""
+        raise AssertionError(args)
+
+    monkeypatch.setattr(operational, "_git", fake_git)
+    operational._validate_bundle_authority_lineage(ROOT, authority, head=head)
+
+
+def test_bundle_authority_lineage_rejects_nonancestor_and_closure_drift(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    head = "f" * 40
+
+    def nonancestor(_root: Path, *args: str) -> str:
+        if args == ("rev-parse", f"{adoption['git_commit']}^{{commit}}"):
+            return str(adoption["git_commit"])
+        if args == ("rev-parse", f"{adoption['git_commit']}^{{tree}}"):
+            return str(adoption["git_tree"])
+        if args == ("merge-base", str(adoption["git_commit"]), head):
+            return "0" * 40
+        raise AssertionError(args)
+
+    monkeypatch.setattr(operational, "_git", nonancestor)
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="not an ancestor",
+    ):
+        operational._validate_bundle_authority_lineage(ROOT, authority, head=head)
+
+    def drifted(_root: Path, *args: str) -> str:
+        if args == ("rev-parse", f"{adoption['git_commit']}^{{commit}}"):
+            return str(adoption["git_commit"])
+        if args == ("rev-parse", f"{adoption['git_commit']}^{{tree}}"):
+            return str(adoption["git_tree"])
+        if args == ("merge-base", str(adoption["git_commit"]), head):
+            return str(adoption["git_commit"])
+        if args[:4] == (
+            "diff",
+            "--name-only",
+            str(adoption["git_commit"]),
+            head,
+        ):
+            return "src/myis_research/armindex/a2_operational_executor.py"
+        raise AssertionError(args)
+
+    monkeypatch.setattr(operational, "_git", drifted)
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="execution bundle closure drift",
+    ):
+        operational._validate_bundle_authority_lineage(ROOT, authority, head=head)
 
 
 def test_remote_execution_binding_rejects_transport_adoption_drift(
@@ -1155,7 +1282,7 @@ def test_reserve_admission_uses_frozen_unfinished_projection_floor() -> None:
                 ),
                 now_utc=now,
             )
-            assert checked["forward_hard_stop_usd"] == "35"
+            assert checked["forward_hard_stop_usd"] == "45"
         else:
             with pytest.raises(
                 operational.A2OperationalExecutorError,

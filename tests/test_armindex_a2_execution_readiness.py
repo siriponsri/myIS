@@ -344,6 +344,7 @@ def test_fresh_instance_binding_drives_v2_admission_and_rejects_instance_drift(
     )
     assert admission["provider_instance_id"] == "58881234"
     assert admission["provider_instance_binding_sha256"] == binding["binding_sha256"]
+    assert admission["forward_hard_stop_usd"] == 45
 
     drifted = json.loads(observation_path.read_text(encoding="ascii"))
     drifted["provider_instance_id"] = "58881235"
@@ -351,6 +352,54 @@ def test_fresh_instance_binding_drives_v2_admission_and_rejects_instance_drift(
     drifted["observation_sha256"] = canonical_sha256(drifted)
     observation_path.write_text(json.dumps(drifted), encoding="ascii")
     with pytest.raises(A2ExecutionReadinessError, match="binding drift|mutation"):
+        build_provider_admission_receipt_v2(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_observation_path=observation_path,
+            source_artifact_paths=sources,
+            instance_binding=binding,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+
+def test_v2_admission_uses_owner_expanded_usd_45_hard_stop(tmp_path: Path) -> None:
+    observation_path, sources = _provider_observation_paths_v2(tmp_path)
+    observation = json.loads(observation_path.read_text(encoding="ascii"))
+    observation["all_fee_components_usd"]["compute_usd"] = "41.00"
+    observation["whole_workload_total_usd"] = "44.00"
+    observation.pop("observation_sha256")
+    observation["observation_sha256"] = canonical_sha256(observation)
+    observation_path.write_text(json.dumps(observation), encoding="ascii")
+    binding = build_provider_instance_binding(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+    )
+
+    admission = build_provider_admission_receipt_v2(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+        instance_binding=binding,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert admission["whole_workload_total_usd"] == "44.00"
+    assert admission["forward_hard_stop_usd"] == 45
+
+    observation["all_fee_components_usd"]["compute_usd"] = "42.01"
+    observation["whole_workload_total_usd"] = "45.01"
+    observation.pop("observation_sha256")
+    observation["observation_sha256"] = canonical_sha256(observation)
+    observation_path.write_text(json.dumps(observation), encoding="ascii")
+    binding = build_provider_instance_binding(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+    )
+    with pytest.raises(A2ExecutionReadinessError, match="exceeds the A2 hard stop"):
         build_provider_admission_receipt_v2(
             ROOT,
             attempt_id=ATTEMPT,
@@ -451,6 +500,8 @@ def test_bundle_closure_requires_both_readiness_envelopes_and_ledger_schemas() -
         "schemas/armindex/a2-execution-ledger-entry.v1.json",
         "schemas/armindex/a2-execution-ledger-entry.v2.json",
         "schemas/armindex/a2-execution-ledger-entry.v3.json",
+        "schemas/armindex/a2-measured-execution-authority.v1.json",
+        "schemas/armindex/a2-measured-execution-authority.v2.json",
     } <= closure
 
 

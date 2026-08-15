@@ -327,28 +327,30 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
         "complete_audit_passed_measured_a2_closed"
     )
     readiness = model["armindex"]["a2_execution_readiness"]
-    assert readiness["status"] == "READY_FOR_MEASURED_EXECUTION"
+    assert readiness["status"] == "READY_FOR_AP_PROVENANCE_REVIEW"
     assert readiness["historical_status"] == "EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED"
-    assert readiness["current_status"] == "READY_FOR_MEASURED_EXECUTION"
-    assert readiness["current_route"] == "LO"
-    assert readiness["scientific_authority"] is True
-    assert readiness["measured_a2_authorized"] is True
-    assert readiness["measured_execution_allowed"] is True
+    assert readiness["current_status"] == "READY_FOR_AP_PROVENANCE_REVIEW"
+    assert readiness["current_route"] == "AP"
+    assert readiness["scientific_authority"] is False
+    assert readiness["measured_a2_authorized"] is False
+    assert readiness["measured_execution_allowed"] is False
     assert readiness["candidate_generation_allowed"] is False
     assert readiness["candidate_mutation_allowed"] is False
     assert readiness["rep_dev_measurement_allowed"] is False
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
     assert readiness["provider_admission_attempted"] is False
-    assert readiness["provider_admission_status"] == "FRESH_ADMISSION_REQUIRED"
+    assert readiness["provider_admission_status"] == "SUCCESSOR_ADOPTION_REQUIRED"
+    assert readiness["task_run_ceiling_usd"] == 45
+    assert readiness["gpu_decision"] == "KEEP_GPU"
     assert readiness["next_authorized_action"] == (
-        "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
+        "AP_REVIEW_PROVENANCE_V2_THEN_ROUTE_SUCCESSOR_STAGING"
     )
-    assert readiness["measurement_authority_sha256"] == (
-        "1fd1daa98bedbcf7193001bf58d5c06f8457a7d525091c7087b5d278069924ef"
+    assert readiness["source_lo_handoff_uri"] == (
+        "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_001_001.md"
     )
-    assert readiness["source_goal_uri"] == (
-        "docs/goal/A2_PER_ARM_AUTOINDEX_goal_001.md"
+    assert readiness["source_im_handoff_uri"] == (
+        "docs/implementation/A2_PER_ARM_AUTOINDEX_im_008_001.md"
     )
     assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0006"
     a2 = next(
@@ -356,10 +358,10 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
         for phase in model["armindex"]["phases"]
         if phase["phase_id"] == "A2_PER_ARM_AUTOINDEX"
     )
-    assert a2["status"] == "ready_for_measured_execution"
+    assert a2["status"] == "ready"
     assert next(task for task in a2["tasks"] if task["task_id"] == "A2.1")[
         "status"
-    ] == "ready_for_measured_execution"
+    ] == "ready"
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:

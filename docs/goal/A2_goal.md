@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: READY_FOR_MEASURED_EXECUTION
-lifecycle: BLOCKED
+status: READY_FOR_AP_PROVENANCE_REVIEW_AFTER_IM_008
+lifecycle: READY
 evidence_class: engineering_execution_readiness
 scientific_authority: false
-claim_boundary: "IM 007 implements attempt/bundle/authority equality and durable per-candidate remote recovery. The separate current goal and authority authorize only frozen A2 retrieval; candidate evaluation and REP-DEV measurement remain closed."
+claim_boundary: "LO 001 stopped before launch on cyclic bundle/authority Git provenance. IM 008 implements authority v2 with bundle-ancestor and unchanged execution-closure checks. Measurement remains closed pending AP and successor adoption."
 last_material_update: 2026-08-15
-next_authorized_action: LO_EXECUTE_A2_PER_ARM_AUTOINDEX_goal_001
+next_authorized_action: AP_REVIEW_IM_008_PROVENANCE_V2
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -46,11 +46,11 @@ added the production remote transport and real Owner-local measured input
 manifest, and separated the 40-hour initial floor from the frozen-runtime
 reserve floor. Audit 007 identified attempt, pushed-HEAD bundle, canonical
 authority, and durable recovery blockers. IM 007 repairs those engineering
-surfaces and returns them to AP. The USD 35 hard stop and frozen scientific
-semantics remain unchanged.
+surfaces and returns them to AP. The Owner expanded the successor hard stop to
+USD 45; frozen scientific, TTL, model, and protected-data semantics remain unchanged.
 
 ```text
-LO_GATE: AP audit 008 passed final-r3 artifacts and created the separate measured authority and goal; LO must fresh-admit before launch.
+LO_GATE: CLOSED_AFTER_LO_001_PROVENANCE_HARD_STOP; AP must review IM 008 and route successor bundle/adoption before issuing authority v2 and a new LO goal.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -107,7 +107,7 @@ Selection, Final, D2 หรือ D3.
       pinned SSH runtime/GPU evidence and `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
    4. Apply the Owner-approved target of `60` hours total and require all-fee
       whole-workload admission for all 52 candidates with at least `40` hours
-      remaining from the fresh absolute deadline, USD `35` forward hard stop,
+      remaining from the fresh absolute deadline, USD `45` forward hard stop,
       no unknown fee and no partial-arm quote. Do not
       login/logout, destroy/reprovision the provider, infer a budget default or reuse an
       A1 admission/adoption receipt.
@@ -133,10 +133,12 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, use the separate tracked authority and goal created by AP audit 008.
-  Preserve append-only evidence and do not alter frozen candidate bytes or the
-  v1/v2 campaign/envelope/budget/execution contract.
-- During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,
+- The AP audit 008 authority v1 and LO goal are historical failed-launch lineage
+  and cannot be reused. Before another LO, AP must approve the authority v2
+  provenance contract and route a successor bundle/adoption.
+  Preserve append-only evidence, frozen candidate bytes, and the current
+  Owner-approved campaign/envelope/budget/execution bindings.
+- During LO, stop before staging on stale/partial quote, quote above USD `45`, TTL below `40` hours remaining,
   missing management authority, wrong instance/GPU/runtime/model/data hash, protected output,
   manifest/receipt/lock drift or any nonzero measured counter.
 - Stop immediately on a request to create/mutate candidates, access REP-DEV for measurement,
