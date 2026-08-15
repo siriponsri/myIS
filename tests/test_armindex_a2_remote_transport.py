@@ -84,6 +84,24 @@ def test_remote_transport_request_is_exactly_hash_bound(tmp_path: Path) -> None:
         validate_transport_request(drifted, config, attempt_id=ATTEMPT)
 
 
+def test_successor_transport_uses_new_commitment_and_allows_fresh_instance(
+    tmp_path: Path,
+) -> None:
+    base = _config(tmp_path)
+    config = RemoteTransportConfig(
+        **{
+            **base.__dict__,
+            "provider_instance_id": "47700075",
+            "measurement_authority_commitment_uri": (
+                "control/armindex/a2/measurement-authority-commitment.v2.json"
+            ),
+        }
+    )
+    request = build_transport_request(config, attempt_id=ATTEMPT)
+    assert request["schema_version"] == "myis.armindex-a2-remote-measured-transport.v3"
+    assert request["request_id"].endswith("-v3")
+
+
 def test_remote_transport_must_equal_execution_adoption(tmp_path: Path) -> None:
     config = _config(tmp_path)
     adoption = {

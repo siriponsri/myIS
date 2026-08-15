@@ -210,6 +210,88 @@ def _authority(adoption: Mapping[str, object]) -> dict[str, object]:
     return {**body, "authority_sha256": canonical_sha256(body)}
 
 
+def _successor_authority(
+    adoption: Mapping[str, object], *, owner_manifest_file_sha256: str = "0" * 64
+) -> dict[str, object]:
+    body: dict[str, object] = {
+        "schema_version": "myis.armindex-a2-measured-execution-authority.v3",
+        "authority_id": "a2-measured-execution-authority-v3",
+        "authority_uri": f"control/armindex/a2/measured-authority/{ATTEMPT}.authority.v3.json",
+        "status": "PASS_A2_MEASURED_EXECUTION_AUTHORIZED",
+        "attempt_id": ATTEMPT,
+        "source_goal_uri": "docs/goal/A2_goal.md",
+        "source_goal_sha256": file_sha256(ROOT / "docs/goal/A2_goal.md"),
+        "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
+        "execution_bundle_git_commit": adoption["git_commit"],
+        "execution_bundle_git_tree": adoption["git_tree"],
+        "provenance_policy": "bundle_ancestor_with_unchanged_execution_closure_v1",
+        "measured_a2_authorized": True,
+        "candidate_generation_allowed": False,
+        "candidate_mutation_allowed": False,
+        "candidate_evaluation_allowed": True,
+        "rep_dev_measurement_allowed": True,
+        "evaluation_location": "owner_local_only",
+        "evaluation_transition": "remote_retrieval_return_to_owner_local_only",
+        "evaluation_output_class": "aggregate_safe_only",
+        "provider_instance_id": "47700075",
+        "candidate_bindings": operational._candidate_authority_bindings(ROOT),
+        "owner_local_evaluation_bindings": {
+            "owner_manifest_sha256": "1" * 64,
+            "owner_manifest_file_sha256": owner_manifest_file_sha256,
+            "evaluator_sha256": "2" * 64,
+            "qrels_commitment_sha256": "3" * 64,
+            "membership_commitment_sha256": "4" * 64,
+            "token_map_commitment_sha256": "5" * 64,
+            "runtime_sha256": "6" * 64,
+            "model_lockset_sha256": "7" * 64,
+            "data_handoff_sha256": "8" * 64,
+            "transport_request_sha256": "9" * 64,
+        },
+        "a3_allowed": False,
+        "selection_allowed": False,
+        "final_allowed": False,
+        "active_reserve_candidate_ids": [],
+        "reserve_activation_evidence_sha256": None,
+        "freeze_bindings": operational._freeze_bindings(ROOT),
+        "scientific_authority": True,
+    }
+    return {**body, "authority_sha256": canonical_sha256(body)}
+
+
+def test_successor_authority_is_narrowly_bound_and_v2_cannot_open_evaluation(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    manifest = tmp_path / "input.json"
+    manifest.write_text("{}", encoding="ascii")
+    authority = _successor_authority(
+        adoption, owner_manifest_file_sha256=file_sha256(manifest)
+    )
+    monkeypatch.setattr(
+        operational, "_validate_measurement_authority_provenance", lambda *_args, **_kwargs: None
+    )
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_args, **_kwargs: None)
+
+    assert operational.validate_measurement_authority(
+        ROOT,
+        authority,
+        attempt_id=ATTEMPT,
+        execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        execution_bundle_git_commit=str(adoption["git_commit"]),
+        execution_bundle_git_tree=str(adoption["git_tree"]),
+    )["schema_version"] == "myis.armindex-a2-measured-execution-authority.v3"
+    assert operational.validate_owner_local_evaluation_authority(
+        ROOT, authority=authority, owner_manifest_path=manifest
+    )["evaluation_location"] == "owner_local_only"
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="requires successor authority v3",
+    ):
+        operational.validate_owner_local_evaluation_authority(
+            ROOT, authority=_authority(adoption), owner_manifest_path=manifest
+        )
+
+
 def _reserve_budget_admission(
     adoption: Mapping[str, object], authority: Mapping[str, object]
 ) -> dict[str, object]:

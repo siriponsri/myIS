@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-remote-measured-transport:v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "attempt_id", "provider_instance_id", "remote_root", "remote_repository_root", "remote_owner_root", "remote_input_manifest", "remote_bundle_path", "remote_bundle_receipt_path", "remote_python_executable", "bundle_sha256", "bundle_receipt_sha256", "bundle_receipt_file_sha256", "git_commit", "git_tree", "measurement_authority_commitment_uri", "measurement_authority_commitment_file_sha256", "owner_manifest_sha256", "remote_input_manifest_sha256", "launch_mode", "protected_payload_returned", "candidate_evaluation_started", "rep_dev_measurement_started", "request_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-remote-measured-transport.v3"},
+    "request_id": {"pattern": "^a2-[a-z0-9-]{7,63}-remote-measured-transport-v3$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "provider_instance_id": {"pattern": "^[0-9]{6,20}$"},
+    "remote_root": {"pattern": "^/opt/myis/a2-[a-z0-9][a-z0-9-]{7,63}$"},
+    "remote_repository_root": {"type": "string", "minLength": 1},
+    "remote_owner_root": {"type": "string", "minLength": 1},
+    "remote_input_manifest": {"type": "string", "minLength": 1},
+    "remote_bundle_path": {"type": "string", "minLength": 1},
+    "remote_bundle_receipt_path": {"type": "string", "minLength": 1},
+    "remote_python_executable": {"type": "string", "minLength": 1},
+    "bundle_sha256": {"$ref": "#/$defs/hash"}, "bundle_receipt_sha256": {"$ref": "#/$defs/hash"}, "bundle_receipt_file_sha256": {"$ref": "#/$defs/hash"},
+    "git_commit": {"$ref": "#/$defs/commit"}, "git_tree": {"$ref": "#/$defs/commit"},
+    "measurement_authority_commitment_uri": {"const": "control/armindex/a2/measurement-authority-commitment.v2.json"},
+    "measurement_authority_commitment_file_sha256": {"$ref": "#/$defs/hash"},
+    "owner_manifest_sha256": {"$ref": "#/$defs/hash"}, "remote_input_manifest_sha256": {"$ref": "#/$defs/hash"},
+    "launch_mode": {"const": "remote_only_hash_bound"}, "protected_payload_returned": {"const": false}, "candidate_evaluation_started": {"const": false}, "rep_dev_measurement_started": {"const": false}, "request_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"}}
+}

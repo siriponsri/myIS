@@ -27,6 +27,8 @@ _HASH = re.compile(r"^[a-f0-9]{64}$")
 _COMMIT = re.compile(r"^[a-f0-9]{40}$")
 _REMOTE_ROOT = re.compile(r"^/opt/myis/a2-[a-z0-9][a-z0-9-]{7,63}$")
 _HOST = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]*$")
+_COMMITMENT_V1 = "control/armindex/a2/measurement-authority-commitment.v1.json"
+_COMMITMENT_V2 = "control/armindex/a2/measurement-authority-commitment.v2.json"
 
 
 class A2RemoteTransportError(ValueError):
@@ -89,8 +91,13 @@ class RemoteTransportConfig:
     local_input_manifest: str | None = None
 
     def __post_init__(self) -> None:
-        if self.provider_instance_id != "47700074":
-            raise A2RemoteTransportError("remote transport is bound to Vast instance 47700074")
+        if not re.fullmatch(r"[0-9]{6,20}", self.provider_instance_id):
+            raise A2RemoteTransportError("remote provider instance identity is invalid")
+        if (
+            self.measurement_authority_commitment_uri == _COMMITMENT_V1
+            and self.provider_instance_id != "47700074"
+        ):
+            raise A2RemoteTransportError("v2 remote transport is bound to Vast instance 47700074")
         if _HOST.fullmatch(self.host) is None or not self.user or not (1 <= self.port <= 65535):
             raise A2RemoteTransportError("remote SSH endpoint is invalid")
         if not self.key_path.is_file() or self.key_path.is_symlink():
@@ -126,9 +133,10 @@ class RemoteTransportConfig:
         ):
             if not value.startswith(self.remote_root + "/"):
                 raise A2RemoteTransportError(f"remote {role} path must be under remote root")
-        if self.measurement_authority_commitment_uri != (
-            "control/armindex/a2/measurement-authority-commitment.v1.json"
-        ):
+        if self.measurement_authority_commitment_uri not in {
+            _COMMITMENT_V1,
+            _COMMITMENT_V2,
+        }:
             raise A2RemoteTransportError("remote authority commitment URI is not canonical")
 
     def ssh_argv(self) -> list[str]:
@@ -153,9 +161,10 @@ def build_transport_request(config: RemoteTransportConfig, *, attempt_id: str) -
 
     if not re.fullmatch(r"^a2-[a-z0-9-]{7,63}$", attempt_id):
         raise A2RemoteTransportError("transport attempt ID is invalid")
+    version = "v3" if config.measurement_authority_commitment_uri == _COMMITMENT_V2 else "v2"
     body = {
-        "schema_version": "myis.armindex-a2-remote-measured-transport.v2",
-        "request_id": f"{attempt_id}-remote-measured-transport-v2",
+        "schema_version": f"myis.armindex-a2-remote-measured-transport.{version}",
+        "request_id": f"{attempt_id}-remote-measured-transport-{version}",
         "attempt_id": attempt_id,
         "provider_instance_id": config.provider_instance_id,
         "remote_root": config.remote_root,
@@ -304,6 +313,7 @@ class RemoteExecutor:
     runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run
     owner_root: Path | None = None
     manifest_relative_path: str | None = None
+    measurement_authority: Mapping[str, Any] | None = None
 
     def __call__(self, command: Sequence[str], *, environment: Mapping[str, str], heartbeat_path: Path, process_path: Path, timeout_seconds: int) -> Mapping[str, Any]:
         del command
@@ -419,6 +429,10 @@ class RemoteExecutor:
         if self.owner_root is not None or self.manifest_relative_path is not None:
             if self.owner_root is None or self.manifest_relative_path is None:
                 raise A2RemoteTransportError("Owner-local evaluation binding is incomplete")
+            if self.measurement_authority is None:
+                raise A2RemoteTransportError(
+                    "Owner-local evaluation requires successor authority v3"
+                )
             candidate_id = environment.get("MYIS_A2_CANDIDATE_ID", "")
             try:
                 from .a2_owner_local_engine import evaluate_remote_retrieval_result
@@ -429,6 +443,7 @@ class RemoteExecutor:
                     manifest_relative_path=self.manifest_relative_path,
                     retrieval_result=value,
                     candidate_id=candidate_id,
+                    measurement_authority=self.measurement_authority,
                 )
             except (OSError, ValueError) as error:
                 raise A2RemoteTransportError("Owner-local evaluation failed closed") from error

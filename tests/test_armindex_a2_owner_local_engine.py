@@ -120,3 +120,26 @@ def test_engine_rejects_nonfrozen_program_bytes(tmp_path: Path, monkeypatch: pyt
 
     with pytest.raises(engine.A2OwnerLocalEngineError, match="program bytes drift"):
         engine.run_owner_local_engine(ROOT, owner_root=tmp_path, manifest_relative_path="input.json", program_path=program_path, candidate_id=program["program_id"], arm_id="ARM-01", program_sha256=altered["program_sha256"])
+
+
+def test_remote_result_rejects_v2_before_opening_owner_local_evaluator(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    manifest = tmp_path / "input.json"
+    manifest.write_text("{}", encoding="ascii")
+    monkeypatch.setattr(
+        engine,
+        "validate_owner_local_input",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("must not open")),
+    )
+    with pytest.raises(RuntimeError, match="requires successor authority v3"):
+        engine.evaluate_remote_retrieval_result(
+            ROOT,
+            owner_root=tmp_path,
+            manifest_relative_path="input.json",
+            retrieval_result={},
+            candidate_id="a2-arm-03-matched-b1-exploit",
+            measurement_authority={
+                "schema_version": "myis.armindex-a2-measured-execution-authority.v2"
+            },
+        )

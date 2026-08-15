@@ -61,6 +61,7 @@ from .a2_remote_transport import (
     RemoteExecutor,
     RemoteTransportConfig,
     build_remote_validation_command,
+    build_transport_request,
     validate_remote_transport_result,
     validate_transport_adoption_binding,
 )
@@ -82,6 +83,8 @@ _RESERVE_TTL_RESERVE_SECONDS = 6 * 60 * 60
 _AUTHORITY_PROVENANCE_POLICY = (
     "bundle_ancestor_with_unchanged_execution_closure_v1"
 )
+_AUTHORITY_V2 = "myis.armindex-a2-measured-execution-authority.v2"
+_AUTHORITY_V3 = "myis.armindex-a2-measured-execution-authority.v3"
 _RESULT_FIELDS = {
     "schema_version",
     "attempt_id",
@@ -160,6 +163,25 @@ def _freeze_bindings(root: Path) -> dict[str, str]:
         "manifest_sha256": str(manifest["manifest_sha256"]),
         "freeze_receipt_sha256": str(receipt["receipt_sha256"]),
         "lock_sha256": str(lock["lock_sha256"]),
+    }
+
+
+def _candidate_authority_bindings(root: Path) -> dict[str, str]:
+    """Commit the exact frozen candidate membership, order, and program bytes."""
+
+    candidates = frozen_candidates(root)
+    ordered = list(candidates)
+    if len(ordered) != 52:
+        raise A2OperationalExecutorError("candidate freeze is incomplete")
+    return {
+        "candidate_ids_sha256": canonical_sha256(sorted(ordered)),
+        "candidate_order_sha256": canonical_sha256(ordered),
+        "candidate_program_hashes_sha256": canonical_sha256(
+            [
+                {"candidate_id": candidate_id, "program_sha256": candidates[candidate_id]["program_sha256"]}
+                for candidate_id in ordered
+            ]
+        ),
     }
 
 
@@ -413,6 +435,80 @@ def _validate_measurement_goal(authority: Mapping[str, Any], goal_path: Path) ->
         raise A2OperationalExecutorError("measurement authority goal does not authorize execution")
 
 
+def validate_owner_local_evaluation_authority(
+    repository_root: Path,
+    *,
+    authority: Mapping[str, Any],
+    owner_manifest_path: Path,
+) -> dict[str, Any]:
+    """Allow the protected evaluator only after a v3 local-only authorization.
+
+    This runs before the Owner-local evaluator opens qrels, membership, or the
+    query token map.  It intentionally accepts no v2 compatibility path.
+    """
+
+    root = repository_root.resolve()
+    checked = dict(authority)
+    if checked.get("schema_version") != _AUTHORITY_V3:
+        raise A2OperationalExecutorError(
+            "Owner-local aggregate evaluation requires successor authority v3"
+        )
+    _validate(root, "a2-measured-execution-authority.v3.json", checked)
+    if (
+        checked["candidate_generation_allowed"] is not False
+        or checked["candidate_mutation_allowed"] is not False
+        or checked["candidate_evaluation_allowed"] is not True
+        or checked["rep_dev_measurement_allowed"] is not True
+        or checked["evaluation_location"] != "owner_local_only"
+        or checked["evaluation_transition"]
+        != "remote_retrieval_return_to_owner_local_only"
+        or checked["evaluation_output_class"] != "aggregate_safe_only"
+        or checked["a3_allowed"] is not False
+        or checked["selection_allowed"] is not False
+        or checked["final_allowed"] is not False
+        or checked["candidate_bindings"] != _candidate_authority_bindings(root)
+        or checked["freeze_bindings"] != _freeze_bindings(root)
+        or checked["authority_sha256"]
+        != canonical_sha256(
+            {key: value for key, value in checked.items() if key != "authority_sha256"}
+        )
+    ):
+        raise A2OperationalExecutorError("Owner-local aggregate evaluation authority drift")
+    path = owner_manifest_path.resolve(strict=True)
+    if path.is_symlink() or not path.is_file():
+        raise A2OperationalExecutorError("Owner-local evaluation manifest is unsafe")
+    if (
+        file_sha256(path)
+        != checked["owner_local_evaluation_bindings"]["owner_manifest_file_sha256"]
+    ):
+        raise A2OperationalExecutorError("Owner-local evaluation manifest binding drift")
+    return checked
+
+
+def validate_owner_local_evaluation_manifest_binding(
+    authority: Mapping[str, Any], manifest: Mapping[str, Any]
+) -> None:
+    """Check manifest commitments before protected evaluation inputs are opened."""
+
+    bindings = authority["owner_local_evaluation_bindings"]
+    artifacts = manifest.get("owner_artifacts")
+    if not isinstance(artifacts, Mapping) or manifest.get("manifest_sha256") != bindings[
+        "owner_manifest_sha256"
+    ]:
+        raise A2OperationalExecutorError("Owner-local evaluation manifest commitment drift")
+    expected = {
+        "evaluator_sha256": artifacts.get("evaluator", {}).get("binding_sha256"),
+        "qrels_commitment_sha256": artifacts.get("qrels", {}).get("binding_sha256"),
+        "membership_commitment_sha256": artifacts.get("membership", {}).get("binding_sha256"),
+        "token_map_commitment_sha256": artifacts.get("queries", {}).get("binding_sha256"),
+        "runtime_sha256": artifacts.get("runtime", {}).get("binding_sha256"),
+        "model_lockset_sha256": artifacts.get("model_lockset", {}).get("binding_sha256"),
+        "data_handoff_sha256": artifacts.get("data_handoff", {}).get("binding_sha256"),
+    }
+    if any(bindings[key] != value for key, value in expected.items()):
+        raise A2OperationalExecutorError("Owner-local evaluation artifact commitment drift")
+
+
 def validate_measurement_authority(
     repository_root: Path,
     authority: Mapping[str, Any],
@@ -426,14 +522,20 @@ def validate_measurement_authority(
 
     root = repository_root.resolve()
     checked = dict(authority)
-    if checked.get("schema_version") != "myis.armindex-a2-measured-execution-authority.v2":
+    schema_version = checked.get("schema_version")
+    if schema_version not in {_AUTHORITY_V2, _AUTHORITY_V3}:
         raise A2OperationalExecutorError(
             "measured execution authority provenance v1 is superseded"
         )
-    _validate(root, "a2-measured-execution-authority.v2.json", checked)
-    if (
-        checked["authority_id"] != "a2-measured-execution-authority-v2"
-        or checked["status"] != "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"
+    _validate(
+        root,
+        "a2-measured-execution-authority.v3.json"
+        if schema_version == _AUTHORITY_V3
+        else "a2-measured-execution-authority.v2.json",
+        checked,
+    )
+    common_invalid = (
+        checked["status"] != "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"
         or checked["attempt_id"] != attempt_id
         or checked["execution_adoption_receipt_sha256"]
         != execution_adoption_receipt_sha256
@@ -443,7 +545,6 @@ def validate_measurement_authority(
         or checked["measured_a2_authorized"] is not True
         or checked["candidate_generation_allowed"] is not False
         or checked["candidate_mutation_allowed"] is not False
-        or checked["rep_dev_measurement_allowed"] is not False
         or checked["a3_allowed"] is not False
         or checked["selection_allowed"] is not False
         or checked["final_allowed"] is not False
@@ -452,6 +553,26 @@ def validate_measurement_authority(
         != canonical_sha256(
             {key: value for key, value in checked.items() if key != "authority_sha256"}
         )
+    )
+    if schema_version == _AUTHORITY_V2:
+        version_invalid = (
+            checked["authority_id"] != "a2-measured-execution-authority-v2"
+            or checked["rep_dev_measurement_allowed"] is not False
+        )
+    else:
+        version_invalid = (
+            checked["authority_id"] != "a2-measured-execution-authority-v3"
+            or checked["candidate_evaluation_allowed"] is not True
+            or checked["rep_dev_measurement_allowed"] is not True
+            or checked["evaluation_location"] != "owner_local_only"
+            or checked["evaluation_transition"]
+            != "remote_retrieval_return_to_owner_local_only"
+            or checked["evaluation_output_class"] != "aggregate_safe_only"
+            or checked["candidate_bindings"] != _candidate_authority_bindings(root)
+        )
+    if (
+        common_invalid
+        or version_invalid
     ):
         raise A2OperationalExecutorError("measured execution authority is not adopted")
     _validate_measurement_authority_provenance(root, checked)
@@ -643,6 +764,19 @@ def execute_external_candidate_set(
             attempt_id=attempt_id,
             adoption_receipt=adoption,
             measurement_authority=authority,
+        )
+        if authority["schema_version"] != _AUTHORITY_V3:
+            raise A2OperationalExecutorError(
+                "v2 authority cannot reach Owner-local candidate evaluation"
+            )
+        if executor.owner_root is None or executor.manifest_relative_path is None:
+            raise A2OperationalExecutorError(
+                "successor authority requires a complete Owner-local evaluation binding"
+            )
+        executor.measurement_authority = authority
+    elif authority["schema_version"] == _AUTHORITY_V3 and owner_local_root is not None:
+        raise A2OperationalExecutorError(
+            "successor authority requires remote retrieval before Owner-local evaluation"
         )
     output = output_directory.resolve()
     if output.is_relative_to(root):
@@ -1566,6 +1700,16 @@ def validate_remote_execution_binding(
         execution_bundle_git_commit=adoption["git_commit"],
         execution_bundle_git_tree=adoption["git_tree"],
     )
+    successor = authority["schema_version"] == _AUTHORITY_V3
+    expected_commitment_uri = (
+        "control/armindex/a2/measurement-authority-commitment.v2.json"
+        if successor
+        else "control/armindex/a2/measurement-authority-commitment.v1.json"
+    )
+    if config.measurement_authority_commitment_uri != expected_commitment_uri:
+        raise A2OperationalExecutorError("measurement authority commitment version drift")
+    if successor and config.provider_instance_id != authority["provider_instance_id"]:
+        raise A2OperationalExecutorError("remote provider differs from successor authority")
     commitment_path = (root / config.measurement_authority_commitment_uri).resolve()
     if (
         not commitment_path.is_relative_to(root)
@@ -1574,7 +1718,13 @@ def validate_remote_execution_binding(
     ):
         raise A2OperationalExecutorError("measurement authority commitment is unsafe")
     commitment = _load_json(commitment_path, role="measurement authority commitment")
-    _validate(root, "a2-measurement-authority-commitment.v1.json", commitment)
+    _validate(
+        root,
+        "a2-measurement-authority-commitment.v2.json"
+        if successor
+        else "a2-measurement-authority-commitment.v1.json",
+        commitment,
+    )
     if (
         commitment["commitment_sha256"]
         != canonical_sha256(
@@ -1592,6 +1742,15 @@ def validate_remote_execution_binding(
         or commitment["measured_a2_authorized"] is not False
     ):
         raise A2OperationalExecutorError("measurement authority commitment drift")
+    if successor and (
+        commitment["authority_schema_uri"]
+        != "schemas/armindex/a2-measured-execution-authority.v3.json"
+        or commitment["transport_schema_version"]
+        != "myis.armindex-a2-remote-measured-transport.v3"
+        or commitment["authority_contract_version"]
+        != "owner_local_aggregate_evaluation_v1"
+    ):
+        raise A2OperationalExecutorError("successor authority commitment drift")
     _git(root, "ls-files", "--error-unmatch", "--", config.measurement_authority_commitment_uri)
     if _git(root, "hash-object", "--", config.measurement_authority_commitment_uri) != _git(
         root, "rev-parse", f"HEAD:{config.measurement_authority_commitment_uri}"
@@ -1627,6 +1786,16 @@ def validate_remote_execution_binding(
         raise A2OperationalExecutorError(
             "remote transport differs from adoption or measurement authority"
         )
+    if successor:
+        bindings = authority["owner_local_evaluation_bindings"]
+        request = build_transport_request(config, attempt_id=attempt_id)
+        if (
+            bindings["owner_manifest_file_sha256"] != config.owner_manifest_sha256
+            or bindings["transport_request_sha256"] != request["request_sha256"]
+        ):
+            raise A2OperationalExecutorError(
+                "successor Owner-local evaluation transport binding drift"
+            )
     return {
         **expected,
         "execution_adoption_receipt_sha256": adoption["receipt_sha256"],

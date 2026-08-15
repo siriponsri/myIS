@@ -248,17 +248,34 @@ def evaluate_remote_retrieval_result(
     manifest_relative_path: str,
     retrieval_result: Mapping[str, Any],
     candidate_id: str,
+    measurement_authority: Mapping[str, Any],
 ) -> dict[str, Any]:
     """Evaluate opaque remote rankings while qrels and membership stay local."""
 
     root = repository_root.resolve()
     owner = owner_root.resolve(strict=True)
+    # Validate authority and the manifest file hash before opening any protected
+    # artifact.  v2 deliberately cannot pass this transition.
+    manifest_path = _safe_file(
+        owner, manifest_relative_path, role="Owner-local input manifest"
+    )
+    from .a2_operational_executor import (
+        validate_owner_local_evaluation_authority,
+        validate_owner_local_evaluation_manifest_binding,
+    )
+
+    authority = validate_owner_local_evaluation_authority(
+        root,
+        authority=measurement_authority,
+        owner_manifest_path=manifest_path,
+    )
     manifest = validate_owner_local_input(
         root,
         owner_root=owner,
         manifest_relative_path=manifest_relative_path,
         validate_runtime_identity=False,
     )
+    validate_owner_local_evaluation_manifest_binding(authority, manifest)
     candidates = frozen_candidates(root)
     candidate = candidates.get(candidate_id)
     checked = dict(retrieval_result)

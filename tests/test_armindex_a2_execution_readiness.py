@@ -502,6 +502,9 @@ def test_bundle_closure_requires_both_readiness_envelopes_and_ledger_schemas() -
         "schemas/armindex/a2-execution-ledger-entry.v3.json",
         "schemas/armindex/a2-measured-execution-authority.v1.json",
         "schemas/armindex/a2-measured-execution-authority.v2.json",
+        "schemas/armindex/a2-measured-execution-authority.v3.json",
+        "schemas/armindex/a2-measurement-authority-commitment.v2.json",
+        "schemas/armindex/a2-remote-measured-transport.v3.json",
     } <= closure
 
 

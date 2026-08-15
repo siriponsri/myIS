@@ -1,0 +1,28 @@
+{
+  "authority_contract_version": "owner_local_aggregate_evaluation_v1",
+  "authority_creation_role": "AP",
+  "authority_file_present": false,
+  "authority_schema_uri": "schemas/armindex/a2-measured-execution-authority.v3.json",
+  "commitment_id": "a2-measurement-authority-pending-ap-v2",
+  "commitment_sha256": "25a15d4e4ad331c26553d19d6537fafff00aeea92e7f3cdb56dd0792a3a18a8d",
+  "measured_a2_authorized": false,
+  "required_bundle_state": "clean_pushed_bundle_ancestor_of_clean_pushed_authority_head",
+  "required_equalities": [
+    "attempt_id:owner_manifest=transport=adoption=execution=ledger=receipts",
+    "bundle_sha256:transport=adoption",
+    "bundle_receipt_sha256:transport=adoption",
+    "bundle_receipt_file_sha256:transport=remote_file",
+    "git_commit:transport=adoption=measurement_authority.execution_bundle_git_commit",
+    "git_tree:transport=adoption=measurement_authority.execution_bundle_git_tree",
+    "bundle_git_commit:is_ancestor_of_current_authority_head",
+    "execution_bundle_closure:bundle_commit=current_authority_head",
+    "execution_adoption_receipt_sha256:measurement_authority=adoption",
+    "owner_manifest_file_sha256:measurement_authority=transport",
+    "transport_request_sha256:measurement_authority=transport",
+    "measurement_authority_commitment_file_sha256:transport=canonical_tracked_file"
+  ],
+  "schema_version": "myis.armindex-a2-measurement-authority-commitment.v2",
+  "scientific_authority": false,
+  "status": "MEASURED_EXECUTION_AUTHORITY_ABSENT_PENDING_AP",
+  "transport_schema_version": "myis.armindex-a2-remote-measured-transport.v3"
+}
