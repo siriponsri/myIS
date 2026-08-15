@@ -185,6 +185,7 @@ def _validate_launch_bindings(
     bundle_receipt_path: Path,
     bundle_sha256: str,
     bundle_receipt_sha256: str,
+    bundle_receipt_file_sha256: str,
     git_commit: str,
     git_tree: str,
     authority_commitment_uri: str,
@@ -207,11 +208,15 @@ def _validate_launch_bindings(
         raise A2RemoteCandidateError("remote retrieval input provenance drift")
     if file_sha256(bundle_path.resolve(strict=True)) != bundle_sha256:
         raise A2RemoteCandidateError("remote bundle hash drift")
-    if file_sha256(bundle_receipt_path.resolve(strict=True)) != bundle_receipt_sha256:
+    if (
+        file_sha256(bundle_receipt_path.resolve(strict=True))
+        != bundle_receipt_file_sha256
+    ):
         raise A2RemoteCandidateError("remote bundle receipt hash drift")
     receipt = _read_json(bundle_receipt_path, role="remote bundle receipt")
     if (
-        receipt.get("bundle_sha256") != bundle_sha256
+        receipt.get("receipt_sha256") != bundle_receipt_sha256
+        or receipt.get("bundle_sha256") != bundle_sha256
         or receipt.get("git_commit") != git_commit
         or receipt.get("git_tree") != git_tree
     ):
@@ -524,6 +529,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--bundle-receipt-path", type=Path, required=True)
     parser.add_argument("--bundle-sha256", required=True)
     parser.add_argument("--bundle-receipt-sha256", required=True)
+    parser.add_argument("--bundle-receipt-file-sha256", required=True)
     parser.add_argument("--git-commit", required=True)
     parser.add_argument("--git-tree", required=True)
     parser.add_argument("--authority-commitment-uri", required=True)
@@ -549,6 +555,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             bundle_receipt_path=args.bundle_receipt_path,
             bundle_sha256=args.bundle_sha256,
             bundle_receipt_sha256=args.bundle_receipt_sha256,
+            bundle_receipt_file_sha256=args.bundle_receipt_file_sha256,
             git_commit=args.git_commit,
             git_tree=args.git_tree,
             authority_commitment_uri=args.authority_commitment_uri,

@@ -45,6 +45,7 @@ def _config(tmp_path: Path) -> RemoteTransportConfig:
         remote_python_executable="/opt/myis/a2-remote-test01/venv/bin/python",
         bundle_sha256="1" * 64,
         bundle_receipt_sha256="2" * 64,
+        bundle_receipt_file_sha256="8" * 64,
         git_commit="3" * 40,
         git_tree="4" * 40,
         measurement_authority_commitment_uri=(
@@ -156,6 +157,7 @@ def test_remote_executor_maps_paths_and_binds_candidate_environment(tmp_path: Pa
     assert config.remote_input_manifest in remote_command
     assert "myis_research.armindex.a2_remote_candidate" in remote_command
     assert config.remote_bundle_receipt_path in remote_command
+    assert config.bundle_receipt_file_sha256 in remote_command
     assert config.remote_input_manifest_sha256 in remote_command
     assert config.owner_manifest_sha256 in remote_command
     assert (tmp_path / "heartbeat").is_file()

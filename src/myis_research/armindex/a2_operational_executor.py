@@ -1457,6 +1457,7 @@ def _load_remote_transport_config(
             remote_python_executable=str(raw["remote_python_executable"]),
             bundle_sha256=str(raw["bundle_sha256"]),
             bundle_receipt_sha256=str(raw["bundle_receipt_sha256"]),
+            bundle_receipt_file_sha256=str(raw["bundle_receipt_file_sha256"]),
             git_commit=str(raw["git_commit"]),
             git_tree=str(raw["git_tree"]),
             measurement_authority_commitment_uri=str(

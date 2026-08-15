@@ -76,6 +76,7 @@ class RemoteTransportConfig:
     remote_python_executable: str
     bundle_sha256: str
     bundle_receipt_sha256: str
+    bundle_receipt_file_sha256: str
     git_commit: str
     git_tree: str
     measurement_authority_commitment_uri: str
@@ -101,6 +102,7 @@ class RemoteTransportConfig:
         for value, role in (
             (self.bundle_sha256, "bundle"),
             (self.bundle_receipt_sha256, "bundle receipt"),
+            (self.bundle_receipt_file_sha256, "bundle receipt file"),
             (
                 self.measurement_authority_commitment_file_sha256,
                 "measurement authority commitment file",
@@ -165,6 +167,7 @@ def build_transport_request(config: RemoteTransportConfig, *, attempt_id: str) -
         "remote_python_executable": config.remote_python_executable,
         "bundle_sha256": config.bundle_sha256,
         "bundle_receipt_sha256": config.bundle_receipt_sha256,
+        "bundle_receipt_file_sha256": config.bundle_receipt_file_sha256,
         "git_commit": config.git_commit,
         "git_tree": config.git_tree,
         "measurement_authority_commitment_uri": (
@@ -232,8 +235,9 @@ def build_remote_validation_command(config: RemoteTransportConfig, *, attempt_id
         "assert bundle.is_file()\n"
         "assert hashlib.sha256(bundle.read_bytes()).hexdigest()==request['bundle_sha256']\n"
         "assert bundle_receipt.is_file()\n"
-        "assert hashlib.sha256(bundle_receipt.read_bytes()).hexdigest()==request['bundle_receipt_sha256']\n"
+        "assert hashlib.sha256(bundle_receipt.read_bytes()).hexdigest()==request['bundle_receipt_file_sha256']\n"
         "bundle_receipt_value=json.loads(bundle_receipt.read_text())\n"
+        "assert bundle_receipt_value['receipt_sha256']==request['bundle_receipt_sha256']\n"
         "assert bundle_receipt_value['bundle_sha256']==request['bundle_sha256']\n"
         "assert bundle_receipt_value['git_commit']==request['git_commit']\n"
         "assert bundle_receipt_value['git_tree']==request['git_tree']\n"
@@ -336,6 +340,8 @@ class RemoteExecutor:
                 self.config.bundle_sha256,
                 "--bundle-receipt-sha256",
                 self.config.bundle_receipt_sha256,
+                "--bundle-receipt-file-sha256",
+                self.config.bundle_receipt_file_sha256,
                 "--git-commit",
                 self.config.git_commit,
                 "--git-tree",
