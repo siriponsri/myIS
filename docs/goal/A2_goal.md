@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: NEEDS_IM_PROVENANCE_AND_REMOTE_RECOVERY_REPAIR
+status: NEEDS_AP_READINESS_REVIEW_AFTER_IM_007
 lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
-claim_boundary: "Fresh admission, isolated staging, Owner-local manifest, and non-measured remote transport are implemented and validated. This guide still does not authorize measured A2 until IM repairs attempt/bundle/authority provenance and durable remote recovery, then AP performs a short readiness review."
+claim_boundary: "IM 007 implements attempt/bundle/authority equality and durable per-candidate remote recovery with synthetic/non-measured evidence. This guide still does not authorize measured A2 until AP performs one short readiness review and creates a separate tracked authority."
 last_material_update: 2026-08-15
-next_authorized_action: IM_REPAIR_ATTEMPT_BUNDLE_AUTHORITY_PROVENANCE_AND_REMOTE_RECOVERY_DO_NOT_MEASURE
+next_authorized_action: AP_REVIEW_IM_007_READINESS_DO_NOT_MEASURE
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -44,13 +44,13 @@ Audit 006 passed fresh v2 admission and isolated staging on Vast instance
 `47700074`, ending at `EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED`. IM 006 then
 added the production remote transport and real Owner-local measured input
 manifest, and separated the 40-hour initial floor from the frozen-runtime
-reserve floor. Audit 007 found that measured LO remains closed because attempt
-identity, final pushed-HEAD bundle, canonical authority, and durable remote
-recovery are not yet bound end to end. The USD 35 hard stop and frozen
-scientific semantics remain unchanged.
+reserve floor. Audit 007 identified attempt, pushed-HEAD bundle, canonical
+authority, and durable recovery blockers. IM 007 repairs those engineering
+surfaces and returns them to AP. The USD 35 hard stop and frozen scientific
+semantics remain unchanged.
 
 ```text
-DO_NOT_LAUNCH: transport and Owner-local manifest exist, but attempt/bundle/authority provenance and durable remote recovery remain incomplete.
+DO_NOT_LAUNCH: IM 007 engineering acceptance is complete, but AP has not created measured authority or opened LO.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -133,8 +133,8 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, IM must complete audit 007 without changing frozen scientific semantics,
-  then AP must perform a short launch-readiness review and create the separate tracked
+- Before LO, AP must review IM 007 without changing frozen scientific semantics
+  and create the separate tracked
   measurement authority/LO goal. Preserve append-only evidence and do not alter frozen
   candidate bytes or the v1/v2 campaign/envelope/budget/execution contract.
 - During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,

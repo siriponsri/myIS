@@ -9,6 +9,7 @@ import hashlib
 from collections.abc import Mapping
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -334,6 +335,63 @@ def test_measurement_authority_rejects_non_authorizing_goal(
             _authority(adoption),
             attempt_id=ATTEMPT,
             execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        )
+
+
+def test_remote_execution_binding_rejects_transport_adoption_drift(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    adoption = _adoption()
+    authority = _authority(adoption)
+    commitment_uri = "control/armindex/a2/measurement-authority-commitment.v1.json"
+    config = SimpleNamespace(
+        measurement_authority_commitment_uri=commitment_uri,
+        measurement_authority_commitment_file_sha256=file_sha256(ROOT / commitment_uri),
+        bundle_sha256=adoption["bundle_sha256"],
+        bundle_receipt_sha256=adoption["bundle_receipt_sha256"],
+        git_commit=adoption["git_commit"],
+        git_tree=adoption["git_tree"],
+        remote_root=adoption["remote_root"],
+    )
+    monkeypatch.setattr(
+        operational,
+        "validate_execution_adoption_receipt",
+        lambda *_args, **_kwargs: dict(adoption),
+    )
+    monkeypatch.setattr(
+        operational,
+        "validate_measurement_authority",
+        lambda *_args, **_kwargs: dict(authority),
+    )
+
+    def tracked_git(_root: Path, *args: str) -> str:
+        if args[0] == "ls-files":
+            return commitment_uri
+        if args[0] in {"hash-object", "rev-parse"}:
+            return "tracked-blob"
+        raise AssertionError(args)
+
+    monkeypatch.setattr(operational, "_git", tracked_git)
+    passed = operational.validate_remote_execution_binding(
+        ROOT,
+        config=config,  # type: ignore[arg-type]
+        attempt_id=ATTEMPT,
+        adoption_receipt=adoption,
+        measurement_authority=authority,
+    )
+    assert passed["status"] == "PASS_A2_REMOTE_EXECUTION_BINDING"
+
+    config.bundle_sha256 = "0" * 64
+    with pytest.raises(
+        operational.A2OperationalExecutorError,
+        match="remote transport differs from adoption",
+    ):
+        operational.validate_remote_execution_binding(
+            ROOT,
+            config=config,  # type: ignore[arg-type]
+            attempt_id=ATTEMPT,
+            adoption_receipt=adoption,
+            measurement_authority=authority,
         )
 
 

@@ -61,6 +61,7 @@ from .a2_remote_transport import (
     RemoteTransportConfig,
     build_remote_validation_command,
     validate_remote_transport_result,
+    validate_transport_adoption_binding,
 )
 
 _HASH = re.compile(r"^[a-f0-9]{64}$")
@@ -584,6 +585,14 @@ def execute_external_candidate_set(
     )
     if adoption["attempt_id"] != attempt_id:
         raise A2OperationalExecutorError("executor attempt differs from adoption")
+    if isinstance(executor, RemoteExecutor):
+        validate_remote_execution_binding(
+            root,
+            config=executor.config,
+            attempt_id=attempt_id,
+            adoption_receipt=adoption,
+            measurement_authority=authority,
+        )
     output = output_directory.resolve()
     if output.is_relative_to(root):
         raise A2OperationalExecutorError("external executor working output must remain Owner-local")
@@ -1444,12 +1453,18 @@ def _load_remote_transport_config(
             remote_owner_root=str(raw["remote_owner_root"]),
             remote_input_manifest=str(raw["remote_input_manifest"]),
             remote_bundle_path=str(raw["remote_bundle_path"]),
+            remote_bundle_receipt_path=str(raw["remote_bundle_receipt_path"]),
             remote_python_executable=str(raw["remote_python_executable"]),
             bundle_sha256=str(raw["bundle_sha256"]),
             bundle_receipt_sha256=str(raw["bundle_receipt_sha256"]),
             git_commit=str(raw["git_commit"]),
             git_tree=str(raw["git_tree"]),
-            measurement_authority_sha256=str(raw["measurement_authority_sha256"]),
+            measurement_authority_commitment_uri=str(
+                raw["measurement_authority_commitment_uri"]
+            ),
+            measurement_authority_commitment_file_sha256=str(
+                raw["measurement_authority_commitment_file_sha256"]
+            ),
             owner_manifest_sha256=str(raw["owner_manifest_sha256"]),
             remote_input_manifest_sha256=str(raw["remote_input_manifest_sha256"]),
             local_repository_root=str(repository_root.resolve()),
@@ -1475,6 +1490,96 @@ def _load_remote_transport_config(
     if owner_manifest is not None and file_sha256(owner_manifest.resolve(strict=True)) != config.owner_manifest_sha256:
         raise A2OperationalExecutorError("Owner-local manifest hash differs from remote transport binding")
     return config, dict(raw)
+
+
+def validate_remote_execution_binding(
+    repository_root: Path,
+    *,
+    config: RemoteTransportConfig,
+    attempt_id: str,
+    adoption_receipt: Mapping[str, Any],
+    measurement_authority: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Bind transport, adoption, pushed bundle, and AP authority before launch."""
+
+    root = repository_root.resolve()
+    adoption = validate_execution_adoption_receipt(root, adoption_receipt)
+    authority = validate_measurement_authority(
+        root,
+        measurement_authority,
+        attempt_id=attempt_id,
+        execution_adoption_receipt_sha256=adoption["receipt_sha256"],
+    )
+    commitment_path = (root / config.measurement_authority_commitment_uri).resolve()
+    if (
+        not commitment_path.is_relative_to(root)
+        or commitment_path.is_symlink()
+        or not commitment_path.is_file()
+    ):
+        raise A2OperationalExecutorError("measurement authority commitment is unsafe")
+    commitment = _load_json(commitment_path, role="measurement authority commitment")
+    _validate(root, "a2-measurement-authority-commitment.v1.json", commitment)
+    if (
+        commitment["commitment_sha256"]
+        != canonical_sha256(
+            {
+                key: value
+                for key, value in commitment.items()
+                if key != "commitment_sha256"
+            }
+        )
+        or file_sha256(commitment_path)
+        != config.measurement_authority_commitment_file_sha256
+        or commitment["status"]
+        != "MEASURED_EXECUTION_AUTHORITY_ABSENT_PENDING_AP"
+        or commitment["scientific_authority"] is not False
+        or commitment["measured_a2_authorized"] is not False
+    ):
+        raise A2OperationalExecutorError("measurement authority commitment drift")
+    _git(root, "ls-files", "--error-unmatch", "--", config.measurement_authority_commitment_uri)
+    if _git(root, "hash-object", "--", config.measurement_authority_commitment_uri) != _git(
+        root, "rev-parse", f"HEAD:{config.measurement_authority_commitment_uri}"
+    ):
+        raise A2OperationalExecutorError("measurement authority commitment is not bound to HEAD")
+    expected = {
+        "attempt_id": attempt_id,
+        "bundle_sha256": adoption["bundle_sha256"],
+        "bundle_receipt_sha256": adoption["bundle_receipt_sha256"],
+        "git_commit": adoption["git_commit"],
+        "git_tree": adoption["git_tree"],
+        "remote_root": adoption["remote_root"],
+    }
+    actual = {
+        "attempt_id": attempt_id,
+        "bundle_sha256": config.bundle_sha256,
+        "bundle_receipt_sha256": config.bundle_receipt_sha256,
+        "git_commit": config.git_commit,
+        "git_tree": config.git_tree,
+        "remote_root": config.remote_root,
+    }
+    try:
+        validate_transport_adoption_binding(
+            config, attempt_id=attempt_id, adoption_receipt=adoption
+        )
+    except A2RemoteTransportError as error:
+        raise A2OperationalExecutorError(
+            "remote transport differs from adoption or measurement authority"
+        ) from error
+    if actual != expected or authority["execution_adoption_receipt_sha256"] != adoption[
+        "receipt_sha256"
+    ]:
+        raise A2OperationalExecutorError(
+            "remote transport differs from adoption or measurement authority"
+        )
+    return {
+        **expected,
+        "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
+        "measurement_authority_sha256": authority["authority_sha256"],
+        "measurement_authority_commitment_file_sha256": (
+            config.measurement_authority_commitment_file_sha256
+        ),
+        "status": "PASS_A2_REMOTE_EXECUTION_BINDING",
+    }
 
 
 def build_reserve_budget_admission(

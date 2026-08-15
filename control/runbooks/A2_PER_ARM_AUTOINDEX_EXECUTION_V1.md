@@ -41,6 +41,16 @@ and non-advancing.
    Owner-local A1 v16 incumbents, strict primary improvement, and the actual
    four frozen reserve axes. Persist one decision and one continuation receipt.
    Each reserve arm is then either four active results or four dormant receipts.
+9. The remote transport, Owner-local manifest, execution adoption, lifecycle
+   ledger, and derived receipts must use one attempt ID. Before every worker,
+   fail closed unless bundle SHA, bundle receipt SHA, Git commit/tree, remote
+   root, false tracked authority commitment, and remote input hashes agree.
+10. Each remote candidate uses an OS-released supervisor lock plus PID/start-time
+    identity, attempt-bound heartbeat, durable cancellation, result-before-relaunch
+    recovery, and verified reaping. A durable result is never launched again.
+
+Audit 007 IM acceptance is engineering readiness only. Measured execution stays
+closed until AP separately writes a tracked measured authority and current LO goal.
 9. Evaluation measures the frozen REP-DEV view and emits aggregate-only receipts;
    query IDs, qrels, membership, rankings, and per-query outcomes remain Owner-local.
    Winner selection rejects exact ties and cannot advance ARM-01 or ARM-02.
@@ -105,7 +115,7 @@ command contract invokes the repository-owned production engine; fixture or
 caller-selected engine commands fail closed.
 
 ```powershell
-uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repository-root . --attempt-id <attempt> execute --execution-adoption-receipt <owner-local-adoption.json> --measurement-authority <tracked-authority.json> --command-argv-json control/armindex/a2/measured-command-argv.v1.json --owner-root <owner-local-root> --owner-input-manifest <owner-local-root/input.json> --output-directory <owner-local-output> --checkpoint-ledger <owner-local-ledger.jsonl>
+uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repository-root . --attempt-id <attempt> execute --execution-adoption-receipt <owner-local-adoption.json> --measurement-authority <tracked-authority.json> --remote-transport <owner-local-remote-transport.json> --command-argv-json control/armindex/a2/measured-command-argv.v1.json --owner-root <owner-local-root> --owner-input-manifest <owner-local-root/input.json> --output-directory <owner-local-output> --checkpoint-ledger <owner-local-ledger.jsonl>
 ```
 
 The first call ends at the matched barrier. After AP/LO creates the fresh
@@ -123,10 +133,13 @@ uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repo
 
 ## Hard Stops
 
-Stop before staging or execution on a hash mismatch, stale quote, price above
-USD 35, TTL below 40 hours remaining, missing management authority, unexpected GPU
-identity, model/data/runtime hash drift, candidate mutation, protected output,
-or any request for A3, HARNESS-DEV, Selection, or Final access.
+Stop before initial staging or execution on a hash mismatch, stale quote, price
+above USD 35, TTL below 40 hours remaining, missing management authority,
+unexpected GPU identity, model/data/runtime hash drift, candidate mutation,
+protected output, or any request for A3, HARNESS-DEV, Selection, or Final
+access. At the matched reserve checkpoint, use the fresh deterministic `53848s`
+floor instead of the initial 40-hour floor; all other hash, quote, hard-stop,
+identity, and protected-boundary checks remain mandatory.
 
 ## Ledger
 

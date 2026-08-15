@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-measurement-authority-commitment:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "commitment_id", "status", "scientific_authority", "measured_a2_authorized", "authority_file_present", "authority_creation_role", "authority_schema_uri", "transport_schema_version", "required_equalities", "required_bundle_state", "commitment_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-measurement-authority-commitment.v1"},
+    "commitment_id": {"const": "a2-measurement-authority-pending-ap-v1"},
+    "status": {"const": "MEASURED_EXECUTION_AUTHORITY_ABSENT_PENDING_AP"},
+    "scientific_authority": {"const": false},
+    "measured_a2_authorized": {"const": false},
+    "authority_file_present": {"const": false},
+    "authority_creation_role": {"const": "AP"},
+    "authority_schema_uri": {"const": "schemas/armindex/a2-measured-execution-authority.v1.json"},
+    "transport_schema_version": {"const": "myis.armindex-a2-remote-measured-transport.v2"},
+    "required_equalities": {
+      "const": [
+        "attempt_id:owner_manifest=transport=adoption=execution=ledger=receipts",
+        "bundle_sha256:transport=adoption",
+        "bundle_receipt_sha256:transport=adoption",
+        "git_commit:transport=adoption",
+        "git_tree:transport=adoption",
+        "execution_adoption_receipt_sha256:measurement_authority=adoption",
+        "measurement_authority_commitment_file_sha256:transport=canonical_tracked_file"
+      ]
+    },
+    "required_bundle_state": {"const": "clean_pushed_origin_main"},
+    "commitment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

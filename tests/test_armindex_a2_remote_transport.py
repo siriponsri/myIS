@@ -11,8 +11,10 @@ from myis_research.armindex.a2_remote_transport import (
     A2RemoteTransportError,
     RemoteExecutor,
     RemoteTransportConfig,
+    build_remote_validation_command,
     build_transport_request,
     validate_remote_transport_result,
+    validate_transport_adoption_binding,
     validate_transport_request,
 )
 from myis_research.kernel.canonical import canonical_sha256
@@ -37,12 +39,18 @@ def _config(tmp_path: Path) -> RemoteTransportConfig:
         remote_owner_root="/opt/myis/a2-remote-test01/owner-input",
         remote_input_manifest="/opt/myis/a2-remote-test01/owner-input/input.json",
         remote_bundle_path="/opt/myis/a2-remote-test01/incoming/bundle.tar.gz",
+        remote_bundle_receipt_path=(
+            "/opt/myis/a2-remote-test01/incoming/bundle.receipt.json"
+        ),
         remote_python_executable="/opt/myis/a2-remote-test01/venv/bin/python",
         bundle_sha256="1" * 64,
         bundle_receipt_sha256="2" * 64,
         git_commit="3" * 40,
         git_tree="4" * 40,
-        measurement_authority_sha256="5" * 64,
+        measurement_authority_commitment_uri=(
+            "control/armindex/a2/measurement-authority-commitment.v1.json"
+        ),
+        measurement_authority_commitment_file_sha256="5" * 64,
         owner_manifest_sha256="6" * 64,
         remote_input_manifest_sha256="7" * 64,
     )
@@ -73,6 +81,39 @@ def test_remote_transport_request_is_exactly_hash_bound(tmp_path: Path) -> None:
     drifted["owner_manifest_sha256"] = "0" * 64
     with pytest.raises(A2RemoteTransportError, match="binding drift"):
         validate_transport_request(drifted, config, attempt_id=ATTEMPT)
+
+
+def test_remote_transport_must_equal_execution_adoption(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    adoption = {
+        "attempt_id": ATTEMPT,
+        "bundle_sha256": config.bundle_sha256,
+        "bundle_receipt_sha256": config.bundle_receipt_sha256,
+        "git_commit": config.git_commit,
+        "git_tree": config.git_tree,
+        "remote_root": config.remote_root,
+    }
+    validate_transport_adoption_binding(
+        config, attempt_id=ATTEMPT, adoption_receipt=adoption
+    )
+    adoption["bundle_sha256"] = "0" * 64
+    with pytest.raises(A2RemoteTransportError, match="execution adoption"):
+        validate_transport_adoption_binding(
+            config, attempt_id=ATTEMPT, adoption_receipt=adoption
+        )
+
+
+def test_remote_validation_binds_attempt_owner_manifest_and_retriever(
+    tmp_path: Path,
+) -> None:
+    command = build_remote_validation_command(_config(tmp_path), attempt_id=ATTEMPT)
+
+    assert "remote_input.get('attempt_id')==request['attempt_id']" in command
+    assert (
+        "remote_input.get('owner_manifest_sha256')==request['owner_manifest_sha256']"
+        in command
+    )
+    assert "a2_remote_retriever.py" in command
 
 
 def test_remote_executor_maps_paths_and_binds_candidate_environment(tmp_path: Path) -> None:
@@ -113,6 +154,14 @@ def test_remote_executor_maps_paths_and_binds_candidate_environment(tmp_path: Pa
     assert config.remote_python_executable in remote_command
     assert config.remote_repository_root in remote_command
     assert config.remote_input_manifest in remote_command
+    assert "myis_research.armindex.a2_remote_candidate" in remote_command
+    assert config.remote_bundle_receipt_path in remote_command
+    assert config.remote_input_manifest_sha256 in remote_command
+    assert config.owner_manifest_sha256 in remote_command
+    assert (tmp_path / "heartbeat").is_file()
+    assert (tmp_path / "process").is_file()
+    process = json.loads((tmp_path / "process").read_text(encoding="ascii"))
+    assert process["status"] == "REMOTE_REAPED_WITH_DURABLE_RESULT"
 
 
 @pytest.mark.parametrize(

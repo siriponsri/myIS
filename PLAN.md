@@ -15,12 +15,13 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_IM_PROVENANCE_AND_REMOTE_RECOVERY_REPAIR`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`NEEDS_AP_READINESS_REVIEW_AFTER_IM_007`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started. Audit 006 passed
   fresh admission and isolated staging. IM 006 added the remote transport and
-  real Owner-local manifest; audit 007 found remaining provenance and recovery
-  blockers.)
+  real Owner-local manifest; IM 007 repairs the audit 007 attempt/bundle/authority
+  provenance and durable per-candidate recovery blockers. Measured execution
+  remains closed pending one short AP review.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
   destroy instance `47411176` and provision a fresh instance. Audit 004 implementation
@@ -28,8 +29,9 @@ measurement, and production-constrained HarnessOpt.
   package. Audit 005 added the missing v2 envelope to the immutable bundle,
   appended the post-IM readiness successor, and made the current A2 disposition
   `FRESH_INSTANCE_REQUIRED` with reuse false. Fresh AP admission/staging now passes
-  on instance `47700074`; measured execution remains locked pending audit 007 IM
-  and one short AP readiness review.)
+  on instance `47700074`; IM 007 rebinds the final pushed-HEAD attempt and adds
+  durable process identity, heartbeat, cancellation, reaping, and recovery.
+  Measured execution remains locked pending one short AP readiness review.)
 - Current evidence class: engineering validation and immutable pre-measurement
   candidate freeze; scientific authority `false`
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
@@ -348,12 +350,13 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-IM reads `docs/audit/A2_PER_ARM_AUTOINDEX_audit_007.md` and repairs the remaining
-attempt/bundle/authority provenance and durable remote recovery surfaces. Reuse
-the staged instance/assets, refresh the Owner-approved 60-hour TTL metadata and
-USD 35 hard stop, run only synthetic/non-measured transport and interruption
-validation, commit/push, and return to AP for one short pass/fail review.
-Measured A2 remains closed.
+AP reads `docs/implementation/A2_PER_ARM_AUTOINDEX_im_007_001.md` and performs
+one short pass/fail review against audit 007. Verify the unified attempt,
+final pushed-HEAD bundle/adoption/transport equalities, false canonical
+measurement-authority commitment, durable remote recovery evidence, refreshed
+60-hour provider admission, USD 35 hard stop, and process-zero transport check.
+Measured A2 remains closed unless AP creates a separate tracked authority and
+current LO goal.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
