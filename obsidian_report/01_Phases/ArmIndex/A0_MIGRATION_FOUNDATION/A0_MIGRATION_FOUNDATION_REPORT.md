@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "1d3c6b5a3f08d2564eafc7a28bbabd428a567b1aee9cea21afc0641dcf0b4b7b"
-read_model_sha256: "0498288ba6a5dfdff2b62e1bff83b32c8bde007eebaeb82520cbf2afe10cb8e6"
-source_commit: "81bf438d399ae447f6fe4d33519049a3d74254ed"
+read_model_revision: "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e"
+read_model_sha256: "ad8494db943dd929e98adaa5b26ef1ea1f83270ee7714529d006ab30f79b70f0"
+source_commit: "dd1999613f4ba62b118bce6b68ce3e11033c1f52"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "1d3c6b5a3f08d2564eafc7a28bbabd428a567b1aee9cea21afc0641dcf0b4b7b"
-last_material_update: "2026-08-15T09:27:09Z"
+generated_from_revision: "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e"
+last_material_update: "2026-08-15T10:37:05Z"
 next_authorized_action: "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-15T09:27:09Z"
-updated_at: "2026-08-15T09:27:09Z"
+created_at: "2026-08-15T10:37:05Z"
+updated_at: "2026-08-15T10:37:05Z"
 note_id: "A0_MIGRATION_FOUNDATION-MASTER"
 note_type: "phase_report"
 phase_id: "A0_MIGRATION_FOUNDATION"
@@ -46,9 +46,9 @@ Migrate repository, freeze contracts, preserve evidence, and run compute-feasibi
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de`
-- `git_commit`: 81bf438d399ae447f6fe4d33519049a3d74254ed
+- `git_commit`: dd1999613f4ba62b118bce6b68ce3e11033c1f52
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
 - `armindex_schema_root`: `schemas/armindex`; SHA-256 `6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`

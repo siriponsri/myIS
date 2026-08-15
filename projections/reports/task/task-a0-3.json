@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T09:27:09Z",
-  "generated_from_revision": "1d3c6b5a3f08d2564eafc7a28bbabd428a567b1aee9cea21afc0641dcf0b4b7b",
-  "git_commit": "81bf438d399ae447f6fe4d33519049a3d74254ed",
+  "generated_at": "2026-08-15T10:37:05Z",
+  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
+  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "81bf438d399ae447f6fe4d33519049a3d74254ed",
+    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -192,19 +192,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8",
+      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T09:27:09Z",
+  "last_material_update": "2026-08-15T10:37:05Z",
   "metric_references": [],
   "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
   "objective": "Brain, read-model, and Obsidian migration",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-3",
-  "report_sha256": "8c95c79ac842ec536375b2ce894f5eea8358f51c9f1d9bd30a38fa581016c6e6",
+  "report_sha256": "480d9e8d2de447b8fdb524781e77057a74da8cd3cb7e5637d32b7bf972e05063",
   "report_type": "task",
   "result": {
     "decision": "completed",

@@ -310,9 +310,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T09:27:09Z",
-  "generated_from_revision": "1d3c6b5a3f08d2564eafc7a28bbabd428a567b1aee9cea21afc0641dcf0b4b7b",
-  "git_commit": "81bf438d399ae447f6fe4d33519049a3d74254ed",
+  "generated_at": "2026-08-15T10:37:05Z",
+  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
+  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -385,7 +385,7 @@
       "owner_ttl_hours": 40,
       "status": "READY_FOR_MEASURED_EXECUTION"
     },
-    "git_commit": "81bf438d399ae447f6fe4d33519049a3d74254ed",
+    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -420,13 +420,13 @@
       "uri": "../03_Paper/01_ArmIndex"
     },
     "source_of_truth": {
-      "sha256": "c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8",
+      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The current authority permits only the frozen retrieval execution and does not itself constitute a measured result, candidate evaluation, REP-DEV measurement, A3 decision, Selection/Final evidence, or a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T09:27:09Z",
+  "last_material_update": "2026-08-15T10:37:05Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -554,7 +554,7 @@
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "8654a10062916fed03a2babe0573907f2ab114e7415394734e736e0fecc805ee",
+  "report_sha256": "406b0166f8a9a3eaf2b4343d43169844e420fe62bec113871b175c474365b515",
   "report_type": "task",
   "result": {
     "decision": "READY_FOR_MEASURED_EXECUTION",

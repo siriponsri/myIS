@@ -3165,9 +3165,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T09:27:09Z",
-  "generated_from_revision": "1d3c6b5a3f08d2564eafc7a28bbabd428a567b1aee9cea21afc0641dcf0b4b7b",
-  "git_commit": "81bf438d399ae447f6fe4d33519049a3d74254ed",
+  "generated_at": "2026-08-15T10:37:05Z",
+  "generated_from_revision": "96cdf29440c930610e41492fd5d67a1501421858ce445d6dbe317f72f6375e5e",
+  "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3321,7 +3321,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "81bf438d399ae447f6fe4d33519049a3d74254ed",
+    "git_commit": "dd1999613f4ba62b118bce6b68ce3e11033c1f52",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3332,13 +3332,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8",
+      "sha256": "ca10429c1378f30c024ead8910b537758031777b8bb447c3c822475b43ab69d9",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-15T09:27:09Z",
+  "last_material_update": "2026-08-15T10:37:05Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3675,7 +3675,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "e7043424bfa4c3b98ba6b6913a9aef2540bf6e2efcb6af55d78d2564a3950d89",
+  "report_sha256": "27e6e7352b8af8bd616104e2b3abfe98da1cb337659018c01b035d0d17180eca",
   "report_type": "task",
   "result": {
     "decision": "PASS_25_OF_25",

@@ -15,7 +15,7 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_MEASURED_EXECUTION`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_PREAUTHORITY_ADMISSION`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started. Audit 006 passed
   fresh admission and isolated staging. IM 006 added the remote transport and
@@ -25,7 +25,12 @@ measurement, and production-constrained HarnessOpt.
   and LO goal. LO 001 then stopped before launch on the cyclic bundle/authority
   Git equality. IM 008 adds the versioned non-cyclic provenance contract. AP
   audit 009 passed the successor bundle/adoption/transport chain and issued
-  authority v2 plus the current LO goal; frozen A2 retrieval is ready for LO.
+  authority v2 plus the current LO goal; LO then stopped before candidate launch
+  because v2 forbade the Owner-local evaluation required by the frozen reserve
+  and winner lifecycle. IM 010 added the separate v3 local aggregate-evaluation
+  closure; AP audit 011 created the clean successor bundle and Goal 003 for
+  fresh provider admission/staging. Measured execution remains closed until AP
+  can bind those fresh facts into authority v3 and a measured successor goal.
   The Owner approved an 84-hour total successor TTL and raised the current A2
   forward hard stop to USD 50; the USD 150 campaign ceiling, 40-hour initial
   floor, and deterministic 53,848-second reserve floor remain unchanged.)
@@ -38,10 +43,10 @@ measurement, and production-constrained HarnessOpt.
   `FRESH_INSTANCE_REQUIRED` with reuse false. Fresh AP admission/staging now passes
   on instance `47700074`; IM 007 rebinds the final pushed-HEAD attempt and adds
   durable process identity, heartbeat, cancellation, reaping, and recovery.
-  Measured execution is authorized only through the current AP authority and
-  fresh LO provider admission.)
-- Current evidence class: measured execution authority for frozen A2 retrieval;
-  scientific authority `true` only within goal 002
+  Measured execution is authorized only through a future AP v3 authority after
+  Goal 003 fresh admission/staging.)
+- Current evidence class: pre-authority operational preparation for frozen A2;
+  scientific authority `false` pending a future v3 authority
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
 - Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
@@ -88,7 +93,7 @@ There are exactly seven active phases. Progress is:
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | ready for measured execution under authority v2 and goal 002; not launched |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | Goal 003 pre-authority admission/staging ready; measured execution remains closed pending fresh v3 bindings |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -358,11 +363,10 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-LO reads `docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md`, obtains a fresh
-authenticated provider observation/admission within the USD 50 Task/Run hard
-stop and 84-hour total TTL, then executes only the frozen A2 retrieval lifecycle
-with durable recovery and safe return. Candidate evaluation, REP-DEV measurement,
-A3, Selection, and Final remain closed.
+LO reads `docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md` and obtains only the
+fresh provider binding/admission, isolated stage, and non-measured transport
+evidence needed for AP to issue authority v3. Candidate retrieval and evaluation,
+REP-DEV measurement, A3, Selection, and Final remain closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined
