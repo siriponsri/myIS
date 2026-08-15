@@ -1,13 +1,13 @@
 ---
 title: "A2 goal: frozen five-arm AutoIndex execution"
 phase_id: A2_PER_ARM_AUTOINDEX
-status: NEEDS_AP_READINESS_REVIEW_AFTER_IM_007
+status: READY_FOR_MEASURED_EXECUTION
 lifecycle: BLOCKED
 evidence_class: engineering_execution_readiness
 scientific_authority: false
-claim_boundary: "IM 007 implements attempt/bundle/authority equality and durable per-candidate remote recovery with synthetic/non-measured evidence. This guide still does not authorize measured A2 until AP performs one short readiness review and creates a separate tracked authority."
+claim_boundary: "IM 007 implements attempt/bundle/authority equality and durable per-candidate remote recovery. The separate current goal and authority authorize only frozen A2 retrieval; candidate evaluation and REP-DEV measurement remain closed."
 last_material_update: 2026-08-15
-next_authorized_action: AP_REVIEW_IM_007_READINESS_DO_NOT_MEASURE
+next_authorized_action: LO_EXECUTE_A2_PER_ARM_AUTOINDEX_goal_001
 ---
 
 # A2: คู่มือ long run หลัง five-arm candidate freeze
@@ -50,7 +50,7 @@ surfaces and returns them to AP. The USD 35 hard stop and frozen scientific
 semantics remain unchanged.
 
 ```text
-DO_NOT_LAUNCH: IM 007 engineering acceptance is complete, but AP has not created measured authority or opened LO.
+LO_GATE: AP audit 008 passed final-r3 artifacts and created the separate measured authority and goal; LO must fresh-admit before launch.
 ```
 
 การ launch นี้ยังไม่ใช่อำนาจให้วัดผล. Session นี้ต้องจบก่อน measured retrieval,
@@ -133,10 +133,9 @@ Selection, Final, D2 หรือ D3.
 
 ## Recovery and hard stops
 
-- Before LO, AP must review IM 007 without changing frozen scientific semantics
-  and create the separate tracked
-  measurement authority/LO goal. Preserve append-only evidence and do not alter frozen
-  candidate bytes or the v1/v2 campaign/envelope/budget/execution contract.
+- Before LO, use the separate tracked authority and goal created by AP audit 008.
+  Preserve append-only evidence and do not alter frozen candidate bytes or the
+  v1/v2 campaign/envelope/budget/execution contract.
 - During LO, stop before staging on stale/partial quote, quote above USD `35`, TTL below `40` hours remaining,
   missing management authority, wrong instance/GPU/runtime/model/data hash, protected output,
   manifest/receipt/lock drift or any nonzero measured counter.
