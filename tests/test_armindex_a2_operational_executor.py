@@ -14,6 +14,7 @@ from types import SimpleNamespace
 import pytest
 
 from myis_research.armindex import a2_operational_executor as operational
+from myis_research.armindex import a2_execution_readiness as readiness
 from myis_research.armindex.a2_execution_readiness import (
     A2ExecutionReadinessError,
     build_provider_admission_receipt,
@@ -409,7 +410,7 @@ def test_measurement_authority_rejects_non_authorizing_goal(
 ) -> None:
     adoption = _adoption()
     monkeypatch.setattr(
-        operational,
+        readiness,
         "_validate_measurement_authority_provenance",
         lambda *_args, **_kwargs: None,
     )
@@ -563,7 +564,7 @@ def test_remote_execution_binding_rejects_transport_adoption_drift(
         remote_root=adoption["remote_root"],
     )
     monkeypatch.setattr(
-        operational,
+        readiness,
         "validate_execution_adoption_receipt",
         lambda *_args, **_kwargs: dict(adoption),
     )
@@ -1597,3 +1598,114 @@ def test_stage_cli_rejects_partial_remote_identity_paths(
         "error": "remote stage requires every remote identity path",
         "status": "FAILED_CLOSED",
     }
+
+
+def test_v3_stage_uses_bound_successor_admission_before_remote_mutation(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    bundle = tmp_path / "bundle.tar.gz"
+    bundle.write_bytes(b"bundle")
+    bundle_receipt = {
+        "attempt_id": ATTEMPT,
+        "bundle_sha256": "a" * 64,
+        "git_commit": "b" * 40,
+        "git_tree": "c" * 40,
+        "receipt_sha256": "d" * 64,
+    }
+    provider = {
+        "schema_version": "myis.armindex-a2-provider-admission-receipt.v3",
+        "attempt_id": ATTEMPT,
+        "provider_instance_id": "58881234",
+        "provider_instance_binding_sha256": "e" * 64,
+    }
+    calls: list[str] = []
+    monkeypatch.setattr(
+        readiness,
+        "validate_provider_instance_binding",
+        lambda *_args, **_kwargs: {"binding_sha256": "e" * 64},
+        raising=False,
+    )
+    monkeypatch.setattr(
+        operational,
+        "validate_provider_admission_receipt_v3",
+        lambda *_args, **_kwargs: calls.append("provider-v3") or dict(provider),
+    )
+    monkeypatch.setattr(
+        operational,
+        "validate_execution_bundle",
+        lambda *_args, **_kwargs: dict(bundle_receipt),
+    )
+    monkeypatch.setattr(
+        operational,
+        "build_lifecycle_checkpoint",
+        lambda *_args, **_kwargs: {"checkpoint_sha256": "f" * 64},
+    )
+    monkeypatch.setattr(
+        operational,
+        "build_watchdog_script",
+        lambda **_kwargs: {"watchdog_sha256": "0" * 64},
+    )
+    monkeypatch.setattr(
+        operational,
+        "build_remote_stage_plan",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("stop before remote mutation")),
+    )
+
+    with pytest.raises(RuntimeError, match="stop before remote mutation"):
+        operational.perform_remote_stage(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_admission_receipt=provider,
+            bundle_receipt=bundle_receipt,
+            bundle_path=bundle,
+            remote_root=f"/opt/myis/{ATTEMPT}",
+            watchdog_deadline_utc="2026-08-13T08:00:00Z",
+            owner_connection_path=tmp_path / "unused-connection",
+            provider_observation_path=tmp_path / "unused-observation",
+            source_artifact_paths={},
+            remote_identity_paths={},
+            instance_binding={},
+        )
+    assert calls == ["provider-v3"]
+
+
+def test_v3_reserve_admission_uses_usd_60_successor_schema(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = {
+        "schema_version": "myis.armindex-a2-execution-adoption-receipt.v3",
+        "attempt_id": ATTEMPT,
+        "receipt_sha256": "a" * 64,
+        "git_commit": "b" * 40,
+        "git_tree": "c" * 40,
+        "provider_instance_binding_sha256": "d" * 64,
+    }
+    authority = {"authority_sha256": "e" * 64}
+    fresh_provider = {
+        "receipt_sha256": "f" * 64,
+        "provider_observation_sha256": "0" * 64,
+        "provider_observation_file_sha256": "1" * 64,
+        "source_artifact_sha256": {name: "2" * 64 for name in ("runtime", "model_lockset", "data_handoff", "ssh_host_key", "management_authority")},
+        "observed_at_utc": "2026-08-12T08:05:00Z",
+        "ttl_deadline_utc": "2026-08-13T23:30:00Z",
+        "whole_workload_total_usd": "54.27",
+        "forward_hard_stop_usd": 60,
+    }
+    monkeypatch.setattr(operational, "validate_execution_adoption_receipt_v3", lambda *_a, **_k: dict(adoption))
+    monkeypatch.setattr(readiness, "validate_provider_instance_binding", lambda *_a, **_k: {"binding_sha256": "d" * 64})
+    monkeypatch.setattr(operational, "validate_measurement_authority", lambda *_a, **_k: dict(authority))
+    monkeypatch.setattr(operational, "build_provider_admission_receipt_v3", lambda *_a, **_k: dict(fresh_provider))
+    monkeypatch.setattr(operational, "validate_reserve_budget_admission", lambda _root, receipt, **_k: dict(receipt))
+
+    result = operational.build_reserve_budget_admission(
+        ROOT,
+        attempt_id=ATTEMPT,
+        adoption_receipt=adoption,
+        measurement_authority=authority,
+        provider_observation_path=tmp_path / "observation.json",
+        source_artifact_paths={},
+        instance_binding={},
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert result["schema_version"] == "myis.armindex-a2-reserve-budget-admission.v2"
+    assert result["forward_hard_stop_usd"] == "60"

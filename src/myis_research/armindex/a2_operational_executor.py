@@ -33,10 +33,12 @@ from .a2_execution_readiness import (
     append_lifecycle_checkpoint,
     build_execution_adoption_receipt,
     build_execution_adoption_receipt_v2,
+    build_execution_adoption_receipt_v3,
     build_execution_bundle,
     build_lifecycle_checkpoint,
     build_provider_admission_receipt,
     build_provider_admission_receipt_v2,
+    build_provider_admission_receipt_v3,
     build_provider_instance_binding,
     build_safe_return_receipt,
     build_winner_receipt,
@@ -46,9 +48,11 @@ from .a2_execution_readiness import (
     resume_checkpoint,
     validate_execution_adoption_receipt,
     validate_execution_adoption_receipt_v2,
+    validate_execution_adoption_receipt_v3,
     validate_execution_bundle,
     validate_provider_admission_receipt,
     validate_provider_admission_receipt_v2,
+    validate_provider_admission_receipt_v3,
 )
 from .autoindex import (
     AutoIndexState,
@@ -1436,7 +1440,12 @@ def validate_live_remote_probe_v2(
     if checked.get("receipt_sha256") != canonical_sha256({key: value for key, value in checked.items() if key != "receipt_sha256"}):
         raise A2OperationalExecutorError("live remote probe self-hash is invalid")
     _validate(root, "a2-live-remote-probe-receipt.v2.json", checked)
-    provider = validate_provider_admission_receipt_v2(root, provider_admission_receipt)
+    provider = (
+        validate_provider_admission_receipt_v3(root, provider_admission_receipt)
+        if provider_admission_receipt.get("schema_version")
+        == "myis.armindex-a2-provider-admission-receipt.v3"
+        else validate_provider_admission_receipt_v2(root, provider_admission_receipt)
+    )
     if checked.get("receipt_id") != f"{attempt_id}-live-remote-probe-v2" or checked.get("attempt_id") != attempt_id:
         raise A2OperationalExecutorError("live remote probe attempt identity drift")
     for field, label in (
@@ -1582,7 +1591,9 @@ def _batch_best(
     return winner[1], winner[0]
 
 
-def reserve_checkpoint_ttl_seconds(repository_root: Path) -> int:
+def reserve_checkpoint_ttl_seconds(
+    repository_root: Path, *, successor_v3: bool = False
+) -> int:
     """Derive the post-matched checkpoint floor from the frozen runtime model.
 
     Initial provider admission remains a separate 40-hour requirement.  At the
@@ -1590,7 +1601,11 @@ def reserve_checkpoint_ttl_seconds(repository_root: Path) -> int:
     the frozen six-hour reserve is required.
     """
 
-    profile_path = repository_root.resolve() / "control/budgets/a2-execution-readiness-v1.json"
+    profile_path = repository_root.resolve() / (
+        "control/budgets/a2-execution-readiness-v2.json"
+        if successor_v3
+        else "control/budgets/a2-execution-readiness-v1.json"
+    )
     try:
         profile = json.loads(profile_path.read_text(encoding="utf-8"))
         projection = profile["runtime_projection"]
@@ -1821,13 +1836,19 @@ def build_reserve_budget_admission(
     """Create the fresh reserve-checkpoint admission without provider contact."""
 
     root = repository_root.resolve()
-    adoption_v2 = adoption_receipt.get("schema_version") == "myis.armindex-a2-execution-adoption-receipt.v2"
-    if adoption_v2:
+    adoption_schema = adoption_receipt.get("schema_version")
+    adoption_v2 = adoption_schema == "myis.armindex-a2-execution-adoption-receipt.v2"
+    adoption_v3 = adoption_schema == "myis.armindex-a2-execution-adoption-receipt.v3"
+    if adoption_v2 or adoption_v3:
         from .a2_execution_readiness import validate_provider_instance_binding
 
-        adoption = validate_execution_adoption_receipt_v2(root, adoption_receipt)
+        adoption = (
+            validate_execution_adoption_receipt_v3(root, adoption_receipt)
+            if adoption_v3
+            else validate_execution_adoption_receipt_v2(root, adoption_receipt)
+        )
         if instance_binding is None:
-            raise A2OperationalExecutorError("v2 reserve admission requires fresh provider instance binding")
+            raise A2OperationalExecutorError("bound reserve admission requires fresh provider instance binding")
         binding = validate_provider_instance_binding(
             root, instance_binding, provider_observation_path=provider_observation_path,
             source_artifact_paths=source_artifact_paths,
@@ -1836,7 +1857,7 @@ def build_reserve_budget_admission(
             raise A2OperationalExecutorError("reserve instance binding differs from adoption")
     else:
         if instance_binding is not None:
-            raise A2OperationalExecutorError("v1 reserve admission cannot accept a v2 instance binding")
+            raise A2OperationalExecutorError("v1 reserve admission cannot accept a bound instance")
         adoption = validate_execution_adoption_receipt(root, adoption_receipt)
     authority = validate_measurement_authority(
         root,
@@ -1846,7 +1867,13 @@ def build_reserve_budget_admission(
         execution_bundle_git_commit=adoption["git_commit"],
         execution_bundle_git_tree=adoption["git_tree"],
     )
-    if adoption_v2:
+    if adoption_v3:
+        fresh_provider = build_provider_admission_receipt_v3(
+            root, attempt_id=attempt_id, provider_observation_path=provider_observation_path,
+            source_artifact_paths=source_artifact_paths, instance_binding=instance_binding,
+            now_utc=now_utc or datetime.now(timezone.utc),
+        )
+    elif adoption_v2:
         fresh_provider = build_provider_admission_receipt_v2(
             root, attempt_id=attempt_id, provider_observation_path=provider_observation_path,
             source_artifact_paths=source_artifact_paths, instance_binding=instance_binding,
@@ -1857,9 +1884,14 @@ def build_reserve_budget_admission(
             root, attempt_id=attempt_id, provider_observation_path=provider_observation_path,
             source_artifact_paths=source_artifact_paths, now_utc=now_utc or datetime.now(timezone.utc),
         )
+    reserve_version = "v2" if adoption_v3 else "v1"
+    # v1 reserves retain their historical USD 50 serialization even for the
+    # original USD 35 provider-admission lineage.  Only the v3 successor
+    # adoption selects the new USD 60 reserve receipt.
+    hard_stop = "60" if adoption_v3 else "50"
     body = {
-        "schema_version": "myis.armindex-a2-reserve-budget-admission.v1",
-        "receipt_id": f"{attempt_id}-reserve-budget-admission-v1",
+        "schema_version": f"myis.armindex-a2-reserve-budget-admission.{reserve_version}",
+        "receipt_id": f"{attempt_id}-reserve-budget-admission-{reserve_version}",
         "attempt_id": attempt_id,
         "execution_adoption_receipt_sha256": adoption["receipt_sha256"],
         "initial_measurement_authority_sha256": authority["authority_sha256"],
@@ -1870,7 +1902,7 @@ def build_reserve_budget_admission(
         "observed_at_utc": fresh_provider["observed_at_utc"],
         "ttl_deadline_utc": fresh_provider["ttl_deadline_utc"],
         "whole_workload_total_usd": fresh_provider["whole_workload_total_usd"],
-        "forward_hard_stop_usd": "50",
+        "forward_hard_stop_usd": hard_stop,
         "freeze_bindings": _freeze_bindings(root),
     }
     receipt = {**body, "receipt_sha256": canonical_sha256(body)}
@@ -1897,7 +1929,14 @@ def validate_reserve_budget_admission(
 ) -> dict[str, Any]:
     root = repository_root.resolve()
     checked = dict(receipt)
-    _validate(root, "a2-reserve-budget-admission.v1.json", checked)
+    schema_version = checked.get("schema_version")
+    if schema_version not in {
+        "myis.armindex-a2-reserve-budget-admission.v1",
+        "myis.armindex-a2-reserve-budget-admission.v2",
+    }:
+        raise A2OperationalExecutorError("reserve budget admission schema is unsupported")
+    successor_v3 = schema_version == "myis.armindex-a2-reserve-budget-admission.v2"
+    _validate(root, f"a2-reserve-budget-admission.v{'2' if successor_v3 else '1'}.json", checked)
     now = now_utc or datetime.now(timezone.utc)
     try:
         observed = datetime.fromisoformat(checked["observed_at_utc"].replace("Z", "+00:00"))
@@ -1913,11 +1952,13 @@ def validate_reserve_budget_admission(
         or checked["freeze_bindings"] != _freeze_bindings(root)
         or checked["receipt_sha256"]
         != canonical_sha256({key: value for key, value in checked.items() if key != "receipt_sha256"})
-        or Decimal(checked["whole_workload_total_usd"]) > Decimal("50")
-        or checked["forward_hard_stop_usd"] != "50"
+        or Decimal(checked["whole_workload_total_usd"])
+        > Decimal("60" if successor_v3 else "50")
+        or checked["forward_hard_stop_usd"] != ("60" if successor_v3 else "50")
         or now - observed > timedelta(minutes=15)
         or observed > now + timedelta(minutes=1)
-        or (deadline - now).total_seconds() < reserve_checkpoint_ttl_seconds(root)
+        or (deadline - now).total_seconds()
+        < reserve_checkpoint_ttl_seconds(root, successor_v3=successor_v3)
     ):
         raise A2OperationalExecutorError("reserve budget admission is stale or identity-drifted")
     return checked
@@ -2126,22 +2167,31 @@ def perform_remote_stage(
     """Create and verify an isolated A2 root, then stop before any worker launch."""
 
     root = repository_root.resolve()
-    v2 = provider_admission_receipt.get("schema_version") == "myis.armindex-a2-provider-admission-receipt.v2"
-    if v2:
+    provider_schema = provider_admission_receipt.get("schema_version")
+    bound_instance = provider_schema in {
+        "myis.armindex-a2-provider-admission-receipt.v2",
+        "myis.armindex-a2-provider-admission-receipt.v3",
+    }
+    successor_v3 = provider_schema == "myis.armindex-a2-provider-admission-receipt.v3"
+    if bound_instance:
         from .a2_execution_readiness import validate_provider_instance_binding
 
         if instance_binding is None:
-            raise A2OperationalExecutorError("v2 remote stage requires fresh provider instance binding")
+            raise A2OperationalExecutorError("bound remote stage requires fresh provider instance binding")
         binding = validate_provider_instance_binding(
             root, instance_binding, provider_observation_path=provider_observation_path,
             source_artifact_paths=source_artifact_paths,
         )
-        provider = validate_provider_admission_receipt_v2(root, provider_admission_receipt)
+        provider = (
+            validate_provider_admission_receipt_v3(root, provider_admission_receipt)
+            if successor_v3
+            else validate_provider_admission_receipt_v2(root, provider_admission_receipt)
+        )
         if binding["binding_sha256"] != provider.get("provider_instance_binding_sha256"):
             raise A2OperationalExecutorError("remote stage provider instance binding drift")
     else:
         if instance_binding is not None:
-            raise A2OperationalExecutorError("v1 remote stage cannot accept a v2 instance binding")
+            raise A2OperationalExecutorError("v1 remote stage cannot accept a bound instance")
         provider = validate_provider_admission_receipt(
             root, provider_admission_receipt, provider_observation_path=provider_observation_path,
             source_artifact_paths=source_artifact_paths,
@@ -2189,10 +2239,10 @@ def perform_remote_stage(
         runner=runner,
     )
     current = (now_utc or datetime.now(timezone.utc)).astimezone(timezone.utc)
-    probe_file = bundle_path.parent / f"{attempt_id}.live-remote-probe.receipt.v{'2' if v2 else '1'}.json"
+    probe_file = bundle_path.parent / f"{attempt_id}.live-remote-probe.receipt.v{'2' if bound_instance else '1'}.json"
     _write_json(probe_file, live_probe)
     live_probe_file_hash = file_sha256(probe_file)
-    live_probe = (validate_live_remote_probe_v2 if v2 else validate_live_remote_probe)(
+    live_probe = (validate_live_remote_probe_v2 if bound_instance else validate_live_remote_probe)(
         root, attempt_id=attempt_id, probe=live_probe, provider_admission_receipt=provider,
         bundle_sha256=bundle_hash, remote_root=remote_root,
         known_hosts_path=Path(connection["known_hosts_path"]), now_utc=current,
@@ -2245,8 +2295,8 @@ def perform_remote_stage(
     finally:
         watchdog_file.unlink(missing_ok=True)
     body = {
-        "schema_version": f"myis.armindex-a2-remote-stage-receipt.v{'2' if v2 else '1'}",
-        "receipt_id": f"{attempt_id}-remote-stage-v{'2' if v2 else '1'}",
+        "schema_version": f"myis.armindex-a2-remote-stage-receipt.v{'2' if bound_instance else '1'}",
+        "receipt_id": f"{attempt_id}-remote-stage-v{'2' if bound_instance else '1'}",
         "attempt_id": attempt_id,
         "status": "PASS_A2_REMOTE_STAGE_NOT_LAUNCHED",
         "provider_observation_sha256": provider["provider_observation_sha256"],
@@ -2271,7 +2321,7 @@ def perform_remote_stage(
         "measured_a2_started": False,
         "freeze_bindings": _freeze_bindings(root),
     }
-    if v2:
+    if bound_instance:
         body.update({
             "provider_admission_receipt_sha256": provider["receipt_sha256"],
             "provider_instance_id": provider["provider_instance_id"],
@@ -2279,8 +2329,14 @@ def perform_remote_stage(
             "bundle_receipt_sha256": bundle_receipt["receipt_sha256"],
         })
     receipt = {**body, "receipt_sha256": canonical_sha256(body)}
-    _validate(root, f"a2-remote-stage-receipt.v{'2' if v2 else '1'}.json", receipt)
-    adoption_builder = build_execution_adoption_receipt_v2 if v2 else build_execution_adoption_receipt
+    _validate(root, f"a2-remote-stage-receipt.v{'2' if bound_instance else '1'}.json", receipt)
+    adoption_builder = (
+        build_execution_adoption_receipt_v3
+        if successor_v3
+        else build_execution_adoption_receipt_v2
+        if bound_instance
+        else build_execution_adoption_receipt
+    )
     adoption = adoption_builder(
         root, attempt_id=attempt_id, provider_admission_receipt=provider, bundle_receipt=bundle_receipt,
         remote_root=remote_root, staged_bundle_sha256=bundle_hash, watchdog_sha256=watchdog_hash,
@@ -2511,6 +2567,7 @@ def _parser() -> argparse.ArgumentParser:
     admission.add_argument("--ssh-host-key-source", type=Path, required=True)
     admission.add_argument("--management-authority-source", type=Path, required=True)
     admission.add_argument("--provider-instance-binding", type=Path)
+    admission.add_argument("--execution-readiness-contract", type=Path)
     admission.add_argument("--output", type=Path)
     bind_instance = commands.add_parser("bind-instance")
     bind_instance.add_argument("--provider-observation", type=Path, required=True)
@@ -2664,7 +2721,30 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "ssh_host_key": args.ssh_host_key_source,
                     "management_authority": args.management_authority_source,
                 }
-            if args.provider_instance_binding is not None:
+            successor_v3 = False
+            if args.execution_readiness_contract is not None:
+                contract = _load_json(
+                    args.execution_readiness_contract,
+                    role="execution readiness contract",
+                )
+                successor_v3 = (
+                    contract.get("schema_version")
+                    == "myis.armindex-a2-execution-readiness-contract.v3"
+                )
+                if not successor_v3 and contract.get("schema_version") != (
+                    "myis.armindex-a2-execution-readiness-contract.v2"
+                ):
+                    raise A2OperationalExecutorError(
+                        "execution readiness contract is unsupported"
+                    )
+            if args.provider_instance_binding is not None and successor_v3:
+                result = build_provider_admission_receipt_v3(
+                    root, attempt_id=args.attempt_id, provider_observation_path=args.provider_observation,
+                    source_artifact_paths=source_paths,
+                    instance_binding=_load_json(args.provider_instance_binding, role="provider instance binding"),
+                    now_utc=datetime.now(timezone.utc),
+                )
+            elif args.provider_instance_binding is not None:
                 result = build_provider_admission_receipt_v2(
                     root, attempt_id=args.attempt_id, provider_observation_path=args.provider_observation,
                     source_artifact_paths=source_paths,

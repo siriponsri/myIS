@@ -19,9 +19,11 @@ from myis_research.armindex.a2_execution_readiness import (
     append_lifecycle_checkpoint,
     build_execution_bundle,
     build_execution_adoption_receipt,
+    build_execution_adoption_receipt_v3,
     build_lifecycle_checkpoint,
     build_provider_admission_receipt,
     build_provider_admission_receipt_v2,
+    build_provider_admission_receipt_v3,
     build_provider_instance_binding,
     build_remote_staging_plan,
     build_safe_return_receipt,
@@ -32,8 +34,11 @@ from myis_research.armindex.a2_execution_readiness import (
     require_execution_adoption,
     resume_checkpoint,
     validate_execution_bundle,
+    validate_execution_adoption_receipt_v3,
     validate_execution_ledger,
     validate_provider_admission_receipt,
+    validate_provider_admission_receipt_v3,
+    validate_forward_hard_cap_successor_v3,
     build_watchdog_script,
     _BUNDLE_CLOSURE,
 )
@@ -408,6 +413,138 @@ def test_v2_admission_uses_owner_expanded_usd_50_hard_stop(tmp_path: Path) -> No
             instance_binding=binding,
             now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
         )
+
+
+def test_v3_usd_60_successor_binds_controls_and_preserves_ttl(tmp_path: Path) -> None:
+    controls = validate_forward_hard_cap_successor_v3(ROOT)
+    assert set(controls) == {
+        "budget_profile_sha256",
+        "execution_readiness_contract_sha256",
+    }
+    budget = json.loads(
+        (ROOT / "control/budgets/a2-execution-readiness-v2.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert budget["runtime_projection"]["concurrency_assumption"] == (
+        "ARM-01 remote CPU on the same Vast instance; one isolated worker for "
+        "each of ARM-02 through ARM-05"
+    )
+    contract = json.loads(
+        (ROOT / "control/armindex/a2/execution-readiness-contract.v3.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert contract["required_receipt_schemas"][-1] == (
+        "schemas/armindex/a2-execution-adoption-receipt.v3.json"
+    )
+
+    observation_path, sources = _provider_observation_paths_v2(tmp_path)
+    observation = json.loads(observation_path.read_text(encoding="ascii"))
+    observation["all_fee_components_usd"]["compute_usd"] = "57.00"
+    observation["whole_workload_total_usd"] = "60.00"
+    observation.pop("observation_sha256")
+    observation["observation_sha256"] = canonical_sha256(observation)
+    observation_path.write_text(json.dumps(observation), encoding="ascii")
+    binding = build_provider_instance_binding(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+    )
+    admission = build_provider_admission_receipt_v3(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+        instance_binding=binding,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    assert admission["forward_hard_stop_usd"] == 60
+    assert admission["whole_workload_total_usd"] == "60.00"
+    assert admission["budget_profile_sha256"] == controls["budget_profile_sha256"]
+    assert admission["execution_readiness_contract_sha256"] == controls[
+        "execution_readiness_contract_sha256"
+    ]
+    assert validate_provider_admission_receipt_v3(ROOT, admission) == admission
+
+    observation["all_fee_components_usd"]["compute_usd"] = "57.01"
+    observation["whole_workload_total_usd"] = "60.01"
+    observation.pop("observation_sha256")
+    observation["observation_sha256"] = canonical_sha256(observation)
+    observation_path.write_text(json.dumps(observation), encoding="ascii")
+    binding = build_provider_instance_binding(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+    )
+    with pytest.raises(A2ExecutionReadinessError, match="exceeds the A2 hard stop"):
+        build_provider_admission_receipt_v3(
+            ROOT,
+            attempt_id=ATTEMPT,
+            provider_observation_path=observation_path,
+            source_artifact_paths=sources,
+            instance_binding=binding,
+            now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+        )
+
+
+def test_v3_adoption_binds_the_usd_60_provider_and_controls(tmp_path: Path) -> None:
+    observation_path, sources = _provider_observation_paths_v2(tmp_path)
+    binding = build_provider_instance_binding(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+    )
+    admission = build_provider_admission_receipt_v3(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_observation_path=observation_path,
+        source_artifact_paths=sources,
+        instance_binding=binding,
+        now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
+    )
+    bundle = {
+        "schema_version": "myis.armindex-a2-execution-bundle-receipt.v1",
+        "receipt_id": f"{ATTEMPT}-bundle-v1",
+        "attempt_id": ATTEMPT,
+        "status": "PASS_CLEAN_HASH_BOUND_A2_BUNDLE",
+        "clean_worktree": True,
+        "pushed_to_origin_main": True,
+        "git_commit": "c" * 40,
+        "git_tree": "d" * 40,
+        "freeze_bindings": {
+            "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+            "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+            "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952",
+        },
+        "bundle_sha256": "1" * 64,
+        "bundle_manifest_sha256": "2" * 64,
+    }
+    bundle["receipt_sha256"] = canonical_sha256(bundle)
+
+    adoption = build_execution_adoption_receipt_v3(
+        ROOT,
+        attempt_id=ATTEMPT,
+        provider_admission_receipt=admission,
+        bundle_receipt=bundle,
+        remote_root="/opt/myis/a2-readiness-test01",
+        staged_bundle_sha256=bundle["bundle_sha256"],
+        watchdog_sha256="e" * 64,
+        watchdog_deadline_utc="2026-08-13T23:59:00Z",
+        lifecycle_genesis_checkpoint_sha256="f" * 64,
+        live_probe_receipt_sha256="1" * 64,
+        live_probe_file_sha256="2" * 64,
+    )
+
+    assert validate_execution_adoption_receipt_v3(ROOT, adoption) == adoption
+    assert adoption["provider_instance_binding_sha256"] == binding["binding_sha256"]
+    assert adoption["budget_profile_sha256"] == admission["budget_profile_sha256"]
+    assert adoption["execution_readiness_contract_sha256"] == admission[
+        "execution_readiness_contract_sha256"
+    ]
 
 
 def test_fresh_instance_binding_rejects_destroyed_instance(tmp_path: Path) -> None:

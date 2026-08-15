@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-execution-readiness-contract:v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "revision_id", "status", "campaign_id", "phase_id", "task_id", "evidence_class", "scientific_authority", "candidate_evaluation_allowed", "launch_allowed", "measured_execution_allowed", "historical_predecessor", "execution_policy", "candidate_design", "freeze_bindings", "budget_binding", "required_receipt_schemas", "next_authorized_action", "contract_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-execution-readiness-contract.v3"},
+    "contract_id": {"const": "a2-five-arm-execution-readiness-v3"},
+    "revision_id": {"const": "a2-forward-hard-cap-usd-60-v3"},
+    "status": {"const": "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"},
+    "campaign_id": {"const": "armindex-multiretriever-v2"},
+    "phase_id": {"const": "A2_PER_ARM_AUTOINDEX"},
+    "task_id": {"const": "A2.1"},
+    "evidence_class": {"const": "engineering_execution_readiness"},
+    "scientific_authority": {"const": false},
+    "candidate_evaluation_allowed": {"const": false},
+    "launch_allowed": {"const": false},
+    "measured_execution_allowed": {"const": false},
+    "historical_predecessor": {"$ref": "#/$defs/historical_predecessor"},
+    "execution_policy": {"$ref": "#/$defs/execution_policy"},
+    "candidate_design": {"$ref": "#/$defs/candidate_design"},
+    "freeze_bindings": {"$ref": "#/$defs/freeze_bindings"},
+    "budget_binding": {"$ref": "#/$defs/budget_binding"},
+    "required_receipt_schemas": {"const": ["schemas/armindex/a2-provider-instance-binding.v1.json", "schemas/armindex/a2-provider-observation.v2.json", "schemas/armindex/a2-provider-admission-receipt.v3.json", "schemas/armindex/a2-live-remote-probe-receipt.v2.json", "schemas/armindex/a2-remote-stage-receipt.v2.json", "schemas/armindex/a2-execution-adoption-receipt.v3.json"]},
+    "next_authorized_action": {"const": "Bind a runtime-supplied fresh Vast instance to new aggregate-safe evidence, then pass isolated staging under the USD 60 successor hard cap; measured A2 remains closed."},
+    "contract_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "historical_predecessor": {"type": "object", "additionalProperties": false, "required": ["contract_uri", "contract_sha256", "forward_hard_stop_usd", "immutable"], "properties": {"contract_uri": {"const": "control/armindex/a2/execution-readiness-contract.v2.json"}, "contract_sha256": {"$ref": "#/$defs/hash"}, "forward_hard_stop_usd": {"const": 50}, "immutable": {"const": true}}},
+    "execution_policy": {"type": "object", "additionalProperties": false, "required": ["provider", "provider_instance_id", "provider_instance_binding_required", "provider_instance_binding_schema", "gpu_count", "gpu_model", "vram_mib_each", "target_ttl_hours", "owner_ttl_hours", "reserve_checkpoint_ttl_seconds", "remote_clock_skew_max_seconds", "forward_hard_stop_usd", "remote_staging_allowed", "provider_destroy_forbidden", "isolated_remote_root_pattern", "execution_envelope_uri", "execution_envelope_sha256"], "properties": {"provider": {"const": "Vast"}, "provider_instance_id": {"const": "runtime_supplied_from_fresh_binding"}, "provider_instance_binding_required": {"const": true}, "provider_instance_binding_schema": {"const": "schemas/armindex/a2-provider-instance-binding.v1.json"}, "gpu_count": {"const": 4}, "gpu_model": {"const": "RTX3090"}, "vram_mib_each": {"const": 24576}, "target_ttl_hours": {"const": 84}, "owner_ttl_hours": {"const": 40}, "reserve_checkpoint_ttl_seconds": {"const": 53848}, "remote_clock_skew_max_seconds": {"const": 60}, "forward_hard_stop_usd": {"const": 60}, "remote_staging_allowed": {"const": true}, "provider_destroy_forbidden": {"const": true}, "isolated_remote_root_pattern": {"const": "^/opt/myis/a2-[a-z0-9][a-z0-9-]{7,63}$"}, "execution_envelope_uri": {"const": "control/execution-envelope-a2-readiness-v3.yaml"}, "execution_envelope_sha256": {"$ref": "#/$defs/hash"}}},
+    "candidate_design": {"type": "object", "additionalProperties": false, "required": ["candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "diagnostic_non_advancing_arms", "primary_advancement_arms", "reserve_activation_predicate"], "properties": {"candidate_count": {"const": 52}, "matched_candidate_count": {"const": 40}, "conditional_reserve_candidate_count": {"const": 12}, "diagnostic_non_advancing_arms": {"const": ["ARM-01", "ARM-02"]}, "primary_advancement_arms": {"const": ["ARM-03", "ARM-05", "ARM-04"]}, "reserve_activation_predicate": {"const": "after_two_complete_matched_batches AND strict_primary_improvement AND grounded_axis_remaining AND fresh_budget_admission_pass"}}},
+    "freeze_bindings": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}},
+    "budget_binding": {"type": "object", "additionalProperties": false, "required": ["budget_profile_uri", "budget_profile_sha256", "forward_hard_stop_usd"], "properties": {"budget_profile_uri": {"const": "control/budgets/a2-execution-readiness-v2.json"}, "budget_profile_sha256": {"$ref": "#/$defs/hash"}, "forward_hard_stop_usd": {"const": 60}}}
+  }
+}

@@ -34,10 +34,12 @@ measurement, and production-constrained HarnessOpt.
   003's attempt identity and receipts remain closed lineage, but the Owner may
   authorize exact-root forensic recovery on instance `47782993` when a new
   attempt ID, new receipt chain, and new authority bind the continuation. A
-  fresh Goal 004 is the recommended one-session continuation; destroy remains
-  the fallback if forensic checks fail.
+  fresh Goal 004 is the recommended one-session continuation. The Owner has
+  since destroyed the predecessor and supplied fresh instance `47790578`, so
+  Goal 004 must use a new isolated attempt root there rather than forensic
+  recovery of the predecessor root.
   The Owner approved an 84-hour total successor TTL and raised the current A2
-  forward hard stop to USD 50; the USD 150 campaign ceiling, 40-hour initial
+  forward hard stop to USD 60; the USD 150 campaign ceiling, 40-hour initial
   floor, and deterministic 53,848-second reserve floor remain unchanged.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
@@ -459,7 +461,7 @@ to one explicit LO session.
 
 After LO 001 stopped prelaunch, the Owner first expanded the successor A2
 task/run hard stop from USD 35 to USD 45. The current Owner authorization
-supersedes that current successor ceiling with USD 50 and an 84-hour total TTL.
+supersedes that current successor ceiling with USD 60 and an 84-hour total TTL.
 This does not rewrite the historical final-r3 admission or change the USD 150
 campaign ceiling, 40-hour initial floor, or deterministic 53,848-second
 reserve floor.

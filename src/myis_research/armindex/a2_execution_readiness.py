@@ -24,6 +24,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any, Callable
 
+import yaml
 from jsonschema import Draft202012Validator
 
 from ..kernel.canonical import canonical_sha256, file_sha256
@@ -64,6 +65,7 @@ _REQUIRED_PROVIDER_SOURCES = frozenset(
 )
 _REQUIRED_TTL_SECONDS = 40 * 60 * 60
 _A2_FORWARD_HARD_STOP_USD_V2 = Decimal("50")
+_A2_FORWARD_HARD_STOP_USD_V3 = Decimal("60")
 _FRESH_INSTANCE_ID = re.compile(r"^[1-9][0-9]{3,19}$")
 _DESTROYED_PROVIDER_INSTANCE_IDS = frozenset({"47411176"})
 _BUNDLE_CLOSURE = (
@@ -74,6 +76,7 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-candidate-freeze-receipt.v1.json",
     "schemas/armindex/a2-candidate-manifest.v1.json",
     "schemas/armindex/a2-execution-adoption-receipt.v1.json",
+    "schemas/armindex/a2-execution-adoption-receipt.v3.json",
     "schemas/armindex/a2-execution-bundle-receipt.v1.json",
     "schemas/armindex/a2-deployment-package-receipt.v1.json",
     "schemas/armindex/a2-execution-ledger-entry.v1.json",
@@ -100,24 +103,30 @@ _BUNDLE_CLOSURE = (
     "schemas/armindex/a2-provider-instance-binding.v1.json",
     "schemas/armindex/a2-provider-observation.v2.json",
     "schemas/armindex/a2-provider-admission-receipt.v2.json",
+    "schemas/armindex/a2-provider-admission-receipt.v3.json",
     "schemas/armindex/a2-live-remote-probe-receipt.v2.json",
     "schemas/armindex/a2-remote-stage-receipt.v2.json",
     "schemas/armindex/a2-execution-adoption-receipt.v2.json",
     "schemas/armindex/a2-reserve-activation-decision.v1.json",
     "schemas/armindex/a2-reserve-budget-admission.v1.json",
+    "schemas/armindex/a2-reserve-budget-admission.v2.json",
     "schemas/armindex/a2-reserve-continuation-authority.v1.json",
     "schemas/armindex/a2-safe-return-receipt.v1.json",
     "schemas/armindex/a2-train-evaluation-receipt.v1.json",
     "schemas/armindex/a2-winner-selection-receipt.v1.json",
     "control/armindex/a2/execution-readiness-contract.v1.json",
     "control/armindex/a2/execution-readiness-contract.v2.json",
+    "control/armindex/a2/execution-readiness-contract.v3.json",
     "control/armindex/a2/measured-command-argv.v1.json",
     "control/armindex/a2/measurement-authority-commitment.v1.json",
     "control/armindex/a2/measurement-authority-commitment.v2.json",
     "control/budgets/a2-execution-readiness-v1.json",
+    "control/budgets/a2-execution-readiness-v2.json",
     "control/execution-envelope-a2-readiness-v1.yaml",
     "control/execution-envelope-a2-readiness-v2.yaml",
+    "control/execution-envelope-a2-readiness-v3.yaml",
     "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
+    "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V2.md",
     "src/myis_research/armindex/a2_candidate_freeze.py",
     "src/myis_research/armindex/a2_execution_readiness.py",
     "src/myis_research/armindex/a2_deployment_package.py",
@@ -950,6 +959,10 @@ def validate_provider_admission_receipt(
 ) -> dict[str, Any]:
     """Validate admission and, when supplied, its current source artifact bytes."""
 
+    if receipt.get("schema_version") == "myis.armindex-a2-provider-admission-receipt.v3":
+        if provider_observation_path is not None or source_artifact_paths is not None:
+            raise A2ExecutionReadinessError("v3 admission source validation is explicit")
+        return validate_provider_admission_receipt_v3(repository_root, receipt)
     root = repository_root.resolve()
     checked = dict(receipt)
     _self_hash(checked, "receipt_sha256")
@@ -1094,6 +1107,75 @@ def validate_provider_instance_binding(
     return checked
 
 
+def validate_forward_hard_cap_successor_v3(repository_root: Path) -> dict[str, str]:
+    """Validate the additive USD 60 readiness control chain without I/O side effects."""
+
+    root = repository_root.resolve()
+    budget_path = root / "control/budgets/a2-execution-readiness-v2.json"
+    contract_path = root / "control/armindex/a2/execution-readiness-contract.v3.json"
+    envelope_path = root / "control/execution-envelope-a2-readiness-v3.yaml"
+    budget = _load_json(budget_path)
+    _self_hash(budget, "budget_profile_sha256")
+    if (
+        budget.get("schema_version")
+        != "myis.armindex-a2-execution-readiness-budget-profile.v2"
+        or budget.get("revision_id") != "a2-five-arm-execution-readiness-v2-forward-usd-60"
+        or budget.get("admission", {}).get("forward_hard_stop_usd") != 60
+        or budget.get("hard_stops", {}).get("a2_forward_usd") != 60
+        or budget.get("runtime_projection", {}).get("forward_hard_stop_usd") != 60
+        or budget.get("runtime_projection", {}).get("concurrency_assumption")
+        != "ARM-01 remote CPU on the same Vast instance; one isolated worker for each of ARM-02 through ARM-05"
+        or budget.get("runtime_projection", {}).get("target_ttl_hours") != 84
+        or budget.get("runtime_projection", {}).get("owner_ttl_hours") != 40
+        or budget.get("runtime_projection", {}).get("reserve_checkpoint_ttl_seconds") != 53848
+    ):
+        raise A2ExecutionReadinessError("USD 60 successor budget control drift")
+    predecessor = budget.get("historical_predecessor")
+    if not isinstance(predecessor, Mapping) or predecessor != {
+        "budget_profile_uri": "control/budgets/a2-execution-readiness-v1.json",
+        "forward_hard_stop_usd": 50,
+        "immutable": True,
+        "revision_id": "a2-five-arm-execution-readiness-v1",
+    }:
+        raise A2ExecutionReadinessError("USD 50 historical budget predecessor drift")
+
+    contract = _load_json(contract_path)
+    _self_hash(contract, "contract_sha256")
+    _validate(root, "a2-execution-readiness-contract.v3.json", contract)
+    policy = contract["execution_policy"]
+    binding = contract["budget_binding"]
+    if (
+        binding["budget_profile_sha256"] != budget["budget_profile_sha256"]
+        or binding["forward_hard_stop_usd"] != 60
+        or policy["forward_hard_stop_usd"] != 60
+        or policy["target_ttl_hours"] != 84
+        or policy["owner_ttl_hours"] != 40
+        or policy["reserve_checkpoint_ttl_seconds"] != 53848
+    ):
+        raise A2ExecutionReadinessError("USD 60 successor contract binding drift")
+    try:
+        envelope = yaml.safe_load(envelope_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, yaml.YAMLError) as error:
+        raise A2ExecutionReadinessError("USD 60 successor envelope is invalid") from error
+    if not isinstance(envelope, Mapping) or (
+        envelope.get("schema_version") != "myis.execution-envelope-a2-readiness.v3"
+        or envelope.get("revision_id") != "a2-forward-hard-cap-usd-60-v3"
+        or envelope.get("resources", {}).get("forward_hard_stop_usd") != 60
+        or envelope.get("resources", {}).get("target_ttl_hours") != 84
+        or envelope.get("resources", {}).get("owner_ttl_hours") != 40
+        or envelope.get("resources", {}).get("reserve_checkpoint_ttl_seconds") != 53848
+        or envelope.get("authority", {}).get("measured_a2_authorized") is not False
+    ):
+        raise A2ExecutionReadinessError("USD 60 successor envelope drift")
+    if policy["execution_envelope_sha256"] != file_sha256(envelope_path):
+        raise A2ExecutionReadinessError("USD 60 successor envelope hash drift")
+    _validate_freeze_bindings(root, contract["freeze_bindings"])
+    return {
+        "budget_profile_sha256": str(budget["budget_profile_sha256"]),
+        "execution_readiness_contract_sha256": str(contract["contract_sha256"]),
+    }
+
+
 def build_provider_admission_receipt_v2(
     repository_root: Path,
     *,
@@ -1199,6 +1281,119 @@ def validate_provider_admission_receipt_v2(repository_root: Path, receipt: Mappi
     return checked
 
 
+def build_provider_admission_receipt_v3(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    provider_observation_path: Path,
+    source_artifact_paths: Mapping[str, Path],
+    instance_binding: Mapping[str, Any],
+    now_utc: datetime,
+    maximum_quote_age: timedelta = timedelta(minutes=15),
+) -> dict[str, Any]:
+    """Issue a fresh admission receipt under the additive USD 60 control chain."""
+
+    root = repository_root.resolve()
+    control_bindings = validate_forward_hard_cap_successor_v3(root)
+    if now_utc.tzinfo is None:
+        raise A2ExecutionReadinessError("now_utc must include an offset")
+    evidence, observation_file_sha256, source_hashes = _provider_observation_v2(
+        root,
+        attempt_id=attempt_id,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+    )
+    binding = validate_provider_instance_binding(
+        root,
+        instance_binding,
+        provider_observation_path=provider_observation_path,
+        source_artifact_paths=source_artifact_paths,
+    )
+    if binding["attempt_id"] != attempt_id:
+        raise A2ExecutionReadinessError("provider binding attempt differs from admission")
+    if binding["provider_instance_id"] != evidence["provider_instance_id"]:
+        raise A2ExecutionReadinessError("provider binding instance drift")
+    mode = evidence.get("source_mode")
+    authenticated = evidence.get("provider_authenticated")
+    if (mode == "OwnerDashboardSsh" and authenticated) or evidence.get("login_or_logout_performed") is not False:
+        raise A2ExecutionReadinessError("provider authentication evidence is inconsistent")
+    current = now_utc.astimezone(timezone.utc)
+    observed_at = _timestamp(evidence.get("observed_at_utc"), "provider observation")
+    quote_observed = _timestamp(evidence.get("quote_observed_at_utc"), "quote")
+    if any(value > current or current - value > maximum_quote_age for value in (observed_at, quote_observed)):
+        raise A2ExecutionReadinessError("provider quote is not fresh")
+    ttl_deadline = _timestamp(evidence.get("ttl_deadline_utc"), "provider TTL deadline")
+    remaining_ttl_seconds = int((ttl_deadline - current).total_seconds())
+    if remaining_ttl_seconds < _REQUIRED_TTL_SECONDS:
+        raise A2ExecutionReadinessError("NEEDS_OWNER_TTL_EXTENSION")
+    if evidence.get("remaining_ttl_seconds") != int((ttl_deadline - observed_at).total_seconds()):
+        raise A2ExecutionReadinessError("provider observation remaining TTL drift")
+    components = evidence.get("all_fee_components_usd")
+    if not isinstance(components, Mapping) or set(components) != _REQUIRED_QUOTE_COMPONENTS:
+        raise A2ExecutionReadinessError("all required quote fee components are required")
+    total = sum((_money(components[name], name) for name in sorted(components)), Decimal())
+    declared_total = _money(evidence.get("whole_workload_total_usd"), "whole workload total")
+    if total != declared_total or total > _A2_FORWARD_HARD_STOP_USD_V3:
+        raise A2ExecutionReadinessError("whole-workload all-fee quote exceeds the A2 hard stop")
+    management_mode = evidence.get("management_mode")
+    manual_ready = evidence.get("owner_manual_dashboard_destroy_ready")
+    if mode == "authenticated_vast_cli":
+        management_ok = authenticated is True and management_mode == "AUTHENTICATED_CLI"
+    else:
+        management_ok = management_mode == "OWNER_MANUAL_DASHBOARD_DESTROY_READY" and manual_ready is True
+    if not management_ok or evidence.get("provider_destroy_performed") is not False:
+        raise A2ExecutionReadinessError("provider management authority is invalid")
+    quote_sha256 = canonical_sha256({
+        "provider_instance_id": evidence["provider_instance_id"], "quote_observed_at_utc": evidence["quote_observed_at_utc"],
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"], "all_fee_components_usd": dict(components),
+        "whole_workload_total_usd": str(declared_total),
+    })
+    budget_sha256 = canonical_sha256({"quote_sha256": quote_sha256, "whole_workload_total_usd": str(total), "hard_stop_usd": "60"})
+    body = {
+        "schema_version": "myis.armindex-a2-provider-admission-receipt.v3",
+        "receipt_id": _receipt_id(attempt_id, "provider-admission").removesuffix("-v1") + "-v3",
+        "attempt_id": attempt_id, "status": "PASS_A2_PROVIDER_ADMISSION",
+        "observed_at_utc": evidence["observed_at_utc"], "quote_observed_at_utc": evidence["quote_observed_at_utc"],
+        "provider_instance_id": evidence["provider_instance_id"], "provider_instance_binding_sha256": binding["binding_sha256"],
+        "provider_status": "RUNNING", "provider_verification": "VERIFIED", "evidence_mode": mode,
+        "provider_authenticated": authenticated, "login_or_logout_performed": False,
+        "gpu_count": 4, "gpu_model": "RTX3090", "vram_mib_each": 24576, "gpu_uuid_set_sha256": evidence["gpu_uuid_set_sha256"],
+        "runtime_sha256": source_hashes["runtime"], "model_lockset_sha256": source_hashes["model_lockset"], "data_handoff_sha256": source_hashes["data_handoff"], "ssh_host_key_sha256": source_hashes["ssh_host_key"],
+        "all_fee_components_usd": {name: str(_money(components[name], name)) for name in sorted(components)},
+        "whole_workload_total_usd": str(declared_total), "quote_sha256": quote_sha256, "whole_workload_budget_sha256": budget_sha256,
+        "management_mode": management_mode, "management_authority_sha256": source_hashes["management_authority"], "owner_manual_dashboard_destroy_ready": bool(manual_ready), "provider_destroy_performed": False,
+        "provider_observation_sha256": evidence["observation_sha256"], "provider_observation_file_sha256": observation_file_sha256, "source_artifact_sha256": source_hashes,
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"], "remaining_ttl_seconds": remaining_ttl_seconds, "forward_hard_stop_usd": 60,
+        "budget_profile_sha256": control_bindings["budget_profile_sha256"], "execution_readiness_contract_sha256": control_bindings["execution_readiness_contract_sha256"],
+        "freeze_bindings": _freeze_bindings(root),
+    }
+    receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+    _validate(root, "a2-provider-admission-receipt.v3.json", receipt)
+    return receipt
+
+
+def validate_provider_admission_receipt_v3(
+    repository_root: Path, receipt: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Validate a v3 receipt and its current additive control bindings."""
+
+    root = repository_root.resolve()
+    control_bindings = validate_forward_hard_cap_successor_v3(root)
+    checked = dict(receipt)
+    _self_hash(checked, "receipt_sha256")
+    _validate(root, "a2-provider-admission-receipt.v3.json", checked)
+    if (
+        checked["forward_hard_stop_usd"] != 60
+        or checked["budget_profile_sha256"] != control_bindings["budget_profile_sha256"]
+        or checked["execution_readiness_contract_sha256"] != control_bindings["execution_readiness_contract_sha256"]
+    ):
+        raise A2ExecutionReadinessError("provider admission uses an invalid USD 60 successor binding")
+    if str(checked["provider_instance_id"]) in _DESTROYED_PROVIDER_INSTANCE_IDS:
+        raise A2ExecutionReadinessError("provider admission targets a destroyed instance")
+    _validate_freeze_bindings(root, checked["freeze_bindings"])
+    return checked
+
+
 def build_execution_adoption_receipt_v2(
     repository_root: Path,
     *,
@@ -1259,6 +1454,99 @@ def validate_execution_adoption_receipt_v2(
     checked = dict(receipt)
     _self_hash(checked, "receipt_sha256")
     _validate(root, "a2-execution-adoption-receipt.v2.json", checked)
+    _validate_freeze_bindings(root, checked["freeze_bindings"])
+    return checked
+
+
+def build_execution_adoption_receipt_v3(
+    repository_root: Path,
+    *,
+    attempt_id: str,
+    provider_admission_receipt: Mapping[str, Any],
+    bundle_receipt: Mapping[str, Any],
+    remote_root: str,
+    staged_bundle_sha256: str,
+    watchdog_sha256: str,
+    watchdog_deadline_utc: str,
+    lifecycle_genesis_checkpoint_sha256: str,
+    live_probe_receipt_sha256: str,
+    live_probe_file_sha256: str,
+) -> dict[str, Any]:
+    """Bind staged execution to the additive USD 60 provider admission."""
+
+    root = repository_root.resolve()
+    provider = validate_provider_admission_receipt_v3(root, provider_admission_receipt)
+    bundle = dict(bundle_receipt)
+    _self_hash(bundle, "receipt_sha256")
+    _validate(root, "a2-execution-bundle-receipt.v1.json", bundle)
+    _validate_freeze_bindings(root, bundle["freeze_bindings"])
+    if bundle["attempt_id"] != attempt_id or provider["attempt_id"] != attempt_id:
+        raise A2ExecutionReadinessError("adoption attempt identity differs from inputs")
+    if _REMOTE_ROOT.fullmatch(remote_root) is None or not remote_root.endswith(attempt_id):
+        raise A2ExecutionReadinessError("adoption requires its isolated A2 remote root")
+    if staged_bundle_sha256 != bundle["bundle_sha256"]:
+        raise A2ExecutionReadinessError("staged bundle hash differs from the local bundle")
+    _require_hash(watchdog_sha256, "watchdog")
+    if _timestamp(watchdog_deadline_utc, "watchdog deadline") >= _timestamp(
+        provider["ttl_deadline_utc"], "provider TTL deadline"
+    ):
+        raise A2ExecutionReadinessError("watchdog deadline must precede provider TTL deadline")
+    _require_hash(lifecycle_genesis_checkpoint_sha256, "lifecycle genesis checkpoint")
+    _require_hash(live_probe_receipt_sha256, "live remote probe receipt")
+    _require_hash(live_probe_file_sha256, "live remote probe file")
+    body = {
+        "schema_version": "myis.armindex-a2-execution-adoption-receipt.v3",
+        "receipt_id": _receipt_id(attempt_id, "execution-adoption").removesuffix("-v1") + "-v3",
+        "attempt_id": attempt_id,
+        "status": "PASS_A2_EXECUTION_ADOPTION",
+        "provider_admission_receipt_sha256": provider["receipt_sha256"],
+        "provider_instance_id": provider["provider_instance_id"],
+        "provider_instance_binding_sha256": provider["provider_instance_binding_sha256"],
+        "provider_observation_sha256": provider["provider_observation_sha256"],
+        "provider_observation_file_sha256": provider["provider_observation_file_sha256"],
+        "live_probe_receipt_sha256": live_probe_receipt_sha256,
+        "live_probe_file_sha256": live_probe_file_sha256,
+        "bundle_receipt_sha256": bundle["receipt_sha256"],
+        "bundle_sha256": bundle["bundle_sha256"],
+        "git_commit": bundle["git_commit"],
+        "git_tree": bundle["git_tree"],
+        "remote_root": remote_root,
+        "remote_root_created_fresh": True,
+        "staged_bundle_sha256": staged_bundle_sha256,
+        "staged_bundle_verified": True,
+        "ttl_deadline_utc": provider["ttl_deadline_utc"],
+        "remaining_ttl_seconds_at_admission": provider["remaining_ttl_seconds"],
+        "watchdog_installed": True,
+        "watchdog_deadline_utc": watchdog_deadline_utc,
+        "watchdog_sha256": watchdog_sha256,
+        "lifecycle_genesis_checkpoint_sha256": lifecycle_genesis_checkpoint_sha256,
+        "budget_profile_sha256": provider["budget_profile_sha256"],
+        "execution_readiness_contract_sha256": provider[
+            "execution_readiness_contract_sha256"
+        ],
+        "freeze_bindings": _freeze_bindings(root),
+        "launch_allowed": True,
+        "measured_retrieval_allowed": False,
+    }
+    receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+    _validate(root, "a2-execution-adoption-receipt.v3.json", receipt)
+    return receipt
+
+
+def validate_execution_adoption_receipt_v3(
+    repository_root: Path, receipt: Mapping[str, Any]
+) -> dict[str, Any]:
+    root = repository_root.resolve()
+    control_bindings = validate_forward_hard_cap_successor_v3(root)
+    checked = dict(receipt)
+    _self_hash(checked, "receipt_sha256")
+    _validate(root, "a2-execution-adoption-receipt.v3.json", checked)
+    if (
+        checked["budget_profile_sha256"] != control_bindings["budget_profile_sha256"]
+        or checked["execution_readiness_contract_sha256"]
+        != control_bindings["execution_readiness_contract_sha256"]
+    ):
+        raise A2ExecutionReadinessError("execution adoption uses an invalid USD 60 successor binding")
     _validate_freeze_bindings(root, checked["freeze_bindings"])
     return checked
 
@@ -1337,6 +1625,8 @@ def validate_execution_adoption_receipt(
 ) -> dict[str, Any]:
     """Validate an adoption receipt without contacting or launching anything."""
 
+    if receipt.get("schema_version") == "myis.armindex-a2-execution-adoption-receipt.v3":
+        return validate_execution_adoption_receipt_v3(repository_root, receipt)
     if receipt.get("schema_version") == "myis.armindex-a2-execution-adoption-receipt.v2":
         return validate_execution_adoption_receipt_v2(repository_root, receipt)
     root = repository_root.resolve()
@@ -1590,9 +1880,11 @@ __all__ = [
     "build_execution_bundle",
     "build_execution_adoption_receipt",
     "build_execution_adoption_receipt_v2",
+    "build_execution_adoption_receipt_v3",
     "build_lifecycle_checkpoint",
     "build_provider_admission_receipt",
     "build_provider_admission_receipt_v2",
+    "build_provider_admission_receipt_v3",
     "build_provider_instance_binding",
     "build_remote_staging_plan",
     "build_safe_return_receipt",
@@ -1606,9 +1898,12 @@ __all__ = [
     "resume_checkpoint",
     "validate_execution_adoption_receipt",
     "validate_execution_adoption_receipt_v2",
+    "validate_execution_adoption_receipt_v3",
     "validate_execution_bundle",
     "validate_execution_ledger",
     "validate_provider_admission_receipt",
     "validate_provider_admission_receipt_v2",
+    "validate_provider_admission_receipt_v3",
+    "validate_forward_hard_cap_successor_v3",
     "validate_provider_instance_binding",
 ]
