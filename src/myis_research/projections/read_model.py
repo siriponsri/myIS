@@ -642,6 +642,10 @@ A2_READINESS_LEDGER_PATH = Path("control/armindex/a2/execution-ledger.v1.jsonl")
 A2_CURRENT_EXECUTION_POINTER_PATH = Path(
     "control/armindex/a2/current-execution-attempt.v1.json"
 )
+A2_MEASURED_AUTHORITY_PATH = Path(
+    "control/armindex/a2/measured-authority/"
+    "a2-im-audit007-final-r3.authority.v1.json"
+)
 A2_FREEZE_NEXT_AUTHORIZED_ACTION = (
     "RUN_INDEPENDENT_A2_FREEZE_AUDIT_STOP_BEFORE_MEASURED_A2"
 )
@@ -936,6 +940,82 @@ def _a2_execution_readiness_projection(
             "provider_admission_status": "NOT_ATTEMPTED",
             "provider_admission_attempted": False,
         }
+
+        # The append-only readiness ledger records staging history, while the
+        # current AP-adopted authority is the source of truth for the next
+        # executable route. Keep the projection aligned with that authority.
+        authority_path = root / A2_MEASURED_AUTHORITY_PATH
+        if authority_path.is_file() and not authority_path.is_symlink():
+            try:
+                authority = _validate_json_receipt(
+                    root,
+                    relative_path=A2_MEASURED_AUTHORITY_PATH,
+                    schema_path=Path(
+                        "schemas/armindex/a2-measured-execution-authority.v1.json"
+                    ),
+                    self_hash_field="authority_sha256",
+                )
+                goal_path = root / str(authority["source_goal_uri"])
+                goal_text = goal_path.read_text(encoding="utf-8")
+                goal_hash_matches = _file_sha256(goal_path) == authority[
+                    "source_goal_sha256"
+                ]
+                goal_is_ready = (
+                    goal_text.startswith("---\n")
+                    and "status: READY_FOR_MEASURED_EXECUTION" in goal_text
+                    and "measured_a2_authorized: true" in goal_text
+                )
+                authority_is_current = (
+                    authority.get("status") == "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"
+                    and authority.get("attempt_id") == "a2-im-audit007-final-r3"
+                    and authority.get("measured_a2_authorized") is True
+                    and authority.get("candidate_generation_allowed") is False
+                    and authority.get("candidate_mutation_allowed") is False
+                    and authority.get("rep_dev_measurement_allowed") is False
+                    and authority.get("a3_allowed") is False
+                    and authority.get("selection_allowed") is False
+                    and authority.get("final_allowed") is False
+                    and goal_hash_matches
+                    and goal_is_ready
+                )
+            except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+                authority = None
+                authority_is_current = False
+            if authority_is_current:
+                return {
+                    **result,
+                    "status": "READY_FOR_MEASURED_EXECUTION",
+                    "validated": True,
+                    "evidence_class": "measured_execution_authority",
+                    "scientific_authority": True,
+                    "claim_boundary": (
+                        "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_"
+                        "a3_selection_final_closed"
+                    ),
+                    "current_status": "READY_FOR_MEASURED_EXECUTION",
+                    "current_route": "LO",
+                    "historical_status": latest_ledger_entry["status"],
+                    "attempt_id": authority["attempt_id"],
+                    "measured_a2_authorized": True,
+                    "measured_execution_allowed": True,
+                    "candidate_generation_allowed": False,
+                    "candidate_mutation_allowed": False,
+                    "rep_dev_measurement_allowed": False,
+                    "provider_admission_status": "FRESH_ADMISSION_REQUIRED",
+                    "provider_admission_attempted": False,
+                    "gpu_decision": "KEEP_GPU",
+                    "gpu_decision_reason": (
+                        "the authorized LO goal reuses the staged instance only after "
+                        "fresh authenticated admission"
+                    ),
+                    "next_authorized_action": (
+                        "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
+                    ),
+                    "measurement_authority_uri": authority["authority_uri"],
+                    "measurement_authority_sha256": authority["authority_sha256"],
+                    "source_goal_uri": authority["source_goal_uri"],
+                    "source_goal_sha256": authority["source_goal_sha256"],
+                }
         if latest_ledger_entry["status"] == "IMPLEMENTATION_BLOCKED":
             return {
                 **result,
@@ -1734,6 +1814,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         and a2_candidate_freeze.get("validated") is True
     ):
         armindex["status"] = (
+            "a2_ready_for_measured_execution_authorized"
+            if a2_execution_readiness.get("status")
+            == "READY_FOR_MEASURED_EXECUTION"
+            else
             "a2_staged_not_launched_measured_a2_locked"
             if a2_execution_readiness.get("status")
             == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
@@ -1765,6 +1849,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             {
                 **phase,
                 "status": (
+                    "ready_for_measured_execution"
+                    if a2_execution_readiness.get("status")
+                    == "READY_FOR_MEASURED_EXECUTION"
+                    else
                     "staged"
                     if a2_execution_readiness.get("status")
                     == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"
@@ -1788,6 +1876,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                         {
                             **task,
                             "status": (
+                                "ready_for_measured_execution"
+                                if a2_execution_readiness.get("status")
+                                == "READY_FOR_MEASURED_EXECUTION"
+                                else
                                 "staged"
                                 if a2_execution_readiness.get("status")
                                 == "STAGED_NOT_LAUNCHED_MEASURED_A2_LOCKED"

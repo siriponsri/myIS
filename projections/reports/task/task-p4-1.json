@@ -9,9 +9,9 @@
   "evidence_class": "planned",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-13T12:56:29Z",
-  "generated_from_revision": "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a",
-  "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+  "generated_at": "2026-08-15T03:11:59Z",
+  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
+  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -37,21 +37,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
     "source_of_truth": {
-      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
+      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "No interpretation is available before the required gate and evidence.",
   "language": "en",
-  "last_material_update": "2026-08-13T12:56:29Z",
+  "last_material_update": "2026-08-15T03:11:59Z",
   "metric_references": [],
-  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
+  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
   "objective": "Manuscript and release package",
   "phase_id": "P4_PUBLICATION",
   "report_id": "task-p4-1",
-  "report_sha256": "d7b1b5eb177105b055d0444e353b976a48d41c88ac9cec23a4491e051f6edecd",
+  "report_sha256": "b959b506e7ae32a4f0e32abd7de1fea177f14e99b667d51c5d34c0498af412e9",
   "report_type": "task",
   "result": {
     "decision": "waiting_owner",

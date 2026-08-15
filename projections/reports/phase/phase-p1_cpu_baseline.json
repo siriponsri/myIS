@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-13T12:56:29Z",
-  "generated_from_revision": "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a",
-  "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+  "generated_at": "2026-08-15T03:11:59Z",
+  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
+  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
+      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-13T12:56:29Z",
+  "last_material_update": "2026-08-15T03:11:59Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -362,11 +362,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
+  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
   "objective": "Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "phase-p1_cpu_baseline",
-  "report_sha256": "2d8c80111990ce35115963b03127af1d085bdbf63fa34c1f469a7c81eab53714",
+  "report_sha256": "ad0ad1c81b8aeae0b9b7bf9ff5b5df1dae083273ad63b73703288142ba0e7599",
   "report_type": "phase",
   "result": {
     "decision": "completed",

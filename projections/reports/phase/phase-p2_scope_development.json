@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-13T12:56:29Z",
-  "generated_from_revision": "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a",
-  "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+  "generated_at": "2026-08-15T03:11:59Z",
+  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
+  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -788,7 +788,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
+      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-13T12:56:29Z",
+  "last_material_update": "2026-08-15T03:11:59Z",
   "metric_references": [],
-  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
+  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "f958dd93485f336761dd0d50b88c961c40dcdf045c85b96771947a86e8c49afe",
+  "report_sha256": "bd5e03b3cc3f3969596566f44a1b4aab41a34823c8c365e8744e69f120380995",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

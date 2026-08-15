@@ -3793,6 +3793,12 @@ def _record_for(
         and isinstance(a2_readiness, Mapping)
         and a2_readiness.get("validated") is True
     )
+    a2_measured_authority_current = (
+        a2_readiness_valid
+        and a2_readiness.get("status") == "READY_FOR_MEASURED_EXECUTION"
+        and a2_readiness.get("scientific_authority") is True
+        and a2_readiness.get("measured_a2_authorized") is True
+    )
     a2_provider_admission_failed_closed = (
         a2_readiness_valid
         and a2_readiness.get("status")
@@ -4255,7 +4261,13 @@ def _record_for(
         result = (
             "Candidate-freeze preparation and the independent audit are complete; "
             + (
-                "the production adapter and matched-first conditional-reserve "
+                "AP launch readiness passed and the hash-bound LO authority is "
+                "current for frozen A2 retrieval; execution has not started and "
+                "fresh authenticated provider admission is required immediately "
+                "before launch. Candidate evaluation and REP-DEV measurement remain "
+                "closed. "
+                if a2_measured_authority_current
+                else "the production adapter and matched-first conditional-reserve "
                 "lifecycle, additive fresh-instance binding, and CPU-local "
                 "deployment-package validation are complete; measured A2 remains "
                 "locked pending AP fresh-instance admission and isolated staging. "
@@ -4275,14 +4287,22 @@ def _record_for(
             f"at {credit.get('resets_at_utc', 'not_recorded')}, and no active limit."
         )
         interpretation = (
-            "This engineering evidence prevents outcome-driven candidate generation "
-            "and preserves a reviewer-reproducible representation universe. It does "
-            "not evaluate a candidate, access REP-DEV for measurement, start an A2 "
-            "run, authorize provider execution, or support a retrieval-quality claim."
+            "The current authority permits only the frozen retrieval execution and "
+            "does not itself constitute a measured result, candidate evaluation, "
+            "REP-DEV measurement, A3 decision, Selection/Final evidence, or a "
+            "retrieval-quality claim."
+            if a2_measured_authority_current
+            else "This engineering evidence prevents outcome-driven candidate "
+            "generation and preserves a reviewer-reproducible representation "
+            "universe. It does not evaluate a candidate, access REP-DEV for "
+            "measurement, start an A2 run, authorize provider execution, or support "
+            "a retrieval-quality claim."
         )
         decision_status = (
             "CLOSED_PASS_INDEPENDENT_AUDIT"
             if audit_passed and task_id == "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
+            else a2_current_route_status
+            if audit_passed and a2_measured_authority_current
             else a2_current_route_status
             if audit_passed and a2_new_instance_rebind_required
             else "BLOCKED_IMPLEMENTATION_ADAPTER_AND_RESERVE_LIFECYCLE"
@@ -4670,7 +4690,7 @@ def _record_for(
             else 0,
         },
         "evidence_class": evidence_class,
-        "scientific_authority": scientific,
+        "scientific_authority": scientific or a2_measured_authority_current,
     }
     if phase_id == "P2_SCOPE_DEVELOPMENT":
         governance["preflight_status"] = str(p2.get("preflight_status", "not_started"))
@@ -4700,7 +4720,7 @@ def _record_for(
         "status": status,
         "language": "en",
         "evidence_class": evidence_class,
-        "scientific_authority": scientific,
+        "scientific_authority": scientific or a2_measured_authority_current,
         "claim_boundary": claim_boundary,
         "generated_at": str(model.get("generated_at", "1970-01-01T00:00:00Z")),
         "generated_from_revision": str(model.get("read_model_revision")),

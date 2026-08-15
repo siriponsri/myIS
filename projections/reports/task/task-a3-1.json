@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-13T12:56:29Z",
-  "generated_from_revision": "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a",
-  "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+  "generated_at": "2026-08-15T03:11:59Z",
+  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
+  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "32ee1a951343e700d1ffe120039e121ed4b654ab",
+    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,19 +52,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
+      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-13T12:56:29Z",
+  "last_material_update": "2026-08-15T03:11:59Z",
   "metric_references": [],
-  "next_authorized_action": "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING",
+  "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
   "objective": "Cross-arm transfer matrix",
   "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
   "report_id": "task-a3-1",
-  "report_sha256": "08a6ca84f0cd0698b7b93ac1d14cd79e7039a1bb3bfc24767ef05016cbf3dc7f",
+  "report_sha256": "6c47dc51b91e6bc21c65595ce0f2b984508f17757d431abdd76c6bcdcbc50b2d",
   "report_type": "task",
   "result": {
     "decision": "planned",
@@ -77,7 +77,7 @@
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
     "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_ready_for_ap_fresh_instance_staging_measured_a2_locked",
+    "program_state": "a2_ready_for_measured_execution_authorized",
     "task": "A3.1"
   },
   "status": "planned",

@@ -1902,6 +1902,24 @@ def _armindex_home_body(model: Mapping[str, Any]) -> str:
         for value in (project.get("current_task"), project.get("current_substage"))
         if value and value != "NOT_APPLICABLE"
     )
+    measured_authority_current = (
+        readiness.get("status") == "READY_FOR_MEASURED_EXECUTION"
+        and readiness.get("scientific_authority") is True
+    )
+    evidence_summary = (
+        "AP measured authority is current for frozen A2 retrieval; execution has "
+        "not started, fresh provider admission is still required, and candidate "
+        "evaluation plus REP-DEV remain closed."
+        if measured_authority_current
+        else "Immutable candidate freeze and pre-measurement engineering readiness; "
+        "A2 candidate evaluation and measured A2 are not started."
+    )
+    latest_handoff = (
+        "docs/implementation/A2_PER_ARM_AUTOINDEX_im_007_001.md"
+        if measured_authority_current
+        else "docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md"
+    )
+    active_goal = readiness.get("source_goal_uri", "NONE")
     return (
         "# myIS Research Report\n\n"
         "หน้านี้เป็น current view ที่สร้างจาก shared read model; PLAN.md และ canonical controls/receipts ยังคงเป็น authority.\n\n"
@@ -1909,14 +1927,15 @@ def _armindex_home_body(model: Mapping[str, Any]) -> str:
         f"- Phase: `{project['current_phase']}`\n"
         f"- Task/Sub-stage: `{task_substage or 'UNKNOWN'}`\n"
         f"- Status: `{project.get('current_status', 'UNKNOWN')}`\n"
-        "- Evidence: immutable candidate freeze and pre-measurement engineering readiness; A2 candidate evaluation and measured A2 are not started.\n\n"
+        f"- Evidence: {evidence_summary}\n\n"
         "## หลักฐานและขอบเขต\n\n"
         f"- Scientific authority: `{readiness.get('scientific_authority', False)}`\n"
         f"- Claim boundary: `{readiness.get('claim_boundary', 'UNKNOWN')}`\n"
         "- A1 measured evidence remains historical canonical lineage; it does not make A2 measured.\n"
         "- Selection and Final remain closed; D2 and D3 are Owner-only.\n\n"
         "## การส่งต่องาน\n\n"
-        "- Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md`\n"
+        f"- Latest implementation handoff: `{latest_handoff}`\n"
+        f"- Active LO goal: `{active_goal}`\n"
         f"- Next authorized action: `{armindex.get('next_command', 'UNKNOWN')}`\n"
         "- Use `uv run --no-sync myis-status` for the current canonical owner status.\n\n"
         "## Navigate\n\n"
@@ -2440,6 +2459,15 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "updated_at": model["generated_at"],
     }
     project = model["project"]
+    a2_readiness = armindex.get("a2_execution_readiness", {})
+    a2_readiness = a2_readiness if isinstance(a2_readiness, Mapping) else {}
+    current_scientific_authority = a2_readiness.get("scientific_authority") is True
+    current_evidence_class = str(
+        a2_readiness.get("evidence_class", "engineering")
+    )
+    current_claim_boundary = str(
+        a2_readiness.get("claim_boundary", "engineering_provenance_only")
+    )
     p1_run_ids = _p1_run_ids(model)
     p1_manifest_hashes = _p1_manifest_hashes(model)
     outputs: dict[Path, str] = {}
@@ -2453,6 +2481,9 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "workflow_status": _workflow_status(project["state"]),
             "evidence_maturity": "engineering",
             "claim_level": "none",
+            "evidence_class": current_evidence_class,
+            "scientific_authority": current_scientific_authority,
+            "claim_boundary": current_claim_boundary,
         },
         _armindex_home_body(model)
         + "\n\n## Historical P1 summary\n\n"
@@ -2496,10 +2527,15 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
             "note_id": "ARM-INDEX-HOME",
             "note_type": "home",
             "phase_id": armindex.get("current_phase"),
-            "task_id": "A0.3",
-            "workflow_status": "verification_needed",
-            "evidence_maturity": "non_scientific",
+            "task_id": project.get("current_task"),
+            "workflow_status": "ready"
+            if current_scientific_authority
+            else "verification_needed",
+            "evidence_maturity": "engineering",
             "claim_level": "none",
+            "evidence_class": current_evidence_class,
+            "scientific_authority": current_scientific_authority,
+            "claim_boundary": current_claim_boundary,
         },
         armindex_home,
     )

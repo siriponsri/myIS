@@ -1,24 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a"
-read_model_sha256: "b3ddd94d374fbcfa2c4b34f66bc7f6b7d3172119572df00f0fc57f6c18e1176c"
-source_commit: "32ee1a951343e700d1ffe120039e121ed4b654ab"
+read_model_revision: "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6"
+read_model_sha256: "4a501bfbe59e9841b80d78e4d164c0268547f2a682fd80ee0c4b05f78a8cefda"
+source_commit: "8240bf2a367821418ccaa23f484e3a1e474d362b"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "engineering"
-scientific_authority: false
-claim_boundary: "engineering_provenance_only"
-generated_from_revision: "54544ea73b670b40511c6d4a5be28936db0dac7f10a88259c69d6da9bcdd858a"
-last_material_update: "2026-08-13T12:56:29Z"
-next_authorized_action: "AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING"
+evidence_class: "measured_execution_authority"
+scientific_authority: true
+claim_boundary: "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed"
+generated_from_revision: "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6"
+last_material_update: "2026-08-15T03:11:59Z"
+next_authorized_action: "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-13T12:56:29Z"
-updated_at: "2026-08-13T12:56:29Z"
+created_at: "2026-08-15T03:11:59Z"
+updated_at: "2026-08-15T03:11:59Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -36,20 +36,21 @@ claim_level: "none"
 
 - Phase: `A2_PER_ARM_AUTOINDEX`
 - Task/Sub-stage: `A2.1 / FROZEN_FIVE_ARM_EXECUTION`
-- Status: `a2_ready_for_ap_fresh_instance_staging_measured_a2_locked`
-- Evidence: immutable candidate freeze and pre-measurement engineering readiness; A2 candidate evaluation and measured A2 are not started.
+- Status: `a2_ready_for_measured_execution_authorized`
+- Evidence: AP measured authority is current for frozen A2 retrieval; execution has not started, fresh provider admission is still required, and candidate evaluation plus REP-DEV remain closed.
 
 ## หลักฐานและขอบเขต
 
-- Scientific authority: `False`
-- Claim boundary: `frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim`
+- Scientific authority: `True`
+- Claim boundary: `frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed`
 - A1 measured evidence remains historical canonical lineage; it does not make A2 measured.
 - Selection and Final remain closed; D2 and D3 are Owner-only.
 
 ## การส่งต่องาน
 
-- Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_004_001.md`
-- Next authorized action: `AP_VALIDATE_OWNER_LOCAL_PUSHED_HEAD_BUNDLE_AND_DEPLOYMENT_RECEIPT_THEN_FRESH_INSTANCE_ADMISSION_AND_ISOLATED_STAGING`
+- Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_007_001.md`
+- Active LO goal: `docs/goal/A2_PER_ARM_AUTOINDEX_goal_001.md`
+- Next authorized action: `LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN`
 - Use `uv run --no-sync myis-status` for the current canonical owner status.
 
 ## Navigate

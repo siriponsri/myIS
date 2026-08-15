@@ -24,7 +24,16 @@ def _active_goal(root: Path) -> str:
         if not text.startswith("---"):
             continue
         data = yaml.safe_load(text.split("---", 2)[1])
-        if isinstance(data, Mapping) and data.get("lifecycle") == "ACTIVE":
+        if not isinstance(data, Mapping):
+            continue
+        lifecycle = data.get("lifecycle")
+        ready_measured_goal = (
+            lifecycle == "READY"
+            and data.get("status") == "READY_FOR_MEASURED_EXECUTION"
+            and data.get("scientific_authority") is True
+            and data.get("measured_a2_authorized") is True
+        )
+        if lifecycle == "ACTIVE" or ready_measured_goal:
             candidates.append(path)
     return sorted(candidates)[-1].relative_to(root).as_posix() if candidates else "NONE"
 

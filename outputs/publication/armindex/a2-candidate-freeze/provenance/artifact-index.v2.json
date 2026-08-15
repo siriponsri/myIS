@@ -2,10 +2,10 @@
   "artifacts": [
     {
       "artifact_id": "control-source-of-truth-yaml",
-      "bytes": 27895,
+      "bytes": 28875,
       "classification": "metadata",
       "media_type": "application/yaml",
-      "sha256": "fb6260f8cfea332849a977083758db1d5dc617d5194ffb7a09ca77232246e387",
+      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
       "uri": "../../../01_Research/control/source-of-truth.yaml"
     },
     {
@@ -157,7 +157,7 @@
       "bytes": 1123,
       "classification": "metadata",
       "media_type": "application/yaml",
-      "sha256": "37c1ce868aebd509341f462a5751ea25d34ed53f35b55fb82ae60039af6fe3e0",
+      "sha256": "af92bc74794551093390e4a515da4946a829b2503db0d4176e5c30123c81d7c2",
       "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v2.yaml"
     },
     {
@@ -170,18 +170,18 @@
     },
     {
       "artifact_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "bytes": 11876,
+      "bytes": 13102,
       "classification": "metadata",
       "media_type": "text/markdown",
-      "sha256": "a02d0cf2701c09938bb69b5a4de624d8b28c8b09cbecee76809afb915403d62f",
+      "sha256": "7a53495769f1392867d37912bf8bdc77993cdfd69a4e8d53f7f7519eeffe5c32",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "artifact_id": "control-armindex-a2-execution-ledger-v1-jsonl",
-      "bytes": 5309,
+      "bytes": 6666,
       "classification": "metadata",
       "media_type": "text/plain",
-      "sha256": "5a243e4ff46d4053a3c9d2b21fec843752dc8b5a9a13f3bec746f1f8ee517945",
+      "sha256": "6dad2987d6cc57b166d9ea13fb4111b5504e2ffb9b7d7440fa055a85564553d4",
       "uri": "../../../01_Research/control/armindex/a2/execution-ledger.v1.jsonl"
     },
     {
@@ -227,7 +227,7 @@
     "status": "candidate_freeze_audit_passed_measured_a2_closed",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "d842376b0c2b53c0d00f404a983baa817cd574af0ae13132053674d2fdd46235",
+  "index_sha256": "335b12365806009702888d664a8b6fb986868a654c9687b9f0c38afcda57940a",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"
