@@ -115,6 +115,8 @@ def test_remote_validation_binds_attempt_owner_manifest_and_retriever(
         in command
     )
     assert "a2_remote_retriever.py" in command
+    assert "pathlib.Path('/proc').glob('[0-9]*/cmdline')" in command
+    assert "module.startswith('myis_research.armindex.a2_')" in command
 
 
 def test_remote_executor_maps_paths_and_binds_candidate_environment(tmp_path: Path) -> None:
