@@ -64,7 +64,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "c5d81a4e5632dfb8c7e1d45cbbede595c43d90acabf553e7e643d79826b4e788",
+  "graph_sha256": "7c52814aefac901860af62644f58eb7acef83aebcf1cb123d8f1a182c5c758c1",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -134,7 +134,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-armindex-a2-execution-readiness-contract-v2-json",
-      "sha256": "a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10",
+      "sha256": "189e7a467b2272c7c6024c995f3c54f97f914c1bf45b0a4843abac22b5728bcc",
       "uri": "../../../01_Research/control/armindex/a2/execution-readiness-contract.v2.json"
     },
     {
@@ -148,7 +148,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-budgets-a2-execution-readiness-v1-json",
-      "sha256": "be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de",
+      "sha256": "73bdd90e4e8958ad29d699dc47586bda61eb969134b6769941bee3af3cc1fa43",
       "uri": "../../../01_Research/control/budgets/a2-execution-readiness-v1.json"
     },
     {
@@ -162,7 +162,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-execution-envelope-a2-readiness-v2-yaml",
-      "sha256": "af92bc74794551093390e4a515da4946a829b2503db0d4176e5c30123c81d7c2",
+      "sha256": "3e0b9a2099612bccffb4f0221306b3aa4f22eda735175080c1b786a802a41dac",
       "uri": "../../../01_Research/control/execution-envelope-a2-readiness-v2.yaml"
     },
     {
@@ -176,14 +176,14 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-runbooks-A2_PER_ARM_AUTOINDEX_EXECUTION_V1-md",
-      "sha256": "7a53495769f1392867d37912bf8bdc77993cdfd69a4e8d53f7f7519eeffe5c32",
+      "sha256": "21a23c154742dd18093db3ca7e5ac8afa5324a3f3c46f5c7dd012e1bf9629fa7",
       "uri": "../../../01_Research/control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md"
     },
     {
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-source-of-truth-yaml",
-      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
+      "sha256": "c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8",
       "uri": "../../../01_Research/control/source-of-truth.yaml"
     },
     {

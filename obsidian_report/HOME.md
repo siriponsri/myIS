@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822"
-read_model_sha256: "a9d77688865af55ecfaf5a11e1598f6cd7eda0553207c635c990a542b6653550"
-source_commit: "27b1f520eeb679a06f76a7329cb51c1a44082dbf"
+read_model_revision: "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8"
+read_model_sha256: "70d5d8621de3950ba099f3d3479d40a6ced7e7a59224eb0dd05580a37e41bc0b"
+source_commit: "665cdcc76c4619a0a60419978179e1ab6b6d7cf6"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "measured_execution_authority"
 scientific_authority: true
 claim_boundary: "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed"
-generated_from_revision: "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822"
-last_material_update: "2026-08-15T03:58:19Z"
+generated_from_revision: "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8"
+last_material_update: "2026-08-15T09:00:53Z"
 next_authorized_action: "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-15T03:58:19Z"
-updated_at: "2026-08-15T03:58:19Z"
+created_at: "2026-08-15T09:00:53Z"
+updated_at: "2026-08-15T09:00:53Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -49,7 +49,7 @@ claim_level: "none"
 ## การส่งต่องาน
 
 - Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_007_001.md`
-- Active LO goal: `docs/goal/A2_PER_ARM_AUTOINDEX_goal_001.md`
+- Active LO goal: `docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md`
 - Next authorized action: `LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN`
 - Use `uv run --no-sync myis-status` for the current canonical owner status.
 

@@ -15,7 +15,7 @@ measurement, and production-constrained HarnessOpt.
 ## Active campaign
 
 - Campaign: `armindex-multiretriever-v2`
-- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_AP_PROVENANCE_REVIEW_AFTER_IM_008`;
+- Current task: `A2.1 / FROZEN_FIVE_ARM_EXECUTION` (`READY_FOR_MEASURED_EXECUTION`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
   candidate evaluation and measured execution are not started. Audit 006 passed
   fresh admission and isolated staging. IM 006 added the remote transport and
@@ -23,8 +23,9 @@ measurement, and production-constrained HarnessOpt.
   provenance and durable per-candidate recovery blockers. AP audit 008 passed
   the final-r3 successor artifacts and created the separate measured authority
   and LO goal. LO 001 then stopped before launch on the cyclic bundle/authority
-  Git equality. IM 008 adds the versioned non-cyclic provenance contract;
-  measured execution remains closed pending AP review and successor adoption.
+  Git equality. IM 008 adds the versioned non-cyclic provenance contract. AP
+  audit 009 passed the successor bundle/adoption/transport chain and issued
+  authority v2 plus the current LO goal; frozen A2 retrieval is ready for LO.
   The Owner approved an 84-hour total successor TTL and raised the current A2
   forward hard stop to USD 50; the USD 150 campaign ceiling, 40-hour initial
   floor, and deterministic 53,848-second reserve floor remain unchanged.)
@@ -39,8 +40,8 @@ measurement, and production-constrained HarnessOpt.
   durable process identity, heartbeat, cancellation, reaping, and recovery.
   Measured execution is authorized only through the current AP authority and
   fresh LO provider admission.)
-- Current evidence class: engineering validation and immutable pre-measurement
-  candidate freeze; scientific authority `false`
+- Current evidence class: measured execution authority for frozen A2 retrieval;
+  scientific authority `true` only within goal 002
 - Admissible completed ArmIndex measured runs: `1` (`r15`, `25/25`)
 - Incomplete live attempts: `1` (`r13`, `24/25`; not promotable)
 - Selection exposures: `0`
@@ -87,7 +88,7 @@ There are exactly seven active phases. Progress is:
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | staged not launched; provenance v2 implemented, AP review and successor adoption pending |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | ready for measured execution under authority v2 and goal 002; not launched |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
@@ -357,13 +358,11 @@ unapproved provider fallback, HARNESS-DEV, Selection, and Final remain forbidden
 ## Next authorized action
 
 ```text
-AP reads `docs/implementation/A2_PER_ARM_AUTOINDEX_im_008_001.md` and
-`docs/long_run/A2_PER_ARM_AUTOINDEX_lo_001_001.md`, then reviews the provenance
-v2 implementation. The review must verify that authority v1 is fail-closed,
-the successor bundle commit is an ancestor of the clean pushed authority HEAD,
-and every execution-bundle-closure path is byte-unchanged between them. AP then
-routes successor staging/adoption before issuing a new authority v2 and LO goal.
-Measured A2, candidate evaluation, and REP-DEV measurement remain closed.
+LO reads `docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md`, obtains a fresh
+authenticated provider observation/admission within the USD 50 Task/Run hard
+stop and 84-hour total TTL, then executes only the frozen A2 retrieval lifecycle
+with durable recovery and safe return. Candidate evaluation, REP-DEV measurement,
+A3, Selection, and Final remain closed.
 ```
 
 The r13 audit remains historical failed-attempt evidence and cannot be combined

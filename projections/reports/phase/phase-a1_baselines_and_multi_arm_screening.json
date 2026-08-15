@@ -3280,9 +3280,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T03:58:19Z",
-  "generated_from_revision": "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822",
-  "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
+  "generated_at": "2026-08-15T09:00:53Z",
+  "generated_from_revision": "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8",
+  "git_commit": "665cdcc76c4619a0a60419978179e1ab6b6d7cf6",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3436,7 +3436,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
+    "git_commit": "665cdcc76c4619a0a60419978179e1ab6b6d7cf6",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3447,13 +3447,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
+      "sha256": "c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-15T03:58:19Z",
+  "last_material_update": "2026-08-15T09:00:53Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3548,7 +3548,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "4c37c05af3256f6afabf2cbbc2cf9526e8f8badb93c7bfec5b0e725911a4f243",
+  "report_sha256": "c24aea68750a312f8a3bc6b9b8e212cea3733c39bbc6aaa8a59d0d531f030397",
   "report_type": "phase",
   "result": {
     "decision": "PASS_25_OF_25",

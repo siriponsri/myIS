@@ -77,7 +77,7 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     home_report = contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
     assert "Task/Sub-stage: `A2.1 / FROZEN_FIVE_ARM_EXECUTION`" in home_report
     assert (
-        "Status: `a2_ready_for_ap_fresh_instance_staging_measured_a2_locked`"
+        "Status: `a2_ready_for_measured_execution_authorized`"
         in home_report
     )
     assert "P1_CPU_MEASURED_COMPLETE" in home_report
@@ -246,24 +246,20 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         for record in records
         if record["report_id"] == "phase-a2_per_arm_autoindex"
     )
-    assert a2_task["result"]["decision"] == (
-        "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
-    )
-    assert "additive fresh-instance binding" in a2_task["result"]["result"]
-    assert "pending AP fresh-instance admission and isolated staging" in a2_task["result"]["result"]
+    assert a2_task["result"]["decision"] == "READY_FOR_MEASURED_EXECUTION"
+    assert "hash-bound LO authority is current" in a2_task["result"]["result"]
+    assert "fresh authenticated provider admission is required" in a2_task["result"]["result"]
     assert "pending the production adapter" not in a2_task["result"]["result"]
     assert "deployment-package validation. " not in a2_task["result"]["result"]
-    assert a2_task["scientific_authority"] is False
-    assert a2_phase["result"]["decision"] == (
-        "READY_FOR_AP_FRESH_INSTANCE_STAGING_MEASUREMENT_LOCKED"
-    )
+    assert a2_task["scientific_authority"] is True
+    assert a2_phase["result"]["decision"] == "READY_FOR_MEASURED_EXECUTION"
     assert a2_phase["input_bindings"]["campaign"]["uri"] == (
         "control/campaigns/armindex-multiretriever-v2.yaml"
     )
     assert a2_phase["input_bindings"]["historical_scope"]["status"] == (
         "historical_read_only"
     )
-    assert a2_phase["scientific_authority"] is False
+    assert a2_phase["scientific_authority"] is True
     assert a2_freeze_task["result"]["decision"] == "CLOSED_PASS_INDEPENDENT_AUDIT"
 
     outputs = projection_report_contents(ROOT, model)

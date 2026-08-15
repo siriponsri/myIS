@@ -1,45 +1,45 @@
 {
-  "dashboard_snapshot_sha256": "a9d77688865af55ecfaf5a11e1598f6cd7eda0553207c635c990a542b6653550",
-  "mlflow_archive_sha256": "c264cd6480e5550ca6b55a65dbc22c5060626cc32306847d91ce30a8ce60d6d3",
-  "mlflow_run_id": "da5a1d4a297c415496ee26072f825b8b",
-  "obsidian_manifest_sha256": "cd78f2f541f76fcf4328ca6079d225c62db7138bc1cca8c5aaefc34553aaf698",
+  "dashboard_snapshot_sha256": "70d5d8621de3950ba099f3d3479d40a6ced7e7a59224eb0dd05580a37e41bc0b",
+  "mlflow_archive_sha256": "9f445a6c9fc94b5d6663816fc16eab22cb90750c9f2203cc919f85b6e4f8805c",
+  "mlflow_run_id": "e56da527648d48b28e68a4aa2c0716f2",
+  "obsidian_manifest_sha256": "1684645c486c41df475da3dfbfe8ffeaa0bc2ce0c01dde3f29041d3c6deeddcc",
   "projection_events": {
     "brain_projection": {
-      "artifact_sha256": "2dd7d07fc877b65ef6ca931e8104505aec9f14535d02d880b346486cdc50de01",
+      "artifact_sha256": "3e10fb46fe866777fcc2057edb85afec9a19963db75008ddcd0d1c46e92bff3b",
       "artifact_uri": "../02_Brain/reports/generated/armindex/phase-A1_BASELINES_AND_MULTI_ARM_SCREENING.md",
       "status": "projected"
     },
     "dashboard_projection": {
-      "artifact_sha256": "a9d77688865af55ecfaf5a11e1598f6cd7eda0553207c635c990a542b6653550",
+      "artifact_sha256": "70d5d8621de3950ba099f3d3479d40a6ced7e7a59224eb0dd05580a37e41bc0b",
       "artifact_uri": "projections/read-model/read-model.v2.json",
       "status": "projected"
     },
     "mlflow_safe_mirror": {
-      "artifact_sha256": "c264cd6480e5550ca6b55a65dbc22c5060626cc32306847d91ce30a8ce60d6d3",
+      "artifact_sha256": "9f445a6c9fc94b5d6663816fc16eab22cb90750c9f2203cc919f85b6e4f8805c",
       "artifact_uri": "mlflow/generated/archive-index.v2.json",
       "status": "mirrored"
     },
     "obsidian_report": {
-      "artifact_sha256": "cd78f2f541f76fcf4328ca6079d225c62db7138bc1cca8c5aaefc34553aaf698",
+      "artifact_sha256": "1684645c486c41df475da3dfbfe8ffeaa0bc2ce0c01dde3f29041d3c6deeddcc",
       "artifact_uri": "obsidian_report/00_System/Generated/generated-manifest.json",
       "status": "projected"
     },
     "paper_readiness": {
-      "artifact_sha256": "124c98e086e1e396f35b847029e23f8478891ea6e3f59be9ff608b450b4ef785",
+      "artifact_sha256": "eb021bf41a342d57cb131d88c8730b671520e7a71fb5f373abd45ce7448e1f74",
       "artifact_uri": "../03_Paper/publications/isai-nlp-2026/generated/publication-readiness.md",
       "status": "projected"
     },
     "read_model_rebuild": {
-      "artifact_sha256": "a9d77688865af55ecfaf5a11e1598f6cd7eda0553207c635c990a542b6653550",
+      "artifact_sha256": "70d5d8621de3950ba099f3d3479d40a6ced7e7a59224eb0dd05580a37e41bc0b",
       "artifact_uri": "projections/read-model/read-model.v2.json",
       "status": "projected"
     }
   },
   "projection_schema_version": "myis.integrated-projection.v2",
-  "read_model_revision": "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822",
-  "read_model_sha256": "a9d77688865af55ecfaf5a11e1598f6cd7eda0553207c635c990a542b6653550",
+  "read_model_revision": "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8",
+  "read_model_sha256": "70d5d8621de3950ba099f3d3479d40a6ced7e7a59224eb0dd05580a37e41bc0b",
   "schema_version": "myis.projection-sync-receipt.v2",
-  "source_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
+  "source_commit": "665cdcc76c4619a0a60419978179e1ab6b6d7cf6",
   "source_receipt_sha256": "e14736fd1cab22cf8602bba2b3d59ecab2ccca3137a81c4fe295e95e22bc16c2",
   "source_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a1.2-scientific-execution-adoption-request.receipt.v11.json",
   "status": "PASS"

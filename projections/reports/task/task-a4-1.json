@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T03:58:19Z",
-  "generated_from_revision": "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822",
-  "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
+  "generated_at": "2026-08-15T09:00:53Z",
+  "generated_from_revision": "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8",
+  "git_commit": "665cdcc76c4619a0a60419978179e1ab6b6d7cf6",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
+    "git_commit": "665cdcc76c4619a0a60419978179e1ab6b6d7cf6",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,19 +52,19 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac",
+      "sha256": "c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T03:58:19Z",
+  "last_material_update": "2026-08-15T09:00:53Z",
   "metric_references": [],
   "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
   "objective": "Production profiles and legal transfer",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "task-a4-1",
-  "report_sha256": "5357527fe1c346583d3d4df7cefced0517e8a70e5ff89941a46f60348606685c",
+  "report_sha256": "2ba7c5d93e1bbd926fb6b36ae7916d2d3aa9c98de4de93c7c770f721a8da31dd",
   "report_type": "task",
   "result": {
     "decision": "planned",

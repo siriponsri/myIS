@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822"
-read_model_sha256: "a9d77688865af55ecfaf5a11e1598f6cd7eda0553207c635c990a542b6653550"
-source_commit: "27b1f520eeb679a06f76a7329cb51c1a44082dbf"
+read_model_revision: "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8"
+read_model_sha256: "70d5d8621de3950ba099f3d3479d40a6ced7e7a59224eb0dd05580a37e41bc0b"
+source_commit: "665cdcc76c4619a0a60419978179e1ab6b6d7cf6"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "measured_execution_authority"
 scientific_authority: true
 claim_boundary: "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed"
-generated_from_revision: "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822"
-last_material_update: "2026-08-15T03:58:19Z"
+generated_from_revision: "c61573b0252186c784df9858380d459f91b828f8a99af3990a38582ff71496f8"
+last_material_update: "2026-08-15T09:00:53Z"
 next_authorized_action: "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-15T03:58:19Z"
-updated_at: "2026-08-15T03:58:19Z"
+created_at: "2026-08-15T09:00:53Z"
+updated_at: "2026-08-15T09:00:53Z"
 note_id: "A2_PER_ARM_AUTOINDEX-MASTER"
 note_type: "phase_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -46,9 +46,9 @@ Search and freeze one representation program per promoted arm.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `f5deba81b379057b876bed25195b04105f46e88248f19a3f45e2eb80864e4fac`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `c711d5de349662766f94ead7aeeb853342bade2bf3220caa0668b6959aa0fed8`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de`
-- `git_commit`: 27b1f520eeb679a06f76a7329cb51c1a44082dbf
+- `git_commit`: 665cdcc76c4619a0a60419978179e1ab6b6d7cf6
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
 - `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
 - `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`
@@ -56,8 +56,8 @@ Search and freeze one representation program per promoted arm.
 - `independent_audit`: `outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json`; SHA-256 `141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0`
 - `control_bindings`: [{'uri': 'control/armindex/a2/official-codex-bridge.v1.json', 'sha256': 'f5fdd0479c8cfd472839f53a56355e810763251d45f777ef19ec7da2dbb578d9'}, {'uri': 'control/armindex/a2/execution-contract.v1.json', 'sha256': 'ba7da95b906a4351adca1898b89a623d852b9b8016602627633397fce29dbc1d'}, {'uri': 'control/execution-envelope-a2-v1.yaml', 'sha256': 'de63c4f5fac96fdd345ed01f19fcf2725559fe959fc3bcfcb44446317ef316a7'}, {'uri': 'control/budgets/a2-per-arm-autoindex-v1.json', 'sha256': 'b7fffaa397920757290b149defde12e798d61150b61ab30845e4cd569d7f11c1'}]
 - `publication_workspace`: `../03_Paper/01_ArmIndex`; SHA-256 `None`
-- `execution_readiness`: `{"budget_profile_sha256": "274fff51e275210ced16367e2008168042a7b718605fa0b94c92f29b46dcb6af", "budget_uri": "control/budgets/a2-execution-readiness-v1.json", "contract_sha256": "da286fef76f8b176b8e07f4c2da6c17b7b88545de422189002c1e49d23ba449f", "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json", "forward_hard_stop_usd": 35, "measured_a2_started": false, "owner_ttl_hours": 40, "status": "READY_FOR_MEASURED_EXECUTION"}`
-- `current_staged_attempt`: `{"attempt_id": "a2-im-audit007-final-r3", "pointer_sha256": null, "pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json"}`
+- `execution_readiness`: `{"budget_profile_sha256": "c831f7bd325318873178baee4673078b2860cd12a02e1998cb68d77797b733f8", "budget_uri": "control/budgets/a2-execution-readiness-v1.json", "contract_sha256": "d559755672ce86309f15ad26ef96977e351bdd28673e03b5be42adc44e1da39e", "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json", "forward_hard_stop_usd": 50, "measured_a2_started": false, "owner_ttl_hours": 40, "status": "READY_FOR_MEASURED_EXECUTION"}`
+- `current_staged_attempt`: `{"attempt_id": "a2-im-audit008-provenance-v2", "pointer_sha256": null, "pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json"}`
 
 ## Work Performed
 
@@ -77,10 +77,10 @@ These references explain what each artifact is for; the bytes remain governed by
 | Official Codex credit closeout correction | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-official-credit-closeout-correction.receipt.v1.json` | `5c663417bf8483b3a1ed9373fd8bd241b7a162074c148c7fee711dd670840081` | `validated` |
 | Independent A2 candidate-freeze audit | `audit` | `engineering_validation` | `outputs/audits/rigor/a2-official-codex-candidate-freeze-independent-audit-20260812.json` | `64458c0705aa257b3a6a5e088360c3e3ee965d2275d4a927a85264600c1a43da` | `validated` |
 | Official Codex post-audit final credit check | `receipt` | `engineering_validation` | `campaigns/armindex-multiretriever-v2/evidence/a2-official-codex-final-credit-check.receipt.v1.json` | `9bc6d88e0ba0fbdd27ebdaad22977cd71279d9d4ae00669b8d3f3cf0035445a7` | `validated` |
-| A2 fresh-instance execution readiness contract | `contract` | `engineering_execution_readiness` | `control/armindex/a2/execution-readiness-contract.v2.json` | `a029f85a9801cd604c635015f482cbbaf1706e6a9169cf747f8e629f7fc97b10` | `validated` |
-| A2 fresh-instance execution readiness envelope | `control` | `engineering_execution_readiness` | `control/execution-envelope-a2-readiness-v2.yaml` | `af92bc74794551093390e4a515da4946a829b2503db0d4176e5c30123c81d7c2` | `validated` |
-| A2 whole-workload readiness budget | `budget` | `engineering_execution_readiness` | `control/budgets/a2-execution-readiness-v1.json` | `be7831dfd151e259ca9648426842c6044f665d1ae031e0d31b235848f00a46de` | `validated` |
-| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `7a53495769f1392867d37912bf8bdc77993cdfd69a4e8d53f7f7519eeffe5c32` | `validated` |
+| A2 fresh-instance execution readiness contract | `contract` | `engineering_execution_readiness` | `control/armindex/a2/execution-readiness-contract.v2.json` | `189e7a467b2272c7c6024c995f3c54f97f914c1bf45b0a4843abac22b5728bcc` | `validated` |
+| A2 fresh-instance execution readiness envelope | `control` | `engineering_execution_readiness` | `control/execution-envelope-a2-readiness-v2.yaml` | `3e0b9a2099612bccffb4f0221306b3aa4f22eda735175080c1b786a802a41dac` | `validated` |
+| A2 whole-workload readiness budget | `budget` | `engineering_execution_readiness` | `control/budgets/a2-execution-readiness-v1.json` | `73bdd90e4e8958ad29d699dc47586bda61eb969134b6769941bee3af3cc1fa43` | `validated` |
+| A2 execution readiness runbook | `runbook` | `engineering_execution_readiness` | `control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md` | `21a23c154742dd18093db3ca7e5ac8afa5324a3f3c46f5c7dd012e1bf9629fa7` | `validated` |
 | A2 append-only execution ledger | `ledger` | `engineering_execution_readiness` | `control/armindex/a2/execution-ledger.v1.jsonl` | `6dad2987d6cc57b166d9ea13fb4111b5504e2ffb9b7d7440fa055a85564553d4` | `validated` |
 
 ## Metrics
@@ -94,7 +94,7 @@ These references explain what each artifact is for; the bytes remain governed by
 | `official_credit_used_percent`@0 | `premeasurement` | `A2 candidate freeze` | `13` | `1` | `official_credit_window` | `measured_execution_authority` |
 | `official_credit_remaining_percent`@0 | `premeasurement` | `A2 candidate freeze` | `87` | `1` | `official_credit_window` | `measured_execution_authority` |
 | `measured_a2_runs`@0 | `premeasurement` | `A2 candidate freeze` | `0` | `1` | `measured_A2` | `measured_execution_authority` |
-| `a2_forward_hard_stop_usd`@0 | `premeasurement` | `A2 execution readiness` | `35` | `1` | `all_fee_whole_workload` | `measured_execution_authority` |
+| `a2_forward_hard_stop_usd`@0 | `premeasurement` | `A2 execution readiness` | `50` | `1` | `all_fee_whole_workload` | `measured_execution_authority` |
 | `a2_owner_ttl_hours`@0 | `premeasurement` | `A2 execution readiness` | `40` | `1` | `provider_watchdog` | `measured_execution_authority` |
 | `a2_provider_admissions`@0 | `premeasurement` | `A2 execution readiness` | `0` | `1` | `current_attempt` | `measured_execution_authority` |
 | `a2_execution_adoptions`@0 | `premeasurement` | `A2 execution readiness` | `0` | `1` | `current_attempt` | `measured_execution_authority` |
