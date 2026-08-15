@@ -3,7 +3,7 @@
 - Session mode: `IM`
 - Phase/Task: `A2_PER_ARM_AUTOINDEX / A2.1 FROZEN_FIVE_ARM_EXECUTION`
 - Source audit: `docs/audit/A2_PER_ARM_AUTOINDEX_audit_007.md`
-- Implementation revision: finalized by the pushed handoff successor recorded below
+- Implementation revision: `3600a87c867218d14beebcc0fe291be6c9c1b44b`
 - Routing: `NEEDS_AP`
 
 ## Outcome
@@ -21,6 +21,9 @@ worker launch unless attempt ID, bundle SHA, bundle receipt SHA, Git commit,
 Git tree, remote root, execution adoption, AP measurement authority, and the
 tracked false commitment agree. Remote input validation also binds the same
 attempt, Owner-manifest file SHA, remote-input file SHA, and retriever code SHA.
+Receipt identity and receipt-file identity are separate fields: the former
+equals adoption's receipt self-hash, while the latter verifies the exact remote
+JSON bytes.
 
 The new Linux candidate supervisor persists PID plus `/proc` start identity,
 attempt-bound heartbeat, cancellation, reaping, recovery count, and durable
@@ -60,12 +63,19 @@ That directory contains the exact pushed-HEAD bundle/receipt, refreshed
 provider observation and v2 admission, unified execution adoption, remote
 transport v2 config/request, non-measured transport receipt, and synthetic
 interruption/cancellation/reaping/recovery evidence. AP must use the successor
-artifacts in that directory, not the older audit 005/006 attempt identities.
+`final-r3` artifacts in that directory, not the older audit 005/006 identities
+or the preserved IM 007 pre-transport/r2 diagnostic attempts.
 
-Implementation code revision: `PENDING_FIRST_PUSH`.
+Implementation code revision: `3600a87c867218d14beebcc0fe291be6c9c1b44b`.
 Final handoff revision: represented by the final pushed `main` used to build
 the successor bundle; the exact commit/tree and bundle hashes are in the
 Owner-local bundle receipt and transport request.
+
+The preserved r2 diagnostic successor proved the corrected dual receipt hashes
+and returned `PASS_A2_REMOTE_TRANSPORT_CHECK` with GPU process count `0`, A2
+process count `0`, candidate evaluation `false`, REP-DEV measurement `false`,
+and protected payload returned `false`. The final r3 successor repeats this
+check after the handoff-only commit so its bundle names the final pushed HEAD.
 
 ## Claim boundary and limitations
 
@@ -83,7 +93,7 @@ destroy, or download/re-upload model bytes.
 อ่าน docs/implementation/A2_PER_ARM_AUTOINDEX_im_007_001.md และ
 docs/audit/A2_PER_ARM_AUTOINDEX_audit_007.md แล้วตรวจ acceptance criteria แบบ
 pass/fail เพียงรอบเดียว โดยตรวจ successor artifacts ใน
-04_Owner_Stores/armindex/a2/a2-im-audit007-final-20260815/ ว่า attempt ID เดียวกัน,
+04_Owner_Stores/armindex/a2/a2-im-audit007-final-20260815/ โดยใช้ final-r3 artifacts ว่า attempt ID เดียวกัน,
 final pushed-HEAD bundle/adoption/transport equal กัน, canonical measurement-authority
 commitment ยัง false, durable remote interruption/cancellation/reaping/recovery ผ่าน,
 provider observation/admission ใช้ TTL 60h และ USD 35 hard stop และ process-zero ผ่าน
