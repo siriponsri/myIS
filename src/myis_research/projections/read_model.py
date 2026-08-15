@@ -655,6 +655,9 @@ A2_PROVENANCE_REPAIR_IM_PATH = Path(
 A2_CURRENT_GOAL_003_PATH = Path(
     "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md"
 )
+A2_CURRENT_GOAL_004_PATH = Path(
+    "docs/goal/A2_PER_ARM_AUTOINDEX_goal_004.md"
+)
 A2_CURRENT_LO_003_PATH = Path(
     "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md"
 )
@@ -966,29 +969,31 @@ def _a2_execution_readiness_projection(
             "provider_admission_attempted": False,
         }
 
-        # Goal 003 is a terminal pre-authority stop. Keep the historical v2
-        # authority and ledger immutable, but let projections follow the
-        # validated current closeout instead of presenting the old LO route.
+        # Goal 003 is terminal pre-authority provenance. Audit 012 and the
+        # active Goal 004 bind the recovery route, so do not rely on mutable
+        # historical handoff prose to determine whether preparation may resume.
         goal_path = root / A2_CURRENT_GOAL_003_PATH
+        successor_goal_path = root / A2_CURRENT_GOAL_004_PATH
         lo_path = root / A2_CURRENT_LO_003_PATH
         audit_path = root / A2_CURRENT_AUDIT_012_PATH
         capsule_path = root / A2_CURRENT_SESSION_CAPSULE_PATH
         try:
             goal_text = goal_path.read_text(encoding="utf-8")
-            lo_text = lo_path.read_text(encoding="utf-8")
+            successor_goal_text = successor_goal_path.read_text(encoding="utf-8")
             audit_text = audit_path.read_text(encoding="utf-8")
             capsule = json.loads(capsule_path.read_text(encoding="utf-8"))
             goal_is_closed_stop = (
                 re.search(r"^status:\s*STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT\s*$", goal_text, re.MULTILINE)
                 and re.search(r"^lifecycle:\s*CLOSED\s*$", goal_text, re.MULTILINE)
             )
+            successor_goal_is_active = (
+                re.search(r"^status:\s*READY_FOR_LO_ONE_SESSION\s*$", successor_goal_text, re.MULTILINE)
+                and re.search(r"^lifecycle:\s*ACTIVE\s*$", successor_goal_text, re.MULTILINE)
+                and re.search(r"^measured_a2_authorized:\s*false\s*$", successor_goal_text, re.MULTILINE)
+            )
             closeout_is_bound = (
-                "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT" in lo_text
-                and (
-                    "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_OR_DESTROY_FALLBACK"
-                    in audit_text
-                    or "NEEDS_OWNER_DESTROY_AND_FRESH_ATTEMPT" in audit_text
-                )
+                "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_OR_DESTROY_FALLBACK" in audit_text
+                and "Goal 004" in audit_text
                 and capsule.get("schema_version") == "myis.research-session.v1"
                 and capsule.get("goal_id") == A2_CURRENT_GOAL_003_PATH.as_posix()
                 and capsule.get("integrity", {}).get("all_refs_exist") is True
@@ -998,13 +1003,14 @@ def _a2_execution_readiness_projection(
             )
         except (OSError, TypeError, ValueError, json.JSONDecodeError):
             goal_is_closed_stop = False
+            successor_goal_is_active = False
             closeout_is_bound = False
-        if goal_is_closed_stop and closeout_is_bound:
+        if goal_is_closed_stop and successor_goal_is_active and closeout_is_bound:
             return {
                 **result,
                 "status": A2_PREAUTHORITY_STOP_STATUS,
                 "current_status": "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT",
-                "current_route": "OWNER_ACTION_REQUIRED",
+                "current_route": "LO_EXECUTE_GOAL_004",
                 "historical_status": latest_ledger_entry["status"],
                 "attempt_id": str(capsule.get("run_id")),
                 "scientific_authority": False,
@@ -1023,9 +1029,11 @@ def _a2_execution_readiness_projection(
                     "Owner-authorized forensic root recovery is the immediate next "
                     "action; destroy only if exact-root checks fail"
                 ),
-                "next_authorized_action": A2_PREAUTHORITY_STOP_NEXT_ACTION,
-                "source_goal_uri": A2_CURRENT_GOAL_003_PATH.as_posix(),
-                "source_goal_sha256": _file_sha256(goal_path),
+                "next_authorized_action": "LO_EXECUTE_GOAL_004",
+                "source_goal_uri": A2_CURRENT_GOAL_004_PATH.as_posix(),
+                "source_goal_sha256": _file_sha256(successor_goal_path),
+                "historical_goal_uri": A2_CURRENT_GOAL_003_PATH.as_posix(),
+                "historical_goal_sha256": _file_sha256(goal_path),
                 "source_lo_handoff_uri": A2_CURRENT_LO_003_PATH.as_posix(),
                 "source_lo_handoff_sha256": _file_sha256(lo_path),
                 "source_audit_uri": A2_CURRENT_AUDIT_012_PATH.as_posix(),

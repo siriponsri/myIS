@@ -332,7 +332,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     )
     assert readiness["historical_status"] == "EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED"
     assert readiness["current_status"] == "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT"
-    assert readiness["current_route"] == "OWNER_ACTION_REQUIRED"
+    assert readiness["current_route"] == "LO_EXECUTE_GOAL_004"
     assert readiness["scientific_authority"] is False
     assert readiness["measured_a2_authorized"] is False
     assert readiness["measured_execution_allowed"] is False
@@ -347,10 +347,11 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     )
     assert readiness["task_run_ceiling_usd"] == 50
     assert readiness["gpu_decision"] == "KEEP_GPU"
-    assert readiness["next_authorized_action"] == (
-        "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT"
-    )
+    assert readiness["next_authorized_action"] == "LO_EXECUTE_GOAL_004"
     assert readiness["source_goal_uri"] == (
+        "docs/goal/A2_PER_ARM_AUTOINDEX_goal_004.md"
+    )
+    assert readiness["historical_goal_uri"] == (
         "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md"
     )
     assert readiness["source_lo_handoff_uri"] == (
