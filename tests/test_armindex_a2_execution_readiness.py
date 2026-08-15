@@ -344,7 +344,7 @@ def test_fresh_instance_binding_drives_v2_admission_and_rejects_instance_drift(
     )
     assert admission["provider_instance_id"] == "58881234"
     assert admission["provider_instance_binding_sha256"] == binding["binding_sha256"]
-    assert admission["forward_hard_stop_usd"] == 45
+    assert admission["forward_hard_stop_usd"] == 50
 
     drifted = json.loads(observation_path.read_text(encoding="ascii"))
     drifted["provider_instance_id"] = "58881235"
@@ -362,11 +362,11 @@ def test_fresh_instance_binding_drives_v2_admission_and_rejects_instance_drift(
         )
 
 
-def test_v2_admission_uses_owner_expanded_usd_45_hard_stop(tmp_path: Path) -> None:
+def test_v2_admission_uses_owner_expanded_usd_50_hard_stop(tmp_path: Path) -> None:
     observation_path, sources = _provider_observation_paths_v2(tmp_path)
     observation = json.loads(observation_path.read_text(encoding="ascii"))
-    observation["all_fee_components_usd"]["compute_usd"] = "41.00"
-    observation["whole_workload_total_usd"] = "44.00"
+    observation["all_fee_components_usd"]["compute_usd"] = "47.00"
+    observation["whole_workload_total_usd"] = "50.00"
     observation.pop("observation_sha256")
     observation["observation_sha256"] = canonical_sha256(observation)
     observation_path.write_text(json.dumps(observation), encoding="ascii")
@@ -385,11 +385,11 @@ def test_v2_admission_uses_owner_expanded_usd_45_hard_stop(tmp_path: Path) -> No
         instance_binding=binding,
         now_utc=datetime(2026, 8, 12, 8, 5, tzinfo=timezone.utc),
     )
-    assert admission["whole_workload_total_usd"] == "44.00"
-    assert admission["forward_hard_stop_usd"] == 45
+    assert admission["whole_workload_total_usd"] == "50.00"
+    assert admission["forward_hard_stop_usd"] == 50
 
-    observation["all_fee_components_usd"]["compute_usd"] = "42.01"
-    observation["whole_workload_total_usd"] = "45.01"
+    observation["all_fee_components_usd"]["compute_usd"] = "47.01"
+    observation["whole_workload_total_usd"] = "50.01"
     observation.pop("observation_sha256")
     observation["observation_sha256"] = canonical_sha256(observation)
     observation_path.write_text(json.dumps(observation), encoding="ascii")

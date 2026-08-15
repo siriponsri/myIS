@@ -17,7 +17,7 @@
     "observed_at_utc": {"type": "string", "format": "date-time"},
     "ttl_deadline_utc": {"type": "string", "format": "date-time"},
     "whole_workload_total_usd": {"$ref": "#/$defs/money"},
-    "forward_hard_stop_usd": {"enum": ["35", "45"]},
+    "forward_hard_stop_usd": {"enum": ["35", "45", "50"]},
     "freeze_bindings": {"$ref": "#/$defs/freeze"},
     "receipt_sha256": {"$ref": "#/$defs/hash"}
   },

@@ -57,8 +57,9 @@ def test_a2_controls_bind_immutable_freeze_and_measurement_stays_locked() -> Non
     assert contract["contract_sha256"] == canonical_sha256(
         {key: value for key, value in contract.items() if key != "contract_sha256"}
     )
-    assert budget["admission"]["forward_hard_stop_usd"] == 45
+    assert budget["admission"]["forward_hard_stop_usd"] == 50
     assert budget["runtime_projection"]["owner_ttl_hours"] == 40
+    assert budget["runtime_projection"]["target_ttl_hours"] == 84
     assert budget["budget_profile_sha256"] == canonical_sha256(
         {key: value for key, value in budget.items() if key != "budget_profile_sha256"}
     )

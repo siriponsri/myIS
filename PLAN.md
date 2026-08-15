@@ -25,8 +25,9 @@ measurement, and production-constrained HarnessOpt.
   and LO goal. LO 001 then stopped before launch on the cyclic bundle/authority
   Git equality. IM 008 adds the versioned non-cyclic provenance contract;
   measured execution remains closed pending AP review and successor adoption.
-  The Owner expanded the successor A2 forward hard stop by USD 10 to USD 45;
-  the USD 150 campaign ceiling and TTL semantics remain unchanged.)
+  The Owner approved an 84-hour total successor TTL and raised the current A2
+  forward hard stop to USD 50; the USD 150 campaign ceiling, 40-hour initial
+  floor, and deterministic 53,848-second reserve floor remain unchanged.)
 - Current phase: `A2_PER_ARM_AUTOINDEX` (audit 003 implementation provides the
   production adapter and matched-first reserve lifecycle. The Owner chose to
   destroy instance `47411176` and provision a fresh instance. Audit 004 implementation
@@ -445,7 +446,9 @@ network reserve and below the unchanged USD 35 hard stop. Audit 008 passed
 IM 007 final-r3, created the current measured authority and LO goal, and routes
 to one explicit LO session.
 
-After LO 001 stopped prelaunch, the Owner expanded the successor A2 task/run
-hard stop from USD 35 to USD 45. This does not rewrite the historical final-r3
-admission or change the USD 150 campaign ceiling, 60-hour target TTL, 40-hour
-initial floor, or deterministic 53,848-second reserve floor.
+After LO 001 stopped prelaunch, the Owner first expanded the successor A2
+task/run hard stop from USD 35 to USD 45. The current Owner authorization
+supersedes that current successor ceiling with USD 50 and an 84-hour total TTL.
+This does not rewrite the historical final-r3 admission or change the USD 150
+campaign ceiling, 40-hour initial floor, or deterministic 53,848-second
+reserve floor.

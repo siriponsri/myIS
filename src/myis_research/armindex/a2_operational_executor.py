@@ -1701,7 +1701,7 @@ def build_reserve_budget_admission(
         "observed_at_utc": fresh_provider["observed_at_utc"],
         "ttl_deadline_utc": fresh_provider["ttl_deadline_utc"],
         "whole_workload_total_usd": fresh_provider["whole_workload_total_usd"],
-        "forward_hard_stop_usd": "45",
+        "forward_hard_stop_usd": "50",
         "freeze_bindings": _freeze_bindings(root),
     }
     receipt = {**body, "receipt_sha256": canonical_sha256(body)}
@@ -1744,8 +1744,8 @@ def validate_reserve_budget_admission(
         or checked["freeze_bindings"] != _freeze_bindings(root)
         or checked["receipt_sha256"]
         != canonical_sha256({key: value for key, value in checked.items() if key != "receipt_sha256"})
-        or Decimal(checked["whole_workload_total_usd"]) > Decimal("45")
-        or checked["forward_hard_stop_usd"] != "45"
+        or Decimal(checked["whole_workload_total_usd"]) > Decimal("50")
+        or checked["forward_hard_stop_usd"] != "50"
         or now - observed > timedelta(minutes=15)
         or observed > now + timedelta(minutes=1)
         or (deadline - now).total_seconds() < reserve_checkpoint_ttl_seconds(root)

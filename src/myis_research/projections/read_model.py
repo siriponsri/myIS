@@ -861,7 +861,7 @@ def _a2_execution_readiness_projection(
             or contract.get("launch_allowed") is not False
             or contract.get("measured_execution_allowed") is not False
             or not isinstance(policy, Mapping)
-            or policy.get("forward_hard_stop_usd") != 45
+            or policy.get("forward_hard_stop_usd") != 50
             or policy.get("owner_ttl_hours") != 40
             or policy.get("provider_instance_id")
             != "runtime_supplied_from_fresh_binding"
@@ -869,7 +869,7 @@ def _a2_execution_readiness_projection(
             or policy.get("gpu_count") != 4
             or policy.get("gpu_model") != "RTX3090"
             or policy.get("vram_mib_each") != 24576
-            or policy.get("target_ttl_hours") != 48
+            or policy.get("target_ttl_hours") != 84
             or policy.get("remote_clock_skew_max_seconds") != 60
         ):
             raise ValueError("A2 readiness contract boundary drift")
@@ -880,7 +880,7 @@ def _a2_execution_readiness_projection(
         if (
             budget.get("status") != "READY_FOR_FRESH_ALL_FEE_ADMISSION"
             or not isinstance(admission, Mapping)
-            or admission.get("forward_hard_stop_usd") != 45
+            or admission.get("forward_hard_stop_usd") != 50
             or admission.get("whole_workload_admission_required") is not True
             or admission.get("fresh_all_fee_quote_required") is not True
             or admission.get("adopted_for_execution") is not False
@@ -917,7 +917,7 @@ def _a2_execution_readiness_projection(
             "conditional_reserve_candidate_count": 12,
             "diagnostic_non_advancing_arms": ["ARM-01", "ARM-02"],
             "primary_advancement_arms": ["ARM-03", "ARM-05", "ARM-04"],
-            "forward_hard_stop_usd": 45,
+            "forward_hard_stop_usd": 50,
             "owner_ttl_hours": 40,
             "phase_ceiling_usd": budget["hard_stops"]["a2_forward_usd"],
             "task_run_ceiling_usd": admission["forward_hard_stop_usd"],
@@ -1053,7 +1053,7 @@ def _a2_execution_readiness_projection(
                 "provider_admission_attempted": False,
                 "gpu_decision": "KEEP_GPU",
                 "gpu_decision_reason": (
-                    "the Owner authorized the USD 45 successor route; instance 47700074 "
+                    "the Owner authorized the USD 50 successor route with an 84-hour total TTL; instance 47700074 "
                     "may be reused only after fresh v2 observation and admission"
                 ),
                 "next_authorized_action": (

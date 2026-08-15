@@ -233,7 +233,7 @@ def _reserve_budget_admission(
         "observed_at_utc": "2026-08-12T08:05:00Z",
         "ttl_deadline_utc": "2026-08-14T08:00:00Z",
         "whole_workload_total_usd": "33",
-        "forward_hard_stop_usd": "45",
+        "forward_hard_stop_usd": "50",
         "freeze_bindings": operational._freeze_bindings(ROOT),
     }
     return {**body, "receipt_sha256": canonical_sha256(body)}
@@ -1282,7 +1282,7 @@ def test_reserve_admission_uses_frozen_unfinished_projection_floor() -> None:
                 ),
                 now_utc=now,
             )
-            assert checked["forward_hard_stop_usd"] == "45"
+            assert checked["forward_hard_stop_usd"] == "50"
         else:
             with pytest.raises(
                 operational.A2OperationalExecutorError,

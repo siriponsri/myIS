@@ -63,7 +63,7 @@ _REQUIRED_PROVIDER_SOURCES = frozenset(
     }
 )
 _REQUIRED_TTL_SECONDS = 40 * 60 * 60
-_A2_FORWARD_HARD_STOP_USD_V2 = Decimal("45")
+_A2_FORWARD_HARD_STOP_USD_V2 = Decimal("50")
 _FRESH_INSTANCE_ID = re.compile(r"^[1-9][0-9]{3,19}$")
 _DESTROYED_PROVIDER_INSTANCE_IDS = frozenset({"47411176"})
 _BUNDLE_CLOSURE = (
@@ -1160,7 +1160,7 @@ def build_provider_admission_receipt_v2(
         "ttl_deadline_utc": evidence["ttl_deadline_utc"], "all_fee_components_usd": dict(components),
         "whole_workload_total_usd": str(declared_total),
     })
-    budget_sha256 = canonical_sha256({"quote_sha256": quote_sha256, "whole_workload_total_usd": str(total), "hard_stop_usd": "45"})
+    budget_sha256 = canonical_sha256({"quote_sha256": quote_sha256, "whole_workload_total_usd": str(total), "hard_stop_usd": "50"})
     body = {
         "schema_version": "myis.armindex-a2-provider-admission-receipt.v2",
         "receipt_id": _receipt_id(attempt_id, "provider-admission").removesuffix("-v1") + "-v2",
@@ -1175,7 +1175,7 @@ def build_provider_admission_receipt_v2(
         "whole_workload_total_usd": str(declared_total), "quote_sha256": quote_sha256, "whole_workload_budget_sha256": budget_sha256,
         "management_mode": management_mode, "management_authority_sha256": source_hashes["management_authority"], "owner_manual_dashboard_destroy_ready": bool(manual_ready), "provider_destroy_performed": False,
         "provider_observation_sha256": evidence["observation_sha256"], "provider_observation_file_sha256": observation_file_sha256, "source_artifact_sha256": source_hashes,
-        "ttl_deadline_utc": evidence["ttl_deadline_utc"], "remaining_ttl_seconds": remaining_ttl_seconds, "forward_hard_stop_usd": 45, "freeze_bindings": _freeze_bindings(root),
+        "ttl_deadline_utc": evidence["ttl_deadline_utc"], "remaining_ttl_seconds": remaining_ttl_seconds, "forward_hard_stop_usd": 50, "freeze_bindings": _freeze_bindings(root),
     }
     receipt = {**body, "receipt_sha256": canonical_sha256(body)}
     _validate(root, "a2-provider-admission-receipt.v2.json", receipt)
@@ -1187,7 +1187,7 @@ def validate_provider_admission_receipt_v2(repository_root: Path, receipt: Mappi
     checked = dict(receipt)
     _self_hash(checked, "receipt_sha256")
     _validate(root, "a2-provider-admission-receipt.v2.json", checked)
-    if checked["forward_hard_stop_usd"] != 45:
+    if checked["forward_hard_stop_usd"] != 50:
         raise A2ExecutionReadinessError("provider admission uses a superseded A2 hard stop")
     if str(checked["provider_instance_id"]) in _DESTROYED_PROVIDER_INSTANCE_IDS:
         raise A2ExecutionReadinessError("provider admission targets a destroyed instance")

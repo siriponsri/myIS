@@ -22,9 +22,9 @@ and non-advancing.
    instance or relax a v1 receipt. Vast CLI is preferred; `OwnerDashboardSsh`
    is valid only with pinned SSH evidence and
    `OWNER_MANUAL_DASHBOARD_DESTROY_READY`.
-4. Require a forward all-fee hard stop no greater than USD 45 and at least
+4. Require a forward all-fee hard stop no greater than USD 50 and at least
    40 hours remaining from a fresh absolute TTL deadline. The Owner-approved
-   total instance TTL is 60 hours. Reject unknown fees or a partial-arm quote.
+   total instance TTL is 84 hours. Reject unknown fees or a partial-arm quote.
 5. Create `/opt/myis/a2-<attempt-id>` only after provider admission passes,
    stage the immutable bundle, and install a new TTL/watchdog receipt. Never
    mutate or reuse an A1 remote root.
@@ -35,7 +35,7 @@ and non-advancing.
    `MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED` until a fresh admission still
    proves at least the deterministic reserve floor
    `ceil(worst_case_dense_parallel_critical_path_seconds - matched_dense_parallel_critical_path_seconds + owner_ttl_reserve_seconds) = 53848s`
-   and the Owner-expanded USD 45 hard stop. The initial admission floor remains
+   and the Owner-expanded USD 50 hard stop. The initial admission floor remains
    40h and is not reused for reserve admission.
 8. Derive the three primary-arm decisions from the frozen batch order,
    Owner-local A1 v16 incumbents, strict primary improvement, and the actual
@@ -144,7 +144,7 @@ uv run --no-sync python -m myis_research.armindex.a2_operational_executor --repo
 ## Hard Stops
 
 Stop before initial staging or execution on a hash mismatch, stale quote, price
-above USD 45, TTL below 40 hours remaining, missing management authority,
+above USD 50, TTL below 40 hours remaining, missing management authority,
 unexpected GPU identity, model/data/runtime hash drift, candidate mutation,
 protected output, or any request for A3, HARNESS-DEV, Selection, or Final
 access. At the matched reserve checkpoint, use the fresh deterministic `53848s`
