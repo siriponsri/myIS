@@ -3165,9 +3165,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T03:11:59Z",
-  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
-  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
+  "generated_at": "2026-08-15T03:58:19Z",
+  "generated_from_revision": "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822",
+  "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3321,7 +3321,7 @@
       "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
+    "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3338,7 +3338,7 @@
   },
   "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-15T03:11:59Z",
+  "last_material_update": "2026-08-15T03:58:19Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3675,7 +3675,7 @@
   "objective": "Common multi-arm screen",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "task-a1-2",
-  "report_sha256": "ff77082e948fd6f7183c87007b776d9bbf15ee441df306f0ffb38e6d05688da1",
+  "report_sha256": "1047709c152f5edb1628f91866c82f6a8fdb77955d1405095c63a9a379408183",
   "report_type": "task",
   "result": {
     "decision": "PASS_25_OF_25",

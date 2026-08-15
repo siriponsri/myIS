@@ -264,9 +264,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T03:11:59Z",
-  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
-  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
+  "generated_at": "2026-08-15T03:58:19Z",
+  "generated_from_revision": "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822",
+  "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -308,7 +308,7 @@
       "sha256": "730c019a0bc5dd27f5014e0938ce3f0691ebb7aa9421d2585494472d7d4a6ac5",
       "uri": "campaigns/armindex-multiretriever-v2/evidence/a0.8-compute-storage-feasibility.receipt.v1.json"
     },
-    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
+    "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -325,7 +325,7 @@
   },
   "interpretation": "The fixture proves that the A0.8 scaffold executes within its bounded synthetic CPU scope on the observed host. It does not estimate production bm25s capacity, retrieval quality, or dense-arm readiness.",
   "language": "en",
-  "last_material_update": "2026-08-15T03:11:59Z",
+  "last_material_update": "2026-08-15T03:58:19Z",
   "metric_references": [
     {
       "cutoff": 32,
@@ -398,7 +398,7 @@
   "objective": "Compute and storage feasibility fixtures",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-8",
-  "report_sha256": "6a08abb0b51b331c1720b66442696bfbce92011f5fa57d54d63e95af6a6a68d5",
+  "report_sha256": "cb5cb47c26d02208efb134258106caf92f0531beddd9aec9de8f73a787ef9252",
   "report_type": "task",
   "result": {
     "decision": "completed",

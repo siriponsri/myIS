@@ -310,9 +310,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T03:11:59Z",
-  "generated_from_revision": "ee5e6becce1ca1996352777668b0001dc5cc8958d5f9a57deee08dfc053bc4e6",
-  "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
+  "generated_at": "2026-08-15T03:58:19Z",
+  "generated_from_revision": "0619d761129b5480351a8747cceea522dc66c25b58f769b38429b16d65360822",
+  "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -385,7 +385,7 @@
       "owner_ttl_hours": 40,
       "status": "READY_FOR_MEASURED_EXECUTION"
     },
-    "git_commit": "8240bf2a367821418ccaa23f484e3a1e474d362b",
+    "git_commit": "27b1f520eeb679a06f76a7329cb51c1a44082dbf",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -426,7 +426,7 @@
   },
   "interpretation": "The current authority permits only the frozen retrieval execution and does not itself constitute a measured result, candidate evaluation, REP-DEV measurement, A3 decision, Selection/Final evidence, or a retrieval-quality claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T03:11:59Z",
+  "last_material_update": "2026-08-15T03:58:19Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -554,7 +554,7 @@
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "d707b85f96136d361f29bcaee413345fe7bae9f5abc02c3cd35a4b5975ea1458",
+  "report_sha256": "af8b71a8c7f26af51598e58e0c9fa5bf7793d6f6a09783b10fc6d43138282d02",
   "report_type": "task",
   "result": {
     "decision": "READY_FOR_MEASURED_EXECUTION",
