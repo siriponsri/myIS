@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a3-train-headroom-bundle-manifest.v1.json",
+  "title": "A3.1 pending five-arm Train-250/HDEV-100 bundle manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "authority_id", "authority_file_sha256", "authority_state", "arms", "frozen_a2_bindings", "pending_runtime_inputs", "safety", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-train-headroom-bundle-manifest.v1"},
+    "bundle_id": {"const": "A3.1_TRAIN_HEADROOM_FIVE_ARM_PENDING"},
+    "authority_id": {"const": "A3.1_TRAIN_HEADROOM_POST_A2"},
+    "authority_file_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "arms": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/arm"}
+    },
+    "frozen_a2_bindings": {"$ref": "#/$defs/frozenA2Bindings"},
+    "pending_runtime_inputs": {
+      "const": ["a2_closeout_receipt", "five_winner_selection_receipts", "a1_incumbent_aggregate_receipt", "owner_local_fixed_diagnostic_aggregates"]
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_execution_started", "protected_data_accessed", "provider_contacted", "remote_execution_started", "spend_permitted", "candidate_mutation_permitted", "selection_permitted", "final_permitted"],
+      "properties": {
+        "measured_execution_started": {"const": false},
+        "protected_data_accessed": {"const": false},
+        "provider_contacted": {"const": false},
+        "remote_execution_started": {"const": false},
+        "spend_permitted": {"const": false},
+        "candidate_mutation_permitted": {"const": false},
+        "selection_permitted": {"const": false},
+        "final_permitted": {"const": false}
+      }
+    },
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_id", "winner_program_sha256", "winner_selection_receipt_sha256", "train_aggregate_receipt_sha256", "hdev_aggregate_receipt_sha256"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "winner_program_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "winner_selection_receipt_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "train_aggregate_receipt_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "hdev_aggregate_receipt_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "frozenA2Bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"],
+      "properties": {
+        "manifest_sha256": {"const": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"},
+        "freeze_receipt_sha256": {"const": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10"},
+        "lock_sha256": {"const": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"}
+      }
+    }
+  }
+}
