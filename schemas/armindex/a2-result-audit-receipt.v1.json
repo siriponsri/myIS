@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-result-audit-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "attempt_id", "status", "execution_closeout_receipt_sha256", "candidate_result_set_sha256", "safe_return_receipt_sha256", "candidate_count", "aggregate_only", "protected_scan_passed", "claim_boundary", "audit_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-result-audit-receipt.v1"},
+    "audit_id": {"pattern": "^a2-[a-z0-9-]+-result-audit-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_RESULT_AUDIT"},
+    "execution_closeout_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+    "safe_return_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "candidate_count": {"const": 52},
+    "aggregate_only": {"const": true},
+    "protected_scan_passed": {"const": true},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "audit_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

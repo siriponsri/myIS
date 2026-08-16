@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-publication-figure-manifest:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "attempt_id", "status", "evidence_class", "fixture_mode", "execution_closeout_receipt_sha256", "result_audit_sha256", "claim_boundary", "figures", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-publication-figure-manifest.v1"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_GOAL004_PUBLICATION_FIGURES"},
+    "evidence_class": {"enum": ["engineering_synthetic", "measured_development_aggregate"]},
+    "fixture_mode": {"type": "boolean"},
+    "execution_closeout_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "result_audit_sha256": {"$ref": "#/$defs/hash"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "figures": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/figure"}
+    },
+    "manifest_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "figure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["figure_id", "reviewer_question", "title", "caption", "evidence_sha256s", "artifacts"],
+      "properties": {
+        "figure_id": {"enum": ["coverage-recovery", "outcomes", "quality-latency-cost-frontier", "matched-reserve-decision-path", "appendix-audit-map"]},
+        "reviewer_question": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "caption": {"type": "string", "minLength": 1},
+        "evidence_sha256s": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/hash"}},
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["png", "svg", "pdf"],
+          "properties": {
+            "png": {"$ref": "#/$defs/artifact"},
+            "svg": {"$ref": "#/$defs/artifact"},
+            "pdf": {"$ref": "#/$defs/artifact"}
+          }
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "sha256", "bytes"],
+      "properties": {
+        "uri": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}
