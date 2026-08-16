@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ArmIndex: A0-A2 Advisor Progress</title>
+    <link rel="stylesheet" href="vendor/reveal/reset.css" />
+    <link rel="stylesheet" href="vendor/reveal/reveal.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section class="title-slide" data-background-color="#f7faf9">
+          <p class="eyebrow">ADVISOR PROGRESS UPDATE | 16 AUG 2026</p>
+          <h1>ArmIndex</h1>
+          <p class="subtitle">จากฐานการทดลองที่ตรวจสอบได้ สู่การค้นหา representation เฉพาะ retriever</p>
+          <div class="phase-strip" aria-label="Project status">
+            <div><span>A0</span><strong>Complete</strong><small>Engineering foundation</small></div>
+            <div><span>A1</span><strong>25/25 complete</strong><small>Measured REP-DEV screen</small></div>
+            <div><span>A2</span><strong>Live</strong><small>Result pending closeout</small></div>
+          </div>
+          <p class="source">Advisor deck derived from the A0-A2 progress report. A2 metrics are intentionally withheld pending closeout.</p>
+        </section>
+
+        <section>
+          <p class="eyebrow">RESEARCH QUESTION</p>
+          <h2>หนึ่ง representation อาจไม่เหมาะกับ retriever ทุกชนิด</h2>
+          <div class="question-layout">
+            <div class="question-copy">
+              <p class="lead">ArmIndex ทดสอบว่า document representation ที่เลือกให้เหมาะกับ retriever แต่ละ arm จะให้คุณภาพ retrieval และ trade-off เชิงปฏิบัติการที่ดีกว่าการใช้คำตอบเดียวกับทุก arm หรือไม่</p>
+              <p class="minor">หน่วยประเมิน: DAPFAM patent family<br />Metric หลัก: OUT Recall@100</p>
+            </div>
+            <div class="flow" aria-label="Study flow">
+              <div><b>A0</b><span>ตรึง controls<br />และ provenance</span></div>
+              <div><b>A1</b><span>common screen<br />5 programs x 5 arms</span></div>
+              <div><b>A2</b><span>per-arm<br />AutoIndex search</span></div>
+            </div>
+          </div>
+          <p class="source">Scope: REP-DEV development evidence only. Selection and Final remain closed.</p>
+        </section>
+
+        <section>
+          <p class="eyebrow">A0 | FOUNDATION</p>
+          <h2>A0 ทำให้ผลระยะถัดไป traceable, reproducible และปลอดภัย</h2>
+          <div class="evidence-grid">
+            <div><strong>5</strong><span>registered retriever arms</span></div>
+            <div><strong>44</strong><span>focused ArmIndex tests passed</span></div>
+            <div><strong>387</strong><span>full-suite tests passed</span></div>
+            <div><strong>0</strong><span>measured retrieval runs in A0</span></div>
+          </div>
+          <div class="two-column concise">
+            <div>
+              <h3>สิ่งที่ A0 ส่งมอบ</h3>
+              <p>Canonical controls, schema, manifests, safe evidence paths, report projections และ five-arm registry</p>
+            </div>
+            <div>
+              <h3>สิ่งที่ A0 ไม่อ้าง</h3>
+              <p>ไม่มี retrieval quality, GPU scientific run, paid API, protected payload, Selection หรือ Final access</p>
+            </div>
+          </div>
+          <p class="source">Source: A0.9 validation and safety closeout. Engineering evidence only.</p>
+        </section>
+
+        <section>
+          <p class="eyebrow">A1 | COMMON MULTI-ARM SCREEN</p>
+          <h2>A1 เปรียบเทียบ 5 representation programs กับ 5 retrievers ครบ 25 cells</h2>
+          <div class="matrix-caption">
+            <span>P00 TAC document</span><span>P01 title + abstract</span><span>P02 first independent claim</span><span>P03 fixed passages</span><span>P04 section multiview</span>
+          </div>
+          <table class="result-table">
+            <thead>
+              <tr><th>Arm</th><th>OUT Recall@100</th><th>OUT nDCG@100</th><th>OUT nDCG@10</th><th>Search p95</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ARM-01 BM25</td><td>0.191</td><td>0.173</td><td>0.160</td><td>441.5 ms</td></tr>
+              <tr><td>ARM-02 BGE-M3</td><td>0.270</td><td>0.231</td><td>0.198</td><td>235.2 ms</td></tr>
+              <tr class="winner"><td>ARM-03 PatEmbed</td><td>0.413</td><td>0.348</td><td>0.290</td><td>212.1 ms</td></tr>
+              <tr><td>ARM-04 Arctic Embed</td><td>0.341</td><td>0.285</td><td>0.236</td><td>214.2 ms</td></tr>
+              <tr><td>ARM-05 Qwen3</td><td>0.364</td><td>0.308</td><td>0.257</td><td>217.1 ms</td></tr>
+            </tbody>
+          </table>
+          <p class="takeaway">ARM-03 สูงสุดใน aggregate quality; ARM-04 และ ARM-05 ก็ผ่าน frozen promotion rule</p>
+          <p class="source">Source: A1 r15 validated aggregate, five-program means on REP-DEV. Not Selection or Final confirmation.</p>
+        </section>
+
+        <section class="figure-slide">
+          <p class="eyebrow">A1 | QUALITY EVIDENCE</p>
+          <h2>ผลของ representation เปลี่ยนไปตาม retriever</h2>
+          <figure>
+            <img src="assets/a1-quality-cell-eda.png" alt="A1 quality heatmaps for Recall@100, nDCG@100, and nDCG@10 across five retrievers and five representation programs" />
+            <figcaption>Fixed passages ให้ Recall@100 สูงสุดทุก arm ใน common screen แต่เป็น descriptive pattern ที่ A2 ต้องทดสอบ per-arm ต่อไป</figcaption>
+          </figure>
+          <p class="source">Source: A1 r15 quality cell EDA, 25 aggregate REP-DEV cells. No per-query outcomes are shown.</p>
+        </section>
+
+        <section class="figure-slide">
+          <p class="eyebrow">A1 | OPERATIONAL EVIDENCE</p>
+          <h2>คุณภาพและต้นทุนต้องอ่านร่วมกัน ไม่ใช่เลือกจาก score เพียงตัวเดียว</h2>
+          <figure>
+            <img src="assets/a1-efficiency-cell-eda.png" alt="A1 efficiency heatmaps for search p95 latency, wall time, and peak VRAM across five retrievers and five representation programs" />
+            <figcaption>cell เดียวกันมี latency, wall time และ VRAM ต่างกัน จึงต้องมอง quality-latency-cost frontier ในระยะถัดไป</figcaption>
+          </figure>
+          <p class="source">Source: A1 r15 efficiency cell EDA. Operational diagnostics do not override the frozen promotion rule.</p>
+        </section>
+
+        <section>
+          <p class="eyebrow">A2 | LIVE CONTROLLED EXECUTION</p>
+          <h2>A2 กำลังวัด candidate เฉพาะแต่ละ arm แต่ยังไม่มี outcome ที่ตีความได้</h2>
+          <div class="a2-layout">
+            <div class="candidate-contract"><strong>52</strong><span>frozen candidates</span><small>40 matched + 12 conditional reserve</small></div>
+            <div class="a2-rules">
+              <p><b>ARM-01 และ ARM-02:</b> diagnostic, non-advancing</p>
+              <p><b>ARM-03 ถึง ARM-05:</b> per-arm representation search</p>
+              <p><b>ขณะนี้:</b> no winner, no metric, no reserve decision, no claim</p>
+            </div>
+          </div>
+          <div class="gate-list">
+            <span>Exact coverage</span><span>Safe return</span><span>Execution closeout</span><span>Independent integrity audit</span>
+          </div>
+          <p class="takeaway">A2 จะรายงานได้เมื่อ gate ทั้งสี่ผ่านครบเท่านั้น</p>
+          <p class="source">Source: A2 Goal 004 and execution authority. Live telemetry is not a scientific result.</p>
+        </section>
+
+        <section class="closing-slide" data-background-color="#f7faf9">
+          <p class="eyebrow">WHAT TO REMEMBER</p>
+          <h2>ตอนนี้เรามีผล A1 ที่มั่นคง และกำลังสร้างหลักฐาน A2 ที่ตีความได้</h2>
+          <div class="closing-grid">
+            <div><b>1</b><p>A0 ทำให้การทดลองควบคุมและตรวจสอบย้อนกลับได้</p></div>
+            <div><b>2</b><p>A1 พบว่า quality และ cost แตกต่างตาม retriever-program cell</p></div>
+            <div><b>3</b><p>A2 จะตอบว่า representation ที่ดีที่สุดควรขึ้นกับ arm หรือไม่</p></div>
+          </div>
+          <p class="closing-note">หลัง A2 closeout: render per-arm figures, update progress report, แล้วจึงเปิด A3.1 train-headroom diagnostic</p>
+          <p class="source">Claim boundary: no A2 winner, Selection result, Final result, legal, or causal claim is made in this deck.</p>
+        </section>
+      </div>
+    </div>
+    <script src="vendor/reveal/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: "c/t",
+        controls: true,
+        progress: true,
+        center: false,
+        width: 1600,
+        height: 900,
+        margin: 0.04,
+        minScale: 0.2,
+        maxScale: 1.5,
+      });
+    </script>
+  </body>
+</html>
