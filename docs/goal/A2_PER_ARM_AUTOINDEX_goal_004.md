@@ -7,7 +7,7 @@ lifecycle: ACTIVE
 evidence_class: measured_execution_and_publication_closeout
 scientific_authority: true
 measured_a2_authorized: true
-measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-003.authority.v4.json
+measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-004.authority.v4.json
 candidate_count: 52
 matched_candidate_count: 40
 conditional_reserve_candidate_count: 12
