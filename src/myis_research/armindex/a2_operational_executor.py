@@ -10,6 +10,7 @@ import shlex
 import subprocess
 import tempfile
 import time
+from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from collections.abc import Mapping, Sequence
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
@@ -89,6 +90,14 @@ _AUTHORITY_PROVENANCE_POLICY = (
 )
 _AUTHORITY_V2 = "myis.armindex-a2-measured-execution-authority.v2"
 _AUTHORITY_V3 = "myis.armindex-a2-measured-execution-authority.v3"
+_AUTHORITY_V4 = "myis.armindex-a2-measured-execution-authority.v4"
+_HYBRID_ARM_ROUTES = {
+    "ARM-01": "remote_cpu_retrieval_return_to_owner_local_only",
+    "ARM-02": "remote_retrieval_return_to_owner_local_only",
+    "ARM-03": "remote_retrieval_return_to_owner_local_only",
+    "ARM-04": "remote_retrieval_return_to_owner_local_only",
+    "ARM-05": "remote_retrieval_return_to_owner_local_only",
+}
 _RESULT_FIELDS = {
     "schema_version",
     "attempt_id",
@@ -444,8 +453,10 @@ def validate_owner_local_evaluation_authority(
     *,
     authority: Mapping[str, Any],
     owner_manifest_path: Path,
+    candidate_id: str | None = None,
+    execution_route: str | None = None,
 ) -> dict[str, Any]:
-    """Allow the protected evaluator only after a v3 local-only authorization.
+    """Allow the protected evaluator only after a successor local authorization.
 
     This runs before the Owner-local evaluator opens qrels, membership, or the
     query token map.  It intentionally accepts no v2 compatibility path.
@@ -453,11 +464,18 @@ def validate_owner_local_evaluation_authority(
 
     root = repository_root.resolve()
     checked = dict(authority)
-    if checked.get("schema_version") != _AUTHORITY_V3:
+    schema_version = checked.get("schema_version")
+    if schema_version not in {_AUTHORITY_V3, _AUTHORITY_V4}:
         raise A2OperationalExecutorError(
-            "Owner-local aggregate evaluation requires successor authority v3"
+            "Owner-local aggregate evaluation requires successor authority v3 or v4"
         )
-    _validate(root, "a2-measured-execution-authority.v3.json", checked)
+    _validate(
+        root,
+        "a2-measured-execution-authority.v4.json"
+        if schema_version == _AUTHORITY_V4
+        else "a2-measured-execution-authority.v3.json",
+        checked,
+    )
     if (
         checked["candidate_generation_allowed"] is not False
         or checked["candidate_mutation_allowed"] is not False
@@ -478,6 +496,25 @@ def validate_owner_local_evaluation_authority(
         )
     ):
         raise A2OperationalExecutorError("Owner-local aggregate evaluation authority drift")
+    if schema_version == _AUTHORITY_V4:
+        if (
+            checked["authority_id"] != "a2-measured-execution-authority-v4"
+            or checked["arm_execution_routes"] != _HYBRID_ARM_ROUTES
+            or checked["official_codex_mode"] != "pre_freeze_lineage_only"
+            or checked["max_concurrent_arms"] != 5
+            or checked["max_active_candidates_per_arm"] != 1
+            or checked["receipt_commit_order"] != "frozen_candidate_order"
+            or candidate_id is None
+            or execution_route is None
+        ):
+            raise A2OperationalExecutorError("hybrid Owner-local evaluation authority drift")
+        candidate = frozen_candidates(root).get(candidate_id)
+        if (
+            candidate is None
+            or checked["arm_execution_routes"].get(candidate["arm_id"])
+            != execution_route
+        ):
+            raise A2OperationalExecutorError("hybrid Owner-local route is invalid")
     path = owner_manifest_path.resolve(strict=True)
     if path.is_symlink() or not path.is_file():
         raise A2OperationalExecutorError("Owner-local evaluation manifest is unsafe")
@@ -527,14 +564,18 @@ def validate_measurement_authority(
     root = repository_root.resolve()
     checked = dict(authority)
     schema_version = checked.get("schema_version")
-    if schema_version not in {_AUTHORITY_V2, _AUTHORITY_V3}:
+    if schema_version not in {_AUTHORITY_V2, _AUTHORITY_V3, _AUTHORITY_V4}:
         raise A2OperationalExecutorError(
             "measured execution authority provenance v1 is superseded"
         )
     _validate(
         root,
-        "a2-measured-execution-authority.v3.json"
-        if schema_version == _AUTHORITY_V3
+        (
+            "a2-measured-execution-authority.v4.json"
+            if schema_version == _AUTHORITY_V4
+            else "a2-measured-execution-authority.v3.json"
+        )
+        if schema_version != _AUTHORITY_V2
         else "a2-measured-execution-authority.v2.json",
         checked,
     )
@@ -563,7 +604,7 @@ def validate_measurement_authority(
             checked["authority_id"] != "a2-measured-execution-authority-v2"
             or checked["rep_dev_measurement_allowed"] is not False
         )
-    else:
+    elif schema_version == _AUTHORITY_V3:
         version_invalid = (
             checked["authority_id"] != "a2-measured-execution-authority-v3"
             or checked["candidate_evaluation_allowed"] is not True
@@ -573,6 +614,22 @@ def validate_measurement_authority(
             != "remote_retrieval_return_to_owner_local_only"
             or checked["evaluation_output_class"] != "aggregate_safe_only"
             or checked["candidate_bindings"] != _candidate_authority_bindings(root)
+        )
+    else:
+        version_invalid = (
+            checked["authority_id"] != "a2-measured-execution-authority-v4"
+            or checked["candidate_evaluation_allowed"] is not True
+            or checked["rep_dev_measurement_allowed"] is not True
+            or checked["evaluation_location"] != "owner_local_only"
+            or checked["evaluation_transition"]
+            != "remote_retrieval_return_to_owner_local_only"
+            or checked["evaluation_output_class"] != "aggregate_safe_only"
+            or checked["candidate_bindings"] != _candidate_authority_bindings(root)
+            or checked["arm_execution_routes"] != _HYBRID_ARM_ROUTES
+            or checked["official_codex_mode"] != "pre_freeze_lineage_only"
+            or checked["max_concurrent_arms"] != 5
+            or checked["max_active_candidates_per_arm"] != 1
+            or checked["receipt_commit_order"] != "frozen_candidate_order"
         )
     if (
         common_invalid
@@ -761,6 +818,10 @@ def execute_external_candidate_set(
     )
     if adoption["attempt_id"] != attempt_id:
         raise A2OperationalExecutorError("executor attempt differs from adoption")
+    if authority["schema_version"] == _AUTHORITY_V4 and not isinstance(executor, RemoteExecutor):
+        raise A2OperationalExecutorError(
+            "hybrid v4 execution requires the bound RemoteExecutor"
+        )
     if isinstance(executor, RemoteExecutor):
         validate_remote_execution_binding(
             root,
@@ -769,7 +830,7 @@ def execute_external_candidate_set(
             adoption_receipt=adoption,
             measurement_authority=authority,
         )
-        if authority["schema_version"] != _AUTHORITY_V3:
+        if authority["schema_version"] not in {_AUTHORITY_V3, _AUTHORITY_V4}:
             raise A2OperationalExecutorError(
                 "v2 authority cannot reach Owner-local candidate evaluation"
             )
@@ -863,7 +924,37 @@ def execute_external_candidate_set(
     ).is_file():
         raise A2OperationalExecutorError("reserve receipt exists before activation decision")
 
-    def record(candidate_id: str, *, active_reserve: bool = False, decision_sha256: str | None = None) -> None:
+    def execute_candidate(candidate_id: str, *, sequence_hint: int) -> dict[str, Any]:
+        candidate = candidates[candidate_id]
+        command = [
+            item.format(
+                candidate_id=candidate_id,
+                arm_id=candidate["arm_id"],
+                program_sha256=candidate["program_sha256"],
+                owner_local_root=(
+                    str(owner_local_root.resolve()) if owner_local_root is not None else ""
+                ),
+                owner_local_input_manifest=owner_input_manifest or "",
+                python_executable=python_executable or "",
+                repository_root=str(root),
+            )
+            for item in command_template
+        ]
+        kwargs = {
+            "environment": _executor_environment(candidate),
+            "heartbeat_path": heartbeats_directory / f"{candidate_id}.attempt-{sequence_hint:04d}.json",
+            "process_path": processes_directory / f"{candidate_id}.attempt-{sequence_hint:04d}.json",
+            "timeout_seconds": timeout_seconds,
+        }
+        return dict(executor(command, **kwargs))
+
+    def record(
+        candidate_id: str,
+        *,
+        active_reserve: bool = False,
+        decision_sha256: str | None = None,
+        executed_row: Mapping[str, Any] | None = None,
+    ) -> None:
         nonlocal sequence, previous
         candidate = candidates[candidate_id]
         if candidate["tier"] == "conditional_reserve" and not active_reserve:
@@ -894,33 +985,11 @@ def execute_external_candidate_set(
                 "per_query_outcomes_included": False,
             }
         else:
-            command = [
-                item.format(
-                    candidate_id=candidate_id,
-                    arm_id=candidate["arm_id"],
-                    program_sha256=candidate["program_sha256"],
-                    owner_local_root=(
-                        str(owner_local_root.resolve())
-                        if owner_local_root is not None
-                        else ""
-                    ),
-                    owner_local_input_manifest=owner_input_manifest or "",
-                    python_executable=python_executable or "",
-                    repository_root=str(root),
-                )
-                for item in command_template
-            ]
             try:
-                row = dict(
-                    executor(
-                        command,
-                        environment=_executor_environment(candidate),
-                        heartbeat_path=heartbeats_directory
-                        / f"{candidate_id}.attempt-{sequence + 1:04d}.json",
-                        process_path=processes_directory
-                        / f"{candidate_id}.attempt-{sequence + 1:04d}.json",
-                        timeout_seconds=timeout_seconds,
-                    )
+                row = (
+                    dict(executed_row)
+                    if executed_row is not None
+                    else execute_candidate(candidate_id, sequence_hint=sequence + 1)
                 )
             except BaseException:
                 paused = build_lifecycle_checkpoint(
@@ -948,13 +1017,118 @@ def execute_external_candidate_set(
         append_lifecycle_checkpoint(ledger, checkpoint)
         previous = checkpoint["checkpoint_sha256"]
 
+    def run_stage(candidate_ids: Sequence[str], *, active_reserves: set[str] | None = None, decision_sha256: str | None = None) -> None:
+        """Run up to one frozen candidate per arm, committing in manifest order."""
+
+        pending_ids = [candidate_id for candidate_id in candidate_ids if candidate_id not in completed]
+        if authority["schema_version"] != _AUTHORITY_V4:
+            for candidate_id in pending_ids:
+                record(
+                    candidate_id,
+                    active_reserve=active_reserves is not None and candidate_id in active_reserves,
+                    decision_sha256=decision_sha256,
+                )
+            return
+        queues: dict[str, list[str]] = {arm_id: [] for arm_id in _HYBRID_ARM_ROUTES}
+        for candidate_id in pending_ids:
+            if (
+                candidates[candidate_id]["tier"] != "conditional_reserve"
+                or active_reserves is None
+                or candidate_id in active_reserves
+            ):
+                queues[str(candidates[candidate_id]["arm_id"])].append(candidate_id)
+        positions = {arm_id: 0 for arm_id in queues}
+        results: dict[str, dict[str, Any]] = {}
+        active: dict[Future[dict[str, Any]], str] = {}
+
+        def submit_next(pool: ThreadPoolExecutor, arm_id: str) -> None:
+            position = positions[arm_id]
+            if position >= len(queues[arm_id]):
+                return
+            candidate_id = queues[arm_id][position]
+            positions[arm_id] = position + 1
+            active[pool.submit(execute_candidate, candidate_id, sequence_hint=sequence + 1)] = candidate_id
+
+        def commit_ready() -> None:
+            while pending_ids:
+                candidate_id = pending_ids[0]
+                dormant = (
+                    candidates[candidate_id]["tier"] == "conditional_reserve"
+                    and active_reserves is not None
+                    and candidate_id not in active_reserves
+                )
+                if dormant:
+                    pending_ids.pop(0)
+                    record(
+                        candidate_id,
+                        active_reserve=False,
+                        decision_sha256=decision_sha256,
+                    )
+                elif candidate_id in results:
+                    pending_ids.pop(0)
+                    record(
+                        candidate_id,
+                        active_reserve=active_reserves is not None and candidate_id in active_reserves,
+                        decision_sha256=decision_sha256,
+                        executed_row=results.pop(candidate_id),
+                    )
+                else:
+                    return
+
+        try:
+            with ThreadPoolExecutor(max_workers=5, thread_name_prefix="a2-hybrid") as pool:
+                for arm_id in _HYBRID_ARM_ROUTES:
+                    submit_next(pool, arm_id)
+                commit_ready()
+                while active:
+                    done, _ = wait(tuple(active), return_when=FIRST_COMPLETED)
+                    for future in done:
+                        candidate_id = active.pop(future)
+                        results[candidate_id] = future.result()
+                        submit_next(pool, str(candidates[candidate_id]["arm_id"]))
+                    commit_ready()
+        except BaseException:
+            siblings = tuple(active.values())
+            for future in active:
+                future.cancel()
+            try:
+                assert isinstance(executor, RemoteExecutor)
+                if siblings:
+                    executor.cancel_and_reap(candidate_ids=siblings)
+                _done, not_done = wait(tuple(active)) if active else (set(), set())
+                if not_done:
+                    raise A2OperationalExecutorError(
+                        "hybrid sibling teardown did not reap every submitted worker"
+                    )
+                for future in _done:
+                    try:
+                        future.result()
+                    except BaseException:
+                        pass
+            except (A2RemoteTransportError, A2OperationalExecutorError) as teardown_error:
+                raise A2OperationalExecutorError(
+                    "hybrid sibling teardown failed closed"
+                ) from teardown_error
+            paused = build_lifecycle_checkpoint(
+                root,
+                attempt_id=attempt_id,
+                sequence=sequence + 1,
+                status="PAUSED",
+                completed_candidate_count=len(completed),
+                failed_candidate_count=1,
+                resume_allowed=True,
+                previous_checkpoint_sha256=previous,
+            )
+            append_lifecycle_checkpoint(ledger, paused)
+            raise
+        if pending_ids or results:
+            raise A2OperationalExecutorError("hybrid scheduler did not commit frozen candidate order")
+
     decision_path = output / "reserve-activation-decision.v1.json"
     continuation_path = output / "reserve-continuation-authority.v1.json"
     with _attempt_lock(output / "attempt.lock"):
         # Stage one never runs or marks a reserve until every frozen matched cell is durable.
-        for candidate_id in matched_ids:
-            if candidate_id not in completed:
-                record(candidate_id)
+        run_stage(matched_ids)
         if reserve_budget_admission is None:
             return {
                 "status": "MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED",
@@ -1029,13 +1203,11 @@ def execute_external_candidate_set(
             expected_active = candidate_id in active_reserves
             if existing.get("reserve_activation_passed") is not expected_active:
                 raise A2OperationalExecutorError("reserve receipt activation decision drift")
-        for candidate_id in reserve_ids:
-            if candidate_id not in completed:
-                record(
-                    candidate_id,
-                    active_reserve=candidate_id in active_reserves,
-                    decision_sha256=decision_hash,
-                )
+        run_stage(
+            reserve_ids,
+            active_reserves=active_reserves,
+            decision_sha256=decision_hash,
+        )
     coverage = evaluate_candidate_receipts(root, receipts_by_candidate=completed)
     return {
         **coverage,
@@ -1715,12 +1887,13 @@ def validate_remote_execution_binding(
         execution_bundle_git_commit=adoption["git_commit"],
         execution_bundle_git_tree=adoption["git_tree"],
     )
-    successor = authority["schema_version"] == _AUTHORITY_V3
-    expected_commitment_uri = (
-        "control/armindex/a2/measurement-authority-commitment.v2.json"
-        if successor
-        else "control/armindex/a2/measurement-authority-commitment.v1.json"
-    )
+    schema_version = authority["schema_version"]
+    successor = schema_version in {_AUTHORITY_V3, _AUTHORITY_V4}
+    expected_commitment_uri = {
+        _AUTHORITY_V2: "control/armindex/a2/measurement-authority-commitment.v1.json",
+        _AUTHORITY_V3: "control/armindex/a2/measurement-authority-commitment.v2.json",
+        _AUTHORITY_V4: "control/armindex/a2/measurement-authority-commitment.v3.json",
+    }[schema_version]
     if config.measurement_authority_commitment_uri != expected_commitment_uri:
         raise A2OperationalExecutorError("measurement authority commitment version drift")
     if successor and config.provider_instance_id != authority["provider_instance_id"]:
@@ -1735,9 +1908,11 @@ def validate_remote_execution_binding(
     commitment = _load_json(commitment_path, role="measurement authority commitment")
     _validate(
         root,
-        "a2-measurement-authority-commitment.v2.json"
-        if successor
-        else "a2-measurement-authority-commitment.v1.json",
+        {
+            _AUTHORITY_V2: "a2-measurement-authority-commitment.v1.json",
+            _AUTHORITY_V3: "a2-measurement-authority-commitment.v2.json",
+            _AUTHORITY_V4: "a2-measurement-authority-commitment.v3.json",
+        }[schema_version],
         commitment,
     )
     if (
@@ -1757,13 +1932,21 @@ def validate_remote_execution_binding(
         or commitment["measured_a2_authorized"] is not False
     ):
         raise A2OperationalExecutorError("measurement authority commitment drift")
-    if successor and (
-        commitment["authority_schema_uri"]
-        != "schemas/armindex/a2-measured-execution-authority.v3.json"
-        or commitment["transport_schema_version"]
-        != "myis.armindex-a2-remote-measured-transport.v3"
-        or commitment["authority_contract_version"]
-        != "owner_local_aggregate_evaluation_v1"
+    expected_successor_contract = {
+        _AUTHORITY_V3: {
+            "authority_schema_uri": "schemas/armindex/a2-measured-execution-authority.v3.json",
+            "transport_schema_version": "myis.armindex-a2-remote-measured-transport.v3",
+            "authority_contract_version": "owner_local_aggregate_evaluation_v1",
+        },
+        _AUTHORITY_V4: {
+            "authority_schema_uri": "schemas/armindex/a2-measured-execution-authority.v4.json",
+            "transport_schema_version": "myis.armindex-a2-remote-measured-transport.v4",
+            "authority_contract_version": "hybrid_remote_cpu_gpu_owner_local_aggregate_evaluation_v1",
+        },
+    }
+    if successor and any(
+        commitment[key] != value
+        for key, value in expected_successor_contract[schema_version].items()
     ):
         raise A2OperationalExecutorError("successor authority commitment drift")
     _git(root, "ls-files", "--error-unmatch", "--", config.measurement_authority_commitment_uri)

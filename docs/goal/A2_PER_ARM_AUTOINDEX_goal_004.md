@@ -2,12 +2,11 @@
 title: "A2 one-session exact-root recovery, measured AutoIndex, and publication closeout"
 phase_id: A2_PER_ARM_AUTOINDEX
 task_id: A2.1
-status: READY_FOR_MEASURED_EXECUTION
+status: READY_FOR_SUCCESSOR_V4_STAGE_AND_AUTHORITY
 lifecycle: ACTIVE
 evidence_class: measured_execution_and_publication_closeout
-scientific_authority: true
-measured_a2_authorized: true
-measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260815-001.authority.v3.json
+scientific_authority: false
+measured_a2_authorized: false
 candidate_count: 52
 matched_candidate_count: 40
 conditional_reserve_candidate_count: 12
@@ -16,7 +15,7 @@ previous_attempt: a2-ap-audit011-v3-full-a2
 provider_instance_id: 47790578
 previous_remote_root: /opt/myis/a2-ap-audit011-v3-full-a2_on_destroyed_predecessor
 last_material_update: 2026-08-16
-next_authorized_action: LO_EXECUTE_GOAL_004
+next_authorized_action: LO_BUILD_STAGE_ADOPT_AND_ISSUE_V4_AUTHORITY
 ---
 
 # Goal 004: one-session A2 closeout
@@ -102,6 +101,29 @@ engineering choices. Checkpoints are durable records, not new approval gates.
    receipts into `outputs/figures/armindex/a2-goal004/` and the approved Paper
    projection. Preserve SVG plus publication-size PNG/PDF where supported.
    Do not generate a scientific figure from Goal 003 stop evidence.
+
+## Approved operational acceleration
+
+On 2026-08-16 the Owner approved an expedited operational route for this
+Goal. This changes neither the frozen scientific unit nor the required
+evidence; it removes duplicated orchestration work.
+
+- A single synthetic canary may exercise transport, worker cancellation and
+  reaping, checkpoint/recovery, and safe-return validation, producing one
+  hash-bound receipt that identifies each covered check.
+- Hash-validated runtime, model, wheelhouse, and input assets already present
+  on the bound instance may be reused. A new code bundle, fresh provider
+  observation/admission, new attempt root, and new execution-adoption receipt
+  remain required whenever their identities change.
+- Do not run a separate formal pre-launch audit after the canary. The focused
+  validator suite and launch-integrity review are the launch decision record.
+- Use five disjoint workers at launch: ARM-01 on the bound instance CPU and
+  ARM-02 through ARM-05 on their assigned GPUs. A single coordinator validates
+  and commits durable checkpoints and receipts in frozen candidate order.
+
+This acceleration never permits candidate or representation mutation, metric
+or evaluator changes, protected-data transfer, unbound asset reuse, skipped
+coverage/reserve decisions, or execution beyond the USD 60 hard stop.
 
 ## Figure and publication artifact contract
 

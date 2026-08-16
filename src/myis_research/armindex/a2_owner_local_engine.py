@@ -268,6 +268,12 @@ def evaluate_remote_retrieval_result(
         root,
         authority=measurement_authority,
         owner_manifest_path=manifest_path,
+        candidate_id=candidate_id,
+        execution_route=(
+            "remote_cpu_retrieval_return_to_owner_local_only"
+            if candidate_id.startswith("a2-arm-01-")
+            else "remote_retrieval_return_to_owner_local_only"
+        ),
     )
     manifest = validate_owner_local_input(
         root,

@@ -102,6 +102,25 @@ def test_successor_transport_uses_new_commitment_and_allows_fresh_instance(
     assert request["request_id"].endswith("-v3")
 
 
+def test_hybrid_transport_requires_v4_commitment_and_request_lineage(
+    tmp_path: Path,
+) -> None:
+    base = _config(tmp_path)
+    config = RemoteTransportConfig(
+        **{
+            **base.__dict__,
+            "provider_instance_id": "47700075",
+            "measurement_authority_commitment_uri": (
+                "control/armindex/a2/measurement-authority-commitment.v3.json"
+            ),
+        }
+    )
+    request = build_transport_request(config, attempt_id=ATTEMPT)
+    assert request["schema_version"] == "myis.armindex-a2-remote-measured-transport.v4"
+    assert request["request_id"].endswith("-v4")
+    assert validate_transport_request(request, config, attempt_id=ATTEMPT) == request
+
+
 def test_remote_transport_must_equal_execution_adoption(tmp_path: Path) -> None:
     config = _config(tmp_path)
     adoption = {
