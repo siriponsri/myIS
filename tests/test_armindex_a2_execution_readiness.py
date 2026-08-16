@@ -629,7 +629,7 @@ assert schema['$schema'].endswith('schema')
     assert result.returncode == 0, result.stderr
 
 
-def test_bundle_closure_requires_both_readiness_envelopes_and_ledger_schemas() -> None:
+def test_bundle_closure_requires_readiness_envelopes_ledger_schemas_and_model_locks() -> None:
     closure = set(_BUNDLE_CLOSURE)
     assert {
         "control/execution-envelope-a2-readiness-v1.yaml",
@@ -642,6 +642,12 @@ def test_bundle_closure_requires_both_readiness_envelopes_and_ledger_schemas() -
         "schemas/armindex/a2-measured-execution-authority.v3.json",
         "schemas/armindex/a2-measurement-authority-commitment.v2.json",
         "schemas/armindex/a2-remote-measured-transport.v3.json",
+        "control/armindex/a1.2/model-lockset.v1.json",
+        "control/armindex/a1.2/model-locks/ARM-01.v1.json",
+        "control/armindex/a1.2/model-locks/ARM-02.v1.json",
+        "control/armindex/a1.2/model-locks/ARM-03.v1.json",
+        "control/armindex/a1.2/model-locks/ARM-04.v1.json",
+        "control/armindex/a1.2/model-locks/ARM-05.v1.json",
     } <= closure
 
 
