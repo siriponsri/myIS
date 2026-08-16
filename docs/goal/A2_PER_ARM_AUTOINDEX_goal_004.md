@@ -2,11 +2,12 @@
 title: "A2 one-session exact-root recovery, measured AutoIndex, and publication closeout"
 phase_id: A2_PER_ARM_AUTOINDEX
 task_id: A2.1
-status: READY_FOR_SUCCESSOR_V4_STAGE_AND_AUTHORITY
+status: READY_FOR_MEASURED_EXECUTION
 lifecycle: ACTIVE
 evidence_class: measured_execution_and_publication_closeout
-scientific_authority: false
-measured_a2_authorized: false
+scientific_authority: true
+measured_a2_authorized: true
+measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-002.authority.v4.json
 candidate_count: 52
 matched_candidate_count: 40
 conditional_reserve_candidate_count: 12
@@ -15,7 +16,7 @@ previous_attempt: a2-ap-audit011-v3-full-a2
 provider_instance_id: 47790578
 previous_remote_root: /opt/myis/a2-ap-audit011-v3-full-a2_on_destroyed_predecessor
 last_material_update: 2026-08-16
-next_authorized_action: LO_BUILD_STAGE_ADOPT_AND_ISSUE_V4_AUTHORITY
+next_authorized_action: LO_EXECUTE_FROZEN_A2_V4_PARALLEL_MEASUREMENT
 ---
 
 # Goal 004: one-session A2 closeout
