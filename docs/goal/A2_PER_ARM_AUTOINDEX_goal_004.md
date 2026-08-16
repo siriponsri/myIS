@@ -7,12 +7,14 @@ lifecycle: ACTIVE
 evidence_class: measured_execution_and_publication_closeout
 scientific_authority: true
 measured_a2_authorized: true
-measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-004.authority.v4.json
+measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-005.authority.v4.json
 candidate_count: 52
 matched_candidate_count: 40
 conditional_reserve_candidate_count: 12
 previous_goal: docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md
 previous_attempt: a2-ap-audit011-v3-full-a2
+active_attempt: a2-goal004-20260816-005
+recovery_lineage: a2-goal004-20260816-004 is preserved as incompatible pre-fix runtime evidence; no candidate output is reusable
 provider_instance_id: 47790578
 previous_remote_root: /opt/myis/a2-ap-audit011-v3-full-a2_on_destroyed_predecessor
 last_material_update: 2026-08-16
@@ -36,6 +38,11 @@ Goal 003 is closed lineage. Do not resume it, reuse its attempt ID, or treat
 its pre-stage observation as measured evidence. Goal 004 must create a new
 attempt ID, new ledger, new receipts, and a new v4 authority even when the
 same provider instance or the exact root is recovered.
+
+Attempt `a2-goal004-20260816-004` is failed lineage: its passage view IDs were
+incompatible with the frozen dense executor. The corrected runtime is bound in
+`a2-goal004-20260816-005`; all 52 candidates restart from zero and no partial
+receipt, ranking, result, checkpoint, or aggregate from `004` is combinable.
 
 ## Frozen scientific scope
 
