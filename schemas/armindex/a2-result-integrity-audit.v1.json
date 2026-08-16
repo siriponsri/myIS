@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-result-integrity-audit:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "closeout", "coverage", "safe_return", "terminal_checkpoint", "protection", "audit_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-result-integrity-audit.v1"},
+    "audit_id": {"pattern": "^a2-[a-z0-9-]+-result-integrity-audit-v1$"},
+    "status": {"const": "PASS_A2_RESULT_INTEGRITY"},
+    "evidence_class": {"const": "measured_development_aggregate_result_audit"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"const": "Aggregate-only integrity audit. It validates receipt lineage and supports no per-query, protected-membership, or publication performance claim by itself."},
+    "closeout": {"$ref": "#/$defs/closeout"},
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "safe_return": {"$ref": "#/$defs/safeReturn"},
+    "terminal_checkpoint": {"$ref": "#/$defs/terminalCheckpoint"},
+    "protection": {"$ref": "#/$defs/protection"},
+    "audit_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"],
+      "properties": {
+        "manifest_sha256": {"$ref": "#/$defs/hash"},
+        "freeze_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "lock_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["uri", "file_sha256", "receipt_sha256"],
+      "properties": {
+        "uri": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "closeout": {
+      "allOf": [
+        {"$ref": "#/$defs/source"},
+        {
+          "type": "object",
+          "required": ["attempt_id", "freeze_bindings", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "arm_winner_receipt_sha256s", "workers_reaped", "protected_scan_passed"],
+          "properties": {
+            "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+            "freeze_bindings": {"$ref": "#/$defs/freeze"},
+            "candidate_count": {"const": 52},
+            "matched_candidate_count": {"const": 40},
+            "conditional_reserve_candidate_count": {"const": 12},
+            "arm_winner_receipt_sha256s": {"$ref": "#/$defs/winnerHashes"},
+            "workers_reaped": {"const": true},
+            "protected_scan_passed": {"const": true}
+          }
+        }
+      ]
+    },
+    "winnerHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"],
+      "properties": {
+        "ARM-01": {"$ref": "#/$defs/hash"},
+        "ARM-02": {"$ref": "#/$defs/hash"},
+        "ARM-03": {"$ref": "#/$defs/hash"},
+        "ARM-04": {"$ref": "#/$defs/hash"},
+        "ARM-05": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "file_sha256", "candidate_result_set_sha256", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "winner_receipt_sha256s", "freeze_bindings"],
+      "properties": {
+        "uri": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"},
+        "file_sha256": {"$ref": "#/$defs/hash"},
+        "candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+        "candidate_count": {"const": 52},
+        "matched_candidate_count": {"const": 40},
+        "conditional_reserve_candidate_count": {"const": 12},
+        "winner_receipt_sha256s": {"$ref": "#/$defs/winnerHashes"},
+        "freeze_bindings": {"$ref": "#/$defs/freeze"}
+      }
+    },
+    "safeReturn": {
+      "allOf": [
+        {"$ref": "#/$defs/source"},
+        {
+          "type": "object",
+          "required": ["attempt_id", "freeze_bindings", "protected_payload_included", "aggregate_artifact_count"],
+          "properties": {
+            "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+            "freeze_bindings": {"$ref": "#/$defs/freeze"},
+            "protected_payload_included": {"const": false},
+            "aggregate_artifact_count": {"type": "integer", "minimum": 1}
+          }
+        }
+      ]
+    },
+    "terminalCheckpoint": {
+      "allOf": [
+        {"$ref": "#/$defs/source"},
+        {
+          "type": "object",
+          "required": ["attempt_id", "freeze_bindings", "status", "completed_candidate_count", "failed_candidate_count", "resume_allowed"],
+          "properties": {
+            "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+            "freeze_bindings": {"$ref": "#/$defs/freeze"},
+            "status": {"const": "SAFE_RETURNED"},
+            "completed_candidate_count": {"const": 52},
+            "failed_candidate_count": {"const": 0},
+            "resume_allowed": {"const": false}
+          }
+        }
+      ]
+    },
+    "protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["aggregate_only_scan_passed", "raw_or_protected_content_observed"],
+      "properties": {
+        "aggregate_only_scan_passed": {"const": true},
+        "raw_or_protected_content_observed": {"const": false}
+      }
+    }
+  }
+}
