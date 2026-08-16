@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a3-harness-dev-headroom-input.v1.json",
+  "title": "A3.1 held-out HARNESS-DEV-100 aggregate headroom input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authorization", "arm_results"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-harness-dev-headroom-input.v1"},
+    "authorization": {"type": "object"},
+    "arm_results": {"type": "array", "minItems": 5, "maxItems": 5}
+  }
+}

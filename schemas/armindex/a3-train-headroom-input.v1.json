@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a3-train-headroom-input.v1.json",
+  "title": "A3.1 Train-250 descriptive headroom diagnostic input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority_id", "authority_file_sha256", "authority_state", "a2_closeout", "a1_incumbent_aggregate", "winners"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-train-headroom-input.v1"},
+    "authority_id": {"const": "A3.1_TRAIN_HEADROOM_POST_A2"},
+    "authority_file_sha256": {"$ref": "#/$defs/hash"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "a2_closeout": {"$ref": "#/$defs/a2Closeout"},
+    "a1_incumbent_aggregate": {"$ref": "#/$defs/a1Aggregate"},
+    "winners": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/winner"}
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "a2Closeout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "receipt_id", "attempt_id", "status", "evidence_class", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "arm_winner_receipt_sha256s", "candidate_result_set_sha256", "safe_return_receipt_sha256", "terminal_checkpoint_sha256", "workers_reaped", "protected_scan_passed", "diagnostic_non_advancing_arms", "primary_advancement_arms", "claim_evidence_pointers", "freeze_bindings", "receipt_sha256"],
+      "properties": {
+        "schema_version": {"const": "myis.armindex-a2-execution-closeout-receipt.v1"},
+        "receipt_id": {"type": "string", "pattern": "^a2-[a-z0-9-]+-execution-closeout-v1$"},
+        "attempt_id": {"type": "string", "pattern": "^a2-[a-z0-9-]{7,63}$"},
+        "status": {"const": "PASS_A2_EXECUTION_CLOSEOUT"},
+        "evidence_class": {"const": "measured_development_aggregate"},
+        "candidate_count": {"const": 52},
+        "matched_candidate_count": {"const": 40},
+        "conditional_reserve_candidate_count": {"const": 12},
+        "arm_winner_receipt_sha256s": {"type": "object", "additionalProperties": false, "required": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-01": {"$ref": "#/$defs/hash"}, "ARM-02": {"$ref": "#/$defs/hash"}, "ARM-03": {"$ref": "#/$defs/hash"}, "ARM-04": {"$ref": "#/$defs/hash"}, "ARM-05": {"$ref": "#/$defs/hash"}}},
+        "candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+        "safe_return_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "terminal_checkpoint_sha256": {"$ref": "#/$defs/hash"},
+        "workers_reaped": {"const": true},
+        "protected_scan_passed": {"const": true},
+        "diagnostic_non_advancing_arms": {"const": ["ARM-01", "ARM-02"]},
+        "primary_advancement_arms": {"const": ["ARM-03", "ARM-05", "ARM-04"]},
+        "claim_evidence_pointers": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"}},
+        "freeze_bindings": {"$ref": "#/$defs/freezeBindings"},
+        "receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "a1Aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "status", "evidence_class", "scientific_authority", "frozen", "scope", "train_query_count", "split_id", "split_decision_sha256", "evaluator_sha256", "metric_name", "metric_denominator", "arm_metrics", "receipt_sha256"],
+      "properties": {
+        "schema_version": {"const": "myis.armindex-a1-incumbent-aggregate-receipt.v1"},
+        "status": {"const": "PASS"},
+        "evidence_class": {"const": "measured_development_aggregate"},
+        "scientific_authority": {"const": true},
+        "frozen": {"const": true},
+        "scope": {"const": "Train-250"},
+        "train_query_count": {"const": 250},
+        "split_id": {"const": "Train-250"},
+        "split_decision_sha256": {"const": "87efd2ef78400b6025b5cfe153ff5e8b165ea4fad784d0a99979e514e6bb2202"},
+        "evaluator_sha256": {"$ref": "#/$defs/hash"},
+        "metric_name": {"const": "recall_at_100_out"},
+        "metric_denominator": {"type": "string", "minLength": 1, "maxLength": 160},
+        "arm_metrics": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/a1Metric"}},
+        "receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "winner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_id", "winner_program_sha256", "winner_selection_receipt_sha256", "candidate_frozen", "train_aggregate_receipt"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "winner_program_sha256": {"$ref": "#/$defs/hash"},
+        "winner_selection_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "candidate_frozen": {"const": true},
+        "train_aggregate_receipt": {"$ref": "#/$defs/trainReceipt"}
+      }
+    },
+    "trainReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "status", "evidence_class", "scientific_authority", "scope", "train_query_count", "split_id", "split_decision_sha256", "evaluator_sha256", "membership_commitment_sha256", "qrels_commitment_sha256", "model_runtime_sha256", "metric_denominator", "freeze_bindings", "winner_selection_receipt_sha256", "selection_accessed", "final_accessed", "metric", "receipt_sha256"],
+      "properties": {
+        "schema_version": {"const": "myis.armindex-a3-owner-local-fixed-diagnostic-receipt.v1"},
+        "status": {"const": "PASS"},
+        "evidence_class": {"const": "measured_post_a2_fixed_diagnostic_aggregate"},
+        "scientific_authority": {"const": true},
+        "scope": {"const": "Train-250"},
+        "train_query_count": {"const": 250},
+        "split_id": {"const": "Train-250"},
+        "split_decision_sha256": {"$ref": "#/$defs/hash"},
+        "evaluator_sha256": {"$ref": "#/$defs/hash"},
+        "membership_commitment_sha256": {"$ref": "#/$defs/hash"},
+        "qrels_commitment_sha256": {"$ref": "#/$defs/hash"},
+        "model_runtime_sha256": {"$ref": "#/$defs/hash"},
+        "metric_denominator": {"type": "string", "minLength": 1, "maxLength": 160},
+        "freeze_bindings": {"$ref": "#/$defs/freezeBindings"},
+        "winner_selection_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "selection_accessed": {"const": false},
+        "final_accessed": {"const": false},
+        "metric": {"$ref": "#/$defs/metric"},
+        "receipt_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_id", "metric_name", "metric_value"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "metric_name": {"const": "recall_at_100_out"},
+        "metric_value": {"$ref": "#/$defs/rate"}
+      }
+    },
+    "a1Metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_id", "incumbent_program_sha256", "metric_name", "metric_value"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "incumbent_program_sha256": {"$ref": "#/$defs/hash"},
+        "metric_name": {"const": "recall_at_100_out"},
+        "metric_value": {"$ref": "#/$defs/rate"}
+      }
+    },
+    "freezeBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"],
+      "properties": {
+        "manifest_sha256": {"const": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"},
+        "freeze_receipt_sha256": {"const": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10"},
+        "lock_sha256": {"const": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"}
+      }
+    }
+  }
+}

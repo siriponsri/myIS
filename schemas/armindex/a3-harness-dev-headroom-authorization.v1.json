@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a3-harness-dev-headroom-authorization.v1.json",
+  "title": "A3.1 post-A2 HARNESS-DEV-100 headroom authorization v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "authority_state", "closeout_state", "scope", "bindings", "safety", "authorization_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-harness-dev-headroom-authorization.v1"},
+    "status": {"const": "POST_A2_CLOSEOUT_HDEV100_AUTHORIZED"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "closeout_state": {"const": "A2_CLOSEOUT_BOUND"},
+    "scope": {"const": "HARNESS-DEV-100"},
+    "bindings": {"type": "object"},
+    "safety": {"type": "object"},
+    "authorization_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

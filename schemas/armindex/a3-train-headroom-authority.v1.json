@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a3-train-headroom-authority:v1",
+  "title": "A3.1 post-A2 train and HARNESS-DEV headroom authority v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority_id", "authority_state", "purpose", "required_runtime_bindings", "frozen_a2_bindings", "pre_closeout_forbidden_actions", "post_closeout_hdev100_boundary", "output_boundary", "execution_permitted", "authority_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-train-headroom-authority.v1"},
+    "authority_id": {"const": "A3.1_TRAIN_HEADROOM_POST_A2"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "purpose": {"type": "string", "minLength": 1},
+    "required_runtime_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["a2_closeout_receipt", "a2_winners", "a1_incumbent_aggregate_receipt"],
+      "properties": {
+        "a2_closeout_receipt": {"type": "string", "minLength": 1},
+        "a2_winners": {"type": "string", "minLength": 1},
+        "a1_incumbent_aggregate_receipt": {"type": "string", "minLength": 1}
+      }
+    },
+    "frozen_a2_bindings": {"$ref": "#/$defs/frozenA2Bindings"},
+    "pre_closeout_forbidden_actions": {
+      "const": ["candidate_mutation", "retrieval", "REP-DEV", "HDEV-100", "Selection", "Final", "provider_contact", "remote_execution", "spend"]
+    },
+    "post_closeout_hdev100_boundary": {"type": "string", "minLength": 1},
+    "output_boundary": {"type": "string", "minLength": 1},
+    "execution_permitted": {"const": false},
+    "authority_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "frozenA2Bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"],
+      "properties": {
+        "manifest_sha256": {"const": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"},
+        "freeze_receipt_sha256": {"const": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10"},
+        "lock_sha256": {"const": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"}
+      }
+    }
+  }
+}

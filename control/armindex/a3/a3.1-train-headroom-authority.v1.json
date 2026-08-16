@@ -1,0 +1,31 @@
+{
+  "schema_version": "myis.armindex-a3-train-headroom-authority.v1",
+  "authority_id": "A3.1_TRAIN_HEADROOM_POST_A2",
+  "authority_state": "PENDING_A2_CLOSEOUT",
+  "purpose": "Prepare a post-closeout primary held-out HDEV-100 headroom diagnostic and a separate descriptive Train-250 comparison.",
+  "required_runtime_bindings": {
+    "a2_closeout_receipt": "valid PASS_A2_EXECUTION_CLOSEOUT measured_development_aggregate A2 closeout with exact 52/40/12 coverage, five winner receipt hashes, terminal checkpoint, safe return, workers reaped, and protected scan PASS",
+    "a2_winners": "exactly five frozen winner program SHA-256 values with one valid aggregate-only Train-250 receipt per arm",
+    "a1_incumbent_aggregate_receipt": "valid frozen PASS aggregate receipt with one Recall@100 OUT value per arm"
+  },
+  "frozen_a2_bindings": {
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"
+  },
+  "pre_closeout_forbidden_actions": [
+    "candidate_mutation",
+    "retrieval",
+    "REP-DEV",
+    "HDEV-100",
+    "Selection",
+    "Final",
+    "provider_contact",
+    "remote_execution",
+    "spend"
+  ],
+  "post_closeout_hdev100_boundary": "A separately emitted self-hashed authorization may bind the five frozen A2 winners and A1 incumbents for one non-adaptive HDEV-100 aggregate-only evaluation. The repository contains no protected-data or retrieval runner.",
+  "output_boundary": "The primary HDEV-100 result and secondary Train-250 comparison emit aggregate-only winner-minus-incumbent Recall@100 OUT deltas; neither can promote, select, or execute a candidate.",
+  "execution_permitted": false,
+  "authority_sha256": "b3b0a5206ca43ec4686ec238c8d1a87e66bb629df5c8752988a8a9248594ba24"
+}

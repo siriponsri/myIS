@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a3-train-headroom-diagnostic.v1.json",
+  "title": "A3.1 Train-250 descriptive headroom diagnostic v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "authority_state", "scope", "bindings", "headroom_by_arm", "safety", "diagnostic_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-train-headroom-diagnostic.v1"},
+    "status": {"const": "DESCRIPTIVE_ONLY"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "scope": {"const": "Train-250"},
+    "bindings": {"type": "object"},
+    "headroom_by_arm": {"type": "array", "minItems": 5, "maxItems": 5},
+    "safety": {"type": "object"},
+    "diagnostic_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
