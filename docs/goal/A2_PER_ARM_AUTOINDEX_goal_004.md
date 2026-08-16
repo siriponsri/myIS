@@ -7,7 +7,7 @@ lifecycle: ACTIVE
 evidence_class: measured_execution_and_publication_closeout
 scientific_authority: true
 measured_a2_authorized: true
-measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-002.authority.v4.json
+measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-003.authority.v4.json
 candidate_count: 52
 matched_candidate_count: 40
 conditional_reserve_candidate_count: 12
@@ -24,7 +24,7 @@ next_authorized_action: LO_EXECUTE_FROZEN_A2_V4_PARALLEL_MEASUREMENT
 ## Objective and publication value
 
 Run the complete A2 path in one orchestrated LO session: bind the Owner-provisioned
-fresh provider environment, bind fresh provider and v3 authority
+fresh provider environment, bind fresh provider and v4 authority
 facts, execute the frozen 52-candidate per-arm AutoIndex workload, return
 aggregate-safe evidence, and prepare publication figures only after measured
 closeout. The goal maximizes publication value through complete candidate
@@ -34,7 +34,7 @@ result.
 
 Goal 003 is closed lineage. Do not resume it, reuse its attempt ID, or treat
 its pre-stage observation as measured evidence. Goal 004 must create a new
-attempt ID, new ledger, new receipts, and a new v3 authority even when the
+attempt ID, new ledger, new receipts, and a new v4 authority even when the
 same provider instance or the exact root is recovered.
 
 ## Frozen scientific scope
@@ -74,7 +74,7 @@ engineering choices. Checkpoints are durable records, not new approval gates.
    transport, stage, watchdog, lifecycle, and execution-adoption receipts.
    Revalidate all hashes against the clean pushed bundle. Run transport,
    cancellation, reaping, checkpoint, recovery, and safe-return dry checks
-   before measured launch. Issue v3 authority only after the new equality
+   before measured launch. Issue v4 authority only after the new equality
    chain passes; it must bind the new attempt, provider instance, adoption
    receipt, Owner-local commitments, and frozen candidate hashes.
 4. **Measure all frozen candidates.** Run the 40 matched candidates in frozen
@@ -87,7 +87,7 @@ engineering choices. Checkpoints are durable records, not new approval gates.
    coordinated attempt; ARM-02 through ARM-05 use the bound GPUs. Owner-local
    work remains limited to the approved aggregate evaluation transition.
    Complete the Owner-local aggregate evaluation and REP-DEV measurement only
-   under the new v3 authority. Never relaunch a candidate with a durable
+   under the new v4 authority. Never relaunch a candidate with a durable
    result and never mutate the frozen candidate set.
 5. **Recover and return safely.** On interruption, use the runbook's
    attempt-scoped PID/start identity, heartbeat, cancellation, reaping, and
@@ -147,7 +147,7 @@ labels and moving caveats to notes, but qualifiers must remain intact.
 
 The session must preserve the new attempt ledger/checkpoint, provider
 observation and admission, exact-root forensic/recovery receipt, stage and
-adoption receipts, v3 authority, candidate coverage and reserve receipts,
+adoption receipts, v4 authority, candidate coverage and reserve receipts,
 aggregate result/evaluation receipts, safe-return archive/receipt, provider
 closeout evidence, evidence audit, figure manifest, and the LO handoff. Every
 artifact must be SHA-256 bound where its schema requires it and must pass the
