@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myis.local/schemas/armindex/a3-harness-dev-headroom-diagnostic.v1.json",
+  "title": "A3.1 primary held-out HARNESS-DEV-100 headroom diagnostic v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "scope", "bindings", "headroom_by_arm", "safety", "diagnostic_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-harness-dev-headroom-diagnostic.v1"},
+    "status": {"const": "PRIMARY_HARNESS_DEV_DIAGNOSTIC"},
+    "scope": {"const": "HARNESS-DEV-100"},
+    "bindings": {"type": "object"},
+    "headroom_by_arm": {"type": "array", "minItems": 5, "maxItems": 5},
+    "safety": {"type": "object"},
+    "diagnostic_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
