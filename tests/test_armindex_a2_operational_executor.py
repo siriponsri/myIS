@@ -6,6 +6,8 @@ import json
 import subprocess
 import tarfile
 import hashlib
+import threading
+import time
 from collections.abc import Mapping
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -259,6 +261,28 @@ def _successor_authority(
     return {**body, "authority_sha256": canonical_sha256(body)}
 
 
+def _hybrid_authority(
+    adoption: Mapping[str, object], *, owner_manifest_file_sha256: str = "0" * 64
+) -> dict[str, object]:
+    body = _successor_authority(
+        adoption, owner_manifest_file_sha256=owner_manifest_file_sha256
+    )
+    body.update(
+        {
+            "schema_version": "myis.armindex-a2-measured-execution-authority.v4",
+            "authority_id": "a2-measured-execution-authority-v4",
+            "authority_uri": f"control/armindex/a2/measured-authority/{ATTEMPT}.authority.v4.json",
+            "arm_execution_routes": dict(operational._HYBRID_ARM_ROUTES),
+            "official_codex_mode": "pre_freeze_lineage_only",
+            "max_concurrent_arms": 5,
+            "max_active_candidates_per_arm": 1,
+            "receipt_commit_order": "frozen_candidate_order",
+        }
+    )
+    body.pop("authority_sha256")
+    return {**body, "authority_sha256": canonical_sha256(body)}
+
+
 def test_successor_authority_is_narrowly_bound_and_v2_cannot_open_evaluation(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -290,6 +314,51 @@ def test_successor_authority_is_narrowly_bound_and_v2_cannot_open_evaluation(
     ):
         operational.validate_owner_local_evaluation_authority(
             ROOT, authority=_authority(adoption), owner_manifest_path=manifest
+        )
+
+
+def test_hybrid_authority_binds_exact_routes_and_execution_limits(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    manifest = tmp_path / "input.json"
+    manifest.write_text("{}", encoding="ascii")
+    authority = _hybrid_authority(
+        adoption, owner_manifest_file_sha256=file_sha256(manifest)
+    )
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+
+    assert operational.validate_measurement_authority(
+        ROOT,
+        authority,
+        attempt_id=ATTEMPT,
+        execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+        execution_bundle_git_commit=str(adoption["git_commit"]),
+        execution_bundle_git_tree=str(adoption["git_tree"]),
+    )["schema_version"].endswith(".v4")
+    assert operational.validate_owner_local_evaluation_authority(
+        ROOT,
+        authority=authority,
+        owner_manifest_path=manifest,
+        candidate_id=next(
+            candidate_id for candidate_id, row in frozen_candidates(ROOT).items() if row["arm_id"] == "ARM-01"
+        ),
+        execution_route="remote_cpu_retrieval_return_to_owner_local_only",
+    )["receipt_commit_order"] == "frozen_candidate_order"
+    invalid = dict(authority)
+    invalid["arm_execution_routes"] = {**authority["arm_execution_routes"], "ARM-01": "remote_retrieval_return_to_owner_local_only"}
+    invalid["authority_sha256"] = canonical_sha256(
+        {key: value for key, value in invalid.items() if key != "authority_sha256"}
+    )
+    with pytest.raises(operational.A2OperationalExecutorError, match="validation failed"):
+        operational.validate_measurement_authority(
+            ROOT,
+            invalid,
+            attempt_id=ATTEMPT,
+            execution_adoption_receipt_sha256=str(adoption["receipt_sha256"]),
+            execution_bundle_git_commit=str(adoption["git_commit"]),
+            execution_bundle_git_tree=str(adoption["git_tree"]),
         )
 
 
@@ -410,7 +479,7 @@ def test_measurement_authority_rejects_non_authorizing_goal(
 ) -> None:
     adoption = _adoption()
     monkeypatch.setattr(
-        readiness,
+        operational,
         "_validate_measurement_authority_provenance",
         lambda *_args, **_kwargs: None,
     )
@@ -1275,6 +1344,219 @@ def test_matched_completion_waits_for_fresh_reserve_admission(
     assert result["status"] == "MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED"
     assert len(calls) == 40
     assert not list((output / "receipts").glob("*reserve*.json"))
+
+
+def test_hybrid_executor_dispatches_arm01_to_remote_cpu_with_bounded_parallelism_and_ordered_commits(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    authority = _hybrid_authority(adoption)
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+    commits: list[str] = []
+    original_builder = operational.build_candidate_result_receipt
+
+    def recording_builder(*args: object, **kwargs: object) -> dict[str, object]:
+        result = kwargs.get("result")
+        assert isinstance(result, Mapping)
+        commits.append(str(result["candidate_id"]))
+        return original_builder(*args, **kwargs)
+
+    monkeypatch.setattr(operational, "build_candidate_result_receipt", recording_builder)
+    monkeypatch.setattr(operational, "validate_remote_execution_binding", lambda *_a, **_k: {})
+    lock = threading.Lock()
+    active_by_arm: dict[str, int] = {}
+    maximum_by_arm: dict[str, int] = {}
+    active_total = 0
+    maximum_total = 0
+    remote_calls: list[str] = []
+
+    key = tmp_path / "key"
+    known_hosts = tmp_path / "known_hosts"
+    owner_input = tmp_path / "input.json"
+    key.write_text("fixture\n", encoding="ascii")
+    known_hosts.write_text("fixture\n", encoding="ascii")
+    owner_input.write_text("{}", encoding="ascii")
+    config = operational.RemoteTransportConfig(
+        provider_instance_id="47700075", host="127.0.0.1", port=22, user="root",
+        key_path=key, known_hosts_path=known_hosts, remote_root=f"/opt/myis/{ATTEMPT}",
+        remote_repository_root=f"/opt/myis/{ATTEMPT}/current",
+        remote_owner_root=f"/opt/myis/{ATTEMPT}/owner-input",
+        remote_input_manifest=f"/opt/myis/{ATTEMPT}/owner-input/input.json",
+        remote_bundle_path=f"/opt/myis/{ATTEMPT}/incoming/bundle.tar.gz",
+        remote_bundle_receipt_path=f"/opt/myis/{ATTEMPT}/incoming/bundle.receipt.json",
+        remote_python_executable=f"/opt/myis/{ATTEMPT}/venv/bin/python",
+        bundle_sha256="1" * 64, bundle_receipt_sha256="2" * 64,
+        bundle_receipt_file_sha256="3" * 64, git_commit="4" * 40, git_tree="5" * 40,
+        measurement_authority_commitment_uri="control/armindex/a2/measurement-authority-commitment.v3.json",
+        measurement_authority_commitment_file_sha256="6" * 64,
+        owner_manifest_sha256="7" * 64, remote_input_manifest_sha256="8" * 64,
+    )
+
+    class SyntheticRemoteExecutor(operational.RemoteExecutor):
+        def __call__(self, command: list[str], **_kwargs: object) -> Mapping[str, object]:
+            nonlocal active_total, maximum_total
+            candidate_id = command[1]
+            arm_id = frozen_candidates(ROOT)[candidate_id]["arm_id"]
+            with lock:
+                remote_calls.append(candidate_id)
+                active_total += 1
+                active_by_arm[arm_id] = active_by_arm.get(arm_id, 0) + 1
+                maximum_total = max(maximum_total, active_total)
+                maximum_by_arm[arm_id] = max(maximum_by_arm.get(arm_id, 0), active_by_arm[arm_id])
+            time.sleep(0.01)
+            with lock:
+                active_total -= 1
+                active_by_arm[arm_id] -= 1
+            return _executed_candidate_row(candidate_id, score="1")
+
+    executor = SyntheticRemoteExecutor(
+        config=config,
+        attempt_id=ATTEMPT,
+        owner_root=tmp_path,
+        manifest_relative_path="input.json",
+    )
+
+    result = operational.execute_external_candidate_set(
+        ROOT,
+        attempt_id=ATTEMPT,
+        adoption_receipt=adoption,
+        measurement_authority=authority,
+        command_template=["executor", "{candidate_id}"],
+        output_directory=tmp_path / "owner-local-output",
+        checkpoint_ledger=tmp_path / "ledger.jsonl",
+        executor=executor,
+    )
+
+    matched_ids = [
+        candidate_id
+        for candidate_id, candidate in frozen_candidates(ROOT).items()
+        if candidate["tier"] == "matched"
+    ]
+    assert result["status"] == "MATCHED_COMPLETE_RESERVE_ADMISSION_REQUIRED"
+    assert any(frozen_candidates(ROOT)[candidate_id]["arm_id"] == "ARM-01" for candidate_id in remote_calls)
+    assert all(
+        frozen_candidates(ROOT)[candidate_id]["arm_id"] in operational._HYBRID_ARM_ROUTES
+        for candidate_id in remote_calls
+    )
+    assert commits == matched_ids
+    assert maximum_total <= 5
+    assert all(value <= 1 for value in maximum_by_arm.values())
+
+
+def test_hybrid_authority_rejects_non_remote_executor(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    authority = _hybrid_authority(adoption)
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+    with pytest.raises(operational.A2OperationalExecutorError, match="bound RemoteExecutor"):
+        operational.execute_external_candidate_set(
+            ROOT,
+            attempt_id=ATTEMPT,
+            adoption_receipt=adoption,
+            measurement_authority=authority,
+            command_template=["executor", "{candidate_id}"],
+            output_directory=tmp_path / "output",
+            checkpoint_ledger=tmp_path / "ledger.jsonl",
+            executor=lambda *_a, **_k: {},
+        )
+
+
+def test_hybrid_failure_cancels_and_reaps_siblings_before_single_pause(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    adoption = _adoption()
+    authority = _hybrid_authority(adoption)
+    monkeypatch.setattr(operational, "_validate_measurement_authority_provenance", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "_validate_measurement_goal", lambda *_a, **_k: None)
+    monkeypatch.setattr(operational, "validate_remote_execution_binding", lambda *_a, **_k: {})
+    commits: list[str] = []
+    original_builder = operational.build_candidate_result_receipt
+
+    def recording_builder(*args: object, **kwargs: object) -> dict[str, object]:
+        result = kwargs.get("result")
+        assert isinstance(result, Mapping)
+        commits.append(str(result["candidate_id"]))
+        return original_builder(*args, **kwargs)
+
+    monkeypatch.setattr(operational, "build_candidate_result_receipt", recording_builder)
+    key = tmp_path / "key"
+    known_hosts = tmp_path / "known_hosts"
+    key.write_text("fixture\n", encoding="ascii")
+    known_hosts.write_text("fixture\n", encoding="ascii")
+    (tmp_path / "input.json").write_text("{}", encoding="ascii")
+    config = operational.RemoteTransportConfig(
+        provider_instance_id="47700075", host="127.0.0.1", port=22, user="root",
+        key_path=key, known_hosts_path=known_hosts, remote_root=f"/opt/myis/{ATTEMPT}",
+        remote_repository_root=f"/opt/myis/{ATTEMPT}/current",
+        remote_owner_root=f"/opt/myis/{ATTEMPT}/owner-input",
+        remote_input_manifest=f"/opt/myis/{ATTEMPT}/owner-input/input.json",
+        remote_bundle_path=f"/opt/myis/{ATTEMPT}/incoming/bundle.tar.gz",
+        remote_bundle_receipt_path=f"/opt/myis/{ATTEMPT}/incoming/bundle.receipt.json",
+        remote_python_executable=f"/opt/myis/{ATTEMPT}/venv/bin/python",
+        bundle_sha256="1" * 64, bundle_receipt_sha256="2" * 64,
+        bundle_receipt_file_sha256="3" * 64, git_commit="4" * 40, git_tree="5" * 40,
+        measurement_authority_commitment_uri="control/armindex/a2/measurement-authority-commitment.v3.json",
+        measurement_authority_commitment_file_sha256="6" * 64,
+        owner_manifest_sha256="7" * 64, remote_input_manifest_sha256="8" * 64,
+    )
+    ready = threading.Event()
+    arm01_returned = threading.Event()
+    cancelled = threading.Event()
+    lock = threading.Lock()
+    started = 0
+    alive = 0
+    cancelled_ids: list[str] = []
+
+    class CancellingRemoteExecutor(operational.RemoteExecutor):
+        def __call__(self, command: list[str], **_kwargs: object) -> Mapping[str, object]:
+            nonlocal started, alive
+            candidate_id = command[1]
+            arm_id = frozen_candidates(ROOT)[candidate_id]["arm_id"]
+            with lock:
+                started += 1
+                alive += 1
+                if started >= 5:
+                    ready.set()
+            try:
+                assert ready.wait(2)
+                if arm_id == "ARM-01":
+                    arm01_returned.set()
+                    return _executed_candidate_row(candidate_id, score="1")
+                if arm_id == "ARM-02":
+                    assert arm01_returned.wait(2)
+                    raise RuntimeError("injected remote failure")
+                assert cancelled.wait(4)
+                raise RuntimeError("cancelled sibling")
+            finally:
+                with lock:
+                    alive -= 1
+
+        def cancel_and_reap(self, *, candidate_ids: tuple[str, ...], timeout_seconds: int = 90) -> None:
+            del timeout_seconds
+            cancelled_ids.extend(candidate_ids)
+            cancelled.set()
+
+    executor = CancellingRemoteExecutor(
+        config=config, attempt_id=ATTEMPT, owner_root=tmp_path, manifest_relative_path="input.json"
+    )
+    output = tmp_path / "output"
+    ledger = tmp_path / "ledger.jsonl"
+    with pytest.raises(RuntimeError, match="injected remote failure"):
+        operational.execute_external_candidate_set(
+            ROOT, attempt_id=ATTEMPT, adoption_receipt=adoption,
+            measurement_authority=authority, command_template=["executor", "{candidate_id}"],
+            output_directory=output, checkpoint_ledger=ledger, executor=executor,
+        )
+    with lock:
+        assert alive == 0
+    assert cancelled_ids
+    checkpoints = [json.loads(line) for line in ledger.read_text(encoding="ascii").splitlines()]
+    assert [item["status"] for item in checkpoints].count("PAUSED") == 1
+    matched_ids = [candidate_id for candidate_id, candidate in frozen_candidates(ROOT).items() if candidate["tier"] == "matched"]
+    assert commits == matched_ids[:len(commits)]
 
 
 def test_reserve_admission_and_continuation_drift_fail_closed(

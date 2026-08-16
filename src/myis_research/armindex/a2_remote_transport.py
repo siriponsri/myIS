@@ -27,8 +27,10 @@ _HASH = re.compile(r"^[a-f0-9]{64}$")
 _COMMIT = re.compile(r"^[a-f0-9]{40}$")
 _REMOTE_ROOT = re.compile(r"^/opt/myis/a2-[a-z0-9][a-z0-9-]{7,63}$")
 _HOST = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]*$")
+_CANDIDATE_ID = re.compile(r"^a2-arm-0[1-5]-(?:matched|reserve)-b[1-3]-(?:exploit|matched-ablation|orthogonal|diversity)$")
 _COMMITMENT_V1 = "control/armindex/a2/measurement-authority-commitment.v1.json"
 _COMMITMENT_V2 = "control/armindex/a2/measurement-authority-commitment.v2.json"
+_COMMITMENT_V3 = "control/armindex/a2/measurement-authority-commitment.v3.json"
 
 
 class A2RemoteTransportError(ValueError):
@@ -136,6 +138,7 @@ class RemoteTransportConfig:
         if self.measurement_authority_commitment_uri not in {
             _COMMITMENT_V1,
             _COMMITMENT_V2,
+            _COMMITMENT_V3,
         }:
             raise A2RemoteTransportError("remote authority commitment URI is not canonical")
 
@@ -161,7 +164,11 @@ def build_transport_request(config: RemoteTransportConfig, *, attempt_id: str) -
 
     if not re.fullmatch(r"^a2-[a-z0-9-]{7,63}$", attempt_id):
         raise A2RemoteTransportError("transport attempt ID is invalid")
-    version = "v3" if config.measurement_authority_commitment_uri == _COMMITMENT_V2 else "v2"
+    version = {
+        _COMMITMENT_V1: "v2",
+        _COMMITMENT_V2: "v3",
+        _COMMITMENT_V3: "v4",
+    }[config.measurement_authority_commitment_uri]
     body = {
         "schema_version": f"myis.armindex-a2-remote-measured-transport.{version}",
         "request_id": f"{attempt_id}-remote-measured-transport-{version}",
@@ -314,6 +321,64 @@ class RemoteExecutor:
     owner_root: Path | None = None
     manifest_relative_path: str | None = None
     measurement_authority: Mapping[str, Any] | None = None
+
+    def cancel_and_reap(
+        self, *, candidate_ids: Sequence[str], timeout_seconds: int = 90
+    ) -> None:
+        """Request durable remote cancellation and prove every worker has exited."""
+
+        if timeout_seconds <= 0 or not candidate_ids or any(
+            _CANDIDATE_ID.fullmatch(candidate_id) is None
+            for candidate_id in candidate_ids
+        ):
+            raise A2RemoteTransportError("remote cancellation request is invalid")
+        script = (
+            "import json, os, pathlib, sys, time\n"
+            "root=pathlib.Path(sys.argv[1]).resolve()\n"
+            "ids=sys.argv[2:-1]\n"
+            "def alive(identity):\n"
+            " p=identity.get('pid'); tick=identity.get('start_tick')\n"
+            " if not isinstance(p,int) or not isinstance(tick,int): return False\n"
+            " try: return int(pathlib.Path(f'/proc/{p}/stat').read_text().rsplit(') ',1)[1].split()[19])==tick\n"
+            " except (OSError,IndexError,ValueError): return False\n"
+            "for candidate_id in ids:\n"
+            " directory=(root/'candidates'/candidate_id).resolve()\n"
+            " if not directory.is_relative_to(root): raise SystemExit(2)\n"
+            " directory.mkdir(parents=True,exist_ok=True)\n"
+            " target=directory/'cancel.request.json'; temporary=directory/'.cancel.tmp'\n"
+            " temporary.write_text(json.dumps({'candidate_id':candidate_id,'status':'CANCEL_REQUESTED'},sort_keys=True,separators=(',',':'))+'\\n')\n"
+            " os.replace(temporary,target)\n"
+            "deadline=time.monotonic()+int(sys.argv[-1])\n"
+            "while time.monotonic()<deadline:\n"
+            " remaining=[]\n"
+            " for candidate_id in ids:\n"
+            "  identity=root/'candidates'/candidate_id/'process.identity.json'\n"
+            "  if identity.is_file() and alive(json.loads(identity.read_text())): remaining.append(candidate_id)\n"
+            " if not remaining: raise SystemExit(0)\n"
+            " time.sleep(.1)\n"
+            "raise SystemExit(1)\n"
+        )
+        remote_command = shlex.join(
+            [
+                self.config.remote_python_executable,
+                "-c",
+                script,
+                f"{self.config.remote_root}/lifecycle",
+                *candidate_ids,
+                str(timeout_seconds),
+            ]
+        )
+        result = self.runner(
+            [*self.config.ssh_argv(), remote_command],
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=timeout_seconds + 60,
+        )
+        if result.returncode != 0:
+            raise A2RemoteTransportError("remote sibling cancellation could not be reaped")
 
     def __call__(self, command: Sequence[str], *, environment: Mapping[str, str], heartbeat_path: Path, process_path: Path, timeout_seconds: int) -> Mapping[str, Any]:
         del command

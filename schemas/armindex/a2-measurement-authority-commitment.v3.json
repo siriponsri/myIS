@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-measurement-authority-commitment:v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "commitment_id", "authority_creation_role", "authority_file_present", "authority_schema_uri", "transport_schema_version", "authority_contract_version", "required_bundle_state", "required_equalities", "measured_a2_authorized", "scientific_authority", "status", "commitment_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-measurement-authority-commitment.v3"},
+    "commitment_id": {"const": "a2-measurement-authority-pending-ap-v3"},
+    "authority_creation_role": {"const": "AP"},
+    "authority_file_present": {"const": false},
+    "authority_schema_uri": {"const": "schemas/armindex/a2-measured-execution-authority.v4.json"},
+    "transport_schema_version": {"const": "myis.armindex-a2-remote-measured-transport.v4"},
+    "authority_contract_version": {"const": "hybrid_remote_cpu_gpu_owner_local_aggregate_evaluation_v1"},
+    "required_bundle_state": {"const": "clean_pushed_bundle_ancestor_of_clean_pushed_authority_head"},
+    "required_equalities": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "measured_a2_authorized": {"const": false},
+    "scientific_authority": {"const": false},
+    "status": {"const": "MEASURED_EXECUTION_AUTHORITY_ABSENT_PENDING_AP"},
+    "commitment_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

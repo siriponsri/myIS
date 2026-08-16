@@ -2,20 +2,23 @@
 title: "A2 one-session exact-root recovery, measured AutoIndex, and publication closeout"
 phase_id: A2_PER_ARM_AUTOINDEX
 task_id: A2.1
-status: READY_FOR_LO_ONE_SESSION
+status: READY_FOR_MEASURED_EXECUTION
 lifecycle: ACTIVE
 evidence_class: measured_execution_and_publication_closeout
-scientific_authority: false
-measured_a2_authorized: false
+scientific_authority: true
+measured_a2_authorized: true
+measurement_authority_uri: control/armindex/a2/measured-authority/a2-goal004-20260816-005.authority.v4.json
 candidate_count: 52
 matched_candidate_count: 40
 conditional_reserve_candidate_count: 12
 previous_goal: docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md
 previous_attempt: a2-ap-audit011-v3-full-a2
+active_attempt: a2-goal004-20260816-005
+recovery_lineage: a2-goal004-20260816-004 is preserved as incompatible pre-fix runtime evidence; no candidate output is reusable
 provider_instance_id: 47790578
 previous_remote_root: /opt/myis/a2-ap-audit011-v3-full-a2_on_destroyed_predecessor
-last_material_update: 2026-08-15
-next_authorized_action: LO_EXECUTE_GOAL_004
+last_material_update: 2026-08-16
+next_authorized_action: LO_EXECUTE_FROZEN_A2_V4_PARALLEL_MEASUREMENT
 ---
 
 # Goal 004: one-session A2 closeout
@@ -23,7 +26,7 @@ next_authorized_action: LO_EXECUTE_GOAL_004
 ## Objective and publication value
 
 Run the complete A2 path in one orchestrated LO session: bind the Owner-provisioned
-fresh provider environment, bind fresh provider and v3 authority
+fresh provider environment, bind fresh provider and v4 authority
 facts, execute the frozen 52-candidate per-arm AutoIndex workload, return
 aggregate-safe evidence, and prepare publication figures only after measured
 closeout. The goal maximizes publication value through complete candidate
@@ -33,8 +36,13 @@ result.
 
 Goal 003 is closed lineage. Do not resume it, reuse its attempt ID, or treat
 its pre-stage observation as measured evidence. Goal 004 must create a new
-attempt ID, new ledger, new receipts, and a new v3 authority even when the
+attempt ID, new ledger, new receipts, and a new v4 authority even when the
 same provider instance or the exact root is recovered.
+
+Attempt `a2-goal004-20260816-004` is failed lineage: its passage view IDs were
+incompatible with the frozen dense executor. The corrected runtime is bound in
+`a2-goal004-20260816-005`; all 52 candidates restart from zero and no partial
+receipt, ranking, result, checkpoint, or aggregate from `004` is combinable.
 
 ## Frozen scientific scope
 
@@ -73,7 +81,7 @@ engineering choices. Checkpoints are durable records, not new approval gates.
    transport, stage, watchdog, lifecycle, and execution-adoption receipts.
    Revalidate all hashes against the clean pushed bundle. Run transport,
    cancellation, reaping, checkpoint, recovery, and safe-return dry checks
-   before measured launch. Issue v3 authority only after the new equality
+   before measured launch. Issue v4 authority only after the new equality
    chain passes; it must bind the new attempt, provider instance, adoption
    receipt, Owner-local commitments, and frozen candidate hashes.
 4. **Measure all frozen candidates.** Run the 40 matched candidates in frozen
@@ -86,7 +94,7 @@ engineering choices. Checkpoints are durable records, not new approval gates.
    coordinated attempt; ARM-02 through ARM-05 use the bound GPUs. Owner-local
    work remains limited to the approved aggregate evaluation transition.
    Complete the Owner-local aggregate evaluation and REP-DEV measurement only
-   under the new v3 authority. Never relaunch a candidate with a durable
+   under the new v4 authority. Never relaunch a candidate with a durable
    result and never mutate the frozen candidate set.
 5. **Recover and return safely.** On interruption, use the runbook's
    attempt-scoped PID/start identity, heartbeat, cancellation, reaping, and
@@ -101,6 +109,29 @@ engineering choices. Checkpoints are durable records, not new approval gates.
    receipts into `outputs/figures/armindex/a2-goal004/` and the approved Paper
    projection. Preserve SVG plus publication-size PNG/PDF where supported.
    Do not generate a scientific figure from Goal 003 stop evidence.
+
+## Approved operational acceleration
+
+On 2026-08-16 the Owner approved an expedited operational route for this
+Goal. This changes neither the frozen scientific unit nor the required
+evidence; it removes duplicated orchestration work.
+
+- A single synthetic canary may exercise transport, worker cancellation and
+  reaping, checkpoint/recovery, and safe-return validation, producing one
+  hash-bound receipt that identifies each covered check.
+- Hash-validated runtime, model, wheelhouse, and input assets already present
+  on the bound instance may be reused. A new code bundle, fresh provider
+  observation/admission, new attempt root, and new execution-adoption receipt
+  remain required whenever their identities change.
+- Do not run a separate formal pre-launch audit after the canary. The focused
+  validator suite and launch-integrity review are the launch decision record.
+- Use five disjoint workers at launch: ARM-01 on the bound instance CPU and
+  ARM-02 through ARM-05 on their assigned GPUs. A single coordinator validates
+  and commits durable checkpoints and receipts in frozen candidate order.
+
+This acceleration never permits candidate or representation mutation, metric
+or evaluator changes, protected-data transfer, unbound asset reuse, skipped
+coverage/reserve decisions, or execution beyond the USD 60 hard stop.
 
 ## Figure and publication artifact contract
 
@@ -123,7 +154,7 @@ labels and moving caveats to notes, but qualifiers must remain intact.
 
 The session must preserve the new attempt ledger/checkpoint, provider
 observation and admission, exact-root forensic/recovery receipt, stage and
-adoption receipts, v3 authority, candidate coverage and reserve receipts,
+adoption receipts, v4 authority, candidate coverage and reserve receipts,
 aggregate result/evaluation receipts, safe-return archive/receipt, provider
 closeout evidence, evidence audit, figure manifest, and the LO handoff. Every
 artifact must be SHA-256 bound where its schema requires it and must pass the

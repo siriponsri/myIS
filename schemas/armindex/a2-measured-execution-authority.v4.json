@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-measured-execution-authority:v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "authority_id", "authority_uri", "status", "attempt_id",
+    "source_goal_uri", "source_goal_sha256", "execution_adoption_receipt_sha256",
+    "execution_bundle_git_commit", "execution_bundle_git_tree", "provenance_policy",
+    "measured_a2_authorized", "candidate_generation_allowed", "candidate_mutation_allowed",
+    "candidate_evaluation_allowed", "rep_dev_measurement_allowed", "evaluation_location",
+    "evaluation_transition", "evaluation_output_class", "provider_instance_id",
+    "candidate_bindings", "owner_local_evaluation_bindings", "arm_execution_routes",
+    "official_codex_mode", "max_concurrent_arms", "max_active_candidates_per_arm",
+    "receipt_commit_order", "a3_allowed", "selection_allowed", "final_allowed",
+    "active_reserve_candidate_ids", "reserve_activation_evidence_sha256", "freeze_bindings",
+    "scientific_authority", "authority_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-measured-execution-authority.v4"},
+    "authority_id": {"const": "a2-measured-execution-authority-v4"},
+    "authority_uri": {"pattern": "^control/armindex/a2/measured-authority/a2-[a-z0-9-]{7,63}\\.authority\\.v4\\.json$"},
+    "status": {"const": "PASS_A2_MEASURED_EXECUTION_AUTHORIZED"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "source_goal_uri": {"pattern": "^docs/goal/A2[^/]*\\.md$"},
+    "source_goal_sha256": {"$ref": "#/$defs/hash"},
+    "execution_adoption_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "execution_bundle_git_commit": {"$ref": "#/$defs/commit"},
+    "execution_bundle_git_tree": {"$ref": "#/$defs/commit"},
+    "provenance_policy": {"const": "bundle_ancestor_with_unchanged_execution_closure_v1"},
+    "measured_a2_authorized": {"const": true},
+    "candidate_generation_allowed": {"const": false},
+    "candidate_mutation_allowed": {"const": false},
+    "candidate_evaluation_allowed": {"const": true},
+    "rep_dev_measurement_allowed": {"const": true},
+    "evaluation_location": {"const": "owner_local_only"},
+    "evaluation_transition": {"const": "remote_retrieval_return_to_owner_local_only"},
+    "evaluation_output_class": {"const": "aggregate_safe_only"},
+    "provider_instance_id": {"pattern": "^[0-9]{6,20}$"},
+    "candidate_bindings": {"$ref": "#/$defs/candidateBindings"},
+    "owner_local_evaluation_bindings": {"$ref": "#/$defs/ownerLocalBindings"},
+    "arm_execution_routes": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"],
+      "properties": {
+        "ARM-01": {"const": "remote_cpu_retrieval_return_to_owner_local_only"},
+        "ARM-02": {"const": "remote_retrieval_return_to_owner_local_only"},
+        "ARM-03": {"const": "remote_retrieval_return_to_owner_local_only"},
+        "ARM-04": {"const": "remote_retrieval_return_to_owner_local_only"},
+        "ARM-05": {"const": "remote_retrieval_return_to_owner_local_only"}
+      }
+    },
+    "official_codex_mode": {"const": "pre_freeze_lineage_only"},
+    "max_concurrent_arms": {"const": 5},
+    "max_active_candidates_per_arm": {"const": 1},
+    "receipt_commit_order": {"const": "frozen_candidate_order"},
+    "a3_allowed": {"const": false},
+    "selection_allowed": {"const": false},
+    "final_allowed": {"const": false},
+    "active_reserve_candidate_ids": {"type": "array", "maxItems": 0},
+    "reserve_activation_evidence_sha256": {"type": "null"},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "scientific_authority": {"const": true},
+    "authority_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "candidateBindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_ids_sha256", "candidate_order_sha256", "candidate_program_hashes_sha256"],
+      "properties": {
+        "candidate_ids_sha256": {"$ref": "#/$defs/hash"},
+        "candidate_order_sha256": {"$ref": "#/$defs/hash"},
+        "candidate_program_hashes_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "ownerLocalBindings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner_manifest_sha256", "owner_manifest_file_sha256", "evaluator_sha256", "qrels_commitment_sha256", "membership_commitment_sha256", "token_map_commitment_sha256", "runtime_sha256", "model_lockset_sha256", "data_handoff_sha256", "transport_request_sha256"],
+      "properties": {
+        "owner_manifest_sha256": {"$ref": "#/$defs/hash"}, "owner_manifest_file_sha256": {"$ref": "#/$defs/hash"}, "evaluator_sha256": {"$ref": "#/$defs/hash"}, "qrels_commitment_sha256": {"$ref": "#/$defs/hash"}, "membership_commitment_sha256": {"$ref": "#/$defs/hash"}, "token_map_commitment_sha256": {"$ref": "#/$defs/hash"}, "runtime_sha256": {"$ref": "#/$defs/hash"}, "model_lockset_sha256": {"$ref": "#/$defs/hash"}, "data_handoff_sha256": {"$ref": "#/$defs/hash"}, "transport_request_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "freeze": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"],
+      "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}
+    }
+  }
+}

@@ -97,6 +97,35 @@ def test_engine_compiles_frozen_program_and_exports_only_aggregate_result(tmp_pa
     assert not ({"query_ids", "qrels", "membership", "per_query_outcomes"} & set(result))
 
 
+def test_corpus_rows_maps_frozen_compact_fields_to_canonical_materialized_fields(tmp_path: Path) -> None:
+    _input_manifest, program = _manifest(tmp_path)
+    corpus = tmp_path / "canonical-corpus.jsonl"
+    _write_jsonl(
+        corpus,
+        [
+            {
+                "family_token": "F-" + "a" * 32,
+                "publication_token": "P-1",
+                "title_en": "TITLE",
+                "abstract_en": "ABSTRACT",
+                "claims_text": "CLAIMS",
+            }
+        ],
+    )
+
+    rows = engine._corpus_rows(corpus, program)
+
+    assert rows == [
+        {
+            "family_token": "F-" + "a" * 32,
+            "publication_token": "P-1",
+            "title": "TITLE",
+            "abstract": "ABSTRACT",
+            "claims_text": "CLAIMS",
+        }
+    ]
+
+
 def test_engine_rejects_program_hash_drift_before_opening_owner_artifacts(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     manifest, program = _manifest(tmp_path)
     program["program_sha256"] = "0" * 64
