@@ -102,7 +102,7 @@ def compile_program(
                         LogicalInput(
                             f"{family}:{identity}:p{index:08d}",
                             family,
-                            f"passage-{index}",
+                            f"passage-{index:04d}",
                             (PhysicalInput(passage, len(passage.split())),),
                         )
                     )

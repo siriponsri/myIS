@@ -29,6 +29,11 @@ def test_compile_program_preserves_literal_labels_order_and_final_partial() -> N
         "b c d",
         "d T: hello",
     ]
+    assert [item.view_id for item in compiled.units] == [
+        "passage-0000",
+        "passage-0001",
+        "passage-0002",
+    ]
 
 
 def test_compile_program_duplicate_modes_and_family_unitization() -> None:
