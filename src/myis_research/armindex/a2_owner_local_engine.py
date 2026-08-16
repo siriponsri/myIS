@@ -135,19 +135,39 @@ def _load_program(path: Path, *, candidate_id: str, arm_id: str, program_sha256:
     return program
 
 
+_CORPUS_FIELD_ALIASES = {
+    # Frozen A2 programs use the compact public vocabulary; the canonical
+    # materialized corpus keeps the explicit language suffixes.
+    "title": "title_en",
+    "abstract": "abstract_en",
+}
+
+
 def _corpus_rows(path: Path, program: Mapping[str, Any]) -> list[dict[str, Any]]:
     fields = set(program["source_fields"])
     rows = _jsonl(path, role="corpus")
     result: list[dict[str, Any]] = []
     for row in rows:
-        if not {"family_token", "publication_token"}.issubset(row) or not fields.issubset(row):
+        source_keys = {
+            field: field if field in row else _CORPUS_FIELD_ALIASES.get(field, field)
+            for field in fields
+        }
+        if not {"family_token", "publication_token"}.issubset(row) or any(
+            source_key not in row for source_key in source_keys.values()
+        ):
             raise A2OwnerLocalEngineError("corpus contract is incomplete")
         family, publication = row["family_token"], row["publication_token"]
         if not isinstance(family, str) or _TOKEN.fullmatch(family) is None or not family.startswith("F-") or not isinstance(publication, str) or not publication:
             raise A2OwnerLocalEngineError("corpus identity is invalid")
-        if any(not isinstance(row[field], str) for field in fields):
+        if any(not isinstance(row[source_key], str) for source_key in source_keys.values()):
             raise A2OwnerLocalEngineError("corpus field is invalid")
-        result.append({key: row[key] for key in {"family_token", "publication_token", *fields}})
+        result.append(
+            {
+                "family_token": family,
+                "publication_token": publication,
+                **{field: row[source_keys[field]] for field in fields},
+            }
+        )
     return result
 
 
