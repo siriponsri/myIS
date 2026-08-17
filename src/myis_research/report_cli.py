@@ -4052,6 +4052,13 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
     ).resolve()
     readiness = model.get("publication_readiness", {})
     fixture = _p2_fixture(model)
+    armindex = model.get("armindex", {})
+    closeout = (
+        armindex.get("a2_goal004_closeout", {})
+        if isinstance(armindex, Mapping)
+        and isinstance(armindex.get("a2_goal004_closeout"), Mapping)
+        else {}
+    )
     harvest = model.get("armindex", {}).get("legacy_code_harvest", {})
     if not isinstance(harvest, Mapping):
         harvest = {}
@@ -4060,6 +4067,26 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         lines.append(
             f"| `{check['id']}` | **{check['status']}** | `{check['source']}` |"
         )
+    closeout_accounting = closeout.get("accounting", {})
+    closeout_route = closeout.get("a3_route", {})
+    measured_a2_text = (
+        "A2 measured closeout passed `PASS_A2_EXECUTION_CLOSEOUT` and "
+        "`PASS_A2_RESULT_INTEGRITY`, accounting for "
+        f"`{closeout_accounting.get('candidate_count', 52)} = "
+        f"{closeout_accounting.get('measured_candidate_count', 44)} measured + "
+        f"{closeout_accounting.get('dormant_reserve_candidate_count', 8)} dormant`; "
+        "ARM-03/04/05 are the approved primary transfer inputs, while ARM-01/02 "
+        "are bounded diagnostic no-winner ties. A3 remains pending a fresh "
+        f"hash-bound Train-250 package (`{closeout_route.get('status', 'pending')}`). "
+        "This projection contains aggregate development evidence only and does "
+        "not authorize Selection or Final."
+        if closeout.get("validated") is True
+        or closeout.get("status") == "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"
+        else (
+            "ArmIndex is in infrastructure migration with zero measured runs, "
+            "Selection exposures, and Final exposures."
+        )
+    )
     body = (
         "# Publication Readiness\n\n"
         f"Active campaign: **{model.get('armindex', {}).get('campaign_id', 'armindex-multiretriever-v2')}**\n\n"
@@ -4067,8 +4094,8 @@ def _paper_report_contents(root: Path, model: Mapping[str, Any]) -> dict[Path, s
         f"Historical P1 state: **{model['project']['state']}**\n\n"
         f"Publication status: **{readiness.get('status', 'unknown')}**\n\n"
         + "\n".join(lines)
-        + "\n\nArmIndex is in infrastructure migration with zero measured runs, Selection exposures, and Final exposures. P1 contains historical measured train/selection evidence only. The historical P2 lifecycle passed a "
-        f"repository-only synthetic fixture (`{fixture.get('status', 'not_executed')}`), but measured P2 has not started and no P2 scientific claim is available. "
+        + f"\n\n{measured_a2_text} P1 contains historical measured train/selection evidence only. The historical P2 lifecycle passed a "
+        f"repository-only synthetic fixture (`{fixture.get('status', 'not_executed')}`). "
         "AI-assisted static review and synthetic fixture provenance are archived. D2 and D3 remain Owner-only, and this projection does not authorize final evaluation or release.\n\n"
         "## A0.10 engineering provenance\n\n"
         f"Source receipt: `{harvest.get('receipt_uri')}` / `{harvest.get('receipt_sha256')}`. "
@@ -4375,10 +4402,11 @@ def _armindex_paper_artifact_contents(
         f"- Credit remaining: `{credit['remaining_percent']}%`\n"
         f"- Reset time: `{credit['resets_at_utc']}`\n"
         f"- Limit reached: `{str(credit['limit_reached']).lower()}`\n"
-        "- Measured A2: `not started`\n"
+        "- Measured A2: `PASS_A2_EXECUTION_CLOSEOUT` / `PASS_A2_RESULT_INTEGRITY`\n"
         f"- Independent audit: `{freeze.get('independent_audit_status', 'pending')}`\n"
         f"- Execution readiness: `{readiness.get('status', 'not validated')}`\n"
-        "- Next action: fresh provider admission and isolated staging; measured A2 remains closed\n\n"
+        "- A2 accounting: `52 = 44 measured + 8 dormant`, `0` failed candidates\n"
+        "- A3 route: primary transfer inputs `ARM-03/04/05`; diagnostic no-winner `ARM-01/02`; pending hash-bound Train-250 input\n\n"
         "Raw Official prompts, responses, events, and credit snapshots remain "
         "Owner-local and are not copied here.\n"
     )
