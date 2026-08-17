@@ -1,0 +1,53 @@
+{
+  "schema_version": "myis.armindex-budget-extension.v1",
+  "extension_id": "armindex-a3-budget-extension-v1",
+  "status": "PENDING_A2_CLOSEOUT",
+  "owner_authorization": {
+    "authorized_at_utc": "2026-08-17T00:00:00Z",
+    "authorized_scope": "A3 five-arm transfer, complementarity, and HarnessOpt preparation and post-A2 execution",
+    "a3_whole_workload_hard_stop_usd": 35,
+    "campaign_hard_stop_usd": 180
+  },
+  "supersedes_after_a2_closeout": {
+    "campaign_hard_stop_usd": 150,
+    "a2_forward_hard_stop_usd": 60,
+    "recorded_a1_charge_usd": 11.161632
+  },
+  "a3_workload": {
+    "whole_workload_admission_required": true,
+    "partial_arm_admission_allowed": false,
+    "fresh_all_fee_quote_required": true,
+    "fresh_provider_identity_required": true,
+    "quote_max_age_seconds": 900,
+    "target_ttl_hours": 48,
+    "same_instance_reuse_allowed_only_after_a2_closeout": true,
+    "additional_instance_creation_allowed": false,
+    "planned_cross_arm_evaluation_cells_maximum": 20,
+    "planned_harnessopt_batches_maximum": 3,
+    "harnessopt_candidates_per_batch": 4
+  },
+  "hard_stops": {
+    "a3_forward_usd": 35,
+    "campaign_usd": 180,
+    "a2_must_close_at_or_below_usd": 60,
+    "worst_case_remaining_campaign_ceiling_after_a1_a2_a3_usd": 73.838368
+  },
+  "activation_requirements": [
+    "PASS_A2_EXECUTION_CLOSEOUT",
+    "PASS_A2_RESULT_AUDIT",
+    "A2_SAFE_RETURN_AND_WORKER_REAP",
+    "fresh_A3_all_fee_quote_at_or_below_hard_stop",
+    "fresh_A3_provider_identity",
+    "post_A2_campaign_budget_amendment_receipt",
+    "five_arm_A3_bundle_validation_pass"
+  ],
+  "pre_closeout_safety": {
+    "launch_allowed": false,
+    "provider_contact_allowed": false,
+    "remote_execution_allowed": false,
+    "spend_allowed": false,
+    "selection_allowed": false,
+    "final_allowed": false
+  },
+  "budget_extension_sha256": "8b107d6b8bf250217c1c6359c121d88b8531e763023c35971850327731e1082f"
+}

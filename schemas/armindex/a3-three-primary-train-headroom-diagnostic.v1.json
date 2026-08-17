@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a3-three-primary-train-headroom-diagnostic:v1",
+  "title": "A3.1 three-primary descriptive Train-250 headroom diagnostic",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "authority_state", "scope", "bindings", "headroom_by_arm", "safety", "diagnostic_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-three-primary-train-headroom-diagnostic.v1"},
+    "status": {"const": "DESCRIPTIVE_ONLY"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "scope": {"const": "Train-250"},
+    "bindings": {"type": "object", "additionalProperties": false, "required": ["authority_id", "authority_file_sha256", "a2_closeout_receipt_sha256", "a2_result_integrity_audit_sha256", "a1_incumbent_aggregate_receipt_sha256", "winner_receipts"], "properties": {"authority_id": {"const": "A3.1_THREE_PRIMARY_TRAIN_HEADROOM_POST_A2"}, "authority_file_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "a2_closeout_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "a2_result_integrity_audit_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "a1_incumbent_aggregate_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "winner_receipts": {"type": "array", "minItems": 3, "maxItems": 3}}},
+    "headroom_by_arm": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["arm_id", "metric_name", "a1_incumbent_value", "a2_winner_train_value", "winner_minus_incumbent"], "properties": {"arm_id": {"enum": ["ARM-03", "ARM-04", "ARM-05"]}, "metric_name": {"const": "recall_at_100_out"}, "a1_incumbent_value": {"type": "number"}, "a2_winner_train_value": {"type": "number"}, "winner_minus_incumbent": {"type": "number"}}}},
+    "safety": {"const": {"aggregate_only": true, "candidate_mutation_permitted": false, "retrieval_permitted": false, "rep_dev_permitted": false, "harness_dev_permitted": false, "selection_permitted": false, "final_permitted": false, "spend_permitted": false}},
+    "diagnostic_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

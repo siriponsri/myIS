@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-three-primary-coverage-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "measured_candidate_count", "dormant_conditional_reserve_count", "failed_candidate_count", "candidate_result_set_sha256", "primary_winner_receipts", "diagnostic_no_winner_receipts", "primary_improvement_proofs", "freeze_bindings", "coverage_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-three-primary-coverage-receipt.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-three-primary-coverage-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_THREE_PRIMARY_EXACT_COVERAGE"},
+    "candidate_count": {"const": 52},
+    "matched_candidate_count": {"const": 40},
+    "conditional_reserve_candidate_count": {"const": 12},
+    "measured_candidate_count": {"const": 44},
+    "dormant_conditional_reserve_count": {"const": 8},
+    "failed_candidate_count": {"const": 0},
+    "candidate_result_set_sha256": {"$ref": "#/$defs/hash"},
+    "primary_winner_receipts": {"$ref": "#/$defs/primaryWinnerReceipts"},
+    "diagnostic_no_winner_receipts": {"$ref": "#/$defs/diagnosticNoWinnerReceipts"},
+    "primary_improvement_proofs": {"$ref": "#/$defs/improvementProofs"},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "coverage_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "primaryWinnerReceipts": {"type": "object", "additionalProperties": false, "required": ["ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-03": {"allOf": [{"$ref": "#/$defs/winnerReceipt"}, {"properties": {"arm_id": {"const": "ARM-03"}}}]}, "ARM-04": {"allOf": [{"$ref": "#/$defs/winnerReceipt"}, {"properties": {"arm_id": {"const": "ARM-04"}}}]}, "ARM-05": {"allOf": [{"$ref": "#/$defs/winnerReceipt"}, {"properties": {"arm_id": {"const": "ARM-05"}}}]}}},
+    "winnerReceipt": {"type": "object", "additionalProperties": false, "required": ["schema_version", "receipt_id", "attempt_id", "arm_id", "winner_candidate_id", "train_evaluation_receipt_sha256", "strict_tie_rejected", "diagnostic_non_advancing", "advancement_eligible", "freeze_bindings", "status", "receipt_sha256"], "properties": {"schema_version": {"const": "myis.armindex-a2-winner-selection-receipt.v1"}, "receipt_id": {"pattern": "^a2-[a-z0-9-]+-arm-0[3-5]-winner-v1$"}, "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"}, "arm_id": {"enum": ["ARM-03", "ARM-04", "ARM-05"]}, "winner_candidate_id": {"type": "string", "pattern": "^a2-arm-0[3-5]-(matched|reserve)-b[1-3]-(exploit|matched-ablation|orthogonal|diversity)$"}, "train_evaluation_receipt_sha256": {"$ref": "#/$defs/hash"}, "strict_tie_rejected": {"const": true}, "diagnostic_non_advancing": {"const": false}, "advancement_eligible": {"const": true}, "freeze_bindings": {"$ref": "#/$defs/freeze"}, "status": {"const": "PASS_A2_WINNER_SELECTED"}, "receipt_sha256": {"$ref": "#/$defs/hash"}}},
+    "diagnosticNoWinnerReceipts": {"type": "object", "additionalProperties": false, "required": ["ARM-01", "ARM-02"], "properties": {"ARM-01": {"allOf": [{"$ref": "#/$defs/diagnosticNoWinnerReceipt"}, {"properties": {"arm_id": {"const": "ARM-01"}}}]}, "ARM-02": {"allOf": [{"$ref": "#/$defs/diagnosticNoWinnerReceipt"}, {"properties": {"arm_id": {"const": "ARM-02"}}}]}}},
+    "diagnosticNoWinnerReceipt": {"type": "object", "additionalProperties": false, "required": ["schema_version", "receipt_id", "attempt_id", "arm_id", "primary_metric_name", "top_primary_metric_value", "top_tie_count", "top_candidate_result_receipt_sha256s", "strict_tie_rejected", "diagnostic_non_advancing", "advancement_eligible", "freeze_bindings", "status", "receipt_sha256"], "properties": {"schema_version": {"const": "myis.armindex-a2-diagnostic-no-winner-receipt.v1"}, "receipt_id": {"pattern": "^a2-[a-z0-9-]+-arm-0[12]-diagnostic-no-winner-v1$"}, "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"}, "arm_id": {"enum": ["ARM-01", "ARM-02"]}, "primary_metric_name": {"const": "recall_at_100/out"}, "top_primary_metric_value": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}, "top_tie_count": {"const": 3}, "top_candidate_result_receipt_sha256s": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"$ref": "#/$defs/hash"}}, "strict_tie_rejected": {"const": true}, "diagnostic_non_advancing": {"const": true}, "advancement_eligible": {"const": false}, "freeze_bindings": {"$ref": "#/$defs/freeze"}, "status": {"const": "PASS_A2_DIAGNOSTIC_NO_WINNER_TIE"}, "receipt_sha256": {"$ref": "#/$defs/hash"}}},
+    "improvementProofs": {"type": "object", "additionalProperties": false, "required": ["ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-03": {"$ref": "#/$defs/improvementProof"}, "ARM-04": {"$ref": "#/$defs/improvementProof"}, "ARM-05": {"$ref": "#/$defs/improvementProof"}}},
+    "improvementProof": {"type": "object", "additionalProperties": false, "required": ["winner_candidate_id", "winner_primary_metric", "frozen_a1_incumbent_candidate_id", "frozen_a1_primary_metric", "strict_primary_improvement", "a1_comparison"], "properties": {"winner_candidate_id": {"type": "string", "pattern": "^a2-arm-0[3-5]-(matched|reserve)-b[1-3]-(exploit|matched-ablation|orthogonal|diversity)$"}, "winner_primary_metric": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}, "frozen_a1_incumbent_candidate_id": {"type": "string", "minLength": 1}, "frozen_a1_primary_metric": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}, "strict_primary_improvement": {"type": "boolean"}, "a1_comparison": {"enum": ["STRICT_IMPROVEMENT", "NO_STRICT_IMPROVEMENT"]}}},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

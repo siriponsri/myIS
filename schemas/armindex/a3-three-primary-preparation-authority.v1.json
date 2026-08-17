@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a3-three-primary-preparation-authority:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority_id", "authority_state", "purpose", "a2_predecessor_bindings", "frozen_a2_bindings", "budget_extension_uri", "primary_arm_scope", "diagnostic_reporting_boundary", "post_closeout_execution_boundary", "pre_admission_forbidden_actions", "execution_permitted", "authority_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-three-primary-preparation-authority.v1"},
+    "authority_id": {"const": "A3_THREE_PRIMARY_TRANSFER_HARNESSOPT_POST_A2"},
+    "authority_state": {"const": "PENDING_FRESH_A3_ADMISSION"},
+    "purpose": {"type": "string", "minLength": 1},
+    "a2_predecessor_bindings": {"type": "object", "additionalProperties": false, "required": ["a2_closeout_receipt_sha256", "a2_result_integrity_audit_sha256", "a2_amendment_sha256", "primary_winner_receipt_sha256s", "diagnostic_no_winner_receipt_sha256s", "safe_return_receipt_sha256", "workers_reaped"], "properties": {"a2_closeout_receipt_sha256": {"$ref": "#/$defs/hash"}, "a2_result_integrity_audit_sha256": {"$ref": "#/$defs/hash"}, "a2_amendment_sha256": {"$ref": "#/$defs/hash"}, "primary_winner_receipt_sha256s": {"$ref": "#/$defs/primaryHashes"}, "diagnostic_no_winner_receipt_sha256s": {"$ref": "#/$defs/diagnosticHashes"}, "safe_return_receipt_sha256": {"$ref": "#/$defs/hash"}, "workers_reaped": {"const": true}}},
+    "frozen_a2_bindings": {"$ref": "#/$defs/freeze"},
+    "budget_extension_uri": {"const": "control/budgets/armindex-budget-extension-a3-three-primary.v1.json"},
+    "primary_arm_scope": {"const": ["ARM-03", "ARM-04", "ARM-05"]},
+    "diagnostic_reporting_boundary": {"const": {"excluded_arm_ids": ["ARM-01", "ARM-02"], "a3_optimization_input": false, "permitted_use": "bounded_A2_negative_diagnostic_reporting_only"}},
+    "post_closeout_execution_boundary": {"type": "object", "additionalProperties": false, "required": ["transfer_matrix", "complementarity", "harnessopt", "hdev100"], "properties": {"transfer_matrix": {"type": "string", "minLength": 1}, "complementarity": {"type": "string", "minLength": 1}, "harnessopt": {"type": "string", "minLength": 1}, "hdev100": {"type": "string", "minLength": 1}}},
+    "pre_admission_forbidden_actions": {"type": "array", "minItems": 10, "items": {"type": "string", "minLength": 1}},
+    "execution_permitted": {"const": false},
+    "authority_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "primaryHashes": {"type": "object", "additionalProperties": false, "required": ["ARM-03", "ARM-04", "ARM-05"], "properties": {"ARM-03": {"$ref": "#/$defs/hash"}, "ARM-04": {"$ref": "#/$defs/hash"}, "ARM-05": {"$ref": "#/$defs/hash"}}}, "diagnosticHashes": {"type": "object", "additionalProperties": false, "required": ["ARM-01", "ARM-02"], "properties": {"ARM-01": {"$ref": "#/$defs/hash"}, "ARM-02": {"$ref": "#/$defs/hash"}}}, "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}}
+}

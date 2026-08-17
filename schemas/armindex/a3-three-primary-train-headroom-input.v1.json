@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a3-three-primary-train-headroom-input:v1",
+  "title": "A3.1 three-primary aggregate Train-250 headroom input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority_id", "authority_file_sha256", "authority_state", "a2_closeout", "a2_result_integrity_audit", "a1_incumbent_aggregate", "winners"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-three-primary-train-headroom-input.v1"},
+    "authority_id": {"const": "A3.1_THREE_PRIMARY_TRAIN_HEADROOM_POST_A2"},
+    "authority_file_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "a2_closeout": {"type": "object"},
+    "a2_result_integrity_audit": {"type": "object"},
+    "a1_incumbent_aggregate": {"type": "object"},
+    "winners": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["arm_id", "winner_program_sha256", "winner_selection_receipt_sha256", "candidate_frozen", "train_aggregate_receipt"], "properties": {"arm_id": {"enum": ["ARM-03", "ARM-04", "ARM-05"]}, "winner_program_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "winner_selection_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "candidate_frozen": {"const": true}, "train_aggregate_receipt": {"type": "object"}}}}
+  }
+}

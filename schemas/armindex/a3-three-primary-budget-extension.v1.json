@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a3-three-primary-budget-extension:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "extension_id", "status", "owner_authorization", "a2_closeout_bindings", "a3_workload", "hard_stops", "activation_requirements", "pre_admission_safety", "budget_extension_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-three-primary-budget-extension.v1"},
+    "extension_id": {"const": "armindex-a3-three-primary-budget-extension-v1"},
+    "status": {"const": "PENDING_FRESH_A3_ADMISSION"},
+    "owner_authorization": {"type": "object", "additionalProperties": false, "required": ["source_amendment_sha256", "a3_whole_workload_hard_stop_usd", "campaign_hard_stop_usd"], "properties": {"source_amendment_sha256": {"$ref": "#/$defs/hash"}, "a3_whole_workload_hard_stop_usd": {"const": 35}, "campaign_hard_stop_usd": {"const": 180}}},
+    "a2_closeout_bindings": {"type": "object", "additionalProperties": false, "required": ["a2_closeout_receipt_sha256", "a2_result_integrity_audit_sha256", "a2_whole_workload_total_usd", "a2_forward_hard_stop_usd", "safe_return_receipt_sha256", "workers_reaped"], "properties": {"a2_closeout_receipt_sha256": {"$ref": "#/$defs/hash"}, "a2_result_integrity_audit_sha256": {"$ref": "#/$defs/hash"}, "a2_whole_workload_total_usd": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}, "a2_forward_hard_stop_usd": {"const": "60"}, "safe_return_receipt_sha256": {"$ref": "#/$defs/hash"}, "workers_reaped": {"const": true}}},
+    "a3_workload": {"type": "object", "additionalProperties": false, "required": ["whole_workload_admission_required", "partial_arm_admission_allowed", "fresh_all_fee_quote_required", "fresh_provider_identity_required", "quote_max_age_seconds", "target_ttl_hours", "same_instance_reuse_allowed_only_after_a2_closeout", "additional_instance_creation_allowed", "planned_cross_arm_evaluation_cells_maximum", "planned_harnessopt_batches_maximum", "harnessopt_candidates_per_batch"], "properties": {"whole_workload_admission_required": {"const": true}, "partial_arm_admission_allowed": {"const": false}, "fresh_all_fee_quote_required": {"const": true}, "fresh_provider_identity_required": {"const": true}, "quote_max_age_seconds": {"const": 900}, "target_ttl_hours": {"const": 48}, "same_instance_reuse_allowed_only_after_a2_closeout": {"const": true}, "additional_instance_creation_allowed": {"const": false}, "planned_cross_arm_evaluation_cells_maximum": {"const": 6}, "planned_harnessopt_batches_maximum": {"const": 3}, "harnessopt_candidates_per_batch": {"const": 4}}},
+    "hard_stops": {"type": "object", "additionalProperties": false, "required": ["a3_forward_usd", "campaign_usd", "a2_must_close_at_or_below_usd", "remaining_campaign_after_a1_a2_a3_usd"], "properties": {"a3_forward_usd": {"const": 35}, "campaign_usd": {"const": 180}, "a2_must_close_at_or_below_usd": {"const": 60}, "remaining_campaign_after_a1_a2_a3_usd": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}}},
+    "activation_requirements": {"type": "array", "minItems": 8, "items": {"type": "string", "minLength": 1}},
+    "pre_admission_safety": {"type": "object", "additionalProperties": false, "required": ["launch_allowed", "provider_contact_allowed", "remote_execution_allowed", "spend_allowed", "selection_allowed", "final_allowed"], "properties": {"launch_allowed": {"const": false}, "provider_contact_allowed": {"const": false}, "remote_execution_allowed": {"const": false}, "spend_allowed": {"const": false}, "selection_allowed": {"const": false}, "final_allowed": {"const": false}}},
+    "budget_extension_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a3-three-primary-preparation-manifest:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "authority_id", "authority_state", "authority_sha256", "budget_extension_uri", "arms", "transfer_matrix", "complementarity_controls", "harnessopt_plan", "pending_runtime_inputs", "safety", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-three-primary-preparation-manifest.v1"},
+    "bundle_id": {"const": "A3_THREE_PRIMARY_TRANSFER_HARNESSOPT_PENDING"},
+    "authority_id": {"const": "A3_THREE_PRIMARY_TRANSFER_HARNESSOPT_POST_A2"},
+    "authority_state": {"const": "PENDING_FRESH_A3_ADMISSION"},
+    "authority_sha256": {"$ref": "#/$defs/hash"},
+    "budget_extension_uri": {"const": "control/budgets/armindex-budget-extension-a3-three-primary.v1.json"},
+    "arms": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["arm_id", "winner_program_sha256", "winner_selection_receipt_sha256"], "properties": {"arm_id": {"enum": ["ARM-03", "ARM-04", "ARM-05"]}, "winner_program_sha256": {"type": "null"}, "winner_selection_receipt_sha256": {"type": "null"}}}},
+    "transfer_matrix": {"type": "array", "minItems": 9, "maxItems": 9, "items": {"type": "object", "additionalProperties": false, "required": ["source_arm_id", "target_arm_id", "post_closeout_action", "transfer_classification", "result_receipt_sha256"], "properties": {"source_arm_id": {"enum": ["ARM-03", "ARM-04", "ARM-05"]}, "target_arm_id": {"enum": ["ARM-03", "ARM-04", "ARM-05"]}, "post_closeout_action": {"enum": ["reuse_self_winner", "validate_cross_arm_transfer"]}, "transfer_classification": {"type": "null"}, "result_receipt_sha256": {"type": "null"}}}},
+    "complementarity_controls": {"type": "object"},
+    "harnessopt_plan": {"type": "object"},
+    "pending_runtime_inputs": {"type": "array", "minItems": 8, "items": {"type": "string", "minLength": 1}},
+    "safety": {"type": "object"},
+    "manifest_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A3 five-arm pending transfer and HarnessOpt preparation manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "authority_id", "authority_state", "budget_extension_uri", "arms", "transfer_matrix", "complementarity_controls", "harnessopt_plan", "pending_runtime_inputs", "safety", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-five-arm-preparation-manifest.v1"},
+    "bundle_id": {"const": "A3_FIVE_ARM_TRANSFER_HARNESSOPT_PENDING"},
+    "authority_id": {"const": "A3_FIVE_ARM_TRANSFER_HARNESSOPT_POST_A2"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "budget_extension_uri": {"const": "control/budgets/armindex-budget-extension-a3-v1.json"},
+    "arms": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm_id", "winner_program_sha256", "winner_selection_receipt_sha256"],
+        "properties": {
+          "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+          "winner_program_sha256": {"type": "null"},
+          "winner_selection_receipt_sha256": {"type": "null"}
+        }
+      }
+    },
+    "transfer_matrix": {
+      "type": "array",
+      "minItems": 25,
+      "maxItems": 25,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_arm_id", "target_arm_id", "post_closeout_action", "transfer_classification", "result_receipt_sha256"],
+        "properties": {
+          "source_arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+          "target_arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+          "post_closeout_action": {"enum": ["reuse_self_winner", "validate_cross_arm_transfer"]},
+          "transfer_classification": {"type": "null"},
+          "result_receipt_sha256": {"type": "null"}
+        }
+      }
+    },
+    "complementarity_controls": {"type": "object"},
+    "harnessopt_plan": {"type": "object"},
+    "pending_runtime_inputs": {"type": "array", "items": {"type": "string"}},
+    "safety": {"type": "object"},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

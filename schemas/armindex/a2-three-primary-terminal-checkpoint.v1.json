@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-three-primary-terminal-checkpoint:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "checkpoint_id", "attempt_id", "status", "candidate_count", "measured_candidate_count", "dormant_conditional_reserve_count", "failed_candidate_count", "safe_return_receipt_sha256", "amendment_sha256", "workers_reaped", "resume_allowed", "freeze_bindings", "checkpoint_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-three-primary-terminal-checkpoint.v1"},
+    "checkpoint_id": {"pattern": "^a2-[a-z0-9-]+-three-primary-terminal-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_THREE_PRIMARY_SAFE_RETURNED"},
+    "candidate_count": {"const": 52},
+    "measured_candidate_count": {"const": 44},
+    "dormant_conditional_reserve_count": {"const": 8},
+    "failed_candidate_count": {"const": 0},
+    "safe_return_receipt_sha256": {"$ref": "#/$defs/hash"},
+    "amendment_sha256": {"$ref": "#/$defs/hash"},
+    "workers_reaped": {"const": true},
+    "resume_allowed": {"const": false},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "checkpoint_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

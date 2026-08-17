@@ -1,0 +1,29 @@
+{
+  "schema_version": "myis.armindex-a3-three-primary-train-headroom-bundle-manifest.v1",
+  "bundle_id": "A3.1_THREE_PRIMARY_TRAIN_HEADROOM_PENDING",
+  "authority_id": "A3.1_THREE_PRIMARY_TRAIN_HEADROOM_POST_A2",
+  "authority_file_sha256": "8d3da844dddbfd6e49bc4bac0f41b1860d96c0af23e1dc25ec7ab50da334e56c",
+  "authority_state": "PENDING_A2_CLOSEOUT",
+  "primary_advancement_arms": [
+    {"arm_id": "ARM-03", "winner_program_sha256": null, "winner_selection_receipt_sha256": null, "train_aggregate_receipt_sha256": null},
+    {"arm_id": "ARM-05", "winner_program_sha256": null, "winner_selection_receipt_sha256": null, "train_aggregate_receipt_sha256": null},
+    {"arm_id": "ARM-04", "winner_program_sha256": null, "winner_selection_receipt_sha256": null, "train_aggregate_receipt_sha256": null}
+  ],
+  "frozen_a2_bindings": {
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"
+  },
+  "pending_runtime_inputs": ["a2_amended_closeout_receipt", "a2_result_integrity_audit_receipt", "a1_incumbent_aggregate_receipt", "owner_local_fixed_train250_aggregates"],
+  "safety": {
+    "measured_execution_started": false,
+    "protected_data_accessed": false,
+    "provider_contacted": false,
+    "remote_execution_started": false,
+    "spend_permitted": false,
+    "candidate_mutation_permitted": false,
+    "selection_permitted": false,
+    "final_permitted": false
+  },
+  "manifest_sha256": "542954a05d93fcf9af4fa7ca607a6f08c2531895edd3158e171c044defa2955f"
+}

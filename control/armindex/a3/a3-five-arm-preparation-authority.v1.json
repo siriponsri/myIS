@@ -1,0 +1,40 @@
+{
+  "schema_version": "myis.armindex-a3-five-arm-preparation-authority.v1",
+  "authority_id": "A3_FIVE_ARM_TRANSFER_HARNESSOPT_POST_A2",
+  "authority_state": "PENDING_A2_CLOSEOUT",
+  "purpose": "Prepare a receipt-bound five-arm A3 transfer, complementarity, and HarnessOpt execution bundle without starting measurement or provider work.",
+  "a2_predecessor_requirements": [
+    "PASS_A2_EXECUTION_CLOSEOUT",
+    "PASS_A2_RESULT_AUDIT",
+    "five_frozen_winner_selection_receipts",
+    "safe_return_validated",
+    "workers_reaped"
+  ],
+  "frozen_a2_bindings": {
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"
+  },
+  "budget_extension_uri": "control/budgets/armindex-budget-extension-a3-v1.json",
+  "five_arm_scope": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"],
+  "post_closeout_execution_boundary": {
+    "transfer_matrix": "each frozen winner may be compiled only against compatible target adapters; unsupported pairs are recorded and never substituted",
+    "complementarity": "equal-depth fixed-union controls precede any adaptive HarnessOpt batch",
+    "harnessopt": "at most three exact-four frozen batches; representations, model adapters, indexes, evaluator, data, and metric remain frozen",
+    "hdev100": "a non-adaptive diagnostic may report aggregate evidence but cannot tune transfer or HarnessOpt decisions"
+  },
+  "pre_closeout_forbidden_actions": [
+    "candidate_mutation",
+    "retrieval",
+    "transfer_evaluation",
+    "complementarity_evaluation",
+    "harnessopt_evaluation",
+    "provider_contact",
+    "remote_execution",
+    "spend",
+    "selection",
+    "final"
+  ],
+  "execution_permitted": false,
+  "authority_sha256": "9f2718e3a5b40d657eb354050a7e68e4cf7462d07c05c4a82b989d7f715a8227"
+}

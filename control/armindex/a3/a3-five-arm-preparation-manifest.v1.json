@@ -1,0 +1,65 @@
+{
+  "schema_version": "myis.armindex-a3-five-arm-preparation-manifest.v1",
+  "bundle_id": "A3_FIVE_ARM_TRANSFER_HARNESSOPT_PENDING",
+  "authority_id": "A3_FIVE_ARM_TRANSFER_HARNESSOPT_POST_A2",
+  "authority_state": "PENDING_A2_CLOSEOUT",
+  "budget_extension_uri": "control/budgets/armindex-budget-extension-a3-v1.json",
+  "arms": [
+    {"arm_id": "ARM-01", "winner_program_sha256": null, "winner_selection_receipt_sha256": null},
+    {"arm_id": "ARM-02", "winner_program_sha256": null, "winner_selection_receipt_sha256": null},
+    {"arm_id": "ARM-03", "winner_program_sha256": null, "winner_selection_receipt_sha256": null},
+    {"arm_id": "ARM-04", "winner_program_sha256": null, "winner_selection_receipt_sha256": null},
+    {"arm_id": "ARM-05", "winner_program_sha256": null, "winner_selection_receipt_sha256": null}
+  ],
+  "transfer_matrix": [
+    {"source_arm_id": "ARM-01", "target_arm_id": "ARM-01", "post_closeout_action": "reuse_self_winner", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-01", "target_arm_id": "ARM-02", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-01", "target_arm_id": "ARM-03", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-01", "target_arm_id": "ARM-04", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-01", "target_arm_id": "ARM-05", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-02", "target_arm_id": "ARM-01", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-02", "target_arm_id": "ARM-02", "post_closeout_action": "reuse_self_winner", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-02", "target_arm_id": "ARM-03", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-02", "target_arm_id": "ARM-04", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-02", "target_arm_id": "ARM-05", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-03", "target_arm_id": "ARM-01", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-03", "target_arm_id": "ARM-02", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-03", "target_arm_id": "ARM-03", "post_closeout_action": "reuse_self_winner", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-03", "target_arm_id": "ARM-04", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-03", "target_arm_id": "ARM-05", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-04", "target_arm_id": "ARM-01", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-04", "target_arm_id": "ARM-02", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-04", "target_arm_id": "ARM-03", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-04", "target_arm_id": "ARM-04", "post_closeout_action": "reuse_self_winner", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-04", "target_arm_id": "ARM-05", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-05", "target_arm_id": "ARM-01", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-05", "target_arm_id": "ARM-02", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-05", "target_arm_id": "ARM-03", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-05", "target_arm_id": "ARM-04", "post_closeout_action": "validate_cross_arm_transfer", "transfer_classification": null, "result_receipt_sha256": null},
+    {"source_arm_id": "ARM-05", "target_arm_id": "ARM-05", "post_closeout_action": "reuse_self_winner", "transfer_classification": null, "result_receipt_sha256": null}
+  ],
+  "complementarity_controls": {
+    "same_depth_required": true,
+    "control_ids": ["best_single", "all_eligible_rrf60", "top_two_rrf60", "top_three_rrf60", "commercial_only_fixed_union"],
+    "aggregate_outputs": ["union_recall", "best_arm_recall", "unique_relevant_pairs", "overlap", "oracle_recall", "incremental_cost", "incremental_latency"]
+  },
+  "harnessopt_plan": {
+    "maximum_batches": 3,
+    "candidates_per_batch": 4,
+    "roles": ["quality_exploit", "cost_latency_ablation", "routing_hypothesis", "diversity_profile"],
+    "adaptive_scope": "Train-250 only",
+    "hdev100_role": "non_adaptive_diagnostic_only"
+  },
+  "pending_runtime_inputs": ["a2_execution_closeout_receipt", "a2_result_integrity_audit_receipt", "five_winner_selection_receipts", "a1_incumbent_aggregate_receipt", "fresh_a3_provider_admission", "post_a2_campaign_budget_amendment_receipt"],
+  "safety": {
+    "measured_execution_started": false,
+    "protected_data_accessed": false,
+    "provider_contacted": false,
+    "remote_execution_started": false,
+    "spend_permitted": false,
+    "candidate_mutation_permitted": false,
+    "selection_permitted": false,
+    "final_permitted": false
+  },
+  "manifest_sha256": "caec8da82ed2fa1a7286c2871a7e624dbb59dca9a6e244080c07a791c7a9b104"
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "myis.armindex-a3-three-primary-budget-extension.v1",
+  "extension_id": "armindex-a3-three-primary-budget-extension-v1",
+  "status": "PENDING_FRESH_A3_ADMISSION",
+  "owner_authorization": {
+    "source_amendment_sha256": "4c48d6f30713ea391148694cab6e0fe15b5bd2f99866bb8778ace558272c0168",
+    "a3_whole_workload_hard_stop_usd": 35,
+    "campaign_hard_stop_usd": 180
+  },
+  "a2_closeout_bindings": {
+    "a2_closeout_receipt_sha256": "e4bc663d7ee09282c334f25945ede247a50b81742a690c214e0f2aa9ffb81d1d",
+    "a2_result_integrity_audit_sha256": "7d31b80d4dab6897f3110ee629ddf8f9d12fd5f0522b0d8ccd175ba892986642",
+    "a2_whole_workload_total_usd": "54.52666666666665948",
+    "a2_forward_hard_stop_usd": "60",
+    "safe_return_receipt_sha256": "659982aea768c6d4c057a75c6a50b04026d7c48875d604e06b1563a1b2b09484",
+    "workers_reaped": true
+  },
+  "a3_workload": {
+    "whole_workload_admission_required": true,
+    "partial_arm_admission_allowed": false,
+    "fresh_all_fee_quote_required": true,
+    "fresh_provider_identity_required": true,
+    "quote_max_age_seconds": 900,
+    "target_ttl_hours": 48,
+    "same_instance_reuse_allowed_only_after_a2_closeout": true,
+    "additional_instance_creation_allowed": false,
+    "planned_cross_arm_evaluation_cells_maximum": 6,
+    "planned_harnessopt_batches_maximum": 3,
+    "harnessopt_candidates_per_batch": 4
+  },
+  "hard_stops": {
+    "a3_forward_usd": 35,
+    "campaign_usd": 180,
+    "a2_must_close_at_or_below_usd": 60,
+    "remaining_campaign_after_a1_a2_a3_usd": "79.31170133333334052"
+  },
+  "activation_requirements": [
+    "PASS_A2_EXECUTION_CLOSEOUT_V2",
+    "PASS_A2_RESULT_INTEGRITY_V2",
+    "A2_SAFE_RETURN_AND_WORKER_REAP",
+    "three_primary_winner_receipts_bound",
+    "two_diagnostic_no_winner_receipts_bound",
+    "fresh_A3_all_fee_quote_at_or_below_hard_stop",
+    "fresh_A3_provider_identity",
+    "post_A2_campaign_budget_amendment_receipt",
+    "three_primary_A3_bundle_validation_pass"
+  ],
+  "pre_admission_safety": {
+    "launch_allowed": false,
+    "provider_contact_allowed": false,
+    "remote_execution_allowed": false,
+    "spend_allowed": false,
+    "selection_allowed": false,
+    "final_allowed": false
+  },
+  "budget_extension_sha256": "087f2d75f4a9808bee1be7caacf19d7616925dc8d8fadbaf8151c476f6a0ca11"
+}

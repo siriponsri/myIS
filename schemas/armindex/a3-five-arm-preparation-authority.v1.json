@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A3 five-arm pending preparation authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "authority_id", "authority_state", "purpose", "a2_predecessor_requirements", "frozen_a2_bindings", "budget_extension_uri", "five_arm_scope", "post_closeout_execution_boundary", "pre_closeout_forbidden_actions", "execution_permitted", "authority_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a3-five-arm-preparation-authority.v1"},
+    "authority_id": {"const": "A3_FIVE_ARM_TRANSFER_HARNESSOPT_POST_A2"},
+    "authority_state": {"const": "PENDING_A2_CLOSEOUT"},
+    "purpose": {"type": "string", "minLength": 1},
+    "a2_predecessor_requirements": {"type": "array", "items": {"type": "string"}},
+    "frozen_a2_bindings": {"type": "object"},
+    "budget_extension_uri": {"const": "control/budgets/armindex-budget-extension-a3-v1.json"},
+    "five_arm_scope": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]}},
+    "post_closeout_execution_boundary": {"type": "object"},
+    "pre_closeout_forbidden_actions": {"type": "array", "items": {"type": "string"}},
+    "execution_permitted": {"const": false},
+    "authority_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

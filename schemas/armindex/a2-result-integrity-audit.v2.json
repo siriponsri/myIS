@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-result-integrity-audit:v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "status", "evidence_class", "scientific_authority", "claim_boundary", "amendment_sha256", "closeout", "coverage", "safe_return", "terminal_checkpoint", "protection", "audit_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-result-integrity-audit.v2"},
+    "audit_id": {"pattern": "^a2-[a-z0-9-]+-result-integrity-audit-v2$"},
+    "status": {"const": "PASS_A2_RESULT_INTEGRITY"},
+    "evidence_class": {"const": "measured_development_aggregate_result_audit"},
+    "scientific_authority": {"const": false},
+    "claim_boundary": {"const": "Aggregate-only integrity audit for the Owner-approved three-primary amendment. It validates receipt lineage and supports no per-query, protected-membership, or publication performance claim by itself."},
+    "amendment_sha256": {"$ref": "#/$defs/hash"},
+    "closeout": {"$ref": "#/$defs/source"},
+    "coverage": {"$ref": "#/$defs/source"},
+    "safe_return": {"$ref": "#/$defs/source"},
+    "terminal_checkpoint": {"$ref": "#/$defs/source"},
+    "protection": {"type": "object", "additionalProperties": false, "required": ["aggregate_only_scan_passed", "raw_or_protected_content_observed"], "properties": {"aggregate_only_scan_passed": {"const": true}, "raw_or_protected_content_observed": {"const": false}}},
+    "audit_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source": {"type": "object", "additionalProperties": false, "required": ["uri", "file_sha256", "receipt_sha256"], "properties": {"uri": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"}, "file_sha256": {"$ref": "#/$defs/hash"}, "receipt_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

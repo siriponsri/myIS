@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-goal004-three-primary-amendment:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "amendment_id", "authority_state", "attempt_id", "approved_at_utc", "owner_approval_text", "owner_approval_sha256", "superseded_for_execution_only", "frozen_a2_bindings", "terminal_accounting", "primary_advancement_arms", "diagnostic_no_winner_tie_arms", "scientific_invariants", "execution_permitted", "amendment_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-goal004-three-primary-amendment.v1"},
+    "amendment_id": {"const": "A2_GOAL004_THREE_PRIMARY_A3_AMENDMENT"},
+    "authority_state": {"const": "OWNER_APPROVED_PENDING_A2_CLOSEOUT"},
+    "attempt_id": {"const": "a2-goal004-20260816-005"},
+    "approved_at_utc": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "owner_approval_text": {"type": "string", "minLength": 1},
+    "owner_approval_sha256": {"$ref": "#/$defs/hash"},
+    "superseded_for_execution_only": {"type": "object", "additionalProperties": false, "required": ["a3_five_arm_authority_uri", "a3_five_arm_authority_sha256", "a3_five_arm_manifest_uri", "a3_five_arm_manifest_sha256", "reason"], "properties": {"a3_five_arm_authority_uri": {"const": "control/armindex/a3/a3-five-arm-preparation-authority.v1.json"}, "a3_five_arm_authority_sha256": {"$ref": "#/$defs/hash"}, "a3_five_arm_manifest_uri": {"const": "control/armindex/a3/a3-five-arm-preparation-manifest.v1.json"}, "a3_five_arm_manifest_sha256": {"$ref": "#/$defs/hash"}, "reason": {"const": "five winner receipts cannot be emitted because ARM-01 and ARM-02 have exact primary-score ties"}}},
+    "frozen_a2_bindings": {"$ref": "#/$defs/freeze"},
+    "terminal_accounting": {"type": "object", "additionalProperties": false, "required": ["candidate_count", "matched_candidate_count", "conditional_reserve_candidate_count", "measured_candidate_count", "dormant_conditional_reserve_count", "failed_candidate_count"], "properties": {"candidate_count": {"const": 52}, "matched_candidate_count": {"const": 40}, "conditional_reserve_candidate_count": {"const": 12}, "measured_candidate_count": {"const": 44}, "dormant_conditional_reserve_count": {"const": 8}, "failed_candidate_count": {"const": 0}}},
+    "primary_advancement_arms": {"const": ["ARM-03", "ARM-05", "ARM-04"]},
+    "diagnostic_no_winner_tie_arms": {"const": ["ARM-01", "ARM-02"]},
+    "scientific_invariants": {"type": "array", "minItems": 5, "items": {"type": "string", "minLength": 1}},
+    "execution_permitted": {"const": false},
+    "amendment_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "myis.armindex-a3-three-primary-preparation-authority.v1",
+  "authority_id": "A3_THREE_PRIMARY_TRANSFER_HARNESSOPT_POST_A2",
+  "authority_state": "PENDING_FRESH_A3_ADMISSION",
+  "purpose": "Prepare a receipt-bound three-primary-arm A3 transfer, complementarity, and HarnessOpt bundle after Owner-approved A2 closeout without altering A2 results.",
+  "a2_predecessor_bindings": {
+    "a2_closeout_receipt_sha256": "e4bc663d7ee09282c334f25945ede247a50b81742a690c214e0f2aa9ffb81d1d",
+    "a2_result_integrity_audit_sha256": "7d31b80d4dab6897f3110ee629ddf8f9d12fd5f0522b0d8ccd175ba892986642",
+    "a2_amendment_sha256": "4c48d6f30713ea391148694cab6e0fe15b5bd2f99866bb8778ace558272c0168",
+    "primary_winner_receipt_sha256s": {
+      "ARM-03": "02d1fe5c9c4be99bdf236b67bcea86a37ddd3ceb2212c4599f01f8ea3c3fb7e9",
+      "ARM-04": "8e38ffd6aa8e1f052d653b9034d8b74493d149072b9a7ab0233cc26ba4bc95c5",
+      "ARM-05": "27cb9a81ca3dada1a904d6cdac97b214df99e6ca104f62040e2e83cc3e342997"
+    },
+    "diagnostic_no_winner_receipt_sha256s": {
+      "ARM-01": "afdb576eb25c8f74aa898c49cc4f8fc75b7152679300d4c4189f397c8017f258",
+      "ARM-02": "3d05dcd3fabad9000a9391184a8e0dd0c294578a775bf61bd0b13315c4dbe2bb"
+    },
+    "safe_return_receipt_sha256": "659982aea768c6d4c057a75c6a50b04026d7c48875d604e06b1563a1b2b09484",
+    "workers_reaped": true
+  },
+  "frozen_a2_bindings": {
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"
+  },
+  "budget_extension_uri": "control/budgets/armindex-budget-extension-a3-three-primary.v1.json",
+  "primary_arm_scope": ["ARM-03", "ARM-04", "ARM-05"],
+  "diagnostic_reporting_boundary": {
+    "excluded_arm_ids": ["ARM-01", "ARM-02"],
+    "a3_optimization_input": false,
+    "permitted_use": "bounded_A2_negative_diagnostic_reporting_only"
+  },
+  "post_closeout_execution_boundary": {
+    "transfer_matrix": "Each primary winner may be compiled only against compatible primary target adapters; unsupported pairs remain explicit and cannot be substituted.",
+    "complementarity": "Equal-depth fixed-union controls precede adaptive HarnessOpt measurement and retain ARM-04 plus ARM-05 as the commercial-only fixed union.",
+    "harnessopt": "At most three exact-four-role frozen batches; representations, model adapters, indexes, evaluator, data, and metric remain frozen.",
+    "hdev100": "A non-adaptive aggregate diagnostic may report evidence but cannot tune transfer or HarnessOpt decisions."
+  },
+  "pre_admission_forbidden_actions": [
+    "candidate_mutation",
+    "retrieval",
+    "transfer_evaluation",
+    "complementarity_evaluation",
+    "harnessopt_evaluation",
+    "provider_contact",
+    "remote_execution",
+    "spend",
+    "selection",
+    "final"
+  ],
+  "execution_permitted": false,
+  "authority_sha256": "7971a91f498c964f5bcc7772f39d0ff7478d2aba7ebf51675da660cfd8146e37"
+}

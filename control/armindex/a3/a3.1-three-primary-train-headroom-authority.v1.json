@@ -1,0 +1,21 @@
+{
+  "schema_version": "myis.armindex-a3-three-primary-train-headroom-authority.v1",
+  "authority_id": "A3.1_THREE_PRIMARY_TRAIN_HEADROOM_POST_A2",
+  "authority_state": "PENDING_A2_CLOSEOUT",
+  "purpose": "Prepare an aggregate-only, post-closeout Train-250 headroom diagnostic for the three A2 primary advancement arms without retrieval, adaptation, provider contact, or spend.",
+  "primary_advancement_arms": ["ARM-03", "ARM-05", "ARM-04"],
+  "required_runtime_bindings": {
+    "a2_amended_closeout_receipt": "valid A2 v2 PASS closeout with exact 52/40/12 accounting, three primary winner receipt hashes, two diagnostic no-winner hashes, safe return, workers reaped, and protected scan PASS",
+    "a2_result_integrity_audit_receipt": "valid aggregate-only PASS audit bound to the amended A2 closeout and amendment",
+    "a1_incumbent_aggregate_receipt": "valid frozen PASS aggregate receipt with one Recall@100 OUT value per primary advancement arm"
+  },
+  "frozen_a2_bindings": {
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"
+  },
+  "pre_closeout_forbidden_actions": ["candidate_mutation", "retrieval", "REP-DEV", "HDEV-100", "Selection", "Final", "provider_contact", "remote_execution", "spend"],
+  "output_boundary": "The diagnostic emits only aggregate winner-minus-incumbent Recall@100 OUT deltas for ARM-03, ARM-05, and ARM-04. It cannot promote, select, execute, or tune any candidate.",
+  "execution_permitted": false,
+  "authority_sha256": "52667f6a5c361fa17ab60ae544262dcf88417de9ace5296b314987c34c0a482f"
+}

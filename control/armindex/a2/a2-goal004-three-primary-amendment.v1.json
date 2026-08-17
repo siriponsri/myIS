@@ -1,0 +1,40 @@
+{
+  "schema_version": "myis.armindex-a2-goal004-three-primary-amendment.v1",
+  "amendment_id": "A2_GOAL004_THREE_PRIMARY_A3_AMENDMENT",
+  "authority_state": "OWNER_APPROVED_PENDING_A2_CLOSEOUT",
+  "attempt_id": "a2-goal004-20260816-005",
+  "approved_at_utc": "2026-08-17T13:24:39Z",
+  "owner_approval_text": "Approve an evidence-preserving A3 amendment: close A2 with ARM-03/04/05 as primary winners; preserve ARM-01/02 as diagnostic no-winner/tie outcomes; execute A3 Extended only on the three primary advancement arms; report ARM-01/02 as bounded negative diagnostic evidence.",
+  "owner_approval_sha256": "a236b24e150308dfb8e548c3753881ab73b7e54e4048b25a7483e0e2bb79048e",
+  "superseded_for_execution_only": {
+    "a3_five_arm_authority_uri": "control/armindex/a3/a3-five-arm-preparation-authority.v1.json",
+    "a3_five_arm_authority_sha256": "9f2718e3a5b40d657eb354050a7e68e4cf7462d07c05c4a82b989d7f715a8227",
+    "a3_five_arm_manifest_uri": "control/armindex/a3/a3-five-arm-preparation-manifest.v1.json",
+    "a3_five_arm_manifest_sha256": "caec8da82ed2fa1a7286c2871a7e624dbb59dca9a6e244080c07a791c7a9b104",
+    "reason": "five winner receipts cannot be emitted because ARM-01 and ARM-02 have exact primary-score ties"
+  },
+  "frozen_a2_bindings": {
+    "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e",
+    "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
+    "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952"
+  },
+  "terminal_accounting": {
+    "candidate_count": 52,
+    "matched_candidate_count": 40,
+    "conditional_reserve_candidate_count": 12,
+    "measured_candidate_count": 44,
+    "dormant_conditional_reserve_count": 8,
+    "failed_candidate_count": 0
+  },
+  "primary_advancement_arms": ["ARM-03", "ARM-05", "ARM-04"],
+  "diagnostic_no_winner_tie_arms": ["ARM-01", "ARM-02"],
+  "scientific_invariants": [
+    "Candidate bytes, model adapters, evaluator, metric, and frozen A2 bindings remain unchanged.",
+    "ARM-01 and ARM-02 remain diagnostic and non-advancing after strict primary-score tie rejection.",
+    "No lexical, latency, cost, or secondary-metric post-hoc tie breaker may select a diagnostic winner.",
+    "ARM-03, ARM-05, and ARM-04 require independently validated unique-primary-score winner receipts.",
+    "A3 may use only the three primary advancement arms; Selection and Final remain closed."
+  ],
+  "execution_permitted": false,
+  "amendment_sha256": "4c48d6f30713ea391148694cab6e0fe15b5bd2f99866bb8778ace558272c0168"
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:armindex:a2-diagnostic-no-winner-receipt:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "attempt_id", "status", "arm_id", "primary_metric_name", "top_primary_metric_value", "top_tie_count", "top_candidate_result_receipt_sha256s", "diagnostic_non_advancing", "advancement_eligible", "strict_tie_rejected", "freeze_bindings", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-diagnostic-no-winner-receipt.v1"},
+    "receipt_id": {"pattern": "^a2-[a-z0-9-]+-diagnostic-no-winner-v1$"},
+    "attempt_id": {"pattern": "^a2-[a-z0-9-]{7,63}$"},
+    "status": {"const": "PASS_A2_DIAGNOSTIC_NO_WINNER_TIE"},
+    "arm_id": {"enum": ["ARM-01", "ARM-02"]},
+    "primary_metric_name": {"const": "recall_at_100/out"},
+    "top_primary_metric_value": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"},
+    "top_tie_count": {"type": "integer", "minimum": 2},
+    "top_candidate_result_receipt_sha256s": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/hash"}},
+    "diagnostic_non_advancing": {"const": true},
+    "advancement_eligible": {"const": false},
+    "strict_tie_rejected": {"const": true},
+    "freeze_bindings": {"$ref": "#/$defs/freeze"},
+    "receipt_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "freeze": {"type": "object", "additionalProperties": false, "required": ["manifest_sha256", "freeze_receipt_sha256", "lock_sha256"], "properties": {"manifest_sha256": {"$ref": "#/$defs/hash"}, "freeze_receipt_sha256": {"$ref": "#/$defs/hash"}, "lock_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Owner-approved ArmIndex A3 pending budget extension",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "extension_id", "status", "owner_authorization", "supersedes_after_a2_closeout", "a3_workload", "hard_stops", "activation_requirements", "pre_closeout_safety", "budget_extension_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-budget-extension.v1"},
+    "extension_id": {"const": "armindex-a3-budget-extension-v1"},
+    "status": {"const": "PENDING_A2_CLOSEOUT"},
+    "owner_authorization": {"type": "object"},
+    "supersedes_after_a2_closeout": {"type": "object"},
+    "a3_workload": {"type": "object"},
+    "hard_stops": {"type": "object"},
+    "activation_requirements": {"type": "array", "items": {"type": "string"}},
+    "pre_closeout_safety": {"type": "object"},
+    "budget_extension_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
