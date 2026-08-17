@@ -1,0 +1,5 @@
+phase,phase_label,status,evidence_class,measured_retrieval,primary_metric,headline_metric_value,candidate_total,measured_candidate_count,dormant_candidate_count,a3_eligible_arm_count
+A0_MIGRATION_FOUNDATION,A0 migration foundation,complete,engineering_validation,false,recall_at_100_out,,,0,0,0
+A1_BASELINES_AND_MULTI_ARM_SCREENING,A1 common multi-arm screening,complete,measured_development_aggregate,true,recall_at_100_out,0.413400,,,,
+A2_PER_ARM_AUTOINDEX,A2 per-arm AutoIndex,complete,measured_development_aggregate,true,recall_at_100_out,0.423000,52,44,8,3
+A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT,A3 transfer and HarnessOpt,pending_hash_bound_train_250_input,pending_preparation,false,recall_at_100_out,,,,,0

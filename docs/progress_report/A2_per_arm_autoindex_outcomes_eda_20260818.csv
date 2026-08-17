@@ -1,0 +1,6 @@
+arm_id,winner_or_diagnostic,recall_at_100,ndcg_at_100,ndcg_at_10,search_p95_ms,charged_usd,a1_comparison,a3_eligible,outcome_class
+ARM-01,diagnostic_three_way_top_tie,0.2346666667,0.2107836237,0.1950241409,1387.940057,0.0000000000,DIAGNOSTIC_TIE_NO_WINNER,false,diagnostic_no_winner
+ARM-02,diagnostic_three_way_top_tie,0.2900000000,0.2499193095,0.2200574939,1139.044918,0.2172489253,DIAGNOSTIC_TIE_NO_WINNER,false,diagnostic_no_winner
+ARM-03,matched-b2-orthogonal,0.4230000000,0.3576360657,0.2994437535,1686.804176,0.3080191566,NUMERICAL_TIE_TO_A1,true,primary_transfer_input
+ARM-04,matched-b1-orthogonal,0.3586666667,0.3018675218,0.2532294396,1115.051996,0.1592182057,STRICT_IMPROVEMENT,true,primary_transfer_input
+ARM-05,matched-b1-matched-ablation,0.3736666667,0.3212617218,0.2736642420,816.054961,0.2109004291,NO_STRICT_IMPROVEMENT,true,primary_transfer_input

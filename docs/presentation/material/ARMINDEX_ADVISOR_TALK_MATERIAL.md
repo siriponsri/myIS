@@ -501,7 +501,7 @@ manifest in `outputs/figures/armindex/a2-goal004/`, not a manually drawn chart.
 - **[P4]** [Deterministic common-program compiler](../../../src/myis_research/armindex/scientific_common_programs_v11.py): exact P00-P04 semantics.
 - **[P5]** `control/armindex/a1.2/rep-harness-split-decision.v1.json`: canonical protected split decision; present counts/hashes only.
 - **[P6]** [A1 publication-impact preregistration](../../research/A1_2_PUBLICATION_IMPACT_PREREGISTRATION_V13.md): development/selection/final claim boundaries.
-- **[P7]** [A0-A2 advisor progress report](../../progress_report/ARMINDEX_A0_A1_A2_ADVISOR_PROGRESS_2026-08-16.md): A0 closeout and A1 synthesis.
+- **[P7]** [A0-A2 advisor progress report](../../progress_report/update_A0_A1_A2_18AUG2026.md): A0 closeout, A1 synthesis, and A2 measured closeout.
 - **[P8]** [A1 cell EDA CSV](../../../outputs/tables/armindex/a12-v16-20260811-r15.cell-eda.v16.csv) and linked A1 figures: valid terminal REP-DEV aggregate evidence.
 - **[P9]** [A1 model source locks](../../research/A1_2_MODEL_SOURCE_LOCKS.md): model identity, revision, license, pooling, and deployment conditions.
 - **[P10]** [Frozen dense adapter contract](../../../src/myis_research/armindex/a1_2_contract.py): exact ARM-02 to ARM-05 templates.

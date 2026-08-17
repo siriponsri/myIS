@@ -2,7 +2,7 @@
 
 This is a minimal, offline-capable Reveal.js deck for an advisor update on A0 through A3 planning. It is derived from the canonical report:
 
-`docs/progress_report/ARMINDEX_A0_A1_A2_ADVISOR_PROGRESS_2026-08-16.md`
+`docs/progress_report/update_A0_A1_A2_18AUG2026.md`
 
 The deck uses validated A1 REP-DEV and A2 aggregate closeout figures. A2 is
 closed with exact `52 = 44 measured + 8 dormant` accounting, three primary

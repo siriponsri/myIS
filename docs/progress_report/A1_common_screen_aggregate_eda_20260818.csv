@@ -1,0 +1,6 @@
+arm_id,arm_label,model_license_class,recall_at_100_mean,ndcg_at_100_mean,ndcg_at_10_mean,search_p95_ms,total_wall_time_s,promotion_status,a3_eligible
+ARM-01,BM25 lexical,commercial_capable,0.191200,0.172717,0.160011,441.520,762.533,diagnostic_non_advancing,false
+ARM-02,BGE-M3,commercial_capable,0.269933,0.231377,0.198497,235.203,19847.315,diagnostic_non_advancing,false
+ARM-03,PatEmbed,research_non_commercial,0.413400,0.347812,0.289856,212.062,29444.640,advanced,true
+ARM-04,Arctic Embed,commercial_capable,0.340667,0.284546,0.235538,214.207,15878.488,advanced,true
+ARM-05,Qwen3 Embedding,commercial_capable,0.363733,0.307930,0.256706,217.099,40309.513,advanced,true
