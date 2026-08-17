@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-17T21:26:45Z",
-  "generated_from_revision": "6dbb1ccd555cfe39e52a3c6e16414da3d6fe2875127cc046e83b29b5fe560ff7",
-  "git_commit": "69644e66678776dd15f0976974cf6576462eb209",
+  "generated_at": "2026-08-17T21:33:05Z",
+  "generated_from_revision": "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c",
+  "git_commit": "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "69644e66678776dd15f0976974cf6576462eb209",
+    "git_commit": "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-17T21:26:45Z",
+  "last_material_update": "2026-08-17T21:33:05Z",
   "metric_references": [],
   "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "phase-p2_scope_development",
-  "report_sha256": "afd8b652d4c7db41d7b00324e59970c5d51fac12621bfc3de9dd1907d094c1be",
+  "report_sha256": "41bd84274355e6176d4bf5c56c7e3057a4f081d5a6c51c8e51bd96f4bdc61e7f",
   "report_type": "phase",
   "result": {
     "decision": "not_started",

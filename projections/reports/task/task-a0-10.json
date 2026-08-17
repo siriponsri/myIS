@@ -298,9 +298,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-17T21:26:45Z",
-  "generated_from_revision": "6dbb1ccd555cfe39e52a3c6e16414da3d6fe2875127cc046e83b29b5fe560ff7",
-  "git_commit": "69644e66678776dd15f0976974cf6576462eb209",
+  "generated_at": "2026-08-17T21:33:05Z",
+  "generated_from_revision": "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c",
+  "git_commit": "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -330,7 +330,7 @@
       "sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "69644e66678776dd15f0976974cf6576462eb209",
+    "git_commit": "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -371,13 +371,13 @@
   },
   "interpretation": "The ledger preserves source provenance and reuse decisions for engineering scaffolding. It does not validate retrieval quality, dense-model execution, or a production recommendation.",
   "language": "en",
-  "last_material_update": "2026-08-17T21:26:45Z",
+  "last_material_update": "2026-08-17T21:33:05Z",
   "metric_references": [],
   "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Legacy code harvest and phase-ready scaffolding",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "task-a0-10",
-  "report_sha256": "f7d69c63e17e4d3ad497f82f93d66fc95e3beb2c6ad511f3350e40bdf2273734",
+  "report_sha256": "69fe4d25dbf06c75f8b967faf7ab23ddb3e25931de92027e337e387d42d1237c",
   "report_type": "task",
   "result": {
     "decision": "completed",
