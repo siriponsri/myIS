@@ -1,0 +1,11 @@
+metric_name,full_name,unit,phase,interpretation,claim_caution
+recall_at_100,Recall at 100 retrieved patent families,ratio,A1 and A2,"Fraction of relevant patent families appearing in the first 100 results","Development evidence only; not Selection or Final performance"
+ndcg_at_100,Normalized discounted cumulative gain at rank 100,ratio,A1 and A2,"Ranking quality with higher weight on earlier relevant results","Secondary metric; do not use as an unregistered tie-break"
+ndcg_at_10,Normalized discounted cumulative gain at rank 10,ratio,A1 and A2,"Early-ranking quality within the first ten results","Secondary metric; no causal interpretation"
+search_p95_ms,95th-percentile search latency,milliseconds,A1 and A2,"Ninety-five percent of measured searches completed within this time","Operational measurement; hardware and batch context remain relevant"
+total_wall_time_s,Total measured wall time,seconds,A1,"Elapsed time for the complete logical cell","Not a per-query latency measure"
+charged_usd,Charged provider cost,United States dollars,A2,"Measured provider charge attributable to the candidate workload","Bound by the A2 hard stop; not a universal future cost estimate"
+candidate_total,Authorized candidate universe,count,A2,"All candidate slots under the frozen A2 contract","Includes dormant reserves"
+measured_candidate_count,Measured candidate count,count,A2,"Candidates with valid measured evidence","Must reconcile with closeout accounting"
+dormant_candidate_count,Dormant conditional reserve count,count,A2,"Valid reserves not activated by the frozen predicate","Dormant is not a failed result"
+a3_eligible_arm_count,Number of primary transfer arms,count,A2 to A3,"Arms retained for the next transfer experiment","Does not open Selection or Final"

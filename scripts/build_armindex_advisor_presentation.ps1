@@ -25,7 +25,7 @@ $presentationRoot = Join-Path $repositoryRoot 'docs\presentation'
 $sourceRoot = Join-Path $presentationRoot 'src'
 $distRoot = Join-Path $presentationRoot 'dist'
 $manifestPath = Join-Path $distRoot 'asset-manifest.json'
-$reportPath = Join-Path $repositoryRoot 'docs\progress_report\ARMINDEX_A0_A1_A2_ADVISOR_PROGRESS_2026-08-16.md'
+$reportPath = Join-Path $repositoryRoot 'docs\progress_report\update_A0_A1_A2_18AUG2026.md'
 
 $bundle = @(
     [ordered]@{ role = 'deck'; source = (Join-Path $sourceRoot 'index.html'); destination = 'index.html' },

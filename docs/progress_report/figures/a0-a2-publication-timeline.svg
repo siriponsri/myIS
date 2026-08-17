@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
+  <title id="title">ArmIndex evidence sequence from A0 through A3</title>
+  <desc id="desc">A publication-ready roadmap showing A0 governance, A1 common screening, A2 per-arm search, and A3 pending hash-bound inputs.</desc>
+  <rect width="1600" height="700" fill="#f7f9fc"/>
+  <text x="80" y="80" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#162033">The evidence sequence is complete through A2; transfer is gated</text>
+  <text x="80" y="122" font-family="Arial, sans-serif" font-size="22" fill="#425466">Each stage adds a scientific question without reopening earlier evidence.</text>
+  <line x1="170" y1="350" x2="1430" y2="350" stroke="#9aa8b8" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="1430,350 1398,330 1398,370" fill="#9aa8b8"/>
+  <g font-family="Arial, sans-serif">
+    <circle cx="250" cy="350" r="86" fill="#155e75"/>
+    <text x="250" y="337" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">A0</text>
+    <text x="250" y="375" text-anchor="middle" font-size="20" fill="#ffffff">Migration</text>
+    <rect x="122" y="470" width="256" height="105" rx="12" fill="#ffffff" stroke="#155e75" stroke-width="3"/>
+    <text x="250" y="505" text-anchor="middle" font-size="20" font-weight="700" fill="#162033">Governance ready</text>
+    <text x="250" y="538" text-anchor="middle" font-size="18" fill="#425466">Controls, schemas,</text>
+    <text x="250" y="565" text-anchor="middle" font-size="18" fill="#425466">protected boundary</text>
+    <circle cx="600" cy="350" r="86" fill="#1d4ed8"/>
+    <text x="600" y="337" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">A1</text>
+    <text x="600" y="375" text-anchor="middle" font-size="20" fill="#ffffff">Common screen</text>
+    <rect x="472" y="470" width="256" height="105" rx="12" fill="#ffffff" stroke="#1d4ed8" stroke-width="3"/>
+    <text x="600" y="505" text-anchor="middle" font-size="20" font-weight="700" fill="#162033">25 of 25 cells</text>
+    <text x="600" y="538" text-anchor="middle" font-size="18" fill="#425466">Five arms by five</text>
+    <text x="600" y="565" text-anchor="middle" font-size="18" fill="#425466">representations</text>
+    <circle cx="950" cy="350" r="86" fill="#047857"/>
+    <text x="950" y="337" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">A2</text>
+    <text x="950" y="375" text-anchor="middle" font-size="20" fill="#ffffff">Per-arm search</text>
+    <rect x="822" y="470" width="256" height="105" rx="12" fill="#ffffff" stroke="#047857" stroke-width="3"/>
+    <text x="950" y="505" text-anchor="middle" font-size="20" font-weight="700" fill="#162033">52 accounted</text>
+    <text x="950" y="538" text-anchor="middle" font-size="18" fill="#425466">44 measured, 8</text>
+    <text x="950" y="565" text-anchor="middle" font-size="18" fill="#425466">dormant, 0 failed</text>
+    <circle cx="1300" cy="350" r="86" fill="#b45309"/>
+    <text x="1300" y="337" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">A3</text>
+    <text x="1300" y="375" text-anchor="middle" font-size="20" fill="#ffffff">Transfer</text>
+    <rect x="1172" y="470" width="256" height="105" rx="12" fill="#fffaf0" stroke="#b45309" stroke-width="3"/>
+    <text x="1300" y="505" text-anchor="middle" font-size="20" font-weight="700" fill="#162033">Pending input</text>
+    <text x="1300" y="538" text-anchor="middle" font-size="18" fill="#425466">Full 250-query</text>
+    <text x="1300" y="565" text-anchor="middle" font-size="18" fill="#425466">hash-bound package</text>
+  </g>
+  <text x="80" y="655" font-family="Arial, sans-serif" font-size="18" fill="#425466">Evidence qualifier: A0 is engineering validation; A1 and A2 are development measurements; A3 has not been measured.</text>
+</svg>
