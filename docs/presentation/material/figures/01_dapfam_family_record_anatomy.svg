@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<style>text{font-family:Arial,Helvetica,sans-serif;letter-spacing:0} .t{fill:#18232b} .m{fill:#5d6b73} .s{font-size:22px} .b{font-size:30px;font-weight:700} .h{font-size:42px;font-weight:700} .k{font-size:18px;font-weight:700;letter-spacing:1.5px}</style>
+<rect width="1600" height="900" fill="#f7f8f7"/>
+<text x="90" y="80" class="k" text-anchor="start">DATASET AND EVALUATION UNIT</text>
+<text x="90" y="145" class="h t" text-anchor="start">DAPFAM evaluates cross-domain retrieval at patent-family level</text>
+<text x="90" y="188" class="s m" text-anchor="start">Schema and counts are aggregate-safe; no patent row, query ID, or qrels are shown.</text>
+<line x1="90" y1="220" x2="1510" y2="220" stroke="#ccd5d8" stroke-width="2" stroke-linecap="round"/>
+<rect x="90" y="275" width="440" height="430" rx="10" fill="#e0f0ee" stroke="#007f7b" stroke-width="2"/>
+<text x="125" y="330" class="b t" text-anchor="start">One target patent family</text>
+<rect x="125" y="370" width="370" height="72" rx="10" fill="#ffffff" stroke="#b7d6d2" stroke-width="2"/>
+<text x="150" y="415" class="k" text-anchor="start">TITLE</text>
+<rect x="125" y="462" width="370" height="72" rx="10" fill="#ffffff" stroke="#b7d6d2" stroke-width="2"/>
+<text x="150" y="507" class="k" text-anchor="start">ABSTRACT</text>
+<rect x="125" y="554" width="370" height="108" rx="10" fill="#ffffff" stroke="#b7d6d2" stroke-width="2"/>
+<text x="150" y="599" class="k" text-anchor="start">CLAIMS</text>
+<text x="150" y="634" class="s m" text-anchor="start">Structured claim text is preserved Owner-local.</text>
+<text x="310" y="748" class="b t" text-anchor="middle">Family is the retrieval unit</text>
+<rect x="610" y="275" width="390" height="150" rx="10" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/>
+<text x="805" y="330" class="h t" text-anchor="middle">45,336</text>
+<text x="805" y="375" class="b t" text-anchor="middle">target families</text>
+<rect x="610" y="450" width="390" height="150" rx="10" fill="#fbefd8" stroke="#c67c00" stroke-width="2"/>
+<text x="805" y="505" class="h t" text-anchor="middle">1,247</text>
+<text x="805" y="550" class="b t" text-anchor="middle">query families</text>
+<rect x="610" y="625" width="390" height="150" rx="10" fill="#f8e6e8" stroke="#b94a5a" stroke-width="2"/>
+<text x="805" y="680" class="h t" text-anchor="middle">49,869</text>
+<text x="805" y="725" class="b t" text-anchor="middle">(query, target, relevance, domain) rows</text>
+<rect x="1080" y="300" width="390" height="400" rx="10" fill="#ffffff" stroke="#d5dcde" stroke-width="2"/>
+<text x="1120" y="355" class="b t" text-anchor="start">Domain label</text>
+<text x="1120" y="405" class="b" text-anchor="start">IN</text>
+<text x="1210" y="405" class="s m" text-anchor="start">at least one shared IPC3 code</text>
+<text x="1120" y="475" class="b" text-anchor="start">OUT</text>
+<text x="1210" y="475" class="s m" text-anchor="start">no shared IPC3 code</text>
+<line x1="1120" y1="515" x2="1430" y2="515" stroke="#d5dcde" stroke-width="2" stroke-linecap="round"/>
+<text x="1120" y="560" class="b t" text-anchor="start">What the labels mean</text>
+<text x="1120" y="605" class="s m" text-anchor="start">Citation-based relevance is an examiner proxy.</text>
+<text x="1120" y="640" class="s m" text-anchor="start">It is not a novelty, validity, infringement,</text>
+<text x="1120" y="675" class="s m" text-anchor="start">or freedom-to-operate determination.</text>
+</svg>

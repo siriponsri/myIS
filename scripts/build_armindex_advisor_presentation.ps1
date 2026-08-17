@@ -35,7 +35,8 @@ $bundle = @(
     [ordered]@{ role = 'reveal-runtime'; source = (Join-Path $presentationRoot 'vendor\reveal\reveal.js'); destination = 'vendor\reveal\reveal.js' },
     [ordered]@{ role = 'reveal-license'; source = (Join-Path $presentationRoot 'vendor\reveal\LICENSE'); destination = 'vendor\reveal\LICENSE' },
     [ordered]@{ role = 'a1-quality-figure'; source = (Join-Path $repositoryRoot 'outputs\figures\armindex\a12-v16-20260811-r15.quality-cell-eda.v16.png'); destination = 'assets\a1-quality-cell-eda.png' },
-    [ordered]@{ role = 'a1-efficiency-figure'; source = (Join-Path $repositoryRoot 'outputs\figures\armindex\a12-v16-20260811-r15.efficiency-cell-eda.v16.png'); destination = 'assets\a1-efficiency-cell-eda.png' }
+    [ordered]@{ role = 'a1-efficiency-figure'; source = (Join-Path $repositoryRoot 'outputs\figures\armindex\a12-v16-20260811-r15.efficiency-cell-eda.v16.png'); destination = 'assets\a1-efficiency-cell-eda.png' },
+    [ordered]@{ role = 'a2-outcomes-figure'; source = (Join-Path $repositoryRoot 'outputs\figures\armindex\a2-goal004\a2-goal004-outcomes.png'); destination = 'assets\a2-outcomes.png' }
 )
 
 function Assert-FileExists {
@@ -118,10 +119,18 @@ if ($Check) {
     }
 
     $deckHtml = Get-Content -Raw -LiteralPath (Join-Path $distRoot 'index.html')
-    foreach ($requiredText in @('ARM-03 สูงสุดใน aggregate quality', 'A2 กำลังวัด candidate เฉพาะแต่ละ arm', 'Live telemetry is not a scientific result.')) {
+    foreach ($requiredText in @(
+        'A1 completed the five-by-five common screen',
+        'A2 closes with complete aggregate evidence and bounded winners',
+        'A3 is prepared locally but remains fail-closed until Train-250 bindings',
+        'frozen candidates accounted'
+    )) {
         if (-not $deckHtml.Contains($requiredText)) {
             throw "Deck content guard failed: $requiredText"
         }
+    }
+    if ($deckHtml -match '[\u0E00-\u0E7F]') {
+        throw 'Deck language guard failed: presentation source must be English-only.'
     }
     Write-Output 'PASS: presentation bundle, source report binding, and asset hashes are valid.'
 }

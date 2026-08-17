@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">ArmIndex staged research program</title>
+  <desc id="desc">Four stage ArmIndex program from controlled foundation through common screening and per-arm AutoIndex to transfer and bounded HarnessOpt.</desc>
+  <style>.bg{fill:#fbfcfd}.title{font:700 44px Arial,sans-serif;fill:#17212b}.sub{font:400 22px Arial,sans-serif;fill:#485764}.h{font:700 26px Arial,sans-serif;fill:#17212b}.t{font:400 19px Arial,sans-serif;fill:#26333d}.small{font:400 17px Arial,sans-serif;fill:#485764}.box{stroke-width:3}.arrow{stroke:#49616f;stroke-width:4;fill:none;marker-end:url(#arrow)}</style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#49616f"/></marker></defs>
+  <rect class="bg" width="1600" height="900"/>
+  <text x="70" y="80" class="title">ArmIndex: learn representations, then test transfer and complementarity</text>
+  <text x="70" y="120" class="sub">A staged design prevents a promising development pattern from becoming an unsupported final claim.</text>
+  <rect x="70" y="240" width="300" height="360" rx="8" fill="#e9f1f5" stroke="#35637a" class="box"/>
+  <text x="100" y="292" class="h">A0</text><text x="100" y="332" class="t">Migration foundation</text><text x="100" y="385" class="small">Controls, schemas,</text><text x="100" y="412" class="small">arm registry, fixtures,</text><text x="100" y="439" class="small">protected-data boundary</text><text x="100" y="530" class="t">Status: complete</text>
+  <path d="M375 420 H445" class="arrow"/>
+  <rect x="460" y="240" width="300" height="360" rx="8" fill="#eef4e7" stroke="#54743b" class="box"/>
+  <text x="490" y="292" class="h">A1</text><text x="490" y="332" class="t">Common multi-arm screen</text><text x="490" y="385" class="small">5 representations</text><text x="490" y="412" class="small">x 5 retrievers</text><text x="490" y="439" class="small">= 25 comparable cells</text><text x="490" y="530" class="t">Status: complete</text>
+  <path d="M765 420 H835" class="arrow"/>
+  <rect x="850" y="240" width="300" height="360" rx="8" fill="#f8eee4" stroke="#9b622d" class="box"/>
+  <text x="880" y="292" class="h">A2</text><text x="880" y="332" class="t">Per-arm AutoIndex</text><text x="880" y="385" class="small">52 candidates accounted:</text><text x="880" y="412" class="small">44 measured + 8 dormant</text><text x="880" y="439" class="small">three primary inputs</text><text x="880" y="530" class="t">Status: closed; audit passed</text>
+  <path d="M1155 420 H1225" class="arrow"/>
+  <rect x="1240" y="240" width="290" height="360" rx="8" fill="#f1edf6" stroke="#684b83" class="box"/>
+  <text x="1270" y="292" class="h">A3</text><text x="1270" y="332" class="t">Transfer + HarnessOpt</text><text x="1270" y="385" class="small">3 x 3 transfer matrix</text><text x="1270" y="412" class="small">Fixed-union complementarity</text><text x="1270" y="439" class="small">Bounded harness batches</text><text x="1270" y="530" class="t">Status: Train-250 input pending</text>
+  <text x="70" y="720" class="h">Publication logic</text><text x="70" y="765" class="t">The contribution is not a model leaderboard: it is evidence about retriever-conditioned representations, transfer boundaries, and a constrained production harness.</text>
+  <text x="70" y="835" class="small">A3 may start only after a fresh hash-bound Train-250 package and provider admission bind the three receipt-bound primary arms.</text>
+</svg>

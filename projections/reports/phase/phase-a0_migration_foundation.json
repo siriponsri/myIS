@@ -5,7 +5,7 @@
       "artifact_type": "control",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+      "content_sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
       "evidence_class": "engineering",
       "explanation": "Binds the in-place ArmIndex migration without creating scientific evidence.",
       "parent_artifact_hashes": {},
@@ -389,7 +389,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-campaigns-armindex-multiretriever-v2.yaml",
-      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+      "sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     {
@@ -505,9 +505,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T10:55:31Z",
-  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
-  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+  "generated_at": "2026-08-17T14:35:47Z",
+  "generated_from_revision": "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0",
+  "git_commit": "713b9be785705181960d06920b804b7757fb9d31",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -534,10 +534,10 @@
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+      "sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+    "git_commit": "713b9be785705181960d06920b804b7757fb9d31",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -548,13 +548,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
+      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:55:31Z",
+  "last_material_update": "2026-08-17T14:35:47Z",
   "metric_references": [
     {
       "cutoff": 32,
@@ -623,11 +623,11 @@
       "value": 156846
     }
   ],
-  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
+  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Migrate repository, freeze contracts, preserve evidence, and run compute-feasibility fixtures.",
   "phase_id": "A0_MIGRATION_FOUNDATION",
   "report_id": "phase-a0_migration_foundation",
-  "report_sha256": "c20e632d5f667fd9981c7e65bcdcf3ffe290103407264707fc8cb1720e33a831",
+  "report_sha256": "cc8011f28ca306728c6137fd0009b999d9af32f5f4348a3cdb80c67a823852a5",
   "report_type": "phase",
   "result": {
     "decision": "completed",
@@ -639,8 +639,8 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
+    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "program_state": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
     "task": null
   },
   "status": "completed",

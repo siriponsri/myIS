@@ -580,6 +580,11 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
     armindex = (
         model.get("armindex", {}) if isinstance(model.get("armindex"), Mapping) else {}
     )
+    a2_goal004 = (
+        armindex.get("a2_goal004_closeout", {})
+        if isinstance(armindex.get("a2_goal004_closeout"), Mapping)
+        else {}
+    )
     harvest = (
         armindex.get("legacy_code_harvest", {})
         if isinstance(armindex.get("legacy_code_harvest"), Mapping)
@@ -705,6 +710,26 @@ def _mlflow_archive_index(model: Mapping[str, Any]) -> dict[str, Any]:
             "measured_runs": closeout.get("measured_runs", 0),
             "selection_accesses": closeout.get("selection_accesses", 0),
             "final_accesses": closeout.get("final_accesses", 0),
+        },
+        "armindex_a2_goal004_closeout": {
+            "status": a2_goal004.get("status", "not_started"),
+            "evidence_class": a2_goal004.get(
+                "evidence_class", "measured_development_aggregate"
+            ),
+            "scientific_authority": a2_goal004.get("scientific_authority", False),
+            "source_projection_uri": a2_goal004.get("source_projection_uri"),
+            "source_projection_file_sha256": a2_goal004.get(
+                "source_projection_file_sha256"
+            ),
+            "projection_sha256": a2_goal004.get("projection_sha256"),
+            "source_artifacts": a2_goal004.get("source_artifacts", {}),
+            "accounting": a2_goal004.get("accounting", {}),
+            "budget": a2_goal004.get("budget", {}),
+            "arm_outcomes": a2_goal004.get("arm_outcomes", []),
+            "a3_route": a2_goal004.get("a3_route", {}),
+            "measured_runs": 1,
+            "selection_accesses": 0,
+            "final_accesses": 0,
         },
         "armindex_a1_adapter_fixture": {
             "status": adapter.get("status", "not_started"),

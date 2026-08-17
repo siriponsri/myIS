@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">DAPFAM family-level retrieval protocol</title>
+  <desc id="desc">A patent family retrieval protocol showing public field views, family-level relevance, IN and OUT domains, and frozen Train Selection Final roles.</desc>
+  <style>
+    .bg{fill:#fbfcfd}.title{font:700 44px Arial,sans-serif;fill:#17212b}.sub{font:400 22px Arial,sans-serif;fill:#485764}.h{font:700 25px Arial,sans-serif;fill:#17212b}.t{font:400 20px Arial,sans-serif;fill:#26333d}.small{font:400 17px Arial,sans-serif;fill:#485764}.box{stroke-width:3}.arrow{stroke:#49616f;stroke-width:4;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#49616f"/></marker></defs>
+  <rect class="bg" width="1600" height="900"/>
+  <text x="80" y="82" class="title">DAPFAM: family-level patent retrieval under domain shift</text>
+  <text x="80" y="120" class="sub">Frozen source revision; public text fields are transformed into family-level retrieval units. OUT Recall@100 is the primary development metric.</text>
+  <rect x="80" y="190" width="340" height="248" rx="8" fill="#e9f1f5" stroke="#35637a" class="box"/>
+  <text x="110" y="235" class="h">Patent records</text>
+  <text x="110" y="278" class="t">Title</text><text x="110" y="315" class="t">Abstract</text><text x="110" y="352" class="t">Claims</text>
+  <text x="110" y="407" class="small">Corpus: 45,336 families</text>
+  <path d="M425 315 H535" class="arrow"/>
+  <rect x="550" y="190" width="450" height="248" rx="8" fill="#eef4e7" stroke="#54743b" class="box"/>
+  <text x="580" y="235" class="h">Family retrieval evaluation</text>
+  <text x="580" y="278" class="t">Query patent view: title + abstract + claims</text>
+  <text x="580" y="315" class="t">Retrieve top 100 candidate families</text>
+  <text x="580" y="352" class="t">Positive relevance: relevance score &gt; 0</text>
+  <text x="580" y="407" class="small">Relations: 49,869 rows; IN and OUT labels</text>
+  <path d="M1005 315 H1115" class="arrow"/>
+  <rect x="1130" y="190" width="390" height="248" rx="8" fill="#f8eee4" stroke="#9b622d" class="box"/>
+  <text x="1160" y="235" class="h">Development outcomes</text>
+  <text x="1160" y="278" class="t">Primary: OUT Recall@100</text>
+  <text x="1160" y="315" class="t">Secondary: OUT nDCG@100</text>
+  <text x="1160" y="352" class="t">Secondary: OUT nDCG@10</text>
+  <text x="1160" y="407" class="small">Metrics are family-level aggregates</text>
+  <text x="80" y="535" class="h">Frozen split roles: no adaptive reuse of held-out evidence</text>
+  <rect x="80" y="580" width="430" height="160" rx="8" fill="#e9f1f5" stroke="#35637a" class="box"/>
+  <text x="110" y="630" class="h">Train</text><text x="110" y="670" class="t">250 queries</text><text x="110" y="708" class="small">Representation development only</text>
+  <rect x="585" y="580" width="430" height="160" rx="8" fill="#eef4e7" stroke="#54743b" class="box"/>
+  <text x="615" y="630" class="h">Selection</text><text x="615" y="670" class="t">125 queries</text><text x="615" y="708" class="small">Closed until the protocol opens it</text>
+  <rect x="1090" y="580" width="430" height="160" rx="8" fill="#f8eee4" stroke="#9b622d" class="box"/>
+  <text x="1120" y="630" class="h">Final</text><text x="1120" y="670" class="t">872 queries</text><text x="1120" y="708" class="small">Owner-gated confirmation only</text>
+  <text x="80" y="830" class="small">Source: Ayaou et al., DAPFAM (2025); local protocol binding: control/assets/dapfam-p1-source.v1.json. Counts are aggregate-safe.</text>
+</svg>

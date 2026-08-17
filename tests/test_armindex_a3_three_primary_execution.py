@@ -175,12 +175,13 @@ def _harness_batch(runtime_bindings_sha256: str) -> dict[str, object]:
 def test_post_admission_contract_is_exact_three_primary_and_aggregate_safe() -> None:
     bindings = _runtime_bindings()
     fixed_union = _fixed_union(bindings["runtime_bindings_sha256"])
-    contract = build_three_primary_execution_contract(bindings, fixed_union, [])
+    batch = _harness_batch(bindings["runtime_bindings_sha256"])
+    contract = build_three_primary_execution_contract(bindings, fixed_union, [batch])
 
     assert contract["status"] == "READY_FOR_POST_ADMISSION_EXECUTION"
     assert len(contract["transfer_matrix"]) == 9
     assert sum(row["source_arm_id"] != row["target_arm_id"] for row in contract["transfer_matrix"]) == 6
-    assert contract["harness_batch_sha256s"] == []
+    assert contract["harness_batch_sha256s"] == [batch["batch_sha256"]]
     assert contract["provider_contact_performed"] is False
     assert contract["remote_execution_performed"] is False
     assert contract["selection_permitted"] is False
@@ -188,6 +189,9 @@ def test_post_admission_contract_is_exact_three_primary_and_aggregate_safe() -> 
     assert validate_fixed_union_contract(
         fixed_union, runtime_bindings_sha256=bindings["runtime_bindings_sha256"]
     ) == fixed_union
+
+    with pytest.raises(A3ThreePrimaryExecutionError, match="requires one to three"):
+        build_three_primary_execution_contract(bindings, fixed_union, [])
 
 
 def test_complete_harnessopt_batch_is_required_to_remain_three_primary() -> None:
@@ -238,7 +242,9 @@ def test_runtime_contract_rejects_diagnostic_arm_and_unequal_union_depth() -> No
     bad_bindings["winner_bindings"]["ARM-01"] = bad_bindings["winner_bindings"].pop("ARM-03")
     with pytest.raises(A3ThreePrimaryExecutionError, match="three primary arms"):
         build_three_primary_execution_contract(
-            bad_bindings, _fixed_union(bindings["runtime_bindings_sha256"]), []
+            bad_bindings,
+            _fixed_union(bindings["runtime_bindings_sha256"]),
+            [_harness_batch(bindings["runtime_bindings_sha256"])],
         )
 
     bad_union = _fixed_union(bindings["runtime_bindings_sha256"])

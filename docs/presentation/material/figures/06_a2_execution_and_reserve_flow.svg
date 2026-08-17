@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<style>text{font-family:Arial,Helvetica,sans-serif;letter-spacing:0} .t{fill:#18232b} .m{fill:#5d6b73} .s{font-size:22px} .b{font-size:30px;font-weight:700} .h{font-size:42px;font-weight:700} .k{font-size:18px;font-weight:700;letter-spacing:1.5px}</style>
+<rect width="1600" height="900" fill="#f7f8f7"/>
+<text x="90" y="80" class="k" text-anchor="start">A2: PER-ARM AUTOINDEX</text>
+<text x="90" y="145" class="h t" text-anchor="start">A2 executes frozen candidates with auditable reserve admission</text>
+<text x="90" y="188" class="s m" text-anchor="start">This is a process diagram, not an A2 quality result. A2 interpretation remains blocked until closeout and independent audit.</text>
+<line x1="90" y1="220" x2="1510" y2="220" stroke="#ccd5d8" stroke-width="2" stroke-linecap="round"/>
+<rect x="80" y="345" width="220" height="170" rx="10" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/>
+<text x="190.0" y="407" class="b t" text-anchor="middle">52 frozen</text>
+<text x="190.0" y="453" class="s m" text-anchor="middle">representation</text>
+<text x="190.0" y="483" class="s m" text-anchor="middle">candidates</text>
+<rect x="365" y="345" width="220" height="170" rx="10" fill="#e0f0ee" stroke="#007f7b" stroke-width="2"/>
+<text x="475.0" y="407" class="b t" text-anchor="middle">40 matched</text>
+<text x="475.0" y="453" class="s m" text-anchor="middle">candidate results</text>
+<text x="475.0" y="483" class="s m" text-anchor="middle">durable checkpoints</text>
+<rect x="650" y="345" width="220" height="170" rx="10" fill="#fbefd8" stroke="#c67c00" stroke-width="2"/>
+<text x="760.0" y="407" class="b t" text-anchor="middle">Matched barrier</text>
+<text x="760.0" y="453" class="s m" text-anchor="middle">fresh TTL and</text>
+<text x="760.0" y="483" class="s m" text-anchor="middle">budget admission</text>
+<rect x="935" y="345" width="220" height="170" rx="10" fill="#f8e6e8" stroke="#b94a5a" stroke-width="2"/>
+<text x="1045.0" y="407" class="b t" text-anchor="middle">12 reserve</text>
+<text x="1045.0" y="453" class="s m" text-anchor="middle">measure if admitted</text>
+<text x="1045.0" y="483" class="s m" text-anchor="middle">or issue dormant receipt</text>
+<rect x="1220" y="345" width="280" height="170" rx="10" fill="#e6efe8" stroke="#23815d" stroke-width="2"/>
+<text x="1360.0" y="407" class="b t" text-anchor="middle">Closeout</text>
+<text x="1360.0" y="453" class="s m" text-anchor="middle">aggregate-safe return</text>
+<text x="1360.0" y="483" class="s m" text-anchor="middle">coverage + integrity audit</text>
+<line x1="312" y1="430" x2="347" y2="430" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 331 420 L 347 430 L 331 440" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="597" y1="430" x2="632" y2="430" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 616 420 L 632 430 L 616 440" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="882" y1="430" x2="917" y2="430" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 901 420 L 917 430 L 901 440" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="1167" y1="430" x2="1202" y2="430" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 1186 420 L 1202 430 L 1186 440" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="170" y="650" width="1260" height="100" rx="10" fill="#ffffff" stroke="#d5dcde" stroke-width="2"/>
+<text x="800" y="695" class="b t" text-anchor="middle">Execution topology</text>
+<text x="800" y="730" class="s m" text-anchor="middle">ARM-01 runs on CPU; ARM-02 through ARM-05 use disjoint GPUs. Every worker reports a heartbeat and candidate checkpoint.</text>
+<text x="800" y="820" class="b t" text-anchor="middle">Closeout: 52 = 44 measured + 8 dormant; zero failed.</text>
+</svg>

@@ -1,0 +1,114 @@
+{
+  "schema_version": "myis.armindex-a2-goal004-closeout-projection.v1",
+  "projection_id": "a2-goal004-20260816-005-closeout-projection-v1",
+  "attempt_id": "a2-goal004-20260816-005",
+  "status": "PASS_A2_GOAL004_CLOSEOUT_PROJECTED",
+  "evidence_class": "measured_development_aggregate",
+  "scientific_authority": true,
+  "claim_boundary": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
+  "source_artifacts": {
+    "execution_closeout": {
+      "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-execution-closeout.receipt.v2.json",
+      "file_sha256": "f6fb69a89cfcb0cb44c3a8bb0e4c0b44ee38462a2bdc3a0e6c8f0520c94b9f00",
+      "record_sha256": "e4bc663d7ee09282c334f25945ede247a50b81742a690c214e0f2aa9ffb81d1d"
+    },
+    "result_integrity_audit": {
+      "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-result-integrity-audit.v2.json",
+      "file_sha256": "d6671c8fff7bbe563d476cb3cfb885e83b3896c1ccf2e929f7bffbd6b0116762",
+      "record_sha256": "7d31b80d4dab6897f3110ee629ddf8f9d12fd5f0522b0d8ccd175ba892986642"
+    },
+    "safe_return": {
+      "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/safe-return-001/a2-safe-return.receipt.v1.json",
+      "file_sha256": "f4288344fd5c041ac5a768d651836350fb01099ac86cc577d656c0cd0fe58282",
+      "record_sha256": "659982aea768c6d4c057a75c6a50b04026d7c48875d604e06b1563a1b2b09484"
+    }
+  },
+  "accounting": {
+    "candidate_count": 52,
+    "matched_candidate_count": 40,
+    "measured_candidate_count": 44,
+    "activated_reserve_candidate_count": 4,
+    "dormant_reserve_candidate_count": 8,
+    "failed_candidate_count": 0,
+    "workers_reaped": true
+  },
+  "budget": {
+    "forward_hard_stop_usd": "60",
+    "whole_workload_total_usd": "54.52666666666665948"
+  },
+  "arm_outcomes": [
+    {
+      "arm_id": "ARM-01",
+      "candidate_id": "a2-arm-01-matched-b1-diversity",
+      "candidate_result_receipt_sha256": "09780863bc40ea0e8c2022d8b5ca784ae98e6e8c5c0070d75f9a7efc7fbec91c",
+      "recall_at_100": 0.2346666666666668,
+      "ndcg_at_100": 0.210783623690076,
+      "ndcg_at_10": 0.1950241408753094,
+      "search_p95_ms": 1387.940057,
+      "charged_usd": 0.0,
+      "a1_recall_at_100": null,
+      "a1_comparison": "DIAGNOSTIC_TIE_NO_WINNER",
+      "a3_eligible": false
+    },
+    {
+      "arm_id": "ARM-02",
+      "candidate_id": "a2-arm-02-matched-b2-orthogonal",
+      "candidate_result_receipt_sha256": "0cac2979f8f7ed4428704493734ffdddfa1d3bb1b84b8b7340b098ff465584e3",
+      "recall_at_100": 0.29,
+      "ndcg_at_100": 0.2499193094784085,
+      "ndcg_at_10": 0.2200574939200255,
+      "search_p95_ms": 1139.044918,
+      "charged_usd": 0.2172489252919918,
+      "a1_recall_at_100": null,
+      "a1_comparison": "DIAGNOSTIC_TIE_NO_WINNER",
+      "a3_eligible": false
+    },
+    {
+      "arm_id": "ARM-03",
+      "candidate_id": "a2-arm-03-matched-b2-orthogonal",
+      "candidate_result_receipt_sha256": "d1f8b55f6443d29539ccf8f051f7fd7169a9d47077306ac4b92da647db03f2ee",
+      "recall_at_100": 0.4229999999999999,
+      "ndcg_at_100": 0.3576360656964662,
+      "ndcg_at_10": 0.2994437534650084,
+      "search_p95_ms": 1686.804176,
+      "charged_usd": 0.3080191566437946,
+      "a1_recall_at_100": 0.4229999999999998,
+      "a1_comparison": "NUMERICAL_TIE_TO_A1",
+      "a3_eligible": true
+    },
+    {
+      "arm_id": "ARM-04",
+      "candidate_id": "a2-arm-04-matched-b1-orthogonal",
+      "candidate_result_receipt_sha256": "a1446c06abbfe3d05fab3052f79af23b513146fd4c9d349b821dfc0c18b09416",
+      "recall_at_100": 0.3586666666666666,
+      "ndcg_at_100": 0.3018675218204638,
+      "ndcg_at_10": 0.2532294396153771,
+      "search_p95_ms": 1115.051996,
+      "charged_usd": 0.159218205702039,
+      "a1_recall_at_100": 0.3526666666666667,
+      "a1_comparison": "STRICT_IMPROVEMENT",
+      "a3_eligible": true
+    },
+    {
+      "arm_id": "ARM-05",
+      "candidate_id": "a2-arm-05-matched-b1-matched-ablation",
+      "candidate_result_receipt_sha256": "a2f1b0702e85d8df44e67df0085b407006d406f4620d3a71ef8cf337c419076a",
+      "recall_at_100": 0.3736666666666666,
+      "ndcg_at_100": 0.3212617217892504,
+      "ndcg_at_10": 0.2736642420289198,
+      "search_p95_ms": 816.054961,
+      "charged_usd": 0.2109004290972753,
+      "a1_recall_at_100": 0.37999999999999995,
+      "a1_comparison": "NO_STRICT_IMPROVEMENT",
+      "a3_eligible": true
+    }
+  ],
+  "a3_route": {
+    "status": "PENDING_HASH_BOUND_TRAIN_250_INPUT",
+    "eligible_arm_ids": ["ARM-03", "ARM-05", "ARM-04"],
+    "excluded_diagnostic_arm_ids": ["ARM-01", "ARM-02"],
+    "provider_disposition": "OWNER_ACTION_DESTROY",
+    "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
+  },
+  "projection_sha256": "80ce52d3edcac62298b3b3ed96d685fe98d9bc8cd1e1f870147a2c742f40027a"
+}

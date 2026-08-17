@@ -19,6 +19,7 @@ def _latest(root: Path, directory: str, pattern: str) -> str:
 
 def _active_goal(root: Path) -> str:
     candidates: list[Path] = []
+    pending_successor_goals: list[Path] = []
     for path in (root / "docs/goal").glob("*.md"):
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
@@ -35,6 +36,14 @@ def _active_goal(root: Path) -> str:
         )
         if lifecycle == "ACTIVE" or ready_measured_goal:
             candidates.append(path)
+        if lifecycle == "PENDING" and data.get("status") == "PENDING_FRESH_A3_ADMISSION":
+            pending_successor_goals.append(path)
+    if pending_successor_goals:
+        return (
+            sorted(pending_successor_goals)[-1]
+            .relative_to(root)
+            .as_posix()
+        )
     return sorted(candidates)[-1].relative_to(root).as_posix() if candidates else "NONE"
 
 
@@ -67,6 +76,25 @@ def _projection_status(root: Path, model: Mapping[str, Any]) -> dict[str, str]:
 
 def _gpu_state(readiness: Mapping[str, Any]) -> dict[str, str]:
     """Render only provider-safe lifecycle data present in the read model."""
+    explicit_decision = readiness.get("gpu_decision")
+    if explicit_decision == "OWNER_ACTION_DESTROY":
+        return {
+            "decision": "OWNER_ACTION_DESTROY",
+            "reason": str(
+                readiness.get(
+                    "gpu_decision_reason",
+                    "no named authorized workload remains after safe return",
+                )
+            ),
+            "instance": str(readiness.get("provider_instance_id", "UNKNOWN")),
+            "hourly_rate_usd": str(readiness.get("hourly_rate_usd", "UNKNOWN")),
+            "accrued_gpu_cost_usd": str(
+                readiness.get("whole_workload_total_usd", "UNKNOWN")
+            ),
+            "keep_destroy_condition": str(
+                readiness.get("gpu_keep_until", "DESTROY_AFTER_OWNER_CONFIRMATION")
+            ),
+        }
     provider = readiness.get("provider_admission_receipt", {})
     provider = provider if isinstance(provider, Mapping) else {}
     instance = provider.get("instance_id")
@@ -106,6 +134,16 @@ def _gpu_state(readiness: Mapping[str, Any]) -> dict[str, str]:
 def _routing(readiness: Mapping[str, Any], active_goal: str) -> dict[str, str]:
     route = str(readiness.get("current_route", ""))
     status = str(readiness.get("current_status", readiness.get("status", "")))
+    if "PENDING_HASH_BOUND_TRAIN_250_INPUT" in status:
+        return {
+            "recommended_next_session": "AP",
+            "recommended_model": "GPT-5.6 Sol High",
+            "reasoning_effort": "High",
+            "reason": "A3 is prepared but cannot spend or contact a provider until the hash-bound Train-250 package is available",
+            "command_before_prompt": "NONE",
+            "copy_paste_prompt": "NONE",
+            "owner_decision_required": "NONE",
+        }
     if active_goal != "NONE":
         return {
             "recommended_next_session": "LO",
@@ -151,8 +189,50 @@ def build_owner_status(repository_root: Path) -> dict[str, Any]:
     root = repository_root.resolve()
     model = build_read_model(root)
     project = model["project"]
-    readiness = model["armindex"].get("a2_execution_readiness", {})
+    armindex = model["armindex"]
+    readiness = armindex.get("a2_execution_readiness", {})
     readiness = readiness if isinstance(readiness, Mapping) else {}
+    closeout = armindex.get("a2_goal004_closeout", {})
+    if isinstance(closeout, Mapping) and closeout.get("validated") is True:
+        route = closeout.get("a3_route", {})
+        route = route if isinstance(route, Mapping) else {}
+        accounting = closeout.get("accounting", {})
+        accounting = accounting if isinstance(accounting, Mapping) else {}
+        budget = closeout.get("budget", {})
+        budget = budget if isinstance(budget, Mapping) else {}
+        readiness = {
+            **readiness,
+            "status": "A2_GOAL004_MEASURED_CLOSEOUT",
+            "current_status": str(route.get("status", "PENDING_HASH_BOUND_TRAIN_250_INPUT")),
+            "current_route": "AP",
+            "evidence_class": closeout.get("evidence_class", "measured_development_aggregate"),
+            "scientific_authority": closeout.get("scientific_authority", True),
+            "claim_boundary": closeout.get("claim_boundary", "aggregate_development_only"),
+            "phase_ceiling_usd": 35,
+            "task_run_ceiling_usd": 35,
+            "a2_spent_accrued_usd": budget.get("whole_workload_total_usd", "UNKNOWN"),
+            "campaign_ceiling_usd": 180,
+            "remaining_campaign_headroom_usd": "79.31170133333334052",
+            "estimated_next_action_cost_usd": "UNKNOWN_DO_NOT_SPEND",
+            "budget_status": "PENDING_FRESH_A3_ADMISSION",
+            "gpu_decision": "OWNER_ACTION_DESTROY",
+            "gpu_decision_reason": "A2 safe return and worker reaping passed; no named authorized A3 workload remains while Train-250 input is missing",
+            "provider_instance_id": readiness.get("provider_admission_receipt", {}).get("instance_id", "47790578")
+            if isinstance(readiness.get("provider_admission_receipt"), Mapping)
+            else "47790578",
+            "whole_workload_total_usd": budget.get("whole_workload_total_usd", "UNKNOWN"),
+            "gpu_keep_until": "DESTROY_AFTER_OWNER_CONFIRMATION",
+            "next_authorized_action": route.get(
+                "next_authorized_action",
+                "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+            ),
+            "counters": {
+                "candidate_evaluations": accounting.get("measured_candidate_count", 0),
+                "measured_a2_runs": 1,
+                "provider_admissions": 1,
+                "provider_execution_adoptions": 1,
+            },
+        }
     counters = readiness.get("counters", {})
     counters = counters if isinstance(counters, Mapping) else {}
     active_goal = _active_goal(root)

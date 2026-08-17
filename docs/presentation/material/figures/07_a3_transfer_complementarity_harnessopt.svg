@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<style>text{font-family:Arial,Helvetica,sans-serif;letter-spacing:0}.t{fill:#18232b}.m{fill:#5d6b73}.s{font-size:22px}.b{font-size:30px;font-weight:700}.h{font-size:42px;font-weight:700}.k{font-size:18px;font-weight:700;letter-spacing:1.5px}</style>
+<rect width="1600" height="900" fill="#f7f8f7"/>
+<text x="90" y="80" class="k" text-anchor="start">A3 EXTENDED: AFTER A2 CLOSEOUT</text>
+<text x="90" y="145" class="h t" text-anchor="start">A3 tests transfer and a bounded production harness</text>
+<text x="90" y="188" class="s m" text-anchor="start">PENDING_HASH_BOUND_TRAIN_250_INPUT. This is a locked design, not a launched experiment or result.</text>
+<line x1="90" y1="220" x2="1510" y2="220" stroke="#ccd5d8" stroke-width="2" stroke-linecap="round"/>
+<rect x="90" y="285" width="570" height="475" rx="10" fill="#ffffff" stroke="#d5dcde" stroke-width="2"/>
+<text x="375" y="340" class="b t" text-anchor="middle">3 x 3 primary-winner transfer matrix</text>
+<text x="345" y="400" class="s m" text-anchor="middle">ARM-03</text><text x="445" y="400" class="s m" text-anchor="middle">ARM-04</text><text x="545" y="400" class="s m" text-anchor="middle">ARM-05</text>
+<text x="245" y="460" class="s m" text-anchor="middle">ARM-03</text><text x="245" y="535" class="s m" text-anchor="middle">ARM-04</text><text x="245" y="610" class="s m" text-anchor="middle">ARM-05</text>
+<rect x="310" y="425" width="70" height="48" rx="4" fill="#e0f0ee" stroke="#007f7b" stroke-width="2"/><rect x="410" y="425" width="70" height="48" rx="4" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/><rect x="510" y="425" width="70" height="48" rx="4" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/>
+<rect x="310" y="500" width="70" height="48" rx="4" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/><rect x="410" y="500" width="70" height="48" rx="4" fill="#e0f0ee" stroke="#007f7b" stroke-width="2"/><rect x="510" y="500" width="70" height="48" rx="4" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/>
+<rect x="310" y="575" width="70" height="48" rx="4" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/><rect x="410" y="575" width="70" height="48" rx="4" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/><rect x="510" y="575" width="70" height="48" rx="4" fill="#e0f0ee" stroke="#007f7b" stroke-width="2"/>
+<text x="375" y="710" class="s m" text-anchor="middle">3 self reuses + up to 6 compatible cross-arm transfers</text>
+<rect x="760" y="285" width="680" height="195" rx="10" fill="#fbefd8" stroke="#c67c00" stroke-width="2"/>
+<text x="800" y="340" class="b t" text-anchor="start">1. Fixed complementarity controls</text>
+<text x="800" y="385" class="s m" text-anchor="start">Equal-depth preregistered unions before adaptive harness work.</text>
+<text x="800" y="425" class="s m" text-anchor="start">Commercial-only fixed union: ARM-04 + ARM-05.</text>
+<rect x="760" y="520" width="680" height="240" rx="10" fill="#f8e6e8" stroke="#b94a5a" stroke-width="2"/>
+<text x="800" y="575" class="b t" text-anchor="start">2. Bounded HarnessOpt</text>
+<text x="800" y="620" class="s m" text-anchor="start">At most 3 complete batches x 4 fixed roles:</text>
+<text x="800" y="655" class="s m" text-anchor="start">quality exploit | cost/latency ablation</text>
+<text x="800" y="687" class="s m" text-anchor="start">routing hypothesis | diversity profile</text>
+<text x="800" y="715" class="s m" text-anchor="start">Train-250 adaptive; HARNESS-DEV aggregate-only and non-adaptive.</text>
+<text x="800" y="810" class="s t" text-anchor="middle">A3 gates: valid A2 coverage, 3 primary receipts, 2 diagnostic exclusions, safe return, and independent audit.</text>
+<text x="800" y="838" class="s t" text-anchor="middle">Fresh Train-250 package, provider quote, and USD 35 cap are required.</text>
+</svg>

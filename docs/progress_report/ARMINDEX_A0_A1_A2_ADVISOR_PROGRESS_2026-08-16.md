@@ -1,9 +1,9 @@
 ---
 title: "ArmIndex Progress Report: A0 to A2"
 audience: "Academic advisor"
-report_date: "2026-08-16"
-reporting_cutoff_utc: "2026-08-16T11:49:32Z"
-status: "A0 complete; A1 complete with measured development evidence; A2 active"
+report_date: "2026-08-18"
+reporting_cutoff_utc: "2026-08-18T18:00:00Z"
+status: "A0 complete; A1 complete with measured development evidence; A2 closed; A3 pending Train-250 binding"
 numeric_authority: "Validated aggregate receipts only"
 update_rule: "Update A2 results only after exact coverage, safe return, closeout, and integrity audit pass."
 ---
@@ -16,11 +16,14 @@ ArmIndex studies whether representation programs should be conditioned on the re
 
 - **A0, migration foundation, is complete.** It established canonical controls, a five-arm registry, the protected-data boundary, and reproducible engineering fixtures. It contains no retrieval-quality result.
 - **A1, common multi-arm screening, is complete.** A valid 25-cell REP-DEV screen measured five frozen representation programs across five frozen retrievers. `ARM-03` had the strongest aggregate quality; `ARM-04` and `ARM-05` also passed the frozen promotion rule.
-- **A2, per-arm AutoIndex, is active.** Runtime authority v4 is
-  `PASS_A2_MEASURED_EXECUTION_AUTHORIZED`. At the reporting cutoff, 16 durable
-  remote result files had been observed by existence only and 11 aggregate-safe
-  candidate receipts had been harvested. These are operational progress
-  signals, not canonical A2 outcomes.
+- **A2, per-arm AutoIndex, is closed with measured evidence.** The terminal
+closeout accounts for `52 = 44 measured + 8 dormant` candidates with zero
+failures, safe return, worker reap, and an independent result-integrity audit.
+The whole-workload charge was USD `54.52666666666665948` under the USD 60 cap.
+- **A2 advances three primary transfer inputs.** ARM-03 is a presentation-
+precision tie to A1, ARM-04 strictly improves its frozen comparator, and ARM-05
+has no strict improvement but is retained for transfer analysis. ARM-01/02 are
+diagnostic three-way ties with no winner.
 
 Selection and Final remain unopened. Protected qrels, memberships, query identifiers, rankings, per-query outcomes, credentials, and raw provider payloads remain Owner-local.
 
@@ -44,8 +47,8 @@ Selection and Final remain unopened. Protected qrels, memberships, query identif
 |---|---|---|---|
 | A0_MIGRATION_FOUNDATION | Complete | Engineering validation | The experiment is governed, reproducible, and protected-data aware. |
 | A1_BASELINES_AND_MULTI_ARM_SCREENING | Complete | Measured development aggregate | Five retrievers were compared under the same five representation programs. |
-| A2_PER_ARM_AUTOINDEX | Active | Measured execution live; validated result pending closeout | Per-arm search is running; no A2 outcome should yet be interpreted. |
-| A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT | Prepared, not started | Pending A2 closeout | A five-arm hash-only bundle exists but is inert until A2 validates. |
+| A2_PER_ARM_AUTOINDEX | Complete | Measured development aggregate | Exact 52-candidate accounting, safe return, and result-integrity audit passed. |
+| A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT | Prepared, not started | Pending hash-bound Train-250 input | A three-primary bundle exists; ARM-03/04/05 only may advance after fresh admission. |
 | A4-A6 | Locked | Not measured | Selection, Final, and release remain closed by protocol gates. |
 
 ## A0: Migration Foundation
@@ -122,80 +125,65 @@ An earlier A1 attempt, `a12-v16-20260811-r14`, failed closed before any dense ce
 
 Detailed 25-cell values: [A1 cell EDA](../operations/A1_2_R15_CELL_EDA_20260811_TH.md). Aggregate closeout: [A1.2 measured closeout](../operations/A1_2_R15_MEASURED_CLOSEOUT_20260811_TH.md).
 
-## A2: Per-Arm AutoIndex
+## A2: Per-Arm AutoIndex (Closed)
 
 ### Objective
 
 A2 searches the frozen representation-candidate universe independently per arm. It evaluates exactly 52 candidates: 40 matched candidates followed by 12 conditional reserve candidates only if the frozen matched-barrier and remaining-time/budget admission pass. The primary outcome remains OUT Recall@100.
 
-### Live Operational State
+### Measured Closeout
 
-| Item | Current state at reporting cutoff |
+| Item | Validated state |
 |---|---|
-| Active attempt | `a2-goal004-20260816-005` |
-| Runtime authority | `myis.armindex-a2-measured-execution-authority.v4`, `PASS_A2_MEASURED_EXECUTION_AUTHORIZED`, stored in the clean execution worktree |
-| Provider topology | Vast instance `47790578`, 4 x RTX 3090; ARM-01 runs on CPU and ARM-02 through ARM-05 use the GPU topology |
-| Budget authority | Whole-workload quote USD 54.5266667, below the USD 60 hard cap at fresh provider observation |
-| Candidate universe | 52 total: 40 matched plus 12 conditional reserve |
-| Durable remote completion signal | 16 `result.json` files observed by existence only |
-| Locally harvested evidence signal | 11 aggregate-safe candidate receipts present |
-| Liveness/resources | Current heartbeat, active workers, about 243 GiB free disk; no OOM/stall conclusion observed |
-| Scientific results | Not canonical. No metric, winner, reserve decision, or claim is reported here. |
+| Attempt | `a2-goal004-20260816-005` |
+| Execution status | `PASS_A2_EXECUTION_CLOSEOUT` |
+| Integrity status | `PASS_A2_RESULT_INTEGRITY` |
+| Candidate accounting | 52 total = 44 measured + 8 dormant; 0 failed |
+| Primary metric | OUT Recall@100 |
+| Whole-workload cost | USD `54.52666666666665948` / USD 60 |
+| Provider disposition | `OWNER_ACTION_DESTROY`; no bound A3 workload |
 
-The completion counts are live operational telemetry, not a coverage receipt. They cannot be used as a denominator for scientific comparison until the executor safely harvests allowlisted aggregate artifacts and the exact `52/40/12` contract passes.
+### Winner and Diagnostic Outcomes
 
-The repository-wide campaign YAML and Goal 004 frontmatter still describe the
-pre-launch preparation state. They are read-model/projection lag, not the
-live-attempt authority. This section instead binds its live-status statement to
-the v4 authority at
-`C:\a2exec-lf\control\armindex\a2\measured-authority\a2-goal004-20260816-005.authority.v4.json`.
-The normal projection synchronization occurs only after result-integrity
-closeout, so the report does not treat either stale projection as an A2 result.
+| Arm | Winner / diagnostic representation | Recall@100 | Interpretation |
+|---|---|---:|---|
+| ARM-01 | diagnostic three-way top tie | 0.23467 | no winner; excluded from A3 |
+| ARM-02 | diagnostic three-way top tie | 0.29000 | no winner; excluded from A3 |
+| ARM-03 | `matched-b2-orthogonal` | 0.42300 | tie at presentation precision; A3 transfer input |
+| ARM-04 | `matched-b1-orthogonal` | 0.35867 | +0.0060 vs A1; A3 transfer input |
+| ARM-05 | `matched-b1-matched-ablation` | 0.37367 | no strict improvement; retained for transfer |
 
-### A2 Recovery Already Applied
+### A2 Publication Figures
 
-ARM-03 exceeded the former 7,200-second operational timeout while safe liveness diagnostics showed healthy model load and retrieval progress. The recovery changed only the authorized timeout to 21,600 seconds. It did not change batch size, model weights, adapter, candidate bytes, evaluator, metric, decision policy, or representation semantics. Failed/partial lineage remains forensic evidence and cannot be mixed into coverage.
-
-### Required Closeout Before Interpretation
-
-A2 is updateable only after:
-
-1. exact `52/40/12` coverage and five arm-winner receipt hashes;
-2. allowlisted aggregate safe return with a hash-bound receipt;
-3. terminal checkpoint and worker-reaping evidence;
-4. an independent aggregate-only result-integrity audit; and
-5. read-model, Obsidian, MLflow, and publication-figure projection checks.
-
-Until then, the correct advisor-facing conclusion is: **A2 is a live controlled execution, not an available finding.**
-
-### A2 Figure Targets
-
-The planned target directory is `outputs/figures/armindex/a2-goal004/`. It is
-not created or linked as an artifact until valid closeout. The post-closeout
-manifest will provide exact filenames for:
+The five figure families are rendered from the validated closeout projection:
 
 | Planned figure | Reviewer question |
 |---|---|
-| Coverage and recovery completeness | Was the candidate universe executed and recovered reproducibly? |
-| Per-arm quality outcomes | Which per-arm representation result is supported by aggregate evidence? |
-| Quality-latency-cost frontier | What is the effectiveness/operational trade-off? |
-| Matched versus reserve path | Did the reserve path run, remain dormant, or reveal a boundary result? |
-| Appendix provenance and claim boundary | Which receipts support each statement, and what is not claimed? |
+| Coverage and recovery completeness | [PNG](../../outputs/figures/armindex/a2-goal004/a2-goal004-coverage-recovery.png) |
+| Per-arm quality outcomes | [PNG](../../outputs/figures/armindex/a2-goal004/a2-goal004-outcomes.png) |
+| Quality-latency-cost frontier | [PNG](../../outputs/figures/armindex/a2-goal004/a2-goal004-quality-latency-cost-frontier.png) |
+| Matched versus reserve path | [PNG](../../outputs/figures/armindex/a2-goal004/a2-goal004-matched-reserve-decision-path.png) |
+| Appendix provenance and claim boundary | [PNG](../../outputs/figures/armindex/a2-goal004/a2-goal004-appendix-audit-map.png) |
+
+The complete PNG/SVG/PDF manifest is
+[A2 figure manifest](../../outputs/figures/armindex/a2-goal004/a2-goal004-figure-manifest.v1.json).
 
 ## Next Milestones
 
-1. Complete live A2 workers and safe-return aggregate evidence.
-2. Validate exact coverage, execute closeout, and run the independent integrity audit.
-3. Render the five A2 figures and update this report with receipt-bound outcomes.
-4. Start the prepared A3.1 train-headroom diagnostic only after valid A2 closeout. The five-arm A3 bundle is currently `PENDING_A2_CLOSEOUT`.
+1. Obtain or locate the Owner-authorized hash-bound Train-250 query/corpus/evaluator package.
+2. Bind fresh A3 admission, budget, runtime, and transfer receipts for ARM-03/04/05 only.
+3. Run A3 Extended transfer, fixed-union, complementarity, and HarnessOpt measurements with aggregate-safe return.
 
 ## Evidence Pointers and Claim Boundary
 
-- [Campaign record, historical projection for the A2 live state](../../control/campaigns/armindex-multiretriever-v2.yaml)
+- [Campaign record, current A2 closeout and A3 pending state](../../control/campaigns/armindex-multiretriever-v2.yaml)
 - [A0.9 validation/safety closeout](../../outputs/audits/armindex/a0.9-validation-safety-closeout-20260805.json)
 - [A0.10 independent acceptance](../../outputs/audits/rigor/a0.10-legacy-code-harvest-independent-accept-20260804.json)
 - [A1 r14 failed-closed audit](../../outputs/audits/armindex/a1.2-v16-r14-instrumentation-failure-20260811.json)
-- [A2 Goal 004, execution objective and pre-launch header](../goal/A2_PER_ARM_AUTOINDEX_goal_004.md)
+- [A2 Goal 004, terminal closeout](../goal/A2_PER_ARM_AUTOINDEX_goal_004.md)
+- [A2 LO 004-001 measured closeout](../long_run/A2_PER_ARM_AUTOINDEX_lo_004_001.md)
+- [A2 closeout projection](../../control/armindex/a2/a2-goal004-closeout-projection.v1.json)
+- [A2 figure manifest](../../outputs/figures/armindex/a2-goal004/a2-goal004-figure-manifest.v1.json)
 - [A2 execution runbook](../../control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V2.md)
 
-This is an advisor-facing synthesis of aggregate-safe evidence. A0 is engineering evidence. A1 is REP-DEV development evidence, not Selection or Final confirmation. A2 remains pending receipt-bound closeout. The report makes no legal, infringement, novelty, causal, Selection, or Final claim and contains no protected record-level data.
+This is an advisor-facing synthesis of aggregate-safe evidence. A0 is engineering evidence. A1 and A2 are development evidence, not Selection or Final confirmation. A3 remains pending a hash-bound Train-250 input package. The report makes no legal, infringement, novelty, causal, Selection, or Final claim and contains no protected record-level data.

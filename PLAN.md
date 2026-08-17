@@ -14,6 +14,24 @@ measurement, and production-constrained HarnessOpt.
 
 ## Active campaign
 
+### Current superseding state (2026-08-18)
+
+A2 Goal 004 is terminal: `PASS_A2_EXECUTION_CLOSEOUT` and
+`PASS_A2_RESULT_INTEGRITY`. The complete frozen universe is `52 = 44 measured +
+8 dormant`, with zero failures, safe return and worker reap passed, and USD
+`54.52666666666665948` charged under the USD 60 hard stop. ARM-03, ARM-04, and
+ARM-05 are the Owner-approved primary transfer inputs; ARM-01/02 are
+diagnostic no-winner ties. ARM-03 is a presentation-precision tie to A1,
+ARM-04 improves its frozen comparator, and ARM-05 is retained for transfer
+analysis despite no strict A1 improvement.
+
+The current phase is `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`, status
+`PENDING_HASH_BOUND_TRAIN_250_INPUT`. A3 may not launch until a fresh
+Owner-authorized, hash-bound Train-250 query/corpus/evaluator package exists.
+The idle Vast instance has disposition `OWNER_ACTION_DESTROY`; it must not be
+kept for an unbound future workload. This section supersedes historical
+pre-authority/readiness narrative below, which remains provenance only.
+
 - Campaign: `armindex-multiretriever-v2`
 - Current task: `A2.1 / successor v3 pre-authority closeout` (`STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT`;
   `OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE` is `CLOSED_PASS`, while A2
@@ -95,14 +113,14 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly seven active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 staging/measurement pending -> A3 -> A4 -> A5 -> A6`
+`A0 complete -> A1 complete -> A2 complete -> A3 pending Train-250 -> A4 -> A5 -> A6`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
-| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | Goal 004 one-session recovery, v3 authority, and measured closeout pending Owner-authorized exact-root recovery or destroy fallback |
-| `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | not started |
+| `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | complete; Goal 004 measured closeout passed with three-primary amendment |
+| `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | pending hash-bound Train-250 query/corpus/evaluator input |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
 | `A6_PUBLICATION_AND_RELEASE` | paper and release | locked by `D3_SUBMIT_RELEASE` |

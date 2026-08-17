@@ -2,10 +2,10 @@
   "artifacts": [
     {
       "artifact_id": "control-source-of-truth-yaml",
-      "bytes": 30097,
+      "bytes": 31532,
       "classification": "metadata",
       "media_type": "application/yaml",
-      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
+      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
       "uri": "../../../01_Research/control/source-of-truth.yaml"
     },
     {
@@ -227,7 +227,7 @@
     "status": "candidate_freeze_audit_passed_measured_a2_closed",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "659955a320346b12127f313186c1700af5f12e2a855b189dcda154fad241c567",
+  "index_sha256": "f60f99668f8cb61a8f5d28b7982e6096b047f7f747d66da6efa4db5d1b8617f2",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"

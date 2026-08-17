@@ -105,12 +105,12 @@ phases:
     tasks: [{id: A1.1, title: Adapter fixture validation, status: complete}, {id: A1.2, title: Common multi-arm screen, status: complete}]
   - id: A2_PER_ARM_AUTOINDEX
     purpose: Search and freeze one representation program per promoted arm.
-    status: official_codex_candidate_freeze_preparation_active
-    measured_retrieval: false
-    tasks: [{id: A2.1, title: Per-arm AutoIndex, status: blocked_pending_official_codex_candidate_freeze_and_auditor_review}]
+    status: complete
+    measured_retrieval: true
+    tasks: [{id: A2.1, title: Per-arm AutoIndex, status: complete}]
   - id: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
     purpose: Analyze transfer, complementarity, and production-constrained harnesses.
-    status: locked_until_A2
+    status: pending_hash_bound_train_250_input
     measured_retrieval: false
     tasks: [{id: A3.1, title: Cross-arm transfer matrix, status: planned}, {id: A3.2, title: Complementarity and HarnessOpt, status: planned}]
   - id: A4_PRODUCTION_TRANSFER_AND_SELECTION

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">A2 execution and A3 admission gate</title>
+  <desc id="desc">A2 frozen candidate evaluation starts with matched candidates and conditionally admits reserve candidates, then requires aggregate-safe evidence and audit before A3 starts.</desc>
+  <style>.bg{fill:#fbfcfd}.title{font:700 44px Arial,sans-serif;fill:#17212b}.sub{font:400 22px Arial,sans-serif;fill:#485764}.h{font:700 25px Arial,sans-serif;fill:#17212b}.t{font:400 19px Arial,sans-serif;fill:#26333d}.small{font:400 17px Arial,sans-serif;fill:#485764}.box{stroke-width:3}.arrow{stroke:#49616f;stroke-width:4;fill:none;marker-end:url(#arrow)}</style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#49616f"/></marker></defs>
+  <rect class="bg" width="1600" height="900"/>
+  <text x="70" y="80" class="title">A2 is closed; A3 requires fresh, hash-bound admission</text>
+  <text x="70" y="120" class="sub">The gate preserves result integrity and prevents an unbound continuation toward a favorable result.</text>
+  <rect x="70" y="260" width="260" height="210" rx="8" fill="#e9f1f5" stroke="#35637a" class="box"/>
+  <text x="98" y="310" class="h">Frozen A2 universe</text><text x="98" y="354" class="t">52 candidates total</text><text x="98" y="391" class="small">40 matched + 12 reserve</text><text x="98" y="425" class="small">Same evaluator and metric</text>
+  <path d="M335 365 H410" class="arrow"/>
+  <rect x="425" y="260" width="260" height="210" rx="8" fill="#eef4e7" stroke="#54743b" class="box"/>
+  <text x="453" y="310" class="h">Matched evaluation</text><text x="453" y="354" class="t">All arms, common path</text><text x="453" y="391" class="small">Primary barrier computed</text><text x="453" y="425" class="small">Durable receipts retained</text>
+  <path d="M690 365 H765" class="arrow"/>
+  <rect x="780" y="260" width="280" height="210" rx="8" fill="#f8eee4" stroke="#9b622d" class="box"/>
+  <text x="808" y="310" class="h">Reserve decision</text><text x="808" y="354" class="t">Admit only if frozen rule</text><text x="808" y="391" class="small">and budget/TTL permit</text><text x="808" y="425" class="small">Else explicitly dormant</text>
+  <path d="M1065 365 H1140" class="arrow"/>
+  <rect x="1155" y="260" width="350" height="210" rx="8" fill="#f1edf6" stroke="#684b83" class="box"/>
+  <text x="1183" y="310" class="h">Closeout evidence</text><text x="1183" y="354" class="t">Exact coverage and safe return</text><text x="1183" y="391" class="small">Aggregate evaluation + audit</text><text x="1183" y="425" class="small">No raw record-level projection</text>
+  <path d="M1330 475 V610" class="arrow"/>
+  <rect x="1000" y="630" width="505" height="140" rx="8" fill="#edf3f8" stroke="#35637a" class="box"/>
+  <text x="1030" y="680" class="h">A3 Extended admission</text><text x="1030" y="720" class="t">3 self reuses + up to 6 transfers + fixed unions + up to 3 HarnessOpt batches</text><text x="1030" y="753" class="small">A2 passed; A3 remains PENDING_HASH_BOUND_TRAIN_250_INPUT until fresh admission.</text>
+  <text x="70" y="810" class="small">A2 is receipt-bound aggregate development evidence: ARM-03/04/05 advance; ARM-01/02 remain diagnostic ties.</text>
+</svg>

@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769"
-read_model_sha256: "a6313c65aa7617a4dd6e29d048ca128d2ea4c20a8d493945177737d622f5bfb8"
-source_commit: "82ca6be739beab4c3561d3c75cfc81b0acfb0da2"
+read_model_revision: "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0"
+read_model_sha256: "fecaf2addcac00e95d9c7be0f268b834ef2171b1d72bc7b9afbdb1fcd1342d52"
+source_commit: "713b9be785705181960d06920b804b7757fb9d31"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769"
-last_material_update: "2026-08-15T10:55:31Z"
-next_authorized_action: "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT"
+generated_from_revision: "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0"
+last_material_update: "2026-08-17T14:35:47Z"
+next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-15T10:55:31Z"
-updated_at: "2026-08-15T10:55:31Z"
+created_at: "2026-08-17T14:35:47Z"
+updated_at: "2026-08-17T14:35:47Z"
 note_id: "P4_PUBLICATION-MASTER"
 note_type: "phase_report"
 phase_id: "P4_PUBLICATION"
@@ -38,17 +38,17 @@ Deliver the P4_PUBLICATION research phase with an auditable evidence boundary.
 
 ## Starting State
 
-- `phase`: A2_PER_ARM_AUTOINDEX
-- `task`: A2.1
+- `phase`: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
+- `task`: A3.1
 - `program_state`: P1_CPU_MEASURED_COMPLETE
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 82ca6be739beab4c3561d3c75cfc81b0acfb0da2
+- `git_commit`: 713b9be785705181960d06920b804b7757fb9d31
 
 ## Work Performed
 
@@ -117,7 +117,7 @@ Status: **waiting_owner**. The phase remains planned and closed.
 
 ## Next Action
 
-OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT
+LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

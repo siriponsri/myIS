@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<style>text{font-family:Arial,Helvetica,sans-serif;letter-spacing:0} .t{fill:#18232b} .m{fill:#5d6b73} .s{font-size:22px} .b{font-size:30px;font-weight:700} .h{font-size:42px;font-weight:700} .k{font-size:18px;font-weight:700;letter-spacing:1.5px}</style>
+<rect width="1600" height="900" fill="#f7f8f7"/>
+<text x="90" y="80" class="k" text-anchor="start">RETRIEVAL SYSTEM</text>
+<text x="90" y="145" class="h t" text-anchor="start">Representation connects patent fields to a frozen retriever</text>
+<text x="90" y="188" class="s m" text-anchor="start">ArmIndex varies the document representation while keeping evaluation, model adapters, and metrics controlled.</text>
+<line x1="90" y1="220" x2="1510" y2="220" stroke="#ccd5d8" stroke-width="2" stroke-linecap="round"/>
+<rect x="90" y="350" width="210" height="165" rx="10" fill="#e0f0ee" stroke="#cbd5d7" stroke-width="2"/>
+<text x="195.0" y="405" class="b t" text-anchor="middle">Patent family</text>
+<text x="195.0" y="445" class="s m" text-anchor="middle">title</text>
+<text x="195.0" y="473" class="s m" text-anchor="middle">abstract</text>
+<text x="195.0" y="501" class="s m" text-anchor="middle">claims</text>
+<rect x="350" y="350" width="240" height="165" rx="10" fill="#e4edf8" stroke="#cbd5d7" stroke-width="2"/>
+<text x="470.0" y="405" class="b t" text-anchor="middle">Representation</text>
+<text x="470.0" y="445" class="s m" text-anchor="middle">document</text>
+<text x="470.0" y="473" class="s m" text-anchor="middle">claim</text>
+<text x="470.0" y="501" class="s m" text-anchor="middle">passages</text>
+<text x="470.0" y="529" class="s m" text-anchor="middle">three views</text>
+<rect x="640" y="350" width="220" height="165" rx="10" fill="#fbefd8" stroke="#cbd5d7" stroke-width="2"/>
+<text x="750.0" y="405" class="b t" text-anchor="middle">Retriever arm</text>
+<text x="750.0" y="445" class="s m" text-anchor="middle">BM25 or</text>
+<text x="750.0" y="473" class="s m" text-anchor="middle">dense embedding</text>
+<text x="750.0" y="501" class="s m" text-anchor="middle">fixed adapter</text>
+<rect x="910" y="350" width="220" height="165" rx="10" fill="#f8e6e8" stroke="#cbd5d7" stroke-width="2"/>
+<text x="1020.0" y="405" class="b t" text-anchor="middle">Family ranking</text>
+<text x="1020.0" y="445" class="s m" text-anchor="middle">MaxP or</text>
+<text x="1020.0" y="473" class="s m" text-anchor="middle">view RRF</text>
+<text x="1020.0" y="501" class="s m" text-anchor="middle">top 100</text>
+<rect x="1180" y="350" width="260" height="165" rx="10" fill="#e6efe8" stroke="#cbd5d7" stroke-width="2"/>
+<text x="1310.0" y="405" class="b t" text-anchor="middle">Evaluation</text>
+<text x="1310.0" y="445" class="s m" text-anchor="middle">OUT Recall@100</text>
+<text x="1310.0" y="473" class="s m" text-anchor="middle">nDCG@100</text>
+<text x="1310.0" y="501" class="s m" text-anchor="middle">latency and cost</text>
+<line x1="310" y1="432" x2="334" y2="432" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 318 422 L 334 432 L 318 442" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="600" y1="432" x2="624" y2="432" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 608 422 L 624 432 L 608 442" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="870" y1="432" x2="894" y2="432" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 878 422 L 894 432 L 878 442" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="1140" y1="432" x2="1164" y2="432" stroke="#007f7b" stroke-width="4" stroke-linecap="round"/>
+<path d="M 1148 422 L 1164 432 L 1148 442" fill="none" stroke="#007f7b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="160" y="630" width="1280" height="110" rx="10" fill="#ffffff" stroke="#d5dcde" stroke-width="2"/>
+<text x="200" y="678" class="b t" text-anchor="start">Design rule</text>
+<text x="430" y="670" class="s m" text-anchor="start">A1 compares five programs across five arms. A2 searches frozen candidates per arm.</text>
+<text x="430" y="698" class="s m" text-anchor="start">A3 tests transfer and complementarity only after A2 closes.</text>
+<text x="800" y="812" class="b t" text-anchor="middle">No LLM is required in the synchronous production retrieval path.</text>
+</svg>

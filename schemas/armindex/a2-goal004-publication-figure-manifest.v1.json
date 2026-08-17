@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-a2-goal004-publication-figure-manifest.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "attempt_id", "status", "projection_sha256", "figures", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-goal004-publication-figure-manifest.v1"},
+    "attempt_id": {"const": "a2-goal004-20260816-005"},
+    "status": {"const": "PASS_A2_GOAL004_PUBLICATION_FIGURES"},
+    "projection_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "figures": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["figure_id", "title", "artifacts"],
+        "properties": {
+          "figure_id": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["png", "svg", "pdf"],
+            "properties": {
+              "png": {"$ref": "#/$defs/artifact"},
+              "svg": {"$ref": "#/$defs/artifact"},
+              "pdf": {"$ref": "#/$defs/artifact"}
+            }
+          }
+        }
+      }
+    },
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "sha256", "bytes"],
+      "properties": {
+        "uri": {"type": "string", "pattern": "^outputs/figures/armindex/a2-goal004/"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

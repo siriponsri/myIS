@@ -719,9 +719,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-15T10:55:31Z",
-  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
-  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+  "generated_at": "2026-08-17T14:35:47Z",
+  "generated_from_revision": "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0",
+  "git_commit": "713b9be785705181960d06920b804b7757fb9d31",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -774,7 +774,7 @@
       "sha256": "6e032d5f4f6ad28d604fe317297eeaa8ea91654611f5ca99de43001fce7bd125",
       "uri": "outputs/fixtures/p2/p2-fixture-pilot-v1.receipt.json"
     },
-    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+    "git_commit": "713b9be785705181960d06920b804b7757fb9d31",
     "observatory_receipt": {
       "sha256": "6e5feb92d10e24aa2430e2067cebde0b759b230c4ddc309564dd2453765d3a51",
       "uri": "outputs/observatory/fixture-v1/receipt.json"
@@ -788,7 +788,7 @@
       "uri": "campaigns/scope-autoindex-v1/preflight/p2-preflight-receipt.json"
     },
     "source_of_truth": {
-      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
+      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
       "uri": "control/source-of-truth.yaml"
     },
     "static_review": {
@@ -798,14 +798,14 @@
   },
   "interpretation": "The repairs strengthen stale authority, worktree boundary, capacity, immutable receipt, cross-platform source stability, advisory locking, journal recovery, detached supervision, and proposer isolation. They do not execute Owner-local preflight, compare R1 candidates, or support a retrieval claim.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:55:31Z",
+  "last_material_update": "2026-08-17T14:35:47Z",
   "metric_references": [],
-  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
+  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Prepare and validate the deterministic R1 SCOPE/AutoIndex lifecycle without starting measured P2.",
   "phase_id": "P2_SCOPE_DEVELOPMENT",
   "preflight_status": "not_started",
   "report_id": "task-p2-1",
-  "report_sha256": "c610b87dcd9015ff10ad6d8dada3f7106bcfba22796f67126ef4752e638ab07e",
+  "report_sha256": "6d78246e36958e3b775c4270df3dc718650b12be34184ef805ad9de378e78a46",
   "report_type": "task",
   "result": {
     "decision": "not_started",
@@ -817,9 +817,9 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A2_PER_ARM_AUTOINDEX",
+    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
     "program_state": "P1_CPU_MEASURED_COMPLETE",
-    "task": "A2.1"
+    "task": "A3.1"
   },
   "status": "planned",
   "supported_claims": [

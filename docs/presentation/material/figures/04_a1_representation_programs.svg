@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<style>text{font-family:Arial,Helvetica,sans-serif;letter-spacing:0} .t{fill:#18232b} .m{fill:#5d6b73} .s{font-size:22px} .b{font-size:30px;font-weight:700} .h{font-size:42px;font-weight:700} .k{font-size:18px;font-weight:700;letter-spacing:1.5px}</style>
+<rect width="1600" height="900" fill="#f7f8f7"/>
+<text x="90" y="80" class="k" text-anchor="start">A1: COMMON REPRESENTATION SCREEN</text>
+<text x="90" y="145" class="h t" text-anchor="start">Five deterministic programs vary the indexed patent-family view</text>
+<text x="90" y="188" class="s m" text-anchor="start">Each program is evaluated against every one of the five frozen retriever arms: 5 x 5 = 25 cells.</text>
+<line x1="90" y1="220" x2="1510" y2="220" stroke="#ccd5d8" stroke-width="2" stroke-linecap="round"/>
+<rect x="90" y="310" width="260" height="310" rx="10" fill="#e0f0ee" stroke="#007f7b" stroke-width="2"/>
+<text x="120" y="360" class="k" text-anchor="start">P00</text>
+<text x="220" y="420" class="b t" text-anchor="middle">TAC document</text>
+<text x="220" y="480" class="s m" text-anchor="middle">Title + abstract</text>
+<text x="220" y="508" class="s m" text-anchor="middle">+ claims</text>
+<rect x="382" y="310" width="260" height="310" rx="10" fill="#e4edf8" stroke="#2463a5" stroke-width="2"/>
+<text x="412" y="360" class="k" text-anchor="start">P01</text>
+<text x="512" y="420" class="b t" text-anchor="middle">TA document</text>
+<text x="512" y="480" class="s m" text-anchor="middle">Title + abstract</text>
+<rect x="674" y="310" width="260" height="310" rx="10" fill="#fbefd8" stroke="#c67c00" stroke-width="2"/>
+<text x="704" y="360" class="k" text-anchor="start">P02</text>
+<text x="804" y="420" class="b t" text-anchor="middle">First claim</text>
+<text x="804" y="480" class="s m" text-anchor="middle">First independent claim</text>
+<text x="804" y="508" class="s m" text-anchor="middle">no fallback</text>
+<rect x="966" y="310" width="260" height="310" rx="10" fill="#f8e6e8" stroke="#b94a5a" stroke-width="2"/>
+<text x="996" y="360" class="k" text-anchor="start">P03</text>
+<text x="1096" y="420" class="b t" text-anchor="middle">Fixed passages</text>
+<text x="1096" y="480" class="s m" text-anchor="middle">384 tokens, 64 overlap</text>
+<text x="1096" y="508" class="s m" text-anchor="middle">family MaxP</text>
+<rect x="1258" y="310" width="260" height="310" rx="10" fill="#e6efe8" stroke="#23815d" stroke-width="2"/>
+<text x="1288" y="360" class="k" text-anchor="start">P04</text>
+<text x="1388" y="420" class="b t" text-anchor="middle">Three views</text>
+<text x="1388" y="480" class="s m" text-anchor="middle">Title / abstract / claims</text>
+<text x="1388" y="508" class="s m" text-anchor="middle">RRF k=60</text>
+<rect x="160" y="700" width="1280" height="88" rx="10" fill="#ffffff" stroke="#d5dcde" stroke-width="2"/>
+<text x="800" y="748" class="s m" text-anchor="middle">Interpretation rule: representations are deterministic data transformations, not LLM prompts. The arms use separately frozen embedding templates where applicable.</text>
+</svg>

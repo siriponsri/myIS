@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ArmIndex: A0-A2 Advisor Progress</title>
+    <title>ArmIndex: A0-A3 Advisor Progress</title>
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="vendor/reveal/reset.css" />
     <link rel="stylesheet" href="vendor/reveal/reveal.css" />
@@ -13,29 +13,30 @@
     <div class="reveal">
       <div class="slides">
         <section class="title-slide" data-background-color="#f7faf9">
-          <p class="eyebrow">ADVISOR PROGRESS UPDATE | 16 AUG 2026</p>
+          <p class="eyebrow">ADVISOR PROGRESS UPDATE | 17 AUGUST 2026</p>
           <h1>ArmIndex</h1>
-          <p class="subtitle">จากฐานการทดลองที่ตรวจสอบได้ สู่การค้นหา representation เฉพาะ retriever</p>
+          <p class="subtitle">Retriever-specific document representations under a controlled, auditable evaluation protocol.</p>
           <div class="phase-strip" aria-label="Project status">
             <div><span>A0</span><strong>Complete</strong><small>Engineering foundation</small></div>
             <div><span>A1</span><strong>25/25 complete</strong><small>Measured REP-DEV screen</small></div>
-            <div><span>A2</span><strong>Live</strong><small>Result pending closeout</small></div>
+            <div><span>A2</span><strong>Closed</strong><small>52 = 44 measured + 8 dormant</small></div>
+            <div><span>A3</span><strong>Pending</strong><small>Hash-bound Train-250 input</small></div>
           </div>
-          <p class="source">Advisor deck derived from the A0-A2 progress report. A2 metrics are intentionally withheld pending closeout.</p>
+          <p class="source">Advisor deck derived from the A0-A2 progress report and validated A2 closeout projection. A3 remains fail-closed pending a hash-bound Train-250 package.</p>
         </section>
 
         <section>
           <p class="eyebrow">RESEARCH QUESTION</p>
-          <h2>หนึ่ง representation อาจไม่เหมาะกับ retriever ทุกชนิด</h2>
+          <h2>A single representation may not suit every retriever</h2>
           <div class="question-layout">
             <div class="question-copy">
-              <p class="lead">ArmIndex ทดสอบว่า document representation ที่เลือกให้เหมาะกับ retriever แต่ละ arm จะให้คุณภาพ retrieval และ trade-off เชิงปฏิบัติการที่ดีกว่าการใช้คำตอบเดียวกับทุก arm หรือไม่</p>
-              <p class="minor">หน่วยประเมิน: DAPFAM patent family<br />Metric หลัก: OUT Recall@100</p>
+              <p class="lead">ArmIndex tests whether a document representation selected for each retrieval arm can improve retrieval quality and the quality-latency-cost trade-off over a single shared choice.</p>
+              <p class="minor">Evaluation unit: DAPFAM patent family<br />Primary development metric: OUT Recall@100</p>
             </div>
             <div class="flow" aria-label="Study flow">
-              <div><b>A0</b><span>ตรึง controls<br />และ provenance</span></div>
-              <div><b>A1</b><span>common screen<br />5 programs x 5 arms</span></div>
-              <div><b>A2</b><span>per-arm<br />AutoIndex search</span></div>
+              <div><b>A0</b><span>Freeze controls<br />and provenance</span></div>
+              <div><b>A1</b><span>Common screen<br />5 programs x 5 arms</span></div>
+              <div><b>A2</b><span>Per-arm<br />AutoIndex search</span></div>
             </div>
           </div>
           <p class="source">Scope: REP-DEV development evidence only. Selection and Final remain closed.</p>
@@ -43,7 +44,7 @@
 
         <section>
           <p class="eyebrow">A0 | FOUNDATION</p>
-          <h2>A0 ทำให้ผลระยะถัดไป traceable, reproducible และปลอดภัย</h2>
+          <h2>A0 makes subsequent evidence traceable, reproducible, and protected</h2>
           <div class="evidence-grid">
             <div><strong>5</strong><span>registered retriever arms</span></div>
             <div><strong>44</strong><span>focused ArmIndex tests passed</span></div>
@@ -52,12 +53,12 @@
           </div>
           <div class="two-column concise">
             <div>
-              <h3>สิ่งที่ A0 ส่งมอบ</h3>
-              <p>Canonical controls, schema, manifests, safe evidence paths, report projections และ five-arm registry</p>
+              <h3>What A0 delivered</h3>
+              <p>Canonical controls, schemas, manifests, safe evidence paths, report projections, and a five-arm registry.</p>
             </div>
             <div>
-              <h3>สิ่งที่ A0 ไม่อ้าง</h3>
-              <p>ไม่มี retrieval quality, GPU scientific run, paid API, protected payload, Selection หรือ Final access</p>
+              <h3>What A0 does not claim</h3>
+              <p>No retrieval quality result, GPU scientific run, paid API use, protected payload, Selection access, or Final access.</p>
             </div>
           </div>
           <p class="source">Source: A0.9 validation and safety closeout. Engineering evidence only.</p>
@@ -65,8 +66,8 @@
 
         <section>
           <p class="eyebrow">A1 | COMMON MULTI-ARM SCREEN</p>
-          <h2>A1 เปรียบเทียบ 5 representation programs กับ 5 retrievers ครบ 25 cells</h2>
-          <div class="matrix-caption">
+          <h2>A1 completed the five-by-five common screen</h2>
+          <div class="matrix-caption" aria-label="Frozen common representations">
             <span>P00 TAC document</span><span>P01 title + abstract</span><span>P02 first independent claim</span><span>P03 fixed passages</span><span>P04 section multiview</span>
           </div>
           <table class="result-table">
@@ -81,58 +82,104 @@
               <tr><td>ARM-05 Qwen3</td><td>0.364</td><td>0.308</td><td>0.257</td><td>217.1 ms</td></tr>
             </tbody>
           </table>
-          <p class="takeaway">ARM-03 สูงสุดใน aggregate quality; ARM-04 และ ARM-05 ก็ผ่าน frozen promotion rule</p>
-          <p class="source">Source: A1 r15 validated aggregate, five-program means on REP-DEV. Not Selection or Final confirmation.</p>
+          <p class="takeaway">ARM-03 has the highest aggregate quality; ARM-04 and ARM-05 also pass the frozen promotion rule.</p>
+          <p class="source">Source: A1 r15 validated aggregate, five-program means on REP-DEV. This is not Selection or Final confirmation.</p>
         </section>
 
         <section class="figure-slide">
           <p class="eyebrow">A1 | QUALITY EVIDENCE</p>
-          <h2>ผลของ representation เปลี่ยนไปตาม retriever</h2>
+          <h2>Representation effects vary by retriever</h2>
           <figure>
             <img src="assets/a1-quality-cell-eda.png" alt="A1 quality heatmaps for Recall@100, nDCG@100, and nDCG@10 across five retrievers and five representation programs" />
-            <figcaption>Fixed passages ให้ Recall@100 สูงสุดทุก arm ใน common screen แต่เป็น descriptive pattern ที่ A2 ต้องทดสอบ per-arm ต่อไป</figcaption>
+            <figcaption>Fixed passages have the highest Recall@100 in every common-screen arm, a descriptive pattern that A2 tests under per-arm search.</figcaption>
           </figure>
-          <p class="source">Source: A1 r15 quality cell EDA, 25 aggregate REP-DEV cells. No per-query outcomes are shown.</p>
+          <p class="source">Source: A1 r15 quality-cell EDA, 25 aggregate REP-DEV cells. No per-query outcomes are shown.</p>
         </section>
 
         <section class="figure-slide">
           <p class="eyebrow">A1 | OPERATIONAL EVIDENCE</p>
-          <h2>คุณภาพและต้นทุนต้องอ่านร่วมกัน ไม่ใช่เลือกจาก score เพียงตัวเดียว</h2>
+          <h2>Quality must be read alongside cost and latency</h2>
           <figure>
             <img src="assets/a1-efficiency-cell-eda.png" alt="A1 efficiency heatmaps for search p95 latency, wall time, and peak VRAM across five retrievers and five representation programs" />
-            <figcaption>cell เดียวกันมี latency, wall time และ VRAM ต่างกัน จึงต้องมอง quality-latency-cost frontier ในระยะถัดไป</figcaption>
+            <figcaption>Latency, wall time, and VRAM vary across the same cells, motivating the later quality-latency-cost frontier analysis.</figcaption>
           </figure>
-          <p class="source">Source: A1 r15 efficiency cell EDA. Operational diagnostics do not override the frozen promotion rule.</p>
+          <p class="source">Source: A1 r15 efficiency-cell EDA. Operational diagnostics do not override the frozen promotion rule.</p>
         </section>
 
         <section>
-          <p class="eyebrow">A2 | LIVE CONTROLLED EXECUTION</p>
-          <h2>A2 กำลังวัด candidate เฉพาะแต่ละ arm แต่ยังไม่มี outcome ที่ตีความได้</h2>
+          <p class="eyebrow">A2 | CONTROLLED EXECUTION</p>
+          <h2>A2 searches frozen candidates within each retriever arm</h2>
           <div class="a2-layout">
             <div class="candidate-contract"><strong>52</strong><span>frozen candidates</span><small>40 matched + 12 conditional reserve</small></div>
             <div class="a2-rules">
-              <p><b>ARM-01 และ ARM-02:</b> diagnostic, non-advancing</p>
-              <p><b>ARM-03 ถึง ARM-05:</b> per-arm representation search</p>
-              <p><b>ขณะนี้:</b> no winner, no metric, no reserve decision, no claim</p>
+              <p><b>ARM-01 and ARM-02:</b> diagnostic and non-advancing</p>
+              <p><b>ARM-03 to ARM-05:</b> per-arm representation search</p>
+              <p><b>Result rule:</b> ties are rejected; closeout preserves winners and negative diagnostics</p>
             </div>
           </div>
           <div class="gate-list">
             <span>Exact coverage</span><span>Safe return</span><span>Execution closeout</span><span>Independent integrity audit</span>
           </div>
-          <p class="takeaway">A2 จะรายงานได้เมื่อ gate ทั้งสี่ผ่านครบเท่านั้น</p>
-          <p class="source">Source: A2 Goal 004 and execution authority. Live telemetry is not a scientific result.</p>
+          <p class="takeaway">A2 is interpretable as aggregate development evidence after all four closeout gates pass.</p>
+          <p class="source">Source: A2 closeout projection, execution closeout, safe return, and integrity audit.</p>
+        </section>
+
+        <section class="a2-progress-slide">
+          <p class="eyebrow">A2 | MEASURED CLOSEOUT | 18 AUGUST 2026</p>
+          <h2>A2 closes with complete aggregate evidence and bounded winners</h2>
+          <div class="progress-grid" aria-label="Aggregate-safe A2 progress">
+            <div><strong>52</strong><span>frozen candidates accounted</span></div>
+            <div><strong>44</strong><span>measured candidates</span></div>
+            <div><strong>8</strong><span>dormant conditional reserves</span></div>
+            <div><strong>0</strong><span>failed candidates</span></div>
+          </div>
+          <div class="reserve-summary">
+            <div class="active"><b>ARM-03</b><span>0.4230; tie at presentation precision.</span><small>Primary A3 transfer input.</small></div>
+            <div><b>ARM-05</b><span>0.3737; no strict A1 improvement.</span><small>Primary A3 transfer input.</small></div>
+            <div class="active"><b>ARM-04</b><span>0.3587; +0.0060 versus A1.</span><small>Primary A3 transfer input.</small></div>
+          </div>
+          <p class="takeaway">Three primary transfer inputs are retained; ARM-01/02 remain diagnostic no-winner ties.</p>
+          <p class="source">Source: A2 Goal 004 closeout projection and validated publication figure manifest.</p>
+        </section>
+
+        <section>
+          <p class="eyebrow">NEXT GATE | A2 TO A3</p>
+          <h2>A2 is closed; A3 Extended waits for a hash-bound Train-250 package</h2>
+          <div class="two-column next-gate-layout">
+            <div>
+              <h3>A2 closeout sequence</h3>
+              <ol class="step-list">
+                <li>52 candidates are classified: 44 measured and 8 dormant.</li>
+                <li>Safe return, worker reap, and result-integrity audit passed.</li>
+                <li>ARM-03/04/05 are retained for transfer; ARM-01/02 are diagnostic.</li>
+                <li>Figures and claims are receipt-bound.</li>
+              </ol>
+            </div>
+            <div>
+              <h3>A3 Extended, after PASS closeout</h3>
+              <ul class="step-list">
+                <li>Five-by-five transfer matrix with 20 off-diagonal evaluations.</li>
+                <li>Fixed-union complementarity controls at equal depth.</li>
+                <li>At most three complete HarnessOpt batches, four roles each.</li>
+                <li>USD 35 A3 cap within the USD 180 campaign ceiling.</li>
+                <li>No launch until the exact Train-250 package is hash-bound.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="takeaway">A3 is prepared locally but remains fail-closed until Train-250 bindings and fresh admission are valid.</p>
+          <p class="source">Source: A3 Extended preparation and A2 closeout projection. No A3 spend is authorized yet.</p>
         </section>
 
         <section class="closing-slide" data-background-color="#f7faf9">
           <p class="eyebrow">WHAT TO REMEMBER</p>
-          <h2>ตอนนี้เรามีผล A1 ที่มั่นคง และกำลังสร้างหลักฐาน A2 ที่ตีความได้</h2>
+          <h2>A1 is stable; A2 now supplies receipt-bound arm-specific evidence</h2>
           <div class="closing-grid">
-            <div><b>1</b><p>A0 ทำให้การทดลองควบคุมและตรวจสอบย้อนกลับได้</p></div>
-            <div><b>2</b><p>A1 พบว่า quality และ cost แตกต่างตาม retriever-program cell</p></div>
-            <div><b>3</b><p>A2 จะตอบว่า representation ที่ดีที่สุดควรขึ้นกับ arm หรือไม่</p></div>
+            <div><b>1</b><p>A0 made the experimental system controlled and auditable.</p></div>
+            <div><b>2</b><p>A1 showed that retrieval quality and cost depend on the retriever-program cell.</p></div>
+            <div><b>3</b><p>A2 tests whether the optimal representation should depend on the retrieval arm.</p></div>
           </div>
-          <p class="closing-note">หลัง A2 closeout: render per-arm figures, update progress report, แล้วจึงเปิด A3.1 train-headroom diagnostic</p>
-          <p class="source">Claim boundary: no A2 winner, Selection result, Final result, legal, or causal claim is made in this deck.</p>
+          <p class="closing-note">Next: bind Train-250 and fresh A3 admission for ARM-03/04/05; do not reuse an idle provider without a concrete authorized workload.</p>
+          <p class="source">Claim boundary: no A2 winner, Selection result, Final result, legal claim, or causal claim is made in this deck.</p>
         </section>
       </div>
     </div>

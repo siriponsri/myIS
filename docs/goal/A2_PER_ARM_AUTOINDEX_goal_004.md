@@ -2,8 +2,8 @@
 title: "A2 one-session exact-root recovery, measured AutoIndex, and publication closeout"
 phase_id: A2_PER_ARM_AUTOINDEX
 task_id: A2.1
-status: READY_FOR_MEASURED_EXECUTION
-lifecycle: ACTIVE
+status: CLOSED_PASS_A2_EXECUTION_CLOSEOUT
+lifecycle: CLOSED
 evidence_class: measured_execution_and_publication_closeout
 scientific_authority: true
 measured_a2_authorized: true
@@ -17,11 +17,32 @@ active_attempt: a2-goal004-20260816-005
 recovery_lineage: a2-goal004-20260816-004 is preserved as incompatible pre-fix runtime evidence; no candidate output is reusable
 provider_instance_id: 47790578
 previous_remote_root: /opt/myis/a2-ap-audit011-v3-full-a2_on_destroyed_predecessor
-last_material_update: 2026-08-16
-next_authorized_action: LO_EXECUTE_FROZEN_A2_V4_PARALLEL_MEASUREMENT
+last_material_update: 2026-08-18
+next_authorized_action: LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION
 ---
 
 # Goal 004: one-session A2 closeout
+
+## Terminal result
+
+`PASS_A2_EXECUTION_CLOSEOUT` and `PASS_A2_RESULT_INTEGRITY` were obtained for
+attempt `a2-goal004-20260816-005`. The frozen universe is completely
+accounted: `52 = 44 measured + 8 dormant`, with zero failed candidates,
+aggregate-safe return passed, and all workers reaped. Total charged workload
+cost was USD `54.52666666666665948`, below the USD 60 hard stop.
+
+The three primary transfer inputs are `ARM-03`, `ARM-04`, and `ARM-05`.
+`ARM-01` and `ARM-02` have three-way diagnostic top ties and no winner under
+the frozen rule. ARM-03 is a numerical tie to A1 at presentation precision;
+ARM-04 improves the frozen A1 comparator; ARM-05 has no strict A1 improvement
+but remains eligible for the Owner-approved A3 transfer analysis. This result
+does not open Selection or Final. The current A3 route is
+`PENDING_HASH_BOUND_TRAIN_250_INPUT`.
+
+The aggregate-safe canonical projection is
+`control/armindex/a2/a2-goal004-closeout-projection.v1.json`; its source file
+and record hashes are validated against the Owner Store before projections or
+publication figures are generated.
 
 ## Objective and publication value
 

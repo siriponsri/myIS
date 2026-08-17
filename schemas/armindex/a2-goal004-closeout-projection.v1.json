@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "myis.armindex-a2-goal004-closeout-projection.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_id",
+    "attempt_id",
+    "status",
+    "evidence_class",
+    "scientific_authority",
+    "claim_boundary",
+    "source_artifacts",
+    "accounting",
+    "budget",
+    "arm_outcomes",
+    "a3_route",
+    "projection_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-a2-goal004-closeout-projection.v1"},
+    "projection_id": {"const": "a2-goal004-20260816-005-closeout-projection-v1"},
+    "attempt_id": {"const": "a2-goal004-20260816-005"},
+    "status": {"const": "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"},
+    "evidence_class": {"const": "measured_development_aggregate"},
+    "scientific_authority": {"const": true},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "source_artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_closeout", "result_integrity_audit", "safe_return"],
+      "properties": {
+        "execution_closeout": {"$ref": "#/$defs/source_artifact"},
+        "result_integrity_audit": {"$ref": "#/$defs/source_artifact"},
+        "safe_return": {"$ref": "#/$defs/source_artifact"}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_count", "matched_candidate_count", "measured_candidate_count", "activated_reserve_candidate_count", "dormant_reserve_candidate_count", "failed_candidate_count", "workers_reaped"],
+      "properties": {
+        "candidate_count": {"const": 52},
+        "matched_candidate_count": {"const": 40},
+        "measured_candidate_count": {"const": 44},
+        "activated_reserve_candidate_count": {"const": 4},
+        "dormant_reserve_candidate_count": {"const": 8},
+        "failed_candidate_count": {"const": 0},
+        "workers_reaped": {"const": true}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["forward_hard_stop_usd", "whole_workload_total_usd"],
+      "properties": {
+        "forward_hard_stop_usd": {"const": "60"},
+        "whole_workload_total_usd": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$"}
+      }
+    },
+    "arm_outcomes": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/arm_outcome"}
+    },
+    "a3_route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "eligible_arm_ids", "excluded_diagnostic_arm_ids", "provider_disposition", "next_authorized_action"],
+      "properties": {
+        "status": {"const": "PENDING_HASH_BOUND_TRAIN_250_INPUT"},
+        "eligible_arm_ids": {"const": ["ARM-03", "ARM-05", "ARM-04"]},
+        "excluded_diagnostic_arm_ids": {"const": ["ARM-01", "ARM-02"]},
+        "provider_disposition": {"const": "OWNER_ACTION_DESTROY"},
+        "next_authorized_action": {"type": "string", "minLength": 1}
+      }
+    },
+    "projection_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "source_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "file_sha256", "record_sha256"],
+      "properties": {
+        "uri": {"type": "string", "pattern": "^owner-store://"},
+        "file_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "arm_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_id", "candidate_id", "candidate_result_receipt_sha256", "recall_at_100", "ndcg_at_100", "ndcg_at_10", "search_p95_ms", "charged_usd", "a1_recall_at_100", "a1_comparison", "a3_eligible"],
+      "properties": {
+        "arm_id": {"enum": ["ARM-01", "ARM-02", "ARM-03", "ARM-04", "ARM-05"]},
+        "candidate_id": {"type": "string", "pattern": "^a2-arm-"},
+        "candidate_result_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "recall_at_100": {"type": "number", "minimum": 0, "maximum": 1},
+        "ndcg_at_100": {"type": "number", "minimum": 0, "maximum": 1},
+        "ndcg_at_10": {"type": "number", "minimum": 0, "maximum": 1},
+        "search_p95_ms": {"type": "number", "minimum": 0},
+        "charged_usd": {"type": "number", "minimum": 0},
+        "a1_recall_at_100": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "a1_comparison": {"enum": ["DIAGNOSTIC_TIE_NO_WINNER", "NUMERICAL_TIE_TO_A1", "STRICT_IMPROVEMENT", "NO_STRICT_IMPROVEMENT"]},
+        "a3_eligible": {"type": "boolean"}
+      }
+    }
+  }
+}

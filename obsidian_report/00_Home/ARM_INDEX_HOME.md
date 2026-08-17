@@ -1,29 +1,29 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769"
-read_model_sha256: "a6313c65aa7617a4dd6e29d048ca128d2ea4c20a8d493945177737d622f5bfb8"
-source_commit: "82ca6be739beab4c3561d3c75cfc81b0acfb0da2"
+read_model_revision: "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0"
+read_model_sha256: "fecaf2addcac00e95d9c7be0f268b834ef2171b1d72bc7b9afbdb1fcd1342d52"
+source_commit: "713b9be785705181960d06920b804b7757fb9d31"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "engineering_execution_readiness"
-scientific_authority: false
-claim_boundary: "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim"
-generated_from_revision: "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769"
-last_material_update: "2026-08-15T10:55:31Z"
-next_authorized_action: "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT"
+evidence_class: "measured_execution_authority"
+scientific_authority: true
+claim_boundary: "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed"
+generated_from_revision: "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0"
+last_material_update: "2026-08-17T14:35:47Z"
+next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-15T10:55:31Z"
-updated_at: "2026-08-15T10:55:31Z"
+created_at: "2026-08-17T14:35:47Z"
+updated_at: "2026-08-17T14:35:47Z"
 note_id: "ARM-INDEX-HOME"
 note_type: "home"
-phase_id: "A2_PER_ARM_AUTOINDEX"
-task_id: "A2.1"
-workflow_status: "verification_needed"
+phase_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+task_id: "A3.1"
+workflow_status: "ready"
 evidence_maturity: "engineering"
 claim_level: "none"
 ---
@@ -35,8 +35,8 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 ## Campaign and phase status
 
 - Campaign: `armindex-multiretriever-v2`
-- Phase: `A2_PER_ARM_AUTOINDEX`
-- Status: `a2_preauthority_stop_unsafe_remote_root_owner_action_required`
+- Phase: `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`
+- Status: `a2_goal004_measured_closeout_complete_a3_train_250_input_pending`
 
 ## Retrieval arms
 
@@ -66,7 +66,7 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 
 ## Next command
 
-`OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT`
+`LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION`
 
 ## Historical evidence
 

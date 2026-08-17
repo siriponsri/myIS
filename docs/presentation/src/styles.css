@@ -16,14 +16,15 @@
 
 .reveal {
   color: var(--ink);
-  font-family: Tahoma, "Noto Sans Thai", "Segoe UI", Arial, sans-serif;
+  font-family: Aptos, "Segoe UI", Arial, sans-serif;
   font-size: 31px;
 }
 
 .reveal .slides section {
   box-sizing: border-box;
   height: 100%;
-  padding: 64px 100px 68px;
+  overflow: hidden;
+  padding: 58px 96px 116px;
   text-align: left;
 }
 
@@ -44,9 +45,9 @@
 }
 
 .reveal h2 {
-  max-width: 1260px;
+  max-width: 1220px;
   margin: 0 0 0.5em;
-  font-size: 1.48em;
+  font-size: 1.34em;
   font-weight: 720;
   line-height: 1.18;
 }
@@ -94,13 +95,13 @@ figcaption {
 
 .source {
   position: absolute;
-  right: 100px;
-  bottom: 20px;
-  left: 100px;
+  right: 96px;
+  bottom: 30px;
+  left: 96px;
   margin: 0 !important;
   color: #6b7780 !important;
   font-size: 0.38em;
-  line-height: 1.25 !important;
+  line-height: 1.18 !important;
 }
 
 .title-slide {
@@ -125,7 +126,7 @@ figcaption {
 }
 
 .phase-strip div {
-  min-height: 132px;
+  min-height: 126px;
   padding: 20px 24px;
   border-top: 7px solid var(--teal);
   background: #ffffff;
@@ -199,7 +200,7 @@ figcaption {
 }
 
 .evidence-grid div {
-  min-height: 150px;
+  min-height: 136px;
   padding: 18px 20px;
   background: #ffffff;
   border-bottom: 4px solid var(--teal);
@@ -263,7 +264,7 @@ figcaption {
   width: 100%;
   margin-top: 0.38em;
   border-collapse: collapse;
-  font-size: 0.58em;
+  font-size: 0.54em;
 }
 
 .result-table th,
@@ -306,7 +307,7 @@ figcaption {
 .figure-slide img {
   display: block;
   width: 100%;
-  max-height: 560px;
+  max-height: 510px;
   object-fit: contain;
 }
 
@@ -356,6 +357,11 @@ figcaption {
 }
 
 .gate-list span {
+  box-sizing: border-box;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px 15px;
   border: 1px solid var(--line);
   color: var(--muted);
@@ -375,7 +381,7 @@ figcaption {
 }
 
 .closing-grid div {
-  min-height: 132px;
+  min-height: 126px;
   padding: 18px 22px;
   border-top: 5px solid var(--teal);
   background: #ffffff;
@@ -408,12 +414,113 @@ figcaption {
   margin: 0.78em 0 0 !important;
 }
 
+.progress-grid,
+.reserve-summary {
+  display: grid;
+  gap: 14px;
+}
+
+.progress-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0.18em 0 0.58em;
+}
+
+.progress-grid div {
+  min-height: 118px;
+  padding: 17px 18px;
+  border-bottom: 4px solid var(--teal);
+  background: #ffffff;
+}
+
+.progress-grid div:nth-child(2) {
+  border-color: var(--gold);
+}
+
+.progress-grid div:nth-child(3) {
+  border-color: var(--coral);
+}
+
+.progress-grid strong,
+.reserve-summary b {
+  display: block;
+  color: var(--teal);
+  font-weight: 760;
+}
+
+.progress-grid strong {
+  font-size: 1.34em;
+}
+
+.progress-grid span {
+  display: block;
+  margin-top: 0.4em;
+  color: var(--muted);
+  font-size: 0.48em;
+  line-height: 1.2;
+}
+
+.reserve-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.reserve-summary div {
+  min-height: 122px;
+  padding: 15px 18px;
+  border-top: 4px solid var(--coral);
+  background: #ffffff;
+}
+
+.reserve-summary .active {
+  border-color: var(--gold);
+}
+
+.reserve-summary b {
+  font-size: 0.68em;
+}
+
+.reserve-summary span,
+.reserve-summary small {
+  display: block;
+  color: var(--muted);
+  line-height: 1.22;
+}
+
+.reserve-summary span {
+  margin-top: 0.45em;
+  font-size: 0.48em;
+}
+
+.reserve-summary small {
+  margin-top: 0.48em;
+  color: var(--ink);
+  font-size: 0.43em;
+  font-weight: 700;
+}
+
+.next-gate-layout {
+  align-items: start;
+  margin-top: 0.22em;
+}
+
+.step-list {
+  margin: 0.18em 0 0;
+  padding-left: 1.15em;
+  color: var(--muted);
+  font-size: 0.6em;
+  line-height: 1.33;
+}
+
+.step-list li {
+  margin: 0 0 0.5em;
+  padding-left: 0.18em;
+}
+
 .reveal .slide-number {
   right: 22px;
   bottom: 16px;
   color: var(--teal);
   background: transparent;
-  font-family: Tahoma, "Noto Sans Thai", "Segoe UI", Arial, sans-serif;
+  font-family: Aptos, "Segoe UI", Arial, sans-serif;
   font-size: 14px;
 }
 
@@ -423,6 +530,12 @@ figcaption {
 
 @media print {
   .reveal .slides section {
-    padding: 56px 86px 60px;
+    padding: 52px 84px 104px;
+  }
+
+  .source {
+    right: 84px;
+    bottom: 26px;
+    left: 84px;
   }
 }

@@ -62,17 +62,42 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
             current_phase.get("tasks", [{}])[-1],
         )
+        # Prefer the validated aggregate-safe read model once a measured
+        # closeout exists. The campaign file remains useful as the fallback
+        # for historical/scaffold checkouts that predate the projection.
+        read_model_path = root / "projections/read-model/read-model.v2.json"
+        if read_model_path.is_file():
+            read_model = json.loads(read_model_path.read_text(encoding="utf-8"))
+            project = read_model.get("project", {})
+            armindex = read_model.get("armindex", {})
+            closeout = armindex.get("a2_goal004_closeout", {})
+            current_phase = {"id": project.get("current_phase", current_phase["id"]), "tasks": []}
+            current_task = {"id": project.get("current_task", current_task.get("id"))}
+            campaign_status = armindex.get("status", campaign["campaign"]["status"])
+            evidence_class = closeout.get("evidence_class", campaign["campaign"]["evidence_class"])
+            scientific_authority = bool(closeout.get("scientific_authority", False))
+            counters = armindex.get("counters", {})
+            measured_runs = counters.get("measured_runs", campaign["campaign"]["migration_measured_runs"])
+            selection_accesses = counters.get("selection_accesses", campaign["campaign"]["selection_accesses"])
+            final_accesses = counters.get("final_accesses", campaign["campaign"]["final_accesses"])
+        else:
+            campaign_status = campaign["campaign"]["status"]
+            evidence_class = campaign["campaign"]["evidence_class"]
+            scientific_authority = False
+            measured_runs = campaign["campaign"]["migration_measured_runs"]
+            selection_accesses = campaign["campaign"]["selection_accesses"]
+            final_accesses = campaign["campaign"]["final_accesses"]
         payload = {
             "schema_version": "myis.armindex-cli-status.v1",
             "campaign_id": campaign["campaign"]["id"],
-            "campaign_status": campaign["campaign"]["status"],
+            "campaign_status": campaign_status,
             "current_phase": current_phase["id"],
             "current_task": current_task.get("id"),
-            "evidence_class": campaign["campaign"]["evidence_class"],
-            "scientific_authority": False,
-            "measured_runs": campaign["campaign"]["migration_measured_runs"],
-            "selection_accesses": campaign["campaign"]["selection_accesses"],
-            "final_accesses": campaign["campaign"]["final_accesses"],
+            "evidence_class": evidence_class,
+            "scientific_authority": scientific_authority,
+            "measured_runs": measured_runs,
+            "selection_accesses": selection_accesses,
+            "final_accesses": final_accesses,
             "model_download_allowed": campaign["protocol"]["model_download_allowed"],
         }
     elif args.command == "validate":

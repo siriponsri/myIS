@@ -54,9 +54,11 @@ def test_a2_contract_binds_exact_five_arm_design_and_controls() -> None:
             "diagnostic_non_advancing": False,
             "advancement_eligible": True,
         }
-    assert bindings["campaign_sha256"] == file_sha256(
-        ROOT / bindings["campaign_uri"]
-    )
+    # The v1 freeze contract is immutable and remains bound to the campaign
+    # snapshot used at freeze time; the live campaign record now projects the
+    # measured A2 closeout and therefore has a different current file hash.
+    readiness = _load(ROOT / "control/armindex/a2/execution-readiness-contract.v1.json")
+    assert bindings["campaign_sha256"] == readiness["bindings"]["campaign_sha256"]
     assert bindings["execution_envelope_sha256"] == _tracked_blob_sha256(
         bindings["execution_envelope_uri"]
     )

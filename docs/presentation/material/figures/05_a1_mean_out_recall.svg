@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<style>text{font-family:Arial,Helvetica,sans-serif;letter-spacing:0} .t{fill:#18232b} .m{fill:#5d6b73} .s{font-size:22px} .b{font-size:30px;font-weight:700} .h{font-size:42px;font-weight:700} .k{font-size:18px;font-weight:700;letter-spacing:1.5px}</style>
+<rect width="1600" height="900" fill="#f7f8f7"/>
+<text x="90" y="80" class="k" text-anchor="start">A1 RESULT: REP-DEV</text>
+<text x="90" y="145" class="h t" text-anchor="start">A1 shows quality spread across frozen retriever arms</text>
+<text x="90" y="188" class="s m" text-anchor="start">Mean OUT Recall@100 across the five common programs; descriptive development evidence only, not Selection or Final confirmation.</text>
+<line x1="90" y1="220" x2="1510" y2="220" stroke="#ccd5d8" stroke-width="2" stroke-linecap="round"/>
+<line x1="220" y1="320" x2="220" y2="710" stroke="#18232b" stroke-width="3" stroke-linecap="round"/>
+<line x1="220" y1="710" x2="1450" y2="710" stroke="#18232b" stroke-width="3" stroke-linecap="round"/>
+<line x1="210" y1="710.0" x2="1450" y2="710.0" stroke="#d9dfe1" stroke-width="2" stroke-linecap="round"/>
+<text x="195" y="718.0" class="s m" text-anchor="end">0.0</text>
+<line x1="210" y1="625.2173913043479" x2="1450" y2="625.2173913043479" stroke="#d9dfe1" stroke-width="2" stroke-linecap="round"/>
+<text x="195" y="633.2173913043479" class="s m" text-anchor="end">0.1</text>
+<line x1="210" y1="540.4347826086956" x2="1450" y2="540.4347826086956" stroke="#d9dfe1" stroke-width="2" stroke-linecap="round"/>
+<text x="195" y="548.4347826086956" class="s m" text-anchor="end">0.2</text>
+<line x1="210" y1="455.6521739130435" x2="1450" y2="455.6521739130435" stroke="#d9dfe1" stroke-width="2" stroke-linecap="round"/>
+<text x="195" y="463.6521739130435" class="s m" text-anchor="end">0.3</text>
+<line x1="210" y1="370.8695652173913" x2="1450" y2="370.8695652173913" stroke="#d9dfe1" stroke-width="2" stroke-linecap="round"/>
+<text x="195" y="378.8695652173913" class="s m" text-anchor="end">0.4</text>
+<rect x="315" y="547.8956521739129" width="120" height="162.10434782608704" rx="6" fill="#007f7b"/>
+<text x="375" y="529.8956521739129" class="b t" text-anchor="middle">0.191</text>
+<text x="375" y="755" class="b t" text-anchor="middle">ARM-01</text>
+<text x="375" y="787" class="s m" text-anchor="middle">BM25 lexical</text>
+<rect x="540" y="481.14347826086964" width="120" height="228.8565217391304" rx="6" fill="#2463a5"/>
+<text x="600" y="463.14347826086964" class="b t" text-anchor="middle">0.270</text>
+<text x="600" y="755" class="b t" text-anchor="middle">ARM-02</text>
+<text x="600" y="787" class="s m" text-anchor="middle">BGE-M3</text>
+<rect x="765" y="359.50869565217397" width="120" height="350.49130434782603" rx="6" fill="#c67c00"/>
+<text x="825" y="341.50869565217397" class="b t" text-anchor="middle">0.413</text>
+<text x="825" y="755" class="b t" text-anchor="middle">ARM-03</text>
+<text x="825" y="787" class="s m" text-anchor="middle">PatEmbed</text>
+<rect x="990" y="421.17391304347836" width="120" height="288.82608695652164" rx="6" fill="#b94a5a"/>
+<text x="1050" y="403.17391304347836" class="b t" text-anchor="middle">0.341</text>
+<text x="1050" y="755" class="b t" text-anchor="middle">ARM-04</text>
+<text x="1050" y="787" class="s m" text-anchor="middle">Arctic Embed</text>
+<rect x="1215" y="401.61739130434785" width="120" height="308.38260869565215" rx="6" fill="#23815d"/>
+<text x="1275" y="383.61739130434785" class="b t" text-anchor="middle">0.364</text>
+<text x="1275" y="755" class="b t" text-anchor="middle">ARM-05</text>
+<text x="1275" y="787" class="s m" text-anchor="middle">Qwen3 Embedding</text>
+<rect x="220" y="770" width="1230" height="70" rx="10" fill="#ffffff" stroke="#d5dcde" stroke-width="2"/>
+<text x="835" y="815" class="s m" text-anchor="middle">A1 payoff: model family and representation interact. A2 therefore searches a constrained representation candidate universe separately for each arm.</text>
+</svg>

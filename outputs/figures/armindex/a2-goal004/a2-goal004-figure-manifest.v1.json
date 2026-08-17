@@ -1,0 +1,114 @@
+{
+  "schema_version": "myis.armindex-a2-goal004-publication-figure-manifest.v1",
+  "attempt_id": "a2-goal004-20260816-005",
+  "status": "PASS_A2_GOAL004_PUBLICATION_FIGURES",
+  "projection_sha256": "80ce52d3edcac62298b3b3ed96d685fe98d9bc8cd1e1f870147a2c742f40027a",
+  "figures": [
+    {
+      "figure_id": "coverage-recovery",
+      "title": "A2 coverage: 44 measured, 8 dormant, 0 failed",
+      "artifacts": {
+        "png": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-coverage-recovery.png",
+          "sha256": "7950f98baefb874f0355c2d0e317bcd1d5409893282c8844d6ec3f63b4c0e1a8",
+          "bytes": 73360
+        },
+        "svg": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-coverage-recovery.svg",
+          "sha256": "c6a782f10651f48d04da10338c6a3c59e33069d18ed3900eb81c1e7aae914436",
+          "bytes": 38153
+        },
+        "pdf": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-coverage-recovery.pdf",
+          "sha256": "d8ebeb532c75f8078cda030904310d0dc8299c72f6231eeedeb46d75aa6188c4",
+          "bytes": 20181
+        }
+      }
+    },
+    {
+      "figure_id": "outcomes",
+      "title": "A2 aggregate OUT metrics by arm",
+      "artifacts": {
+        "png": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-outcomes.png",
+          "sha256": "37a9fa2e42ca967285cbe468dbd32cd7417ac3270bb1218d271df66309d3b446",
+          "bytes": 78620
+        },
+        "svg": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-outcomes.svg",
+          "sha256": "7588ebeb31a7094d6af5df2277c09bf2c589ee89a6cb65c53352dcdf166365a7",
+          "bytes": 44861
+        },
+        "pdf": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-outcomes.pdf",
+          "sha256": "f608c1e97af42e877e545be33d1a9ba845a271fa74d7156c0bb6271828d54c0d",
+          "bytes": 21617
+        }
+      }
+    },
+    {
+      "figure_id": "quality-latency-cost-frontier",
+      "title": "A2 quality, search latency, and candidate cost",
+      "artifacts": {
+        "png": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-quality-latency-cost-frontier.png",
+          "sha256": "c9e6cf82401911333e41645fa23be9b99d03ca23a2e41fc6ac89cb414f4b87b4",
+          "bytes": 108759
+        },
+        "svg": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-quality-latency-cost-frontier.svg",
+          "sha256": "4141e47ba8e1b5d4b36e3cd6a866326de75d99e9763578c9712d25a26ba6fc24",
+          "bytes": 51504
+        },
+        "pdf": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-quality-latency-cost-frontier.pdf",
+          "sha256": "90114a7a6ada1b745cc6f4f9f8b67366e119a57f215b957e040d3ff97cf60faa",
+          "bytes": 23651
+        }
+      }
+    },
+    {
+      "figure_id": "matched-reserve-decision-path",
+      "title": "A2 matched-first reserve decision path",
+      "artifacts": {
+        "png": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-matched-reserve-decision-path.png",
+          "sha256": "f7b8f62c8085eb96c2629d1c5722fe35068545c53b283a9284a8290864e7bee2",
+          "bytes": 65239
+        },
+        "svg": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-matched-reserve-decision-path.svg",
+          "sha256": "5ee64ff29403cfa0c9530303419971e5c91d5ff5e667ee5b690cd09229fe211f",
+          "bytes": 35518
+        },
+        "pdf": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-matched-reserve-decision-path.pdf",
+          "sha256": "c4c151cfc4a3e3c38e732b4158ba19256d8d293dcd6e2fb2c02a338c5821dbfa",
+          "bytes": 20347
+        }
+      }
+    },
+    {
+      "figure_id": "appendix-audit-map",
+      "title": "A2 evidence chain for publication claims",
+      "artifacts": {
+        "png": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-appendix-audit-map.png",
+          "sha256": "bcedc9f4693e93d0b5c57a3b0c394ebe001acb4ddd4538a8f9ad76d1262c9aac",
+          "bytes": 75549
+        },
+        "svg": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-appendix-audit-map.svg",
+          "sha256": "b34fc64f780826719dcb5d87d011ea17a9fc6cff3385befad2d02e7c1f70cba8",
+          "bytes": 42739
+        },
+        "pdf": {
+          "uri": "outputs/figures/armindex/a2-goal004/a2-goal004-appendix-audit-map.pdf",
+          "sha256": "be525c623d3a60901f9b3474b27325f7bc84b6fc9e047422c7dfd589253ce36d",
+          "bytes": 23748
+        }
+      }
+    }
+  ],
+  "manifest_sha256": "c9f8fa894b4de6380848398b3c2f6fe3944d6299d642deb552cc655087cb3173"
+}

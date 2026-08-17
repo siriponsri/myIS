@@ -14,6 +14,10 @@ from typing import Any, Mapping
 from jsonschema import Draft202012Validator
 
 from ..armindex import ArmIndexContractError, build_armindex_projection
+from ..armindex.a2_goal004_closeout_figures import (
+    A2Goal004CloseoutFigureError,
+    validate_a2_goal004_closeout_projection,
+)
 from ..armindex.a1_2_cell_eda_package_v16 import (
     CellEdaPackageV16Error,
     validate_cell_eda_package_file,
@@ -667,6 +671,9 @@ A2_CURRENT_AUDIT_012_PATH = Path(
 A2_CURRENT_SESSION_CAPSULE_PATH = Path(
     "outputs/audits/research-sessions/"
     "a2-ap-audit011-v3-full-a2-lo003-20260815.json"
+)
+A2_GOAL004_CLOSEOUT_PROJECTION_PATH = Path(
+    "control/armindex/a2/a2-goal004-closeout-projection.v1.json"
 )
 A2_PREAUTHORITY_STOP_STATUS = (
     "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
@@ -1577,6 +1584,30 @@ def _a2_candidate_freeze_projection(root: Path) -> dict[str, Any]:
     }
 
 
+def _a2_goal004_closeout_projection(root: Path) -> dict[str, Any]:
+    missing = {
+        "status": "not_available",
+        "validated": False,
+        "phase_id": "A2_PER_ARM_AUTOINDEX",
+        "task_id": "A2.1",
+        "source_projection_uri": A2_GOAL004_CLOSEOUT_PROJECTION_PATH.as_posix(),
+    }
+    if not (root / A2_GOAL004_CLOSEOUT_PROJECTION_PATH).is_file():
+        return missing
+    try:
+        projection = validate_a2_goal004_closeout_projection(root)
+    except (A2Goal004CloseoutFigureError, OSError, UnicodeError, ValueError):
+        return {**missing, "status": "INVALID"}
+    return {
+        **projection,
+        "validated": True,
+        "source_projection_uri": A2_GOAL004_CLOSEOUT_PROJECTION_PATH.as_posix(),
+        "source_projection_file_sha256": _file_sha256(
+            root / A2_GOAL004_CLOSEOUT_PROJECTION_PATH
+        ),
+    }
+
+
 def build_read_model(repository_root: Path) -> dict[str, Any]:
     root = repository_root.resolve()
     campaign_id = "scope-autoindex-v1"
@@ -1599,6 +1630,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     a2_execution_readiness = _a2_execution_readiness_projection(
         root, a2_candidate_freeze
     )
+    a2_goal004_closeout = _a2_goal004_closeout_projection(root)
     armindex = {
         **armindex,
         "legacy_code_harvest": _a010_legacy_code_harvest_projection(root),
@@ -1615,6 +1647,7 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
         "a1_2_remote_retention": a1_2_remote_retention,
         "a2_candidate_freeze": a2_candidate_freeze,
         "a2_execution_readiness": a2_execution_readiness,
+        "a2_goal004_closeout": a2_goal004_closeout,
     }
     a11_declared_complete = any(
         task.get("task_id") == "A1.1" and task.get("status") == "complete"
@@ -2092,6 +2125,77 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
     ):
         armindex["local_adoption_input_status"] = "BLOCKED_CONTRACT_DEFECT"
         armindex["next_command"] = a1_2_p02_limit_audit["next_authorized_action"]
+    if a2_goal004_closeout.get("validated") is True:
+        route = a2_goal004_closeout["a3_route"]
+        outcomes = {
+            str(outcome["arm_id"]): outcome
+            for outcome in a2_goal004_closeout["arm_outcomes"]
+            if isinstance(outcome, Mapping)
+        }
+        armindex["status"] = "a2_goal004_measured_closeout_complete_a3_train_250_input_pending"
+        armindex["current_phase"] = "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+        armindex["next_command"] = str(route["next_authorized_action"])
+        armindex["a2_execution_status"] = "complete"
+        armindex["arms"] = [
+            {
+                **arm,
+                "a2_outcome": outcomes.get(str(arm.get("arm_id"))),
+                "a2_status": (
+                    "a2_primary_transfer_eligible"
+                    if outcomes.get(str(arm.get("arm_id")), {}).get("a3_eligible")
+                    is True
+                    else "a2_diagnostic_no_winner"
+                ),
+            }
+            for arm in armindex.get("arms", [])
+            if isinstance(arm, Mapping)
+        ]
+        counters = dict(armindex.get("counters", {}))
+        counters.update(
+            {
+                "a2_candidate_count": a2_goal004_closeout["accounting"][
+                    "candidate_count"
+                ],
+                "a2_measured_candidate_count": a2_goal004_closeout["accounting"][
+                    "measured_candidate_count"
+                ],
+                "a2_dormant_reserve_candidate_count": a2_goal004_closeout[
+                    "accounting"
+                ]["dormant_reserve_candidate_count"],
+                "a2_failed_candidate_count": a2_goal004_closeout["accounting"][
+                    "failed_candidate_count"
+                ],
+            }
+        )
+        armindex["counters"] = counters
+        armindex["phases"] = [
+            {
+                **phase,
+                "status": (
+                    "complete"
+                    if phase.get("phase_id") == "A2_PER_ARM_AUTOINDEX"
+                    else "pending_hash_bound_train_250_input"
+                    if phase.get("phase_id")
+                    == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+                    else phase.get("status")
+                ),
+                "tasks": [
+                    {
+                        **task,
+                        "status": (
+                            "complete"
+                            if phase.get("phase_id") == "A2_PER_ARM_AUTOINDEX"
+                            and task.get("task_id") == "A2.1"
+                            else task.get("status")
+                        ),
+                    }
+                    for task in phase.get("tasks", [])
+                    if isinstance(task, Mapping)
+                ],
+            }
+            for phase in armindex.get("phases", [])
+            if isinstance(phase, Mapping)
+        ]
     campaign_config = _load_yaml_like(
         root / "control" / "campaigns" / f"{campaign_id}.yaml"
     )
@@ -2389,7 +2493,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "active_phase": armindex["current_phase"],
             "current_phase": armindex["current_phase"],
             "current_task": (
-                "A2.1"
+                "A3.1"
+                if armindex["current_phase"]
+                == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+                else "A2.1"
                 if armindex["current_phase"] == "A2_PER_ARM_AUTOINDEX"
                 else "A1.2"
                 if armindex["current_phase"]
@@ -2397,7 +2504,10 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                 else "A0"
             ),
             "current_substage": (
-                "FROZEN_FIVE_ARM_EXECUTION"
+                "PENDING_HASH_BOUND_TRAIN_250_INPUT"
+                if armindex["current_phase"]
+                == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+                else "FROZEN_FIVE_ARM_EXECUTION"
                 if armindex["current_phase"] == "A2_PER_ARM_AUTOINDEX"
                 else "NOT_APPLICABLE"
             ),

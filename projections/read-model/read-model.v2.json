@@ -4087,7 +4087,7 @@
     },
     "a2_execution_readiness": {
       "a2_spent_accrued_usd": 0,
-      "attempt_id": "a2-ap-audit011-v3-full-a2",
+      "attempt_id": "a2-im-audit008-provenance-v2",
       "budget_file_sha256": "73bdd90e4e8958ad29d699dc47586bda61eb969134b6769941bee3af3cc1fa43",
       "budget_profile_sha256": "c831f7bd325318873178baee4673078b2860cd12a02e1998cb68d77797b733f8",
       "budget_status": "UNKNOWN_DO_NOT_SPEND",
@@ -4097,7 +4097,7 @@
       "candidate_evaluation_allowed": false,
       "candidate_generation_allowed": false,
       "candidate_mutation_allowed": false,
-      "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
+      "claim_boundary": "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed",
       "conditional_reserve_candidate_count": 12,
       "contract_file_sha256": "189e7a467b2272c7c6024c995f3c54f97f914c1bf45b0a4843abac22b5728bcc",
       "contract_sha256": "d559755672ce86309f15ad26ef96977e351bdd28673e03b5be42adc44e1da39e",
@@ -4109,8 +4109,8 @@
         "provider_execution_adoptions": 0
       },
       "current_execution_pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json",
-      "current_route": "OWNER_ACTION_REQUIRED",
-      "current_status": "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT",
+      "current_route": "LO",
+      "current_status": "READY_FOR_MEASURED_EXECUTION",
       "diagnostic_non_advancing_arms": [
         "ARM-01",
         "ARM-02"
@@ -4118,7 +4118,7 @@
       "envelope_file_sha256": "3e0b9a2099612bccffb4f0221306b3aa4f22eda735175080c1b786a802a41dac",
       "envelope_uri": "control/execution-envelope-a2-readiness-v2.yaml",
       "estimated_next_action_cost_usd": "UNKNOWN",
-      "evidence_class": "engineering_execution_readiness",
+      "evidence_class": "measured_execution_authority",
       "forward_hard_stop_usd": 50,
       "freeze_bindings": {
         "freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
@@ -4126,17 +4126,19 @@
         "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e"
       },
       "gpu_decision": "KEEP_GPU",
-      "gpu_decision_reason": "Owner-authorized forensic root recovery is the immediate next action; destroy only if exact-root checks fail",
+      "gpu_decision_reason": "the authorized LO goal reuses the staged instance only after fresh authenticated admission",
       "historical_status": "EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED",
       "latest_ledger_entry_id": "A2EXEC-EV0006",
       "latest_ledger_entry_sha256": "112e27b6b58201d1157190a4d3d584f48e0f7a48be14e191e962f5a199df3199",
       "ledger_sha256": "6dad2987d6cc57b166d9ea13fb4111b5504e2ffb9b7d7440fa055a85564553d4",
       "ledger_uri": "control/armindex/a2/execution-ledger.v1.jsonl",
       "matched_candidate_count": 40,
-      "measured_a2_authorized": false,
+      "measured_a2_authorized": true,
       "measured_a2_started": false,
-      "measured_execution_allowed": false,
-      "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
+      "measured_execution_allowed": true,
+      "measurement_authority_sha256": "5fcd91014acd2a510bec8571815846861598a613eef33a2aa3fb29142e486e41",
+      "measurement_authority_uri": "control/armindex/a2/measured-authority/a2-im-audit008-provenance-v2.authority.v2.json",
+      "next_authorized_action": "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN",
       "next_phase_ceiling_usd": null,
       "owner_ttl_hours": 40,
       "phase_ceiling_usd": 50,
@@ -4146,30 +4148,147 @@
         "ARM-05",
         "ARM-04"
       ],
-      "provider_admission_attempted": true,
-      "provider_admission_performed": true,
-      "provider_admission_status": "PASS_PREAUTHORITY_STOP_BEFORE_STAGE",
+      "provider_admission_attempted": false,
+      "provider_admission_performed": false,
+      "provider_admission_status": "FRESH_ADMISSION_REQUIRED",
       "provider_execution_adoption_performed": false,
-      "provider_instance_id": "47782993",
       "recorded_campaign_spend_usd": 11.161632,
       "remaining_campaign_headroom_usd": 138.838368,
       "remote_staging_performed": false,
       "rep_dev_measurement_allowed": false,
-      "research_session_sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
-      "research_session_uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json",
       "runbook_sha256": "21a23c154742dd18093db3ca7e5ac8afa5324a3f3c46f5c7dd012e1bf9629fa7",
       "runbook_uri": "control/runbooks/A2_PER_ARM_AUTOINDEX_EXECUTION_V1.md",
-      "scientific_authority": false,
-      "source_audit_sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
-      "source_audit_uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md",
-      "source_goal_sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
-      "source_goal_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md",
-      "source_lo_handoff_sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
-      "source_lo_handoff_uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
-      "status": "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED",
+      "scientific_authority": true,
+      "source_goal_sha256": "25673ad3ae8377f7a075743aad5242674de185f554bc001d8b015a1fd44612dd",
+      "source_goal_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md",
+      "status": "READY_FOR_MEASURED_EXECUTION",
       "task_id": "A2.1",
       "task_run_ceiling_usd": 50,
-      "unsafe_remote_root": "/opt/myis/a2-ap-audit011-v3-full-a2",
+      "validated": true
+    },
+    "a2_execution_status": "complete",
+    "a2_goal004_closeout": {
+      "a3_route": {
+        "eligible_arm_ids": [
+          "ARM-03",
+          "ARM-05",
+          "ARM-04"
+        ],
+        "excluded_diagnostic_arm_ids": [
+          "ARM-01",
+          "ARM-02"
+        ],
+        "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+        "provider_disposition": "OWNER_ACTION_DESTROY",
+        "status": "PENDING_HASH_BOUND_TRAIN_250_INPUT"
+      },
+      "accounting": {
+        "activated_reserve_candidate_count": 4,
+        "candidate_count": 52,
+        "dormant_reserve_candidate_count": 8,
+        "failed_candidate_count": 0,
+        "matched_candidate_count": 40,
+        "measured_candidate_count": 44,
+        "workers_reaped": true
+      },
+      "arm_outcomes": [
+        {
+          "a1_comparison": "DIAGNOSTIC_TIE_NO_WINNER",
+          "a1_recall_at_100": null,
+          "a3_eligible": false,
+          "arm_id": "ARM-01",
+          "candidate_id": "a2-arm-01-matched-b1-diversity",
+          "candidate_result_receipt_sha256": "09780863bc40ea0e8c2022d8b5ca784ae98e6e8c5c0070d75f9a7efc7fbec91c",
+          "charged_usd": 0.0,
+          "ndcg_at_10": 0.1950241408753094,
+          "ndcg_at_100": 0.210783623690076,
+          "recall_at_100": 0.2346666666666668,
+          "search_p95_ms": 1387.940057
+        },
+        {
+          "a1_comparison": "DIAGNOSTIC_TIE_NO_WINNER",
+          "a1_recall_at_100": null,
+          "a3_eligible": false,
+          "arm_id": "ARM-02",
+          "candidate_id": "a2-arm-02-matched-b2-orthogonal",
+          "candidate_result_receipt_sha256": "0cac2979f8f7ed4428704493734ffdddfa1d3bb1b84b8b7340b098ff465584e3",
+          "charged_usd": 0.2172489252919918,
+          "ndcg_at_10": 0.2200574939200255,
+          "ndcg_at_100": 0.2499193094784085,
+          "recall_at_100": 0.29,
+          "search_p95_ms": 1139.044918
+        },
+        {
+          "a1_comparison": "NUMERICAL_TIE_TO_A1",
+          "a1_recall_at_100": 0.4229999999999998,
+          "a3_eligible": true,
+          "arm_id": "ARM-03",
+          "candidate_id": "a2-arm-03-matched-b2-orthogonal",
+          "candidate_result_receipt_sha256": "d1f8b55f6443d29539ccf8f051f7fd7169a9d47077306ac4b92da647db03f2ee",
+          "charged_usd": 0.3080191566437946,
+          "ndcg_at_10": 0.2994437534650084,
+          "ndcg_at_100": 0.3576360656964662,
+          "recall_at_100": 0.4229999999999999,
+          "search_p95_ms": 1686.804176
+        },
+        {
+          "a1_comparison": "STRICT_IMPROVEMENT",
+          "a1_recall_at_100": 0.3526666666666667,
+          "a3_eligible": true,
+          "arm_id": "ARM-04",
+          "candidate_id": "a2-arm-04-matched-b1-orthogonal",
+          "candidate_result_receipt_sha256": "a1446c06abbfe3d05fab3052f79af23b513146fd4c9d349b821dfc0c18b09416",
+          "charged_usd": 0.159218205702039,
+          "ndcg_at_10": 0.2532294396153771,
+          "ndcg_at_100": 0.3018675218204638,
+          "recall_at_100": 0.3586666666666666,
+          "search_p95_ms": 1115.051996
+        },
+        {
+          "a1_comparison": "NO_STRICT_IMPROVEMENT",
+          "a1_recall_at_100": 0.37999999999999995,
+          "a3_eligible": true,
+          "arm_id": "ARM-05",
+          "candidate_id": "a2-arm-05-matched-b1-matched-ablation",
+          "candidate_result_receipt_sha256": "a2f1b0702e85d8df44e67df0085b407006d406f4620d3a71ef8cf337c419076a",
+          "charged_usd": 0.2109004290972753,
+          "ndcg_at_10": 0.2736642420289198,
+          "ndcg_at_100": 0.3212617217892504,
+          "recall_at_100": 0.3736666666666666,
+          "search_p95_ms": 816.054961
+        }
+      ],
+      "attempt_id": "a2-goal004-20260816-005",
+      "budget": {
+        "forward_hard_stop_usd": "60",
+        "whole_workload_total_usd": "54.52666666666665948"
+      },
+      "claim_boundary": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
+      "evidence_class": "measured_development_aggregate",
+      "projection_id": "a2-goal004-20260816-005-closeout-projection-v1",
+      "projection_sha256": "80ce52d3edcac62298b3b3ed96d685fe98d9bc8cd1e1f870147a2c742f40027a",
+      "schema_version": "myis.armindex-a2-goal004-closeout-projection.v1",
+      "scientific_authority": true,
+      "source_artifacts": {
+        "execution_closeout": {
+          "file_sha256": "f6fb69a89cfcb0cb44c3a8bb0e4c0b44ee38462a2bdc3a0e6c8f0520c94b9f00",
+          "record_sha256": "e4bc663d7ee09282c334f25945ede247a50b81742a690c214e0f2aa9ffb81d1d",
+          "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-execution-closeout.receipt.v2.json"
+        },
+        "result_integrity_audit": {
+          "file_sha256": "d6671c8fff7bbe563d476cb3cfb885e83b3896c1ccf2e929f7bffbd6b0116762",
+          "record_sha256": "7d31b80d4dab6897f3110ee629ddf8f9d12fd5f0522b0d8ccd175ba892986642",
+          "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-result-integrity-audit.v2.json"
+        },
+        "safe_return": {
+          "file_sha256": "f4288344fd5c041ac5a768d651836350fb01099ac86cc577d656c0cd0fe58282",
+          "record_sha256": "659982aea768c6d4c057a75c6a50b04026d7c48875d604e06b1563a1b2b09484",
+          "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/safe-return-001/a2-safe-return.receipt.v1.json"
+        }
+      },
+      "source_projection_file_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_projection_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "status": "PASS_A2_GOAL004_CLOSEOUT_PROJECTED",
       "validated": true
     },
     "adapter_fixture_validation": {
@@ -4349,6 +4468,20 @@
     },
     "arms": [
       {
+        "a2_outcome": {
+          "a1_comparison": "DIAGNOSTIC_TIE_NO_WINNER",
+          "a1_recall_at_100": null,
+          "a3_eligible": false,
+          "arm_id": "ARM-01",
+          "candidate_id": "a2-arm-01-matched-b1-diversity",
+          "candidate_result_receipt_sha256": "09780863bc40ea0e8c2022d8b5ca784ae98e6e8c5c0070d75f9a7efc7fbec91c",
+          "charged_usd": 0.0,
+          "ndcg_at_10": 0.1950241408753094,
+          "ndcg_at_100": 0.210783623690076,
+          "recall_at_100": 0.2346666666666668,
+          "search_p95_ms": 1387.940057
+        },
+        "a2_status": "a2_diagnostic_no_winner",
         "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-01",
         "commercial_status": "commercial_capable",
@@ -4358,6 +4491,20 @@
         "role": "lexical_anchor_cpu_fallback"
       },
       {
+        "a2_outcome": {
+          "a1_comparison": "DIAGNOSTIC_TIE_NO_WINNER",
+          "a1_recall_at_100": null,
+          "a3_eligible": false,
+          "arm_id": "ARM-02",
+          "candidate_id": "a2-arm-02-matched-b2-orthogonal",
+          "candidate_result_receipt_sha256": "0cac2979f8f7ed4428704493734ffdddfa1d3bb1b84b8b7340b098ff465584e3",
+          "charged_usd": 0.2172489252919918,
+          "ndcg_at_10": 0.2200574939200255,
+          "ndcg_at_100": 0.2499193094784085,
+          "recall_at_100": 0.29,
+          "search_p95_ms": 1139.044918
+        },
+        "a2_status": "a2_diagnostic_no_winner",
         "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-02",
         "commercial_status": "commercial_capable",
@@ -4367,6 +4514,20 @@
         "role": "multilingual_dense_anchor"
       },
       {
+        "a2_outcome": {
+          "a1_comparison": "NUMERICAL_TIE_TO_A1",
+          "a1_recall_at_100": 0.4229999999999998,
+          "a3_eligible": true,
+          "arm_id": "ARM-03",
+          "candidate_id": "a2-arm-03-matched-b2-orthogonal",
+          "candidate_result_receipt_sha256": "d1f8b55f6443d29539ccf8f051f7fd7169a9d47077306ac4b92da647db03f2ee",
+          "charged_usd": 0.3080191566437946,
+          "ndcg_at_10": 0.2994437534650084,
+          "ndcg_at_100": 0.3576360656964662,
+          "recall_at_100": 0.4229999999999999,
+          "search_p95_ms": 1686.804176
+        },
+        "a2_status": "a2_primary_transfer_eligible",
         "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-03",
         "commercial_status": "research_non_commercial",
@@ -4376,6 +4537,20 @@
         "role": "research_champion_candidate"
       },
       {
+        "a2_outcome": {
+          "a1_comparison": "STRICT_IMPROVEMENT",
+          "a1_recall_at_100": 0.3526666666666667,
+          "a3_eligible": true,
+          "arm_id": "ARM-04",
+          "candidate_id": "a2-arm-04-matched-b1-orthogonal",
+          "candidate_result_receipt_sha256": "a1446c06abbfe3d05fab3052f79af23b513146fd4c9d349b821dfc0c18b09416",
+          "charged_usd": 0.159218205702039,
+          "ndcg_at_10": 0.2532294396153771,
+          "ndcg_at_100": 0.3018675218204638,
+          "recall_at_100": 0.3586666666666666,
+          "search_p95_ms": 1115.051996
+        },
+        "a2_status": "a2_primary_transfer_eligible",
         "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-04",
         "commercial_status": "commercial_capable",
@@ -4385,6 +4560,20 @@
         "role": "long_context_dense"
       },
       {
+        "a2_outcome": {
+          "a1_comparison": "NO_STRICT_IMPROVEMENT",
+          "a1_recall_at_100": 0.37999999999999995,
+          "a3_eligible": true,
+          "arm_id": "ARM-05",
+          "candidate_id": "a2-arm-05-matched-b1-matched-ablation",
+          "candidate_result_receipt_sha256": "a2f1b0702e85d8df44e67df0085b407006d406f4620d3a71ef8cf337c419076a",
+          "charged_usd": 0.2109004290972753,
+          "ndcg_at_10": 0.2736642420289198,
+          "ndcg_at_100": 0.3212617217892504,
+          "recall_at_100": 0.3736666666666666,
+          "search_p95_ms": 816.054961
+        },
+        "a2_status": "a2_primary_transfer_eligible",
         "adapter_status": "declared_pending_fixture_lock",
         "arm_id": "ARM-05",
         "commercial_status": "commercial_capable",
@@ -4591,12 +4780,16 @@
       "validated": true
     },
     "counters": {
+      "a2_candidate_count": 52,
+      "a2_dormant_reserve_candidate_count": 8,
+      "a2_failed_candidate_count": 0,
+      "a2_measured_candidate_count": 44,
       "candidate_count": 0,
       "final_accesses": 0,
       "measured_runs": 1,
       "selection_accesses": 0
     },
-    "current_phase": "A2_PER_ARM_AUTOINDEX",
+    "current_phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
     "gates": [
       {
         "gate_id": "D2_OPEN_FINAL",
@@ -4659,7 +4852,7 @@
       "validated": true
     },
     "local_adoption_input_status": "A1_COMPLETE_25_OF_25",
-    "next_command": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
+    "next_command": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
     "phase_closeout": {
       "candidate_count": 0,
       "claim_boundary": "a0_engineering_closeout_only_no_measured_retrieval",
@@ -4760,10 +4953,10 @@
       {
         "phase_id": "A2_PER_ARM_AUTOINDEX",
         "purpose": "Search and freeze one representation program per promoted arm.",
-        "status": "blocked",
+        "status": "complete",
         "tasks": [
           {
-            "status": "blocked",
+            "status": "complete",
             "task_id": "A2.1",
             "title": "Per-arm AutoIndex"
           },
@@ -4777,7 +4970,7 @@
       {
         "phase_id": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
         "purpose": "Analyze transfer, complementarity, and production-constrained harnesses.",
-        "status": "locked_until_A2",
+        "status": "pending_hash_bound_train_250_input",
         "tasks": [
           {
             "status": "planned",
@@ -4844,7 +5037,7 @@
     ],
     "representation_programs": [],
     "schema_version": "myis.armindex-read-model.v1",
-    "status": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
+    "status": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
     "transfer": {
       "matrix_entries": 0,
       "status": "not_started"
@@ -4876,7 +5069,7 @@
       "current_state": "A0_MIGRATION_FOUNDATION",
       "primary_metric": "recall_at_100/out",
       "standing_authorization": "D1_START_CAMPAIGN",
-      "status": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
+      "status": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
       "title": "ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization"
     }
   ],
@@ -5035,7 +5228,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-15T10:55:31Z",
+  "generated_at": "2026-08-17T14:35:47Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -5930,12 +6123,12 @@
   "project": {
     "active_campaign_id": "armindex-multiretriever-v2",
     "active_direction": "ArmIndex",
-    "active_phase": "A2_PER_ARM_AUTOINDEX",
+    "active_phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
     "campaign_id": "scope-autoindex-v1",
-    "current_phase": "A2_PER_ARM_AUTOINDEX",
-    "current_status": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
-    "current_substage": "FROZEN_FIVE_ARM_EXECUTION",
-    "current_task": "A2.1",
+    "current_phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "current_status": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
+    "current_substage": "PENDING_HASH_BOUND_TRAIN_250_INPUT",
+    "current_task": "A3.1",
     "display_name": "myIS Research",
     "program_id": "myis-research",
     "state": "P1_CPU_MEASURED_COMPLETE"
@@ -5945,7 +6138,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
+  "projection_revision": "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -5989,8 +6182,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
-  "read_model_sha256": "a6313c65aa7617a4dd6e29d048ca128d2ea4c20a8d493945177737d622f5bfb8",
+  "read_model_revision": "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0",
+  "read_model_sha256": "fecaf2addcac00e95d9c7be0f268b834ef2171b1d72bc7b9afbdb1fcd1342d52",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -6123,7 +6316,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+  "source_commit": "713b9be785705181960d06920b804b7757fb9d31",
   "tasks": [
     {
       "evidence_ids": [],

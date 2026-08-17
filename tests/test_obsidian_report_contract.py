@@ -75,9 +75,9 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
     assert "## Execution progress / observability" in result_report
     assert "## Execution progress / observability" in phase_report
     home_report = contents[ROOT / VAULT_RELATIVE_PATH / "HOME.md"]
-    assert "Task/Sub-stage: `A2.1 / FROZEN_FIVE_ARM_EXECUTION`" in home_report
+    assert "Task/Sub-stage: `A3.1 / PENDING_HASH_BOUND_TRAIN_250_INPUT`" in home_report
     assert (
-        "Status: `a2_ready_for_measured_execution_authorized`"
+        "Status: `a2_goal004_measured_closeout_complete_a3_train_250_input_pending`"
         in home_report
     )
     assert "P1_CPU_MEASURED_COMPLETE" in home_report
@@ -246,13 +246,13 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         for record in records
         if record["report_id"] == "phase-a2_per_arm_autoindex"
     )
-    assert a2_task["result"]["decision"] == "READY_FOR_MEASURED_EXECUTION"
-    assert "hash-bound LO authority is current" in a2_task["result"]["result"]
-    assert "fresh authenticated provider admission is required" in a2_task["result"]["result"]
+    assert a2_task["result"]["decision"] == "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250"
+    assert "PASS_A2_EXECUTION_CLOSEOUT" in a2_task["result"]["result"]
+    assert "pending hash-bound Train-250 route" in a2_task["result"]["result"]
     assert "pending the production adapter" not in a2_task["result"]["result"]
     assert "deployment-package validation. " not in a2_task["result"]["result"]
     assert a2_task["scientific_authority"] is True
-    assert a2_phase["result"]["decision"] == "READY_FOR_MEASURED_EXECUTION"
+    assert a2_phase["result"]["decision"] == "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250"
     assert a2_phase["input_bindings"]["campaign"]["uri"] == (
         "control/campaigns/armindex-multiretriever-v2.yaml"
     )
@@ -324,6 +324,14 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
         "a1.2-scientific-execution-adoption-request.receipt.v11.json"
     )
     mlflow_index = json.loads((ROOT / "mlflow/generated/archive-index.v2.json").read_text(encoding="utf-8"))
+    assert mlflow_index["armindex_a2_goal004_closeout"]["status"] == (
+        "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"
+    )
+    assert mlflow_index["armindex_a2_goal004_closeout"]["a3_route"]["eligible_arm_ids"] == [
+        "ARM-03",
+        "ARM-05",
+        "ARM-04",
+    ]
     assert mlflow_index["armindex_a1_2_contract_scaffold"]["status"] == (
         "a1_2_contract_scaffold_complete_launch_locked"
     )

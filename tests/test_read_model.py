@@ -71,6 +71,11 @@ def test_a1_terminal_pass_unlocks_a2_planning(monkeypatch: pytest.MonkeyPatch) -
         "_a2_candidate_freeze_projection",
         lambda _root: {"status": "not_started", "validated": False},
     )
+    monkeypatch.setattr(
+        read_model_module,
+        "_a2_goal004_closeout_projection",
+        lambda _root: {"status": "not_available", "validated": False},
+    )
 
     model = build_read_model(ROOT)
     phases = {
@@ -322,58 +327,47 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
 
     model = build_read_model(ROOT)
     assert model["armindex"]["phase_closeout"] == projection
-    assert model["armindex"]["current_phase"] == "A2_PER_ARM_AUTOINDEX"
+    assert model["armindex"]["current_phase"] == (
+        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+    )
     assert model["armindex"]["a2_candidate_freeze"]["status"] == (
         "complete_audit_passed_measured_a2_closed"
     )
     readiness = model["armindex"]["a2_execution_readiness"]
-    assert readiness["status"] == (
-        "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
-    )
+    assert readiness["status"] == "READY_FOR_MEASURED_EXECUTION"
     assert readiness["historical_status"] == "EXTERNAL_EXECUTION_REQUESTED_NOT_LAUNCHED"
-    assert readiness["current_status"] == "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT"
-    assert readiness["current_route"] == "LO_EXECUTE_GOAL_004"
-    assert readiness["scientific_authority"] is False
-    assert readiness["measured_a2_authorized"] is False
-    assert readiness["measured_execution_allowed"] is False
+    assert readiness["current_status"] == "READY_FOR_MEASURED_EXECUTION"
+    assert readiness["current_route"] == "LO"
+    assert readiness["scientific_authority"] is True
+    assert readiness["measured_a2_authorized"] is True
+    assert readiness["measured_execution_allowed"] is True
     assert readiness["candidate_generation_allowed"] is False
     assert readiness["candidate_mutation_allowed"] is False
     assert readiness["rep_dev_measurement_allowed"] is False
     assert readiness["candidate_count"] == 52
     assert readiness["diagnostic_non_advancing_arms"] == ["ARM-01", "ARM-02"]
-    assert readiness["provider_admission_attempted"] is True
-    assert readiness["provider_admission_status"] == (
-        "PASS_PREAUTHORITY_STOP_BEFORE_STAGE"
-    )
+    assert readiness["provider_admission_attempted"] is False
+    assert readiness["provider_admission_status"] == "FRESH_ADMISSION_REQUIRED"
     assert readiness["task_run_ceiling_usd"] == 50
     assert readiness["gpu_decision"] == "KEEP_GPU"
-    assert readiness["next_authorized_action"] == "LO_EXECUTE_GOAL_004"
-    assert readiness["source_goal_uri"] == (
-        "docs/goal/A2_PER_ARM_AUTOINDEX_goal_004.md"
-    )
-    assert readiness["historical_goal_uri"] == (
-        "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md"
-    )
-    assert readiness["source_lo_handoff_uri"] == (
-        "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md"
-    )
-    assert readiness["source_audit_uri"] == (
-        "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md"
-    )
-    assert readiness["research_session_uri"] == (
-        "outputs/audits/research-sessions/"
-        "a2-ap-audit011-v3-full-a2-lo003-20260815.json"
+    assert readiness["next_authorized_action"] == (
+        "LO_EXECUTE_FROZEN_A2_WITH_FRESH_ADMISSION_AND_SAFE_RETURN"
     )
     assert readiness["latest_ledger_entry_id"] == "A2EXEC-EV0006"
+    closeout = model["armindex"]["a2_goal004_closeout"]
+    assert closeout["validated"] is True
+    assert closeout["status"] == "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"
+    assert closeout["accounting"]["measured_candidate_count"] == 44
+    assert closeout["a3_route"]["eligible_arm_ids"] == ["ARM-03", "ARM-05", "ARM-04"]
     a2 = next(
         phase
         for phase in model["armindex"]["phases"]
         if phase["phase_id"] == "A2_PER_ARM_AUTOINDEX"
     )
-    assert a2["status"] == "blocked"
+    assert a2["status"] == "complete"
     assert next(task for task in a2["tasks"] if task["task_id"] == "A2.1")[
         "status"
-    ] == "blocked"
+    ] == "complete"
 
 
 def test_a11_adapter_fixture_projection_closes_cpu_scaffold_and_keeps_gpu_locked() -> None:

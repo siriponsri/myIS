@@ -264,8 +264,10 @@ def _validate_winner_shapes(value: Any) -> None:
 def _validate_harness_batches(
     values: Sequence[Mapping[str, Any]], *, runtime_bindings_sha256: str
 ) -> list[dict[str, Any]]:
-    if len(values) > 3:
-        raise A3ThreePrimaryExecutionError("A3 permits at most three complete HarnessOpt batches")
+    if not 1 <= len(values) <= 3:
+        raise A3ThreePrimaryExecutionError(
+            "A3 Extended requires one to three complete HarnessOpt batches"
+        )
     validated: list[dict[str, Any]] = []
     for expected_iteration, value in enumerate(values, start=1):
         try:

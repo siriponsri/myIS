@@ -1,0 +1,414 @@
+{"kind":"slide","id":"sl/ozniar","slide":1,"title":"ADVISOR UPDATE | 18 AUGUST 2026","textShapes":14}
+{"kind":"textbox","id":"sh/jq1o3mtk","slide":1,"name":"cover-kicker","text":"ADVISOR UPDATE | 18 AUGUST 2026","textPreview":"ADVISOR UPDATE | 18 AUGUST 2026","textChars":31,"textLines":1,"bbox":[72,64,500,22]}
+{"kind":"textbox","id":"sh/krapwrup","slide":1,"name":"cover-title","text":"ArmIndex","textPreview":"ArmIndex","textChars":8,"textLines":1,"bbox":[72,142,570,88]}
+{"kind":"textbox","id":"sh/lsjq5wba","slide":1,"name":"cover-subtitle","text":"Retriever-conditioned representation search for cross-domain patent retrieval.","textPreview":"Retriever-conditioned representation search for cross-domain patent retrieval.","textChars":78,"textLines":1,"bbox":[72,252,590,86]}
+{"kind":"shape","id":"sh/a187qhcn","slide":1,"name":"rule","bbox":[72,366,190,5]}
+{"kind":"textbox","id":"sh/bmhozmt8","slide":1,"name":"cover-claim","text":"A controlled sequence: foundation -> common screen -> per-arm search -> transfer and harness design.","textPreview":"A controlled sequence: foundation -> common screen -> per-arm search -> transfer and harness design.","textChars":100,"textLines":1,"bbox":[72,392,580,58]}
+{"kind":"shape","id":"sh/wnqpsrut","slide":1,"name":"rule","bbox":[72,500,178.67,4]}
+{"kind":"textbox","id":"sh/xoz61cbe","slide":1,"name":"phase-code-0","text":"A0","textPreview":"A0","textChars":2,"textLines":1,"bbox":[72,518,178.67,32]}
+{"kind":"textbox","id":"sh/uhs721c7","slide":1,"name":"phase-state-0","text":"Complete","textPreview":"Complete","textChars":8,"textLines":1,"bbox":[72,554,178.67,38]}
+{"kind":"textbox","id":"sh/vil8b6tc","slide":1,"name":"phase-note-0","text":"Reproducibility foundation","textPreview":"Reproducibility foundation","textChars":26,"textLines":1,"bbox":[72,594,178.67,50]}
+{"kind":"shape","id":"sh/vidwzils","slide":1,"name":"rule","bbox":[268.67,500,178.67,4]}
+{"kind":"textbox","id":"sh/uhkfqdk7","slide":1,"name":"phase-code-1","text":"A1","textPreview":"A1","textChars":2,"textLines":1,"bbox":[268.67,518,178.67,32]}
+{"kind":"textbox","id":"sh/hkve183y","slide":1,"name":"phase-state-1","text":"25 / 25","textPreview":"25 / 25","textChars":7,"textLines":1,"bbox":[268.67,554,178.67,38]}
+{"kind":"textbox","id":"sh/gjmxsn2d","slide":1,"name":"phase-note-1","text":"Measured REP-DEV screen","textPreview":"Measured REP-DEV screen","textChars":23,"textLines":1,"bbox":[268.67,594,178.67,50]}
+{"kind":"shape","id":"sh/3mdw3ilo","slide":1,"name":"rule","bbox":[465.33,500,178.67,4]}
+{"kind":"textbox","id":"sh/il4fudkj","slide":1,"name":"phase-code-2","text":"A2","textPreview":"A2","textChars":2,"textLines":1,"bbox":[465.33,518,178.67,32]}
+{"kind":"textbox","id":"sh/58vy5s3u","slide":1,"name":"phase-state-2","text":"Closed","textPreview":"Closed","textChars":6,"textLines":1,"bbox":[465.33,554,178.67,38]}
+{"kind":"textbox","id":"sh/4nmxwn29","slide":1,"name":"phase-note-2","text":"44 measured; 8 dormant","textPreview":"44 measured; 8 dormant","textChars":22,"textLines":1,"bbox":[465.33,594,178.67,50]}
+{"kind":"textbox","id":"sh/q9ofyxkf","slide":1,"name":"cover-boundary","text":"A2 has receipt-bound aggregate development evidence; A3 awaits a hash-bound Train-250 package.","textPreview":"A2 has receipt-bound aggregate development evidence; A3 awaits a hash-bound Train-250 package.","textChars":94,"textLines":1,"bbox":[704,602,500,46]}
+{"kind":"image","id":"im/o3a1kvyt","slide":1,"name":"","alt":"Retrieval system stack schematic","bbox":[704,94,500,492]}
+{"kind":"notes","id":"nt/ozniar","slide":1,"text":"Open with the research question and evidence boundary. A2 is closed with exact aggregate accounting, but its results remain development evidence rather than Selection or Final confirmation.\n\n[Sources]\n[P1] ArmIndex Research Plan V02\n[P2] Current campaign plan\n[P11] A2 Goal 004\n[P17] A2 closeout projection"}
+{"kind":"slide","id":"sl/xzrxz0","slide":2,"title":"CONTEXT | DAPFAM","textShapes":8}
+{"kind":"textbox","id":"sh/sbit0jq5","slide":2,"name":"section-label","text":"CONTEXT | DAPFAM","textPreview":"CONTEXT | DAPFAM","textChars":16,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/ra9sre9k","slide":2,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/q90by98f","slide":2,"name":"slide-number","text":"02 / 18","textPreview":"02 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/10baxor2","slide":2,"name":"slide-title","text":"A patent family is the retrieval unit","textPreview":"A patent family is the retrieval unit","textChars":37,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/0z2t43qh","slide":2,"name":"slide-subtitle","text":"A family carries heterogeneous technical and legal text across its ordered fields.","textPreview":"A family carries heterogeneous technical and legal text across its ordered fields.","textChars":82,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/ed0b2t8b","slide":2,"name":"bullet-dot-0","bbox":[750,240,8,8]}
+{"kind":"textbox","id":"sh/h47al4ri","slide":2,"name":"bullet-0","text":"45,336 target families; 1,247 query families; 49,869 evaluation rows.","textPreview":"45,336 target families; 1,247 query families; 49,869 evaluation rows.","textChars":69,"textLines":1,"bbox":[772,230,428,92]}
+{"kind":"shape","id":"sh/gjy9szqx","slide":2,"name":"bullet-dot-1","bbox":[750,334,8,8]}
+{"kind":"textbox","id":"sh/2xoj2don","slide":2,"name":"bullet-1","text":"IN shares at least one IPC3; OUT shares none.","textPreview":"IN shares at least one IPC3; OUT shares none.","textChars":45,"textLines":1,"bbox":[772,324,428,92]}
+{"kind":"shape","id":"sh/3yxkbi58","slide":2,"name":"bullet-dot-2","bbox":[750,428,8,8]}
+{"kind":"textbox","id":"sh/oz614n6t","slide":2,"name":"bullet-2","text":"Citation relevance is an examiner proxy, not a legal conclusion.","textPreview":"Citation relevance is an examiner proxy, not a legal conclusion.","textChars":64,"textLines":1,"bbox":[772,418,428,92]}
+{"kind":"textbox","id":"sh/p0f2dsne","slide":2,"name":"safe-data-note","text":"Raw patent text, IDs, qrels, rankings, and per-query outcomes remain Owner-local.","textPreview":"Raw patent text, IDs, qrels, rankings, and per-query outcomes remain Owner-local.","textChars":81,"textLines":1,"bbox":[750,540,430,50]}
+{"kind":"image","id":"im/al4belkz","slide":2,"name":"","alt":"Aggregate-safe DAPFAM family record anatomy","bbox":[72,212,624,365]}
+{"kind":"notes","id":"nt/xzrxz0","slide":2,"text":"Explain why one isolated chunk is inadequate: patent-family retrieval aggregates several fields and publications. The figure deliberately shows the schema, not a raw protected record.\n\n[Sources]\n[P3] DAPFAM source contract\n[R1] DAPFAM dataset paper"}
+{"kind":"slide","id":"sl/a85mbc","slide":3,"title":"METHODOLOGICAL LINEAGE | GEPA","textShapes":10}
+{"kind":"textbox","id":"sh/m1sj2xsj","slide":3,"name":"section-label","text":"METHODOLOGICAL LINEAGE | GEPA","textPreview":"METHODOLOGICAL LINEAGE | GEPA","textChars":29,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/t4j2xcba","slide":3,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/83a147ap","slide":3,"name":"slide-number","text":"03 / 18","textPreview":"03 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/v6lkz2t0","slide":3,"name":"slide-title","text":"GEPA motivates bounded program search","textPreview":"GEPA motivates bounded program search","textChars":37,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/u5sj6xsv","slide":3,"name":"slide-subtitle","text":"The target changes: executable document representations, not free-form answer prompts.","textPreview":"The target changes: executable document representations, not free-form answer prompts.","textChars":86,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/g7u187al","slide":3,"name":"rule","bbox":[72,220,520,5]}
+{"kind":"textbox","id":"sh/bah0nitw","slide":3,"name":"GEPA lineage-label","text":"GEPA lineage","textPreview":"GEPA lineage","textChars":12,"textLines":1,"bbox":[72,238,520,28]}
+{"kind":"textbox","id":"sh/a98judsb","slide":3,"name":"GEPA lineage-detail","text":"Reflective, evidence-driven optimization within a constrained text space.","textPreview":"Reflective, evidence-driven optimization within a constrained text space.","textChars":73,"textLines":1,"bbox":[72,274,520,48]}
+{"kind":"shape","id":"sh/gbel0f2x","slide":3,"name":"rule","bbox":[72,358,520,5]}
+{"kind":"textbox","id":"sh/1cn29kji","slide":3,"name":"ArmIndex adaptation-label","text":"ArmIndex adaptation","textPreview":"ArmIndex adaptation","textChars":19,"textLines":1,"bbox":[72,376,520,28]}
+{"kind":"textbox","id":"sh/epwjy5kr","slide":3,"name":"ArmIndex adaptation-detail","text":"A schema-valid representation program is frozen before deterministic retrieval.","textPreview":"A schema-valid representation program is frozen before deterministic retrieval.","textChars":79,"textLines":1,"bbox":[72,412,520,48]}
+{"kind":"shape","id":"sh/fq5k7a1c","slide":3,"name":"rule","bbox":[72,496,520,5]}
+{"kind":"textbox","id":"sh/ofel4fi9","slide":3,"name":"Scientific boundary-label","text":"Scientific boundary","textPreview":"Scientific boundary","textChars":19,"textLines":1,"bbox":[72,514,520,28]}
+{"kind":"textbox","id":"sh/pg72dkje","slide":3,"name":"Scientific boundary-detail","text":"The proposer and reviewer do not receive protected evaluation signal or results.","textPreview":"The proposer and reviewer do not receive protected evaluation signal or results.","textChars":80,"textLines":1,"bbox":[72,550,520,48]}
+{"kind":"image","id":"im/4jmpsjeh","slide":3,"name":"","alt":"ArmIndex research program schematic","bbox":[660,222,544,306]}
+{"kind":"notes","id":"nt/a85mbc","slide":3,"text":"GEPA is methodological lineage, not a reproduced result. A2 uses Official Codex only before measurement to propose/review bounded, falsifiable programs; production retrieval stays deterministic and hash-bound.\n\n[Sources]\n[R2] GEPA paper\n[P14] A2 Official Codex bridge\n[P1] ArmIndex Research Plan V02"}
+{"kind":"slide","id":"sl/j02o39","slide":4,"title":"RESEARCH PROGRAM","textShapes":16}
+{"kind":"textbox","id":"sh/lon61szi","slide":4,"name":"section-label","text":"RESEARCH PROGRAM","textPreview":"RESEARCH PROGRAM","textChars":16,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/ylcnqx0r","slide":4,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/jm5ozihc","slide":4,"name":"slide-number","text":"04 / 18","textPreview":"04 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/wju5onil","slide":4,"name":"slide-title","text":"ArmIndex separates four scientific questions","textPreview":"ArmIndex separates four scientific questions","textChars":44,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/xk36xsz6","slide":4,"name":"slide-subtitle","text":"The phases intentionally turn one broad idea into testable claims.","textPreview":"The phases intentionally turn one broad idea into testable claims.","textChars":66,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"textbox","id":"sh/bilovih0","slide":4,"name":"program-num-0","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[72,206,42,38]}
+{"kind":"textbox","id":"sh/ofu5k3ip","slide":4,"name":"program-label-0","text":"Search","textPreview":"Search","textChars":6,"textLines":1,"bbox":[136,206,150,32]}
+{"kind":"textbox","id":"sh/9g36t8za","slide":4,"name":"program-detail-0","text":"Which program fits each frozen arm?","textPreview":"Which program fits each frozen arm?","textChars":35,"textLines":1,"bbox":[136,240,435,50]}
+{"kind":"textbox","id":"sh/50fqtw3u","slide":4,"name":"program-num-1","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[72,300,42,38]}
+{"kind":"textbox","id":"sh/4zm90b29","slide":4,"name":"program-label-1","text":"Transfer","textPreview":"Transfer","textChars":8,"textLines":1,"bbox":[136,300,150,32]}
+{"kind":"textbox","id":"sh/3yd8r6lo","slide":4,"name":"program-detail-1","text":"Can one arm's winner help another?","textPreview":"Can one arm's winner help another?","textChars":34,"textLines":1,"bbox":[136,334,435,50]}
+{"kind":"textbox","id":"sh/ix4ry1k3","slide":4,"name":"program-num-2","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[72,394,42,38]}
+{"kind":"textbox","id":"sh/hwvqpw3y","slide":4,"name":"program-label-2","text":"Coverage","textPreview":"Coverage","textChars":8,"textLines":1,"bbox":[136,394,150,32]}
+{"kind":"textbox","id":"sh/gvm9wr2d","slide":4,"name":"program-detail-2","text":"Do equal-depth unions recover more families?","textPreview":"Do equal-depth unions recover more families?","textChars":44,"textLines":1,"bbox":[136,428,435,50]}
+{"kind":"textbox","id":"sh/vud8nmls","slide":4,"name":"program-num-3","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[72,488,42,38]}
+{"kind":"textbox","id":"sh/ut4ruhk7","slide":4,"name":"program-label-3","text":"Harness","textPreview":"Harness","textChars":7,"textLines":1,"bbox":[136,488,150,32]}
+{"kind":"textbox","id":"sh/9sbqlc3m","slide":4,"name":"program-detail-3","text":"Does quality justify cost and latency?","textPreview":"Does quality justify cost and latency?","textChars":38,"textLines":1,"bbox":[136,522,435,50]}
+{"kind":"image","id":"im/vm1wn25g","slide":4,"name":"","alt":"A3 transfer complementarity and HarnessOpt schematic","bbox":[650,220,554,312]}
+{"kind":"notes","id":"nt/j02o39","slide":4,"text":"Use this as the talk's roadmap. Each phase supports a distinct inference and controls what later phases may adapt on.\n\n[Sources]\n[P1] ArmIndex Research Plan V02\n[P13] A3 Extended Goal 003"}
+{"kind":"slide","id":"sl/gymsm3","slide":5,"title":"RETRIEVAL FOUNDATIONS","textShapes":12}
+{"kind":"textbox","id":"sh/mh03id4v","slide":5,"name":"section-label","text":"RETRIEVAL FOUNDATIONS","textPreview":"RETRIEVAL FOUNDATIONS","textChars":21,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/9kbmds3m","slide":5,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/ojilknm1","slide":5,"name":"slide-number","text":"05 / 18","textPreview":"05 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/ze9k7ilk","slide":5,"name":"slide-title","text":"Retrieval quality is a full-system property","textPreview":"Retrieval quality is a full-system property","textChars":43,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/ed03ed4z","slide":5,"name":"slide-subtitle","text":"Representation affects what is indexed, aggregated, ranked, and ultimately evaluated.","textPreview":"Representation affects what is indexed, aggregated, ranked, and ultimately evaluated.","textChars":85,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/0filgnm5","slide":5,"name":"rule","bbox":[770,218,410,4]}
+{"kind":"textbox","id":"sh/rqpk3yl8","slide":5,"name":"system-label-0","text":"Chunking / unitization","textPreview":"Chunking / unitization","textChars":22,"textLines":1,"bbox":[770,232,410,28]}
+{"kind":"textbox","id":"sh/qpg3at4n","slide":5,"name":"system-detail-0","text":"Family, claim, fixed passage, or field view.","textPreview":"Family, claim, fixed passage, or field view.","textChars":44,"textLines":1,"bbox":[770,266,410,44]}
+{"kind":"shape","id":"sh/ovi54zyt","slide":5,"name":"rule","bbox":[770,314,410,4]}
+{"kind":"textbox","id":"sh/pwrmdkze","slide":5,"name":"system-label-1","text":"Embedding / indexing","textPreview":"Embedding / indexing","textChars":20,"textLines":1,"bbox":[770,328,410,28]}
+{"kind":"textbox","id":"sh/2tgn2pgn","slide":5,"name":"system-detail-1","text":"Frozen templates, pooling, and similarity.","textPreview":"Frozen templates, pooling, and similarity.","textChars":42,"textLines":1,"bbox":[770,362,410,44]}
+{"kind":"shape","id":"sh/3up4buh8","slide":5,"name":"rule","bbox":[770,410,410,4]}
+{"kind":"textbox","id":"sh/g7yl0fyh","slide":5,"name":"system-label-2","text":"Aggregation","textPreview":"Aggregation","textChars":11,"textLines":1,"bbox":[770,424,410,28]}
+{"kind":"textbox","id":"sh/187m9kz2","slide":5,"name":"system-detail-2","text":"MaxP or multiview RRF to one family ranking.","textPreview":"MaxP or multiview RRF to one family ranking.","textChars":44,"textLines":1,"bbox":[770,458,410,44]}
+{"kind":"shape","id":"sh/e5g3y5gr","slide":5,"name":"rule","bbox":[770,506,410,4]}
+{"kind":"textbox","id":"sh/f6p47ahw","slide":5,"name":"system-label-3","text":"Evaluation","textPreview":"Evaluation","textChars":10,"textLines":1,"bbox":[770,520,410,28]}
+{"kind":"textbox","id":"sh/0325cjy1","slide":5,"name":"system-detail-3","text":"OUT Recall@100; retain quality, latency, and cost.","textPreview":"OUT Recall@100; retain quality, latency, and cost.","textChars":50,"textLines":1,"bbox":[770,554,410,44]}
+{"kind":"image","id":"im/gbeh0n25","slide":5,"name":"","alt":"Patent retrieval pipeline schematic","bbox":[72,222,630,354]}
+{"kind":"notes","id":"nt/gymsm3","slide":5,"text":"This slide establishes why chunking is part of the scientific treatment rather than preprocessing. Keep the causal claim modest: ArmIndex measures associations under frozen execution, not a universal mechanism.\n\n[Sources]\n[P4] Deterministic common-program compiler\n[R1] DAPFAM dataset paper"}
+{"kind":"slide","id":"sl/f1h19r","slide":6,"title":"A0 | SCIENTIFIC CONTROL","textShapes":10}
+{"kind":"textbox","id":"sh/twj6l43e","slide":6,"name":"section-label","text":"A0 | SCIENTIFIC CONTROL","textPreview":"A0 | SCIENTIFIC CONTROL","textChars":23,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/6t87a94n","slide":6,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/7u1ojel8","slide":6,"name":"slide-number","text":"06 / 18","textPreview":"06 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/gzapgjmp","slide":6,"name":"slide-title","text":"A0 separates evidence roles","textPreview":"A0 separates evidence roles","textChars":27,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/h0jqpo3a","slide":6,"name":"slide-subtitle","text":"Development can adapt; later evidence remains reserved for later decisions.","textPreview":"Development can adapt; later evidence remains reserved for later decisions.","textChars":75,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/vy18nelk","slide":6,"name":"callout-REP-DEV","bbox":[758,230,190,110]}
+{"kind":"shape","id":"sh/43upk3m1","slide":6,"name":"rule","bbox":[758,230,7,110]}
+{"kind":"textbox","id":"sh/p43qto3m","slide":6,"name":"REP-DEV-value","text":"150","textPreview":"150","textChars":3,"textLines":1,"bbox":[784,248,150,38]}
+{"kind":"textbox","id":"sh/10netkfm","slide":6,"name":"REP-DEV-label","text":"REP-DEV","textPreview":"REP-DEV","textChars":7,"textLines":1,"bbox":[784,296,150,24]}
+{"kind":"shape","id":"sh/0zedkfy1","slide":6,"name":"callout-HARNESS-DEV","bbox":[982,230,222,110]}
+{"kind":"shape","id":"sh/zy5craxg","slide":6,"name":"rule","bbox":[982,230,7,110]}
+{"kind":"textbox","id":"sh/exwvi5gv","slide":6,"name":"HARNESS-DEV-value","text":"100","textPreview":"100","textChars":3,"textLines":1,"bbox":[1008,248,182,38]}
+{"kind":"textbox","id":"sh/947ex4fi","slide":6,"name":"HARNESS-DEV-label","text":"HARNESS-DEV","textPreview":"HARNESS-DEV","textChars":11,"textLines":1,"bbox":[1008,296,182,24]}
+{"kind":"textbox","id":"sh/o3ydozyx","slide":6,"name":"a0-policy","text":"Selection-125 is an atomic finalist exposure. Final-872 is the sole confirmation set and remains closed.","textPreview":"Selection-125 is an atomic finalist exposure. Final-872 is the sole confirmation set and remains closed.","textChars":104,"textLines":1,"bbox":[758,392,430,78]}
+{"kind":"textbox","id":"sh/n2pwvuxs","slide":6,"name":"a0-protect","text":"The protocol releases only aggregate-safe counts and hashes; protected membership and qrels never leave Owner-local storage.","textPreview":"The protocol releases only aggregate-safe counts and hashes; protected membership and qrels never leave Owner-local storage.","textChars":124,"textLines":1,"bbox":[758,502,430,64]}
+{"kind":"image","id":"im/3etwv25g","slide":6,"name":"","alt":"A0 protected split and leakage control schematic","bbox":[72,210,630,360]}
+{"kind":"notes","id":"nt/f1h19r","slide":6,"text":"The Train-250 split uses seed 42 and protected deterministic membership. Explain the role separation before showing any A1 quality result.\n\n[Sources]\n[P5] REP/HARNESS split decision\n[P6] A1 publication-impact preregistration"}
+{"kind":"slide","id":"sl/yvmurq","slide":7,"title":"A0 | FOUNDATION","textShapes":8}
+{"kind":"textbox","id":"sh/2tcfydob","slide":7,"name":"section-label","text":"A0 | FOUNDATION","textPreview":"A0 | FOUNDATION","textChars":15,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/pw3y9sn2","slide":7,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/4vux0n6h","slide":7,"name":"slide-number","text":"07 / 18","textPreview":"07 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/bylgb25s","slide":7,"name":"slide-title","text":"A0 delivered infrastructure, not a score","textPreview":"A0 delivered infrastructure, not a score","textChars":40,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/qxcf2xo7","slide":7,"name":"slide-subtitle","text":"The first phase makes later evidence reproducible, auditable, and protected.","textPreview":"The first phase makes later evidence reproducible, auditable, and protected.","textChars":76,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/czex4n6d","slide":7,"name":"bullet-dot-0","bbox":[72,234,8,8]}
+{"kind":"textbox","id":"sh/721wzy5o","slide":7,"name":"bullet-0","text":"Canonical controls, schemas, five-arm registry, source locks, and safe evidence paths.","textPreview":"Canonical controls, schemas, five-arm registry, source locks, and safe evidence paths.","textChars":86,"textLines":1,"bbox":[94,224,588,103]}
+{"kind":"shape","id":"sh/61sfqto3","slide":7,"name":"bullet-dot-1","bbox":[72,339,8,8]}
+{"kind":"textbox","id":"sh/43yd4za1","slide":7,"name":"bullet-1","text":"CPU adapter and contract fixtures validated before measured retrieval.","textPreview":"CPU adapter and contract fixtures validated before measured retrieval.","textChars":70,"textLines":1,"bbox":[94,329,588,103]}
+{"kind":"shape","id":"sh/p47ux4bm","slide":7,"name":"bullet-dot-2","bbox":[72,444,8,8]}
+{"kind":"textbox","id":"sh/21gv29sb","slide":7,"name":"bullet-2","text":"No measured retrieval run, GPU scientific run, protected payload, Selection access, or Final access in A0.","textPreview":"No measured retrieval run, GPU scientific run, protected payload, Selection access, or Final access in A0.","textChars":106,"textLines":1,"bbox":[94,434,588,103]}
+{"kind":"textbox","id":"sh/32pcvetw","slide":7,"name":"a0-contribution","text":"A0 establishes a trustworthy substrate; it makes no retrieval-quality claim.","textPreview":"A0 establishes a trustworthy substrate; it makes no retrieval-quality claim.","textChars":76,"textLines":1,"bbox":[72,562,610,35]}
+{"kind":"image","id":"im/47yxsjmt","slide":7,"name":"","alt":"DAPFAM protocol and safe evidence schematic","bbox":[684,226,520,293]}
+{"kind":"notes","id":"nt/yvmurq","slide":7,"text":"Make the absence of an A0 quality score explicit. The foundation is evidence infrastructure, not a performance claim.\n\n[Sources]\n[P7] A0-A2 advisor progress report"}
+{"kind":"slide","id":"sl/qzo9m8","slide":8,"title":"A1 | COMMON SCREENING","textShapes":11}
+{"kind":"textbox","id":"sh/4j21ojul","slide":8,"name":"section-label","text":"A1 | COMMON SCREENING","textPreview":"A1 | COMMON SCREENING","textChars":21,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/3it0fed0","slide":8,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/ih0jm9cf","slide":8,"name":"slide-number","text":"08 / 18","textPreview":"08 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/hgridovu","slide":8,"name":"slide-title","text":"A1 is a controlled 5 x 5 screen","textPreview":"A1 is a controlled 5 x 5 screen","textChars":31,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/gfi1kju9","slide":8,"name":"slide-subtitle","text":"Five common representations are measured against five frozen retrieval arms.","textPreview":"Five common representations are measured against five frozen retrieval arms.","textChars":76,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"textbox","id":"sh/ud0ji9cj","slide":8,"name":"a1-method-title","text":"The comparison changes one factor","textPreview":"The comparison changes one factor","textChars":33,"textLines":1,"bbox":[738,226,410,35]}
+{"kind":"shape","id":"sh/1cv2p8ve","slide":8,"name":"bullet-dot-0","bbox":[738,292,8,8]}
+{"kind":"textbox","id":"sh/0bm1w3ut","slide":8,"name":"bullet-0","text":"P00 full TAC document","textPreview":"P00 full TAC document","textChars":21,"textLines":1,"bbox":[760,282,398,50]}
+{"kind":"shape","id":"sh/6tszu5k3","slide":8,"name":"bullet-dot-1","bbox":[738,344,8,8]}
+{"kind":"textbox","id":"sh/7u1gna1o","slide":8,"name":"bullet-1","text":"P01 title + abstract","textPreview":"P01 title + abstract","textChars":20,"textLines":1,"bbox":[760,334,398,50]}
+{"kind":"shape","id":"sh/svuhwf29","slide":8,"name":"bullet-dot-2","bbox":[738,396,8,8]}
+{"kind":"textbox","id":"sh/tw3yp0ju","slide":8,"name":"bullet-2","text":"P02 first independent claim","textPreview":"P02 first independent claim","textChars":27,"textLines":1,"bbox":[760,386,398,50]}
+{"kind":"shape","id":"sh/ypszqlk7","slide":8,"name":"bullet-dot-3","bbox":[738,448,8,8]}
+{"kind":"textbox","id":"sh/jq1gjq1c","slide":8,"name":"bullet-3","text":"P03 fixed passages","textPreview":"P03 fixed passages","textChars":18,"textLines":1,"bbox":[760,438,398,50]}
+{"kind":"shape","id":"sh/krahsv2x","slide":8,"name":"bullet-dot-4","bbox":[738,500,8,8]}
+{"kind":"textbox","id":"sh/lsjyl0ji","slide":8,"name":"bullet-4","text":"P04 field-specific multiview","textPreview":"P04 field-specific multiview","textChars":28,"textLines":1,"bbox":[760,490,398,50]}
+{"kind":"textbox","id":"sh/2lcz2pkb","slide":8,"name":"a1-complete","text":"25 / 25 valid logical cells on REP-DEV | USD 11.161632","textPreview":"25 / 25 valid logical cells on REP-DEV | USD 11.161632","textChars":54,"textLines":1,"bbox":[738,564,430,32]}
+{"kind":"image","id":"im/e9c3mlcz","slide":8,"name":"","alt":"Five A1 representation programs","bbox":[72,220,595,354]}
+{"kind":"notes","id":"nt/qzo9m8","slide":8,"text":"A1 is a common screen, not a final model-selection result. The only changing treatment is the deterministic representation program; evaluator and role remain fixed.\n\n[Sources]\n[P4] Deterministic common-program compiler\n[P8] A1 validated aggregate evidence"}
+{"kind":"slide","id":"sl/p4whs7","slide":9,"title":"A1 | FROZEN RETRIEVERS","textShapes":35}
+{"kind":"textbox","id":"sh/dobe1krm","slide":9,"name":"section-label","text":"A1 | FROZEN RETRIEVERS","textPreview":"A1 | FROZEN RETRIEVERS","textChars":22,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/q1kvqp8b","slide":9,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/bmtwza9w","slide":9,"name":"slide-number","text":"09 / 18","textPreview":"09 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/0rmxwzqd","slide":9,"name":"slide-title","text":"Five diverse arms expose the interaction","textPreview":"Five diverse arms expose the interaction","textChars":40,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/lsve547y","slide":9,"name":"slide-subtitle","text":"The arms differ in lexical/dense behavior, domain training, context envelope, and template semantics.","textPreview":"The arms differ in lexical/dense behavior, domain training, context envelope, and template semantics.","textChars":101,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/ypkvup87","slide":9,"name":"table-cell-210-0","bbox":[72,210,196,46]}
+{"kind":"textbox","id":"sh/zqdw3u9s","slide":9,"name":"table-text-210-0","text":"Arm","textPreview":"Arm","textChars":3,"textLines":1,"bbox":[84,220,172,30]}
+{"kind":"shape","id":"sh/8vmx0zq9","slide":9,"name":"table-cell-210-1","bbox":[268,210,342,46]}
+{"kind":"textbox","id":"sh/9wve947u","slide":9,"name":"table-text-210-1","text":"Frozen source","textPreview":"Frozen source","textChars":13,"textLines":1,"bbox":[280,220,318,30]}
+{"kind":"shape","id":"sh/pcn2dgjm","slide":9,"name":"table-cell-210-2","bbox":[610,210,226,46]}
+{"kind":"textbox","id":"sh/obe14b21","slide":9,"name":"table-text-210-2","text":"Retrieval role","textPreview":"Retrieval role","textChars":14,"textLines":1,"bbox":[622,220,202,30]}
+{"kind":"shape","id":"sh/na50b61g","slide":9,"name":"table-cell-210-3","bbox":[836,210,224,46]}
+{"kind":"textbox","id":"sh/29wj21kv","slide":9,"name":"table-text-210-3","text":"Envelope","textPreview":"Envelope","textChars":8,"textLines":1,"bbox":[848,220,200,30]}
+{"kind":"shape","id":"sh/x072hgji","slide":9,"name":"table-cell-210-4","bbox":[1060,210,148,46]}
+{"kind":"textbox","id":"sh/cfe18b2x","slide":9,"name":"table-text-210-4","text":"License","textPreview":"License","textChars":7,"textLines":1,"bbox":[1072,220,124,30]}
+{"kind":"shape","id":"sh/be5kf61c","slide":9,"name":"table-cell-256-0","bbox":[72,256,196,56]}
+{"kind":"textbox","id":"sh/adwj6lkr","slide":9,"name":"table-text-256-0","text":"ARM-01","textPreview":"ARM-01","textChars":6,"textLines":1,"bbox":[84,266,172,40]}
+{"kind":"shape","id":"sh/d43i5wje","slide":9,"name":"table-cell-256-1","bbox":[268,256,342,56]}
+{"kind":"textbox","id":"sh/sju1wr2t","slide":9,"name":"table-text-256-1","text":"bm25s==0.3.10","textPreview":"bm25s==0.3.10","textChars":13,"textLines":1,"bbox":[280,266,318,40]}
+{"kind":"shape","id":"sh/4zyt8bel","slide":9,"name":"table-cell-256-2","bbox":[610,256,226,56]}
+{"kind":"textbox","id":"sh/50ra1gv6","slide":9,"name":"table-text-256-2","text":"Lexical CPU anchor","textPreview":"Lexical CPU anchor","textChars":18,"textLines":1,"bbox":[622,266,202,40]}
+{"kind":"shape","id":"sh/ixgr6lwv","slide":9,"name":"table-cell-256-3","bbox":[836,256,224,56]}
+{"kind":"textbox","id":"sh/3ypszqdg","slide":9,"name":"table-text-256-3","text":"k1=1.2; b=0.75","textPreview":"k1=1.2; b=0.75","textChars":14,"textLines":1,"bbox":[848,266,200,40]}
+{"kind":"shape","id":"sh/s3itcvex","slide":9,"name":"table-cell-256-4","bbox":[1060,256,148,56]}
+{"kind":"textbox","id":"sh/d4ra50vi","slide":9,"name":"table-text-256-4","text":"MIT","textPreview":"MIT","textChars":3,"textLines":1,"bbox":[1072,266,124,40]}
+{"kind":"shape","id":"sh/q10balwr","slide":9,"name":"table-cell-312-0","bbox":[72,312,196,56]}
+{"kind":"textbox","id":"sh/r29s3qdc","slide":9,"name":"table-text-312-0","text":"ARM-02","textPreview":"ARM-02","textChars":6,"textLines":1,"bbox":[84,322,172,40]}
+{"kind":"shape","id":"sh/0r2tgvet","slide":9,"name":"table-cell-312-1","bbox":[268,312,342,56]}
+{"kind":"textbox","id":"sh/1sba90ve","slide":9,"name":"table-text-312-1","text":"BAAI/bge-m3","textPreview":"BAAI/bge-m3","textChars":11,"textLines":1,"bbox":[280,322,318,40]}
+{"kind":"shape","id":"sh/bmdwzexw","slide":9,"name":"table-cell-312-2","bbox":[610,312,226,56]}
+{"kind":"textbox","id":"sh/al4v69gb","slide":9,"name":"table-text-312-2","text":"Generic dense","textPreview":"Generic dense","textChars":13,"textLines":1,"bbox":[622,322,202,40]}
+{"kind":"shape","id":"sh/xove14fm","slide":9,"name":"table-cell-312-3","bbox":[836,312,224,56]}
+{"kind":"textbox","id":"sh/cnmd8zy1","slide":9,"name":"table-text-312-3","text":"1,024d; 8,192 tokens","textPreview":"1,024d; 8,192 tokens","textChars":20,"textLines":1,"bbox":[848,322,200,40]}
+{"kind":"shape","id":"sh/nytcvuxk","slide":9,"name":"table-cell-312-4","bbox":[1060,312,148,56]}
+{"kind":"textbox","id":"sh/2xkv2pgz","slide":9,"name":"table-text-312-4","text":"MIT","textPreview":"MIT","textChars":3,"textLines":1,"bbox":[1072,322,124,40]}
+{"kind":"shape","id":"sh/pkvux4fq","slide":9,"name":"table-cell-368-0","bbox":[72,368,196,56]}
+{"kind":"textbox","id":"sh/ozmd4zy5","slide":9,"name":"table-text-368-0","text":"ARM-03","textPreview":"ARM-03","textChars":6,"textLines":1,"bbox":[84,378,172,40]}
+{"kind":"shape","id":"sh/7uxw7yxo","slide":9,"name":"table-cell-368-1","bbox":[268,368,342,56]}
+{"kind":"textbox","id":"sh/mtovetgj","slide":9,"name":"table-text-368-1","text":"datalyes/patembed-large","textPreview":"datalyes/patembed-large","textChars":23,"textLines":1,"bbox":[280,378,318,40]}
+{"kind":"shape","id":"sh/u14z2dcn","slide":9,"name":"table-cell-368-2","bbox":[610,368,226,56]}
+{"kind":"textbox","id":"sh/f2dgbit8","slide":9,"name":"table-text-368-2","text":"Patent-domain dense","textPreview":"Patent-domain dense","textChars":19,"textLines":1,"bbox":[622,378,202,40]}
+{"kind":"shape","id":"sh/g3mh4nut","slide":9,"name":"table-cell-368-3","bbox":[836,368,224,56]}
+{"kind":"textbox","id":"sh/h4vydsby","slide":9,"name":"table-text-368-3","text":"1,024d; 512 tokens","textPreview":"1,024d; 512 tokens","textChars":18,"textLines":1,"bbox":[848,378,200,40]}
+{"kind":"shape","id":"sh/6xkzydcb","slide":9,"name":"table-cell-368-4","bbox":[1060,368,148,56]}
+{"kind":"textbox","id":"sh/7ydg7itw","slide":9,"name":"table-text-368-4","text":"CC-BY-NC-SA","textPreview":"CC-BY-NC-SA","textChars":11,"textLines":1,"bbox":[1072,378,124,40]}
+{"kind":"shape","id":"sh/szmh03uh","slide":9,"name":"table-cell-424-0","bbox":[72,424,196,56]}
+{"kind":"textbox","id":"sh/t0vy98b2","slide":9,"name":"table-text-424-0","text":"ARM-04","textPreview":"ARM-04","textChars":6,"textLines":1,"bbox":[84,434,172,40]}
+{"kind":"shape","id":"sh/qtozaxcv","slide":9,"name":"table-cell-424-1","bbox":[268,424,342,56]}
+{"kind":"textbox","id":"sh/rux0j2tg","slide":9,"name":"table-text-424-1","text":"Snowflake Arctic Embed M v2.0","textPreview":"Snowflake Arctic Embed M v2.0","textChars":29,"textLines":1,"bbox":[280,434,318,40]}
+{"kind":"shape","id":"sh/1oj29wvi","slide":9,"name":"table-cell-424-2","bbox":[610,424,226,56]}
+{"kind":"textbox","id":"sh/0nq10rex","slide":9,"name":"table-text-424-2","text":"Long-context dense","textPreview":"Long-context dense","textChars":18,"textLines":1,"bbox":[622,434,202,40]}
+{"kind":"shape","id":"sh/z2hk76dc","slide":9,"name":"table-cell-424-3","bbox":[836,424,224,56]}
+{"kind":"textbox","id":"sh/e18jy1wr","slide":9,"name":"table-text-424-3","text":"768d; 8,192 tokens","textPreview":"768d; 8,192 tokens","textChars":18,"textLines":1,"bbox":[848,434,200,40]}
+{"kind":"shape","id":"sh/d0z25wv6","slide":9,"name":"table-cell-424-4","bbox":[1060,424,148,56]}
+{"kind":"textbox","id":"sh/czq1wre1","slide":9,"name":"table-text-424-4","text":"Apache-2.0","textPreview":"Apache-2.0","textChars":10,"textLines":1,"bbox":[1072,434,124,40]}
+{"kind":"shape","id":"sh/ryhk3mdg","slide":9,"name":"table-cell-480-0","bbox":[72,480,196,56]}
+{"kind":"textbox","id":"sh/qx8juhwv","slide":9,"name":"table-text-480-0","text":"ARM-05","textPreview":"ARM-05","textChars":6,"textLines":1,"bbox":[84,490,172,40]}
+{"kind":"shape","id":"sh/xw32hgvq","slide":9,"name":"table-cell-480-1","bbox":[268,480,342,56]}
+{"kind":"textbox","id":"sh/wval8be5","slide":9,"name":"table-text-480-1","text":"Qwen3-Embedding-0.6B","textPreview":"Qwen3-Embedding-0.6B","textChars":20,"textLines":1,"bbox":[280,490,318,40]}
+{"kind":"shape","id":"sh/gb2d0jqd","slide":9,"name":"table-cell-480-2","bbox":[610,480,226,56]}
+{"kind":"textbox","id":"sh/hcbeto7y","slide":9,"name":"table-text-480-2","text":"Instruction-aware dense","textPreview":"Instruction-aware dense","textChars":23,"textLines":1,"bbox":[622,490,202,40]}
+{"kind":"shape","id":"sh/u9kvy98n","slide":9,"name":"table-cell-480-3","bbox":[836,480,224,56]}
+{"kind":"textbox","id":"sh/fatcrep8","slide":9,"name":"table-text-480-3","text":"1,024d; 32,768 tokens","textPreview":"1,024d; 32,768 tokens","textChars":21,"textLines":1,"bbox":[848,490,200,40]}
+{"kind":"shape","id":"sh/872dwjqh","slide":9,"name":"table-cell-480-4","bbox":[1060,480,148,56]}
+{"kind":"textbox","id":"sh/t8bupo72","slide":9,"name":"table-text-480-4","text":"Apache-2.0","textPreview":"Apache-2.0","textChars":10,"textLines":1,"bbox":[1072,490,124,40]}
+{"kind":"textbox","id":"sh/65kvu98b","slide":9,"name":"model-note","text":"Exact public revisions, pooling, query/document templates, and non-commercial qualification for ARM-03 are frozen in the speaker notes and backup material.","textPreview":"Exact public revisions, pooling, query/document templates, and non-commercial qualification for ARM-03 are frozen in the speaker notes an...","textChars":155,"textLines":1,"bbox":[72,564,1040,46]}
+{"kind":"notes","id":"nt/p4whs7","slide":9,"text":"Each arm is bound to a specific model revision and adapter template. ARM-01 has no embedding prompt. ARM-03 remains research/non-commercial. The full exact templates are documented in Appendix B of the material.\n\n[Sources]\n[P9] A1 model source locks\n[P10] Frozen dense adapter contract\n[R4]-[R7] Official model cards"}
+{"kind":"slide","id":"sl/gqrcmw","slide":10,"title":"A1 | REP-DEV RESULT","textShapes":9}
+{"kind":"textbox","id":"sh/f21ojql0","slide":10,"name":"section-label","text":"A1 | REP-DEV RESULT","textPreview":"A1 | REP-DEV RESULT","textChars":19,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/g3a5svml","slide":10,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/14j6l036","slide":10,"name":"slide-number","text":"10 / 18","textPreview":"10 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/25snul4r","slide":10,"name":"slide-title","text":"A1 reveals a broad quality range","textPreview":"A1 reveals a broad quality range","textChars":32,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/361onqlw","slide":10,"name":"slide-subtitle","text":"The representation surface differs across frozen retriever arms.","textPreview":"The representation surface differs across frozen retriever arms.","textChars":64,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/p8j6p032","slide":10,"name":"callout-Highest common cell","bbox":[816,224,330,110]}
+{"kind":"shape","id":"sh/i9oni147","slide":10,"name":"rule","bbox":[816,224,7,110]}
+{"kind":"textbox","id":"sh/jahob6ls","slide":10,"name":"Highest common cell-value","text":"P03","textPreview":"P03","textChars":3,"textLines":1,"bbox":[842,242,290,38]}
+{"kind":"textbox","id":"sh/vid0ru10","slide":10,"name":"Highest common cell-label","text":"Highest common cell","textPreview":"Highest common cell","textChars":19,"textLines":1,"bbox":[842,290,290,24]}
+{"kind":"textbox","id":"sh/uh4jipkf","slide":10,"name":"a1-quality-copy","text":"Fixed passages obtain the highest individual Recall@100 cell in all five arms.","textPreview":"Fixed passages obtain the highest individual Recall@100 cell in all five arms.","textChars":78,"textLines":1,"bbox":[816,374,350,62]}
+{"kind":"textbox","id":"sh/hkv2t4j6","slide":10,"name":"a1-promotion","text":"ARM-03, ARM-04, and ARM-05 pass the frozen promotion rule; ARM-01 and ARM-02 remain diagnostic/non-advancing in A2.","textPreview":"ARM-03, ARM-04, and ARM-05 pass the frozen promotion rule; ARM-01 and ARM-02 remain diagnostic/non-advancing in A2.","textChars":115,"textLines":1,"bbox":[816,474,350,90]}
+{"kind":"textbox","id":"sh/gjm1kzil","slide":10,"name":"a1-boundary","text":"REP-DEV descriptive evidence only; not Selection or Final confirmation.","textPreview":"REP-DEV descriptive evidence only; not Selection or Final confirmation.","textChars":71,"textLines":1,"bbox":[72,576,680,28]}
+{"kind":"image","id":"im/5sj6xsni","slide":10,"name":"","alt":"A1 mean OUT Recall at 100 across arms","bbox":[72,210,680,330]}
+{"kind":"notes","id":"nt/gqrcmw","slide":10,"text":"Read the arm means as a quality spread, not a final model selection. The arm-level numbers are 0.191, 0.270, 0.413, 0.341, and 0.364 mean OUT Recall@100 for BM25, BGE-M3, PatEmbed, Arctic, and Qwen3 respectively.\n\n[Sources]\n[P8] A1 cell EDA CSV and validated figures"}
+{"kind":"slide","id":"sl/kocoph","slide":11,"title":"A1 | OPERATIONAL EVIDENCE","textShapes":5}
+{"kind":"textbox","id":"sh/adonuxcv","slide":11,"name":"section-label","text":"A1 | OPERATIONAL EVIDENCE","textPreview":"A1 | OPERATIONAL EVIDENCE","textChars":25,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/xgf65cvm","slide":11,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/cf65w7u1","slide":11,"name":"slide-number","text":"11 / 18","textPreview":"11 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/nqd4zid4","slide":11,"name":"slide-title","text":"Quality gains bring physical work","textPreview":"Quality gains bring physical work","textChars":33,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/2p4nqxcj","slide":11,"name":"slide-subtitle","text":"The quality-latency-cost frontier is a result, not an afterthought.","textPreview":"The quality-latency-cost frontier is a result, not an afterthought.","textChars":67,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"textbox","id":"sh/or65snup","slide":11,"name":"a1-operations-caption","text":"The full receipt-bound frontier retains quality, p95 latency, wall time, VRAM, RAM, index size, and cost together.","textPreview":"The full receipt-bound frontier retains quality, p95 latency, wall time, VRAM, RAM, index size, and cost together.","textChars":114,"textLines":1,"bbox":[72,620,1136,26]}
+{"kind":"image","id":"im/c7mdo7mx","slide":11,"name":"","alt":"A1 efficiency cell EDA","bbox":[72,218,1136,387]}
+{"kind":"notes","id":"nt/kocoph","slide":11,"text":"Use the EDA to distinguish the common-screen pattern from deployment policy. No conclusion is drawn from Recall alone; later phases preserve p95 latency, throughput, cost, RAM, VRAM, and index-size receipts.\n\n[Sources]\n[P8] A1 efficiency EDA\n[P13] A3 Extended Goal 003"}
+{"kind":"slide","id":"sl/bwn9hn","slide":12,"title":"A2 | PER-ARM AUTOINDEX","textShapes":10}
+{"kind":"textbox","id":"sh/atwfaxor","slide":12,"name":"section-label","text":"A2 | PER-ARM AUTOINDEX","textPreview":"A2 | PER-ARM AUTOINDEX","textChars":22,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/xwnylc7i","slide":12,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/wvexc76x","slide":12,"name":"slide-number","text":"12 / 18","textPreview":"12 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/jipgn2po","slide":12,"name":"slide-title","text":"A2 evaluates a frozen candidate universe","textPreview":"A2 evaluates a frozen candidate universe","textChars":40,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/yhgzexo3","slide":12,"name":"slide-subtitle","text":"Candidate generation is pre-measurement; evaluation remains deterministic and checkpointed.","textPreview":"Candidate generation is pre-measurement; evaluation remains deterministic and checkpointed.","textChars":91,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/kjyhg76t","slide":12,"name":"callout-Frozen candidates","bbox":[798,228,330,110]}
+{"kind":"shape","id":"sh/zmlgbip4","slide":12,"name":"rule","bbox":[798,228,7,110]}
+{"kind":"textbox","id":"sh/elcf2d8j","slide":12,"name":"Frozen candidates-value","text":"52","textPreview":"52","textChars":2,"textLines":1,"bbox":[824,246,290,38]}
+{"kind":"textbox","id":"sh/w3yd4nut","slide":12,"name":"Frozen candidates-label","text":"Frozen candidates","textPreview":"Frozen candidates","textChars":17,"textLines":1,"bbox":[824,294,290,24]}
+{"kind":"textbox","id":"sh/x47uxsve","slide":12,"name":"a2-count","text":"40 matched + 12 conditional reserve candidates","textPreview":"40 matched + 12 conditional reserve candidates","textChars":46,"textLines":1,"bbox":[798,360,370,52]}
+{"kind":"shape","id":"sh/a1gv2dcn","slide":12,"name":"bullet-dot-0","bbox":[798,456,8,8]}
+{"kind":"textbox","id":"sh/v2pcvid8","slide":12,"name":"bullet-0","text":"ARM-01 is CPU; ARM-02-05 use separate GPUs.","textPreview":"ARM-01 is CPU; ARM-02-05 use separate GPUs.","textChars":43,"textLines":1,"bbox":[820,446,372,58]}
+{"kind":"shape","id":"sh/k7id87up","slide":12,"name":"bullet-dot-1","bbox":[798,516,8,8]}
+{"kind":"textbox","id":"sh/58re1cba","slide":12,"name":"bullet-1","text":"Each candidate has a durable checkpoint and heartbeat.","textPreview":"Each candidate has a durable checkpoint and heartbeat.","textChars":54,"textLines":1,"bbox":[820,506,372,58]}
+{"kind":"shape","id":"sh/i50v6xcj","slide":12,"name":"bullet-dot-2","bbox":[798,576,8,8]}
+{"kind":"textbox","id":"sh/j69wz2t4","slide":12,"name":"bullet-2","text":"Reserves need fresh barrier, budget, and TTL admission.","textPreview":"Reserves need fresh barrier, budget, and TTL admission.","textChars":55,"textLines":1,"bbox":[820,566,372,58]}
+{"kind":"image","id":"im/sv2hknut","slide":12,"name":"","alt":"A2 execution and reserve admission flow","bbox":[72,210,658,360]}
+{"kind":"notes","id":"nt/bwn9hn","slide":12,"text":"Define dormant carefully. A dormant reserve candidate is not zero, null, failure, or equal to the baseline. It was not evaluated because its pre-registered admission predicate did not trigger.\n\n[Sources]\n[P11] A2 Goal 004\n[P12] A2 execution runbook\n[P14] A2 Official Codex bridge"}
+{"kind":"slide","id":"sl/6owdv3","slide":13,"title":"A2 | MEASURED CLOSEOUT","textShapes":10}
+{"kind":"textbox","id":"sh/vi9gvi5s","slide":13,"name":"section-label","text":"A2 | MEASURED CLOSEOUT","textPreview":"A2 | MEASURED CLOSEOUT","textChars":22,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/wjixo3md","slide":13,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/xkryx8ni","slide":13,"name":"slide-number","text":"13 / 18","textPreview":"13 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/il0fqd43","slide":13,"name":"slide-title","text":"A2 closes with bounded primary inputs","textPreview":"A2 closes with bounded primary inputs","textChars":37,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/jm9gzi5o","slide":13,"name":"slide-subtitle","text":"Exact accounting, safe return, and an independent audit support aggregate-only interpretation.","textPreview":"Exact accounting, safe return, and an independent audit support aggregate-only interpretation.","textChars":94,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/58ry1snu","slide":13,"name":"rule","bbox":[764,224,414,5]}
+{"kind":"textbox","id":"sh/690fux4f","slide":13,"name":"ARM-03-label","text":"ARM-03","textPreview":"ARM-03","textChars":6,"textLines":1,"bbox":[764,242,414,28]}
+{"kind":"textbox","id":"sh/7atg3250","slide":13,"name":"ARM-03-detail","text":"Recall@100 0.4230; numerical tie to A1 at presentation precision.","textPreview":"Recall@100 0.4230; numerical tie to A1 at presentation precision.","textChars":65,"textLines":1,"bbox":[764,278,414,48]}
+{"kind":"shape","id":"sh/zm98bmt0","slide":13,"name":"rule","bbox":[764,356,414,5]}
+{"kind":"textbox","id":"sh/ylg721sf","slide":13,"name":"ARM-04-label","text":"ARM-04","textPreview":"ARM-04","textChars":6,"textLines":1,"bbox":[764,374,414,28]}
+{"kind":"textbox","id":"sh/l8rqdwb6","slide":13,"name":"ARM-04-detail","text":"Recall@100 0.3587; strict +0.0060 improvement over A1.","textPreview":"Recall@100 0.3587; strict +0.0060 improvement over A1.","textChars":54,"textLines":1,"bbox":[764,410,414,48]}
+{"kind":"shape","id":"sh/07ip4ral","slide":13,"name":"rule","bbox":[764,488,414,5]}
+{"kind":"textbox","id":"sh/bipo7mt4","slide":13,"name":"ARM-05-label","text":"ARM-05","textPreview":"ARM-05","textChars":6,"textLines":1,"bbox":[764,506,414,28]}
+{"kind":"textbox","id":"sh/qhg7yhsj","slide":13,"name":"ARM-05-detail","text":"Recall@100 0.3737; no strict A1 improvement, retained for transfer.","textPreview":"Recall@100 0.3737; no strict A1 improvement, retained for transfer.","textChars":67,"textLines":1,"bbox":[764,542,414,48]}
+{"kind":"image","id":"im/tkzixc3m","slide":13,"name":"","alt":"A2 receipt-bound aggregate outcomes by arm","bbox":[72,218,658,360]}
+{"kind":"notes","id":"nt/6owdv3","slide":13,"text":"A2 passed execution closeout and result-integrity audit: 52 equals 44 measured plus 8 dormant, with zero failures, safe return, and worker reaping. ARM-01 and ARM-02 are three-way diagnostic ties with no winner and are excluded. ARM-03, ARM-04, and ARM-05 are the three approved A3 transfer inputs. No Selection or Final claim is supported.\n\n[Sources]\n[P11] A2 Goal 004\n[P17] A2 closeout projection\n[P18] A2 execution closeout and integrity audit"}
+{"kind":"slide","id":"sl/q5s7q2","slide":14,"title":"A3 EXTENDED | PENDING INPUT PACKAGE","textShapes":12}
+{"kind":"textbox","id":"sh/z2t8rmp0","slide":14,"name":"section-label","text":"A3 EXTENDED | PENDING INPUT PACKAGE","textPreview":"A3 EXTENDED | PENDING INPUT PACKAGE","textChars":35,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/032pkr6l","slide":14,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/14bqtw76","slide":14,"name":"slide-number","text":"14 / 18","textPreview":"14 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/mpkrm1or","slide":14,"name":"slide-title","text":"A3 needs a fresh hash-bound Train-250 package","textPreview":"A3 needs a fresh hash-bound Train-250 package","textChars":45,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/nqt8v6pw","slide":14,"name":"slide-subtitle","text":"ARM-03, ARM-04, and ARM-05 are prepared; admission and spend remain closed.","textPreview":"ARM-03, ARM-04, and ARM-05 are prepared; admission and spend remain closed.","textChars":75,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/9sbqxw72","slide":14,"name":"rule","bbox":[656,180,90,4]}
+{"kind":"textbox","id":"sh/atkrq1on","slide":14,"name":"a3-label-0","text":"Transfer","textPreview":"Transfer","textChars":8,"textLines":1,"bbox":[656,192,250,48]}
+{"kind":"textbox","id":"sh/bud8z6p8","slide":14,"name":"a3-detail-0","text":"3 self-reuses + up to 6 compatible cross-arm transfers.","textPreview":"3 self-reuses + up to 6 compatible cross-arm transfers.","textChars":55,"textLines":1,"bbox":[656,244,520,46]}
+{"kind":"shape","id":"sh/vqhk76xo","slide":14,"name":"rule","bbox":[656,290,90,4]}
+{"kind":"textbox","id":"sh/up83e1g3","slide":14,"name":"a3-label-1","text":"Complementarity","textPreview":"Complementarity","textChars":15,"textLines":1,"bbox":[656,302,250,48]}
+{"kind":"textbox","id":"sh/hcj29gfu","slide":14,"name":"a3-detail-1","text":"Equal-depth unions first; commercial-only union is ARM-04 + ARM-05.","textPreview":"Equal-depth unions first; commercial-only union is ARM-04 + ARM-05.","textChars":67,"textLines":1,"bbox":[656,354,520,46]}
+{"kind":"shape","id":"sh/gbalgby9","slide":14,"name":"rule","bbox":[656,400,90,4]}
+{"kind":"textbox","id":"sh/7mhk36xs","slide":14,"name":"a3-label-2","text":"HarnessOpt","textPreview":"HarnessOpt","textChars":10,"textLines":1,"bbox":[656,412,250,48]}
+{"kind":"textbox","id":"sh/6l83a1g7","slide":14,"name":"a3-detail-2","text":"At most three complete batches; quality, cost/latency, routing, and diversity roles.","textPreview":"At most three complete batches; quality, cost/latency, routing, and diversity roles.","textChars":84,"textLines":1,"bbox":[656,464,520,46]}
+{"kind":"shape","id":"sh/toz25gfi","slide":14,"name":"rule","bbox":[656,510,90,4]}
+{"kind":"textbox","id":"sh/8nqlcbyx","slide":14,"name":"a3-label-3","text":"Admission","textPreview":"Admission","textChars":9,"textLines":1,"bbox":[656,522,250,48]}
+{"kind":"textbox","id":"sh/rilkfqxw","slide":14,"name":"a3-detail-3","text":"Hash-bound Train-250, fresh provider receipt, USD 35 A3 cap, USD 180 campaign ceiling.","textPreview":"Hash-bound Train-250, fresh provider receipt, USD 35 A3 cap, USD 180 campaign ceiling.","textChars":86,"textLines":1,"bbox":[656,574,520,46]}
+{"kind":"image","id":"im/p4nu9krq","slide":14,"name":"","alt":"Three-primary A3 transfer, complementarity, and HarnessOpt design","bbox":[72,224,560,303]}
+{"kind":"notes","id":"nt/q5s7q2","slide":14,"text":"A3 is prepared but cannot launch. It requires a fresh Owner-authorized hash-bound Train-250 query/corpus/evaluator package, then a fresh provider admission. The three-primary route excludes ARM-01 and ARM-02 permanently from A3 optimization.\n\n[Sources]\n[P13] A3 Extended Goal 003\n[P5] REP/HARNESS split decision\n[P17] A2 closeout projection"}
+{"kind":"slide","id":"sl/ttxfo5","slide":15,"title":"TAKEAWAY","textShapes":13}
+{"kind":"textbox","id":"sh/0f6dsnix","slide":15,"name":"section-label","text":"TAKEAWAY","textPreview":"TAKEAWAY","textChars":8,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/zexwzi1c","slide":15,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/edovqd0r","slide":15,"name":"slide-number","text":"15 / 18","textPreview":"15 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/9kze5sje","slide":15,"name":"slide-title","text":"ArmIndex is an auditable interaction test","textPreview":"ArmIndex is an auditable interaction test","textChars":41,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/ojqdwnit","slide":15,"name":"slide-subtitle","text":"The contribution is a defensible research sequence, not a one-off model win.","textPreview":"The contribution is a defensible research sequence, not a one-off model win.","textChars":76,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/nixw3218","slide":15,"name":"rule","bbox":[72,232,250,6]}
+{"kind":"textbox","id":"sh/mhovux03","slide":15,"name":"takeaway-code-0","text":"A0","textPreview":"A0","textChars":2,"textLines":1,"bbox":[72,260,250,46]}
+{"kind":"textbox","id":"sh/x8ze9cjq","slide":15,"name":"takeaway-detail-0","text":"made the scientific sequence controlled and reproducible.","textPreview":"made the scientific sequence controlled and reproducible.","textChars":57,"textLines":1,"bbox":[72,326,250,94]}
+{"kind":"shape","id":"sh/w7qx07i5","slide":15,"name":"rule","bbox":[356,232,250,6]}
+{"kind":"textbox","id":"sh/etg3yp8j","slide":15,"name":"takeaway-code-1","text":"A1","textPreview":"A1","textChars":2,"textLines":1,"bbox":[356,260,250,46]}
+{"kind":"textbox","id":"sh/zupk7up4","slide":15,"name":"takeaway-detail-1","text":"showed a representation-by-retriever quality and cost surface.","textPreview":"showed a representation-by-retriever quality and cost surface.","textChars":62,"textLines":1,"bbox":[356,326,250,94]}
+{"kind":"shape","id":"sh/0vyl0fqp","slide":15,"name":"rule","bbox":[640,232,250,6]}
+{"kind":"textbox","id":"sh/1w729k7u","slide":15,"name":"takeaway-code-2","text":"A2","textPreview":"A2","textChars":2,"textLines":1,"bbox":[640,260,250,46]}
+{"kind":"textbox","id":"sh/mhg32p8f","slide":15,"name":"takeaway-detail-2","text":"closed with three transfer inputs and bounded negative evidence.","textPreview":"closed with three transfer inputs and bounded negative evidence.","textChars":64,"textLines":1,"bbox":[640,326,250,94]}
+{"kind":"shape","id":"sh/nip4bup0","slide":15,"name":"rule","bbox":[924,232,250,6]}
+{"kind":"textbox","id":"sh/ojyl4zql","slide":15,"name":"takeaway-code-3","text":"A3","textPreview":"A3","textChars":2,"textLines":1,"bbox":[924,260,250,46]}
+{"kind":"textbox","id":"sh/9krmd476","slide":15,"name":"takeaway-detail-3","text":"will test the three-primary transfer and operational frontier.","textPreview":"will test the three-primary transfer and operational frontier.","textChars":62,"textLines":1,"bbox":[924,326,250,94]}
+{"kind":"textbox","id":"sh/2lw3q58b","slide":15,"name":"next-update","text":"The next meaningful update is a hash-bound Train-250 package and fresh A3 admission, not reuse of an idle instance.","textPreview":"The next meaningful update is a hash-bound Train-250 package and fresh A3 admission, not reuse of an idle instance.","textChars":115,"textLines":1,"bbox":[72,520,1020,60]}
+{"kind":"notes","id":"nt/ttxfo5","slide":15,"text":"Close on the evidence sequence. The advisor discussion is whether the A2 evidence justifies the bounded three-primary A3 design and whether its required Train-250 package can be bound without weakening the protocol.\n\n[Sources]\n[P1] ArmIndex Research Plan V02\n[P11] A2 Goal 004\n[P13] A3 Extended Goal 003"}
+{"kind":"slide","id":"sl/79em47","slide":16,"title":"APPENDIX A | EVIDENCE ROLES","textShapes":7}
+{"kind":"textbox","id":"sh/n21gn65k","slide":16,"name":"section-label","text":"APPENDIX A | EVIDENCE ROLES","textPreview":"APPENDIX A | EVIDENCE ROLES","textChars":27,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/o3ahwb65","slide":16,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/p4jypgnq","slide":16,"name":"slide-number","text":"16 / 18","textPreview":"16 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/a5szylov","slide":16,"name":"slide-title","text":"Appendix: the split protects the sequence","textPreview":"Appendix: the split protects the sequence","textChars":41,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/bq1grq5g","slide":16,"name":"slide-subtitle","text":"The allocation is a protocol decision that limits what can adapt at each stage.","textPreview":"The allocation is a protocol decision that limits what can adapt at each stage.","textChars":79,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/xsjytgnm","slide":16,"name":"bullet-dot-0","bbox":[822,238,8,8]}
+{"kind":"textbox","id":"sh/ytsz2lo7","slide":16,"name":"bullet-0","text":"REP-DEV is used for A1 screening and A2 representation search.","textPreview":"REP-DEV is used for A1 screening and A2 representation search.","textChars":62,"textLines":1,"bbox":[844,228,336,93]}
+{"kind":"shape","id":"sh/zulgvq5s","slide":16,"name":"bullet-dot-1","bbox":[822,333,8,8]}
+{"kind":"textbox","id":"sh/7atk321c","slide":16,"name":"bullet-1","text":"HARNESS-DEV supports A3 transfer, complementarity, and bounded harness optimization after representation freeze.","textPreview":"HARNESS-DEV supports A3 transfer, complementarity, and bounded harness optimization after representation freeze.","textChars":112,"textLines":1,"bbox":[844,323,336,93]}
+{"kind":"shape","id":"sh/m903ax0r","slide":16,"name":"bullet-dot-2","bbox":[822,428,8,8]}
+{"kind":"textbox","id":"sh/9cb25cji","slide":16,"name":"bullet-2","text":"Selection and Final remain protected from adaptive development use.","textPreview":"Selection and Final remain protected from adaptive development use.","textChars":67,"textLines":1,"bbox":[844,418,336,93]}
+{"kind":"image","id":"im/1kfap07u","slide":16,"name":"","alt":"Dense overflow windowing diagnostic","bbox":[72,212,666,346]}
+{"kind":"notes","id":"nt/79em47","slide":16,"text":"This backup slide documents the rationale for the staged split and shows a safe aggregate windowing diagnostic. It does not open protected membership or qrels.\n\n[Sources]\n[P5] REP/HARNESS split decision\n[P6] A1 preregistration\n[P8] Dense-overflow EDA"}
+{"kind":"slide","id":"sl/wnqicc","slide":17,"title":"APPENDIX B | MODEL CONTRACTS","textShapes":29}
+{"kind":"textbox","id":"sh/dwje10zi","slide":17,"name":"section-label","text":"APPENDIX B | MODEL CONTRACTS","textPreview":"APPENDIX B | MODEL CONTRACTS","textChars":28,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/6t8v65gr","slide":17,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/ruhwzqhc","slide":17,"name":"slide-number","text":"17 / 18","textPreview":"17 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/4rqd4vy1","slide":17,"name":"slide-title","text":"Appendix: frozen model contracts","textPreview":"Appendix: frozen model contracts","textChars":32,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/5szex0z6","slide":17,"name":"slide-subtitle","text":"Templates, pooling, and revisions are part of each measured retrieval identity.","textPreview":"Templates, pooling, and revisions are part of each measured retrieval identity.","textChars":79,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/i58v2lgv","slide":17,"name":"table-cell-206-0","bbox":[72,206,142,46]}
+{"kind":"textbox","id":"sh/j6hwvqhg","slide":17,"name":"table-text-206-0","text":"Arm","textPreview":"Arm","textChars":3,"textLines":1,"bbox":[84,216,118,30]}
+{"kind":"shape","id":"sh/onuxgfy5","slide":17,"name":"table-cell-206-1","bbox":[214,206,344,46]}
+{"kind":"textbox","id":"sh/po3e9kzq","slide":17,"name":"table-text-206-1","text":"Query template","textPreview":"Query template","textChars":14,"textLines":1,"bbox":[226,216,320,30]}
+{"kind":"shape","id":"sh/5cn6lcvy","slide":17,"name":"table-cell-206-2","bbox":[558,206,342,46]}
+{"kind":"textbox","id":"sh/4bepc7ut","slide":17,"name":"table-text-206-2","text":"Document / pooling","textPreview":"Document / pooling","textChars":18,"textLines":1,"bbox":[570,216,318,30]}
+{"kind":"shape","id":"sh/3a5oj2d8","slide":17,"name":"table-cell-206-3","bbox":[900,206,308,46]}
+{"kind":"textbox","id":"sh/i9w7ahcn","slide":17,"name":"table-text-206-3","text":"Revision","textPreview":"Revision","textChars":8,"textLines":1,"bbox":[912,216,284,30]}
+{"kind":"shape","id":"sh/h8n6hcv2","slide":17,"name":"table-cell-252-0","bbox":[72,252,142,62]}
+{"kind":"textbox","id":"sh/g7up87uh","slide":17,"name":"table-text-252-0","text":"ARM-01","textPreview":"ARM-01","textChars":6,"textLines":1,"bbox":[84,262,118,46]}
+{"kind":"shape","id":"sh/v6lof2dw","slide":17,"name":"table-cell-252-1","bbox":[214,252,344,62]}
+{"kind":"textbox","id":"sh/u5c76xcb","slide":17,"name":"table-text-252-1","text":"No embedding prompt","textPreview":"No embedding prompt","textChars":19,"textLines":1,"bbox":[226,262,320,46]}
+{"kind":"shape","id":"sh/147qtwv6","slide":17,"name":"table-cell-252-2","bbox":[558,252,342,62]}
+{"kind":"textbox","id":"sh/03ypkrul","slide":17,"name":"table-text-252-2","text":"BM25 lexical scoring","textPreview":"BM25 lexical scoring","textChars":20,"textLines":1,"bbox":[570,262,318,46]}
+{"kind":"shape","id":"sh/kjq1cz69","slide":17,"name":"table-cell-252-3","bbox":[900,252,308,62]}
+{"kind":"textbox","id":"sh/lkzi54nu","slide":17,"name":"table-text-252-3","text":"bm25s==0.3.10","textPreview":"bm25s==0.3.10","textChars":13,"textLines":1,"bbox":[912,262,284,46]}
+{"kind":"shape","id":"sh/yx8zapo3","slide":17,"name":"table-cell-314-0","bbox":[72,314,142,62]}
+{"kind":"textbox","id":"sh/jyh03u5o","slide":17,"name":"table-text-314-0","text":"ARM-02","textPreview":"ARM-02","textChars":6,"textLines":1,"bbox":[84,324,118,46]}
+{"kind":"shape","id":"sh/wv6h8z6x","slide":17,"name":"table-cell-314-1","bbox":[214,314,344,62]}
+{"kind":"textbox","id":"sh/xwfi147i","slide":17,"name":"table-text-314-1","text":"{query}","textPreview":"{query}","textChars":7,"textLines":1,"bbox":[226,324,320,46]}
+{"kind":"shape","id":"sh/atoz6po7","slide":17,"name":"table-cell-314-2","bbox":[558,314,342,62]}
+{"kind":"textbox","id":"sh/bux0zups","slide":17,"name":"table-text-314-2","text":"{document}; official dense parity","textPreview":"{document}; official dense parity","textChars":33,"textLines":1,"bbox":[570,324,318,46]}
+{"kind":"shape","id":"sh/or6h4f61","slide":17,"name":"table-cell-314-3","bbox":[900,314,308,62]}
+{"kind":"textbox","id":"sh/9sfixk7m","slide":17,"name":"table-text-314-3","text":"5617a9f...","textPreview":"5617a9f...","textChars":10,"textLines":1,"bbox":[912,324,284,46]}
+{"kind":"shape","id":"sh/rmd07a98","slide":17,"name":"table-cell-376-0","bbox":[72,376,142,62]}
+{"kind":"textbox","id":"sh/q14je58n","slide":17,"name":"table-text-376-0","text":"ARM-03","textPreview":"ARM-03","textChars":6,"textLines":1,"bbox":[84,386,118,46]}
+{"kind":"shape","id":"sh/dovi9kre","slide":17,"name":"table-cell-376-1","bbox":[214,376,344,62]}
+{"kind":"textbox","id":"sh/cnm1gfqt","slide":17,"name":"table-text-376-1","text":"encode query for different document retrieval: {query}","textPreview":"encode query for different document retrieval: {query}","textChars":54,"textLines":1,"bbox":[226,386,320,46]}
+{"kind":"shape","id":"sh/zqxkbu9k","slide":17,"name":"table-cell-376-2","bbox":[558,376,342,62]}
+{"kind":"textbox","id":"sh/ep4jip8z","slide":17,"name":"table-text-376-2","text":"document prefix; mean non-padding","textPreview":"document prefix; mean non-padding","textChars":33,"textLines":1,"bbox":[570,386,318,46]}
+{"kind":"shape","id":"sh/1sf2dkrq","slide":17,"name":"table-cell-376-3","bbox":[900,376,308,62]}
+{"kind":"textbox","id":"sh/0r61kfq5","slide":17,"name":"table-text-376-3","text":"2d5c0f9...","textPreview":"2d5c0f9...","textChars":10,"textLines":1,"bbox":[912,386,284,46]}
+{"kind":"shape","id":"sh/nuxkfu9g","slide":17,"name":"table-cell-438-0","bbox":[72,438,142,62]}
+{"kind":"textbox","id":"sh/mtojmp8v","slide":17,"name":"table-text-438-0","text":"ARM-04","textPreview":"ARM-04","textChars":6,"textLines":1,"bbox":[84,448,118,46]}
+{"kind":"shape","id":"sh/mxw3idg7","slide":17,"name":"table-cell-438-1","bbox":[214,438,344,62]}
+{"kind":"textbox","id":"sh/7y54byhs","slide":17,"name":"table-text-438-1","text":"query: {query}","textPreview":"query: {query}","textChars":14,"textLines":1,"bbox":[226,448,320,46]}
+{"kind":"shape","id":"sh/8zelk3yd","slide":17,"name":"table-cell-438-2","bbox":[558,438,342,62]}
+{"kind":"textbox","id":"sh/90nmd8zy","slide":17,"name":"table-text-438-2","text":"{document}; CLS / first token","textPreview":"{document}; CLS / first token","textChars":29,"textLines":1,"bbox":[570,448,318,46]}
+{"kind":"shape","id":"sh/u1g3mdg3","slide":17,"name":"table-cell-438-3","bbox":[900,438,308,62]}
+{"kind":"textbox","id":"sh/v2p4fiho","slide":17,"name":"table-text-438-3","text":"95c2741...","textPreview":"95c2741...","textChars":10,"textLines":1,"bbox":[912,448,284,46]}
+{"kind":"shape","id":"sh/w3ylony9","slide":17,"name":"table-cell-500-0","bbox":[72,500,142,62]}
+{"kind":"textbox","id":"sh/ho7mhsfu","slide":17,"name":"table-text-500-0","text":"ARM-05","textPreview":"ARM-05","textChars":6,"textLines":1,"bbox":[84,510,118,46]}
+{"kind":"shape","id":"sh/a5c3a9gz","slide":17,"name":"table-cell-500-1","bbox":[214,500,344,62]}
+{"kind":"textbox","id":"sh/b6lk3ehk","slide":17,"name":"table-text-500-1","text":"Instruct: Retrieve patent families ... Query:{query}","textPreview":"Instruct: Retrieve patent families ... Query:{query}","textChars":52,"textLines":1,"bbox":[226,510,320,46]}
+{"kind":"shape","id":"sh/dwby5gne","slide":17,"name":"table-cell-500-2","bbox":[558,500,342,62]}
+{"kind":"textbox","id":"sh/cv2xwbmt","slide":17,"name":"table-text-500-2","text":"{document}; last token / left padding","textPreview":"{document}; last token / left padding","textChars":37,"textLines":1,"bbox":[570,510,318,46]}
+{"kind":"shape","id":"sh/rutw3658","slide":17,"name":"table-cell-500-3","bbox":[900,500,308,62]}
+{"kind":"textbox","id":"sh/qtkfu14n","slide":17,"name":"table-text-500-3","text":"97b0c61...","textPreview":"97b0c61...","textChars":10,"textLines":1,"bbox":[912,510,284,46]}
+{"kind":"textbox","id":"sh/10vy903a","slide":17,"name":"contract-note","text":"Full immutable template text, public hashes, dimensions, token envelopes, licenses, and pooling rules are retained in the source locks and the talk material.","textPreview":"Full immutable template text, public hashes, dimensions, token envelopes, licenses, and pooling rules are retained in the source locks an...","textChars":157,"textLines":1,"bbox":[72,578,1040,32]}
+{"kind":"notes","id":"nt/wnqicc","slide":17,"text":"Read exact binding from the material Appendix A. ARM-02 revision 5617a9f61b028005a4858fdac845db406aefb181; ARM-03 2d5c0f92a3e5dc3d5415c08e612c57543c0e03ad; ARM-04 95c2741480856aa9666782eb4afe11959938017f; ARM-05 97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3.\n\n[Sources]\n[P9] A1 model source locks\n[P10] Frozen dense adapter contract\n[R4]-[R7] Official model cards"}
+{"kind":"slide","id":"sl/rc6asv","slide":18,"title":"APPENDIX C | PROMPT GOVERNANCE","textShapes":15}
+{"kind":"textbox","id":"sh/b2p872xw","slide":18,"name":"section-label","text":"APPENDIX C | PROMPT GOVERNANCE","textPreview":"APPENDIX C | PROMPT GOVERNANCE","textChars":30,"textLines":1,"bbox":[72,30,500,18]}
+{"kind":"shape","id":"sh/c3i9g7eh","slide":18,"name":"rule","bbox":[72,48,1136,1]}
+{"kind":"textbox","id":"sh/x4rq9cf2","slide":18,"name":"slide-number","text":"18 / 18","textPreview":"18 / 18","textChars":7,"textLines":1,"bbox":[1114,678,94,18]}
+{"kind":"textbox","id":"sh/2xg7axwf","slide":18,"name":"slide-title","text":"Appendix: audited prompt governance","textPreview":"Appendix: audited prompt governance","textChars":35,"textLines":1,"bbox":[72,75,1096,62]}
+{"kind":"textbox","id":"sh/nyp832x0","slide":18,"name":"slide-subtitle","text":"Official Codex proposes and reviews only pre-measurement, aggregate-safe candidate programs.","textPreview":"Official Codex proposes and reviews only pre-measurement, aggregate-safe candidate programs.","textChars":92,"textLines":1,"bbox":[72,145,980,34]}
+{"kind":"shape","id":"sh/ozypc7el","slide":18,"name":"proposer-surface","bbox":[72,218,520,310]}
+{"kind":"shape","id":"sh/p07q5cf6","slide":18,"name":"rule","bbox":[72,218,520,5]}
+{"kind":"textbox","id":"sh/e9w76xwj","slide":18,"name":"proposer-title","text":"Proposer template","textPreview":"Proposer template","textChars":17,"textLines":1,"bbox":[100,248,420,34]}
+{"kind":"shape","id":"sh/fa58zixo","slide":18,"name":"bullet-dot-0","bbox":[104,318,8,8]}
+{"kind":"textbox","id":"sh/b6dwnm50","slide":18,"name":"bullet-0","text":"Returns schema-constrained JSON for exactly four requested slots.","textPreview":"Returns schema-constrained JSON for exactly four requested slots.","textChars":65,"textLines":1,"bbox":[126,308,416,49]}
+{"kind":"shape","id":"sh/a54fehof","slide":18,"name":"bullet-dot-1","bbox":[104,369,8,8]}
+{"kind":"textbox","id":"sh/x8vypwn6","slide":18,"name":"bullet-1","text":"Uses only frozen aggregate-safe operation payload.","textPreview":"Uses only frozen aggregate-safe operation payload.","textChars":50,"textLines":1,"bbox":[126,359,416,49]}
+{"kind":"shape","id":"sh/c7mxgrml","slide":18,"name":"bullet-dot-2","bbox":[104,420,8,8]}
+{"kind":"textbox","id":"sh/zaxgrm5w","slide":18,"name":"bullet-2","text":"States a falsifiable intervention, comparator, expected direction, and failure condition.","textPreview":"States a falsifiable intervention, comparator, expected direction, and failure condition.","textChars":89,"textLines":1,"bbox":[126,410,416,49]}
+{"kind":"shape","id":"sh/y94fi14b","slide":18,"name":"bullet-dot-3","bbox":[104,471,8,8]}
+{"kind":"textbox","id":"sh/lcfytwn2","slide":18,"name":"bullet-3","text":"Preserves accepted candidates byte-for-byte on revision rounds.","textPreview":"Preserves accepted candidates byte-for-byte on revision rounds.","textChars":63,"textLines":1,"bbox":[126,461,416,49]}
+{"kind":"shape","id":"sh/kb6xkrmh","slide":18,"name":"reviewer-surface","bbox":[688,218,520,310]}
+{"kind":"shape","id":"sh/fetwf25s","slide":18,"name":"rule","bbox":[688,218,520,5]}
+{"kind":"textbox","id":"sh/edkf6xo7","slide":18,"name":"reviewer-title","text":"Independent reviewer template","textPreview":"Independent reviewer template","textChars":29,"textLines":1,"bbox":[716,248,440,34]}
+{"kind":"shape","id":"sh/itsze5ov","slide":18,"name":"bullet-dot-0","bbox":[720,318,8,8]}
+{"kind":"textbox","id":"sh/3u10napg","slide":18,"name":"bullet-0","text":"Checks determinism, role fit, duplication, safety, and interpretability.","textPreview":"Checks determinism, role fit, duplication, safety, and interpretability.","textChars":72,"textLines":1,"bbox":[742,308,416,49]}
+{"kind":"shape","id":"sh/4va1gf61","slide":18,"name":"bullet-dot-1","bbox":[720,369,8,8]}
+{"kind":"textbox","id":"sh/5wjipk76","slide":18,"name":"bullet-1","text":"Cannot change evaluator, metrics, promotion rule, model weights, or protected split.","textPreview":"Cannot change evaluator, metrics, promotion rule, model weights, or protected split.","textChars":84,"textLines":1,"bbox":[742,359,416,49]}
+{"kind":"shape","id":"sh/u58zaloj","slide":18,"name":"bullet-dot-2","bbox":[720,420,8,8]}
+{"kind":"textbox","id":"sh/v6h0jqp4","slide":18,"name":"bullet-2","text":"No qrels, query IDs, memberships, rankings, protected text, or measured results.","textPreview":"No qrels, query IDs, memberships, rankings, protected text, or measured results.","textChars":80,"textLines":1,"bbox":[742,410,416,49]}
+{"kind":"shape","id":"sh/g7qhcv6p","slide":18,"name":"bullet-dot-3","bbox":[720,471,8,8]}
+{"kind":"textbox","id":"sh/h8zil07a","slide":18,"name":"bullet-3","text":"Accepts only candidates satisfying every frozen check.","textPreview":"Accepts only candidates satisfying every frozen check.","textChars":54,"textLines":1,"bbox":[742,461,416,49]}
+{"kind":"textbox","id":"sh/m1oz6l8n","slide":18,"name":"prompt-binding","text":"Model binding: gpt-5.6-sol, high reasoning effort, before A2 measurement. Full exact prompt templates are retained in the speaker notes and material Appendix D.","textPreview":"Model binding: gpt-5.6-sol, high reasoning effort, before A2 measurement. Full exact prompt templates are retained in the speaker notes a...","textChars":160,"textLines":1,"bbox":[72,570,1100,38]}
+{"kind":"notes","id":"nt/rc6asv","slide":18,"text":"Full exact proposer template:\n\nYou are the Official Codex representation proposer for a pre-measurement, five-arm patent-retrieval study. Return only JSON matching the supplied output schema.\n\nUse only the frozen aggregate-safe payload below. Propose exactly the four requested candidate slots. Preserve every candidate ID and role exactly. Make each hypothesis falsifiable, retriever-conditioned, compatible with the listed source fields, and distinct from the other candidates in the batch. Do not use or request qrels, query IDs, membership, rankings, per-query outcomes, protected text, credentials, provider payloads, or measured results. Do not claim that an unmeasured candidate improves retrieval. Do not expose hidden reasoning.\n\nFor program fields, use only the allowed source fields and ensure field_order contains exactly the same fields once. Keep logical passage sizes conservative for the declared arm limit. ARM-01 and ARM-02 candidates are diagnostic only when the payload says advancement_eligible=false.\n\nEvery hypothesis must identify one deterministic representation intervention, the frozen within-arm comparator, the expected direction that can later be falsified, and a concrete failure condition without claiming improvement. Avoid learned, adaptive, data-dependent, ranking-dependent, or unspecified processing. Keep each candidate attributable to its declared axis and explain it in language suitable for a journal ablation. For conditional reserve slots, state that the candidate remains dormant unless the frozen activation predicate is satisfied. Apply every reviewer_required_changes item to its named candidate while keeping the other slots independently valid. On revision rounds, accepted_candidate_ids are immutable: copy those candidates from previous_candidates byte-for-byte, including their hypothesis, program, expected_effect, and failure_risk. Revise only candidate IDs that are not in accepted_candidate_ids. Return all four slots in the canonical order.\n\nOperation payload:\n\n{{OPERATION_PAYLOAD_JSON}}\n\nFull exact reviewer template:\n\nYou are the independent Official Codex reviewer for a frozen pre-measurement representation-candidate batch. Return only JSON matching the supplied output schema.\n\nReview only the frozen aggregate-safe context and candidate payload below. You have no proposer transcript and no measured outcomes. Preserve every candidate ID. Check falsifiability, role fit, duplication, protected-boundary safety, arm compatibility, deterministic interpretability, and publication interpretability. Accept only candidates that satisfy every check. Required changes must be specific and must not alter the frozen evaluator, metrics, A1 promotion, model weights, protected split, or diagnostic non-advancement. Do not expose hidden reasoning.\n\npreviously_accepted_candidate_ids were accepted in an earlier independent review and are required to be byte-identical in this round. Recheck them, but do not request stylistic changes or reinterpret their scientific semantics. Reject a previously accepted candidate only for a concrete newly observed safety, determinism, duplication, or contract defect.\n\nOperation payload:\n\n{{OPERATION_PAYLOAD_JSON}}\n\n[Sources]\n[P14] A2 Official Codex bridge\n[P15] A2 representation proposer prompt\n[P16] A2 representation reviewer prompt"}

@@ -70,7 +70,10 @@ _FORBIDDEN = re.compile(
     r"raw_provider_payload|credentials?|api_keys?|password|secret)",
     re.IGNORECASE,
 )
-_ABSOLUTE = re.compile(r"(?:[A-Za-z]:[\\/]|/Users/|/home/)", re.IGNORECASE)
+_ABSOLUTE = re.compile(
+    r"(?:^|(?<=[\s\"'=]))[A-Za-z]:[\\/]|/Users/|/home/",
+    re.IGNORECASE,
+)
 
 
 def _schema() -> dict[str, Any]:
@@ -388,6 +391,61 @@ def _artifacts(
                             producing_task_id="A2.1",
                         )
                     )
+        closeout = model.get("armindex", {}).get("a2_goal004_closeout", {})
+        if isinstance(closeout, Mapping) and closeout.get("validated") is True:
+            result.append(
+                _artifact(
+                    artifact_id="a2-goal004-closeout-projection-v1",
+                    title="A2 Goal 004 aggregate-safe closeout projection",
+                    artifact_type="projection",
+                    evidence_class="measured_development_aggregate",
+                    scientific_authority=True,
+                    safe_uri=str(closeout["source_projection_uri"]),
+                    content_sha256=str(closeout["source_projection_file_sha256"]),
+                    explanation="Hash-binds the audited measured A2 closeout, three-primary transfer route, and claim boundary without protected payloads.",
+                    producing_phase_id="A2_PER_ARM_AUTOINDEX",
+                    producing_task_id="A2.1",
+                )
+            )
+            for key, title, artifact_type, scientific_authority, explanation in (
+                (
+                    "execution_closeout",
+                    "A2 Goal 004 measured execution closeout",
+                    "receipt",
+                    True,
+                    "Accounts for all 52 frozen candidates, the USD 60 cap, worker teardown, and primary advancement outputs.",
+                ),
+                (
+                    "result_integrity_audit",
+                    "A2 Goal 004 independent result-integrity audit",
+                    "audit",
+                    False,
+                    "Validates aggregate receipt lineage and the measured-result claim boundary.",
+                ),
+                (
+                    "safe_return",
+                    "A2 Goal 004 aggregate-safe return receipt",
+                    "receipt",
+                    False,
+                    "Records allowlisted artifact return and protected-output scan success.",
+                ),
+            ):
+                source = closeout["source_artifacts"][key]
+                result.append(
+                    _artifact(
+                        artifact_id=f"a2-goal004-{key.replace('_', '-')}-v1",
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="measured_development_aggregate",
+                        scientific_authority=scientific_authority,
+                        safe_uri=str(source["uri"]),
+                        content_sha256=str(source["file_sha256"]),
+                        explanation=explanation,
+                        producing_phase_id="A2_PER_ARM_AUTOINDEX",
+                        producing_task_id="A2.1",
+                        parent_artifact_hashes={"record_sha256": str(source["record_sha256"])},
+                    )
+                )
         return result
     p1 = phase_id == "P1_CPU_BASELINE"
     if p1:
@@ -2639,7 +2697,16 @@ def _metrics(
                 credit.get("remaining_percent"),
                 "official_credit_window",
             ),
-            ("measured_a2_runs", 0, "measured_A2"),
+            (
+                "measured_a2_runs",
+                1
+                if model.get("armindex", {}).get("a2_goal004_closeout", {}).get(
+                    "validated"
+                )
+                is True
+                else 0,
+                "measured_A2",
+            ),
         )
         rows = [
             {
@@ -2702,6 +2769,67 @@ def _metrics(
                     ),
                 )
             )
+        closeout = model.get("armindex", {}).get("a2_goal004_closeout", {})
+        if isinstance(closeout, Mapping) and closeout.get("validated") is True:
+            source_uri = closeout.get("source_projection_uri")
+            source_sha256 = closeout.get("source_projection_file_sha256")
+            rows.extend(
+                {
+                    "name": name,
+                    "cutoff": 100 if "out" in name else 0,
+                    "split": "development_aggregate",
+                    "scope": "A2 Goal 004 measured closeout",
+                    "value": value,
+                    "n": 1,
+                    "denominator": denominator,
+                    "source_uri": source_uri,
+                    "source_sha256": source_sha256,
+                }
+                for name, value, denominator in (
+                    (
+                        "a2_measured_candidate_count",
+                        closeout["accounting"]["measured_candidate_count"],
+                        "frozen_candidate_universe",
+                    ),
+                    (
+                        "a2_dormant_reserve_candidate_count",
+                        closeout["accounting"]["dormant_reserve_candidate_count"],
+                        "conditional_reserve_universe",
+                    ),
+                    (
+                        "a2_failed_candidate_count",
+                        closeout["accounting"]["failed_candidate_count"],
+                        "frozen_candidate_universe",
+                    ),
+                    (
+                        "a2_whole_workload_total_usd",
+                        closeout["budget"]["whole_workload_total_usd"],
+                        "whole_workload",
+                    ),
+                )
+            )
+            for outcome in closeout["arm_outcomes"]:
+                arm = str(outcome["arm_id"]).lower().replace("-", "_")
+                rows.extend(
+                    {
+                        "name": f"a2_{arm}_{metric_name}",
+                        "cutoff": 100 if metric_name != "search_p95_ms" else 0,
+                        "split": "out_development_aggregate",
+                        "scope": "A2 Goal 004 winner or diagnostic top candidate",
+                        "value": outcome[metric_name],
+                        "n": 1,
+                        "denominator": "aggregate_safe_candidate_outcome",
+                        "source_uri": source_uri,
+                        "source_sha256": source_sha256,
+                    }
+                    for metric_name in (
+                        "recall_at_100",
+                        "ndcg_at_100",
+                        "ndcg_at_10",
+                        "search_p95_ms",
+                        "charged_usd",
+                    )
+                )
         return rows
     if phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING" and task_id in {None, "A1.1"}:
         adapter = model.get("armindex", {}).get("adapter_fixture_validation", {})
@@ -3812,6 +3940,22 @@ def _bindings(
             if isinstance(current_attempt.get("cell_eda_package"), Mapping)
             else None,
         }
+    closeout = model.get("armindex", {}).get("a2_goal004_closeout", {})
+    if (
+        phase_id == "A2_PER_ARM_AUTOINDEX"
+        and task_id in {None, "A2.1"}
+        and isinstance(closeout, Mapping)
+        and closeout.get("validated") is True
+    ):
+        bindings["a2_goal004_measured_closeout"] = {
+            "projection_uri": closeout.get("source_projection_uri"),
+            "projection_sha256": closeout.get("source_projection_file_sha256"),
+            "status": closeout.get("status"),
+            "accounting": closeout.get("accounting"),
+            "budget": closeout.get("budget"),
+            "a3_route": closeout.get("a3_route"),
+            "source_artifacts": closeout.get("source_artifacts"),
+        }
     return bindings
 
 
@@ -3836,6 +3980,7 @@ def _record_for(
     current_attempt = model.get("armindex", {}).get("a1_2_current_attempt", {})
     a2_freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
     a2_readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
+    a2_closeout = model.get("armindex", {}).get("a2_goal004_closeout", {})
     a2_freeze_valid = (
         phase_id == "A2_PER_ARM_AUTOINDEX"
         and task_id
@@ -3848,6 +3993,12 @@ def _record_for(
         and task_id in {None, "A2.1"}
         and isinstance(a2_readiness, Mapping)
         and a2_readiness.get("validated") is True
+    )
+    a2_closeout_valid = (
+        phase_id == "A2_PER_ARM_AUTOINDEX"
+        and task_id in {None, "A2.1"}
+        and isinstance(a2_closeout, Mapping)
+        and a2_closeout.get("validated") is True
     )
     a2_measured_authority_current = (
         a2_readiness_valid
@@ -3889,7 +4040,7 @@ def _record_for(
     )
     current_failed_closed = current_terminal and current_attempt.get("status") == "FAILED_CLOSED"
     current_pass = current_terminal and current_attempt.get("status") == "PASS"
-    scientific = phase_id == "P1_CPU_BASELINE" or current_pass
+    scientific = phase_id == "P1_CPU_BASELINE" or current_pass or a2_closeout_valid
     a11_validated = (
         phase_id == "A1_BASELINES_AND_MULTI_ARM_SCREENING"
         and isinstance(adapter, Mapping)
@@ -3903,6 +4054,8 @@ def _record_for(
     evidence_class = (
         str(current_attempt.get("evidence_class"))
         if current_terminal
+        else str(a2_closeout.get("evidence_class"))
+        if a2_closeout_valid
         else str(a2_readiness.get("evidence_class"))
         if a2_readiness_valid
         else str(a2_freeze.get("evidence_class"))
@@ -3926,6 +4079,8 @@ def _record_for(
     claim_boundary = (
         str(current_attempt.get("claim_boundary"))
         if current_terminal
+        else str(a2_closeout.get("claim_boundary"))
+        if a2_closeout_valid
         else str(a2_readiness.get("claim_boundary"))
         if a2_readiness_valid
         else str(a2_freeze.get("claim_boundary"))
@@ -4285,6 +4440,18 @@ def _record_for(
         result = "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes."
         interpretation = f"The frozen rule promoted {', '.join(str(item) for item in promoted)}. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3."
         decision_status = "PASS_25_OF_25"
+    elif a2_closeout_valid:
+        output = (
+            "A2 measured closeout accounts for 52 frozen candidates: 44 measured, "
+            "8 dormant conditional reserves, and zero failures. Primary advancement "
+            "is limited to ARM-03, ARM-04, and ARM-05 under the Owner-approved amendment."
+        )
+        result = (
+            "PASS_A2_EXECUTION_CLOSEOUT and PASS_A2_RESULT_INTEGRITY; A3 Extended is "
+            "prepared only as a pending hash-bound Train-250 route."
+        )
+        interpretation = str(a2_closeout.get("claim_boundary"))
+        decision_status = "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250"
     elif scientific:
         output = "Four validated R0/R0-W train and selection manifests with aggregate Recall@100 metrics."
         result = "P1 measured train/selection evidence is complete within its declared development boundary."
@@ -4738,8 +4905,10 @@ def _record_for(
     )
     governance = {
         "protected_data_accessed": False if a2_freeze_valid else scientific,
-        "measured_execution": False if a2_freeze_valid else scientific,
-        "gpu": current_pass,
+        "measured_execution": False
+        if a2_freeze_valid and not a2_closeout_valid
+        else scientific,
+        "gpu": current_pass or a2_closeout_valid,
         "paid_api": False,
         "network_model_download": False,
         "provider_fallback": False,
@@ -4747,17 +4916,23 @@ def _record_for(
         "d3": "waiting_owner",
         "final_split": "closed",
         "real_counters": {
-            "measured_runs": 0
+            "measured_runs": 1
+            if a2_closeout_valid
+            else 0
             if a2_freeze_valid
             else int(armindex_counters.get("measured_runs", 0))
             if phase_id.startswith("A")
             else int(p2.get("measured_runs", 0)),
-            "candidate_count": 0
+            "candidate_count": 52
+            if a2_closeout_valid
+            else 0
             if a2_freeze_valid
             else int(armindex_counters.get("candidate_count", 0))
             if phase_id.startswith("A")
             else int(p2.get("candidate_count", 0)),
-            "shortlist_count": 0
+            "shortlist_count": 3
+            if a2_closeout_valid
+            else 0
             if phase_id.startswith("A")
             else int(p2.get("shortlist_count", 0)),
             "selection_accesses": int(armindex_counters.get("selection_accesses", 0))
@@ -4789,6 +4964,13 @@ def _record_for(
         governance["provider_execution_adoption_performed"] = False
         governance["rep_dev_accessed_for_measurement"] = False
         governance["independent_auditor_required"] = True
+    if a2_closeout_valid:
+        governance["protected_data_accessed"] = False
+        governance["measured_execution"] = True
+        governance["provider_admission_performed"] = True
+        governance["provider_execution_adoption_performed"] = True
+        governance["rep_dev_accessed_for_measurement"] = True
+        governance["independent_auditor_required"] = False
     record = {
         "schema_version": REPORT_SCHEMA,
         "report_id": report_id,
@@ -4824,6 +5006,8 @@ def _record_for(
             if phase_id == "P2_SCOPE_DEVELOPMENT"
             else "Goal 003 completed fresh provider admission preparation but stopped before isolated staging because the exact target remote root already existed; the stop, safe return, and Owner destroy disposition are retained as aggregate-safe provenance. No candidate retrieval, evaluation, measured A2, or publication metric was produced."
             if a2_unsafe_root_stop
+            else "The A2 Goal 004 measured closeout is complete with 52-candidate accounting, aggregate-safe return, independent result-integrity audit, three primary advancement arms, and bounded diagnostic no-winner outcomes for ARM-01/02. A3 Extended remains pending a hash-bound Train-250 query/corpus/evaluator package."
+            if a2_closeout_valid
             else "The allowlisted loopback Official Codex bridge passed its synthetic smoke, Official identity and credit availability were recorded, 52 schema-valid candidates were independently proposed and reviewed, every candidate compiled deterministically twice, and exactly 40 matched plus 12 dormant reserve candidates were locked before measurement. The production adapter, matched-first conditional-reserve lifecycle, additive fresh-instance binding, and CPU-local deployment-package validation are complete; A2 remains measurement-locked pending AP fresh-instance admission and isolated staging. The additive credit correction preserves immutable freeze bytes while identifying the chronological reviewer-final and post-freeze closeout snapshots."
             if a2_freeze_valid
             else "The five-arm adapter interface was validated with synthetic offline inputs; ARM-01 completed deterministic compilation, CPU indexing, family-level search and aggregate evaluation, while ARM-02 through ARM-05 failed closed. Write-once artifacts, a hash-chained ledger, a task receipt, detailed English reporting controls, archive safeguards, and a non-authorizing A1.2 resource proposal were bound without protected-data access or charged compute."
@@ -4857,7 +5041,13 @@ def _record_for(
             "reason": result,
             "owner_decisions_unchanged": True,
         },
-        "next_authorized_action": str(a2_readiness.get("next_authorized_action"))
+        "next_authorized_action": str(
+            a2_closeout.get("a3_route", {}).get("next_authorized_action")
+        )
+        if a2_closeout_valid
+        and isinstance(a2_closeout.get("a3_route"), Mapping)
+        and a2_closeout.get("a3_route", {}).get("next_authorized_action")
+        else str(a2_readiness.get("next_authorized_action"))
         if a2_readiness_valid
         else str(a2_freeze.get("next_authorized_action"))
         if a2_freeze_valid

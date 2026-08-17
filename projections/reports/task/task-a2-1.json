@@ -239,7 +239,7 @@
       "artifact_type": "goal",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
+      "content_sha256": "25673ad3ae8377f7a075743aad5242674de185f554bc001d8b015a1fd44612dd",
       "evidence_class": "engineering_execution_readiness",
       "explanation": "Closed pre-authority goal; retained as immutable stop provenance and not reusable for launch.",
       "parent_artifact_hashes": {},
@@ -247,73 +247,97 @@
       "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
       "producing_task_id": "A2.1",
       "retention_class": "repository_safe",
-      "safe_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md",
+      "safe_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md",
       "scientific_authority": false,
       "title": "A2 Goal 003 terminal closeout",
       "validation_status": "validated"
     },
     {
-      "artifact_id": "a2-source-lo-handoff-goal003-stop-v1",
-      "artifact_type": "long_run_handoff",
+      "artifact_id": "a2-goal004-closeout-projection-v1",
+      "artifact_type": "projection",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
-      "evidence_class": "engineering_execution_readiness",
-      "explanation": "Records the unsafe-root stop, safe-return result, and absence of measured A2 exposure.",
+      "content_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "evidence_class": "measured_development_aggregate",
+      "explanation": "Hash-binds the audited measured A2 closeout, three-primary transfer route, and claim boundary without protected payloads.",
       "parent_artifact_hashes": {},
       "parent_artifact_ids": [],
       "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
       "producing_task_id": "A2.1",
       "retention_class": "repository_safe",
-      "safe_uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
-      "scientific_authority": false,
-      "title": "A2 LO 003 pre-authority stop handoff",
+      "safe_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "scientific_authority": true,
+      "title": "A2 Goal 004 aggregate-safe closeout projection",
       "validation_status": "validated"
     },
     {
-      "artifact_id": "a2-source-audit-goal003-stop-v1",
+      "artifact_id": "a2-goal004-execution-closeout-v1",
+      "artifact_type": "receipt",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "f6fb69a89cfcb0cb44c3a8bb0e4c0b44ee38462a2bdc3a0e6c8f0520c94b9f00",
+      "evidence_class": "measured_development_aggregate",
+      "explanation": "Accounts for all 52 frozen candidates, the USD 60 cap, worker teardown, and primary advancement outputs.",
+      "parent_artifact_hashes": {
+        "record_sha256": "e4bc663d7ee09282c334f25945ede247a50b81742a690c214e0f2aa9ffb81d1d"
+      },
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
+      "producing_task_id": "A2.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-execution-closeout.receipt.v2.json",
+      "scientific_authority": true,
+      "title": "A2 Goal 004 measured execution closeout",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a2-goal004-result-integrity-audit-v1",
       "artifact_type": "audit",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
-      "evidence_class": "engineering_execution_readiness",
-      "explanation": "Binds the Owner destroy disposition and fresh-attempt requirement.",
-      "parent_artifact_hashes": {},
+      "content_sha256": "d6671c8fff7bbe563d476cb3cfb885e83b3896c1ccf2e929f7bffbd6b0116762",
+      "evidence_class": "measured_development_aggregate",
+      "explanation": "Validates aggregate receipt lineage and the measured-result claim boundary.",
+      "parent_artifact_hashes": {
+        "record_sha256": "7d31b80d4dab6897f3110ee629ddf8f9d12fd5f0522b0d8ccd175ba892986642"
+      },
       "parent_artifact_ids": [],
       "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
       "producing_task_id": "A2.1",
       "retention_class": "repository_safe",
-      "safe_uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md",
+      "safe_uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-result-integrity-audit.v2.json",
       "scientific_authority": false,
-      "title": "A2 Audit 012 unsafe-root decision",
+      "title": "A2 Goal 004 independent result-integrity audit",
       "validation_status": "validated"
     },
     {
-      "artifact_id": "a2-research-session-goal003-stop-v1",
-      "artifact_type": "session_capsule",
+      "artifact_id": "a2-goal004-safe-return-v1",
+      "artifact_type": "receipt",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
-      "evidence_class": "engineering_execution_readiness",
-      "explanation": "Validated aggregate-safe session record with reference and integrity checks.",
-      "parent_artifact_hashes": {},
+      "content_sha256": "f4288344fd5c041ac5a768d651836350fb01099ac86cc577d656c0cd0fe58282",
+      "evidence_class": "measured_development_aggregate",
+      "explanation": "Records allowlisted artifact return and protected-output scan success.",
+      "parent_artifact_hashes": {
+        "record_sha256": "659982aea768c6d4c057a75c6a50b04026d7c48875d604e06b1563a1b2b09484"
+      },
       "parent_artifact_ids": [],
       "producing_phase_id": "A2_PER_ARM_AUTOINDEX",
       "producing_task_id": "A2.1",
       "retention_class": "repository_safe",
-      "safe_uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json",
+      "safe_uri": "owner-store://armindex/a2/a2-goal004-20260816-005/safe-return-001/a2-safe-return.receipt.v1.json",
       "scientific_authority": false,
-      "title": "A2 Goal 003 research-session capsule",
+      "title": "A2 Goal 004 aggregate-safe return receipt",
       "validation_status": "validated"
     }
   ],
-  "claim_boundary": "frozen_52_candidate_execution_readiness_only_no_candidate_evaluation_or_measured_a2_claim",
+  "claim_boundary": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "The pre-authority attempt is closed and non-promotable; no candidate retrieval, evaluation, reserve, winner, Selection, Final, or publication metric was produced.",
-    "status": "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT"
+    "reason": "PASS_A2_EXECUTION_CLOSEOUT and PASS_A2_RESULT_INTEGRITY; A3 Extended is prepared only as a pending hash-bound Train-250 route.",
+    "status": "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250"
   },
-  "evidence_class": "engineering_execution_readiness",
+  "evidence_class": "measured_development_aggregate",
   "evidence_links": [
     {
       "artifact_id": "a2-five-arm-candidate-manifest-v1",
@@ -382,57 +406,111 @@
     },
     {
       "artifact_id": "a2-source-goal-goal003-stop-v1",
-      "sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
-      "uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md"
+      "sha256": "25673ad3ae8377f7a075743aad5242674de185f554bc001d8b015a1fd44612dd",
+      "uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md"
     },
     {
-      "artifact_id": "a2-source-lo-handoff-goal003-stop-v1",
-      "sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
-      "uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md"
+      "artifact_id": "a2-goal004-closeout-projection-v1",
+      "sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json"
     },
     {
-      "artifact_id": "a2-source-audit-goal003-stop-v1",
-      "sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
-      "uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md"
+      "artifact_id": "a2-goal004-execution-closeout-v1",
+      "sha256": "f6fb69a89cfcb0cb44c3a8bb0e4c0b44ee38462a2bdc3a0e6c8f0520c94b9f00",
+      "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-execution-closeout.receipt.v2.json"
     },
     {
-      "artifact_id": "a2-research-session-goal003-stop-v1",
-      "sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
-      "uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json"
+      "artifact_id": "a2-goal004-result-integrity-audit-v1",
+      "sha256": "d6671c8fff7bbe563d476cb3cfb885e83b3896c1ccf2e929f7bffbd6b0116762",
+      "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-result-integrity-audit.v2.json"
+    },
+    {
+      "artifact_id": "a2-goal004-safe-return-v1",
+      "sha256": "f4288344fd5c041ac5a768d651836350fb01099ac86cc577d656c0cd0fe58282",
+      "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/safe-return-001/a2-safe-return.receipt.v1.json"
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-15T10:55:31Z",
-  "generated_from_revision": "728c53f999772c296885f46589ee5ab30680483663d7edd115dd9add35e8c769",
-  "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+  "generated_at": "2026-08-17T14:35:47Z",
+  "generated_from_revision": "a03d1e12dc207826c87d964033a2f7ffb9eda892e4c1e0c37d901358355528f0",
+  "git_commit": "713b9be785705181960d06920b804b7757fb9d31",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering_execution_readiness",
+    "evidence_class": "measured_development_aggregate",
     "final_split": "closed",
     "gpu": false,
-    "independent_auditor_required": true,
-    "measured_execution": false,
+    "independent_auditor_required": false,
+    "measured_execution": true,
     "network_model_download": false,
     "official_model_name": "gpt-5.6-sol",
     "paid_api": false,
     "protected_data_accessed": false,
-    "provider_admission_performed": false,
-    "provider_execution_adoption_performed": false,
+    "provider_admission_performed": true,
+    "provider_execution_adoption_performed": true,
     "provider_fallback": false,
     "real_counters": {
-      "candidate_count": 0,
+      "candidate_count": 52,
       "final_accesses": 0,
-      "measured_runs": 0,
+      "measured_runs": 1,
       "selection_accesses": 0,
-      "shortlist_count": 0
+      "shortlist_count": 3
     },
-    "rep_dev_accessed_for_measurement": false,
-    "scientific_authority": false
+    "rep_dev_accessed_for_measurement": true,
+    "scientific_authority": true
   },
   "input_bindings": {
+    "a2_goal004_measured_closeout": {
+      "a3_route": {
+        "eligible_arm_ids": [
+          "ARM-03",
+          "ARM-05",
+          "ARM-04"
+        ],
+        "excluded_diagnostic_arm_ids": [
+          "ARM-01",
+          "ARM-02"
+        ],
+        "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+        "provider_disposition": "OWNER_ACTION_DESTROY",
+        "status": "PENDING_HASH_BOUND_TRAIN_250_INPUT"
+      },
+      "accounting": {
+        "activated_reserve_candidate_count": 4,
+        "candidate_count": 52,
+        "dormant_reserve_candidate_count": 8,
+        "failed_candidate_count": 0,
+        "matched_candidate_count": 40,
+        "measured_candidate_count": 44,
+        "workers_reaped": true
+      },
+      "budget": {
+        "forward_hard_stop_usd": "60",
+        "whole_workload_total_usd": "54.52666666666665948"
+      },
+      "projection_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "projection_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "source_artifacts": {
+        "execution_closeout": {
+          "file_sha256": "f6fb69a89cfcb0cb44c3a8bb0e4c0b44ee38462a2bdc3a0e6c8f0520c94b9f00",
+          "record_sha256": "e4bc663d7ee09282c334f25945ede247a50b81742a690c214e0f2aa9ffb81d1d",
+          "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-execution-closeout.receipt.v2.json"
+        },
+        "result_integrity_audit": {
+          "file_sha256": "d6671c8fff7bbe563d476cb3cfb885e83b3896c1ccf2e929f7bffbd6b0116762",
+          "record_sha256": "7d31b80d4dab6897f3110ee629ddf8f9d12fd5f0522b0d8ccd175ba892986642",
+          "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/three-primary-closeout-001/a2-result-integrity-audit.v2.json"
+        },
+        "safe_return": {
+          "file_sha256": "f4288344fd5c041ac5a768d651836350fb01099ac86cc577d656c0cd0fe58282",
+          "record_sha256": "659982aea768c6d4c057a75c6a50b04026d7c48875d604e06b1563a1b2b09484",
+          "uri": "owner-store://armindex/a2/a2-goal004-20260816-005/safe-return-001/a2-safe-return.receipt.v1.json"
+        }
+      },
+      "status": "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"
+    },
     "campaign": {
-      "sha256": "b8b5c85d7deafe0d20cef1b5d9da0ac4a7e8300cf4f61696ffa9fa2eb43a06de",
+      "sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "candidate_freeze": {
@@ -463,18 +541,18 @@
       }
     ],
     "current_preauthority_closeout": {
-      "audit_sha256": "d318f1efb4ed42cb858987777185bf281510a0df42ed45a39489a78417036426",
-      "audit_uri": "docs/audit/A2_PER_ARM_AUTOINDEX_audit_012.md",
-      "goal_sha256": "23fb6abf2cd264342f2332e8be2851921cb31742ac44721b782bf00521b0e79b",
-      "goal_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_003.md",
-      "lo_handoff_sha256": "e1028905459e0b667b771149df2a5d2627ca6ef68d6ea93877488760ae89ac31",
-      "lo_handoff_uri": "docs/long_run/A2_PER_ARM_AUTOINDEX_lo_003_001.md",
-      "research_session_sha256": "b048cc2bae42892c0f94b5f450448b3b5cc65250c923ce20e3b46b12b704698e",
-      "research_session_uri": "outputs/audits/research-sessions/a2-ap-audit011-v3-full-a2-lo003-20260815.json",
-      "status": "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
+      "audit_sha256": null,
+      "audit_uri": null,
+      "goal_sha256": "25673ad3ae8377f7a075743aad5242674de185f554bc001d8b015a1fd44612dd",
+      "goal_uri": "docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md",
+      "lo_handoff_sha256": null,
+      "lo_handoff_uri": null,
+      "research_session_sha256": null,
+      "research_session_uri": null,
+      "status": "READY_FOR_MEASURED_EXECUTION"
     },
     "current_staged_attempt": {
-      "attempt_id": "a2-ap-audit011-v3-full-a2",
+      "attempt_id": "a2-im-audit008-provenance-v2",
       "pointer_sha256": null,
       "pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json"
     },
@@ -486,9 +564,9 @@
       "forward_hard_stop_usd": 50,
       "measured_a2_started": false,
       "owner_ttl_hours": 40,
-      "status": "PREAUTHORITY_STOP_UNSAFE_REMOTE_ROOT_MEASUREMENT_LOCKED"
+      "status": "READY_FOR_MEASURED_EXECUTION"
     },
-    "git_commit": "82ca6be739beab4c3561d3c75cfc81b0acfb0da2",
+    "git_commit": "713b9be785705181960d06920b804b7757fb9d31",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -523,13 +601,13 @@
       "uri": "../03_Paper/01_ArmIndex"
     },
     "source_of_truth": {
-      "sha256": "ebc18a90a8278dccc251a065014f80dad35dda20349f177ee04d4257bef94b26",
+      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "The unsafe-root finding is operational provenance only. It supports a fresh-attempt requirement and Owner destroy disposition, not an A2 quality, latency, cost, or superiority claim.",
+  "interpretation": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
   "language": "en",
-  "last_material_update": "2026-08-15T10:55:31Z",
+  "last_material_update": "2026-08-17T14:35:47Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -606,7 +684,7 @@
       "source_sha256": "67328668a8876680f53ecb27cd7fc5148997b7c361b6a886a84d209488559eed",
       "source_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json",
       "split": "premeasurement",
-      "value": 0
+      "value": 1
     },
     {
       "cutoff": 0,
@@ -639,7 +717,7 @@
       "source_sha256": "189e7a467b2272c7c6024c995f3c54f97f914c1bf45b0a4843abac22b5728bcc",
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
-      "value": 1
+      "value": 0
     },
     {
       "cutoff": 0,
@@ -651,32 +729,351 @@
       "source_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
       "split": "premeasurement",
       "value": 0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "frozen_candidate_universe",
+      "n": 1,
+      "name": "a2_measured_candidate_count",
+      "scope": "A2 Goal 004 measured closeout",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "development_aggregate",
+      "value": 44
+    },
+    {
+      "cutoff": 0,
+      "denominator": "conditional_reserve_universe",
+      "n": 1,
+      "name": "a2_dormant_reserve_candidate_count",
+      "scope": "A2 Goal 004 measured closeout",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "development_aggregate",
+      "value": 8
+    },
+    {
+      "cutoff": 0,
+      "denominator": "frozen_candidate_universe",
+      "n": 1,
+      "name": "a2_failed_candidate_count",
+      "scope": "A2 Goal 004 measured closeout",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "development_aggregate",
+      "value": 0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "whole_workload",
+      "n": 1,
+      "name": "a2_whole_workload_total_usd",
+      "scope": "A2 Goal 004 measured closeout",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "development_aggregate",
+      "value": "54.52666666666665948"
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_01_recall_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2346666666666668
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_01_ndcg_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.210783623690076
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_01_ndcg_at_10",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.1950241408753094
+    },
+    {
+      "cutoff": 0,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_01_search_p95_ms",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 1387.940057
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_01_charged_usd",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.0
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_02_recall_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.29
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_02_ndcg_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2499193094784085
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_02_ndcg_at_10",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2200574939200255
+    },
+    {
+      "cutoff": 0,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_02_search_p95_ms",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 1139.044918
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_02_charged_usd",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2172489252919918
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_03_recall_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.4229999999999999
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_03_ndcg_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.3576360656964662
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_03_ndcg_at_10",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2994437534650084
+    },
+    {
+      "cutoff": 0,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_03_search_p95_ms",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 1686.804176
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_03_charged_usd",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.3080191566437946
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_04_recall_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.3586666666666666
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_04_ndcg_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.3018675218204638
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_04_ndcg_at_10",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2532294396153771
+    },
+    {
+      "cutoff": 0,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_04_search_p95_ms",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 1115.051996
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_04_charged_usd",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.159218205702039
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_05_recall_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.3736666666666666
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_05_ndcg_at_100",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.3212617217892504
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_05_ndcg_at_10",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2736642420289198
+    },
+    {
+      "cutoff": 0,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_05_search_p95_ms",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 816.054961
+    },
+    {
+      "cutoff": 100,
+      "denominator": "aggregate_safe_candidate_outcome",
+      "n": 1,
+      "name": "a2_arm_05_charged_usd",
+      "scope": "A2 Goal 004 winner or diagnostic top candidate",
+      "source_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "source_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "split": "out_development_aggregate",
+      "value": 0.2109004290972753
     }
   ],
-  "next_authorized_action": "OWNER_AUTHORIZE_EXACT_ROOT_RECOVERY_ON_47782993_OR_DESTROY_THEN_CREATE_A2_ATTEMPT",
+  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "e809906b58d92ffe9523161cd1eb74383654de745f6644b9703d0db251f30882",
+  "report_sha256": "1f0c324baff828d0bb39d62248220967cb8e51758b89404c40d08c33540d608a",
   "report_type": "task",
   "result": {
-    "decision": "STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT",
-    "output": "Goal 003 completed fresh provider admission preparation but stopped before isolated staging because its exact target remote root already existed.",
-    "result": "The pre-authority attempt is closed and non-promotable; no candidate retrieval, evaluation, reserve, winner, Selection, Final, or publication metric was produced."
+    "decision": "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250",
+    "output": "A2 measured closeout accounts for 52 frozen candidates: 44 measured, 8 dormant conditional reserves, and zero failures. Primary advancement is limited to ARM-03, ARM-04, and ARM-05 under the Owner-approved amendment.",
+    "result": "PASS_A2_EXECUTION_CLOSEOUT and PASS_A2_RESULT_INTEGRITY; A3 Extended is prepared only as a pending hash-bound Train-250 route."
   },
   "schema_version": "myis.phase-task-report.v1",
-  "scientific_authority": false,
+  "scientific_authority": true,
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A2_PER_ARM_AUTOINDEX",
-    "program_state": "a2_preauthority_stop_unsafe_remote_root_owner_action_required",
+    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "program_state": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
     "task": "A2.1"
   },
-  "status": "blocked",
+  "status": "completed",
   "supported_claims": [
     {
-      "claim": "Goal 003 completed fresh provider admission preparation but stopped before isolated staging because its exact target remote root already existed.",
+      "claim": "A2 measured closeout accounts for 52 frozen candidates: 44 measured, 8 dormant conditional reserves, and zero failures. Primary advancement is limited to ARM-03, ARM-04, and ARM-05 under the Owner-approved amendment.",
       "evidence": [
         "a2-five-arm-candidate-manifest-v1",
         "a2-five-arm-candidate-freeze-receipt-v1",
@@ -692,9 +1089,10 @@
         "a2-execution-readiness-runbook-v1",
         "a2-execution-readiness-ledger-v1",
         "a2-source-goal-goal003-stop-v1",
-        "a2-source-lo-handoff-goal003-stop-v1",
-        "a2-source-audit-goal003-stop-v1",
-        "a2-research-session-goal003-stop-v1"
+        "a2-goal004-closeout-projection-v1",
+        "a2-goal004-execution-closeout-v1",
+        "a2-goal004-result-integrity-audit-v1",
+        "a2-goal004-safe-return-v1"
       ]
     }
   ],
@@ -705,5 +1103,5 @@
     "Causal or legal conclusions from retrieval aggregates."
   ],
   "validation_status": "validated",
-  "work_summary": "Goal 003 completed fresh provider admission preparation but stopped before isolated staging because the exact target remote root already existed; the stop, safe return, and Owner destroy disposition are retained as aggregate-safe provenance. No candidate retrieval, evaluation, measured A2, or publication metric was produced."
+  "work_summary": "The A2 Goal 004 measured closeout is complete with 52-candidate accounting, aggregate-safe return, independent result-integrity audit, three primary advancement arms, and bounded diagnostic no-winner outcomes for ARM-01/02. A3 Extended remains pending a hash-bound Train-250 query/corpus/evaluator package."
 }
