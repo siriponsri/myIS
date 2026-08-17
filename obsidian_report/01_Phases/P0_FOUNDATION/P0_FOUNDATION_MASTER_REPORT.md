@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c"
-read_model_sha256: "2d200d65b4225c07a4716b5c788ee4ddd95ea4ddae937d5cc2474d186b8e62cf"
-source_commit: "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a"
+read_model_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
+read_model_sha256: "d8bb770a0b454c14dea6c7199fcf6befc9ef28de8b7d8bf29cccd464e329981b"
+source_commit: "e399efea2e0726aad2ab28e0253f5fde49a1174c"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c"
-last_material_update: "2026-08-17T21:33:05Z"
+generated_from_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
+last_material_update: "2026-08-17T22:01:32Z"
 next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-17T21:33:05Z"
-updated_at: "2026-08-17T21:33:05Z"
+created_at: "2026-08-17T22:01:32Z"
+updated_at: "2026-08-17T22:01:32Z"
 note_id: "P0_FOUNDATION-MASTER"
 note_type: "phase_report"
 phase_id: "P0_FOUNDATION"
@@ -48,7 +48,7 @@ Deliver the P0_FOUNDATION research phase with an auditable evidence boundary.
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 8ad6333cb5dccb3345ceb19b25bd03ee9eab598a
+- `git_commit`: e399efea2e0726aad2ab28e0253f5fde49a1174c
 
 ## Work Performed
 

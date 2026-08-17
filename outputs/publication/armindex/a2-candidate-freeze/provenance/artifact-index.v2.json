@@ -209,6 +209,30 @@
       "uri": "../../../01_Research/schemas/armindex/a2-execution-adoption-receipt.v1.json"
     },
     {
+      "artifact_id": "control-armindex-a2-a2-goal004-closeout-projection-v1-json",
+      "bytes": 5091,
+      "classification": "aggregate",
+      "media_type": "application/json",
+      "sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "uri": "../../../01_Research/control/armindex/a2/a2-goal004-closeout-projection.v1.json"
+    },
+    {
+      "artifact_id": "docs-long_run-A2_PER_ARM_AUTOINDEX_lo_004_001-md",
+      "bytes": 4733,
+      "classification": "aggregate",
+      "media_type": "text/markdown",
+      "sha256": "850677dd8ac0319c5c79a9d9378b0367582edad0cd9753bb727f8c0fdffe533e",
+      "uri": "../../../01_Research/docs/long_run/A2_PER_ARM_AUTOINDEX_lo_004_001.md"
+    },
+    {
+      "artifact_id": "outputs-figures-armindex-a2-goal004-a2-goal004-figure-manifest-v1-json",
+      "bytes": 4704,
+      "classification": "aggregate",
+      "media_type": "application/json",
+      "sha256": "32503773f58945ac0484d9b7b3789c0861359a067c1c3a88920c6f56de7b94de",
+      "uri": "../../../01_Research/outputs/figures/armindex/a2-goal004/a2-goal004-figure-manifest.v1.json"
+    },
+    {
       "artifact_id": "outputs-audits-armindex-a2-five-arm-candidate-freeze-replay-validation-v1-json",
       "bytes": 1310,
       "classification": "aggregate",
@@ -218,16 +242,16 @@
     }
   ],
   "context": {
-    "claim_boundary": "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim",
-    "evidence_class": "engineering_validation",
+    "claim_boundary": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
+    "evidence_class": "measured_development_aggregate",
     "model_name": "gpt-5.6-sol",
     "phase_id": "A2_PER_ARM_AUTOINDEX",
-    "scientific_authority": false,
+    "scientific_authority": true,
     "source_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10",
-    "status": "candidate_freeze_audit_passed_measured_a2_closed",
+    "status": "a2_goal004_measured_closeout_a3_pending",
     "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
   },
-  "index_sha256": "f60f99668f8cb61a8f5d28b7982e6096b047f7f747d66da6efa4db5d1b8617f2",
+  "index_sha256": "d42556c6fe4aadd2f2bedfd03e452beb82700b66066a7b497ab45926267f5757",
   "run_id": "a2freeze-20260812t014444z",
   "schema_version": "myis.artifact-index.v2",
   "uri_base": "03_Paper/01_ArmIndex/provenance"

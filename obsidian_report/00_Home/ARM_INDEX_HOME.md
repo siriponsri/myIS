@@ -1,24 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c"
-read_model_sha256: "2d200d65b4225c07a4716b5c788ee4ddd95ea4ddae937d5cc2474d186b8e62cf"
-source_commit: "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a"
+read_model_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
+read_model_sha256: "d8bb770a0b454c14dea6c7199fcf6befc9ef28de8b7d8bf29cccd464e329981b"
+source_commit: "e399efea2e0726aad2ab28e0253f5fde49a1174c"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "measured_execution_authority"
+evidence_class: "measured_development_aggregate"
 scientific_authority: true
-claim_boundary: "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed"
-generated_from_revision: "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c"
-last_material_update: "2026-08-17T21:33:05Z"
+claim_boundary: "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported."
+generated_from_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
+last_material_update: "2026-08-17T22:01:32Z"
 next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-17T21:33:05Z"
-updated_at: "2026-08-17T21:33:05Z"
+created_at: "2026-08-17T22:01:32Z"
+updated_at: "2026-08-17T22:01:32Z"
 note_id: "ARM-INDEX-HOME"
 note_type: "home"
 phase_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
@@ -38,15 +38,15 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 - Phase: `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`
 - Status: `a2_goal004_measured_closeout_complete_a3_train_250_input_pending`
 
-## Retrieval arms
+## A2 measured arm outcomes
 
-| Arm | Model | Adapter | Representation | Commercial status |
-|---|---|---|---|---|
-| `ARM-01` | `lexical/bm25s` | declared_pending_fixture_lock | not_started | commercial_capable |
-| `ARM-02` | `BAAI/bge-m3` | declared_pending_fixture_lock | not_started | commercial_capable |
-| `ARM-03` | `datalyes/patembed-large` | declared_pending_fixture_lock | not_started | research_non_commercial |
-| `ARM-04` | `Snowflake/snowflake-arctic-embed-m-v2.0` | declared_pending_fixture_lock | not_started | commercial_capable |
-| `ARM-05` | `Qwen/Qwen3-Embedding-0.6B` | declared_pending_fixture_lock | not_started | commercial_capable |
+| Arm | Model | A2 status | A1 comparison | OUT Recall@100 | Commercial status |
+|---|---|---|---|---:|---|
+| `ARM-01` | `lexical/bm25s` | `a2_diagnostic_no_winner` | `DIAGNOSTIC_TIE_NO_WINNER` | `0.2346666666666668` | commercial_capable |
+| `ARM-02` | `BAAI/bge-m3` | `a2_diagnostic_no_winner` | `DIAGNOSTIC_TIE_NO_WINNER` | `0.29` | commercial_capable |
+| `ARM-03` | `datalyes/patembed-large` | `a2_primary_transfer_eligible` | `NUMERICAL_TIE_TO_A1` | `0.4229999999999999` | research_non_commercial |
+| `ARM-04` | `Snowflake/snowflake-arctic-embed-m-v2.0` | `a2_primary_transfer_eligible` | `STRICT_IMPROVEMENT` | `0.3586666666666666` | commercial_capable |
+| `ARM-05` | `Qwen/Qwen3-Embedding-0.6B` | `a2_primary_transfer_eligible` | `NO_STRICT_IMPROVEMENT` | `0.3736666666666666` | commercial_capable |
 
 ## Optimization status
 

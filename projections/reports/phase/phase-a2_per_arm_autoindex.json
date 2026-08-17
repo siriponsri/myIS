@@ -431,9 +431,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-17T21:33:05Z",
-  "generated_from_revision": "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c",
-  "git_commit": "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a",
+  "generated_at": "2026-08-17T22:01:32Z",
+  "generated_from_revision": "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766",
+  "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -460,6 +460,28 @@
     "scientific_authority": true
   },
   "input_bindings": {
+    "a2_goal004_closeout": {
+      "a3_route": {
+        "eligible_arm_ids": [
+          "ARM-03",
+          "ARM-05",
+          "ARM-04"
+        ],
+        "excluded_diagnostic_arm_ids": [
+          "ARM-01",
+          "ARM-02"
+        ],
+        "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+        "provider_disposition": "OWNER_ACTION_DESTROY",
+        "status": "PENDING_HASH_BOUND_TRAIN_250_INPUT"
+      },
+      "attempt_id": "a2-goal004-20260816-005",
+      "claim_boundary": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
+      "evidence_class": "measured_development_aggregate",
+      "projection_sha256": "6193e637bb070c01aa00f5f5ff2d1ebfb298a9d17a00dfd66d1669075bb1d209",
+      "projection_uri": "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
+      "status": "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"
+    },
     "a2_goal004_measured_closeout": {
       "a3_route": {
         "eligible_arm_ids": [
@@ -540,7 +562,18 @@
         "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
       }
     ],
-    "current_preauthority_closeout": {
+    "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+    "historical_execution_readiness": {
+      "budget_profile_sha256": "c831f7bd325318873178baee4673078b2860cd12a02e1998cb68d77797b733f8",
+      "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
+      "contract_sha256": "d559755672ce86309f15ad26ef96977e351bdd28673e03b5be42adc44e1da39e",
+      "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
+      "forward_hard_stop_usd": 50,
+      "measured_a2_started": false,
+      "owner_ttl_hours": 40,
+      "status": "READY_FOR_MEASURED_EXECUTION"
+    },
+    "historical_preauthority_closeout": {
       "audit_sha256": null,
       "audit_uri": null,
       "goal_sha256": "25673ad3ae8377f7a075743aad5242674de185f554bc001d8b015a1fd44612dd",
@@ -551,26 +584,15 @@
       "research_session_uri": null,
       "status": "READY_FOR_MEASURED_EXECUTION"
     },
-    "current_staged_attempt": {
-      "attempt_id": "a2-im-audit008-provenance-v2",
-      "pointer_sha256": null,
-      "pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json"
-    },
-    "execution_readiness": {
-      "budget_profile_sha256": "c831f7bd325318873178baee4673078b2860cd12a02e1998cb68d77797b733f8",
-      "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
-      "contract_sha256": "d559755672ce86309f15ad26ef96977e351bdd28673e03b5be42adc44e1da39e",
-      "contract_uri": "control/armindex/a2/execution-readiness-contract.v2.json",
-      "forward_hard_stop_usd": 50,
-      "measured_a2_started": false,
-      "owner_ttl_hours": 40,
-      "status": "READY_FOR_MEASURED_EXECUTION"
-    },
-    "git_commit": "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "historical_staged_attempt": {
+      "attempt_id": "a2-im-audit008-provenance-v2",
+      "pointer_sha256": null,
+      "pointer_uri": "control/armindex/a2/current-execution-attempt.v1.json"
     },
     "independent_audit": {
       "sha256": "141e616d49a48caf889aedc5cec04e8c1a75b05c5afd55845b292e10b222d8f0",
@@ -607,7 +629,7 @@
   },
   "interpretation": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
   "language": "en",
-  "last_material_update": "2026-08-17T21:33:05Z",
+  "last_material_update": "2026-08-17T22:01:32Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -1054,7 +1076,7 @@
   "objective": "Search and freeze one representation program per promoted arm.",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "phase-a2_per_arm_autoindex",
-  "report_sha256": "b302ad4ddf6c697c3ddff3fb40df21c6860b4764cfc9fefb39c2a4a677a01614",
+  "report_sha256": "7427dbfaf747221bb6a9c8471011949d0bc5f6f627488aec5385aa0c0cc690d0",
   "report_type": "phase",
   "result": {
     "decision": "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250",

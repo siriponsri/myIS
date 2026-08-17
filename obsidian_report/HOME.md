@@ -1,24 +1,24 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c"
-read_model_sha256: "2d200d65b4225c07a4716b5c788ee4ddd95ea4ddae937d5cc2474d186b8e62cf"
-source_commit: "8ad6333cb5dccb3345ceb19b25bd03ee9eab598a"
+read_model_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
+read_model_sha256: "d8bb770a0b454c14dea6c7199fcf6befc9ef28de8b7d8bf29cccd464e329981b"
+source_commit: "e399efea2e0726aad2ab28e0253f5fde49a1174c"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "measured_execution_authority"
+evidence_class: "measured_development_aggregate"
 scientific_authority: true
-claim_boundary: "frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed"
-generated_from_revision: "3f579e2a216738ba90a001bc1354f1a1bafa4a1394adea36c2cbd5813ada7b0c"
-last_material_update: "2026-08-17T21:33:05Z"
+claim_boundary: "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported."
+generated_from_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
+last_material_update: "2026-08-17T22:01:32Z"
 next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-17T21:33:05Z"
-updated_at: "2026-08-17T21:33:05Z"
+created_at: "2026-08-17T22:01:32Z"
+updated_at: "2026-08-17T22:01:32Z"
 note_id: "HOME"
 note_type: "home"
 phase_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
@@ -30,28 +30,32 @@ claim_level: "none"
 
 # myIS Research Report
 
-หน้านี้เป็น current view ที่สร้างจาก shared read model; PLAN.md และ canonical controls/receipts ยังคงเป็น authority.
+This current view is generated from the validated shared read model; canonical controls, receipts, and measured evidence remain authoritative.
 
-## สถานะตอนนี้
+## Current status
 
 - Phase: `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`
 - Task/Sub-stage: `A3.1 / PENDING_HASH_BOUND_TRAIN_250_INPUT`
 - Status: `a2_goal004_measured_closeout_complete_a3_train_250_input_pending`
-- Evidence: AP measured authority is current for frozen A2 retrieval; execution has not started, fresh provider admission is still required, and candidate evaluation plus REP-DEV remain closed.
+- A2 terminal status: `PASS_A2_EXECUTION_CLOSEOUT`
+- Result integrity: `PASS_A2_RESULT_INTEGRITY`
+- Accounting: `52 = 44 measured + 8 dormant`; failed candidates: `0`
+- Whole-workload cost: `$54.52666666666665948` against `$60` hard stop
 
-## หลักฐานและขอบเขต
+## A2 outcome and advancement
 
-- Scientific authority: `True`
-- Claim boundary: `frozen_a2_retrieval_only_candidate_evaluation_rep_dev_a3_selection_final_closed`
-- A1 measured evidence remains historical canonical lineage; it does not make A2 measured.
-- Selection and Final remain closed; D2 and D3 are Owner-only.
+- `ARM-04` is the strict A1 improvement.
+- `ARM-03`, `ARM-04`, and `ARM-05` are the Owner-approved primary transfer inputs for A3 Extended.
+- `ARM-01` and `ARM-02` are diagnostic three-way ties/no-winner outcomes and remain bounded negative evidence.
+- Evidence is aggregate development evidence only; Selection and Final remain closed.
 
-## การส่งต่องาน
+## Evidence and next action
 
-- Latest implementation handoff: `docs/implementation/A2_PER_ARM_AUTOINDEX_im_007_001.md`
-- Active LO goal: `docs/goal/A2_PER_ARM_AUTOINDEX_goal_002.md`
+- A2 closeout report: `docs/long_run/A2_PER_ARM_AUTOINDEX_lo_004_001.md`
+- A2 closeout projection: `control/armindex/a2/a2-goal004-closeout-projection.v1.json`
+- A3 route: `PENDING_HASH_BOUND_TRAIN_250_INPUT`
 - Next authorized action: `LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION`
-- Use `uv run --no-sync myis-status` for the current canonical owner status.
+- Vast disposition: `OWNER_ACTION_DESTROY`; do not retain the idle instance for an unbound future run.
 
 ## Navigate
 
