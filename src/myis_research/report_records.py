@@ -3565,9 +3565,21 @@ def _bindings(
                 "uri": "../03_Paper/01_ArmIndex",
                 "authority": "projection_only",
             }
+        closeout = model.get("armindex", {}).get("a2_goal004_closeout", {})
+        closeout_valid = isinstance(closeout, Mapping) and closeout.get("validated") is True
+        if closeout_valid:
+            bindings["a2_goal004_closeout"] = {
+                "status": closeout.get("status"),
+                "evidence_class": closeout.get("evidence_class"),
+                "claim_boundary": closeout.get("claim_boundary"),
+                "projection_uri": closeout.get("source_projection_uri"),
+                "projection_sha256": closeout.get("source_projection_file_sha256"),
+                "attempt_id": closeout.get("attempt_id"),
+                "a3_route": closeout.get("a3_route"),
+            }
         readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
         if isinstance(readiness, Mapping) and readiness.get("validated") is True:
-            bindings["execution_readiness"] = {
+            readiness_binding = {
                 "status": readiness.get("status"),
                 "contract_uri": readiness.get("contract_uri"),
                 "contract_sha256": readiness.get("contract_sha256"),
@@ -3577,8 +3589,17 @@ def _bindings(
                 "owner_ttl_hours": readiness.get("owner_ttl_hours"),
                 "measured_a2_started": readiness.get("measured_a2_started"),
             }
+            bindings[
+                "historical_execution_readiness"
+                if closeout_valid
+                else "execution_readiness"
+            ] = readiness_binding
             if readiness.get("attempt_id"):
-                bindings["current_staged_attempt"] = {
+                bindings[
+                    "historical_staged_attempt"
+                    if closeout_valid
+                    else "current_staged_attempt"
+                ] = {
                     "attempt_id": readiness.get("attempt_id"),
                     "pointer_uri": readiness.get("current_execution_pointer_uri"),
                     "pointer_sha256": readiness.get(
@@ -3586,7 +3607,11 @@ def _bindings(
                     ),
                 }
             if readiness.get("source_goal_uri"):
-                bindings["current_preauthority_closeout"] = {
+                bindings[
+                    "historical_preauthority_closeout"
+                    if closeout_valid
+                    else "current_preauthority_closeout"
+                ] = {
                     "status": readiness.get("status"),
                     "goal_uri": readiness.get("source_goal_uri"),
                     "goal_sha256": readiness.get("source_goal_sha256"),

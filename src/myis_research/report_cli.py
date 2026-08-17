@@ -1916,9 +1916,54 @@ def _p1_home_body(model: Mapping[str, Any], next_lines: str) -> str:
     )
 
 
+def _validated_a2_goal004_closeout(model: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Return the measured A2 closeout only when its projection is validated."""
+    armindex = model.get("armindex", {})
+    if not isinstance(armindex, Mapping):
+        return {}
+    closeout = armindex.get("a2_goal004_closeout", {})
+    if isinstance(closeout, Mapping) and closeout.get("validated") is True:
+        return closeout
+    return {}
+
+
 def _armindex_home_body(model: Mapping[str, Any]) -> str:
     project = model["project"]
     armindex = model["armindex"]
+    closeout = _validated_a2_goal004_closeout(model)
+    if closeout:
+        accounting = closeout.get("accounting", {})
+        budget = closeout.get("budget", {})
+        route = closeout.get("a3_route", {})
+        return (
+            "# myIS Research Report\n\n"
+            "This current view is generated from the validated shared read model; "
+            "canonical controls, receipts, and measured evidence remain authoritative.\n\n"
+            "## Current status\n\n"
+            f"- Phase: `{project['current_phase']}`\n"
+            f"- Task/Sub-stage: `{' / '.join(str(value) for value in (project.get('current_task'), project.get('current_substage')) if value and value != 'NOT_APPLICABLE') or 'UNKNOWN'}`\n"
+            f"- Status: `{project.get('current_status', 'UNKNOWN')}`\n"
+            "- A2 terminal status: `PASS_A2_EXECUTION_CLOSEOUT`\n"
+            "- Result integrity: `PASS_A2_RESULT_INTEGRITY`\n"
+            f"- Accounting: `{accounting.get('candidate_count', 52)} = {accounting.get('measured_candidate_count', 44)} measured + {accounting.get('dormant_reserve_candidate_count', 8)} dormant`; failed candidates: `{accounting.get('failed_candidate_count', 0)}`\n"
+            f"- Whole-workload cost: `${budget.get('whole_workload_total_usd', 'unknown')}` against `${budget.get('forward_hard_stop_usd', '60')}` hard stop\n\n"
+            "## A2 outcome and advancement\n\n"
+            "- `ARM-04` is the strict A1 improvement.\n"
+            "- `ARM-03`, `ARM-04`, and `ARM-05` are the Owner-approved primary transfer inputs for A3 Extended.\n"
+            "- `ARM-01` and `ARM-02` are diagnostic three-way ties/no-winner outcomes and remain bounded negative evidence.\n"
+            "- Evidence is aggregate development evidence only; Selection and Final remain closed.\n\n"
+            "## Evidence and next action\n\n"
+            "- A2 closeout report: `docs/long_run/A2_PER_ARM_AUTOINDEX_lo_004_001.md`\n"
+            "- A2 closeout projection: `control/armindex/a2/a2-goal004-closeout-projection.v1.json`\n"
+            f"- A3 route: `{route.get('status', 'PENDING_HASH_BOUND_TRAIN_250_INPUT')}`\n"
+            f"- Next authorized action: `{route.get('next_authorized_action', armindex.get('next_command', 'UNKNOWN'))}`\n"
+            "- Vast disposition: `OWNER_ACTION_DESTROY`; do not retain the idle instance for an unbound future run.\n\n"
+            "## Navigate\n\n"
+            "- [[ARM_INDEX_HOME]]\n"
+            "- [[A2_PER_ARM_AUTOINDEX_REPORT]]\n"
+            "- [[A2.1]]\n"
+            "- [[RESEARCH_HISTORY_INDEX]]\n"
+        )
     readiness = armindex.get("a2_execution_readiness", {})
     if not isinstance(readiness, Mapping):
         readiness = {}
@@ -2484,14 +2529,18 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
         "updated_at": model["generated_at"],
     }
     project = model["project"]
+    a2_closeout = _validated_a2_goal004_closeout(model)
     a2_readiness = armindex.get("a2_execution_readiness", {})
     a2_readiness = a2_readiness if isinstance(a2_readiness, Mapping) else {}
-    current_scientific_authority = a2_readiness.get("scientific_authority") is True
+    current_authority_source = a2_closeout or a2_readiness
+    current_scientific_authority = (
+        current_authority_source.get("scientific_authority") is True
+    )
     current_evidence_class = str(
-        a2_readiness.get("evidence_class", "engineering")
+        current_authority_source.get("evidence_class", "engineering")
     )
     current_claim_boundary = str(
-        a2_readiness.get("claim_boundary", "engineering_provenance_only")
+        current_authority_source.get("claim_boundary", "engineering_provenance_only")
     )
     p1_run_ids = _p1_run_ids(model)
     p1_manifest_hashes = _p1_manifest_hashes(model)
@@ -2521,17 +2570,34 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     armindex_phases = [
         row for row in armindex.get("phases", []) if isinstance(row, Mapping)
     ]
-    arm_rows = "\n".join(
-        f"| `{row.get('arm_id')}` | `{row.get('model_id')}` | {row.get('adapter_status')} | {row.get('representation_status')} | {row.get('commercial_status')} |"
-        for row in armindex.get("arms", [])
-        if isinstance(row, Mapping)
-    )
+    if a2_closeout:
+        arm_rows = "\n".join(
+            f"| `{row.get('arm_id')}` | `{row.get('model_id')}` | `{row.get('a2_status', 'unknown')}` | `{row.get('a2_outcome', {}).get('a1_comparison', 'unknown')}` | `{row.get('a2_outcome', {}).get('recall_at_100', 'not available')}` | {row.get('commercial_status')} |"
+            for row in armindex.get("arms", [])
+            if isinstance(row, Mapping)
+        )
+        arm_table = (
+            "## A2 measured arm outcomes\n\n"
+            "| Arm | Model | A2 status | A1 comparison | OUT Recall@100 | Commercial status |\n"
+            "|---|---|---|---|---:|---|\n"
+            + arm_rows
+        )
+    else:
+        arm_rows = "\n".join(
+            f"| `{row.get('arm_id')}` | `{row.get('model_id')}` | {row.get('adapter_status')} | {row.get('representation_status')} | {row.get('commercial_status')} |"
+            for row in armindex.get("arms", [])
+            if isinstance(row, Mapping)
+        )
+        arm_table = (
+            "## Retrieval arms\n\n| Arm | Model | Adapter | Representation | Commercial status |\n"
+            "|---|---|---|---|---|\n"
+            + arm_rows
+        )
     armindex_home = (
         "# ArmIndex Home\n\n"
         "ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readable but is not current ArmIndex evidence.\n\n"
         f"## Campaign and phase status\n\n- Campaign: `{armindex.get('campaign_id')}`\n- Phase: `{armindex.get('current_phase')}`\n- Status: `{armindex.get('status')}`\n\n"
-        "## Retrieval arms\n\n| Arm | Model | Adapter | Representation | Commercial status |\n|---|---|---|---|---|\n"
-        + arm_rows
+        + arm_table
         + "\n\n## Optimization status\n\n"
         f"- Transfer: `{armindex.get('transfer', {}).get('status', 'not_started')}`\n"
         f"- Complementarity: `{armindex.get('complementarity', {}).get('status', 'not_started')}`\n"
@@ -4213,6 +4279,8 @@ def _armindex_paper_artifact_contents(
                 "aggregate",
             ),
         ]
+    closeout = _validated_a2_goal004_closeout(model)
+    closeout_valid = bool(closeout)
     readiness = model.get("armindex", {}).get("a2_execution_readiness", {})
     readiness_valid = (
         isinstance(readiness, Mapping) and readiness.get("validated") is True
@@ -4240,6 +4308,17 @@ def _armindex_paper_artifact_contents(
             receipt = readiness.get(receipt_key)
             if isinstance(receipt, Mapping) and isinstance(receipt.get("uri"), str):
                 artifact_specs.append((receipt["uri"], "aggregate"))
+    if closeout_valid:
+        artifact_specs.extend(
+            (
+                ("control/armindex/a2/a2-goal004-closeout-projection.v1.json", "aggregate"),
+                ("docs/long_run/A2_PER_ARM_AUTOINDEX_lo_004_001.md", "aggregate"),
+                (
+                    "outputs/figures/armindex/a2-goal004/a2-goal004-figure-manifest.v1.json",
+                    "aggregate",
+                ),
+            )
+        )
     artifacts = [
         _artifact_file(root, relative, classification)
         for relative, classification in artifact_specs
@@ -4264,10 +4343,20 @@ def _armindex_paper_artifact_contents(
         "context": {
             "phase_id": "A2_PER_ARM_AUTOINDEX",
             "task_id": "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE",
-            "status": "candidate_freeze_audit_passed_measured_a2_closed",
-            "evidence_class": "engineering_validation",
-            "scientific_authority": False,
-            "claim_boundary": str(freeze["claim_boundary"]),
+            "status": "a2_goal004_measured_closeout_a3_pending"
+            if closeout_valid
+            else "candidate_freeze_audit_passed_measured_a2_closed",
+            "evidence_class": str(
+                closeout.get("evidence_class", "engineering_validation")
+                if closeout_valid
+                else "engineering_validation"
+            ),
+            "scientific_authority": bool(closeout_valid),
+            "claim_boundary": str(
+                closeout.get("claim_boundary", freeze["claim_boundary"])
+                if closeout_valid
+                else freeze["claim_boundary"]
+            ),
             "model_name": str(freeze["official_identity"]["model_name"]),
             "source_receipt_sha256": str(freeze["freeze_receipt_sha256"]),
         },
@@ -4404,13 +4493,18 @@ def _armindex_paper_artifact_contents(
         f"- Limit reached: `{str(credit['limit_reached']).lower()}`\n"
         "- Measured A2: `PASS_A2_EXECUTION_CLOSEOUT` / `PASS_A2_RESULT_INTEGRITY`\n"
         f"- Independent audit: `{freeze.get('independent_audit_status', 'pending')}`\n"
-        f"- Execution readiness: `{readiness.get('status', 'not validated')}`\n"
-        "- A2 accounting: `52 = 44 measured + 8 dormant`, `0` failed candidates\n"
+        + (
+            "- A2 terminal closeout: `PASS_A2_EXECUTION_CLOSEOUT` / "
+            "`PASS_A2_RESULT_INTEGRITY`\n"
+            if closeout_valid
+            else f"- Execution readiness: `{readiness.get('status', 'not validated')}`\n"
+        )
+        + "- A2 accounting: `52 = 44 measured + 8 dormant`, `0` failed candidates\n"
         "- A3 route: primary transfer inputs `ARM-03/04/05`; diagnostic no-winner `ARM-01/02`; pending hash-bound Train-250 input\n\n"
         "Raw Official prompts, responses, events, and credit snapshots remain "
         "Owner-local and are not copied here.\n"
     )
-    return {
+    outputs = {
         canonical_provenance_root / "artifact-index.v2.json": _json_text(index),
         canonical_provenance_root
         / "artifact-provenance-graph.v1.json": _json_text(graph),
@@ -4418,6 +4512,53 @@ def _armindex_paper_artifact_contents(
         provenance_root / "artifact-provenance-graph.v1.json": _json_text(graph),
         paper_root / "A2_CANDIDATE_FREEZE_ARTIFACTS.md": summary,
     }
+    if closeout_valid:
+        accounting = closeout.get("accounting", {})
+        budget = closeout.get("budget", {})
+        source_artifacts = closeout.get("source_artifacts", {})
+        figure_manifest = (
+            "outputs/figures/armindex/a2-goal004/"
+            "a2-goal004-figure-manifest.v1.json"
+        )
+        closeout_summary = (
+            "# ArmIndex A2 Goal 004 Measured Closeout Artifacts\n\n"
+            "This is an aggregate-safe Paper projection generated from the "
+            "validated A2 closeout. Canonical authority remains in `01_Research`; "
+            "protected qrels, membership, query IDs, rankings, per-query outcomes, "
+            "credentials, and raw provider payloads are not copied here.\n\n"
+            "- Phase: `A2_PER_ARM_AUTOINDEX`\n"
+            "- Attempt: `a2-goal004-20260816-005`\n"
+            "- Terminal statuses: `PASS_A2_EXECUTION_CLOSEOUT`, "
+            "`PASS_A2_RESULT_INTEGRITY`\n"
+            f"- Accounting: `{accounting.get('candidate_count', 52)} = "
+            f"{accounting.get('measured_candidate_count', 44)} measured + "
+            f"{accounting.get('dormant_reserve_candidate_count', 8)} dormant`; "
+            f"failed candidates: `{accounting.get('failed_candidate_count', 0)}`\n"
+            f"- Whole-workload cost: `${budget.get('whole_workload_total_usd', 'unknown')}` "
+            f"under `${budget.get('forward_hard_stop_usd', '60')}` hard stop\n"
+            "- Primary A3 transfer inputs: `ARM-03`, `ARM-04`, `ARM-05`\n"
+            "- Diagnostic no-winner evidence: `ARM-01`, `ARM-02`\n"
+            "- A3 status: `PENDING_HASH_BOUND_TRAIN_250_INPUT`\n"
+            "- Claim boundary: aggregate development evidence only; no Selection or Final claim\n\n"
+            "## Evidence receipts\n\n"
+            f"- Execution closeout record SHA-256: `{source_artifacts.get('execution_closeout', {}).get('record_sha256', 'not available')}`\n"
+            f"- Result-integrity audit record SHA-256: `{source_artifacts.get('result_integrity_audit', {}).get('record_sha256', 'not available')}`\n"
+            f"- Aggregate-safe return record SHA-256: `{source_artifacts.get('safe_return', {}).get('record_sha256', 'not available')}`\n\n"
+            "## Figure families\n\n"
+            "The five publication figure families are retained canonically under "
+            "`01_Research/outputs/figures/armindex/a2-goal004/`, with PNG, SVG, "
+            "and PDF variants where supported:\n\n"
+            "1. Candidate coverage and checkpoint/recovery completeness.\n"
+            "2. Five-arm OUT Recall@100 with secondary nDCG panels.\n"
+            "3. Quality-latency-cost frontier.\n"
+            "4. Matched-versus-reserve decision path.\n"
+            "5. Appendix provenance and audit map.\n\n"
+            f"- Figure manifest: `{figure_manifest}`\n"
+            "- Figure labels preserve the ARM-03 tie, ARM-04 strict improvement, "
+            "ARM-05 non-improvement, and ARM-01/02 diagnostic qualifications.\n"
+        )
+        outputs[paper_root / "A2_GOAL004_CLOSEOUT_ARTIFACTS.md"] = closeout_summary
+    return outputs
 
 
 def _compatibility_report_contents(

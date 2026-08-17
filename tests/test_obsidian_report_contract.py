@@ -80,6 +80,15 @@ def test_generated_vault_uses_v2_property_vocabulary_and_resolvable_links() -> N
         "Status: `a2_goal004_measured_closeout_complete_a3_train_250_input_pending`"
         in home_report
     )
+    assert "PASS_A2_EXECUTION_CLOSEOUT" in home_report
+    assert "52 = 44 measured + 8 dormant" in home_report
+    assert "A2 candidate evaluation and measured A2 are not started" not in home_report
+    armindex_home = contents[
+        ROOT / VAULT_RELATIVE_PATH / "00_Home/ARM_INDEX_HOME.md"
+    ]
+    assert "a2_primary_transfer_eligible" in armindex_home
+    assert "a2_diagnostic_no_winner" in armindex_home
+    assert "representation_status: not_started" not in armindex_home
     assert "P1_CPU_MEASURED_COMPLETE" in home_report
     assert "## สถานะตอนนี้" in audit_report
     assert "Round `3`" in audit_report
@@ -561,6 +570,14 @@ def test_a2_publication_artifacts_preserve_v1_and_bind_resolvable_v2_uris() -> N
 
     assert outputs[paper_index_path] == outputs[canonical_index_path]
     assert outputs[paper_graph_path] == outputs[canonical_graph_path]
+    closeout_path = (
+        ROOT.parent / "03_Paper/01_ArmIndex/A2_GOAL004_CLOSEOUT_ARTIFACTS.md"
+    ).resolve()
+    assert closeout_path in outputs
+    closeout = outputs[closeout_path]
+    assert "PASS_A2_EXECUTION_CLOSEOUT" in closeout
+    assert "a2-goal004-figure-manifest.v1.json" in closeout
+    assert "ARM-03`, `ARM-04`, `ARM-05" in closeout
     index = json.loads(outputs[paper_index_path])
     graph = json.loads(outputs[paper_graph_path])
     index_schema = json.loads((ROOT / "schemas/artifact-index.v2.json").read_text())
