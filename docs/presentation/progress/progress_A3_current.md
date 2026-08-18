@@ -4,7 +4,7 @@ audience: "Academic advisor"
 language: "English"
 as_of: "2026-08-18"
 status: "A0-A2 complete; A3 measurement in progress; A4 locked pending A3 audit"
-evidence_boundary: "Aggregate-safe controls, A1/A2 evidence, and A3 operational launch receipts only."
+evidence_boundary: "Summary controls, A1/A2 evidence, and A3 operational launch records only."
 ---
 
 # ArmIndex Progress Update
@@ -21,7 +21,7 @@ the A3 transfer measurement.
 
 **On slide**
 
-- Retriever-conditioned representation search for cross-domain patent retrieval
+- Retriever-specific document representation search for cross-domain patent retrieval
 - A0-A2 complete; A3 measurement in progress
 - 18 August 2026
 
@@ -41,14 +41,15 @@ results.
 **On slide**
 
 - A0: reproducibility and protected-data controls
-- A1: five document representations across five frozen retrievers
-- A2: constrained per-retriever representation search
-- A3: transfer and complementary-retriever measurement is running
+- A1: five document representations across five predefined retrievers
+- A2: constrained representation search for each retriever
+- A3: transfer and retriever-combination measurement is running
 
 **Speaker notes**
 
 Each phase has a distinct role. A0 establishes reproducibility. A1 tests the
-common representation surface. A2 conducts constrained per-retriever search.
+common comparison. A2 conducts constrained representation search for each
+retriever.
 A3 now asks whether the selected representations transfer and whether combining
 retrievers adds useful coverage under operational constraints.
 
@@ -79,14 +80,14 @@ labels.
 
 **On slide**
 
-- A1 completed the five-by-five common screen
+- A1 completed the five-by-five common comparison
 - A2 has complete accounting: 52 = 44 measured + 8 dormant
 - Dormant means not admitted for evaluation, not failure or zero performance
 
 **Speaker notes**
 
-A1 measured five fixed representations across five frozen retrieval arms. A2
-then searched its frozen candidate universe independently per arm. All 52
+A1 measured five fixed representations across five predefined retrieval arms. A2
+then searched its predefined candidate set independently for each arm. All 52
 authorized candidate slots are accounted for: 44 were measured and eight
 conditional reserves were dormant. The distinction is important because a
 dormant reserve is not a missing or null result.
@@ -100,13 +101,13 @@ dormant reserve is not a missing or null result.
 **On slide**
 
 - Primary A3 inputs: ARM-03 PatEmbed, ARM-04 Arctic Embed, ARM-05 Qwen3 Embedding
-- ARM-01 BM25 and ARM-02 BGE-M3 remain non-advancing diagnostic evidence
+- ARM-01 BM25 and ARM-02 BGE-M3 are retained for interpretation but do not advance
 - The decision preserves ties and no-gain outcomes instead of selecting only positive results
 
 **Speaker notes**
 
 ARM-03, ARM-04, and ARM-05 are the only A3 inputs. ARM-01 and ARM-02 had
-three-way top ties without a unique winner and remain useful diagnostic
+three-way top ties without a unique winner and remain useful interpretation
 evidence. ARM-04 is the strict A2 improvement; ARM-03 is a numerical tie at
 reported precision; ARM-05 is retained without a strict A2 improvement to
 avoid selecting only positive outcomes.
@@ -121,16 +122,16 @@ avoid selecting only positive outcomes.
 **On slide**
 
 - Current run: stage 028 launched 14 of 14 operations
-- Scope: transfer and fixed-union controls for ARM-03, ARM-04, and ARM-05
+- Scope: transfer and fixed combination controls for ARM-03, ARM-04, and ARM-05
 - Measurement is in progress; no A3 scientific result is available yet
-- A4 remains locked until coverage, receipts, and aggregate results are audited
+- A4 remains locked until complete results and execution records are audited
 
 **Speaker notes**
 
-Stage 028 has launched all nine transfer operations and five fixed-control
+Stage 028 has launched all nine transfer operations and five fixed combination-control
 operations. Launch is an operational fact, not a performance result. The next
-valid conclusion requires completed evidence collection, owner-local evaluation,
-coverage checks, and result-integrity audit. A4 has no current authorization to
+valid conclusion requires completed evidence collection, protected local evaluation,
+completeness checks, and result-integrity audit. A4 has no current authorization to
 proceed.
 
 [Sources]
@@ -140,6 +141,6 @@ proceed.
 ## Quality-Control Note
 
 The deck contains six slides, one core point per slide, speaker notes with
-source blocks, English-only visible copy, and only aggregate-safe figures.
+source blocks, English-only visible copy, and only summary figures.
 Its final slide explicitly prevents interpreting an operational launch as an
 A3 result.

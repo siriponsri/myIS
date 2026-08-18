@@ -27,5 +27,5 @@ $env:PROGRESS_ROOT = (Resolve-Path docs\presentation\progress).Path
 node "$build\build_progress_A3_current.mjs"
 ```
 
-The slide deck uses aggregate-safe A1/A2 figures only. It contains no protected
+The slide deck uses summary A1/A2 figures only. It contains no protected
 records, relevance judgments, split membership, rankings, or per-query output.

@@ -151,7 +151,7 @@ async function main() {
       bold: true,
       color: colors.ink,
     }, "title");
-    addText(slide, "Retriever-conditioned representation search for cross-domain patent retrieval", { left: 72, top: 280, width: 830, height: 72 }, {
+    addText(slide, "Retriever-specific document representation search for cross-domain patent retrieval", { left: 72, top: 280, width: 830, height: 72 }, {
       fontSize: 28,
       color: colors.muted,
     }, "subtitle");
@@ -165,7 +165,7 @@ async function main() {
       fontSize: 16,
       color: colors.muted,
     }, "date");
-    addFooter(slide, "Aggregate-safe advisor update. Selection and final confirmation remain closed.");
+    addFooter(slide, "Summary advisor update. Selection and final confirmation remain closed.");
     addNotes(slide, [
       "The central question is whether the best deterministic representation of a patent family depends on the retriever.",
       "This update reports completed evidence through A2 and the current operational state of A3. It does not present A3 results.",
@@ -180,13 +180,13 @@ async function main() {
     const slide = presentation.slides.add();
     slide.background.fill = colors.paper;
     addHeader(slide, "A0-A3 advances to transfer measurement", 2);
-    addText(slide, "Each phase answers a narrower question while keeping the retrievers, evaluator, and protected boundaries controlled.", { left: 72, top: 155, width: 1000, height: 48 }, {
+    addText(slide, "Each phase answers a narrower question while keeping retrievers, scoring rules, and data protections controlled.", { left: 72, top: 155, width: 1000, height: 48 }, {
       fontSize: 23,
       color: colors.muted,
     }, "subtitle");
     addPhase(slide, 72, "A0", "Controls", colors.blue);
-    addPhase(slide, 336, "A1", "Common screen", colors.teal);
-    addPhase(slide, 600, "A2", "Per-retriever search", colors.green);
+    addPhase(slide, 336, "A1", "Common comparison", colors.teal);
+    addPhase(slide, 600, "A2", "Representation search", colors.green);
     addPhase(slide, 864, "A3", "Transfer study", colors.amber);
     addText(slide, "complete", { left: 92, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a0-status");
     addText(slide, "complete", { left: 356, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a1-status");
@@ -197,9 +197,9 @@ async function main() {
       bold: true,
       color: colors.ink,
     }, "takeaway");
-    addFooter(slide, "Phase roles and A3 scope are fixed before measurement.");
+    addFooter(slide, "Phase roles and A3 scope are set before measurement.");
     addNotes(slide, [
-      "A0 establishes reproducibility and protected-data controls. A1 tests the common representation surface. A2 conducts constrained per-retriever search.",
+      "A0 establishes reproducibility and data-protection controls. A1 tests the common comparison. A2 conducts constrained representation search for each retriever.",
       "A3 now tests whether selected representations transfer and whether combining retrievers adds useful coverage under operational constraints.",
       "[Sources]",
       "docs/progress_report/update_A0_A1_A2_18AUG2026.md",
@@ -242,7 +242,7 @@ async function main() {
     const slide = presentation.slides.add();
     slide.background.fill = colors.paper;
     addHeader(slide, "A1 and A2 establish complete development evidence", 4);
-    addText(slide, "A1 maps the common representation surface; A2 searches a frozen candidate universe per retriever.", { left: 72, top: 155, width: 1070, height: 42 }, {
+    addText(slide, "A1 maps the common comparison; A2 searches a predefined candidate set for each retriever.", { left: 72, top: 155, width: 1070, height: 42 }, {
       fontSize: 23,
       color: colors.muted,
     }, "subtitle");
@@ -269,9 +269,9 @@ async function main() {
       color: colors.muted,
       alignment: "center",
     }, "a2-caption");
-    addFooter(slide, "A1 and A2 are aggregate development evidence; they are not Selection or Final confirmation.");
+    addFooter(slide, "A1 and A2 are summary development evidence; they are not Selection or Final confirmation.");
     addNotes(slide, [
-      "A1 measured five fixed representations across five frozen retrieval arms. A2 then searched its frozen candidate universe independently per arm.",
+      "A1 measured five fixed representations across five predefined retrieval arms. A2 then searched its predefined candidate set independently for each arm.",
       "All 52 authorized candidate slots are accounted for: 44 were measured and eight conditional reserves were dormant. A dormant reserve is not a missing or null result.",
       "[Sources]",
       "docs/progress_report/update_A0_A1_A2_18AUG2026.md",
@@ -297,14 +297,14 @@ async function main() {
       color: colors.ink,
     }, "primary-list");
     addRect(slide, { left: 835, top: 455, width: 340, height: 115 }, colors.paleAmber, "diagnostic-arms", colors.paleAmber);
-    addText(slide, "ARM-01 and ARM-02 stay as non-advancing diagnostic evidence.", { left: 865, top: 481, width: 260, height: 56 }, {
+    addText(slide, "ARM-01 and ARM-02 are retained for interpretation but do not advance.", { left: 865, top: 481, width: 270, height: 56 }, {
       fontSize: 19,
       color: colors.amber,
       bold: true,
     }, "diagnostic-note");
     addFooter(slide, "Only ARM-03, ARM-04, and ARM-05 enter A3 transfer and complementarity measurement.");
     addNotes(slide, [
-      "ARM-03, ARM-04, and ARM-05 are the only A3 inputs. ARM-01 and ARM-02 had three-way top ties without a unique winner and remain useful diagnostic evidence.",
+      "ARM-03, ARM-04, and ARM-05 are the only A3 inputs. ARM-01 and ARM-02 had three-way top ties without a unique winner and remain useful interpretation evidence.",
       "ARM-04 is the strict A2 improvement; ARM-03 is a numerical tie at reported precision; ARM-05 is retained without a strict A2 improvement to avoid selecting only positive outcomes.",
       "[Sources]",
       "docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md",
@@ -318,7 +318,7 @@ async function main() {
     const slide = presentation.slides.add();
     slide.background.fill = colors.paper;
     addHeader(slide, "A3 is running; conclusions await a result audit", 6);
-    addText(slide, "The current work tests transfer and fixed-union controls before any production decision.", { left: 72, top: 155, width: 1050, height: 42 }, {
+    addText(slide, "The current work tests transfer and fixed combination controls before any production decision.", { left: 72, top: 155, width: 1050, height: 42 }, {
       fontSize: 23,
       color: colors.muted,
     }, "subtitle");
@@ -327,19 +327,19 @@ async function main() {
     addText(slide, "operations launched\nin stage 028", { left: 102, top: 350, width: 190, height: 58 }, { fontSize: 21, bold: true, color: colors.ink }, "operation-label");
     addRect(slide, { left: 380, top: 235, width: 360, height: 220 }, colors.white, "measurement-scope");
     addText(slide, "What is being measured", { left: 410, top: 267, width: 280, height: 30 }, { fontSize: 23, bold: true, color: colors.ink }, "scope-title");
-    addText(slide, "- 9 transfer operations\n- 5 fixed-union controls\n- ARM-03, ARM-04, ARM-05 only", { left: 410, top: 324, width: 290, height: 95 }, { fontSize: 20, color: colors.ink }, "scope-body");
+    addText(slide, "- 9 transfer operations\n- 5 fixed combination controls\n- ARM-03, ARM-04, ARM-05 only", { left: 410, top: 324, width: 300, height: 95 }, { fontSize: 20, color: colors.ink }, "scope-body");
     addRect(slide, { left: 778, top: 235, width: 400, height: 220 }, colors.paleBlue, "decision-boundary", colors.paleBlue);
     addText(slide, "What cannot be concluded yet", { left: 808, top: 267, width: 330, height: 30 }, { fontSize: 23, bold: true, color: colors.blue }, "boundary-title");
     addText(slide, "No transfer result\nNo complementary-set decision\nNo A4 production decision", { left: 808, top: 324, width: 315, height: 100 }, { fontSize: 20, bold: true, color: colors.ink }, "boundary-body");
-    addText(slide, "Next valid update: collected packages, owner-local evaluation, coverage check, and independent result audit.", { left: 72, top: 525, width: 1025, height: 62 }, {
+    addText(slide, "Next valid update: collected packages, protected local evaluation, completeness check, and independent result audit.", { left: 72, top: 525, width: 1025, height: 62 }, {
       fontSize: 26,
       bold: true,
       color: colors.ink,
     }, "next-step");
-    addFooter(slide, "A4 remains locked pending valid A3 aggregate evidence and audit.");
+    addFooter(slide, "A4 remains locked pending valid A3 summary evidence and audit.");
     addNotes(slide, [
-      "Stage 028 has launched all nine transfer operations and five fixed-control operations.",
-      "Launch is an operational fact, not a performance result. The next valid conclusion requires completed evidence collection, owner-local evaluation, coverage checks, and a result-integrity audit.",
+      "Stage 028 has launched all nine transfer operations and five fixed combination-control operations.",
+      "Launch is an operational fact, not a performance result. The next valid conclusion requires completed evidence collection, protected local evaluation, completeness checks, and a result-integrity audit.",
       "A4 has no current authorization to proceed.",
       "[Sources]",
       "docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md",
