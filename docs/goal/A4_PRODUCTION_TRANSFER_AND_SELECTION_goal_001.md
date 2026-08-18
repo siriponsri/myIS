@@ -87,6 +87,9 @@ be observed, classified, and reaped only after its identity is proven orphaned.
   Selection exposure. Record that authorization in the attempt admission; do
   not create a new routine micro-gate. The one-shot preflight counter is a
   readiness record, not a second Selection access.
+- Treat that instruction as the Owner's `D1_START_CAMPAIGN` continuation for
+  A4. Bind its receipt to the fresh admission and this goal revision without
+  mutating or claiming that a historical D1 record covers the new phase.
 - The Owner has additionally pre-authorized conditional continuity: if and only
   if the complete A4 result, safe-return, independent integrity audit, and
   pointer-only A5 bundle all pass their automatic checks, the orchestrator may
