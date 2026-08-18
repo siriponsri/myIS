@@ -5,10 +5,18 @@ It does not start A4 measurement, open Selection or Final, inspect protected
 membership or qrels, or instantiate a production candidate from speculative
 results.
 
-The handoff is fail-closed until the A3 closeout receipt, three winner program
+The A3 closeout is now bound by
+`control/armindex/a4/a4-readiness-binding-20260819.json` (`binding_sha256`
+`4fb8b8f8d6d80941b0c76116d13c4cfd5199dbcd0d17e59152f0088c54c4f7fd`). The
+binding references the passing A3 result-integrity audit, aggregate safe return,
+flat HarnessOpt evaluation, and frozen runtime bindings. It is a readiness
+handoff only: `measured_execution`, `selection_permitted`, and
+`final_permitted` remain false.
+
+The handoff is fail-closed unless the A3 closeout binding, three winner program
 hashes, transfer/complementarity/HarnessOpt aggregate receipts, and safe-return
-receipt are present. The current A3 preparation manifest is therefore reported
-as `pending_a3_closeout`, not as A4 scientific authority.
+receipt are present. The A4 binding is therefore `contract_only_ready`, not A4
+scientific authority.
 
 The scaffold validates:
 

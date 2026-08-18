@@ -1,0 +1,33 @@
+{
+  "a3_attempt_id": "a3-goal003-20260818-028",
+  "a3_closeout_verified": true,
+  "a3_harnessopt_evaluation_sha256": "547ed212febe8c70f6675ca9851e652d391940598fbfb39ec41394c8c453007a",
+  "a3_result_integrity_audit_sha256": "3fbc601111b204d3d4829aab63cda2e4368f2b76fd08315c14f4c21abf820644",
+  "a3_safe_return_receipt_sha256": "48cb4c51680ec3e59a876dad9b3feaa0593c39585bf27ae4eaf1d50e950453dc",
+  "binding_sha256": "4fb8b8f8d6d80941b0c76116d13c4cfd5199dbcd0d17e59152f0088c54c4f7fd",
+  "claim_boundary": "contract_only_a4_readiness_no_production_measurement_no_selection_no_final",
+  "final_permitted": false,
+  "fixed_control_count": 5,
+  "harnessopt_candidate_count": 12,
+  "harnessopt_complete_batch_count": 3,
+  "harnessopt_unique_action_signature_count": 1,
+  "measured_execution": false,
+  "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+  "primary_arm_scope": [
+    "ARM-03",
+    "ARM-04",
+    "ARM-05"
+  ],
+  "protected_payload_included": false,
+  "runtime_bindings_sha256": "58e8d604d9b608b6e733e0ec961304539c6ce84c0f626a0278b9a713789b5e68",
+  "schema_version": "myis.armindex-a4-readiness-binding.v1",
+  "selection_permitted": false,
+  "status": "contract_only_ready",
+  "train250_query_count": 250,
+  "transfer_operation_count": 9,
+  "winner_program_sha256s": {
+    "ARM-03": "bcbffffa1a1836653fa833c3e5a64aa69620cf53c3907ee1fc47d83b143a48e3",
+    "ARM-04": "26a2148d32ed51ba67fc553fe637682d282d462f6165f27287018be8b15c4ca8",
+    "ARM-05": "71bfff354ef30e17f32448f35471f5a9f9f9a06b24de23407d55ddb01cfc68f8"
+  }
+}
