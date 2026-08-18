@@ -143,6 +143,9 @@ def _validate_inventory(
     if not isinstance(command, list) or not command or any(not isinstance(part, str) or not part for part in command):
         raise A3ThreePrimaryRemoteWorkerError("runtime ranker command is invalid")
     _self_hash(inventory, "inventory_sha256", role="runtime asset inventory")
+    # Enforce the frozen local-only model contract for the child ranker.
+    os.environ["HF_HUB_OFFLINE"] = "1"
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"
     executable = (assets_root / command[0]).resolve(strict=True)
     if executable.is_symlink() or not executable.is_file() or not executable.is_relative_to(assets_root):
         raise A3ThreePrimaryRemoteWorkerError("runtime ranker executable must remain inside opaque assets")
