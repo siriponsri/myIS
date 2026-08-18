@@ -252,7 +252,7 @@ def stage_a3_remote_runtime(
                 "import hashlib,json,os,sys;"
                 "root=sys.argv[1]; expected=sys.argv[2];"
                 "paths=[os.path.join(base,name) for base,dirs,files in os.walk(root) for name in files];"
-                "raise SystemExit('symlink in model tree') if any(os.path.islink(path) for path in paths) else None;"
+                "if any(os.path.islink(path) for path in paths): raise SystemExit('symlink in model tree');"
                 "entries=[{'path':os.path.relpath(path,root).replace(os.sep,'/'),'sha256':hashlib.sha256(open(path,'rb').read()).hexdigest()} for path in paths if os.path.relpath(path,root).replace(os.sep,'/') != 'A3_ADAPTER_BINDING.json'];"
                 "entries.sort(key=lambda item:item['path']);"
                 "actual=hashlib.sha256(json.dumps(entries,ensure_ascii=True,sort_keys=True,separators=(',',':')).encode()).hexdigest();"
