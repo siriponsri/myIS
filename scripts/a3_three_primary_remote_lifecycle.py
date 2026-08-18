@@ -65,12 +65,14 @@ def main() -> int:
     stage.add_argument("--code-bundle", required=True, type=Path)
     stage.add_argument("--runtime-assets-archive", required=True, type=Path)
     stage.add_argument("--runtime-assets-inventory", required=True, type=Path)
+    stage.add_argument("--remote-reuse-assets-root")
     launch = commands.add_parser("launch")
     _common(launch)
     launch.add_argument("--stage-receipt", required=True, type=Path)
     launch.add_argument("--request", required=True, type=Path)
     launch.add_argument("--request-manifest", required=True, type=Path)
     launch.add_argument("--remote-python", required=True)
+    launch.add_argument("--remote-device")
     collect = commands.add_parser("collect")
     _common(collect)
     collect.add_argument("--stage-receipt", required=True, type=Path)
@@ -84,6 +86,7 @@ def main() -> int:
             code_bundle=args.code_bundle,
             runtime_assets_archive=args.runtime_assets_archive,
             runtime_assets_inventory=args.runtime_assets_inventory,
+            remote_reuse_assets_root=args.remote_reuse_assets_root,
             ssh_host=args.ssh_host,
             ssh_port=args.ssh_port,
             ssh_key_path=args.ssh_key,
@@ -99,6 +102,7 @@ def main() -> int:
             ssh_key_path=args.ssh_key,
             known_hosts_path=args.known_hosts,
             remote_python=args.remote_python,
+            remote_device=args.remote_device,
         )
     else:
         result = collect_a3_remote_ranking_package(

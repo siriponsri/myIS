@@ -135,7 +135,7 @@ def _validate_inventory(
     value: Mapping[str, Any], *, assets_root: Path, expected_assets: Mapping[str, Any]
 ) -> dict[str, Any]:
     inventory = _aggregate_copy(value, role="runtime asset inventory")
-    if set(inventory) != _INVENTORY_KEYS or inventory["schema_version"] != "myis.armindex-a3-runtime-assets-inventory.v1":
+    if set(inventory) - (_INVENTORY_KEYS | {"package_bindings"}) or inventory["schema_version"] != "myis.armindex-a3-runtime-assets-inventory.v1":
         raise A3ThreePrimaryRemoteWorkerError("runtime asset inventory fields are incomplete")
     if inventory["remote_asset_sha256s"] != expected_assets:
         raise A3ThreePrimaryRemoteWorkerError("runtime asset inventory is not bound to the request")

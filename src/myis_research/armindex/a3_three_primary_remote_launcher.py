@@ -34,6 +34,7 @@ _HOST = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.-]{0,252}$")
 _PORT = re.compile(r"^[1-9][0-9]{0,4}$")
 _PID = re.compile(r"^[1-9][0-9]{0,11}$")
 _OPERATION_ID = re.compile(r"^[a-z0-9][a-z0-9._-]+$")
+_REMOTE_DEVICE = re.compile(r"^cuda:[0-9]+$")
 _A2_REUSE_ASSETS_ROOT = "/opt/myis/a2-goal004-20260816-005-incoming/assets"
 _STAGE_KEYS = {
     "schema_version",
@@ -244,18 +245,35 @@ def stage_a3_remote_runtime(
             corpus_sha = manifest["remote_asset_sha256s"]["corpus_sha256"]
             query_sha = manifest["remote_asset_sha256s"]["queries_sha256"]
             model_shas = manifest["remote_asset_sha256s"]["model_sha256s"]
+            # The model commitment is the canonical POSIX tree hash, not the
+            # hash of runtime-file-manifest.v4.json.  Compute that same
+            # aggregate on the instance after reusing its verified bytes.
+            tree_hash_script = (
+                "import hashlib,json,os,sys;"
+                "root=sys.argv[1]; expected=sys.argv[2];"
+                "paths=[os.path.join(base,name) for base,dirs,files in os.walk(root) for name in files];"
+                "raise SystemExit('symlink in model tree') if any(os.path.islink(path) for path in paths) else None;"
+                "entries=[{'path':os.path.relpath(path,root).replace(os.sep,'/'),'sha256':hashlib.sha256(open(path,'rb').read()).hexdigest()} for path in paths if os.path.relpath(path,root).replace(os.sep,'/') != 'A3_ADAPTER_BINDING.json'];"
+                "entries.sort(key=lambda item:item['path']);"
+                "actual=hashlib.sha256(json.dumps(entries,ensure_ascii=True,sort_keys=True,separators=(',',':')).encode()).hexdigest();"
+                "raise SystemExit(0 if actual == expected else 'model tree hash mismatch')"
+            )
             reuse = (
-                f"mkdir -p {shlex.quote(root)}/assets/input {shlex.quote(root)}/assets/models; "
-                f"cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/corpus.jsonl {shlex.quote(root)}/assets/input/corpus.jsonl; "
-                f"cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/queries.jsonl {shlex.quote(root)}/assets/input/queries.jsonl; "
-                f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-03 {shlex.quote(root)}/assets/models/ARM-03; "
-                f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-04 {shlex.quote(root)}/assets/models/ARM-04; "
-                f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-05 {shlex.quote(root)}/assets/models/ARM-05; "
-                f"test \"$(sha256sum {shlex.quote(root)}/assets/input/corpus.jsonl | awk '{{print $1}}')\" = {corpus_sha}; "
-                f"test \"$(sha256sum {shlex.quote(root)}/assets/input/queries.jsonl | awk '{{print $1}}')\" = {query_sha}; "
-                f"test \"$(sha256sum {shlex.quote(root)}/assets/models/ARM-03/runtime-file-manifest.v4.json | awk '{{print $1}}')\" = {model_shas['ARM-03']}; "
-                f"test \"$(sha256sum {shlex.quote(root)}/assets/models/ARM-04/runtime-file-manifest.v4.json | awk '{{print $1}}')\" = {model_shas['ARM-04']}; "
-                f"test \"$(sha256sum {shlex.quote(root)}/assets/models/ARM-05/runtime-file-manifest.v4.json | awk '{{print $1}}')\" = {model_shas['ARM-05']}; "
+                f"mkdir -p {shlex.quote(root)}/assets/models; "
+                f"cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/corpus.jsonl {shlex.quote(root)}/assets/corpus.jsonl; "
+                f"cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/queries.jsonl {shlex.quote(root)}/assets/queries.jsonl; "
+                f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-03/. {shlex.quote(root)}/assets/models/ARM-03/; "
+                f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-04/. {shlex.quote(root)}/assets/models/ARM-04/; "
+                f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-05/. {shlex.quote(root)}/assets/models/ARM-05/; "
+                f"for arm in ARM-03 ARM-04 ARM-05; do cd {shlex.quote(root)}/assets/models/$arm; "
+                "find . -type f ! -name 'A3_ADAPTER_BINDING.json' ! -name 'SHA256SUMS' "
+                "! -name 'runtime-file-manifest.v4.json' -printf '%P\\n' | sort | "
+                "while IFS= read -r file; do sha256sum \"$file\"; done > SHA256SUMS; done; "
+                f"test \"$(sha256sum {shlex.quote(root)}/assets/corpus.jsonl | awk '{{print $1}}')\" = {corpus_sha}; "
+                f"test \"$(sha256sum {shlex.quote(root)}/assets/queries.jsonl | awk '{{print $1}}')\" = {query_sha}; "
+                f"python3 -c {shlex.quote(tree_hash_script)} {shlex.quote(root)}/assets/models/ARM-03 {model_shas['ARM-03']}; "
+                f"python3 -c {shlex.quote(tree_hash_script)} {shlex.quote(root)}/assets/models/ARM-04 {model_shas['ARM-04']}; "
+                f"python3 -c {shlex.quote(tree_hash_script)} {shlex.quote(root)}/assets/models/ARM-05 {model_shas['ARM-05']}; "
             )
         verify = (
             "set -eu; "
@@ -265,6 +283,8 @@ def stage_a3_remote_runtime(
             f"tar --no-same-owner --no-same-permissions -xzf {shlex.quote(root)}/incoming/code.tar.gz -C {shlex.quote(root)}/current; "
             f"tar --no-same-owner --no-same-permissions -xzf {shlex.quote(root)}/incoming/assets.tar.gz -C {shlex.quote(root)}/assets; "
             f"{reuse}"
+            f"sed -i 's/\\r$//' {shlex.quote(root)}/assets/bin/a3-three-primary-ranker; "
+            f"chmod 755 {shlex.quote(root)}/assets/bin/a3-three-primary-ranker; "
             f"test -f {shlex.quote(root)}/current/src/myis_research/armindex/a3_three_primary_remote_retriever.py; "
             f"test -f {shlex.quote(root)}/current/src/myis_research/armindex/a3_three_primary_remote_worker.py; "
             f"cp {shlex.quote(root)}/incoming/A3_RUNTIME_ASSETS.json {shlex.quote(root)}/assets/A3_RUNTIME_ASSETS.json; "
@@ -327,6 +347,7 @@ def launch_a3_remote_operation(
     ssh_key_path: Path,
     known_hosts_path: Path,
     remote_python: str,
+    remote_device: str | None = None,
     run: Callable[[Sequence[str]], str] | None = None,
 ) -> dict[str, Any]:
     """Launch one isolated remote operation without reading output or logs.
@@ -344,6 +365,8 @@ def launch_a3_remote_operation(
     )
     if not isinstance(remote_python, str) or not remote_python.startswith("/") or ".." in Path(remote_python).parts:
         raise A3ThreePrimaryRemoteLauncherError("remote Python path is unsafe")
+    if remote_device is not None and not _REMOTE_DEVICE.fullmatch(remote_device):
+        raise A3ThreePrimaryRemoteLauncherError("remote device is unsafe")
     ssh, scp, target = _connection_args(
         ssh_host=ssh_host,
         ssh_port=ssh_port,
@@ -360,11 +383,13 @@ def launch_a3_remote_operation(
             f"test -f {shlex.quote(root)}/assets/A3_RUNTIME_ASSETS.json; "
             f"test \"$(sha256sum {shlex.quote(root)}/requests/{operation}.json | awk '{{print $1}}')\" = {request_manifest_file_sha256}; "
             f"mkdir -p {shlex.quote(root)}/output; "
-            f"nohup sh -c 'set -eu; export PYTHONPATH={shlex.quote(root)}/current/src A3_REMOTE_PYTHON={shlex.quote(remote_python)}; "
+            f"nohup sh -c 'set -eu; export PYTHONPATH={shlex.quote(root)}/current/src A3_REMOTE_PYTHON={shlex.quote(remote_python)}"
+            + (f" A3_REMOTE_DEVICE={shlex.quote(remote_device)}" if remote_device is not None else "")
+            + "; "
             f"{shlex.quote(remote_python)} -m myis_research.armindex.a3_three_primary_remote_worker "
             f"--request {shlex.quote(root)}/requests/{operation}.json --assets-root {shlex.quote(root)}/assets "
             f"--output-root {shlex.quote(root)}/output/{operation}' </dev/null "
-            f">{shlex.quote(root)}/output/{operation}/worker.stdout 2>{shlex.quote(root)}/output/{operation}/worker.stderr & echo $!"
+            f">{shlex.quote(root)}/output/{operation}.stdout 2>{shlex.quote(root)}/output/{operation}.stderr & echo $!"
         )
         output = execute([*ssh, command]).strip().splitlines()
     except (OSError, subprocess.SubprocessError, A3ThreePrimaryRemoteLauncherError) as error:

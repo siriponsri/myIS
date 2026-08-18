@@ -180,7 +180,7 @@ def test_stage_and_launch_emit_only_aggregate_safe_receipts(tmp_path: Path) -> N
     assert all("qrels" not in " ".join(call) for call in calls)
     launch_command = next(call[-1] for call in calls if "nohup" in call[-1])
     assert f"mkdir -p {manifest['remote_root']}/output;" in launch_command
-    assert f"mkdir -p {manifest['remote_root']}/output/a3-self-03;" not in launch_command
+    assert f"{manifest['remote_root']}/output/a3-self-03.stdout" in launch_command
 
 
 def test_stage_rejects_unbound_a2_asset_reuse_root(tmp_path: Path) -> None:
