@@ -75,11 +75,14 @@ def validate_a3_bindings(
         raise A4ReadinessError("unsupported A3 preparation manifest schema")
     if manifest.get("bundle_id") != "A3_THREE_PRIMARY_TRANSFER_HARNESSOPT_PENDING":
         raise A4ReadinessError("A3 bundle identity is not the three-primary bundle")
-    arms = tuple(item.get("arm_id") for item in manifest.get("arms", ()))
+    raw_arms = manifest.get("arms")
+    if not isinstance(raw_arms, list) or any(not isinstance(item, Mapping) for item in raw_arms):
+        raise A4ReadinessError("A3 arm declarations are malformed")
+    arms = tuple(item.get("arm_id") for item in raw_arms)
     if arms != PRIMARY_ARMS:
         raise A4ReadinessError("A3 primary arm scope must be ARM-03, ARM-04, ARM-05")
     matrix = manifest.get("transfer_matrix")
-    if not isinstance(matrix, list) or len(matrix) != 9:
+    if not isinstance(matrix, list) or len(matrix) != 9 or any(not isinstance(item, Mapping) for item in matrix):
         raise A4ReadinessError("A3 transfer matrix must contain all nine primary cells")
     pairs = {(item.get("source_arm_id"), item.get("target_arm_id")) for item in matrix}
     if pairs != {(source, target) for source in PRIMARY_ARMS for target in PRIMARY_ARMS}:
@@ -110,7 +113,7 @@ def validate_a3_bindings(
             raise A4ReadinessError("A3 closeout state is not terminal")
         if not (authority or {}).get("a3_closeout_receipt_sha256"):
             raise A4ReadinessError("A3 closeout receipt is required before A4")
-        for item in manifest["arms"]:
+        for item in raw_arms:
             _require_sha256(item.get("winner_program_sha256"), f"{item['arm_id']}.winner_program_sha256")
     return {
         "status": "ready_for_a4_contract_checks" if require_closeout else "pending_a3_closeout",
@@ -130,12 +133,16 @@ def validate_commercial_eligibility(
     """Validate explicit model/license snapshots for a profile or candidate."""
 
     _safe_scan(license_matrix)
+    if not isinstance(license_matrix, Sequence) or any(not isinstance(row, Mapping) for row in license_matrix):
+        raise A4ReadinessError("license matrix rows are malformed")
     rows = {str(row.get("arm_id")): row for row in license_matrix}
     if len(rows) != len(license_matrix):
         raise A4ReadinessError("license matrix contains duplicate arm IDs")
     selected = tuple(candidate_arm_ids)
     if not selected or len(set(selected)) != len(selected):
         raise A4ReadinessError("candidate arm IDs must be non-empty and unique")
+    if any(not re.fullmatch(r"ARM-0[1-5]", arm_id) for arm_id in selected):
+        raise A4ReadinessError("candidate arm IDs are not active ArmIndex arms")
     unknown = set(selected) - set(rows)
     if unknown:
         raise A4ReadinessError(f"license matrix is missing arms: {sorted(unknown)}")
@@ -171,7 +178,10 @@ def non_dominated_frontier(
 ) -> tuple[str, ...]:
     """Return deterministic IDs on the quality/latency/cost Pareto frontier."""
 
-    rows = [dict(point) for point in points]
+    try:
+        rows = [dict(point) for point in points]
+    except (TypeError, ValueError) as error:
+        raise A4ReadinessError("Pareto points must be mappings") from error
     ids = [str(row.get(id_key, "")) for row in rows]
     if not rows or any(not item for item in ids) or len(ids) != len(set(ids)):
         raise A4ReadinessError("Pareto points require unique non-empty IDs")
@@ -212,7 +222,9 @@ def validate_production_profile_manifest(
     if manifest.get("selection_accesses") != 0 or manifest.get("final_accesses") != 0:
         raise A4ReadinessError("A4 profile manifest cannot contain Selection or Final access")
     profiles = manifest.get("profiles")
-    if not isinstance(profiles, list) or {row.get("profile_id") for row in profiles} != set(REQUIRED_PROFILES):
+    if not isinstance(profiles, list) or any(not isinstance(row, Mapping) for row in profiles):
+        raise A4ReadinessError("A4 profile rows are malformed")
+    if {row.get("profile_id") for row in profiles} != set(REQUIRED_PROFILES):
         raise A4ReadinessError("A4 profile manifest must contain FAST, BALANCED, and DEEP exactly once")
     if len(profiles) != len(REQUIRED_PROFILES):
         raise A4ReadinessError("A4 profile IDs must be unique")
@@ -231,8 +243,15 @@ def validate_production_profile_manifest(
         arms = tuple(row["arm_ids"])
         if not arms or len(set(arms)) != len(arms) or any(arm not in COMMERCIAL_ARMS + ("ARM-03",) for arm in arms):
             raise A4ReadinessError("profile arm IDs are invalid")
-        if row["maximum_candidate_depth"] < 1 or row["maximum_candidate_depth"] > 2000:
+        if (
+            isinstance(row["maximum_candidate_depth"], bool)
+            or not isinstance(row["maximum_candidate_depth"], int)
+            or row["maximum_candidate_depth"] < 1
+            or row["maximum_candidate_depth"] > 2000
+        ):
             raise A4ReadinessError("profile depth is outside the bounded contract")
+        if not isinstance(row["commercial_only"], bool):
+            raise A4ReadinessError("profile commercial_only marker must be boolean")
         validate_commercial_eligibility(license_matrix, arms, commercial_only=bool(row["commercial_only"]))
         if row["profile_id"] == "FAST" and (row["mode"] != "synchronous" or "ARM-01" not in arms or len(arms) > 2):
             raise A4ReadinessError("FAST must be synchronous, include BM25, and use at most two arms")
@@ -290,7 +309,11 @@ def consume_selection_preflight_counter(
     if not request_id or not isinstance(request_id, str):
         raise A4ReadinessError("Selection preflight request_id is required")
     _require_sha256(frozen_bindings_sha256, "frozen_bindings_sha256")
-    if set(checks) != set(SELECTION_PREFLIGHT_CHECKS) or any(value is not True for value in checks.values()):
+    if (
+        not isinstance(checks, Mapping)
+        or set(checks) != set(SELECTION_PREFLIGHT_CHECKS)
+        or any(value is not True for value in checks.values())
+    ):
         raise A4ReadinessError("all exact Selection preflight checks must pass")
     path = Path(counter_path)
     if path.is_symlink():
