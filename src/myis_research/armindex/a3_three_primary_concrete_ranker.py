@@ -22,7 +22,7 @@ from .a1_2_measured_executor_v16 import SentenceTransformerDenseAdapter
 from .a2_owner_local_engine import _corpus_rows, _queries, _rank_dense
 from .a2_program_runtime import compile_program
 from .fusion import fuse_rankings
-from .a3_three_primary_execution import PRIMARY_ARMS
+from .a3_three_primary_execution import PRIMARY_ARMS, _validate_package_bindings
 from .a3_three_primary_remote_retriever import validate_remote_cell_request
 
 
@@ -55,6 +55,8 @@ def run_a3_three_primary_ranker(
         raise A3ThreePrimaryConcreteRankerError("A3 assets root is unsafe")
     inventory = _inventory(root, expected_assets=request["remote_asset_sha256s"])
     runtime = _runtime_bindings(root, expected_sha256=request["runtime_bindings_sha256"])
+    if inventory.get("package_bindings") != runtime.get("package_bindings"):
+        raise A3ThreePrimaryConcreteRankerError("runtime package commitments are not aligned")
     corpus_path, queries = _train_assets(root, inventory)
     depth = max(request["output_depth_by_arm"].values())
     started = time.perf_counter()
@@ -165,17 +167,26 @@ def _serialise_rankings(rankings: Mapping[str, Sequence[Any]], *, depth: int) ->
 
 def _train_assets(root: Path, inventory: Mapping[str, Any]) -> tuple[Path, dict[str, str]]:
     scope = _load_json(root / "train-scope.json", role="Train-250 scope")
-    if scope != {
+    expected_scope = {
         "schema_version": "myis.armindex-a3-train-scope.v1",
         "scope": "Train-250",
         "split_id": "Train-250",
         "query_count": 250,
         "queries_sha256": inventory["remote_asset_sha256s"]["queries_sha256"],
-    }:
+    }
+    package = inventory.get("package_bindings")
+    if package is not None:
+        expected_scope["split_commitment_sha256"] = package["split_commitment_sha256"]
+    if scope != expected_scope:
         raise A3ThreePrimaryConcreteRankerError("A3 ranker requires exactly Train-250")
     corpus_path, queries_path = root / "corpus.jsonl", root / "queries.jsonl"
     if file_sha256(corpus_path) != inventory["remote_asset_sha256s"]["corpus_sha256"] or file_sha256(queries_path) != scope["queries_sha256"]:
         raise A3ThreePrimaryConcreteRankerError("Train-250 asset hash drift")
+    if package is not None and (
+        package["corpus_sha256"] != inventory["remote_asset_sha256s"]["corpus_sha256"]
+        or package["query_bundle_sha256"] != inventory["remote_asset_sha256s"]["queries_sha256"]
+    ):
+        raise A3ThreePrimaryConcreteRankerError("A3 package commitments do not match staged assets")
     queries = _queries(queries_path)
     if len(queries) != 250:
         raise A3ThreePrimaryConcreteRankerError("Train-250 query coverage drift")
@@ -184,7 +195,8 @@ def _train_assets(root: Path, inventory: Mapping[str, Any]) -> tuple[Path, dict[
 
 def _inventory(root: Path, *, expected_assets: Mapping[str, Any]) -> dict[str, Any]:
     value = _load_json(root / "A3_RUNTIME_ASSETS.json", role="runtime asset inventory")
-    if set(value) != _INVENTORY_KEYS or value.get("schema_version") != "myis.armindex-a3-runtime-assets-inventory.v1" or value.get("remote_asset_sha256s") != expected_assets:
+    allowed = _INVENTORY_KEYS | {"package_bindings"}
+    if set(value) - allowed or value.get("schema_version") != "myis.armindex-a3-runtime-assets-inventory.v1" or value.get("remote_asset_sha256s") != expected_assets:
         raise A3ThreePrimaryConcreteRankerError("runtime assets are not bound to the remote request")
     _require_sha256(value.get("inventory_sha256"), "runtime inventory")
     if value["inventory_sha256"] != canonical_sha256({key: item for key, item in value.items() if key != "inventory_sha256"}):
@@ -194,13 +206,15 @@ def _inventory(root: Path, *, expected_assets: Mapping[str, Any]) -> dict[str, A
 
 def _runtime_bindings(root: Path, *, expected_sha256: str) -> dict[str, Any]:
     value = _load_json(root / "A3_RUNTIME_BINDINGS.json", role="runtime bindings")
-    if set(value) != _RUNTIME_KEYS or value.get("primary_arm_scope") != list(PRIMARY_ARMS) or value.get("runtime_bindings_sha256") != expected_sha256:
+    if set(value) not in (_RUNTIME_KEYS, _RUNTIME_KEYS | {"package_bindings"}) or value.get("primary_arm_scope") != list(PRIMARY_ARMS) or value.get("runtime_bindings_sha256") != expected_sha256:
         raise A3ThreePrimaryConcreteRankerError("runtime binding identity drift")
     if expected_sha256 != canonical_sha256({key: item for key, item in value.items() if key != "runtime_bindings_sha256"}):
         raise A3ThreePrimaryConcreteRankerError("runtime binding hash drift")
     for arm_id in PRIMARY_ARMS:
         _require_sha256(value["winner_bindings"][arm_id]["winner_program_sha256"], "winner program")
         _require_sha256(value["target_adapter_sha256s"][arm_id], "target adapter")
+    if "package_bindings" in value:
+        _validate_package_bindings(value["package_bindings"])
     return value
 
 
@@ -221,11 +235,16 @@ def _tree_sha256(root: Path, *, exclude: set[str] | None = None) -> str:
         raise A3ThreePrimaryConcreteRankerError("model asset directory is invalid")
     excluded = exclude or set()
     entries = []
-    for path in sorted(root.rglob("*")):
+    # Sort serialized POSIX paths, rather than platform-specific Path ordering.
+    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
         relative = path.relative_to(root).as_posix()
         if relative in excluded:
             continue
-        if path.is_symlink() or not path.is_file():
+        if path.is_symlink():
+            raise A3ThreePrimaryConcreteRankerError("model asset tree contains an unsafe entry")
+        if path.is_dir():
+            continue
+        if not path.is_file():
             raise A3ThreePrimaryConcreteRankerError("model asset tree contains an unsafe entry")
         entries.append({"path": relative, "sha256": file_sha256(path)})
     if not entries:

@@ -38,6 +38,16 @@ _ADMISSION_KEYS = {
     "admission_sha256",
 }
 _WINNER_KEYS = {"winner_program_sha256", "winner_selection_receipt_sha256"}
+_PACKAGE_BINDING_KEYS = {
+    "corpus_sha256",
+    "query_bundle_sha256",
+    "split_commitment_sha256",
+    "evaluator_sha256",
+    "qrels_commitment_sha256",
+    "membership_commitment_sha256",
+    "runtime_lock_sha256",
+    "data_handoff_sha256",
+}
 _FIXED_UNION_KEYS = {
     "schema_version",
     "status",
@@ -106,6 +116,7 @@ def build_three_primary_runtime_bindings(
     admission: Mapping[str, Any],
     winner_bindings: Mapping[str, Mapping[str, Any]],
     target_adapter_sha256s: Mapping[str, str],
+    package_bindings: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
     """Bind admissible winners and adapter identities using hashes only."""
 
@@ -130,6 +141,8 @@ def build_three_primary_runtime_bindings(
         "winner_bindings": winners,
         "target_adapter_sha256s": adapters,
     }
+    if package_bindings is not None:
+        body["package_bindings"] = _validate_package_bindings(package_bindings)
     return {**body, "runtime_bindings_sha256": canonical_sha256(body)}
 
 
@@ -226,16 +239,33 @@ def _validate_runtime_bindings(value: Mapping[str, Any]) -> dict[str, Any]:
         "target_adapter_sha256s",
         "runtime_bindings_sha256",
     }
-    if set(bindings) != required or bindings["schema_version"] != "myis.armindex-a3-three-primary-runtime-bindings.v1":
+    extended_required = required | {"package_bindings"}
+    if (
+        set(bindings) not in (required, extended_required)
+        or bindings.get("schema_version")
+        != "myis.armindex-a3-three-primary-runtime-bindings.v1"
+    ):
         raise A3ThreePrimaryExecutionError("runtime bindings fields are incomplete")
     if bindings["primary_arm_scope"] != list(PRIMARY_ARMS):
         raise A3ThreePrimaryExecutionError("runtime bindings changed the primary-arm scope")
     for field in ("budget_extension_sha256", "authority_sha256", "manifest_sha256", "admission_sha256"):
         _require_sha256(bindings[field], field)
     _validate_hash_mapping(bindings["target_adapter_sha256s"], role="target adapter")
+    if "package_bindings" in bindings:
+        _validate_package_bindings(bindings["package_bindings"])
     _validate_winner_shapes(bindings["winner_bindings"])
     _self_hash(bindings, "runtime_bindings_sha256", role="runtime bindings")
     return bindings
+
+
+def _validate_package_bindings(value: Mapping[str, Any]) -> dict[str, str]:
+    bindings = _aggregate_copy(value, role="A3 package bindings")
+    if set(bindings) != _PACKAGE_BINDING_KEYS:
+        raise A3ThreePrimaryExecutionError("A3 package bindings fields are incomplete")
+    result = {str(key): str(item) for key, item in bindings.items()}
+    for field, digest in result.items():
+        _require_sha256(digest, f"package binding {field}")
+    return result
 
 
 def _validate_winner_bindings(

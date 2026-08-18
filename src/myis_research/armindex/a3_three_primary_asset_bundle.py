@@ -15,7 +15,7 @@ from ..kernel.canonical import canonical_sha256, file_sha256
 from ..protection import assert_aggregate_only
 from .a2_owner_local_engine import _queries
 from .a3_three_primary_concrete_ranker import _tree_sha256
-from .a3_three_primary_execution import PRIMARY_ARMS
+from .a3_three_primary_execution import PRIMARY_ARMS, _validate_package_bindings
 
 
 class A3ThreePrimaryAssetBundleError(ValueError):
@@ -45,9 +45,20 @@ def build_a3_three_primary_asset_bundle(
         raise A3ThreePrimaryAssetBundleError("A3 stage-source root must be a new Owner-Store directory")
     bindings = _runtime_bindings(runtime_bindings)
     corpus, queries = _regular(corpus_path, role="corpus"), _regular(queries_path, role="queries")
-    scope = _train_scope(train_scope, queries_sha256=file_sha256(queries))
+    package = bindings.get("package_bindings")
+    checked_package = _validate_package_bindings(package) if package is not None else None
+    scope = _train_scope(
+        train_scope,
+        queries_sha256=file_sha256(queries),
+        split_commitment_sha256=(checked_package or {}).get("split_commitment_sha256"),
+    )
     if len(_queries(queries)) != 250:
         raise A3ThreePrimaryAssetBundleError("A3 bundle requires exactly 250 Train-250 queries")
+    if checked_package is not None:
+        if checked_package["corpus_sha256"] != file_sha256(corpus):
+            raise A3ThreePrimaryAssetBundleError("A3 package corpus hash does not match staged corpus")
+        if checked_package["query_bundle_sha256"] != file_sha256(queries):
+            raise A3ThreePrimaryAssetBundleError("A3 package query hash does not match staged queries")
     if set(winner_program_paths) != set(PRIMARY_ARMS) or set(target_model_directories) != set(PRIMARY_ARMS):
         raise A3ThreePrimaryAssetBundleError("A3 bundle must cover exactly the three primary arms")
     target.mkdir(parents=True, exist_ok=False)
@@ -86,6 +97,7 @@ def build_a3_three_primary_asset_bundle(
             "schema_version": "myis.armindex-a3-three-primary-asset-bundle-receipt.v1",
             "status": "PASS_A3_OWNER_STORE_ASSET_BUNDLE",
             "runtime_bindings_sha256": bindings["runtime_bindings_sha256"],
+            **({"package_bindings": checked_package} if checked_package is not None else {}),
             "scope": "Train-250",
             "query_count": 250,
             "corpus_sha256": inventory["remote_asset_sha256s"]["corpus_sha256"],
@@ -112,7 +124,7 @@ def _runtime_bindings(value: Mapping[str, Any]) -> dict[str, Any]:
         "manifest_sha256", "admission_sha256", "winner_bindings", "target_adapter_sha256s",
         "runtime_bindings_sha256",
     }
-    if set(bindings) != required or bindings.get("schema_version") != "myis.armindex-a3-three-primary-runtime-bindings.v1" or bindings.get("primary_arm_scope") != list(PRIMARY_ARMS):
+    if set(bindings) not in (required, required | {"package_bindings"}) or bindings.get("schema_version") != "myis.armindex-a3-three-primary-runtime-bindings.v1" or bindings.get("primary_arm_scope") != list(PRIMARY_ARMS):
         raise A3ThreePrimaryAssetBundleError("A3 runtime bindings are invalid")
     digest = bindings.get("runtime_bindings_sha256")
     if not _sha(digest) or digest != canonical_sha256({key: item for key, item in bindings.items() if key != "runtime_bindings_sha256"}):
@@ -121,10 +133,20 @@ def _runtime_bindings(value: Mapping[str, Any]) -> dict[str, Any]:
         winner = bindings["winner_bindings"].get(arm_id)
         if not isinstance(winner, Mapping) or not _sha(winner.get("winner_program_sha256")) or not _sha(bindings["target_adapter_sha256s"].get(arm_id)):
             raise A3ThreePrimaryAssetBundleError("A3 winner or adapter binding is invalid")
+    if "package_bindings" in bindings:
+        try:
+            bindings["package_bindings"] = _validate_package_bindings(bindings["package_bindings"])
+        except ValueError as error:
+            raise A3ThreePrimaryAssetBundleError(str(error)) from error
     return bindings
 
 
-def _train_scope(value: Mapping[str, Any], *, queries_sha256: str) -> dict[str, Any]:
+def _train_scope(
+    value: Mapping[str, Any],
+    *,
+    queries_sha256: str,
+    split_commitment_sha256: str | None = None,
+) -> dict[str, Any]:
     scope = deepcopy(dict(value))
     expected = {
         "schema_version": "myis.armindex-a3-train-scope.v1",
@@ -133,6 +155,8 @@ def _train_scope(value: Mapping[str, Any], *, queries_sha256: str) -> dict[str, 
         "query_count": 250,
         "queries_sha256": queries_sha256,
     }
+    if split_commitment_sha256 is not None:
+        expected["split_commitment_sha256"] = split_commitment_sha256
     if scope != expected:
         raise A3ThreePrimaryAssetBundleError("A3 asset bundle accepts only the exact Train-250 scope")
     return scope
@@ -156,6 +180,9 @@ def _inventory(assets: Path) -> dict[str, Any]:
         },
         "ranker_command": ["bin/a3-three-primary-ranker"],
     }
+    runtime = json.loads((assets / "A3_RUNTIME_BINDINGS.json").read_text(encoding="utf-8"))
+    if "package_bindings" in runtime:
+        body["package_bindings"] = runtime["package_bindings"]
     return {**body, "inventory_sha256": canonical_sha256(body)}
 
 

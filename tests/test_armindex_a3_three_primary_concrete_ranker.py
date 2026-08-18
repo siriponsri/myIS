@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+
+import pytest
 from types import SimpleNamespace
 
 from myis_research.armindex.a3_three_primary_asset_bundle import (
+    A3ThreePrimaryAssetBundleError,
     build_a3_three_primary_asset_bundle,
 )
 from myis_research.armindex.a3_three_primary_concrete_ranker import (
+    _tree_sha256,
     run_a3_three_primary_ranker,
 )
 from myis_research.armindex.a3_three_primary_remote_retriever import (
@@ -140,6 +144,23 @@ def _write_sources(tmp_path: Path) -> tuple[dict[str, object], dict[str, Path], 
     return runtime, programs, models, corpus, queries, scope
 
 
+def test_model_tree_hash_uses_posix_relative_path_order(tmp_path: Path) -> None:
+    model = tmp_path / "model"
+    nested = model / "1_Pooling"
+    nested.mkdir(parents=True)
+    (model / ".gitattributes").write_text("g", encoding="ascii")
+    (nested / "config.json").write_text("p", encoding="ascii")
+    (model / "z.txt").write_text("z", encoding="ascii")
+    expected = canonical_sha256(
+        [
+            {"path": ".gitattributes", "sha256": file_sha256(model / ".gitattributes")},
+            {"path": "1_Pooling/config.json", "sha256": file_sha256(nested / "config.json")},
+            {"path": "z.txt", "sha256": file_sha256(model / "z.txt")},
+        ]
+    )
+    assert _tree_sha256(model) == expected
+
+
 def test_builder_and_ranker_bind_train250_winner_programs_and_target_adapters(tmp_path: Path) -> None:
     runtime, programs, models, corpus, queries, scope = _write_sources(tmp_path)
     stage_root = tmp_path / "owner-store" / "a3" / "stage-source-001"
@@ -215,3 +236,65 @@ def test_fixed_union_uses_equal_depth_rrf_and_never_opens_an_evaluator(tmp_path:
     result = run_a3_three_primary_ranker(request_path, assets_root=assets, result_path=tmp_path / "union.json", rank_dense=rank_dense)
     assert result["coverage"]["completed_units"] == 250
     assert all(len(rows) == 3 for rows in result["rankings"].values())
+
+
+def test_extended_package_bindings_are_carried_into_owner_store_receipt(tmp_path: Path) -> None:
+    runtime, programs, models, corpus, queries, scope = _write_sources(tmp_path)
+    runtime["package_bindings"] = {
+        "corpus_sha256": file_sha256(corpus),
+        "query_bundle_sha256": file_sha256(queries),
+        "split_commitment_sha256": "a" * 64,
+        "evaluator_sha256": "b" * 64,
+        "qrels_commitment_sha256": "c" * 64,
+        "membership_commitment_sha256": "d" * 64,
+        "runtime_lock_sha256": "e" * 64,
+        "data_handoff_sha256": "f" * 64,
+    }
+    runtime["runtime_bindings_sha256"] = canonical_sha256(
+        {key: item for key, item in runtime.items() if key != "runtime_bindings_sha256"}
+    )
+    scope["split_commitment_sha256"] = runtime["package_bindings"]["split_commitment_sha256"]
+    receipt = build_a3_three_primary_asset_bundle(
+        tmp_path / "owner-store" / "a3" / "extended",
+        runtime_bindings=runtime,
+        corpus_path=corpus,
+        queries_path=queries,
+        train_scope=scope,
+        winner_program_paths=programs,
+        target_model_directories=models,
+    )
+    assert receipt["package_bindings"] == runtime["package_bindings"]
+    inventory = json.loads(
+        (tmp_path / "owner-store" / "a3" / "extended" / "assets" / "A3_RUNTIME_ASSETS.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert inventory["package_bindings"] == runtime["package_bindings"]
+
+
+def test_extended_package_bindings_reject_staged_corpus_drift(tmp_path: Path) -> None:
+    runtime, programs, models, corpus, queries, scope = _write_sources(tmp_path)
+    runtime["package_bindings"] = {
+        "corpus_sha256": "0" * 64,
+        "query_bundle_sha256": file_sha256(queries),
+        "split_commitment_sha256": "a" * 64,
+        "evaluator_sha256": "b" * 64,
+        "qrels_commitment_sha256": "c" * 64,
+        "membership_commitment_sha256": "d" * 64,
+        "runtime_lock_sha256": "e" * 64,
+        "data_handoff_sha256": "f" * 64,
+    }
+    runtime["runtime_bindings_sha256"] = canonical_sha256(
+        {key: item for key, item in runtime.items() if key != "runtime_bindings_sha256"}
+    )
+    scope["split_commitment_sha256"] = runtime["package_bindings"]["split_commitment_sha256"]
+    with pytest.raises(A3ThreePrimaryAssetBundleError, match="corpus hash"):
+        build_a3_three_primary_asset_bundle(
+            tmp_path / "owner-store" / "a3" / "drift",
+            runtime_bindings=runtime,
+            corpus_path=corpus,
+            queries_path=queries,
+            train_scope=scope,
+            winner_program_paths=programs,
+            target_model_directories=models,
+        )
