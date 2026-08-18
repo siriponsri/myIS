@@ -9,12 +9,13 @@ advisor-facing slides.
 
 - English-only visible copy is used throughout.
 - A2 is stated exactly as `52 = 44 measured + 8 dormant`.
-- A3 is stated as operationally running with `14 / 14` launched operations,
-  `12` return receipts collected, and `2` fixed controls active;
-  the deck explicitly states that no A3 scientific result is available yet.
+- A3 is stated as complete with `14 / 14` audited operations, including `9`
+  transfer cells and `5` fixed controls.
+- The final slide reports aggregate-safe A3 findings and explicitly keeps A4,
+  Selection, and Final closed.
 - The A3 scope is limited to ARM-03, ARM-04, and ARM-05. ARM-01 and ARM-02 are
   described as evidence retained for interpretation but not advanced to A3.
-- A4 is explicitly locked pending A3 evidence collection and audit.
+- A4 is explicitly locked pending the Owner gate after A3 audit.
 - Speaker notes include a `[Sources]` block on every slide.
 
 ## Layout
@@ -27,5 +28,5 @@ advisor-facing slides.
 
 ## Claim Boundary
 
-This is a summary progress update. It does not expose protected data or
-claim any Selection, Final, A3 performance, transfer result, or A4 decision.
+This is a summary progress update. It does not expose protected data or claim
+Selection, Final, production generalization, or an A4 decision.

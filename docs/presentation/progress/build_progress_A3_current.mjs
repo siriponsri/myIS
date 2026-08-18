@@ -156,7 +156,7 @@ async function main() {
       color: colors.muted,
     }, "subtitle");
     addRect(slide, { left: 72, top: 432, width: 910, height: 78 }, colors.paleTeal, "status-surface", colors.paleTeal);
-    addText(slide, "A0-A2 complete | A3 measurement in progress | No A3 result yet", { left: 98, top: 457, width: 850, height: 30 }, {
+    addText(slide, "A0-A3 complete | Result audit passed | A4 remains gated", { left: 98, top: 457, width: 850, height: 30 }, {
       fontSize: 25,
       bold: true,
       color: colors.green,
@@ -168,7 +168,7 @@ async function main() {
     addFooter(slide, "Summary advisor update. Selection and final confirmation remain closed.");
     addNotes(slide, [
       "The central question is whether the best deterministic representation of a patent family depends on the retriever.",
-      "This update reports completed evidence through A2 and the current operational state of A3. It does not present A3 results.",
+      "This update reports completed evidence through A3. The A3 result is aggregate-safe development evidence; it does not open production transfer, Selection, or Final.",
       "[Sources]",
       "docs/research/ARMINDEX_RESEARCH_PLAN_V02.md",
       "docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md",
@@ -191,7 +191,7 @@ async function main() {
     addText(slide, "complete", { left: 92, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a0-status");
     addText(slide, "complete", { left: 356, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a1-status");
     addText(slide, "complete", { left: 620, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a2-status");
-    addText(slide, "12 returned / 2 active", { left: 884, top: 430, width: 210, height: 25 }, { fontSize: 17, color: colors.amber }, "a3-status");
+    addText(slide, "audit passed", { left: 884, top: 430, width: 210, height: 25 }, { fontSize: 18, color: colors.green }, "a3-status");
     addText(slide, "A4 remains locked until A3 evidence is collected and audited.", { left: 72, top: 548, width: 850, height: 38 }, {
       fontSize: 24,
       bold: true,
@@ -313,37 +313,35 @@ async function main() {
     ]);
   }
 
-  // Slide 6: A3 operational status and A4 gate.
+  // Slide 6: A3 audited result and A4 gate.
   {
     const slide = presentation.slides.add();
     slide.background.fill = colors.paper;
-    addHeader(slide, "A3 is running; conclusions await a result audit", 6);
-    addText(slide, "The current work tests transfer and fixed combination controls before any production decision.", { left: 72, top: 155, width: 1050, height: 42 }, {
+    addHeader(slide, "A3 result audit: transfer is adapter-dependent", 6);
+    addText(slide, "All 14 Train-250 operations completed; the strongest fixed control is top-two RRF-60.", { left: 72, top: 155, width: 1050, height: 42 }, {
       fontSize: 23,
       color: colors.muted,
     }, "subtitle");
-    addRect(slide, { left: 72, top: 235, width: 270, height: 220 }, colors.paleAmber, "launch-status", colors.paleAmber);
-    addText(slide, "14 / 14", { left: 102, top: 275, width: 195, height: 60 }, { fontSize: 47, bold: true, color: colors.amber }, "operation-count");
-    addText(slide, "operations launched\n12 returned | 2 active", { left: 102, top: 350, width: 190, height: 72 }, { fontSize: 18, bold: true, color: colors.ink }, "operation-label");
-    addRect(slide, { left: 380, top: 235, width: 360, height: 220 }, colors.white, "measurement-scope");
-    addText(slide, "What is being measured", { left: 410, top: 267, width: 280, height: 30 }, { fontSize: 23, bold: true, color: colors.ink }, "scope-title");
-    addText(slide, "- 9 transfer operations\n- 5 fixed combination controls\n- ARM-03, ARM-04, ARM-05 only", { left: 410, top: 324, width: 300, height: 95 }, { fontSize: 20, color: colors.ink }, "scope-body");
-    addRect(slide, { left: 778, top: 235, width: 400, height: 220 }, colors.paleBlue, "decision-boundary", colors.paleBlue);
-    addText(slide, "What cannot be concluded yet", { left: 808, top: 267, width: 330, height: 30 }, { fontSize: 23, bold: true, color: colors.blue }, "boundary-title");
-    addText(slide, "No transfer result\nNo complementary-set decision\nNo A4 production decision", { left: 808, top: 324, width: 315, height: 100 }, { fontSize: 20, bold: true, color: colors.ink }, "boundary-body");
-    addText(slide, "Next valid update: collected packages, protected local evaluation, completeness check, and independent result audit.", { left: 72, top: 525, width: 1025, height: 62 }, {
-      fontSize: 26,
+    await addImage(slide, path.join(figures, "a3-transfer-recall-heatmap-20260819.png"), "A3 transfer matrix showing OUT Recall at 100 for three source programs and three target adapters", { left: 72, top: 215, width: 610, height: 355 }, "a3-transfer-figure");
+    addRect(slide, { left: 720, top: 215, width: 458, height: 355 }, colors.paleTeal, "a3-results", colors.paleTeal);
+    addText(slide, "Audited findings", { left: 750, top: 247, width: 330, height: 30 }, { fontSize: 24, bold: true, color: colors.green }, "results-title");
+    addText(slide, "- Best transfer: ARM-05 -> ARM-03, Recall@100 0.419\n- Best fixed control: top-two RRF-60, Recall@100 0.419\n- All-primary union: 0.415 Recall@100\n- HarnessOpt: flat surface, no adaptive gain", { left: 750, top: 307, width: 390, height: 150 }, { fontSize: 19, color: colors.ink }, "results-body");
+    addText(slide, "A4 remains locked; Selection and Final remain closed.", { left: 750, top: 500, width: 390, height: 35 }, { fontSize: 19, bold: true, color: colors.blue }, "results-boundary");
+    addText(slide, "Claim-limited development evidence: transfer depends on the adapter, and adding every arm is not automatically complementary.", { left: 72, top: 595, width: 1080, height: 38 }, {
+      fontSize: 20,
       bold: true,
       color: colors.ink,
     }, "next-step");
-    addFooter(slide, "A4 remains locked pending valid A3 summary evidence and audit.");
+    addFooter(slide, "A3 development evidence only. Selection and Final remain closed.");
     addNotes(slide, [
-      "Stage 028 launched all nine transfer operations and five fixed combination-control operations. Twelve return receipts are collected; two fixed controls remain active.",
-      "Launch is an operational fact, not a performance result. The next valid conclusion requires completed evidence collection, protected local evaluation, completeness checks, and a result-integrity audit.",
-      "A4 has no current authorization to proceed.",
+      "All 14 authorized operations completed on Train-250 and passed an independent aggregate-only result-integrity audit.",
+      "The transfer heatmap shows adapter-dependent quality. The strongest fixed control is top-two RRF-60; the all-primary union is lower on the development workload.",
+      "HarnessOpt compiled three complete batches into one effective action signature, so the valid conclusion is a flat-surface stop rather than an adaptive improvement claim.",
+      "A4 readiness is prepared contractually, but Selection and Final remain closed.",
       "[Sources]",
-      "docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md",
-      "../04_Owner_Stores/armindex/a3/a3-goal003-20260818-028-launch-receipts/ (aggregate receipt count only)",
+      "docs/progress_report/update_A3_19AUG2026.md",
+      "docs/progress_report/figures/a3-transfer-recall-heatmap-20260819.png",
+      "docs/progress_report/A3_transfer_matrix_eda_20260819.csv",
     ]);
   }
 

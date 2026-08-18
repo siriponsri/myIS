@@ -3,8 +3,8 @@ title: "ArmIndex Progress Update"
 audience: "Academic advisor"
 language: "English"
 as_of: "2026-08-19"
-status: "A0-A2 complete; A3 measurement in progress (12/14 returned); A4 locked pending A3 audit"
-evidence_boundary: "Summary controls, A1/A2 evidence, and A3 operational launch records only."
+status: "A0-A3 complete; result-integrity audit passed; A4 locked pending Owner gate"
+evidence_boundary: "Summary controls, A1/A2 evidence, and A3 aggregate-safe result records only."
 ---
 
 # ArmIndex Progress Update
@@ -12,8 +12,8 @@ evidence_boundary: "Summary controls, A1/A2 evidence, and A3 operational launch 
 ## Communication Goal
 
 By the end, an academic advisor should understand that ArmIndex has completed
-an auditable A0-A2 development sequence and has begun, but not yet concluded,
-the A3 transfer measurement.
+an auditable A0-A3 development sequence. A3 has a valid aggregate-only result
+audit; A4 remains gated.
 
 ## Main Deck
 
@@ -22,15 +22,14 @@ the A3 transfer measurement.
 **On slide**
 
 - Retriever-specific document representation search for cross-domain patent retrieval
-- A0-A2 complete; A3 measurement in progress
+- A0-A3 complete; result-integrity audit passed
 - 19 August 2026
 
 **Speaker notes**
 
 The central question is whether the best deterministic representation of a
 patent family depends on the retriever. This update reports completed evidence
-through A2 and the current operational state of A3. It does not present A3
-results.
+through A3 and keeps production and confirmation claims closed.
 
 [Sources]
 - `docs/research/ARMINDEX_RESEARCH_PLAN_V02.md`
@@ -43,7 +42,7 @@ results.
 - A0: reproducibility and protected-data controls
 - A1: five document representations across five predefined retrievers
 - A2: constrained representation search for each retriever
-- A3: transfer and retriever-combination measurement is running
+- A3: transfer and retriever-combination evidence is audited
 
 **Speaker notes**
 
@@ -117,31 +116,33 @@ avoid selecting only positive outcomes.
 - `docs/progress_report/A2_per_arm_autoindex_outcomes_eda_20260818.csv`
 - `docs/progress_report/figures/a2-per-arm-outcomes.png`
 
-### 6. A3 is running; conclusions await a result audit
+### 6. A3 result audit: transfer is adapter-dependent
 
 **On slide**
 
-- Current run: stage 028 launched 14 of 14 operations; 12 return receipts are collected and two fixed controls remain active
-- Scope: transfer and fixed combination controls for ARM-03, ARM-04, and ARM-05
-- Measurement is in progress; no A3 scientific result is available yet
-- A4 remains locked until complete results and execution records are audited
+- Stage 028 completed 14 of 14 operations and passed result-integrity audit
+- Scope: 9 transfer cells and 5 fixed combination controls for ARM-03, ARM-04, and ARM-05
+- Best transfer: ARM-05 winner program to ARM-03 adapter, OUT Recall@100 0.419274
+- Best fixed control: top-two RRF-60, OUT Recall@100 0.418715; HarnessOpt surface is flat
+- A4 remains locked; Selection and Final remain closed
 
 **Speaker notes**
 
-Stage 028 launched all nine transfer operations and five fixed combination-control
-operations. Twelve return receipts are collected and two fixed controls remain
-active. Launch and receipt collection are operational facts, not performance
-results. The next valid conclusion requires completed evidence collection,
-protected local evaluation, completeness checks, and a result-integrity audit. A4
-has no current authorization to proceed.
+Stage 028 completed all nine transfer operations and five fixed combination-control
+operations. Every operation covered Train-250 (250/250 units), and the independent
+aggregate-only result-integrity audit passed. Transfer quality depends on the
+target adapter; the top-two fixed union is the strongest fixed control, while the
+all-primary union is lower. HarnessOpt produced a flat-surface stop, not an
+adaptive improvement claim. A4 has no current authorization to proceed.
 
 [Sources]
 - `docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md`
-- `../04_Owner_Stores/armindex/a3/a3-goal003-20260818-028-launch-receipts/` (aggregate receipt count only)
+- `docs/progress_report/update_A3_19AUG2026.md`
+- `docs/progress_report/figures/a3-transfer-recall-heatmap-20260819.png`
 
 ## Quality-Control Note
 
 The deck contains six slides, one core point per slide, speaker notes with
 source blocks, English-only visible copy, and only summary figures.
-Its final slide explicitly prevents interpreting an operational launch as an
-A3 result.
+Its final slide reports audited aggregate evidence and explicitly prevents
+interpreting it as Selection, Final, or production evidence.
