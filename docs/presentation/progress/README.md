@@ -1,7 +1,7 @@
 # ArmIndex Current Progress Deck
 
 This folder contains a short, advisor-facing update for the current ArmIndex
-state on 18 August 2026. It is intentionally separate from the full advisor
+state on 19 August 2026. It is intentionally separate from the full advisor
 talk under `docs/presentation/`.
 
 ## Contents

@@ -9,7 +9,8 @@ advisor-facing slides.
 
 - English-only visible copy is used throughout.
 - A2 is stated exactly as `52 = 44 measured + 8 dormant`.
-- A3 is stated as operationally running with `14 / 14` launched operations;
+- A3 is stated as operationally running with `14 / 14` launched operations,
+  `12` return receipts collected, and `2` fixed controls active;
   the deck explicitly states that no A3 scientific result is available yet.
 - The A3 scope is limited to ARM-03, ARM-04, and ARM-05. ARM-01 and ARM-02 are
   described as evidence retained for interpretation but not advanced to A3.

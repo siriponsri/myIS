@@ -2,8 +2,8 @@
 title: "ArmIndex Progress Update"
 audience: "Academic advisor"
 language: "English"
-as_of: "2026-08-18"
-status: "A0-A2 complete; A3 measurement in progress; A4 locked pending A3 audit"
+as_of: "2026-08-19"
+status: "A0-A2 complete; A3 measurement in progress (12/14 returned); A4 locked pending A3 audit"
 evidence_boundary: "Summary controls, A1/A2 evidence, and A3 operational launch records only."
 ---
 
@@ -23,7 +23,7 @@ the A3 transfer measurement.
 
 - Retriever-specific document representation search for cross-domain patent retrieval
 - A0-A2 complete; A3 measurement in progress
-- 18 August 2026
+- 19 August 2026
 
 **Speaker notes**
 
@@ -121,18 +121,19 @@ avoid selecting only positive outcomes.
 
 **On slide**
 
-- Current run: stage 028 launched 14 of 14 operations
+- Current run: stage 028 launched 14 of 14 operations; 12 return receipts are collected and two fixed controls remain active
 - Scope: transfer and fixed combination controls for ARM-03, ARM-04, and ARM-05
 - Measurement is in progress; no A3 scientific result is available yet
 - A4 remains locked until complete results and execution records are audited
 
 **Speaker notes**
 
-Stage 028 has launched all nine transfer operations and five fixed combination-control
-operations. Launch is an operational fact, not a performance result. The next
-valid conclusion requires completed evidence collection, protected local evaluation,
-completeness checks, and result-integrity audit. A4 has no current authorization to
-proceed.
+Stage 028 launched all nine transfer operations and five fixed combination-control
+operations. Twelve return receipts are collected and two fixed controls remain
+active. Launch and receipt collection are operational facts, not performance
+results. The next valid conclusion requires completed evidence collection,
+protected local evaluation, completeness checks, and a result-integrity audit. A4
+has no current authorization to proceed.
 
 [Sources]
 - `docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md`

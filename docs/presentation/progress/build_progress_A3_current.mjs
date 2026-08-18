@@ -161,7 +161,7 @@ async function main() {
       bold: true,
       color: colors.green,
     }, "status");
-    addText(slide, "18 August 2026", { left: 72, top: 612, width: 350, height: 24 }, {
+    addText(slide, "19 August 2026", { left: 72, top: 612, width: 350, height: 24 }, {
       fontSize: 16,
       color: colors.muted,
     }, "date");
@@ -191,7 +191,7 @@ async function main() {
     addText(slide, "complete", { left: 92, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a0-status");
     addText(slide, "complete", { left: 356, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a1-status");
     addText(slide, "complete", { left: 620, top: 430, width: 120, height: 25 }, { fontSize: 18, color: colors.green }, "a2-status");
-    addText(slide, "14 operations launched", { left: 884, top: 430, width: 190, height: 25 }, { fontSize: 18, color: colors.amber }, "a3-status");
+    addText(slide, "12 returned / 2 active", { left: 884, top: 430, width: 210, height: 25 }, { fontSize: 17, color: colors.amber }, "a3-status");
     addText(slide, "A4 remains locked until A3 evidence is collected and audited.", { left: 72, top: 548, width: 850, height: 38 }, {
       fontSize: 24,
       bold: true,
@@ -324,7 +324,7 @@ async function main() {
     }, "subtitle");
     addRect(slide, { left: 72, top: 235, width: 270, height: 220 }, colors.paleAmber, "launch-status", colors.paleAmber);
     addText(slide, "14 / 14", { left: 102, top: 275, width: 195, height: 60 }, { fontSize: 47, bold: true, color: colors.amber }, "operation-count");
-    addText(slide, "operations launched\nin stage 028", { left: 102, top: 350, width: 190, height: 58 }, { fontSize: 21, bold: true, color: colors.ink }, "operation-label");
+    addText(slide, "operations launched\n12 returned | 2 active", { left: 102, top: 350, width: 190, height: 72 }, { fontSize: 18, bold: true, color: colors.ink }, "operation-label");
     addRect(slide, { left: 380, top: 235, width: 360, height: 220 }, colors.white, "measurement-scope");
     addText(slide, "What is being measured", { left: 410, top: 267, width: 280, height: 30 }, { fontSize: 23, bold: true, color: colors.ink }, "scope-title");
     addText(slide, "- 9 transfer operations\n- 5 fixed combination controls\n- ARM-03, ARM-04, ARM-05 only", { left: 410, top: 324, width: 300, height: 95 }, { fontSize: 20, color: colors.ink }, "scope-body");
@@ -338,7 +338,7 @@ async function main() {
     }, "next-step");
     addFooter(slide, "A4 remains locked pending valid A3 summary evidence and audit.");
     addNotes(slide, [
-      "Stage 028 has launched all nine transfer operations and five fixed combination-control operations.",
+      "Stage 028 launched all nine transfer operations and five fixed combination-control operations. Twelve return receipts are collected; two fixed controls remain active.",
       "Launch is an operational fact, not a performance result. The next valid conclusion requires completed evidence collection, protected local evaluation, completeness checks, and a result-integrity audit.",
       "A4 has no current authorization to proceed.",
       "[Sources]",
