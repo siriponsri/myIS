@@ -2,16 +2,21 @@
 title: "A3 Extended three-primary transfer, complementarity, and HarnessOpt"
 phase_id: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
 task_id: A3.1_A3.2
-status: PENDING_FRESH_A3_ADMISSION
-lifecycle: PENDING
+status: CLOSED
+lifecycle: CLOSED
 evidence_class: measured_development_and_publication_preparation
-scientific_authority: false
+scientific_authority: true
 execution_permitted: false
 previous_goal: docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_002.md
 amendment_uri: control/armindex/a2/a2-goal004-three-primary-amendment.v1.json
 preparation_authority_uri: control/armindex/a3/a3-three-primary-preparation-authority.v1.json
 preparation_manifest_uri: control/armindex/a3/a3-three-primary-preparation-manifest.v1.json
 budget_extension_uri: control/budgets/armindex-budget-extension-a3-three-primary.v1.json
+a3_attempt_id: a3-goal003-20260818-028
+result_integrity_audit_sha256: 3fbc601111b204d3d4829aab63cda2e4368f2b76fd08315c14f4c21abf820644
+safe_return_receipt_sha256: 48cb4c51680ec3e59a876dad9b3feaa0593c39585bf27ae4eaf1d50e950453dc
+harnessopt_evaluation_sha256: 547ed212febe8c70f6675ca9851e652d391940598fbfb39ec41394c8c453007a
+a4_readiness_binding_sha256: 4fb8b8f8d6d80941b0c76116d13c4cfd5199dbcd0d17e59152f0088c54c4f7fd
 ---
 
 # Goal 003: Extended A3 after amended A2 closeout
@@ -88,6 +93,15 @@ spend, candidate mutation, Selection, and Final are forbidden.
    aggregate figures, EDA, and claim-limited presentation/report updates.
 7. Keep the instance only while a named, immediately authorized A3 workload
    remains. Otherwise request Owner destruction.
+
+## Closeout
+
+Stage `a3-goal003-20260818-028` completed all 14 authorized operations. The
+aggregate-only Owner-local evaluation, HarnessOpt boundary evaluation, and
+independent result-integrity audit all passed. The closeout produced no
+Selection or Final access and no protected payload projection. A4 is prepared
+as a contract-only readiness handoff; a separate Owner-authorized A4 goal is
+required before production measurement.
 
 ## Hard Stops
 

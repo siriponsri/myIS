@@ -14,7 +14,7 @@ measurement, and production-constrained HarnessOpt.
 
 ## Active campaign
 
-### Current superseding state (2026-08-18)
+### Current superseding state (2026-08-19)
 
 A2 Goal 004 is terminal: `PASS_A2_EXECUTION_CLOSEOUT` and
 `PASS_A2_RESULT_INTEGRITY`. The complete frozen universe is `52 = 44 measured +
@@ -25,11 +25,17 @@ diagnostic no-winner ties. ARM-03 is a presentation-precision tie to A1,
 ARM-04 improves its frozen comparator, and ARM-05 is retained for transfer
 analysis despite no strict A1 improvement.
 
-The current phase is `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`, status
-`PENDING_HASH_BOUND_TRAIN_250_INPUT`. A3 may not launch until a fresh
-Owner-authorized, hash-bound Train-250 query/corpus/evaluator package exists.
-The idle Vast instance has disposition `OWNER_ACTION_DESTROY`; it must not be
-kept for an unbound future workload. This section supersedes historical
+The current phase `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` is terminal with
+`PASS_A3_RESULT_INTEGRITY_AUDIT`. Stage `a3-goal003-20260818-028` completed the
+exact 14-operation three-primary workload, including 9 transfer cells, 5 fixed
+controls, complete Train-250 coverage, aggregate-safe return, and a flat
+HarnessOpt boundary. The audit, safe-return, and HarnessOpt hashes are bound in
+`control/armindex/a4/a4-readiness-binding-20260819.json`.
+
+The next phase is `A4_PRODUCTION_TRANSFER_AND_SELECTION` in
+`contract_only_ready` preparation. A4 measurement, Selection, and Final remain
+closed pending a separate Owner-authorized goal. The Vast instance has no
+remaining A3 workload; do not keep it for an unbound future run. This section supersedes historical
 pre-authority/readiness narrative below, which remains provenance only.
 
 - Campaign: `armindex-multiretriever-v2`
@@ -113,15 +119,15 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly seven active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 complete -> A3 pending Train-250 -> A4 -> A5 -> A6`
+`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 contract-only ready -> A5 -> A6`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
 | `A0_MIGRATION_FOUNDATION` | authority, contracts, evidence preservation, projections, fixtures | complete |
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | complete; Goal 004 measured closeout passed with three-primary amendment |
-| `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | pending hash-bound Train-250 query/corpus/evaluator input |
-| `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | not started |
+| `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | complete; 14/14 audited, flat HarnessOpt surface |
+| `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | contract-only ready; measurement and Selection closed |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
 | `A6_PUBLICATION_AND_RELEASE` | paper and release | locked by `D3_SUBMIT_RELEASE` |
 
