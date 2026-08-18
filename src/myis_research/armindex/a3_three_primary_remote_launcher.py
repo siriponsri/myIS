@@ -261,7 +261,8 @@ def stage_a3_remote_runtime(
             reuse = (
                 f"mkdir -p {shlex.quote(root)}/assets/models; "
                 f"cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/corpus.jsonl {shlex.quote(root)}/assets/corpus.jsonl; "
-                f"cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/queries.jsonl {shlex.quote(root)}/assets/queries.jsonl; "
+                f"if test -f {shlex.quote(root)}/assets/queries.jsonl && test \"$(sha256sum {shlex.quote(root)}/assets/queries.jsonl | awk '{{print $1}}')\" = {query_sha}; then :; "
+                f"else cp --reflink=auto --preserve=mode,timestamps {shlex.quote(reuse_assets_root)}/owner-input/inputs/queries.jsonl {shlex.quote(root)}/assets/queries.jsonl; fi; "
                 f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-03/. {shlex.quote(root)}/assets/models/ARM-03/; "
                 f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-04/. {shlex.quote(root)}/assets/models/ARM-04/; "
                 f"cp -a --reflink=auto {shlex.quote(reuse_assets_root)}/models/ARM-05/. {shlex.quote(root)}/assets/models/ARM-05/; "
