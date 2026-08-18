@@ -232,3 +232,32 @@ def test_owner_batch_evaluator_rejects_a_repository_destination_before_evaluatio
             requests_dir=paths["requests"], rankings_dir=paths["rankings"], return_receipts_dir=paths["returns"],
             aggregate_output_dir=tmp_path / "repository-visible-output", safe_return_receipt_path=paths["owner"] / "safe-return.json",
         )
+
+
+def test_owner_batch_cli_maps_stage_receipt_to_path_parameter(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    captured: dict[str, object] = {}
+
+    def fake_evaluate(**kwargs: object) -> dict[str, object]:
+        captured.update(kwargs)
+        return {"status": "PASS"}
+
+    monkeypatch.setattr(MODULE, "evaluate_a3_owner_batch", fake_evaluate)
+    values = {
+        "owner-store-root": tmp_path / "owner",
+        "stage-receipt": tmp_path / "stage-receipt.json",
+        "stage-manifest": tmp_path / "stage-manifest.json",
+        "runtime-bindings": tmp_path / "runtime.json",
+        "train-package-root": tmp_path / "train",
+        "requests-dir": tmp_path / "requests",
+        "rankings-dir": tmp_path / "rankings",
+        "return-receipts-dir": tmp_path / "returns",
+        "aggregate-output-dir": tmp_path / "aggregate",
+        "safe-return-receipt": tmp_path / "safe-return.json",
+    }
+    argv = [item for flag, value in values.items() for item in (f"--{flag}", str(value))]
+
+    assert MODULE.main(argv) == 0
+    assert captured["stage_receipt_path"] == values["stage-receipt"]
+    assert captured["stage_manifest_path"] == values["stage-manifest"]
+    assert captured["runtime_bindings_path"] == values["runtime-bindings"]
+    assert captured["safe_return_receipt_path"] == values["safe-return-receipt"]
