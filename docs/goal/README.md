@@ -4,9 +4,8 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A2_PER_ARM_AUTOINDEX_goal_004.md](A2_PER_ARM_AUTOINDEX_goal_004.md) | `ACTIVE` | `READY_FOR_LO_ONE_SESSION` | One-session exact-root recovery or destroy fallback, fresh rebind, v3 authority, measured A2, safe return, and publication closeout |
-
-| [A2_PER_ARM_AUTOINDEX_goal_003.md](A2_PER_ARM_AUTOINDEX_goal_003.md) | `CLOSED` | `STOP_PREAUTHORITY_UNSAFE_REMOTE_ROOT` | Historical pre-authority stop; its attempt identity and receipts are never reused |
+| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `ACTIVE` | `READY_FOR_LONG_RUN` | Measured FAST/BALANCED/DEEP profiles, isolated legal transfer, one-shot Selection, and A5 hash/pointer-only handoff on instance 47790578 |
+| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D2` | Frozen final-872 handoff; waits for `D2_OPEN_FINAL` or a hash-bound conditional auto-pass receipt and never opens Final from preparation alone |
 
 ## Historical goal registry
 
@@ -15,6 +14,7 @@
 | [A1_2_goal.md](A1_2_goal.md) | `CLOSED` | `HISTORICAL_SUPERSEDED_BY_A1_2_RERUN_GOAL` | ประวัติ fail-closed ของ r13 เท่านั้น |
 | [A1_2_rerun_goal.md](A1_2_rerun_goal.md) | `CLOSED` | `CLOSED_PASS` | หลักฐานส่งต่อ A1.2 r15; ห้าม launch ซ้ำ |
 | [A2_official_codex_bridge_goal.md](A2_official_codex_bridge_goal.md) | `CLOSED` | `CLOSED_PASS` | Historical bridge and candidate freeze; preserved for provenance only |
+| [A2_PER_ARM_AUTOINDEX_goal_004.md](A2_PER_ARM_AUTOINDEX_goal_004.md) | `CLOSED` | `CLOSED_PASS_A2_EXECUTION_CLOSEOUT` | Measured A2 closeout; preserved as immutable predecessor evidence |
 | [A2_PER_ARM_AUTOINDEX_goal_001.md](A2_PER_ARM_AUTOINDEX_goal_001.md) | `CLOSED` | `HISTORICAL_PRELAUNCH_STOP` | Historical cyclic-provenance prelaunch stop |
 | [A2_PER_ARM_AUTOINDEX_goal_002.md](A2_PER_ARM_AUTOINDEX_goal_002.md) | `CLOSED` | `HISTORICAL_PRELAUNCH_AUTHORITY_CONTRADICTION` | Historical v2 prelaunch stop; never reuse for execution |
 
@@ -25,15 +25,21 @@
   through `lo_003_001` remain readable provenance. They are referenced by the
   canonical source-of-truth record, validators, or successor documents, so none
   qualifies for archival under `docs/observatory/REPORTING_POLICY.md`.
-- Goal 003 is the terminal record for the stopped attempt. It must not be
-  resumed or reused. Its attempt identity and receipts are closed lineage;
-  exact-root recovery, if authorized, belongs to Goal 004 under a new identity.
-- Goal 004 is the one-session continuation. It covers Owner-authorized
-  exact-root forensic recovery or destroy fallback, fresh provider admission,
-  isolated stage, v3 authority binding, measured A2, safe return, evidence
-  audit, and publication closeout. Its LO prompt is:
+- Goal 003 is the terminal record for the stopped A2 attempt. It must not be
+  resumed or reused. Its attempt identity and receipts are closed lineage.
+- Goal 004 completed the successor A2 measured closeout and is now immutable
+  predecessor evidence. It must not be launched again or used as the A4
+  attempt/root/receipt lineage.
+- A4 Goal 001 is the active successor for the current `contract_only_ready`
+  A4 handoff. It owns the existing instance `47790578`, fresh A4 attempt
+  lineage, measured production profiles, one-shot Selection, safe return, and
+  A5 pointer-only bundle preparation:
 
-  `/goal อ่าน docs/goal/A2_PER_ARM_AUTOINDEX_goal_004.md แล้วทำงานตามขั้นตอนทั้งหมดใน one orchestrated session`
+  `/goal อ่าน docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md แล้วทำงานตามขั้นตอนทั้งหมดใน one orchestrated session`
+- A5 Goal 001 is a separate Owner-gate handoff. It remains blocked until
+  `D2_OPEN_FINAL` or the Owner's explicit hash-bound conditional auto-pass
+  receipt after a complete, audited A4 PASS; its bundle may contain hashes,
+  counts, receipts, and opaque pointers but never raw protected Final payloads.
 - Generated Obsidian/report projections are rebuilt from the shared read model;
   no generated Markdown is edited by hand. No publication figure is generated
   from the stopped pre-authority attempt.
