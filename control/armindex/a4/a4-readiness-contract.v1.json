@@ -1,0 +1,66 @@
+{
+  "schema_version": "myis.armindex-a4-readiness-contract.v1",
+  "contract_id": "a4-production-transfer-selection-readiness-v1",
+  "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+  "task_id": "A4.1",
+  "status": "contract_only_pending_a3_closeout",
+  "scientific_authority": false,
+  "launch_allowed": false,
+  "measured_execution": false,
+  "selection_accesses": 0,
+  "final_accesses": 0,
+  "a3_bindings": {
+    "manifest_uri": "control/armindex/a3/a3-three-primary-preparation-manifest.v1.json",
+    "authority_uri": "control/armindex/a3/a3-three-primary-preparation-authority.v1.json",
+    "primary_arm_scope": ["ARM-03", "ARM-04", "ARM-05"],
+    "commercial_fixed_union": ["ARM-04", "ARM-05"],
+    "required_closeout_artifacts": [
+      "a3_closeout_receipt_sha256",
+      "winner_program_sha256s",
+      "transfer_matrix_receipt_sha256s",
+      "complementarity_receipt_sha256",
+      "harnessopt_receipt_sha256",
+      "safe_return_receipt_sha256"
+    ]
+  },
+  "license_policy": {
+    "commercial_status_field_required": true,
+    "commercial_profile_allowed_status": "commercial_capable",
+    "research_only_arm_ids": ["ARM-03"],
+    "commercial_arm_ids": ["ARM-01", "ARM-02", "ARM-04", "ARM-05"],
+    "commercial_fixed_union_arm_ids": ["ARM-04", "ARM-05"]
+  },
+  "required_profiles": ["FAST", "BALANCED", "DEEP"],
+  "profile_requirements": {
+    "FAST": "BM25 plus one commercial dense arm, synchronous, bounded depth",
+    "BALANCED": "best two or three commercial arms, synchronous when p95 passes",
+    "DEEP": "frozen selected harness, asynchronous permitted"
+  },
+  "pareto_dimensions": {
+    "maximize": ["recall_at_100", "throughput_qps"],
+    "minimize": ["latency_p95_ms", "cost_per_query_usd", "index_size_bytes"]
+  },
+  "legal_transfer": {
+    "target_domain": "legal_structured_retrieval",
+    "feedback_into_patent_campaign": false,
+    "protected_data_accessed": false,
+    "selection_accesses": 0,
+    "final_accesses": 0,
+    "unsupported_mappings_explicit": true
+  },
+  "selection_preflight": {
+    "counter_schema": "myis.armindex-a4-selection-preflight-counter.v1",
+    "maximum_preflight_count": 1,
+    "selection_accesses_before_owner_action": 0,
+    "required_checks": [
+      "a3_closeout_verified",
+      "commercial_license_verified",
+      "pareto_frontier_verified",
+      "profiles_complete",
+      "legal_transfer_isolated",
+      "protected_boundary_verified"
+    ],
+    "protected_payloads_allowed": false
+  },
+  "claim_boundary": "contract_only_no_a4_measurement_no_selection_no_final"
+}
