@@ -4,8 +4,8 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `ACTIVE` | `READY_FOR_LONG_RUN` | Measured FAST/BALANCED/DEEP profiles, isolated legal transfer, one-shot Selection, and A5 hash/pointer-only handoff on instance 47790578 |
-| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D2` | Frozen final-872 handoff; waits for `D2_OPEN_FINAL` or a hash-bound conditional auto-pass receipt and never opens Final from preparation alone |
+| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `ACTIVE` | `READY_FOR_LONG_RUN` | Commercial FAST/BALANCED/DEEP frontier, license-segregated research reference, isolated legal transfer, one-shot preregistered Selection, and A5 handoff on instance 47790578 |
+| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D2` | Frozen two-system Final-872 confirmation; waits for `D2_OPEN_FINAL` or a hash-bound conditional auto-pass receipt and never opens Final from preparation alone |
 
 ## Historical goal registry
 

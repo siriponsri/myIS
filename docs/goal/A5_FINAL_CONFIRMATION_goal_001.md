@@ -32,8 +32,12 @@ validation and recovery planning while blocked, but it must not start a provider
 workload or inspect protected Final membership.
 
 The final split contains exactly 872 queries under the campaign contract. A5
-must not change the finalist, representation program, model adapter, evaluator,
-metric, output depth, tie policy, or runtime semantics after A4 Selection.
+must not change the frozen comparison set, representation program, model
+adapter, evaluator, metric, output depth, tie policy, or runtime semantics
+after A4 Selection. Its confirmatory comparison is exactly the preregistered
+strongest static/common-program comparator and one research champion. The
+separate commercial champion is reported from Selection unless it is identical
+to one of those two systems; it cannot expand the Final comparison family.
 
 ## Required A4 predecessor
 
@@ -41,6 +45,8 @@ Do not proceed until the A4 goal has a canonical closeout with:
 
 - complete FAST/BALANCED/DEEP profile receipts and legal-transfer isolation;
 - one valid Selection receipt at most, with finalist/program hashes frozen;
+- a frozen two-system Final registry that resolves the preregistered strongest
+  comparator and exactly one research champion from the A4 Selection registry;
 - `selection_accesses` equal to 0 or 1 and `final_accesses` equal to 0 before
   D2;
 - result-integrity audit, safe-return receipt, provider disposition, and
@@ -71,6 +77,12 @@ Required bundle members:
 6. complete SHA-256 manifest and bundle self-hash;
 7. an explicit claim boundary stating that no Final result exists before the
    A5 measured closeout.
+
+The bundle must also bind the Final registry, the A4-protected A5 budget reserve,
+and the aggregate-only statistical plan: paired deltas, 10,000 paired bootstrap
+resamples, 95% confidence intervals, rank-biserial effect, win/tie/loss, and
+the preregistered correction rule. It cannot add a Final system because it had
+an attractive Selection outcome.
 
 The bundle must set `protected_payload_included: false`. Raw qrels, split
 membership, query IDs, rankings, per-query outcomes, credentials, raw provider
@@ -104,12 +116,14 @@ contract.
 4. Materialize the protected final inputs only inside the Owner-local evaluator
    boundary. Export only aggregate-safe metrics, counts, hashes, receipts, and
    safe pointers.
-5. Run exactly one frozen final-872 evaluation with durable checkpoints and
-   attempt-scoped recovery. Never combine incompatible partial attempts or
-   relaunch a unit with a durable valid result.
+5. Run exactly one frozen final-872 evaluation for each member of the
+   two-system Final registry, with durable checkpoints and attempt-scoped
+   recovery. Never combine incompatible partial attempts or relaunch a unit
+   with a durable valid result.
 6. Validate complete coverage, metric/evaluator identity, protected boundary,
-   safe return, worker teardown, and provider disposition. Generate the
-   independent result-integrity audit.
+   paired-statistics identity, safe return, worker teardown, and provider
+   disposition. Generate the independent result-integrity audit and the
+   aggregate-safe final comparison/operational table needed by A6.
 7. Update projections and create
    `docs/long_run/A5_FINAL_CONFIRMATION_lo_001_001.md`. Keep `D3_SUBMIT_RELEASE`
    closed; A6 publication/release cannot start from this goal.
@@ -136,8 +150,9 @@ with the campaign. A conditional receipt is valid only when A4 automatic PASS
 is complete and independently audited; it cannot be created from a partial or
 unaudited result. Also stop on finalist or evaluator drift, protected-data
 leak, unknown/over-cap budget, insufficient TTL, provider identity drift,
-duplicate Final access, incomplete 872 coverage, incompatible partial outputs,
-or any attempt to submit release without `D3_SUBMIT_RELEASE`.
+duplicate Final access, an expanded or altered two-system Final registry,
+incomplete 872 coverage, incompatible partial outputs, or any attempt to
+submit release without `D3_SUBMIT_RELEASE`.
 
 ## Terminal states
 

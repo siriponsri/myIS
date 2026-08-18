@@ -32,6 +32,14 @@ negative, flat, unsupported, and boundary results as publication evidence. The
 goal also prepares a complete hash/pointer-only A5 handoff without opening the
 Final split.
 
+The publication-facing design has two deliberately separate outputs: a
+license-segregated research reference that may include `ARM-03`, and a
+commercial-capable serving frontier built only from permitted commercial arms.
+This makes a useful research result publishable even if it cannot be deployed,
+while preventing a research-only model from being presented as a production
+profile. The A4 Selection analysis then distinguishes the research and
+commercial champions without retrofitting either after exposure.
+
 The goal does not optimize for a positive result. A4 scientific authority is
 created only by valid measured receipts and an independent result-integrity
 audit; this goal document is not a numeric source of truth.
@@ -74,13 +82,30 @@ be observed, classified, and reaped only after its identity is proven orphaned.
   `control/armindex/a4/a4-readiness-contract.v1.json` as the interface for
   profile completeness, commercial licensing, Pareto dimensions, and legal
   transfer isolation.
-- Produce exactly `FAST`, `BALANCED`, and `DEEP` profile records. Commercial
-  profiles may not include `ARM-03`; the commercial fixed union is `ARM-04` plus
-  `ARM-05`.
+- Measure the frozen production configurations only on the protected
+  `HARNESS-DEV` commitment of 100 Train-250 queries. A4 may not mutate a
+  representation, harness, adapter, cache policy, or profile after this
+  measurement starts.
+- Produce exactly `FAST`, `BALANCED`, and `DEEP` commercial profile records.
+  Every named profile must contain only commercial-capable arms; the commercial
+  fixed union is `ARM-04` plus `ARM-05`. A license-segregated `ARM-03`
+  research-reference comparator may be measured under the same frozen
+  evaluator, but it is not a fourth profile and never enters a commercial
+  frontier or deployment claim.
 - Preserve the frozen primary metric `OUT Recall@100`, secondary OUT nDCG
   metrics, and operational latency, throughput, cost, index-size, RAM, and VRAM
   definitions. No post-hoc metric, tie, depth, license, or evaluator change is
   permitted.
+- Freeze the Selection registry before Selection access: at most four distinct
+  slots in the order prescribed by the research plan: strongest static/common
+  baseline, strongest single-arm AutoIndex champion, research HarnessOpt
+  champion if promoted, and commercial production champion if distinct. Empty
+  or duplicate slots remain empty; no profile is added after the registry hash.
+- Selection analyses must report the predeclared lexicographic decision,
+  10,000 paired bootstrap resamples, 95% confidence intervals, paired
+  win/tie/loss counts, and the correction rule for the small preregistered
+  comparison family. These are aggregate-safe evaluator outputs, never
+  per-query projections.
 - Legal transfer is diagnostic and isolated. It must not feed back into the
   patent campaign, access protected data, or increment Selection or Final.
 - The current Owner instruction authorizes this A4 measured run and one
@@ -119,6 +144,10 @@ be observed, classified, and reaped only after its identity is proven orphaned.
   If the current ceiling, accrued spend, quote, or next-action estimate is
   unknown, use `UNKNOWN_DO_NOT_SPEND`. Never infer authority from `vast-ssh.md`
   hourly text or historical receipts.
+- The A4 admission must reserve a fresh quote-backed amount sufficient for the
+  single A5 Final-872 confirmation and its safe return before discretionary A4
+  expansion. A4 may close with complete evidence without that reserve, but it
+  cannot emit conditional D2 or claim automatic A5 continuity.
 - Stop before the live admission if the quote or projected A4 workload exceeds
   the verified remaining campaign/goal ceiling, TTL floor, or provider identity.
 
@@ -138,27 +167,34 @@ be observed, classified, and reaped only after its identity is proven orphaned.
    budget projection, Owner intent, and protected-data boundary. Do not stage or
    spend until the whole-workload admission passes.
 4. **Build and validate the bundle.** Package only clean pushed code, frozen
-   controls, runtime bindings, model/license snapshots, A3 winner hashes, A4
-   profile contracts, legal-transfer maps, evaluator interfaces, and safe
-   export rules. Recompute the bundle and file hashes after staging. Create a
-   durable append-only ledger, attempt checkpoint, watchdog, and stop marker.
+   controls, runtime bindings, model/license snapshots, A3 winner hashes,
+   HARNESS-DEV commitment, A4 profile contracts, the four-slot Selection
+   registry policy, legal-transfer maps, evaluator interfaces, and safe export
+   rules. Recompute the bundle and file hashes after staging. Create a durable
+   append-only ledger, attempt checkpoint, watchdog, and stop marker.
 5. **Run launch checks.** Exercise transport, cancellation, heartbeat,
    checkpoint/resume, worker reaping, protected-field scan, and safe-return dry
    checks. Require an independent launch-integrity review before measured work.
-6. **Measure A4.** Run the three complete profiles over the authorized
-   development input under the frozen evaluator. Record profile coverage,
-   latency/cost/resource aggregates, unsupported mappings, and failures. A
-   partial profile is not a result and cannot be combined with another attempt.
-7. **Run legal transfer diagnostics.** Evaluate only the isolated legal
-   structured-retrieval mapping. Emit explicit supported, mixed, unsupported,
-   or stopped-with-evidence states. Do not return raw legal inputs or feed the
-   diagnostic back into ArmIndex.
-8. **Consume the one-shot preflight and Selection.** After all aggregate-safe
-   A4 checks pass, atomically consume the owner-local preflight counter once.
-   Perform at most one Selection exposure using the frozen lexicographic rule.
-   Record the Selection receipt and finalist hashes. If the preflight counter,
-   license check, Pareto frontier, profile completeness, legal isolation, or
-   protected boundary fails, do not open Selection.
+6. **Measure A4.** Run the three complete commercial profiles over the frozen
+   HARNESS-DEV input under the frozen evaluator. Measure the eligible
+   research-reference comparator separately, with its license label intact.
+   Record profile coverage, non-dominated frontier status, latency/cost/resource
+   aggregates, unsupported mappings, and failures. A partial profile is not a
+   result and cannot be combined with another attempt.
+7. **Run legal transfer diagnostics.** Run the minimum frozen legal mini
+   diagnostic first; run the full legal benchmark only after the mini diagnostic
+   is valid and the A5 reserve remains intact. Emit explicit supported, mixed,
+   unsupported, or stopped-with-evidence states. Do not return raw legal inputs
+   or feed the diagnostic back into ArmIndex.
+8. **Freeze the Selection registry and consume Selection.** After all A4
+   development checks pass, freeze the distinct at-most-four finalist registry
+   and its comparator relationships, then atomically consume the owner-local
+   preflight counter once. Perform at most one Selection exposure using the
+   frozen lexicographic rule and paired statistics. Record the research and
+   commercial champion designations, Selection receipt, and finalist hashes. If
+   the preflight counter, license check, Pareto frontier, profile completeness,
+   legal isolation, protected boundary, or registry closure fails, do not open
+   Selection.
 9. **Prepare A5 handoff.** Build the A5 bundle described in
    `docs/goal/A5_FINAL_CONFIRMATION_goal_001.md`. Keep protected inputs as
    Owner-local opaque pointers and hashes. Do not materialize or copy raw final
@@ -194,6 +230,8 @@ control conventions, with Owner-local protected material under
 - clean execution bundle manifest/receipt, runtime and model/license bindings,
   stage/adoption receipts, and launch-integrity review;
 - per-profile FAST/BALANCED/DEEP manifests and aggregate result receipts;
+- a separately labeled research-reference receipt, commercial Pareto frontier
+  receipt, and a frozen at-most-four Selection registry with comparator roles;
 - legal transfer receipt with explicit unsupported mappings;
 - durable ledger/checkpoints, watchdog/heartbeat/reaping receipts, and safe
   return archive/receipt;
@@ -203,6 +241,12 @@ control conventions, with Owner-local protected material under
   opaque pointer, and SHA-256 manifest;
 - result-integrity audit, figure/claim manifest if generated, projections, and
   the long-run handoff.
+
+The figure/claim manifest must allow reconstruction of aggregate-safe
+publication tables and figures: quality-latency-cost frontier, profile resource
+table, research-versus-commercial decision table, Selection paired-effect
+summary, and legal-transfer boundary summary. It must distinguish measured,
+unsupported, and unmeasured states rather than impute missing results.
 
 No artifact may contain raw qrels, membership, query IDs, rankings, per-query
 outcomes, credentials, or provider payloads.
@@ -241,17 +285,21 @@ Hard stop and preserve state on:
 - malformed/already-consumed Selection counter, second Selection exposure,
   any Final access before the hash-bound conditional D2 receipt, or any request
   to bypass `D2_OPEN_FINAL`;
+- an unfrozen or altered Selection registry, a research-only arm in a
+  commercial profile, or a conditional-D2 decision without a protected A5
+  budget reserve;
 - incompatible partial outputs, irrecoverable provenance ambiguity, or a
   possible protected leak.
 
 ## Acceptance and terminal states
 
-Success requires complete A4 profile/transfer coverage, at most one valid
-Selection receipt, zero Final access before the conditional D2 receipt, safe
-return, independent result audit, hash-closed A5 pointer bundle, and
-synchronized projections. A flat or negative result is a valid success if
-evidence is complete and claim-limited, but it never triggers D2 when coverage
-or audit completeness is missing.
+Success requires complete A4 profile/transfer coverage, a clear research versus
+commercial claim boundary, at most one valid Selection receipt, zero Final
+access before the conditional D2 receipt, safe return, independent result
+audit, hash-closed A5 pointer bundle, and synchronized projections. A flat or
+negative result is a valid success if evidence is complete and claim-limited,
+but it never triggers D2 when coverage, audit completeness, or the A5 reserve
+is missing.
 
 Terminal states are `PASS_A4_SELECTION_AND_A5_HANDOFF`,
 `STOP_FAIL_CLOSED_WITH_EVIDENCE`, or `BLOCKED_OWNER_ACTION`. A blocked state
