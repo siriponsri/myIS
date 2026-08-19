@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405"
-read_model_sha256: "21a759dfdd3b73c17ee56c15b5d3fb07f87776ba90591c7358a474f5dc2ab998"
-source_commit: "cfdd2c7300eb7888855873f1728a23bc6da99749"
+read_model_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
+read_model_sha256: "2a0bd9cd30525c7fc4f44771eb36183092795d29c9b6593655ca4faa860f9bbd"
+source_commit: "60de8e8d039bfb482c19039d7b4b2839a14a2a81"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: ["03b2bce9ab001e2ce4a0fff218ac4dead89f9107cb64173fe56291a780bebb8c","b9c04d3fa753bbc1dcd53e29c9c9c15696fe4b1a946823f7f981d34d9a2eed9d"]
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "aggregate_safe_synthetic_runtime_preparation"
 scientific_authority: false
 claim_boundary: "This is a synthetic adapter-level preparation check. It contains no protected source text, query identifiers, memberships, qrels, rankings, per-query outcomes, credentials, raw provider payloads, or A1 retrieval result."
-generated_from_revision: "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405"
-last_material_update: "2026-08-19T07:03:17Z"
+generated_from_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
+last_material_update: "2026-08-19T11:10:50Z"
 next_authorized_action: "Commit and push the hash-bound repair, build a clean v16 bundle, re-run provider admission and execution adoption, then resume only the frozen 25/25 A1.2 screen."
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-19T07:03:17Z"
-updated_at: "2026-08-19T07:03:17Z"
+created_at: "2026-08-19T11:10:50Z"
+updated_at: "2026-08-19T11:10:50Z"
 note_id: "A1-2-EXACT-TOKEN-ID-ADAPTER-PROBE"
 note_type: "history_report"
 phase_id: "A1_BASELINES_AND_MULTI_ARM_SCREENING"

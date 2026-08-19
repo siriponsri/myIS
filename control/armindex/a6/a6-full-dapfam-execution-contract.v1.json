@@ -63,6 +63,10 @@
     "failure_taxonomy"
   ],
   "provider_admission": {
+    "authorized_instance_id": 47790578,
+    "same_instance_reuse_permitted_only_after_a5_closeout": true,
+    "fresh_a6_attempt_root_required": true,
+    "reuse_a4_a5_workers_caches_pids_or_partials_forbidden": true,
     "fresh_quote_required": true,
     "fresh_budget_admission_required": true,
     "fresh_ttl_and_health_receipt_required": true,
@@ -92,5 +96,5 @@
     ]
   },
   "claim_boundary": "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
-  "contract_sha256": "989fd3fe56089755fae62e278b434f8c0c406e3182b74740e5cb6c5203f6c2e6"
+  "contract_sha256": "eb41ffcf070470a610cdc5fb0a948d26e018c12a6413f1721d74ba404c118c45"
 }

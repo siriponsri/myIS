@@ -9,9 +9,9 @@
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-19T07:03:17Z",
-  "generated_from_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
-  "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
+  "generated_at": "2026-08-19T11:10:50Z",
+  "generated_from_revision": "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a",
+  "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -41,7 +41,7 @@
       "sha256": "1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
+    "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -58,13 +58,13 @@
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-19T07:03:17Z",
+  "last_material_update": "2026-08-19T11:10:50Z",
   "metric_references": [],
   "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Build publication and release artifacts from validated aggregate-safe A0-A6 evidence only after D3_SUBMIT_RELEASE.",
   "phase_id": "A7_PUBLICATION_AND_RELEASE",
   "report_id": "phase-a7_publication_and_release",
-  "report_sha256": "1ad27589b7074a131c6d3b2f252d9f32cb7cf6a818f92e145e9dab9c94b24b1b",
+  "report_sha256": "de779a3ba523e5c83b30fe0f16af3cc5b81a620dd300d1224856144e81199626",
   "report_type": "phase",
   "result": {
     "decision": "blocked",

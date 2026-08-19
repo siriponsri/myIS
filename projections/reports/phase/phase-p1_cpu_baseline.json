@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-19T07:03:17Z",
-  "generated_from_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
-  "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
+  "generated_at": "2026-08-19T11:10:50Z",
+  "generated_from_revision": "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a",
+  "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,7 +181,7 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
+    "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
@@ -191,7 +191,7 @@
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-19T07:03:17Z",
+  "last_material_update": "2026-08-19T11:10:50Z",
   "metric_references": [
     {
       "arm": "R0",
@@ -366,7 +366,7 @@
   "objective": "Deliver the P1_CPU_BASELINE research phase with an auditable evidence boundary.",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "phase-p1_cpu_baseline",
-  "report_sha256": "2294546da563a5fa7556404e7a307fe6cd45727b3cc1ce2ecd92c06578c3ec57",
+  "report_sha256": "25dccc9be8afda676f835e6c05f40cedc60f3cda8c19b3ce90010792fb209783",
   "report_type": "phase",
   "result": {
     "decision": "completed",

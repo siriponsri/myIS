@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405"
-read_model_sha256: "21a759dfdd3b73c17ee56c15b5d3fb07f87776ba90591c7358a474f5dc2ab998"
-source_commit: "cfdd2c7300eb7888855873f1728a23bc6da99749"
+read_model_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
+read_model_sha256: "2a0bd9cd30525c7fc4f44771eb36183092795d29c9b6593655ca4faa860f9bbd"
+source_commit: "60de8e8d039bfb482c19039d7b4b2839a14a2a81"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering_validation"
 scientific_authority: false
 claim_boundary: "premeasurement_candidate_freeze_only_no_candidate_evaluation_or_retrieval_quality_claim"
-generated_from_revision: "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405"
-last_material_update: "2026-08-19T07:03:17Z"
+generated_from_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
+last_material_update: "2026-08-19T11:10:50Z"
 next_authorized_action: "OWNER_LAUNCH_DOCS_GOAL_A2_WITH_FRESH_PREFLIGHT"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-19T07:03:17Z"
-updated_at: "2026-08-19T07:03:17Z"
+created_at: "2026-08-19T11:10:50Z"
+updated_at: "2026-08-19T11:10:50Z"
 note_id: "OFFICIAL_CODEX_BRIDGE_AND_CANDIDATE_FREEZE"
 note_type: "task_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -48,7 +48,7 @@ Official Codex bridge and five-arm candidate freeze
 
 - `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5`
 - `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6`
-- `git_commit`: cfdd2c7300eb7888855873f1728a23bc6da99749
+- `git_commit`: 60de8e8d039bfb482c19039d7b4b2839a14a2a81
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
 - `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
 - `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`

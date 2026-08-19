@@ -12,6 +12,7 @@ required_owner_decision: none
 d3_required: false
 protected_payloads_allowed: false
 full_corpus_owner_local_only: true
+provider_instance_id: 47790578
 previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
 next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
 last_material_update: 2026-08-19
@@ -57,6 +58,12 @@ If A5 does not create one unambiguous, hash-closed target, A6 closes
 fail-closed with the reason and preserves A5 evidence. It never resolves a
 tie or selects a replacement configuration.
 
+The checked-in preparation interface is
+`control/armindex/a6/a6-pending-a5-closeout-template.v1.json`. It has no winner,
+corpus hash, Owner Store path, or execution permission. It can be validated
+locally while A4/A5 run, but cannot be turned into an A6 attempt without the
+complete A5 binding and a new A6 admission.
+
 ## Non-adaptive scientific boundary
 
 The following actions are forbidden in A6:
@@ -99,8 +106,9 @@ it is outside this goal.
    `<MYIS_ROOT>/04_Owner_Stores/armindex/a6/<attempt-id>/`. Obtain a fresh
    provider identity, all-fee quote, whole-workload budget admission, TTL,
    runtime/GPU/CPU/disk/RAM health receipt, watchdog, checkpoint, and safe
-   return plan. Do not use an A4/A5 quote, root, worker, cache, PID, partial
-   output, or budget admission as A6 authority.
+   return plan. Instance `47790578` may be retained and reused only after A5
+   closes and this fresh A6 admission passes. Do not use an A4/A5 quote, root,
+   worker, cache, PID, partial output, or budget admission as A6 authority.
 3. **Freeze source and execution inputs.** Materialize the approved full
    DAPFAM source only inside the Owner Store. Freeze its source hash, the A5
    target registry, code/runtime/configuration hashes, output schema, resource
