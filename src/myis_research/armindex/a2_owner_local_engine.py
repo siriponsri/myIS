@@ -230,8 +230,8 @@ def _dense_units(compiled: Sequence[Any], *, arm_id: str, adapter: Any) -> tuple
     return tuple(result)
 
 
-def _rank_dense(units: Sequence[Any], queries: Mapping[str, str], *, arm_id: str, model_directory: Path, device: str, method: str, adapter_factory: Callable[..., Any]) -> tuple[dict[str, tuple[Any, ...]], tuple[float, ...]]:
-    adapter = adapter_factory(arm_id=arm_id, model_directory=model_directory, device=device, batch_size=1)
+def _rank_dense(units: Sequence[Any], queries: Mapping[str, str], *, arm_id: str, model_directory: Path, device: str, method: str, adapter_factory: Callable[..., Any], batch_size: int = 1) -> tuple[dict[str, tuple[Any, ...]], tuple[float, ...]]:
+    adapter = adapter_factory(arm_id=arm_id, model_directory=model_directory, device=device, batch_size=batch_size)
     materialized = _dense_units(units, arm_id=arm_id, adapter=adapter)
     index = build_dense_index(arm_id=arm_id, adapter=adapter, corpus=materialized)
     result: dict[str, tuple[Any, ...]] = {}

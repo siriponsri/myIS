@@ -187,6 +187,7 @@ def _rank_one(root: Path, *, arm_id: str, queries: Mapping[str, str]) -> tuple[d
         device=_device_for_arm(arm_id),
         method=compiled.family_aggregation,
         adapter_factory=SentenceTransformerDenseAdapter.from_staged_directory,
+        batch_size=32,
     )
     return _serialise(ranks), list(latencies)
 
