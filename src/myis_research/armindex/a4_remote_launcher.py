@@ -102,6 +102,8 @@ def stage_a4_remote_runtime(
     code_bundle: Path,
     runtime_assets_archive: Path,
     runtime_assets_inventory: Path,
+    runtime_bindings: Path,
+    profile_registry: Path,
     ssh_host: str,
     ssh_port: int,
     ssh_key_path: Path,
@@ -111,20 +113,47 @@ def stage_a4_remote_runtime(
     """Create a new remote root and stage opaque code/assets only."""
 
     manifest = validate_a4_stage_manifest(stage_manifest)
+    bindings = _load_json(Path(runtime_bindings), "A4 runtime bindings")
+    registry = _load_json(Path(profile_registry), "A4 profile registry")
+    _self_hash(bindings, "runtime_bindings_sha256", "A4 runtime bindings")
+    _self_hash(registry, "registry_sha256", "A4 profile registry")
+    if (
+        bindings.get("attempt_id") != manifest["attempt_id"]
+        or bindings["runtime_bindings_sha256"] != manifest["runtime_bindings_sha256"]
+        or registry.get("attempt_id") != manifest["attempt_id"]
+        or registry["registry_sha256"] != manifest["profile_registry_sha256"]
+    ):
+        raise A4RemoteLauncherError("A4 runtime metadata has binding drift")
     files = {
         "code_bundle": (Path(code_bundle), manifest["code_bundle_sha256"], "code.tar.gz"),
         "runtime_assets_archive": (Path(runtime_assets_archive), manifest["runtime_assets_archive_sha256"], "assets.tar.gz"),
         "runtime_assets_inventory": (Path(runtime_assets_inventory), manifest["runtime_assets_inventory_sha256"], "A4_RUNTIME_ASSETS.json"),
+        "runtime_bindings": (Path(runtime_bindings), None, "A4_RUNTIME_BINDINGS.json"),
+        "profile_registry": (Path(profile_registry), None, "profile-registry.json"),
     }
     for role, (path, expected, _name) in files.items():
-        _verify_file(path, expected, role)
+        candidate = Path(path).resolve(strict=True)
+        if candidate.is_symlink() or not candidate.is_file():
+            raise A4RemoteLauncherError(f"A4 {role} is unavailable")
+        if expected is not None:
+            _verify_file(candidate, expected, role)
     ssh, scp, target = _connection(ssh_host, ssh_port, ssh_key_path, known_hosts_path)
     execute = run or _run
     root = manifest["remote_root"]
     execute([*ssh, f"set -eu; test ! -e {shlex.quote(root)}; mkdir -p {shlex.quote(root)}/incoming {shlex.quote(root)}/current {shlex.quote(root)}/assets {shlex.quote(root)}/requests {shlex.quote(root)}/receipts {shlex.quote(root)}/output {shlex.quote(root)}/checkpoints"])
     for _role, (path, _expected, name) in files.items():
         execute([*scp, str(path.resolve()), f"{target}:{root}/incoming/{name}"])
-    execute([*ssh, f"set -eu; test \"$(sha256sum {shlex.quote(root)}/incoming/code.tar.gz | awk '{{print $1}}')\" = {shlex.quote(manifest['code_bundle_sha256'])}; test \"$(sha256sum {shlex.quote(root)}/incoming/assets.tar.gz | awk '{{print $1}}')\" = {shlex.quote(manifest['runtime_assets_archive_sha256'])}; test \"$(sha256sum {shlex.quote(root)}/incoming/A4_RUNTIME_ASSETS.json | awk '{{print $1}}')\" = {shlex.quote(manifest['runtime_assets_inventory_sha256'])}; tar -xzf {shlex.quote(root)}/incoming/code.tar.gz -C {shlex.quote(root)}/current; tar -xzf {shlex.quote(root)}/incoming/assets.tar.gz -C {shlex.quote(root)}/assets; cp {shlex.quote(root)}/incoming/A4_RUNTIME_ASSETS.json {shlex.quote(root)}/assets/A4_RUNTIME_ASSETS.json; sha256sum {shlex.quote(root)}/incoming/* > {shlex.quote(root)}/receipts/staged.sha256"])
+    verify_source = (
+        "import json,sys; "
+        f"sys.path.insert(0, {root!r} + '/current/src'); "
+        "from myis_research.armindex.a4_remote_ranker import _profile_registry,_runtime_bindings; "
+        f"root={root!r}; "
+        f"runtime=_runtime_bindings(json.loads(open(root + '/A4_RUNTIME_BINDINGS.json').read()), attempt_id={manifest['attempt_id']!r}); "
+        "registry=_profile_registry(json.loads(open(root + '/receipts/profile-registry.json').read()), attempt_id=runtime['attempt_id']); "
+        f"assert runtime['runtime_bindings_sha256']=={manifest['runtime_bindings_sha256']!r}; "
+        f"assert registry['registry_sha256']=={manifest['profile_registry_sha256']!r}"
+    )
+    execute([*ssh, f"set -eu; test \"$(sha256sum {shlex.quote(root)}/incoming/code.tar.gz | awk '{{print $1}}')\" = {shlex.quote(manifest['code_bundle_sha256'])}; test \"$(sha256sum {shlex.quote(root)}/incoming/assets.tar.gz | awk '{{print $1}}')\" = {shlex.quote(manifest['runtime_assets_archive_sha256'])}; test \"$(sha256sum {shlex.quote(root)}/incoming/A4_RUNTIME_ASSETS.json | awk '{{print $1}}')\" = {shlex.quote(manifest['runtime_assets_inventory_sha256'])}; tar -xzf {shlex.quote(root)}/incoming/code.tar.gz -C {shlex.quote(root)}/current; tar -xzf {shlex.quote(root)}/incoming/assets.tar.gz -C {shlex.quote(root)}/assets; cp {shlex.quote(root)}/incoming/A4_RUNTIME_ASSETS.json {shlex.quote(root)}/assets/A4_RUNTIME_ASSETS.json; cp {shlex.quote(root)}/incoming/A4_RUNTIME_BINDINGS.json {shlex.quote(root)}/A4_RUNTIME_BINDINGS.json; cp {shlex.quote(root)}/incoming/profile-registry.json {shlex.quote(root)}/receipts/profile-registry.json; PYTHONPATH={shlex.quote(root)}/current/src python3 -c {shlex.quote(verify_source)}; sha256sum {shlex.quote(root)}/incoming/* > {shlex.quote(root)}/receipts/staged.sha256"])
     body = {
         "schema_version": "myis.armindex-a4-remote-stage-receipt.v1",
         "status": "PASS_A4_REMOTE_RUNTIME_STAGED",
