@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Mapping, Sequence
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
 import os
@@ -120,12 +121,13 @@ def run_a4_profile_ranker(
     if len(queries) != 100:
         raise A4RemoteRankerError("A4 ranker requires exactly HDEV-100")
     started = time.perf_counter()
-    rankings_by_arm: dict[str, dict[str, list[dict[str, Any]]]] = {}
-    latencies: list[float] = []
-    for arm_id in request["arm_ids"]:
-        ranks, current = _rank_one(root, arm_id=arm_id, queries=queries)
-        rankings_by_arm[arm_id] = ranks
-        latencies.extend(current)
+    rankings_by_arm, per_arm_latencies = _rank_arms(
+        root,
+        arm_ids=request["arm_ids"],
+        queries=queries,
+        mode=request["mode"],
+    )
+    latencies = _profile_latencies(per_arm_latencies, arm_ids=request["arm_ids"], mode=request["mode"])
     rankings = _fuse(rankings_by_arm, depth=request["candidate_depth"])
     elapsed = max(0.0, time.perf_counter() - started)
     body = {
@@ -137,13 +139,13 @@ def run_a4_profile_ranker(
             "p99_ms": _percentile(latencies, 0.99) * 1000.0,
             "throughput_qps": 100.0 / elapsed if elapsed else 0.0,
         },
-        "resource": _resource_metrics(root, elapsed, request["arm_ids"]),
+        "resource": _resource_metrics(root, elapsed, request["arm_ids"], mode=request["mode"]),
     }
     _write_new_json(result_path, body)
     return body
 
 
-def _resource_metrics(root: Path, elapsed: float, arm_ids: Sequence[str]) -> dict[str, Any]:
+def _resource_metrics(root: Path, elapsed: float, arm_ids: Sequence[str], *, mode: str) -> dict[str, Any]:
     """Return aggregate-safe runtime resources required by the Owner evaluator."""
     rate = float(os.environ.get("A4_HOURLY_RATE_USD", "0.6455555555555554"))
     if not math.isfinite(rate) or rate < 0:
@@ -161,12 +163,60 @@ def _resource_metrics(root: Path, elapsed: float, arm_ids: Sequence[str]) -> dic
     index_size = sum(path.stat().st_size for path in root.rglob("*") if path.is_file())
     return {
         "gpu_ids": _gpu_ids(arm_ids),
-        "mode": "measured",
+        "profile_mode": mode,
         "cost_usd": rate * elapsed / 3600.0,
         "ram_gib": max(0.0, ram_gib),
         "vram_gib": max(0.0, vram_gib),
         "index_size_bytes": int(index_size),
     }
+
+
+def _rank_arms(
+    root: Path,
+    *,
+    arm_ids: Sequence[str],
+    queries: Mapping[str, str],
+    mode: str,
+) -> tuple[dict[str, dict[str, list[dict[str, Any]]]], dict[str, list[float]]]:
+    """Run profile components in their frozen service mode."""
+
+    if mode not in {"synchronous", "asynchronous"}:
+        raise A4RemoteRankerError("A4 profile mode is invalid")
+    arms = tuple(arm_ids)
+    if not arms or len(set(arms)) != len(arms):
+        raise A4RemoteRankerError("A4 profile arm scope is invalid")
+    collected: dict[str, tuple[dict[str, list[dict[str, Any]]], list[float]]] = {}
+    if mode == "synchronous":
+        for arm_id in arms:
+            collected[arm_id] = _rank_one(root, arm_id=arm_id, queries=queries)
+    else:
+        with ThreadPoolExecutor(max_workers=len(arms), thread_name_prefix="a4-profile") as pool:
+            futures = {arm_id: pool.submit(_rank_one, root, arm_id=arm_id, queries=queries) for arm_id in arms}
+            for arm_id in arms:
+                collected[arm_id] = futures[arm_id].result()
+    rankings = {arm_id: collected[arm_id][0] for arm_id in arms}
+    latencies = {arm_id: collected[arm_id][1] for arm_id in arms}
+    if any(len(values) != len(queries) for values in latencies.values()):
+        raise A4RemoteRankerError("A4 component latency coverage is incomplete")
+    return rankings, latencies
+
+
+def _profile_latencies(
+    per_arm: Mapping[str, Sequence[float]],
+    *,
+    arm_ids: Sequence[str],
+    mode: str,
+) -> list[float]:
+    """Derive service latency from component latency under the frozen mode."""
+
+    samples = [per_arm[arm_id] for arm_id in arm_ids]
+    if not samples or len({len(values) for values in samples}) != 1:
+        raise A4RemoteRankerError("A4 profile latency alignment is invalid")
+    if mode == "synchronous":
+        return [sum(float(values[index]) for values in samples) for index in range(len(samples[0]))]
+    if mode == "asynchronous":
+        return [max(float(values[index]) for values in samples) for index in range(len(samples[0]))]
+    raise A4RemoteRankerError("A4 profile mode is invalid")
 
 
 def _rank_one(root: Path, *, arm_id: str, queries: Mapping[str, str]) -> tuple[dict[str, list[dict[str, Any]]], list[float]]:
