@@ -11,9 +11,15 @@ import argparse
 from collections.abc import Mapping, Sequence
 import json
 import math
+import os
 from pathlib import Path
 import time
 from typing import Any
+
+try:
+    import resource
+except ImportError:  # pragma: no cover - Windows development host
+    resource = None  # type: ignore[assignment]
 
 from ..kernel.canonical import canonical_json, canonical_sha256, file_sha256
 from .a1_2_measured_executor_v16 import SentenceTransformerDenseAdapter
@@ -130,10 +136,37 @@ def run_a4_profile_ranker(
             "search_p95_seconds": _percentile(latencies, 0.95),
             "search_p99_seconds": _percentile(latencies, 0.99),
         },
-        "resource": {"gpu_ids": _gpu_ids(request["arm_ids"]), "mode": request["mode"]},
+        "resource": _resource_metrics(root, started, request["arm_ids"]),
     }
     _write_new_json(result_path, body)
     return body
+
+
+def _resource_metrics(root: Path, started: float, arm_ids: Sequence[str]) -> dict[str, Any]:
+    """Return aggregate-safe runtime resources required by the Owner evaluator."""
+    elapsed = max(0.0, time.perf_counter() - started)
+    rate = float(os.environ.get("A4_HOURLY_RATE_USD", "0.6455555555555554"))
+    if not math.isfinite(rate) or rate < 0:
+        raise A4RemoteRankerError("A4 hourly rate is invalid")
+    ram_gib = 0.0
+    if resource is not None:
+        ram_gib = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss) / (1024 ** 2)
+    vram_gib = 0.0
+    try:
+        import torch
+
+        vram_gib = max(float(torch.cuda.max_memory_allocated(i)) for i in range(torch.cuda.device_count())) / (1024 ** 3) if torch.cuda.is_available() else 0.0
+    except (ImportError, RuntimeError, ValueError):
+        vram_gib = 0.0
+    index_size = sum(path.stat().st_size for path in root.rglob("*") if path.is_file())
+    return {
+        "gpu_ids": _gpu_ids(arm_ids),
+        "mode": "measured",
+        "cost_usd": rate * elapsed / 3600.0,
+        "ram_gib": max(0.0, ram_gib),
+        "vram_gib": max(0.0, vram_gib),
+        "index_size_bytes": int(index_size),
+    }
 
 
 def _rank_one(root: Path, *, arm_id: str, queries: Mapping[str, str]) -> tuple[dict[str, list[dict[str, Any]]], list[float]]:
