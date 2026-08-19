@@ -31,7 +31,10 @@ def main() -> int:
 
     package = json.loads(args.package.read_text(encoding="utf-8"))
     registry = json.loads(args.profile_registry.read_text(encoding="utf-8"))
-    profile = next(row for row in registry["profiles"] if row["profile_id"] == args.profile)
+    if args.profile == "ARM-03_RESEARCH_REFERENCE":
+        profile = registry["research_reference"]
+    else:
+        profile = next(row for row in registry["profiles"] if row["profile_id"] == args.profile)
     hdev_tokens = {row["work_token"] for row in _jsonl(args.hdev_queries)}
     qrels = {row["work_token"]: row["relevance"] for row in _jsonl(args.qrels) if row["work_token"] in hdev_tokens}
     membership = {row["work_token"]: row["eligible_out"] for row in _jsonl(args.membership) if row["work_token"] in hdev_tokens}

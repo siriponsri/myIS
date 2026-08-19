@@ -249,7 +249,7 @@ def _fuse(rankings_by_arm: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]
         if len(fused) != 100:
             raise A4RemoteRankerError("A4 fused profile cannot return top 100")
         result[token] = [
-            {"family_token": row.family_token, "rank": index, "score": float(row.score)}
+            {"family_token": row["family_id"], "rank": index, "score": float(row["score"])}
             for index, row in enumerate(fused, start=1)
         ]
     return result
