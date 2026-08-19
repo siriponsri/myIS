@@ -220,7 +220,9 @@ def _validate_inventory(path: Path, assets: Path, request: Mapping[str, Any]) ->
 
 
 def _run_ranker(arguments: Sequence[str]) -> None:
-    subprocess.run(list(arguments), check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    # Preserve ranker diagnostics in the isolated operation log; no payload is
+    # printed by the ranker, and the parent worker remains aggregate-safe.
+    subprocess.run(list(arguments), check=True, stdout=subprocess.DEVNULL)
 
 
 def _load_json(path: Path, role: str) -> dict[str, Any]:
