@@ -15,7 +15,9 @@ mkdir -p "$model_root"
 
 download() {
   local arm=$1 repository=$2 revision=$3 bytes=$4 expected_sha=$5
-  local dir="$model_root/$arm" parts="$dir/parts" target="$dir/model.safetensors"
+  local dir="$model_root/$arm"
+  local parts="$dir/parts"
+  local target="$dir/model.safetensors"
   mkdir -p "$parts"
   local count=$(( (bytes + chunk_bytes - 1) / chunk_bytes ))
   local failed=0
