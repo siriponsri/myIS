@@ -33,6 +33,10 @@ from .scientific_common_programs_v11 import compile_common_program
 
 _DENSE_ARMS = ("ARM-03", "ARM-04", "ARM-05")
 _COMMERCIAL_ARMS = ("ARM-01", "ARM-02", "ARM-04", "ARM-05")
+# This operational setting is deliberately conservative for the 24 GiB A4
+# runtime. It is code-bundle bound for each fresh attempt and does not alter
+# the frozen representation or retrieval semantics.
+_DENSE_ENCODE_BATCH_SIZE = 1
 _REQUEST_KEYS = {
     "schema_version",
     "attempt_id",
@@ -237,7 +241,7 @@ def _rank_one(root: Path, *, arm_id: str, queries: Mapping[str, str]) -> tuple[d
         device=_device_for_arm(arm_id),
         method=compiled.family_aggregation,
         adapter_factory=SentenceTransformerDenseAdapter.from_staged_directory,
-        batch_size=32,
+        batch_size=_DENSE_ENCODE_BATCH_SIZE,
     )
     return _serialise(ranks), list(latencies)
 
