@@ -7,7 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from myis_research.armindex.a2_owner_local_engine import FamilyRank, _metrics
+from myis_research.armindex.a1_2_measured_executor_v16 import FamilyRank
+from myis_research.armindex.a2_owner_local_engine import _metrics
 from myis_research.armindex.a4_evaluator import evaluate_a4_profile_owner_local
 from myis_research.kernel.canonical import canonical_json, file_sha256
 

@@ -289,6 +289,9 @@ def launch_a4_remote_operation(
     root = stage["remote_root"]
     ssh, scp, target = _connection(ssh_host, ssh_port, ssh_key_path, known_hosts_path)
     execute = run or _run
+    # A retry after a local transport interruption is valid only when no remote
+    # request, output, or log exists for this immutable operation identity.
+    execute([*ssh, f"set -eu; test ! -e {shlex.quote(f'{root}/requests/{operation_id}.json')}; test ! -e {shlex.quote(f'{root}/output/{operation_id}')}; test ! -e {shlex.quote(f'{root}/output/{operation_id}.log')}"])
     execute([*scp, str(Path(request_path).resolve()), f"{target}:{root}/requests/{operation_id}.json"])
     command = f"cd {shlex.quote(root)}; export PYTHONPATH={shlex.quote(f'{root}/current/src')}:$PYTHONPATH HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1; nohup {shlex.quote('python3')} -m myis_research.armindex.a4_remote_worker --request {shlex.quote(f'{root}/requests/{operation_id}.json')} --assets-root {shlex.quote(f'{root}/assets')} --output-root {shlex.quote(f'{root}/output/{operation_id}')} > {shlex.quote(f'{root}/output/{operation_id}.log')} 2>&1 & echo $!"
     pid_text = execute([*ssh, command]).strip().splitlines()[-1]

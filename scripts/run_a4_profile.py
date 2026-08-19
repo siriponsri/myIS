@@ -29,6 +29,17 @@ def _write(path: Path, value: dict[str, Any]) -> None:
     path.write_text(canonical_json(value) + "\n", encoding="utf-8")
 
 
+def _reuse_prepared(path: Path, expected: dict[str, Any], role: str) -> dict[str, Any]:
+    """Reuse local pre-launch evidence only after an interrupted transport."""
+
+    if not path.is_file() or path.is_symlink():
+        raise ValueError(f"A4 prepared {role} is unavailable: {path}")
+    existing = _load(path)
+    if existing != expected:
+        raise ValueError(f"A4 prepared {role} drifted: {path}")
+    return existing
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--attempt-id", required=True)
@@ -38,6 +49,7 @@ def main() -> int:
     parser.add_argument("--port", type=int, required=True)
     parser.add_argument("--key", type=Path, required=True)
     parser.add_argument("--known-hosts", type=Path, required=True)
+    parser.add_argument("--retry-prepared-transport", action="store_true")
     args = parser.parse_args()
 
     root = args.root.resolve(strict=True)
@@ -51,7 +63,10 @@ def main() -> int:
         profile_id=args.profile,
     )
     request_path = root / "requests" / f"{args.profile}.json"
-    _write(request_path, request)
+    if args.retry_prepared_transport:
+        request = _reuse_prepared(request_path, request, "request")
+    else:
+        _write(request_path, request)
     integrity = build_a4_launch_integrity_receipt(
         attempt_id=args.attempt_id,
         stage_receipt_sha256=stage["receipt_sha256"],
@@ -59,7 +74,14 @@ def main() -> int:
         code_bundle_sha256=stage["code_bundle_sha256"],
         runtime_bindings_sha256=runtime["runtime_bindings_sha256"],
     )
-    _write(root / "launch-integrity" / f"{args.profile}.json", integrity)
+    integrity_path = root / "launch-integrity" / f"{args.profile}.json"
+    if args.retry_prepared_transport:
+        integrity = _reuse_prepared(integrity_path, integrity, "launch integrity")
+    else:
+        _write(integrity_path, integrity)
+    launch_path = root / "launch-receipts" / f"{args.profile}.json"
+    if launch_path.exists() or launch_path.is_symlink():
+        raise ValueError(f"A4 launch receipt already exists: {launch_path}")
     launch = launch_a4_remote_operation(
         stage,
         integrity,
@@ -69,7 +91,7 @@ def main() -> int:
         ssh_key_path=args.key,
         known_hosts_path=args.known_hosts,
     )
-    _write(root / "launch-receipts" / f"{args.profile}.json", launch)
+    _write(launch_path, launch)
     print(canonical_json({
         "profile": args.profile,
         "request_sha256": request["request_sha256"],

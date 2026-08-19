@@ -123,7 +123,8 @@ def test_launcher_contracts_and_safe_return(tmp_path: Path) -> None:
     _write_json(completion_path, completion)
     returned = safe_return_a4_result(launch_receipt=launch, completion_path=completion_path, owner_output_path=tmp_path / "owner" / "completion.json")
     assert returned["owner_local_only"] is True
-    assert len(calls) == 2
+    assert len(calls) == 3
+    assert "test ! -e" in " ".join(calls[0])
     assert build_a4_heartbeat(attempt_id=attempt, operation_id=launch["operation_id"], remote_pid="54321", completed_units=10)["completed_units"] == 10
     assert build_a4_checkpoint(attempt_id=attempt, operation_id=launch["operation_id"], completed_units=100, request_sha256=HASH)["expected_units"] == 100
 
