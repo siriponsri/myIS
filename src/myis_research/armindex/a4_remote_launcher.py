@@ -180,7 +180,7 @@ def launch_a4_remote_operation(
     ssh, scp, target = _connection(ssh_host, ssh_port, ssh_key_path, known_hosts_path)
     execute = run or _run
     execute([*scp, str(Path(request_path).resolve()), f"{target}:{root}/requests/{operation_id}.json"])
-    command = f"cd {shlex.quote(root)}; export PYTHONPATH={shlex.quote(f'{root}/current')}:$PYTHONPATH; nohup {shlex.quote('python3')} -m myis_research.armindex.a4_remote_worker --request {shlex.quote(f'{root}/requests/{operation_id}.json')} --assets-root {shlex.quote(f'{root}/assets')} --output-root {shlex.quote(f'{root}/output/{operation_id}')} > {shlex.quote(f'{root}/output/{operation_id}.log')} 2>&1 & echo $!"
+    command = f"cd {shlex.quote(root)}; export PYTHONPATH={shlex.quote(f'{root}/current/src')}:$PYTHONPATH; nohup {shlex.quote('python3')} -m myis_research.armindex.a4_remote_worker --request {shlex.quote(f'{root}/requests/{operation_id}.json')} --assets-root {shlex.quote(f'{root}/assets')} --output-root {shlex.quote(f'{root}/output/{operation_id}')} > {shlex.quote(f'{root}/output/{operation_id}.log')} 2>&1 & echo $!"
     pid_text = execute([*ssh, command]).strip().splitlines()[-1]
     if not _PID.fullmatch(pid_text):
         raise A4RemoteLauncherError("A4 remote worker PID was not returned")
