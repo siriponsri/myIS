@@ -14,7 +14,6 @@ from myis_research.armindex.a4_execution import (
     build_d1_continuation_receipt,
 )
 from myis_research.kernel.canonical import canonical_json, canonical_sha256
-from myis_research.kernel.canonical import file_sha256
 
 
 def _write(path: Path, value: object) -> None:
