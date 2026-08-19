@@ -127,24 +127,24 @@ def run_a4_profile_ranker(
         rankings_by_arm[arm_id] = ranks
         latencies.extend(current)
     rankings = _fuse(rankings_by_arm, depth=request["candidate_depth"])
+    elapsed = max(0.0, time.perf_counter() - started)
     body = {
         "rankings": rankings,
         "coverage": {"expected_units": 100, "completed_units": len(rankings)},
         "latency": {
-            "wall_seconds": time.perf_counter() - started,
-            "search_p50_seconds": _percentile(latencies, 0.5),
-            "search_p95_seconds": _percentile(latencies, 0.95),
-            "search_p99_seconds": _percentile(latencies, 0.99),
+            "p50_ms": _percentile(latencies, 0.5) * 1000.0,
+            "p95_ms": _percentile(latencies, 0.95) * 1000.0,
+            "p99_ms": _percentile(latencies, 0.99) * 1000.0,
+            "throughput_qps": 100.0 / elapsed if elapsed else 0.0,
         },
-        "resource": _resource_metrics(root, started, request["arm_ids"]),
+        "resource": _resource_metrics(root, elapsed, request["arm_ids"]),
     }
     _write_new_json(result_path, body)
     return body
 
 
-def _resource_metrics(root: Path, started: float, arm_ids: Sequence[str]) -> dict[str, Any]:
+def _resource_metrics(root: Path, elapsed: float, arm_ids: Sequence[str]) -> dict[str, Any]:
     """Return aggregate-safe runtime resources required by the Owner evaluator."""
-    elapsed = max(0.0, time.perf_counter() - started)
     rate = float(os.environ.get("A4_HOURLY_RATE_USD", "0.6455555555555554"))
     if not math.isfinite(rate) or rate < 0:
         raise A4RemoteRankerError("A4 hourly rate is invalid")
