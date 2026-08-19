@@ -464,8 +464,9 @@ def _connection(host: str, port: int, key: Path, known_hosts: Path) -> tuple[lis
         raise A4RemoteLauncherError("A4 SSH endpoint is invalid")
     # OpenSSH parses -o values itself; preserve Windows paths containing spaces.
     known_hosts_option = f'UserKnownHostsFile="{Path(known_hosts).resolve()}"'
-    prefix = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, "-i", str(Path(key).resolve()), "-p", str(port)]
-    return prefix + [f"root@{host}"], ["scp", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, "-i", str(Path(key).resolve()), "-P", str(port)], f"root@{host}"
+    transport = ["-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=6", "-o", "TCPKeepAlive=yes", "-o", "ConnectTimeout=30"]
+    prefix = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, *transport, "-i", str(Path(key).resolve()), "-p", str(port)]
+    return prefix + [f"root@{host}"], ["scp", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, *transport, "-i", str(Path(key).resolve()), "-P", str(port)], f"root@{host}"
 
 
 def _verify_file(path: Path, expected: str, role: str) -> None:

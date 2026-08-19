@@ -34,6 +34,8 @@ def test_connection_quotes_windows_known_hosts_path(tmp_path: Path) -> None:
     expected = f'UserKnownHostsFile="{known_hosts.resolve()}"'
     assert expected in ssh
     assert expected in scp
+    assert "ServerAliveInterval=30" in ssh
+    assert "ServerAliveCountMax=6" in scp
 
 
 def _request(attempt: str) -> dict:
