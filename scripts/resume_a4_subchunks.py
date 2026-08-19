@@ -15,7 +15,7 @@ def main() -> int:
     def resume(path: Path) -> str:
         batch = f'reput "{path.resolve().as_posix()}" {remote}/{path.name}\nquit\n'
         command = [
-            "sftp", "-oBatchMode=yes", "-oStrictHostKeyChecking=yes",
+            "sftp", "-B", "1048576", "-R", "64", "-oBatchMode=yes", "-oStrictHostKeyChecking=yes",
             f"-oUserKnownHostsFile={known}", "-i", key, "-P", "51007",
             "root@38.49.42.120",
         ]
