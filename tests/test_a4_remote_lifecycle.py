@@ -13,6 +13,7 @@ from myis_research.armindex.a4_remote_launcher import (
     build_a4_stage_manifest,
     launch_a4_remote_operation,
     safe_return_a4_result,
+    stage_a4_remote_runtime_from_verified_seed,
     validate_a4_stage_manifest,
 )
 from myis_research.armindex.a4_remote_worker import (
@@ -130,3 +131,81 @@ def test_launcher_contracts_and_safe_return(tmp_path: Path) -> None:
 def test_stage_rejects_attempt_root_reuse() -> None:
     with pytest.raises(A4RemoteLauncherError):
         build_a4_stage_manifest(attempt_id="a4-goal001-20260819T010203Z-abcd", remote_root="/opt/myis/a3-goal003-20260819T010203Z-abcd", runtime_bindings_sha256=HASH, profile_registry_sha256=HASH, code_bundle_sha256=HASH, runtime_assets_archive_sha256=HASH, runtime_assets_inventory_sha256=HASH, remote_asset_sha256s={"corpus": HASH})
+
+
+def test_verified_a4_seed_stage_never_reuses_worker_or_output(tmp_path: Path) -> None:
+    attempt = "a4-goal001-20260819T010203Z-abcd"
+    root = f"/opt/myis/{attempt}"
+    code = tmp_path / "code.tar.gz"
+    code.write_bytes(b"code")
+    scope_body = {
+        "schema_version": "myis.armindex-a4-harness-dev-scope.v1",
+        "scope": "HARNESS-DEV",
+        "query_count": 100,
+    }
+    scope = {**scope_body, "scope_sha256": canonical_sha256(scope_body)}
+    inventory_body = {
+        "schema_version": "myis.armindex-a4-runtime-assets-inventory.v1",
+        "attempt_id": attempt,
+        "asset_sha256s": {"opaque.txt": HASH},
+        "hdev_scope_sha256": scope["scope_sha256"],
+        "profile_registry_sha256": HASH,
+        "protected_payload_included": False,
+    }
+    inventory = {**inventory_body, "inventory_sha256": canonical_sha256(inventory_body)}
+    registry_body = {"schema_version": "myis.armindex-a4-profile-registry.v1", "attempt_id": attempt}
+    registry = {**registry_body, "registry_sha256": canonical_sha256(registry_body)}
+    inventory["profile_registry_sha256"] = registry["registry_sha256"]
+    inventory_body["profile_registry_sha256"] = registry["registry_sha256"]
+    inventory["inventory_sha256"] = canonical_sha256(inventory_body)
+    runtime_body = {
+        "schema_version": "myis.armindex-a4-runtime-bindings.v1",
+        "attempt_id": attempt,
+        "asset_inventory_sha256": inventory["inventory_sha256"],
+        "hdev_scope_sha256": scope["scope_sha256"],
+    }
+    runtime = {**runtime_body, "runtime_bindings_sha256": canonical_sha256(runtime_body)}
+    paths = {
+        "runtime": tmp_path / "runtime.json",
+        "registry": tmp_path / "registry.json",
+        "scope": tmp_path / "scope.json",
+        "inventory": tmp_path / "inventory.json",
+    }
+    _write_json(paths["runtime"], runtime)
+    _write_json(paths["registry"], registry)
+    _write_json(paths["scope"], scope)
+    _write_json(paths["inventory"], inventory)
+    manifest = build_a4_stage_manifest(
+        attempt_id=attempt,
+        remote_root=root,
+        runtime_bindings_sha256=runtime["runtime_bindings_sha256"],
+        profile_registry_sha256=registry["registry_sha256"],
+        code_bundle_sha256=file_sha256(code),
+        runtime_assets_archive_sha256=HASH,
+        runtime_assets_inventory_sha256=inventory["inventory_sha256"],
+        remote_asset_sha256s={"asset_inventory": inventory["inventory_sha256"]},
+    )
+    calls: list[list[str]] = []
+
+    def fake_run(arguments: list[str]) -> str:
+        calls.append(arguments)
+        return ""
+
+    staged = stage_a4_remote_runtime_from_verified_seed(
+        manifest,
+        code_bundle=code,
+        runtime_bindings=paths["runtime"],
+        profile_registry=paths["registry"],
+        hdev_scope=paths["scope"],
+        runtime_assets_inventory=paths["inventory"],
+        seed_root="/opt/myis/a4-goal001-20260818T235614Z-a4x1",
+        ssh_host="example.test",
+        ssh_port=22,
+        ssh_key_path=tmp_path / "key",
+        known_hosts_path=tmp_path / "known",
+        run=fake_run,
+    )
+    assert staged["stage_receipt"]["status"] == "PASS_A4_REMOTE_RUNTIME_STAGED"
+    assert staged["seed_receipt"]["reused_output"] is False
+    assert staged["seed_receipt"]["reused_worker"] is False
+    assert any("cp -a --reflink=auto" in " ".join(command) for command in calls)

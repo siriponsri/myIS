@@ -141,6 +141,116 @@ def stage_a4_remote_runtime(
     return {**body, "receipt_sha256": canonical_sha256(body)}
 
 
+def stage_a4_remote_runtime_from_verified_seed(
+    stage_manifest: Mapping[str, Any],
+    *,
+    code_bundle: Path,
+    runtime_bindings: Path,
+    profile_registry: Path,
+    hdev_scope: Path,
+    runtime_assets_inventory: Path,
+    seed_root: str,
+    ssh_host: str,
+    ssh_port: int,
+    ssh_key_path: Path,
+    known_hosts_path: Path,
+    run: Callable[[Sequence[str]], str] | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Stage a new root from verified immutable A4 assets without re-uploading weights.
+
+    The seed may contain only a prior A4 asset tree.  It never copies a worker,
+    cache, request, PID, receipt, or output; fresh code and attempt-bound
+    metadata are uploaded and the new asset inventory is recomputed remotely.
+    """
+
+    manifest = validate_a4_stage_manifest(stage_manifest)
+    root = manifest["remote_root"]
+    if not isinstance(seed_root, str) or not _ROOT.fullmatch(seed_root) or seed_root == root:
+        raise A4RemoteLauncherError("A4 verified asset seed root is invalid")
+    files = {
+        "code_bundle": (Path(code_bundle), manifest["code_bundle_sha256"], "code.tar.gz"),
+        "runtime_bindings": (Path(runtime_bindings), None, "A4_RUNTIME_BINDINGS.json"),
+        "profile_registry": (Path(profile_registry), None, "profile-registry.json"),
+        "hdev_scope": (Path(hdev_scope), None, "hdev-scope.json"),
+        "runtime_assets_inventory": (Path(runtime_assets_inventory), None, "A4_RUNTIME_ASSETS.json"),
+    }
+    for role, (path, expected, _name) in files.items():
+        candidate = path.resolve(strict=True)
+        if candidate.is_symlink() or not candidate.is_file():
+            raise A4RemoteLauncherError(f"A4 {role} is unavailable")
+        if expected is not None:
+            _verify_file(candidate, expected, role)
+    runtime = _load_json(files["runtime_bindings"][0], "A4 runtime bindings")
+    inventory = _load_json(files["runtime_assets_inventory"][0], "A4 runtime inventory")
+    scope = _load_json(files["hdev_scope"][0], "A4 HDEV scope")
+    registry = _load_json(files["profile_registry"][0], "A4 profile registry")
+    _self_hash(runtime, "runtime_bindings_sha256", "A4 runtime bindings")
+    _self_hash(inventory, "inventory_sha256", "A4 runtime inventory")
+    _self_hash(scope, "scope_sha256", "A4 HDEV scope")
+    _self_hash(registry, "registry_sha256", "A4 profile registry")
+    if (
+        runtime.get("attempt_id") != manifest["attempt_id"]
+        or registry.get("attempt_id") != manifest["attempt_id"]
+        or runtime.get("runtime_bindings_sha256") != manifest["runtime_bindings_sha256"]
+        or registry.get("registry_sha256") != manifest["profile_registry_sha256"]
+        or runtime.get("asset_inventory_sha256") != inventory["inventory_sha256"]
+        or runtime.get("hdev_scope_sha256") != scope["scope_sha256"]
+        or inventory.get("hdev_scope_sha256") != scope["scope_sha256"]
+        or inventory.get("profile_registry_sha256") != registry["registry_sha256"]
+    ):
+        raise A4RemoteLauncherError("A4 verified seed metadata has binding drift")
+    ssh, scp, target = _connection(ssh_host, ssh_port, ssh_key_path, known_hosts_path)
+    execute = run or _run
+    execute([*ssh, f"set -eu; test ! -e {shlex.quote(root)}; test -d {shlex.quote(seed_root)}/assets; mkdir -p {shlex.quote(root)}/incoming {shlex.quote(root)}/current {shlex.quote(root)}/assets {shlex.quote(root)}/requests {shlex.quote(root)}/receipts {shlex.quote(root)}/output {shlex.quote(root)}/checkpoints; cp -a --reflink=auto {shlex.quote(seed_root)}/assets/. {shlex.quote(root)}/assets/"])
+    for _role, (path, _expected, name) in files.items():
+        execute([*scp, str(path.resolve()), f"{target}:{root}/incoming/{name}"])
+    verify_source = (
+        "import json,sys; from pathlib import Path; "
+        f"sys.path.insert(0, {root!r} + '/current/src'); "
+        "from myis_research.armindex.a4_remote_ranker import _inventory,_runtime_bindings,_scope; "
+        f"root=Path({root!r}); assets=root/'assets'; "
+        "inventory=_inventory(json.loads((assets/'A4_RUNTIME_ASSETS.json').read_text()), assets); "
+        f"runtime=_runtime_bindings(json.loads((root/'A4_RUNTIME_BINDINGS.json').read_text()), attempt_id={manifest['attempt_id']!r}); "
+        "scope=_scope(json.loads((assets/'hdev-scope.json').read_text())); "
+        "assert runtime['asset_inventory_sha256']==inventory['inventory_sha256']; "
+        "assert runtime['hdev_scope_sha256']==scope['scope_sha256']"
+    )
+    execute([*ssh, f"set -eu; test \"$(sha256sum {shlex.quote(root)}/incoming/code.tar.gz | awk '{{print $1}}')\" = {shlex.quote(manifest['code_bundle_sha256'])}; tar -xzf {shlex.quote(root)}/incoming/code.tar.gz -C {shlex.quote(root)}/current; cp {shlex.quote(root)}/incoming/A4_RUNTIME_BINDINGS.json {shlex.quote(root)}/A4_RUNTIME_BINDINGS.json; cp {shlex.quote(root)}/incoming/profile-registry.json {shlex.quote(root)}/receipts/profile-registry.json; cp {shlex.quote(root)}/incoming/hdev-scope.json {shlex.quote(root)}/assets/hdev-scope.json; cp {shlex.quote(root)}/incoming/A4_RUNTIME_ASSETS.json {shlex.quote(root)}/assets/A4_RUNTIME_ASSETS.json; python3 -c {shlex.quote(verify_source)}; sha256sum {shlex.quote(root)}/incoming/* > {shlex.quote(root)}/receipts/staged.sha256"])
+    stage_body = {
+        "schema_version": "myis.armindex-a4-remote-stage-receipt.v1",
+        "status": "PASS_A4_REMOTE_RUNTIME_STAGED",
+        "attempt_id": manifest["attempt_id"],
+        "remote_root": root,
+        "stage_manifest_sha256": manifest["stage_manifest_sha256"],
+        "code_bundle_sha256": manifest["code_bundle_sha256"],
+        "runtime_assets_archive_sha256": manifest["runtime_assets_archive_sha256"],
+        "runtime_assets_inventory_sha256": manifest["runtime_assets_inventory_sha256"],
+        "protected_payload_included": False,
+        "selection_accesses": 0,
+        "final_accesses": 0,
+    }
+    stage = {**stage_body, "receipt_sha256": canonical_sha256(stage_body)}
+    seed_body = {
+        "schema_version": "myis.armindex-a4-verified-asset-seed-receipt.v1",
+        "status": "PASS_A4_VERIFIED_IMMUTABLE_ASSET_SEED",
+        "attempt_id": manifest["attempt_id"],
+        "remote_root": root,
+        "seed_root": seed_root,
+        "stage_manifest_sha256": manifest["stage_manifest_sha256"],
+        "asset_inventory_sha256": inventory["inventory_sha256"],
+        "runtime_bindings_sha256": runtime["runtime_bindings_sha256"],
+        "profile_registry_sha256": registry["registry_sha256"],
+        "seed_scope": "immutable_a4_input_assets_only",
+        "reused_worker": False,
+        "reused_cache": False,
+        "reused_request": False,
+        "reused_output": False,
+        "protected_payload_included": False,
+    }
+    seed = {**seed_body, "receipt_sha256": canonical_sha256(seed_body)}
+    return {"stage_receipt": stage, "seed_receipt": seed}
+
+
 def build_a4_launch_integrity_receipt(*, attempt_id: str, stage_receipt_sha256: str, request_sha256: str, code_bundle_sha256: str, runtime_bindings_sha256: str) -> dict[str, Any]:
     _attempt(attempt_id)
     for field, value in (("stage_receipt_sha256", stage_receipt_sha256), ("request_sha256", request_sha256), ("code_bundle_sha256", code_bundle_sha256), ("runtime_bindings_sha256", runtime_bindings_sha256)):
@@ -403,4 +513,4 @@ def _run(arguments: Sequence[str]) -> str:
     return subprocess.run(list(arguments), check=True, capture_output=True, text=True).stdout
 
 
-__all__ = ["A4RemoteLauncherError", "build_a4_checkpoint", "build_a4_heartbeat", "build_a4_launch_integrity_receipt", "build_a4_stage_manifest", "launch_a4_remote_operation", "reap_a4_remote_process", "safe_return_a4_remote_package", "safe_return_a4_remote_result", "safe_return_a4_result", "stage_a4_remote_runtime", "validate_a4_stage_manifest", "validate_a4_resume_checkpoint", "verify_a4_process_identity"]
+__all__ = ["A4RemoteLauncherError", "build_a4_checkpoint", "build_a4_heartbeat", "build_a4_launch_integrity_receipt", "build_a4_stage_manifest", "launch_a4_remote_operation", "reap_a4_remote_process", "safe_return_a4_remote_package", "safe_return_a4_remote_result", "safe_return_a4_result", "stage_a4_remote_runtime", "stage_a4_remote_runtime_from_verified_seed", "validate_a4_stage_manifest", "validate_a4_resume_checkpoint", "verify_a4_process_identity"]
