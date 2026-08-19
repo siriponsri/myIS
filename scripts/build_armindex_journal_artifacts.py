@@ -115,6 +115,16 @@ CLAIM_INVENTORY = (
         "prohibited_interpretation": "Do not label it a Final winner or a causal superiority claim",
     },
     {
+        "claim_id": "C-A4-FAST-STATUS-01",
+        "phase": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+        "claim_text": "The FAST profile has a completed 100-unit Owner-local aggregate evaluation, but it is not a completed A4 result because the remaining profiles, legal isolation, and Selection are still incomplete.",
+        "metric_scope": "profile-specific HDEV aggregate; population label is not exported in this package",
+        "source_artifact": "<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/hdev-evaluations/FAST.json",
+        "evidence_status": "OWNER_LOCAL_STATUS_POINTER",
+        "permitted_use": "Current-status reporting only; cite the numeric receipt only after complete A4 closeout",
+        "prohibited_interpretation": "Do not call FAST a production winner, a commercial champion, Selection evidence, or Final evidence",
+    },
+    {
         "claim_id": "C-A4-01",
         "phase": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
         "claim_text": "A4 is not complete at this package cutoff; FAST evidence exists but BALANCED, legal transfer, and Selection are not all closed.",
@@ -303,6 +313,133 @@ def build_a3_journal_figures(repo: Path, output: Path) -> list[dict[str, Any]]:
     return records
 
 
+def build_a2_journal_figure(repo: Path, output: Path) -> list[dict[str, Any]]:
+    """Render a paper-oriented A2 frontier with explicit arm dispositions."""
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+
+    rows = list(csv.DictReader((repo / "docs/progress_report/A2_per_arm_autoindex_outcomes_eda_20260818.csv").open(encoding="utf-8")))
+    labels = {
+        "ARM-01": "BM25 lexical",
+        "ARM-02": "BGE-M3",
+        "ARM-03": "PatEmbed",
+        "ARM-04": "Arctic Embed",
+        "ARM-05": "Qwen3 Embedding",
+    }
+    colors = {"ARM-01": "#0072B2", "ARM-02": "#E69F00", "ARM-03": "#009E73", "ARM-04": "#CC79A7", "ARM-05": "#D55E00"}
+    markers = {"ARM-01": "x", "ARM-02": "x", "ARM-03": "o", "ARM-04": "o", "ARM-05": "o"}
+    fig, ax = plt.subplots(figsize=(8.4, 5.5), constrained_layout=True)
+    latencies = [float(row["search_p95_ms"]) for row in rows]
+    recalls = [float(row["recall_at_100"]) for row in rows]
+    for row in rows:
+        arm = row["arm_id"]
+        cost = float(row["charged_usd"])
+        size = 220 + 900 * max(cost, 0.03)
+        scatter_kwargs: dict[str, Any] = {
+            "s": size,
+            "c": colors[arm],
+            "marker": markers[arm],
+            "linewidths": 1.0,
+            "alpha": 0.95,
+            "zorder": 3,
+        }
+        if markers[arm] != "x":
+            scatter_kwargs["edgecolors"] = "#222222"
+        ax.scatter(float(row["search_p95_ms"]), float(row["recall_at_100"]), **scatter_kwargs)
+        offset = (8, 8) if arm != "ARM-01" else (8, -16)
+        ax.annotate(labels[arm], (float(row["search_p95_ms"]), float(row["recall_at_100"])), xytext=offset, textcoords="offset points", fontsize=9)
+    ax.set_title("Per-retriever search reveals a quality-latency-cost frontier", fontsize=15, weight="bold", pad=12)
+    ax.set_xlabel("Search p95 latency (ms)")
+    ax.set_ylabel("OUT Recall@100")
+    ax.set_xlim(min(latencies) - 45, max(latencies) + 150)
+    ax.set_ylim(min(recalls) - 0.025, max(recalls) + 0.008)
+    ax.grid(axis="both", color="#D9D9D9", linewidth=0.7, alpha=0.6)
+    ax.set_axisbelow(True)
+    ax.legend(
+        handles=[
+            Line2D([0], [0], marker="o", color="none", markerfacecolor="#777777", markeredgecolor="#222222", markersize=8, label="Primary transfer input"),
+            Line2D([0], [0], marker="x", color="#555555", markersize=8, linestyle="None", label="Diagnostic no-winner"),
+        ],
+        loc="upper left",
+        bbox_to_anchor=(0.01, 0.98),
+        ncol=2,
+        frameon=False,
+        fontsize=8.5,
+    )
+    figure_dir = output / "figures"
+    figure_dir.mkdir(parents=True, exist_ok=True)
+    stem = figure_dir / "a2-quality-latency-cost-frontier-journal"
+    records: list[dict[str, Any]] = []
+    for suffix, kwargs in ((".png", {"dpi": 300}), (".svg", {}), (".pdf", {})):
+        path = stem.with_suffix(suffix)
+        fig.savefig(path, **kwargs)
+        records.append({"source": "derived from docs/progress_report/A2_per_arm_autoindex_outcomes_eda_20260818.csv", "package_path": path.relative_to(output).as_posix(), "bytes": path.stat().st_size, "sha256": sha256(path)})
+    plt.close(fig)
+    return records
+
+
+def build_readiness_table(repo: Path, output: Path) -> dict[str, Any]:
+    """Project A4 readiness without copying Owner-local measurements."""
+    source = repo / "control/armindex/a4/a4-readiness-binding-20260819.json"
+    binding = json.loads(source.read_text(encoding="utf-8"))
+    path = output / "tables/A4_readiness_status_20260819.csv"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rows = [
+        ("phase_status", binding.get("status", "MISSING")),
+        ("measured_execution", str(binding.get("measured_execution", "MISSING")).lower()),
+        ("selection_permitted", str(binding.get("selection_permitted", "MISSING")).lower()),
+        ("final_permitted", str(binding.get("final_permitted", "MISSING")).lower()),
+        ("primary_arm_count", str(len(binding.get("primary_arm_scope", [])))),
+        ("train250_query_count", str(binding.get("train250_query_count", "MISSING"))),
+        ("transfer_operation_count", str(binding.get("transfer_operation_count", "MISSING"))),
+        ("harnessopt_candidate_count", str(binding.get("harnessopt_candidate_count", "MISSING"))),
+        ("claim_boundary", binding.get("claim_boundary", "MISSING")),
+    ]
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(("field", "value", "source"))
+        writer.writerows((field, value, "control/armindex/a4/a4-readiness-binding-20260819.json") for field, value in rows)
+    return {"source": "control/armindex/a4/a4-readiness-binding-20260819.json", "package_path": path.relative_to(output).as_posix(), "bytes": path.stat().st_size, "sha256": sha256(path)}
+
+
+def build_manuscript_asset_map(output: Path) -> dict[str, Any]:
+    text = """# ArmIndex manuscript asset map
+
+This map is a writing aid generated with the aggregate-safe journal package. Use the paper-oriented variants for the main manuscript and retain the full EDA set for supplementary material. Numeric authority remains the hash-bound source listed in `provenance/journal-artifact-manifest.v1.json`.
+
+## Main manuscript
+
+| Slot | Recommended asset | Evidence role | Claim boundary |
+|---|---|---|---|
+| Figure 1 | `figures/a0-a2-publication-timeline.svg` | Study lifecycle and gate separation | A0 is engineering validation; A1-A3 are development evidence. |
+| Figure 2 | `figures/a1-common-screen-quality.png` | Retriever-conditioned representation effects | Descriptive 25-cell REP-DEV aggregate; no universal best representation. |
+| Figure 3 | `figures/a2-quality-latency-cost-frontier-journal.png` | Per-retriever quality/latency/cost trade-off | A2 development evidence; primary inputs and diagnostic no-winner arms are shown explicitly. |
+| Figure 4 | `figures/a3-transfer-recall-heatmap-journal.png` | Transfer complementarity | Train-250 development evidence; not external generalization or Selection evidence. |
+| Figure 5 | `figures/a3-fixed-control-quality-journal.png` | Fixed-control fusion comparison | Development frontier only; flat HarnessOpt surface is retained as a negative result. |
+
+## Tables
+
+- `tables/results-summary.md`: readable aggregate result table for drafting.
+- `tables/A0_A1_A2_metric_dictionary_20260818.csv`: metric definitions and units.
+- `tables/A1_common_screen_aggregate_eda_20260818.csv`: common-screen aggregates.
+- `tables/A2_per_arm_autoindex_outcomes_eda_20260818.csv`: per-arm outcomes and dispositions.
+- `tables/A3_transfer_matrix_eda_20260819.csv`: nine transfer cells, each 250/250 units.
+- `tables/A3_fixed_controls_eda_20260819.csv`: five fixed controls.
+- `tables/A4_readiness_status_20260819.csv`: contract-only A4 status; no complete A4 result is inferred.
+
+## Supplementary material
+
+Use the PDF/SVG duplicates under `figures/`, the cell-level EDA table, the A2 coverage/reserve figures, and `provenance/claim-inventory.csv` as audit supplements. Do not export protected membership, qrels, raw IDs, rankings, per-query outcomes, credentials, provider payloads, or model weights.
+
+## Current gate note
+
+A4 remains `contract_only_ready` in the canonical readiness binding. FAST completed a 100-unit Owner-local aggregate evaluation, but BALANCED ended in a recoverable CUDA out-of-memory runtime failure and DEEP, legal isolation, one-shot Selection, safe return, and independent audit remain incomplete. FAST must therefore be cited only as a pending profile status pointer, not as an A4 production result. A5 Final and A6 full-corpus materialization are not paper results at this cutoff.
+"""
+    path = output / "manuscript/asset-map.md"
+    write_text(path, text)
+    return {"source": "generated from allowlisted EDA tables and A4 readiness binding", "package_path": path.relative_to(output).as_posix(), "bytes": path.stat().st_size, "sha256": sha256(path)}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository-root", type=Path, default=Path.cwd())
@@ -320,9 +457,12 @@ def main() -> int:
                 child.unlink()
 
     figure_records = copy_allowlist(repo, output, FIGURES, "figures")
+    figure_records.extend(build_a2_journal_figure(repo, output))
     figure_records.extend(build_a3_journal_figures(repo, output))
     table_records = copy_allowlist(repo, output, TABLES, "tables")
+    table_records.append(build_readiness_table(repo, output))
     claim_records = build_claim_inventory(output)
+    manuscript_records = [build_manuscript_asset_map(output)]
     pointer_records = []
     for relative in CONTROL_POINTERS:
         source = repo / relative
@@ -351,7 +491,7 @@ A2 reports the per-arm development outcomes after candidate search. ARM-03 is a 
 
 ## Figure 4. A3 transfer matrix
 
-Transfer performance depends on both source representation program and target adapter. The strongest observed cell is ARM-03 program to ARM-03 adapter at `0.419274` OUT Recall@100; this is bounded Train-250 development evidence, not external generalization.
+Transfer performance depends on both source representation program and target adapter. The strongest observed cell is the ARM-05 source program on the ARM-03 adapter at `0.419274` OUT Recall@100; this is bounded Train-250 development evidence, not external generalization.
 
 ## Figure 5. A3 fixed controls
 
@@ -389,6 +529,7 @@ This directory contains a reproducible, aggregate-safe package for drafting the 
 - `provenance/journal-artifact-manifest.v1.json`: source/package SHA-256 ledger.
 - `provenance/claim-inventory.csv`: manuscript-ready claims, evidence sources, and prohibited interpretations.
 - `provenance/claim-boundary.md`: protected-data and scientific claim boundary.
+- `manuscript/asset-map.md`: recommended main-text and supplementary assets with evidence limits.
 
 The package does not contain protected membership, qrels, raw identifiers, rankings, per-query outcomes, credentials, provider payloads, or model weights. A4-A6 artifacts are pointers/status only until their canonical gates pass.
 """
@@ -405,6 +546,7 @@ The package does not contain protected membership, qrels, raw identifiers, ranki
         "figures": figure_records,
         "tables": table_records,
         "claim_inventory": claim_records,
+        "manuscript_assets": manuscript_records,
         "canonical_pointers": pointer_records,
         "claim_boundary": "A0 engineering; A1-A3 development aggregates; A4 incomplete; A5 Final closed; A6 blocked until A5 PASS.",
     }
