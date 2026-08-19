@@ -7,6 +7,7 @@ import pytest
 
 from myis_research.armindex.a4_remote_launcher import (
     A4RemoteLauncherError,
+    _connection,
     build_a4_checkpoint,
     build_a4_heartbeat,
     build_a4_launch_integrity_receipt,
@@ -25,6 +26,14 @@ from myis_research.kernel.canonical import canonical_json, canonical_sha256, fil
 
 
 HASH = "a" * 64
+
+
+def test_connection_quotes_windows_known_hosts_path(tmp_path: Path) -> None:
+    known_hosts = tmp_path / "owner path" / "known_hosts"
+    ssh, scp, _target = _connection("example.test", 22, tmp_path / "key", known_hosts)
+    expected = f'UserKnownHostsFile="{known_hosts.resolve()}"'
+    assert expected in ssh
+    assert expected in scp
 
 
 def _request(attempt: str) -> dict:

@@ -462,8 +462,10 @@ def safe_return_a4_remote_package(
 def _connection(host: str, port: int, key: Path, known_hosts: Path) -> tuple[list[str], list[str], str]:
     if not isinstance(host, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9.-]{0,252}", host) or not isinstance(port, int) or not 1 <= port <= 65535:
         raise A4RemoteLauncherError("A4 SSH endpoint is invalid")
-    prefix = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", f"UserKnownHostsFile={Path(known_hosts).resolve()}", "-i", str(Path(key).resolve()), "-p", str(port)]
-    return prefix + [f"root@{host}"], ["scp", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", f"UserKnownHostsFile={Path(known_hosts).resolve()}", "-i", str(Path(key).resolve()), "-P", str(port)], f"root@{host}"
+    # OpenSSH parses -o values itself; preserve Windows paths containing spaces.
+    known_hosts_option = f'UserKnownHostsFile="{Path(known_hosts).resolve()}"'
+    prefix = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, "-i", str(Path(key).resolve()), "-p", str(port)]
+    return prefix + [f"root@{host}"], ["scp", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, "-i", str(Path(key).resolve()), "-P", str(port)], f"root@{host}"
 
 
 def _verify_file(path: Path, expected: str, role: str) -> None:
