@@ -19,13 +19,20 @@ _ROOT_FILES = (
     "SECURITY.md",
     "CHANGELOG.md",
 )
+_IGNORED_GENERATED_PARTS = frozenset({".build", "node_modules", "dist"})
 
 
 def _markdown_files(root: Path) -> tuple[Path, ...]:
     files = [root / name for name in _ROOT_FILES if (root / name).is_file()]
     docs = root / "docs"
     if docs.is_dir():
-        files.extend(path for path in docs.rglob("*.md") if path.is_file() and not path.is_symlink())
+        files.extend(
+            path
+            for path in docs.rglob("*.md")
+            if path.is_file()
+            and not path.is_symlink()
+            and not _IGNORED_GENERATED_PARTS.intersection(path.relative_to(root).parts)
+        )
     return tuple(sorted(files, key=lambda path: path.relative_to(root).as_posix()))
 
 

@@ -536,7 +536,7 @@
           "type": "string"
         },
         "phase_id": {
-          "pattern": "^A[0-6]_[A-Z0-9_]+$",
+          "pattern": "^A[0-7]_[A-Z0-9_]+$",
           "title": "Phase Id",
           "type": "string"
         },
@@ -563,7 +563,7 @@
           "type": "string"
         },
         "task_id": {
-          "pattern": "^A[0-6]\\.[0-9]+$",
+          "pattern": "^A[0-7]\\.[0-9]+$",
           "title": "Task Id",
           "type": "string"
         }
@@ -665,7 +665,7 @@
           "type": "string"
         },
         "phase_id": {
-          "pattern": "^A[0-6]_[A-Z0-9_]+$",
+          "pattern": "^A[0-7]_[A-Z0-9_]+$",
           "title": "Phase Id",
           "type": "string"
         },
@@ -713,7 +713,7 @@
           "type": "string"
         },
         "task_id": {
-          "pattern": "^A[0-6]\\.[0-9]+$",
+          "pattern": "^A[0-7]\\.[0-9]+$",
           "title": "Task Id",
           "type": "string"
         }

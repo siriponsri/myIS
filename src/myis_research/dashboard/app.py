@@ -144,7 +144,7 @@ def create_app(
         model = read_model_snapshot()
         return {"schema_version": "myis.presentation.v3", "title": "ArmIndex", "sections": [
             {"id": "question", "title_th": "โจทย์วิจัย", "title_en": "Research question", "body": "Can retriever-conditioned representation programs and a deterministic multi-arm harness improve structured-document retrieval under explicit quality, latency, and cost constraints?"},
-            {"id": "flow", "title_th": "ลำดับการทำงาน", "title_en": "Execution flow", "body": "A0 Migration → A1 Screening → A2 Per-arm AutoIndex → A3 Transfer and HarnessOpt → A4 Production and Selection → A5 Final → A6 Publication"},
+            {"id": "flow", "title_th": "ลำดับการทำงาน", "title_en": "Execution flow", "body": "A0 Migration → A1 Screening → A2 Per-arm AutoIndex → A3 Transfer and HarnessOpt → A4 Production and Selection → A5 Final → A6 Full-DAPFAM materialization and scalability → A7 Publication"},
             {"id": "status", "title_th": "สถานะจากข้อมูลจริง", "title_en": "Evidence status", "body": {"phase": _current_phase(model), "runs": len(model.get("runs", [])), "metrics": len(model.get("metrics", [])), "readiness": model.get("publication_readiness", {}).get("status", "blocked")}},
         ]}
 
@@ -168,7 +168,7 @@ def create_app(
         if phase is None:
             phase = next((item for item in model["phases"] if item.get("phase_id") == phase_id), None)
         if phase is None:
-            raise HTTPException(404, "phase_id is not in the active A0-A6 or historical P0-P4 registry")
+            raise HTTPException(404, "phase_id is not in the active A0-A7 or historical P0-P4 registry")
         return {"schema_version": "myis.dashboard-phase.v2", "read_model_revision": model["read_model_revision"], "phase": phase}
 
     @app.get("/api/v2/results")

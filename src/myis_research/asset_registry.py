@@ -228,7 +228,7 @@ def _validate_registry_v2(payload: dict[str, Any], root: Path) -> None:
         seen.add(asset_id)
         if asset["disposition"] not in DISPOSITIONS or asset["copy_mode"] not in COPY_MODES:
             raise AssetRegistryError(f"{asset_id} has invalid disposition or copy_mode")
-        if not isinstance(asset["allowed_phases"], list) or any(not re.fullmatch(r"(?:P[0-4]|A[0-6])_[A-Z_]+", str(item)) for item in asset["allowed_phases"]):
+        if not isinstance(asset["allowed_phases"], list) or any(not re.fullmatch(r"(?:P[0-4]|A[0-7])_[A-Z_]+", str(item)) for item in asset["allowed_phases"]):
             raise AssetRegistryError(f"{asset_id} has invalid phase scope")
         if not isinstance(asset["protected_data_level"], str):
             raise AssetRegistryError(f"{asset_id} has invalid protected_data_level")

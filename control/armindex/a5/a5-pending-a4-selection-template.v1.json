@@ -1,0 +1,13 @@
+{
+  "schema_version": "myis.armindex-a5-pending-a4-selection.v1",
+  "status": "PENDING_A4_SELECTION",
+  "execution_permitted": false,
+  "selection_accesses": 0,
+  "final_accesses": 0,
+  "expected_final_query_count": 872,
+  "final_registry": [],
+  "final_input_pointer": null,
+  "protected_payload_included": false,
+  "claim_boundary": "No A4 Selection, D2, Final access, or A5 result exists.",
+  "template_sha256": "1659e1abe4bbaf9d38a0cb453ed82b5e8d0db3080086cbfffafd54db97f1981a"
+}

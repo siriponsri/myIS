@@ -4877,7 +4877,8 @@ def _ensure_owner_boundary(vault_root: Path) -> None:
         "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
         "A4_PRODUCTION_TRANSFER_AND_SELECTION",
         "A5_FINAL_CONFIRMATION",
-        "A6_PUBLICATION_AND_RELEASE",
+        "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+        "A7_PUBLICATION_AND_RELEASE",
     ):
         (vault_root / "01_Phases" / phase / "Owner_Notes").mkdir(
             parents=True, exist_ok=True

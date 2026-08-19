@@ -81,6 +81,8 @@ contracts:
   a2_candidate_manifest_schema: schemas/armindex/a2-candidate-manifest.v1.json
   a2_candidate_freeze_receipt_schema: schemas/armindex/a2-candidate-freeze-receipt.v1.json
   a2_candidate_freeze_lock_schema: schemas/armindex/a2-candidate-freeze-lock.v1.json
+  a6_a7_phase_amendment: control/armindex/a6/a6-a7-phase-amendment.v1.json
+  a6_full_dapfam_execution_contract: control/armindex/a6/a6-full-dapfam-execution-contract.v1.json
 
 phases:
   - id: A0_MIGRATION_FOUNDATION
@@ -124,11 +126,17 @@ phases:
     status: locked_owner_D2
     measured_retrieval: false
     tasks: [{id: A5.1, title: Frozen final evaluation, status: locked_owner_D2}]
-  - id: A6_PUBLICATION_AND_RELEASE
-    purpose: Build publication and release artifacts only after D3_SUBMIT_RELEASE.
+  - id: A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
+    purpose: Materialize one A5-frozen winner across the approved full DAPFAM corpus to establish post-confirmatory operational coverage and scalability evidence.
+    status: locked_until_valid_A5_closeout
+    measured_retrieval: false
+    full_corpus_owner_local_only: true
+    tasks: [{id: A6.1, title: Frozen winner full-DAPFAM materialization and scalability validation, status: locked_until_valid_A5_closeout}]
+  - id: A7_PUBLICATION_AND_RELEASE
+    purpose: Build publication and release artifacts from validated aggregate-safe A0-A6 evidence only after D3_SUBMIT_RELEASE.
     status: locked_owner_D3
     measured_retrieval: false
-    tasks: [{id: A6.1, title: Manuscript and release package, status: locked_owner_D3}]
+    tasks: [{id: A7.1, title: Manuscript and release package, status: locked_owner_D3}]
 
 gates:
   owner: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]

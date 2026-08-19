@@ -480,8 +480,8 @@ class RunManifest(ArmIndexContract):
     schema_version: Literal["myis.armindex-run-manifest.v1"]
     run_id: str = Field(min_length=1)
     campaign_id: Literal["armindex-multiretriever-v2"]
-    phase_id: str = Field(pattern=r"^A[0-6]_[A-Z0-9_]+$")
-    task_id: str = Field(pattern=r"^A[0-6]\.[0-9]+$")
+    phase_id: str = Field(pattern=r"^A[0-7]_[A-Z0-9_]+$")
+    task_id: str = Field(pattern=r"^A[0-7]\.[0-9]+$")
     stage: Literal["fixture"]
     status: Literal["valid", "invalid", "blocked"]
     git_commit: str = Field(pattern=r"^[a-f0-9]{40,64}$")
@@ -544,8 +544,8 @@ class CostReceipt(ArmIndexContract):
 class PhaseCloseoutEvent(ArmIndexContract):
     schema_version: Literal["myis.armindex-phase-closeout-event.v1"]
     event_id: str = Field(min_length=1)
-    phase_id: str = Field(pattern=r"^A[0-6]_[A-Z0-9_]+$")
-    task_id: str = Field(pattern=r"^A[0-6]\.[0-9]+$")
+    phase_id: str = Field(pattern=r"^A[0-7]_[A-Z0-9_]+$")
+    task_id: str = Field(pattern=r"^A[0-7]\.[0-9]+$")
     aggregate_receipt_sha256: Sha256 = Field(pattern=r"^[a-f0-9]{64}$")
     status: Literal["completed", "blocked"]
     next_authorized_action: str = Field(min_length=1)

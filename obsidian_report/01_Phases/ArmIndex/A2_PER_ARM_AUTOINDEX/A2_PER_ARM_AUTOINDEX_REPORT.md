@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
-read_model_sha256: "d8bb770a0b454c14dea6c7199fcf6befc9ef28de8b7d8bf29cccd464e329981b"
-source_commit: "e399efea2e0726aad2ab28e0253f5fde49a1174c"
+read_model_revision: "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405"
+read_model_sha256: "21a759dfdd3b73c17ee56c15b5d3fb07f87776ba90591c7358a474f5dc2ab998"
+source_commit: "cfdd2c7300eb7888855873f1728a23bc6da99749"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "measured_development_aggregate"
 scientific_authority: true
 claim_boundary: "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported."
-generated_from_revision: "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766"
-last_material_update: "2026-08-17T22:01:32Z"
+generated_from_revision: "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405"
+last_material_update: "2026-08-19T07:03:17Z"
 next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-17T22:01:32Z"
-updated_at: "2026-08-17T22:01:32Z"
+created_at: "2026-08-19T07:03:17Z"
+updated_at: "2026-08-19T07:03:17Z"
 note_id: "A2_PER_ARM_AUTOINDEX-MASTER"
 note_type: "phase_report"
 phase_id: "A2_PER_ARM_AUTOINDEX"
@@ -46,9 +46,9 @@ Search and freeze one representation program per promoted arm.
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d`
-- `git_commit`: e399efea2e0726aad2ab28e0253f5fde49a1174c
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6`
+- `git_commit`: cfdd2c7300eb7888855873f1728a23bc6da99749
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
 - `candidate_freeze`: `{"freeze_receipt_sha256": "ea93db368c3e740f7914e07e2bdfc15052991f6f05976f6924acdce717392e10", "freeze_receipt_uri": "campaigns/armindex-multiretriever-v2/evidence/a2-five-arm-candidate-freeze.receipt.v1.json", "generation_attempt_id": "a2freeze-20260812t014444z", "lock_sha256": "c01f683b909e6f4c6310c01855b3f79319a183b7950f91338d43baa8a2d57952", "lock_uri": "control/armindex/a2/candidate-freeze.lock.v1.json", "manifest_sha256": "f6276e3a15e760187152270418e00ce4cae4d8efe45b13edb02c4742e3b3049e", "manifest_uri": "campaigns/armindex-multiretriever-v2/manifests/a2-five-arm-candidate-manifest.v1.json"}`
 - `official_identity`: `{"cli_version": "0.144.4", "model_name": "gpt-5.6-sol", "provider": "openai", "reasoning_effort": "high", "sdk_version": "0.144.4"}`

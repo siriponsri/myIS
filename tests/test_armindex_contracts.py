@@ -52,7 +52,7 @@ def test_armindex_projection_is_complete_and_historical_scope_is_separate() -> N
     projection = build_armindex_projection(ROOT)
     assert projection["campaign_id"] == "armindex-multiretriever-v2"
     assert len(projection["arms"]) == 5
-    assert len(projection["phases"]) == 7
+    assert len(projection["phases"]) == 8
     assert {item["profile_id"] for item in projection["production_profiles"]} == {"FAST", "BALANCED", "DEEP"}
     assert projection["champions"] == {"research": None, "commercial": None}
     assert projection["historical_campaigns"][0]["campaign_id"] == "scope-autoindex-v1"

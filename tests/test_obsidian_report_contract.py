@@ -239,9 +239,9 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
     model = build_read_model(ROOT)
     records = build_report_records(ROOT, model)
 
-    assert len(records) == 40
-    assert sum(record["report_type"] == "phase" for record in records) == 12
-    assert sum(record["report_type"] == "task" for record in records) == 28
+    assert len(records) == 42
+    assert sum(record["report_type"] == "phase" for record in records) == 13
+    assert sum(record["report_type"] == "task" for record in records) == 29
     assert {record["language"] for record in records} == {"en"}
 
     a2_task = next(record for record in records if record["report_id"] == "task-a2-1")
@@ -424,7 +424,7 @@ def test_every_registered_phase_and_task_report_is_detailed_english() -> None:
             or "/02_Tasks/ArmIndex/" in path.as_posix()
         )
     ]
-    assert len(phase_task_paths) == 40
+    assert len(phase_task_paths) == 42
     for path in phase_task_paths:
         content = outputs[path]
         assert re.search(r"[\u0e00-\u0e7f]", content) is None

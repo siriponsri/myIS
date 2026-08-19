@@ -5,7 +5,9 @@ import pytest
 from myis_research.armindex.a4_a5_handoff import (
     A4A5HandoffError,
     build_a5_pointer_bundle,
+    build_pending_a5_handoff_template,
     validate_a5_pointer_bundle,
+    validate_pending_a5_handoff_template,
 )
 from myis_research.armindex.a4_evaluator import (
     A4OwnerEvaluatorError,
@@ -107,3 +109,42 @@ def test_frontier_and_a5_pointer_bundle() -> None:
             result_audit_sha256=H, safe_return_sha256=H, final_split_commitment_sha256=H,
             final_input_pointer="/private/final", evaluator_handoff_sha256=H, a5_reserved_usd="8", finalists=[],
         )
+
+
+def test_pending_a5_template_is_fail_closed() -> None:
+    template = build_pending_a5_handoff_template()
+    assert validate_pending_a5_handoff_template(template)["status"] == "PENDING_A4_SELECTION"
+    assert template["selection_accesses"] == template["final_accesses"] == 0
+    with pytest.raises(A4A5HandoffError):
+        build_pending_a5_handoff_template(expected_final_query_count=871)
+    tampered = {**template, "final_input_pointer": "a5/final"}
+    with pytest.raises(A4A5HandoffError):
+        validate_pending_a5_handoff_template(tampered)
+
+
+def test_a5_finalizer_rejects_invalid_pointer_reserve_license_and_plan() -> None:
+    kwargs = dict(
+        attempt_id="a4-goal001-20260819T010203Z", a4_coverage_sha256=H, selection_receipt_sha256=H,
+        result_audit_sha256=H, safe_return_sha256=H, final_split_commitment_sha256=H,
+        evaluator_handoff_sha256=H,
+        finalists=[
+            {"role": "static_common_baseline", "system_sha256": H, "program_sha256": H, "license_scope": "commercial_capable"},
+            {"role": "research_champion", "system_sha256": "b" * 64, "program_sha256": "c" * 64, "license_scope": "research_only"},
+        ],
+    )
+    for bad in ("../private/final", "0", "-1"):
+        with pytest.raises(A4A5HandoffError):
+            build_a5_pointer_bundle(**kwargs, final_input_pointer="a5/final", a5_reserved_usd=bad)
+    with pytest.raises(A4A5HandoffError):
+        build_a5_pointer_bundle(**kwargs, final_input_pointer="../private/final", a5_reserved_usd="8")
+    with pytest.raises(A4A5HandoffError):
+        build_a5_pointer_bundle(
+            **kwargs, final_input_pointer="a5/final", a5_reserved_usd="8",
+            statistical_plan={"paired_bootstrap_resamples": 10_000},
+        )
+    bad_finalists = [
+        kwargs["finalists"][0],
+        {**kwargs["finalists"][1], "license_scope": "commercial_capable"},
+    ]
+    with pytest.raises(A4A5HandoffError):
+        build_a5_pointer_bundle(**{**kwargs, "finalists": bad_finalists}, final_input_pointer="a5/final", a5_reserved_usd="8")

@@ -28,7 +28,8 @@ ACTIVE_PHASE_IDS = (
     "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
     "A4_PRODUCTION_TRANSFER_AND_SELECTION",
     "A5_FINAL_CONFIRMATION",
-    "A6_PUBLICATION_AND_RELEASE",
+    "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+    "A7_PUBLICATION_AND_RELEASE",
 )
 OWNER_GATES = ("D2_OPEN_FINAL", "D3_SUBMIT_RELEASE")
 PRODUCTION_PROFILES = ("FAST", "BALANCED", "DEEP")
@@ -199,7 +200,7 @@ def validate_campaign(root: Path, value: Mapping[str, Any], *, migration: bool =
         raise ArmIndexContractError("active ArmIndex campaign must define exactly five ordered arms")
     phases = value.get("phases")
     if not isinstance(phases, list) or tuple(item.get("id") for item in phases if isinstance(item, Mapping)) != ACTIVE_PHASE_IDS:
-        raise ArmIndexContractError("active ArmIndex phase registry must contain A0-A6 only")
+        raise ArmIndexContractError("active ArmIndex phase registry must contain A0-A7 only")
     gates = value.get("gates")
     if not isinstance(gates, Mapping) or tuple(gates.get("owner", [])) != OWNER_GATES:
         raise ArmIndexContractError("Owner gates must be exactly D2 and D3")
@@ -245,7 +246,7 @@ def build_armindex_projection(root: Path) -> dict[str, Any]:
     ]
     current_phase = next(
         (item["id"] for item in config["phases"] if item.get("status") != "complete"),
-        "A6_PUBLICATION_AND_RELEASE",
+        "A7_PUBLICATION_AND_RELEASE",
     )
     projection = {
         "schema_version": "myis.armindex-read-model.v1",

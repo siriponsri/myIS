@@ -144,7 +144,13 @@ D3_SUBMIT_RELEASE
 ### Phase 9
 
 ```text
-/goal Execute Phase 9 of PLAN_V02_NEW.md only. Write the six-page paper from frozen evidence, create the anonymous reproducibility package, audit claims, statistics, licenses, latency, and protected boundaries, and stop before submission unless D3_SUBMIT_RELEASE is recorded.
+/goal Execute A7_PUBLICATION_AND_RELEASE only. Read docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md, use validated aggregate-safe A0-A6 evidence, write the manuscript and anonymous reproducibility package, audit claims, statistics, licenses, layout, and protected boundaries, and stop before submission unless D3_SUBMIT_RELEASE is recorded.
+```
+
+### A6 full-DAPFAM materialization
+
+```text
+/goal Execute A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY only. Read docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md, wait for a valid A5 closeout, then materialize exactly one A5-frozen winner over the full DAPFAM corpus with owner-local protected data, aggregate-safe return, and no tuning, Selection, or Final feedback.
 ```
 
 ---

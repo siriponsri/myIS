@@ -1,0 +1,96 @@
+{
+  "schema_version": "myis.armindex-a6-full-dapfam-execution-contract.v1",
+  "contract_id": "a6-full-dapfam-post-confirmatory-materialization-v1",
+  "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+  "task_id": "A6.1",
+  "status": "blocked_until_valid_a5_closeout",
+  "scientific_authority": false,
+  "launch_allowed": false,
+  "predecessor_binding": {
+    "required_a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
+    "required_receipts": [
+      "a5_closeout_receipt_sha256",
+      "a5_result_integrity_audit_sha256",
+      "a5_safe_return_receipt_sha256",
+      "a5_finalist_registry_sha256",
+      "a5_frozen_winner_configuration_sha256"
+    ],
+    "winner_count": 1
+  },
+  "frozen_input_contract": {
+    "must_match_a5": [
+      "representation_program_sha256",
+      "prompt_or_prefix_sha256",
+      "model_adapter_sha256",
+      "chunking_configuration_sha256",
+      "retrieval_configuration_sha256",
+      "index_configuration_sha256",
+      "runtime_lock_sha256"
+    ],
+    "full_corpus_source_hash_required": true,
+    "full_corpus_processing_owner_local_only": true
+  },
+  "forbidden_adaptation": [
+    "winner_change",
+    "selection_reopen",
+    "final_reopen",
+    "retrieval_evaluation",
+    "qrels_access",
+    "membership_access",
+    "ranking_export",
+    "per_query_outcome_export",
+    "prompt_tuning",
+    "representation_tuning",
+    "model_weight_change",
+    "baseline_superiority_claim"
+  ],
+  "required_aggregate_metrics": [
+    "source_document_count",
+    "family_count",
+    "chunk_count",
+    "representation_count",
+    "coverage_rate",
+    "throughput_documents_per_second",
+    "latency_p50_ms",
+    "latency_p95_ms",
+    "latency_p99_ms",
+    "ram_bytes_peak",
+    "vram_bytes_peak",
+    "index_size_bytes",
+    "cost_usd",
+    "checkpoint_recovery_count",
+    "determinism_sha256",
+    "failure_taxonomy"
+  ],
+  "provider_admission": {
+    "fresh_quote_required": true,
+    "fresh_budget_admission_required": true,
+    "fresh_ttl_and_health_receipt_required": true,
+    "separate_a6_budget_ceiling_required": true
+  },
+  "safe_return": {
+    "owner_store_root_template": "<MYIS_ROOT>/04_Owner_Stores/armindex/a6/<attempt-id>/",
+    "git_and_projection_allowlist": [
+      "aggregate_metrics",
+      "counts",
+      "hashes",
+      "safe_manifests",
+      "safe_receipts",
+      "aggregate_figures",
+      "failure_taxonomy"
+    ],
+    "protected_exports_forbidden": [
+      "raw_corpus",
+      "document_or_family_ids",
+      "query_membership",
+      "qrels",
+      "rankings",
+      "per_query_outcomes",
+      "credentials",
+      "provider_payloads",
+      "model_payloads"
+    ]
+  },
+  "claim_boundary": "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
+  "contract_sha256": "989fd3fe56089755fae62e278b434f8c0c406e3182b74740e5cb6c5203f6c2e6"
+}

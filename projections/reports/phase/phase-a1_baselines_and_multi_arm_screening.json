@@ -3280,9 +3280,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-17T22:01:32Z",
-  "generated_from_revision": "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766",
-  "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+  "generated_at": "2026-08-19T07:03:17Z",
+  "generated_from_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
+  "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3429,14 +3429,14 @@
       "uri": "control/armindex/a1.2/execution-contract.v3.json"
     },
     "armindex_schema_root": {
-      "sha256": "6ede89f83141bf4f051413feedf5316388defe5565051a53eaed386c4c62320a",
+      "sha256": "431f248e714c50af194ee9cdbc197441a0a384b830f739943a87a93c8b4ff0f8",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
+      "sha256": "1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+    "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3447,13 +3447,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
+      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-17T22:01:32Z",
+  "last_material_update": "2026-08-19T07:03:17Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3548,7 +3548,7 @@
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "05d5dfb2f726c201851db6dfbfb38dabf50c441350a135b2df3350ffafefee11",
+  "report_sha256": "bb84858b24849bdc3bf10f1d1fbd58774de9e14c8e8c1ba4c00d5169adb3db8d",
   "report_type": "phase",
   "result": {
     "decision": "PASS_25_OF_25",

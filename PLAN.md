@@ -117,9 +117,9 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 ## Active phases
 
-There are exactly seven active phases. Progress is:
+There are exactly eight active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 contract-only ready -> A5 -> A6`
+`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 contract-only ready -> A5 -> A6 full-corpus materialization -> A7 publication`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
@@ -129,7 +129,8 @@ There are exactly seven active phases. Progress is:
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | complete; 14/14 audited, flat HarnessOpt surface |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | contract-only ready; measurement and Selection closed |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | locked by `D2_OPEN_FINAL` |
-| `A6_PUBLICATION_AND_RELEASE` | paper and release | locked by `D3_SUBMIT_RELEASE` |
+| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | locked until valid A5 closeout; D3 remains closed |
+| `A7_PUBLICATION_AND_RELEASE` | paper and release from A0-A6 aggregate-safe evidence | locked by `D3_SUBMIT_RELEASE` |
 
 No Sprint, Stage, Work Package, or micro-phase is canonical.
 

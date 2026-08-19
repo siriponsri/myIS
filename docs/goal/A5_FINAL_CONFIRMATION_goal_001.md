@@ -14,7 +14,7 @@ automatic_continuation_allowed: true
 final_query_count: 872
 protected_payloads_allowed: false
 previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
-next_goal: A6_PUBLICATION_AND_RELEASE
+next_goal: docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md
 last_material_update: 2026-08-19
 next_authorized_action: WAIT_FOR_MANUAL_OR_CONDITIONAL_D2_AND_VALIDATE_A4_HANDOFF
 ---
@@ -64,6 +64,13 @@ data. Store the repository-safe portion under the campaign evidence/control
 conventions and the protected handoff under
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/<attempt-id>/`.
 
+While A4 is running, the local preparation artifact is
+`control/armindex/a5/a5-pending-a4-selection-template.v1.json`. It is explicitly
+`PENDING_A4_SELECTION`, has `execution_permitted: false`, keeps both Selection
+and Final counters at zero, and contains no provisional finalist or Final
+pointer. It is a bundle interface template only; the PASS pointer bundle is
+created only after A4 closeout and validated Selection evidence.
+
 Required bundle members:
 
 1. clean code/runtime bundle, Git commit/tree, dependency and image identity;
@@ -101,7 +108,7 @@ contract.
 | Fresh provider admission and final stage | BLOCKED | observation, quote, TTL, adoption |
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
 | Safe return and independent audit | BLOCKED | final safe-return/audit receipts |
-| A5 closeout and A6 handoff | BLOCKED | terminal report and projections |
+| A5 closeout and A6 frozen-winner handoff | BLOCKED | terminal report and projections |
 
 ## Execution flow after D2
 
@@ -123,10 +130,13 @@ contract.
 6. Validate complete coverage, metric/evaluator identity, protected boundary,
    paired-statistics identity, safe return, worker teardown, and provider
    disposition. Generate the independent result-integrity audit and the
-   aggregate-safe final comparison/operational table needed by A6.
+   aggregate-safe final comparison/operational table and frozen-winner
+   configuration receipt needed by A6.
 7. Update projections and create
-   `docs/long_run/A5_FINAL_CONFIRMATION_lo_001_001.md`. Keep `D3_SUBMIT_RELEASE`
-   closed; A6 publication/release cannot start from this goal.
+   `docs/long_run/A5_FINAL_CONFIRMATION_lo_001_001.md`. Hand off exactly one
+   frozen winner configuration to A6. Keep `D3_SUBMIT_RELEASE` closed; A6 may
+   only materialize that configuration over the full corpus and cannot reopen
+   Selection or Final, tune any component, or alter the A5 winner.
 
 ## Validation commands
 
@@ -160,4 +170,6 @@ Before a valid manual or conditional D2 receipt this goal remains
 `BLOCKED_OWNER_D2`. After that receipt it may terminate as
 `PASS_A5_FINAL_CONFIRMATION`, `STOP_FAIL_CLOSED_WITH_EVIDENCE`, or
 `BLOCKED_OWNER_ACTION`. A successful A5 result is confirmatory evidence only;
-publication/release remains governed by `D3_SUBMIT_RELEASE` and A6.
+post-confirmatory full-corpus materialization proceeds only through A6's
+separate admission, while publication/release remains governed by
+`D3_SUBMIT_RELEASE` and A7.

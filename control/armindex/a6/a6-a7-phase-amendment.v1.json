@@ -1,0 +1,44 @@
+{
+  "schema_version": "myis.armindex-a6-a7-phase-amendment.v1",
+  "amendment_id": "A6_FULL_DAPFAM_MATERIALIZATION_A7_PUBLICATION_AMENDMENT",
+  "authority_state": "OWNER_APPROVED_PREREGISTERED",
+  "approved_at_utc": "2026-08-19T00:00:00Z",
+  "owner_approval_text": "Approve eight active phases: insert A6 as post-confirmatory full-DAPFAM materialization and scalability validation using only the frozen A5 winner, and move publication and release to A7. A6 must not tune, reselect, reopen Selection or Final, or export protected data.",
+  "owner_approval_sha256": "d3b0bdf44eaa34d5ccf6ba973834236535b9a5ad86ff7f2d1e2123541d5831e4",
+  "effective_phase_registry": [
+    "A0_MIGRATION_FOUNDATION",
+    "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "A2_PER_ARM_AUTOINDEX",
+    "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+    "A5_FINAL_CONFIRMATION",
+    "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+    "A7_PUBLICATION_AND_RELEASE"
+  ],
+  "predecessor_requirements": {
+    "a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
+    "a5_result_integrity_audit": "required",
+    "a5_frozen_finalist_registry": "required",
+    "a5_safe_return": "required",
+    "a5_aggregate_safe_closeout": "required"
+  },
+  "a6_scientific_invariants": [
+    "A6 consumes exactly one A5-frozen winner configuration, including representation, prompt, model, chunking, retrieval, index, and provenance hashes.",
+    "A6 materializes the full approved DAPFAM corpus only to establish deployment and scalability evidence; it is not a retrieval-quality evaluation or external-generalization study.",
+    "A6 cannot change the winner, retrain or tune any component, rerun or reopen Selection or Final, or feed results back into A4 or A5 decisions.",
+    "Full-corpus artifacts remain in the Owner Store. Repository, Paper, Brain, Obsidian, MLflow, Dashboard, and chat receive aggregate-safe manifests, hashes, counts, metrics, figures, and failure taxonomy only.",
+    "A single-winner A6 run supports deployability and scalability claims only. Comparative full-corpus quality, latency, or cost claims require a separately preregistered paired comparator study."
+  ],
+  "counter_policy": {
+    "selection_accesses_changed_by_a6": false,
+    "final_accesses_changed_by_a6": false,
+    "d3_required_for_a6": false,
+    "d3_required_for_a7": true
+  },
+  "historical_preservation": {
+    "a0_a5_receipts_and_hashes_mutated": false,
+    "a4_a5_scientific_bindings_mutated": false,
+    "old_a6_publication_label": "superseded_for_future_routing_only"
+  },
+  "amendment_sha256": "c0ea27ffbaed7dd311417ca6430efdca90931b4722b5d39cbcd9e1ea5c2522b6"
+}

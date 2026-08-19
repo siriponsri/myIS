@@ -5009,13 +5009,25 @@
         ]
       },
       {
-        "phase_id": "A6_PUBLICATION_AND_RELEASE",
-        "purpose": "Build publication and release artifacts only after D3_SUBMIT_RELEASE.",
+        "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+        "purpose": "Materialize one A5-frozen winner across the approved full DAPFAM corpus to establish post-confirmatory operational coverage and scalability evidence.",
+        "status": "locked_until_valid_A5_closeout",
+        "tasks": [
+          {
+            "status": "locked_until_valid_A5_closeout",
+            "task_id": "A6.1",
+            "title": "Frozen winner full-DAPFAM materialization and scalability validation"
+          }
+        ]
+      },
+      {
+        "phase_id": "A7_PUBLICATION_AND_RELEASE",
+        "purpose": "Build publication and release artifacts from validated aggregate-safe A0-A6 evidence only after D3_SUBMIT_RELEASE.",
         "status": "locked_owner_D3",
         "tasks": [
           {
             "status": "locked_owner_D3",
-            "task_id": "A6.1",
+            "task_id": "A7.1",
             "title": "Manuscript and release package"
           }
         ]
@@ -5228,7 +5240,7 @@
       "status": "waiting_owner"
     }
   ],
-  "generated_at": "2026-08-17T22:01:32Z",
+  "generated_at": "2026-08-19T07:03:17Z",
   "historical_exposure": {
     "active_final_872_global_untouched": "not_claimable",
     "paper_a": "historically_exposed",
@@ -6138,7 +6150,7 @@
     "shared_revision_required": true,
     "status": "current"
   },
-  "projection_revision": "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766",
+  "projection_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
   "projection_schema_version": "myis.integrated-projection.v2",
   "publication_readiness": {
     "checks": [
@@ -6182,8 +6194,8 @@
     "status": "blocked"
   },
   "raid": [],
-  "read_model_revision": "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766",
-  "read_model_sha256": "d8bb770a0b454c14dea6c7199fcf6befc9ef28de8b7d8bf29cccd464e329981b",
+  "read_model_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
+  "read_model_sha256": "21a759dfdd3b73c17ee56c15b5d3fb07f87776ba90591c7358a474f5dc2ab998",
   "reports": {
     "generated_manifest": "obsidian_report/00_System/Generated/generated-manifest.json",
     "vault_id": "myis-obsidian-report",
@@ -6316,7 +6328,7 @@
     }
   ],
   "schema_version": "myis.read-model.v2",
-  "source_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+  "source_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
   "tasks": [
     {
       "evidence_ids": [],

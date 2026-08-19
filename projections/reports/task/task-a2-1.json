@@ -431,9 +431,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-17T22:01:32Z",
-  "generated_from_revision": "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766",
-  "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+  "generated_at": "2026-08-19T07:03:17Z",
+  "generated_from_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
+  "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -532,7 +532,7 @@
       "status": "PASS_A2_GOAL004_CLOSEOUT_PROJECTED"
     },
     "campaign": {
-      "sha256": "a040eb54b502de3123cca39f7a977266d52eeb327e747c56b9be3b73eeeb831d",
+      "sha256": "1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
     "candidate_freeze": {
@@ -562,7 +562,7 @@
         "uri": "control/budgets/a2-per-arm-autoindex-v1.json"
       }
     ],
-    "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+    "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
     "historical_execution_readiness": {
       "budget_profile_sha256": "c831f7bd325318873178baee4673078b2860cd12a02e1998cb68d77797b733f8",
       "budget_uri": "control/budgets/a2-execution-readiness-v1.json",
@@ -623,13 +623,13 @@
       "uri": "../03_Paper/01_ArmIndex"
     },
     "source_of_truth": {
-      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
+      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported.",
   "language": "en",
-  "last_material_update": "2026-08-17T22:01:32Z",
+  "last_material_update": "2026-08-19T07:03:17Z",
   "metric_references": [
     {
       "cutoff": 0,
@@ -1076,7 +1076,7 @@
   "objective": "Per-arm AutoIndex",
   "phase_id": "A2_PER_ARM_AUTOINDEX",
   "report_id": "task-a2-1",
-  "report_sha256": "646bf206ffa1c472b370224cd4bc1d48eed7426fde1feaffbb38f106ca229fd3",
+  "report_sha256": "cc96f6c06d80c1fcfab5640c172e70255a836ec9179fd8907a3e465e9c0a4621",
   "report_type": "task",
   "result": {
     "decision": "PASS_A2_MEASURED_CLOSEOUT_A3_PENDING_TRAIN_250",

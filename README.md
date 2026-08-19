@@ -180,7 +180,8 @@ repository artifacts are aggregate-only and content-hash bound. See
 
 ## Roadmap
 
-The seven-phase roadmap runs from A0 migration through A6 publication. See
+The eight-phase roadmap runs from A0 migration through A7 publication, with a
+post-confirmatory full-DAPFAM materialization and scalability phase in A6. See
 [`docs/ROADMAP.md`](docs/ROADMAP.md) and the canonical [`PLAN.md`](PLAN.md).
 
 ## Documentation

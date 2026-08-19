@@ -15,6 +15,11 @@ records:
     authority: control/migrations/armindex-a0.10-amendment.v1.yaml
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_fixture_only, no_protected_data, measured_counters_zero]
+  - id: armindex_a6_a7_phase_amendment
+    authority: control/armindex/a6/a6-a7-phase-amendment.v1.json
+    supporting_authority: [control/armindex/a6/a6-full-dapfam-execution-contract.v1.json]
+    projections: [projections/read-model, projections/reports, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [owner_approved_preregistration, preserve_a0_a5_hashes, a6_requires_valid_a5_closeout, a6_owner_local_full_corpus_only, no_selection_or_final_reopen, no_tuning_or_winner_feedback, d3_applies_to_a7_only, aggregate_safe_projection_only]
   - id: armindex_a1_1_adapter_fixture_closeout
     authority: campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]

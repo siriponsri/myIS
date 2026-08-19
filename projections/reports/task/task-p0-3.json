@@ -5,7 +5,7 @@
       "artifact_type": "schema",
       "child_artifact_hashes": {},
       "child_artifact_ids": [],
-      "content_sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
+      "content_sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
       "evidence_class": "engineering",
       "explanation": "Defines the canonical boundary used to build and validate projections.",
       "parent_artifact_hashes": {},
@@ -65,7 +65,7 @@
   "evidence_links": [
     {
       "artifact_id": "control-source-of-truth.yaml",
-      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
+      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
       "uri": "control/source-of-truth.yaml"
     },
     {
@@ -80,9 +80,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-17T22:01:32Z",
-  "generated_from_revision": "7a041e0f09cbd256a6cb69870e2ac4f46b7894feacd04af29674b7b34560f766",
-  "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+  "generated_at": "2026-08-19T07:03:17Z",
+  "generated_from_revision": "265356546de15877c49fb4ce0b58277a98242461779f52ba947fcf0a72593405",
+  "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -108,21 +108,21 @@
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "uri": "control/campaigns/scope-autoindex-v1.yaml"
     },
-    "git_commit": "e399efea2e0726aad2ab28e0253f5fde49a1174c",
+    "git_commit": "cfdd2c7300eb7888855873f1728a23bc6da99749",
     "source_of_truth": {
-      "sha256": "a34e56e0b8500bd55e3aa6605282e654781b3fab7578d3a75cea9c19d8b10a0a",
+      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "Engineering controls are available; no scientific metric follows from this phase.",
   "language": "en",
-  "last_material_update": "2026-08-17T22:01:32Z",
+  "last_material_update": "2026-08-19T07:03:17Z",
   "metric_references": [],
   "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
   "objective": "Projection contracts and migration closure",
   "phase_id": "P0_FOUNDATION",
   "report_id": "task-p0-3",
-  "report_sha256": "2a92476a5441dc1c0163a38c5c88ec48023be70e1dd79093e7ddae9a1b6f483f",
+  "report_sha256": "67243fb447fe7ec6c4ef8b2b1a89e084244fc91beddd2064909aa3ff793f874e",
   "report_type": "task",
   "result": {
     "decision": "completed",

@@ -215,7 +215,8 @@ class MirrorStage(StrEnum):
     A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT = "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
     A4_PRODUCTION_TRANSFER_AND_SELECTION = "A4_PRODUCTION_TRANSFER_AND_SELECTION"
     A5_FINAL_CONFIRMATION = "A5_FINAL_CONFIRMATION"
-    A6_PUBLICATION_AND_RELEASE = "A6_PUBLICATION_AND_RELEASE"
+    A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY = "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+    A7_PUBLICATION_AND_RELEASE = "A7_PUBLICATION_AND_RELEASE"
 
     @property
     def experiment_name(self) -> str:
@@ -231,7 +232,8 @@ class MirrorStage(StrEnum):
             MirrorStage.A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT: ARMINDEX_EXPERIMENT,
             MirrorStage.A4_PRODUCTION_TRANSFER_AND_SELECTION: ARMINDEX_EXPERIMENT,
             MirrorStage.A5_FINAL_CONFIRMATION: ARMINDEX_EXPERIMENT,
-            MirrorStage.A6_PUBLICATION_AND_RELEASE: ARMINDEX_EXPERIMENT,
+            MirrorStage.A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY: ARMINDEX_EXPERIMENT,
+            MirrorStage.A7_PUBLICATION_AND_RELEASE: ARMINDEX_EXPERIMENT,
         }[self]
 
 
@@ -266,9 +268,9 @@ class ProjectionLineage:
             raise MirrorValidationError("projection lineage Linear issue IDs must be unique")
         if len(self.linear_issue_ids) != len(self.task_ids):
             raise MirrorValidationError("projection lineage requires one Linear issue ID per Task ID")
-        if any(not re.fullmatch(r"(?:P[0-4]|A[0-6])_[A-Z_]+", value) for value in self.phase_ids):
+        if any(not re.fullmatch(r"(?:P[0-4]|A[0-7])_[A-Z_]+", value) for value in self.phase_ids):
             raise MirrorValidationError("projection lineage contains an invalid Phase ID")
-        if any(not re.fullmatch(r"(?:P[0-4]|A[0-6])\.[0-9]+", value) for value in self.task_ids):
+        if any(not re.fullmatch(r"(?:P[0-4]|A[0-7])\.[0-9]+", value) for value in self.task_ids):
             raise MirrorValidationError("projection lineage contains an invalid Task ID")
         if any(value not in {"D2_OPEN_FINAL", "D3_SUBMIT_RELEASE"} for value in self.gate_ids):
             raise MirrorValidationError("projection lineage contains an invalid Gate ID")

@@ -6,6 +6,8 @@
 |---|---|---|---|
 | [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `ACTIVE` | `READY_FOR_LONG_RUN` | Commercial FAST/BALANCED/DEEP frontier, license-segregated research reference, isolated legal transfer, one-shot preregistered Selection, and A5 handoff on instance 47790578 |
 | [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D2` | Frozen two-system Final-872 confirmation; waits for `D2_OPEN_FINAL` or a hash-bound conditional auto-pass receipt and never opens Final from preparation alone |
+| [A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md](A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md) | `BLOCKED` | `BLOCKED_A5_CLOSEOUT` | Post-confirmatory materialization of exactly one A5-frozen winner over full DAPFAM; operational scalability only; no Selection/Final/tuning feedback |
+| [A7_PUBLICATION_AND_RELEASE_goal_001.md](A7_PUBLICATION_AND_RELEASE_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D3` | Publication and release from validated aggregate-safe A0-A6 evidence after `D3_SUBMIT_RELEASE` |
 
 ## Historical goal registry
 

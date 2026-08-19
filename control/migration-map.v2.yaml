@@ -24,7 +24,7 @@ historical_runtime_paths:
 rules:
   keep: immutable evidence, approvals, manifests, session capsules, provenance
   merge: duplicate status, dashboard, Obsidian and publication facts into read-model projections
-  rewrite: plans, instructions, MLflow tags, report generation and dashboard state to ArmIndex A0-A6/D2-D3
+  rewrite: plans, instructions, MLflow tags, report generation and dashboard state to ArmIndex A0-A7/D2-D3
   archive: legacy C/S governance, old layout, Paper D and adopted inbox staging inputs
   remove: only exact generated/cache paths with zero references and no unique evidence
   owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]

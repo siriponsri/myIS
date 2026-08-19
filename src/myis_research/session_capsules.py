@@ -473,7 +473,8 @@ def _validate_plan_binding(root: Path, phase_id: str, task_id: str, gate_id: str
             "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
             "A4_PRODUCTION_TRANSFER_AND_SELECTION",
             "A5_FINAL_CONFIRMATION",
-            "A6_PUBLICATION_AND_RELEASE",
+            "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+            "A7_PUBLICATION_AND_RELEASE",
         ))},
     }
     task_prefix = task_id.split(".", 1)[0] if _TASK_RE.fullmatch(task_id) else ""
