@@ -22,9 +22,11 @@ download() {
   local count=$(( (bytes + chunk_bytes - 1) / chunk_bytes ))
   local failed=0
   for ((index=0; index<count; index+=1)); do
-    local start=$((index * chunk_bytes)) end=$((start + chunk_bytes - 1))
+    local start=$((index * chunk_bytes))
+    local end=$((start + chunk_bytes - 1))
     (( end >= bytes )) && end=$((bytes - 1))
-    local size=$((end - start + 1)) part
+    local size=$((end - start + 1))
+    local part
     printf -v part '%s/part-%03d' "$parts" "$index"
     if [[ -f "$part" && $(stat -c '%s' "$part") -eq $size ]]; then
       continue
