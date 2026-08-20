@@ -40,12 +40,13 @@ Recall@100 โดยรายงาน OUT nDCG@100, OUT nDCG@10 และตั
 - **Transfer, Complementarity, and Harness Optimization เสร็จสมบูรณ์** บน
   Train-250: 14/14 operations, 9 transfer cells, 5 fixed controls และ
   HarnessOpt 3 batches/12 candidates ผ่าน independent result-integrity audit
-- **Production transfer and Selection กำลังดำเนินการบน Vast instance 47790578**
-  FAST มี Owner-local aggregate receipt ผ่านแล้ว ส่วน BALANCED ยังรันอยู่และยัง
-  ไม่มี completion receipt ขณะจัดทำรายงาน; DEEP, legal transfer และ one-shot
-  Selection ยังไม่มีผลที่ยืนยันใน repository นี้
-- **Final confirmation และ full-corpus materialization ยังไม่เริ่ม** ดังนั้นยัง
-  ไม่มี Final-872 result และยังไม่มีผล full DAPFAM ที่ใช้ยืนยัน scalability
+- **Production transfer บน Vast instance 47790578 ปิดด้วยหลักฐานครบ**
+  FAST, BALANCED, DEEP และ ARM-03 research reference วัดครบ 100/100 หน่วย,
+  deterministic และ failures=0; FAST และ DEEP เป็น commercial non-dominated
+  frontier ส่วน ARM-03 แยกเป็น research-only
+- **Selection และ Final confirmation ยังไม่เปิด** เนื่องจากไม่มี hash-bound
+  Selection-125 paired-vector/evaluator handoff; จึงยังไม่มี production winner,
+  Final-872 result หรือ full-corpus materialization result
 
 ผลที่มีนัยสำคัญต่อ publication คือหลักฐาน interaction ระหว่าง representation กับ
 retriever และผลเชิงลบที่ยังอธิบายได้: ARM-04 ดีขึ้นจาก A1 อย่างมี strict gain,
@@ -340,10 +341,14 @@ the status is `MISSING`, not zero.
 | A1 aggregate | MISSING in summary | MISSING in summary | 0.1912--0.4134 Recall@100 by arm | 150 per cell | VERIFIED OUT; ALL/IN missing |
 | A2 closeout | MISSING in projection | MISSING in projection | 0.234667--0.423000 Recall@100 by arm | candidate-dependent REP-DEV | VERIFIED OUT; ALL/IN missing |
 | A3 transfer/fusion | MISSING | MISSING | 0.337430--0.419274 transfer; 0.369274--0.418715 controls | 250 per operation | VERIFIED OUT |
-| A4 FAST | MISSING from Git projection | MISSING | MISSING: receipt exposes one 0.345833 Recall@100 aggregate but does not label it ALL/IN/OUT | 100/100 | Owner Store receipt verified; Git projection pending |
-| A4 BALANCED | MISSING | MISSING | not available | 100 planned | RUNNING; no closeout |
-| A4 DEEP / Selection | MISSING | MISSING | not available | not available | NOT STARTED/NOT VERIFIED |
-| A5 Final-872 | protected | protected | protected | 872 | CLOSED/NOT OPENED |
+| A4 FAST | MISSING | MISSING | 0.345833 Recall@100; 0.292764 nDCG@100; 0.249337 nDCG@10 (HDEV OUT contract; receipt omits population field) | 100/100 | VERIFIED aggregate; deterministic; 0 failures |
+| A4 BALANCED | MISSING | MISSING | 0.382639 Recall@100; 0.328777 nDCG@100; 0.278442 nDCG@10 (HDEV OUT contract; receipt omits population field) | 100/100 | VERIFIED aggregate; deterministic; 0 failures |
+| A4 DEEP | MISSING | MISSING | 0.382639 Recall@100; 0.328777 nDCG@100; 0.278442 nDCG@10 (HDEV OUT contract; receipt omits population field) | 100/100 | VERIFIED aggregate; deterministic; 0 failures |
+| A4 ARM-03 research reference | MISSING | MISSING | 0.463194 Recall@100; 0.372934 nDCG@100; 0.305775 nDCG@10 (HDEV OUT contract; receipt omits population field) | 100/100 | VERIFIED research-only aggregate; excluded from commercial claims |
+| A4 profile coverage / audit | MISSING | MISSING | four profiles complete; no quality value added | 100/100 each | `PASS_A4_RESULT_INTEGRITY_AUDIT`; Selection/Final accesses 0 |
+| A4 LegalBench mini transfer | MISSING | MISSING | UNSUPPORTED: required frozen mini dataset/evaluator/runtime absent | -- | Isolated diagnostic; no patent retuning |
+| A4 Selection-125 | protected | protected | no valid hash-bound paired-vector/evaluator handoff | 125 required | BLOCKED; Selection not opened |
+| A5 Final-872 | protected | protected | no result | 872 | NOT STARTED; pointer-only pending bundle, execution forbidden |
 
 The apparent `0.41` discrepancy is thus explained only for the rows above: these
 are OUT Recall@100 values in A1/A2/A3, not ALL values. Any document claiming the
@@ -359,12 +364,17 @@ projections are copied here.
 
 The A3 Owner Store retains the complete attempt-scoped requests, stage receipts,
 14 return receipts, result-integrity audit, safe-return receipt, HarnessOpt
-evaluation, runtime assets and recovery logs. Only the aggregate-safe audit and
-EDA projections are described here; protected rankings and per-query outcomes
-remain outside the report. A4 FAST is currently available as
-`<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/hdev-evaluations/FAST.json`.
-This is an aggregate-safe receipt outside Git; its current local projection is
-pending. BALANCED is an active process, so no partial output is treated as result.
+evaluation, runtime assets and recovery logs. Only aggregate-safe evidence is
+described here; protected rankings and per-query outcomes remain outside the
+report. Complete A4 aggregate receipts are in
+`<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/`.
+The A4 artifact index is
+`<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX.json`
+with canonical `index_sha256` `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576`
+and file SHA-256 `198e4c7fbb723e723249de2803df1d8dd53f485214667e9f4240a1a6737ecabf`.
+The artifact index records the four profile receipts, coverage/frontier/audit
+receipts, legal isolation, safe return, and the A5 pending interface without
+copying protected payloads.
 
 ## 15. Cost, failures และ operational evidence
 
@@ -378,10 +388,13 @@ pending. BALANCED is an active process, so no partial output is treated as resul
 | A1 failures | 0.0 mean per arm | A1 summary, VERIFIED |
 | A2 failed candidates | 0 | A2 closeout, VERIFIED |
 | A3 failure markers | 0 | A3 closeout, VERIFIED |
-| A4 FAST cost | 0.4285334716092246 USD | Owner-local FAST receipt, aggregate-safe |
-| A4 FAST p50/p95/p99 | 496.878 / 1574.871 / 1647.859 ms | Owner-local FAST receipt |
-| A4 FAST throughput | 0.041845269864437096 qps | Owner-local FAST receipt |
-| A4 FAST index/RAM/VRAM | 4,162,224,778 bytes / 10.466 GiB / 8.597 GiB | Owner-local FAST receipt |
+| A4 FAST cost | 0.6334513497072259 USD | Owner Store `FAST.json`, aggregate-safe |
+| A4 BALANCED cost | 1.5818391125582612 USD | Owner Store `BALANCED.json`, aggregate-safe |
+| A4 DEEP cost | 1.1815346193478262 USD | Owner Store `DEEP.json`, aggregate-safe |
+| A4 ARM-03 research-reference cost | 1.2348912417435087 USD | Owner Store research-only receipt |
+| A4 latency p50/p95/p99 (ms) | FAST 487.24/1524.23/1571.27; BALANCED 732.51/1771.50/2348.53; DEEP 314.43/1637.75/1817.28; ARM-03 327.71/1742.99/1899.35 | Four profile receipts |
+| A4 throughput (qps) | FAST 0.02831; BALANCED 0.01134; DEEP 0.01518; ARM-03 0.01452 | Four profile receipts |
+| A4 coverage / failures / determinism | 100/100 for each profile; 0 failures; deterministic=true | `A4_COMPLETE_PROFILE_COVERAGE.json`; `A4_RESULT_INTEGRITY_AUDIT.json` |
 
 Known engineering repairs are preserved rather than counted as scientific
 failures: A4 stale import repair, prepared-transport retry, and remote duplicate
@@ -415,30 +428,32 @@ is therefore safe to commit, but it cannot replace the Owner-local evaluator ret
    commercial deployment claim.
 5. A3 Train-250 transfer results are bounded development evidence; they do not
    establish external generalization.
-6. A4 coverage is incomplete while BALANCED runs and DEEP/legal/Selection remain
-   unclosed. FAST alone cannot establish a production frontier.
+6. A4 profile coverage is complete and independently audited; Selection remains
+   blocked by the missing hash-bound Selection-125 handoff, so no production
+   winner can be claimed.
 7. The protected concrete family example and exact hidden optimizer prompts are
    intentionally unavailable in Git (`MISSING`/`OWNER-LOCAL`).
-8. A4 evidence currently spans Owner Store and repository projections; until the
-   projection is synchronized, use the receipt path and hash as authority.
+8. A4 evidence is indexed in Owner Store artifact index
+   `A4_PUBLICATION_ARTIFACT_INDEX.json` (index SHA-256
+   `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576`);
+   use receipt paths and hashes as numeric authority.
 
 ## 18. สถานะปัจจุบันและ gates ถัดไป
 
 | Gate | สถานะ | เงื่อนไขปิด |
 |---|---|---|
-| A4 FAST | PASS aggregate | receipt and safe-return already present in Owner Store |
-| A4 BALANCED | RUNNING | complete coverage, integrity receipt, no mixed attempt |
-| A4 DEEP | PENDING | launch only after balanced lifecycle is safely closed |
-| Legal transfer | PENDING | mini transfer valid, isolated, A5 reserve intact |
-| Selection | CLOSED until preflight | one frozen registry, exactly one access, bootstrap/W-T-L evidence |
-| A5 Final-872 | NOT STARTED | automatic A4 PASS plus conditional D2 and clean pointer-only bundle |
+| A4 profile transfer | PASS aggregate | four profiles complete; independent audit `PASS_A4_RESULT_INTEGRITY_AUDIT` |
+| Commercial frontier | PASS diagnostic | FAST and DEEP are non-dominated; ARM-03 is research-only |
+| Legal transfer | PASS isolated diagnostic / UNSUPPORTED | mini input/runtime unavailable; no full transfer; A5 reserve intact |
+| Selection-125 | BLOCKED | blocker receipt `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822`; required handoff absent |
+| A5 Final-872 | NOT STARTED | `selection_accesses=0`, `final_accesses=0`; pointer-only bundle has `execution_permitted=false` |
 | A6 full DAPFAM materialization | NOT STARTED | PASS A5 only; winner frozen, no feedback to selection |
 | A7 publication/release | LOCKED | A6 closeout and Owner D3 |
 
-ณ เวลา snapshot `2026-08-19T12:27:22Z` A4 BALANCED ยังเป็น active scientific
-operation บน instance `47790578`; ไม่ควร kill, reconfigure หรือรวม partial
-output กับ attempt อื่น
-และยังไม่มีเหตุผลทางหลักฐานให้เริ่ม A5/A6
+At the current A4 closeout snapshot, instance `47790578` has completed all four
+profile measurements and the workers have been torn down. A5/A6 must remain
+closed until the missing hash-bound Selection-125 handoff is supplied and the
+one-shot Selection preflight is independently validated.
 
 # ภาคผนวก A: Evidence ledger
 
@@ -456,9 +471,12 @@ output กับ attempt อื่น
 | A3 strongest transfer | 0.419274 Recall@100 | OUT | 250 | `a3-goal003-20260818-028` | `<MYIS_ROOT>/04_Owner_Stores/armindex/a3/a3-goal003-20260818-028-result-integrity-audit.json` | audit SHA-256 `3fbc601111b204d3d4829aab63cda2e4368f2b76fd08315c14f4c21abf820644`; observed file SHA-256 `02926c7e129e573ce4c14ccc2a86912d2b082609cc0da5cdf3a2758f41a29d75` | VERIFIED |
 | A3 top-two RRF-60 | 0.418715 Recall@100 | OUT | 250 | same | same audit | safe-return receipt SHA-256 `48cb4c51680ec3e59a876dad9b3feaa0593c39585bf27ae4eaf1d50e950453dc`; observed file SHA-256 `6d11a589a1ff008a3d9b665e9a3c7deb5662f5bc1f2bd893569f3a59714bfc41` | VERIFIED |
 | A3 HarnessOpt | 3/3 batches, 12 candidates, one signature | aggregate | 250 | same | `<MYIS_ROOT>/04_Owner_Stores/armindex/a3/a3-goal003-20260818-028-harnessopt-owner-evaluation.json` | evaluation SHA-256 `547ed212febe8c70f6675ca9851e652d391940598fbfb39ec41394c8c453007a`; observed file SHA-256 `f163101a99792d1d98f7a9ad284ffbdd812c0ccb709daef82ddd794d607019dd` | VERIFIED flat |
-| A4 FAST | 0.3458333333333334 Recall@100; 0.29276395850751985 nDCG@100; 0.24933704256908668 nDCG@10 | MISSING: no ALL/IN/OUT field in aggregate receipt | 100 | `a4-goal001-20260819T073000Z-a4x5` | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/hdev-evaluations/FAST.json` | result receipt SHA-256 `4f74b051187fba516ea7b7da6e9759c26a8588844fcf93efd303f6f3c2cae7bd`; observed file SHA-256 `da7cb79a552a5f68682595a61d7e47089e1d2b753462f5cc667418416ee1d3dc`; evaluator binding SHA-256 `10351fd7d2c24e550382b9fcad31d882fb70c861dfd83b60efe6e036cebad9b0`; HDEV commitment SHA-256 `6117606574690bd9807416a9f2fc422f38b620beefc07a2443c82e6a8a4336f5` | VERIFIED external projection; population label MISSING |
-| A4 FAST remote return | 100/100; no membership/qrels opened; ranking not embedded | -- | 100 | same | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/fast-return/completion-receipt.json` | remote receipt SHA-256 `ce1f1daad226e5bedda55e724427bad37ad18b2134be88149edf652077e0935c`; observed file SHA-256 `1a1977d2296e9c0a4bd4b052cd0aea2eeb83e8affe302cbe39eb0a55dda20e15` | VERIFIED safe return |
-| A4 BALANCED | no result yet at snapshot cutoff | -- | 100 planned | `a4-goal001-20260819T073000Z-a4x5--balanced-run` | isolated remote operation under `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/` | launch receipt SHA-256 `4929a07de68ca7a79e63329d18a44c89c8fa39a0ff15b4e5c5bef1db34ae2476`; request SHA-256 `5978e2b1b0ae8ea46946968fbd89bcab6ef52c089d863504607ada94b2e2c177`; observed launch-file SHA-256 `87172f038f86e377300ea824e472598c3a0323f5be9d0d21a81be53f66ee8f37`; no completion/result hash at cutoff | RUNNING |
+| A4 FAST | 0.3458333333333334 Recall@100; 0.2927643693511339 nDCG@100; 0.24933704256908668 nDCG@10 | HDEV OUT contract; receipt population field MISSING | 100/100 | `a4-goal001-20260819T180000Z-a4x12` | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/FAST.json`; file SHA-256 `be9d7740c668882e2ed2f2ee36825be9d3b593eba0bacccf2a3242ebb7d419f9` | receipt field SHA-256 `965f4b8a72562ac29f3222e479842cfbfd9f6bae64aea95a753a3037c21502c8`; VERIFIED aggregate, deterministic, 0 failures |
+| A4 BALANCED | 0.382638888888889 Recall@100; 0.32877720343200206 nDCG@100; 0.27844241266224945 nDCG@10 | HDEV OUT contract; receipt population field MISSING | 100/100 | same | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/BALANCED.json`; file SHA-256 `b7a2f5a3c24b47538fa3417f5de43b26cf911b998b522be0e41950be69b9333d` | receipt field SHA-256 `774477ea8f9cd550ff16eb70919eae1afe167e5b48186fb58d35433e17fbce5f`; VERIFIED aggregate, deterministic, 0 failures |
+| A4 DEEP | 0.382638888888889 Recall@100; 0.32877720343200206 nDCG@100; 0.27844241266224945 nDCG@10 | HDEV OUT contract; receipt population field MISSING | 100/100 | same | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/DEEP.json`; file SHA-256 `287d17a7dd61d705ef12a30eeb00fe1af334fccbf6cd877eed79f160853dc5c1` | receipt field SHA-256 `886c29aeb2c14359a3e374b09a9f3a6f20d775b5f740bbbb686fde9f477dcbf0`; VERIFIED aggregate, deterministic, 0 failures |
+| A4 ARM-03 research reference | 0.46319444444444446 Recall@100; 0.37293395839982973 nDCG@100; 0.3057748795608454 nDCG@10 | HDEV OUT contract; receipt population field MISSING | 100/100 | same | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/ARM-03_RESEARCH_REFERENCE.json`; file SHA-256 `98ca6d598c51cd5194baef59c9f922455dc7be9a026f568991b726ac0c5d8dca` | receipt field SHA-256 `53620ad3d2ec9637b684871384cb8b7462a52e37b63bc5547fdf0ade83de4157`; VERIFIED research-only, no commercial claim |
+| A4 integrity / coverage | four profiles, each 100/100; deterministic; 0 failures | aggregate | 400 total units | same | `A4_COMPLETE_PROFILE_COVERAGE.json`; `A4_RESULT_INTEGRITY_AUDIT.json` | coverage SHA-256 `8e1e2e6a2e1a00a93ced7219f488ed9ebbc9bbfee8f79bb1f6796a7dabcb4653`; audit SHA-256 `08b83b848023c52967329b769d7b230cf7009290664e95ddd340d569bb0157b5` | `PASS_A4_RESULT_INTEGRITY_AUDIT` |
+| A4 Selection handoff blocker | no hash-bound Selection-125 paired vectors/evaluator handoff; Selection/Final accesses 0 | OUT required | 125 required | same | `A4_SELECTION_HANDOFF_BLOCKER.json` | blocker receipt SHA-256 `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822` | `BLOCKED_MISSING_SELECTION_125_HANDOFF` |
 | Final-872 | unavailable | protected | 872 | none | no access | -- | CLOSED/NOT OPENED |
 
 # ภาคผนวก B: Run inventory
@@ -469,7 +487,7 @@ output กับ attempt อื่น
 | Common screening | `a12-v16-20260811-r15.summary.v16.json` | measured development aggregate | 25/25, 150 each | Selection/Final 0 |
 | Per-arm search | `a2-goal004-closeout-projection.v1.json` | measured development aggregate | 44 measured of 52 | Selection/Final 0 |
 | Transfer/HarnessOpt | `update_A3_19AUG2026.md` plus safe return/audit | measured development aggregate | 14/14, 250 each | Selection/Final 0 |
-| Production transfer | FAST Owner Store receipt; BALANCED active | development/production preparation | FAST 100/100; BALANCED pending | Selection not yet valid |
+| Production transfer | A4 x12 four-profile receipts, coverage, frontier and integrity audit | development/production preparation | 4 x 100/100; 0 failures; deterministic | Selection not yet valid |
 | Final confirmation | no receipt | protected final | 0 | Final closed |
 | Full corpus materialization | no receipt | future post-confirmatory | 0 | requires A5 PASS |
 
@@ -536,9 +554,11 @@ protected payloads เข้ามาใน Git
 | A3 figures | `docs/progress_report/figures/a3-transfer-recall-heatmap-20260819.png`; `docs/progress_report/figures/a3-fixed-control-quality-20260819.png` | transfer/fusion publication figures | derived projection / VERIFIED |
 | A3 code/audit | `scripts/audit_a3_three_primary_results.py`; `scripts/evaluate_a3_three_primary_owner_local.py`; `scripts/evaluate_a3_harnessopt_owner_local.py` | independent audit and aggregate evaluator | reproducibility code / VERIFIED |
 | A4 readiness | `control/armindex/a4/a4-readiness-binding-20260819.json`; `control/armindex/a4/a4-readiness-contract.v1.json` | frozen A4 profiles, selection counters and legal isolation | contract-only authority / VERIFIED |
-| A4 admission | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/admission/` | fresh identity, quote, TTL, budget and runtime probes | provider admission lineage / VERIFIED |
-| A4 FAST result | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/hdev-evaluations/FAST.json` | 100/100 aggregate quality and resources | Owner-local numeric authority / VERIFIED |
-| A4 active profiles | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/launch-integrity/`; `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/launch-receipts/`; `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T073000Z-a4x5/requests/` | BALANCED lifecycle and DEEP readiness | BALANCED RUNNING at cutoff; DEEP NOT VERIFIED |
+| A4 admission | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/admission/` | fresh identity, quote, TTL, budget and runtime probes | provider admission lineage / VERIFIED |
+| A4 profile results | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{FAST,BALANCED,DEEP,ARM-03_RESEARCH_REFERENCE}.json` | four 100/100 aggregate quality/resource receipts | Owner-local numeric authority / VERIFIED |
+| A4 coverage/frontier/audit | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{A4_COMPLETE_PROFILE_COVERAGE,A4_COMMERCIAL_FRONTIER,A4_RESULT_INTEGRITY_AUDIT}.json` | completeness, commercial frontier and independent integrity | canonical aggregate authority / VERIFIED; `PASS_A4_RESULT_INTEGRITY_AUDIT` |
+| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX.json` | publication-relevant evidence pointers and claim boundary | index SHA-256 `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576` / VERIFIED |
+| A4 Selection blocker | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_SELECTION_HANDOFF_BLOCKER.json` | missing hash-bound Selection-125 handoff | blocker SHA-256 `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822` / BLOCKED |
 | A5 pending bundle | `control/armindex/a5/a5-pending-a4-selection-template.v1.json` | pointer-only interface before Selection | execution forbidden / VERIFIED pending |
 | A6/A7 phase amendment | `control/armindex/a6/a6-a7-phase-amendment.v1.json`; `docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md`; `docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md` | moves publication/release to A7; preserves A6 as post-confirmatory, non-adaptive full-corpus materialization | owner-approved routing / VERIFIED |
 | A6 pending bundle | `control/armindex/a6/a6-pending-a5-closeout-template.v1.json`; `control/armindex/a6/a6-full-dapfam-execution-contract.v1.json` | post-confirmatory full-corpus contract | execution forbidden until `PASS_A5_FINAL_CONFIRMATION` |
@@ -589,19 +609,23 @@ aggregate receipts remain available in Owner Store.
 2. Representation quality is retriever-conditioned in the measured development evidence; one universal representation claim is unsupported.
 3. A2 has 44 valid measured candidates, 8 dormant reserves and 0 scientific failures; dormant is not null or failure.
 4. A3 transfer and fixed-fusion evidence is complete and shows an adapter interaction plus a flat HarnessOpt surface.
-5. A4 FAST has an aggregate Owner-local result; complete A4 and Selection are not yet closed.
+5. A4 has complete four-profile aggregate coverage and a passing independent
+   integrity audit; Selection/A5 remain closed because the Selection-125 handoff
+   is missing.
 
 ## Unresolved inconsistencies
 
 - Older projections/slides may use values near `0.41` without stating ALL versus OUT. Canonical summaries support OUT for the values quoted here; older unlabeled values remain **INCONSISTENT**.
 - ALL and IN aggregates are not present in the A1/A2/A3 summary surfaces used here. They must not be inferred from OUT.
 - The exact hidden optimizer conversation prompts and protected family example are not in the safe repository projection.
-- A4 FAST is in Owner Store while its Git report projection is pending; BALANCED has no result receipt.
+- A4 aggregate profile receipts are Owner-local and now projected here; the
+  receipt schema omits an explicit ALL/IN/OUT field, so population labeling is
+  retained as MISSING rather than inferred.
 
 ## Missing artifacts
 
-- Complete A4 BALANCED and DEEP aggregate receipts and safe-return hashes.
-- Isolated legal-transfer mini/full receipts.
+- Selection-125 paired-vector/evaluator handoff and frozen finalist registry.
+- Isolated legal-transfer mini/full receipts (mini is currently UNSUPPORTED).
 - One-shot Selection preflight, registry hash, bootstrap confidence intervals and W/T/L evidence.
 - A5 Final-872 receipt and immutable final registry.
 - A6 full-corpus materialization receipt, coverage/failure taxonomy and resource ledger.
@@ -612,15 +636,15 @@ aggregate receipts remain available in Owner Store.
 - No claim of Final-872 or protected-test performance.
 - No claim that ArmIndex improves DAPFAM universally or that ARM-03 is deployable commercially.
 - No claim that HarnessOpt improved quality; the measured result is a flat surface.
-- No claim that FAST alone is the production frontier; BALANCED/DEEP and Selection are incomplete.
+- No claim that FAST or DEEP is a confirmed production winner; the four A4 profiles are complete, but Selection is still unopened.
 - No claim of legal novelty, infringement, validity or freedom-to-operate from DAPFAM citation relevance.
 - No claim that A6 full-corpus processing improves retrieval quality; it can only establish post-confirmatory operational scalability after A5.
 
 ## Recommended next experimental gates
 
-1. Let the active BALANCED operation finish and preserve its complete attempt lineage; do not mix partial outputs.
-2. Complete DEEP and legal-transfer isolation under the same frozen evaluator and fresh profile receipts.
-3. Run the one-shot Selection only after complete A4 coverage, frozen finalist registry and zero pre-Selection counter violations.
+1. Supply and independently validate the missing hash-bound Selection-125 paired-vector/evaluator handoff; do not synthesize it from HDEV-100 outputs.
+2. Freeze the finalist registry and run the one-shot Selection only with zero pre-Selection counter violations.
+3. Preserve the isolated legal-transfer UNSUPPORTED diagnostic and A5 reserve while preparing the valid handoff.
 4. Open A5 Final-872 only after automatic A4 PASS, conditional D2, safe return, independent audit and pointer-only bundle checks pass.
 5. Prepare A6 only after A5 closes: one frozen winner, full DAPFAM materialization, coverage/resource/failure/determinism receipts, and no feedback into winner selection.
 6. Reconcile ALL/IN/OUT fields and unlabeled `0.41` values before publication drafting; preserve every negative and dormant outcome.
