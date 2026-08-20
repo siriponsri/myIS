@@ -370,9 +370,9 @@ report. Complete A4 aggregate receipts are in
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/`.
 The refreshed A4 publication artifact index is
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json`
-with canonical `index_sha256` `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1`
-and file SHA-256 `ca5761a943ca75b03c26610a834d31b27c7750a523022f2fe2c6da71aef67ca0`.
-It supersedes the earlier index hash `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576`
+with canonical `index_sha256` `a04a5caee3de035eacf1884c20b8d96c173f52400d431a2bf1568c2152ef3b72`
+and file SHA-256 `ea0908aa71d6115840595da6586f3c34afd29e9f92a1245065bb96d0697d79c5`.
+It supersedes the earlier refreshed index hash `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1`
 while preserving that file as historical provenance. The refreshed index has
 49 hash-bound records covering profile results, coverage/frontier/audit,
 legal isolation, safe return, runtime/package identity, frozen representation
@@ -439,7 +439,7 @@ is therefore safe to commit, but it cannot replace the Owner-local evaluator ret
    intentionally unavailable in Git (`MISSING`/`OWNER-LOCAL`).
 8. A4 evidence is indexed in the refreshed Owner Store artifact index
    `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` (index SHA-256
-   `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1`);
+   `a04a5caee3de035eacf1884c20b8d96c173f52400d431a2bf1568c2152ef3b72`);
    use receipt paths and hashes as numeric authority.
 
 ## 18. สถานะปัจจุบันและ gates ถัดไป
@@ -561,7 +561,7 @@ protected payloads เข้ามาใน Git
 | A4 admission | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/admission/` | fresh identity, quote, TTL, budget and runtime probes | provider admission lineage / VERIFIED |
 | A4 profile results | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{FAST,BALANCED,DEEP,ARM-03_RESEARCH_REFERENCE}.json` | four 100/100 aggregate quality/resource receipts | Owner-local numeric authority / VERIFIED |
 | A4 coverage/frontier/audit | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{A4_COMPLETE_PROFILE_COVERAGE,A4_COMMERCIAL_FRONTIER,A4_RESULT_INTEGRITY_AUDIT}.json` | completeness, commercial frontier and independent integrity | canonical aggregate authority / VERIFIED; `PASS_A4_RESULT_INTEGRITY_AUDIT` |
-| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` | 49 publication/reproducibility pointers plus claim boundary | index SHA-256 `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1` / VERIFIED |
+| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` | 49 publication/reproducibility pointers plus claim boundary; A5 runtime identity bound to `697eb08a` | index SHA-256 `a04a5caee3de035eacf1884c20b8d96c173f52400d431a2bf1568c2152ef3b72` / VERIFIED |
 | A4 Selection blocker | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_SELECTION_HANDOFF_BLOCKER.json` | missing hash-bound Selection-125 handoff | blocker SHA-256 `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822` / BLOCKED |
 | A5 pending bundle | `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/a5-pending-a4-selection-20260820T174500Z/` | pointer-only template, validation, code identity, manifest, goal and safe-transport receipt | `execution_permitted=false`; Selection/Final accesses 0; VERIFIED pending-only |
 | A4/A5 artifact-index validation | `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` plus 49 referenced files | canonical self-hash and per-file SHA-256 validation | `PASS_INDEX_HASH_AND_ARTIFACT_VALIDATION` |
