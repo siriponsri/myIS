@@ -52,6 +52,7 @@ quality failure and not legal advice.
 - Research safe-return receipt: `8a882b79234d75d72b9304053960dd322fe56e0486159b423a7753406afcb665`.
 - Complete A4 coverage receipt: `8e1e2e6a2e1a00a93ced7219f488ed9ebbc9bbfee8f79bb1f6796a7dabcb4653`.
 - Independent aggregate result-integrity audit: `08b83b848023c52967329b769d7b230cf7009290664e95ddd340d569bb0157b5`.
+- Selection handoff blocker receipt: `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822`.
 - Remote workers are gone; all four GPUs were observed idle and approximately
   142 GiB disk remained after safe return.
 
@@ -68,7 +69,7 @@ so the correct state is fail-closed:
 - Conditional `D2_OPEN_FINAL` was not emitted.
 - A5 remains a pointer-only pending template with
   `execution_permitted=false`; the latest remote pending bundle is isolated at
-  `/opt/myis/a5-pending-a4-selection-20260820T110500Z` and contains no
+  `/opt/myis/a5-pending-a4-selection-20260820T112000Z` and contains no
   protected payload.
 
 The next valid continuation requires an Owner-local, hash-bound Selection-125
