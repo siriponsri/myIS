@@ -1,0 +1,67 @@
+{
+  "a6_contract_sha256": "eb41ffcf070470a610cdc5fb0a948d26e018c12a6413f1721d74ba404c118c45",
+  "authorized_instance_id": 47790578,
+  "bundle_id": "A6_PREPARATION_PENDING_A5_CLOSEOUT",
+  "bundle_sha256": "2e4061392240085027d1df4e02b7be7a5581d1fcca51b4bdbd0f34263408b7ff",
+  "claim_boundary": "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
+  "execution_permitted": false,
+  "final_accesses": 0,
+  "fresh_a6_attempt_required": true,
+  "launch_allowed": false,
+  "pending_template_sha256": "6641d8e34685fe8311578d41a4414d05be51c0e75807530c33fb97ef4839ae82",
+  "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+  "protected_payload_included": false,
+  "required_a5_bindings": [
+    "a5_closeout_receipt_sha256",
+    "a5_result_integrity_audit_sha256",
+    "a5_safe_return_receipt_sha256",
+    "a5_finalist_registry_sha256",
+    "a5_frozen_winner_configuration_sha256",
+    "full_corpus_source_sha256"
+  ],
+  "required_a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
+  "required_aggregate_metrics": [
+    "source_document_count",
+    "family_count",
+    "chunk_count",
+    "representation_count",
+    "coverage_rate",
+    "throughput_documents_per_second",
+    "latency_p50_ms",
+    "latency_p95_ms",
+    "latency_p99_ms",
+    "ram_bytes_peak",
+    "vram_bytes_peak",
+    "index_size_bytes",
+    "cost_usd",
+    "checkpoint_recovery_count",
+    "determinism_sha256",
+    "failure_taxonomy"
+  ],
+  "safe_return_allowlist": [
+    "aggregate_metrics",
+    "counts",
+    "hashes",
+    "safe_manifests",
+    "safe_receipts",
+    "aggregate_figures",
+    "failure_taxonomy"
+  ],
+  "schema_version": "myis.armindex-a6-preparation-bundle.v1",
+  "scientific_authority": false,
+  "selection_accesses": 0,
+  "source_file_sha256": {
+    "control/armindex/a6/a6-full-dapfam-execution-contract.v1.json": "744ed2a3d686da425083923ec6e2f273ad2c9d2fbb3902259acf8e8624365558",
+    "control/armindex/a6/a6-pending-a5-closeout-template.v1.json": "75eef36e712dfc1b27b7a69ee43d3041f06d9eb2d69303dbfb0688258b403ef4",
+    "docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md": "cb531b7b1d8bc99bad2b32d90994187968fb6ab72e91491788f2c1195e21e6b1"
+  },
+  "stale_runtime_reuse_forbidden": true,
+  "status": "PENDING_A5_CLOSEOUT",
+  "task_id": "A6.1",
+  "validation": {
+    "contract_validated": true,
+    "dry_run_only": true,
+    "pending_template_validated": true,
+    "source_hashes_recorded": true
+  }
+}

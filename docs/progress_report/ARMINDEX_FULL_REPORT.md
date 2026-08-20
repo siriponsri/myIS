@@ -4,8 +4,8 @@ language: "Thai"
 audience: "Research advisor, graduate students, and researchers"
 repository: "myIS Research / 01_Research"
 branch: "main"
-commit: "a8df5a83c958987bc12d1a382b9befc34e6c5bb6"
-report_date: "2026-08-19"
+commit: "61a0f16ee18db77a95bd179560b19a308077df06"
+report_date: "2026-08-20"
 remote_observation_cutoff_utc: "2026-08-19T12:27:22Z"
 numeric_authority: "Canonical manifests, machine-readable result summaries, append-only receipts, and Owner Store aggregate-safe receipts"
 evidence_boundary: "Development evidence is separated from Selection and Final held-out evidence. Protected qrels, membership, raw identifiers, rankings, and per-query outcomes are not reproduced."
@@ -368,16 +368,15 @@ evaluation, runtime assets and recovery logs. Only aggregate-safe evidence is
 described here; protected rankings and per-query outcomes remain outside the
 report. Complete A4 aggregate receipts are in
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/`.
-The refreshed A4 publication artifact index is
+The latest A4 publication artifact index is
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json`
-with canonical `index_sha256` `a04a5caee3de035eacf1884c20b8d96c173f52400d431a2bf1568c2152ef3b72`
-and file SHA-256 `ea0908aa71d6115840595da6586f3c34afd29e9f92a1245065bb96d0697d79c5`.
-It supersedes the earlier refreshed index hash `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1`
-while preserving that file as historical provenance. The refreshed index has
-49 hash-bound records covering profile results, coverage/frontier/audit,
+with canonical `index_sha256` `953675d1d6b150e1d89cba9c52559ebb7294f74b2257535989b76bb81eb841da`
+and file SHA-256 `4d074f0638affc899269e8bb0d7223fe14f7e25c795a50d8d7d8c134f7050e0d`.
+It supersedes earlier refreshed index files while preserving them as historical provenance. The refreshed index has
+51 hash-bound records covering profile results, coverage/frontier/audit,
 legal isolation, safe return, runtime/package identity, frozen representation
 programs, adapter/model manifests, evaluator scope/handoff, launch and stage
-receipts, and the current A5 pending transport. Protected payloads remain
+receipts, parallel audit, A5 blocker and current pending transport. Protected payloads remain
 outside the report and Git.
 
 ## 15. Cost, failures และ operational evidence
@@ -450,6 +449,8 @@ is therefore safe to commit, but it cannot replace the Owner-local evaluator ret
 | Commercial frontier | PASS diagnostic | FAST and DEEP are non-dominated; ARM-03 is research-only |
 | Legal transfer | PASS isolated diagnostic / UNSUPPORTED | mini input/runtime unavailable; no full transfer; A5 reserve intact |
 | Selection-125 | BLOCKED | blocker receipt `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822`; required handoff absent |
+| A5 pending validation/transport | PASS pending-only | current-main validation `ba65d384af874c913b453a4b0b87180557bbfe5f9ce6a8aa59f6574fc0ec00ab`; latest transport `451ba0dffa5070b728932491242d854be3aa4f61683cd70af9dde4d224642b09`; protected payload absent |
+| A5 execution | BLOCKED | `A5_EXECUTION_BLOCKER_20260820.json`; `execution_permitted=false`, `selection_accesses=0`, `final_accesses=0`; Selection-125 handoff, finalist registry, D2 receipt, and current identity refresh are missing |
 | A5 Final-872 | NOT STARTED | `selection_accesses=0`, `final_accesses=0`; pointer-only bundle has `execution_permitted=false` |
 | A6 full DAPFAM materialization | NOT STARTED | PASS A5 only; winner frozen, no feedback to selection |
 | A7 publication/release | LOCKED | A6 closeout and Owner D3 |
@@ -561,10 +562,12 @@ protected payloads เข้ามาใน Git
 | A4 admission | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/admission/` | fresh identity, quote, TTL, budget and runtime probes | provider admission lineage / VERIFIED |
 | A4 profile results | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{FAST,BALANCED,DEEP,ARM-03_RESEARCH_REFERENCE}.json` | four 100/100 aggregate quality/resource receipts | Owner-local numeric authority / VERIFIED |
 | A4 coverage/frontier/audit | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{A4_COMPLETE_PROFILE_COVERAGE,A4_COMMERCIAL_FRONTIER,A4_RESULT_INTEGRITY_AUDIT}.json` | completeness, commercial frontier and independent integrity | canonical aggregate authority / VERIFIED; `PASS_A4_RESULT_INTEGRITY_AUDIT` |
-| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` | 49 publication/reproducibility pointers plus claim boundary; A5 runtime identity bound to `697eb08a` | index SHA-256 `a04a5caee3de035eacf1884c20b8d96c173f52400d431a2bf1568c2152ef3b72` / VERIFIED |
+| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` | 51 publication/reproducibility pointers plus parallel audit, A5 blocker, and A6 conditional routing | index SHA-256 `953675d1d6b150e1d89cba9c52559ebb7294f74b2257535989b76bb81eb841da`; file SHA-256 `4d074f0638affc899269e8bb0d7223fe14f7e25c795a50d8d7d8c134f7050e0d` / VERIFIED |
 | A4 Selection blocker | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_SELECTION_HANDOFF_BLOCKER.json` | missing hash-bound Selection-125 handoff | blocker SHA-256 `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822` / BLOCKED |
-| A5 pending bundle | `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/a5-pending-a4-selection-20260820T174500Z/` | pointer-only template, validation, code identity, manifest, goal and safe-transport receipt | `execution_permitted=false`; Selection/Final accesses 0; VERIFIED pending-only |
-| A4/A5 artifact-index validation | `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` plus 49 referenced files | canonical self-hash and per-file SHA-256 validation | `PASS_INDEX_HASH_AND_ARTIFACT_VALIDATION` |
+| A5 pending bundle | `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/a5-current-main-pending-20260820T190000Z/` | current-main pointer-only template, validation, code identity, manifest and safe-transport receipt | `execution_permitted=false`; Selection/Final accesses 0; commit `61a0f16e`, tree `f3679c00`; VERIFIED pending-only |
+| A5 execution blocker | `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/a5-pending-a4-selection-20260820T174500Z/A5_EXECUTION_BLOCKER_20260820.json` | missing Selection-125 handoff, finalist registry and D2 | receipt SHA-256 `1536fa8ab712a11c11381e274354e1ffdc5a83ff5073bb9ccf5f9cd040821155` / BLOCKED |
+| A4/A5 artifact-index validation | `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` plus 51 referenced files | canonical self-hash and per-file SHA-256 validation | `PASS_INDEX_HASH_AND_ARTIFACT_VALIDATION`; latest index SHA-256 `953675d1d6b150e1d89cba9c52559ebb7294f74b2257535989b76bb81eb841da` |
+| Parallel A4/A5 audit | `A4_A5_PARALLEL_AUDIT_20260820.json` | independent A4 PASS, A5 pending-only PASS, conditional same-instance A6 continuation | receipt SHA-256 `3585f7ae1d0d0315a5d6a96c0e62ea14ec16d97865ce71ba9cfeb0d7848fcab8` / PASS with identity-refresh follow-up |
 | A6/A7 phase amendment | `control/armindex/a6/a6-a7-phase-amendment.v1.json`; `docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md`; `docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md` | moves publication/release to A7; preserves A6 as post-confirmatory, non-adaptive full-corpus materialization | owner-approved routing / VERIFIED |
 | A6 pending bundle | `control/armindex/a6/a6-pending-a5-closeout-template.v1.json`; `control/armindex/a6/a6-full-dapfam-execution-contract.v1.json` | post-confirmatory full-corpus contract | execution forbidden until `PASS_A5_FINAL_CONFIRMATION` |
 | Literature | `evidence/literature/digests/` and `evidence/literature/source/` | primary-source design inheritance | literature authority for related work |
