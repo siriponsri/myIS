@@ -368,13 +368,17 @@ evaluation, runtime assets and recovery logs. Only aggregate-safe evidence is
 described here; protected rankings and per-query outcomes remain outside the
 report. Complete A4 aggregate receipts are in
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/`.
-The A4 artifact index is
-`<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX.json`
-with canonical `index_sha256` `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576`
-and file SHA-256 `198e4c7fbb723e723249de2803df1d8dd53f485214667e9f4240a1a6737ecabf`.
-The artifact index records the four profile receipts, coverage/frontier/audit
-receipts, legal isolation, safe return, and the A5 pending interface without
-copying protected payloads.
+The refreshed A4 publication artifact index is
+`<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json`
+with canonical `index_sha256` `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1`
+and file SHA-256 `ca5761a943ca75b03c26610a834d31b27c7750a523022f2fe2c6da71aef67ca0`.
+It supersedes the earlier index hash `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576`
+while preserving that file as historical provenance. The refreshed index has
+49 hash-bound records covering profile results, coverage/frontier/audit,
+legal isolation, safe return, runtime/package identity, frozen representation
+programs, adapter/model manifests, evaluator scope/handoff, launch and stage
+receipts, and the current A5 pending transport. Protected payloads remain
+outside the report and Git.
 
 ## 15. Cost, failures และ operational evidence
 
@@ -433,9 +437,9 @@ is therefore safe to commit, but it cannot replace the Owner-local evaluator ret
    winner can be claimed.
 7. The protected concrete family example and exact hidden optimizer prompts are
    intentionally unavailable in Git (`MISSING`/`OWNER-LOCAL`).
-8. A4 evidence is indexed in Owner Store artifact index
-   `A4_PUBLICATION_ARTIFACT_INDEX.json` (index SHA-256
-   `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576`);
+8. A4 evidence is indexed in the refreshed Owner Store artifact index
+   `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` (index SHA-256
+   `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1`);
    use receipt paths and hashes as numeric authority.
 
 ## 18. สถานะปัจจุบันและ gates ถัดไป
@@ -557,9 +561,10 @@ protected payloads เข้ามาใน Git
 | A4 admission | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/admission/` | fresh identity, quote, TTL, budget and runtime probes | provider admission lineage / VERIFIED |
 | A4 profile results | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{FAST,BALANCED,DEEP,ARM-03_RESEARCH_REFERENCE}.json` | four 100/100 aggregate quality/resource receipts | Owner-local numeric authority / VERIFIED |
 | A4 coverage/frontier/audit | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/{A4_COMPLETE_PROFILE_COVERAGE,A4_COMMERCIAL_FRONTIER,A4_RESULT_INTEGRITY_AUDIT}.json` | completeness, commercial frontier and independent integrity | canonical aggregate authority / VERIFIED; `PASS_A4_RESULT_INTEGRITY_AUDIT` |
-| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX.json` | publication-relevant evidence pointers and claim boundary | index SHA-256 `16a9f7e512eb7f36936aa7b62819aeb8a096713c1d96387ceec4d681efba1576` / VERIFIED |
+| A4 publication artifact index | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` | 49 publication/reproducibility pointers plus claim boundary | index SHA-256 `337ed73bfdf0f5616a82081117e7243a0c0bab51c2b8f1224d54e4f3db9e58f1` / VERIFIED |
 | A4 Selection blocker | `<MYIS_ROOT>/04_Owner_Stores/armindex/a4/a4-goal001-20260819T180000Z-a4x12/hdev-evaluations/A4_SELECTION_HANDOFF_BLOCKER.json` | missing hash-bound Selection-125 handoff | blocker SHA-256 `32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822` / BLOCKED |
-| A5 pending bundle | `control/armindex/a5/a5-pending-a4-selection-template.v1.json` | pointer-only interface before Selection | execution forbidden / VERIFIED pending |
+| A5 pending bundle | `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/a5-pending-a4-selection-20260820T174500Z/` | pointer-only template, validation, code identity, manifest, goal and safe-transport receipt | `execution_permitted=false`; Selection/Final accesses 0; VERIFIED pending-only |
+| A4/A5 artifact-index validation | `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` plus 49 referenced files | canonical self-hash and per-file SHA-256 validation | `PASS_INDEX_HASH_AND_ARTIFACT_VALIDATION` |
 | A6/A7 phase amendment | `control/armindex/a6/a6-a7-phase-amendment.v1.json`; `docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md`; `docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md` | moves publication/release to A7; preserves A6 as post-confirmatory, non-adaptive full-corpus materialization | owner-approved routing / VERIFIED |
 | A6 pending bundle | `control/armindex/a6/a6-pending-a5-closeout-template.v1.json`; `control/armindex/a6/a6-full-dapfam-execution-contract.v1.json` | post-confirmatory full-corpus contract | execution forbidden until `PASS_A5_FINAL_CONFIRMATION` |
 | Literature | `evidence/literature/digests/` and `evidence/literature/source/` | primary-source design inheritance | literature authority for related work |
