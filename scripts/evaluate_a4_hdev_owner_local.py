@@ -33,7 +33,11 @@ def main() -> int:
     package = json.loads(args.package.read_text(encoding="utf-8"))
     registry = json.loads(args.profile_registry.read_text(encoding="utf-8"))
     if args.profile == "ARM-03_RESEARCH_REFERENCE":
-        profile = registry["research_reference"]
+        profile = dict(registry["research_reference"])
+        # The frozen registry calls this field ``label``; the evaluator's
+        # common profile interface uses ``profile_id``.
+        profile["profile_id"] = profile.pop("label")
+        profile["attempt_id"] = registry["attempt_id"]
     else:
         profile = next(row for row in registry["profiles"] if row["profile_id"] == args.profile)
     hdev_tokens = {row["work_token"] for row in _jsonl(args.hdev_queries)}
