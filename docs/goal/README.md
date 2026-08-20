@@ -4,8 +4,8 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `ACTIVE` | `READY_FOR_LONG_RUN` | Commercial FAST/BALANCED/DEEP frontier, license-segregated research reference, isolated legal transfer, one-shot preregistered Selection, and A5 handoff on instance 47790578 |
-| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D2` | Frozen two-system Final-872 confirmation; waits for `D2_OPEN_FINAL` or a hash-bound conditional auto-pass receipt and never opens Final from preparation alone |
+| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `CLOSED` | `CLOSED_WITH_EVIDENCE_SELECTION_HANDOFF_BLOCKED` | Complete four-profile A4 transfer evidence; Selection-125 handoff missing, Selection/Final remain unopened |
+| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_PRESELECTION_HANDOFF_AND_D2` | Frozen two-system Final-872 confirmation; waits for validated Selection-125 handoff and then `D2_OPEN_FINAL` or a hash-bound conditional receipt |
 | [A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md](A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md) | `BLOCKED` | `BLOCKED_A5_CLOSEOUT` | Post-confirmatory materialization of exactly one A5-frozen winner over full DAPFAM; operational scalability only; no Selection/Final/tuning feedback |
 | [A7_PUBLICATION_AND_RELEASE_goal_001.md](A7_PUBLICATION_AND_RELEASE_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D3` | Publication and release from validated aggregate-safe A0-A6 evidence after `D3_SUBMIT_RELEASE` |
 
@@ -32,14 +32,14 @@
 - Goal 004 completed the successor A2 measured closeout and is now immutable
   predecessor evidence. It must not be launched again or used as the A4
   attempt/root/receipt lineage.
-- A4 Goal 001 is the active successor for the current `contract_only_ready`
-  A4 handoff. It owns the existing instance `47790578`, fresh A4 attempt
-  lineage, measured production profiles, one-shot Selection, safe return, and
-  A5 pointer-only bundle preparation:
+- A4 Goal 001 is closed with evidence for the current `contract_only_ready`
+  A4 handoff. It owns the recorded attempt lineage, measured production
+  profiles, safe return, and Selection-handoff blocker:
 
-  `/goal อ่าน docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md แล้วทำงานตามขั้นตอนทั้งหมดใน one orchestrated session`
-- A5 Goal 001 is a separate Owner-gate handoff. It remains blocked until
-  `D2_OPEN_FINAL` or the Owner's explicit hash-bound conditional auto-pass
+  `docs/long_run/A4_PRODUCTION_TRANSFER_AND_SELECTION_lo_001_001.md`
+- A5 Goal 001 is a separate handoff. It remains blocked until the missing
+  hash-bound Selection-125 evaluator input is supplied and validated, followed
+  by `D2_OPEN_FINAL` or the Owner's explicit hash-bound conditional auto-pass
   receipt after a complete, audited A4 PASS; its bundle may contain hashes,
   counts, receipts, and opaque pointers but never raw protected Final payloads.
 - Generated Obsidian/report projections are rebuilt from the shared read model;

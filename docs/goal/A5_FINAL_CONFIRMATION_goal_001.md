@@ -2,7 +2,7 @@
 title: "A5 frozen final confirmation handoff"
 phase_id: A5_FINAL_CONFIRMATION
 task_id: A5.1
-status: BLOCKED_OWNER_D2
+status: BLOCKED_PRESELECTION_HANDOFF_AND_D2
 lifecycle: BLOCKED
 evidence_class: prepared_final_confirmation_handoff
 scientific_authority: false
@@ -15,8 +15,8 @@ final_query_count: 872
 protected_payloads_allowed: false
 previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
 next_goal: docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md
-last_material_update: 2026-08-19
-next_authorized_action: WAIT_FOR_MANUAL_OR_CONDITIONAL_D2_AND_VALIDATE_A4_HANDOFF
+last_material_update: 2026-08-20
+next_authorized_action: WAIT_FOR_SELECTION_125_HANDOFF_AND_MANUAL_OR_CONDITIONAL_D2
 ---
 
 # Goal 001: A5 final confirmation

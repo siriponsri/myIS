@@ -2,11 +2,11 @@
 title: "A4 long-run production transfer, one-shot Selection, and A5 bundle preparation"
 phase_id: A4_PRODUCTION_TRANSFER_AND_SELECTION
 task_id: A4.1
-status: READY_FOR_LONG_RUN
-lifecycle: ACTIVE
+status: CLOSED_WITH_EVIDENCE_SELECTION_HANDOFF_BLOCKED
+lifecycle: CLOSED
 evidence_class: measured_development_and_selection_preparation
 scientific_authority: false
-execution_permitted: true
+execution_permitted: false
 provider_instance_id: 47790578
 a4_auto_pass_continuation: true
 conditional_owner_decisions: [D1_START_CAMPAIGN, D2_OPEN_FINAL]
@@ -14,11 +14,16 @@ a3_readiness_binding_uri: control/armindex/a4/a4-readiness-binding-20260819.json
 a3_readiness_binding_sha256: 4fb8b8f8d6d80941b0c76116d13c4cfd5199dbcd0d17e59152f0088c54c4f7fd
 selection_access_limit: 1
 final_accesses_allowed: 0
+selection_accesses: 0
+final_accesses: 0
 protected_payloads_allowed: false
 previous_goal: docs/goal/A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md
 next_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
-last_material_update: 2026-08-19
-next_authorized_action: START_A4_LONG_RUN_WITH_FRESH_ADMISSION_AND_ISOLATED_ATTEMPT_ROOT
+last_material_update: 2026-08-20
+next_authorized_action: OWNER_ACTION_SUPPLY_HASH_BOUND_SELECTION_125_HANDOFF
+closeout_attempt_id: a4-goal001-20260819T180000Z-a4x12
+closeout_audit_sha256: 08b83b848023c52967329b769d7b230cf7009290664e95ddd340d569bb0157b5
+selection_handoff_blocker_sha256: 32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822
 ---
 
 # Goal 001: A4 production transfer and Selection
@@ -302,11 +307,17 @@ but it never triggers D2 when coverage, audit completeness, or the A5 reserve
 is missing.
 
 Terminal states are `PASS_A4_SELECTION_AND_A5_HANDOFF`,
-`STOP_FAIL_CLOSED_WITH_EVIDENCE`, or `BLOCKED_OWNER_ACTION`. A blocked state
-must preserve the same attempt and goal lineage for resume.
+`CLOSED_WITH_EVIDENCE_SELECTION_HANDOFF_BLOCKED`,
+`STOP_FAIL_CLOSED_WITH_EVIDENCE`, or `BLOCKED_OWNER_ACTION`. The current
+terminal state is the evidence-preserving Selection-handoff blocker recorded in
+the A4 closeout; a future continuation must use a new attempt and must not
+reuse this measured root. A blocked state must preserve the same attempt and
+goal lineage for resume.
 
 ## Next action
 
 After A4 closeout, hand off to
-`docs/goal/A5_FINAL_CONFIRMATION_goal_001.md`. A5 remains blocked until a
-manual `D2_OPEN_FINAL` or this goal's hash-bound conditional D2 receipt exists.
+`docs/goal/A5_FINAL_CONFIRMATION_goal_001.md`. The current handoff is blocked
+until an Owner-local, hash-bound Selection-125 paired-vector/evaluator handoff
+is independently validated. A5 then remains blocked until a manual
+`D2_OPEN_FINAL` or this goal's hash-bound conditional D2 receipt exists.
