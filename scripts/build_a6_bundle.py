@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = Path("control/armindex/a6/a6-full-dapfam-execution-contract.v1.json")
 TEMPLATE = Path("control/armindex/a6/a6-pending-a5-closeout-template.v1.json")
 GOAL = Path("docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md")
+SOURCE_CONTRACT = Path("control/assets/dapfam-p1-source.v1.json")
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -39,7 +40,7 @@ def _relative(path: Path) -> str:
 
 
 def _source_hashes() -> dict[str, str]:
-    paths = (CONTRACT, TEMPLATE, GOAL)
+    paths = (CONTRACT, TEMPLATE, GOAL, SOURCE_CONTRACT)
     missing = [str(path) for path in paths if not (ROOT / path).is_file()]
     if missing:
         raise A6MaterializationError(f"missing A6 source file(s): {', '.join(missing)}")
@@ -51,6 +52,10 @@ def build_bundle() -> dict[str, Any]:
     template = _load_json(ROOT / TEMPLATE)
     validated = validate_pending_a6_materialization_template(template, contract)
     sources = _source_hashes()
+    source_contract = _load_json(ROOT / SOURCE_CONTRACT)
+    corpus = source_contract.get("configs", {}).get("corpus", {})
+    if source_contract.get("dataset", {}).get("revision") != "a59a74ce31384165065af1823a83c6f94ccafd48" or corpus.get("rows") != 45336:
+        raise A6MaterializationError("canonical DAPFAM full-corpus inventory drifted")
     body: dict[str, Any] = {
         "schema_version": "myis.armindex-a6-preparation-bundle.v1",
         "bundle_id": "A6_PREPARATION_PENDING_A5_CLOSEOUT",
@@ -64,6 +69,13 @@ def build_bundle() -> dict[str, Any]:
         "a6_contract_sha256": validated["a6_contract_sha256"],
         "pending_template_sha256": validated["template_sha256"],
         "source_file_sha256": sources,
+        "full_corpus_source_manifest_sha256": sources[_relative(SOURCE_CONTRACT)],
+        "full_corpus_row_count": corpus["rows"],
+        "full_corpus_inventory": {
+            "dataset_revision": source_contract["dataset"]["revision"],
+            "rows": corpus["rows"],
+            "files": corpus.get("files", []),
+        },
         "required_a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
         "required_a5_bindings": [
             "a5_closeout_receipt_sha256",
@@ -98,7 +110,8 @@ def validate_bundle(path: Path) -> dict[str, Any]:
         "schema_version", "bundle_id", "status", "phase_id", "task_id",
         "execution_permitted", "launch_allowed", "scientific_authority",
         "authorized_instance_id", "a6_contract_sha256", "pending_template_sha256",
-        "source_file_sha256", "required_a5_terminal_state", "required_a5_bindings",
+        "source_file_sha256", "full_corpus_source_manifest_sha256", "full_corpus_row_count",
+        "full_corpus_inventory", "required_a5_terminal_state", "required_a5_bindings",
         "fresh_a6_attempt_required", "stale_runtime_reuse_forbidden",
         "selection_accesses", "final_accesses", "protected_payload_included",
         "required_aggregate_metrics", "safe_return_allowlist", "claim_boundary",
@@ -125,6 +138,11 @@ def validate_bundle(path: Path) -> dict[str, Any]:
     current = _source_hashes()
     if bundle["source_file_sha256"] != current:
         raise A6MaterializationError("A6 source file hash drifted")
+    source_contract = _load_json(ROOT / SOURCE_CONTRACT)
+    if bundle["full_corpus_source_manifest_sha256"] != current[_relative(SOURCE_CONTRACT)] or bundle["full_corpus_row_count"] != 45336:
+        raise A6MaterializationError("A6 full-corpus source binding drifted")
+    if bundle["full_corpus_inventory"] != {"dataset_revision": source_contract["dataset"]["revision"], "rows": source_contract["configs"]["corpus"]["rows"], "files": source_contract["configs"]["corpus"].get("files", [])}:
+        raise A6MaterializationError("A6 full-corpus inventory drifted")
     return bundle
 
 

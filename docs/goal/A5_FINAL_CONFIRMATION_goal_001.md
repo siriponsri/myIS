@@ -72,6 +72,12 @@ Do not proceed until the A4 goal has a canonical closeout with:
 
 ## A5 bundle contract
 
+Preparation is represented by the hash-only Owner Store bundle at
+`04_Owner_Stores/armindex/data-bundle/<bundle-id>/`. The `final-872/sealed/`
+marker is `SEALED_PRE_D2`/`PENDING_A5_D2`; it is not Final access and does not
+create a finalist or winner. A5 may consume only a validated Selection-125
+handoff and must keep the preparation counters at zero until D2 admission.
+
 The bundle is full in provenance and interfaces, but pointer-only for protected
 data. Store the repository-safe portion under the campaign evidence/control
 conventions and the protected handoff under

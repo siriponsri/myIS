@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:myis:research:schema:armindex-owner-data-bundle-source-manifest:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "source_contract_pointer", "source_contract_sha256",
+    "dataset_revision", "full_corpus_row_count", "parent_split_sha256",
+    "split_algorithm", "split_seed", "partition_counts", "rep_dev_count",
+    "hdev_count", "membership_commitment_sha256", "split_receipt_sha256",
+    "artifacts", "protected_payload_included", "measured_access"
+  ],
+  "properties": {
+    "schema_version": {"const": "myis.armindex-owner-data-source-manifest.v1"},
+    "source_contract_pointer": {"type": "string", "const": "control/assets/dapfam-p1-source.v1.json"},
+    "source_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dataset_revision": {"type": "string", "const": "a59a74ce31384165065af1823a83c6f94ccafd48"},
+    "full_corpus_row_count": {"const": 45336},
+    "parent_split_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "split_algorithm": {"const": "sha256-seed-colon-id-lexical-v1"},
+    "split_seed": {"const": 42},
+    "partition_counts": {"const": {"train": 250, "selection": 125, "final": 872}},
+    "rep_dev_count": {"const": 150},
+    "hdev_count": {"const": 100},
+    "membership_commitment_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "split_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifacts": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "protected_payload_included": {"const": false},
+    "measured_access": {"const": false}
+  }
+}

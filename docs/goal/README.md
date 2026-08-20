@@ -54,6 +54,10 @@
   the real Selection-125 handoff remains the single pre-Selection Owner-input
   stop, and A5/A6 still fail closed on scientific, protected-data, budget,
   provider, or evidence-integrity boundaries.
+- The canonical Owner Data Bundle is a hash-only preparation surface for
+  Train-250/REP-DEV/HDEV-100, sealed Selection-125 and Final-872, and the
+  45,336-row A6 source inventory. Building it does not count as Selection or
+  Final access and cannot produce paired vectors, a D2, or a winner.
 - Generated Obsidian/report projections are rebuilt from the shared read model;
   no generated Markdown is edited by hand. No publication figure is generated
   from the stopped pre-authority attempt.

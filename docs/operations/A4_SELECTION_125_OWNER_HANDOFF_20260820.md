@@ -47,6 +47,13 @@ counts, receipts, and opaque relative pointers. The paired vectors,
 evaluator handoff, qrels, split membership, raw query/family IDs, rankings,
 and per-query outcomes remain in the Owner Store.
 
+The canonical preparation pointer is the write-once Owner Store bundle under
+`<MYIS_ROOT>/04_Owner_Stores/armindex/data-bundle/<bundle-id>/`. Its
+`selection-125/sealed/` marker must remain `SEALED_PRE_MEASUREMENT` with
+`PENDING_PAIRED_VECTORS`; building this bundle is preparation only and must
+leave `selection_accesses=0` and `final_accesses=0`. HDEV-100 or legacy IS1
+metrics cannot populate the Selection vectors.
+
 The aggregate-safe manifest must contain exactly these input commitments:
 
 | Field | Required value or rule |

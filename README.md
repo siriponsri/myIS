@@ -155,6 +155,12 @@ overview and does not duplicate volatile counters.
 
 ## Reproducibility and governance
 
+The canonical A2-A6 Owner Data Bundle is built with
+`scripts/build_owner_data_bundle.py`. It stores protected payloads only in
+`04_Owner_Stores` and emits hash/count/pointer receipts; preparation keeps
+Selection-125 and Final-872 access counters at zero. A6 binds the pinned
+45,336-row DAPFAM source manifest but remains fail-closed until A5 closeout.
+
 Model revisions, adapters, representation programs, evaluators, split hashes,
 budgets, and harnesses are frozen through canonical JSON and SHA-256 receipts.
 Protected qrels and split membership stay Owner-local. Selection is exposed at

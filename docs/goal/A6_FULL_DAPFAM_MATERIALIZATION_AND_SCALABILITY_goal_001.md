@@ -46,6 +46,13 @@ opportunity to improve the system after observing A5.
 
 ## Starting state and frozen authority
 
+The pre-A5 Owner Store bundle records the canonical DAPFAM source manifest and
+full-corpus inventory (`45,336` rows) by hash/pointer only. Its A6 marker is
+`SOURCE_HASHED`/`PENDING_A5_FROZEN_WINNER`; preparation does not materialize the
+corpus, select a winner, open qrels, or authorize execution. A6 remains
+`execution_permitted: false` until `PASS_A5_FINAL_CONFIRMATION` and a fresh
+admission/root are available.
+
 The A6/A7 phase amendment is the authority for this routing change:
 `control/armindex/a6/a6-a7-phase-amendment.v1.json`. The executable A6
 interface is
