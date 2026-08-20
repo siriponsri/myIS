@@ -19,6 +19,8 @@ last_material_update: 2026-08-19
 next_authorized_action: WAIT_FOR_VALID_A5_CLOSEOUT_AND_FROZEN_MATERIALIZATION_TARGET
 a6_winner_binding_schema: myis.armindex-a6-a5-winner-binding.v1
 a6_attempt_admission_schema: myis.armindex-a6-attempt-admission.v1
+continuation_mode: CONTINUE_AFTER_PASS_A5_WITH_FRESH_ADMISSION
+routine_owner_interaction: false
 publication_priority: TIER_1_REVIEWER_DEFENSIBLE_SCALABILITY
 ---
 
@@ -103,6 +105,20 @@ it is outside this goal.
 | Isolated materialization run completed or bounded failure closed | BLOCKED | coverage/checkpoint/failure receipts |
 | Aggregate-safe EDA, figures, and independent integrity audit | BLOCKED | validated metric and audit package |
 | A7 publication handoff prepared | BLOCKED | aggregate-safe A6 closeout bundle |
+
+## Minimal continuation policy
+
+A6 is the immediate post-A5 continuation, not a new exploratory branch. After
+the validated A5 frozen-winner binding is available, admit one fresh A6 root
+and continue without a routine Owner prompt or extra gate. Same-instance reuse
+is operational only: provider identity, quote, budget, TTL, health, runtime,
+and attempt root must all be fresh.
+
+Fix-forward is limited to operational recovery inside the isolated A6 attempt.
+Stop only for winner/configuration drift, source ambiguity, protected-data
+exposure, unknown budget/TTL, provider/process identity ambiguity,
+incompatible partial outputs, or failed integrity/safe-export checks. A6 never
+reopens Selection or Final and never changes the A5 winner.
 
 ## Execution flow
 

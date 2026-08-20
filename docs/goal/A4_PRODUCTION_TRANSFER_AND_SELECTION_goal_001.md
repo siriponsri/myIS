@@ -9,6 +9,9 @@ scientific_authority: false
 execution_permitted: false
 provider_instance_id: 47790578
 a4_auto_pass_continuation: true
+continuation_mode: CONDITIONAL_AUTO_CONTINUE_MINIMAL_TRANSITIONS
+routine_owner_interaction: false
+missing_handoff_policy: BLOCKED_OWNER_INPUT_NO_GPU_HOLD
 conditional_owner_decisions: [D1_START_CAMPAIGN, D2_OPEN_FINAL]
 a3_readiness_binding_uri: control/armindex/a4/a4-readiness-binding-20260819.json
 a3_readiness_binding_sha256: 4fb8b8f8d6d80941b0c76116d13c4cfd5199dbcd0d17e59152f0088c54c4f7fd
@@ -141,6 +144,21 @@ payload may be synthesized from HDEV-100.
   credentials, model payloads, and raw provider payloads remain Owner-local.
   Repository, chat, projections, and the A5 bundle receive only hashes, counts,
   safe IDs, receipts, and opaque pointers.
+
+## Minimal continuation policy
+
+This goal runs as one autonomous continuation. After a canonical receipt and
+its independent checks pass, the orchestrator advances to the next numbered
+step without another routine Owner prompt or a new micro-gate. Ordinary SSH,
+package, timeout, worker, checkpoint, cache, and deterministic staging faults
+are fix-forward/resume work inside the same attempt lineage.
+
+The only pre-Selection Owner-input stop is the missing or invalid real
+Selection-125 handoff. When that handoff is absent, record
+`BLOCKED_OWNER_INPUT`, release any GPU hold, and emit the exact Owner Store
+path/hash action. Never wait indefinitely, infer vectors, or use HDEV-100 as a
+substitute. Once the Owner handoff is present and validates, resume this goal
+lineage and consume Selection at most once.
 
 ## Provider, budget, and TTL authority
 

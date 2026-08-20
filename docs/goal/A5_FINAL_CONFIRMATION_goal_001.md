@@ -11,6 +11,9 @@ provider_instance_id: 47790578
 required_owner_decision: D2_OPEN_FINAL
 conditional_owner_preauthorization: D2_OPEN_FINAL_ON_A4_AUTOMATIC_PASS
 automatic_continuation_allowed: true
+continuation_mode: CONDITIONAL_AUTO_CONTINUE_MINIMAL_TRANSITIONS
+routine_owner_interaction: false
+next_phase_handoff_mode: IMMEDIATE_AFTER_PASS_A5
 final_query_count: 872
 protected_payloads_allowed: false
 previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
@@ -122,6 +125,19 @@ contract.
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
 | Safe return and independent audit | BLOCKED | final safe-return/audit receipts |
 | A5 closeout and A6 frozen-winner handoff | BLOCKED | terminal report and projections |
+
+## Minimal continuation policy
+
+After a valid conditional D2 receipt, this goal advances through fresh A5
+admission, Final-872, safe return, audit, and the A6 winner handoff without
+routine Owner prompts or additional micro-gates. Fix-forward and compatible
+checkpoint recovery remain internal engineering actions. The orchestrator
+must stop only for a real scientific, protected-data, budget/TTL, provider
+identity, evidence-integrity, or Owner-only boundary.
+
+On a valid `PASS_A5_FINAL_CONFIRMATION`, hand off exactly one frozen winner to
+A6 immediately. A5 failure or ambiguity closes with evidence and never starts
+A6; it must not be repaired by selecting a replacement system.
 
 ## Execution flow after D2
 

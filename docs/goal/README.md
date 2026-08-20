@@ -49,6 +49,11 @@
 - A5/A6 code parity may be checked on the existing instance in a fresh
   non-measured code-check root. Measured A5 and A6 attempts require separate
   fresh roots and admissions even when instance `47790578` is reused.
+- The approved continuation mode is conditional auto-continue with minimal
+  receipt transitions: routine engineering faults are repaired internally;
+  the real Selection-125 handoff remains the single pre-Selection Owner-input
+  stop, and A5/A6 still fail closed on scientific, protected-data, budget,
+  provider, or evidence-integrity boundaries.
 - Generated Obsidian/report projections are rebuilt from the shared read model;
   no generated Markdown is edited by hand. No publication figure is generated
   from the stopped pre-authority attempt.
