@@ -17,6 +17,9 @@ previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
 next_goal: docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md
 last_material_update: 2026-08-20
 next_authorized_action: WAIT_FOR_SELECTION_125_HANDOFF_AND_MANUAL_OR_CONDITIONAL_D2
+selection_handoff_contract_uri: docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md
+a5_pointer_bundle_schema: myis.armindex-a4-a5-pointer-bundle.v2
+publication_priority: TIER_1_REVIEWER_DEFENSIBLE_CONFIRMATION
 ---
 
 # Goal 001: A5 final confirmation
@@ -30,6 +33,10 @@ handoff specification,
 not permission to open Final. It may be used for aggregate-safe bundle
 validation and recovery planning while blocked, but it must not start a provider
 workload or inspect protected Final membership.
+
+The publication target is tier 1: Final-872 must provide complete two-system
+coverage, paired uncertainty, independent integrity review, and a frozen
+winner binding that A6 can consume without interpretation drift.
 
 The final split contains exactly 872 queries under the campaign contract. A5
 must not change the frozen comparison set, representation program, model
@@ -53,6 +60,9 @@ Do not proceed until the A4 goal has a canonical closeout with:
   aggregate-safe projections;
 - an A5 bundle manifest whose hashes resolve to clean pushed code and the A4
   closeout receipts.
+- the validated Owner-local Selection-125 handoff at
+  `docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md`, including
+  paired OUT-vector and evaluator-handoff commitments;
 - If continuity is requested, a conditional D2 receipt must bind all of the
   above plus the A4 automatic PASS record, A5 bundle self-hash, exact final
   split commitment, and `owner_conditional_approval: true`.
@@ -63,6 +73,8 @@ The bundle is full in provenance and interfaces, but pointer-only for protected
 data. Store the repository-safe portion under the campaign evidence/control
 conventions and the protected handoff under
 `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/<attempt-id>/`.
+Its validated schema is `myis.armindex-a4-a5-pointer-bundle.v2`; a v1 bundle is
+not sufficient for conditional D2.
 
 While A4 is running, the local preparation artifact is
 `control/armindex/a5/a5-pending-a4-selection-template.v1.json`. It is explicitly
@@ -74,11 +86,12 @@ created only after A4 closeout and validated Selection evidence.
 Required bundle members:
 
 1. clean code/runtime bundle, Git commit/tree, dependency and image identity;
-2. frozen finalist/program/model/license hashes and A4 Selection receipt;
+2. frozen finalist/program/prompt/representation/model/license/runtime hashes
+   and A4 Selection receipt;
 3. final evaluator contract, metric contract, split commitment hash, and
    expected count `872`;
-4. Owner-local evaluator handoff receipt, opaque final-input pointer, and
-   ephemeral token-map hash;
+4. Owner-local evaluator handoff receipt and opaque evaluator/final-input
+   pointers, plus ephemeral token-map hash;
 5. safe-export allowlist, provider admission template, watchdog/checkpoint
    schema, resume marker, and attempt-scoped ledger template;
 6. complete SHA-256 manifest and bundle self-hash;
@@ -103,7 +116,7 @@ contract.
 | Step | Status | Completion evidence |
 |---|---|---|
 | A4 closeout and Selection receipt verified | BLOCKED | A4 result/audit hashes |
-| A5 pointer-only bundle manifest built | PENDING | bundle and self-hash |
+| A5 pointer-only bundle manifest built | BLOCKED | A5 v2 bundle waits for real Selection-125 handoff |
 | D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | BLOCKED | decision receipt |
 | Fresh provider admission and final stage | BLOCKED | observation, quote, TTL, adoption |
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
@@ -115,8 +128,9 @@ contract.
 1. Validate the A4 closeout, bundle self-hash, finalist freeze, clean Git tree,
    and the exact D2 decision receipt (manual or conditional auto-pass). If any
    binding differs, stop.
-2. Create a new A5 attempt ID and isolated root on instance `47790578`; do not
-   reuse A4 workers, roots, PIDs, caches, or partial outputs.
+2. Create a new A5 attempt ID and isolated root named
+   `/opt/myis/a5-goal001-<UTC>` on instance `47790578`; do not reuse A4
+   workers, roots, PIDs, caches, quotes, budget admissions, or partial outputs.
 3. Obtain fresh provider identity, all-fee quote, TTL, budget admission,
    runtime verification, and protected-evaluator handoff. Do not infer current
    authority from the A4 quote or historical instance receipts.
@@ -144,7 +158,7 @@ Before a valid D2 receipt, validate the pointer-only bundle and its receipt hash
 opening the Final split:
 
 ```text
-rtk pytest -q tests/test_a4_readiness.py
+rtk pytest -q tests/test_a4_evaluator_selection.py tests/test_a4_selection_runner.py tests/test_a5_pending_handoff_validator.py tests/test_a6_pending_materialization_validator.py tests/test_a6_materialization.py tests/test_a6_preparation_bundle.py
 rtk git diff --check
 ```
 

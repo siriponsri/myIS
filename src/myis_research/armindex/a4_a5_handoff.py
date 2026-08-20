@@ -12,6 +12,8 @@ from ..kernel.canonical import canonical_sha256
 from ..protection import assert_aggregate_only
 
 _HASH = re.compile(r"^[a-f0-9]{64}$")
+_GIT_ID = re.compile(r"^[a-f0-9]{40}$")
+_GIT_REF = re.compile(r"^origin/[A-Za-z0-9._/-]+$")
 
 
 class A4A5HandoffError(ValueError):
@@ -88,6 +90,13 @@ def build_a5_pointer_bundle(
     final_split_commitment_sha256: str,
     final_input_pointer: str,
     evaluator_handoff_sha256: str,
+    evaluator_handoff_pointer: str,
+    safe_export_manifest_sha256: str,
+    git_commit: str,
+    git_tree: str,
+    git_ref: str,
+    clean_worktree: bool,
+    pushed_to_origin: bool,
     a5_reserved_usd: str | float,
     finalists: Sequence[Mapping[str, Any]],
     statistical_plan: Mapping[str, Any] | None = None,
@@ -96,9 +105,15 @@ def build_a5_pointer_bundle(
 
     if not isinstance(attempt_id, str) or not attempt_id.startswith("a4-goal001-"):
         raise A4A5HandoffError("A4 attempt identity is invalid")
-    for field, value in (("a4_coverage_sha256", a4_coverage_sha256), ("selection_receipt_sha256", selection_receipt_sha256), ("result_audit_sha256", result_audit_sha256), ("safe_return_sha256", safe_return_sha256), ("final_split_commitment_sha256", final_split_commitment_sha256), ("evaluator_handoff_sha256", evaluator_handoff_sha256)):
+    for field, value in (("a4_coverage_sha256", a4_coverage_sha256), ("selection_receipt_sha256", selection_receipt_sha256), ("result_audit_sha256", result_audit_sha256), ("safe_return_sha256", safe_return_sha256), ("final_split_commitment_sha256", final_split_commitment_sha256), ("evaluator_handoff_sha256", evaluator_handoff_sha256), ("safe_export_manifest_sha256", safe_export_manifest_sha256)):
         _hash(value, field)
     _opaque_pointer(final_input_pointer)
+    _opaque_pointer(evaluator_handoff_pointer)
+    _git_id(git_commit, "git_commit")
+    _git_id(git_tree, "git_tree")
+    _git_ref(git_ref)
+    if clean_worktree is not True or pushed_to_origin is not True:
+        raise A4A5HandoffError("A5 bundle requires a clean pushed Git tree")
     _positive_decimal(a5_reserved_usd, "a5_reserved_usd")
     rows = [_finalist(row) for row in finalists]
     if len(rows) != 2 or {row["role"] for row in rows} != {"static_common_baseline", "research_champion"}:
@@ -119,7 +134,7 @@ def build_a5_pointer_bundle(
     except ValueError as error:
         raise A4A5HandoffError("A5 statistical plan contains protected payload") from error
     body = {
-        "schema_version": "myis.armindex-a4-a5-pointer-bundle.v1",
+        "schema_version": "myis.armindex-a4-a5-pointer-bundle.v2",
         "status": "PASS_A4_A5_POINTER_ONLY_BUNDLE",
         "attempt_id": attempt_id,
         "a4_coverage_sha256": a4_coverage_sha256,
@@ -129,6 +144,13 @@ def build_a5_pointer_bundle(
         "final_split_commitment_sha256": final_split_commitment_sha256,
         "final_input_pointer": final_input_pointer,
         "evaluator_handoff_sha256": evaluator_handoff_sha256,
+        "evaluator_handoff_pointer": evaluator_handoff_pointer,
+        "safe_export_manifest_sha256": safe_export_manifest_sha256,
+        "git_commit": git_commit,
+        "git_tree": git_tree,
+        "git_ref": git_ref,
+        "clean_worktree": clean_worktree,
+        "pushed_to_origin": pushed_to_origin,
         "a5_reserved_usd": str(a5_reserved_usd),
         "final_registry": sorted(rows, key=lambda row: row["role"]),
         "statistical_plan": plan,
@@ -148,7 +170,9 @@ def validate_a5_pointer_bundle(value: Mapping[str, Any]) -> dict[str, Any]:
         "schema_version", "status", "attempt_id", "a4_coverage_sha256",
         "selection_receipt_sha256", "result_audit_sha256", "safe_return_sha256",
         "final_split_commitment_sha256", "final_input_pointer",
-        "evaluator_handoff_sha256", "a5_reserved_usd", "final_registry",
+        "evaluator_handoff_sha256", "evaluator_handoff_pointer",
+        "safe_export_manifest_sha256", "git_commit", "git_tree", "git_ref",
+        "clean_worktree", "pushed_to_origin", "a5_reserved_usd", "final_registry",
         "statistical_plan", "claim_boundary", "protected_payload_included",
         "bundle_sha256",
     }
@@ -158,7 +182,7 @@ def validate_a5_pointer_bundle(value: Mapping[str, Any]) -> dict[str, Any]:
         assert_aggregate_only(item)
     except ValueError as error:
         raise A4A5HandoffError("A5 bundle contains protected payload") from error
-    if item.get("schema_version") != "myis.armindex-a4-a5-pointer-bundle.v1" or item.get("status") != "PASS_A4_A5_POINTER_ONLY_BUNDLE":
+    if item.get("schema_version") != "myis.armindex-a4-a5-pointer-bundle.v2" or item.get("status") != "PASS_A4_A5_POINTER_ONLY_BUNDLE":
         raise A4A5HandoffError("A5 bundle schema is invalid")
     _hash(item.get("bundle_sha256"), "bundle_sha256")
     if item["bundle_sha256"] != canonical_sha256({key: value for key, value in item.items() if key != "bundle_sha256"}):
@@ -167,9 +191,15 @@ def validate_a5_pointer_bundle(value: Mapping[str, Any]) -> dict[str, Any]:
         raise A4A5HandoffError("A5 bundle crossed protected boundary")
     if not isinstance(item.get("attempt_id"), str) or not item["attempt_id"].startswith("a4-goal001-"):
         raise A4A5HandoffError("A4 attempt identity is invalid")
-    for field in ("a4_coverage_sha256", "selection_receipt_sha256", "result_audit_sha256", "safe_return_sha256", "final_split_commitment_sha256", "evaluator_handoff_sha256"):
+    for field in ("a4_coverage_sha256", "selection_receipt_sha256", "result_audit_sha256", "safe_return_sha256", "final_split_commitment_sha256", "evaluator_handoff_sha256", "safe_export_manifest_sha256"):
         _hash(item.get(field), field)
     _opaque_pointer(item.get("final_input_pointer"))
+    _opaque_pointer(item.get("evaluator_handoff_pointer"))
+    _git_id(item.get("git_commit"), "git_commit")
+    _git_id(item.get("git_tree"), "git_tree")
+    _git_ref(item.get("git_ref"))
+    if item.get("clean_worktree") is not True or item.get("pushed_to_origin") is not True:
+        raise A4A5HandoffError("A5 bundle is not clean and pushed")
     _positive_decimal(item.get("a5_reserved_usd"), "a5_reserved_usd")
     _validate_statistical_plan(item.get("statistical_plan"))
     rows = item.get("final_registry")
@@ -184,12 +214,20 @@ def validate_a5_pointer_bundle(value: Mapping[str, Any]) -> dict[str, Any]:
 
 def _finalist(value: Mapping[str, Any]) -> dict[str, Any]:
     item = deepcopy(dict(value))
-    if set(item) != {"role", "system_sha256", "program_sha256", "license_scope"}:
+    if set(item) != {
+        "role", "system_sha256", "program_sha256", "prompt_sha256",
+        "representation_sha256", "model_sha256", "license_sha256",
+        "runtime_sha256", "license_scope",
+    }:
         raise A4A5HandoffError("A5 finalist fields are invalid")
     if item["role"] not in {"static_common_baseline", "research_champion"}:
         raise A4A5HandoffError("A5 finalist role is invalid")
     _hash(item["system_sha256"], "system_sha256")
-    _hash(item["program_sha256"], "program_sha256")
+    for field in (
+        "program_sha256", "prompt_sha256", "representation_sha256",
+        "model_sha256", "license_sha256", "runtime_sha256",
+    ):
+        _hash(item[field], field)
     if item["license_scope"] not in {"commercial_capable", "research_only"}:
         raise A4A5HandoffError("A5 finalist license scope is invalid")
     expected_scope = {
@@ -217,6 +255,18 @@ def _positive_decimal(value: Any, field: str) -> Decimal:
     if not parsed.is_finite() or parsed <= 0:
         raise A4A5HandoffError(f"{field} must be a positive decimal")
     return parsed
+
+
+def _git_id(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not _GIT_ID.fullmatch(value):
+        raise A4A5HandoffError(f"{field} must be a 40-character Git object ID")
+    return value
+
+
+def _git_ref(value: Any) -> str:
+    if not isinstance(value, str) or not _GIT_REF.fullmatch(value):
+        raise A4A5HandoffError("git_ref must identify a pushed origin ref")
+    return value
 
 
 def _validate_statistical_plan(value: Any) -> None:

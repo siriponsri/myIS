@@ -50,8 +50,10 @@ def _counter(registry: dict) -> dict:
 def _input() -> dict:
     left = [1.0] * 100 + [0.0] * 25
     right = [0.0] * 125
-    return {
-        "selection_input_sha256": "f" * 64,
+    body = {
+        "selection_input_sha256": "",
+        "paired_out_vectors_sha256": "",
+        "evaluator_handoff_sha256": "1" * 64,
         "selection_query_count": 125,
         "selection_population": "OUT",
         "comparison_family_id": "a4-selection-frozen-finalists-v1",
@@ -73,6 +75,22 @@ def _input() -> dict:
             }
         ],
     }
+    body["paired_out_vectors_sha256"] = canonical_sha256(
+        {
+            "comparisons": [
+                {
+                    "comparison_id": body["comparisons"][0]["comparison_id"],
+                    "left_system_sha256": body["comparisons"][0]["left_system_sha256"],
+                    "right_system_sha256": body["comparisons"][0]["right_system_sha256"],
+                    "metrics": body["comparisons"][0]["metrics"],
+                }
+            ]
+        }
+    )
+    body["selection_input_sha256"] = canonical_sha256(
+        {key: value for key, value in body.items() if key != "selection_input_sha256"}
+    )
+    return body
 
 
 def test_selection_runner_returns_only_aggregate_receipt_and_writes_once(tmp_path: Path) -> None:
@@ -86,6 +104,8 @@ def test_selection_runner_returns_only_aggregate_receipt_and_writes_once(tmp_pat
     assert comparison["paired_effect"]["bootstrap_resamples"] == 10_000
     assert comparison["win_tie_loss"] == {"wins": 100, "ties": 25, "losses": 0}
     assert "metrics" not in comparison
+    assert receipt["paired_out_vectors_sha256"] == _input()["paired_out_vectors_sha256"]
+    assert receipt["evaluator_handoff_sha256"] == "1" * 64
     with pytest.raises(A4SelectionRunnerError, match="already exists"):
         run_selection_owner_local(_registry(), _input(), preflight_counter=_counter(_registry()), selection_output_path=output)
 
@@ -101,3 +121,33 @@ def test_selection_runner_rejects_wrong_count_or_registry_binding() -> None:
     counter["counter_sha256"] = canonical_sha256({key: value for key, value in counter.items() if key != "counter_sha256"})
     with pytest.raises(A4SelectionRunnerError, match="binding"):
         run_selection_owner_local(registry, _input(), preflight_counter=counter)
+
+
+def test_selection_runner_rejects_vector_hash_drift_and_protected_input() -> None:
+    registry = _registry()
+    source = _input()
+    source["paired_out_vectors_sha256"] = "0" * 64
+    source["selection_input_sha256"] = canonical_sha256(
+        {key: value for key, value in source.items() if key != "selection_input_sha256"}
+    )
+    with pytest.raises(A4SelectionRunnerError, match="vector hash"):
+        run_selection_owner_local(registry, source, preflight_counter=_counter(registry))
+    source = _input()
+    source["comparisons"][0]["query_ids"] = ["protected"]
+    source["paired_out_vectors_sha256"] = canonical_sha256(
+        {
+            "comparisons": [
+                {
+                    "comparison_id": source["comparisons"][0]["comparison_id"],
+                    "left_system_sha256": source["comparisons"][0]["left_system_sha256"],
+                    "right_system_sha256": source["comparisons"][0]["right_system_sha256"],
+                    "metrics": source["comparisons"][0]["metrics"],
+                }
+            ]
+        }
+    )
+    source["selection_input_sha256"] = canonical_sha256(
+        {key: value for key, value in source.items() if key != "selection_input_sha256"}
+    )
+    with pytest.raises(A4SelectionRunnerError, match="protected payload"):
+        run_selection_owner_local(registry, source, preflight_counter=_counter(registry))

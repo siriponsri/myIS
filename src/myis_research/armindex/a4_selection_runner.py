@@ -51,11 +51,12 @@ def run_selection_owner_local(
     _validate_registry(checked_registry)
     counter = _safe_copy(preflight_counter, "Selection preflight counter")
     _validate_counter(counter, checked_registry["registry_sha256"])
-    source = _protected_input(protected_input)
+    source = _protected_input(protected_input, role="Selection input")
     if source.get("selection_query_count") != 125:
         raise A4SelectionRunnerError("Selection is frozen at exactly 125 queries")
     if source.get("selection_population") != "OUT":
         raise A4SelectionRunnerError("Selection primary population must be OUT")
+    _validate_selection_input_hashes(source)
     rows = source.get("comparisons")
     if not isinstance(rows, list) or not rows:
         raise A4SelectionRunnerError("Selection input requires comparisons")
@@ -70,6 +71,8 @@ def run_selection_owner_local(
         "comparison_family_id": _text(source.get("comparison_family_id"), "comparison_family_id"),
         "selection_query_count": 125,
         "selection_population": "OUT",
+        "paired_out_vectors_sha256": source["paired_out_vectors_sha256"],
+        "evaluator_handoff_sha256": source["evaluator_handoff_sha256"],
         "claim_boundary": "One aggregate-only A4 Selection exposure; no Final result and no protected payload exported.",
         "protected_payload_included": False,
     }
@@ -84,7 +87,7 @@ def run_selection_owner_local(
 
 
 def _evaluate_comparison(value: Mapping[str, Any], source: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
-    item = _protected_input(value)
+    item = _protected_input(value, role="Selection comparison")
     required = {"comparison_id", "left_system_sha256", "right_system_sha256", "metrics"}
     if set(item) - (required | {"operational"}) or not required.issubset(item):
         raise A4SelectionRunnerError("Selection comparison fields are invalid")
@@ -203,10 +206,15 @@ def _validate_counter(value: Mapping[str, Any], registry_sha256: str) -> None:
         raise A4SelectionRunnerError("Selection preflight checks are incomplete")
 
 
-def _protected_input(value: Mapping[str, Any]) -> dict[str, Any]:
+def _protected_input(value: Mapping[str, Any], *, role: str) -> dict[str, Any]:
     if not isinstance(value, Mapping):
-        raise A4SelectionRunnerError("Selection input must be an object")
-    return deepcopy(dict(value))
+        raise A4SelectionRunnerError(f"{role} must be an object")
+    item = deepcopy(dict(value))
+    try:
+        assert_aggregate_only(item)
+    except ValueError as error:
+        raise A4SelectionRunnerError(f"{role} contains protected payload") from error
+    return item
 
 
 def _safe_copy(value: Mapping[str, Any], role: str) -> dict[str, Any]:
@@ -264,6 +272,52 @@ def _hash(value: Any, field: str) -> str:
     except ValueError as error:
         raise A4SelectionRunnerError(f"{field} must be SHA-256") from error
     return value
+
+
+def _validate_selection_input_hashes(source: Mapping[str, Any]) -> None:
+    required = {
+        "selection_input_sha256",
+        "paired_out_vectors_sha256",
+        "evaluator_handoff_sha256",
+        "selection_query_count",
+        "selection_population",
+        "comparison_family_id",
+        "bootstrap_seed",
+        "comparisons",
+    }
+    if set(source) != required:
+        raise A4SelectionRunnerError("Selection handoff fields are incomplete or unexpected")
+    _hash(source["selection_input_sha256"], "selection_input_sha256")
+    _hash(source["paired_out_vectors_sha256"], "paired_out_vectors_sha256")
+    _hash(source["evaluator_handoff_sha256"], "evaluator_handoff_sha256")
+    if source["selection_input_sha256"] != canonical_sha256(
+        {key: value for key, value in source.items() if key != "selection_input_sha256"}
+    ):
+        raise A4SelectionRunnerError("Selection input hash drifted")
+    if source["paired_out_vectors_sha256"] != canonical_sha256(_vector_payload(source)):
+        raise A4SelectionRunnerError("paired OUT vector hash drifted")
+
+
+def _vector_payload(source: Mapping[str, Any]) -> dict[str, Any]:
+    rows = source.get("comparisons")
+    if not isinstance(rows, list):
+        raise A4SelectionRunnerError("Selection comparisons are invalid")
+    payload = []
+    for raw in rows:
+        if not isinstance(raw, Mapping):
+            raise A4SelectionRunnerError("Selection comparison is invalid")
+        metrics = raw.get("metrics")
+        if not isinstance(metrics, Mapping):
+            raise A4SelectionRunnerError("Selection metric vectors are invalid")
+        payload.append(
+            {
+                "comparison_id": raw.get("comparison_id"),
+                "left_system_sha256": raw.get("left_system_sha256"),
+                "right_system_sha256": raw.get("right_system_sha256"),
+                "metrics": metrics,
+            }
+        )
+    return {"comparisons": payload}
 
 
 def _text(value: Any, field: str) -> str:

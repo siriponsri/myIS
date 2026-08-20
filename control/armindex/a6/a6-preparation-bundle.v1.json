@@ -2,7 +2,7 @@
   "a6_contract_sha256": "eb41ffcf070470a610cdc5fb0a948d26e018c12a6413f1721d74ba404c118c45",
   "authorized_instance_id": 47790578,
   "bundle_id": "A6_PREPARATION_PENDING_A5_CLOSEOUT",
-  "bundle_sha256": "2e4061392240085027d1df4e02b7be7a5581d1fcca51b4bdbd0f34263408b7ff",
+  "bundle_sha256": "40acfe01e8584141f632e3fa90360527236d60f359f8045b04a362a2a2c0425f",
   "claim_boundary": "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
   "execution_permitted": false,
   "final_accesses": 0,
@@ -53,7 +53,7 @@
   "source_file_sha256": {
     "control/armindex/a6/a6-full-dapfam-execution-contract.v1.json": "744ed2a3d686da425083923ec6e2f273ad2c9d2fbb3902259acf8e8624365558",
     "control/armindex/a6/a6-pending-a5-closeout-template.v1.json": "75eef36e712dfc1b27b7a69ee43d3041f06d9eb2d69303dbfb0688258b403ef4",
-    "docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md": "cb531b7b1d8bc99bad2b32d90994187968fb6ab72e91491788f2c1195e21e6b1"
+    "docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md": "62ef18cef592b8ba49e6c95de5f13d75437d806e9f7e3f779e1dbea5e8abb367"
   },
   "stale_runtime_reuse_forbidden": true,
   "status": "PENDING_A5_CLOSEOUT",

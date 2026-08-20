@@ -17,6 +17,9 @@ previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
 next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
 last_material_update: 2026-08-19
 next_authorized_action: WAIT_FOR_VALID_A5_CLOSEOUT_AND_FROZEN_MATERIALIZATION_TARGET
+a6_winner_binding_schema: myis.armindex-a6-a5-winner-binding.v1
+a6_attempt_admission_schema: myis.armindex-a6-attempt-admission.v1
+publication_priority: TIER_1_REVIEWER_DEFENSIBLE_SCALABILITY
 ---
 
 # Goal 001: A6 full-DAPFAM materialization and scalability
@@ -27,6 +30,10 @@ Materialize exactly one configuration frozen by the valid A5 closeout across
 the approved complete DAPFAM corpus. A6 produces reproducible operational
 evidence that the confirmed configuration can be rendered, embedded or indexed
 as applicable, checkpointed, recovered, and safely returned at corpus scale.
+
+The publication target is tier 1 operational evidence: complete coverage,
+determinism, resource/cost/latency accounting, recovery lineage, failure
+taxonomy, independent audit, and figures/tables that never overclaim quality.
 
 This is deliberately post-confirmatory. Its publication contribution is
 deployment and scalability evidence: source coverage, family/document/chunk/
@@ -62,7 +69,10 @@ The checked-in preparation interface is
 `control/armindex/a6/a6-pending-a5-closeout-template.v1.json`. It has no winner,
 corpus hash, Owner Store path, or execution permission. It can be validated
 locally while A4/A5 run, but cannot be turned into an A6 attempt without the
-complete A5 binding and a new A6 admission.
+complete A5 binding and a new A6 admission. The post-A5 code validators require
+`myis.armindex-a6-a5-winner-binding.v1` and
+`myis.armindex-a6-attempt-admission.v1`; these bind exactly one winner and
+forbid stale runtime reuse.
 
 ## Non-adaptive scientific boundary
 
@@ -88,7 +98,7 @@ it is outside this goal.
 |---|---|---|
 | A5 terminal/audit/safe-return bindings validated | BLOCKED | hash-verified predecessor receipt set |
 | One materialization target frozen by A5 | BLOCKED | target registry and exact configuration hashes |
-| Fresh A6 budget, provider, TTL, and health admission | BLOCKED | A6-specific admission receipt |
+| Fresh A6 budget, provider, TTL, and health admission | BLOCKED | A6-specific admission receipt and fresh-attempt validator |
 | Owner-local full-corpus source and safe-export manifest frozen | BLOCKED | source hash and protected-boundary scan |
 | Isolated materialization run completed or bounded failure closed | BLOCKED | coverage/checkpoint/failure receipts |
 | Aggregate-safe EDA, figures, and independent integrity audit | BLOCKED | validated metric and audit package |
@@ -103,7 +113,8 @@ it is outside this goal.
    changing either.
 2. **Admit the A6 workload.** Create a new A6 attempt ID and an isolated
    Owner Store root at
-   `<MYIS_ROOT>/04_Owner_Stores/armindex/a6/<attempt-id>/`. Obtain a fresh
+   `<MYIS_ROOT>/04_Owner_Stores/armindex/a6/<attempt-id>/` and a remote root
+   `/opt/myis/a6-goal001-<UTC>`. Obtain a fresh
    provider identity, all-fee quote, whole-workload budget admission, TTL,
    runtime/GPU/CPU/disk/RAM health receipt, watchdog, checkpoint, and safe
    return plan. Instance `47790578` may be retained and reused only after A5
@@ -172,8 +183,12 @@ bounded operational finding; do not substitute another target.
 Before launch, validate the amendment, A6 execution contract, target binding,
 budget admission, source manifest, and export allowlist. After execution,
 validate complete accounting, determinism, safe return, teardown, and the
-independent result-integrity audit. Also run focused repository validators and
-`rtk git diff --check` before closeout.
+independent result-integrity audit. Also run the focused A5/A6 contract suite
+and `rtk git diff --check` before closeout:
+
+```text
+rtk pytest -q tests/test_a5_pending_handoff_validator.py tests/test_a6_pending_materialization_validator.py tests/test_a6_materialization.py tests/test_a6_preparation_bundle.py
+```
 
 Terminal states are `PASS_A6_FULL_DAPFAM_MATERIALIZATION`,
 `STOP_A6_WITH_OPERATIONAL_EVIDENCE`, or `BLOCKED_OWNER_ACTION`. A6 never

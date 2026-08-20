@@ -24,6 +24,9 @@ next_authorized_action: OWNER_ACTION_SUPPLY_HASH_BOUND_SELECTION_125_HANDOFF
 closeout_attempt_id: a4-goal001-20260819T180000Z-a4x12
 closeout_audit_sha256: 08b83b848023c52967329b769d7b230cf7009290664e95ddd340d569bb0157b5
 selection_handoff_blocker_sha256: 32e5a634b40226a9af2f766fb0f2949a539d3c869968d10324056f25ac839822
+selection_handoff_contract_uri: docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md
+selection_handoff_status: BLOCKED_OWNER_INPUT
+publication_priority: TIER_1_REVIEWER_DEFENSIBLE_EVIDENCE
 ---
 
 # Goal 001: A4 production transfer and Selection
@@ -47,7 +50,9 @@ commercial champions without retrofitting either after exposure.
 
 The goal does not optimize for a positive result. A4 scientific authority is
 created only by valid measured receipts and an independent result-integrity
-audit; this goal document is not a numeric source of truth.
+audit; this goal document is not a numeric source of truth. Publication impact
+is tier 1: Selection-125 must preserve paired uncertainty and W/T/L evidence,
+and every downstream A5/A6 claim must remain independently auditable.
 
 ## Starting state
 
@@ -64,19 +69,23 @@ observation on 2026-08-19 identified four RTX 3090 GPUs, Python 3.11, 190 GB
 free disk, and historical A2/A3 roots. Historical roots, PIDs, watchdogs,
 checkpoints, and receipts are not reusable A4 lineage. Any stale process must
 be observed, classified, and reaped only after its identity is proven orphaned.
+The Owner handoff contract is
+`docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md`; no Selection
+payload may be synthesized from HDEV-100.
 
 ## Work status
 
 | Step | Status | Completion evidence |
 |---|---|---|
-| Canonical A3/A4 integrity and contract validation | PENDING | validator output and input hash record |
-| Fresh provider admission and isolated A4 attempt | PENDING | provider observation, quote, admission, root proof |
-| A4 runtime/profile stage and smoke checks | PENDING | stage, runtime, watchdog, and dry-run receipts |
-| FAST/BALANCED/DEEP measured execution | PENDING | complete profile coverage and aggregate receipts |
-| Legal transfer isolation and unsupported-map evidence | PENDING | transfer receipt with zero protected access |
-| One-shot Selection exposure | PENDING | preflight counter and Selection receipt; maximum one |
-| A5 hash/pointer-only bundle | PENDING | bundle manifest, evaluator handoff, SHA-256 closure |
-| Safe return, audit, projections, and closeout | PENDING | safe-return receipt, result audit, LO handoff |
+| Canonical A3/A4 integrity and contract validation | COMPLETE | A3 readiness binding and A4 closeout receipts |
+| Fresh provider admission and isolated A4 attempt | COMPLETE | A4 admission and attempt `a4-goal001-20260819T180000Z-a4x12` |
+| A4 runtime/profile stage and smoke checks | COMPLETE | runtime, watchdog, and profile receipts |
+| FAST/BALANCED/DEEP measured execution | COMPLETE | complete profile coverage and aggregate receipts |
+| Legal transfer isolation and unsupported-map evidence | COMPLETE | isolated unsupported transfer receipt |
+| One-shot Selection-125 owner handoff | BLOCKED | blocker receipt `32e5a634...` and handoff contract |
+| One-shot Selection exposure | BLOCKED | preflight counter and Selection receipt; maximum one |
+| A5 v2 hash/pointer-only bundle | BLOCKED | real handoff, finalist hashes, safe-export and Git closure |
+| Safe return, audit, projections, and closeout | COMPLETE | A4 audit/safe-return plus recorded Selection blocker |
 
 ## Frozen scientific and safety invariants
 
@@ -193,15 +202,21 @@ be observed, classified, and reaped only after its identity is proven orphaned.
    or feed the diagnostic back into ArmIndex.
 8. **Freeze the Selection registry and consume Selection.** After all A4
    development checks pass, freeze the distinct at-most-four finalist registry
-   and its comparator relationships, then atomically consume the owner-local
-   preflight counter once. Perform at most one Selection exposure using the
-   frozen lexicographic rule and paired statistics. Record the research and
-   commercial champion designations, Selection receipt, and finalist hashes. If
-   the preflight counter, license check, Pareto frontier, profile completeness,
-   legal isolation, protected boundary, or registry closure fails, do not open
-   Selection.
+   and its comparator relationships, then validate the owner-local
+   `docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md` contract before
+   consuming the preflight counter once. Perform at most one Selection exposure
+   using exactly 125 OUT paired vectors, the frozen lexicographic rule, 10,000
+   bootstrap resamples, 95% confidence intervals, rank-biserial effect, and
+   W/T/L. Record the research and commercial champion designations, Selection
+   receipt, and finalist hashes. If the handoff hash, vector count, evaluator
+   handoff, preflight counter, license check, Pareto frontier, profile
+   completeness, legal isolation, protected boundary, or registry closure
+   fails, do not open Selection.
 9. **Prepare A5 handoff.** Build the A5 bundle described in
-   `docs/goal/A5_FINAL_CONFIRMATION_goal_001.md`. Keep protected inputs as
+   `docs/goal/A5_FINAL_CONFIRMATION_goal_001.md` using the v2 pointer-bundle
+   contract. Bind finalist program/prompt/representation/model/license/runtime
+   hashes, evaluator handoff pointer, Final-872 commitment, safe-export
+   manifest, and clean pushed Git commit/tree. Keep protected inputs as
    Owner-local opaque pointers and hashes. Do not materialize or copy raw final
    payloads to the repository, chat, projections, or the remote staging root.
 10. **Return and audit.** Stop workers at a safe boundary, validate the

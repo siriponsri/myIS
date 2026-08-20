@@ -24,6 +24,7 @@ from myis_research.armindex.a4_selection import (
 
 
 H = "a" * 64
+GIT = "1" * 40
 
 
 def _profile(name: str) -> dict:
@@ -96,10 +97,13 @@ def test_frontier_and_a5_pointer_bundle() -> None:
     bundle = build_a5_pointer_bundle(
         attempt_id="a4-goal001-20260819T010203Z", a4_coverage_sha256=H, selection_receipt_sha256=H,
         result_audit_sha256=H, safe_return_sha256=H, final_split_commitment_sha256=H,
-        final_input_pointer="a5/final-input", evaluator_handoff_sha256=H, a5_reserved_usd="8",
+        final_input_pointer="a5/final-input", evaluator_handoff_sha256=H,
+        evaluator_handoff_pointer="a5/evaluator-handoff", safe_export_manifest_sha256=H,
+        git_commit=GIT, git_tree=GIT, git_ref="origin/main", clean_worktree=True,
+        pushed_to_origin=True, a5_reserved_usd="8",
         finalists=[
-            {"role": "static_common_baseline", "system_sha256": H, "program_sha256": H, "license_scope": "commercial_capable"},
-            {"role": "research_champion", "system_sha256": "b" * 64, "program_sha256": "c" * 64, "license_scope": "research_only"},
+            {"role": "static_common_baseline", "system_sha256": H, "program_sha256": H, "prompt_sha256": H, "representation_sha256": H, "model_sha256": H, "license_sha256": H, "runtime_sha256": H, "license_scope": "commercial_capable"},
+            {"role": "research_champion", "system_sha256": "b" * 64, "program_sha256": "c" * 64, "prompt_sha256": H, "representation_sha256": H, "model_sha256": H, "license_sha256": H, "runtime_sha256": H, "license_scope": "research_only"},
         ],
     )
     assert validate_a5_pointer_bundle(bundle)["bundle_sha256"] == bundle["bundle_sha256"]
@@ -107,7 +111,10 @@ def test_frontier_and_a5_pointer_bundle() -> None:
         build_a5_pointer_bundle(
             attempt_id="a4-goal001-20260819T010203Z", a4_coverage_sha256=H, selection_receipt_sha256=H,
             result_audit_sha256=H, safe_return_sha256=H, final_split_commitment_sha256=H,
-            final_input_pointer="/private/final", evaluator_handoff_sha256=H, a5_reserved_usd="8", finalists=[],
+            final_input_pointer="/private/final", evaluator_handoff_sha256=H,
+            evaluator_handoff_pointer="a5/evaluator-handoff", safe_export_manifest_sha256=H,
+            git_commit=GIT, git_tree=GIT, git_ref="origin/main", clean_worktree=True,
+            pushed_to_origin=True, a5_reserved_usd="8", finalists=[],
         )
 
 
@@ -126,10 +133,12 @@ def test_a5_finalizer_rejects_invalid_pointer_reserve_license_and_plan() -> None
     kwargs = dict(
         attempt_id="a4-goal001-20260819T010203Z", a4_coverage_sha256=H, selection_receipt_sha256=H,
         result_audit_sha256=H, safe_return_sha256=H, final_split_commitment_sha256=H,
-        evaluator_handoff_sha256=H,
+        evaluator_handoff_sha256=H, evaluator_handoff_pointer="a5/evaluator-handoff",
+        safe_export_manifest_sha256=H, git_commit=GIT, git_tree=GIT,
+        git_ref="origin/main", clean_worktree=True, pushed_to_origin=True,
         finalists=[
-            {"role": "static_common_baseline", "system_sha256": H, "program_sha256": H, "license_scope": "commercial_capable"},
-            {"role": "research_champion", "system_sha256": "b" * 64, "program_sha256": "c" * 64, "license_scope": "research_only"},
+            {"role": "static_common_baseline", "system_sha256": H, "program_sha256": H, "prompt_sha256": H, "representation_sha256": H, "model_sha256": H, "license_sha256": H, "runtime_sha256": H, "license_scope": "commercial_capable"},
+            {"role": "research_champion", "system_sha256": "b" * 64, "program_sha256": "c" * 64, "prompt_sha256": H, "representation_sha256": H, "model_sha256": H, "license_sha256": H, "runtime_sha256": H, "license_scope": "research_only"},
         ],
     )
     for bad in ("../private/final", "0", "-1"):
@@ -148,3 +157,22 @@ def test_a5_finalizer_rejects_invalid_pointer_reserve_license_and_plan() -> None
     ]
     with pytest.raises(A4A5HandoffError):
         build_a5_pointer_bundle(**{**kwargs, "finalists": bad_finalists}, final_input_pointer="a5/final", a5_reserved_usd="8")
+
+
+def test_a5_pointer_bundle_rejects_unpushed_or_incomplete_binding() -> None:
+    finalists = [
+        {"role": "static_common_baseline", "system_sha256": H, "program_sha256": H, "prompt_sha256": H, "representation_sha256": H, "model_sha256": H, "license_sha256": H, "runtime_sha256": H, "license_scope": "commercial_capable"},
+        {"role": "research_champion", "system_sha256": "b" * 64, "program_sha256": "c" * 64, "prompt_sha256": H, "representation_sha256": H, "model_sha256": H, "license_sha256": H, "runtime_sha256": H, "license_scope": "research_only"},
+    ]
+    kwargs = dict(
+        attempt_id="a4-goal001-20260819T010203Z", a4_coverage_sha256=H, selection_receipt_sha256=H,
+        result_audit_sha256=H, safe_return_sha256=H, final_split_commitment_sha256=H,
+        final_input_pointer="a5/final", evaluator_handoff_sha256=H,
+        evaluator_handoff_pointer="a5/evaluator-handoff", safe_export_manifest_sha256=H,
+        git_commit=GIT, git_tree=GIT, git_ref="origin/main", clean_worktree=True,
+        pushed_to_origin=True, a5_reserved_usd="8", finalists=finalists,
+    )
+    with pytest.raises(A4A5HandoffError):
+        build_a5_pointer_bundle(**{**kwargs, "clean_worktree": False})
+    with pytest.raises(A4A5HandoffError):
+        build_a5_pointer_bundle(**{**kwargs, "finalists": [{**finalists[0], "runtime_sha256": None}, finalists[1]]})

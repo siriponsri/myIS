@@ -4,9 +4,9 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `CLOSED` | `CLOSED_WITH_EVIDENCE_SELECTION_HANDOFF_BLOCKED` | Complete four-profile A4 transfer evidence; Selection-125 handoff missing, Selection/Final remain unopened |
-| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_PRESELECTION_HANDOFF_AND_D2` | Frozen two-system Final-872 confirmation; waits for validated Selection-125 handoff and then `D2_OPEN_FINAL` or a hash-bound conditional receipt |
-| [A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md](A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md) | `BLOCKED` | `BLOCKED_A5_CLOSEOUT` | Post-confirmatory materialization of exactly one A5-frozen winner over full DAPFAM; operational scalability only; no Selection/Final/tuning feedback |
+| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `CLOSED` | `CLOSED_WITH_EVIDENCE_SELECTION_HANDOFF_BLOCKED` | Complete A4 evidence; use the [Selection-125 Owner handoff](../operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md), then consume Selection at most once |
+| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_PRESELECTION_HANDOFF_AND_D2` | Tier-1 frozen two-system Final-872 confirmation; waits for validated handoff and `D2_OPEN_FINAL` or a hash-bound conditional receipt |
+| [A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md](A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md) | `BLOCKED` | `BLOCKED_A5_CLOSEOUT` | Tier-1 post-confirmatory materialization of exactly one A5-frozen winner over full DAPFAM; operational scalability only |
 | [A7_PUBLICATION_AND_RELEASE_goal_001.md](A7_PUBLICATION_AND_RELEASE_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D3` | Publication and release from validated aggregate-safe A0-A6 evidence after `D3_SUBMIT_RELEASE` |
 
 ## Historical goal registry
@@ -20,7 +20,7 @@
 | [A2_PER_ARM_AUTOINDEX_goal_001.md](A2_PER_ARM_AUTOINDEX_goal_001.md) | `CLOSED` | `HISTORICAL_PRELAUNCH_STOP` | Historical cyclic-provenance prelaunch stop |
 | [A2_PER_ARM_AUTOINDEX_goal_002.md](A2_PER_ARM_AUTOINDEX_goal_002.md) | `CLOSED` | `HISTORICAL_PRELAUNCH_AUTHORITY_CONTRADICTION` | Historical v2 prelaunch stop; never reuse for execution |
 
-## Documentation backlog disposition (2026-08-15)
+## Documentation backlog disposition (2026-08-20)
 
 - The A2 handoff chain is retained in place: audits `001`-`012`, implementation
   handoffs `im_001_001` through `im_010_001`, and long-run handoffs `lo_001_001`
@@ -42,6 +42,13 @@
   by `D2_OPEN_FINAL` or the Owner's explicit hash-bound conditional auto-pass
   receipt after a complete, audited A4 PASS; its bundle may contain hashes,
   counts, receipts, and opaque pointers but never raw protected Final payloads.
+- The current Owner input contract is
+  `docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md`. It is the only
+  valid route for clearing the Selection blocker; HDEV-100 cannot substitute
+  for Selection-125 vectors.
+- A5/A6 code parity may be checked on the existing instance in a fresh
+  non-measured code-check root. Measured A5 and A6 attempts require separate
+  fresh roots and admissions even when instance `47790578` is reused.
 - Generated Obsidian/report projections are rebuilt from the shared read model;
   no generated Markdown is edited by hand. No publication figure is generated
   from the stopped pre-authority attempt.
