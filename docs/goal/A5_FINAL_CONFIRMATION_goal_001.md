@@ -127,7 +127,7 @@ contract.
 | Step | Status | Completion evidence |
 |---|---|---|
 | A4 closeout and Selection receipt verified | PASS | A4 coverage, safe-return, legal-isolation, and result-integrity receipts |
-| A5 pointer-only bundle manifest built | PASS | Rebuilt v6 bundle plus aggregate-safe provenance manifest and opaque Final-872 receipt in Owner Store |
+| A5 pointer-only bundle manifest built | PASS | Rebuilt v7 bundle plus aggregate-safe provenance manifest and opaque Final-872 receipt in Owner Store |
 | D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | PREAUTHORIZED_PENDING_FRESH_INSTANCE | Automatic D2 is authorized by Owner, but no Final access has occurred |
 | Fresh provider admission and final stage | PAUSED | Must use a fresh instance/root after the current instance is destroyed |
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |

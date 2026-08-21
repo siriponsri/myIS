@@ -9,11 +9,11 @@
   "execution_permitted": false,
   "provider_instance_id": 47790578,
   "provider_disposition": "DESTROYED_BY_OWNER_AFTER_SAFE_RETURN",
-  "bundle_pointer": "04_Owner_Stores/armindex/a5/provenance/a5-pointer-bundle-v6-20260822.json",
-  "bundle_sha256": "1eaa7fc465664c0e46178b8283364a8ec70f020296245d0316399b1e768e8b5a",
+  "bundle_pointer": "04_Owner_Stores/armindex/a5/provenance/a5-pointer-bundle-v7-20260822.json",
+  "bundle_sha256": "fa5c1ce719b9ece89c7e4fd09698f4592234437daebbdfd014e3be5d8caf1fed",
   "bundle_structural_validation": "PASS_STRUCTURAL_AND_PROVENANCE_MANIFEST_BOUND",
   "provenance_manifest_pointer": "04_Owner_Stores/armindex/a5/provenance/a5-finalist-provenance-manifest-20260822.json",
-  "provenance_manifest_sha256": "c0e4e271d358bb4cd5a51859baea794d25849ae996c9df0c2154b186022fea0e",
+  "provenance_manifest_sha256": "853b884d01e222471194cf911028056e2ed38311c4cb753b7d82c7031fb098bb",
   "opaque_final_input_receipt_pointer": "04_Owner_Stores/armindex/a5/final-872-input/receipt.json",
   "opaque_final_input_receipt_sha256": "355afca60c31603ee81219da571f7e2d73fae0c2db1bd1bf55a03166a556ff4",
   "selection_accesses": 1,
@@ -72,8 +72,8 @@
       "field": "git_binding",
       "status": "VERIFIED",
       "observed": {
-        "git_commit": "d065fdb817709fa54ad3320cba30d90ecb11415e",
-        "git_tree": "b61bc0245e04dcf343f33032e96afdf3b991c0f5",
+        "git_commit": "cc3a87b67dc19f0b5ca276007fdd36f56c92fc6b",
+        "git_tree": "fa08e7a9eadce10eeefc426565aa7dd78d726324",
         "git_ref": "origin/main"
       }
     },
@@ -104,5 +104,5 @@
   "next_gate": "A5_PRECHECK_ON_FRESH_INSTANCE",
   "a6_status": "PENDING_A5_CLOSEOUT",
   "claim_boundary": "No A5 Final result exists; A6 full-corpus materialization remains unopened.",
-  "receipt_sha256": "ffc03a966cbae405d993f14eee99a10116d1d150db3ddb79119ee36408d43f49"
+  "receipt_sha256": "697608c57e51c684617e67a25d075480635c3622d550be047083c3ad01483896"
 }
