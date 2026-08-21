@@ -80,11 +80,22 @@
         "disk_available_gib": 130,
         "workers_found": 0
       }
+    },
+    {
+      "field": "protected_access_incident",
+      "status": "CONTAINED_READ_ONLY_NO_EXPORT",
+      "observed": {
+        "file_class": "protected_ranking_package_json",
+        "file_modified": false,
+        "file_exported": false,
+        "further_protected_inspection": false
+      },
+      "gap": "The package contents must not be used as evidence; no additional forensic inspection is authorized in this session."
     }
   ],
-  "required_owner_action": "Stage a canonical aggregate-safe provenance manifest resolving both finalist prompt/model/representation hashes and a valid opaque pointer plus receipt for the protected Final-872 input. Do not export payload, qrels, membership, IDs, rankings, or per-query outcomes.",
+  "required_owner_action": "Stage a canonical aggregate-safe provenance manifest resolving both finalist prompt/model/representation hashes and a valid opaque pointer plus receipt for the protected Final-872 input. Preserve the contained read-only ranking-package incident; do not reuse its contents and do not export payload, qrels, membership, IDs, rankings, or per-query outcomes.",
   "next_gate": "A5_PRECHECK_AFTER_PROVENANCE_PASS",
   "a6_status": "PENDING_A5_CLOSEOUT",
   "claim_boundary": "No A5 Final result exists; A6 full-corpus materialization remains unopened.",
-  "receipt_sha256": "988cc22c76437bc7cfd81d3058ef83e6ce460f7565c64976eec14409ff1fccc9"
+  "receipt_sha256": "92d9668c3e69abcb5da32467b4dad3fbb9a11270c831cf2c56f9efb3d8549ddf"
 }
