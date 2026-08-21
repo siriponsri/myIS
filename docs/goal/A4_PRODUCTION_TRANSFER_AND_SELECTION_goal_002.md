@@ -60,6 +60,13 @@ manual `D2_OPEN_FINAL` ที่ตรวจสอบได้
   `OUT nDCG@10`
 - Selection population `OUT`, exactly `125` paired units
 
+Selection has two explicit, hash-bound counts: the protected Selection scope is
+`125` queries, and the current canonical evaluator receipt identifies `90`
+`OUT`-eligible queries. OUT quality vectors and paired statistics use the
+eligible OUT denominator defined by the publication contract; they must contain
+90 values and must never be padded with the 35 non-eligible scope members.
+The scope remains 125 for retrieval coverage, disjointness, and access control.
+
 ห้ามเปลี่ยน model weights, representation semantics, candidate depth, evaluator
 semantics, split membership, tie policy, bootstrap count (`10,000`) หรือ metric
 definitionเพื่อให้ผลดีขึ้น

@@ -61,7 +61,8 @@ The aggregate-safe manifest must contain exactly these input commitments:
 | `selection_input_sha256` | SHA-256 of the canonical input body excluding this field |
 | `paired_out_vectors_sha256` | SHA-256 of canonical comparison IDs/system hashes/three metric vectors |
 | `evaluator_handoff_sha256` | SHA-256 of the protected evaluator handoff receipt |
-| `selection_query_count` | Exactly `125` |
+| `selection_query_count` | Exactly `125` (the protected Selection scope) |
+| `selection_evaluated_query_count` | Exactly the hash-bound `OUT`-eligible count from the evaluator receipt (`90` for the current canonical materialization) |
 | `selection_population` | Exactly `OUT` |
 | `comparison_family_id` | Frozen preregistered family identifier |
 | `bootstrap_seed` | Non-negative integer recorded before exposure |
@@ -69,9 +70,13 @@ The aggregate-safe manifest must contain exactly these input commitments:
 
 Each comparison must contain distinct left/right system SHA-256 values and
 exactly these metric vector names: `recall_at_100`, `ndcg_at_100`, and
-`ndcg_at_10`. Every left/right vector must contain exactly 125 finite values in
-`[0, 1]`. Do not create vectors from HDEV-100, fixtures, guessed rankings, or
-post-hoc finalist choices.
+`ndcg_at_10`. The enclosing protected scope is exactly 125 queries, while each
+metric vector contains exactly the hash-bound `OUT`-eligible population (90 in
+the current materialization), because the canonical publication contract uses
+macro averages over eligible OUT queries and paired units are eligible OUT
+queries. The evaluator receipt and handoff must record both counts. Do not pad
+non-eligible queries, or create vectors from HDEV-100, fixtures, guessed
+rankings, or post-hoc finalist choices.
 
 The frozen pre-Selection registry must be self-hashed, have status
 `FROZEN_BEFORE_SELECTION`, contain distinct candidates only, and bind each

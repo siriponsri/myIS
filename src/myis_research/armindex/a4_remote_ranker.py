@@ -196,6 +196,7 @@ def _run_profile_ranker(
         "request_sha256": request["request_sha256"],
         "profile_id": request["profile_id"],
         "rankings": rankings,
+        "ranking_sha256": canonical_sha256(rankings),
         "coverage": {"expected_units": expected_count, "completed_units": len(rankings)},
         "latency": {
             "p50_ms": _percentile(latencies, 0.5) * 1000.0,
