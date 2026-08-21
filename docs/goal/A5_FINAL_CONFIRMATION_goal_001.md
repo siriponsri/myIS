@@ -2,7 +2,7 @@
 title: "A5 frozen final confirmation handoff"
 phase_id: A5_FINAL_CONFIRMATION
 task_id: A5.1
-status: BLOCKED_PRESELECTION_HANDOFF_AND_D2
+status: BLOCKED_PROVENANCE_AND_D2
 lifecycle: BLOCKED
 evidence_class: prepared_final_confirmation_handoff
 scientific_authority: false
@@ -19,7 +19,7 @@ protected_payloads_allowed: false
 previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
 next_goal: docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md
 last_material_update: 2026-08-20
-next_authorized_action: WAIT_FOR_SELECTION_125_HANDOFF_AND_MANUAL_OR_CONDITIONAL_D2
+next_authorized_action: WAIT_FOR_CANONICAL_PROVENANCE_MANIFEST_AND_MANUAL_OR_CONDITIONAL_D2
 selection_handoff_contract_uri: docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md
 a5_pointer_bundle_schema: myis.armindex-a4-a5-pointer-bundle.v2
 publication_priority: TIER_1_REVIEWER_DEFENSIBLE_CONFIRMATION
@@ -124,9 +124,9 @@ contract.
 
 | Step | Status | Completion evidence |
 |---|---|---|
-| A4 closeout and Selection receipt verified | BLOCKED | A4 result/audit hashes |
-| A5 pointer-only bundle manifest built | BLOCKED | A5 v2 bundle waits for real Selection-125 handoff |
-| D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | BLOCKED | decision receipt |
+| A4 closeout and Selection receipt verified | PASS | A4 coverage, safe-return, legal-isolation, and result-integrity receipts |
+| A5 pointer-only bundle manifest built | FIX_REQUIRED | Structural bundle validation passes; provenance audit `control/armindex/a5/a5-provenance-audit-20260821.json` unresolved |
+| D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | BLOCKED | D2 cannot open Final until provenance audit passes |
 | Fresh provider admission and final stage | BLOCKED | observation, quote, TTL, adoption |
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
 | Safe return and independent audit | BLOCKED | final safe-return/audit receipts |
@@ -148,8 +148,9 @@ A6; it must not be repaired by selecting a replacement system.
 ## Execution flow after D2
 
 1. Validate the A4 closeout, bundle self-hash, finalist freeze, clean Git tree,
-   and the exact D2 decision receipt (manual or conditional auto-pass). If any
-   binding differs, stop.
+   canonical finalist prompt/model/representation provenance, protected
+   Final-872 pointer receipt, and the exact D2 decision receipt (manual or
+   conditional auto-pass). If any binding differs, stop.
 2. Create a new A5 attempt ID and isolated root named
    `/opt/myis/a5-goal001-<UTC>` on instance `47790578`; do not reuse A4
    workers, roots, PIDs, caches, quotes, budget admissions, or partial outputs.

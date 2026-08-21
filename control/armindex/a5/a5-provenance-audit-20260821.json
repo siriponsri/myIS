@@ -1,0 +1,90 @@
+{
+  "schema_version": "myis.armindex-a5-provenance-audit.v1",
+  "audit_id": "a5-provenance-audit-20260821-a4-sel01",
+  "phase_id": "A5_FINAL_CONFIRMATION",
+  "attempt_id": "a4-goal001-20260821T071350Z-sel01",
+  "status": "FIX_REQUIRED",
+  "evidence_class": "read_only_provenance_audit",
+  "scientific_authority": false,
+  "execution_permitted": false,
+  "provider_instance_id": 47790578,
+  "bundle_pointer": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/a5-pointer-bundle-v4.json",
+  "bundle_sha256": "a44035421f72fdffdca97a1eea99605f4709bacedd717ffa731ae3fce4453e52",
+  "bundle_structural_validation": "PASS_STRUCTURAL_ONLY",
+  "selection_accesses": 1,
+  "final_accesses": 0,
+  "protected_payload_included": false,
+  "checks": [
+    {
+      "field": "a4_closeout",
+      "status": "VERIFIED",
+      "evidence": [
+        "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-closeout-v3/A4_SELECTION_COVERAGE.json",
+        "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-closeout-v3/A4_SELECTION_SAFE_RETURN.json",
+        "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-closeout-v3/A4_SELECTION_RESULT_INTEGRITY_AUDIT.json"
+      ],
+      "claim": "Four Selection-125 profiles have complete 125/125 coverage, deterministic execution, zero recorded failures, and one aggregate-only Selection exposure."
+    },
+    {
+      "field": "prompt_hashes",
+      "status": "PARTIAL_REQUEST_HASH_ONLY",
+      "observed": [
+        "c054bda4d7699aa61dc5dc15dff1b26d32b1f88ebd274fc3eeca74110e693a36",
+        "51a81f1bafca1b37e3a39bf44c40a6ee3e061a0704318e0e0612adc8c61da1d4"
+      ],
+      "evidence": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/requests/ARM-03_RESEARCH_REFERENCE.json; 04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/requests/FAST.json",
+      "gap": "The values are request_sha256 commitments; no canonical prompt artifact or semantic prompt manifest is bound, so Final execution cannot claim prompt provenance."
+    },
+    {
+      "field": "research_model_hash",
+      "status": "VERIFIED",
+      "observed": "234ea36a876fe5d5c416c1cbaad6f7221e17861fadd6481f0b96588fdc1ca482",
+      "evidence": "control/armindex/a1.2/model-locks/ARM-03.v1.json"
+    },
+    {
+      "field": "commercial_model_hash",
+      "status": "UNRESOLVED",
+      "observed": "07ea93de0a4f46cf94295a0d73f1dc13614d72070131cd4be83b46f92df7dacf",
+      "gap": "No canonical model lock, runtime manifest, or Owner-Store file currently resolves this hash."
+    },
+    {
+      "field": "representation_hash",
+      "status": "MISMATCHED_LABEL",
+      "observed": "de075d8dee828e50da1157a9bb6fe1a0a0055c5f70590e9b874a4a332725a20b",
+      "evidence": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/stage/A4_RUNTIME_ASSETS.json",
+      "gap": "The value is labelled asset/inventory SHA-256, not a canonical representation or compiled-program manifest SHA-256."
+    },
+    {
+      "field": "final_input_pointer",
+      "status": "UNVERIFIED_PROTECTED_POINTER",
+      "observed": "a5/final-872-input",
+      "evidence": "04_Owner_Stores/armindex/data-bundle/canonical-a2-a6-20260820/final-872/sealed/scope.json",
+      "gap": "The sealed marker explicitly records payload_materialized=false; no protected Final-872 input receipt is available for validation."
+    },
+    {
+      "field": "git_binding",
+      "status": "VERIFIED",
+      "observed": {
+        "git_commit": "aeb5428c35c6406581e050b826510f816b1e2625",
+        "git_tree": "77a32adc35bdcd8f85b117db5ed80763cca32b19",
+        "git_ref": "origin/main"
+      }
+    },
+    {
+      "field": "instance_health",
+      "status": "VERIFIED_READ_ONLY",
+      "observed": {
+        "instance_id": 47790578,
+        "gpu_count": 4,
+        "gpu_idle": true,
+        "disk_available_gib": 130,
+        "workers_found": 0
+      }
+    }
+  ],
+  "required_owner_action": "Stage a canonical aggregate-safe provenance manifest resolving both finalist prompt/model/representation hashes and a valid opaque pointer plus receipt for the protected Final-872 input. Do not export payload, qrels, membership, IDs, rankings, or per-query outcomes.",
+  "next_gate": "A5_PRECHECK_AFTER_PROVENANCE_PASS",
+  "a6_status": "PENDING_A5_CLOSEOUT",
+  "claim_boundary": "No A5 Final result exists; A6 full-corpus materialization remains unopened.",
+  "receipt_sha256": "988cc22c76437bc7cfd81d3058ef83e6ce460f7565c64976eec14409ff1fccc9"
+}
