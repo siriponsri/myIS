@@ -13,6 +13,8 @@ d3_required: false
 protected_payloads_allowed: false
 full_corpus_owner_local_only: true
 provider_instance_id: 47790578
+provider_instance_status: DESTROYED_BY_OWNER
+fresh_provider_instance_required: true
 previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
 next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
 last_material_update: 2026-08-22

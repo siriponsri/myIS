@@ -8,6 +8,8 @@ evidence_class: prepared_final_confirmation_handoff
 scientific_authority: false
 execution_permitted: false
 provider_instance_id: 47790578
+provider_instance_status: DESTROYED_BY_OWNER
+fresh_provider_instance_required: true
 required_owner_decision: D2_OPEN_FINAL_PREAUTHORIZED_AUTOMATICALLY
 conditional_owner_preauthorization: D2_OPEN_FINAL_ON_A4_AUTOMATIC_PASS
 automatic_continuation_allowed: true
@@ -125,7 +127,7 @@ contract.
 | Step | Status | Completion evidence |
 |---|---|---|
 | A4 closeout and Selection receipt verified | PASS | A4 coverage, safe-return, legal-isolation, and result-integrity receipts |
-| A5 pointer-only bundle manifest built | PASS | Rebuilt v5 bundle plus aggregate-safe provenance manifest and opaque Final-872 receipt in Owner Store |
+| A5 pointer-only bundle manifest built | PASS | Rebuilt v6 bundle plus aggregate-safe provenance manifest and opaque Final-872 receipt in Owner Store |
 | D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | PREAUTHORIZED_PENDING_FRESH_INSTANCE | Automatic D2 is authorized by Owner, but no Final access has occurred |
 | Fresh provider admission and final stage | PAUSED | Must use a fresh instance/root after the current instance is destroyed |
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
@@ -144,8 +146,8 @@ receipt records that protected payload, qrels, membership, query files,
 rankings, and per-query outcomes were not exported. The contained read-only
 ranking-package incident remains forensic-only and its contents are not reused.
 
-The goal is intentionally paused after A4 closeout. Owner may destroy instance
-`47790578` and open a fresh authorized instance. Resume this same goal and goal
+The goal is intentionally paused after A4 closeout. Owner destroyed instance
+`47790578`; a fresh authorized instance must be opened before continuation. Resume this same goal and goal
 index after reading the updated `vast-ssh.md`; do not create a replacement goal
 solely because the provider instance changed. A5 must create a fresh attempt
 root and obtain fresh identity, quote, TTL, and budget evidence before Final

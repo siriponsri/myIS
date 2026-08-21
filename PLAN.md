@@ -119,7 +119,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly eight active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> paused for instance rotation -> A5 -> A6 full-corpus materialization -> A7 publication`
+`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> PAUSED after owner destroyed instance -> A5 -> A6 full-corpus materialization -> A7 publication`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
@@ -127,8 +127,8 @@ There are exactly eight active phases. Progress is:
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | complete; Goal 004 measured closeout passed with three-primary amendment |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | complete; 14/14 audited, flat HarnessOpt surface |
-| `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | Selection-125 closeout PASS; safe-return complete; current instance rotation pending |
-| `A5_FINAL_CONFIRMATION` | one frozen confirmation | provenance PASS and D2 preauthorized; paused until fresh provider admission |
+| `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | Selection-125 closeout PASS; safe-return complete; previous instance destroyed |
+| `A5_FINAL_CONFIRMATION` | one frozen confirmation | provenance PASS and D2 preauthorized; PAUSED until fresh provider admission |
 | `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | pending `PASS_A5_FINAL_CONFIRMATION`; fresh A6 root required; D3 remains closed |
 | `A7_PUBLICATION_AND_RELEASE` | paper and release from A0-A6 aggregate-safe evidence | locked by `D3_SUBMIT_RELEASE` |
 

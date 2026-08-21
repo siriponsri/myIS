@@ -9,8 +9,8 @@ Status: `PAUSED_AFTER_A4_INSTANCE_ROTATION`
   exposure, and zero Final exposures.
 - Aggregate-safe A5 provenance is staged in Owner Store:
   `armindex/a5/provenance/a5-finalist-provenance-manifest-20260822.json`.
-- The pointer-only A5 bundle was rebuilt against pushed `main` as
-  `a5-pointer-bundle-v5-20260822.json`.
+- The pointer-only A5 bundle was rebuilt against the final pushed `main` as
+  `a5-pointer-bundle-v6-20260822.json`.
 - The opaque Final-872 input receipt is staged at
   `armindex/a5/final-872-input/receipt.json` with `payload_materialized=false`.
 - Safe-return artifacts from Vast `47790578` are recorded under
@@ -27,7 +27,7 @@ outcomes, credentials, and model payloads were not exported.
 
 ## Resume protocol
 
-After Owner destroys the old instance and updates `vast-ssh.md`, resume this
+After Owner has destroyed the old instance and updates `vast-ssh.md`, resume this
 same goal and goal index. Read the new `vast-ssh.md`, verify fresh provider
 identity, quote, TTL, budget, runtime, disk, and GPU health, then create a
 fresh isolated A5 root. Do not reuse old PIDs, caches, workers, quotes,
