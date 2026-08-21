@@ -14,7 +14,6 @@ import json
 import math
 import os
 from pathlib import Path
-from threading import Lock
 import time
 from typing import Any
 
@@ -38,11 +37,6 @@ _COMMERCIAL_ARMS = ("ARM-01", "ARM-02", "ARM-04", "ARM-05")
 # runtime. It is code-bundle bound for each fresh attempt and does not alter
 # the frozen representation or retrieval semantics.
 _DENSE_ENCODE_BATCH_SIZE = 1
-# SentenceTransformer's staged/offline loader is not thread-safe when two
-# remote-code models are materialized concurrently.  Serialize only model
-# construction; the frozen asynchronous profile still ranks components in
-# parallel after each adapter is ready.
-_DENSE_ADAPTER_LOAD_LOCK = Lock()
 _REQUEST_KEYS = {
     "schema_version",
     "attempt_id",
@@ -312,18 +306,10 @@ def _rank_one(root: Path, *, arm_id: str, queries: Mapping[str, str]) -> tuple[d
         model_directory=root / "models" / arm_id,
         device=_device_for_arm(arm_id),
         method=compiled.family_aggregation,
-        adapter_factory=_serialized_dense_adapter_factory,
+        adapter_factory=SentenceTransformerDenseAdapter.from_staged_directory,
         batch_size=_DENSE_ENCODE_BATCH_SIZE,
     )
     return _serialise(ranks), list(latencies)
-
-
-def _serialized_dense_adapter_factory(**kwargs: Any) -> Any:
-    """Construct one dense model at a time while preserving profile concurrency."""
-
-    with _DENSE_ADAPTER_LOAD_LOCK:
-        return SentenceTransformerDenseAdapter.from_staged_directory(**kwargs)
-
 
 def _rank_common_bm25(root: Path, queries: Mapping[str, str]) -> tuple[dict[str, list[dict[str, Any]]], list[float]]:
     rows = []
