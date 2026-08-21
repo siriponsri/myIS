@@ -2,13 +2,13 @@
 title: "A5 frozen final confirmation handoff"
 phase_id: A5_FINAL_CONFIRMATION
 task_id: A5.1
-status: BLOCKED_PROVENANCE_AND_D2
-lifecycle: BLOCKED
+status: PAUSED_AFTER_A4_INSTANCE_ROTATION
+lifecycle: PAUSED
 evidence_class: prepared_final_confirmation_handoff
 scientific_authority: false
 execution_permitted: false
 provider_instance_id: 47790578
-required_owner_decision: D2_OPEN_FINAL
+required_owner_decision: D2_OPEN_FINAL_PREAUTHORIZED_AUTOMATICALLY
 conditional_owner_preauthorization: D2_OPEN_FINAL_ON_A4_AUTOMATIC_PASS
 automatic_continuation_allowed: true
 continuation_mode: CONDITIONAL_AUTO_CONTINUE_MINIMAL_TRANSITIONS
@@ -18,8 +18,8 @@ final_query_count: 872
 protected_payloads_allowed: false
 previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
 next_goal: docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md
-last_material_update: 2026-08-20
-next_authorized_action: WAIT_FOR_CANONICAL_PROVENANCE_MANIFEST_AND_MANUAL_OR_CONDITIONAL_D2
+last_material_update: 2026-08-22
+next_authorized_action: OWNER_DESTROY_47790578_OPEN_FRESH_INSTANCE_THEN_RESUME_SAME_GOAL
 selection_handoff_contract_uri: docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md
 a5_pointer_bundle_schema: myis.armindex-a4-a5-pointer-bundle.v2
 publication_priority: TIER_1_REVIEWER_DEFENSIBLE_CONFIRMATION
@@ -125,14 +125,32 @@ contract.
 | Step | Status | Completion evidence |
 |---|---|---|
 | A4 closeout and Selection receipt verified | PASS | A4 coverage, safe-return, legal-isolation, and result-integrity receipts |
-| A5 pointer-only bundle manifest built | FIX_REQUIRED | Structural bundle validation passes; provenance audit `control/armindex/a5/a5-provenance-audit-20260821.json` unresolved |
-| D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | BLOCKED | D2 cannot open Final until provenance audit passes |
-| Fresh provider admission and final stage | BLOCKED | observation, quote, TTL, adoption |
+| A5 pointer-only bundle manifest built | PASS | Rebuilt v5 bundle plus aggregate-safe provenance manifest and opaque Final-872 receipt in Owner Store |
+| D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | PREAUTHORIZED_PENDING_FRESH_INSTANCE | Automatic D2 is authorized by Owner, but no Final access has occurred |
+| Fresh provider admission and final stage | PAUSED | Must use a fresh instance/root after the current instance is destroyed |
 | Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
 | Safe return and independent audit | BLOCKED | final safe-return/audit receipts |
 | A5 closeout and A6 frozen-winner handoff | BLOCKED | terminal report and projections |
 
 ## Minimal continuation policy
+
+### 2026-08-22 instance-rotation handoff
+
+The current instance `47790578` was surveyed and found healthy but idle. No A5
+or A6 measured execution was started. Aggregate-safe artifacts were returned to
+Owner Store under `armindex/handoff/vast-47790578-20260822/`, including runtime
+manifests, profile requests, staged receipt, and code bundle. The safe-return
+receipt records that protected payload, qrels, membership, query files,
+rankings, and per-query outcomes were not exported. The contained read-only
+ranking-package incident remains forensic-only and its contents are not reused.
+
+The goal is intentionally paused after A4 closeout. Owner may destroy instance
+`47790578` and open a fresh authorized instance. Resume this same goal and goal
+index after reading the updated `vast-ssh.md`; do not create a replacement goal
+solely because the provider instance changed. A5 must create a fresh attempt
+root and obtain fresh identity, quote, TTL, and budget evidence before Final
+access. A6 remains conditional on `PASS_A5_FINAL_CONFIRMATION` and one frozen
+winner.
 
 After a valid conditional D2 receipt, this goal advances through fresh A5
 admission, Final-872, safe return, audit, and the A6 winner handoff without

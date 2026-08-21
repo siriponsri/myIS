@@ -2,8 +2,8 @@
 title: "A6 post-confirmatory full-DAPFAM materialization and scalability"
 phase_id: A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
 task_id: A6.1
-status: BLOCKED_A5_CLOSEOUT
-lifecycle: BLOCKED
+status: BLOCKED_A5_CLOSEOUT_INSTANCE_ROTATION
+lifecycle: PAUSED
 evidence_class: post_confirmatory_operational_scalability
 scientific_authority: false
 execution_permitted: false
@@ -15,8 +15,8 @@ full_corpus_owner_local_only: true
 provider_instance_id: 47790578
 previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
 next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
-last_material_update: 2026-08-19
-next_authorized_action: WAIT_FOR_VALID_A5_CLOSEOUT_AND_FROZEN_MATERIALIZATION_TARGET
+last_material_update: 2026-08-22
+next_authorized_action: RESUME_AFTER_FRESH_INSTANCE_AND_PASS_A5_CLOSEOUT
 a6_winner_binding_schema: myis.armindex-a6-a5-winner-binding.v1
 a6_attempt_admission_schema: myis.armindex-a6-attempt-admission.v1
 continuation_mode: CONTINUE_AFTER_PASS_A5_WITH_FRESH_ADMISSION

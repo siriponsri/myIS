@@ -3,14 +3,18 @@
   "audit_id": "a5-provenance-audit-20260821-a4-sel01",
   "phase_id": "A5_FINAL_CONFIRMATION",
   "attempt_id": "a4-goal001-20260821T071350Z-sel01",
-  "status": "FIX_REQUIRED",
-  "evidence_class": "read_only_provenance_audit",
+  "status": "PASS_AGGREGATE_SAFE_PROVENANCE",
+  "evidence_class": "aggregate_safe_provenance_audit",
   "scientific_authority": false,
   "execution_permitted": false,
   "provider_instance_id": 47790578,
-  "bundle_pointer": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/a5-pointer-bundle-v4.json",
-  "bundle_sha256": "a44035421f72fdffdca97a1eea99605f4709bacedd717ffa731ae3fce4453e52",
-  "bundle_structural_validation": "PASS_STRUCTURAL_ONLY",
+  "bundle_pointer": "04_Owner_Stores/armindex/a5/provenance/a5-pointer-bundle-v5-20260822.json",
+  "bundle_sha256": "5f161a70622b48ebe0a1895fcad5de1a5dffa402a8dc63a406794e22e8f984ef",
+  "bundle_structural_validation": "PASS_STRUCTURAL_AND_PROVENANCE_MANIFEST_BOUND",
+  "provenance_manifest_pointer": "04_Owner_Stores/armindex/a5/provenance/a5-finalist-provenance-manifest-20260822.json",
+  "provenance_manifest_sha256": "6ea2f3bb4972e1423b69f418f030a79975ad810cca794a7eb0419e2ab2bd61bd",
+  "opaque_final_input_receipt_pointer": "04_Owner_Stores/armindex/a5/final-872-input/receipt.json",
+  "opaque_final_input_receipt_sha256": "355afca60c31603ee81219da571f7e2d73fae0c2db1bd1bf55a03166a556ff4",
   "selection_accesses": 1,
   "final_accesses": 0,
   "protected_payload_included": false,
@@ -27,13 +31,13 @@
     },
     {
       "field": "prompt_hashes",
-      "status": "PARTIAL_REQUEST_HASH_ONLY",
+      "status": "VERIFIED_REQUEST_BOUND_SEMANTIC_MANIFEST",
       "observed": [
         "c054bda4d7699aa61dc5dc15dff1b26d32b1f88ebd274fc3eeca74110e693a36",
         "51a81f1bafca1b37e3a39bf44c40a6ee3e061a0704318e0e0612adc8c61da1d4"
       ],
-      "evidence": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/requests/ARM-03_RESEARCH_REFERENCE.json; 04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/requests/FAST.json",
-      "gap": "The values are request_sha256 commitments; no canonical prompt artifact or semantic prompt manifest is bound, so Final execution cannot claim prompt provenance."
+      "evidence": "04_Owner_Stores/armindex/a5/provenance/a5-finalist-provenance-manifest-20260822.json",
+      "gap": null
     },
     {
       "field": "research_model_hash",
@@ -43,30 +47,32 @@
     },
     {
       "field": "commercial_model_hash",
-      "status": "UNRESOLVED",
+      "status": "VERIFIED_COMPOSITE_STATIC_RUNTIME_BINDING",
       "observed": "07ea93de0a4f46cf94295a0d73f1dc13614d72070131cd4be83b46f92df7dacf",
-      "gap": "No canonical model lock, runtime manifest, or Owner-Store file currently resolves this hash."
+      "evidence": "04_Owner_Stores/armindex/a5/provenance/a5-finalist-provenance-manifest-20260822.json; control/armindex/a1.2/model-locks/ARM-01.v1.json; control/armindex/a1.2/model-locks/ARM-04.v1.json",
+      "gap": null
     },
     {
       "field": "representation_hash",
-      "status": "MISMATCHED_LABEL",
+      "status": "VERIFIED_PROGRAM_ASSET_MANIFEST",
       "observed": "de075d8dee828e50da1157a9bb6fe1a0a0055c5f70590e9b874a4a332725a20b",
       "evidence": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/stage/A4_RUNTIME_ASSETS.json",
-      "gap": "The value is labelled asset/inventory SHA-256, not a canonical representation or compiled-program manifest SHA-256."
+      "evidence": "04_Owner_Stores/armindex/a5/provenance/a5-finalist-provenance-manifest-20260822.json",
+      "gap": null
     },
     {
       "field": "final_input_pointer",
-      "status": "UNVERIFIED_PROTECTED_POINTER",
+      "status": "VERIFIED_OPAQUE_INPUT_RECEIPT",
       "observed": "a5/final-872-input",
-      "evidence": "04_Owner_Stores/armindex/data-bundle/canonical-a2-a6-20260820/final-872/sealed/scope.json",
-      "gap": "The sealed marker explicitly records payload_materialized=false; no protected Final-872 input receipt is available for validation."
+      "evidence": "04_Owner_Stores/armindex/a5/final-872-input/receipt.json; 04_Owner_Stores/armindex/data-bundle/canonical-a2-a6-20260820/final-872/sealed/scope.json",
+      "gap": null
     },
     {
       "field": "git_binding",
       "status": "VERIFIED",
       "observed": {
-        "git_commit": "aeb5428c35c6406581e050b826510f816b1e2625",
-        "git_tree": "77a32adc35bdcd8f85b117db5ed80763cca32b19",
+        "git_commit": "730e4d76de25d25c57ef7ad35fbe04ec95c0afed",
+        "git_tree": "37605393891f0790f4fe3491e09298176d62bc5b",
         "git_ref": "origin/main"
       }
     },
@@ -93,9 +99,9 @@
       "gap": "The package contents must not be used as evidence; no additional forensic inspection is authorized in this session."
     }
   ],
-  "required_owner_action": "Stage a canonical aggregate-safe provenance manifest resolving both finalist prompt/model/representation hashes and a valid opaque pointer plus receipt for the protected Final-872 input. Preserve the contained read-only ranking-package incident; do not reuse its contents and do not export payload, qrels, membership, IDs, rankings, or per-query outcomes.",
-  "next_gate": "A5_PRECHECK_AFTER_PROVENANCE_PASS",
+  "required_owner_action": "Destroy instance 47790578 after safe-return verification, open a fresh authorized instance, then resume this goal for A5 Final-872 and A6. Preserve the contained read-only ranking-package incident; do not reuse its contents and do not export protected payloads.",
+  "next_gate": "A5_PRECHECK_ON_FRESH_INSTANCE",
   "a6_status": "PENDING_A5_CLOSEOUT",
   "claim_boundary": "No A5 Final result exists; A6 full-corpus materialization remains unopened.",
-  "receipt_sha256": "92d9668c3e69abcb5da32467b4dad3fbb9a11270c831cf2c56f9efb3d8549ddf"
+  "receipt_sha256": "64cd92e399f5fbb679767a238fb7131e4cfee6bb2756808b1d019863d32951e9"
 }
