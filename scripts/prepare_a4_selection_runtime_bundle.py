@@ -15,7 +15,7 @@ from myis_research.kernel.canonical import canonical_json
 
 
 def _load(path: Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+    value = json.loads(path.read_text(encoding="utf-8-sig"))
     if not isinstance(value, dict):
         raise ValueError(f"{path} must contain a JSON object")
     return value
