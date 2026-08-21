@@ -45,8 +45,9 @@ are excluded and cannot be mixed into this attempt.
 
 ## Parallel readiness work
 
-Local A5 pending handoff validation passed with execution disabled, Final-872
-bound to `872`, and counters `0/0`. Local A6 pending materialization validation
+Local A5 pending-template validation passed with execution disabled, Final-872
+bound to `872`, and its unopened template counters `0/0`. The measured A4
+Selection counter is `1` and Final remains `0`. Local A6 pending materialization validation
 passed with execution disabled and the full DAPFAM corpus remaining
 pointer-only. These are readiness artifacts, not measured A5/A6 evidence.
 
