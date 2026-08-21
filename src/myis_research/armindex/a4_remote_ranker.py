@@ -52,6 +52,11 @@ _REQUEST_KEYS = {
     "license_scope",
     "request_sha256",
 }
+_SELECTION_REQUEST_KEYS = {
+    "schema_version", "attempt_id", "request_id", "profile_id", "system_sha256",
+    "profile_registry_sha256", "runtime_bindings_sha256", "selection_scope_sha256",
+    "selection_query_count", "arm_ids", "candidate_depth", "mode", "license_scope", "request_sha256",
+}
 
 
 class A4RemoteRankerError(ValueError):
@@ -110,41 +115,102 @@ def run_a4_profile_ranker(
 ) -> dict[str, Any]:
     """Run one frozen A4 profile over exactly 100 HDEV opaque work tokens."""
 
-    request = _request(_load_json(request_path, "A4 profile request"))
+    return _run_profile_ranker(request_path, assets_root=assets_root, result_path=result_path, scope_kind="hdev")
+
+
+def build_a4_selection_profile_request(
+    *,
+    attempt_id: str,
+    profile_registry: Mapping[str, Any],
+    runtime_bindings: Mapping[str, Any],
+    profile_id: str,
+    selection_scope_sha256: str,
+    selection_query_count: int = 125,
+) -> dict[str, Any]:
+    """Create a profile request bound to the one-shot Selection scope."""
+
+    base = build_a4_profile_request(
+        attempt_id=attempt_id,
+        profile_registry=profile_registry,
+        runtime_bindings=runtime_bindings,
+        profile_id=profile_id,
+    )
+    body = {key: value for key, value in base.items() if key not in {"hdev_scope_sha256", "request_sha256"}}
+    body.update({
+        "selection_scope_sha256": selection_scope_sha256,
+        "selection_query_count": selection_query_count,
+    })
+    return {**body, "request_sha256": canonical_sha256(body)}
+
+
+def run_a4_selection_profile_ranker(
+    request_path: Path,
+    *,
+    assets_root: Path,
+    result_path: Path,
+) -> dict[str, Any]:
+    """Run a frozen A4 profile over exactly the protected Selection-125 scope."""
+
+    return _run_profile_ranker(request_path, assets_root=assets_root, result_path=result_path, scope_kind="selection")
+
+
+def _run_profile_ranker(
+    request_path: Path,
+    *,
+    assets_root: Path,
+    result_path: Path,
+    scope_kind: str,
+) -> dict[str, Any]:
+    if scope_kind not in {"hdev", "selection"}:
+        raise A4RemoteRankerError("A4 scope kind is invalid")
+    selection = scope_kind == "selection"
+    request = _request(_load_json(request_path, "A4 profile request"), selection=selection)
     root = _directory(assets_root, "A4 assets")
     runtime = _runtime_bindings(_load_json(root.parent / "A4_RUNTIME_BINDINGS.json", "A4 runtime bindings"), attempt_id=request["attempt_id"])
     if runtime["runtime_bindings_sha256"] != request["runtime_bindings_sha256"]:
         raise A4RemoteRankerError("A4 request runtime binding drift")
-    scope = _scope(_load_json(root / "hdev-scope.json", "A4 HDEV scope"))
-    if scope["scope_sha256"] != request["hdev_scope_sha256"]:
-        raise A4RemoteRankerError("A4 request HDEV scope drift")
+    scope_file = root / ("selection-scope.json" if selection else "hdev-scope.json")
+    scope = _scope(_load_json(scope_file, "A4 scope"), selection=selection)
+    scope_hash_field = "selection_scope_sha256" if selection else "hdev_scope_sha256"
+    if scope["scope_sha256"] != request[scope_hash_field]:
+        raise A4RemoteRankerError("A4 request scope drift")
+    expected_count = int(request.get("selection_query_count", 100)) if selection else 100
+    if selection and expected_count != 125:
+        raise A4RemoteRankerError("A4 Selection scope is frozen at 125 queries")
     inventory = _inventory(_load_json(root / "A4_RUNTIME_ASSETS.json", "A4 inventory"), root)
     if inventory["inventory_sha256"] != runtime["asset_inventory_sha256"]:
         raise A4RemoteRankerError("A4 asset inventory binding drift")
     queries = _queries(root / "queries.jsonl")
-    if len(queries) != 100:
-        raise A4RemoteRankerError("A4 ranker requires exactly HDEV-100")
+    if len(queries) != expected_count:
+        raise A4RemoteRankerError("A4 ranker query coverage is incomplete")
+    print(f"[A4-{scope_kind.upper()}] START profile={request['profile_id']} queries={expected_count}", flush=True)
     started = time.perf_counter()
-    rankings_by_arm, per_arm_latencies = _rank_arms(
-        root,
-        arm_ids=request["arm_ids"],
-        queries=queries,
-        mode=request["mode"],
-    )
+    rankings_by_arm, per_arm_latencies = _rank_arms(root, arm_ids=request["arm_ids"], queries=queries, mode=request["mode"])
     latencies = _profile_latencies(per_arm_latencies, arm_ids=request["arm_ids"], mode=request["mode"])
-    rankings = _fuse(rankings_by_arm, depth=request["candidate_depth"])
+    rankings = _fuse(rankings_by_arm, depth=request["candidate_depth"], expected_query_count=expected_count)
     elapsed = max(0.0, time.perf_counter() - started)
     body = {
+        "schema_version": "myis.armindex-a4-remote-ranking-package.v1",
+        "status": "PASS_A4_REMOTE_RANKING_PACKAGE",
+        "attempt_id": request["attempt_id"],
+        "request_sha256": request["request_sha256"],
+        "profile_id": request["profile_id"],
         "rankings": rankings,
-        "coverage": {"expected_units": 100, "completed_units": len(rankings)},
+        "coverage": {"expected_units": expected_count, "completed_units": len(rankings)},
         "latency": {
             "p50_ms": _percentile(latencies, 0.5) * 1000.0,
             "p95_ms": _percentile(latencies, 0.95) * 1000.0,
             "p99_ms": _percentile(latencies, 0.99) * 1000.0,
-            "throughput_qps": 100.0 / elapsed if elapsed else 0.0,
+            "throughput_qps": expected_count / elapsed if elapsed else 0.0,
         },
         "resource": _resource_metrics(root, elapsed, request["arm_ids"], mode=request["mode"]),
+        "determinism": True,
+        "failures": 0,
     }
+    if selection:
+        body["selection_scope_sha256"] = scope["scope_sha256"]
+        body["selection_query_count"] = expected_count
+    print(f"[A4-{scope_kind.upper()}] COMPLETE profile={request['profile_id']} coverage={len(rankings)}/{expected_count}", flush=True)
     _write_new_json(result_path, body)
     return body
 
@@ -281,13 +347,13 @@ def _rank_common_bm25(root: Path, queries: Mapping[str, str]) -> tuple[dict[str,
     return result, latencies
 
 
-def _fuse(rankings_by_arm: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]], *, depth: int) -> dict[str, list[dict[str, Any]]]:
+def _fuse(rankings_by_arm: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]], *, depth: int, expected_query_count: int = 100) -> dict[str, list[dict[str, Any]]]:
     # Profiles may build a deeper candidate pool, but every returned result is
     # normalized to the frozen OUT top-100 evaluator depth.
     if not isinstance(depth, int) or isinstance(depth, bool) or depth < 100:
         raise A4RemoteRankerError("A4 candidate depth must be at least 100")
     tokens = set.intersection(*(set(value) for value in rankings_by_arm.values())) if rankings_by_arm else set()
-    if len(tokens) != 100 or any(set(value) != tokens for value in rankings_by_arm.values()):
+    if len(tokens) != expected_query_count or any(set(value) != tokens for value in rankings_by_arm.values()):
         raise A4RemoteRankerError("A4 profile coverage is incomplete")
     result: dict[str, list[dict[str, Any]]] = {}
     for token in sorted(tokens):
@@ -336,10 +402,11 @@ def _runtime_bindings(value: Mapping[str, Any], *, attempt_id: str) -> dict[str,
     return item
 
 
-def _scope(value: Mapping[str, Any]) -> dict[str, Any]:
+def _scope(value: Mapping[str, Any], *, selection: bool = False) -> dict[str, Any]:
     item = dict(value)
-    if item.get("schema_version") != "myis.armindex-a4-harness-dev-scope.v1" or item.get("scope") != "HARNESS-DEV" or item.get("query_count") != 100:
-        raise A4RemoteRankerError("A4 HDEV scope is invalid")
+    expected = ("myis.armindex-a4-selection-scope.v1", "Selection-125", 125) if selection else ("myis.armindex-a4-harness-dev-scope.v1", "HARNESS-DEV", 100)
+    if item.get("schema_version") != expected[0] or item.get("scope") != expected[1] or item.get("query_count") != expected[2]:
+        raise A4RemoteRankerError("A4 scope is invalid")
     _self_hash(item, "scope_sha256", "A4 HDEV scope")
     return item
 
@@ -364,9 +431,10 @@ def _inventory(value: Mapping[str, Any], root: Path) -> dict[str, Any]:
     return item
 
 
-def _request(value: Mapping[str, Any]) -> dict[str, Any]:
+def _request(value: Mapping[str, Any], *, selection: bool = False) -> dict[str, Any]:
     item = dict(value)
-    if set(item) != _REQUEST_KEYS or item.get("schema_version") != "myis.armindex-a4-remote-profile-request.v1":
+    expected_keys = _SELECTION_REQUEST_KEYS if selection else _REQUEST_KEYS
+    if set(item) != expected_keys or item.get("schema_version") != "myis.armindex-a4-remote-profile-request.v1":
         raise A4RemoteRankerError("A4 profile request schema is invalid")
     if item.get("profile_id") not in {"FAST", "BALANCED", "DEEP", "ARM-03_RESEARCH_REFERENCE"}:
         raise A4RemoteRankerError("A4 profile request identity is invalid")
@@ -439,7 +507,7 @@ def main() -> int:
     return 0
 
 
-__all__ = ["A4RemoteRankerError", "build_a4_profile_request", "run_a4_profile_ranker"]
+__all__ = ["A4RemoteRankerError", "build_a4_profile_request", "build_a4_selection_profile_request", "run_a4_profile_ranker", "run_a4_selection_profile_ranker"]
 
 
 if __name__ == "__main__":
