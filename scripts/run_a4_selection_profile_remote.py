@@ -3,7 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
+
+# The measured dense adapter fail-closes unless offline mode is active.  Set
+# these in the entrypoint as well as the supervisor environment so the guard
+# remains effective when the worker is launched through a remote shell.
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
 from myis_research.armindex.a4_remote_ranker import run_a4_selection_profile_ranker
 
