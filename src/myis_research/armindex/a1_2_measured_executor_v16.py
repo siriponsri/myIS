@@ -15,6 +15,7 @@ import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from threading import Lock
 from typing import Any, Protocol
 
 import numpy as np
@@ -34,6 +35,11 @@ ARM_CONFIG_OVERRIDES: dict[str, dict[str, Any]] = {
         "use_memory_efficient_attention": False,
     }
 }
+# SentenceTransformers can construct custom/remote-code modules through a
+# shared Transformers loading path.  Concurrent ARM-04/ARM-05 construction
+# can leave the ARM-04 module on ``meta`` and fail during ``.to(device)``.
+# Serialize only construction; DEEP query/index work remains asynchronous.
+_MODEL_LOAD_LOCK = Lock()
 _OPAQUE_ID_RE = re.compile(r"(?:F|Q)-[a-f0-9]{32}")
 _PASSAGE_VIEW_RE = re.compile(r"passage-[0-9]{4}")
 
@@ -203,17 +209,22 @@ class SentenceTransformerDenseAdapter:
             raise MeasuredExecutorV16Error(
                 "frozen dense runtime dependency is unavailable"
             ) from error
-        model = SentenceTransformer(
-            str(directory),
-            device=device,
-            trust_remote_code=arm_id == "ARM-04",
-            local_files_only=True,
-            # Force eager materialization before the model is placed on the
-            # requested device.  Concurrent ARM-04/05 loads otherwise may
-            # leave a Transformer module on the meta device and fail on .to().
-            model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": False},
-            config_kwargs=ARM_CONFIG_OVERRIDES.get(arm_id),
-        )
+        # Keep model construction process-local and serialized.  This is an
+        # execution/runtime repair only: each model, device, and frozen input
+        # remains unchanged, while asynchronous ranking starts after both
+        # constructors have completed.
+        with _MODEL_LOAD_LOCK:
+            model = SentenceTransformer(
+                str(directory),
+                device=device,
+                trust_remote_code=arm_id == "ARM-04",
+                local_files_only=True,
+                # Force eager materialization before the model is placed on the
+                # requested device.  Concurrent ARM-04/05 loads otherwise may
+                # leave a Transformer module on the meta device and fail on .to().
+                model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": False},
+                config_kwargs=ARM_CONFIG_OVERRIDES.get(arm_id),
+            )
         model.max_seq_length = max_input_tokens or MAX_INPUT_TOKENS[arm_id]
         return cls(arm_id=arm_id, model=model, batch_size=batch_size)
 
