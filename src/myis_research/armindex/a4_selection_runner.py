@@ -104,8 +104,14 @@ def _evaluate_comparison(value: Mapping[str, Any], source: Mapping[str, Any]) ->
         vectors = metrics[metric]
         if not isinstance(vectors, Mapping) or set(vectors) != {"left", "right"}:
             raise A4SelectionRunnerError(f"{metric} vectors are invalid")
-        lv = _vector(vectors["left"], metric, expected_count=source["selection_query_count"])
-        rv = _vector(vectors["right"], metric, expected_count=source["selection_query_count"])
+        # Selection is a 125-query scope, but this handoff evaluates the
+        # frozen OUT population only (90 judged queries).  Legacy fixtures that
+        # omit an explicit population count continue to use 125 vectors.
+        expected_count = int(source.get("selection_evaluated_query_count", source["selection_query_count"]))
+        if expected_count <= 0 or expected_count > source["selection_query_count"]:
+            raise A4SelectionRunnerError("Selection evaluated query count is invalid")
+        lv = _vector(vectors["left"], metric, expected_count=expected_count)
+        rv = _vector(vectors["right"], metric, expected_count=expected_count)
         if len(lv) != len(rv) or not lv:
             raise A4SelectionRunnerError(f"{metric} paired coverage is invalid")
         if primary_vector is None:
@@ -285,7 +291,7 @@ def _validate_selection_input_hashes(source: Mapping[str, Any]) -> None:
         "bootstrap_seed",
         "comparisons",
     }
-    if set(source) != required:
+    if set(source) not in (required, required | {"selection_evaluated_query_count"}):
         raise A4SelectionRunnerError("Selection handoff fields are incomplete or unexpected")
     _hash(source["selection_input_sha256"], "selection_input_sha256")
     _hash(source["paired_out_vectors_sha256"], "paired_out_vectors_sha256")
@@ -296,6 +302,10 @@ def _validate_selection_input_hashes(source: Mapping[str, Any]) -> None:
         raise A4SelectionRunnerError("Selection input hash drifted")
     if source["paired_out_vectors_sha256"] != canonical_sha256(_vector_payload(source)):
         raise A4SelectionRunnerError("paired OUT vector hash drifted")
+    if "selection_evaluated_query_count" in source:
+        count = source["selection_evaluated_query_count"]
+        if isinstance(count, bool) or not isinstance(count, int) or count <= 0 or count > source["selection_query_count"]:
+            raise A4SelectionRunnerError("Selection evaluated query count is invalid")
 
 
 def _vector_payload(source: Mapping[str, Any]) -> dict[str, Any]:
