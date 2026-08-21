@@ -66,6 +66,24 @@ def main() -> int:
             "failures": package["failures"],
             "determinism": package["determinism"],
         }
+    legal_path = root / "selection-closeout-v2" / "A4_LEGAL_TRANSFER.json"
+    if not legal_path.is_file() or legal_path.is_symlink():
+        raise ValueError("Selection attempt is missing isolated legal-transfer receipt")
+    legal = _load(legal_path)
+    if legal.get("schema_version") != "myis.armindex-a4-legal-transfer-receipt.v1":
+        raise ValueError("legal-transfer receipt schema is invalid")
+    if legal.get("status") != "PASS_A4_LEGAL_TRANSFER_ISOLATED":
+        raise ValueError("legal-transfer isolation is not PASS")
+    if legal.get("attempt_id") != attempt_id:
+        raise ValueError("legal-transfer attempt identity is mixed")
+    if legal.get("mini", {}).get("status") != "UNSUPPORTED":
+        raise ValueError("Selection legal mini must preserve the unsupported status")
+    if legal.get("full", {}).get("status") != "NOT_RUN":
+        raise ValueError("Selection legal full transfer must remain not run")
+    if legal.get("selection_accesses") != 0 or legal.get("final_accesses") != 0:
+        raise ValueError("legal-transfer receipt changed gated counters")
+    if legal.get("patent_retuning") is not False or legal.get("protected_payload_included") is not False:
+        raise ValueError("legal-transfer receipt crossed an isolation boundary")
     coverage_body = {
         "schema_version": "myis.armindex-a4-selection-coverage-receipt.v1",
         "status": "PASS_A4_SELECTION_COMPLETE_PROFILE_COVERAGE",
@@ -74,6 +92,8 @@ def main() -> int:
         "selection_query_count": 125,
         "evaluated_out_query_count": 90,
         "profiles": refs,
+        "legal_transfer_receipt_sha256": file_sha256(legal_path),
+        "legal_transfer_status": legal["mini"]["status"],
         "selection_accesses": 1,
         "final_accesses": 0,
         "protected_payload_included": False,
@@ -104,6 +124,7 @@ def main() -> int:
         "all_profile_coverage_complete": True,
         "all_profile_failures_zero": True,
         "all_profile_deterministic": True,
+        "legal_transfer_isolated": True,
         "selection_accesses": 1,
         "final_accesses": 0,
         "protected_payload_included": False,
