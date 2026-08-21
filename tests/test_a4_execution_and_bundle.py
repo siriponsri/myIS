@@ -121,6 +121,7 @@ def test_admission_reserves_a5_and_d2_requires_all_predicates() -> None:
         "finalist_frozen": True,
         "protected_boundary": True,
         "a5_budget_reserve": True,
+        "a5_provenance_pass": True,
     }
     receipt = build_conditional_d2_receipt(
         a4_result_audit_sha256=HASH_A,
@@ -132,9 +133,11 @@ def test_admission_reserves_a5_and_d2_requires_all_predicates() -> None:
         clean_git_tree="1" * 40,
         selection_accesses=1,
         final_accesses=0,
+        a5_provenance_audit_sha256="9" * 64,
         automatic_pass=predicates,
     )
     assert receipt["owner_conditional_approval"] is True
+    assert receipt["a5_provenance_audit_sha256"] == "9" * 64
     predicates["a5_budget_reserve"] = False
     with pytest.raises(A4ExecutionError, match="automatic PASS"):
         build_conditional_d2_receipt(
@@ -147,6 +150,52 @@ def test_admission_reserves_a5_and_d2_requires_all_predicates() -> None:
             clean_git_tree="1" * 40,
             selection_accesses=1,
             final_accesses=0,
+            a5_provenance_audit_sha256="9" * 64,
+            automatic_pass=predicates,
+        )
+
+
+def test_conditional_d2_rejects_unresolved_a5_provenance() -> None:
+    predicates = {
+        "all_a4_coverage": True,
+        "selection_count_valid": True,
+        "legal_isolation": True,
+        "safe_return": True,
+        "independent_audit": True,
+        "a5_bundle_clean_pushed": True,
+        "finalist_frozen": True,
+        "protected_boundary": True,
+        "a5_budget_reserve": True,
+        "a5_provenance_pass": False,
+    }
+    with pytest.raises(A4ExecutionError, match="automatic PASS"):
+        build_conditional_d2_receipt(
+            a4_result_audit_sha256=HASH_A,
+            a4_safe_return_sha256=HASH_B,
+            a5_bundle_sha256=HASH_C,
+            final_registry_sha256=HASH_D,
+            final_split_commitment_sha256="e" * 64,
+            clean_git_commit="f" * 40,
+            clean_git_tree="1" * 40,
+            selection_accesses=1,
+            final_accesses=0,
+            a5_provenance_audit_sha256="9" * 64,
+            automatic_pass=predicates,
+        )
+
+    predicates.pop("a5_provenance_pass")
+    with pytest.raises(A4ExecutionError, match="automatic PASS"):
+        build_conditional_d2_receipt(
+            a4_result_audit_sha256=HASH_A,
+            a4_safe_return_sha256=HASH_B,
+            a5_bundle_sha256=HASH_C,
+            final_registry_sha256=HASH_D,
+            final_split_commitment_sha256="e" * 64,
+            clean_git_commit="f" * 40,
+            clean_git_tree="1" * 40,
+            selection_accesses=1,
+            final_accesses=0,
+            a5_provenance_audit_sha256="9" * 64,
             automatic_pass=predicates,
         )
 

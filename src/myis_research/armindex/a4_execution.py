@@ -326,9 +326,15 @@ def build_conditional_d2_receipt(
     clean_git_tree: str,
     selection_accesses: int,
     final_accesses: int,
+    a5_provenance_audit_sha256: str,
     automatic_pass: Mapping[str, bool],
 ) -> dict[str, Any]:
-    """Emit D2 only after every independently observable A4 predicate passes."""
+    """Emit D2 only after A4 predicates and A5 provenance have passed.
+
+    The provenance receipt is aggregate-safe and hash-bound. Requiring it at
+    this constructor boundary prevents structural A5 validation from being
+    mistaken for launch-ready Final provenance.
+    """
 
     for field, value in (
         ("a4_result_audit_sha256", a4_result_audit_sha256),
@@ -336,6 +342,7 @@ def build_conditional_d2_receipt(
         ("a5_bundle_sha256", a5_bundle_sha256),
         ("final_registry_sha256", final_registry_sha256),
         ("final_split_commitment_sha256", final_split_commitment_sha256),
+        ("a5_provenance_audit_sha256", a5_provenance_audit_sha256),
     ):
         _hash(value, field)
     if not re.fullmatch(r"[a-f0-9]{40}", clean_git_commit) or not re.fullmatch(r"[a-f0-9]{40}", clean_git_tree):
@@ -350,6 +357,7 @@ def build_conditional_d2_receipt(
         "finalist_frozen",
         "protected_boundary",
         "a5_budget_reserve",
+        "a5_provenance_pass",
     }
     if set(automatic_pass) != required or any(value is not True for value in automatic_pass.values()):
         raise A4ExecutionError("A4 automatic PASS predicates are incomplete")
@@ -363,6 +371,7 @@ def build_conditional_d2_receipt(
         "a4_result_audit_sha256": a4_result_audit_sha256,
         "a4_safe_return_sha256": a4_safe_return_sha256,
         "a5_bundle_sha256": a5_bundle_sha256,
+        "a5_provenance_audit_sha256": a5_provenance_audit_sha256,
         "final_registry_sha256": final_registry_sha256,
         "final_split_commitment_sha256": final_split_commitment_sha256,
         "clean_git_commit": clean_git_commit,
