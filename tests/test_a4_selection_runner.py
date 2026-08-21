@@ -47,14 +47,16 @@ def _counter(registry: dict) -> dict:
     return {**body, "counter_sha256": canonical_sha256(body)}
 
 
-def _input() -> dict:
-    left = [1.0] * 100 + [0.0] * 25
-    right = [0.0] * 125
+def _input(*, evaluated_count: int = 125) -> dict:
+    left_wins = min(100, evaluated_count)
+    left = [1.0] * left_wins + [0.0] * (evaluated_count - left_wins)
+    right = [0.0] * evaluated_count
     body = {
         "selection_input_sha256": "",
         "paired_out_vectors_sha256": "",
         "evaluator_handoff_sha256": "1" * 64,
         "selection_query_count": 125,
+        "selection_evaluated_query_count": evaluated_count,
         "selection_population": "OUT",
         "comparison_family_id": "a4-selection-frozen-finalists-v1",
         "bootstrap_seed": 17,
@@ -100,6 +102,7 @@ def test_selection_runner_returns_only_aggregate_receipt_and_writes_once(tmp_pat
     assert receipt["selection_accesses"] == 1
     assert receipt["final_accesses"] == 0
     assert receipt["selection_query_count"] == 125
+    assert receipt["selection_evaluated_query_count"] == 125
     assert comparison["decision"] == "LEFT"
     assert comparison["paired_effect"]["bootstrap_resamples"] == 10_000
     assert comparison["win_tie_loss"] == {"wins": 100, "ties": 25, "losses": 0}
@@ -108,6 +111,26 @@ def test_selection_runner_returns_only_aggregate_receipt_and_writes_once(tmp_pat
     assert receipt["evaluator_handoff_sha256"] == "1" * 64
     with pytest.raises(A4SelectionRunnerError, match="already exists"):
         run_selection_owner_local(_registry(), _input(), preflight_counter=_counter(_registry()), selection_output_path=output)
+
+
+def test_selection_runner_reports_out_denominator_without_padding() -> None:
+    source = _input(evaluated_count=90)
+    receipt = run_selection_owner_local(_registry(), source, preflight_counter=_counter(_registry()))
+    comparison = receipt["comparisons"][0]
+    assert receipt["selection_query_count"] == 125
+    assert receipt["selection_evaluated_query_count"] == 90
+    assert comparison["paired_effect"]["unit_count"] == 90
+    assert comparison["win_tie_loss"] == {"wins": 90, "ties": 0, "losses": 0}
+
+
+def test_selection_runner_rejects_implicit_out_denominator() -> None:
+    source = _input()
+    del source["selection_evaluated_query_count"]
+    source["selection_input_sha256"] = canonical_sha256(
+        {key: value for key, value in source.items() if key != "selection_input_sha256"}
+    )
+    with pytest.raises(A4SelectionRunnerError, match="fields are incomplete"):
+        run_selection_owner_local(_registry(), source, preflight_counter=_counter(_registry()))
 
 
 def test_selection_runner_rejects_wrong_count_or_registry_binding() -> None:
