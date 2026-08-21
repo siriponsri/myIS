@@ -208,7 +208,10 @@ class SentenceTransformerDenseAdapter:
             device=device,
             trust_remote_code=arm_id == "ARM-04",
             local_files_only=True,
-            model_kwargs={"torch_dtype": torch.float16},
+            # Force eager materialization before the model is placed on the
+            # requested device.  Concurrent ARM-04/05 loads otherwise may
+            # leave a Transformer module on the meta device and fail on .to().
+            model_kwargs={"torch_dtype": torch.float16, "low_cpu_mem_usage": False},
             config_kwargs=ARM_CONFIG_OVERRIDES.get(arm_id),
         )
         model.max_seq_length = max_input_tokens or MAX_INPUT_TOKENS[arm_id]

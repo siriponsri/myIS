@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import sys
+from types import SimpleNamespace
+
 import numpy as np
 import pytest
 
@@ -46,6 +49,53 @@ class TokenIdAdapter(FakeAdapter):
     def encode_token_ids(self, inputs: list[tuple[int, ...]]) -> np.ndarray:
         self.token_id_calls.append(tuple(inputs))
         return np.asarray([(1.0, 0.0) for _ in inputs], dtype=np.float64)
+
+
+def test_staged_sentence_transformer_load_forces_eager_materialization(
+    monkeypatch: pytest.MonkeyPatch, tmp_path
+) -> None:
+    """Concurrent profile loads must not retain meta-device parameters."""
+
+    calls: list[dict[str, object]] = []
+
+    class FakeSentenceTransformer:
+        def __init__(self, _directory: str, **kwargs: object) -> None:
+            calls.append(kwargs)
+
+    monkeypatch.setitem(
+        sys.modules,
+        "torch",
+        SimpleNamespace(float16="float16"),
+    )
+    monkeypatch.setitem(
+        sys.modules,
+        "sentence_transformers",
+        SimpleNamespace(SentenceTransformer=FakeSentenceTransformer),
+    )
+    monkeypatch.setenv("HF_HUB_OFFLINE", "1")
+    monkeypatch.setenv("TRANSFORMERS_OFFLINE", "1")
+    staged_model = tmp_path / "staged-model"
+    staged_model.mkdir()
+
+    adapter = SentenceTransformerDenseAdapter.from_staged_directory(
+        arm_id="ARM-05",
+        model_directory=staged_model,
+        device="cuda:0",
+    )
+
+    assert isinstance(adapter.model, FakeSentenceTransformer)
+    assert calls == [
+        {
+            "device": "cuda:0",
+            "trust_remote_code": False,
+            "local_files_only": True,
+            "model_kwargs": {
+                "torch_dtype": "float16",
+                "low_cpu_mem_usage": False,
+            },
+            "config_kwargs": None,
+        }
+    ]
 
 
 def unit(
