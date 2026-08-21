@@ -20,6 +20,7 @@ from typing import Any
 from ..kernel.canonical import canonical_json, canonical_sha256, file_sha256
 from .a4_execution import validate_a4_predecessor_binding
 from .a4_hdev_materializer import validate_a4_hdev_handoff
+from .a4_selection_materializer import validate_selection_input_materialization
 
 
 _DENSE_ARMS = ("ARM-03", "ARM-04", "ARM-05")
@@ -29,6 +30,215 @@ _PROTECTED_NAME_PARTS = ("qrel", "membership", "ranking", "credential", "secret"
 
 class A4AssetBundleError(ValueError):
     """Raised when a fresh A4 runtime package cannot be safely assembled."""
+
+
+def build_a4_selection_runtime_package(
+    *,
+    hdev_package_root: Path,
+    selection_input_root: Path,
+    output_root: Path,
+    attempt_id: str,
+    predecessor_binding: Mapping[str, Any],
+    profile_registry: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Build a fresh opaque Selection-125 runtime package.
+
+    The HDEV package is an immutable asset seed: only its corpus, programs,
+    and model trees are copied.  The Selection query package is read from the
+    validated Owner Store materialization and is copied as opaque
+    ``work_token``/``text`` JSONL.  Qrels, membership, rankings, and evaluator
+    payloads are intentionally never read or included in the remote package.
+    """
+
+    if not isinstance(attempt_id, str) or not attempt_id.startswith("a4-"):
+        raise A4AssetBundleError("A4 Selection attempt identity is invalid")
+    predecessor = validate_a4_predecessor_binding(predecessor_binding)
+    profile = _profile_registry(profile_registry, attempt_id=attempt_id, predecessor=predecessor)
+    source_package = _directory(hdev_package_root, "validated HDEV runtime package")
+    source_receipt = _load_json(_file(source_package / "A4_RUNTIME_PACKAGE_RECEIPT.json", "HDEV runtime receipt"))
+    source_attempt = source_receipt.get("attempt_id")
+    if not isinstance(source_attempt, str) or source_attempt == attempt_id:
+        raise A4AssetBundleError("Selection package requires a distinct fresh attempt identity")
+    validate_a4_hdev_runtime_package(source_package, expected_attempt_id=source_attempt)
+    source_assets = _directory(source_package / "assets", "validated HDEV runtime assets")
+
+    selection_root = _directory(selection_input_root, "Selection input materialization")
+    selection_receipt_file = _file(
+        selection_root / "A4_SELECTION_INPUT_MATERIALIZATION_RECEIPT.json",
+        "Selection input receipt",
+    )
+    selection_receipt = _load_json(selection_receipt_file)
+    selection_attempt = selection_receipt.get("attempt_id")
+    if not isinstance(selection_attempt, str):
+        raise A4AssetBundleError("Selection input receipt attempt identity is invalid")
+    validate_selection_input_materialization(selection_root, expected_attempt_id=selection_attempt)
+    query_file = _selection_query_file(selection_root, selection_receipt)
+    rows = _query_rows(query_file, None)
+    if len(rows) != 125:
+        raise A4AssetBundleError("Selection input package must contain exactly 125 queries")
+
+    destination = Path(output_root).resolve()
+    if destination.exists() or destination.is_symlink():
+        raise A4AssetBundleError("fresh A4 Selection package destination already exists")
+    destination.mkdir(parents=True, exist_ok=False)
+    assets = destination / "assets"
+    try:
+        assets.mkdir()
+        _copy_selection_seed_assets(source_assets, assets)
+        _write_json(assets / "queries.jsonl", rows, jsonl=True)
+        scope_body = {
+            "schema_version": "myis.armindex-a4-selection-scope.v1",
+            "scope": "Selection-125",
+            "population": "OUT",
+            "query_count": 125,
+            "parent_split_sha256": _sha256(selection_receipt.get("parent_split_sha256"), "parent_split_sha256"),
+            "selection_input_receipt_sha256": file_sha256(selection_receipt_file),
+            "query_bundle_sha256": file_sha256(assets / "queries.jsonl"),
+            "selection_accesses": 0,
+            "final_accesses": 0,
+            "protected_payload_included": False,
+        }
+        scope = {**scope_body, "scope_sha256": canonical_sha256(scope_body)}
+        _write_json(assets / "selection-scope.json", scope)
+        inventory_body = {
+            "schema_version": "myis.armindex-a4-runtime-assets-inventory.v1",
+            "attempt_id": attempt_id,
+            "asset_sha256s": _asset_hashes(assets),
+            "selection_scope_sha256": scope["scope_sha256"],
+            "profile_registry_sha256": profile["registry_sha256"],
+            "selection_input_receipt_sha256": file_sha256(selection_receipt_file),
+            "protected_payload_included": False,
+        }
+        inventory = {**inventory_body, "inventory_sha256": canonical_sha256(inventory_body)}
+        _write_json(assets / "A4_RUNTIME_ASSETS.json", inventory)
+        runtime_body = {
+            "schema_version": "myis.armindex-a4-runtime-bindings.v1",
+            "attempt_id": attempt_id,
+            "predecessor_binding_sha256": predecessor["binding_sha256"],
+            "profile_registry_sha256": profile["registry_sha256"],
+            "selection_scope_sha256": scope["scope_sha256"],
+            "asset_inventory_sha256": inventory["inventory_sha256"],
+            "winner_program_sha256s": predecessor["winner_program_sha256s"],
+            "primary_arm_scope": list(_DENSE_ARMS),
+            "protected_payload_included": False,
+        }
+        runtime = {**runtime_body, "runtime_bindings_sha256": canonical_sha256(runtime_body)}
+        _write_json(destination / "A4_RUNTIME_BINDINGS.json", runtime)
+        archive = destination / "a4-selection-runtime-assets.tar.gz"
+        _tar_directory(assets, archive)
+        body = {
+            "schema_version": "myis.armindex-a4-selection-runtime-package-receipt.v1",
+            "status": "PASS_A4_SELECTION_RUNTIME_PACKAGE",
+            "attempt_id": attempt_id,
+            "source_hdev_attempt_id": source_attempt,
+            "selection_input_receipt_sha256": file_sha256(selection_receipt_file),
+            "selection_scope_sha256": scope["scope_sha256"],
+            "asset_inventory_sha256": inventory["inventory_sha256"],
+            "runtime_bindings_sha256": runtime["runtime_bindings_sha256"],
+            "selection_query_count": 125,
+            "archive_sha256": file_sha256(archive),
+            "archive_size_bytes": archive.stat().st_size,
+            "protected_payload_included": False,
+            "selection_accesses": 0,
+            "final_accesses": 0,
+        }
+        receipt = {**body, "receipt_sha256": canonical_sha256(body)}
+        _write_json(destination / "A4_SELECTION_RUNTIME_PACKAGE_RECEIPT.json", receipt)
+        return receipt
+    except Exception:
+        shutil.rmtree(destination, ignore_errors=True)
+        raise
+
+
+def validate_a4_selection_runtime_package(root: Path, *, expected_attempt_id: str) -> dict[str, Any]:
+    """Validate a complete Selection-125 package before remote staging."""
+
+    package = _directory(root, "A4 Selection runtime package")
+    receipt = _load_json(_file(package / "A4_SELECTION_RUNTIME_PACKAGE_RECEIPT.json", "Selection runtime receipt"))
+    if receipt.get("attempt_id") != expected_attempt_id or receipt.get("status") != "PASS_A4_SELECTION_RUNTIME_PACKAGE":
+        raise A4AssetBundleError("A4 Selection runtime package identity is invalid")
+    _self_hash(receipt, "receipt_sha256", "Selection runtime receipt")
+    if receipt.get("selection_query_count") != 125 or receipt.get("selection_accesses") != 0 or receipt.get("final_accesses") != 0:
+        raise A4AssetBundleError("Selection runtime package scope/counters are invalid")
+    runtime = _load_json(_file(package / "A4_RUNTIME_BINDINGS.json", "Selection runtime bindings"))
+    _self_hash(runtime, "runtime_bindings_sha256", "Selection runtime bindings")
+    assets = _directory(package / "assets", "Selection runtime assets")
+    expected_top = {"corpus.jsonl", "queries.jsonl", "selection-scope.json", "programs", "models", "A4_RUNTIME_ASSETS.json"}
+    if {path.name for path in assets.iterdir()} != expected_top:
+        raise A4AssetBundleError("Selection runtime assets contain unexpected files")
+    scope = _load_json(_file(assets / "selection-scope.json", "Selection scope"))
+    _self_hash(scope, "scope_sha256", "Selection scope")
+    if scope.get("schema_version") != "myis.armindex-a4-selection-scope.v1" or scope.get("scope") != "Selection-125" or scope.get("population") != "OUT" or scope.get("query_count") != 125:
+        raise A4AssetBundleError("Selection scope is invalid")
+    if scope.get("selection_accesses") != 0 or scope.get("final_accesses") != 0 or scope.get("protected_payload_included") is not False:
+        raise A4AssetBundleError("Selection scope counters/protection are invalid")
+    rows = _query_rows(_file(assets / "queries.jsonl", "Selection query package"), None)
+    if len(rows) != 125:
+        raise A4AssetBundleError("Selection query package coverage is incomplete")
+    inventory = _load_json(_file(assets / "A4_RUNTIME_ASSETS.json", "Selection runtime inventory"))
+    _self_hash(inventory, "inventory_sha256", "Selection runtime inventory")
+    if inventory.get("asset_sha256s") != _asset_hashes(assets, exclude={"A4_RUNTIME_ASSETS.json"}):
+        raise A4AssetBundleError("Selection runtime asset inventory hash drift")
+    if inventory.get("selection_scope_sha256") != scope["scope_sha256"] or runtime.get("selection_scope_sha256") != scope["scope_sha256"] or runtime.get("asset_inventory_sha256") != inventory["inventory_sha256"]:
+        raise A4AssetBundleError("Selection runtime scope/inventory binding drift")
+    if receipt.get("archive_sha256") != file_sha256(_file(package / "a4-selection-runtime-assets.tar.gz", "Selection runtime archive")):
+        raise A4AssetBundleError("Selection runtime archive hash drift")
+    _validate_archive_names(package / "a4-selection-runtime-assets.tar.gz")
+    return receipt
+
+
+def _selection_query_file(selection_root: Path, receipt: Mapping[str, Any]) -> Path:
+    artifacts = receipt.get("protected_artifacts")
+    if not isinstance(artifacts, list) or len(artifacts) != 1 or not isinstance(artifacts[0], Mapping):
+        raise A4AssetBundleError("Selection input protected artifact declaration is invalid")
+    relative = artifacts[0].get("relative_path")
+    if not isinstance(relative, str) or Path(relative).is_absolute():
+        raise A4AssetBundleError("Selection input protected artifact path is invalid")
+    candidate = (selection_root / relative).resolve(strict=True)
+    if candidate.is_symlink() or not candidate.is_file() or not candidate.is_relative_to(selection_root):
+        raise A4AssetBundleError("Selection input query package is unsafe")
+    declared = artifacts[0].get("sha256")
+    if not isinstance(declared, str) or declared != file_sha256(candidate):
+        raise A4AssetBundleError("Selection input query package hash drift")
+    return candidate
+
+
+def _copy_selection_seed_assets(source_assets: Path, destination: Path) -> None:
+    """Copy only the immutable retrieval components from a validated HDEV seed."""
+
+    _copy_file(_file(source_assets / "corpus.jsonl", "HDEV seed corpus"), destination / "corpus.jsonl")
+    programs = destination / "programs"
+    models = destination / "models"
+    programs.mkdir()
+    models.mkdir()
+    for arm_id in _DENSE_ARMS:
+        _copy_file(
+            _file(source_assets / "programs" / f"{arm_id}.json", f"HDEV seed {arm_id} program"),
+            programs / f"{arm_id}.json",
+        )
+        _copy_tree(_directory(source_assets / "models" / arm_id, f"HDEV seed {arm_id} model"), models / arm_id)
+
+
+def _validate_archive_names(path: Path) -> None:
+    try:
+        with tarfile.open(path, "r:gz") as archive:
+            members = archive.getmembers()
+    except (OSError, tarfile.TarError) as error:
+        raise A4AssetBundleError("Selection runtime archive is invalid") from error
+    names = {member.name for member in members}
+    if any(member.issym() or member.islnk() or not member.isfile() for member in members):
+        raise A4AssetBundleError("Selection runtime archive contains unsafe member")
+    if any(any(part in name.lower() for part in _PROTECTED_NAME_PARTS) for name in names):
+        raise A4AssetBundleError("Selection runtime archive contains protected artifact name")
+    required = {"corpus.jsonl", "queries.jsonl", "selection-scope.json", "A4_RUNTIME_ASSETS.json"}
+    if not required.issubset(names) or "hdev-scope.json" in names:
+        raise A4AssetBundleError("Selection runtime archive scope is invalid")
+
+
+def _sha256(value: Any, role: str) -> str:
+    if not isinstance(value, str) or len(value) != 64:
+        raise A4AssetBundleError(f"{role} is invalid")
+    return value
 
 
 def build_a4_hdev_runtime_package(
@@ -304,4 +514,10 @@ def _self_hash(value: Mapping[str, Any], field: str, role: str) -> None:
         raise A4AssetBundleError(f"{role} self-hash does not match")
 
 
-__all__ = ["A4AssetBundleError", "build_a4_hdev_runtime_package", "validate_a4_hdev_runtime_package"]
+__all__ = [
+    "A4AssetBundleError",
+    "build_a4_hdev_runtime_package",
+    "build_a4_selection_runtime_package",
+    "validate_a4_hdev_runtime_package",
+    "validate_a4_selection_runtime_package",
+]
