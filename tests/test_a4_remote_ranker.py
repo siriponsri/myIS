@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from threading import Barrier
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier, Lock
+import time
 from types import SimpleNamespace
 
 import pytest
@@ -95,3 +97,33 @@ def test_dense_ranking_uses_conservative_batch_one_after_oom_recovery(
     a4_remote_ranker._rank_one(tmp_path, arm_id="ARM-05", queries={})
 
     assert captured["batch_size"] == 1
+
+
+def test_dense_adapter_construction_is_serialized_for_async_profile(monkeypatch: pytest.MonkeyPatch) -> None:
+    active = 0
+    max_active = 0
+    state_lock = Lock()
+
+    def fake_loader(**kwargs: object) -> object:
+        nonlocal active, max_active
+        with state_lock:
+            active += 1
+            max_active = max(max_active, active)
+        time.sleep(0.02)
+        with state_lock:
+            active -= 1
+        return kwargs
+
+    monkeypatch.setattr(
+        a4_remote_ranker.SentenceTransformerDenseAdapter,
+        "from_staged_directory",
+        staticmethod(fake_loader),
+    )
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [
+            pool.submit(a4_remote_ranker._serialized_dense_adapter_factory, **kwargs)
+            for kwargs in ({"arm_id": "ARM-04"}, {"arm_id": "ARM-05"})
+        ]
+        [future.result() for future in futures]
+
+    assert max_active == 1
