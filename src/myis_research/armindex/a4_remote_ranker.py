@@ -98,7 +98,10 @@ def build_a4_profile_request(
         "system_sha256": system,
         "profile_registry_sha256": registry["registry_sha256"],
         "runtime_bindings_sha256": runtime["runtime_bindings_sha256"],
-        "hdev_scope_sha256": runtime["hdev_scope_sha256"],
+        # Selection requests replace the legacy HDEV scope binding below.
+        # Keep the common builder usable for both contracts without requiring
+        # a HDEV field in the Selection runtime bindings.
+        "hdev_scope_sha256": runtime.get("hdev_scope_sha256"),
         "arm_ids": arm_ids,
         "candidate_depth": depth,
         "mode": mode,
