@@ -129,8 +129,9 @@ def main() -> int:
 
     known_hosts = args.known_hosts.resolve(strict=True)
     key = args.key.resolve(strict=True)
-    ssh = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", f'UserKnownHostsFile={known_hosts}', "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=6", "-i", str(key), "-p", str(args.port), f"root@{args.host}"]
-    scp = ["scp", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", f'UserKnownHostsFile={known_hosts}', "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=6", "-i", str(key), "-P", str(args.port)]
+    known_hosts_option = f'UserKnownHostsFile="{known_hosts}"'
+    ssh = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=6", "-i", str(key), "-p", str(args.port), f"root@{args.host}"]
+    scp = ["scp", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", known_hosts_option, "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=6", "-i", str(key), "-P", str(args.port)]
     remote = f"root@{args.host}"
     root, seed = shlex.quote(args.remote_root), shlex.quote(args.seed_root)
     _run([*ssh, f"set -eu; test ! -e {root}; test -d {seed}/assets; mkdir -p {root}/incoming {root}/current {root}/assets {root}/requests {root}/receipts {root}/output {root}/checkpoints; cp -a --reflink=auto {seed}/assets/corpus.jsonl {root}/assets/; cp -a --reflink=auto {seed}/assets/programs {root}/assets/; cp -a --reflink=auto {seed}/assets/models {root}/assets/"])

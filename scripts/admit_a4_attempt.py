@@ -42,7 +42,7 @@ def _vast(instance_id: str) -> dict:
 def _runtime_probe(host: str, port: int, key: Path, known_hosts: Path) -> dict:
     command = [
         "ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes",
-        "-o", f"UserKnownHostsFile={known_hosts}", "-i", str(key), "-p", str(port),
+        "-o", f'UserKnownHostsFile="{known_hosts.resolve()}"', "-i", str(key), "-p", str(port),
         f"root@{host}", "python -c 'import torch; print(torch.__version__); print(torch.version.cuda); print(torch.cuda.is_available()); print(torch.cuda.device_count())'",
     ]
     output = subprocess.run(command, check=True, capture_output=True, text=True, timeout=60).stdout.splitlines()
