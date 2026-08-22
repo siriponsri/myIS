@@ -21,6 +21,32 @@ def _load(path: Path) -> dict[str, Any]:
     return value
 
 
+def _validate_ranking_package(request: Mapping[str, Any], package: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Validate the opaque remote package before opening Owner-local qrels."""
+
+    if package.get("schema_version") != "myis.armindex-a5-final-ranking-package.v1" or package.get("status") != "PASS_A5_REMOTE_OPAQUE_RANKINGS":
+        raise ValueError("A5 ranking package is not complete")
+    if (
+        package.get("attempt_id") != request["attempt_id"]
+        or package.get("request_sha256") != request["request_sha256"]
+        or package.get("scope") != "Final-872"
+        or package.get("query_count") != 872
+        or package.get("failures") != 0
+        or package.get("determinism") is not True
+        or package.get("protected_payload_included") is not False
+        or package.get("rankings_returned_to") != "owner_local_evaluator_only"
+    ):
+        raise ValueError("A5 ranking package binding is invalid")
+    rankings = package.get("rankings")
+    if not isinstance(rankings, Mapping) or set(rankings) != {"research_champion", "static_common_baseline"}:
+        raise ValueError("A5 finalist ranking set is invalid")
+    if package.get("coverage") != {"research_champion": 872, "static_common_baseline": 872}:
+        raise ValueError("A5 ranking package coverage is invalid")
+    if package.get("ranking_sha256") != canonical_sha256(rankings):
+        raise ValueError("A5 ranking package commitment drift")
+    return rankings
+
+
 def _qrels(path: Path) -> tuple[dict[str, dict[str, int]], set[str]]:
     qrels: dict[str, dict[str, int]] = {}
     for line in path.read_text(encoding="ascii").splitlines():
@@ -69,13 +95,7 @@ def evaluate(*, ranking_path: Path, request_path: Path, owner_root: Path, output
     if request.get("request_sha256") != canonical_sha256({k: v for k, v in request.items() if k != "request_sha256"}):
         raise ValueError("A5 request hash mismatch")
     package = _load(ranking_path)
-    if package.get("schema_version") != "myis.armindex-a5-final-ranking-package.v1" or package.get("status") != "PASS_A5_REMOTE_OPAQUE_RANKINGS":
-        raise ValueError("A5 ranking package is not complete")
-    if package.get("request_sha256") != request["request_sha256"] or package.get("query_count") != 872 or package.get("failures") != 0 or package.get("determinism") is not True:
-        raise ValueError("A5 ranking package binding is invalid")
-    rankings = package.get("rankings")
-    if not isinstance(rankings, Mapping) or set(rankings) != {"research_champion", "static_common_baseline"}:
-        raise ValueError("A5 finalist ranking set is invalid")
+    rankings = _validate_ranking_package(request, package)
     qrels, eligible = _qrels(owner_root / "protected" / "qrels.jsonl")
     metrics: dict[str, dict[str, Any]] = {}
     vectors: dict[str, tuple[list[float], list[float], list[float]]] = {}
