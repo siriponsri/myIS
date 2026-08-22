@@ -1,0 +1,24 @@
+{
+  "attempt_id": "a5-goal001-20260822T-rerun-final872-r03",
+  "destination": "owner_store_only",
+  "final_accesses": 1,
+  "opaque_package_bytes": 15777158,
+  "opaque_package_sha256": "7906e3220f5e097b9694a4771a820d6f3a5c30c91675ebb48ec30ad44da3a2df",
+  "protected_payload_included": false,
+  "provider_disposition": "KEEP_GPU_PENDING_OWNER_A6_APPROVAL",
+  "provider_instance_id": 48367896,
+  "receipt_sha256": "2341db96c426f9a0568861f591fd8b92e47984351b2e1139a8771dfd806fdd56",
+  "repository_allowlist": [
+    "aggregate_metrics",
+    "counts",
+    "hashes",
+    "safe_manifests",
+    "safe_receipts",
+    "aggregate_figures",
+    "failure_taxonomy"
+  ],
+  "schema_version": "myis.armindex-a5-safe-return.v1",
+  "selection_accesses": 1,
+  "status": "PASS_A5_SAFE_RETURN",
+  "worker_teardown_verified": true
+}

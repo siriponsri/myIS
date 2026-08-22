@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 from pathlib import Path
 
 import pytest
@@ -32,7 +31,7 @@ def test_canonical_pending_template_produces_closed_receipt() -> None:
     assert receipt["selection_accesses"] == 0
     assert receipt["final_accesses"] == 0
     assert receipt["protected_payload_included"] is False
-    assert receipt["authorized_instance_id"] == 47790578
+    assert receipt["authorized_instance_id"] == 48367896
     assert len(receipt["receipt_sha256"]) == 64
 
 

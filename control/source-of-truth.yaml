@@ -20,6 +20,11 @@ records:
     supporting_authority: [control/armindex/a6/a6-full-dapfam-execution-contract.v1.json]
     projections: [projections/read-model, projections/reports, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [owner_approved_preregistration, preserve_a0_a5_hashes, a6_requires_valid_a5_closeout, a6_owner_local_full_corpus_only, no_selection_or_final_reopen, no_tuning_or_winner_feedback, d3_applies_to_a7_only, aggregate_safe_projection_only]
+  - id: armindex_a5_final_confirmation_r03
+    authority: control/armindex/a5/final-r03-20260822/A5_FINAL_CLOSEOUT.json
+    supporting_authority: [control/armindex/a5/final-r03-20260822/A5_FINAL_OWNER_EVALUATION.json, control/armindex/a5/final-r03-20260822/A5_FINAL_RESULT_INTEGRITY_AUDIT.json, control/armindex/a5/final-r03-20260822/A5_FROZEN_WINNER_BINDING.json]
+    projections: [projections/read-model, projections/reports, dashboard, brain, obsidian, paper, mlflow]
+    restrictions: [final_872_consumed_once, exactly_two_frozen_systems, aggregate_safe_only, raw_rankings_and_protected_inputs_owner_store_only, arm_03_single_frozen_winner, a6_requires_explicit_owner_approval_and_fresh_admission, no_a5_rerun_or_registry_expansion]
   - id: armindex_a1_1_adapter_fixture_closeout
     authority: campaigns/armindex-multiretriever-v2/evidence/a1.1-adapter-fixture-validation.receipt.v1.json
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]

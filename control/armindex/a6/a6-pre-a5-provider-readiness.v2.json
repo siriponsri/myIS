@@ -1,5 +1,5 @@
 {
-  "a6_contract_sha256": "eb41ffcf070470a610cdc5fb0a948d26e018c12a6413f1721d74ba404c118c45",
+  "a6_contract_sha256": "57c2a4c724ccf71d2f8c1eaae697470d75a4ea9234dbe72aabc1544a4aee0b39",
   "aggregate_health_observation": {
     "disk_available_gib": null,
     "gpu_count": null,
@@ -38,5 +38,5 @@
   "scientific_authority": false,
   "selection_accesses": 0,
   "status": "PENDING_A5_CLOSEOUT_FRESH_PROVIDER_CANDIDATE",
-  "plan_sha256": "5eeae1862d785467359656ec91258bc24b84c644f637ed85c25bda2c8e726e28"
+  "plan_sha256": "0d220aabbe031316fe540c1ede01d04c7ca0fd4ac970699a45f47d8cf938b17b"
 }

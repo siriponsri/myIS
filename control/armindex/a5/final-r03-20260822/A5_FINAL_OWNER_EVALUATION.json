@@ -1,0 +1,101 @@
+{
+  "claim_boundary": "Final-872 confirmatory aggregate only; no per-query outcomes, rankings, qrels, membership, IDs, or protected payload are projected.",
+  "final_accesses": 1,
+  "judged_query_count": 872,
+  "paired_effects": {
+    "bootstrap_resamples": 10000,
+    "recall_wins_ties_losses": {
+      "losses": 95,
+      "ties": 158,
+      "wins": 619
+    },
+    "research_minus_static_ndcg_at_100": {
+      "ci95": [
+        0.07867335584624419,
+        0.09407655981032025
+      ],
+      "delta": 0.08634224051593878
+    },
+    "research_minus_static_recall_at_100": {
+      "ci95": [
+        0.10229357798165122,
+        0.12043832823649343
+      ],
+      "delta": 0.11137869520897027
+    }
+  },
+  "protected_payload_included": false,
+  "query_count": 872,
+  "ranking_package_sha256": "7906e3220f5e097b9694a4771a820d6f3a5c30c91675ebb48ec30ad44da3a2df",
+  "request_sha256": "7bf12807d0ea439d991bd121918c3050d1ef2bf88d2838ab51b0a330192883f6",
+  "result_sha256": "9fefedf91fc730501a159824b61b024facb8d80a96b4c797477087df4f06cd17",
+  "schema_version": "myis.armindex-a5-final-owner-evaluation.v1",
+  "scope": "Final-872",
+  "selection_accesses": 1,
+  "status": "PASS_A5_FINAL_CONFIRMATION",
+  "systems": {
+    "research_champion": {
+      "coverage": 872,
+      "determinism": true,
+      "failures": 0,
+      "latency": {
+        "p50_ms": 237.547494,
+        "p95_ms": 732.2175749999999,
+        "p99_ms": 1044.612964,
+        "throughput_qps": 3.3193435166404908
+      },
+      "quality": {
+        "failure_rate": 0.0,
+        "judged_query_count": 872,
+        "ndcg_at_100_out": 0.3655952439732403,
+        "ndcg_at_10_out": 0.29745937412122164,
+        "recall_at_100_out": 0.4424757900101942,
+        "tie_rate": 0.0,
+        "unique_relevant_family_query_pairs": 17429
+      },
+      "resource": {
+        "cost_usd": 1.4568183848031657,
+        "gpu_ids": [
+          "0",
+          "1"
+        ],
+        "index_size_bytes": 2961523444,
+        "profile_mode": "synchronous",
+        "ram_gib": 16.357601165771484,
+        "vram_gib": 0.844658374786377
+      }
+    },
+    "static_common_baseline": {
+      "coverage": 872,
+      "determinism": true,
+      "failures": 0,
+      "latency": {
+        "p50_ms": 315.8622230072591,
+        "p95_ms": 735.1705999963057,
+        "p99_ms": 804.001928954267,
+        "throughput_qps": 2.6659179985456176
+      },
+      "quality": {
+        "failure_rate": 0.0,
+        "judged_query_count": 872,
+        "ndcg_at_100_out": 0.2792530034573017,
+        "ndcg_at_10_out": 0.23366560108615564,
+        "recall_at_100_out": 0.33109709480122335,
+        "tie_rate": 0.0,
+        "unique_relevant_family_query_pairs": 17429
+      },
+      "resource": {
+        "cost_usd": 1.4568183848031657,
+        "gpu_ids": [
+          "0",
+          "1"
+        ],
+        "index_size_bytes": 2961523444,
+        "profile_mode": "synchronous",
+        "ram_gib": 16.357601165771484,
+        "vram_gib": 0.844658374786377
+      }
+    }
+  },
+  "winner": "research_champion"
+}

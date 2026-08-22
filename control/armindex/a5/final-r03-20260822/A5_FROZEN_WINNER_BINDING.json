@@ -1,0 +1,25 @@
+{
+  "a5_closeout_receipt_sha256": "348bba37d070239f06373dc75ea77b6322f167b0203cc1bbc75329702db6a0d9",
+  "a5_finalist_registry_sha256": "d927eb6a0d5ddf91fa580ab24707337e0878d0830ae36be94a4b748cb22c5505",
+  "a5_frozen_winner_configuration_sha256": "285e94b1e76b4fcbc941daa524c71db213f63d21e1fab06dc2931ddf6dee26fc",
+  "a5_result_integrity_audit_sha256": "b38534f742bab3e3e8cf41a8c9bb22632cc40bb496582dc1cda19f1fbf04191e",
+  "a5_safe_return_receipt_sha256": "2341db96c426f9a0568861f591fd8b92e47984351b2e1139a8771dfd806fdd56",
+  "a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
+  "binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+  "claim_boundary": "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
+  "final_accesses": 1,
+  "protected_payload_included": false,
+  "schema_version": "myis.armindex-a6-a5-winner-binding.v1",
+  "selection_accesses": 1,
+  "status": "PASS_A5_FROZEN_WINNER_BOUND",
+  "winner": {
+    "chunking_configuration_sha256": "c694d5e72d3e5077bf42f0dbf9209bc61a0b5995c7bb86fe2944f08e435f0a60",
+    "index_configuration_sha256": "bbdbc78218d87ecd2f683570b2039f4517ac238f3ee73d56a26574d3c738bd9e",
+    "model_adapter_sha256": "08bbed4b3f07ce6a52ce60992e178339e69f1672cffe0a04d2f77ffc01cc4f19",
+    "prompt_or_prefix_sha256": "c054bda4d7699aa61dc5dc15dff1b26d32b1f88ebd274fc3eeca74110e693a36",
+    "representation_program_sha256": "bcbffffa1a1836653fa833c3e5a64aa69620cf53c3907ee1fc47d83b143a48e3",
+    "retrieval_configuration_sha256": "e2ba107ff4e62e530ebf99a4f0c01a8419ed9417c5e5cf5a75159ccb2797f6fa",
+    "runtime_lock_sha256": "b0893b48a4178c7bd47e1cd796d74a1ad275c1c4788c05f0441af29885f86113"
+  },
+  "winner_count": 1
+}

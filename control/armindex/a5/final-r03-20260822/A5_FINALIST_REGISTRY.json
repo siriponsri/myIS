@@ -1,0 +1,35 @@
+{
+  "a4_a5_pointer_bundle_sha256": "dbaf609acca477c76456cebd14070e0900efd40111bf8733a72a68c9ed6d5d33",
+  "attempt_id": "a5-goal001-20260822T-rerun-final872-r03",
+  "final_accesses": 1,
+  "protected_payload_included": false,
+  "receipt_sha256": "d927eb6a0d5ddf91fa580ab24707337e0878d0830ae36be94a4b748cb22c5505",
+  "registry": [
+    {
+      "license_scope": "research_only",
+      "license_sha256": "d27b3ae652f08944c904a7803d33155a9f9ab2affded8db07cc798066f9fb2de",
+      "model_sha256": "234ea36a876fe5d5c416c1cbaad6f7221e17861fadd6481f0b96588fdc1ca482",
+      "program_sha256": "bcbffffa1a1836653fa833c3e5a64aa69620cf53c3907ee1fc47d83b143a48e3",
+      "prompt_sha256": "c054bda4d7699aa61dc5dc15dff1b26d32b1f88ebd274fc3eeca74110e693a36",
+      "representation_sha256": "de075d8dee828e50da1157a9bb6fe1a0a0055c5f70590e9b874a4a332725a20b",
+      "role": "research_champion",
+      "runtime_sha256": "b0893b48a4178c7bd47e1cd796d74a1ad275c1c4788c05f0441af29885f86113",
+      "system_sha256": "bcbffffa1a1836653fa833c3e5a64aa69620cf53c3907ee1fc47d83b143a48e3"
+    },
+    {
+      "license_scope": "commercial_capable",
+      "license_sha256": "d27b3ae652f08944c904a7803d33155a9f9ab2affded8db07cc798066f9fb2de",
+      "model_sha256": "07ea93de0a4f46cf94295a0d73f1dc13614d72070131cd4be83b46f92df7dacf",
+      "program_sha256": "00f1c29507e55a70eb6f9046a24253f5c8f9726bfe5ca521309a84d779674397",
+      "prompt_sha256": "51a81f1bafca1b37e3a39bf44c40a6ee3e061a0704318e0e0612adc8c61da1d4",
+      "representation_sha256": "de075d8dee828e50da1157a9bb6fe1a0a0055c5f70590e9b874a4a332725a20b",
+      "role": "static_common_baseline",
+      "runtime_sha256": "b0893b48a4178c7bd47e1cd796d74a1ad275c1c4788c05f0441af29885f86113",
+      "system_sha256": "9a98a6d81af0510068927a2925fb5fca102867d5b23c7a102eb27b09e7a0dde0"
+    }
+  ],
+  "schema_version": "myis.armindex-a5-finalist-registry.v1",
+  "selection_accesses": 1,
+  "status": "PASS_A5_FINALIST_REGISTRY_FROZEN",
+  "winner": "research_champion"
+}

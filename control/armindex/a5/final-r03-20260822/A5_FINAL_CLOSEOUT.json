@@ -1,0 +1,20 @@
+{
+  "a4_a5_pointer_bundle_sha256": "dbaf609acca477c76456cebd14070e0900efd40111bf8733a72a68c9ed6d5d33",
+  "attempt_id": "a5-goal001-20260822T-rerun-final872-r03",
+  "claim_boundary": "Final-872 confirmatory aggregate only; A6 remains a separately admitted post-confirmatory scalability phase.",
+  "coverage_receipt_sha256": "a2ac3bff734b4d1bbb4095fb986c0d0b6b6f5e4f19a185fc684df640a172638f",
+  "final_accesses": 1,
+  "finalist_registry_sha256": "d927eb6a0d5ddf91fa580ab24707337e0878d0830ae36be94a4b748cb22c5505",
+  "frozen_winner_configuration_sha256": "285e94b1e76b4fcbc941daa524c71db213f63d21e1fab06dc2931ddf6dee26fc",
+  "owner_evaluation_sha256": "9fefedf91fc730501a159824b61b024facb8d80a96b4c797477087df4f06cd17",
+  "protected_payload_included": false,
+  "receipt_sha256": "348bba37d070239f06373dc75ea77b6322f167b0203cc1bbc75329702db6a0d9",
+  "result_integrity_audit_sha256": "b38534f742bab3e3e8cf41a8c9bb22632cc40bb496582dc1cda19f1fbf04191e",
+  "safe_return_receipt_sha256": "2341db96c426f9a0568861f591fd8b92e47984351b2e1139a8771dfd806fdd56",
+  "schema_version": "myis.armindex-a5-final-closeout.v1",
+  "scope": "Final-872",
+  "selection_accesses": 1,
+  "status": "PASS_A5_FINAL_CONFIRMATION",
+  "winner": "research_champion",
+  "winner_count": 1
+}

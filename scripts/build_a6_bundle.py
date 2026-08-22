@@ -121,7 +121,10 @@ def validate_bundle(path: Path) -> dict[str, Any]:
         raise A6MaterializationError("A6 bundle fields are invalid")
     if bundle["schema_version"] != "myis.armindex-a6-preparation-bundle.v1":
         raise A6MaterializationError("A6 bundle schema is invalid")
-    for field, expected in (("status", "PENDING_A5_CLOSEOUT"), ("execution_permitted", False), ("launch_allowed", False), ("scientific_authority", False), ("selection_accesses", 0), ("final_accesses", 0), ("protected_payload_included", False), ("authorized_instance_id", 47790578), ("fresh_a6_attempt_required", True), ("stale_runtime_reuse_forbidden", True)):
+    contract = _load_json(ROOT / CONTRACT)
+    template = _load_json(ROOT / TEMPLATE)
+    validated = validate_pending_a6_materialization_template(template, contract)
+    for field, expected in (("status", "PENDING_A5_CLOSEOUT"), ("execution_permitted", False), ("launch_allowed", False), ("scientific_authority", False), ("selection_accesses", 0), ("final_accesses", 0), ("protected_payload_included", False), ("authorized_instance_id", validated["authorized_instance_id"]), ("fresh_a6_attempt_required", True), ("stale_runtime_reuse_forbidden", True)):
         if bundle[field] != expected:
             raise A6MaterializationError(f"A6 bundle guard failed: {field}")
     if bundle["required_a5_terminal_state"] != "PASS_A5_FINAL_CONFIRMATION":
@@ -130,9 +133,6 @@ def validate_bundle(path: Path) -> dict[str, Any]:
     digest = bundle.get("bundle_sha256")
     if not isinstance(digest, str) or digest != canonical_sha256({k: v for k, v in bundle.items() if k != "bundle_sha256"}):
         raise A6MaterializationError("A6 bundle self-hash mismatch")
-    contract = _load_json(ROOT / CONTRACT)
-    template = _load_json(ROOT / TEMPLATE)
-    validated = validate_pending_a6_materialization_template(template, contract)
     if bundle["a6_contract_sha256"] != validated["a6_contract_sha256"] or bundle["pending_template_sha256"] != validated["template_sha256"]:
         raise A6MaterializationError("A6 contract/template commitment drifted")
     current = _source_hashes()

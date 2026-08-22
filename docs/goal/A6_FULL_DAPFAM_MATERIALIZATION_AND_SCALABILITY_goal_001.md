@@ -2,23 +2,23 @@
 title: "A6 post-confirmatory full-DAPFAM materialization and scalability"
 phase_id: A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
 task_id: A6.1
-status: BLOCKED_A5_CLOSEOUT_INSTANCE_ROTATION
+status: PAUSED_OWNER_A6_APPROVAL
 lifecycle: PAUSED
 evidence_class: post_confirmatory_operational_scalability
 scientific_authority: false
 execution_permitted: false
 required_predecessor_terminal_state: PASS_A5_FINAL_CONFIRMATION
-required_owner_decision: none
+required_owner_decision: APPROVE_A6_LONG_RUN
 d3_required: false
 protected_payloads_allowed: false
 full_corpus_owner_local_only: true
-provider_instance_id: 47790578
-provider_instance_status: DESTROYED_BY_OWNER
-fresh_provider_instance_required: true
+provider_instance_id: 48367896
+provider_instance_status: ACTIVE_PENDING_FRESH_A6_ADMISSION
+fresh_provider_instance_required: false
 previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
 next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
 last_material_update: 2026-08-22
-next_authorized_action: RESUME_AFTER_FRESH_INSTANCE_AND_PASS_A5_CLOSEOUT
+next_authorized_action: AWAIT_OWNER_APPROVE_A6_LONG_RUN
 a6_winner_binding_schema: myis.armindex-a6-a5-winner-binding.v1
 a6_attempt_admission_schema: myis.armindex-a6-attempt-admission.v1
 continuation_mode: CONTINUE_AFTER_PASS_A5_WITH_FRESH_ADMISSION
@@ -60,9 +60,10 @@ The A6/A7 phase amendment is the authority for this routing change:
 interface is
 `control/armindex/a6/a6-full-dapfam-execution-contract.v1.json`.
 
-A6 remains blocked until a valid A5 terminal closeout supplies one explicit
-materialization target. That target must be selected and frozen by A5, not by
-A6. It must bind all of the following exact A5-derived hashes:
+A6 remains paused until the valid A5 terminal closeout supplies one explicit
+materialization target and the Owner explicitly approves the long run. That
+target must be selected and frozen by A5, not by A6. It must bind all of the
+following exact A5-derived hashes:
 
 1. representation program;
 2. prompt or encoder prefix;
@@ -118,10 +119,10 @@ it is outside this goal.
 ## Minimal continuation policy
 
 A6 is the immediate post-A5 continuation, not a new exploratory branch. After
-the validated A5 frozen-winner binding is available, admit one fresh A6 root
-and continue without a routine Owner prompt or extra gate. Same-instance reuse
-is operational only: provider identity, quote, budget, TTL, health, runtime,
-and attempt root must all be fresh.
+the validated A5 frozen-winner binding is available, retain this phase in
+`PAUSED_OWNER_A6_APPROVAL` until the Owner approves the long run. Same-instance
+reuse is operational only: provider identity, quote, budget, TTL, health,
+runtime, and attempt root must all be fresh.
 
 Fix-forward is limited to operational recovery inside the isolated A6 attempt.
 Stop only for winner/configuration drift, source ambiguity, protected-data
@@ -142,8 +143,8 @@ reopens Selection or Final and never changes the A5 winner.
    `/opt/myis/a6-goal001-<UTC>`. Obtain a fresh
    provider identity, all-fee quote, whole-workload budget admission, TTL,
    runtime/GPU/CPU/disk/RAM health receipt, watchdog, checkpoint, and safe
-   return plan. Instance `47790578` may be retained and reused only after A5
-   closes and this fresh A6 admission passes. Do not use an A4/A5 quote, root,
+   return plan. Instance `48367896` may be reused only after explicit Owner A6
+   approval and this fresh A6 admission passes. Do not use an A4/A5 quote, root,
    worker, cache, PID, partial output, or budget admission as A6 authority.
 3. **Freeze source and execution inputs.** Materialize the approved full
    DAPFAM source only inside the Owner Store. Freeze its source hash, the A5

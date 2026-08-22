@@ -1,0 +1,20 @@
+{
+  "attempt_id": "a5-goal001-20260822T-rerun-final872-r03",
+  "coverage": {
+    "research_champion": 872,
+    "static_common_baseline": 872
+  },
+  "determinism": true,
+  "failures": 0,
+  "final_accesses": 1,
+  "protected_payload_included": false,
+  "query_count": 872,
+  "ranking_package_sha256": "7906e3220f5e097b9694a4771a820d6f3a5c30c91675ebb48ec30ad44da3a2df",
+  "ranking_sha256": "688d9f356aa02a8785f9f8bd3ebb4fd770f54a191a863cd8010a923393bc5fb4",
+  "receipt_sha256": "a2ac3bff734b4d1bbb4095fb986c0d0b6b6f5e4f19a185fc684df640a172638f",
+  "request_sha256": "7bf12807d0ea439d991bd121918c3050d1ef2bf88d2838ab51b0a330192883f6",
+  "schema_version": "myis.armindex-a5-final-coverage.v1",
+  "scope": "Final-872",
+  "selection_accesses": 1,
+  "status": "PASS_A5_FINAL_COVERAGE"
+}

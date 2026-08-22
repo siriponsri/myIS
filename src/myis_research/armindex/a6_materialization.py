@@ -35,6 +35,7 @@ _REQUIRED_METRICS = (
 )
 _A6_ATTEMPT = re.compile(r"^a6-goal001-[0-9]{8}T[0-9]{6}Z(?:-[a-z0-9]+)?$")
 _A6_HISTORICAL_INSTANCE_ID = 47790578
+_A6_AUTHORIZED_INSTANCE_ID = 48367896
 
 
 def build_pending_a6_materialization_template(
@@ -299,10 +300,15 @@ def _validate_a6_contract(value: Mapping[str, Any]) -> dict[str, Any]:
     body = {key: item for key, item in contract.items() if key != "contract_sha256"}
     if contract["contract_sha256"] != canonical_sha256(body):
         raise A6MaterializationError("A6 execution contract self-hash mismatch")
-    if contract.get("status") != "blocked_until_valid_a5_closeout" or contract.get("launch_allowed") is not False:
-        raise A6MaterializationError("A6 execution contract does not remain pre-A5 blocked")
+    if (
+        contract.get("status") != "paused_pending_owner_a6_approval"
+        or contract.get("launch_allowed") is not False
+        or contract.get("a5_terminal_state") != "PASS_A5_FINAL_CONFIRMATION"
+        or contract.get("owner_a6_long_run_approval_required") is not True
+    ):
+        raise A6MaterializationError("A6 execution contract does not preserve the Owner approval pause")
     provider = contract.get("provider_admission")
-    if not isinstance(provider, Mapping) or provider.get("authorized_instance_id") != _A6_HISTORICAL_INSTANCE_ID:
+    if not isinstance(provider, Mapping) or provider.get("authorized_instance_id") != _A6_AUTHORIZED_INSTANCE_ID:
         raise A6MaterializationError("A6 execution contract has no approved same-instance policy")
     if provider.get("same_instance_reuse_permitted_only_after_a5_closeout") is not True or provider.get("fresh_a6_attempt_root_required") is not True or provider.get("reuse_a4_a5_workers_caches_pids_or_partials_forbidden") is not True:
         raise A6MaterializationError("A6 execution contract permits unsafe runtime reuse")

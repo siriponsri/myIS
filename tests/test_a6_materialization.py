@@ -57,7 +57,7 @@ def _admission(winner: dict) -> dict:
         "a5_winner_binding_sha256": winner["binding_sha256"],
         "attempt_id": "a6-goal001-20260820T010203Z-a1",
         "attempt_root_pointer": "a6/a6-goal001-20260820T010203Z-a1",
-        "authorized_instance_id": 47790578,
+        "authorized_instance_id": 48367896,
         "provider_identity_sha256": "c" * 64,
         "fresh_quote_sha256": "c" * 64,
         "budget_admission_sha256": "c" * 64,
@@ -79,7 +79,7 @@ def test_builds_fail_closed_a6_template() -> None:
     template = build_pending_a6_materialization_template(_contract())
     validated = validate_pending_a6_materialization_template(template, _contract())
     assert validated["status"] == "PENDING_A5_CLOSEOUT"
-    assert validated["authorized_instance_id"] == 47790578
+    assert validated["authorized_instance_id"] == 48367896
     assert validated["selection_accesses"] == validated["final_accesses"] == 0
 
 
@@ -117,7 +117,7 @@ def test_a5_winner_binding_and_fresh_a6_admission_validate() -> None:
     winner = _winner_binding()
     assert validate_a5_frozen_winner_binding(winner, contract)["winner_count"] == 1
     admission = _admission(winner)
-    assert validate_a6_attempt_admission(admission, contract, winner)["authorized_instance_id"] == 47790578
+    assert validate_a6_attempt_admission(admission, contract, winner)["authorized_instance_id"] == 48367896
 
 
 def test_a6_admission_rejects_winner_drift_and_stale_reuse() -> None:

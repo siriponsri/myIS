@@ -14,6 +14,20 @@ measurement, and production-constrained HarnessOpt.
 
 ## Active campaign
 
+### Current superseding state (2026-08-22)
+
+A4 Selection-125 is closed with one valid exposure. A5 Final-872 is terminal:
+the frozen `research_champion` (ARM-03) and static/common comparator each
+completed `872/872`, with zero failures and deterministic output. ARM-03 won
+the confirmatory comparison on OUT Recall@100, nDCG@100, and nDCG@10; the
+aggregate-safe evaluation, safe-return, integrity-audit, closeout, and frozen
+winner receipts are at `control/armindex/a5/final-r03-20260822/`.
+
+A6 is `PAUSED_OWNER_A6_APPROVAL`. It may use Vast `48367896` only after an
+explicit Owner approval and a fresh A6 attempt admission; no full-corpus asset
+has been uploaded and no A6 worker has started. This state supersedes the
+historical preparation narrative below.
+
 ### Current superseding state (2026-08-19)
 
 A2 Goal 004 is terminal: `PASS_A2_EXECUTION_CLOSEOUT` and
@@ -119,7 +133,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly eight active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> PAUSED after owner destroyed instance -> A5 -> A6 full-corpus materialization -> A7 publication`
+`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> A5 Final-872 PASS -> A6 paused for Owner approval -> A7 publication`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
@@ -128,8 +142,8 @@ There are exactly eight active phases. Progress is:
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | complete; Goal 004 measured closeout passed with three-primary amendment |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | complete; 14/14 audited, flat HarnessOpt surface |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | Selection-125 closeout PASS; safe-return complete; previous instance destroyed |
-| `A5_FINAL_CONFIRMATION` | one frozen confirmation | provenance PASS and D2 preauthorized; PAUSED until fresh provider admission |
-| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | pending `PASS_A5_FINAL_CONFIRMATION`; fresh A6 root required; D3 remains closed |
+| `A5_FINAL_CONFIRMATION` | one frozen confirmation | PASS: Final-872 complete for exactly two frozen systems; ARM-03 winner; aggregate-safe closeout and integrity audit complete |
+| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | `PAUSED_OWNER_A6_APPROVAL`; fresh root/admission required on Vast `48367896`; D3 remains closed |
 | `A7_PUBLICATION_AND_RELEASE` | paper and release from A0-A6 aggregate-safe evidence | locked by `D3_SUBMIT_RELEASE` |
 
 No Sprint, Stage, Work Package, or micro-phase is canonical.

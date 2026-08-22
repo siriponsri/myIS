@@ -1,0 +1,24 @@
+{
+  "a4_a5_pointer_bundle_sha256": "dbaf609acca477c76456cebd14070e0900efd40111bf8733a72a68c9ed6d5d33",
+  "attempt_id": "a5-goal001-20260822T-rerun-final872-r03",
+  "audit_sha256": "b38534f742bab3e3e8cf41a8c9bb22632cc40bb496582dc1cda19f1fbf04191e",
+  "checks": {
+    "canonical_ranking_hash": true,
+    "complete_coverage": true,
+    "owner_local_evaluation": true,
+    "protected_boundary": true,
+    "two_system_registry": true,
+    "worker_teardown": true
+  },
+  "coverage_receipt_sha256": "a2ac3bff734b4d1bbb4095fb986c0d0b6b6f5e4f19a185fc684df640a172638f",
+  "final_accesses": 1,
+  "finalist_registry_sha256": "d927eb6a0d5ddf91fa580ab24707337e0878d0830ae36be94a4b748cb22c5505",
+  "owner_evaluation_sha256": "9fefedf91fc730501a159824b61b024facb8d80a96b4c797477087df4f06cd17",
+  "protected_payload_included": false,
+  "ranking_package_sha256": "7906e3220f5e097b9694a4771a820d6f3a5c30c91675ebb48ec30ad44da3a2df",
+  "request_sha256": "7bf12807d0ea439d991bd121918c3050d1ef2bf88d2838ab51b0a330192883f6",
+  "safe_return_receipt_sha256": "2341db96c426f9a0568861f591fd8b92e47984351b2e1139a8771dfd806fdd56",
+  "schema_version": "myis.armindex-a5-result-integrity-audit.v1",
+  "selection_accesses": 1,
+  "status": "PASS_A5_RESULT_INTEGRITY_AUDIT"
+}

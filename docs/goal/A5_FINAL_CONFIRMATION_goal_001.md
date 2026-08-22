@@ -2,14 +2,14 @@
 title: "A5 frozen final confirmation handoff"
 phase_id: A5_FINAL_CONFIRMATION
 task_id: A5.1
-status: PAUSED_AFTER_A4_INSTANCE_ROTATION
-lifecycle: PAUSED
-evidence_class: prepared_final_confirmation_handoff
-scientific_authority: false
+status: PASS_A5_FINAL_CONFIRMATION_PENDING_OWNER_A6_APPROVAL
+lifecycle: CLOSED
+evidence_class: measured_final_confirmation_aggregate
+scientific_authority: true
 execution_permitted: false
-provider_instance_id: 47790578
-provider_instance_status: DESTROYED_BY_OWNER
-fresh_provider_instance_required: true
+provider_instance_id: 48367896
+provider_instance_status: ACTIVE_VERIFIED_A5_WORKER_TORN_DOWN
+fresh_provider_instance_required: false
 required_owner_decision: D2_OPEN_FINAL_PREAUTHORIZED_AUTOMATICALLY
 conditional_owner_preauthorization: D2_OPEN_FINAL_ON_A4_AUTOMATIC_PASS
 automatic_continuation_allowed: true
@@ -21,7 +21,7 @@ protected_payloads_allowed: false
 previous_goal: docs/goal/A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md
 next_goal: docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md
 last_material_update: 2026-08-22
-next_authorized_action: OWNER_DESTROY_47790578_OPEN_FRESH_INSTANCE_THEN_RESUME_SAME_GOAL
+next_authorized_action: AWAIT_OWNER_APPROVE_A6_LONG_RUN
 selection_handoff_contract_uri: docs/operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md
 a5_pointer_bundle_schema: myis.armindex-a4-a5-pointer-bundle.v2
 publication_priority: TIER_1_REVIEWER_DEFENSIBLE_CONFIRMATION
@@ -128,42 +128,28 @@ contract.
 |---|---|---|
 | A4 closeout and Selection receipt verified | PASS | A4 coverage, safe-return, legal-isolation, and result-integrity receipts |
 | A5 pointer-only bundle manifest built | PASS | Rebuilt v7 bundle plus aggregate-safe provenance manifest and opaque Final-872 receipt in Owner Store |
-| D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | PREAUTHORIZED_PENDING_FRESH_INSTANCE | Automatic D2 is authorized by Owner, but no Final access has occurred |
-| Fresh provider admission and final stage | PAUSED | Must use a fresh instance/root after the current instance is destroyed |
-| Final-872 measured confirmation | BLOCKED | complete final coverage receipt |
-| Safe return and independent audit | BLOCKED | final safe-return/audit receipts |
-| A5 closeout and A6 frozen-winner handoff | BLOCKED | terminal report and projections |
+| D2_OPEN_FINAL recorded by Owner or conditional auto-pass receipt | PASS | Final was opened exactly once under the conditional D2 receipt |
+| Fresh provider admission and final stage | PASS | Vast `48367896`, isolated r03 root, verified teardown |
+| Final-872 measured confirmation | PASS | two systems `872/872`, zero failures, deterministic |
+| Safe return and independent audit | PASS | aggregate-safe receipts and owner-local opaque rankings package verified |
+| A5 closeout and A6 frozen-winner handoff | PASS | exactly one ARM-03 winner binding; A6 remains paused for Owner approval |
 
 ## Minimal continuation policy
 
-### 2026-08-22 instance-rotation handoff
+### 2026-08-22 Final-872 closeout
 
-The current instance `47790578` was surveyed and found healthy but idle. No A5
-or A6 measured execution was started. Aggregate-safe artifacts were returned to
-Owner Store under `armindex/handoff/vast-47790578-20260822/`, including runtime
-manifests, profile requests, staged receipt, and code bundle. The safe-return
-receipt records that protected payload, qrels, membership, query files,
-rankings, and per-query outcomes were not exported. The contained read-only
-ranking-package incident remains forensic-only and its contents are not reused.
+The isolated attempt `a5-goal001-20260822T-rerun-final872-r03` completed on
+Vast `48367896`. The owner-local evaluator confirmed complete two-system
+Final-872 coverage with zero failures and deterministic output. ARM-03 is the
+single frozen research winner. Aggregate-safe evaluation, coverage, safe-return,
+integrity-audit, finalist-registry, closeout, and winner-binding receipts are
+stored under `control/armindex/a5/final-r03-20260822/`; raw rankings and
+protected evaluator inputs remain Owner Store only.
 
-The goal is intentionally paused after A4 closeout. Owner destroyed instance
-`47790578`; a fresh authorized instance must be opened before continuation. Resume this same goal and goal
-index after reading the updated `vast-ssh.md`; do not create a replacement goal
-solely because the provider instance changed. A5 must create a fresh attempt
-root and obtain fresh identity, quote, TTL, and budget evidence before Final
-access. A6 remains conditional on `PASS_A5_FINAL_CONFIRMATION` and one frozen
-winner.
-
-After a valid conditional D2 receipt, this goal advances through fresh A5
-admission, Final-872, safe return, audit, and the A6 winner handoff without
-routine Owner prompts or additional micro-gates. Fix-forward and compatible
-checkpoint recovery remain internal engineering actions. The orchestrator
-must stop only for a real scientific, protected-data, budget/TTL, provider
-identity, evidence-integrity, or Owner-only boundary.
-
-On a valid `PASS_A5_FINAL_CONFIRMATION`, hand off exactly one frozen winner to
-A6 immediately. A5 failure or ambiguity closes with evidence and never starts
-A6; it must not be repaired by selecting a replacement system.
+A6 is intentionally paused until the Owner reviews this A5 evidence and
+explicitly approves the A6 long run. No A6 corpus/model/index upload or worker
+may start before that approval. A5 has consumed the single allowed Final access;
+it must never be rerun or expanded.
 
 ## Execution flow after D2
 
