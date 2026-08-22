@@ -34,6 +34,7 @@ _REQUIRED_METRICS = (
     "failure_taxonomy",
 )
 _A6_ATTEMPT = re.compile(r"^a6-goal001-[0-9]{8}T[0-9]{6}Z(?:-[a-z0-9]+)?$")
+_A6_HISTORICAL_INSTANCE_ID = 47790578
 
 
 def build_pending_a6_materialization_template(
@@ -110,6 +111,76 @@ def validate_pending_a6_materialization_template(
     body = {key: value for key, value in item.items() if key != "template_sha256"}
     if item["template_sha256"] != canonical_sha256(body):
         raise A6MaterializationError("A6 pending template self-hash mismatch")
+    return item
+
+
+def validate_a6_pre_a5_provider_readiness_plan(
+    value: Mapping[str, Any],
+    a6_contract: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Validate a candidate-provider plan that cannot stage or admit A6."""
+
+    contract = _validate_a6_contract(a6_contract)
+    if not isinstance(value, Mapping):
+        raise A6MaterializationError("A6 pre-A5 readiness plan must be an object")
+    item = deepcopy(dict(value))
+    expected = {
+        "schema_version", "plan_id", "status", "scientific_authority",
+        "execution_permitted", "launch_allowed", "a6_contract_sha256",
+        "historical_instance_id", "historical_instance_status",
+        "candidate_provider", "provider_contact_performed", "aggregate_health_observation", "remote_pre_stage",
+        "post_a5_admission_required", "required_predecessor_terminal_state",
+        "fresh_a6_attempt_root_required", "selection_accesses", "final_accesses",
+        "protected_payload_included", "claim_boundary", "plan_sha256",
+    }
+    if set(item) != expected:
+        raise A6MaterializationError("A6 pre-A5 readiness plan fields are invalid")
+    if item["schema_version"] != "myis.armindex-a6-pre-a5-provider-readiness.v2":
+        raise A6MaterializationError("A6 pre-A5 readiness plan schema is invalid")
+    if item["status"] != "PENDING_A5_CLOSEOUT_FRESH_PROVIDER_CANDIDATE":
+        raise A6MaterializationError("A6 pre-A5 readiness plan status is invalid")
+    if any(item[field] is not False for field in ("scientific_authority", "execution_permitted", "launch_allowed", "provider_contact_performed")):
+        raise A6MaterializationError("A6 pre-A5 readiness plan permits execution or provider contact")
+    if item["a6_contract_sha256"] != contract["contract_sha256"]:
+        raise A6MaterializationError("A6 pre-A5 readiness plan contract hash drifted")
+    if item["historical_instance_id"] != _A6_HISTORICAL_INSTANCE_ID or item["historical_instance_status"] != "DESTROYED_BY_OWNER":
+        raise A6MaterializationError("A6 pre-A5 readiness plan historical lineage is invalid")
+    candidate = item["candidate_provider"]
+    if not isinstance(candidate, Mapping) or set(candidate) != {"provider", "instance_id", "status", "identity_verified"}:
+        raise A6MaterializationError("A6 pre-A5 readiness plan candidate identity is invalid")
+    if candidate["provider"] != "vast" or not isinstance(candidate["instance_id"], int) or candidate["instance_id"] <= 0 or candidate["instance_id"] == _A6_HISTORICAL_INSTANCE_ID:
+        raise A6MaterializationError("A6 pre-A5 readiness plan candidate is stale or invalid")
+    if candidate["status"] != "ACTIVE_PENDING_REMOTE_VERIFICATION" or candidate["identity_verified"] is not False:
+        raise A6MaterializationError("A6 pre-A5 readiness plan overstates provider verification")
+    health = item["aggregate_health_observation"]
+    expected_health = {"status", "disk_available_gib", "gpu_count", "ram_available_gib"}
+    if not isinstance(health, Mapping) or set(health) != expected_health:
+        raise A6MaterializationError("A6 aggregate health fields are invalid")
+    if health["status"] != "NOT_OBSERVED" or any(health[field] is not None for field in ("disk_available_gib", "gpu_count", "ram_available_gib")):
+        raise A6MaterializationError("A6 aggregate health observation overstates remote verification")
+    prestage = item["remote_pre_stage"]
+    expected_prestage = {
+        "status", "empty_parent_created", "remote_root", "corpus_uploaded",
+        "model_uploaded", "representation_uploaded", "index_uploaded",
+        "requires_fresh_post_a5_root_and_admission",
+    }
+    if not isinstance(prestage, Mapping) or set(prestage) != expected_prestage:
+        raise A6MaterializationError("A6 remote pre-stage fields are invalid")
+    if prestage["status"] != "NOT_CREATED" or prestage["remote_root"] is not None or prestage["requires_fresh_post_a5_root_and_admission"] is not True:
+        raise A6MaterializationError("A6 remote pre-stage was created or is reusable")
+    if any(prestage[field] is not False for field in ("empty_parent_created", "corpus_uploaded", "model_uploaded", "representation_uploaded", "index_uploaded")):
+        raise A6MaterializationError("A6 remote pre-stage contains an unsafe artifact")
+    if item["post_a5_admission_required"] is not True or item["required_predecessor_terminal_state"] != "PASS_A5_FINAL_CONFIRMATION" or item["fresh_a6_attempt_root_required"] is not True:
+        raise A6MaterializationError("A6 pre-A5 readiness plan weakens post-A5 admission")
+    if item["selection_accesses"] != 0 or item["final_accesses"] != 0 or item["protected_payload_included"] is not False or item["claim_boundary"] != contract["claim_boundary"]:
+        raise A6MaterializationError("A6 pre-A5 readiness plan crossed a protected boundary")
+    try:
+        assert_aggregate_only(item)
+    except ValueError as error:
+        raise A6MaterializationError("A6 pre-A5 readiness plan contains protected payload") from error
+    _sha256(item["plan_sha256"], "plan_sha256")
+    if item["plan_sha256"] != canonical_sha256({key: value for key, value in item.items() if key != "plan_sha256"}):
+        raise A6MaterializationError("A6 pre-A5 readiness plan self-hash mismatch")
     return item
 
 
@@ -231,7 +302,7 @@ def _validate_a6_contract(value: Mapping[str, Any]) -> dict[str, Any]:
     if contract.get("status") != "blocked_until_valid_a5_closeout" or contract.get("launch_allowed") is not False:
         raise A6MaterializationError("A6 execution contract does not remain pre-A5 blocked")
     provider = contract.get("provider_admission")
-    if not isinstance(provider, Mapping) or provider.get("authorized_instance_id") != 47790578:
+    if not isinstance(provider, Mapping) or provider.get("authorized_instance_id") != _A6_HISTORICAL_INSTANCE_ID:
         raise A6MaterializationError("A6 execution contract has no approved same-instance policy")
     if provider.get("same_instance_reuse_permitted_only_after_a5_closeout") is not True or provider.get("fresh_a6_attempt_root_required") is not True or provider.get("reuse_a4_a5_workers_caches_pids_or_partials_forbidden") is not True:
         raise A6MaterializationError("A6 execution contract permits unsafe runtime reuse")
@@ -266,6 +337,7 @@ def _sha256(value: Any, field: str) -> str:
 __all__ = [
     "A6MaterializationError",
     "build_pending_a6_materialization_template",
+    "validate_a6_pre_a5_provider_readiness_plan",
     "validate_a5_frozen_winner_binding",
     "validate_a6_attempt_admission",
     "validate_pending_a6_materialization_template",
