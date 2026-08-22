@@ -25,6 +25,54 @@ def _opaque(prefix: str, scope: str, value: str) -> str:
     return f"{prefix}-{hashlib.sha256(f'{scope}:{prefix}:{value}'.encode()).hexdigest()[:32]}"
 
 
+def _corpus_record(
+    *,
+    family_token: str,
+    publication_token: str,
+    publication_ordinal: int,
+    row: dict[str, Any],
+) -> dict[str, Any]:
+    """Build one explicit opaque corpus record for the remote adapter.
+
+    Keep this contract in one place so an alternate staging path cannot omit
+    the identity/ordering fields required by ``compile_common_program``.
+    ``publication_ordinal=0`` is deliberate: the pinned DAPFAM corpus emits
+    one publication row per family in this materialization.
+    """
+
+    if (
+        not isinstance(family_token, str)
+        or not family_token.startswith("F-")
+        or not isinstance(publication_token, str)
+        or not publication_token.startswith("P-")
+        or isinstance(publication_ordinal, bool)
+        or not isinstance(publication_ordinal, int)
+        or publication_ordinal < 0
+    ):
+        raise ValueError("opaque corpus identity/order contract is invalid")
+    record = {
+        "family_token": family_token,
+        "publication_token": publication_token,
+        "publication_ordinal": publication_ordinal,
+        "title_en": row.get("title_en"),
+        "abstract_en": row.get("abstract_en"),
+        "claims_text": row.get("claims_text"),
+        "claims": [],
+    }
+    required = {
+        "family_token",
+        "publication_token",
+        "publication_ordinal",
+        "title_en",
+        "abstract_en",
+        "claims_text",
+        "claims",
+    }
+    if set(record) != required or not isinstance(record["claims"], list):
+        raise ValueError("opaque corpus schema is incomplete")
+    return record
+
+
 def _write_json(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     body = {**value}
@@ -57,8 +105,22 @@ def materialize(*, repository_root: Path, cache_root: Path, split_path: Path, ou
             if not source or source in family_tokens:
                 raise ValueError("corpus identity is invalid")
             token = _opaque("F", scope, source)
+            publication_token = _opaque("P", scope, source)
             family_tokens.add(source)
-            handle.write(json.dumps({"family_token": token, "publication_token": token, "publication_ordinal": 0, "title_en": row.get("title_en"), "abstract_en": row.get("abstract_en"), "claims_text": row.get("claims_text"), "claims": []}, ensure_ascii=True, sort_keys=True, separators=(",", ":")) + "\n")
+            handle.write(
+                json.dumps(
+                    _corpus_record(
+                        family_token=token,
+                        publication_token=publication_token,
+                        publication_ordinal=0,
+                        row=row,
+                    ),
+                    ensure_ascii=True,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
+                + "\n"
+            )
             corpus_count += 1
     observed: set[str] = set()
     with (inputs / "queries.jsonl").open("w", encoding="utf-8", newline="\n") as handle:
