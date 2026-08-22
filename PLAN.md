@@ -23,10 +23,11 @@ the confirmatory comparison on OUT Recall@100, nDCG@100, and nDCG@10; the
 aggregate-safe evaluation, safe-return, integrity-audit, closeout, and frozen
 winner receipts are at `control/armindex/a5/final-r03-20260822/`.
 
-A6 is `PAUSED_OWNER_A6_APPROVAL`. It may use Vast `48367896` only after an
-explicit Owner approval and a fresh A6 attempt admission; no full-corpus asset
-has been uploaded and no A6 worker has started. This state supersedes the
-historical preparation narrative below.
+A6 is `BLOCKED_OWNER_A6_BUDGET_CEILING`. The Owner approved the A6 intent, but
+the canonical execution contract requires a separate numeric A6 ceiling and
+fresh admission, neither of which exists. No full-corpus asset has been
+uploaded and no A6 worker has started. The aggregate-safe disposition is at
+`docs/operations/A6_PRELAUNCH_BLOCKER_AND_GPU_DISPOSITION_20260822.md`.
 
 ### Current superseding state (2026-08-19)
 
@@ -133,7 +134,7 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 There are exactly eight active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> A5 Final-872 PASS -> A6 paused for Owner approval -> A7 publication`
+`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> A5 Final-872 PASS -> A6 blocked on numeric budget authority -> A7 publication`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
@@ -143,7 +144,7 @@ There are exactly eight active phases. Progress is:
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | complete; 14/14 audited, flat HarnessOpt surface |
 | `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | Selection-125 closeout PASS; safe-return complete; previous instance destroyed |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | PASS: Final-872 complete for exactly two frozen systems; ARM-03 winner; aggregate-safe closeout and integrity audit complete |
-| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | `PAUSED_OWNER_A6_APPROVAL`; fresh root/admission required on Vast `48367896`; D3 remains closed |
+| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | `BLOCKED_OWNER_A6_BUDGET_CEILING`; harness ready, but a fresh numeric ceiling and admission are required before any spend; D3 remains closed |
 | `A7_PUBLICATION_AND_RELEASE` | paper and release from A0-A6 aggregate-safe evidence | locked by `D3_SUBMIT_RELEASE` |
 
 No Sprint, Stage, Work Package, or micro-phase is canonical.

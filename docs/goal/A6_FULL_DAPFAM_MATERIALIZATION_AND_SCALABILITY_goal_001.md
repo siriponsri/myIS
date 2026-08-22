@@ -2,23 +2,23 @@
 title: "A6 post-confirmatory full-DAPFAM materialization and scalability"
 phase_id: A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
 task_id: A6.1
-status: PAUSED_OWNER_A6_APPROVAL
-lifecycle: PAUSED
+status: BLOCKED_OWNER_A6_BUDGET_CEILING
+lifecycle: BLOCKED
 evidence_class: post_confirmatory_operational_scalability
 scientific_authority: false
 execution_permitted: false
 required_predecessor_terminal_state: PASS_A5_FINAL_CONFIRMATION
-required_owner_decision: APPROVE_A6_LONG_RUN
+required_owner_decision: APPROVE_A6_NUMERIC_BUDGET_CEILING
 d3_required: false
 protected_payloads_allowed: false
 full_corpus_owner_local_only: true
 provider_instance_id: 48367896
-provider_instance_status: ACTIVE_PENDING_FRESH_A6_ADMISSION
+provider_instance_status: ACTIVE_NO_AUTHORIZED_A6_WORKLOAD
 fresh_provider_instance_required: false
 previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
 next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
 last_material_update: 2026-08-22
-next_authorized_action: AWAIT_OWNER_APPROVE_A6_LONG_RUN
+next_authorized_action: AWAIT_OWNER_APPROVE_A6_NUMERIC_BUDGET_CEILING
 a6_winner_binding_schema: myis.armindex-a6-a5-winner-binding.v1
 a6_attempt_admission_schema: myis.armindex-a6-attempt-admission.v1
 continuation_mode: CONTINUE_AFTER_PASS_A5_WITH_FRESH_ADMISSION
@@ -108,9 +108,9 @@ it is outside this goal.
 
 | Step | Status | Completion evidence |
 |---|---|---|
-| A5 terminal/audit/safe-return bindings validated | BLOCKED | hash-verified predecessor receipt set |
-| One materialization target frozen by A5 | BLOCKED | target registry and exact configuration hashes |
-| Fresh A6 budget, provider, TTL, and health admission | BLOCKED | A6-specific admission receipt and fresh-attempt validator |
+| A5 terminal/audit/safe-return bindings validated | PASS | hash-verified predecessor receipt set |
+| One materialization target frozen by A5 | PASS | ARM-03 frozen winner binding |
+| Fresh A6 budget, provider, TTL, and health admission | BLOCKED_OWNER_A6_BUDGET_CEILING | A6-specific numeric ceiling, then fresh admission receipt |
 | Owner-local full-corpus source and safe-export manifest frozen | BLOCKED | source hash and protected-boundary scan |
 | Isolated materialization run completed or bounded failure closed | BLOCKED | coverage/checkpoint/failure receipts |
 | Aggregate-safe EDA, figures, and independent integrity audit | BLOCKED | validated metric and audit package |
@@ -118,11 +118,12 @@ it is outside this goal.
 
 ## Minimal continuation policy
 
-A6 is the immediate post-A5 continuation, not a new exploratory branch. After
-the validated A5 frozen-winner binding is available, retain this phase in
-`PAUSED_OWNER_A6_APPROVAL` until the Owner approves the long run. Same-instance
-reuse is operational only: provider identity, quote, budget, TTL, health,
-runtime, and attempt root must all be fresh.
+A6 is the immediate post-A5 continuation, not a new exploratory branch. The
+Owner approved the long-run intent, but `separate_a6_budget_ceiling_required`
+remains unmet. Retain this phase in `BLOCKED_OWNER_A6_BUDGET_CEILING` until a
+canonical numeric ceiling is supplied. Same-instance reuse is operational only:
+provider identity, quote, budget, TTL, health, runtime, and attempt root must
+all be fresh.
 
 Fix-forward is limited to operational recovery inside the isolated A6 attempt.
 Stop only for winner/configuration drift, source ambiguity, protected-data
