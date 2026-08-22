@@ -1,4 +1,4 @@
 phase,status,planned_scope,measured_scope,metric_status,next_gate,source_file
 A4_PRODUCTION_TRANSFER_AND_SELECTION,PASS_A4_SELECTION_COMPLETE_PROFILE_COVERAGE,Selection-125; four frozen profiles,125 retrieval units; 90 OUT evaluator units,VERIFIED_AGGREGATE,A5 Final-872,04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-receipt.json
-A5_FINAL_CONFIRMATION,PENDING_FRESH_INSTANCE_RUN,Final-872; FAST comparator vs ARM-03 research champion,NONE,PENDING_NOT_VERIFIED,PASS_A5_FINAL_CONFIRMATION,04_Owner_Stores/armindex/a5/provenance/a5-pointer-bundle-v7-20260822.json
+A5_FINAL_CONFIRMATION,RUNNING_PENDING_RECEIPT,Final-872; FAST comparator vs ARM-03 research champion,NONE,PENDING_NOT_VERIFIED,PASS_A5_FINAL_CONFIRMATION,04_Owner_Stores/armindex/a5/provenance/a5-pointer-bundle-v7-20260822.json
 A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY,PENDING_A5_CLOSEOUT,"Frozen A5 winner over 45,336-row DAPFAM corpus",NONE,PENDING_NOT_VERIFIED,PASS_A6_MATERIALIZATION,docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md

@@ -101,7 +101,7 @@ def main() -> int:
         },
         {
             "phase": "A5_FINAL_CONFIRMATION",
-            "status": "PENDING_FRESH_INSTANCE_RUN",
+            "status": "RUNNING_PENDING_RECEIPT",
             "planned_scope": "Final-872; FAST comparator vs ARM-03 research champion",
             "measured_scope": "NONE",
             "metric_status": "PENDING_NOT_VERIFIED",
