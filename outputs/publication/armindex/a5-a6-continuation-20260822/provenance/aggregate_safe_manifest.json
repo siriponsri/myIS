@@ -1,0 +1,31 @@
+{
+  "schema_version": "myis.armindex.publication-eda-scaffold.v1",
+  "generated_on": "2026-08-22",
+  "evidence_class": "aggregate_safe_publication_scaffold",
+  "protected_payload_included": false,
+  "source_records": [
+    {
+      "path": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-closeout-v3/A4_SELECTION_COVERAGE.json",
+      "sha256": "7e70e7ac3380f0507d7f52342e6646928e6fea217e8d198b2bf8efd3bbed65c3"
+    },
+    {
+      "path": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-receipt.json",
+      "sha256": "699990b1ef59f424510ad7fbd758f6c124b05d86cd66db577d9919ef9920f956"
+    }
+  ],
+  "outputs": [
+    "tables/a4_selection_profile_metrics.csv",
+    "tables/a4_selection_pairwise_effects.csv",
+    "tables/a4_a5_a6_status_pending.csv",
+    "figures/a4_selection_quality_cost_latency.png",
+    "figures/a4_a5_a6_status_pending.png"
+  ],
+  "claim_boundary": "A4 aggregate Selection evidence only. A5 Final-872 and A6 full-corpus metrics are pending and must not be inferred from this package.",
+  "not_verified": [
+    "A4 OUT nDCG@100",
+    "A4 OUT nDCG@10",
+    "A5 metrics",
+    "A6 metrics"
+  ],
+  "manifest_sha256": "d610d4b10d0c1b7c274832cf1ba697179cb287edcdd75c5846f52ae266ef216c"
+}
