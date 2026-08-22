@@ -50,7 +50,7 @@ These are fail-closed launch conditions. No scientific result is inferred from t
 
 Choose one terminal route:
 
-1. Destroy instance `48367896` now and resume A6 later with a new/fresh instance and a canonical A6 budget ceiling; or
+1. Destroy instance `48367896` now and resume A6 later with a new/fresh instance, a canonical A6 budget ceiling, and a fresh control amendment that binds the new provider instance; or
 2. Provide a canonical A6 ceiling, then create fresh A6 admission and lineage receipts before any paid staging or execution.
 
 Until route 2 is complete, A6 remains `UNKNOWN_DO_NOT_SPEND`; no A6 metric, throughput, cost, or scalability claim may be reported.
