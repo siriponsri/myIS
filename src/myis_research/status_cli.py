@@ -20,12 +20,26 @@ def _latest(root: Path, directory: str, pattern: str) -> str:
 def _active_goal(root: Path) -> str:
     candidates: list[Path] = []
     pending_successor_goals: list[Path] = []
+    canonical_phase = ""
+    program_path = root / "control/program.yaml"
+    try:
+        program = yaml.safe_load(program_path.read_text(encoding="utf-8"))
+        registry = program.get("active_phase_registry", {}) if isinstance(program, Mapping) else {}
+        if isinstance(registry, Mapping):
+            canonical_phase = str(registry.get("current_phase", ""))
+    except (OSError, UnicodeError, yaml.YAMLError):
+        canonical_phase = ""
     for path in (root / "docs/goal").glob("*.md"):
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
             continue
         data = yaml.safe_load(text.split("---", 2)[1])
         if not isinstance(data, Mapping):
+            continue
+        # Old ACTIVE goal files remain provenance after a phase closes.  The
+        # canonical phase router is authoritative for the owner-facing status
+        # projection, so do not surface an earlier phase as the active goal.
+        if canonical_phase and str(data.get("phase_id", "")) != canonical_phase:
             continue
         lifecycle = data.get("lifecycle")
         ready_measured_goal = (
@@ -77,6 +91,15 @@ def _projection_status(root: Path, model: Mapping[str, Any]) -> dict[str, str]:
 def _gpu_state(readiness: Mapping[str, Any]) -> dict[str, str]:
     """Render only provider-safe lifecycle data present in the read model."""
     explicit_decision = readiness.get("gpu_decision")
+    if explicit_decision == "GPU_ACTIVE":
+        return {
+            "decision": "GPU_ACTIVE",
+            "reason": str(readiness.get("gpu_decision_reason", "authorized measured workload is active")),
+            "instance": str(readiness.get("provider_instance_id", "UNKNOWN")),
+            "hourly_rate_usd": str(readiness.get("hourly_rate_usd", "UNKNOWN")),
+            "accrued_gpu_cost_usd": str(readiness.get("whole_workload_total_usd", "UNKNOWN")),
+            "keep_destroy_condition": str(readiness.get("gpu_keep_until", "UNKNOWN")),
+        }
     if explicit_decision == "OWNER_ACTION_DESTROY":
         return {
             "decision": "OWNER_ACTION_DESTROY",
@@ -134,6 +157,36 @@ def _gpu_state(readiness: Mapping[str, Any]) -> dict[str, str]:
 def _routing(readiness: Mapping[str, Any], active_goal: str) -> dict[str, str]:
     route = str(readiness.get("current_route", ""))
     status = str(readiness.get("current_status", readiness.get("status", "")))
+    if status.upper().startswith("A7_") or "SEVEN_LAYER" in status.upper():
+        a7_complete = status.upper() == "A7_SEVEN_LAYER_DIAGNOSIS_COMPLETE"
+        return {
+            "recommended_next_session": "OWNER" if a7_complete else "LO",
+            "recommended_model": "NONE_OWNER_D3_REQUIRED" if a7_complete else "GPT-5.6 Terra XHigh",
+            "reasoning_effort": "NONE" if a7_complete else "XHigh",
+            "reason": (
+                "A7 is closed with aggregate-safe CPU-local evidence; A8 journal synthesis remains locked until D3_SUBMIT_RELEASE"
+                if a7_complete
+                else "A7 CPU-local diagnosis is active against the hash-bound A6 Top-200 pool"
+            ),
+            "command_before_prompt": "OWNER_D3_SUBMIT_RELEASE" if a7_complete else "NONE",
+            "copy_paste_prompt": "NONE",
+            "owner_decision_required": "D3_SUBMIT_RELEASE" if a7_complete else "NONE",
+        }
+    if status.upper().startswith("A6_") or "MATERIALIZATION" in status.upper():
+        a6_complete = status.upper() == "A6_RESULT_INTEGRITY_VERIFIED_A7_READY"
+        return {
+            "recommended_next_session": "LO",
+            "recommended_model": "GPT-5.6 Terra XHigh",
+            "reasoning_effort": "XHigh",
+            "reason": (
+                "A6 result integrity is verified; prepare the hash-bound A7 seven-layer diagnosis on the CPU-first route"
+                if a6_complete
+                else "A6 full-DAPFAM materialization is active and must finish pool generation, safe return, and Owner-local evaluation"
+            ),
+            "command_before_prompt": "NONE",
+            "copy_paste_prompt": "NONE",
+            "owner_decision_required": "NONE",
+        }
     if "PENDING_HASH_BOUND_TRAIN_250_INPUT" in status:
         return {
             "recommended_next_session": "AP",
@@ -193,7 +246,92 @@ def build_owner_status(repository_root: Path) -> dict[str, Any]:
     readiness = armindex.get("a2_execution_readiness", {})
     readiness = readiness if isinstance(readiness, Mapping) else {}
     closeout = armindex.get("a2_goal004_closeout", {})
-    if isinstance(closeout, Mapping) and closeout.get("validated") is True:
+    if project.get("current_phase") == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY":
+        budget_path = root / "control/budgets/armindex-a6-frozen-pool.v1.json"
+        budget = json.loads(budget_path.read_text(encoding="utf-8"))
+        accounting = closeout.get("accounting", {}) if isinstance(closeout, Mapping) else {}
+        a6_complete = (
+            str(project.get("state")) == "A6_COMPLETE_A7_READY"
+            or str(armindex.get("status")) == "a6_result_integrity_verified_a7_ready"
+        )
+        readiness = {
+            "status": (
+                "A6_RESULT_INTEGRITY_VERIFIED_A7_READY"
+                if a6_complete
+                else "A6_ACTIVE_MEASURED_EXECUTION"
+            ),
+            "current_status": (
+                "A6_RESULT_INTEGRITY_VERIFIED_A7_READY"
+                if a6_complete
+                else "A6_ACTIVE_MEASURED_EXECUTION"
+            ),
+            "current_route": "LO",
+            "evidence_class": "post_confirmatory_operational_scalability",
+            "scientific_authority": True if a6_complete else False,
+            "claim_boundary": (
+                "frozen ARM-03 full-DAPFAM materialization, aggregate ALL/IN/OUT retrieval evidence, "
+                "and operational scalability only; no new winner, comparative full-corpus superiority, "
+                "external-generalization, reranking, Selection reopen, or Final reopen"
+                if a6_complete
+                else "frozen ARM-03 full-DAPFAM pool and Owner-local ALL/IN/OUT metrics are present; independent result-integrity audit is pending"
+            ),
+            "phase_ceiling_usd": budget["phase_ceiling_usd"],
+            "task_run_ceiling_usd": budget["phase_ceiling_usd"],
+            "campaign_ceiling_usd": budget["campaign_ceiling_usd"],
+            "a2_spent_accrued_usd": "0.300323" if a6_complete else "UNKNOWN",
+            "remaining_campaign_headroom_usd": "UNKNOWN_UNTIL_A6_CLOSEOUT" if not a6_complete else "VERIFIED_FROM_CANONICAL_CAMPAIGN_ACCOUNTING",
+            "estimated_next_action_cost_usd": "WITHIN_A6_CEILING" if not a6_complete else "NO_GPU_SPEND_REQUIRED_FOR_A7_CPU_FIRST_ROUTE",
+            "budget_status": "A6_ACTIVE_WITHIN_USD_20_CEILING" if not a6_complete else "A6_CLOSED_WITHIN_USD_20_CEILING",
+            "gpu_decision": "GPU_ACTIVE" if not a6_complete else "NO_GPU_NEEDED",
+            "gpu_decision_reason": "A6 full-DAPFAM materialization is running on the authorized instance" if not a6_complete else "A6 safe return and GPU teardown passed; A7 is hash-bound and CPU-first",
+            "provider_instance_id": budget["authorized_instance_id"],
+            "hourly_rate_usd": budget["hourly_rate_usd_reference"],
+            "whole_workload_total_usd": "PENDING" if not a6_complete else "0.300323",
+            "gpu_keep_until": "A6_SAFE_RETURN_RESULT_AUDIT_AND_POOL_FREEZE" if not a6_complete else "NONE_A6_GPU_TEARDOWN_PASS",
+            "next_authorized_action": "COMPLETE_INDEPENDENT_A6_RESULT_INTEGRITY_AUDIT_THEN_ISSUE_HASH_BOUND_A7_HANDOFF" if not a6_complete else "PREPARE_A7_SEVEN_LAYER_DIAGNOSIS_FROM_HASH_BOUND_A6_HANDOFF",
+            "counters": {
+                "candidate_evaluations": accounting.get("measured_candidate_count", 0),
+                "measured_a2_runs": 4,
+                "provider_admissions": 1,
+                "provider_execution_adoptions": 1,
+            },
+        }
+    elif project.get("current_phase") == "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS":
+        audit_path = root / "control/armindex/a7/a7-result-integrity-audit-20260823.json"
+        try:
+            audit = json.loads(audit_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            audit = {}
+        a7_complete = audit.get("status") == "PASS_A7_RESULT_INTEGRITY"
+        readiness = {
+            "status": "A7_SEVEN_LAYER_DIAGNOSIS_COMPLETE" if a7_complete else "A7_CPU_LOCAL_DIAGNOSIS_ACTIVE",
+            "current_status": "A7_SEVEN_LAYER_DIAGNOSIS_COMPLETE" if a7_complete else "A7_CPU_LOCAL_DIAGNOSIS_ACTIVE",
+            "current_route": "OWNER" if a7_complete else "LO",
+            "evidence_class": "post_confirmatory_cpu_local_diagnosis",
+            "scientific_authority": a7_complete,
+            "claim_boundary": (
+                "aggregate-safe diagnosis of the immutable A6 Top-200 pool; no winner change, new retrieval, pool expansion, reranking, Selection reopen, Final reopen, or GPU-reproduction claim"
+            ),
+            "phase_ceiling_usd": 0,
+            "task_run_ceiling_usd": 0,
+            "campaign_ceiling_usd": 180,
+            "a2_spent_accrued_usd": 0,
+            "remaining_campaign_headroom_usd": "NOT_APPLICABLE_CPU_LOCAL",
+            "estimated_next_action_cost_usd": 0,
+            "budget_status": "CPU_LOCAL_NO_PAID_SPEND",
+            "gpu_decision": "NO_GPU_NEEDED",
+            "gpu_decision_reason": "Owner destroyed the A6 GPU instance; A7 CPU-local layers are complete or active without provider reuse",
+            "whole_workload_total_usd": 0,
+            "gpu_keep_until": "NONE",
+            "next_authorized_action": "OWNER_D3_SUBMIT_RELEASE_TO_OPEN_A8" if a7_complete else "COMPLETE_A7_CPU_LOCAL_RESULT_INTEGRITY_AUDIT",
+            "counters": {
+                "candidate_evaluations": 0,
+                "measured_a2_runs": 4,
+                "provider_admissions": 0,
+                "provider_execution_adoptions": 0,
+            },
+        }
+    elif isinstance(closeout, Mapping) and closeout.get("validated") is True:
         route = closeout.get("a3_route", {})
         route = route if isinstance(route, Mapping) else {}
         accounting = closeout.get("accounting", {})

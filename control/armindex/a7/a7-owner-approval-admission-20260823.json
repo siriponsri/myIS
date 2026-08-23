@@ -1,0 +1,47 @@
+{
+  "schema_version": "myis.armindex-a7-owner-approval-admission.v1",
+  "receipt_id": "A7_OWNER_APPROVAL_ADMISSION_20260823",
+  "status": "PASS_A7_CPU_FIRST_ADMISSION",
+  "phase_id": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+  "task_id": "A7.1",
+  "attempt_id": "a7-goal001-20260823T085555Z-cpu01",
+  "recorded_at_utc": "2026-08-23T08:55:55Z",
+  "owner_approval": {
+    "text": "Owner approved A7 long run continuation on 2026-08-23.",
+    "text_sha256": "4012243d988cf57fb37e70a6f15cebc353f43d6018be808d6dfaa9d51fadc0ea"
+  },
+  "predecessor": {
+    "handoff_uri": "control/armindex/a6/a6-a7-handoff-20260823.json",
+    "handoff_status": "PASS_A6_TO_A7_HASH_BOUND_HANDOFF",
+    "a5_winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+    "a6_pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+    "a6_evaluation_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+    "a6_result_integrity_audit_sha256": "9D83ADAED078478900D6575D72415FE80186E0B3877A77524FF72EC67A762BCE",
+    "a6_safe_return_sha256": "29266d66338ac97eeafa44d00cdef51108fe4ecca1b4b9348078f2182fef1315",
+    "query_count": 1247,
+    "pool_depth": 200,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "compute_authority": {
+    "mode": "CPU_LOCAL_OWNER_STORE",
+    "paid_compute_usd": 0,
+    "provider_instance": "NONE_OWNER_DESTROYED_A6_INSTANCE",
+    "a7_l3r": "NOT_RUN_NO_FRESH_GPU_ADMISSION"
+  },
+  "allowed_layers": ["A7-L1", "A7-L2", "A7-L3", "A7-L4", "A7-L5", "A7-L6", "A7-L7"],
+  "protected_boundary": {
+    "owner_store_inputs_only": ["qrels", "split_membership", "protected_ids", "raw_rankings", "per_query_outcomes"],
+    "aggregate_safe_exports_only": true
+  },
+  "forbidden": [
+    "winner_change",
+    "representation_tuning",
+    "model_weight_change",
+    "pool_expansion",
+    "reranker_selection",
+    "selection_reopen",
+    "final_reopen",
+    "provider_upload"
+  ]
+}

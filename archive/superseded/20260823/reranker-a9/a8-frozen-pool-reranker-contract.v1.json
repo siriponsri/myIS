@@ -1,0 +1,38 @@
+{
+  "claim_boundary": "fixed_pool_reranking_comparison_only_no_new_retrieval_claim",
+  "contract_sha256": "03dfad71b6a8763a36de370c2a648d5dddb91c138612378c6c05b5a07db0f40d",
+  "execution_permitted": false,
+  "final_accesses": 0,
+  "frozen_rules": [
+    "same_pool_for_all_systems",
+    "no_prompt_search",
+    "no_model_selection",
+    "no_weight_tuning",
+    "no_pool_expansion",
+    "no_post_result_substitution"
+  ],
+  "phase_id": "A8_FROZEN_POOL_RERANKER_MATRIX",
+  "pool_depth": 200,
+  "protected_boundary": "per_query_rankings_and_qrels_owner_local_only; aggregate_safe_projection_only",
+  "required_metrics": [
+    "Recall@100",
+    "nDCG@100",
+    "nDCG@10",
+    "W/T/L",
+    "paired_bootstrap_10000",
+    "latency",
+    "throughput",
+    "cost",
+    "failure_taxonomy"
+  ],
+  "schema_version": "myis.armindex-a8-frozen-pool-reranker-contract.v1",
+  "selection_accesses": 0,
+  "status": "pending_A6_frozen_pool_authority_and_A7_audit",
+  "systems": [
+    "NO_RERANK_A6_ORDER",
+    "BAAI/bge-reranker-v2-m3",
+    "Qwen/Qwen3-Reranker-0.6B",
+    "jinaai/jina-reranker-v3.5",
+    "ORACLE_CEILING"
+  ]
+}

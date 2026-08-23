@@ -1,0 +1,58 @@
+{
+  "schema_version": "myis.armindex-a7-result-integrity-audit.v1",
+  "audit_id": "a7-result-integrity-audit-20260823-cpu02",
+  "status": "PASS_A7_RESULT_INTEGRITY",
+  "attempt_id": "a7-goal001-20260823T093525Z-cpu02",
+  "auditor": "independent_a7_audit",
+  "compute": "CPU_LOCAL_OWNER_STORE",
+  "predecessor_bindings": {
+    "a5_winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+    "a6_pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+    "a6_evaluation_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+    "a6_relations_sha256": "861a991875f3594e301c84ffe0ad4f0fbd6edcf07c534c172609f40bf623e298",
+    "a6_result_integrity_audit_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce"
+  },
+  "output_bindings": {
+    "receipt_uri": "outputs/publication/armindex/a7-seven-layer-diagnosis/a7-goal001-20260823T093525Z-cpu02/a7-diagnosis-receipt.json",
+    "receipt_canonical_sha256": "8e39b193c097b8f9d3470ba0aa228b23e9de3c19e672af048cf153e44984c556",
+    "receipt_file_sha256": "03a1356210382ff62117196836de66b723dc98d2b991bb6809bad321f39b06ba",
+    "aggregate_csv_uri": "outputs/publication/armindex/a7-seven-layer-diagnosis/a7-goal001-20260823T093525Z-cpu02/a7-layer-aggregate-metrics.csv",
+    "aggregate_csv_file_sha256": "ad869ef99254df10c2e155911a1aa1a975dc9e41f1203bffa1fac2ab66043c1e"
+  },
+  "coverage": {
+    "query_count": 1247,
+    "pool_depth": 200,
+    "pool_row_count": 249400,
+    "completed_layers": ["A7-L1", "A7-L2", "A7-L3", "A7-L4", "A7-L5", "A7-L6", "A7-L7"],
+    "optional_unrun_layer": "A7-L3R",
+    "optional_unrun_reason": "NOT_RUN_NO_FRESH_GPU_ADMISSION"
+  },
+  "result_checks": {
+    "a7_l1_a6_all_in_out_replay_exact": true,
+    "a7_l2_family_collisions": 0,
+    "a7_l2_denominator_discrepancies": 0,
+    "a7_l2_mapping_scope_leakage_count": 0,
+    "a7_l3_external_protocol_comparability": "NOT_COMPARABLE_EXTERNAL_PROTOCOL_CONFIGURATION_NOT_FULLY_VERIFIED",
+    "a7_l4_representation_attribution": "SUPPORTED_DESCRIPTIVE_ONLY",
+    "a7_l5_query_rescue": "NOT_AVAILABLE_NO_HASH_BOUND_COMPARATOR",
+    "a7_l6_candidate_exposure_anatomy": "PASS",
+    "a7_l7_oracle_boundary": "PASS_ANALYTICAL_BOUND_ONLY"
+  },
+  "boundary_checks": {
+    "selection_accesses": 0,
+    "final_accesses": 0,
+    "winner_change": false,
+    "pool_expansion": false,
+    "reranker_selection": false,
+    "protected_payload_in_public_output": false,
+    "raw_rankings_in_public_output": false,
+    "aggregate_safe_public_output_only": true
+  },
+  "validation": {
+    "focused_tests": "PASS: tests/test_a7_runner.py and tests/test_a7_contracts.py (4 passed)",
+    "diff_check": "PASS",
+    "independent_audit_verdict": "PASS"
+  },
+  "claim_boundary": "Post-confirmatory diagnosis of the immutable A6 Top-200 pool only. L3R was not run; external protocols are not comparable; representation attribution is descriptive only; query-rescue comparison is unavailable; oracle quantities are frozen-pool analytical bounds, not reranker or system results.",
+  "evidence_status": "verified_from_hash_bound_A6_inputs_and_aggregate_safe_A7_CPU02_outputs"
+}

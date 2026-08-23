@@ -64,7 +64,7 @@
   ],
   "evidence_class": "engineering_validation",
   "graph_id": "a2-official-codex-candidate-freeze-provenance-v1",
-  "graph_sha256": "5508537f92f59e79160f237b9ba6ba1e8c7d39c48b9cdca5509f01426e550266",
+  "graph_sha256": "4bfec95d66ba0d546546b37f2b485ad01338903a2951cfaafd23c63249885cf8",
   "model_name": "gpt-5.6-sol",
   "nodes": [
     {
@@ -190,7 +190,7 @@
       "classification": "metadata",
       "kind": "control",
       "node_id": "control-source-of-truth-yaml",
-      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
+      "sha256": "0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d",
       "uri": "../../../01_Research/control/source-of-truth.yaml"
     },
     {

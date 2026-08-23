@@ -1,0 +1,30 @@
+{
+  "claim_boundary": "audit_and_diagnostic_evidence_only_no_winner_change",
+  "contract_sha256": "00c64f8b696d7fbb401510360ea7822a55ba9e6b0c8e9b1379f8703e393ab562",
+  "execution_permitted": false,
+  "final_accesses": 0,
+  "frozen_outputs": [
+    "audit_receipts",
+    "aggregate_metrics",
+    "oracle_curves",
+    "error_decomposition",
+    "claim_classification"
+  ],
+  "phase_id": "A7_SCIENTIFIC_AUDIT_AND_ORACLE_HEADROOM",
+  "protected_boundary": "qrels_and_membership_owner_local_only; projections_aggregate_safe_only",
+  "required_input": "A6_FROZEN_POOL_AUTHORITY",
+  "schema_version": "myis.armindex-a7-scientific-audit-contract.v1",
+  "selection_accesses": 0,
+  "status": "pending_A6_frozen_pool_authority",
+  "tracks": [
+    "evidence_identity",
+    "independent_metric_replay",
+    "population_accounting",
+    "denominator",
+    "family_aggregation",
+    "leakage",
+    "statistical_replay",
+    "benchmark_comparability",
+    "oracle_headroom"
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "A7-L1_score_identity": {
+    "delta_vs_A6": {
+      "ALL": {
+        "Recall@100_delta": 0.0,
+        "nDCG@100_delta": 0.0,
+        "query_count_match": true
+      },
+      "IN": {
+        "Recall@100_delta": 0.0,
+        "nDCG@100_delta": 0.0,
+        "query_count_match": true
+      },
+      "OUT": {
+        "Recall@100_delta": 0.0,
+        "nDCG@100_delta": 0.0,
+        "query_count_match": true
+      }
+    },
+    "replayed_metrics": {
+      "ALL": {
+        "Recall@100": 0.438964626214,
+        "judged_query_count": 1247,
+        "nDCG@100": 0.362497103931,
+        "relevant_family_count": 24929
+      },
+      "IN": {
+        "Recall@100": 0.528164111236,
+        "judged_query_count": 1217,
+        "nDCG@100": 0.406513126603,
+        "relevant_family_count": 19736
+      },
+      "OUT": {
+        "Recall@100": 0.188449898653,
+        "judged_query_count": 905,
+        "nDCG@100": 0.070644223566,
+        "relevant_family_count": 5193
+      }
+    },
+    "status": "PASS"
+  },
+  "A7-L2_family_relevance_integrity": {
+    "pool": {
+      "candidate_row_count": 249400,
+      "pool_depth": 200,
+      "pool_query_count": 1247
+    },
+    "pool_relation_query_coverage_match": true,
+    "relations": {
+      "positive_relation_row_count": 24929,
+      "positive_relation_row_count_IN": 19736,
+      "positive_relation_row_count_OUT": 5193,
+      "self_relation_count": 40
+    },
+    "status": "PASS"
+  },
+  "A7-L3R_fixed_reference_reproduction": {
+    "reason": "GPU instance destroyed; fresh admission absent",
+    "status": "NOT_RUN_NO_FRESH_GPU"
+  },
+  "A7-L3_protocol_parity": {
+    "evaluation_cutoff": 100,
+    "evaluator_identity": "NOT_VERIFIED",
+    "family_aggregation": "maxp",
+    "final_accesses": 0,
+    "frozen_pool_depth": 200,
+    "normalization": "unicode_nfkc_whitespace",
+    "selection_accesses": 0,
+    "status": "BOUNDED_PASS"
+  },
+  "A7-L4_representation_attribution": {
+    "reason": "Frozen single-system evidence supports configuration attribution, not causal component ablation.",
+    "representation_fields": [
+      "title",
+      "abstract",
+      "claims_text"
+    ],
+    "status": "SUPPORTED_DESCRIPTIVE_ONLY"
+  },
+  "A7-L5_query_rescue": {
+    "reason": "No hash-bound comparator ranking was supplied; no comparison inferred.",
+    "status": "NOT_AVAILABLE"
+  },
+  "A7-L6_candidate_exposure_error_anatomy": {
+    "populations": {
+      "ALL": {
+        "curves": {
+          "10": {
+            "Recall": 0.136794974606,
+            "nDCG": 0.295725055507
+          },
+          "100": {
+            "Recall": 0.438964626214,
+            "nDCG": 0.362497103931
+          },
+          "20": {
+            "Recall": 0.214697496213,
+            "nDCG": 0.246606575819
+          },
+          "200": {
+            "Recall": 0.546832397755,
+            "nDCG": 0.405319355173
+          },
+          "50": {
+            "Recall": 0.336358371202,
+            "nDCG": 0.315167721895
+          }
+        },
+        "query_count": 1247,
+        "relevant_family_count": 24929,
+        "relevant_family_exposed_at_200": 13627,
+        "relevant_family_not_exposed_at_200": 11302
+      },
+      "IN": {
+        "curves": {
+          "10": {
+            "Recall": 0.187048067448,
+            "nDCG": 0.3074831284
+          },
+          "100": {
+            "Recall": 0.528164111236,
+            "nDCG": 0.406513126603
+          },
+          "20": {
+            "Recall": 0.277871602329,
+            "nDCG": 0.28696509781
+          },
+          "200": {
+            "Recall": 0.645077432336,
+            "nDCG": 0.448900868962
+          },
+          "50": {
+            "Recall": 0.413144709628,
+            "nDCG": 0.357930632744
+          }
+        },
+        "query_count": 1217,
+        "relevant_family_count": 19736,
+        "relevant_family_exposed_at_200": 12499,
+        "relevant_family_not_exposed_at_200": 7237
+      },
+      "OUT": {
+        "curves": {
+          "10": {
+            "Recall": 0.034022635484,
+            "nDCG": 0.025697169664
+          },
+          "100": {
+            "Recall": 0.188449898653,
+            "nDCG": 0.070644223566
+          },
+          "20": {
+            "Recall": 0.070933281792,
+            "nDCG": 0.037999805734
+          },
+          "200": {
+            "Recall": 0.260166940437,
+            "nDCG": 0.086359451545
+          },
+          "50": {
+            "Recall": 0.133993988468,
+            "nDCG": 0.056667425242
+          }
+        },
+        "query_count": 905,
+        "relevant_family_count": 5193,
+        "relevant_family_exposed_at_200": 1128,
+        "relevant_family_not_exposed_at_200": 4065
+      }
+    },
+    "status": "PASS"
+  },
+  "A7-L7_oracle_retrieval_boundary": {
+    "definition": "oracle selection restricted to the existing frozen Top-200 candidates",
+    "populations": {
+      "ALL": {
+        "bounded_reranking_headroom_Recall@100": 0.107867771541,
+        "existing_top_200_oracle_Recall@100": 0.546832397755,
+        "observed_Recall@100": 0.438964626214,
+        "pool_expansion_performed": false,
+        "query_count": 1247
+      },
+      "IN": {
+        "bounded_reranking_headroom_Recall@100": 0.1169133211,
+        "existing_top_200_oracle_Recall@100": 0.645077432336,
+        "observed_Recall@100": 0.528164111236,
+        "pool_expansion_performed": false,
+        "query_count": 1217
+      },
+      "OUT": {
+        "bounded_reranking_headroom_Recall@100": 0.071717041784,
+        "existing_top_200_oracle_Recall@100": 0.260166940437,
+        "observed_Recall@100": 0.188449898653,
+        "pool_expansion_performed": false,
+        "query_count": 905
+      }
+    },
+    "status": "PASS"
+  },
+  "claim_boundary": "post_confirmatory_diagnosis_only_no_winner_change_no_new_retrieval_no_pool_expansion_no_reranker",
+  "claim_to_evidence": {
+    "candidate_exposure_and_oracle_headroom": "SUPPORTED_WITHIN_TOP_200",
+    "family_relevance_and_leakage_integrity": "SUPPORTED",
+    "fixed_reference_gpu_reproduction": "NOT_RUN_NO_FRESH_GPU_ADMISSION",
+    "protocol_comparability": "BOUNDED",
+    "query_rescue_comparison": "NOT_AVAILABLE_NO_HASH_BOUND_COMPARATOR",
+    "representation_attribution": "DESCRIPTIVE_ONLY",
+    "score_identity_replay": "SUPPORTED",
+    "winner_or_final_confirmation": "NOT_ESTABLISHED_BY_A7"
+  },
+  "compute": "CPU_LOCAL",
+  "final_accesses": 0,
+  "frozen_input_hashes": {
+    "evaluation_file_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+    "pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+    "relations_sha256": "861a991875f3594e301c84ffe0ad4f0fbd6edcf07c534c172609f40bf623e298",
+    "token_map_sha256": "90e4630bd0c23b16e5e881c00eccf47eca6f1259dfeb665ff45b4ed177e1e23a"
+  },
+  "protected_payload_included": false,
+  "receipt_sha256": "6124d1f2d410d6fed9e0492ad9309a92807284f9b543661f649fb09139313283",
+  "schema_version": "myis.armindex-a7-seven-layer-diagnosis-receipt.v1",
+  "selection_accesses": 0,
+  "status": "PASS_A7_CPU_LOCAL_DIAGNOSIS"
+}

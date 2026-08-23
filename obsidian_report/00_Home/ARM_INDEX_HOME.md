@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
-read_model_sha256: "2a0bd9cd30525c7fc4f44771eb36183092795d29c9b6593655ca4faa860f9bbd"
-source_commit: "60de8e8d039bfb482c19039d7b4b2839a14a2a81"
+read_model_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+read_model_sha256: "eb6c6b72fdceb47302a1246c3a0a2672cd6c97df09ebc2663b4bd2d1e8cbba35"
+source_commit: "0ec3eaaeed6229bb6d1f671ab3286a9c26550623"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,18 +11,18 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "measured_development_aggregate"
 scientific_authority: true
 claim_boundary: "Aggregate development evidence only. ARM-03 is a numerical tie to A1 at presentation precision; ARM-04 improves its frozen A1 comparator; ARM-05 is retained for transfer analysis but has no strict A1 improvement. No Selection or Final claim is supported."
-generated_from_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
-last_material_update: "2026-08-19T11:10:50Z"
-next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
+generated_from_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+last_material_update: "2026-08-22T15:21:39Z"
+next_authorized_action: "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-19T11:10:50Z"
-updated_at: "2026-08-19T11:10:50Z"
+created_at: "2026-08-22T15:21:39Z"
+updated_at: "2026-08-22T15:21:39Z"
 note_id: "ARM-INDEX-HOME"
 note_type: "home"
-phase_id: "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
-task_id: "A3.1"
+phase_id: "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS"
+task_id: "A7.1"
 workflow_status: "ready"
 evidence_maturity: "engineering"
 claim_level: "none"
@@ -35,8 +35,8 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 ## Campaign and phase status
 
 - Campaign: `armindex-multiretriever-v2`
-- Phase: `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT`
-- Status: `a2_goal004_measured_closeout_complete_a3_train_250_input_pending`
+- Phase: `A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS`
+- Status: `a7_seven_layer_diagnosis_complete`
 
 ## A2 measured arm outcomes
 
@@ -58,15 +58,15 @@ ArmIndex is the active campaign. Historical SCOPE and P1 evidence remains readab
 
 ## Integrity and gates
 
-- Measured runs: `1`
-- Selection exposures: `0`
-- Final exposures: `0`
+- Measured runs: `4`
+- Selection exposures: `1`
+- Final exposures: `1`
 - D2 and D3 remain Owner-only.
 - Final remains closed.
 
 ## Next command
 
-`LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION`
+`RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL`
 
 ## Historical evidence
 

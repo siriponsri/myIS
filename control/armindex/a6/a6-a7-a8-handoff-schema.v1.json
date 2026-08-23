@@ -1,0 +1,7 @@
+{
+  "schema_version": "myis.armindex-a6-a7-handoff.v1",
+  "required": ["a6_pool_authority_sha256", "a6_evaluation_sha256", "a5_winner_binding_sha256", "query_count", "pool_depth", "protected_payload_included"],
+  "fixed": {"query_count": 1247, "pool_depth": 200, "protected_payload_included": false},
+  "consumers": {"A7": "seven_layer_diagnosis_and_comparison_only"},
+  "forbidden": ["pool_expansion", "winner_change", "selection_reopen", "final_reopen"]
+}

@@ -95,7 +95,31 @@ D3_SUBMIT_RELEASE
 
 ## 3. คำสั่ง Phase
 
-### Phase 1
+## Active route (2026-08-23)
+
+The canonical route is the nine-phase ArmIndex roadmap below. The legacy
+Phase 0-9 command examples in this section are retained only as historical
+provenance and must not be used to launch work.
+
+```text
+A0_MIGRATION_FOUNDATION
+  -> A1_BASELINES_AND_MULTI_ARM_SCREENING
+  -> A2_PER_ARM_AUTOINDEX
+  -> A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
+  -> A4_PRODUCTION_TRANSFER_AND_SELECTION
+  -> A5_FINAL_CONFIRMATION
+  -> A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
+  -> A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS
+  -> A8_JOURNAL_SYNTHESIS_AND_PUBLICATION
+```
+
+Current state: A5 Final-872 is closed and immutable; A6 full materialization
+has complete source coverage (`45,336/45,336`) but Top-200/deep-ranking export,
+Owner-local ALL/IN/OUT metrics, and the independent integrity audit remain
+pending. A7 is locked until the hash-bound A6 frozen diagnostic bundle exists.
+There is no reranking phase. `D3_SUBMIT_RELEASE` applies to A8 only.
+
+### Phase 1 (historical; do not execute)
 
 ```text
 /goal Execute Phase 1 of PLAN_V02_NEW.md only. Reproduce the canonical family-level BM25 baseline and validate every frozen arm adapter on fixtures and REP-DEV. Resolve protocol or lineage failures before continuing and stop with a comparable-baseline report. Do not use HARNESS-DEV, Selection, or Final for optimization.
@@ -144,7 +168,7 @@ D3_SUBMIT_RELEASE
 ### Phase 9
 
 ```text
-/goal Execute A7_PUBLICATION_AND_RELEASE only. Read docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md, use validated aggregate-safe A0-A6 evidence, write the manuscript and anonymous reproducibility package, audit claims, statistics, licenses, layout, and protected boundaries, and stop before submission unless D3_SUBMIT_RELEASE is recorded.
+/goal Execute A8_JOURNAL_SYNTHESIS_AND_PUBLICATION only. Read docs/goal/A8_JOURNAL_SYNTHESIS_AND_PUBLICATION_goal_001.md, use validated aggregate-safe A0-A7 evidence, write the manuscript and anonymous reproducibility package, audit claims, statistics, licenses, layout, and protected boundaries, and stop before submission unless D3_SUBMIT_RELEASE is recorded.
 ```
 
 ### A6 full-DAPFAM materialization

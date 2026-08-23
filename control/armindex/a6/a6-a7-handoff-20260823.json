@@ -1,0 +1,17 @@
+{
+  "schema_version": "myis.armindex-a6-a7-handoff.v1",
+  "status": "PASS_A6_TO_A7_HASH_BOUND_HANDOFF",
+  "attempt_id": "a6-goal001-20260823T052423Z-full09",
+  "a6_pool_authority_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+  "a6_evaluation_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+  "a6_result_integrity_audit_sha256": "9D83ADAED078478900D6575D72415FE80186E0B3877A77524FF72EC67A762BCE",
+  "a6_safe_return_sha256": "29266d66338ac97eeafa44d00cdef51108fe4ecca1b4b9348078f2182fef1315",
+  "a5_winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+  "query_count": 1247,
+  "pool_depth": 200,
+  "protected_payload_included": false,
+  "selection_accesses": 0,
+  "final_accesses": 0,
+  "consumer": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+  "claim_boundary": "diagnostic_and_comparability_evidence_only; no new winner, pool expansion, reranking, Selection reopen, or Final reopen"
+}

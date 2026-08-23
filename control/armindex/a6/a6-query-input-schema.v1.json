@@ -1,0 +1,11 @@
+{
+  "schema_version": "myis.armindex-a6-query-input.v1",
+  "required": ["opaque_query_token", "query_text", "query_index"],
+  "properties": {
+    "opaque_query_token": {"type": "string", "pattern": "^q-[a-f0-9]{16,64}$"},
+    "query_text": {"type": "string", "minLength": 1},
+    "query_index": {"type": "integer", "minimum": 0, "maximum": 1246}
+  },
+  "forbidden_fields": ["qrels", "membership", "split", "family_id", "publication_id", "per_query_outcome"],
+  "count_commitment": 1247
+}

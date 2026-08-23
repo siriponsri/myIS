@@ -3280,9 +3280,9 @@
       "status": "repaired_and_validated"
     }
   ],
-  "generated_at": "2026-08-19T11:10:50Z",
-  "generated_from_revision": "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a",
-  "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+  "generated_at": "2026-08-22T15:21:39Z",
+  "generated_from_revision": "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879",
+  "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -3296,9 +3296,9 @@
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
-      "final_accesses": 0,
-      "measured_runs": 1,
-      "selection_accesses": 0,
+      "final_accesses": 1,
+      "measured_runs": 4,
+      "selection_accesses": 1,
       "shortlist_count": 0
     },
     "scientific_authority": true
@@ -3429,14 +3429,14 @@
       "uri": "control/armindex/a1.2/execution-contract.v3.json"
     },
     "armindex_schema_root": {
-      "sha256": "431f248e714c50af194ee9cdbc197441a0a384b830f739943a87a93c8b4ff0f8",
+      "sha256": "f97779630461e05cbdb80fa66b01d0ddbbe58b6a9266adc244f1faf97c3dcc61",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6",
+      "sha256": "bbe2ab3cbe7f32ae31594560ddf78d3bb86710715377a40876abfe96ea2a536f",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+    "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -3447,13 +3447,13 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
+      "sha256": "0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The frozen rule promoted ARM-03, ARM-05, ARM-04. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3.",
   "language": "en",
-  "last_material_update": "2026-08-19T11:10:50Z",
+  "last_material_update": "2026-08-22T15:21:39Z",
   "metric_references": [
     {
       "cutoff": 100,
@@ -3544,11 +3544,11 @@
       "value": 1.0
     }
   ],
-  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+  "next_authorized_action": "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL",
   "objective": "Reproduce controls and screen the five adapters with common programs.",
   "phase_id": "A1_BASELINES_AND_MULTI_ARM_SCREENING",
   "report_id": "phase-a1_baselines_and_multi_arm_screening",
-  "report_sha256": "536d349c1a983392aa180fe3d8e4e7b6bd1ba5bd8c719adca502da8951092005",
+  "report_sha256": "41cf4e5b74241ed9a8f5dc44d9e01a9fc6c067a80169eb0be83b8dde1ef722cc",
   "report_type": "phase",
   "result": {
     "decision": "PASS_25_OF_25",
@@ -3560,8 +3560,8 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
-    "program_state": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
+    "phase": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+    "program_state": "a7_seven_layer_diagnosis_complete",
     "task": null
   },
   "status": "completed",

@@ -1931,6 +1931,36 @@ def _armindex_home_body(model: Mapping[str, Any]) -> str:
     project = model["project"]
     armindex = model["armindex"]
     closeout = _validated_a2_goal004_closeout(model)
+    if project.get("current_phase") == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY":
+        a6_complete = project.get("state") == "A6_COMPLETE_A7_READY"
+        a6_status_line = (
+            "- A6 result-integrity audit: `PASS_A6_RESULT_INTEGRITY`; safe return, hash reconciliation, and worker teardown passed."
+            if a6_complete
+            else "- Full-DAPFAM pool generation and Owner-local ALL/IN/OUT evaluation have PASS receipts; independent result-integrity audit remains pending."
+        )
+        a6_claim_line = (
+            "- Claim boundary: frozen ARM-03 full-DAPFAM materialization, aggregate ALL/IN/OUT retrieval evidence, and operational scalability only; no new winner, comparative full-corpus superiority, external-generalization, reranking, Selection reopen, or Final reopen."
+            if a6_complete
+            else "- Claim boundary: post-confirmatory operational scalability evidence only until the pool, metrics, safe return, and integrity audit pass."
+        )
+        return (
+            "# myIS Research Report\n\n"
+            "This current view is generated from the validated shared read model; "
+            "canonical controls, receipts, and measured evidence remain authoritative.\n\n"
+            "## Current status\n\n"
+            f"- Phase: `{project.get('current_phase')}`\n"
+            f"- Task/Sub-stage: `{' / '.join(str(value) for value in (project.get('current_task'), project.get('current_substage')) if value and value != 'NOT_APPLICABLE') or 'UNKNOWN'}`\n"
+            f"- Status: `{project.get('current_status', 'UNKNOWN')}`\n"
+            "- A5 remains the frozen predecessor; A6 does not select a new winner or reopen Selection/Final.\n"
+            f"{a6_status_line}\n\n"
+            "## Evidence and next action\n\n"
+            f"- Next authorized action: `{armindex.get('next_command', 'COMPLETE_INDEPENDENT_A6_RESULT_INTEGRITY_AUDIT_THEN_ISSUE_HASH_BOUND_A7_HANDOFF')}`\n"
+            f"{a6_claim_line}\n\n"
+            "## Navigate\n\n"
+            "- [[ARM_INDEX_HOME]]\n"
+            "- [[A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_REPORT]]\n"
+            "- [[A5_FINAL_CONFIRMATION_REPORT]]\n"
+        )
     if closeout:
         accounting = closeout.get("accounting", {})
         budget = closeout.get("budget", {})
@@ -1955,13 +1985,12 @@ def _armindex_home_body(model: Mapping[str, Any]) -> str:
             "## Evidence and next action\n\n"
             "- A2 closeout report: `docs/long_run/A2_PER_ARM_AUTOINDEX_lo_004_001.md`\n"
             "- A2 closeout projection: `control/armindex/a2/a2-goal004-closeout-projection.v1.json`\n"
-            f"- A3 route: `{route.get('status', 'PENDING_HASH_BOUND_TRAIN_250_INPUT')}`\n"
+            f"- Downstream route: A3 transfer, A4 selection, and A5 confirmation are complete; current work is A6.\n"
             f"- Next authorized action: `{route.get('next_authorized_action', armindex.get('next_command', 'UNKNOWN'))}`\n"
             "- Vast disposition: `OWNER_ACTION_DESTROY`; do not retain the idle instance for an unbound future run.\n\n"
             "## Navigate\n\n"
             "- [[ARM_INDEX_HOME]]\n"
             "- [[A2_PER_ARM_AUTOINDEX_REPORT]]\n"
-            "- [[A2.1]]\n"
             "- [[RESEARCH_HISTORY_INDEX]]\n"
         )
     readiness = armindex.get("a2_execution_readiness", {})
@@ -2011,7 +2040,6 @@ def _armindex_home_body(model: Mapping[str, Any]) -> str:
         "## Navigate\n\n"
         "- [[ARM_INDEX_HOME]]\n"
         "- [[A2_PER_ARM_AUTOINDEX_REPORT]]\n"
-        "- [[A2.1]]\n"
         "- [[RESEARCH_HISTORY_INDEX]]\n"
     )
 
@@ -2542,6 +2570,14 @@ def _obsidian_vault_contents(root: Path, model: Mapping[str, Any]) -> dict[Path,
     current_claim_boundary = str(
         current_authority_source.get("claim_boundary", "engineering_provenance_only")
     )
+    if project.get("state") == "A6_COMPLETE_A7_READY":
+        current_evidence_class = "post_confirmatory_aggregate"
+        current_scientific_authority = True
+        current_claim_boundary = (
+            "frozen ARM-03 full-DAPFAM materialization, aggregate ALL/IN/OUT retrieval evidence, "
+            "and operational scalability only; no new winner, comparative full-corpus superiority, "
+            "external-generalization, reranking, Selection reopen, or Final reopen"
+        )
     p1_run_ids = _p1_run_ids(model)
     p1_manifest_hashes = _p1_manifest_hashes(model)
     outputs: dict[Path, str] = {}
@@ -4686,6 +4722,8 @@ def _workflow_status(value: Any) -> str:
         "complete": "complete",
         "completed": "complete",
         "measured": "complete",
+        "A6_COMPLETE_A7_READY": "complete",
+        "A6_ACTIVE_MEASURED_EXECUTION": "in_progress",
         "blocked": "blocked",
         "blocked_until_p1": "waiting_dependency",
         "locked_pending_execution_contract": "waiting_dependency",
@@ -4878,7 +4916,8 @@ def _ensure_owner_boundary(vault_root: Path) -> None:
         "A4_PRODUCTION_TRANSFER_AND_SELECTION",
         "A5_FINAL_CONFIRMATION",
         "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
-        "A7_PUBLICATION_AND_RELEASE",
+        "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+        "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
     ):
         (vault_root / "01_Phases" / phase / "Owner_Notes").mkdir(
             parents=True, exist_ok=True

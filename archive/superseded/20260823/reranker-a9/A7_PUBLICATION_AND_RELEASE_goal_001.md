@@ -1,9 +1,9 @@
 ---
-title: "A7 publication and release"
-phase_id: A7_PUBLICATION_AND_RELEASE
-task_id: A7.1
-status: BLOCKED_OWNER_D3
-lifecycle: BLOCKED
+title: "Historical A7 publication and release routing"
+phase_id: A9_PUBLICATION_AND_RELEASE
+task_id: A9.1
+status: HISTORICAL_SUPERSEDED_BY_UPDATE_PLAN
+lifecycle: CLOSED
 evidence_class: publication_and_release
 scientific_authority: false
 execution_permitted: false
@@ -14,11 +14,13 @@ last_material_update: 2026-08-19
 next_authorized_action: WAIT_FOR_D3_SUBMIT_RELEASE_AND_VALIDATED_A0_A6_EVIDENCE
 ---
 
-# Goal 001: A7 publication and release
+# Historical routing: publication and release
 
 ## Objective and boundary
 
-Create the manuscript, reproducibility package, figures, tables, release
+This preserved goal is superseded for future routing by
+`docs/goal/A8_JOURNAL_SYNTHESIS_AND_PUBLICATION_goal_001.md`. It remains readable
+provenance. The historical publication phase created the manuscript, reproducibility package, figures, tables, release
 bundle, and public claims only after `D3_SUBMIT_RELEASE` is recorded. A7 uses
 validated aggregate-safe evidence from A0 through A6 and never treats a
 projection, slide, draft, Brain note, or unverified summary as scientific

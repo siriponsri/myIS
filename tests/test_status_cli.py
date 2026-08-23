@@ -14,23 +14,21 @@ from myis_research.status_cli import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_owner_status_renders_current_a3_pending_boundary() -> None:
+def test_owner_status_renders_current_a6_boundary() -> None:
     status = build_owner_status(ROOT)
     rendered = render_owner_status(status)
 
-    assert status["project"]["phase"] == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
-    assert status["project"]["task"] == "A3.1 / PENDING_HASH_BOUND_TRAIN_250_INPUT"
+    assert status["project"]["phase"] == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+    assert status["project"]["task"].startswith("A6.1 /")
     assert status["project"]["scientific_authority"] is True
-    assert status["boundaries"]["candidate_evaluations"] == 44
-    assert status["boundaries"]["measured_a2_runs"] == 1
-    assert status["budget"]["phase_ceiling_usd"] == 35
+    assert status["budget"]["phase_ceiling_usd"] == 20
     assert status["budget"]["campaign_ceiling_usd"] == 180
-    assert status["budget"]["status"] == "PENDING_FRESH_A3_ADMISSION"
-    assert status["gpu_vast"]["instance"] == "47790578"
-    assert status["gpu_vast"]["decision"] == "OWNER_ACTION_DESTROY"
-    assert status["routing"]["recommended_next_session"] == "AP"
+    assert status["budget"]["status"] == "A6_CLOSED_WITHIN_USD_20_CEILING"
+    assert status["gpu_vast"]["instance"] == "NONE"
+    assert status["gpu_vast"]["decision"] == "NO_GPU_NEEDED"
+    assert status["routing"]["recommended_next_session"] == "LO"
     assert "P2_SCOPE_DEVELOPMENT" not in rendered
-    assert "GPT-5.6 Sol High" in rendered
+    assert "A6 result integrity is verified" in rendered
 
 
 def test_owner_status_discovers_handoffs_and_no_active_closed_goal() -> None:
@@ -40,9 +38,7 @@ def test_owner_status_discovers_handoffs_and_no_active_closed_goal() -> None:
     assert handoffs["latest_ap"].endswith("A2_PER_ARM_AUTOINDEX_audit_012.md")
     assert handoffs["latest_im"].endswith("A2_PER_ARM_AUTOINDEX_im_010_001.md")
     assert handoffs["latest_lo"].endswith("A2_PER_ARM_AUTOINDEX_lo_004_001.md")
-    assert handoffs["active_goal"].endswith(
-        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT_goal_003.md"
-    )
+    assert handoffs["active_goal"] == "NONE"
 
 
 def test_gpu_state_uses_staged_provider_receipt() -> None:

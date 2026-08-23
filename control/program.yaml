@@ -19,13 +19,13 @@ authority:
 
 active_phase_registry:
   campaign_id: armindex-multiretriever-v2
-  phases: [A0_MIGRATION_FOUNDATION, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX, A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT, A4_PRODUCTION_TRANSFER_AND_SELECTION, A5_FINAL_CONFIRMATION, A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY, A7_PUBLICATION_AND_RELEASE]
-  current_phase: A1_BASELINES_AND_MULTI_ARM_SCREENING
-  current_task: A1.2
-  current_task_status: a1_2_vast_4x3090_postcommit_preflight_prepared_launch_locked
-  measured_runs: 0
-  selection_accesses: 0
-  final_accesses: 0
+  phases: [A0_MIGRATION_FOUNDATION, A1_BASELINES_AND_MULTI_ARM_SCREENING, A2_PER_ARM_AUTOINDEX, A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT, A4_PRODUCTION_TRANSFER_AND_SELECTION, A5_FINAL_CONFIRMATION, A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY, A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS, A8_JOURNAL_SYNTHESIS_AND_PUBLICATION]
+  current_phase: A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS
+  current_task: A7.1
+  current_task_status: complete
+  measured_runs: 4
+  selection_accesses: 1
+  final_accesses: 1
 
 owner_decisions:
   standing_authorization: D1_START_CAMPAIGN
@@ -34,8 +34,8 @@ owner_decisions:
   micro_gates: false
 
 defaults:
-  campaign_budget_usd: 100
-  hard_stop_usd: 100
+  campaign_budget_usd: 180
+  hard_stop_usd: 180
   selection_rule: strictly_greater_reject_ties
   split_seed: 42
   train_queries: 250
@@ -54,7 +54,8 @@ defaults:
   armindex_a1_2_preserved_revision: a1.2-local-vast-4x3090-v2
   armindex_a1_2_historical_v1_status: scaffold_complete_launch_locked_not_adopted
   armindex_a1_2_planning_rate_usd_per_four_gpu_instance_hour: 0.6
-  armindex_measured_campaign_started: false
+  armindex_measured_campaign_started: true
+  armindex_a6_budget_profile_id: armindex-a6-frozen-pool-20260822
 
 protected_boundary:
   agent_access: aggregate_hash_count_only
@@ -62,4 +63,4 @@ protected_boundary:
   protected_membership_in_agent_workspace: false
   qrels_in_projections: false
   per_query_outcomes_in_projections: false
-  active_project_claim_boundary: postcommit_validator_and_clean_bundle_identity_correction_only_live_vast_and_scientific_execution_unstarted
+  active_project_claim_boundary: a7_post_confirmatory_cpu_diagnosis_of_the_immutable_a6_pool_no_winner_change_no_pool_expansion_no_selection_or_final_reopen

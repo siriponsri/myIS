@@ -1,0 +1,22 @@
+{
+  "schema_version": "myis.armindex-a6-frozen-pool-authority.v1",
+  "status": "PASS_A6_FROZEN_POOL_AUTHORITY",
+  "authority_id": "a6-frozen-pool-authority-20260823-full09",
+  "attempt_id": "a6-goal001-20260823T052423Z-full09",
+  "winner_arm_id": "ARM-03",
+  "winner_model_id": "datalyes/patembed-large",
+  "a5_winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+  "pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+  "manifest_sha256": "3232e43bacdc2a4fe8f11b9b5f4612fdd74f9e57cfc407aeadb5678921f78ff4",
+  "evaluation_receipt_sha256": "5e8950b801dae04c408234336d8fbdc868a9c07c015b8519fdc7469d21fa1d3a",
+  "evaluation_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+  "safe_return_sha256": "29266d66338ac97eeafa44d00cdef51108fe4ecca1b4b9348078f2182fef1315",
+  "query_count": 1247,
+  "pool_depth": 200,
+  "coverage_count": 1247,
+  "protected_payload_included": true,
+  "selection_accesses": 0,
+  "final_accesses": 0,
+  "consumers": ["A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS"],
+  "forbidden": ["pool_expansion", "winner_change", "selection_reopen", "final_reopen", "reranker_search"]
+}

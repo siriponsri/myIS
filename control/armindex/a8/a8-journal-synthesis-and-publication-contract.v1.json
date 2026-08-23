@@ -1,0 +1,43 @@
+{
+  "schema_version": "myis.armindex-a8-journal-synthesis-and-publication-contract.v1",
+  "phase_id": "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
+  "status": "PASS_A8_JOURNAL_PACKAGE",
+  "roadmap_source": "inbox/UPDATE_PLAN.md",
+  "required_predecessors": [
+    "A0_through_A5_validated_evidence",
+    "A6_FROZEN_DIAGNOSTIC_BUNDLE",
+    "A7_SEVEN_LAYER_DIAGNOSIS_CLOSEOUT"
+  ],
+  "scientific_scope": "evidence-grounded journal synthesis and submission preparation",
+  "forbidden": [
+    "new_retrieval_experiment",
+    "reranker_phase",
+    "additional_embedding_model_search",
+    "winner_change",
+    "protected_data_export",
+    "unsupported_claim"
+  ],
+  "required_outputs": [
+    "claim_to_evidence_matrix",
+    "literature_audit",
+    "publication_figures_and_tables",
+    "manuscript_source",
+    "reviewer_simulation",
+    "number_and_citation_consistency_audit",
+    "release_manifest"
+  ],
+  "aggregate_safe_projection_allowlist": [
+    "hashes",
+    "aggregate_metrics",
+    "confidence_intervals",
+    "counts",
+    "figures",
+    "tables",
+    "citations",
+    "claim_boundaries",
+    "pointers"
+  ],
+  "owner_gate": "D3_SUBMIT_RELEASE",
+  "owner_gate_status": "APPROVED_AUTOMATIC_AFTER_A7_PASS",
+  "terminal_states": ["PASS_A8_JOURNAL_PACKAGE", "STOP_A8_WITH_EVIDENCE", "BLOCKED_OWNER_D3"]
+}

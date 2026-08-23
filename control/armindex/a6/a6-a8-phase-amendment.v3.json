@@ -1,0 +1,57 @@
+{
+  "schema_version": "myis.armindex-a6-a8-phase-amendment.v3",
+  "amendment_id": "A6_FULL_DAPFAM_A7_DIAGNOSIS_A8_JOURNAL",
+  "authority_state": "OWNER_APPROVED_PREREGISTERED",
+  "roadmap_source": "inbox/UPDATE_PLAN.md",
+  "approved_at_utc": "2026-08-23T00:00:00Z",
+  "owner_approval_text": "Approve the evidence-preserving A6-A8 retrieval-focused extension: A6 materializes the frozen ARM-03 retrieval pool over full DAPFAM; A7 performs the seven-layer retrieval diagnosis and comparison framework; A8 synthesizes the validated evidence into the journal manuscript and submission package.",
+  "effective_phase_registry": [
+    "A0_MIGRATION_FOUNDATION",
+    "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "A2_PER_ARM_AUTOINDEX",
+    "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+    "A5_FINAL_CONFIRMATION",
+    "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+    "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+    "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION"
+  ],
+  "scientific_units": {
+    "A6": {
+      "winner": "ARM-03 / datalyes/patembed-large",
+      "corpus": "full_DAPFAM",
+      "query_count": 1247,
+      "pool_depth": 200,
+      "role": "full retrieval materialization, operational scalability, and immutable evidence creation",
+      "selection_accesses": 0,
+      "final_accesses": 0
+    },
+    "A7": {
+      "role": "seven-layer retrieval diagnosis and comparison framework",
+      "compute_policy": "CPU_FIRST; optional A7-L3R fixed-reference reproduction only with fresh GPU admission",
+      "pool_mutation": "forbidden",
+      "winner_change": "forbidden",
+      "reranker_search": "forbidden"
+    },
+    "A8": {
+      "role": "journal synthesis, literature audit, figures, tables, manuscript, and submission package",
+      "owner_gate": "D3_SUBMIT_RELEASE"
+    }
+  },
+  "global_invariants": [
+    "A0-A5 receipts, hashes, Selection, and Final evidence remain immutable predecessor evidence.",
+    "A6 uses exactly one A5-frozen ARM-03 configuration and cannot tune, reselect, or reopen Selection or Final.",
+    "A6 provider-side inputs and all repository projections remain protected-data safe; raw rankings, qrels, membership, IDs, and per-query outcomes stay in Owner Store.",
+    "A7 consumes the immutable A6 frozen diagnostic bundle and cannot expand the pool or introduce a new retrieval winner.",
+    "A8 adds no new scientific experiment merely to enlarge the manuscript; all claims trace to A0-A7 evidence.",
+    "No reranking phase or additional embedding-model search is part of this amendment."
+  ],
+  "historical_preservation": {
+    "a0_a5_receipts_and_hashes_mutated": false,
+    "supersedes_for_future_routing_only": [
+      "archive/superseded/20260823/reranker-a9/a6-a9-phase-amendment.v2.json",
+      "archive/superseded/20260823/reranker-a9/a6-a7-phase-amendment.v1.json"
+    ],
+    "historical_files_retained": true
+  }
+}

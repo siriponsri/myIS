@@ -1,0 +1,124 @@
+{
+  "a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
+  "aggregate_safe_projection_allowlist": [
+    "coverage_counts",
+    "pool_depth_counts",
+    "hashes",
+    "latency_histograms",
+    "throughput",
+    "cost",
+    "ram_vram",
+    "index_size",
+    "determinism",
+    "failure_taxonomy",
+    "figures"
+  ],
+  "budget": {
+    "budget_control": "control/budgets/armindex-a6-frozen-pool.v1.json",
+    "ceiling_usd": 20.0,
+    "currency": "USD",
+    "fresh_quote_and_ttl_required": true,
+    "separate_numeric_ceiling_required": true,
+    "stop_at_ceiling": true
+  },
+  "claim_boundary": "A6_frozen_candidate_pool_full_corpus_evaluation_and_operational_scalability; no_new_winner_or_final_confirmation_claim",
+  "contract_id": "a6-full-dapfam-frozen-top200-pool-v2",
+  "contract_sha256": "0fc3aaebdf2789434994686b49270434fd091535f66d5fc3251abaa561f58c81",
+  "counters": {
+    "final_accesses": 0,
+    "selection_accesses": 0
+  },
+  "evaluation_stage": {
+    "aggregate_projection": "counts_metrics_ci_hashes_only",
+    "final_accesses": 0,
+    "location": "owner_local_after_pool_safe_return",
+    "metrics": [
+      "Recall@10",
+      "Recall@20",
+      "Recall@50",
+      "Recall@100",
+      "Recall@200",
+      "nDCG@10",
+      "nDCG@100"
+    ],
+    "per_query_records": "owner_store_only",
+    "populations": [
+      "ALL",
+      "IN",
+      "OUT"
+    ],
+    "reconstruct_from": [
+      "frozen_ranked_pool",
+      "owner_local_qrels",
+      "owner_local_split_manifest"
+    ],
+    "selection_accesses": 0
+  },
+  "execution_requirements": [
+    "fresh A6 attempt ID and isolated remote root",
+    "fresh provider identity, all-fee quote, numeric A6 ceiling, TTL and health receipts",
+    "offline model execution with exact staged runtime/package receipt",
+    "deterministic family aggregation and tie-breaking",
+    "checkpoint and recovery lineage",
+    "safe return of complete ranked Top-200 pool to Owner Store",
+    "worker teardown and independent result-integrity audit"
+  ],
+  "forbidden_adaptation": [
+    "winner_change",
+    "selection_reopen",
+    "final_reopen",
+    "provider_side_retrieval_evaluation",
+    "qrels_access_on_provider",
+    "membership_access_on_provider",
+    "prompt_tuning",
+    "representation_tuning",
+    "model_weight_change",
+    "pool_depth_change_after_admission",
+    "candidate_substitution",
+    "A5_feedback"
+  ],
+  "frozen_input_contract": {
+    "full_corpus_source_hash_required": true,
+    "must_match_a5": [
+      "representation_program_sha256",
+      "prompt_or_prefix_sha256",
+      "model_adapter_sha256",
+      "chunking_configuration_sha256",
+      "retrieval_configuration_sha256",
+      "index_configuration_sha256",
+      "runtime_lock_sha256"
+    ],
+    "provider_input_policy": "opaque_corpus_and_query_text_only_no_qrels_membership_or_protected_ids",
+    "query_source_hash_required": true
+  },
+  "launch_allowed": false,
+  "owner_store_artifacts": [
+    "ranked_candidate_pool_top200",
+    "retrieval_scores",
+    "opaque_query_and_candidate_tokens",
+    "family_aggregation_and_tie_break_receipts",
+    "representation_and_runtime_manifests",
+    "checkpoint_recovery_and_failure_lineage"
+  ],
+  "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+  "predecessor_winner_claim_boundary": "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
+  "protected_exports_forbidden": [
+    "raw_corpus",
+    "raw_query_or_family_ids",
+    "qrels",
+    "split_membership",
+    "per_query_evaluation_outcomes",
+    "credentials",
+    "provider_payloads",
+    "model_payloads"
+  ],
+  "required_coverage": {
+    "pool_depth": 200,
+    "queries": 1247
+  },
+  "required_winner": "ARM-03 / datalyes/patembed-large",
+  "schema_version": "myis.armindex-a6-frozen-pool-execution-contract.v2",
+  "scientific_authority": false,
+  "status": "approved_pending_fresh_admission",
+  "task_id": "A6.1"
+}

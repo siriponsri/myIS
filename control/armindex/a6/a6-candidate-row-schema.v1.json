@@ -1,0 +1,14 @@
+{
+  "schema_version": "myis.armindex-a6-candidate-row.v1",
+  "required": ["opaque_query_token", "opaque_family_token", "rank", "score", "pool_depth", "evidence_pointer"],
+  "properties": {
+    "opaque_query_token": {"type": "string"},
+    "opaque_family_token": {"type": "string"},
+    "rank": {"type": "integer", "minimum": 1, "maximum": 200},
+    "score": {"type": "number"},
+    "pool_depth": {"const": 200},
+    "evidence_pointer": {"type": "string"}
+  },
+  "storage_boundary": "Owner_Store_only",
+  "projection_forbidden": true
+}

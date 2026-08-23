@@ -4,10 +4,12 @@
 
 | Goal document | Lifecycle | Status | Authorized use |
 |---|---|---|---|
-| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `CLOSED` | `CLOSED_WITH_EVIDENCE_SELECTION_HANDOFF_BLOCKED` | Complete A4 evidence; use the [Selection-125 Owner handoff](../operations/A4_SELECTION_125_OWNER_HANDOFF_20260820.md), then consume Selection at most once |
-| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `BLOCKED` | `BLOCKED_PRESELECTION_HANDOFF_AND_D2` | Tier-1 frozen two-system Final-872 confirmation; waits for validated handoff and `D2_OPEN_FINAL` or a hash-bound conditional receipt |
-| [A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md](A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md) | `BLOCKED` | `BLOCKED_A5_CLOSEOUT` | Tier-1 post-confirmatory materialization of exactly one A5-frozen winner over full DAPFAM; operational scalability only |
-| [A7_PUBLICATION_AND_RELEASE_goal_001.md](A7_PUBLICATION_AND_RELEASE_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D3` | Publication and release from validated aggregate-safe A0-A6 evidence after `D3_SUBMIT_RELEASE` |
+| [A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md](A4_PRODUCTION_TRANSFER_AND_SELECTION_goal_001.md) | `CLOSED` | `PASS_A4_SELECTION_HANDOFF` | Four profiles, one valid Selection-125 exposure, and aggregate-safe handoff are immutable predecessor evidence |
+| [A5_FINAL_CONFIRMATION_goal_001.md](A5_FINAL_CONFIRMATION_goal_001.md) | `CLOSED` | `PASS_A5_FINAL_CONFIRMATION` | Frozen comparator and ARM-03 research champion completed Final-872 once with deterministic zero-failure evidence |
+| [A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md](A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md) | `CLOSED` | `PASS_A6_RESULT_INTEGRITY` | A5-frozen ARM-03 full-DAPFAM Top-200 candidate pool, Owner-local ALL/IN/OUT evaluation, and operational scalability |
+| [A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS_goal_001.md](A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS_goal_001.md) | `CLOSED` | `PASS_A7_SEVEN_LAYER_DIAGNOSIS` | CPU-local seven-layer diagnosis has an aggregate-safe integrity audit; A8 remains locked by `D3_SUBMIT_RELEASE` |
+| [A7_SCIENTIFIC_AUDIT_AND_ORACLE_HEADROOM_goal_001.md](A7_SCIENTIFIC_AUDIT_AND_ORACLE_HEADROOM_goal_001.md) | `HISTORICAL` | `SUPERSEDED_BY_A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS` | Preserved audit/oracle predecessor wording; not an execution route |
+| [A8_JOURNAL_SYNTHESIS_AND_PUBLICATION_goal_001.md](A8_JOURNAL_SYNTHESIS_AND_PUBLICATION_goal_001.md) | `BLOCKED` | `BLOCKED_OWNER_D3` | Journal synthesis and publication from validated aggregate-safe A0-A7 evidence |
 
 ## Historical goal registry
 

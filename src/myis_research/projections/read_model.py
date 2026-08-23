@@ -2202,6 +2202,106 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             for phase in armindex.get("phases", [])
             if isinstance(phase, Mapping)
         ]
+
+    # Legacy A0-A2 evidence builders above are intentionally retained for
+    # historical provenance, but they must not override the current control
+    # plane.  ``control/program.yaml`` is the canonical phase router; overlay
+    # it last so the read model cannot regress to the old A3 pending boundary
+    # after A6 has been admitted.
+    canonical_program = _load_yaml_like(root / "control" / "program.yaml")
+    canonical_registry = canonical_program.get("active_phase_registry", {})
+    if isinstance(canonical_registry, Mapping):
+        canonical_phase = str(canonical_registry.get("current_phase", ""))
+        canonical_task = str(canonical_registry.get("current_task", ""))
+        canonical_task_status = str(
+            canonical_registry.get("current_task_status", "")
+        )
+        canonical_campaign = _load_yaml_like(
+            root / "control" / "campaigns" / "armindex-multiretriever-v2.yaml"
+        )
+        canonical_phase_rows = canonical_campaign.get("phases", [])
+        canonical_phase_ids = {
+            str(phase.get("id"))
+            for phase in canonical_phase_rows
+            if isinstance(phase, Mapping)
+        }
+        if canonical_phase in canonical_phase_ids:
+            existing_phases = {
+                str(phase.get("phase_id")): phase
+                for phase in armindex.get("phases", [])
+                if isinstance(phase, Mapping)
+            }
+            merged_phases: list[dict[str, Any]] = []
+            for control_phase in canonical_phase_rows:
+                if not isinstance(control_phase, Mapping):
+                    continue
+                phase_id = str(control_phase.get("id"))
+                current = dict(existing_phases.get(phase_id, {}))
+                current.update(
+                    {
+                        "phase_id": phase_id,
+                        "purpose": str(control_phase.get("purpose", current.get("purpose", ""))),
+                        "status": str(control_phase.get("status", current.get("status", "planned"))),
+                        "tasks": [
+                            {
+                                "task_id": str(task.get("id")),
+                                "title": str(task.get("title", "")),
+                                "status": str(task.get("status", "planned")),
+                            }
+                            for task in control_phase.get("tasks", [])
+                            if isinstance(task, Mapping)
+                        ],
+                    }
+                )
+                merged_phases.append(current)
+            armindex["phases"] = merged_phases
+            armindex["current_phase"] = canonical_phase
+            armindex["current_task"] = canonical_task
+            armindex["current_task_status"] = canonical_task_status
+            armindex["status"] = str(
+                canonical_campaign.get("campaign", {}).get(
+                    "status", canonical_registry.get("current_task_status", "UNKNOWN")
+                )
+            )
+            campaign_status = str(
+                canonical_campaign.get("campaign", {}).get("status", "")
+            ).lower()
+            a6_result_ready = (
+                canonical_phase
+                == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+                and canonical_task_status.lower() in {"complete", "measured"}
+                and campaign_status == "a6_result_integrity_verified_a7_ready"
+            )
+            next_actions = {
+                "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY": (
+                    "PREPARE_A7_SEVEN_LAYER_DIAGNOSIS_FROM_HASH_BOUND_A6_HANDOFF"
+                    if a6_result_ready
+                    else "GENERATE_TOP200_AND_DEEP_RANKINGS_THEN_OWNER_LOCAL_EVALUATION"
+                ),
+                "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS": (
+                    "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL"
+                ),
+                "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION": (
+                    "PREPARE_AGGREGATE_SAFE_JOURNAL_SUBMISSION_PACKAGE_AFTER_D3"
+                ),
+            }
+            armindex["next_command"] = next_actions.get(
+                canonical_phase, armindex.get("next_command", "UNKNOWN")
+            )
+            if a6_result_ready:
+                armindex["status"] = "a6_result_integrity_verified_a7_ready"
+            armindex["active_phase_registry"] = {
+                "source": "control/program.yaml",
+                "current_phase": canonical_phase,
+                "current_task": canonical_task,
+                "current_task_status": canonical_task_status,
+            }
+            counters = dict(armindex.get("counters", {}))
+            for key in ("measured_runs", "selection_accesses", "final_accesses"):
+                if key in canonical_registry:
+                    counters[key] = canonical_registry[key]
+            armindex["counters"] = counters
+
     campaign_config = _load_yaml_like(
         root / "control" / "campaigns" / f"{campaign_id}.yaml"
     )
@@ -2499,7 +2599,9 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
             "active_phase": armindex["current_phase"],
             "current_phase": armindex["current_phase"],
             "current_task": (
-                "A3.1"
+                armindex.get("current_task")
+                if armindex.get("current_task")
+                else "A3.1"
                 if armindex["current_phase"]
                 == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
                 else "A2.1"
@@ -2510,14 +2612,31 @@ def build_read_model(repository_root: Path) -> dict[str, Any]:
                 else "A0"
             ),
             "current_substage": (
-                "PENDING_HASH_BOUND_TRAIN_250_INPUT"
+                str(armindex.get("current_task_status", "UNKNOWN")).upper()
+                if armindex["current_phase"]
+                in {
+                    "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+                    "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+                    "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
+                }
+                else "PENDING_HASH_BOUND_TRAIN_250_INPUT"
                 if armindex["current_phase"]
                 == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
                 else "FROZEN_FIVE_ARM_EXECUTION"
                 if armindex["current_phase"] == "A2_PER_ARM_AUTOINDEX"
                 else "NOT_APPLICABLE"
             ),
-            "state": p1_state,
+            "state": (
+                "A6_COMPLETE_A7_READY"
+                if armindex["current_phase"]
+                == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+                and armindex.get("status")
+                == "a6_result_integrity_verified_a7_ready"
+                else "A6_ACTIVE_MEASURED_EXECUTION"
+                if armindex["current_phase"]
+                == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+                else p1_state
+            ),
             "current_status": armindex["status"],
         },
         "projection_health": {
@@ -2823,7 +2942,8 @@ def _empty_armindex_projection() -> dict[str, Any]:
         "A4_PRODUCTION_TRANSFER_AND_SELECTION",
         "A5_FINAL_CONFIRMATION",
         "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
-        "A7_PUBLICATION_AND_RELEASE",
+        "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+        "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
     )
     return {
         "schema_version": "myis.armindex-read-model.v1",

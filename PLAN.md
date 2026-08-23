@@ -23,11 +23,12 @@ the confirmatory comparison on OUT Recall@100, nDCG@100, and nDCG@10; the
 aggregate-safe evaluation, safe-return, integrity-audit, closeout, and frozen
 winner receipts are at `control/armindex/a5/final-r03-20260822/`.
 
-A6 is `BLOCKED_OWNER_A6_BUDGET_CEILING`. The Owner approved the A6 intent, but
-the canonical execution contract requires a separate numeric A6 ceiling and
-fresh admission, neither of which exists. No full-corpus asset has been
-uploaded and no A6 worker has started. The aggregate-safe disposition is at
-`docs/operations/A6_PRELAUNCH_BLOCKER_AND_GPU_DISPOSITION_20260822.md`.
+A6 is closed with a deterministic Top-200 family pool for all 1,247 queries,
+the A5-frozen ARM-03 winner, Owner-local ALL/IN/OUT evaluation, safe return,
+and an independent integrity audit. A7 is also closed with a CPU-local,
+aggregate-safe seven-layer diagnosis over that immutable pool. The Owner
+approved automatic `D3_SUBMIT_RELEASE` immediately after A7 PASS; A8's
+anonymous V01 package is staged under `03_Paper/01_ArmIndex/paper_01/`.
 
 ### Current superseding state (2026-08-19)
 
@@ -132,9 +133,9 @@ profiles are `FAST`, `BALANCED`, and `DEEP`; all are pending measurement.
 
 ## Active phases
 
-There are exactly eight active phases. Progress is:
+There are exactly nine active phases. Progress is:
 
-`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> A5 Final-872 PASS -> A6 blocked on numeric budget authority -> A7 publication`
+`A0 complete -> A1 complete -> A2 complete -> A3 complete -> A4 Selection closeout -> A5 Final-872 PASS -> A6 full-pool PASS -> A7 diagnosis PASS -> A8 journal package PASS`
 
 | Phase | Purpose | Migration state |
 |---|---|---|
@@ -142,10 +143,11 @@ There are exactly eight active phases. Progress is:
 | `A1_BASELINES_AND_MULTI_ARM_SCREENING` | baseline reproduction and five-arm common screening | complete; A1.1 and A1.2 complete; r15 terminal PASS at 25/25 |
 | `A2_PER_ARM_AUTOINDEX` | per-arm representation-program search | complete; Goal 004 measured closeout passed with three-primary amendment |
 | `A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT` | transfer, complementarity, fixed unions, HarnessOpt | complete; 14/14 audited, flat HarnessOpt surface |
-| `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | Selection-125 closeout PASS; safe-return complete; previous instance destroyed |
+| `A4_PRODUCTION_TRANSFER_AND_SELECTION` | profiles, legal transfer, one-shot Selection | Selection-125 closeout PASS; all four profiles ranked and were judged for 125/125 scoped queries; OUT metrics and paired statistics use the 90-query OUT-positive subset only, with 35 excluded only from that denominator; safe-return complete |
 | `A5_FINAL_CONFIRMATION` | one frozen confirmation | PASS: Final-872 complete for exactly two frozen systems; ARM-03 winner; aggregate-safe closeout and integrity audit complete |
-| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | one A5-frozen winner over the full DAPFAM corpus; operational scalability only | `BLOCKED_OWNER_A6_BUDGET_CEILING`; harness ready, but a fresh numeric ceiling and admission are required before any spend; D3 remains closed |
-| `A7_PUBLICATION_AND_RELEASE` | paper and release from A0-A6 aggregate-safe evidence | locked by `D3_SUBMIT_RELEASE` |
+| `A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY` | A5-frozen ARM-03 Top-200 pool for 1,247 queries plus Owner-local ALL/IN/OUT metrics and scalability | PASS; full09 integrity audit and hash-bound pool authority verified |
+| `A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS` | seven-layer retrieval diagnosis and comparison framework over the immutable A6 evidence | PASS; L1-L7 complete within stated diagnostic boundaries, L3R optional and unrun without fresh GPU admission |
+| `A8_JOURNAL_SYNTHESIS_AND_PUBLICATION` | literature audit, figures, tables, manuscript, and release preparation from A0-A7 evidence | PASS; anonymous V01 package staged; D3 auto-approved after A7 PASS |
 
 No Sprint, Stage, Work Package, or micro-phase is canonical.
 

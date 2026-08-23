@@ -1,0 +1,16 @@
+{
+  "claim_boundary": "claims_must_match_protocol_comparability_and_validated_receipts",
+  "contract_sha256": "850d11673091c9d45094211c181560d3cf4316266c922cb8ad444312950acca0",
+  "execution_permitted": false,
+  "phase_id": "A9_PUBLICATION_AND_RELEASE",
+  "protected_boundary": "aggregate_safe_manuscript_and_release_only",
+  "required_inputs": [
+    "A0_A5_validated_evidence",
+    "A6_pool_scalability",
+    "A7_independent_audit",
+    "A8_reranker_matrix"
+  ],
+  "required_owner_decision": "D3_SUBMIT_RELEASE",
+  "schema_version": "myis.armindex-a9-publication-release-contract.v1",
+  "status": "blocked_until_A0_A8_evidence_and_D3"
+}

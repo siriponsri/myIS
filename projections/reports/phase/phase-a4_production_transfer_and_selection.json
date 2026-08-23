@@ -3,15 +3,15 @@
   "claim_boundary": "engineering_provenance_only",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A4_PRODUCTION_TRANSFER_AND_SELECTION is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.",
-    "status": "blocked"
+    "reason": "A4_PRODUCTION_TRANSFER_AND_SELECTION is completed; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "completed"
   },
   "evidence_class": "engineering",
   "evidence_links": [],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-19T11:10:50Z",
-  "generated_from_revision": "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a",
-  "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+  "generated_at": "2026-08-22T15:21:39Z",
+  "generated_from_revision": "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879",
+  "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -25,23 +25,23 @@
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
-      "final_accesses": 0,
-      "measured_runs": 1,
-      "selection_accesses": 0,
+      "final_accesses": 1,
+      "measured_runs": 4,
+      "selection_accesses": 1,
       "shortlist_count": 0
     },
     "scientific_authority": false
   },
   "input_bindings": {
     "armindex_schema_root": {
-      "sha256": "431f248e714c50af194ee9cdbc197441a0a384b830f739943a87a93c8b4ff0f8",
+      "sha256": "f97779630461e05cbdb80fa66b01d0ddbbe58b6a9266adc244f1faf97c3dcc61",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6",
+      "sha256": "bbe2ab3cbe7f32ae31594560ddf78d3bb86710715377a40876abfe96ea2a536f",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+    "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,35 +52,35 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
+      "sha256": "0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
   "language": "en",
-  "last_material_update": "2026-08-19T11:10:50Z",
+  "last_material_update": "2026-08-22T15:21:39Z",
   "metric_references": [],
-  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+  "next_authorized_action": "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL",
   "objective": "Freeze FAST/BALANCED/DEEP profiles and expose Selection once.",
   "phase_id": "A4_PRODUCTION_TRANSFER_AND_SELECTION",
   "report_id": "phase-a4_production_transfer_and_selection",
-  "report_sha256": "c7c988a6f5471066f9e3b36719ddc0d8a963bb470affa3a85205767a0b57b1bb",
+  "report_sha256": "4aa6dba860cb71a749c7d9635b15ddb2e35080f0e8f3b11072d9522cf8855bb5",
   "report_type": "phase",
   "result": {
-    "decision": "blocked",
+    "decision": "completed",
     "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-    "result": "A4_PRODUCTION_TRANSFER_AND_SELECTION is blocked; ArmIndex measured runs, Selection, and Final counters remain zero."
+    "result": "A4_PRODUCTION_TRANSFER_AND_SELECTION is completed; ArmIndex measured runs, Selection, and Final counters remain zero."
   },
   "schema_version": "myis.phase-task-report.v1",
   "scientific_authority": false,
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
-    "program_state": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
+    "phase": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+    "program_state": "a7_seven_layer_diagnosis_complete",
     "task": null
   },
-  "status": "blocked",
+  "status": "completed",
   "supported_claims": [
     {
       "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",

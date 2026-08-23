@@ -1,0 +1,66 @@
+{
+  "schema_version": "myis.armindex-a4-selection-population-accounting-audit.v1",
+  "audit_id": "a4-selection-125-population-accounting-audit-20260823",
+  "status": "PASS_A4_SELECTION_POPULATION_ACCOUNTING",
+  "scope": {
+    "label": "Selection-125",
+    "selection_scope_sha256": "c56dac147aa985162b89181e864e2fe9418334e553159d18909958bc7c9e3a11",
+    "selection_query_count": 125,
+    "selection_accesses": 1,
+    "final_accesses": 0
+  },
+  "coverage": {
+    "ranking_package_query_count_per_profile": 125,
+    "qrels_judged_query_count": 125,
+    "missing_ranking_query_count": 0,
+    "missing_qrels_query_count": 0,
+    "profiles_with_complete_coverage": 4,
+    "comparison_count": 6
+  },
+  "metric_population": {
+    "population_label": "OUT-positive subset of the hash-bound Selection-125 scope",
+    "out_judged_query_count": 90,
+    "excluded_from_out_metric_denominator_count": 35,
+    "inclusion_rule": "A query is included only when the frozen relation source contains at least one positive relation with domain_rel equal to OUT.",
+    "exclusion_rule": "A scoped query with no positive OUT relation is excluded only from OUT metric vectors and paired statistics. It is not excluded from Selection membership, ranking-package coverage, qrels coverage, access control, or profile execution.",
+    "non_inference": "The audit does not label the 35 non-OUT-eligible queries as IN-only because this aggregate-safe record does not inspect or export their protected relation composition."
+  },
+  "evaluator_semantics": {
+    "ranking_input_scope": "All four frozen profiles submit Top-100 rankings for all 125 opaque Selection work tokens.",
+    "qrels_scope": "The Owner-local evaluator materializes non-empty qrels for all 125 scoped tokens before computing metrics.",
+    "metric_vector_scope": "The evaluator iterates only the eligible_out token set. Therefore every OUT metric vector has exactly 90 values and must not be padded with 35 zeroes or missing values.",
+    "statistical_scope": "Paired bootstrap confidence intervals and W/T/L for A4 Selection are defined on the same 90 OUT-eligible paired units.",
+    "publication_wording": "Report 'Selection-125 exposure and coverage; OUT metric denominator n=90'. Do not report the 90 values as estimates over all 125 Selection queries."
+  },
+  "evidence": {
+    "selection_evaluator_inputs_receipt": {
+      "uri": "04_Owner_Stores/armindex/a4/selection-125/a4-selection-125-20260821T000000Z-canonical-001/selection-evaluator/A4_SELECTION_EVALUATOR_INPUTS_RECEIPT.json",
+      "receipt_sha256": "afb65ba89b161c8d56cd61d93f395c4704a54f948cf36955729b5774a2a63be7",
+      "file_sha256": "7808645f2cc9694601f58f809339ae38bd7051fe124e9e0a01bc75628dfcc5fa"
+    },
+    "selection_vector_handoff_receipt": {
+      "uri": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-evaluator-handoff-v2/A4_SELECTION_EVALUATOR_HANDOFF_RECEIPT.json",
+      "receipt_sha256": "7f4301c24ba1d20ea7c6a8c9a094bf0a067fd77bfdf31987345f6ac6d4676361",
+      "file_sha256": "437e3bad64b0aea457193f656269b5881541181dd468a59afa29dabf35023add"
+    },
+    "selection_coverage_receipt": {
+      "uri": "04_Owner_Stores/armindex/a4/a4-goal001-20260821T071350Z-sel01/selection-closeout-v3/A4_SELECTION_COVERAGE.json",
+      "receipt_sha256": "7b88b2997f067fc54eab7f5a3da2c3ce200fecdcd007c81c5f6aa99184b740e4",
+      "file_sha256": "7e70e7ac3380f0507d7f52342e6646928e6fea217e8d198b2bf8efd3bbed65c3"
+    },
+    "evaluator_code": {
+      "uri": "src/myis_research/armindex/a4_selection_evaluator.py",
+      "file_sha256": "58cc163027d5b5bc27a5723933e0c8dea255c4049cbb2a7bb264dff6e93b0dbd"
+    },
+    "evaluator_input_code": {
+      "uri": "src/myis_research/armindex/a4_selection_evaluator_inputs.py",
+      "file_sha256": "aca5239eea74be6c85a3be212e4dabaa35e1e02a80f770d4a7c9631e1f2779b0"
+    }
+  },
+  "protected_data_boundary": {
+    "aggregate_safe": true,
+    "protected_membership_or_qrels_exported": false,
+    "protected_ids_or_per_query_outcomes_exported": false
+  },
+  "claim_boundary": "This resolves the Selection scope and OUT metric denominator. It does not reopen Selection, alter the A4 decision, alter the A5 Final result, or establish an all-Selection OUT metric."
+}

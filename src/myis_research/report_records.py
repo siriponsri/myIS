@@ -183,6 +183,47 @@ def _artifacts(
     task_id: str | None = None,
 ) -> list[dict[str, Any]]:
     result: list[dict[str, Any]] = []
+    if phase_id == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY":
+        for artifact_id, title, artifact_type, uri, explanation in (
+            (
+                "a6-result-integrity-audit-20260823",
+                "A6 independent result-integrity audit",
+                "audit",
+                "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+                "Verifies full-corpus coverage, aggregate metrics, provenance hashes, protected boundary, and teardown.",
+            ),
+            (
+                "a6-frozen-pool-authority-20260823",
+                "A6 frozen Top-200 pool authority",
+                "authority",
+                "control/armindex/a6/a6-frozen-pool-authority-20260823.json",
+                "Binds the A5-frozen ARM-03 pool for 1,247 queries at depth 200 for A7 consumption.",
+            ),
+            (
+                "a6-a7-handoff-20260823",
+                "A6 to A7 hash-bound handoff",
+                "handoff",
+                "control/armindex/a6/a6-a7-handoff-20260823.json",
+                "Permits diagnostic consumption only; forbids pool expansion, winner change, reranking, Selection, and Final reopen.",
+            ),
+        ):
+            digest = _hash_file(root, uri)
+            if digest:
+                result.append(
+                    _artifact(
+                        artifact_id=artifact_id,
+                        title=title,
+                        artifact_type=artifact_type,
+                        evidence_class="post_confirmatory_aggregate",
+                        scientific_authority=True,
+                        safe_uri=uri,
+                        content_sha256=digest,
+                        explanation=explanation,
+                        producing_phase_id="A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+                        producing_task_id="A6.1",
+                    )
+                )
+        return result
     if phase_id == "A2_PER_ARM_AUTOINDEX":
         freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
         if not isinstance(freeze, Mapping) or freeze.get("validated") is not True:
@@ -2673,6 +2714,81 @@ def _artifacts(
 def _metrics(
     model: Mapping[str, Any], phase_id: str, task_id: str | None
 ) -> list[dict[str, Any]]:
+    if phase_id == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY":
+        audit_uri = "control/armindex/a6/a6-result-integrity-audit-20260823.json"
+        audit_sha256 = "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce"
+        source_uri = audit_uri
+        rows = []
+        for population, values in {
+            "ALL": {
+                "recall_at_10": 0.136794974606,
+                "recall_at_20": 0.214697496213,
+                "recall_at_50": 0.336358371202,
+                "recall_at_100": 0.438964626214,
+                "recall_at_200": 0.546832397755,
+                "ndcg_at_10": 0.295725055507,
+                "ndcg_at_100": 0.362497103931,
+            },
+            "IN": {
+                "recall_at_10": 0.187048067448,
+                "recall_at_20": 0.277871602329,
+                "recall_at_50": 0.413144709628,
+                "recall_at_100": 0.528164111236,
+                "recall_at_200": 0.645077432336,
+                "ndcg_at_10": 0.3074831284,
+                "ndcg_at_100": 0.406513126603,
+            },
+            "OUT": {
+                "recall_at_10": 0.034022635484,
+                "recall_at_20": 0.070933281792,
+                "recall_at_50": 0.133993988468,
+                "recall_at_100": 0.188449898653,
+                "recall_at_200": 0.260166940437,
+                "ndcg_at_10": 0.025697169664,
+                "ndcg_at_100": 0.070644223566,
+            },
+        }.items():
+            for name, value in values.items():
+                cutoff = int(name.rsplit("_", 1)[-1])
+                rows.append(
+                    {
+                        "name": f"a6_{population.lower()}_{name}",
+                        "cutoff": cutoff,
+                        "split": "full_dapfam_aggregate",
+                        "scope": population,
+                        "value": value,
+                        "n": 1247,
+                        "denominator": "owner_local_family_evaluation",
+                        "source_uri": source_uri,
+                        "source_sha256": audit_sha256,
+                    }
+                )
+        for name, value, denominator in (
+            ("a6_source_document_count", 45336, "full_dapfam_source"),
+            ("a6_query_count", 1247, "canonical_query_set"),
+            ("a6_pool_depth", 200, "frozen_pool_contract"),
+            ("a6_pool_rows", 249400, "query_count_times_pool_depth"),
+            ("a6_chunk_count", 188944, "materialized_representation_count"),
+            ("a6_throughput_documents_per_second", 14.349362, "full_dapfam_materialization"),
+            ("a6_latency_p50_ms", 50.0, "owner_local_latency_receipt"),
+            ("a6_latency_p95_ms", 50.0, "owner_local_latency_receipt"),
+            ("a6_latency_p99_ms", 50.0, "owner_local_latency_receipt"),
+            ("a6_cost_usd", 0.300323, "fresh_a6_attempt"),
+        ):
+            rows.append(
+                {
+                    "name": name,
+                    "cutoff": 0,
+                    "split": "full_dapfam_operational",
+                    "scope": "A6",
+                    "value": value,
+                    "n": 1,
+                    "denominator": denominator,
+                    "source_uri": source_uri,
+                    "source_sha256": audit_sha256,
+                }
+            )
+        return rows
     if phase_id == "A2_PER_ARM_AUTOINDEX":
         freeze = model.get("armindex", {}).get("a2_candidate_freeze", {})
         if not isinstance(freeze, Mapping) or freeze.get("validated") is not True:
@@ -4025,6 +4141,10 @@ def _record_for(
         and isinstance(a2_closeout, Mapping)
         and a2_closeout.get("validated") is True
     )
+    a6_verified = (
+        phase_id == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+        and str(phase.get("status", "")).lower() in {"complete", "measured", "pass_a6_full_dapfam_materialization"}
+    )
     a2_measured_authority_current = (
         a2_readiness_valid
         and a2_readiness.get("status") == "READY_FOR_MEASURED_EXECUTION"
@@ -4123,6 +4243,15 @@ def _record_for(
         or phase_id.startswith("A")
         else "unavailable"
     )
+    if a6_verified:
+        status = "completed"
+        scientific = True
+        evidence_class = "post_confirmatory_aggregate"
+        claim_boundary = (
+            "frozen ARM-03 full-DAPFAM materialization, aggregate ALL/IN/OUT retrieval evidence, "
+            "and operational scalability only; no new winner, comparative full-corpus superiority, "
+            "external-generalization, reranking, Selection reopen, or Final reopen"
+        )
     objective = (
         str(task.get("title"))
         if task
@@ -4465,6 +4594,22 @@ def _record_for(
         result = "PASS: safe return, Owner-local evaluation, deterministic promotion, and provider disposition are bound by aggregate-safe hashes."
         interpretation = f"The frozen rule promoted {', '.join(str(item) for item in promoted)}. This establishes only the A1.2 development result boundary and does not authorize A2, HARNESS-DEV, Selection, Final, D2, or D3."
         decision_status = "PASS_25_OF_25"
+    elif a6_verified:
+        output = (
+            "A6 full-DAPFAM materialization completed for the frozen ARM-03 configuration: "
+            "45,336/45,336 source documents, 1,247 queries, and a deterministic 1,247 x 200 family pool."
+        )
+        result = (
+            "PASS_A6_FULL_DAPFAM_MATERIALIZATION and PASS_A6_RESULT_INTEGRITY; "
+            "Owner-local ALL/IN/OUT aggregate evaluation, safe return, hash reconciliation, "
+            "and worker teardown passed."
+        )
+        interpretation = (
+            "The evidence supports frozen full-corpus materialization and operational scalability "
+            "of ARM-03. It does not select a new winner, compare full-corpus systems, establish "
+            "external generalization, or authorize reranking, Selection, or Final reopening."
+        )
+        decision_status = "PASS_A6_RESULT_INTEGRITY"
     elif a2_closeout_valid:
         output = (
             "A2 measured closeout accounts for 52 frozen candidates: 44 measured, "
@@ -4933,7 +5078,7 @@ def _record_for(
         "measured_execution": False
         if a2_freeze_valid and not a2_closeout_valid
         else scientific,
-        "gpu": current_pass or a2_closeout_valid,
+        "gpu": current_pass or a2_closeout_valid or a6_verified,
         "paid_api": False,
         "network_model_download": False,
         "provider_fallback": False,
@@ -4942,7 +5087,7 @@ def _record_for(
         "final_split": "closed",
         "real_counters": {
             "measured_runs": 1
-            if a2_closeout_valid
+            if a6_verified or a2_closeout_valid
             else 0
             if a2_freeze_valid
             else int(armindex_counters.get("measured_runs", 0))
@@ -4996,6 +5141,17 @@ def _record_for(
         governance["provider_execution_adoption_performed"] = True
         governance["rep_dev_accessed_for_measurement"] = True
         governance["independent_auditor_required"] = False
+    if a6_verified:
+        governance["measured_execution"] = True
+        governance["provider_admission_performed"] = True
+        governance["provider_execution_adoption_performed"] = True
+        governance["rep_dev_accessed_for_measurement"] = False
+        governance["independent_auditor_required"] = False
+        governance["a6_coverage"] = "45336/45336"
+        governance["a6_query_count"] = 1247
+        governance["a6_pool_depth"] = 200
+        governance["a6_selection_accesses"] = 0
+        governance["a6_final_accesses"] = 0
     record = {
         "schema_version": REPORT_SCHEMA,
         "report_id": report_id,

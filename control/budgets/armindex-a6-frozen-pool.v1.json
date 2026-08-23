@@ -1,0 +1,32 @@
+{
+  "admission_requirements": [
+    "fresh_all_fee_quote_at_or_below_phase_ceiling",
+    "fresh_provider_identity",
+    "fresh_runtime_gpu_cpu_disk_health",
+    "fresh_isolated_attempt_root",
+    "worst_case_cost_at_or_below_phase_ceiling",
+    "stop_at_ceiling_watchdog"
+  ],
+  "authorized_instance_id": 48367896,
+  "budget_id": "armindex-a6-frozen-pool-20260822",
+  "budget_sha256": "115ddb272cd22184aa5d7829a9f501ed2ef66f8846e2b10bed87661e0217f3fd",
+  "campaign_ceiling_usd": 180.0,
+  "currency": "USD",
+  "final_accesses": 1,
+  "forbidden_spend": [
+    "reranker_phase_or_execution",
+    "additional_instance_creation",
+    "Selection_reopen",
+    "Final_reopen",
+    "model_or_representation_tuning"
+  ],
+  "hourly_rate_usd_reference": 0.342,
+  "maximum_instance_hours_at_reference_rate": 58.47,
+  "phase_ceiling_usd": 20.0,
+  "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+  "protected_payload_included": false,
+  "schema_version": "myis.armindex-a6-frozen-pool-budget.v1",
+  "scientific_scope": "one A5-frozen ARM-03 full-DAPFAM Top-200 candidate-pool generation and Owner-local evaluation only",
+  "selection_accesses": 1,
+  "status": "APPROVED_PENDING_FRESH_ADMISSION"
+}

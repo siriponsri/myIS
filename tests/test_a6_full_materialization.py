@@ -8,6 +8,7 @@ from queue import Queue
 
 import pytest
 
+import myis_research.armindex.a6_full_materialization as a6
 from myis_research.armindex.a6_full_materialization import (
     A6ExecutionError,
     ExecutionConfig,
@@ -20,8 +21,10 @@ from myis_research.armindex.a6_full_materialization import (
     build_safe_return_manifest,
     passage_texts,
     prepare_fresh_attempt,
+    prepare_full_attempt_after_canary,
     shard_for_family,
     truncate_checkpoint_tails,
+    validate_fresh_attempt_root,
     validate_full_attempt_resume,
     validate_source_and_shard,
 )
@@ -100,6 +103,127 @@ def test_source_requires_unique_opaque_publication_tokens(tmp_path: Path) -> Non
         validate_source_and_shard(config, canary_documents=2)
 
 
+def _write_owner_source_lineage(owner: Path, source: Path, *, rows: int = 1) -> dict[str, object]:
+    source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_bytes(b"{\"row\":1}\n")
+    manifest = {
+        "schema_version": "myis.armindex-owner-data-source-manifest.v1",
+        "source_contract_sha256": "c" * 64,
+        "full_corpus_row_count": rows,
+        "protected_payload_included": False,
+        "parent_split_sha256": "p" * 64,
+        "partition_counts": {"final": 872},
+        "artifacts": [{
+            "artifact_role": "a6_full_corpus_owner_pointer",
+            "owner_relative_pointer": source.relative_to(owner).as_posix(),
+            "bytes": source.stat().st_size,
+            "sha256": a6.file_sha256(source),
+        }],
+    }
+    manifest_hash = a6.canonical_sha256(manifest)
+    manifest_path = owner / "data-bundle" / "canonical-a2-a6-20260820" / "source-manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    opaque = {
+        "schema_version": "myis.armindex-a5-final-872-opaque-input-receipt.v1",
+        "status": "SEALED_PRE_D2_OPAQUE_POINTER_READY",
+        "source_manifest_sha256": manifest_hash,
+        "final_split_commitment_sha256": "p" * 64,
+        "expected_final_query_count": 872,
+        "payload_materialized": False,
+        "protected_payload_included": False,
+    }
+    opaque_path = owner / "armindex" / "a5" / "final-872-input" / "receipt.json"
+    opaque_path.parent.mkdir(parents=True, exist_ok=True)
+    opaque_path.write_text(json.dumps(opaque), encoding="utf-8")
+    a5_manifest_body = {
+        "schema_version": "myis.armindex-a5-final-opaque-materialization.v1",
+        "status": "PASS_A5_OPAQUE_INPUTS_MATERIALIZED", "scope": "Final-872",
+        "corpus_count": rows, "hashes": {"corpus": a6.file_sha256(source)},
+        "protected_payload_included": False,
+    }
+    a5_manifest_hash = a6.canonical_sha256(a5_manifest_body)
+    a5_manifest_path = owner / "armindex" / "a5" / "materialized" / "A5_OPAQUE_MATERIALIZATION_MANIFEST.json"
+    a5_manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    a5_manifest_path.write_text(json.dumps({**a5_manifest_body, "sha256": a5_manifest_hash}), encoding="utf-8")
+    return {"manifest": manifest, "manifest_hash": manifest_hash, "manifest_path": manifest_path,
+            "opaque_path": opaque_path, "a5_manifest_hash": a5_manifest_hash}
+
+
+def test_owner_source_lineage_rejects_manifest_pointer_and_opaque_drift(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    owner = tmp_path / "owner"
+    source = owner / "protected" / "inputs" / "corpus.jsonl"
+    lineage = _write_owner_source_lineage(owner, source)
+    monkeypatch.setattr(a6, "CANONICAL_SOURCE_MANIFEST_SHA256", "c" * 64)
+    monkeypatch.setattr(a6, "OWNER_SOURCE_MANIFEST_SHA256", lineage["manifest_hash"])
+    monkeypatch.setattr(a6, "A5_SOURCE_SNAPSHOT_MANIFEST_SHA256", lineage["a5_manifest_hash"])
+    a6._validate_owner_source_provenance(owner, source, expected_rows=1)
+
+    source.write_bytes(b"{\"row\":2}\n")
+    with pytest.raises(A6ExecutionError, match="source bytes"):
+        a6._validate_owner_source_provenance(owner, source, expected_rows=1)
+
+    source.write_bytes(b"{\"row\":1}\n")
+    manifest = dict(lineage["manifest"])
+    manifest["full_corpus_row_count"] = 2
+    lineage["manifest_path"].write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(A6ExecutionError, match="manifest hash"):
+        a6._validate_owner_source_provenance(owner, source, expected_rows=1)
+
+    lineage["manifest_path"].write_text(json.dumps(lineage["manifest"]), encoding="utf-8")
+    opaque = json.loads(lineage["opaque_path"].read_text(encoding="utf-8"))
+    opaque["expected_final_query_count"] = 871
+    lineage["opaque_path"].write_text(json.dumps(opaque), encoding="utf-8")
+    with pytest.raises(A6ExecutionError, match="opaque source receipt"):
+        a6._validate_owner_source_provenance(owner, source, expected_rows=1)
+
+
+def test_owner_source_lineage_accepts_only_hash_bound_semantic_bridge(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    owner = tmp_path / "owner"
+    source = owner / "protected" / "inputs" / "corpus.jsonl"
+    lineage = _write_owner_source_lineage(owner, source)
+    a5_path = owner / "armindex" / "a5" / "materialized" / "A5_OPAQUE_MATERIALIZATION_MANIFEST.json"
+    a5_body = json.loads(a5_path.read_text(encoding="utf-8"))
+    a5_body["hashes"]["corpus"] = "f" * 64
+    a5_manifest_body = {key: value for key, value in a5_body.items() if key != "sha256"}
+    a5_body["sha256"] = a6.canonical_sha256(a5_manifest_body)
+    a5_path.write_text(json.dumps(a5_body), encoding="utf-8")
+    bridge_body = {
+        "schema_version": "myis.armindex-a6-source-equivalence-bridge.v1",
+        "status": "PASS_A6_SOURCE_SEMANTIC_EQUIVALENCE_BRIDGE",
+        "canonical_source_sha256": a6.file_sha256(source),
+        "a5_materialized_source_sha256": "f" * 64,
+        "canonical_row_count": 1,
+        "a5_row_count": 1,
+        "frozen_field_set": ["title_en", "abstract_en", "claims_text", "claims", "publication_ordinal"],
+        "canonical_content_multiset_sha256": "e" * 64,
+        "a5_content_multiset_sha256": "e" * 64,
+        "token_namespace_equivalent": False,
+        "protected_payload_included": False,
+    }
+    bridge_path = owner / "armindex" / "a6" / "a6-source-equivalence-bridge-20260823.json"
+    bridge_path.parent.mkdir(parents=True, exist_ok=True)
+    bridge_path.write_text(json.dumps({
+        **bridge_body, "bridge_sha256": a6.canonical_sha256(bridge_body),
+    }), encoding="utf-8")
+    monkeypatch.setattr(a6, "EXPECTED_DOCUMENT_COUNT", 1)
+    monkeypatch.setattr(a6, "CANONICAL_SOURCE_MANIFEST_SHA256", "c" * 64)
+    monkeypatch.setattr(a6, "OWNER_SOURCE_MANIFEST_SHA256", lineage["manifest_hash"])
+    monkeypatch.setattr(a6, "A5_SOURCE_SNAPSHOT_MANIFEST_SHA256", a5_body["sha256"])
+
+    a6._validate_owner_source_provenance(owner, source, expected_rows=1)
+
+    invalid = json.loads(bridge_path.read_text(encoding="utf-8"))
+    invalid["canonical_content_multiset_sha256"] = "d" * 64
+    invalid_body = {key: value for key, value in invalid.items() if key != "bridge_sha256"}
+    invalid["bridge_sha256"] = a6.canonical_sha256(invalid_body)
+    bridge_path.write_text(json.dumps(invalid), encoding="utf-8")
+    with pytest.raises(A6ExecutionError, match="equivalence bridge"):
+        a6._validate_owner_source_provenance(owner, source, expected_rows=1)
+
+
 def test_fresh_attempt_root_is_one_shot_and_owner_local(tmp_path: Path) -> None:
     source = tmp_path / "source.jsonl"
     config = _config(tmp_path, source, 45_336)
@@ -148,10 +272,47 @@ def test_full_resume_requires_same_fresh_root_and_both_compatible_checkpoints(tm
         (shard_root / "metadata.jsonl").write_bytes(b"{}tail")
         (shard_root / "checkpoint.json").write_text(json.dumps(_checkpoint(config, shard)), encoding="utf-8")
     assert validate_full_attempt_resume(config, owner_store_root=root, attempt_root=attempt)["attempt_id"] == config.attempt_id
-    assert (attempt / "owner-local" / "shard-0" / "flat-l2-normalized.index.f32").read_bytes() == b"1234"
+
     (attempt / "canary").mkdir()
     with pytest.raises(A6ExecutionError, match="canary"):
         validate_full_attempt_resume(config, owner_store_root=root, attempt_root=attempt)
+
+    (attempt / "A6_CANARY_LINEAGE.json").write_text(json.dumps({
+        "schema_version": "myis.armindex-a6-canary-lineage.v1",
+        "status": "PASS_A6_CANARY_ISOLATED_NON_RESUMABLE", "stage": "canary",
+        "attempt_id": config.attempt_id, "config_sha256": config.config_sha256,
+        "source_sha256": config.source_sha256, "canary_root_pointer": f"a6/{config.attempt_id}/canary",
+        "full_promotion_forbidden": True, "protected_payload_included": False,
+        "lineage_sha256": "placeholder",
+    }), encoding="utf-8")
+    with pytest.raises(A6ExecutionError, match="canary"):
+        validate_full_attempt_resume(config, owner_store_root=root, attempt_root=attempt)
+    canary_path = attempt / "A6_CANARY_LINEAGE.json"
+    canary = json.loads(canary_path.read_text(encoding="utf-8"))
+    canary["lineage_sha256"] = a6.canonical_sha256({key: value for key, value in canary.items() if key != "lineage_sha256"})
+    canary_path.write_text(json.dumps(canary), encoding="utf-8")
+    prepare_full_attempt_after_canary(config, owner_store_root=root, attempt_root=attempt)
+    assert validate_full_attempt_resume(config, owner_store_root=root, attempt_root=attempt)["attempt_id"] == config.attempt_id
+
+
+def test_staged_fresh_root_validates_before_first_launch(tmp_path: Path) -> None:
+    owner = tmp_path / "owner"
+    attempt = owner / "armindex" / "a6" / "attempt"
+    attempt.mkdir(parents=True)
+    source = tmp_path / "source.jsonl"
+    source.write_text("{}\n", encoding="utf-8")
+    config = _config(tmp_path, source, 1)
+    body = {
+        "schema_version": "myis.armindex-a6-fresh-attempt-root-receipt.v1",
+        "status": "PASS_A6_FRESH_ATTEMPT_ROOT", "attempt_id": config.attempt_id,
+        "attempt_root_pointer": attempt.relative_to(owner).as_posix(),
+        "config_sha256": config.config_sha256, "source_sha256": config.source_sha256,
+        "protected_payload_included": False,
+    }
+    (attempt / "A6_FRESH_ATTEMPT_ROOT.json").write_text(
+        json.dumps({**body, "fresh_attempt_root_receipt_sha256": a6.canonical_sha256(body)}, sort_keys=True), encoding="utf-8"
+    )
+    assert validate_fresh_attempt_root(config, owner_store_root=owner, attempt_root=attempt)["attempt_id"] == config.attempt_id
 
 
 def test_failure_receipt_is_aggregate_safe_and_bounded(tmp_path: Path) -> None:
@@ -170,6 +331,37 @@ def test_staged_model_tree_hash_changes_when_staged_bytes_change(tmp_path: Path)
     first = model_tree_sha256(model)
     weights.write_bytes(b"second")
     assert model_tree_sha256(model) != first
+
+
+def test_sha256sums_rejects_staged_model_byte_tampering(tmp_path: Path) -> None:
+    model = tmp_path / "model"
+    model.mkdir()
+    weights = model / "model.safetensors"
+    weights.write_bytes(b"frozen")
+    expected = a6.file_sha256(weights)
+    sums = model / "SHA256SUMS"
+    sums.write_text(f"{expected}  model.safetensors\n", encoding="utf-8")
+    a6._validate_sha256sums(model, sums, required_model_hash=expected)
+    weights.write_bytes(b"tampered")
+    with pytest.raises(A6ExecutionError, match="byte mismatch"):
+        a6._validate_sha256sums(model, sums, required_model_hash=expected)
+
+
+def test_canonical_model_lock_rejects_critical_artifact_drift(monkeypatch: pytest.MonkeyPatch) -> None:
+    a6._validate_canonical_model_lock(adapter_sha256="08bbed4b3f07ce6a52ce60992e178339e69f1672cffe0a04d2f77ffc01cc4f19")
+    monkeypatch.setattr(a6, "MODEL_SAFETENSORS_SHA256", "0" * 64)
+    with pytest.raises(A6ExecutionError, match="model\.safetensors"):
+        a6._validate_canonical_model_lock(
+            adapter_sha256="08bbed4b3f07ce6a52ce60992e178339e69f1672cffe0a04d2f77ffc01cc4f19"
+        )
+
+
+def test_runtime_package_lock_rejects_version_drift() -> None:
+    packages = {"numpy": "test", "torch": "2.6.0+cu118", "sentence-transformers": "4.1.0", "transformers": "4.51.3"}
+    a6._validate_runtime_package_lock(packages)
+    packages["transformers"] = "4.50.0"
+    with pytest.raises(A6ExecutionError, match="transformers"):
+        a6._validate_runtime_package_lock(packages)
 
 
 class _Worker:

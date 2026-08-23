@@ -1,0 +1,137 @@
+{
+  "a6_scientific_unit": {
+    "corpus": "full_DAPFAM",
+    "evaluation": "owner_local_after_pool_freeze_before_A6_closeout",
+    "evaluation_metrics": [
+      "Recall@10",
+      "Recall@20",
+      "Recall@50",
+      "Recall@100",
+      "Recall@200",
+      "nDCG@10",
+      "nDCG@100"
+    ],
+    "evaluation_populations": [
+      "ALL",
+      "IN",
+      "OUT"
+    ],
+    "frozen_binding": "A5_ARM-03_representation_model_chunking_retrieval_index_runtime_hashes",
+    "pool_depth_k": 200,
+    "purpose": "freeze_candidate_exposure_before_any_reranking",
+    "query_coverage": "1247_of_1247_expected",
+    "selection_and_final_accesses": 0
+  },
+  "a7_scientific_unit": {
+    "inputs": [
+      "A5_Final-872_receipts",
+      "A6_FROZEN_POOL_AUTHORITY"
+    ],
+    "may_access_qrels": "owner_local_only",
+    "may_change_pool": false,
+    "may_change_winner": false,
+    "purpose": "independent_metric_population_leakage_family_and_oracle_audit"
+  },
+  "a8_scientific_unit": {
+    "adaptation_forbidden": [
+      "prompt_search",
+      "model_selection",
+      "weight_tuning",
+      "pool_expansion",
+      "post_result_substitution"
+    ],
+    "pool_depth_k": 200,
+    "purpose": "fixed_within_pool_reranking_comparison",
+    "systems": [
+      "NO_RERANK_A6_ORDER",
+      "BAAI/bge-reranker-v2-m3",
+      "Qwen/Qwen3-Reranker-0.6B",
+      "jinaai/jina-reranker-v3.5",
+      "ORACLE_CEILING"
+    ]
+  },
+  "a9_scientific_unit": {
+    "owner_gate": "D3_SUBMIT_RELEASE",
+    "purpose": "journal_strength_publication_and_release",
+    "required_inputs": [
+      "A0_through_A8_validated_evidence"
+    ]
+  },
+  "amendment_id": "A6_FROZEN_POOL_A7_AUDIT_A8_RERANK_A9_PUBLICATION",
+  "amendment_sha256": "be647c9e18fe78431787768e0faa885427ccab8cf39a72bd83e67910ea1f1b83",
+  "approved_at_utc": "2026-08-22T00:00:00Z",
+  "authority_state": "OWNER_APPROVED_PREREGISTERED",
+  "budget_policy": {
+    "a6_budget_control": "control/budgets/armindex-a6-frozen-pool.v1.json",
+    "a6_ceiling_usd": 20.0,
+    "a8_ceiling_usd": null,
+    "currency": "USD",
+    "fresh_quote_and_admission_required": true,
+    "unknown_do_not_spend_until_numeric_ceiling": true
+  },
+  "effective_phase_registry": [
+    "A0_MIGRATION_FOUNDATION",
+    "A1_BASELINES_AND_MULTI_ARM_SCREENING",
+    "A2_PER_ARM_AUTOINDEX",
+    "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "A4_PRODUCTION_TRANSFER_AND_SELECTION",
+    "A5_FINAL_CONFIRMATION",
+    "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+    "A7_SCIENTIFIC_AUDIT_AND_ORACLE_HEADROOM",
+    "A8_FROZEN_POOL_RERANKER_MATRIX",
+    "A9_PUBLICATION_AND_RELEASE"
+  ],
+  "global_invariants": [
+    "A0-A5 receipts and hashes are immutable predecessor evidence.",
+    "A6 consumes exactly one A5-frozen ARM-03 winner and cannot tune or reselect.",
+    "A6 provider-side inputs contain only permitted opaque corpus/query text and opaque tokens; qrels, memberships, protected IDs, and outcomes never leave Owner Store.",
+    "A6 computes full-DAPFAM retrieval metrics only after the frozen pool is returned to Owner-local evaluation; this does not reopen Selection or Final and does not select a new winner.",
+    "The complete A6 ranked pool and scores remain in Owner Store; Git, Paper, Brain, Obsidian, MLflow, Dashboard, and chat receive only allowlisted aggregate-safe projections.",
+    "A7 and A8 bind the immutable A6 pool hash; A8 may reorder candidates but may not retrieve outside the pool.",
+    "Selection and Final counters remain unchanged after A5.",
+    "D3 is closed until A9 release audit and Owner submission authorization."
+  ],
+  "historical_preservation": {
+    "a0_a5_receipts_mutated": false,
+    "a5_final_registry_mutated": false,
+    "supersedes_for_future_routing_only": [
+      "control/armindex/a6/a6-a7-phase-amendment.v1.json",
+      "control/armindex/a6/a6-full-dapfam-execution-contract.v1.json"
+    ]
+  },
+  "owner_approval_text": "Approve the evidence-preserving A6-A9 extension: A6 freezes a full-DAPFAM Top-200 retrieval pool with the A5-frozen ARM-03 winner; A7 independently audits metrics, populations, leakage, family aggregation, and oracle headroom; A8 runs the fixed reranker matrix on the unchanged pool; A9 handles publication and release. No phase may reopen Selection or Final, change the A5 winner, or export protected data outside Owner Store.",
+  "predecessor_requirements": {
+    "a5_frozen_winner": "exactly_one_research_champion_ARM-03",
+    "a5_terminal_state": "PASS_A5_FINAL_CONFIRMATION",
+    "a6_budget": "separate_numeric_ceiling_required_before_paid_staging",
+    "a6_safe_return": "owner_store_pool_and_aggregate_safe_projection_required"
+  },
+  "protected_boundary": {
+    "forbidden_everywhere_outside_owner_store": [
+      "raw_protected_ids",
+      "qrels",
+      "split_membership",
+      "per_query_outcomes",
+      "credentials",
+      "provider_payloads"
+    ],
+    "owner_store_allowed": [
+      "opaque_query_tokens",
+      "opaque_candidate_tokens",
+      "rankings",
+      "scores",
+      "per_query_pool_records",
+      "qrels_for_local_A7_only"
+    ],
+    "projection_allowed": [
+      "counts",
+      "hashes",
+      "aggregate_metrics",
+      "confidence_intervals",
+      "failure_taxonomy",
+      "figures",
+      "manifests"
+    ]
+  },
+  "schema_version": "myis.armindex-a6-a9-phase-amendment.v2"
+}

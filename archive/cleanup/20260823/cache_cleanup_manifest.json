@@ -1,0 +1,37 @@
+{
+  "cleanup_id": "cleanup-20260823-a6-lane3-cache",
+  "created_utc": "2026-08-23T05:30:00Z",
+  "scope": "Generated cache directories outside virtual environments, archives, and protected roots",
+  "audit": {
+    "repository_references_checked": true,
+    "temporary_file_scan_completed": true,
+    "canonical_evidence_touched": false,
+    "protected_payload_touched": false,
+    "active_a6_remote_worker_touched": false,
+    "safe_return_transfer_touched": false
+  },
+  "patterns": [
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".mypy_cache",
+    ".tox",
+    ".nox"
+  ],
+  "disposition": "DELETED_REGENERABLE_CACHE",
+  "before": {
+    "directories": 436,
+    "files": 3375,
+    "bytes": 75590734
+  },
+  "after": {
+    "eligible_directories_remaining": 0,
+    "eligible_bytes_remaining": 0
+  },
+  "excluded": [
+    ".venv and .venv-* environments",
+    "archive directories",
+    "protected directories",
+    "Owner Store cleanup archive containing temporary-file evidence"
+  ]
+}

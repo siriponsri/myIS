@@ -1,13 +1,13 @@
 campaign:
   id: armindex-multiretriever-v2
   title: ArmIndex - Retriever-Conditioned Representation Search and Harness Optimization
-  status: a2_official_codex_candidate_freeze_preparation_active
-  evidence_class: engineering_preparation_with_a1_terminal_lineage
-  scientific_authority: false
-  claim_boundary: a1_r15_terminal_pass_preserved_a2_bridge_and_candidate_freeze_preparation_only_no_a2_measurement
-  migration_measured_runs: 0
-  selection_accesses: 0
-  final_accesses: 0
+  status: a7_seven_layer_diagnosis_complete
+  evidence_class: post_confirmatory_full_corpus_evaluation_and_diagnosis
+  scientific_authority: true
+  claim_boundary: a5_final872_frozen_arm03_confirmatory_evidence_plus_a6_pool_and_all_in_out_metrics_verified_by_independent_integrity_audit
+  migration_measured_runs: 4
+  selection_accesses: 1
+  final_accesses: 1
   standing_authorization: D1_START_CAMPAIGN
   active_owner_decisions: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
   historical_campaigns: [scope-autoindex-v1]
@@ -21,8 +21,8 @@ protocol:
   split_roles: {train: 250, selection: 125, final: 872}
   selection_rule: lexicographic_recall_ndcg_latency_cost_simplicity
   final_split_open: false
-  measured_execution_allowed: false
-  model_download_allowed: false
+  measured_execution_allowed: true
+  model_download_allowed: true
 
 arms:
   - {id: ARM-01, model_id: lexical/bm25s, method: bm25, license: MIT, commercial_status: commercial_capable, role: lexical_anchor_cpu_fallback}
@@ -81,8 +81,11 @@ contracts:
   a2_candidate_manifest_schema: schemas/armindex/a2-candidate-manifest.v1.json
   a2_candidate_freeze_receipt_schema: schemas/armindex/a2-candidate-freeze-receipt.v1.json
   a2_candidate_freeze_lock_schema: schemas/armindex/a2-candidate-freeze-lock.v1.json
-  a6_a7_phase_amendment: control/armindex/a6/a6-a7-phase-amendment.v1.json
-  a6_full_dapfam_execution_contract: control/armindex/a6/a6-full-dapfam-execution-contract.v1.json
+  a6_a8_phase_amendment: control/armindex/a6/a6-a8-phase-amendment.v3.json
+  a6_frozen_pool_execution_contract: control/armindex/a6/a6-frozen-pool-execution-contract.v2.json
+  a7_seven_layer_diagnosis_contract: control/armindex/a7/a7-seven-layer-diagnosis-contract.v1.json
+  a7_owner_approval_admission: control/armindex/a7/a7-owner-approval-admission-20260823.json
+  a8_journal_synthesis_contract: control/armindex/a8/a8-journal-synthesis-and-publication-contract.v1.json
 
 phases:
   - id: A0_MIGRATION_FOUNDATION
@@ -112,46 +115,52 @@ phases:
     tasks: [{id: A2.1, title: Per-arm AutoIndex, status: complete}]
   - id: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
     purpose: Analyze transfer, complementarity, and production-constrained harnesses.
-    status: pending_hash_bound_train_250_input
-    measured_retrieval: false
-    tasks: [{id: A3.1, title: Cross-arm transfer matrix, status: planned}, {id: A3.2, title: Complementarity and HarnessOpt, status: planned}]
+    status: complete
+    measured_retrieval: true
+    tasks: [{id: A3.1, title: Cross-arm transfer matrix, status: complete}, {id: A3.2, title: Complementarity and HarnessOpt, status: complete}]
   - id: A4_PRODUCTION_TRANSFER_AND_SELECTION
     purpose: Freeze FAST/BALANCED/DEEP profiles and expose Selection once.
-    status: locked_until_A3
-    measured_retrieval: false
+    status: complete
+    measured_retrieval: true
     selection_exposure_limit: 1
-    tasks: [{id: A4.1, title: Production profiles and legal transfer, status: planned}]
+    tasks: [{id: A4.1, title: Production profiles and legal transfer, status: complete}]
   - id: A5_FINAL_CONFIRMATION
     purpose: Run one frozen confirmation only after D2_OPEN_FINAL.
-    status: locked_owner_D2
-    measured_retrieval: false
-    tasks: [{id: A5.1, title: Frozen final evaluation, status: locked_owner_D2}]
+    status: complete
+    measured_retrieval: true
+    tasks: [{id: A5.1, title: Frozen final evaluation, status: complete}]
   - id: A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
-    purpose: Materialize one A5-frozen winner across the approved full DAPFAM corpus to establish post-confirmatory operational coverage and scalability evidence.
-    status: locked_until_valid_A5_closeout
-    measured_retrieval: false
+    purpose: Generate the deterministic Top-200 family pool with the A5-frozen ARM-03 winner over full DAPFAM, then calculate Owner-local ALL/IN/OUT metrics and operational scalability evidence.
+    status: complete
+    measured_retrieval: true
     full_corpus_owner_local_only: true
-    tasks: [{id: A6.1, title: Frozen winner full-DAPFAM materialization and scalability validation, status: locked_until_valid_A5_closeout}]
-  - id: A7_PUBLICATION_AND_RELEASE
-    purpose: Build publication and release artifacts from validated aggregate-safe A0-A6 evidence only after D3_SUBMIT_RELEASE.
+    pool_depth: 200
+    tasks: [{id: A6.1, title: Frozen ARM-03 full-DAPFAM candidate generation, evaluation, and safe return, status: complete}]
+  - id: A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS
+    purpose: Apply the seven-layer retrieval diagnosis and comparison framework to immutable A6 evidence, including metric identity, family integrity, protocol parity, mechanism, rescue, exposure anatomy, and retrieval boundary.
+    status: complete
+    measured_retrieval: false
+    tasks: [{id: A7.1, title: Seven-layer retrieval diagnosis and comparison, status: complete}]
+  - id: A8_JOURNAL_SYNTHESIS_AND_PUBLICATION
+    purpose: Build publication artifacts from validated aggregate-safe A0-A7 evidence only after D3_SUBMIT_RELEASE.
     status: locked_owner_D3
     measured_retrieval: false
-    tasks: [{id: A7.1, title: Manuscript and release package, status: locked_owner_D3}]
+    tasks: [{id: A8.1, title: Journal synthesis and submission package, status: locked_owner_D3}]
 
 gates:
   owner: [D2_OPEN_FINAL, D3_SUBMIT_RELEASE]
   automatic: [repository_integrity, protected_data, model_lock, budget, arm_promotion, transfer_validity, harnessopt_stop, production_pareto, shortlist_freeze, one_shot_selection]
-  selection_accesses: 0
-  final_accesses: 0
+  selection_accesses: 1
+  final_accesses: 1
 
 budget:
   profile_id: armindex-migration-v2
   currency: USD
   migration_cost_actual_usd: 0
-  hard_stop_usd: 150
-  cpu_only: true
+  hard_stop_usd: 180
+  cpu_only: false
   paid_api: false
-  gpu_scientific_run: false
+  gpu_scientific_run: true
   a1_2_planning_rate_usd_per_four_gpu_instance_hour: 0.6
   a1_2_estimated_instance_hours: 2-4
   a1_2_estimated_raw_worker_usd: 1.20-2.40

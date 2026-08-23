@@ -10,16 +10,16 @@ records:
   - id: armindex_protocol
     authority: control/campaigns/armindex-multiretriever-v2.yaml
     projections: [projections/read-model, dashboard, brain, paper, mlflow]
-    restrictions: [current_attempt_pointer_controls_a1_terminal_state, no_runtime_model_download, a2_requires_fresh_admission_and_adoption]
+    restrictions: [current_attempt_pointer_controls_active_phase, a0_a5_receipts_immutable, a6_requires_fresh_attempt_lineage, aggregate_safe_projection_only]
   - id: armindex_a0_10_goal_amendment
     authority: control/migrations/armindex-a0.10-amendment.v1.yaml
     projections: [projections/read-model, dashboard, brain, obsidian, paper, mlflow]
     restrictions: [engineering_fixture_only, no_protected_data, measured_counters_zero]
-  - id: armindex_a6_a7_phase_amendment
-    authority: control/armindex/a6/a6-a7-phase-amendment.v1.json
-    supporting_authority: [control/armindex/a6/a6-full-dapfam-execution-contract.v1.json]
+  - id: armindex_a6_a8_phase_amendment
+    authority: control/armindex/a6/a6-a8-phase-amendment.v3.json
+    supporting_authority: [control/armindex/a6/a6-frozen-pool-execution-contract.v2.json, control/budgets/armindex-a6-frozen-pool.v1.json, control/armindex/a7/a7-seven-layer-diagnosis-contract.v1.json, control/armindex/a8/a8-journal-synthesis-and-publication-contract.v1.json]
     projections: [projections/read-model, projections/reports, dashboard, brain, obsidian, paper, mlflow]
-    restrictions: [owner_approved_preregistration, preserve_a0_a5_hashes, a6_requires_valid_a5_closeout, a6_owner_local_full_corpus_only, no_selection_or_final_reopen, no_tuning_or_winner_feedback, d3_applies_to_a7_only, aggregate_safe_projection_only]
+    restrictions: [owner_approved_preregistration, preserve_a0_a5_hashes, exactly_one_a5_frozen_arm03_winner, a6_top200_pool_1247_queries, a6_owner_local_all_in_out_evaluation, qrels_membership_and_per_query_outcomes_owner_store_only, no_selection_or_final_reopen, no_tuning_or_winner_feedback, a7_diagnosis_hash_binds_pool, no_reranking_phase, d3_applies_to_a8_only, aggregate_safe_projection_only]
   - id: armindex_a5_final_confirmation_r03
     authority: control/armindex/a5/final-r03-20260822/A5_FINAL_CLOSEOUT.json
     supporting_authority: [control/armindex/a5/final-r03-20260822/A5_FINAL_OWNER_EVALUATION.json, control/armindex/a5/final-r03-20260822/A5_FINAL_RESULT_INTEGRITY_AUDIT.json, control/armindex/a5/final-r03-20260822/A5_FROZEN_WINNER_BINDING.json]

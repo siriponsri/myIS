@@ -112,6 +112,34 @@ def test_contract_hash_or_same_instance_policy_cannot_drift() -> None:
         build_pending_a6_materialization_template(contract)
 
 
+def test_v2_frozen_pool_contract_normalizes_without_old_instance_binding() -> None:
+    path = ROOT / "control" / "armindex" / "a6" / "a6-frozen-pool-execution-contract.v2.json"
+    contract = json.loads(path.read_text(encoding="utf-8"))
+    template = build_pending_a6_materialization_template(contract)
+    assert template["a6_contract_sha256"] == contract["contract_sha256"]
+    assert template["authorized_instance_id"] == 48367896
+
+
+def test_v2_pending_self_hash_is_rejected() -> None:
+    path = ROOT / "control" / "armindex" / "a6" / "a6-frozen-pool-execution-contract.v2.json"
+    contract = json.loads(path.read_text(encoding="utf-8"))
+    contract["contract_sha256"] = "PENDING"
+    with pytest.raises(A6MaterializationError, match="self-hash is pending"):
+        build_pending_a6_materialization_template(contract)
+
+
+def test_v2_accepts_hash_bound_a5_provenance_claim_boundary() -> None:
+    contract = json.loads((ROOT / "control" / "armindex" / "a6" / "a6-frozen-pool-execution-contract.v2.json").read_text(encoding="utf-8"))
+    winner = json.loads((ROOT / "control" / "armindex" / "a5" / "final-r03-20260822" / "A5_FROZEN_WINNER_BINDING.json").read_text(encoding="utf-8"))
+    assert validate_a5_frozen_winner_binding(winner, contract)["winner"]["model_adapter_sha256"]
+
+    tampered = dict(winner)
+    tampered["claim_boundary"] = "quality improvement claim"
+    tampered["binding_sha256"] = canonical_sha256({key: value for key, value in tampered.items() if key != "binding_sha256"})
+    with pytest.raises(A6MaterializationError, match="claim boundary"):
+        validate_a5_frozen_winner_binding(tampered, contract)
+
+
 def test_a5_winner_binding_and_fresh_a6_admission_validate() -> None:
     contract = _contract()
     winner = _winner_binding()

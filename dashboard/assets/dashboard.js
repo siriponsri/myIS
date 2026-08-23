@@ -378,7 +378,7 @@ function renderPhaseDetail() {
   state.selectedPhaseId = phase.phase_id;
   const done = (phase.tasks || []).filter((task) => ["complete", "measured"].includes(task.status)).length;
   const milestone = (state.model?.milestones || []).find((item) => item.milestone_id === phase.phase_id) || {};
-  const gate = phase.phase_id === "A5_FINAL_CONFIRMATION" ? "D2_OPEN_FINAL" : phase.phase_id === "A7_PUBLICATION_AND_RELEASE" ? "D3_SUBMIT_RELEASE" : "No Owner gate";
+  const gate = phase.phase_id === "A5_FINAL_CONFIRMATION" ? "D2_OPEN_FINAL" : phase.phase_id === "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION" ? "D3_SUBMIT_RELEASE" : "No Owner gate";
   $("phase-detail").innerHTML = `<div class="phase-detail-grid"><div><span class="detail-label">Phase</span><strong>${escapeHtml(shortPhase(phase.phase_id))} · ${escapeHtml(phaseTitle(phase.phase_id))}</strong></div><div><span class="detail-label">สถานะ</span><strong>${escapeHtml(phase.status || "planned")}</strong></div><div><span class="detail-label">Task evidence</span><strong>${done}/${(phase.tasks || []).length}</strong></div><div><span class="detail-label">Dependency</span><strong>${escapeHtml((milestone.depends_on || []).map(shortPhase).join(", ") || "None")}</strong></div><div><span class="detail-label">Gate</span><strong>${escapeHtml(gate)}</strong></div></div>`;
 }
 
@@ -597,7 +597,7 @@ function card(label, value, detail, icon) {
 }
 
 function phaseTitle(id) {
-  return ({ A0_MIGRATION_FOUNDATION: "Migration foundation", A1_BASELINES_AND_MULTI_ARM_SCREENING: "Baselines and screening", A2_PER_ARM_AUTOINDEX: "Per-arm AutoIndex", A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT: "Transfer and HarnessOpt", A4_PRODUCTION_TRANSFER_AND_SELECTION: "Production and Selection", A5_FINAL_CONFIRMATION: "Final confirmation", A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY: "Full-DAPFAM materialization and scalability", A7_PUBLICATION_AND_RELEASE: "Publication and release", P0_FOUNDATION: "Historical foundation", P1_CPU_BASELINE: "Historical CPU baseline", P2_SCOPE_DEVELOPMENT: "Historical SCOPE development", P3_FINAL: "Historical final", P4_PUBLICATION: "Historical publication" })[id] || id || "-";
+  return ({ A0_MIGRATION_FOUNDATION: "Migration foundation", A1_BASELINES_AND_MULTI_ARM_SCREENING: "Baselines and screening", A2_PER_ARM_AUTOINDEX: "Per-arm AutoIndex", A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT: "Transfer and HarnessOpt", A4_PRODUCTION_TRANSFER_AND_SELECTION: "Production and Selection", A5_FINAL_CONFIRMATION: "Final confirmation", A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY: "Full-DAPFAM materialization and scalability", A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS: "Seven-layer retrieval diagnosis", A8_JOURNAL_SYNTHESIS_AND_PUBLICATION: "Journal synthesis and publication", P0_FOUNDATION: "Historical foundation", P1_CPU_BASELINE: "Historical CPU baseline", P2_SCOPE_DEVELOPMENT: "Historical SCOPE development", P3_FINAL: "Historical final", P4_PUBLICATION: "Historical publication" })[id] || id || "-";
 }
 
 function shortPhase(id) {
@@ -618,7 +618,7 @@ function simpleStatus(status) {
 
 function gateName(task) {
   if (task.status === "locked_owner_D2" || task.phase_id === "A5_FINAL_CONFIRMATION") return "รอ D2_OPEN_FINAL";
-  if (task.status === "locked_owner_D3" || task.phase_id === "A7_PUBLICATION_AND_RELEASE") return "รอ D3_SUBMIT_RELEASE";
+  if (task.status === "locked_owner_D3" || task.phase_id === "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION") return "รอ D3_SUBMIT_RELEASE";
   return "รอ Owner review";
 }
 

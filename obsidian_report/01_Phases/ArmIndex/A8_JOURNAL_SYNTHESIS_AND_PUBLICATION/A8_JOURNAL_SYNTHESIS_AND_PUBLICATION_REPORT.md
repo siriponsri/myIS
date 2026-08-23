@@ -1,0 +1,129 @@
+---
+schema_version: "myis.obsidian-note.v2"
+read_model_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+read_model_sha256: "eb6c6b72fdceb47302a1246c3a0a2672cd6c97df09ebc2663b4bd2d1e8cbba35"
+source_commit: "0ec3eaaeed6229bb6d1f671ab3286a9c26550623"
+projection_schema_version: "myis.integrated-projection.v2"
+source_run_ids: []
+source_manifest_sha256: []
+related_literature_ids: []
+related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
+evidence_class: "engineering"
+scientific_authority: false
+claim_boundary: "engineering_provenance_only"
+generated_from_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+last_material_update: "2026-08-22T15:21:39Z"
+next_authorized_action: "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL"
+managed_by: "myis-report"
+edit_policy: "generated_do_not_edit"
+safe_to_present: true
+created_at: "2026-08-22T15:21:39Z"
+updated_at: "2026-08-22T15:21:39Z"
+note_id: "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION-MASTER"
+note_type: "phase_report"
+phase_id: "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION"
+task_id: null
+workflow_status: "blocked"
+evidence_maturity: "non_scientific"
+claim_level: "none"
+---
+
+# A8_JOURNAL_SYNTHESIS_AND_PUBLICATION
+
+Generated from the validated report record. Manual edits may be replaced; use the separate Owner Notes area for personal annotations.
+
+## Objective
+
+Build publication artifacts from validated aggregate-safe A0-A7 evidence only after D3_SUBMIT_RELEASE.
+
+## Starting State
+
+- `phase`: A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS
+- `task`: None
+- `program_state`: a7_seven_layer_diagnosis_complete
+- `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
+- `claim_boundary`: No unsupported scientific claim
+
+## Inputs and Frozen Bindings
+
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `bbe2ab3cbe7f32ae31594560ddf78d3bb86710715377a40876abfe96ea2a536f`
+- `git_commit`: 0ec3eaaeed6229bb6d1f671ab3286a9c26550623
+- `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
+- `armindex_schema_root`: `schemas/armindex`; SHA-256 `f97779630461e05cbdb80fa66b01d0ddbbe58b6a9266adc244f1faf97c3dcc61`
+- `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
+
+## Work Performed
+
+The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable.
+
+## Artifacts Produced
+
+These references explain what each artifact is for; the bytes remain governed by canonical paths.
+
+| Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
+|---|---|---|---|---|---|
+| None | - | - | - | - | - |
+
+## Metrics
+
+| Metric | Split | Scope | Value | n | Denominator | Evidence |
+|---|---|---|---:|---:|---|---|
+| No measured metric is available | - | - | - | - | - | planned/fixture |
+
+Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
+
+## Result
+
+**Output:** Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.
+
+**Result:** A8_JOURNAL_SYNTHESIS_AND_PUBLICATION is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.
+
+**Decision:** blocked
+
+## Interpretation
+
+This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.
+
+## Supported Claims
+
+- Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.
+
+## Unsupported Claims
+
+- Measured P2 improvement or candidate superiority before a real measured run.
+- Final-split generalization or publication release before D2 and D3.
+- Causal or legal conclusions from retrieval aggregates.
+
+## Failures and Recovery
+
+- No material failure is recorded for this Phase or Task.
+
+## Governance and Safety
+
+- `protected_data_accessed`: False
+- `measured_execution`: False
+- `gpu`: False
+- `paid_api`: False
+- `network_model_download`: False
+- `provider_fallback`: False
+- `d2`: waiting_owner
+- `d3`: waiting_owner
+- `final_split`: closed
+- `real_counters`: `{"candidate_count": 0, "final_accesses": 1, "measured_runs": 4, "selection_accesses": 1, "shortlist_count": 0}`
+- `evidence_class`: engineering
+- `scientific_authority`: False
+
+## Decision
+
+Status: **blocked**. A8_JOURNAL_SYNTHESIS_AND_PUBLICATION is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.
+
+## Next Action
+
+RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL
+
+Measured P2, real selection, and final evaluation must not start automatically from this report.
+
+## Evidence Links
+
+- None recorded.

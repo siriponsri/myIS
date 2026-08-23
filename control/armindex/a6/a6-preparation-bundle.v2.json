@@ -1,0 +1,44 @@
+{
+  "a5_winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+  "a5_winner_configuration_sha256": "285e94b1e76b4fcbc941daa524c71db213f63d21e1fab06dc2931ddf6dee26fc",
+  "a6_budget_control": "control/budgets/armindex-a6-frozen-pool.v1.json",
+  "a6_contract": "control/armindex/a6/a6-frozen-pool-execution-contract.v2.json",
+  "a6_phase_ceiling_usd": 20.0,
+  "bundle_id": "A6_FROZEN_TOP200_POOL_AND_OWNER_LOCAL_EVALUATION",
+  "bundle_sha256": "9c44b46bfb3fddf9a59c44e1a9958f2908f78367cfeca54cda482d1eeb556851",
+  "corpus_rows": 45336,
+  "coverage_contract": "1247_of_1247_queries; rank_1_to_200_contiguous; family_deduplicated; deterministic_tie_break",
+  "execution_permitted": false,
+  "final_accesses": 0,
+  "launch_allowed": false,
+  "owner_local_evaluation": {
+    "metrics": [
+      "Recall@10",
+      "Recall@20",
+      "Recall@50",
+      "Recall@100",
+      "Recall@200",
+      "nDCG@10",
+      "nDCG@100"
+    ],
+    "populations": [
+      "ALL",
+      "IN",
+      "OUT"
+    ],
+    "projection": "aggregate_safe_only",
+    "qrels_location": "Owner_Store_only"
+  },
+  "owner_store_handoff": "A6_FROZEN_POOL_AUTHORITY",
+  "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+  "pool_depth_k": 200,
+  "protected_payload_included": false,
+  "query_rows": 1247,
+  "query_source_sha256": "b596c2dcc73399840c0a9c2143b23e8497bbaa33af8dbb2a8877ad52e5f9f2fd",
+  "schema_version": "myis.armindex-a6-preparation-bundle.v2",
+  "selection_accesses": 0,
+  "separate_numeric_budget_ceiling_required": true,
+  "source_manifest_sha256": "f829e1827aff84dfb332742f74c1f717da655a1ef962e1aca0260d8d2a450d6c",
+  "status": "PENDING_FRESH_A6_ADMISSION",
+  "task_id": "A6.1"
+}

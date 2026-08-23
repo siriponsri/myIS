@@ -6,10 +6,20 @@ repository: "myIS Research / 01_Research"
 branch: "main"
 commit: "e002d7a6de40ba9d6118bab410e0c30255b61fd0"
 report_date: "2026-08-20"
+status: "HISTORICAL_SNAPSHOT_SUPERSEDED_BY_CURRENT_CONTROLS"
+current_canonical_state: "A5_FINAL_CONFIRMATION_CLOSED; A6_MATERIALIZATION_COMPLETE_POOL_AND_METRICS_PENDING"
 remote_observation_cutoff_utc: "2026-08-19T12:27:22Z"
 numeric_authority: "Canonical manifests, machine-readable result summaries, append-only receipts, and Owner Store aggregate-safe receipts"
 evidence_boundary: "Development evidence is separated from Selection and Final held-out evidence. Protected qrels, membership, raw identifiers, rankings, and per-query outcomes are not reproduced."
 ---
+
+> **Status note (2026-08-23):** This report is a historical snapshot and is not
+> current numeric authority. It predates the closed A4 Selection-125/A5
+> Final-872 evidence chain and the active A6 full-DAPFAM run. For current
+> routing and metrics, use `PLAN.md`, `control/program.yaml`, the A5 closeout
+> receipts, and `docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md`.
+> The active route is A5 -> A6 -> A7 Seven-Layer Diagnosis -> A8 Journal
+> Synthesis; no reranking phase is active.
 
 # ArmIndex: รายงานเทคนิคฉบับเต็มแบบตรวจสอบย้อนกลับได้
 
@@ -568,7 +578,8 @@ protected payloads เข้ามาใน Git
 | A5 execution blocker | `<MYIS_ROOT>/04_Owner_Stores/armindex/a5/a5-pending-a4-selection-20260820T174500Z/A5_EXECUTION_BLOCKER_20260820.json` | missing Selection-125 handoff, finalist registry and D2 | receipt SHA-256 `1536fa8ab712a11c11381e274354e1ffdc5a83ff5073bb9ccf5f9cd040821155` / BLOCKED |
 | A4/A5 artifact-index validation | `A4_PUBLICATION_ARTIFACT_INDEX_REFRESHED_20260820.json` plus 51 referenced files | canonical self-hash and per-file SHA-256 validation | `PASS_INDEX_HASH_AND_ARTIFACT_VALIDATION`; latest index SHA-256 `953675d1d6b150e1d89cba9c52559ebb7294f74b2257535989b76bb81eb841da` |
 | Parallel A4/A5 audit | `A4_A5_PARALLEL_AUDIT_20260820.json` | independent A4 PASS, A5 pending-only PASS, conditional same-instance A6 continuation | receipt SHA-256 `3585f7ae1d0d0315a5d6a96c0e62ea14ec16d97865ce71ba9cfeb0d7848fcab8` / PASS with identity-refresh follow-up |
-| A6/A7 phase amendment | `control/armindex/a6/a6-a7-phase-amendment.v1.json`; `docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md`; `docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md` | moves publication/release to A7; preserves A6 as post-confirmatory, non-adaptive full-corpus materialization | owner-approved routing / VERIFIED |
+| Superseded A6/A7 phase amendment | `archive/superseded/20260823/reranker-a9/a6-a7-phase-amendment.v1.json` | historical eight-phase proposal; retained for provenance only | superseded by `control/armindex/a6/a6-a8-phase-amendment.v3.json` |
+| Current A6-A8 phase amendment | `control/armindex/a6/a6-a8-phase-amendment.v3.json`; `docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md`; `docs/goal/A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS_goal_001.md`; `docs/goal/A8_JOURNAL_SYNTHESIS_AND_PUBLICATION_goal_001.md` | full DAPFAM materialization, seven-layer diagnosis, and journal synthesis | current routing / VERIFIED |
 | A6 pending bundle | `control/armindex/a6/a6-pending-a5-closeout-template.v1.json`; `control/armindex/a6/a6-full-dapfam-execution-contract.v1.json` | post-confirmatory full-corpus contract | execution forbidden until `PASS_A5_FINAL_CONFIRMATION` |
 | Literature | `evidence/literature/digests/` and `evidence/literature/source/` | primary-source design inheritance | literature authority for related work |
 | Advisor reports | `docs/progress_report/update_A0_A1_A2_18AUG2026.md`; `update_A3_19AUG2026.md` | human-readable projections | informative, not numeric authority |

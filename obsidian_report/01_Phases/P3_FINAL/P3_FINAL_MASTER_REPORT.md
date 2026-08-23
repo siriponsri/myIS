@@ -1,8 +1,8 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
-read_model_sha256: "2a0bd9cd30525c7fc4f44771eb36183092795d29c9b6593655ca4faa860f9bbd"
-source_commit: "60de8e8d039bfb482c19039d7b4b2839a14a2a81"
+read_model_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+read_model_sha256: "eb6c6b72fdceb47302a1246c3a0a2672cd6c97df09ebc2663b4bd2d1e8cbba35"
+source_commit: "0ec3eaaeed6229bb6d1f671ab3286a9c26550623"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
@@ -11,14 +11,14 @@ related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
 evidence_class: "engineering"
 scientific_authority: false
 claim_boundary: "engineering_provenance_only"
-generated_from_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
-last_material_update: "2026-08-19T11:10:50Z"
-next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
+generated_from_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+last_material_update: "2026-08-22T15:21:39Z"
+next_authorized_action: "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-19T11:10:50Z"
-updated_at: "2026-08-19T11:10:50Z"
+created_at: "2026-08-22T15:21:39Z"
+updated_at: "2026-08-22T15:21:39Z"
 note_id: "P3_FINAL-MASTER"
 note_type: "phase_report"
 phase_id: "P3_FINAL"
@@ -38,17 +38,17 @@ Deliver the P3_FINAL research phase with an auditable evidence boundary.
 
 ## Starting State
 
-- `phase`: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
-- `task`: A3.1
+- `phase`: A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS
+- `task`: A7.1
 - `program_state`: P1_CPU_MEASURED_COMPLETE
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5`
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d`
 - `campaign`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
-- `git_commit`: 60de8e8d039bfb482c19039d7b4b2839a14a2a81
+- `git_commit`: 0ec3eaaeed6229bb6d1f671ab3286a9c26550623
 
 ## Work Performed
 
@@ -117,7 +117,7 @@ Status: **waiting_owner**. The phase remains planned and closed.
 
 ## Next Action
 
-LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION
+RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 

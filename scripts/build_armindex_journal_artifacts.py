@@ -137,12 +137,12 @@ CLAIM_INVENTORY = (
     {
         "claim_id": "C-A5-A6-01",
         "phase": "A5_FINAL_CONFIRMATION / A6_FULL_DAPFAM_MATERIALIZATION",
-        "claim_text": "Full-corpus materialization is a post-confirmatory deployment phase and remains gated on PASS_A5_FINAL_CONFIRMATION.",
+        "claim_text": "Full-corpus materialization is the active post-confirmatory A6 phase; its frozen pool and Owner-local ALL/IN/OUT metrics remain pending closeout.",
         "metric_scope": "phase contract and gate status",
-        "source_artifact": "control/armindex/a6/a6-full-dapfam-execution-contract.v1.json",
+        "source_artifact": "control/armindex/a6/a6-frozen-pool-execution-contract.v2.json",
         "evidence_status": "CONTRACT_VERIFIED",
         "permitted_use": "Protocol, limitations, and next-experiment gates",
-        "prohibited_interpretation": "Do not report A6 scalability or quality results before its measured run",
+        "prohibited_interpretation": "Do not report A6 pool or retrieval metrics until complete safe return, local evaluation, and integrity audit",
     },
 )
 
@@ -152,10 +152,11 @@ CONTROL_POINTERS = (
     "control/armindex/a2/a2-goal004-closeout-projection.v1.json",
     "control/armindex/a4/a4-readiness-binding-20260819.json",
     "control/armindex/a5/a5-pending-a4-selection-template.v1.json",
-    "control/armindex/a6/a6-a7-phase-amendment.v1.json",
-    "control/armindex/a6/a6-full-dapfam-execution-contract.v1.json",
+    "control/armindex/a6/a6-a8-phase-amendment.v3.json",
+    "control/armindex/a6/a6-frozen-pool-execution-contract.v2.json",
     "docs/goal/A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY_goal_001.md",
-    "docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md",
+    "docs/goal/A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS_goal_001.md",
+    "docs/goal/A8_JOURNAL_SYNTHESIS_AND_PUBLICATION_goal_001.md",
 )
 
 

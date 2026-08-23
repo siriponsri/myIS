@@ -1,0 +1,98 @@
+{
+  "artifact_references": [],
+  "claim_boundary": "engineering_provenance_only",
+  "decision": {
+    "owner_decisions_unchanged": true,
+    "reason": "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.",
+    "status": "blocked"
+  },
+  "evidence_class": "engineering",
+  "evidence_links": [],
+  "failure_recovery_references": [],
+  "generated_at": "2026-08-22T15:21:39Z",
+  "generated_from_revision": "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879",
+  "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
+  "governance_status": {
+    "d2": "waiting_owner",
+    "d3": "waiting_owner",
+    "evidence_class": "engineering",
+    "final_split": "closed",
+    "gpu": false,
+    "measured_execution": false,
+    "network_model_download": false,
+    "paid_api": false,
+    "protected_data_accessed": false,
+    "provider_fallback": false,
+    "real_counters": {
+      "candidate_count": 0,
+      "final_accesses": 1,
+      "measured_runs": 4,
+      "selection_accesses": 1,
+      "shortlist_count": 0
+    },
+    "scientific_authority": false
+  },
+  "input_bindings": {
+    "armindex_schema_root": {
+      "sha256": "f97779630461e05cbdb80fa66b01d0ddbbe58b6a9266adc244f1faf97c3dcc61",
+      "uri": "schemas/armindex"
+    },
+    "campaign": {
+      "sha256": "bbe2ab3cbe7f32ae31594560ddf78d3bb86710715377a40876abfe96ea2a536f",
+      "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
+    },
+    "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
+    "historical_scope": {
+      "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
+      "status": "historical_read_only",
+      "uri": "control/campaigns/scope-autoindex-v1.yaml"
+    },
+    "migration_budget": {
+      "sha256": "48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec",
+      "uri": "control/budgets/armindex-migration-v2.yaml"
+    },
+    "source_of_truth": {
+      "sha256": "0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d",
+      "uri": "control/source-of-truth.yaml"
+    }
+  },
+  "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
+  "language": "en",
+  "last_material_update": "2026-08-22T15:21:39Z",
+  "metric_references": [],
+  "next_authorized_action": "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL",
+  "objective": "Build publication artifacts from validated aggregate-safe A0-A7 evidence only after D3_SUBMIT_RELEASE.",
+  "phase_id": "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
+  "report_id": "phase-a8_journal_synthesis_and_publication",
+  "report_sha256": "99dacf5fa97bddbff8f1adfb93e61fea0f91c8cc9879cb10617a6c877b371e5d",
+  "report_type": "phase",
+  "result": {
+    "decision": "blocked",
+    "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
+    "result": "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION is blocked; ArmIndex measured runs, Selection, and Final counters remain zero."
+  },
+  "schema_version": "myis.phase-task-report.v1",
+  "scientific_authority": false,
+  "starting_state": {
+    "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
+    "claim_boundary": "No unsupported scientific claim",
+    "phase": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+    "program_state": "a7_seven_layer_diagnosis_complete",
+    "task": null
+  },
+  "status": "blocked",
+  "supported_claims": [
+    {
+      "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
+      "evidence": []
+    }
+  ],
+  "task_id": null,
+  "unsupported_claims": [
+    "Measured P2 improvement or candidate superiority before a real measured run.",
+    "Final-split generalization or publication release before D2 and D3.",
+    "Causal or legal conclusions from retrieval aggregates."
+  ],
+  "validation_status": "validated",
+  "work_summary": "The active repository is migrated in place to ArmIndex with versioned contracts and projections while historical SCOPE/P1/P2 evidence remains immutable and readable."
+}

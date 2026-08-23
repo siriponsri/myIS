@@ -16,9 +16,10 @@ from typing import Any
 
 from myis_research.armindex.a6_full_materialization import (
     A6ExecutionError, build_canary_receipt, build_failure_receipt, build_safe_return_manifest, load_execution_config,
-    iter_source_shard, prepare_fresh_attempt, run_shard, validate_full_attempt_resume, validate_source_inventory,
+    iter_source_shard, prepare_fresh_attempt, prepare_full_attempt_after_canary, run_shard, validate_fresh_attempt_root, validate_full_attempt_resume, validate_source_inventory,
     write_aggregate_safe_receipt,
 )
+from myis_research.kernel.canonical import canonical_sha256
 
 
 def _json(path: Path) -> dict[str, Any]:
@@ -106,7 +107,12 @@ def main() -> int:
                 raise A6ExecutionError("A6 resume is forbidden for canary work")
             validate_full_attempt_resume(config, owner_store_root=root, attempt_root=attempt)
         else:
-            prepare_fresh_attempt(config, owner_store_root=root, attempt_root=attempt)
+            if canary is None and attempt.exists() and (attempt / "A6_CANARY_LINEAGE.json").is_file():
+                prepare_full_attempt_after_canary(config, owner_store_root=root, attempt_root=attempt)
+            elif canary is None and attempt.exists() and (attempt / "A6_FRESH_ATTEMPT_ROOT.json").is_file():
+                validate_fresh_attempt_root(config, owner_store_root=root, attempt_root=attempt)
+            else:
+                prepare_fresh_attempt(config, owner_store_root=root, attempt_root=attempt)
         validate_source_inventory(config)
         # A canary is intentionally non-resumable into the full corpus.  Its
         # vectors prove runtime capacity but cannot become A6 full-run output.
@@ -126,6 +132,15 @@ def main() -> int:
             raise A6ExecutionError("A6 shard worker failed; preserve attempt for compatible recovery")
         elapsed = time.monotonic() - started
         if canary is not None:
+            lineage_body = {
+                "schema_version": "myis.armindex-a6-canary-lineage.v1",
+                "status": "PASS_A6_CANARY_ISOLATED_NON_RESUMABLE",
+                "stage": "canary", "attempt_id": config.attempt_id,
+                "config_sha256": config.config_sha256, "source_sha256": config.source_sha256,
+                "canary_root_pointer": f"{attempt.relative_to(root).as_posix()}/canary",
+                "full_promotion_forbidden": True, "protected_payload_included": False,
+            }
+            write_aggregate_safe_receipt(attempt / "A6_CANARY_LINEAGE.json", {**lineage_body, "lineage_sha256": canonical_sha256(lineage_body)})
             aggregate = build_canary_receipt(config, [message["result"] for message in messages], elapsed_seconds=elapsed)
             target = args.safe_export_root / "A6_CANARY_RECEIPT.json"
             write_aggregate_safe_receipt(target, aggregate)

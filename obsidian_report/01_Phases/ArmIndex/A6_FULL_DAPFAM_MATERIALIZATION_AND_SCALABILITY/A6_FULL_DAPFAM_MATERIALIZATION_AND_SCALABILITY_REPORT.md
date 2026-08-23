@@ -1,29 +1,29 @@
 ---
 schema_version: "myis.obsidian-note.v2"
-read_model_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
-read_model_sha256: "2a0bd9cd30525c7fc4f44771eb36183092795d29c9b6593655ca4faa860f9bbd"
-source_commit: "60de8e8d039bfb482c19039d7b4b2839a14a2a81"
+read_model_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+read_model_sha256: "eb6c6b72fdceb47302a1246c3a0a2672cd6c97df09ebc2663b4bd2d1e8cbba35"
+source_commit: "0ec3eaaeed6229bb6d1f671ab3286a9c26550623"
 projection_schema_version: "myis.integrated-projection.v2"
 source_run_ids: []
 source_manifest_sha256: []
 related_literature_ids: []
 related_decision_ids: ["D2_OPEN_FINAL","D3_SUBMIT_RELEASE"]
-evidence_class: "engineering"
-scientific_authority: false
-claim_boundary: "engineering_provenance_only"
-generated_from_revision: "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a"
-last_material_update: "2026-08-19T11:10:50Z"
-next_authorized_action: "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION"
+evidence_class: "post_confirmatory_aggregate"
+scientific_authority: true
+claim_boundary: "frozen ARM-03 full-DAPFAM materialization, aggregate ALL/IN/OUT retrieval evidence, and operational scalability only; no new winner, comparative full-corpus superiority, external-generalization, reranking, Selection reopen, or Final reopen"
+generated_from_revision: "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879"
+last_material_update: "2026-08-22T15:21:39Z"
+next_authorized_action: "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL"
 managed_by: "myis-report"
 edit_policy: "generated_do_not_edit"
 safe_to_present: true
-created_at: "2026-08-19T11:10:50Z"
-updated_at: "2026-08-19T11:10:50Z"
+created_at: "2026-08-22T15:21:39Z"
+updated_at: "2026-08-22T15:21:39Z"
 note_id: "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY-MASTER"
 note_type: "phase_report"
 phase_id: "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
 task_id: null
-workflow_status: "blocked"
+workflow_status: "complete"
 evidence_maturity: "non_scientific"
 claim_level: "none"
 ---
@@ -34,23 +34,23 @@ Generated from the validated report record. Manual edits may be replaced; use th
 
 ## Objective
 
-Materialize one A5-frozen winner across the approved full DAPFAM corpus to establish post-confirmatory operational coverage and scalability evidence.
+Generate the deterministic Top-200 family pool with the A5-frozen ARM-03 winner over full DAPFAM, then calculate Owner-local ALL/IN/OUT metrics and operational scalability evidence.
 
 ## Starting State
 
-- `phase`: A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT
+- `phase`: A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS
 - `task`: None
-- `program_state`: a2_goal004_measured_closeout_complete_a3_train_250_input_pending
+- `program_state`: a7_seven_layer_diagnosis_complete
 - `authorization`: D1_START_CAMPAIGN; D2/D3 remain Owner-only
 - `claim_boundary`: No unsupported scientific claim
 
 ## Inputs and Frozen Bindings
 
-- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5`
-- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6`
-- `git_commit`: 60de8e8d039bfb482c19039d7b4b2839a14a2a81
+- `source_of_truth`: `control/source-of-truth.yaml`; SHA-256 `0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d`
+- `campaign`: `control/campaigns/armindex-multiretriever-v2.yaml`; SHA-256 `bbe2ab3cbe7f32ae31594560ddf78d3bb86710715377a40876abfe96ea2a536f`
+- `git_commit`: 0ec3eaaeed6229bb6d1f671ab3286a9c26550623
 - `migration_budget`: `control/budgets/armindex-migration-v2.yaml`; SHA-256 `48bab215d10ef82c0fe8206702f75f4b212df12792d7475131888d50161821ec`
-- `armindex_schema_root`: `schemas/armindex`; SHA-256 `431f248e714c50af194ee9cdbc197441a0a384b830f739943a87a93c8b4ff0f8`
+- `armindex_schema_root`: `schemas/armindex`; SHA-256 `f97779630461e05cbdb80fa66b01d0ddbbe58b6a9266adc244f1faf97c3dcc61`
 - `historical_scope`: `control/campaigns/scope-autoindex-v1.yaml`; SHA-256 `a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9`
 
 ## Work Performed
@@ -63,31 +63,63 @@ These references explain what each artifact is for; the bytes remain governed by
 
 | Artifact | Type | Evidence | Safe URI | SHA-256 | Validation |
 |---|---|---|---|---|---|
-| None | - | - | - | - | - |
+| A6 independent result-integrity audit | `audit` | `post_confirmatory_aggregate` | `control/armindex/a6/a6-result-integrity-audit-20260823.json` | `9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce` | `validated` |
+| A6 frozen Top-200 pool authority | `authority` | `post_confirmatory_aggregate` | `control/armindex/a6/a6-frozen-pool-authority-20260823.json` | `7529987818004830f4690b50c7c9d15b70685efb502ec376f96d4379849d3fe3` | `validated` |
+| A6 to A7 hash-bound handoff | `handoff` | `post_confirmatory_aggregate` | `control/armindex/a6/a6-a7-handoff-20260823.json` | `b308ecf9cb1d38650522f1b68d8aa8a349ec8e2fd8fc08c5386c583ac2bc2f0f` | `validated` |
 
 ## Metrics
 
 | Metric | Split | Scope | Value | n | Denominator | Evidence |
 |---|---|---|---:|---:|---|---|
-| No measured metric is available | - | - | - | - | - | planned/fixture |
+| `a6_all_recall_at_10`@10 | `full_dapfam_aggregate` | `ALL` | `0.136794974606` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_all_recall_at_20`@20 | `full_dapfam_aggregate` | `ALL` | `0.214697496213` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_all_recall_at_50`@50 | `full_dapfam_aggregate` | `ALL` | `0.336358371202` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_all_recall_at_100`@100 | `full_dapfam_aggregate` | `ALL` | `0.438964626214` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_all_recall_at_200`@200 | `full_dapfam_aggregate` | `ALL` | `0.546832397755` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_all_ndcg_at_10`@10 | `full_dapfam_aggregate` | `ALL` | `0.295725055507` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_all_ndcg_at_100`@100 | `full_dapfam_aggregate` | `ALL` | `0.362497103931` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_recall_at_10`@10 | `full_dapfam_aggregate` | `IN` | `0.187048067448` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_recall_at_20`@20 | `full_dapfam_aggregate` | `IN` | `0.277871602329` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_recall_at_50`@50 | `full_dapfam_aggregate` | `IN` | `0.413144709628` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_recall_at_100`@100 | `full_dapfam_aggregate` | `IN` | `0.528164111236` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_recall_at_200`@200 | `full_dapfam_aggregate` | `IN` | `0.645077432336` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_ndcg_at_10`@10 | `full_dapfam_aggregate` | `IN` | `0.3074831284` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_in_ndcg_at_100`@100 | `full_dapfam_aggregate` | `IN` | `0.406513126603` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_recall_at_10`@10 | `full_dapfam_aggregate` | `OUT` | `0.034022635484` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_recall_at_20`@20 | `full_dapfam_aggregate` | `OUT` | `0.070933281792` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_recall_at_50`@50 | `full_dapfam_aggregate` | `OUT` | `0.133993988468` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_recall_at_100`@100 | `full_dapfam_aggregate` | `OUT` | `0.188449898653` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_recall_at_200`@200 | `full_dapfam_aggregate` | `OUT` | `0.260166940437` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_ndcg_at_10`@10 | `full_dapfam_aggregate` | `OUT` | `0.025697169664` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_out_ndcg_at_100`@100 | `full_dapfam_aggregate` | `OUT` | `0.070644223566` | `1247` | `owner_local_family_evaluation` | `post_confirmatory_aggregate` |
+| `a6_source_document_count`@0 | `full_dapfam_operational` | `A6` | `45336` | `1` | `full_dapfam_source` | `post_confirmatory_aggregate` |
+| `a6_query_count`@0 | `full_dapfam_operational` | `A6` | `1247` | `1` | `canonical_query_set` | `post_confirmatory_aggregate` |
+| `a6_pool_depth`@0 | `full_dapfam_operational` | `A6` | `200` | `1` | `frozen_pool_contract` | `post_confirmatory_aggregate` |
+| `a6_pool_rows`@0 | `full_dapfam_operational` | `A6` | `249400` | `1` | `query_count_times_pool_depth` | `post_confirmatory_aggregate` |
+| `a6_chunk_count`@0 | `full_dapfam_operational` | `A6` | `188944` | `1` | `materialized_representation_count` | `post_confirmatory_aggregate` |
+| `a6_throughput_documents_per_second`@0 | `full_dapfam_operational` | `A6` | `14.349362` | `1` | `full_dapfam_materialization` | `post_confirmatory_aggregate` |
+| `a6_latency_p50_ms`@0 | `full_dapfam_operational` | `A6` | `50.0` | `1` | `owner_local_latency_receipt` | `post_confirmatory_aggregate` |
+| `a6_latency_p95_ms`@0 | `full_dapfam_operational` | `A6` | `50.0` | `1` | `owner_local_latency_receipt` | `post_confirmatory_aggregate` |
+| `a6_latency_p99_ms`@0 | `full_dapfam_operational` | `A6` | `50.0` | `1` | `owner_local_latency_receipt` | `post_confirmatory_aggregate` |
+| `a6_cost_usd`@0 | `full_dapfam_operational` | `A6` | `0.300323` | `1` | `fresh_a6_attempt` | `post_confirmatory_aggregate` |
 
 Fixture values are synthetic engineering diagnostics and are never reported as measured performance.
 
 ## Result
 
-**Output:** Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.
+**Output:** A6 full-DAPFAM materialization completed for the frozen ARM-03 configuration: 45,336/45,336 source documents, 1,247 queries, and a deterministic 1,247 x 200 family pool.
 
-**Result:** A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.
+**Result:** PASS_A6_FULL_DAPFAM_MATERIALIZATION and PASS_A6_RESULT_INTEGRITY; Owner-local ALL/IN/OUT aggregate evaluation, safe return, hash reconciliation, and worker teardown passed.
 
-**Decision:** blocked
+**Decision:** PASS_A6_RESULT_INTEGRITY
 
 ## Interpretation
 
-This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.
+The evidence supports frozen full-corpus materialization and operational scalability of ARM-03. It does not select a new winner, compare full-corpus systems, establish external generalization, or authorize reranking, Selection, or Final reopening.
 
 ## Supported Claims
 
-- Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.
+- A6 full-DAPFAM materialization completed for the frozen ARM-03 configuration: 45,336/45,336 source documents, 1,247 queries, and a deterministic 1,247 x 200 family pool. (evidence: a6-result-integrity-audit-20260823, a6-frozen-pool-authority-20260823, a6-a7-handoff-20260823)
 
 ## Unsupported Claims
 
@@ -101,29 +133,40 @@ This is engineering migration provenance only and supports no retrieval-quality,
 
 ## Governance and Safety
 
-- `protected_data_accessed`: False
-- `measured_execution`: False
-- `gpu`: False
+- `protected_data_accessed`: True
+- `measured_execution`: True
+- `gpu`: True
 - `paid_api`: False
 - `network_model_download`: False
 - `provider_fallback`: False
 - `d2`: waiting_owner
 - `d3`: waiting_owner
 - `final_split`: closed
-- `real_counters`: `{"candidate_count": 0, "final_accesses": 0, "measured_runs": 1, "selection_accesses": 0, "shortlist_count": 0}`
-- `evidence_class`: engineering
-- `scientific_authority`: False
+- `real_counters`: `{"candidate_count": 0, "final_accesses": 1, "measured_runs": 1, "selection_accesses": 1, "shortlist_count": 0}`
+- `evidence_class`: post_confirmatory_aggregate
+- `scientific_authority`: True
+- `provider_admission_performed`: True
+- `provider_execution_adoption_performed`: True
+- `rep_dev_accessed_for_measurement`: False
+- `independent_auditor_required`: False
+- `a6_coverage`: 45336/45336
+- `a6_query_count`: 1247
+- `a6_pool_depth`: 200
+- `a6_selection_accesses`: 0
+- `a6_final_accesses`: 0
 
 ## Decision
 
-Status: **blocked**. A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.
+Status: **PASS_A6_RESULT_INTEGRITY**. PASS_A6_FULL_DAPFAM_MATERIALIZATION and PASS_A6_RESULT_INTEGRITY; Owner-local ALL/IN/OUT aggregate evaluation, safe return, hash reconciliation, and worker teardown passed.
 
 ## Next Action
 
-LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION
+RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL
 
 Measured P2, real selection, and final evaluation must not start automatically from this report.
 
 ## Evidence Links
 
-- None recorded.
+- a6-result-integrity-audit-20260823
+- a6-frozen-pool-authority-20260823
+- a6-a7-handoff-20260823

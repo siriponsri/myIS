@@ -2,67 +2,67 @@
 title: "A6 post-confirmatory full-DAPFAM materialization and scalability"
 phase_id: A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY
 task_id: A6.1
-status: BLOCKED_OWNER_A6_BUDGET_CEILING
-lifecycle: BLOCKED
+status: PASS_A6_FULL_DAPFAM_MATERIALIZATION
+lifecycle: CLOSED
 evidence_class: post_confirmatory_operational_scalability
-scientific_authority: false
-execution_permitted: false
+scientific_authority: true
+execution_permitted: true
 required_predecessor_terminal_state: PASS_A5_FINAL_CONFIRMATION
-required_owner_decision: APPROVE_A6_NUMERIC_BUDGET_CEILING
+required_owner_decision: NONE_ROUTINE_ENGINEERING; A6_CEILING_USD_20_BOUND
 d3_required: false
 protected_payloads_allowed: false
 full_corpus_owner_local_only: true
 provider_instance_id: 48367896
-provider_instance_status: ACTIVE_NO_AUTHORIZED_A6_WORKLOAD
+provider_instance_status: ACTIVE_VERIFIED_A6_INSTANCE
 fresh_provider_instance_required: false
 previous_goal: docs/goal/A5_FINAL_CONFIRMATION_goal_001.md
-next_goal: docs/goal/A7_PUBLICATION_AND_RELEASE_goal_001.md
-last_material_update: 2026-08-22
-next_authorized_action: AWAIT_OWNER_APPROVE_A6_NUMERIC_BUDGET_CEILING
+next_goal: docs/goal/A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS_goal_001.md
+last_material_update: 2026-08-23
+next_authorized_action: PREPARE_A7_SEVEN_LAYER_DIAGNOSIS_FROM_HASH_BOUND_A6_HANDOFF
 a6_winner_binding_schema: myis.armindex-a6-a5-winner-binding.v1
 a6_attempt_admission_schema: myis.armindex-a6-attempt-admission.v1
 continuation_mode: CONTINUE_AFTER_PASS_A5_WITH_FRESH_ADMISSION
 routine_owner_interaction: false
-publication_priority: TIER_1_REVIEWER_DEFENSIBLE_SCALABILITY
+publication_priority: TIER_1_REVIEWER_DEFENSIBLE_FULL_CORPUS_EVALUATION_AND_FROZEN_POOL
 ---
 
 # Goal 001: A6 full-DAPFAM materialization and scalability
 
 ## Objective and publication value
 
-Materialize exactly one configuration frozen by the valid A5 closeout across
-the approved complete DAPFAM corpus. A6 produces reproducible operational
-evidence that the confirmed configuration can be rendered, embedded or indexed
-as applicable, checkpointed, recovered, and safely returned at corpus scale.
+Run exactly one configuration frozen by the valid A5 closeout across full
+DAPFAM. A6 creates the deterministic ARM-03 Top-200 family pool for the
+committed 1,247 queries, safe-returns the complete claim-bearing pool to Owner
+Store, and evaluates it locally with the Owner-local qrels and population view.
 
-The publication target is tier 1 operational evidence: complete coverage,
-determinism, resource/cost/latency accounting, recovery lineage, failure
-taxonomy, independent audit, and figures/tables that never overclaim quality.
+The required metric package is Recall@10/20/50/100/200 and nDCG@10/100,
+reported separately for ALL, IN, and OUT. It also records document/family/
+chunk/representation counts, p50/p95/p99 latency, throughput, RAM/VRAM,
+index size, cost, determinism, checkpoints, and failure taxonomy.
 
-This is deliberately post-confirmatory. Its publication contribution is
-deployment and scalability evidence: source coverage, family/document/chunk/
-representation counts, resource use, cost, throughput, latency, index size,
-determinism, and a transparent failure taxonomy. It is not another
-retrieval-quality experiment, an external-generalization study, or an
-opportunity to improve the system after observing A5.
+This is post-confirmatory and non-adaptive: the full-corpus metrics characterize
+the frozen configuration and create an immutable candidate universe for A7/A8.
+They cannot choose a new winner, reopen Selection/Final, tune any component,
+or create an external-generalization or paired-baseline superiority claim.
 
 ## Starting state and frozen authority
 
-The pre-A5 Owner Store bundle records the canonical DAPFAM source manifest and
-full-corpus inventory (`45,336` rows) by hash/pointer only. Its A6 marker is
-`SOURCE_HASHED`/`PENDING_A5_FROZEN_WINNER`; preparation does not materialize the
-corpus, select a winner, open qrels, or authorize execution. A6 remains
-`execution_permitted: false` until `PASS_A5_FINAL_CONFIRMATION` and a fresh
-admission/root are available.
+The pre-A5 Owner Store bundle recorded the canonical DAPFAM source manifest and
+full-corpus inventory (`45,336` rows) by hash/pointer only. That preparation
+was superseded by the hash-bound `full09` attempt after
+`PASS_A5_FINAL_CONFIRMATION`; it did not select a winner or expose qrels on the
+provider. The completed A6 evidence is now authoritative for the frozen pool,
+while all protected evaluation payloads remain Owner-local.
 
-The A6/A7 phase amendment is the authority for this routing change:
-`control/armindex/a6/a6-a7-phase-amendment.v1.json`. The executable A6
-interface is
-`control/armindex/a6/a6-full-dapfam-execution-contract.v1.json`.
+The A6-A8 phase amendment is the authority for this routing change:
+`control/armindex/a6/a6-a8-phase-amendment.v3.json`. The executable A6
+interface is `control/armindex/a6/a6-frozen-pool-execution-contract.v2.json`.
+The numeric phase ceiling is USD 20 in
+`control/budgets/armindex-a6-frozen-pool.v1.json`.
 
-A6 remains paused until the valid A5 terminal closeout supplies one explicit
-materialization target and the Owner explicitly approves the long run. That
-target must be selected and frozen by A5, not by A6. It must bind all of the
+A6 is admitted only after the valid A5 terminal closeout supplies one explicit
+materialization target and a fresh A6 admission binds the long run. That target
+must be selected and frozen by A5, not by A6. It must bind all of the
 following exact A5-derived hashes:
 
 1. representation program;
@@ -94,36 +94,36 @@ The following actions are forbidden in A6:
 - prompt, representation, chunking, index, retrieval, or model tuning;
 - model training, adapters, distillation, or weight changes;
 - accessing, reopening, rerunning, or incrementing Selection or Final;
-- access to qrels, split membership, protected query identities, rankings, or
-  per-query outcomes;
-- reporting retrieval quality, generalization, or full-corpus superiority over
-  a baseline from this single-configuration materialization.
+- qrels, split membership, protected identifiers, or per-query evaluation
+  outcomes on the provider; these may be read only in Owner Store after safe
+  return to calculate the specified aggregate metrics;
+- export of rankings, per-query outcomes, qrels, membership, raw IDs, or model
+  and provider payloads outside Owner Store;
+- a new winner, a comparative full-corpus superiority claim, or feedback from
+  the metrics into A4/A5 decisions.
 
-A6 may report only that the frozen configuration was or was not materialized
-at the specified corpus scale under the recorded operational conditions. A
-full-corpus comparison claim requires a distinct preregistered paired study;
-it is outside this goal.
-
-## Work status
+## Work status (updated 2026-08-23)
 
 | Step | Status | Completion evidence |
 |---|---|---|
 | A5 terminal/audit/safe-return bindings validated | PASS | hash-verified predecessor receipt set |
 | One materialization target frozen by A5 | PASS | ARM-03 frozen winner binding |
-| Fresh A6 budget, provider, TTL, and health admission | BLOCKED_OWNER_A6_BUDGET_CEILING | A6-specific numeric ceiling, then fresh admission receipt |
-| Owner-local full-corpus source and safe-export manifest frozen | BLOCKED | source hash and protected-boundary scan |
-| Isolated materialization run completed or bounded failure closed | BLOCKED | coverage/checkpoint/failure receipts |
-| Aggregate-safe EDA, figures, and independent integrity audit | BLOCKED | validated metric and audit package |
-| A7 publication handoff prepared | BLOCKED | aggregate-safe A6 closeout bundle |
+| Numeric A6 budget authority | COMPLETE | USD 20 phase ceiling and stop-at-ceiling control |
+| Fresh provider, TTL, runtime, and health admission | PASS | fresh admission, runtime, health, and isolated-root receipts |
+| Full corpus/query input and safe-export manifest frozen | PASS | exact source/query hashes and protected-field scan |
+| Isolated ARM-03 full-corpus materialization | PASS | `a6-goal001-20260823T052423Z-full09`; `45,336/45,336` coverage, worker teardown, and safe-return manifest |
+| Top-200 pool generation and deep-ranking export | PASS | full09 completion marker, 1,247 x 200 pool, and matching SHA-256 manifest |
+| Owner-local ALL/IN/OUT evaluation | PASS | Owner-local receipt with 1,247 queries, 49,869 relation rows, and aggregate-only curves |
+| Aggregate-safe EDA and independent integrity audit | PASS | `control/armindex/a6/a6-result-integrity-audit-20260823.json`; independent hash, coverage, teardown, and claim-boundary checks passed |
+| Provider disposition | OWNER_CONFIRMED_INSTANCE_DESTROYED | `control/armindex/a6/a6-provider-disposition-20260823.json`; Owner confirmed Vast instance `48367896` destroyed after safe return and teardown |
+| A7/A8 immutable handoff prepared | PASS | `control/armindex/a6/a6-frozen-pool-authority-20260823.json` and `control/armindex/a6/a6-a7-handoff-20260823.json` |
 
 ## Minimal continuation policy
 
 A6 is the immediate post-A5 continuation, not a new exploratory branch. The
-Owner approved the long-run intent, but `separate_a6_budget_ceiling_required`
-remains unmet. Retain this phase in `BLOCKED_OWNER_A6_BUDGET_CEILING` until a
-canonical numeric ceiling is supplied. Same-instance reuse is operational only:
-provider identity, quote, budget, TTL, health, runtime, and attempt root must
-all be fresh.
+fresh USD 20 admission and isolated `full09` root are the active authority.
+Same-instance reuse remains operational only: provider identity, quote, budget,
+TTL, health, runtime, and attempt root are bound to this attempt.
 
 Fix-forward is limited to operational recovery inside the isolated A6 attempt.
 Stop only for winner/configuration drift, source ambiguity, protected-data
@@ -219,5 +219,7 @@ rtk pytest -q tests/test_a5_pending_handoff_validator.py tests/test_a6_pending_m
 
 Terminal states are `PASS_A6_FULL_DAPFAM_MATERIALIZATION`,
 `STOP_A6_WITH_OPERATIONAL_EVIDENCE`, or `BLOCKED_OWNER_ACTION`. A6 never
-opens D3 automatically. A7 can begin only after `D3_SUBMIT_RELEASE` and the
-validated aggregate-safe evidence set from A0 through A6.
+opens D3 automatically. A7 can begin only after a valid hash-bound A6 frozen
+diagnostic bundle and independent integrity audit. A8 remains gated by
+`D3_SUBMIT_RELEASE` and the validated aggregate-safe evidence set from A0
+through A7.

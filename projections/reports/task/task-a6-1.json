@@ -1,47 +1,127 @@
 {
-  "artifact_references": [],
-  "claim_boundary": "engineering_provenance_only",
+  "artifact_references": [
+    {
+      "artifact_id": "a6-result-integrity-audit-20260823",
+      "artifact_type": "audit",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "evidence_class": "post_confirmatory_aggregate",
+      "explanation": "Verifies full-corpus coverage, aggregate metrics, provenance hashes, protected boundary, and teardown.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+      "producing_task_id": "A6.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "scientific_authority": true,
+      "title": "A6 independent result-integrity audit",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a6-frozen-pool-authority-20260823",
+      "artifact_type": "authority",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "7529987818004830f4690b50c7c9d15b70685efb502ec376f96d4379849d3fe3",
+      "evidence_class": "post_confirmatory_aggregate",
+      "explanation": "Binds the A5-frozen ARM-03 pool for 1,247 queries at depth 200 for A7 consumption.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+      "producing_task_id": "A6.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a6/a6-frozen-pool-authority-20260823.json",
+      "scientific_authority": true,
+      "title": "A6 frozen Top-200 pool authority",
+      "validation_status": "validated"
+    },
+    {
+      "artifact_id": "a6-a7-handoff-20260823",
+      "artifact_type": "handoff",
+      "child_artifact_hashes": {},
+      "child_artifact_ids": [],
+      "content_sha256": "b308ecf9cb1d38650522f1b68d8aa8a349ec8e2fd8fc08c5386c583ac2bc2f0f",
+      "evidence_class": "post_confirmatory_aggregate",
+      "explanation": "Permits diagnostic consumption only; forbids pool expansion, winner change, reranking, Selection, and Final reopen.",
+      "parent_artifact_hashes": {},
+      "parent_artifact_ids": [],
+      "producing_phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+      "producing_task_id": "A6.1",
+      "retention_class": "repository_safe",
+      "safe_uri": "control/armindex/a6/a6-a7-handoff-20260823.json",
+      "scientific_authority": true,
+      "title": "A6 to A7 hash-bound handoff",
+      "validation_status": "validated"
+    }
+  ],
+  "claim_boundary": "frozen ARM-03 full-DAPFAM materialization, aggregate ALL/IN/OUT retrieval evidence, and operational scalability only; no new winner, comparative full-corpus superiority, external-generalization, reranking, Selection reopen, or Final reopen",
   "decision": {
     "owner_decisions_unchanged": true,
-    "reason": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY is blocked; ArmIndex measured runs, Selection, and Final counters remain zero.",
-    "status": "blocked"
+    "reason": "PASS_A6_FULL_DAPFAM_MATERIALIZATION and PASS_A6_RESULT_INTEGRITY; Owner-local ALL/IN/OUT aggregate evaluation, safe return, hash reconciliation, and worker teardown passed.",
+    "status": "PASS_A6_RESULT_INTEGRITY"
   },
-  "evidence_class": "engineering",
-  "evidence_links": [],
+  "evidence_class": "post_confirmatory_aggregate",
+  "evidence_links": [
+    {
+      "artifact_id": "a6-result-integrity-audit-20260823",
+      "sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json"
+    },
+    {
+      "artifact_id": "a6-frozen-pool-authority-20260823",
+      "sha256": "7529987818004830f4690b50c7c9d15b70685efb502ec376f96d4379849d3fe3",
+      "uri": "control/armindex/a6/a6-frozen-pool-authority-20260823.json"
+    },
+    {
+      "artifact_id": "a6-a7-handoff-20260823",
+      "sha256": "b308ecf9cb1d38650522f1b68d8aa8a349ec8e2fd8fc08c5386c583ac2bc2f0f",
+      "uri": "control/armindex/a6/a6-a7-handoff-20260823.json"
+    }
+  ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-19T11:10:50Z",
-  "generated_from_revision": "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a",
-  "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+  "generated_at": "2026-08-22T15:21:39Z",
+  "generated_from_revision": "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879",
+  "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
   "governance_status": {
+    "a6_coverage": "45336/45336",
+    "a6_final_accesses": 0,
+    "a6_pool_depth": 200,
+    "a6_query_count": 1247,
+    "a6_selection_accesses": 0,
     "d2": "waiting_owner",
     "d3": "waiting_owner",
-    "evidence_class": "engineering",
+    "evidence_class": "post_confirmatory_aggregate",
     "final_split": "closed",
-    "gpu": false,
-    "measured_execution": false,
+    "gpu": true,
+    "independent_auditor_required": false,
+    "measured_execution": true,
     "network_model_download": false,
     "paid_api": false,
-    "protected_data_accessed": false,
+    "protected_data_accessed": true,
+    "provider_admission_performed": true,
+    "provider_execution_adoption_performed": true,
     "provider_fallback": false,
     "real_counters": {
       "candidate_count": 0,
-      "final_accesses": 0,
+      "final_accesses": 1,
       "measured_runs": 1,
-      "selection_accesses": 0,
+      "selection_accesses": 1,
       "shortlist_count": 0
     },
-    "scientific_authority": false
+    "rep_dev_accessed_for_measurement": false,
+    "scientific_authority": true
   },
   "input_bindings": {
     "armindex_schema_root": {
-      "sha256": "431f248e714c50af194ee9cdbc197441a0a384b830f739943a87a93c8b4ff0f8",
+      "sha256": "f97779630461e05cbdb80fa66b01d0ddbbe58b6a9266adc244f1faf97c3dcc61",
       "uri": "schemas/armindex"
     },
     "campaign": {
-      "sha256": "1c03d7317c0c51882ecb58e1e21103e08d879d051967c6bc372558631e9248c6",
+      "sha256": "bbe2ab3cbe7f32ae31594560ddf78d3bb86710715377a40876abfe96ea2a536f",
       "uri": "control/campaigns/armindex-multiretriever-v2.yaml"
     },
-    "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+    "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
     "historical_scope": {
       "sha256": "a86d73657988713d62ddfb12c9c01da367af2e97922363233ef8cd453fb20ce9",
       "status": "historical_read_only",
@@ -52,39 +132,385 @@
       "uri": "control/budgets/armindex-migration-v2.yaml"
     },
     "source_of_truth": {
-      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
+      "sha256": "0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d",
       "uri": "control/source-of-truth.yaml"
     }
   },
-  "interpretation": "This is engineering migration provenance only and supports no retrieval-quality, champion, or production claim.",
+  "interpretation": "The evidence supports frozen full-corpus materialization and operational scalability of ARM-03. It does not select a new winner, compare full-corpus systems, establish external generalization, or authorize reranking, Selection, or Final reopening.",
   "language": "en",
-  "last_material_update": "2026-08-19T11:10:50Z",
-  "metric_references": [],
-  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
-  "objective": "Frozen winner full-DAPFAM materialization and scalability validation",
+  "last_material_update": "2026-08-22T15:21:39Z",
+  "metric_references": [
+    {
+      "cutoff": 10,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_recall_at_10",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.136794974606
+    },
+    {
+      "cutoff": 20,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_recall_at_20",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.214697496213
+    },
+    {
+      "cutoff": 50,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_recall_at_50",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.336358371202
+    },
+    {
+      "cutoff": 100,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_recall_at_100",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.438964626214
+    },
+    {
+      "cutoff": 200,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_recall_at_200",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.546832397755
+    },
+    {
+      "cutoff": 10,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_ndcg_at_10",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.295725055507
+    },
+    {
+      "cutoff": 100,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_all_ndcg_at_100",
+      "scope": "ALL",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.362497103931
+    },
+    {
+      "cutoff": 10,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_recall_at_10",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.187048067448
+    },
+    {
+      "cutoff": 20,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_recall_at_20",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.277871602329
+    },
+    {
+      "cutoff": 50,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_recall_at_50",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.413144709628
+    },
+    {
+      "cutoff": 100,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_recall_at_100",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.528164111236
+    },
+    {
+      "cutoff": 200,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_recall_at_200",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.645077432336
+    },
+    {
+      "cutoff": 10,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_ndcg_at_10",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.3074831284
+    },
+    {
+      "cutoff": 100,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_in_ndcg_at_100",
+      "scope": "IN",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.406513126603
+    },
+    {
+      "cutoff": 10,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_recall_at_10",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.034022635484
+    },
+    {
+      "cutoff": 20,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_recall_at_20",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.070933281792
+    },
+    {
+      "cutoff": 50,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_recall_at_50",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.133993988468
+    },
+    {
+      "cutoff": 100,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_recall_at_100",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.188449898653
+    },
+    {
+      "cutoff": 200,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_recall_at_200",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.260166940437
+    },
+    {
+      "cutoff": 10,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_ndcg_at_10",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.025697169664
+    },
+    {
+      "cutoff": 100,
+      "denominator": "owner_local_family_evaluation",
+      "n": 1247,
+      "name": "a6_out_ndcg_at_100",
+      "scope": "OUT",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_aggregate",
+      "value": 0.070644223566
+    },
+    {
+      "cutoff": 0,
+      "denominator": "full_dapfam_source",
+      "n": 1,
+      "name": "a6_source_document_count",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 45336
+    },
+    {
+      "cutoff": 0,
+      "denominator": "canonical_query_set",
+      "n": 1,
+      "name": "a6_query_count",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 1247
+    },
+    {
+      "cutoff": 0,
+      "denominator": "frozen_pool_contract",
+      "n": 1,
+      "name": "a6_pool_depth",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 200
+    },
+    {
+      "cutoff": 0,
+      "denominator": "query_count_times_pool_depth",
+      "n": 1,
+      "name": "a6_pool_rows",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 249400
+    },
+    {
+      "cutoff": 0,
+      "denominator": "materialized_representation_count",
+      "n": 1,
+      "name": "a6_chunk_count",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 188944
+    },
+    {
+      "cutoff": 0,
+      "denominator": "full_dapfam_materialization",
+      "n": 1,
+      "name": "a6_throughput_documents_per_second",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 14.349362
+    },
+    {
+      "cutoff": 0,
+      "denominator": "owner_local_latency_receipt",
+      "n": 1,
+      "name": "a6_latency_p50_ms",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 50.0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "owner_local_latency_receipt",
+      "n": 1,
+      "name": "a6_latency_p95_ms",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 50.0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "owner_local_latency_receipt",
+      "n": 1,
+      "name": "a6_latency_p99_ms",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 50.0
+    },
+    {
+      "cutoff": 0,
+      "denominator": "fresh_a6_attempt",
+      "n": 1,
+      "name": "a6_cost_usd",
+      "scope": "A6",
+      "source_sha256": "9d83adaed078478900d6575d72415fe80186e0b3877a77524ff72ec67a762bce",
+      "source_uri": "control/armindex/a6/a6-result-integrity-audit-20260823.json",
+      "split": "full_dapfam_operational",
+      "value": 0.300323
+    }
+  ],
+  "next_authorized_action": "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL",
+  "objective": "Frozen ARM-03 full-DAPFAM candidate generation",
   "phase_id": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
   "report_id": "task-a6-1",
-  "report_sha256": "bdc532bb5b5a42db0335e6b27fb11bc1e70d3a08b964c1e4acbdae4b37177a89",
+  "report_sha256": "8d8369d9dcf897cacbb1ba83c5fb035274acd4c96e2a2fa4b760f69e05a5b65d",
   "report_type": "task",
   "result": {
-    "decision": "blocked",
-    "output": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-    "result": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY is blocked; ArmIndex measured runs, Selection, and Final counters remain zero."
+    "decision": "PASS_A6_RESULT_INTEGRITY",
+    "output": "A6 full-DAPFAM materialization completed for the frozen ARM-03 configuration: 45,336/45,336 source documents, 1,247 queries, and a deterministic 1,247 x 200 family pool.",
+    "result": "PASS_A6_FULL_DAPFAM_MATERIALIZATION and PASS_A6_RESULT_INTEGRITY; Owner-local ALL/IN/OUT aggregate evaluation, safe return, hash reconciliation, and worker teardown passed."
   },
   "schema_version": "myis.phase-task-report.v1",
-  "scientific_authority": false,
+  "scientific_authority": true,
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
-    "program_state": "a2_goal004_measured_closeout_complete_a3_train_250_input_pending",
+    "phase": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+    "program_state": "a7_seven_layer_diagnosis_complete",
     "task": "A6.1"
   },
-  "status": "blocked",
+  "status": "completed",
   "supported_claims": [
     {
-      "claim": "Versioned ArmIndex control, schema, code, and projection state with historical SCOPE/P1 evidence preserved by pointer.",
-      "evidence": []
+      "claim": "A6 full-DAPFAM materialization completed for the frozen ARM-03 configuration: 45,336/45,336 source documents, 1,247 queries, and a deterministic 1,247 x 200 family pool.",
+      "evidence": [
+        "a6-result-integrity-audit-20260823",
+        "a6-frozen-pool-authority-20260823",
+        "a6-a7-handoff-20260823"
+      ]
     }
   ],
   "task_id": "A6.1",

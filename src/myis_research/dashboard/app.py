@@ -168,7 +168,7 @@ def create_app(
         if phase is None:
             phase = next((item for item in model["phases"] if item.get("phase_id") == phase_id), None)
         if phase is None:
-            raise HTTPException(404, "phase_id is not in the active A0-A7 or historical P0-P4 registry")
+            raise HTTPException(404, "phase_id is not in the active A0-A8 or historical P0-P4 registry")
         return {"schema_version": "myis.dashboard-phase.v2", "read_model_revision": model["read_model_revision"], "phase": phase}
 
     @app.get("/api/v2/results")

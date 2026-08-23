@@ -1,0 +1,89 @@
+{
+  "schema_version": "myis.armindex-a6-result-integrity-audit.v1",
+  "audit_id": "a6-result-integrity-audit-20260823-full09",
+  "status": "PASS_A6_RESULT_INTEGRITY",
+  "attempt_id": "a6-goal001-20260823T052423Z-full09",
+  "auditor": "independent_a6_audit",
+  "authority": "04_Owner_Stores/armindex/a6/a6-goal001-20260823T052423Z-full09",
+  "winner": {
+    "arm_id": "ARM-03",
+    "model_id": "datalyes/patembed-large",
+    "a5_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2"
+  },
+  "coverage": {
+    "source_document_count": 45336,
+    "materialized_document_count": 45336,
+    "query_count": 1247,
+    "pool_depth": 200,
+    "pool_rows": 249400,
+    "relations_rows": 49869,
+    "chunk_count": 188944,
+    "representation_count": 188944,
+    "coverage_rate": 1.0,
+    "failure_count": 0,
+    "duplicate_family_count": 0
+  },
+  "aggregate_metrics": {
+    "ALL": {
+      "Recall@10": 0.136794974606,
+      "Recall@20": 0.214697496213,
+      "Recall@50": 0.336358371202,
+      "Recall@100": 0.438964626214,
+      "Recall@200": 0.546832397755,
+      "nDCG@10": 0.295725055507,
+      "nDCG@100": 0.362497103931,
+      "judged_query_count": 1247
+    },
+    "IN": {
+      "Recall@10": 0.187048067448,
+      "Recall@20": 0.277871602329,
+      "Recall@50": 0.413144709628,
+      "Recall@100": 0.528164111236,
+      "Recall@200": 0.645077432336,
+      "nDCG@10": 0.3074831284,
+      "nDCG@100": 0.406513126603,
+      "judged_query_count": 1217
+    },
+    "OUT": {
+      "Recall@10": 0.034022635484,
+      "Recall@20": 0.070933281792,
+      "Recall@50": 0.133993988468,
+      "Recall@100": 0.188449898653,
+      "Recall@200": 0.260166940437,
+      "nDCG@10": 0.025697169664,
+      "nDCG@100": 0.070644223566,
+      "judged_query_count": 905
+    }
+  },
+  "operational": {
+    "throughput_documents_per_second": 14.349362,
+    "latency_p50_ms": 50.0,
+    "latency_p95_ms": 50.0,
+    "latency_p99_ms": 50.0,
+    "index_size_bytes": 773914624,
+    "ram_bytes_peak": 2154569728,
+    "vram_bytes_peak": 1773727744,
+    "cost_usd": 0.300323,
+    "checkpoint_recovery_count": 0,
+    "determinism_sha256": "3c72d4ed8b7c69eeebb842df36ecc4e2832d8ad7108eb249ac7f3b16fd6dee23"
+  },
+  "provenance": {
+    "source_sha256": "be553e6d18a87dedd37308de118f7dc39529405de35bbd13f0a91d52ec4e7b4a",
+    "pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+    "evaluation_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+    "safe_return_sha256": "29266d66338ac97eeafa44d00cdef51108fe4ecca1b4b9348078f2182fef1315",
+    "safe_export_manifest_sha256": "3232e43bacdc2a4fe8f11b9b5f4612fdd74f9e57cfc407aeadb5678921f78ff4",
+    "runtime_receipt_sha256": "4e35d15dc621ac2147ef4d47efe779dacd22dce0a225de1c65790a454e1ccc95"
+  },
+  "boundary_checks": {
+    "selection_accesses": 0,
+    "final_accesses": 0,
+    "protected_payload_in_repository": false,
+    "raw_rankings_in_repository": false,
+    "worker_teardown": "PASS",
+    "gpu_teardown": "PASS",
+    "independent_hash_reconciliation": "PASS",
+    "claim_boundary": "frozen ARM-03 full-DAPFAM materialization, aggregate retrieval evidence, and operational scalability only; no new winner, comparative full-corpus superiority, or external-generalization claim"
+  },
+  "evidence_status": "verified_from_owner_store_receipts_and_independent_audit"
+}

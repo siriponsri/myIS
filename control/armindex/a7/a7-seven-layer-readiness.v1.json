@@ -1,0 +1,31 @@
+{
+  "schema_version": "myis.armindex-a7-seven-layer-readiness.v1",
+  "phase_id": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+  "status": "ACTIVE_OWNER_APPROVED_A7_CPU_FIRST",
+  "roadmap_source": "inbox/UPDATE_PLAN.md",
+  "predecessor": {
+    "a5_winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+    "a6_authority_status": "PASS_A6_FROZEN_POOL_AUTHORITY",
+    "a6_pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+    "a6_evaluation_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+    "a6_evaluation_receipt_sha256": "5e8950b801dae04c408234336d8fbdc868a9c07c015b8519fdc7469d21fa1d3a",
+    "a6_result_integrity_audit_sha256": "9D83ADAED078478900D6575D72415FE80186E0B3877A77524FF72EC67A762BCE",
+    "a6_safe_return_sha256": "29266d66338ac97eeafa44d00cdef51108fe4ecca1b4b9348078f2182fef1315",
+    "a6_safe_return": "PASS_A6_FULL_DAPFAM_MATERIALIZATION",
+    "a6_independent_audit": "PASS_A6_RESULT_INTEGRITY"
+  },
+  "readiness_checks": {
+    "full_dapfam_coverage_1247": "PASS",
+    "top_200_pool": "PASS",
+    "deep_rankings": "PASS",
+    "aggregate_safe_handoff": "PASS",
+    "protected_boundary": "REQUIRED",
+    "fresh_gpu_for_a7_l3r": "OPTIONAL"
+  },
+  "execution_policy": "CPU_FIRST_AFTER_A6_SAFE_RETURN; A7-L3R_ONLY_IF_FRESH_GPU_ADMISSION_IS_VALID",
+  "selection_accesses": 0,
+  "final_accesses": 0,
+  "launch_allowed": true,
+  "activation_receipt": "control/armindex/a7/a7-owner-approval-admission-20260823.json",
+  "claim_boundary": "diagnostic_and_comparability_evidence_only; no new winner or final confirmation claim"
+}

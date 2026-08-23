@@ -13,12 +13,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_status_is_aggregate_safe(capsys) -> None:
     assert main(["status", "--repository-root", str(ROOT)]) == 0
     payload = yaml.safe_load(capsys.readouterr().out)
-    assert payload["current_phase"] == "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
-    assert payload["current_task"] == "A3.1"
-    assert payload["scientific_authority"] is True
-    assert payload["measured_runs"] == 1
-    assert payload["selection_accesses"] == 0
-    assert payload["final_accesses"] == 0
+    assert payload["current_phase"] == "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
+    assert payload["current_task"] == "A6.1"
+    assert payload["scientific_authority"] is False
+    assert payload["measured_runs"] == 4
+    assert payload["selection_accesses"] == 1
+    assert payload["final_accesses"] == 1
 
 
 def test_validate_covers_contracts_and_five_arm_registry(capsys) -> None:

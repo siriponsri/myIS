@@ -83,8 +83,13 @@ def test_a1_terminal_pass_unlocks_a2_planning(monkeypatch: pytest.MonkeyPatch) -
     }
 
     assert phases["A1_BASELINES_AND_MULTI_ARM_SCREENING"]["status"] == "complete"
-    assert phases["A2_PER_ARM_AUTOINDEX"]["status"] == "planned"
-    assert model["armindex"]["next_command"] == "A1_CLOSEOUT_COMPLETE_STOP_BEFORE_A2"
+    # The fixture still verifies A1 -> A2 planning semantics, while the
+    # repository's canonical active overlay is the completed A6 phase.
+    assert phases["A2_PER_ARM_AUTOINDEX"]["status"] == "complete"
+    assert (
+        model["armindex"]["next_command"]
+        == "PREPARE_A7_SEVEN_LAYER_DIAGNOSIS_FROM_HASH_BOUND_A6_HANDOFF"
+    )
     retention = model["armindex"]["a1_2_remote_retention"]
     assert retention["validated"] is True
     assert retention["status"] == "PASS"
@@ -328,7 +333,7 @@ def test_a09_phase_closeout_projection_closes_every_a0_task_and_stays_zero() -> 
     model = build_read_model(ROOT)
     assert model["armindex"]["phase_closeout"] == projection
     assert model["armindex"]["current_phase"] == (
-        "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT"
+        "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY"
     )
     assert model["armindex"]["a2_candidate_freeze"]["status"] == (
         "complete_audit_passed_measured_a2_closed"
@@ -861,7 +866,7 @@ def test_checked_in_legacy_receipt_is_hash_locked_and_never_promoted() -> None:
     )
     assert disposition["source_file_sha256"] == "f83ae6b052334190eee08dda5ca1dde70930464d02f97f47d4ea18dc922d9766"
     model = build_read_model(repository_root)
-    assert model["project"]["state"] == "P1_CPU_MEASURED_COMPLETE"
+    assert model["project"]["state"] == "A6_COMPLETE_A7_READY"
     assert len(model["runs"]) == 4
     assert len(model["metrics"]) == 12
     assert all(

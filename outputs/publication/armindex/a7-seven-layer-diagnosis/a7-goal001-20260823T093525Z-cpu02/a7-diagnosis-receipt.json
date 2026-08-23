@@ -1,0 +1,443 @@
+{
+  "A7-L1_score_identity": {
+    "delta_vs_A6": {
+      "ALL": {
+        "Recall@100_delta": 0.0,
+        "nDCG@100_delta": 0.0,
+        "query_count_match": true
+      },
+      "IN": {
+        "Recall@100_delta": 0.0,
+        "nDCG@100_delta": 0.0,
+        "query_count_match": true
+      },
+      "OUT": {
+        "Recall@100_delta": 0.0,
+        "nDCG@100_delta": 0.0,
+        "query_count_match": true
+      }
+    },
+    "replayed_metrics": {
+      "ALL": {
+        "Recall@100": 0.438964626214,
+        "judged_query_count": 1247,
+        "nDCG@100": 0.362497103931,
+        "relevant_family_count": 24929
+      },
+      "IN": {
+        "Recall@100": 0.528164111236,
+        "judged_query_count": 1217,
+        "nDCG@100": 0.406513126603,
+        "relevant_family_count": 19736
+      },
+      "OUT": {
+        "Recall@100": 0.188449898653,
+        "judged_query_count": 905,
+        "nDCG@100": 0.070644223566,
+        "relevant_family_count": 5193
+      }
+    },
+    "status": "PASS"
+  },
+  "A7-L2_family_relevance_integrity": {
+    "leakage_scope": "frozen_pool_to_corpus_family_mapping_only; protected_split_membership_not_inspected",
+    "pool": {
+      "candidate_row_count": 249400,
+      "pool_depth": 200,
+      "pool_query_count": 1247,
+      "unknown_pool_family_token_count": 0
+    },
+    "pool_relation_query_coverage_match": true,
+    "relations": {
+      "denominator_discrepancy_count": 0,
+      "denominator_discrepancy_count_IN": 0,
+      "denominator_discrepancy_count_OUT": 0,
+      "family_collision_count": 0,
+      "family_collision_count_IN": 0,
+      "family_collision_count_OUT": 0,
+      "leakage_count": 0,
+      "positive_relation_row_count": 24929,
+      "positive_relation_row_count_IN": 19736,
+      "positive_relation_row_count_OUT": 5193,
+      "raw_to_family_deduplication_count": 0,
+      "raw_to_family_deduplication_count_IN": 0,
+      "raw_to_family_deduplication_count_OUT": 0,
+      "self_relation_count": 40,
+      "unique_family_relation_pair_count": 24929,
+      "unique_family_relation_pair_count_IN": 19736,
+      "unique_family_relation_pair_count_OUT": 5193
+    },
+    "self_match_sensitivity": {
+      "conclusion": "Sensitivity reported; raw identifier equality is not classified as cross-split leakage. No protected split membership was read or exported.",
+      "delta_vs_inclusive": {
+        "ALL": {
+          "Recall@100_delta": -0.000776600684,
+          "judged_query_count_delta": 0,
+          "nDCG@100_delta": -0.004146318565,
+          "relevant_family_count_delta": -40
+        },
+        "IN": {
+          "Recall@100_delta": -0.00090759598,
+          "judged_query_count_delta": 0,
+          "nDCG@100_delta": -0.005135945435,
+          "relevant_family_count_delta": -40
+        },
+        "OUT": {
+          "Recall@100_delta": 0.0,
+          "judged_query_count_delta": 0,
+          "nDCG@100_delta": 0.0,
+          "relevant_family_count_delta": 0
+        }
+      },
+      "removed_raw_self_relation_count": 40,
+      "replayed_metrics_excluding_raw_self_relations": {
+        "ALL": {
+          "Recall@100": 0.43818802553,
+          "judged_query_count": 1247,
+          "nDCG@100": 0.358350785366,
+          "relevant_family_count": 24889
+        },
+        "IN": {
+          "Recall@100": 0.527256515256,
+          "judged_query_count": 1217,
+          "nDCG@100": 0.401377181168,
+          "relevant_family_count": 19696
+        },
+        "OUT": {
+          "Recall@100": 0.188449898653,
+          "judged_query_count": 905,
+          "nDCG@100": 0.070644223566,
+          "relevant_family_count": 5193
+        }
+      },
+      "scope": "exclude_raw_relations_where_query_id_equals_relevant_id",
+      "status": "PASS_DESCRIPTIVE_SENSITIVITY"
+    },
+    "status": "PASS"
+  },
+  "A7-L3R_fixed_reference_reproduction": {
+    "reason": "GPU instance destroyed; fresh admission absent",
+    "status": "NOT_RUN_NO_FRESH_GPU"
+  },
+  "A7-L3_protocol_parity": {
+    "allowed_labels": [
+      "EXACT",
+      "FUNCTIONALLY_EQUIVALENT",
+      "DIFFERENT_CONTROLLED",
+      "NOT_COMPARABLE",
+      "UNKNOWN"
+    ],
+    "comparability_conclusion": "NOT_COMPARABLE_EXTERNAL_PROTOCOL_CONFIGURATION_NOT_FULLY_VERIFIED",
+    "external_configuration_status": "UNKNOWN_NOT_INFERRED",
+    "final_accesses": 0,
+    "matrix": [
+      {
+        "ArmIndex": "source_sha256:be553e6d18a87dedd37308de118f7dc39529405de35bbd13f0a91d52ec4e7b4a",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "dataset_revision"
+      },
+      {
+        "ArmIndex": "1247_queries/45336_documents",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "query_corpus_counts"
+      },
+      {
+        "ArmIndex": "relation_scoped_IN:1217;OUT:905",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "in_out_definition"
+      },
+      {
+        "ArmIndex": "hash_bound_corpus_family_tokens",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "family_mapping"
+      },
+      {
+        "ArmIndex": "fields:title+abstract+claims_text;labels:{\"abstract\": \"\", \"claims_text\": \"\", \"title\": \"\"}",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "fields_prefixes"
+      },
+      {
+        "ArmIndex": "logical_size:384;overlap:64",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "passage_length_overlap"
+      },
+      {
+        "ArmIndex": "model:datalyes/patembed-large;precision:NOT_VERIFIED;normalization:unicode_nfkc_whitespace;similarity:flat_l2_normalized",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "model_precision_normalization_similarity"
+      },
+      {
+        "ArmIndex": "maxp",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "aggregation"
+      },
+      {
+        "ArmIndex": "Recall@10/20/50/100/200;nDCG@10/100;Top-200_frozen_pool",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "cutoff"
+      },
+      {
+        "ArmIndex": "family_level_relevance_filtered_Recall_and_nDCG",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "metric"
+      },
+      {
+        "ArmIndex": "macro_mean_across_judged_queries",
+        "ArmIndex_vs_DAPFAM": "UNKNOWN",
+        "ArmIndex_vs_PatenTEB": "UNKNOWN",
+        "DAPFAM": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "DAPFAM_vs_PatenTEB": "UNKNOWN",
+        "PatenTEB": "UNKNOWN_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+        "dimension": "averaging"
+      }
+    ],
+    "selection_accesses": 0,
+    "status": "BOUNDED_PASS"
+  },
+  "A7-L4_representation_attribution": {
+    "reason": "Frozen single-system evidence supports configuration attribution, not causal component ablation.",
+    "representation_fields": [
+      "title",
+      "abstract",
+      "claims_text"
+    ],
+    "status": "SUPPORTED_DESCRIPTIVE_ONLY",
+    "unavailable_aggregate_record": {
+      "reason": "No hash-bound component ablation or counterfactual representation run was supplied.",
+      "status": "NOT_AVAILABLE"
+    }
+  },
+  "A7-L5_query_rescue": {
+    "reason": "No hash-bound comparator ranking was supplied; no comparison inferred.",
+    "status": "NOT_AVAILABLE",
+    "unavailable_aggregate_record": {
+      "comparator_system_count": 0,
+      "reason": "A frozen comparator ranking is required for query-rescue attribution.",
+      "status": "NOT_AVAILABLE"
+    }
+  },
+  "A7-L6_candidate_exposure_error_anatomy": {
+    "populations": {
+      "ALL": {
+        "aggregate_query_classes": {
+          "deep_only_101_to_200": 23,
+          "fully_exposed_at_100": 18,
+          "partially_exposed_at_100": 1173,
+          "unretrieved_at_200": 33
+        },
+        "curves": {
+          "10": {
+            "Recall": 0.136794974606,
+            "nDCG": 0.295725055507
+          },
+          "100": {
+            "Recall": 0.438964626214,
+            "nDCG": 0.362497103931
+          },
+          "20": {
+            "Recall": 0.214697496213,
+            "nDCG": 0.246606575819
+          },
+          "200": {
+            "Recall": 0.546832397755,
+            "nDCG": 0.405319355173
+          },
+          "50": {
+            "Recall": 0.336358371202,
+            "nDCG": 0.315167721895
+          }
+        },
+        "query_count": 1247,
+        "relevant_family_count": 24929,
+        "relevant_family_deep_ranked_101_to_200": 2689,
+        "relevant_family_exposed_at_100": 10938,
+        "relevant_family_exposed_at_200": 13627,
+        "relevant_family_not_exposed_at_200": 11302
+      },
+      "IN": {
+        "aggregate_query_classes": {
+          "deep_only_101_to_200": 19,
+          "fully_exposed_at_100": 81,
+          "partially_exposed_at_100": 1091,
+          "unretrieved_at_200": 26
+        },
+        "curves": {
+          "10": {
+            "Recall": 0.187048067448,
+            "nDCG": 0.3074831284
+          },
+          "100": {
+            "Recall": 0.528164111236,
+            "nDCG": 0.406513126603
+          },
+          "20": {
+            "Recall": 0.277871602329,
+            "nDCG": 0.28696509781
+          },
+          "200": {
+            "Recall": 0.645077432336,
+            "nDCG": 0.448900868962
+          },
+          "50": {
+            "Recall": 0.413144709628,
+            "nDCG": 0.357930632744
+          }
+        },
+        "query_count": 1217,
+        "relevant_family_count": 19736,
+        "relevant_family_deep_ranked_101_to_200": 2357,
+        "relevant_family_exposed_at_100": 10142,
+        "relevant_family_exposed_at_200": 12499,
+        "relevant_family_not_exposed_at_200": 7237
+      },
+      "OUT": {
+        "aggregate_query_classes": {
+          "deep_only_101_to_200": 86,
+          "fully_exposed_at_100": 67,
+          "partially_exposed_at_100": 297,
+          "unretrieved_at_200": 455
+        },
+        "curves": {
+          "10": {
+            "Recall": 0.034022635484,
+            "nDCG": 0.025697169664
+          },
+          "100": {
+            "Recall": 0.188449898653,
+            "nDCG": 0.070644223566
+          },
+          "20": {
+            "Recall": 0.070933281792,
+            "nDCG": 0.037999805734
+          },
+          "200": {
+            "Recall": 0.260166940437,
+            "nDCG": 0.086359451545
+          },
+          "50": {
+            "Recall": 0.133993988468,
+            "nDCG": 0.056667425242
+          }
+        },
+        "query_count": 905,
+        "relevant_family_count": 5193,
+        "relevant_family_deep_ranked_101_to_200": 332,
+        "relevant_family_exposed_at_100": 796,
+        "relevant_family_exposed_at_200": 1128,
+        "relevant_family_not_exposed_at_200": 4065
+      }
+    },
+    "status": "PASS"
+  },
+  "A7-L7_oracle_retrieval_boundary": {
+    "analytical_bound_only": true,
+    "definition": "oracle selection restricted to the existing frozen Top-200 candidates",
+    "not_a_reranker_or_system_result": true,
+    "populations": {
+      "ALL": {
+        "bounded_reranking_headroom_Recall@100": 0.107867771541,
+        "bounded_reranking_headroom_nDCG@10": 0.54939293778,
+        "bounded_reranking_headroom_nDCG@100": 0.290265597808,
+        "bounded_top_200_oracle_nDCG@10": 0.845117993287,
+        "bounded_top_200_oracle_nDCG@100": 0.652762701739,
+        "existing_top_200_oracle_Recall@100": 0.546832397755,
+        "observed_Recall@100": 0.438964626214,
+        "observed_nDCG@10": 0.295725055507,
+        "observed_nDCG@100": 0.362497103931,
+        "pool_expansion_performed": false,
+        "query_count": 1247
+      },
+      "IN": {
+        "bounded_reranking_headroom_Recall@100": 0.1169133211,
+        "bounded_reranking_headroom_nDCG@10": 0.566718256979,
+        "bounded_reranking_headroom_nDCG@100": 0.32774016667,
+        "bounded_top_200_oracle_nDCG@10": 0.874201385379,
+        "bounded_top_200_oracle_nDCG@100": 0.734253293273,
+        "existing_top_200_oracle_Recall@100": 0.645077432336,
+        "observed_Recall@100": 0.528164111236,
+        "observed_nDCG@10": 0.3074831284,
+        "observed_nDCG@100": 0.406513126603,
+        "pool_expansion_performed": false,
+        "query_count": 1217
+      },
+      "OUT": {
+        "bounded_reranking_headroom_Recall@100": 0.071717041784,
+        "bounded_reranking_headroom_nDCG@10": 0.297000962544,
+        "bounded_reranking_headroom_nDCG@100": 0.238763201227,
+        "bounded_top_200_oracle_nDCG@10": 0.322698132208,
+        "bounded_top_200_oracle_nDCG@100": 0.309407424793,
+        "existing_top_200_oracle_Recall@100": 0.260166940437,
+        "observed_Recall@100": 0.188449898653,
+        "observed_nDCG@10": 0.025697169664,
+        "observed_nDCG@100": 0.070644223566,
+        "pool_expansion_performed": false,
+        "query_count": 905
+      }
+    },
+    "status": "PASS"
+  },
+  "claim_boundary": "post_confirmatory_diagnosis_only_no_winner_change_no_new_retrieval_no_pool_expansion_no_reranker",
+  "claim_to_evidence": {
+    "candidate_exposure_and_oracle_headroom": "SUPPORTED_WITHIN_TOP_200",
+    "family_relevance_and_leakage_integrity": "SUPPORTED",
+    "fixed_reference_gpu_reproduction": "NOT_RUN_NO_FRESH_GPU_ADMISSION",
+    "protocol_comparability": "NOT_COMPARABLE_EXTERNAL_CONFIGURATION_NOT_FULLY_VERIFIED",
+    "query_rescue_comparison": "NOT_AVAILABLE_NO_HASH_BOUND_COMPARATOR",
+    "representation_attribution": "DESCRIPTIVE_ONLY",
+    "score_identity_replay": "SUPPORTED",
+    "winner_or_final_confirmation": "NOT_ESTABLISHED_BY_A7"
+  },
+  "compute": "CPU_LOCAL",
+  "final_accesses": 0,
+  "frozen_input_hashes": {
+    "evaluation_file_sha256": "6766b09a5272384caec18d3514f46de9a6643e72ca179c86bdfa21527e4d2381",
+    "pool_sha256": "9ede1cee084db346743eb7e3dcbf300ac013c60055403f58449169dd71041879",
+    "relations_sha256": "861a991875f3594e301c84ffe0ad4f0fbd6edcf07c534c172609f40bf623e298",
+    "token_map_sha256": "90e4630bd0c23b16e5e881c00eccf47eca6f1259dfeb665ff45b4ed177e1e23a"
+  },
+  "protected_payload_included": false,
+  "receipt_sha256": "8e39b193c097b8f9d3470ba0aa228b23e9de3c19e672af048cf153e44984c556",
+  "schema_version": "myis.armindex-a7-seven-layer-diagnosis-receipt.v1",
+  "selection_accesses": 0,
+  "status": "PASS_A7_CPU_LOCAL_DIAGNOSIS"
+}

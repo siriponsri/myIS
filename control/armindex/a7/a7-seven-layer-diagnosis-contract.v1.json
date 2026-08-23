@@ -1,0 +1,59 @@
+{
+  "schema_version": "myis.armindex-a7-seven-layer-diagnosis-contract.v1",
+  "phase_id": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+  "status": "ACTIVE_OWNER_APPROVED_A6_HASH_BOUND",
+  "scientific_authority": false,
+  "execution_permitted": true,
+  "activation_receipt": "control/armindex/a7/a7-owner-approval-admission-20260823.json",
+  "claim_boundary": "post_confirmatory_diagnosis_and_comparison_only_no_winner_change_no_new_retrieval_claim",
+  "required_predecessor": {
+    "phase": "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
+    "authority": "A6_FROZEN_DIAGNOSTIC_BUNDLE",
+    "required_pool_depth": 200,
+    "required_query_count": 1247,
+    "safe_return": "PASS",
+    "independent_integrity_audit": "PASS"
+  },
+  "frozen_bindings": {
+    "winner": "ARM-03 / datalyes/patembed-large",
+    "winner_binding_sha256": "551dd85b4df94eefe0a8dfc1e5cfbcdfb46b240b6144df192ae16cb4f025e7f2",
+    "representation": "title + abstract + claims",
+    "pool_depth": 200,
+    "selection_accesses": 0,
+    "final_accesses": 0
+  },
+  "layers": [
+    {"id": "A7-L1", "name": "score_identity", "compute": "CPU_LOCAL"},
+    {"id": "A7-L2", "name": "family_relevance_integrity", "compute": "CPU_LOCAL"},
+    {"id": "A7-L3", "name": "protocol_parity", "compute": "CPU_LOCAL"},
+    {"id": "A7-L3R", "name": "fixed_reference_reproduction", "compute": "GPU_OPTIONAL", "requires_fresh_admission": true},
+    {"id": "A7-L4", "name": "representation_attribution", "compute": "CPU_LOCAL"},
+    {"id": "A7-L5", "name": "query_rescue", "compute": "CPU_LOCAL"},
+    {"id": "A7-L6", "name": "candidate_exposure_error_anatomy", "compute": "CPU_LOCAL"},
+    {"id": "A7-L7", "name": "oracle_retrieval_boundary", "compute": "CPU_LOCAL"}
+  ],
+  "required_outputs": [
+    "independent_score_identity_receipt",
+    "all_in_out_population_accounting",
+    "family_and_leakage_audit",
+    "protocol_comparability_matrix",
+    "representation_attribution_aggregates",
+    "query_rescue_aggregates",
+    "candidate_exposure_error_decomposition",
+    "oracle_boundary_aggregates",
+    "claim_to_evidence_matrix"
+  ],
+  "aggregate_safe_projection_allowlist": [
+    "hashes", "counts", "aggregate_metrics", "confidence_intervals", "w_t_l",
+    "protocol_labels", "latency_histograms", "figures", "failure_taxonomy", "pointers"
+  ],
+  "protected_data_boundary": {
+    "owner_store_only": ["qrels", "split_membership", "protected_ids", "per_query_outcomes", "rankings"],
+    "forbidden_exports": ["qrels", "split_membership", "protected_ids", "per_query_outcomes", "raw_rankings", "credentials", "model_payloads"]
+  },
+  "forbidden_adaptation": [
+    "winner_change", "representation_tuning", "model_weight_change", "selection_reopen",
+    "final_reopen", "pool_expansion", "post_hoc_cutoff_change", "reranker_selection"
+  ],
+  "terminal_states": ["PASS_A7_SEVEN_LAYER_DIAGNOSIS", "STOP_A7_WITH_EVIDENCE", "HARD_STOP_A7_EVIDENCE_INTEGRITY"]
+}

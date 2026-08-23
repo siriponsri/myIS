@@ -75,7 +75,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             current_task = {"id": project.get("current_task", current_task.get("id"))}
             campaign_status = armindex.get("status", campaign["campaign"]["status"])
             evidence_class = closeout.get("evidence_class", campaign["campaign"]["evidence_class"])
-            scientific_authority = bool(closeout.get("scientific_authority", False))
+            current_phase_id = str(project.get("current_phase", ""))
+            if current_phase_id.startswith("A6_"):
+                scientific_authority = False
+            elif current_phase_id == "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS":
+                audit_path = root / "control/armindex/a7/a7-result-integrity-audit-20260823.json"
+                try:
+                    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+                except (OSError, UnicodeError, json.JSONDecodeError):
+                    audit = {}
+                scientific_authority = audit.get("status") == "PASS_A7_RESULT_INTEGRITY"
+            else:
+                scientific_authority = bool(closeout.get("scientific_authority", False))
             counters = armindex.get("counters", {})
             measured_runs = counters.get("measured_runs", campaign["campaign"]["migration_measured_runs"])
             selection_accesses = counters.get("selection_accesses", campaign["campaign"]["selection_accesses"])

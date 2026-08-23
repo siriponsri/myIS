@@ -1,0 +1,29 @@
+{
+  "cleanup_id": "cleanup-20260823-a6-pre-run",
+  "created_utc": "2026-08-23T05:00:00Z",
+  "scope": "Untracked temporary files in the 01_Research root",
+  "audit": {
+    "repository_references_checked": true,
+    "git_history_checked": true,
+    "brain_paper_owner_store_checked": true,
+    "canonical_evidence_touched": false,
+    "protected_payload_touched": false,
+    "failed_attempts_touched": false
+  },
+  "disposition": "ARCHIVED_OWNER_STORE",
+  "payload_root": "04_Owner_Stores/armindex/archive/cleanup/20260823",
+  "files": [
+    {"original_path": ".tmp-sftp-batch", "sha256": "8fe045c9ea9562dcabba284684aeac6b429dc62dcf8e20c09ef508c387d533fb", "bytes": 294},
+    {"original_path": ".tmp-sftp-small-batch", "sha256": "24db4a8e03175c398631528216e151bd3c9eb0ff11056d40f7bd1b53e0ba8431", "bytes": 3830},
+    {"original_path": ".tmp_compare_a6_sources.py", "sha256": "d6fdd076cfa67527082fe7802d45d95d1e2a166cea5caf0feab475385ac39a52", "bytes": 1645},
+    {"original_path": ".tmp_compare_a6_tokens.py", "sha256": "1cb301fbc73dfea350049cfd9a427897190551f19fd9f268a3e7b73af2573704", "bytes": 1667},
+    {"original_path": ".tmp_compare_queries.py", "sha256": "f1a11ccd7f409f4696088f9c7890b1707a45a5b76c8f2902d60a57da3ea82ec5", "bytes": 752},
+    {"original_path": ".tmp_debug_a6.py", "sha256": "ecbf5cd5179c7010413c79869c0167b0c33febe6a7ab7430f1a47ebc67459497", "bytes": 1828},
+    {"original_path": ".tmp_inspect_arrow.py", "sha256": "2636a2b65ae7721357cb7b342cf40fe1164f6bc4b823dff20f9a538e76a747a2", "bytes": 813},
+    {"original_path": ".tmp_inspect_relations.py", "sha256": "35ff2a0123ce0f083b9bba25a4873f6f30918082778e7a8f4018ca7956299e44", "bytes": 844},
+    {"original_path": ".tmp_inventory_full_eval.py", "sha256": "6240aa98ee6d873f690e101b846f9f9bae8d8243cb4e7032c272cba4be1514ec", "bytes": 850},
+    {"original_path": ".tmp_model_hash.py", "sha256": "8e20ef320f68336b378005fd6a35a502456c3cb6c617bd8a4bac40fe0b7e4c5b", "bytes": 377},
+    {"original_path": ".tmp_model_hash2.py", "sha256": "26e9876c3319bde98713b24e0c17912230e7fe7c2778a3f8c474988a897476de", "bytes": 456},
+    {"original_path": ".tmp_show_lines.py", "sha256": "2138d9f2c1054b1fc4ee6e88091b861f5ab6f2739df3b55b0bae4885bf1a328b", "bytes": 210}
+  ]
+}

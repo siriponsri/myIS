@@ -157,9 +157,12 @@ overview and does not duplicate volatile counters.
 
 The canonical A2-A6 Owner Data Bundle is built with
 `scripts/build_owner_data_bundle.py`. It stores protected payloads only in
-`04_Owner_Stores` and emits hash/count/pointer receipts; preparation keeps
-Selection-125 and Final-872 access counters at zero. A6 binds the pinned
-45,336-row DAPFAM source manifest but remains fail-closed until A5 closeout.
+`04_Owner_Stores` and emits hash/count/pointer receipts. Selection-125 and
+Final-872 were each consumed exactly once by the closed A4/A5 evidence chain;
+the active A6 attempt is post-confirmatory and cannot reopen either counter.
+A6 is currently materialization-complete for the pinned 45,336-row DAPFAM
+source, with Top-200/deep-ranking export and Owner-local ALL/IN/OUT metrics
+still pending.
 
 Model revisions, adapters, representation programs, evaluators, split hashes,
 budgets, and harnesses are frozen through canonical JSON and SHA-256 receipts.
@@ -186,8 +189,10 @@ repository artifacts are aggregate-only and content-hash bound. See
 
 ## Roadmap
 
-The eight-phase roadmap runs from A0 migration through A7 publication, with a
-post-confirmatory full-DAPFAM materialization and scalability phase in A6. See
+The nine-phase roadmap runs from A0 migration through A8 journal synthesis. A6
+creates the full-DAPFAM retrieval evidence and Owner-local ALL/IN/OUT metrics;
+A7 performs the seven-layer diagnosis and comparison; and A8 writes the paper
+from validated A0-A7 evidence. No reranking phase is part of the active route. See
 [`docs/ROADMAP.md`](docs/ROADMAP.md) and the canonical [`PLAN.md`](PLAN.md).
 
 ## Documentation

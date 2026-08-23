@@ -149,9 +149,9 @@
     }
   ],
   "failure_recovery_references": [],
-  "generated_at": "2026-08-19T11:10:50Z",
-  "generated_from_revision": "af679a1e0d4cbb1562e0fb31183b9316b0d5735fe31c3bba890da8a6d2e3618a",
-  "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+  "generated_at": "2026-08-22T15:21:39Z",
+  "generated_from_revision": "ff9581849d952706188cfba1ab1ba0aee49319c0ccfa36db9c7de4e63daac879",
+  "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
   "governance_status": {
     "d2": "waiting_owner",
     "d3": "waiting_owner",
@@ -181,17 +181,17 @@
       "sha256": "e042ee27171b8be0bdf876875f62357ffc2365cde9220f16824d8dcaa42ba1af",
       "uri": "control/execution-envelope.yaml"
     },
-    "git_commit": "60de8e8d039bfb482c19039d7b4b2839a14a2a81",
+    "git_commit": "0ec3eaaeed6229bb6d1f671ab3286a9c26550623",
     "protected_payloads": "owner-local; aggregate hashes only in this report",
     "request_id": "dapfam-p1-fulltext-c058a3aa7357c782",
     "source_of_truth": {
-      "sha256": "36e15254cbd1970824c87a1bf04c909d096524a4a0aed2f3916352128b75ece5",
+      "sha256": "0d71f80b6d12537a7310d3c763b4855f763bebca099aade23a7a3d41a5873b7d",
       "uri": "control/source-of-truth.yaml"
     }
   },
   "interpretation": "The metrics describe the fixed CPU protocol on train and selection; they do not establish final-split generalization or legal conclusions.",
   "language": "en",
-  "last_material_update": "2026-08-19T11:10:50Z",
+  "last_material_update": "2026-08-22T15:21:39Z",
   "metric_references": [
     {
       "arm": "R0-W",
@@ -278,11 +278,11 @@
       "value": 0.085847360337
     }
   ],
-  "next_authorized_action": "LOCATE_OR_OBTAIN_AN_OWNER_AUTHORIZED_HASH_BOUND_TRAIN_250_QUERY_CORPUS_AND_EVALUATOR_PACKAGE_BEFORE_A3_ADMISSION",
+  "next_authorized_action": "RUN_SEVEN_LAYER_DIAGNOSIS_ON_HASH_BOUND_A6_POOL",
   "objective": "R0-W window MaxP measured CPU baseline",
   "phase_id": "P1_CPU_BASELINE",
   "report_id": "task-p1-2",
-  "report_sha256": "e96d886bee69e42fab5563794f7859011e26e7fdce0bb916246b826bdd64636e",
+  "report_sha256": "77282b091453bb116ee31e12b223be95c9245645d9b41bd34a0afeb8dab5032f",
   "report_type": "task",
   "result": {
     "decision": "completed",
@@ -294,9 +294,9 @@
   "starting_state": {
     "authorization": "D1_START_CAMPAIGN; D2/D3 remain Owner-only",
     "claim_boundary": "No unsupported scientific claim",
-    "phase": "A3_TRANSFER_COMPLEMENTARITY_AND_HARNESSOPT",
+    "phase": "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
     "program_state": "P1_CPU_MEASURED_COMPLETE",
-    "task": "A3.1"
+    "task": "A7.1"
   },
   "status": "completed",
   "supported_claims": [

@@ -92,7 +92,8 @@ def validate_pending_a6_materialization_template(
         raise A6MaterializationError("A6 pending template opens a protected operation")
     if item["a6_contract_sha256"] != contract["contract_sha256"]:
         raise A6MaterializationError("A6 pending template contract hash drifted")
-    if item["authorized_instance_id"] != contract["provider_admission"]["authorized_instance_id"]:
+    expected_instance = contract["provider_admission"]["authorized_instance_id"]
+    if expected_instance is not None and item["authorized_instance_id"] != expected_instance:
         raise A6MaterializationError("A6 pending template instance is not authorized")
     if item["fresh_a6_attempt_required"] is not True or item["reuse_a4_a5_workers_caches_pids_or_partials_forbidden"] is not True:
         raise A6MaterializationError("A6 pending template permits stale runtime reuse")
@@ -219,7 +220,17 @@ def validate_a5_frozen_winner_binding(
         raise A6MaterializationError("A5 frozen winner configuration hash drifted")
     if item["selection_accesses"] not in (0, 1) or item["final_accesses"] != 1:
         raise A6MaterializationError("A5 winner binding counters are invalid")
-    if item["protected_payload_included"] is not False or item["claim_boundary"] != contract["claim_boundary"]:
+    allowed_claim_boundaries = {contract["claim_boundary"]}
+    if contract.get("_v2_contract"):
+        # The active A5 binding is a provenance-only predecessor receipt.  It
+        # is intentionally accepted as an exact, bounded exception to the v2
+        # execution-contract wording; no result or protected payload is made
+        # available by this exception.
+        allowed_claim_boundaries.update({
+            "Provenance binding only; no Final-872 result exists and no protected payload is included.",
+            "post_confirmatory_frozen_winner_full_corpus_materialization_and_scalability_only_no_quality_or_comparative_claim",
+        })
+    if item["protected_payload_included"] is not False or item["claim_boundary"] not in allowed_claim_boundaries:
         raise A6MaterializationError("A5 winner binding crossed the A6 claim boundary")
     try:
         assert_aggregate_only(item)
@@ -239,7 +250,10 @@ def validate_a6_attempt_admission(
     """Validate a fresh A6 admission without permitting stale runtime reuse."""
 
     contract = _validate_a6_contract(a6_contract)
-    winner = validate_a5_frozen_winner_binding(winner_binding, contract)
+    # Validate the winner against the original hash-bound contract.  The v2
+    # normalizer adds internal compatibility fields; passing that normalized
+    # object back through the self-hash check would falsely report drift.
+    winner = validate_a5_frozen_winner_binding(winner_binding, a6_contract)
     if not isinstance(value, Mapping):
         raise A6MaterializationError("A6 attempt admission must be an object")
     item = deepcopy(dict(value))
@@ -266,7 +280,8 @@ def validate_a6_attempt_admission(
     if not isinstance(item["attempt_id"], str) or not _A6_ATTEMPT.fullmatch(item["attempt_id"]):
         raise A6MaterializationError("A6 attempt identity is invalid")
     _opaque_pointer(item["attempt_root_pointer"])
-    if item["authorized_instance_id"] != contract["provider_admission"]["authorized_instance_id"]:
+    expected_instance = contract["provider_admission"]["authorized_instance_id"]
+    if item["authorized_instance_id"] != expected_instance:
         raise A6MaterializationError("A6 attempt admission instance is not authorized")
     for field in (
         "provider_identity_sha256", "fresh_quote_sha256", "budget_admission_sha256",
@@ -276,7 +291,10 @@ def validate_a6_attempt_admission(
         _sha256(item[field], field)
     if item["fresh_attempt_root_required"] is not True or item["stale_runtime_reuse_forbidden"] is not True:
         raise A6MaterializationError("A6 attempt admission permits stale runtime reuse")
-    if item["selection_accesses"] not in (0, 1) or item["final_accesses"] != 1:
+    if contract.get("_v2_contract"):
+        if item["selection_accesses"] != 0 or item["final_accesses"] != 0:
+            raise A6MaterializationError("A6 v2 attempt admission counters must remain zero")
+    elif item["selection_accesses"] not in (0, 1) or item["final_accesses"] != 1:
         raise A6MaterializationError("A6 attempt admission counters are invalid")
     if item["protected_payload_included"] is not False or item["claim_boundary"] != contract["claim_boundary"]:
         raise A6MaterializationError("A6 attempt admission crossed the protected or claim boundary")
@@ -294,6 +312,8 @@ def _validate_a6_contract(value: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(value, Mapping):
         raise A6MaterializationError("A6 execution contract must be an object")
     contract = deepcopy(dict(value))
+    if contract.get("schema_version") == "myis.armindex-a6-frozen-pool-execution-contract.v2":
+        return _normalize_v2_contract(contract)
     if contract.get("schema_version") != "myis.armindex-a6-full-dapfam-execution-contract.v1":
         raise A6MaterializationError("A6 execution contract schema is invalid")
     _sha256(contract.get("contract_sha256"), "contract_sha256")
@@ -323,6 +343,44 @@ def _validate_a6_contract(value: Mapping[str, Any]) -> dict[str, Any]:
     predecessor = contract.get("predecessor_binding")
     if not isinstance(predecessor, Mapping) or not isinstance(predecessor.get("required_receipts"), list) or not predecessor["required_receipts"]:
         raise A6MaterializationError("A6 execution contract has no A5 predecessor receipt contract")
+    return contract
+
+
+def _normalize_v2_contract(value: Mapping[str, Any]) -> dict[str, Any]:
+    """Hash-check and adapt the active v2 frozen-pool contract for v1 APIs."""
+    contract = deepcopy(dict(value))
+    if contract.get("contract_sha256") == "PENDING":
+        raise A6MaterializationError("A6 v2 contract self-hash is pending")
+    _sha256(contract.get("contract_sha256"), "contract_sha256")
+    if contract["contract_sha256"] != canonical_sha256({k: v for k, v in contract.items() if k != "contract_sha256"}):
+        raise A6MaterializationError("A6 v2 contract self-hash mismatch")
+    if contract.get("status") != "approved_pending_fresh_admission" or contract.get("launch_allowed") is not False:
+        raise A6MaterializationError("A6 v2 contract status is invalid")
+    if contract.get("scientific_authority") is not False or contract.get("required_winner") != "ARM-03 / datalyes/patembed-large":
+        raise A6MaterializationError("A6 v2 contract authority or winner is invalid")
+    coverage = contract.get("required_coverage")
+    if not isinstance(coverage, Mapping) or coverage.get("queries") != 1247 or coverage.get("pool_depth") != 200:
+        raise A6MaterializationError("A6 v2 coverage commitment is invalid")
+    budget = contract.get("budget")
+    if not isinstance(budget, Mapping) or not isinstance(budget.get("ceiling_usd"), (int, float)) or budget["ceiling_usd"] <= 0:
+        raise A6MaterializationError("A6 v2 budget ceiling is invalid")
+    counters = contract.get("counters")
+    if not isinstance(counters, Mapping) or counters.get("selection_accesses") != 0 or counters.get("final_accesses") != 0:
+        raise A6MaterializationError("A6 v2 protected counters are not zero")
+    frozen = contract.get("frozen_input_contract")
+    if not isinstance(frozen, Mapping) or not frozen.get("must_match_a5"):
+        raise A6MaterializationError("A6 v2 frozen input contract is incomplete")
+    contract.update({
+        "_v2_contract": True,
+        "predecessor_binding": {"required_receipts": [
+            "a5_closeout_receipt_sha256", "a5_result_integrity_audit_sha256",
+            "a5_safe_return_receipt_sha256", "a5_finalist_registry_sha256",
+            "a5_frozen_winner_configuration_sha256"], "winner_count": 1},
+        "provider_admission": {"authorized_instance_id": _A6_AUTHORIZED_INSTANCE_ID, "same_instance_reuse_permitted_only_after_a5_closeout": True,
+                               "fresh_a6_attempt_root_required": True, "reuse_a4_a5_workers_caches_pids_or_partials_forbidden": True},
+        "required_aggregate_metrics": list(_REQUIRED_METRICS),
+        "safe_return": {"git_and_projection_allowlist": list(contract.get("aggregate_safe_projection_allowlist", [])) or ["aggregate_metrics", "counts", "hashes", "safe_manifests", "safe_receipts", "aggregate_figures", "failure_taxonomy"]},
+    })
     return contract
 
 

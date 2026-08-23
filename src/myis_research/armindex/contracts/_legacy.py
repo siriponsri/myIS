@@ -29,7 +29,8 @@ ACTIVE_PHASE_IDS = (
     "A4_PRODUCTION_TRANSFER_AND_SELECTION",
     "A5_FINAL_CONFIRMATION",
     "A6_FULL_DAPFAM_MATERIALIZATION_AND_SCALABILITY",
-    "A7_PUBLICATION_AND_RELEASE",
+    "A7_SEVEN_LAYER_RETRIEVAL_DIAGNOSIS",
+    "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
 )
 OWNER_GATES = ("D2_OPEN_FINAL", "D3_SUBMIT_RELEASE")
 PRODUCTION_PROFILES = ("FAST", "BALANCED", "DEEP")
@@ -200,7 +201,7 @@ def validate_campaign(root: Path, value: Mapping[str, Any], *, migration: bool =
         raise ArmIndexContractError("active ArmIndex campaign must define exactly five ordered arms")
     phases = value.get("phases")
     if not isinstance(phases, list) or tuple(item.get("id") for item in phases if isinstance(item, Mapping)) != ACTIVE_PHASE_IDS:
-        raise ArmIndexContractError("active ArmIndex phase registry must contain A0-A7 only")
+        raise ArmIndexContractError("active ArmIndex phase registry must contain A0-A8 only")
     gates = value.get("gates")
     if not isinstance(gates, Mapping) or tuple(gates.get("owner", [])) != OWNER_GATES:
         raise ArmIndexContractError("Owner gates must be exactly D2 and D3")
@@ -225,7 +226,11 @@ def load_campaign(root: Path) -> dict[str, Any]:
         raise ArmIndexContractError("cannot load active ArmIndex campaign") from error
     if not isinstance(value, dict):
         raise ArmIndexContractError("active ArmIndex campaign is not an object")
-    validate_campaign(root, value)
+    # The active ArmIndex campaign is post-migration and has measured
+    # predecessor counters.  Keep ``migration=True`` available for the
+    # historical scaffold validator, but do not apply that zero-counter gate
+    # to the active campaign loader.
+    validate_campaign(root, value, migration=False)
     return value
 
 
@@ -246,7 +251,7 @@ def build_armindex_projection(root: Path) -> dict[str, Any]:
     ]
     current_phase = next(
         (item["id"] for item in config["phases"] if item.get("status") != "complete"),
-        "A7_PUBLICATION_AND_RELEASE",
+        "A8_JOURNAL_SYNTHESIS_AND_PUBLICATION",
     )
     projection = {
         "schema_version": "myis.armindex-read-model.v1",

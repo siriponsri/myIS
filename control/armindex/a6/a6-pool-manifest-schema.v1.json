@@ -1,0 +1,7 @@
+{
+  "schema_version": "myis.armindex-a6-pool-manifest.v1",
+  "required": ["query_count", "pool_depth", "coverage_count", "rank_continuity", "duplicate_family_count", "pool_sha256", "source_sha256", "winner_configuration_sha256"],
+  "fixed": {"query_count": 1247, "pool_depth": 200, "coverage_count": 1247, "duplicate_family_count": 0},
+  "storage_boundary": "Owner_Store_only",
+  "aggregate_projection_fields": ["query_count", "pool_depth", "coverage_count", "hashes", "failure_taxonomy", "metrics"]
+}
