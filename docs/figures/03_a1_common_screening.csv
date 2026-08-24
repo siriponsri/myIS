@@ -1,0 +1,6 @@
+retrieval_system,system_type,recall_at_100,ndcg_at_100,ndcg_at_10,p95_latency_ms,development_disposition,cells_completed,cells_total,reported_cost_usd
+BM25,Lexical,0.191200,0.172717,0.160011,441.520,Diagnostic did not advance,5,5,11.161632
+BGE-M3,Multilingual dense,0.269933,0.231377,0.198497,235.203,Diagnostic did not advance,5,5,11.161632
+PatEmbed-large,Patent-specific dense,0.413400,0.347812,0.289856,212.062,Advanced,5,5,11.161632
+Arctic Embed M v2.0,Long-context multilingual dense,0.340667,0.284546,0.235538,214.207,Advanced,5,5,11.161632
+Qwen3 Embedding 0.6B,Instruction-aware dense,0.363733,0.307930,0.256706,217.099,Advanced,5,5,11.161632

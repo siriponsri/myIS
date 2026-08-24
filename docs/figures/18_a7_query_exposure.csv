@@ -1,0 +1,5 @@
+query_exposure_category,query_count,share_of_905_judged_cross_domain_queries,interpretation
+All relevant evidence exposed by rank 200,67,0.0740,Every relevant family pair for the query appears in the pool
+Partial relevant evidence exposed,297,0.3282,Some but not all relevant family pairs appear in the pool
+Relevant evidence only at ranks 101-200,86,0.0950,Pool contains relevant evidence but none in the top 100
+No relevant candidate in Top-200,455,0.5028,First-stage retrieval exposed no relevant candidate

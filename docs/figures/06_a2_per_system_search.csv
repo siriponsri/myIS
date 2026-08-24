@@ -1,0 +1,6 @@
+retrieval_system,recall_at_100,ndcg_at_100,ndcg_at_10,p95_latency_ms,decision_label,comparison_reference,global_measured_configurations,global_trial_configurations,global_dormant_reserves,failures,global_workload_cost_usd
+BM25,0.234667,0.210784,0.195024,1387.940,Diagnostic tie no per-system winner,A2 decision rule,44,52,8,0,54.526667
+BGE-M3,0.290000,0.249919,0.220057,1139.045,Diagnostic tie no per-system winner,A2 decision rule,44,52,8,0,54.526667
+PatEmbed-large,0.423000,0.357636,0.299444,1686.804,Unique within-search winner tied with A1 incumbent at displayed precision,A1 incumbent at displayed precision,44,52,8,0,54.526667
+Arctic Embed M v2.0,0.358667,0.301868,0.253229,1115.052,Strict improvement retained for transfer,A1 incumbent,44,52,8,0,54.526667
+Qwen3 Embedding 0.6B,0.373667,0.321262,0.273664,816.055,No strict improvement retained as transfer control,A1 incumbent,44,52,8,0,54.526667

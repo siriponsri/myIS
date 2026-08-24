@@ -1,0 +1,6 @@
+partition_id,partition_name,query_count,role,access_rule,can_influence_confirmation,denominator_note
+P1,Representation development,150,Shared screening and per-system representation search,Reusable only within development rules,No,Primary development population
+P2,System-composition development,100,Transfer fusion and constrained orchestration,Reserved from representation search,No,Combined development pool is 250 queries
+P3,Selection,125,Choose configuration entering confirmation,One exposure only,Indirectly,90 queries have positive cross-domain relations for cross-domain metrics
+P4,Final confirmation,872,Compare two frozen systems,One exposure only and no feedback into design,No,Paired held-out confirmation population
+ALL,Complete benchmark,1247,Post-confirmatory single-system characterization,After confirmation only,No,Includes all judged queries

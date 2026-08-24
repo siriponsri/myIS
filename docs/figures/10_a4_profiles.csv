@@ -1,0 +1,5 @@
+profile,recall_at_100,ndcg_at_100,ndcg_at_10,p50_latency_ms,p95_latency_ms,qps,reported_cost_usd,query_count,failures,license_note
+Speed-oriented,0.345833,0.292764,0.249337,487.241,1524.230,0.02831,0.63345,100,0,Commercial-capable operating profile
+Balanced,0.382639,0.328777,0.278442,732.509,1771.497,0.01134,1.58184,100,0,Commercial-capable operating profile
+Quality-oriented,0.382639,0.328777,0.278442,314.432,1637.748,0.01518,1.18153,100,0,Commercial-capable operating profile
+Research reference,0.463194,0.372934,0.305775,327.714,1742.994,0.01452,1.23489,100,0,Research or non-commercial license boundary

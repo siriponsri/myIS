@@ -1,0 +1,19 @@
+measure,value,unit,scope,interpretation
+Source families,45336,families,Complete benchmark,Full candidate corpus
+Materialized families,45336,families,Complete benchmark,100 percent materialization
+Query families,1247,queries,Complete benchmark,All judged queries
+Text chunks or representations,188944,items,Complete benchmark,Materialized representation count
+Candidate depth,200,ranked candidates per query,Complete benchmark,Top-200 output
+Ranked rows,249400,rows,Complete benchmark,1247 queries times 200 candidates
+Coverage,100,percent,Complete benchmark,No missing query outputs
+Failures,0,count,Complete benchmark,Deterministic complete run
+Duplicate-family errors,0,count,Complete benchmark,Family integrity passed
+Checkpoint recoveries,0,count,Complete benchmark,No recovery required
+Materialization throughput,14.349,documents_per_second,Complete benchmark,Recorded throughput
+Recorded p50 latency,50,milliseconds,Complete benchmark,Descriptive operational measure
+Recorded p95 latency,50,milliseconds,Complete benchmark,Descriptive operational measure
+Recorded p99 latency,50,milliseconds,Complete benchmark,Descriptive operational measure
+Index size,773914624,bytes,Complete benchmark,Approximately 738 MiB
+Peak RAM,2154569728,bytes,Complete benchmark,Approximately 2.01 GiB
+Peak VRAM,1773727744,bytes,Complete benchmark,Approximately 1.65 GiB
+Reported cost,0.300323,USD,Complete benchmark,Operational cost record

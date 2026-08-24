@@ -1,0 +1,4 @@
+population,observed_recall_at_100,perfect_ordering_bound_top_200,within_pool_headroom,headroom_fraction_of_bound,interpretation
+All relations,0.438965,0.546832,0.107868,0.1973,Ordering can recover only a bounded portion of remaining error
+In-domain relations,0.528164,0.645077,0.116913,0.1812,Ordering headroom is larger than cross-domain but still bounded
+Strict cross-domain relations,0.188450,0.260167,0.071717,0.2756,Absent candidates dominate the remaining cross-domain error

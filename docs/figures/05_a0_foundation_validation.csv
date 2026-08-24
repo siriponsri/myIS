@@ -1,0 +1,6 @@
+validation_area,check_count,unit,measured_retrieval,interpretation,evidence_class
+Targeted engineering checks,44,checks,No,Software and pipeline readiness,Synthetic engineering validation
+Broader tests,387,tests,No,Regression and integration coverage,Synthetic engineering validation
+Interface and policy checks,66,checks,No,Contract and safety readiness,Synthetic engineering validation
+Measured retrieval runs,0,runs,No,A0 cannot support retrieval effectiveness claims,Synthetic engineering validation
+Feasibility data,Synthetic,environment,No,Representation compilation indexing search aggregation replay memory and scaling only,Synthetic engineering validation

@@ -1,0 +1,9 @@
+work_item,status,stage,scientific_gate_status,external_action,interpretation
+Evidence synthesis,Complete,A8,Complete,None,A0-A7 evidence converted into manuscript-ready claims
+Figures and tables,Complete,A8,Complete,None,Publication visuals and tables internally checked
+Claim-to-evidence mapping,Complete,A8,Complete,None,Claim boundaries separated by evidence class
+Protected-data review,Complete,A8,Complete,None,No query identifiers relevance judgments raw rankings or per-query outputs in package
+Submission authorization,Approved,A8,Complete,None,Package may proceed to venue submission
+Author metadata,Pending,External administration,Not a scientific blocker,Owner provides names affiliations roles and declarations,Venue-specific completion task
+Venue formatting and policy check,Pending,External administration,Not a scientific blocker,Owner rechecks current journal rules,Administrative task
+Journal upload and submission,Not performed,External administration,Not a scientific blocker,Owner performs external submission,No manuscript uploaded by evidence cutoff

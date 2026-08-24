@@ -1,0 +1,9 @@
+quality_control_area,status,evidence_scope,figure_or_slide_implication
+Claim separation,Passed,A0-A7 claims separated by evidence class,Use color or label to distinguish confirmed development and diagnostic
+Aggregate consistency,Passed,All reported metrics and counts,Exact labels can be used in plots
+Citation structure,Passed,Literature and bibliography,Use references in captions or notes as needed
+License boundaries,Passed,Model and deployment claims,Keep license qualifier visible in profile charts
+Protected-data review,Passed,Identifiers judgments rankings and per-query outputs,Plot aggregates only
+Figure and table readability,Passed,Publication package,Use direct labels and restrained legends
+Document compilation and layout,Passed,Publication package,Paper and slide variants may be derived
+Submission authorization,Approved,A8,Do not label package as submitted

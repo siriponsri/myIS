@@ -1,0 +1,10 @@
+representation_source,target_system,recall_at_100,ndcg_at_100,ndcg_at_10,p95_latency_s,diagonal_or_transfer
+PatEmbed,PatEmbed,0.418436,0.347098,0.290589,1.712,Diagonal
+PatEmbed,Arctic,0.337430,0.288876,0.248091,1.715,Transfer
+PatEmbed,Qwen3,0.362570,0.306168,0.259749,1.445,Transfer
+Arctic,PatEmbed,0.418715,0.352416,0.295553,1.493,Transfer
+Arctic,Arctic,0.341341,0.286975,0.239140,1.462,Diagonal
+Arctic,Qwen3,0.359497,0.305476,0.258884,1.411,Transfer
+Qwen3,PatEmbed,0.419274,0.351428,0.296279,0.976,Transfer
+Qwen3,Arctic,0.338268,0.280557,0.229009,0.892,Transfer
+Qwen3,Qwen3,0.360615,0.306579,0.261546,0.872,Diagonal

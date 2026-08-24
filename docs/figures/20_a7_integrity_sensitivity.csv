@@ -1,0 +1,15 @@
+check_or_scope,metric,baseline_value,sensitivity_value,delta,unit,interpretation
+Replay all relations,Recall@100,0.438965,0.438965,0.000000,macro score,Exact reproduction
+Replay all relations,nDCG@100,0.362497,0.362497,0.000000,macro score,Exact reproduction
+Replay in-domain relations,Recall@100,0.528164,0.528164,0.000000,macro score,Exact reproduction
+Replay in-domain relations,nDCG@100,0.406513,0.406513,0.000000,macro score,Exact reproduction
+Replay strict cross-domain relations,Recall@100,0.188450,0.188450,0.000000,macro score,Exact reproduction
+Replay strict cross-domain relations,nDCG@100,0.070644,0.070644,0.000000,macro score,Exact reproduction
+Remove 40 raw self-relations,All relations Recall@100,0.438965,0.438188,-0.000777,macro score,Sensitivity only
+Remove 40 raw self-relations,All relations nDCG@100,0.362497,0.358351,-0.004146,macro score,Sensitivity only
+Remove 40 raw self-relations,In-domain Recall@100,0.528164,0.527256,-0.000908,macro score,Sensitivity only
+Remove 40 raw self-relations,In-domain nDCG@100,0.406513,0.401377,-0.005136,macro score,Sensitivity only
+Remove 40 raw self-relations,Strict cross-domain Recall@100,0.188450,0.188450,0.000000,macro score,Strict cross-domain unchanged
+Integrity collisions,family collisions,0,0,0,count,No family collisions
+Integrity denominators,denominator discrepancies,0,0,0,count,No denominator discrepancies
+Integrity mapping,mapping-scope leakage events,0,0,0,count,No mapping-scope leakage

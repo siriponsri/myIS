@@ -1,0 +1,4 @@
+scope,population_type,judged_queries,relevant_pairs,relation_overlap,recall_at_100,ndcg_at_100,scope_warning
+All relations,All judged relations,1247,24929,May overlap with other scopes,0.438965,0.362497,Not a disjoint population
+In-domain relations,Relation-scoped in-domain,1217,19736,May overlap with all-relations queries,0.528164,0.406513,Relation denominator differs from all relations
+Strict cross-domain relations,Relation-scoped strict cross-domain,905,5193,May overlap with in-domain queries at query level,0.188450,0.070644,Do not compare as a time trend with A5

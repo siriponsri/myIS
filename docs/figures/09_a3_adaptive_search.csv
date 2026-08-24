@@ -1,0 +1,5 @@
+batch,proposal_count,distinct_executable_actions,recall_at_100,ndcg_at_100,ndcg_at_10,p95_latency_s,coverage_queries,coverage_total,interpretation
+Batch 1,4,1,0.415084,0.346250,0.284772,1.436,250,250,All proposals compiled to the same action
+Batch 2,4,1,0.415084,0.346250,0.284772,1.436,250,250,No new executable behavior
+Batch 3,4,1,0.415084,0.346250,0.284772,1.436,250,250,No new executable behavior
+All batches,12,1,0.415084,0.346250,0.284772,1.436,250,250,Flat adaptive search surface

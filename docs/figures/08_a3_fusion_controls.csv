@@ -1,0 +1,6 @@
+configuration,recall_at_100,ndcg_at_100,ndcg_at_10,p95_latency_s,relative_quality_note,systems_included
+Strongest single system,0.418436,0.347098,0.290589,1.692,Reference control,One
+Two-system fusion,0.418715,0.352747,0.293716,1.345,Slight nDCG improvement and lower p95 than strongest single control,Two
+Three-system fusion,0.415084,0.346250,0.284772,1.443,Underperformed two-system fusion,Three
+All-primary fusion,0.415084,0.346250,0.284772,1.436,Identical aggregate quality to three-system fusion,All primary
+Commercial-only fusion,0.369274,0.308967,0.258116,1.165,Faster but lower quality,Commercial-capable systems

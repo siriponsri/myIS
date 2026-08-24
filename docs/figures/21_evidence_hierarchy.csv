@@ -1,0 +1,8 @@
+stage,evidence_class,supported_use,unsupported_use,uncertainty_marker
+A0,Synthetic engineering validation,Readiness safety reproducibility,Retrieval effectiveness,No measured retrieval
+A1-A3,Measured development evidence,Interaction transfer fusion negative findings,Final generalization,Development-only
+A4,Selection evidence,Selection rationale,Confirmatory effect,One-time exposure
+A5,Paired final confirmation,System-level effect between two frozen systems,Universal or commercial superiority,95 percent paired intervals for primary endpoints
+A6,Post-confirmatory measurement,Full-scale depth and resources,New comparative winner,Single-system characterization
+A7,Diagnostic inference,Candidate exposure and analytical bounds,Achieved reranker performance,Oracle is analytical only
+A8,Publication synthesis,Prepared and internally checked package,Journal submission or acceptance,No external upload by cutoff

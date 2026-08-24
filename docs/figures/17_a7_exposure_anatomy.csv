@@ -1,0 +1,4 @@
+population,relevant_family_pairs,found_ranks_1_100,found_only_ranks_101_200,absent_top_200,found_any_top_200,absent_fraction,denominator_type
+All relations,24929,10938,2689,11302,13627,0.4534,Relation-scoped relevant pairs
+In-domain relations,19736,10142,2357,7237,12499,0.3666,Relation-scoped relevant pairs
+Strict cross-domain relations,5193,796,332,4065,1128,0.7826,Relation-scoped relevant pairs

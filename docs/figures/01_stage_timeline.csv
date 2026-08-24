@@ -1,0 +1,10 @@
+sequence,stage,label,plain_language_role,evidence_class,measured_retrieval,primary_population,completion_status,primary_result
+0,A0,Research foundation,Governance schemas feasibility and safety,Synthetic engineering validation,No,None,Complete,44 targeted checks 387 broader tests 66 interface and policy checks
+1,A1,Common screening,Five systems crossed with five shared representations,Measured development,Yes,150-query representation-development population,Complete,25 of 25 cells completed
+2,A2,Per-system search,Retriever-specific representation search,Measured development,Yes,150-query representation-development population,Complete,44 of 52 configurations measured and zero failures
+3,A3,Transfer and composition,Transfer compatibility fusion and constrained search,Measured development,Yes,250-query development pool,Complete,14 audited operations and one executable adaptive action
+4,A4,Selection,Operating profiles and one-time selection,Selection evidence,Yes,125-query selection exposure,Complete,Four profiles completed all 125 queries
+5,A5,Final confirmation,Paired comparison of two frozen systems,Confirmatory evidence,Yes,872-query final confirmation,Complete,Recall@100 difference 0.111379 with CI 0.102294 to 0.120438
+6,A6,Full benchmark,Single-system depth and scale characterization,Post-confirmatory measurement,Yes,1247 queries and 45336 candidate families,Complete,100 percent coverage and zero failures
+7,A7,Exposure diagnosis,Immutable-pool anatomy and ordering bound,Diagnostic inference,Yes,Strict relation-scoped cross-domain population,Complete,4065 of 5193 relevant pairs absent from Top-200
+8,A8,Publication synthesis,Manuscript figures tables and evidence mapping,Publication synthesis,No new retrieval,Validated A0-A7 evidence,Complete and submission-authorized,No external journal upload by cutoff

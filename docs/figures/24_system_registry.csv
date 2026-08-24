@@ -1,0 +1,6 @@
+system_label,system_type,principal_role,license_boundary,weights_changed,query_prefix_fixed,document_prefix_fixed,pooling_fixed,normalization_fixed,similarity_fixed
+BM25,Lexical,Transparent CPU reference,Commercial-capable implementation,No,Yes,Yes,Not applicable,Yes,Yes
+BGE-M3,Multilingual dense,General dense reference,MIT,No,Yes,Yes,Yes,Yes,Yes
+PatEmbed-large,Patent-specific dense,Research-quality candidate,Research or non-commercial boundary,No,Yes,Yes,Yes,Yes,Yes
+Arctic Embed M v2.0,Long-context multilingual dense,Commercial-capable candidate,Apache 2.0,No,Yes,Yes,Yes,Yes,Yes
+Qwen3 Embedding 0.6B,Instruction-aware dense,Commercial-capable candidate,Apache 2.0,No,Yes,Yes,Yes,Yes,Yes

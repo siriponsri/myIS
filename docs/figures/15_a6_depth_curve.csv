@@ -1,0 +1,4 @@
+population,recall_at_10,recall_at_20,recall_at_50,recall_at_100,recall_at_200,ndcg_at_10,ndcg_at_100,judged_queries,scope_note
+All relations,0.136795,0.214697,0.336358,0.438965,0.546832,0.295725,0.362497,1247,All judged queries
+In-domain relations,0.187048,0.277872,0.413145,0.528164,0.645077,0.307483,0.406513,1217,Relation-scoped in-domain population
+Strict cross-domain relations,0.034023,0.070933,0.133994,0.188450,0.260167,0.025697,0.070644,905,Relation-scoped strict cross-domain population

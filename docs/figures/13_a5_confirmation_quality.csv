@@ -1,0 +1,4 @@
+metric,static_comparator,research_configuration,absolute_difference,ci_lower,ci_upper,wins,ties,losses,paired_queries,uncertainty_status,interpretation
+Recall@100,0.331097,0.442476,0.111379,0.102294,0.120438,619,158,95,872,Canonical paired bootstrap interval,Confirmed system-level improvement
+nDCG@100,0.279253,0.365595,0.086342,0.078673,0.094077,,,872,Canonical paired bootstrap interval,Confirmed system-level improvement
+nDCG@10,0.233666,0.297459,0.063794,,,,872,Descriptive no canonical interval,Do not infer confirmatory interval

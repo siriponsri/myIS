@@ -1,0 +1,9 @@
+claim_id,claim_text,stage,evidence_status,scope,do_not_overclaim,visual_encoding
+C1,Complete research configuration improves cross-domain Recall@100 over static comparator,A5,Confirmed,872 held-out queries,System-level comparison not component-level causality,Highlight point with CI
+C2,Complete research configuration improves cross-domain nDCG@100 over static comparator,A5,Confirmed,872 held-out queries,System-level comparison not universal superiority,Highlight point with CI
+C3,Representation quality is retriever-dependent,A1-A3,Supported development evidence,Five retrieval systems and transfer matrix,Not a universal representation ranking,Heatmap with diagonal marker
+C4,More retrieval systems do not guarantee better fusion,A3,Supported development evidence,Five composition controls,Not a claim that fusion is always harmful,Grouped dot plot
+C5,Most strict cross-domain error is outside Top-200 candidate pool,A7,Diagnostic inference,5193 relevant pairs,Analytical scope cannot estimate future reranker,Stacked exposure bar
+C6,A8 package is complete and submission-authorized,A8,Confirmed project status,Publication package,No journal acceptance or upload claim,Status card
+C7,The method is commercially deployable,A4-A8,Not tested,License and deployment context,Do not include in figure narrative,Explicitly omit
+C8,The selected model is legally valid for patent decisions,A0-A8,Not tested,Legal interpretation,Do not include in figure narrative,Explicitly omit

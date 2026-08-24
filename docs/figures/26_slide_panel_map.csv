@@ -1,0 +1,14 @@
+panel_id,slide_role,source_csv,visual_form,headline,secondary_annotation,qualifier
+P01,Opening problem,04_document_representations.csv,Process diagram,Retrievers score representations rather than inventions in the abstract,Five deterministic views expose different evidence,Representation is a scientific variable
+P02,Protocol guardrail,02_evaluation_partitions.csv,Partition lane,Development selection and confirmation were separated,Selection and final sets were opened once,Protected membership is not shown
+P03,Development frontier,03_a1_common_screening.csv,Ranked dot plot,Three systems advanced from common screening,PatEmbed had highest common-screen mean,Development is not confirmation
+P04,Conditional search,06_a2_per_system_search.csv,Decision matrix,Per-system outcomes were heterogeneous,PatEmbed within-search winner ties A1 incumbent at displayed precision,No universal winner
+P05,Transfer,07_a3_transfer_matrix.csv,Heatmap,No diagonal representation advantage persisted across targets,Target retriever identity remains important,Development aggregate
+P06,Fusion boundary,08_a3_fusion_controls.csv,Grouped bars,Two-system fusion helped selectively,Three-system and all-primary fusion tied,More systems is not monotonic
+P07,Selection,11_a4_selection_pairs.csv,Forest plot,Research profile exceeded alternatives on paired Recall@100,Intervals remain above zero for selected comparisons,Selection is not confirmation
+P08,Confirmation,13_a5_confirmation_quality.csv,Forest plot,Held-out quality improvement was confirmed,Recall and nDCG intervals exclude zero,Complete system comparison
+P09,Operations,14_a5_confirmation_operational.csv,Slope chart,Quality gain came with a p99 latency trade-off,Median latency and throughput improved,Not universally faster
+P10,Scale,15_a6_depth_curve.csv,Small-multiple lines,Depth improves recall but cross-domain remains hard,In-domain and all-relations curves are higher,Scopes are relation-scoped
+P11,Diagnosis,17_a7_exposure_anatomy.csv,Stacked bars,Most cross-domain relevant pairs are absent from Top-200,4065 of 5193 are absent,Counts are pair-level
+P12,Next research,19_a7_within_pool_bound.csv,Bound chart,Perfect ordering cannot recover absent candidates,Headroom is 0.071717 cross-domain,Oracle is analytical
+P13,Closeout,22_publication_status.csv,Status matrix,Scientific package is complete and submission-authorized,External upload remains undone,Administrative status only

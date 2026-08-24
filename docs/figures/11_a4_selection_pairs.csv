@@ -1,0 +1,7 @@
+comparison,left_system,right_system,left_recall_at_100,right_recall_at_100,difference,ci_lower,ci_upper,wins,ties,losses,paired_queries,selection_scope
+Research vs balanced,Research configuration,Balanced,0.416111,0.360556,0.055556,0.029986,0.081667,49,20,21,90,Cross-domain-positive selection queries
+Research vs quality-oriented,Research configuration,Quality-oriented,0.416111,0.360556,0.055556,0.029986,0.081667,49,20,21,90,Cross-domain-positive selection queries
+Research vs speed-oriented,Research configuration,Speed-oriented,0.416111,0.308333,0.107778,0.081111,0.135000,69,9,12,90,Cross-domain-positive selection queries
+Balanced vs quality-oriented,Balanced,Quality-oriented,0.360556,0.360556,0.000000,0.000000,0.000000,0,90,0,90,Cross-domain-positive selection queries
+Balanced vs speed-oriented,Balanced,Speed-oriented,0.360556,0.308333,0.052222,0.038889,0.065556,55,29,6,90,Cross-domain-positive selection queries
+Quality-oriented vs speed-oriented,Quality-oriented,Speed-oriented,0.360556,0.308333,0.052222,0.038889,0.065556,55,29,6,90,Cross-domain-positive selection queries

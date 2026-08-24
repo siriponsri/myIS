@@ -1,0 +1,11 @@
+metric_id,metric_label,definition,unit,aggregation,preferred_chart,uncertainty_rule,notes
+recall_at_k,Recall@k,Share of relevant family pairs retrieved within first k ranks,proportion,Macro over relation-scoped queries,Line chart or dot plot,Use interval only when canonical interval exists,Primary quality endpoint
+ndcg_at_k,nDCG@k,Discounted gain normalized by ideal ranking at depth k,proportion,Macro over evaluated queries,Dot plot or forest plot,Use interval only when canonical interval exists,Secondary ranking endpoint
+p50_latency,Median latency,50th percentile end-to-end query latency,milliseconds,Percentile over queries,Dot plot,Descriptive unless interval is available,Lower is favorable
+p95_latency,95th percentile latency,95th percentile end-to-end query latency,milliseconds,Percentile over queries,Dot plot,Descriptive,Lower is favorable
+p99_latency,99th percentile latency,99th percentile end-to-end query latency,milliseconds,Percentile over queries,Dot plot,Descriptive,Lower is favorable
+throughput,Throughput,Queries processed per second,queries_per_second,Run-level rate,Dot plot,Descriptive,Higher is favorable
+coverage,Coverage,Completed query outputs divided by scoped query outputs,percent,Run-level proportion,Metric card,Exact count preferred,Must not be confused with retrieval quality
+candidate_exposure,Candidate exposure,Relevant family pairs present in candidate pool,count,Relation-level count,Stacked bar,Exact count,Pool depth must be stated
+within_pool_headroom,Within-pool headroom,Perfect-ordering bound minus observed Recall@100,proportion,Relation-scoped macro difference,Paired bar,Analytical bound only,Not achieved reranker performance
+reported_cost,Reported cost,Measured operational charge for the scoped run,USD,Run total,Cost card,Descriptive,Do not compare across incompatible scopes without qualification

@@ -1,0 +1,6 @@
+representation_id,short_label,construction,token_or_view_rule,aggregation,used_in_common_screening,interpretive_role
+R1,Title abstract claims,Concatenate title abstract and claims,Full family document,Single family score,Yes,Complete context baseline
+R2,Title abstract,Concatenate title and abstract,Full family document,Single family score,Yes,Compact summary baseline
+R3,Independent claim,First structured independent claim,Single claim view,Single family score,Yes,Legal-technical anchor
+R4,Overlapping passages,Split long text into fixed passages,384-token passages with 64-token overlap,Family maximum score,Yes,Long-document evidence access
+R5,Labeled multi-view,Separate labeled title abstract and claims,Section-specific views,Family rank fusion,Yes,Structured multi-view composition

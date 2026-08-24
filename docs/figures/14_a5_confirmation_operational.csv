@@ -1,0 +1,9 @@
+measure,unit,static_comparator,research_configuration,difference,research_direction,interpretation
+p50 latency,ms,315.862,237.547,-78.315,Lower is favorable,Research configuration lower median latency
+p95 latency,ms,735.171,732.218,-2.953,Lower is favorable,Similar tail latency at p95
+p99 latency,ms,804.002,1044.613,240.611,Higher is unfavorable,Research configuration worse p99 latency
+Throughput,queries_per_second,2.6659,3.3193,0.6534,Higher is favorable,Research configuration higher throughput
+Peak RAM,GiB,16.358,16.358,0.000,Lower is favorable,Equal peak RAM
+Peak VRAM,GiB,0.845,0.845,0.000,Lower is favorable,Equal peak VRAM
+Index size,bytes,2961523444,2961523444,0,Higher is unfavorable,Equal index size
+Reported cost,USD,1.45682,1.45682,0,Higher is unfavorable,Equal reported cost

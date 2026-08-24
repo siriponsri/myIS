@@ -1,0 +1,2 @@
+selection_population,scoped_queries,queries_with_positive_cross_domain_relations,queries_excluded_from_cross_domain_denominator,profile_count,failures,exposure_count,interpretation
+Sealed selection set,125,90,35,4,0,1,All 125 queries counted for access and coverage; 90 used for cross-domain paired metrics
