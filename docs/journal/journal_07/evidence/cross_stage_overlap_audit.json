@@ -1,0 +1,47 @@
+{
+  "claim_boundary": "The audit establishes exact query-record and normalized query-text overlap only. The available benchmark metadata does not map query records to query families or source-publication members, so it cannot establish family-level independence.",
+  "exact_query_id_overlap": {
+    "selection_vs_final": 0,
+    "train_vs_final": 0,
+    "train_vs_selection": 0
+  },
+  "inputs": {
+    "parent_split_sha256": "f56ad94e2a8d821ab8da556b39fcb60c30a970b9274dda4a40ddfc8f4364195c",
+    "query_arrow_sha256": "b596c2dcc73399840c0a9c2143b23e8497bbaa33af8dbb2a8877ad52e5f9f2fd"
+  },
+  "metadata_coverage": {
+    "benchmark_related_family_grouping_available": false,
+    "exact_query_family_mapping_available": false,
+    "missing_split_query_rows": 0,
+    "query_rows": 1247,
+    "query_schema_fields": [
+      "query_id",
+      "earliest_claim_jusrisdiction",
+      "jurisdiction",
+      "ipcr_codes_str",
+      "earliest_claim_date",
+      "earliest_claim_year",
+      "classifications_ipcr_list_first_three_chars_list",
+      "title_en",
+      "abstract_en",
+      "claims_text",
+      "description_en",
+      "abstract_keywords"
+    ],
+    "source_publication_member_mapping_available": false
+  },
+  "normalization": "NFKC, whitespace collapse, trim, Unicode casefold over title+abstract+claims",
+  "normalized_query_tac_overlap": {
+    "selection_vs_final": 0,
+    "train_vs_final": 0,
+    "train_vs_selection": 0
+  },
+  "protected_payload_included": false,
+  "schema_version": "rcrs.cross-stage-overlap-audit.v1",
+  "stage_query_counts": {
+    "final": 872,
+    "selection": 125,
+    "train": 250
+  },
+  "status": "PASS_AGGREGATE_ONLY_WITH_METADATA_LIMITS"
+}

@@ -1,0 +1,4 @@
+* RCRS searches executable patent-text programs for a frozen retriever.
+* On 872 OUT-eligible queries, RCRS exceeds the fixed comparator by 0.1114.
+* Observed transfer outcomes vary across the tested retrievers.
+* 4,065 of 5,193 strictly OUT-linked pairs are absent from Top-200.

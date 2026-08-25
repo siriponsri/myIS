@@ -343,3 +343,15 @@ dashboard identity/all-fee/TTL evidence plus pinned SSH runtime/GPU checks and
 `OWNER_MANUAL_DASHBOARD_DESTROY_READY`; it records
 `provider_authenticated=false` and requires Owner manual dashboard destruction
 and post-closeout SSH unreachability.
+
+## Paper refinement workflow
+
+Paper versions are stored under `docs/journal/`. For each future refinement,
+create the next `journal_NN/` as a sibling copy of the prior version, keep every
+prior version unchanged, apply only evidence-supported edits, build and run
+text/static/delegated visual QA, then commit and push the validated new version
+from this `01_Research` repository. After closeout, stop and wait for the owner
+to provide the matching next external review and Prism audit.
+
+The current paper refinement is `journal_06/` to `journal_07/`, driven by
+`external_review_06.md` and `prism_audit_06.md` in the Paper workspace.

@@ -1,0 +1,988 @@
+     Retriever-Conditioned Representation Search for
+          Cross-Domain Patent-Family Retrieval
+                             Anonymous manuscript
+
+
+
+
+Abstract
+Citation-linked patent-family retrieval must find relevant families despite
+long documents, duplicate family members, and vocabulary shifts across
+technical domains. We test whether the candidate representation should be
+chosen for each frozen retriever rather than fixed for all retrievers. Retriever-
+Conditioned Representation Search (RCRS) evaluates a finite set of exe-
+cutable patent-text programs without updating retriever weights. Develop-
+ment results varied by retriever and did not support one universal represen-
+tation. Before the single Selection-125 exposure, BM25 plus Arctic was fixed
+as the operational comparator. Final-872 then compared that system with
+the selected PatEmbed RCRS system. Recall@100 on the 872 OUT-eligible
+queries was 0.4425 versus 0.3311 (paired difference 0.1114; 95% bootstrap
+confidence interval 0.1023–0.1204; 619 wins, 158 ties, and 95 losses). This
+confirms a difference between two complete frozen systems, not an isolated
+representation effect. A later diagnosis of the unchanged winner found that
+4,065 of 5,193 strictly OUT-linked relevant pairs were absent from its Top-
+200 pool. Under this protocol, the selected system performed better than the
+operational comparator, while most remaining strict-OUT error lay outside
+the pool available to a reranker.
+Keywords: patent retrieval, patent families, representation search,
+cross-domain retrieval, candidate exposure, auditable evaluation
+
+
+1. Introduction
+    A patent retrieval system rarely scores an invention as a single, uniform
+document. Technical content may be split across family members and across
+titles, abstracts, descriptions, and claims. Claims compress legal scope into
+specialized language; descriptions repeat concepts at several levels of detail.
+
+Preprint submitted to World Patent Information                    August 25, 2026
+Cross-domain retrieval adds vocabulary shift between the query and the rel-
+evant family. These properties make text construction part of the retrieval
+configuration. Field order, structural labels, passage boundaries, packing,
+duplicate handling, and family aggregation all affect the evidence presented
+to a frozen retriever.
+    Family-level and embedding benchmarks now support controlled study
+of these choices. DAPFAM defines domain-aware relevance at patent-family
+level [1]. PatenTEB and a broader multi-task study compare patent embed-
+dings across retrieval, classification, and clustering tasks [2, 3]. Those studies
+primarily compare models or embeddings. Here the model weights stay fixed
+while the executable representation changes.
+    AutoIndex frames representation construction as a program-search prob-
+lem [4]. Patent records require a more constrained grammar than generic
+text: the program must respect document structure, long fields, family du-
+plication, and candidate-level aggregation. RCRS combines that determinis-
+tic patent-family grammar with retriever-conditioned staged evaluation and
+a frozen system-level confirmation. Optimization also needs an evaluation
+protocol that separates iterative development from confirmation. Repeated
+access to one final set would make a representation program another route
+for test-set adaptation.
+    The contribution is deliberately separated into four parts. The method
+contribution is an executable grammar for patent-family representations.
+The protocol contribution is retriever-conditioned staged selection followed
+by bounded confirmation. The empirical contribution is the observation that
+transfer outcomes varied across the tested retrievers. The diagnostic contri-
+bution is the post-confirmatory decomposition of candidate exposure from
+within-pool ordering. RCRS is therefore not presented as a wholly new re-
+trieval algorithm or as a replacement for AutoIndex; it is a patent-specific
+representation and evaluation formulation.
+    Retriever-Conditioned Representation Search (RCRS) addresses both
+points. The method searches serializable programs that transform patent
+text and aggregate family evidence. Retriever weights, training data, and
+relevance judgments do not change. The protocol separates iterative de-
+velopment, one Selection-125 exposure, paired Final-872 confirmation, and
+post-confirmatory analysis of the unchanged winner (Fig. 1).
+    Repository receipts use A1–A7 for study records; retriever identifiers re-
+main in the provenance files. The article therefore uses step names and model
+names in the narrative and figures; Table 5 maps the study steps back to their
+
+                                        2
+    A Representation evaluated for one frozen retriever
+
+Patent-family record Representation program p Frozen retriever a                     Family aggregation           Ranked families
+
+
+title | abstract | claims   fields | segments | packing    weights/scoring frozen;   max | top-k mean | RRF       Top-k candidates
+                                                                index rebuilt
+
+    B Study order and permitted inference
+
+                    Development                              Selection-125            Final-872               Post-confirmatory
+
+
+         common screen | per-retriever search                 one exposure         two frozen systems              depth run
+              transfer | fixed controls                   comparator already fixed                             exposure diagnosis
+
+                   The operational comparator was fixed before Selection; later analyses use the unchanged winner.
+
+
+
+Figure 1: Method and study order. (A) An executable program constructs patent text and
+family-level evidence for one frozen retriever. Retriever weights and the scoring function
+are frozen; the derived candidate index is rebuilt deterministically for each representation
+program. (B) Development, Selection-125, Final-872 confirmation, and post-confirmatory
+analysis have separate roles. The operational comparator was fixed before Selection-125.
+
+
+repository records.
+    The study answers three questions. First, does one representation pro-
+gram transfer across frozen retrievers, or are useful choices retriever-specific?
+Second, how does the selected frozen system compare with the prespecified
+BM25+Arctic operational comparator on a held-out query split? Third, after
+confirmation, how much strictly OUT-linked error reflects ordering inside the
+retrieved pool and how much reflects absent candidates? The claims remain
+within this family-level benchmark. We do not present a new embedding
+model, a component-level causal ablation, a universal baseline ranking, or a
+numerical comparison with external protocols that use different corpora or
+relevance definitions.
+
+2. Related work
+2.1. Patent-family retrieval and embedding evaluation
+    Patent retrieval differs from short-text web search in length, structure,
+duplication, and the cost of missed prior art. BM25 remains a useful lexical
+reference because it exposes exact-term evidence and has a well understood
+probabilistic basis [5]. Dense retrievers add semantic matching but impose
+model-specific context, pooling, and input conventions. Multilingual and
+patent-specialized embedding models therefore need evaluation at the same
+unit used by the application.
+
+                                                                   3
+    DAPFAM makes the family the evaluation unit and distinguishes cross-
+domain relations [1]. That design avoids counting several publications of the
+same invention as independent successes. PatenTEB and patent-embedding
+benchmarks cover a broader set of tasks and models [2, 3]. Their published
+scores cannot be placed in a common ranking with the present results unless
+corpus version, query construction, family normalization, relevance unit, and
+metric denominators match. They position the research question but do not
+serve as numerical comparators.
+
+2.2. Executable representations, fusion, and candidate depth
+    An executable representation program records more than a prompt or a
+text template. It specifies the operations that produce indexable units and
+the rule that maps unit scores back to a patent family. AutoIndex provides
+the closest general formulation [4]. Our grammar specializes that idea to
+structured patent fields and ties every program to a frozen retriever.
+    DAPFAM evaluates patent retrieval choices such as models, document
+or passage representations, family aggregation, and rank fusion [1]. RCRS
+does not replace that benchmark or claim a new embedding or reranker. It
+adds a finite, serializable search over representation programs, removes du-
+plicate executable actions, conditions each search on one frozen retriever,
+and separates development, one selection exposure, and confirmation. Com-
+pared with AutoIndex, the search mechanism remains program based, but
+the grammar is limited to patent fields, long-document units, duplicate han-
+dling, and patent-family aggregation. The main difference is therefore the
+patent-specific grammar and evaluation protocol, not a wholly new search
+algorithm.
+    Table 1 separates these contributions. The individual operations are not
+claimed as new. RCRS contributes their patent-specific, executable identity,
+conditions the search on a frozen retriever, and places selection and confir-
+mation behind separate data exposures.
+    Optimization in a compound system can produce flat or unstable search
+surfaces when distinct proposals compile to the same action or when a local
+change is incompatible with the surrounding components [6]. The evalua-
+tion therefore records the effective program signature and negative outcomes
+rather than counting proposals as independent progress. Rank fusion supplies
+a separate test of complementarity. Reciprocal rank fusion (RRF) combines
+lists without calibrated scores [7], but an extra list can still add noise. Best-
+single, top-two, top-three, all-primary, and commercial-only controls were
+
+                                       4
+Table 1: Scope of the closest frameworks. A check marks an explicit focus, not a numerical
+comparison across incompatible protocols.
+Framework     Main unit            Executable            Retriever-          Protected
+                                   program               conditioned         selection and
+                                   identity              search              confirmation
+DAPFAM        patent-family        no                    evaluates           no
+[1]           benchmark                                  multiple
+              experiments                                retrievers and
+                                                         representations
+AutoIndex     general              yes                   frozen-retriever    not its focus
+[4]           representation                             program
+              programs                                   optimization
+RCRS          patent-family        yes; duplicate        yes; one search     yes; one
+              representation       actions removed       per frozen          selection
+              programs                                   retriever           exposure and
+                                                                             one frozen
+                                                                             system
+                                                                             comparison
+
+
+fixed before evaluation.
+    Candidate depth separates first-stage exposure from later ordering. Pas-
+sage retrieval can support fine-grained patent novelty analysis [8], but a
+downstream reranker or novelty model cannot act on an absent family. The
+post-confirmatory oracle therefore asks only what perfect ordering of the al-
+ready frozen Top-200 could achieve. It is an analytical bound, not a reranker
+result.
+
+3. Method
+3.1. Retriever-conditioned objective
+    Let a denote a frozen retriever, p ∈ P an executable representation pro-
+gram, q a query patent record, and d a candidate patent-family record. Pro-
+gram p emits a finite set of candidate views,
+
+                                 Vp (d) = {v1 , . . . , vm }.                                (1)
+    The frozen retriever scores each view, and the program maps those scores
+to a family score,
+
+                     Sa,p (q, d) = Gp (sa (q, v1 ), . . . , sa (q, vm )) .                   (2)
+
+                                              5
+   The development search selects
+
+                               p∗a = arg max Ja (p),                             (3)
+                                            p∈P
+
+    where Ja is the prespecified family-level objective for retriever a. OUT
+Recall@100 is primary; latency, cost, coverage, failures, and determinism
+are guardrails. The subscript a is substantive: a program selected for one
+retriever is not assumed to transfer to another.
+    For max-p aggregation, the score of a family is the highest score among
+its emitted passages: Gp (s1 , . . . , sm ) = maxi si . In plain terms, a family
+receives the score of its best-matching passage. The query side uses the frozen
+benchmark query text and each retriever’s locked query format. PatEmbed
+uses “encode query for different document retrieval:”; Arctic uses “query:”;
+BGE-M3 uses no instruction; and Qwen3 uses the recorded patent-family
+retrieval instruction. The representation program changes candidate-family
+views, not query membership or relevance labels.
+    For a query q, Rq (q) denotes the query representation and Rp (d) denotes
+the candidate-family views emitted by program p. Retriever weights and
+the scoring function are bound before evaluation. Changing p changes the
+candidate views and therefore the derived index; candidate indexes are re-
+built deterministically for each evaluated representation. The model, scoring
+function, relevance judgments, and metric code remain fixed.
+    For a query-level relevant-family set Rel(q), per-query recall and macro
+query-averaged recall are
+                   | Rel(q) ∩ Topk (q)|                          1 X
+         rq @k =                        ,         Recall @k =           rq @k.   (4)
+                         | Rel(q)|                              |Q| q∈Q
+
+The pair-level exposure diagnostic is different:
+
+                                            q | Rel(q) ∩ Topk (q)|
+                                       P
+                    Exposure @k =                                    .           (5)
+                                                  q | Rel(q)|
+                                                P
+
+
+Macro query recall must therefore not be compared numerically with pair-
+level exposure.
+    Binary relevance is computed as
+                     
+                     1,    if the recorded score is greater than zero,
+         rel(q, d) =                                                            (6)
+                         0, otherwise.
+
+                                            6
+3.2. Executable grammar and program identity
+    The grammar contains auditable text operations. A program selects title,
+abstract, and claims; orders fields; adds structural labels; creates document,
+section, claim, passage, or multiview units; sets passage size, overlap, and
+boundary handling; packs units within the retriever’s input limit; normalizes
+Unicode, whitespace, case, and punctuation; applies a duplicate policy; and
+aggregates evidence by maximum score, top-three mean, top-two mean, or
+view-level RRF. The program cannot change retriever parameters, training
+data, the corpus, relevance labels, or metric code.
+    Every candidate program is serialized. Evaluation keys use its effective
+action signature, so syntactically different proposals that compile to the same
+behavior are counted once. This rule matters for the flat search surface
+reported in Section 5.
+
+3.3. Finite representation-search procedure
+    The search used a frozen candidate manifest rather than an unconstrained
+live LLM sweep. The manifest contained 52 proposals: 40 matched proposals
+and 12 conditional reserves. All 52 compiled to distinct executable signatures.
+Its proposal roles were exploit, matched-ablation, orthogonal, and diversity,
+and it was frozen before measurement with seed 20260812. Each frozen pro-
+posal was compiled, mapped to an effective action signature, and skipped if
+that signature had already been evaluated. For a new signature, the pro-
+cedure constructed query and candidate views, evaluated the candidate on
+development data, and recorded valid, invalid, or dormant status with cost,
+coverage, and failures. The predeclared decision class (strict gain, numerical
+tie, or no strict gain) was then applied and the selected configuration was
+frozen. No proposal mutated a retriever, corpus, judgment, metric, or later
+split.
+    Before comparison, the primary metric is rounded to 12 decimal places
+with round-half-even. A strict gain means that this rounded candidate score
+is greater than the rounded frozen incumbent score. Equality is a numerical
+tie. There is no additional tolerance and no secondary-metric or latency
+tiebreaker. Dormant candidates remain unmeasured and do not imply a
+metric.
+    The A2 accounting was 52 frozen proposals, 44 measured proposals, 8
+dormant reserves, and zero declared scientific failures.
+
+
+
+                                      7
+Table 2: Finite representation-search accounting. The candidate manifest was frozen
+before measurement. Every proposal had a distinct executable signature; dormant reserves
+were not measured.
+Retriever   Proposals Unique sigs. Measured Dormant Recorded outcome
+BM25               8           8        8        0 diagnostic tie
+BGE-M3             8           8        8        0 diagnostic tie
+PatEmbed          12          12        8        4 numerical tie
+Arctic            12          12        8        4 strict gain
+Qwen3             12          12        8        4 no strict gain
+Total             52          52       44        8 –
+
+
+
+    The separate A3 search procedure proposed 12 programs in three com-
+plete batches, but all 12 compiled to one executable action. It therefore
+stopped at a flat search surface. A2 and A3 are separate development records.
+
+3.4. Frozen retrievers
+    All retrievers were frozen before their reported evaluations. They span a
+lexical baseline, a general multilingual embedding model, a patent-specialized
+model, and two recent general embedding models (Table 3). Context lim-
+its are recorded configuration properties; they do not imply equal effective
+coverage of a patent record. PatEmbed uses CC BY-NC-SA 4.0, which may
+constrain commercial deployment. The license is therefore part of the system
+boundary, not a footnote to the effectiveness result.
+    The frozen BM25S configuration used k1 = 1.2, b = 0.75, Lucene-style
+scoring, and a NumPy backend. Its tokenizer applied Unicode NFKC nor-
+malization and case folding, then extracted word tokens; it used neither
+stemming nor stopword removal.
+    Both systems used the same fixed Final-872 query scope and candidate-
+family pool, but their retrievers, query encoders or formats, scoring functions,
+input limits, and indexes were system specific and frozen before confirmation.
+Final-872 therefore compares these two complete systems. It does not isolate
+representation and is not a claim against all static representations.
+
+4. Experimental design
+4.1. Benchmark and evidence stages
+    Every experiment belongs to the same family-level cross-domain bench-
+mark lineage [1]. The benchmark construction is publication/source records
+→ benchmark family records → ordered text fields → normalization and
+
+                                            8
+Table 3: Frozen retrievers. Short names are used in the text and figures; repository
+retriever identifiers remain in the provenance files.
+Short         Retriever            Type; dimension;       License         Role in
+name                               context                                development
+BM25          BM25S 0.3.10         lexical; –; –          –               diagnostic lexical
+                                                                          baseline [5]
+BGE-M3        BAAI/bge-m3          dense multilingual;    MIT             diagnostic [9]
+                                   1,024; 8,192
+PatEmbed      datalyes/            patent dense;          CC              advanced;
+              patembed-large       1,024; 512             BY-NC-SA        research/non-
+                                                          4.0             commercial
+Arctic        Snowflake Arctic-    dense multilingual;    Apache 2.0      advanced [10]
+              Embed-M-v2.0         768; 8,192
+Qwen3         Qwen3-               dense multilingual;    Apache 2.0      advanced [11]
+              Embedding-0.6B       1,024; 32,768
+                                   model-declared
+                                   tokens
+
+
+Table 4: The two systems compared on Final-872. They use different retriever composi-
+tions and candidate representations. The result is therefore a comparison of two complete
+frozen systems, not an isolated representation effect. Verification identifiers are listed in
+Appendix Table A.8.
+System                 Human-readable binding
+Selected RCRS          PatEmbed only; title, abstract, claims; 384-token passages;
+                       64-token overlap; NFKC whitespace normalization;
+                       content-hash-first duplicate policy; max-p family aggregation
+Operational            BM25 plus Arctic, synchronous, depth 100; title, abstract, claims;
+comparator             one family document; NFKC canonical whitespace with case
+                       preserved; all source members retained; single-unit family
+                       aggregation
+
+
+duplicate policy → views/passages → one family score. The complete re-
+trieval pool contains 45,336 candidate families. Table 5 records population,
+exposure, freeze state, and permitted interpretation for each study step. De-
+velopment is iterative. Selection-125 is the only selection exposure. Final-872
+compares exactly two frozen systems. The depth run and candidate-exposure
+diagnosis use only the confirmed winner after Final-872.
+
+
+
+
+                                              9
+Table 5: Study steps, populations, exposure, and permitted interpretation. Repository
+codes identify experiment records, not retrievers.
+Record   Study step          N    OUT                System state and        Permitted
+                                  population         exposure                inference
+A1–A3    Development:       250   development-       five frozen             describe
+         common                   specific           retrievers; iterative   retriever-
+         screen,                                     search; fixed           specific
+         per-retriever                               transfer and fusion     outcomes,
+         search,                                     controls                transfer, ties,
+         transfer, and                                                       and negative
+         controls                                                            controls
+A4       Selection-125      125   OUT-eligible       four frozen profiles;   select the
+                                  n = 90             one exposure            research
+                                                                             reference
+A5       Final-872          872   eligible cohort;   two frozen systems;     compare
+         confirmation             17,429 judged      no tuning; paired       RCRS and
+                                  positive pairs     by query                the
+                                                                             operational
+                                                                             comparator
+A6       Full-            1,247   relation-          confirmed winner        report a
+         benchmark                scoped             only; depth 200;        depth stress
+         depth run                                   after Final-872         test only
+A7       Candidate-         905   strict             unchanged winner        separate
+         exposure                 IN/OUT;            and frozen Top-200      exposure
+         diagnosis                5,193 positive     pool                    from
+                                  OUT pairs                                  within-pool
+                                                                             ordering
+
+
+4.2. Patent-family construction and split protection
+    Each query is an English patent-family record represented by its title, ab-
+stract, and claims. The system ranks 45,336 candidate families, and positive
+relations are those with relevance score greater than zero. The benchmark la-
+bels each positive relation as IN or OUT by its domain relation. The recorded
+aggregate evidence does not expose a separate temporal-control rule, so no
+temporal-independence claim is added here.
+    The benchmark treats a candidate family as the unit of retrieval and
+evaluation. Publication/source records are grouped into benchmark-defined
+family records; the recorded comparator program retains all source members
+and orders them by publication ordinal and opaque publication token. It
+renders the title, abstract, and claims fields with NFKC canonical whites-
+
+
+                                          10
+pace and case preservation, then forms one family document. The selected
+RCRS program uses title, abstract, and claims fields with NFKC whitespace
+normalization, 384-token passages, 64-token overlap, content-hash-first du-
+plicate handling, and max-p family aggregation. The frozen specifications do
+not separately declare a language-selection filter or a near-duplicate rule; nei-
+ther is inferred here. These details distinguish the two frozen specifications
+without exposing member identifiers or protected split payload.
+    The split unit is the benchmark query record. Development comprises
+the REP-DEV 150-query cohort, the HDEV-100 100-query cohort, and their
+combined Train-250 250-query development record. Selection-125 contains
+125 queries, with OUT metrics on the verified (n=90) eligible subset. Final-
+872 contains 872 paired queries. Split membership and judgments were
+fixed before exposure and remain protected. A local aggregate-only audit
+found zero shared query records and zero duplicate normalized title–abstract–
+claims text across Development, Selection-125, and Final-872. The available
+metadata does not map query records to query-family or source-publication
+members, so the study establishes query-split separation but does not claim
+family-level independence.
+
+4.3. Development, transfer, and fixed controls
+    The common screen applies one representation to all five retrievers. The
+per-retriever search then preserves each recorded decision class (strict im-
+provement, tie, or no strict improvement). The transfer study applies each
+advanced-retriever program to every advanced target retriever without edit-
+ing. The 3 × 3 matrix tests compatibility; it is not a second selection proce-
+dure.
+    Five fixed controls test whether rank-list complementarity changes the re-
+sult: the strongest single system, top-two RRF, top-three RRF, all-primary
+fusion, and a commercial-only profile. The all-primary and top-three con-
+trols resolve to the same aggregate scores in the frozen record. None of
+these development controls can replace Selection-125 or enter Final-872 after
+inspection.
+
+4.4. Selection and confirmation
+    Selection-125 evaluates four frozen profiles at depth 100. The research
+reference is PatEmbed alone. The operational comparator combines BM25
+and Arctic synchronously. BALANCED combines BM25, Arctic, and Qwen3
+synchronously; DEEP uses the same three retrievers asynchronously. The
+
+                                       11
+primary OUT subset contains 90 queries. The research reference won all three
+pairwise decisions on eligible-cohort Recall@100 after every profile passed
+full coverage, zero-failure, and determinism checks. The exact comparator
+system was registered as the static/common baseline before Selection-125
+was opened. The registry had zero selection accesses and bound its system
+hash, synchronous mode, depth 100, and commercial-capable license scope.
+Selection identified the research champion; it did not select or modify the
+comparator. The resulting pair was then frozen for Final-872. Confirmation
+requires 872/872 coverage and paired query-level comparison; a failure would
+remain visible in the report.
+
+4.5. Metrics, uncertainty, and population accounting
+    Recall@k is computed at patent-family level. Recall@100 on the OUT-
+eligible query cohort is primary. nDCG@100 is a confirmatory secondary
+outcome. nDCG@10 is descriptive because the canonical Final-872 artifact
+contains no confidence interval for that endpoint. nDCG uses the bench-
+mark’s binary relevance grades. Final-872 differences are paired by query.
+Percentile 95% confidence intervals use 10,000 paired bootstrap resamples
+of the paired query units; win, tie, and loss counts use the same query
+unit. These intervals describe uncertainty from resampling the 872 evalu-
+ated queries under this fixed protocol; they are not uncertainty intervals for
+all patents or future search settings. Development decision classes are strict
+gain, numerical tie, and no strict gain, as recorded in the aggregate ledger.
+    The notation distinguishes two denominators. In Selection-125, an OUT-
+eligible query has at least one positive relation whose domain_rel value is
+OUT. All 125 queries are ranked, but only the 90 eligible queries enter OUT
+metric vectors and paired statistics; the other 35 are not inserted as zeroes.
+Final-872 selects queries by OUT eligibility but evaluates all judged positive
+families for those queries, not only relations whose domain_rel is OUT. Its
+metric denominator contains 17,429 positive query–family pairs. OU Tstrict
+is used only in the post-confirmatory full-benchmark diagnosis: raw self-
+relations are removed, then metrics are computed on the 905 queries that
+retain at least one positive OUT relation, comprising 5,193 positive pairs.
+IN and OUT can overlap at query level because one query may have both
+relation types. These populations serve different analyses and are not a
+before–after series.
+
+
+
+                                     12
+5. Development results
+5.1. Common screen and per-retriever search
+    Common-screen Recall@100 was 0.1912 for BM25, 0.2699 for BGE-M3,
+0.4134 for PatEmbed, 0.3407 for Arctic, and 0.3637 for Qwen3. The corre-
+sponding nDCG@100 values were 0.1727, 0.2314, 0.3478, 0.2845, and 0.3079.
+BM25 and BGE-M3 remained diagnostic; PatEmbed, Arctic, and Qwen3
+entered advanced development. Appendix Table A.7 gives the full common-
+screen and per-retriever aggregate ledger.
+    The common-screen and per-retriever values are separate development
+records; the first is not the incumbent used for the second decision. Against
+their frozen A2 incumbents, Arctic scored 0.3587 versus 0.3527 and met its
+strict-gain rule, PatEmbed tied at 0.4230, and Qwen3 scored 0.3737 versus
+0.3800 and did not meet the rule. BM25 and BGE-M3 remained diagnos-
+tic. Program outcomes therefore varied across the tested retrievers without
+implying an A1-to-A2 gain from the side-by-side display.
+
+5.2. Transfer, fusion, and effective search surface
+    Figure 2A reports all nine advanced-retriever transfers. The three pro-
+grams produced a narrow Recall@100 range on PatEmbed (0.4184–0.4193),
+a lower range on Arctic (0.3374–0.3413), and 0.3595–0.3626 on Qwen3. No
+program source held a consistent diagonal advantage, and the target-retriever
+ordering remained visible after transfer.
+    The diagonal cells in Fig. 2A are descriptive transfer cells, not the per-
+retriever winner values in Appendix Table A.7. The transfer matrix and the
+ledger use different development cohort and configuration summaries: the
+matrix applies each source program unchanged to a target retriever, whereas
+the ledger reports the separate per-retriever search record. Their diagonal
+values therefore need not agree, and no value is corrected or promoted from
+one record to the other.
+    The controls were also non-monotonic (Fig. 2B). Best-single and top-two
+RRF were nearly tied in Recall@100 (0.4184 and 0.4187), while top-two RRF
+increased nDCG@100 from 0.3471 to 0.3527. All-primary fusion and top-
+three RRF both returned 0.4151 Recall@100 and 0.2848 nDCG@10, below
+the strongest single system on those endpoints. The commercial-only profile
+returned 0.3693 Recall@100. It quantifies a licensing trade-off within this
+benchmark; it is not an alternative Final winner.
+
+
+                                     13
+    The separate search procedure proposed 12 candidates in three batches,
+but their effective action signatures collapsed to one. Additional proposal
+rounds did not create additional executable behavior. Nominal proposal
+count would therefore overstate the amount of search; the effective signature
+is the reported unit.
+
+6. Selection and confirmatory results
+6.1. One selection exposure
+    All four Selection-125 profiles completed 125/125 queries. The research
+reference obtained 0.4161 eligible-cohort Recall@100. BALANCED and
+DEEP tied at 0.3606; FAST obtained 0.3083. Against either BALANCED
+or DEEP, the paired difference was 0.0556 (95% CI 0.0300–0.0817; 49 wins,
+20 ties, 21 losses). Against FAST, the difference was 0.1078 (95% CI 0.0811–
+0.1350; 69/9/12). The recorded Selection-125 result contains no verified
+nDCG value, so none is inferred. The reported intervals and win/tie/loss
+counts are descriptive selection diagnostics, not confirmatory inference,
+because this exposure was used for profile selection. FAST is reported here
+as the registered profile name. It was the prespecified static/common oper-
+ational comparator, not the strongest commercial-capable system observed
+at Selection-125. Selection fixed the RCRS champion and did not alter the
+comparator; the final pair was then evaluated without tuning.
+
+                             A Cross-retriever transfer                                        B Fixed controls
+                                                                                                                                                               0.418
+                                                                                Best single                                         0.347
+                                                                                                                 0.291
+                 PatEmbed      0.4184       0.3374      0.3626
+Program source
+
+
+
+
+                                                                                                                                                               0.419
+                                                                               Top-two RRF                                            0.353
+                                                                                                                  0.294
+                    Arctic     0.4187      0.3413        0.3595
+                                                                                                                                                              0.415
+                                                                   All-primary / top-three                                          0.346
+                                                                                                               0.285
+
+
+                   Qwen3       0.4193       0.3383       0.3606
+                                                                                                                                              0.369
+                                                                           Commercial-only                               0.309
+                                                                                                      0.258
+                             PatEmbed        Arctic      Qwen3                                0.250    0.275    0.300     0.325   0.350   0.375       0.400   0.425
+                                  Frozen target retriever                                                                   Metric value
+                             Color scale normalized separately by target                                       Recall@100         nDCG@100             nDCG@10
+
+
+
+Figure 2: Development-only transfer and fixed controls. (A) Recall@100 for programs
+optimized on PatEmbed, Arctic, or Qwen3 and applied to each frozen target retriever;
+shading is normalized within a target column, so the darkest cell marks only that column’s
+highest transfer score. (B) Fixed fusion and licensing controls. These data were not used
+to revise the Final-872 systems.
+
+
+                                                                                     14
+              A Aggregate scores                                   B Paired differences                        C Recall@100 outcomes
+                           0.331                     Recall@100                               +0.1114   Win                        619
+Recall@100                                   0.442
+
+
+
+                   0.279
+nDCG@100                             0.366           nDCG@100                           +0.0863          Tie        158
+
+
+
+             0.234
+ nDCG@10                     0.297
+
+                                                      nDCG@10                     +0.0638 descriptive   Loss       95
+
+             0.2            0.3       0.4                         0.00     0.05       0.10                     0    250      500
+              Score on OUT-eligible queries                              Paired difference                              Queries
+              Operational comparator           RCRS
+
+
+
+Figure 3: Final-872 comparison of two frozen systems. (A) Aggregate effectiveness on
+the OUT-eligible query cohort; all judged positive families for each eligible query enter
+the metric. (B) Paired query-level differences and 95% bootstrap confidence intervals;
+nDCG@10 is descriptive. (C) Query-level Recall@100 wins, ties, and losses.
+
+
+6.2. Final-872 effectiveness
+    Both Final-872 systems completed 872/872 queries without failure.
+RCRS obtained 0.4425 Recall@100 on the OUT-eligible query cohort; the
+operational comparator obtained 0.3311 (Fig. 3). The paired difference
+was 0.1114 (95% CI 0.1023–0.1204), with 619 wins, 158 ties, and 95 losses.
+nDCG@100 increased from 0.2793 to 0.3656, a paired difference of 0.0863
+(95% CI 0.0787–0.0941). Descriptive nDCG@10 increased from 0.2337 to
+0.2975, an aggregate difference of 0.0638.
+    Under the frozen Final-872 protocol, the selected PatEmbed RCRS sys-
+tem outperformed the BM25+Arctic operational comparator. The estimate
+is a difference between two complete frozen systems. It does not show that
+representation alone caused the difference. External systems and individual
+grammar components were outside the design.
+    The operational results were mixed. RCRS reduced median latency and
+had a similar p95, but its p99 was 1,044.613 ms versus 804.002 ms for the
+operational comparator. Throughput was higher for RCRS (3.319344 versus
+2.665918 queries per second), a direct ratio of 1.245. These are recorded
+observations from the frozen run, not an independently reproducible effi-
+ciency benchmark: the available aggregate record does not define cache state,
+repetition count, or the exact timing boundary. They are not evidence of
+patent-office deployment scalability, and the worse tail latency prevents an
+unqualified efficiency claim.
+
+
+                                                                         15
+Table 6: Final-872 effectiveness on OUT-eligible queries and recorded operational checks.
+Metrics include all judged positive families for each eligible query. Confidence intervals
+are paired query-level bootstrap intervals. The p99 latency result is retained although it
+favors the comparator.
+Outcome            Operational comparator              RCRS     Difference   Statistical or
+                                                                or ratio     operational note
+Eligible-cohort                    0.3311             0.4425    +0.1114      CI 0.1023–0.1204;
+Recall@100                                                                   619/158/95
+Eligible-cohort                    0.2793             0.3656    +0.0863      95% CI
+nDCG@100                                                                     0.0787–0.0941
+Eligible-cohort                    0.2337             0.2975    +0.0638      descriptive; no
+nDCG@10                                                                      verified interval
+Latency p50 /           315.862 / 735.171   237.547 / 732.218   –            lower median;
+p95 (ms)                                                                     similar p95
+Latency p99 (ms)                  804.002          1,044.613    –            higher for RCRS
+Throughput                   2.665918 q/s       3.319344 q/s    1.245        direct throughput
+                                                                             ratio
+Coverage /                     872/872; 0         872/872; 0    –            both deterministic
+failures                                                                     in the recorded run
+
+
+
+7. Post-confirmatory diagnosis
+7.1. Complete-benchmark depth profile
+    After Final-872 fixed the selected RCRS configuration, the full-
+benchmark depth run evaluated that system alone on 1,247 queries and
+45,336 candidate families to depth 200. The run produced 249,400 ranked
+rows with no failure. Overall Recall@10, @20, @50, @100, and @200 was
+0.1368, 0.2147, 0.3364, 0.4390, and 0.5468 (Fig. 4A). IN recall at those
+depths was 0.1870, 0.2779, 0.4131, 0.5282, and 0.6451. Strict OUT recall
+was 0.0340, 0.0709, 0.1340, 0.1884, and 0.2602. nDCG@100 was 0.3625
+overall, 0.4065 for IN, and 0.0706 for OU Tstrict .
+    The depth run contains no comparator and uses relation-scoped denom-
+inators. It describes the frozen selected RCRS configuration at increasing
+candidate depth; it does not re-estimate the Final-872 effect.
+
+7.2. Strict OUT exposure and Top-200 bound
+    The candidate-exposure diagnosis partitions 5,193 OU Tstrict -relevant fam-
+ily pairs (Fig. 4B). Of these, 796 appeared in ranks 1–100, 332 only in ranks
+101–200, and 4,065 were absent at rank 200. Among 905 judged OU Tstrict
+queries, 67 were fully retrieved by rank 200, 297 were partially retrieved,
+86 had relevant evidence only in ranks 101–200, and 455 had no relevant
+candidate in the Top-200 pool. Appendix Table A.9 records these counts.
+
+
+                                             16
+                      A Recall by candidate depth                   B Top-200 exposure                            C Perfect within-pool ordering bound
+                0.7
+                                                                                                           ALL                       +0.108
+                                              IN                          796
+                0.6                                       Top 100         (15.3%)
+                                              ALL
+                0.5
+Family Recall
+
+
+
+
+                0.4
+                                                                        332
+                                                          101-200                                           IN                             +0.117
+                                                                        (6.4%)
+                0.3
+                                              OUTstrict
+                0.2
+                                                                                            4,065
+                0.1                                        Absent                           (78.3%)
+                                                                                                      OUTstrict         +0.072
+                0.0
+                      10   20   50    100    200                    0    1000 2000 3000 4000                      0.2      0.4       0.6
+                           Candidate depth                      Strictly OUT-linked relevant pairs                      Recall@100
+                                                                                                                          Observed @100
+                                                                                                                          Top-200 bound
+
+
+
+
+Figure 4: Diagnosis of the unchanged selected RCRS configuration after confirmation.
+(A) Macro query-averaged family recall by candidate depth. (B) Pair-weighted exposure
+counts for 5,193 OU Tstrict -relevant pairs. (C) Macro query-averaged Recall@100 and the
+analytical bound from perfect ordering of the frozen Top-200 pool. IN and OUT are
+relation-scoped and may overlap by query.
+
+
+    The analytical oracle moves each relevant family already present in the
+frozen Top-200 into the first 100 positions; it adds no candidate. The re-
+sulting Recall@100 bounds were 0.5468 overall, 0.6451 for IN, and 0.2602
+for OU Tstrict , compared with observed values of 0.4390, 0.5282, and 0.1884.
+The within-pool gaps were 0.1079, 0.1169, and 0.0717 (Fig. 4C). These are
+ordering bounds, not achieved reranker scores. Even perfect ordering of the
+exposed Top-200 would leave 4,065 strict OU Tstrict -relevant pairs unavailable.
+    The macro recall curves give each query equal weight. The exposure
+counts give each relevant query–family pair equal weight, so a query with
+many relevant families contributes more pairs. The two summaries answer
+different questions and need not have the same numerical value.
+
+8. Discussion
+8.1. Representation is part of the retriever configuration
+    The development results varied across retrievers. Arctic met its strict-
+improvement rule; PatEmbed and Qwen3 did not. Transfer changed scores
+by target retriever and produced no consistent source-program advantage.
+These outcomes fit a conditional view: the useful text units and aggregation
+rule depend on the scoring behavior and input constraints of the retriever
+that consumes them.
+    Final-872 shows that the selected frozen RCRS system can outperform the
+prespecified BM25+Arctic operational comparator. The estimate is paired,
+
+                                                                                    17
+its interval excludes zero, both systems cover the same 872 queries, and the
+comparator was fixed before the selection exposure. The negative and tied
+development outcomes show that improvement was not observed for every
+retriever, proposal batch, or fusion.
+
+8.2. Candidate exposure is a separate engineering target
+    The exposure decomposition narrows the next question. A reranker can
+reorder the 332 strictly OUT-linked relevant pairs found only in ranks 101–
+200 and can change the placement of relevant pairs already in the first 100.
+It cannot recover the 4,065 pairs absent from the Top-200. Candidate gen-
+eration, coverage, and cross-domain exposure therefore need separate mea-
+surement from ordering quality.
+    The oracle is reported as a bound. Calling the Top-200 bound a reranking
+result would imply an implemented model and an attainable gain. Neither
+exists here. The bound measures only the largest Recall@100 value permitted
+by the frozen candidate pool.
+
+8.3. Implications for patent-search evaluation
+    Three reporting practices follow from the evidence. A representation pro-
+gram should be versioned with its retriever, not listed as generic preprocess-
+ing. Family normalization, duplicate handling, passage packing, and score
+aggregation should appear in the executable configuration. The benchmark’s
+citation-derived relevance relations are evaluation labels, not legal findings
+about novelty or inventive step. Finally, relation-scoped populations should
+be reported with their query and pair denominators. The same label, such
+as OUT, is insufficient when protocols use different eligibility rules.
+    For search practice, the results separate four decisions. Family grouping
+and duplicate handling prevent repeated publications of one invention from
+being counted as separate retrieval successes. Candidate depth sets a hard
+ceiling: a later reranker cannot repair a false negative that never enters its
+pool. Representation must therefore be tested with the retriever that will
+consume it, and licensing must be considered before a research system is
+treated as a deployment option.
+    Licensing also constrains system choice. PatEmbed supports the research
+comparison but its non-commercial share-alike terms may exclude a produc-
+tion deployment. The commercial-only control quantifies one in-benchmark
+
+
+
+                                     18
+alternative, but it does not establish the best deployable system. A produc-
+tion study would need a new prespecified comparison among models with
+compatible terms.
+
+8.4. Limitations and follow-up work
+    The evidence is bounded in six ways. It comes from one family-level
+benchmark with 45,336 candidate families, not a patent-office-scale deploy-
+ment. The benchmark-scale latency and throughput measurements should
+not be read as production capacity evidence. Citation-derived relevance is
+not a legal novelty or inventive-step determination. Final-872 contains one
+frozen multi-retriever comparator, not an exhaustive baseline suite or a same-
+retriever representation ablation. The grammar changes several components
+jointly, and no hash-bound component ablation identifies a causal field, seg-
+mentation rule, or aggregation operation. External benchmark configurations
+were not verified as comparable, so cross-study scores are not ranked. IN and
+OUT are relation-scoped and can overlap by query. The candidate-exposure
+diagnosis contains no implemented rescue model or layer-three reranker.
+    The aggregate audit found no shared query records or normalized query
+text, but the available metadata cannot test query-family or source-member
+overlap across development, Selection-125, and Final-872. The public pack-
+age also omits restricted split data, complete execution assets, and per-query
+results. These limits weaken independent verification and should be resolved
+before a strong held-out-family or public-reproducibility claim is made.
+    A separate preregistered study could test grammar ablations, additional
+licensed baselines, an independent benchmark, and candidate-generation
+methods with a new development/final split. Reusing Final-872 for those
+decisions would weaken the confirmation reported here.
+
+9. Conclusion
+    On Final-872, the selected frozen PatEmbed RCRS system exceeded the
+prespecified BM25+Arctic operational comparator by 0.1114 in Recall@100
+on the OUT-eligible query cohort. This difference is specific to the two
+tested systems and the family-level protocol. After confirmation, the un-
+changed selected RCRS configuration exposed only 1,128 of 5,193 OU Tstrict -
+relevant pairs in its Top-200, placing most of the remaining error outside
+the pool available to a reranker. The system comparison and the expo-
+sure limit are separate: the tested RCRS system performed better than the
+
+                                     19
+operational comparator, while broader candidate coverage remains an open
+retrieval problem.
+
+Declaration of competing interest
+    The authors declare no known competing financial interests or personal
+relationships that could have influenced the work reported in this paper.
+
+Funding
+   Funding information will be inserted after author approval.
+
+CRediT authorship contribution statement
+   Author roles will be inserted after author approval and before submission.
+
+Data and code availability
+   The benchmark remains subject to its source terms, and PatEmbed re-
+mains subject to CC BY-NC-SA 4.0. The submission package contains aggre-
+gate tables, machine-readable aggregate figure inputs, deterministic figure-
+generation code, serialized representation specifications, frozen configuration
+identifiers, an aggregate-only split-overlap audit, and provenance paths for
+every reported number. It is internally auditable and configuration-bound,
+but it is not independently reproducible from the public artifacts alone. It
+does not redistribute query identifiers, patent or family identifiers, relevance
+judgments, per-query outcomes, or raw rankings. The blinded repository
+URL, archive identifier, and final availability statement will be added after
+owner review.
+
+Declaration of generative AI and AI-assisted technologies
+    During manuscript preparation, the authors used OpenAI Codex for
+language editing, document structure, LaTeX implementation, and quality-
+control support. The authors reviewed and edited all output, checked every
+reported result against the study records, and take full responsibility for the
+article.
+
+
+
+                                      20
+References
+[1] I. Ayaou, D. Cavallucci, H. Chibane, DAPFAM: A domain-aware family-
+    level dataset to benchmark cross-domain patent retrieval, Array 29
+    (2026) 100720. doi:10.1016/j.array.2026.100720.
+    URL https://doi.org/10.1016/j.array.2026.100720
+
+[2] I. Ayaou, D. Cavallucci, PatenTEB: A comprehensive benchmark
+    and model family for patent text embedding, arXiv preprint
+    arXiv:2510.22264 (2025). arXiv:2510.22264.
+    URL https://arxiv.org/abs/2510.22264
+
+[3] A. Yousefiramandi, C. Cooney, Benchmarking patent embeddings: A
+    multi-task evaluation of 22 models across retrieval, classification, and
+    clustering, arXiv preprint arXiv:2605.24297 (2026). arXiv:2605.24297.
+    URL https://arxiv.org/abs/2605.24297
+
+[4] S. O’Nuallain, N. Rajkumar, R. Narayanasamy, H. Jiang, S. Chaudhari,
+    A. Drozdov, AutoIndex: Learning representation programs for retrieval,
+    arXiv preprint arXiv:2607.18603 (2026). arXiv:2607.18603.
+    URL https://arxiv.org/abs/2607.18603
+
+[5] S. Robertson, H. Zaragoza, The probabilistic relevance framework:
+    BM25 and beyond, Foundations and Trends in Information Retrieval
+    3 (4) (2009) 333–389. doi:10.1561/1500000019.
+
+[6] X. Zhang, G. Wang, Y. Cui, W. Qiu, Z. Li, B. Zhu, P. He, Prompt
+    optimization is a coin flip: Diagnosing when it helps in compound AI
+    systems, arXiv preprint arXiv:2604.14585 (2026). arXiv:2604.14585.
+    URL https://arxiv.org/abs/2604.14585
+
+[7] G. V. Cormack, C. L. A. Clarke, S. Büttcher, Reciprocal rank fu-
+    sion outperforms condorcet and individual rank learning methods, in:
+    Proceedings of the 32nd International ACM SIGIR Conference on Re-
+    search and Development in Information Retrieval, 2009, pp. 758–759.
+    doi:10.1145/1571941.1572114.
+
+[8] V. Knappich, A. Hätty, S. Razniewski, A. Friedrich, Is it novel and
+    why? fine-grained patent novelty prediction based on passage retrieval,
+    in: Proceedings of the 49th International ACM SIGIR Conference on
+
+
+                                    21
+      Research and Development in Information Retrieval, 2026, pp. 1–12.
+      doi:10.1145/3805712.3809576.
+      URL https://doi.org/10.1145/3805712.3809576
+
+ [9] J. Chen, S. Xiao, P. Zhang, K. Luo, D. Lian, Z. Liu, BGE
+     M3-embedding: Multi-lingual, multi-functionality, multi-granularity
+     text embeddings through self-knowledge distillation, arXiv preprint
+     arXiv:2402.03216 (2024). arXiv:2402.03216.
+     URL https://arxiv.org/abs/2402.03216
+
+[10] L. Merrick, D. Xu, G. Nuti, D. Campos, Arctic-embed: Scal-
+     able, efficient, and accurate text embedding models, arXiv preprint
+     arXiv:2405.05374 (2024). arXiv:2405.05374.
+     URL https://arxiv.org/abs/2405.05374
+
+[11] Y. Zhang, M. Li, D. Long, X. Zhang, H. Lin, B. Yang, P. Xie, A. Yang,
+     D. Liu, J. Lin, F. Huang, J. Zhou, Qwen3 Embedding: Advancing text
+     embedding and reranking through foundation models, arXiv preprint
+     arXiv:2506.05176 (2025). arXiv:2506.05176.
+     URL https://arxiv.org/abs/2506.05176
+
+Appendix A. Aggregate evidence ledger
+     The appendix is part of the main manuscript. No supplementary scientific
+file is required. Tables A.7 and A.9 contain aggregate values only.
+
+Table A.7: Key common-screen (repository A1) and per-retriever search (repository A2)
+aggregates. Decision classes compare the A2 candidate with its frozen A2 incumbent,
+not with the common-screen score. Scores are rounded to 12 decimal places before strict
+comparison.
+            Common-screen record             A2 record
+Retriever    R@100     nDCG@100 Candidate R@100 Incumbent R@100 Decision
+                                                                class
+BM25        0.191200     0.172717        0.234667               – diagnostic
+BGE-M3      0.269933     0.231377        0.290000               – diagnostic
+PatEmbed    0.413400     0.347812        0.423000        0.423000 numerical
+                                                                  tie
+Arctic      0.340667     0.284546        0.358667        0.352667 strict gain
+Qwen3       0.363733     0.307930        0.373667        0.380000 no strict
+                                                                  gain
+
+
+
+
+                                            22
+Table A.8: Verification identifiers for the two Final-872 systems. These identifiers support
+local checking but are not part of the scientific comparison.
+System               SHA-256 prefixes
+Selected RCRS        winner binding 285e94b1...; representation bcbffffa...; retrieval e2ba107f...
+Operational          system 9a98a6d8...; program 00f1c295...; query format 51a81f1b...
+comparator
+
+
+
+
+Table A.9: Candidate-exposure diagnosis (repository A7). The strict OUT pair-level total
+is 5,193; the judged-query total is 905.
+Pair-level class                        Count        Query-level class                     Count
+Relevant pair in Top-100                  796        fully retrieved by rank 200               67
+Relevant pair in ranks 101–200            332        partially retrieved by rank 200          297
+Relevant pair absent at rank 200        4,065        deep-only at ranks 101–200                86
+                                                     no relevant candidate in Top-200         455
+
+
+
+
+                                                23
+

@@ -1,0 +1,74 @@
+                 Table 2: Frozen retrievers. Short names are used in the text and figures; repository retriever identifiers remain in the provenance files.
+Short name          Retriever                    Type; dimension; context        License                 Role in development
+BM25                BM25S 0.3.10                 lexical; –; –                   –                       diagnostic lexical baseline [5]
+BGE-M3              BAAI/bge-m3                  dense multilingual;             MIT                     diagnostic [9]
+                                                 1,024; 8,192
+PatEmbed            datalyes/patembed-large      patent dense; 1,024; 512        CC BY-NC-SA             advanced; research/non-commercial
+                                                                                 4.0
+Arctic              Snowflake                    dense multilingual; 768;        Apache 2.0              advanced [10]
+                    Arctic-Embed-M-v2.0          8,192
+Qwen3               Qwen3-Embedding-             dense multilingual;             Apache 2.0              advanced [11]
+                    0.6B                         1,024; 32,768
+                                                 model-declared tokens
+
+
+
+Table 3: The two systems compared on Final-872. They use different retriever compositions as well as different candidate representations. The result is therefore a
+comparison of two frozen systems, not an isolated effect of representation. Hash prefixes bind the fixed configurations without exposing protected split data.
+System                          Human-readable binding            Frozen configuration identifiers
+Selected RCRS                   PatEmbed only; title,             winner binding 285e94b1...; representation bcbffffa...; retrieval e2ba107f...
+                                abstract, claims;
+                                384-token passages;
+                                64-token overlap; NFKC
+                                whitespace normalization;
+                                content-hash-first
+                                duplicate policy; max-p
+                                family aggregation
+FAST comparator                 BM25 plus Arctic,                 system 9a98a6d8...; program 00f1c295...; prompt 51a81f1b...
+                                synchronous, depth 100;
+                                title, abstract, claims; one
+                                family document; NFKC
+                                canonical whitespace with
+                                case preserved; all source
+                                members retained;
+                                single-unit family
+                                aggregation
+
+
+
+              Table 4: Study steps, repository records, populations, and claim boundaries. Repository codes identify experimental records, not retrievers.
+Record          Study step               Population                   System state and exposure              Permitted inference
+A1–A3           Development:             development cohorts          five retrievers; iterative             describe retriever interaction, transfer, complementarity, ties,
+                common screen,                                        search; fixed transfer and             and negative results
+                per-retriever search,                                 fusion controls
+                transfer and controls
+A4              Selection-125            125 queries; OUT             at most four frozen profiles;          select one profile
+                                         primary n = 90               one exposure
+A5              Final-872                872 queries                  two frozen systems; no                 compare the specified frozen RCRS and FAST systems
+                confirmation                                          tuning; paired by query
+A6              Full-benchmark           1,247 queries                confirmed winner only; depth           report depth-wise stress test; no comparator effect
+                depth run                                             200; after Final-872
+A7              Candidate-exposure       strict relation-scoped       unchanged winner and its               diagnose candidate exposure and the within-pool ordering
+                diagnosis                IN/OUT; OUT has 905          frozen Top-200 pool                    bound
+                                         judged queries and
+                                         5,193 positive pairs
+
+
+
+              Table 5: Aggregate split and exposure ledger. OUT counts are metric-population counts, not total stage membership when otherwise stated.
+Split                             Queries Development          OUT population     Exposure           Prot.
+                                          record
+Development       150 + 100; 250 combined REP-DEV;        development-specific iterative             frozen aggregates
+                                          HDEV; Train-250
+Selection-125                         125 –               OUT-eligible (n=90) one exposure           protected
+Final-872                             872 –               OUT-eligible;        held out after        protected
+                                                          17,429 pairs         freeze
+
+
+
+
+                                                                                           4.5. Metrics, uncertainty, and population accounting
+                                                                                             Recall@k is computed at patent-family level. OUT Re-
+                                                                                           call@100 is primary. nDCG@100 is a confirmatory secondary
+                                                                                       5
+

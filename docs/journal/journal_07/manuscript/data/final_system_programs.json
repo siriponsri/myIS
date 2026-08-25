@@ -1,0 +1,35 @@
+{
+  "schema_version": "rcrs.wpi.final-system-programs.v1",
+  "selected_rcrs": {
+    "retrievers": ["datalyes/patembed-large"],
+    "source_fields": ["title", "abstract", "claims_text"],
+    "unitization": {"kind": "passage", "logical_size_tokens": 384, "overlap_tokens": 64},
+    "normalization": "unicode_nfkc_whitespace",
+    "duplicate_policy": "content_hash_first",
+    "family_aggregation": "maxp",
+    "query_format": "encode query for different document retrieval: {query}",
+    "program_sha256": "bcbffffa1a1836653fa833c3e5a64aa69620cf53c3907ee1fc47d83b143a48e3"
+  },
+  "operational_comparator": {
+    "retrievers": ["BM25S 0.3.10", "Snowflake/snowflake-arctic-embed-m-v2.0"],
+    "bm25": {
+      "k1": 1.2,
+      "b": 0.75,
+      "method": "lucene",
+      "backend": "numpy",
+      "tokenizer": "unicode_nfkc_casefold_word_v1",
+      "stemming": false,
+      "stopword_removal": false
+    },
+    "mode": "synchronous",
+    "candidate_depth": 100,
+    "source_fields": ["title", "abstract", "claims_text"],
+    "unitization": {"kind": "one_family_document"},
+    "normalization": "unicode_nfkc_canonical_whitespace_case_preserved",
+    "duplicate_policy": "retain_all_source_members",
+    "family_aggregation": "single_unit",
+    "dense_query_format": "query: {query}",
+    "system_sha256": "9a98a6d81af0510068927a2925fb5fca102867d5b23c7a102eb27b09e7a0dde0",
+    "program_sha256": "00f1c29507e55a70eb6f9046a24253f5c8f9726bfe5ca521309a84d779674397"
+  }
+}
