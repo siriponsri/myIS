@@ -1,4 +1,4 @@
-# Paper 01 iSAI-NLP Rules and Template Contract
+# Paper 02 iSAI-NLP Rules and Template Contract
 
 ## Scientific rules
 
@@ -20,7 +20,7 @@
 
 ## Build template
 
-From `docs/paper/manuscript`, run latexmk with `../build` as the output
-directory. The tested review artifact is `build/paper_isainlp2026.pdf`. Before
-release, check page count, anonymous metadata, no template guidance text, and
-`git diff --check`.
+Run `python verify_release.py --build` from `paper_02`. It validates the A7
+aggregate CSV hash, regenerates both figures, and invokes latexmk. The review
+artifact is `build/paper_isainlp2026.pdf`. Before release, check page count,
+anonymous metadata, no template guidance text, and `git diff --check`.

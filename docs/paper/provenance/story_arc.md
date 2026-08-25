@@ -7,8 +7,8 @@ Diagnosing Candidate Exposure after Held-Out Confirmation in Cross-Domain Patent
 ## Thesis
 
 After one held-out comparison freezes the system, a complete-benchmark audit
-separates two non-interchangeable views of out-of-domain failure: raw candidate
-availability and macro-Recall ordering headroom within the same Top-200 pool.
+shows candidate absence across OUT queries and relevant-family incidences, then
+bounds macro-Recall ordering headroom within the same Top-200 pool.
 
 ## Evidence sequence
 
@@ -18,9 +18,11 @@ availability and macro-Recall ordering headroom within the same Top-200 pool.
 3. **RQ:** What does the frozen OUT pool show about candidate absence and
    within-pool ordering headroom?
 4. **Design:** A5 confirms once; A6 materializes; A7 audits without reselection.
-5. **Finding:** 4,065/5,193 OUT incidences are absent at rank 200; the same
-   population has 0.071717 macro-Recall ordering headroom.
-6. **Boundary:** Counts and macro averages are complementary, not additive.
+5. **Finding:** 455/905 OUT queries have no relevant family in Top-200;
+   4,065/5,193 OUT incidences are absent at rank 200; the same query population
+   has 0.071717 macro-Recall ordering headroom.
+6. **Boundary:** Query counts, incidence counts, and macro averages are
+   complementary, not additive.
 
 ## Claim boundary
 

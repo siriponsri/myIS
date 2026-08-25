@@ -19,10 +19,11 @@ benchmark. The system first improved Recall@100 over BM25 by 0.111379 on 872
 held-out out-of-domain queries (95\% paired-bootstrap confidence interval
 [0.102294, 0.120438]). We then materialized the unchanged system over 45,336
 documents and 1,247 queries and audited its family Top-200 pool without
-reopening selection. Out of 5,193 out-of-domain relevant-family incidences,
-4,065 were absent at rank 200. Perfect ordering of candidates already in the
-pool could raise macro Recall@100 only from 0.188450 to 0.260167, an analytical
-upper bound of 0.071717. The incidence counts and macro-Recall bound use
+reopening selection. No relevant family appeared in the pool for 455 of 905
+out-of-domain queries; across 5,193 relevant-family incidences, 4,065 were
+absent at rank 200. Perfect ordering of candidates already in the pool could
+raise macro Recall@100 only from 0.188450 to 0.260167, an analytical upper
+bound of 0.071717. Query classes, incidence counts, and macro Recall use
 different aggregation rules and are not additive. This receipt-bound,
 single-system DAPFAM case study shows how a frozen-pool audit can separate
 candidate availability from ordering headroom while preserving the boundary
@@ -61,19 +62,18 @@ compared once with BM25 on 872 held-out out-of-domain queries. The unchanged
 configuration was then run over the complete benchmark, and its deterministic
 family Top-200 pool was diagnosed without another selection or final access.
 
-The central finding is visible in two quantities that must remain separate.
-First, 4,065 of 5,193 out-of-domain relevant-family incidences were absent at
-rank 200. This is a raw composition of relevance incidences. Second, an oracle
-ordering of the same pool raised macro Recall@100 from 0.188450 to 0.260167,
-leaving 0.071717 ordering headroom. The oracle is an upper bound, not a trained
-reranker result. By binding both diagnostics to one post-confirmatory pool, the
-study shows what each quantity can and cannot support.
+The central finding appears at two counting levels. No relevant family reached
+the Top-200 pool for 455 of 905 out-of-domain queries. Across all 5,193
+out-of-domain relevant-family incidences, 4,065 were absent at rank 200. An
+oracle ordering of the same pool raised macro Recall@100 from 0.188450 to
+0.260167, leaving 0.071717 ordering headroom. The query classes, incidence
+counts, and macro average have different units; none decomposes another.
 
-This paper contributes a compact, receipt-bound case study of one selected
-retriever on DAPFAM across confirmation, complete-corpus materialization, and
-fixed-pool diagnosis. Within this deliberately narrow scope, raw candidate
-availability and macro-averaged ordering headroom are reported together
-without treating one as a decomposition of the other.
+The empirical contribution is a receipt-bound, two-level exposure audit of one
+selected DAPFAM retriever. It connects held-out confirmation to complete-corpus
+diagnosis and shows that the incidence deficit spans 455 of 905 OUT queries.
+The fixed-pool oracle then bounds what ordering alone could recover without
+presenting a reranker result.
 
 \begin{figure*}[t]
 \centering
@@ -165,11 +165,29 @@ run. This comparison supports a benchmark- and split-specific effect; it does
 not establish universal superiority.
 
 \subsection{Fixed-Pool Diagnosis}
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{out_domain_diagnosis.pdf}
+\caption{Three non-additive views of the frozen OUT family Top-200 pool. (a)
+The four mutually exclusive query classes sum to 905; ``None by 200'' means no
+relevant family is present for that query. (b) Raw relevant-family incidence
+counts sum to 5,193. (c) Macro Recall@100 is averaged over the 905 queries; the
+oracle reorders only candidates already present at rank 200. Query counts,
+incidence counts, and macro Recall have different units.}
+\label{fig:diagnosis}
+\end{figure*}
+
 For every relevant-family incidence in the frozen pool, A7 records one of three
 mutually exclusive states: exposed by rank 100, first exposed at ranks
 101--200, or absent at rank 200. These are raw counts of query--relevant-family
 incidences. They are useful for describing pool composition but are not
 components of macro Recall because queries have different relevance-set sizes.
+
+A separate query-level classification records whether all relevant families
+were exposed by rank 100, some were exposed by rank 100, the first appeared at
+ranks 101--200, or none appeared by rank 200. These four classes are mutually
+exclusive and cover the 905 OUT queries. The last class means that no method
+restricted to that query's Top-200 pool can retrieve a relevant family.
 
 The ordering diagnostic replaces the observed order within each Top-200 family
 pool with an oracle order that places all already retrieved relevant families
@@ -178,16 +196,9 @@ Recall@100 on the same query population. The oracle cannot introduce a family
 that is absent at rank 200. It is therefore an analytical upper bound on
 reordering within this pool, not the performance of a learned reranker.
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=\textwidth]{out_domain_diagnosis.pdf}
-\caption{Two non-additive views of the frozen OUT family Top-200 pool. (a) Raw
-relevant-family incidence counts sum to 5,193. (b) Macro Recall@100 is averaged
-over the 905 receipt-defined OUT queries; the oracle reorders only candidates
-already present at rank 200. The count composition and macro-Recall headroom
-have different denominators and aggregation rules.}
-\label{fig:diagnosis}
-\end{figure*}
+As a descriptive integrity sensitivity, A7 also removed 40 raw self-relations.
+OUT Recall@100 and nDCG@100 remained exactly 0.188450 and 0.070644. This check
+does not inspect protected split membership and is not a broader leakage audit.
 
 \section{Results}
 \subsection{The Frozen System Confirms on Held-Out Queries}
@@ -225,12 +236,17 @@ nDCG@100 values were 0.406513 and 0.070644. This is a within-system domain
 diagnosis at complete scale, not a full-scale superiority claim against BM25 or
 another dense model.
 
-\subsection{Candidate Absence and Ordering Headroom Differ}
-Figure~\ref{fig:diagnosis} presents the two views of the out-of-domain pool.
-Among 5,193 relevant-family incidences, 796 were exposed by rank 100 and 332
-first appeared at ranks 101--200. The remaining 4,065 were absent at rank 200.
-Thus most raw out-of-domain relevance incidences were unavailable to any method
-restricted to this candidate pool.
+\subsection{Candidate Absence Appears at Query and Incidence Levels}
+Figure~\ref{fig:diagnosis} first classifies the 905 out-of-domain queries. All
+relevant families were exposed by rank 100 for 67 queries, and some were
+exposed for 297. Another 86 had their first relevant family at ranks 101--200.
+The remaining 455 had no relevant family in Top-200. Candidate absence is
+therefore not confined to a small subset of queries.
+
+At the incidence level, 796 of 5,193 relevant-family incidences were exposed by
+rank 100 and 332 first appeared at ranks 101--200. The remaining 4,065 were
+absent at rank 200. Most raw out-of-domain relevance incidences were therefore
+unavailable to any method restricted to this candidate pool.
 
 The macro-Recall view answers a different question. Observed out-of-domain
 Recall@100 was 0.188450. Perfectly ordering every relevant family already in the
@@ -244,8 +260,8 @@ The held-out result and the fixed-pool diagnosis answer different parts of the
 evaluation story. The A5 comparison shows that the selected dense configuration
 improved over BM25 on the declared held-out out-of-domain set. It does not show
 why complete-scale out-of-domain Recall remains low. The post-confirmatory audit
-locates two boundaries without changing the selected system: candidate
-availability in raw incidence units and ordering headroom in macro-Recall units.
+locates the same candidate boundary at query and incidence levels, then measures
+ordering headroom in macro-Recall units, without changing the selected system.
 
 This distinction matters when interpreting a proposed retrieval improvement.
 A reranking study can be evaluated against the 0.071717 fixed-pool upper bound,
@@ -284,15 +300,13 @@ follows from these results.
 \section{Conclusion}
 One held-out score cannot show where cross-domain retrieval fails. In this
 receipt-bound case study of one DAPFAM system, a frozen dense patent retriever
-improved over BM25 on 872 held-out queries. Yet its complete DAPFAM family pool
-still exposed only 1,128 of 5,193 out-of-domain
-relevant-family incidences by rank 200. Within that same pool, perfect ordering
-could raise macro Recall@100 only from 0.188450 to 0.260167. Reporting these
-quantities separately distinguishes candidate availability from ordering
-headroom without turning an analytical bound into a system result. The
-diagnostic therefore specifies whether a follow-up on this system should test
-reordering or candidate expansion while leaving both interventions as open
-questions.
+improved over BM25 on 872 held-out queries. Yet 455 of 905 complete-scale OUT
+queries had no relevant family in Top-200, and 4,065 of 5,193 relevant-family
+incidences were absent. Within that same pool, perfect ordering could raise
+macro Recall@100 only from 0.188450 to 0.260167. Keeping the query classes,
+incidence counts, and macro bound separate identifies candidate expansion as a
+distinct research target while leaving its efficacy, and that of reranking, as
+open questions.
 
 \bibliographystyle{IEEEtran}
 \bibliography{../references/references}

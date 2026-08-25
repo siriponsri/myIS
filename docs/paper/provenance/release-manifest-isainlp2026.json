@@ -1,6 +1,6 @@
 {
   "schema_version": "myis.armindex-isainlp2026-paper.v1",
-  "package": "paper_01",
+  "package": "paper_02",
   "status": "FINAL_PAPER_PACKAGE",
   "venue": "iSAI-NLP 2026",
   "format": "official IEEE conference proceedings",
@@ -16,7 +16,7 @@
   },
   "protected_data_exported": false,
   "new_experiment": false,
-  "internal_scientific_decision": "ACCEPT",
+  "internal_scientific_decision": "STRONG_ACCEPT",
   "submission_readiness_claimed": false,
   "manuscript": "manuscript/paper_isainlp2026.tex",
   "claim_matrix": "provenance/claim_to_evidence.csv",
@@ -25,6 +25,14 @@
     "figures/isainlp2026/evidence_chain.pdf",
     "figures/isainlp2026/out_domain_diagnosis.pdf"
   ],
+  "reproducibility_capsule": {
+    "verifier": "verify_release.py",
+    "figure_dependencies": "requirements-figures.txt",
+    "figure_runtime": "runtime-figures.txt",
+    "figure_input": "tables/a7-layer-aggregate-metrics.csv",
+    "figure_input_sha256": "ad869ef99254df10c2e155911a1aa1a975dc9e41f1203bffa1fac2ab66043c1e",
+    "boundary": "aggregate-safe figure and manuscript rebuild; protected retrieval inputs are not released"
+  },
   "required_release_checks": [
     "PDF page count at most six",
     "IEEE template geometry unchanged",
@@ -35,19 +43,20 @@
     "visual QA pass"
   ],
   "release_check_status": {
-    "build": "PASS",
-    "page_limit": "PASS: 4 of 6",
-    "ieee_format": "PASS",
-    "double_anonymity": "PASS",
-    "citations_and_cross_references": "PASS",
-    "figure_values": "PASS",
-    "paper_guard": "PASS",
-    "visual_qa_pages_1_to_4": "PASS"
+    "build": "PASS: deterministic clean build; PDF SHA-256 5ffa6ba0aff7e7c3b7a115c3a9fa06af06c0fad7e5465c2f3d8bf2472755dbea",
+    "page_limit": "PASS: 4 A4 pages of 6",
+    "ieee_format": "PASS: IEEEtran conference geometry unchanged",
+    "double_anonymity": "PASS: anonymous author, metadata, no identifying affiliations or acknowledgments",
+    "citations_and_cross_references": "PASS: no unresolved citation/reference warnings",
+    "figure_values": "PASS: verifier input hash ad869ef99254df10c2e155911a1aa1a975dc9e41f1203bffa1fac2ab66043c1e",
+    "paper_guard": "PASS: handoff/paper_guard_02.json",
+    "visual_qa_pages_1_to_4": "PASS: reviewer visual inspection; no clipping or legibility defect"
   },
   "qa_reports": [
-    "reports/BUILD_QA_01.md",
-    "reports/SCIENTIFIC_REVIEW_01.md",
-    "reports/VISUAL_REVIEW_01.md",
-    "reports/paper_guard_01.json"
+    "reports/BUILD_QA_02.md",
+    "reports/SCIENTIFIC_REVIEW_02.md",
+    "reports/VISUAL_REVIEW_02.md",
+    "reports/EDITORIAL_AUDIT_02.md",
+    "reports/paper_guard_02.json"
   ]
 }

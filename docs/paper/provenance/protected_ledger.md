@@ -1,4 +1,4 @@
-# Protected Ledger - paper_01
+# Protected Ledger - paper_02
 
 This ledger was recorded before the iSAI-NLP rewrite. Every item must retain
 its canonical meaning, denominator, aggregation rule, and evidence class.
@@ -50,12 +50,23 @@ its canonical meaning, denominator, aggregation rule, and evidence class.
   2,689 first exposed at ranks 101--200 + 11,302 absent at rank 200.
 - OUT relevant-family incidences: 5,193 = 796 exposed by rank 100 + 332 first
   exposed at ranks 101--200 + 4,065 absent at rank 200.
+- OUT query exposure classes: 905 = 67 fully exposed by rank 100 + 297
+  partially exposed by rank 100 + 86 deep-only at ranks 101--200 + 455 with no
+  relevant family exposed by rank 200.
 - OUT fixed-pool oracle Recall@100: 0.260166940437.
 - OUT ordering headroom: 0.071717041784 macro-Recall units, computed within the
   same Top-200 family pool. It is an upper bound, not a reranker result.
 
 Raw incidence counts and macro-averaged Recall values have different units and
 aggregation rules. They are complementary diagnostics and are never additive.
+
+## Descriptive sensitivity
+
+- Raw self-relations removed: 40, all outside the OUT relevance set.
+- OUT Recall@100 after removal: 0.188449898653 (delta 0).
+- OUT nDCG@100 after removal: 0.070644223566 (delta 0).
+- Boundary: raw-identifier sensitivity only; no protected split membership was
+  inspected and no broader leakage claim is supported.
 
 ## Hash bindings
 
