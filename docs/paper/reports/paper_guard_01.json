@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "pdf": "docs\\paper\\build\\paper_isainlp2026.pdf",
+  "pages": 4,
+  "display_math_markers": 0,
+  "findings": [
+    {
+      "type": "LONG_SENTENCE",
+      "file": "manuscript/paper_isainlp2026.tex",
+      "detail": "39 words: t lrrr Metric Dense BM25 Recall 100 0 442476 0 331097 0 111379 nDCG 100 0 365595 0..."
+    },
+    {
+      "type": "URL_REVIEW",
+      "file": "provenance/literature_audit.md",
+      "detail": "https://arxiv.org/abs/2506.22141)"
+    },
+    {
+      "type": "URL_REVIEW",
+      "file": "provenance/literature_audit.md",
+      "detail": "https://arxiv.org/abs/2605.24297v2)"
+    },
+    {
+      "type": "URL_REVIEW",
+      "file": "provenance/literature_audit.md",
+      "detail": "https://arxiv.org/abs/2507.23084v1)"
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "provenance/literature_audit.md",
+      "detail": "172 words: Source Verified use in paper Boundary DAPFAM https arxiv org abs 2506 22141 Family-level domain-aware patent retrieval benchmark..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "provenance/story_arc.md",
+      "detail": "45 words: iSAI-NLP 2026 Story Arc Title Diagnosing Candidate Exposure after Held-Out Confirmation in Cross-Domain Patent Retrieval Thesis After one..."
+    },
+    {
+      "type": "URL_REVIEW",
+      "file": "references/references.bib",
+      "detail": "https://arxiv.org/abs/2506.22141},"
+    },
+    {
+      "type": "URL_REVIEW",
+      "file": "references/references.bib",
+      "detail": "https://arxiv.org/abs/2605.24297v2}"
+    },
+    {
+      "type": "URL_REVIEW",
+      "file": "references/references.bib",
+      "detail": "https://arxiv.org/abs/2507.23084v1}"
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "references/references.bib",
+      "detail": "326 words: article robertson2009probabilistic author Robertson Stephen and Zaragoza Hugo title The probabilistic relevance framework BM25 and beyond journal Foundations..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "references/references.bib",
+      "detail": "72 words: and Buettcher Stefan title Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods booktitle Proceedings of SIGIR..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/SCIENTIFIC_REVIEW_01.md",
+      "detail": "66 words: Scores Dimension Score Venue fit significance 8 6 Novelty contribution 8 3 Scientific validity 9 0 Evidence claim..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/VERSION_DIFF_00_to_01.md",
+      "detail": "195 words: Summary Added 18 Removed 21 Modified 6 Unchanged 4 Added build paper_isainlp2026 aux build paper_isainlp2026 bbl build paper_isainlp2026..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/VERSION_DIFF_00_to_01.md",
+      "detail": "54 words: 21 16 20 7 Build template powershell cd paper_04 New-Item ItemType Directory Force build Out-Null pdflatex interaction nonstopmode..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/VERSION_DIFF_00_to_01.md",
+      "detail": "222 words: import csv from decimal import Decimal from pathlib import Path import matplotlib pyplot as plt import numpy as..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/VERSION_DIFF_00_to_01.md",
+      "detail": "164 words: fig savefig OUT name bbox_inches None pad_inches 0 02 facecolor white fig savefig OUT Path name with_suffix pdf..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/VERSION_DIFF_00_to_01.md",
+      "detail": "54 words: BM25 0 365 0 28 0 275 0 56 TEAL A6 MATERIALIZE 45 336 documents 1 247 queries..."
+    },
+    {
+      "type": "LONG_SENTENCE",
+      "file": "reports/VERSION_DIFF_00_to_01.md",
+      "detail": "755 words: Diff provenance claim_to_evidence csv diff paper_00 provenance claim_to_evidence csv paper_01 provenance claim_to_evidence csv 1 9 1 13 claim_id..."
+    }
+  ]
+}

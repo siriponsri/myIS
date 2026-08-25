@@ -1,0 +1,53 @@
+{
+  "schema_version": "myis.armindex-isainlp2026-paper.v1",
+  "package": "paper_01",
+  "status": "FINAL_PAPER_PACKAGE",
+  "venue": "iSAI-NLP 2026",
+  "format": "official IEEE conference proceedings",
+  "maximum_pages_including_references": 6,
+  "double_anonymous": true,
+  "scientific_scope": "A5 held-out confirmation plus A6/A7 frozen-pool measurement study",
+  "study_design": "receipt-bound single-system DAPFAM case study",
+  "retrieval_checkpoint": "datalyes/patembed-large",
+  "configuration_sha256": {
+    "a5_winner": "285e94b1e76b4fcbc941daa524c71db213f63d21e1fab06dc2931ddf6dee26fc",
+    "a6_model_manifest": "0ae9ed779d0eb40cce3d84149ab6e53681665aa841739b7c93d2cc28ac4b962c",
+    "a6_execution": "e560e565e451321f29ff2f81ef87187d3c361095b78681132cd654bbc06acd5f"
+  },
+  "protected_data_exported": false,
+  "new_experiment": false,
+  "internal_scientific_decision": "ACCEPT",
+  "submission_readiness_claimed": false,
+  "manuscript": "manuscript/paper_isainlp2026.tex",
+  "claim_matrix": "provenance/claim_to_evidence.csv",
+  "protected_ledger": "provenance/protected_ledger.md",
+  "figures": [
+    "figures/isainlp2026/evidence_chain.pdf",
+    "figures/isainlp2026/out_domain_diagnosis.pdf"
+  ],
+  "required_release_checks": [
+    "PDF page count at most six",
+    "IEEE template geometry unchanged",
+    "double-anonymous source and PDF metadata",
+    "citations and cross-references resolved",
+    "figure values equal canonical aggregate fields",
+    "paper guard pass",
+    "visual QA pass"
+  ],
+  "release_check_status": {
+    "build": "PASS",
+    "page_limit": "PASS: 4 of 6",
+    "ieee_format": "PASS",
+    "double_anonymity": "PASS",
+    "citations_and_cross_references": "PASS",
+    "figure_values": "PASS",
+    "paper_guard": "PASS",
+    "visual_qa_pages_1_to_4": "PASS"
+  },
+  "qa_reports": [
+    "reports/BUILD_QA_01.md",
+    "reports/SCIENTIFIC_REVIEW_01.md",
+    "reports/VISUAL_REVIEW_01.md",
+    "reports/paper_guard_01.json"
+  ]
+}
