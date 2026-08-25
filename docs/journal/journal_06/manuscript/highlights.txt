@@ -1,0 +1,4 @@
+* RCRS searches executable patent-text programs for a frozen retriever.
+* The frozen RCRS system exceeds FAST by 0.1114 on Final-872.
+* Observed transfer outcomes vary across the tested retrievers.
+* 4,065 of 5,193 strict OUT-relevant pairs are absent from Top-200.
