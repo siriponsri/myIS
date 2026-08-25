@@ -1,0 +1,96 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{dapfam2026}
+I.~Ayaou, D.~Cavallucci, H.~Chibane,
+  \href{https://doi.org/10.1016/j.array.2026.100720}{{DAPFAM}: A domain-aware
+  family-level dataset to benchmark cross-domain patent retrieval}, Array 29
+  (2026) 100720.
+\newblock \href {https://doi.org/10.1016/j.array.2026.100720}
+  {\path{doi:10.1016/j.array.2026.100720}}.
+\newline\urlprefix\url{https://doi.org/10.1016/j.array.2026.100720}
+
+\bibitem{patenteb2025}
+I.~Ayaou, D.~Cavallucci, \href{https://arxiv.org/abs/2510.22264}{{PatenTEB}: A
+  comprehensive benchmark and model family for patent text embedding}, arXiv
+  preprint arXiv:2510.22264 (2025).
+\newblock \href {http://arxiv.org/abs/2510.22264} {\path{arXiv:2510.22264}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2510.22264}
+
+\bibitem{patentembeddings2026}
+A.~Yousefiramandi, C.~Cooney,
+  \href{https://arxiv.org/abs/2605.24297}{Benchmarking patent embeddings: A
+  multi-task evaluation of 22 models across retrieval, classification, and
+  clustering}, arXiv preprint arXiv:2605.24297 (2026).
+\newblock \href {http://arxiv.org/abs/2605.24297} {\path{arXiv:2605.24297}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2605.24297}
+
+\bibitem{autoindex2026}
+S.~O'Nuallain, N.~Rajkumar, R.~Narayanasamy, H.~Jiang, S.~Chaudhari,
+  A.~Drozdov, \href{https://arxiv.org/abs/2607.18603}{{AutoIndex}: Learning
+  representation programs for retrieval}, arXiv preprint arXiv:2607.18603
+  (2026).
+\newblock \href {http://arxiv.org/abs/2607.18603} {\path{arXiv:2607.18603}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2607.18603}
+
+\bibitem{bm25review2009}
+S.~Robertson, H.~Zaragoza, The probabilistic relevance framework: {BM25} and
+  beyond, Foundations and Trends in Information Retrieval 3~(4) (2009)
+  333--389.
+\newblock \href {https://doi.org/10.1561/1500000019}
+  {\path{doi:10.1561/1500000019}}.
+
+\bibitem{promptcoinflip2026}
+X.~Zhang, G.~Wang, Y.~Cui, W.~Qiu, Z.~Li, B.~Zhu, P.~He,
+  \href{https://arxiv.org/abs/2604.14585}{Prompt optimization is a coin flip:
+  Diagnosing when it helps in compound {AI} systems}, arXiv preprint
+  arXiv:2604.14585 (2026).
+\newblock \href {http://arxiv.org/abs/2604.14585} {\path{arXiv:2604.14585}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2604.14585}
+
+\bibitem{rrf2009}
+G.~V. Cormack, C.~L.~A. Clarke, S.~B{\"u}ttcher, Reciprocal rank fusion
+  outperforms condorcet and individual rank learning methods, in: Proceedings
+  of the 32nd International ACM SIGIR Conference on Research and Development in
+  Information Retrieval, 2009, pp. 758--759.
+\newblock \href {https://doi.org/10.1145/1571941.1572114}
+  {\path{doi:10.1145/1571941.1572114}}.
+
+\bibitem{finepatents2026}
+V.~Knappich, A.~H{\"a}tty, S.~Razniewski, A.~Friedrich,
+  \href{https://doi.org/10.1145/3805712.3809576}{Is it novel and why?
+  fine-grained patent novelty prediction based on passage retrieval}, in:
+  Proceedings of the 49th International ACM SIGIR Conference on Research and
+  Development in Information Retrieval, 2026, pp. 1--12.
+\newblock \href {https://doi.org/10.1145/3805712.3809576}
+  {\path{doi:10.1145/3805712.3809576}}.
+\newline\urlprefix\url{https://doi.org/10.1145/3805712.3809576}
+
+\bibitem{bgem3}
+J.~Chen, S.~Xiao, P.~Zhang, K.~Luo, D.~Lian, Z.~Liu,
+  \href{https://arxiv.org/abs/2402.03216}{{BGE M3}-embedding: Multi-lingual,
+  multi-functionality, multi-granularity text embeddings through self-knowledge
+  distillation}, arXiv preprint arXiv:2402.03216 (2024).
+\newblock \href {http://arxiv.org/abs/2402.03216} {\path{arXiv:2402.03216}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2402.03216}
+
+\bibitem{arcticembed}
+L.~Merrick, D.~Xu, G.~Nuti, D.~Campos,
+  \href{https://arxiv.org/abs/2405.05374}{Arctic-embed: Scalable, efficient,
+  and accurate text embedding models}, arXiv preprint arXiv:2405.05374 (2024).
+\newblock \href {http://arxiv.org/abs/2405.05374} {\path{arXiv:2405.05374}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2405.05374}
+
+\bibitem{qwen3embedding}
+Y.~Zhang, M.~Li, D.~Long, X.~Zhang, H.~Lin, B.~Yang, P.~Xie, A.~Yang, D.~Liu,
+  J.~Lin, F.~Huang, J.~Zhou, \href{https://arxiv.org/abs/2506.05176}{{Qwen3
+  Embedding}: Advancing text embedding and reranking through foundation
+  models}, arXiv preprint arXiv:2506.05176 (2025).
+\newblock \href {http://arxiv.org/abs/2506.05176} {\path{arXiv:2506.05176}}.
+\newline\urlprefix\url{https://arxiv.org/abs/2506.05176}
+
+\end{thebibliography}

@@ -1,0 +1,5 @@
+# Visual QA: Submission Pages 1-4
+
+- Page 1 - PASS. No meaningful clipping, overlap, glyph failure, caption issue, or figure/table readability defect observed. The title block, abstract rules, footer, and page balance are visually consistent.
+- Pages 2-3 - MINOR. The paragraph beginning "The experimental repository" is split so that page 2 ends with the isolated line "The method searches serializable", while page 3 contains only the continuation and one short paragraph before a large unused lower-page area. Affected element: paragraph pagination and page balance. Smallest recommended fix: adjust the local page break or float/vertical-spacing parameters so the paragraph continuation is not stranded and page 3 carries a fuller block of body text. Acceptance criterion: no isolated continuation at the page boundary, and page 3 has balanced journal-style text occupancy without changing manuscript content.
+- Page 4 - PASS. Figure 1 is sharp and readable, panel labels and arrows are distinct, the caption is placed correctly, and the surrounding body text and section hierarchy show no meaningful collision or overflow.
