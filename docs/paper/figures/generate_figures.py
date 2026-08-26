@@ -1,219 +1,309 @@
 from __future__ import annotations
 
-import csv
-from datetime import datetime, timezone
-from decimal import Decimal
+import io
+import zipfile
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, Rectangle
+import numpy as np
+import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import Rectangle
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "tables" / "a7-layer-aggregate-metrics.csv"
-OUTPUT = ROOT / "figures" / "isainlp2026"
+ARCHIVE = ROOT / "prism-uploads" / "myIS_prism_csv_pack_20260826.zip"
+PREFIX = "myIS_prism_csv_pack_20260826/prism_ready/"
+OUT = ROOT / "figures"
 
-CHARCOAL = "#252A2E"
-BLUE = "#2B5D7D"
-TEAL = "#3A7D78"
-GOLD = "#C49332"
-LIGHT_GRAY = "#D7DADD"
-MID_GRAY = "#7A8187"
-PAPER = "#FFFFFF"
-
-
-def load_metrics() -> dict[tuple[str, str, str], Decimal]:
-    metrics: dict[tuple[str, str, str], Decimal] = {}
-    with DATA.open(newline="", encoding="utf-8") as handle:
-        for row in csv.DictReader(handle):
-            try:
-                value = Decimal(row["value"])
-            except Exception:
-                continue
-            metrics[(row["layer"], row["population"], row["metric"])] = value
-    return metrics
+NAVY = "#17365D"
+BLUE = "#2C78B8"
+TEAL = "#2A9D8F"
+GOLD = "#E9C46A"
+ORANGE = "#E76F51"
+LIGHT = "#E8EEF4"
+MIDGRAY = "#7A7A7A"
+DARK = "#202020"
 
 
-def checked(metrics: dict[tuple[str, str, str], Decimal], key, expected: str) -> float:
-    value = metrics[key]
-    if value != Decimal(expected):
-        raise ValueError(f"Canonical value changed for {key}: {value} != {expected}")
-    return float(value)
+def load_csv(name: str) -> pd.DataFrame:
+    with zipfile.ZipFile(ARCHIVE) as zf:
+        raw = zf.read(PREFIX + name)
+    return pd.read_csv(io.BytesIO(raw))
 
 
-def save(fig: plt.Figure, stem: str) -> None:
-    OUTPUT.mkdir(parents=True, exist_ok=True)
-    fixed_time = datetime(2026, 8, 25, tzinfo=timezone.utc)
-    metadata = {
-        "Title": stem,
-        "Author": "Anonymous",
-        "Creator": "Matplotlib",
-        "CreationDate": fixed_time,
-        "ModDate": fixed_time,
-    }
-    fig.savefig(OUTPUT / f"{stem}.pdf", bbox_inches="tight", metadata=metadata)
-    fig.savefig(OUTPUT / f"{stem}.png", dpi=300, bbox_inches="tight")
+def set_style() -> None:
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 8.2,
+            "axes.labelsize": 8.5,
+            "axes.titlesize": 9.0,
+            "xtick.labelsize": 7.6,
+            "ytick.labelsize": 7.6,
+            "legend.fontsize": 7.4,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+            "savefig.transparent": False,
+        }
+    )
+
+
+def save_figure(fig: plt.Figure, stem: str) -> None:
+    """Persist vector and high-resolution raster variants for LaTeX export."""
+    fig.savefig(OUT / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(OUT / f"{stem}.png", dpi=600, bbox_inches="tight", pad_inches=0.02)
+
+
+def fig1_transfer() -> None:
+    df = load_csv("fig1_a3_transfer.csv")
+    assert len(df) == 9 and set(df["evidence_class"]) == {"development"}
+
+    sources = ["PatEmbed", "Arctic Embed", "Qwen3 Embedding"]
+    targets = ["PatEmbed", "Arctic Embed", "Qwen3 Embedding"]
+    matrix = (
+        df.pivot(index="representation_source", columns="target_retriever", values="Recall@100")
+        .reindex(index=sources, columns=targets)
+        .to_numpy()
+    )
+    np.testing.assert_allclose(matrix.max(axis=0), [0.419273743017, 0.341340782123, 0.362569832402])
+
+    cmap = LinearSegmentedColormap.from_list("paper_blues", ["#F4F7FA", "#A9C9E2", NAVY])
+    fig, ax = plt.subplots(figsize=(7.05, 1.85))
+    im = ax.imshow(matrix, cmap=cmap, vmin=0.33, vmax=0.425, aspect="auto")
+
+    ax.set_xticks(range(3), ["PatEmbed", "Arctic Embed", "Qwen3 Embedding"])
+    ax.set_yticks(range(3), ["PatEmbed-derived", "Arctic-derived", "Qwen3-derived"])
+    ax.set_xlabel("Target retriever")
+    ax.set_ylabel("Representation source")
+    ax.tick_params(length=0)
+
+    maxima = matrix.argmax(axis=0)
+    for row in range(3):
+        for col in range(3):
+            value = matrix[row, col]
+            text_color = "white" if value > 0.385 else DARK
+            weight = "bold" if row == maxima[col] else "normal"
+            ax.text(
+                col,
+                row,
+                f"{value:.6f}",
+                ha="center",
+                va="center",
+                color=text_color,
+                fontweight=weight,
+                fontsize=7.2,
+            )
+            if row == col:
+                ax.add_patch(
+                    Rectangle(
+                        (col - 0.47, row - 0.47),
+                        0.94,
+                        0.94,
+                        fill=False,
+                        edgecolor=DARK,
+                        linewidth=1.0,
+                        linestyle=(0, (3, 2)),
+                    )
+                )
+            if row == maxima[col]:
+                ax.plot(col + 0.34, row - 0.31, marker="o", markersize=4.2, color=GOLD, markeredgecolor=DARK, markeredgewidth=0.5)
+
+    cbar = fig.colorbar(im, ax=ax, fraction=0.035, pad=0.025)
+    cbar.set_label("Recall@100")
+    cbar.outline.set_linewidth(0.6)
+    ax.text(
+        1.0,
+        -0.26,
+        "Dashed border: matched source and target    Gold marker: best source for each target",
+        transform=ax.transAxes,
+        ha="center",
+        va="top",
+        fontsize=7.2,
+        color=MIDGRAY,
+    )
+    fig.subplots_adjust(left=0.20, right=0.94, bottom=0.34, top=0.98)
+    save_figure(fig, "fig1_a3_transfer")
     plt.close(fig)
 
 
-def evidence_chain() -> None:
-    fig, ax = plt.subplots(figsize=(7.16, 1.48))
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
+def fig2_confirmation() -> None:
+    metrics = load_csv("fig2_a5_confirmation.csv")
+    wtl = load_csv("fig2_a5_recall_wtl.csv")
+    confirm = metrics[metrics["metric"].isin(["Recall@100", "nDCG@100"])].copy()
+    assert len(confirm) == 2 and set(confirm["n_queries"]) == {872}
+    np.testing.assert_allclose(confirm["paired_difference"], [0.111379, 0.086342])
+    assert int(wtl["count"].sum()) == 872
 
-    stages = [
-        (0.015, 0.28, 0.275, 0.56, BLUE, "A5  CONFIRM", "872 held-out OUT queries", "Frozen dense vs. BM25"),
-        (0.365, 0.28, 0.275, 0.56, TEAL, "A6  MATERIALIZE", "45,336 documents / 1,247 queries", "Immutable family Top-200 pool"),
-        (0.715, 0.28, 0.27, 0.56, GOLD, "A7  AUDIT", "Same pool; no reselection", "Exposure counts + oracle bound"),
-    ]
+    fig = plt.figure(figsize=(3.35, 3.55))
+    gs = fig.add_gridspec(3, 1, height_ratios=[1.05, 0.95, 0.48], hspace=0.78)
 
-    for idx, (x, y, w, h, color, title, line1, line2) in enumerate(stages):
-        linestyle = "--" if idx == 2 else "-"
-        ax.add_patch(Rectangle((x, y), w, h, facecolor=PAPER, edgecolor=color,
-                               linewidth=1.35, linestyle=linestyle))
-        ax.add_patch(Rectangle((x, y), 0.012, h, facecolor=color, edgecolor=color))
-        ax.text(x + 0.032, y + 0.40, title, color=color, fontsize=8.2,
-                fontweight="bold", va="center")
-        ax.text(x + 0.032, y + 0.235, line1, color=CHARCOAL, fontsize=7.2, va="center")
-        ax.text(x + 0.032, y + 0.105, line2, color=CHARCOAL, fontsize=7.2, va="center")
-        if idx < 2:
-            ax.add_patch(FancyArrowPatch((x + w + 0.012, 0.56),
-                                         (stages[idx + 1][0] - 0.012, 0.56),
-                                         arrowstyle="-|>", mutation_scale=9,
-                                         linewidth=1.1, color=MID_GRAY))
+    ax0 = fig.add_subplot(gs[0, 0])
+    y = np.array([1, 0])
+    labels = confirm["metric"].tolist()
+    static = confirm["static_comparator"].to_numpy()
+    selected = confirm["selected_research"].to_numpy()
+    for yi, a, b in zip(y, static, selected):
+        ax0.plot([a, b], [yi, yi], color="#B7C4CF", linewidth=2.2, zorder=1)
+    ax0.scatter(static, y, s=35, color=MIDGRAY, label="Static comparator", zorder=2)
+    ax0.scatter(selected, y, s=42, color=BLUE, label="Selected configuration", zorder=3)
+    for yi, a, b in zip(y, static, selected):
+        ax0.text(a, yi + 0.17, f"{a:.3f}", ha="center", color=MIDGRAY, fontsize=7.1)
+        ax0.text(b, yi + 0.17, f"{b:.3f}", ha="center", color=NAVY, fontsize=7.1, fontweight="bold")
+    ax0.set_yticks(y, labels)
+    ax0.set_xlim(0.25, 0.47)
+    ax0.set_xlabel("Final-872 score")
+    ax0.grid(axis="x", color=LIGHT, linewidth=0.7)
+    ax0.scatter([0.278, 0.371], [0.50, 0.50], s=22, color=[MIDGRAY, BLUE], zorder=3)
+    ax0.text(0.286, 0.50, "static", va="center", color=MIDGRAY, fontsize=6.8)
+    ax0.text(0.379, 0.50, "selected", va="center", color=NAVY, fontsize=6.8)
+    ax0.set_title("A  Absolute performance", loc="left", fontweight="bold", pad=4)
 
-    ax.text(0.015, 0.08,
-            "Selection closes before the held-out comparison; A6 and A7 use zero selection/final accesses.",
-            fontsize=7.0, color=CHARCOAL, va="center")
-    fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-    save(fig, "evidence_chain")
+    ax1 = fig.add_subplot(gs[1, 0])
+    diffs = confirm["paired_difference"].to_numpy()
+    low = confirm["ci95_low"].to_numpy()
+    high = confirm["ci95_high"].to_numpy()
+    xerr = np.vstack([diffs - low, high - diffs])
+    ax1.errorbar(diffs, y, xerr=xerr, fmt="o", color=NAVY, ecolor=BLUE, elinewidth=2.2, capsize=3.5, markersize=5)
+    ax1.axvline(0, color=MIDGRAY, linewidth=0.8)
+    for yi, d in zip(y, diffs):
+        ax1.text(d, yi + 0.18, f"+{d:.3f}", ha="center", color=NAVY, fontsize=7.1, fontweight="bold")
+    ax1.set_yticks(y, labels)
+    ax1.set_xlim(0, 0.13)
+    ax1.set_xlabel("Paired difference (95% CI)")
+    ax1.grid(axis="x", color=LIGHT, linewidth=0.7)
+    ax1.set_title("B  Confirmatory effect", loc="left", fontweight="bold", pad=4)
 
-
-def out_domain_diagnosis(metrics: dict[tuple[str, str, str], Decimal]) -> None:
-    fully_100 = checked(metrics, ("A7-L6", "OUT", "aggregate_query_classes.fully_exposed_at_100"), "67")
-    partial_100 = checked(metrics, ("A7-L6", "OUT", "aggregate_query_classes.partially_exposed_at_100"), "297")
-    deep_only = checked(metrics, ("A7-L6", "OUT", "aggregate_query_classes.deep_only_101_to_200"), "86")
-    unretrieved = checked(metrics, ("A7-L6", "OUT", "aggregate_query_classes.unretrieved_at_200"), "455")
-    query_total = checked(metrics, ("A7-L6", "OUT", "query_count"), "905")
-    exposed_100 = checked(metrics, ("A7-L6", "OUT", "relevant_family_exposed_at_100"), "796")
-    deep_200 = checked(metrics, ("A7-L6", "OUT", "relevant_family_deep_ranked_101_to_200"), "332")
-    absent_200 = checked(metrics, ("A7-L6", "OUT", "relevant_family_not_exposed_at_200"), "4065")
-    total = checked(metrics, ("A7-L6", "OUT", "relevant_family_count"), "5193")
-    observed = checked(metrics, ("A7-L7", "OUT", "observed_Recall@100"), "0.188449898653")
-    oracle = checked(metrics, ("A7-L7", "OUT", "existing_top_200_oracle_Recall@100"), "0.260166940437")
-    headroom = checked(metrics, ("A7-L7", "OUT", "bounded_reranking_headroom_Recall@100"), "0.071717041784")
-
-    if fully_100 + partial_100 + deep_only + unretrieved != query_total:
-        raise ValueError("OUT query exposure classes do not sum to the query count")
-
-    fig, (ax0, ax1, ax2) = plt.subplots(
-        1, 3, figsize=(7.16, 2.55),
-        gridspec_kw={"width_ratios": [1.02, 1.18, 0.98]},
-    )
-
-    query_values = [fully_100, partial_100, deep_only, unretrieved]
-    query_labels = ["All by 100", "Some by 100", "First at 101-200", "None by 200"]
-    query_colors = [BLUE, TEAL, GOLD, LIGHT_GRAY]
-    query_hatches = ["", "", "///", "..."]
-    y_positions = [3, 2, 1, 0]
-    for y, value, label, color, hatch in zip(
-        y_positions, query_values, query_labels, query_colors, query_hatches
-    ):
-        ax0.barh(y, value, height=0.55, color=color, edgecolor=CHARCOAL,
-                 linewidth=0.55, hatch=hatch)
-        ax0.text(value + 9, y, f"{int(value):,}", va="center", ha="left",
-                 fontsize=6.8, fontweight="bold", color=CHARCOAL)
-    ax0.set_yticks(y_positions, query_labels)
-    ax0.set_xlim(0, 520)
-    ax0.set_xlabel("OUT queries (count)", fontsize=7.2)
-    ax0.set_title("(a) Query-level exposure", loc="left", fontsize=8.0,
-                  fontweight="bold", color=CHARCOAL)
-    ax0.spines[["top", "right", "left"]].set_visible(False)
-    ax0.tick_params(axis="x", labelsize=6.5, length=2.5)
-    ax0.tick_params(axis="y", labelsize=6.2, length=0, pad=2)
-
-    segments = [
-        (exposed_100, BLUE, "", "Exposed by rank 100"),
-        (deep_200, GOLD, "///", "First exposed at ranks 101-200"),
-        (absent_200, LIGHT_GRAY, "...", "Absent at rank 200"),
-    ]
-    left = 0.0
-    short_labels = [r"$\leq 100$", "101-200", "absent at 200"]
-    for (value, color, hatch, label), short_label in zip(segments, short_labels):
-        ax1.barh([0], [value], left=left, height=0.42, color=color,
-                 edgecolor=CHARCOAL, linewidth=0.6, hatch=hatch, label=label)
-        text_color = PAPER if color in {BLUE, TEAL} else CHARCOAL
-        if short_label == "101-200":
-            center = left + value / 2
-            ax1.plot([center, center], [0.23, 0.30], color=CHARCOAL, linewidth=0.65)
-            ax1.text(center, 0.34, f"{int(value):,}", ha="center", va="bottom",
-                     fontsize=7.2, fontweight="bold", color=CHARCOAL)
-        else:
-            ax1.text(left + value / 2, 0, f"{int(value):,}", ha="center", va="center",
-                     fontsize=7.5, fontweight="bold", color=text_color)
-        label_x = left + value / 2
-        label_ha = "center"
-        if short_label == r"$\leq 100$":
-            label_x = left + 4
-            label_ha = "left"
-        elif short_label == "101-200":
-            label_x += 260
-        ax1.text(label_x, -0.27, short_label, ha=label_ha, va="top",
-                 fontsize=5.8, color=CHARCOAL)
-        left += value
-    ax1.set_xlim(0, total)
-    ax1.set_ylim(-0.72, 0.55)
-    ax1.set_yticks([])
-    ax1.set_xlabel("Relevant-family incidences", fontsize=7.2)
-    ax1.set_title("(b) Incidence-level exposure", loc="left",
-                  fontsize=8.0, fontweight="bold", color=CHARCOAL)
-    ax1.spines[["top", "right", "left"]].set_visible(False)
-    ax1.tick_params(axis="x", labelsize=6.5, length=2.5)
-
-    ax2.hlines(0, observed, oracle, color=TEAL, linewidth=3.0, zorder=1)
-    ax2.scatter([observed], [0], s=46, marker="o", color=BLUE,
-                edgecolor=CHARCOAL, linewidth=0.6, zorder=2)
-    ax2.scatter([oracle], [0], s=52, marker="D", color=GOLD,
-                edgecolor=CHARCOAL, linewidth=0.6, zorder=2)
-    ax2.annotate(f"Observed\n{observed:.6f}", (observed, 0),
-                 xytext=(0, -19), textcoords="offset points", ha="center",
-                 va="top", fontsize=7.2, color=CHARCOAL)
-    ax2.annotate(f"Fixed-pool oracle\n{oracle:.6f}", (oracle, 0),
-                 xytext=(0, -19), textcoords="offset points", ha="center",
-                 va="top", fontsize=7.2, color=CHARCOAL)
-    ax2.text((observed + oracle) / 2, 0.08, f"+{headroom:.6f}",
-             ha="center", va="bottom", fontsize=8.0, fontweight="bold", color=TEAL)
-    ax2.text((observed + oracle) / 2, 0.055, "ordering upper bound",
-             ha="center", va="bottom", fontsize=6.7, color=MID_GRAY)
-    ax2.set_xlim(0.15, 0.30)
-    ax2.set_ylim(-0.18, 0.18)
+    ax2 = fig.add_subplot(gs[2, 0])
+    counts = wtl.set_index("outcome").loc[["win", "tie", "loss"], "count"].to_numpy()
+    colors = [TEAL, "#C9D2D9", ORANGE]
+    left = 0
+    for count, color, label in zip(counts, colors, ["W", "T", "L"]):
+        ax2.barh([0], [count], left=left, height=0.48, color=color, edgecolor="white", linewidth=0.8)
+        ax2.text(
+            left + count / 2,
+            0,
+            f"{label}\n{count}",
+            ha="center",
+            va="center",
+            fontsize=6.8,
+            color="white" if label != "T" else DARK,
+            fontweight="bold",
+        )
+        left += count
+    ax2.set_xlim(0, 872)
+    ax2.set_ylim(-0.62, 0.62)
+    ax2.set_xticks([])
     ax2.set_yticks([])
-    ax2.set_xlabel("Macro Recall@100", fontsize=7.2)
-    ax2.set_title("(c) Fixed-pool headroom", loc="left",
-                  fontsize=8.0, fontweight="bold", color=CHARCOAL)
-    ax2.set_xticks([0.15, 0.20, 0.25, 0.30])
-    ax2.spines[["top", "right", "left"]].set_visible(False)
-    ax2.tick_params(axis="x", labelsize=6.5, length=2.5)
+    ax2.set_title("C  Recall@100 query outcomes", loc="left", fontweight="bold", pad=4)
+    ax2.spines["left"].set_visible(False)
+    ax2.spines["bottom"].set_visible(False)
 
-    fig.subplots_adjust(left=0.085, right=0.995, top=0.87, bottom=0.24, wspace=0.34)
-    save(fig, "out_domain_diagnosis")
+    fig.subplots_adjust(left=0.25, right=0.98, bottom=0.08, top=0.97)
+    save_figure(fig, "fig2_a5_confirmation")
+    plt.close(fig)
+
+
+def fig3_diagnosis() -> None:
+    df = load_csv("fig3_a7_out_diagnosis.csv")
+    incidence = df[df["unit"] == "relevant_family_incidence"].set_index("state")
+    recall = df[df["unit"] == "macro_recall"].set_index("state")
+    counts = incidence.loc[
+        ["exposed_by_rank_100", "first_exposed_rank_101_200", "absent_at_rank_200"], "value"
+    ].to_numpy(dtype=float)
+    np.testing.assert_allclose(counts, [796, 332, 4065])
+    observed = float(recall.loc["observed_Recall@100", "value"])
+    oracle = float(recall.loc["fixed_pool_oracle_Recall@100", "value"])
+    headroom = float(recall.loc["bounded_ordering_headroom_Recall@100", "value"])
+    np.testing.assert_allclose([observed, oracle, headroom], [0.188449898653, 0.260166940437, 0.071717041784])
+
+    fig = plt.figure(figsize=(3.35, 2.95))
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.05, 0.95], hspace=0.53)
+
+    ax0 = fig.add_subplot(gs[0, 0])
+    colors = [TEAL, GOLD, ORANGE]
+    labels = ["Found by rank 100", "First found at ranks 101--200", "Absent from Top-200"]
+    left = 0.0
+    for count, color, label in zip(counts, colors, labels):
+        ax0.barh([0], [count], left=left, height=0.46, color=color, edgecolor="white", linewidth=0.8)
+        if label == "Absent from Top-200":
+            text_color = "white" if color != GOLD else DARK
+            ax0.text(
+                left + count / 2,
+                0,
+                f"{int(count):,} / 5,193\n{label}",
+                ha="center",
+                va="center",
+                fontsize=6.2,
+                color=text_color,
+                fontweight="bold",
+            )
+        else:
+            short_label = "by rank 100" if label == "Found by rank 100" else "ranks 101--200"
+            offset = 0 if label == "Found by rank 100" else 700
+            ax0.annotate(
+                f"{int(count):,} / 5,193\n{short_label}",
+                xy=(left + count / 2, 0.25),
+                xytext=(left + count / 2 + offset, 0.65),
+                ha="center",
+                va="bottom",
+                fontsize=6.0,
+                arrowprops={"arrowstyle": "-", "color": MIDGRAY, "linewidth": 0.7},
+            )
+        left += count
+    ax0.set_xlim(0, 5193)
+    ax0.set_ylim(-0.55, 1.00)
+    ax0.set_yticks([])
+    ax0.set_xlabel("Strict cross-domain relevant incidences (n=5,193)", fontsize=7.4)
+    ax0.set_title("A  Exposure anatomy", loc="left", fontweight="bold", pad=4)
+    ax0.spines["left"].set_visible(False)
+
+    ax1 = fig.add_subplot(gs[1, 0])
+    ax1.plot([observed, oracle], [0, 0], color="#AEBBC5", linewidth=5, solid_capstyle="round", zorder=1)
+    ax1.scatter([observed], [0], s=55, color=BLUE, zorder=3)
+    ax1.scatter([oracle], [0], s=55, color=ORANGE, zorder=3)
+    ax1.text(observed, 0.18, f"Observed\n{observed:.3f}", ha="center", color=NAVY, fontsize=7.4, fontweight="bold")
+    ax1.text(oracle, 0.18, f"Perfect ordering\n{oracle:.3f}", ha="center", color=ORANGE, fontsize=7.4, fontweight="bold")
+    ax1.annotate(
+        f"bounded headroom\n+{headroom:.3f}",
+        xy=((observed + oracle) / 2, -0.03),
+        xytext=((observed + oracle) / 2, -0.36),
+        ha="center",
+        va="top",
+        fontsize=7.2,
+        color=DARK,
+        arrowprops={"arrowstyle": "-[,widthB=2.7", "color": MIDGRAY, "linewidth": 0.8},
+    )
+    ax1.set_xlim(0.15, 0.28)
+    ax1.set_ylim(-0.58, 0.55)
+    ax1.set_yticks([])
+    ax1.set_xlabel("Macro Recall@100 over 905 queries")
+    ax1.set_title("B  Within-pool ordering bound", loc="left", fontweight="bold", pad=4)
+    ax1.spines["left"].set_visible(False)
+    ax1.grid(axis="x", color=LIGHT, linewidth=0.7)
+
+    fig.text(
+        0.58,
+        0.015,
+        "Analytical bound inside the existing Top-200 pool; not a reranker experiment.",
+        ha="center",
+        va="bottom",
+        fontsize=6.2,
+        color=MIDGRAY,
+    )
+    fig.subplots_adjust(left=0.18, right=0.98, bottom=0.17, top=0.97)
+    save_figure(fig, "fig3_a7_diagnosis")
+    plt.close(fig)
 
 
 def main() -> None:
-    plt.rcParams.update({
-        "font.family": "DejaVu Sans",
-        "font.size": 7.5,
-        "axes.edgecolor": CHARCOAL,
-        "axes.labelcolor": CHARCOAL,
-        "xtick.color": CHARCOAL,
-        "ytick.color": CHARCOAL,
-        "pdf.fonttype": 42,
-        "ps.fonttype": 42,
-    })
-    metrics = load_metrics()
-    evidence_chain()
-    out_domain_diagnosis(metrics)
+    OUT.mkdir(exist_ok=True)
+    set_style()
+    fig1_transfer()
+    fig2_confirmation()
+    fig3_diagnosis()
 
 
 if __name__ == "__main__":
