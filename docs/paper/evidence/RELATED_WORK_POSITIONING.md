@@ -25,7 +25,7 @@ Fusion and expert routing motivate complementarity, but ArmIndex development con
 > Rather than treating document construction as a model-independent constant, we empirically examine how representation choices behave across heterogeneous frozen retrievers, then separate development observations from protected system-level confirmation and full-scale failure diagnosis.
 
 Primary source starting points from the repository research notes:
-- DAPFAM: Ayaou et al., arXiv:2506.22141 / Array 31 (2026) 100720.
+- DAPFAM: Ayaou et al., arXiv:2506.22141 / Array 29 (2026) 100720.
 - Benchmarking Patent Embeddings: Yousefiramandi and Cooney, arXiv:2605.24297.
 - AutoIndex representation-search work: verify the correct AutoIndex paper/citation before submission; do not confuse it with database “AutoIndexer” work.
 - BM25, RRF, nDCG, and bootstrap references are already seeded in `references/references.bib`.

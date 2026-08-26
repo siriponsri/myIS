@@ -528,7 +528,7 @@ Forty raw self-relations were examined in a sensitivity analysis. Removing them 
 
 Among the 905 judged cross-domain queries:
 
-- 67 had all relevant evidence exposed by rank 200;
+- 67 had all relevant evidence exposed by rank 100;
 - 297 had partial relevant evidence exposed;
 - 86 had relevant evidence only at ranks 101-200; and
 - 455 had no relevant candidate in the Top-200 pool.

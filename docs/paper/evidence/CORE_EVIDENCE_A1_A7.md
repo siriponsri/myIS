@@ -152,7 +152,7 @@ Candidate-exposure anatomy:
 | Strict cross-domain | **5,193** | **796** | **332** | **4,065** |
 
 Among 905 judged strict cross-domain queries:
-- 67 had all relevant evidence exposed by rank 200.
+- 67 had all relevant evidence exposed by rank 100.
 - 297 had partial relevant evidence exposed.
 - 86 had relevant evidence only at ranks 101-200.
 - **455 had no relevant candidate in Top-200.**
