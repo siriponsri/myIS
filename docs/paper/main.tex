@@ -38,7 +38,7 @@ The evidence is organized in three stages that answer different questions. Devel
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/v02/overview_evidence_map.pdf}
+\includegraphics[width=0.98\textwidth]{figures/rebuilt/overview_evidence_map.pdf}
 \caption{\textbf{Evidence map.} Representation construction and transfer analysis are development evidence. Development closes before Selection-125 and Final-872 complete-system confirmation; full-benchmark A7 diagnosis is post-confirmatory.}
 \label{fig:evidence-map}
 \end{figure*}
@@ -80,8 +80,8 @@ Full benchmark & 1,247 & Characterization/diagnosis \\
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/v02/fig1_a3_transfer.pdf}
-\caption{\textbf{Best representation---for whom?} Development Recall@100 for three representation sources and consuming retrievers. The left view preserves a common absolute scale; the right view shows differences from each target's matched source. Shape identifies source, amber marks the nominal maximum, and a dark ring marks the matched pair. Within-target ranges are 0.000838 for PatEmbed, 0.003911 for Arctic, and 0.003073 for Qwen3. These are descriptive development results; no cell-level confirmatory inference is claimed.}
+\includegraphics[width=0.98\textwidth]{figures/rebuilt/fig1_a3_transfer.pdf}
+\caption{\textbf{Best representation---for whom?} Development Recall@100 for three representation sources and consuming retrievers, shown on disclosed target-specific axes with direct value labels. Shape identifies source, amber marks the nominal maximum, and a dark ring marks the matched pair. Within-target ranges are 0.000838 for PatEmbed, 0.003911 for Arctic, and 0.003073 for Qwen3. These are descriptive development results; no cell-level confirmatory inference is claimed.}
 \label{fig:transfer}
 \end{figure*}
 
@@ -130,7 +130,7 @@ Both Final-872 systems process all 872 queries without failure, and deterministi
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.96\textwidth]{figures/v02/fig2_a5_confirmation.pdf}
+\includegraphics[width=0.96\textwidth]{figures/rebuilt/fig2_a5_confirmation.pdf}
 \caption{\textbf{Final-872 comparison of two complete frozen configurations.} (a) Absolute cross-domain Recall@100 and nDCG@100. (b) Paired selected-minus-comparator differences with 95\% percentile intervals from 10,000 paired bootstrap resamples. (c) Recall@100 query-level wins, ties, and losses. The comparison supports the complete selected system, not a representation-only causal effect.}
 \label{fig:confirmation}
 \end{figure*}
@@ -147,7 +147,7 @@ This fixed pool permits a bounded diagnostic question: \emph{How much of the rem
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.96\textwidth]{figures/v02/fig3_a7_diagnosis.pdf}
+\includegraphics[width=0.96\textwidth]{figures/rebuilt/fig3_a7_diagnosis.pdf}
 \caption{\textbf{Candidate exposure and within-pool ordering bound.} Post-confirmatory diagnosis of the fixed full-benchmark Top-200 pool for strict cross-domain relations. (a) Relevant-family incidence exposure: 796 by rank 100, 332 first at ranks 101--200, and 4,065 absent. (b) The analytical perfect-ordering bound within the immutable pool raises macro Recall@100 from 0.188450 to 0.260167, leaving headroom of 0.071717; it is not reranker performance. Incidences and macro Recall use different aggregation units.}
 \label{fig:diagnosis}
 \end{figure*}
