@@ -1,0 +1,7 @@
+interface:
+  display_name: "Research Paper Writing"
+  short_description: "Evidence-led manuscript writing and story arc"
+  default_prompt: "Use this skill to revise the manuscript from claims and evidence."
+
+policy:
+  allow_implicit_invocation: true

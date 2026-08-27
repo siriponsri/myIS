@@ -1,0 +1,142 @@
+Post-confirmatory diagnosis: candidate exposure limits cross-domain recall
+Immutable full-benchmark Top-200 pool
+A. Exposure anatomy
+Strict cross-domain relevant-family incidences · n = 5,193
+15.3% 6.4% 78.3% absent
+796 found by rank 100
+332 first found at ranks 101–200
+4,065 / 5,193 absent from Top-200
+B. Within-pool ordering headroom
+Macro Recall@100 across 905 strict cross-domain judged queries
+Observed
+0.188
+Perfect-ordering bound
+0.260
++0.072 headroom
+0.18 0.20 0.22 0.24 0.26
+Macro Recall@100
+Fig. 4. Candidate exposure and within-pool ordering bound. Post-confirmatory diagnosis of the fixed full-benchmark Top-200 pool for strict cross-domain
+relations. (a) Relevant-family incidence exposure: 796 by rank 100, 332 first at ranks 101–200, and 4,065 absent. (b) The analytical perfect-ordering bound
+within the immutable pool raises macro Recall@100 from 0.188 to 0.260, a headroom of 0.072; it is not reranker performance. Incidences and macro Recall
+use different aggregation units.
+complete configuration, not representation alone. The direction
+is consistent with the published landscape—DAPFAM’s own
+sweep finds passage retrieval ahead of document retrieval,
+and PatenTEB reports patembed-large as the strongest patent-
+specific encoder on this benchmark [1], [4]; what the protocol
+adds is not the ranking but its survival on held-out data with
+development closed.
+B. Full-Benchmark Candidate Exposure
+The selected system wins its comparison decisively. On
+the strict cross-domain slice, it still misses most of what it
+should find—a confirmed system is the right place to ask
+why. We keep the winner fixed and run it unchanged over the
+full benchmark: 45,336 target families, 1,247 queries, Top-200
+per query. The run materializes 188,944 chunks and 249,400
+ranked family rows with full coverage, no failures, and no
+duplicate-family errors. This strict cross-domain population
+differs from Final-872, so we report it separately from the
+confirmation.
+The pool licenses one bounded question: how much re-
+maining error could a perfect reordering of existing candidates
+recover? Under the strict cross-domain definition, 905 judged
+queries hold 5,193 relevant-family incidences. Observed macro
+Recall@100 is 0.188; at depth 200 it is 0.260.
+Figure 4 separates exposure from ordering, and the split is
+stark. Of 5,193 relevant incidences, 796 surface by rank 100
+and 332 more by rank 200—and 4,065 never appear at all.
+Seventy-eight percent of the evidence is not late; it is absent.
+The query view agrees: only 67 of 905 queries have every
+relevant family inside the top 100, while 455 expose none by
+rank 200. Reorder the pool perfectly and macro Recall@100
+climbs from 0.188 to 0.260—a headroom of 0.072, and the
+entire prize available to any reranker. Everything above it was
+never retrieved. For a first-stage configuration this strong, the
+binding constraint is exposure, not ordering.
+VI. DISCUSSION AND CONCLUSION
+Three results, one lesson: the unit that deserves a name
+in cross-domain patent retrieval is the retriever–representation
+configuration, not the retriever alone. The model scores what-
+ever the construction, view selection, segmentation, and family
+aggregation make visible; these choices deserve the precision
+of a checkpoint name or retrieval depth. But precision is not
+leverage. At the coarse, field level these choices do not reorder
+retrievers—the reordering that looks real dissolves under re-
+sampling, while the retrievers stay firmly apart. Representation
+specifies the evidence; the retriever decides what to do with
+it.
+The protected comparison moves the burden of proof from
+development behavior to a complete system that holds up on
+held-out queries with development closed. We keep the two
+levels apart on purpose: the transfer matrix shapes how we
+read the result, but only the held-out comparison is allowed
+to confirm.
+The confirmed system points to where the next gain lives—
+and it is not the ranker. Four in five relevant families never
+reach the candidate pool, so reranking is capped at a headroom
+of 0.072 while candidate expansion still has most of the
+recall to win. The two interventions act on different failures:
+expansion changes what is exposed, reranking changes how
+exposed evidence is ordered. We do not rank them against
+each other here; we say which one the numbers make urgent.
+Everything about representation and transfer is development
+evidence from a single benchmark, and no individual trans-
+fer cell carries confirmatory weight. The full-scale diagnosis
+examines one selected dense configuration. The exposure
+diagnosis is specific to the Top-200 pool; deeper cutoffs
+are uncharacterized. PatEmbed-large carries a research/non-
+commercial license. And citation-based patent retrieval is
+an information-retrieval task, not a legal reading of novelty,
+validity, infringement, or freedom to operate; nothing here
+should be read as the latter.
+A retrieval score reflects both the model that scores evidence
+and the construction that decides what evidence exists. Once
+the first-stage configuration is fixed, a further constraint ap-
+pears: which relevant families enter the pool. Together they set
+the reporting unit and the honest limit of downstream ranking.
+REFERENCES
+[1] I. Ayaou, D. Cavallucci, and H. Chibane, “DAPFAM: A domain-aware
+family-level dataset to benchmark cross-domain patent retrieval,” Array,
+vol. 29, p. 100720, 2026.
+[2] A. Yousefiramandi and C. Cooney, “Benchmarking patent embeddings:
+A multi-task evaluation of 22 models across retrieval, classification, and
+clustering,” arXiv preprint arXiv:2605.24297, 2026.
+[3] S. O’Nuallain, N. Rajkumar, R. Narayanasamy, H. Jiang, S. Chaudhari,
+and A. Drozdov, “AutoIndex: Learning representation programs for
+retrieval,” arXiv preprint arXiv:2607.18603, 2026.
+[4] I. Ayaou and D. Cavallucci, “PatenTEB: A comprehensive bench-
+mark and model family for patent text embedding,” arXiv preprint
+arXiv:2510.22264, 2025.
+[5] Y. Yoo, Q. Xu, Z. Wu, and L. Cao, “Heterogeneous dependency
+graph-guided attention for patent representation learning,” arXiv preprint
+arXiv:2605.10073, 2026.
+[6] N. Asadi and J. Lin, “Effectiveness/efficiency tradeoffs for candidate
+generation in multi-stage retrieval architectures,” in Proceedings of the
+36th International ACM SIGIR Conference on Research and Develop-
+ment in Information Retrieval, 2013, pp. 997–1000.
+[7] R. Nogueira and K. Cho, “Passage re-ranking with BERT,” arXiv
+preprint arXiv:1901.04085, 2019.
+[8] K. Järvelin and J. Kekäläinen, “Cumulated gain-based evaluation of IR
+techniques,” ACM Transactions on Information Systems, vol. 20, no. 4,
+pp. 422–446, 2002.
+[9] S. Robertson and H. Zaragoza, “The probabilistic relevance framework:
+BM25 and beyond,” Foundations and Trends in Information Retrieval,
+vol. 3, no. 4, pp. 333–389, 2009.
+[10] J. Chen, S. Xiao, P. Zhang, K. Luo, D. Lian, and Z. Liu, “M3-
+Embedding: Multi-linguality, multi-functionality, multi-granularity text
+embeddings through self-knowledge distillation,” in Findings of the
+Association for Computational Linguistics: ACL 2024, 2024, pp. 2318–
+2335.
+[11] P. Yu, L. Merrick, G. Nuti, and D. Campos, “Arctic-Embed 2.0: Multi-
+lingual retrieval without compromise,” arXiv preprint arXiv:2412.04506,
+2024.
+[12] Y. Zhang, M. Li, D. Long, X. Zhang, H. Lin, B. Yang, P. Xie,
+A. Yang, D. Liu, J. Lin, F. Huang, and J. Zhou, “Qwen3 Embedding:
+Advancing text embedding and reranking through foundation models,”
+arXiv preprint arXiv:2506.05176, 2025.
+[13] G. V. Cormack, C. L. A. Clarke, and S. Buettcher, “Reciprocal rank
+fusion outperforms condorcet and individual rank learning methods,” in
+Proceedings of SIGIR, 2009, pp. 758–759.
+[14] A. C. Davison and D. V. Hinkley, Bootstrap Methods and Their
+Application. Cambridge University Press, 1997.
+

@@ -1,0 +1,7 @@
+interface:
+  display_name: "CPU Research Experiment"
+  short_description: "Governed CPU-only experiments and evaluations"
+  default_prompt: "Use this skill to resolve a manuscript evidence gap with the minimum valid CPU experiment."
+
+policy:
+  allow_implicit_invocation: true

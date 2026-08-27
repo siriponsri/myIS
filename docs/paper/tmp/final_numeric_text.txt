@@ -1,0 +1,361 @@
+﻿    Beyond the Retriever: Representation Transfer in
+            Cross-Domain Patent Retrieval
+                                                         Anonymous Authors
+
+
+    Abstract—A patent retriever never sees the invention it is         is tuned around one retriever, does its advantage survive when
+asked to find. It sees a representation we build for it—a              a different retriever consumes it?
+title, a claim, a window of passages—and scores that. Cross-              We freeze five heterogeneous retrievers and vary five de-
+domain benchmarks freeze this representation and read the
+resulting differences as facts about the retrievers, as if the         terministic constructions, with no fine-tuning, adapters, or
+construction were a neutral control. It is not: it is part of the      distillation, then run a full 3 × 3 transfer matrix across
+system under test. We take that assumption apart on family-            three dense retrievers and ask, plainly, best representation—for
+level cross-domain patent retrieval (DAPFAM) by freezing five          whom? We expected the answer to reorder the field. It does
+retrievers and varying five deterministic constructions, keeping       not. The nominally best construction flips from target to target,
+development, one-time selection, and held-out confirmation as
+separate evidence levels. The result is deflationary. Across a 3 × 3   but the flips are smaller than the noise around them, while
+cross-retriever transfer matrix, the best construction changes         the retrievers stay separated by an order of magnitude. At the
+from one target retriever to the next—but the changes sit inside       coarse level of field selection, representation is not the lever;
+bootstrap noise (within-target Recall@100 spread below 0.004;          retriever identity is. This is a claim about coarse constructions,
+every 95% interval caps the effect below 0.011), while the gap         not about representation in general: richer, learned representa-
+between retrievers is an order of magnitude larger. At the coarse,
+field level, representation does not reorder retrievers; retriever     tion programs can move even dense retrievers substantially [3],
+identity does. A preregistered complete configuration then wins        a boundary we draw carefully in Section II.
+cleanly on 872 held-out queries, lifting Recall@100 from 0.331 to         What makes these claims worth trusting is discipline, so
+0.442 (paired difference 0.111, 95% bootstrap CI [0.102, 0.120])       we keep three kinds of evidence apart and never let one speak
+over a frozen comparator—a system-level result our design does         with another’s authority (Figure 1). Development characterizes
+not credit to representation alone. Applied unchanged to the full
+benchmark, that winner reveals what actually caps recall: 78%          representation response and transfer. A one-time selection
+of relevant-family incidences never enter the Top-200 pool, and        stage then freezes a complete configuration, which a pro-
+a perfect reordering of what remains would add only 0.072. On          tected 872-query held-out comparison confirms. Only after
+this benchmark, cross-domain patent retrieval is exposure-bound,       that system is fixed do we turn its full-benchmark Top-200
+not ordering-bound. We argue that retrieval quality should be          pool into a diagnostic—and it delivers the paper’s sharpest
+reported at the retriever–representation configuration level, and
+that no amount of ranker tuning can recover evidence the pool          finding: recall is capped not by how we order candidates,
+never contained.                                                       but by which candidates ever appear. Most relevant families
+    Index Terms—patent retrieval, cross-domain retrieval, docu-        never reach the pool. Our contributions are (i) controlled multi-
+ment representation, dense retrieval, information retrieval            retriever evidence that coarse representation choices do not
+                                                                       transfer into retriever reordering, (ii) a preregistered, held-
+                       I. I NTRODUCTION                                out confirmation of a complete configuration, and (iii) a
+   A patent retriever never sees a patent. It sees the represen-       post-confirmatory diagnosis showing that cross-domain patent
+tation we choose to hand it—a title and abstract, a full claim         retrieval is exposure-bound.
+set, a single structured claim, a window of passages. Index a
+lexical and a dense retriever on the same construction and they                             II. R ELATED W ORK
+appear to receive the same evidence, so benchmarks freeze the             Patent retrieval benchmarks increasingly expose the effects
+construction and compare the models. The move is convenient,           of domain and document construction. DAPFAM gives family-
+and it hides an assumption: that a fixed representation is a           level in-domain and out-of-domain evaluation and system-
+control the model cannot see around, rather than one more              atically compares lexical and dense retrieval, document and
+part of the system being measured. Freezing a variable does            passage units, aggregation, and fusion [1]. PatenTEB broadens
+not neutralize it. It only hides it. So we ask a blunt question:       patent embedding evaluation across retrieval and other patent-
+with the retriever fixed, does the representation still move the       language tasks, and a recent 22-model benchmark examines
+ranking?                                                               multiple text-section views and reports stubborn out-of-domain
+   Patent families make the question concrete. The same inven-         degradation [2], [4]. Together they establish that model family
+tion can be exposed as a bare title, a single structured claim,        and document view both matter. Much of this is one research
+overlapping passages, or a fused set of section views, and             line (the DAPFAM, PatenTEB, and PatEmbed resources share
+earlier work has shown that granularity and field choice change        authorship), and our question is orthogonal to it: not whether a
+effectiveness, most sharply across technological domains [1],          view helps a given retriever, but whether a view chosen around
+[2]. What that work leaves open is transfer: if a construction         one retriever stays best when another retriever consumes it,
+      DEVELOPMENT EVIDENCE                                                                            PROTECTED CONFIRMATION                  POST-CONFIRMATORY DIAGNOSIS
+
+
+
+
+                                                                                 DEVELOPMENT CLOSED
+                      01                                 02                                                            03                                         04
+
+        Construct representations                  Test transfer                                             Freeze & confirm                         Diagnose exposure
+          Five patent-family text views   Do views transfer across retrievers?                             Selection-125 → 872 held-out            What still caps recall in the pool?
+
+
+               5 constructions                   reordering is noise                                           +0.111 Recall@100                      78% of evidence absent
+
+
+
+
+Fig. 1. Evidence map. Representation construction and transfer analysis are development evidence. Development closes before Selection-125 and the Final-
+872 complete-system confirmation; the full-benchmark diagnosis is post-confirmatory. Each stage answers a different question, and none borrows another’s
+authority.
+
+
+
+under a protocol that keeps development, selection, and con-                                                                        TABLE I
+firmation apart. Learned structural encoders are also advancing                                           S EPARATED EVIDENCE ROLES AND QUERY POPULATIONS . T HE
+                                                                                                        FULL - BENCHMARK STRICT CROSS - DOMAIN POPULATION IS NOT THE
+on this benchmark: PHAGE injects a claim-dependency graph                                                                  F INAL -872 POPULATION .
+into a pre-trained encoder’s attention [5]; we sit at the opposite
+end of that spectrum—deterministic, coarse, and frozen—                                                  Evidence role                    Queries Purpose
+asking whether construction choices are portable at all, not                                             Representation development          150   Common/per-system search
+how to learn better ones.                                                                                Combined development                250   Transfer and composition
+                                                                                                         One-time selection                  125   Freeze final systems
+   The sharpest contrast is with representation-optimization                                             Protected confirmation              872   Complete-system comparison
+work, and because it cuts against our headline we meet it di-                                            Full benchmark                    1,247   Characterization/diagnosis
+rectly. AutoIndex learns executable representation programs—
+slicing, enriching, reweighting, normalizing documents—
+around a fixed BM25 backend, and reports large recall gains                                           M3 [10], PatEmbed-large [4], Arctic Embed M v2.0 [11], and
+from representation alone, including a preliminary dense result                                       Qwen3 Embedding 0.6B [12]. No system receives fine-tuning,
+in which a learned program improves Qwen3-Embedding-                                                  adapters, distillation, or continued pretraining during the study.
+0.6B Recall@100 by 18.3% on a single task [3]. Our study                                                 Representations and evidence separation. By construction
+is complementary and deliberately narrower. We hold five                                              we mean the full deterministic mapping from a patent family
+retrievers fixed and vary a small set of coarse, field-level static                                   to its retrievable units—field selection, segmentation, family-
+constructions; we do not search a rich program space. So our                                          level aggregation, and any deterministic view fusion—not
+finding that these constructions do not reorder retrievers is a                                       text content alone. The shared deterministic surface holds
+statement about the portability of coarse choices across frozen                                       five constructions: title–abstract–claims as one family docu-
+dense retrievers, not a claim that representation is inert—                                           ment; title and abstract; the first structured independent claim;
+AutoIndex shows the opposite once the representation space is                                         384-token passages with 64-token overlap and family-level
+rich and corpus-adaptive. Seen this way, our transfer matrix is                                       maximum aggregation; and labeled title, abstract, and claims
+an early empirical probe of exactly the cross-retriever transfer                                      views combined by family-level rank fusion [13]. Table I
+question AutoIndex leaves open.                                                                       lists the protected sequence. The populations nest simply:
+   Finally, multi-stage retrieval separates candidate generation                                      the 1,247 query families split into 250 for development, 125
+from downstream scoring: a cheap first stage supplies a                                               for selection, and 872 for protected confirmation. The strict
+bounded pool, and more expensive models rerank it [6], [7].                                           cross-domain slice used later for diagnosis is a different
+We invoke that distinction only after confirmation, to measure                                        cut—relations for which the query and relevant target do
+candidate exposure and to compute a perfect-ordering bound                                            not share the required technical classification level—leaving
+inside the fixed Top-200 pool—separating error a reranker                                             905 judged queries drawn from all 1,247. The Final-872 and
+could still recover from error that is simply absent.                                                 strict-slice scores are computed on different populations and
+                                                                                                      are not directly comparable. Representation development uses
+                              III. S TUDY D ESIGN                                                     150 queries; transfer and fixed-composition controls cover
+   Benchmark and systems. The evaluation unit is a patent                                             all 250 development queries. Four profiles pass through one
+family. The benchmark holds 1,247 query families, 45,336                                              Selection-125 exposure before the research system and a static
+target families, and 49,869 judged relations. Cross-domain                                            comparator are frozen. Final confirmation uses paired query-
+Recall@100 is primary; nDCG@100 and nDCG@10 are sec-                                                  level differences, 10,000 paired bootstrap resamples, and 95%
+ondary [8]. We freeze five retrieval systems: BM25 [9], BGE-                                          percentile intervals [14]. After confirmation, the winner alone
+                              TABLE II                                                            TABLE III
+       D EVELOPMENT RESPONSE ACROSS FROZEN RETRIEVERS .                                   C OMPLETE FROZEN SYSTEMS .
+    S HARED - SCREEN AND PER - SYSTEM - SEARCH R ECALL @100 ARE
+ DISTINCT SUMMARIES PRODUCED UNDER DIFFERENT DECISION RULES ;         System       Frozen specification
+     THEIR DIFFERENCE IS NOT A CAUSAL BEFORE / AFTER EFFECT.
+                                                                      Research     ARM-03:             datalyes/patembed-large         (revision
+                                                                                   2d5c0f92a3e5dc3d5415c08e612c57543c0e03ad);           a2-arm-
+                  Shared Per-system                                                03-matched-b2-orthogonal, title+abstract+claims, 384-token
+   Retriever      screen   search Frozen interpretation
+                                                                                   passages with 64-token overlap, NFKC whitespace, mean non-
+   BM25           0.191    0.235    Diagnostic tie; no winner                      padding pooling, L2 normalization, max-p family aggregation;
+   BGE-M3         0.270    0.290    Diagnostic tie; no winner                      query prefix “encode query for different document retrieval:”;
+   PatEmbed       0.413    0.423    Numerical tie to incumbent; re-                no fusion, top-100.
+                                    tained                            Comparator   FAST:     BM25S       0.3.10     plus   Snowflake/snowflake-
+   Arctic Embed 0.341      0.359    Strict improvement; retained                   arctic-embed-m-v2.0                                 (revision
+   Qwen3 Embed. 0.364      0.374    No strict improvement; transfer                95c2741480856aa9666782eb4afe11959938017f);               P00-
+                                    control                                        TAC-DOC title+abstract+claims as one family document with
+                                                                                   NFKC canonical-whitespace, case-preserving construction;
+                                                                                   dense query prefix “query:”; synchronous reciprocal-rank
+                                                                                   fusion (RRF-60), top-100.
+is applied to all 1,247 queries unchanged except retrieval
+depth, extended to 200 for the diagnostic pool; every later
+analysis reuses that one Top-200 pool with no further retrieval          Figure 2 lays the result out. Read target by target, the nom-
+or model selection.                                                   inally best construction does move: Qwen3-derived text wins
+                                                                      for PatEmbed, Arctic-derived for Arctic, PatEmbed-derived
+   IV. C ROSS -R ETRIEVER R EPRESENTATION T RANSFER                   for Qwen3, and the nDCG@100 ordering disagrees again
+   If representation were neutral preprocessing, frozen re-           (its top cell is Arctic-derived text on PatEmbed, 0.352). No
+trievers would respond to it alike. We test that first on a           construction holds first place everywhere. But the differences
+common screen: five systems under five shared constructions,          behind that reordering are tiny, and because every cell shares
+25 development cells. PatEmbed, Arctic Embed, and Qwen3               the same 250 queries we can test them head-on. Within
+carry forward to the transfer analysis; BM25 and BGE-M3               each target, the paired gap between the best and second-best
+stay diagnostic. The screen probes one predefined surface on          construction has a 95% bootstrap interval that includes zero
+one benchmark, and is not a model leaderboard.                        ([-0.005, 0.006] for PatEmbed, [-0.005, 0.011] for Arctic, [-
+   A per-system search then registers 52 configurations in            0.006, 0.009] for Qwen3), and no construction is a stable
+advance. Registering the whole set—including the eight condi-         within-target winner under resampling (best-source probability
+tional reserves whose activation predicates never fired, leaving      at most 0.68). The reordering is noise—and bounded: the
+44 executed—fixes the search space before any score is seen,          largest effect consistent with any of these intervals is 0.011
+which is the point of registering it. The full list, activation       Recall@100, below the narrowest separation between the
+predicates, and decision rules are fixed in a version-controlled      retriever bands (0.018). What is not noise is the retriever: every
+artifact released with the paper. The responses are mixed:            construction lands near 0.419 Recall@100 on PatEmbed, near
+Arctic improves strictly under its rule, PatEmbed produces a          0.34 on Arctic, near 0.36 on Qwen3—bands separated by far
+within-search winner that ties its incumbent, Qwen3 shows no          more than the spread inside any one of them. Change the
+strict improvement, and BM25 and BGE-M3 end in diagnostic             construction and you shuffle positions within a band; change
+ties. Under the per-system rule, a challenger replaces its            the retriever and you move between bands.
+incumbent only on a strict Recall@100 gain; anything smaller             A composition control tells the same story from another
+is recorded as a tie. Because the common screen and the per-          angle. Two-system fusion (0.419) barely edges the strongest
+system search use different decision rules, their numbers are         single system (0.418), and three-system fusion drops to 0.415:
+not a before/after pair; Table II reports each with its frozen        stacking retrievers does not monotonically help.
+interpretation.                                                          At the coarse, field level, representation is a passenger, not
+   The mixed responses leave a tempting possibility open: a           the driver; no single transfer cell carries confirmatory weight.
+construction discovered around one system might still transfer        That settles development and sets up a sharper question.
+to the others. We test it with a complete 3 × 3 matrix—               The configuration looks strong on development data. Does it
+each construction selected from PatEmbed, Arctic Embed, or            survive contact with queries it has never seen?
+Qwen3, consumed by each of the three targets, every cell
+over all 250 development queries. Concretely, the PatEmbed-                V. P ROTECTED C ONFIRMATION AND F ULL -S CALE
+derived construction is title, abstract, and claims in 384-token                            D IAGNOSIS
+passages with 64-token overlap and max-p aggregation, the
+                                                                      A. Protected Held-Out Confirmation
+Arctic-derived is labeled title, abstract, and claims in 512-
+token passages with 64-token overlap and max-p aggregation,              It does. Four frozen profiles enter one Selection-125 evalu-
+and the Qwen3-derived is title, abstract, and claims in 2048-         ation with complete rankings; cross-domain selection statistics
+token passages with 256-token overlap and max-p aggregation.          use 90 queries with positive cross-domain relations. On this
+        Representation transfer across frozen retrievers
+        Development Recall@100 · retriever identity dominates construction choice
+
+                                               PatEmbed target                                              Arctic target                                     Qwen3 target
+
+                PatEmbed                                0.418436                                                   0.337430                                            0.362570
+                source
+
+
+                Arctic                                  0.418715                                                   0.341341                                            0.359497
+                source
+
+
+                Qwen3                                   0.419274                                                   0.338268                                            0.360615
+                source
+
+
+                  Within-target
+                                                        0.000838                                                   0.003911                                            0.003073
+                  range
+
+
+                     Nominal best in column                         Matched-pair (same source and target)
+
+
+        Best source flips by target, but within-target spread (<0.004) is dwarfed by between-target gaps (~0.08).
+
+
+Fig. 2. Best representation—for whom? Development Recall@100 for three representation sources and consuming retrievers, on disclosed target-specific
+values. The nominal best source (amber) changes with the target, but the within-target spread is below 0.004 for every target, while the between-target bands
+differ by an order of magnitude. Development evidence; no single cell carries confirmatory inference.
+
+
+         Final-872 held-out confirmation
+         Two frozen complete configurations · n = 872
+
+
+            A. Absolute performance                                                                              B. Held-out paired improvement
+
+                                                     0.331                           0.442
+                                                                                                                                                                             +0.111
+            Recall@100
+                                                                                                                 Recall@100
+                                                                                                                                                                         [0.102, 0.120]
+
+                                      0.279                     0.366
+                                                                                                                                                               +0.086
+            nDCG@100
+                                                                                                                 nDCG@100
+                                                                                                                                                            [0.079, 0.094]
+                                                                                                                              0     0.02   0.04     0.06     0.08       0.10      0.12 0.13
+                               0.25           0.30           0.35          0.40         0.45
+
+                                                      Metric value                                                                         Held-out paired improvement
+
+                                                                                                                                                  95% bootstrap CI
+                                           Comparator                Selected
+
+
+
+            C. Recall wins / ties / losses                                                   Wins: 619 (71.0%)                                     Ties: 158 (18.1%)    Losses: 95 (10.9%)
+
+
+
+
+Fig. 3. Final-872 comparison of two complete frozen configurations. (a) Absolute cross-domain Recall@100 and nDCG@100. (b) Paired selected-
+minus-comparator differences with 95% percentile intervals from 10,000 paired bootstrap resamples. (c) Recall@100 query-level wins, ties, and losses. The
+comparison supports the complete selected system, not a representation-only causal effect.
+
+
+
+slice the four profiles scored Recall@100 of 0.416 (ARM-                                                  ministic replay is verified. The selected configuration lifts
+03), 0.361 (BALANCED), 0.361 (DEEP), and 0.308 (FAST).                                                    Recall@100 from 0.331 to 0.442, a paired difference of 0.111
+The preregistered rule selects the research system; the research                                          (95% CI [0.102, 0.120]); it wins 619 queries, ties 158, and
+system and static comparator are fixed when it closes, with                                               loses 95 (Figure 3). nDCG@100 rises from 0.279 to 0.366
+complete specifications in Table III. FAST was fixed as the                                               (0.086, [0.079, 0.094]), and nDCG@10 from 0.234 to 0.297
+comparator before Final-872 because it was the pre-specified                                              (0.064, [0.053, 0.074]).
+static/common operational baseline; it was not chosen af-
+ter observing Final-872 outcomes. After Selection-125, both                                                  Development and selection were closed before these out-
+complete systems—model, representation, prompt, program,                                                  comes were observed, allowing the comparison to carry
+runtime—are locked before Final-872.                                                                      weight. It is the paper’s strongest confirmatory evidence and
+                                                                                                          is deliberately system-level: the design fixes representation
+   Both systems run all 872 queries without failure; deter-                                               with every other component, so the win belongs to the
+         Post-confirmatory diagnosis: candidate exposure limits cross-domain recall
+         Immutable full-benchmark Top-200 pool
+
+          A. Exposure anatomy                                                      B. Within-pool ordering headroom
+          Strict cross-domain relevant-family incidences · n = 5,193               Macro Recall@100 across 905 strict cross-domain judged queries
+
+
+                                                                                              Observed                                      Perfect-ordering bound
+             15.3%      6.4%                           78.3% absent
+
+                                                                                                  0.188                                             0.260
+          796 found by rank 100
+          332 first found at ranks 101–200
+
+          4,065 / 5,193 absent from Top-200                                                                        +0.072 headroom
+
+
+                                                                                           0.18           0.20         0.22          0.24           0.26
+
+                                                                                                                  Macro Recall@100
+
+
+
+Fig. 4. Candidate exposure and within-pool ordering bound. Post-confirmatory diagnosis of the fixed full-benchmark Top-200 pool for strict cross-domain
+relations. (a) Relevant-family incidence exposure: 796 by rank 100, 332 first at ranks 101–200, and 4,065 absent. (b) The analytical perfect-ordering bound
+within the immutable pool raises macro Recall@100 from 0.188 to 0.260, a headroom of 0.072; it is not reranker performance. Incidences and macro Recall
+use different aggregation units.
+
+
+
+complete configuration, not representation alone. The direction                                   VI. D ISCUSSION AND C ONCLUSION
+is consistent with the published landscape—DAPFAM’s own
+sweep finds passage retrieval ahead of document retrieval,                         Three results, one lesson: the unit that deserves a name
+and PatenTEB reports patembed-large as the strongest patent-                   in cross-domain patent retrieval is the retriever–representation
+specific encoder on this benchmark [1], [4]; what the protocol                 configuration, not the retriever alone. The model scores what-
+adds is not the ranking but its survival on held-out data with                 ever the construction, view selection, segmentation, and family
+development closed.                                                            aggregation make visible; these choices deserve the precision
+                                                                               of a checkpoint name or retrieval depth. But precision is not
+                                                                               leverage. At the coarse, field level these choices do not reorder
+B. Full-Benchmark Candidate Exposure                                           retrievers—the reordering that looks real dissolves under re-
+                                                                               sampling, while the retrievers stay firmly apart. Representation
+   The selected system wins its comparison decisively. On                      specifies the evidence; the retriever decides what to do with
+the strict cross-domain slice, it still misses most of what it                 it.
+should find—a confirmed system is the right place to ask                           The protected comparison moves the burden of proof from
+why. We keep the winner fixed and run it unchanged over the                    development behavior to a complete system that holds up on
+full benchmark: 45,336 target families, 1,247 queries, Top-200                 held-out queries with development closed. We keep the two
+per query. The run materializes 188,944 chunks and 249,400                     levels apart on purpose: the transfer matrix shapes how we
+ranked family rows with full coverage, no failures, and no                     read the result, but only the held-out comparison is allowed
+duplicate-family errors. This strict cross-domain population                   to confirm.
+differs from Final-872, so we report it separately from the                        The confirmed system points to where the next gain lives—
+confirmation.                                                                  and it is not the ranker. Four in five relevant families never
+   The pool licenses one bounded question: how much re-                        reach the candidate pool, so reranking is capped at a headroom
+maining error could a perfect reordering of existing candidates                of 0.072 while candidate expansion still has most of the
+recover? Under the strict cross-domain definition, 905 judged                  recall to win. The two interventions act on different failures:
+queries hold 5,193 relevant-family incidences. Observed macro                  expansion changes what is exposed, reranking changes how
+Recall@100 is 0.188; at depth 200 it is 0.260.                                 exposed evidence is ordered. We do not rank them against
+   Figure 4 separates exposure from ordering, and the split is                 each other here; we say which one the numbers make urgent.
+stark. Of 5,193 relevant incidences, 796 surface by rank 100                       Everything about representation and transfer is development
+and 332 more by rank 200—and 4,065 never appear at all.                        evidence from a single benchmark, and no individual trans-
+Seventy-eight percent of the evidence is not late; it is absent.               fer cell carries confirmatory weight. The full-scale diagnosis
+The query view agrees: only 67 of 905 queries have every                       examines one selected dense configuration. The exposure
+relevant family inside the top 100, while 455 expose none by                   diagnosis is specific to the Top-200 pool; deeper cutoffs
+rank 200. Reorder the pool perfectly and macro Recall@100                      are uncharacterized. PatEmbed-large carries a research/non-
+climbs from 0.188 to 0.260—a headroom of 0.072, and the                        commercial license. And citation-based patent retrieval is
+entire prize available to any reranker. Everything above it was                an information-retrieval task, not a legal reading of novelty,
+never retrieved. For a first-stage configuration this strong, the              validity, infringement, or freedom to operate; nothing here
+binding constraint is exposure, not ordering.                                  should be read as the latter.
+  A retrieval score reflects both the model that scores evidence                       36th International ACM SIGIR Conference on Research and Develop-
+and the construction that decides what evidence exists. Once                           ment in Information Retrieval, 2013, pp. 997–1000.
+                                                                                   [7] R. Nogueira and K. Cho, “Passage re-ranking with BERT,” arXiv
+the first-stage configuration is fixed, a further constraint ap-                       preprint arXiv:1901.04085, 2019.
+pears: which relevant families enter the pool. Together they set                   [8] K. Järvelin and J. Kekäläinen, “Cumulated gain-based evaluation of IR
+the reporting unit and the honest limit of downstream ranking.                         techniques,” ACM Transactions on Information Systems, vol. 20, no. 4,
+                                                                                       pp. 422–446, 2002.
+                              R EFERENCES                                          [9] S. Robertson and H. Zaragoza, “The probabilistic relevance framework:
+                                                                                       BM25 and beyond,” Foundations and Trends in Information Retrieval,
+ [1] I. Ayaou, D. Cavallucci, and H. Chibane, “DAPFAM: A domain-aware                  vol. 3, no. 4, pp. 333–389, 2009.
+     family-level dataset to benchmark cross-domain patent retrieval,” Array,     [10] J. Chen, S. Xiao, P. Zhang, K. Luo, D. Lian, and Z. Liu, “M3-
+     vol. 29, p. 100720, 2026.                                                         Embedding: Multi-linguality, multi-functionality, multi-granularity text
+ [2] A. Yousefiramandi and C. Cooney, “Benchmarking patent embeddings:                 embeddings through self-knowledge distillation,” in Findings of the
+     A multi-task evaluation of 22 models across retrieval, classification, and        Association for Computational Linguistics: ACL 2024, 2024, pp. 2318–
+     clustering,” arXiv preprint arXiv:2605.24297, 2026.                               2335.
+ [3] S. O’Nuallain, N. Rajkumar, R. Narayanasamy, H. Jiang, S. Chaudhari,         [11] P. Yu, L. Merrick, G. Nuti, and D. Campos, “Arctic-Embed 2.0: Multi-
+     and A. Drozdov, “AutoIndex: Learning representation programs for                  lingual retrieval without compromise,” arXiv preprint arXiv:2412.04506,
+     retrieval,” arXiv preprint arXiv:2607.18603, 2026.                                2024.
+ [4] I. Ayaou and D. Cavallucci, “PatenTEB: A comprehensive bench-                [12] Y. Zhang, M. Li, D. Long, X. Zhang, H. Lin, B. Yang, P. Xie,
+     mark and model family for patent text embedding,” arXiv preprint                  A. Yang, D. Liu, J. Lin, F. Huang, and J. Zhou, “Qwen3 Embedding:
+     arXiv:2510.22264, 2025.                                                           Advancing text embedding and reranking through foundation models,”
+ [5] Y. Yoo, Q. Xu, Z. Wu, and L. Cao, “Heterogeneous dependency                       arXiv preprint arXiv:2506.05176, 2025.
+     graph-guided attention for patent representation learning,” arXiv preprint   [13] G. V. Cormack, C. L. A. Clarke, and S. Buettcher, “Reciprocal rank
+     arXiv:2605.10073, 2026.                                                           fusion outperforms condorcet and individual rank learning methods,” in
+ [6] N. Asadi and J. Lin, “Effectiveness/efficiency tradeoffs for candidate            Proceedings of SIGIR, 2009, pp. 758–759.
+     generation in multi-stage retrieval architectures,” in Proceedings of the    [14] A. C. Davison and D. V. Hinkley, Bootstrap Methods and Their
+                                                                                       Application. Cambridge University Press, 1997.
+

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scientific Table Design"
+  short_description: "Compact evidence tables for IEEE and WPI"
+  default_prompt: "Use this skill to create or audit a scientific results table."
+
+policy:
+  allow_implicit_invocation: true

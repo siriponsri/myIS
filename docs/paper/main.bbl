@@ -1,0 +1,75 @@
+\begin{thebibliography}{10}
+
+\bibitem{ayaou2026dapfam}
+I.~Ayaou, D.~Cavallucci, and H.~Chibane, ``{DAPFAM}: A domain-aware
+  family-level dataset to benchmark cross-domain patent retrieval,''
+  \emph{Array}, vol.~29, p. 100720, 2026.
+
+\bibitem{yousefiramandi2026patent}
+A.~Yousefiramandi and C.~Cooney, ``Benchmarking patent embeddings: A multi-task
+  evaluation of 22 models across retrieval, classification, and clustering,''
+  \emph{arXiv preprint arXiv:2605.24297}, 2026.
+
+\bibitem{onuallain2026autoindex}
+S.~O'Nuallain, N.~Rajkumar, R.~Narayanasamy, H.~Jiang, S.~Chaudhari, and
+  A.~Drozdov, ``{AutoIndex}: Learning representation programs for retrieval,''
+  \emph{arXiv preprint arXiv:2607.18603}, 2026.
+
+\bibitem{ayaou2025patenteb}
+I.~Ayaou and D.~Cavallucci, ``{PatenTEB}: A comprehensive benchmark and model
+  family for patent text embedding,'' \emph{arXiv preprint arXiv:2510.22264},
+  2025.
+
+\bibitem{phage2026}
+Y.~Yoo, Q.~Xu, Z.~Wu, and L.~Cao, ``Heterogeneous dependency graph-guided
+  attention for patent representation learning,'' \emph{arXiv preprint
+  arXiv:2605.10073}, 2026.
+
+\bibitem{asadi2013candidate}
+N.~Asadi and J.~Lin, ``Effectiveness/efficiency tradeoffs for candidate
+  generation in multi-stage retrieval architectures,'' in \emph{Proceedings of
+  the 36th International ACM SIGIR Conference on Research and Development in
+  Information Retrieval}, 2013, pp. 997--1000.
+
+\bibitem{nogueira2019passage}
+R.~Nogueira and K.~Cho, ``Passage re-ranking with {BERT},'' \emph{arXiv
+  preprint arXiv:1901.04085}, 2019.
+
+\bibitem{jarvelin2002cumulated}
+K.~J\"{a}rvelin and J.~Kek\"{a}l\"{a}inen, ``Cumulated gain-based evaluation of
+  {IR} techniques,'' \emph{ACM Transactions on Information Systems}, vol.~20,
+  no.~4, pp. 422--446, 2002.
+
+\bibitem{robertson2009probabilistic}
+S.~Robertson and H.~Zaragoza, ``The probabilistic relevance framework: {BM25}
+  and beyond,'' \emph{Foundations and Trends in Information Retrieval},
+  vol.~3, no.~4, pp. 333--389, 2009.
+
+\bibitem{chen2024bgem3}
+J.~Chen, S.~Xiao, P.~Zhang, K.~Luo, D.~Lian, and Z.~Liu, ``{M3}-embedding:
+  Multi-linguality, multi-functionality, multi-granularity text embeddings
+  through self-knowledge distillation,'' in \emph{Findings of the Association
+  for Computational Linguistics: ACL 2024}, 2024, pp. 2318--2335.
+
+\bibitem{yu2024arctic}
+P.~Yu, L.~Merrick, G.~Nuti, and D.~Campos, ``Arctic-embed 2.0: Multilingual
+  retrieval without compromise,'' \emph{arXiv preprint arXiv:2412.04506},
+  2024.
+
+\bibitem{zhang2025qwen3}
+Y.~Zhang, M.~Li, D.~Long, X.~Zhang, H.~Lin, B.~Yang, P.~Xie, A.~Yang, D.~Liu,
+  J.~Lin, F.~Huang, and J.~Zhou, ``{Qwen3} embedding: Advancing text embedding
+  and reranking through foundation models,'' \emph{arXiv preprint
+  arXiv:2506.05176}, 2025.
+
+\bibitem{cormack2009rrf}
+G.~V. Cormack, C.~L.~A. Clarke, and S.~Buettcher, ``Reciprocal rank fusion
+  outperforms condorcet and individual rank learning methods,'' in
+  \emph{Proceedings of SIGIR}, 2009, pp. 758--759.
+
+\bibitem{davison1997bootstrap}
+A.~C. Davison and D.~V. Hinkley, \emph{Bootstrap Methods and Their
+  Application}.\hskip 1em plus 0.5em minus 0.4em\relax Cambridge University
+  Press, 1997.
+
+\end{thebibliography}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scientific Figure Design"
+  short_description: "Modern patent/NLP figures for IEEE and WPI"
+  default_prompt: "Use this skill to design or audit a scientific figure at final publication size."
+
+policy:
+  allow_implicit_invocation: true

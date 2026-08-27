@@ -1,0 +1,139 @@
+{
+  "schema_version": "myis.research-session.v1",
+  "session_id": "20260825T170213Z-isainlp-paper01-9659989",
+  "run_id": null,
+  "goal_id": null,
+  "started_at_utc": null,
+  "ended_at_utc": "2026-08-25T17:02:13Z",
+  "scope": "Finalize the receipt-bound iSAI-NLP 2026 paper package, copy it to 01_Research/docs/paper, and commit and push the package.",
+  "provenance": "agent-observed",
+  "owner_approvals": [
+    {
+      "gate": "FINALIZE_PAPER_PACKAGE",
+      "source": "Owner request in the active session to finish the work, copy the final paper to 01_Research/docs/paper, commit, and push.",
+      "scope": "Finalize, validate, copy, commit, and push the paper package only."
+    }
+  ],
+  "repository": {
+    "path": ".",
+    "revision": "9659989142b7924bc9076f789f207afcd77efe0b",
+    "dirty_paths": [
+      "tmp_decomp-1.png",
+      "tmp_exposure-1.png",
+      "tmp_story-1.png"
+    ]
+  },
+  "events": [
+    {
+      "event_id": "EV0001",
+      "sequence": 1,
+      "type": "decision",
+      "provenance": "owner",
+      "summary": "The Owner authorized finalization, copying to the research repository, commit, and push.",
+      "evidence_refs": []
+    },
+    {
+      "event_id": "EV0002",
+      "sequence": 2,
+      "type": "decision",
+      "provenance": "agent-observed",
+      "summary": "The contribution was retained as a receipt-bound, single-system DAPFAM case study rather than broadened beyond its evidence.",
+      "evidence_refs": [
+        {
+          "path": "docs/paper/reports/SCIENTIFIC_REVIEW_01.md",
+          "sha256": "154f5ecf58ca510435c7142973693d8ef53babdf926493938ec507b70a6f6b09",
+          "locator": "Gate result"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0003",
+      "sequence": 3,
+      "type": "claim",
+      "provenance": "agent-observed",
+      "summary": "Every retained manuscript claim is mapped to its evidence class and aggregation boundary.",
+      "evidence_refs": [
+        {
+          "path": "docs/paper/provenance/claim_to_evidence.csv",
+          "sha256": "83a12c14142accfda09678c3031423000c99b983a80f463663e1de4febf2c35a",
+          "locator": "Rows C01-C12"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0004",
+      "sequence": 4,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The final reviewed PDF was built as four A4 IEEE conference pages and passed deterministic QA.",
+      "evidence_refs": [
+        {
+          "path": "docs/paper/reports/BUILD_QA_01.md",
+          "sha256": "078374f689f23e41f25b6aeb1d898516515cffddf52dee10aaf0a8e7e641f804",
+          "locator": "Build result and Deterministic checks"
+        },
+        {
+          "path": "docs/paper/reports/paper_guard_01.json",
+          "sha256": "26d7117edddfcd58cc54c074a4dc22508a8aca014d788bf7604806f5695e2e49",
+          "locator": "status, pages, display_math_markers"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0005",
+      "sequence": 5,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "Independent visual review passed all four pages with no remaining finding.",
+      "evidence_refs": [
+        {
+          "path": "docs/paper/reports/VISUAL_REVIEW_01.md",
+          "sha256": "f8caf86f70e4b9882e808ec4c5ed007cf785682ce515be56d417920b234c9f8e",
+          "locator": "Pages 1-3 and Page 4"
+        }
+      ]
+    },
+    {
+      "event_id": "EV0006",
+      "sequence": 6,
+      "type": "action",
+      "provenance": "agent-observed",
+      "summary": "The final paper package was committed and pushed to origin/main at the recorded repository revision.",
+      "evidence_refs": [
+        {
+          "path": "docs/paper/provenance/release-manifest-isainlp2026.json",
+          "sha256": "f43c94cdc22c87341a0de344ba148fbc8801ee2236767b72970339732281f786",
+          "locator": "status and release_check_status"
+        }
+      ]
+    }
+  ],
+  "run_artifacts": {
+    "prompt": null,
+    "flow": null,
+    "progress": null,
+    "result": null,
+    "metrics": null,
+    "runtime": null,
+    "per_query_metrics": null,
+    "validation_report": null,
+    "manifest": null,
+    "mlflow_receipts": []
+  },
+  "open_threads": [
+    {
+      "provenance": "agent-observed",
+      "summary": "Submission-administration checks remain outside this paper-build task."
+    },
+    {
+      "provenance": "agent-observed",
+      "summary": "The package is internally ACCEPT, not STRONG ACCEPT; no submission-readiness claim is made."
+    }
+  ],
+  "integrity": {
+    "all_refs_exist": true,
+    "all_hashes_match": true,
+    "contains_protected_payload": false,
+    "contains_secrets": false
+  }
+}

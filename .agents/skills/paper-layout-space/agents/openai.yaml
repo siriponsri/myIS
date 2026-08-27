@@ -1,0 +1,7 @@
+interface:
+  display_name: "Paper Layout & Space"
+  short_description: "Page balance and six-page information economy"
+  default_prompt: "Use this skill to audit manuscript page layout and space without template hacks."
+
+policy:
+  allow_implicit_invocation: true
