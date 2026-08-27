@@ -1,0 +1,63 @@
+{
+  "seed": 0,
+  "n_boot": 10000,
+  "within_target": {
+    "PatEmbed": {
+      "best": "Qwen3",
+      "second": "Arctic",
+      "best_minus_second": 0.000558659217877091,
+      "ci": [
+        -0.005027932960893861,
+        0.006424581005586589
+      ],
+      "contains_zero": true
+    },
+    "Arctic": {
+      "best": "Arctic",
+      "second": "Qwen3",
+      "best_minus_second": 0.0030726256983240226,
+      "ci": [
+        -0.005034916201117318,
+        0.011452513966480449
+      ],
+      "contains_zero": true
+    },
+    "Qwen3": {
+      "best": "PatEmbed",
+      "second": "Qwen3",
+      "best_minus_second": 0.001955307262569832,
+      "ci": [
+        -0.00558659217877095,
+        0.009497206703910613
+      ],
+      "contains_zero": true
+    }
+  },
+  "argmax_stability": {
+    "PatEmbed": {
+      "PatEmbed": 0.2914,
+      "Arctic": 0.2892,
+      "Qwen3": 0.4194,
+      "max_argmax_prob": 0.4194
+    },
+    "Arctic": {
+      "PatEmbed": 0.1119,
+      "Arctic": 0.6834,
+      "Qwen3": 0.2047,
+      "max_argmax_prob": 0.6834
+    },
+    "Qwen3": {
+      "PatEmbed": 0.6138,
+      "Arctic": 0.1311,
+      "Qwen3": 0.2551,
+      "max_argmax_prob": 0.6138
+    }
+  },
+  "ndcg10_ci": {
+    "diff": 0.06379377303506567,
+    "ci": [
+      0.053257025480794175,
+      0.07433172878476038
+    ]
+  }
+}
