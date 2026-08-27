@@ -2,6 +2,7 @@
 
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{tabularx}
 \usepackage{cite}
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
@@ -98,7 +99,7 @@ Full benchmark & 1,247 & Characterization/diagnosis \\
 \end{tabular}
 \end{table}
 
-\textbf{Representations and evidence separation.} The shared deterministic surface holds five constructions: title--abstract--claims as one family document; title and abstract; the first structured independent claim; 384-token passages with 64-token overlap and family-level maximum aggregation; and labeled title, abstract, and claims views combined by family-level rank fusion~\cite{cormack2009rrf}. Table~\ref{tab:protocol} lists the protected sequence. Representation development uses 150 queries; transfer and fixed-composition controls cover all 250 development queries. Four profiles pass through one Selection-125 exposure before the research system and a static comparator are frozen. Final confirmation uses paired query-level differences, 10,000 paired bootstrap resamples, and 95\% percentile intervals~\cite{davison1997bootstrap}. After confirmation, the winner alone is applied unchanged to all 1,247 queries at depth 200, and every later analysis reuses that one Top-200 pool with no further retrieval or model selection.
+\textbf{Representations and evidence separation.} The shared deterministic surface holds five constructions: title--abstract--claims as one family document; title and abstract; the first structured independent claim; 384-token passages with 64-token overlap and family-level maximum aggregation; and labeled title, abstract, and claims views combined by family-level rank fusion~\cite{cormack2009rrf}. Table~\ref{tab:protocol} lists the protected sequence. Representation development uses 150 queries; transfer and fixed-composition controls cover all 250 development queries. Four profiles pass through one Selection-125 exposure before the research system and a static comparator are frozen. Final confirmation uses paired query-level differences, 10,000 paired bootstrap resamples, and 95\% percentile intervals~\cite{davison1997bootstrap}. After confirmation, the winner alone is applied to all 1,247 queries unchanged except retrieval depth, extended to 200 for the diagnostic pool; every later analysis reuses that one Top-200 pool with no further retrieval or model selection.
 
 \section{Cross-Retriever Representation Transfer}
 
@@ -136,7 +137,7 @@ The mixed responses leave a tempting possibility open: a construction discovered
 
 Figure~\ref{fig:transfer} lays the result out. Read target by target, the nominally best construction does move: Qwen3-derived text wins for PatEmbed, Arctic-derived for Arctic, PatEmbed-derived for Qwen3, and the nDCG@100 ordering disagrees again (its top cell is Arctic-derived text on PatEmbed, 0.352). No construction holds first place everywhere. But the differences behind that reordering are tiny, and because every cell shares the same 250 queries we can test them head-on. Within each target, the paired gap between the best and second-best construction has a 95\% bootstrap interval that includes zero (\wtPatCI\ for PatEmbed, \wtArcCI\ for Arctic, \wtQwenCI\ for Qwen3), and no construction is a stable within-target winner under resampling (best-source probability at most \maxArgmaxProb). The reordering is noise. What is not noise is the retriever: every construction lands near 0.419 Recall@100 on PatEmbed, near 0.34 on Arctic, near 0.36 on Qwen3---bands separated by far more than the spread inside any one of them. Change the construction and you shuffle positions within a band; change the retriever and you move between bands.
 
-A composition control gives the same result. Two-system fusion (0.419) barely edges the strongest single system (0.418), and three-system fusion drops to 0.415: stacking retrievers does not monotonically help.
+A composition control tells the same story from another angle. Two-system fusion (0.419) barely edges the strongest single system (0.418), and three-system fusion drops to 0.415: stacking retrievers does not monotonically help.
 
 At the coarse, field level, representation is a passenger, not the driver; no single transfer cell carries confirmatory weight. That settles development and sets up a sharper question. The configuration looks strong on development data. Does it survive contact with queries it has never seen?
 
@@ -151,7 +152,22 @@ At the coarse, field level, representation is a passenger, not the driver; no si
 
 \subsection{Protected Held-Out Confirmation}
 
-It does. Four frozen profiles enter one Selection-125 evaluation with complete rankings; cross-domain selection statistics use 90 queries with positive cross-domain relations. The preregistered rule selects \selectedSpec; the comparator \comparatorSpec is fixed at the same moment. After Selection-125, both complete systems---model, representation, prompt, program, runtime---are locked before Final-872.
+\begin{table}[!t]
+\caption{Complete frozen systems.}
+\label{tab:systems}
+\centering
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}lX@{}}
+\toprule
+System & Frozen specification \\
+\midrule
+Research & \selectedSpec \\
+Comparator & \comparatorSpec \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+It does. Four frozen profiles enter one Selection-125 evaluation with complete rankings; cross-domain selection statistics use 90 queries with positive cross-domain relations. The preregistered rule selects the research system; the research system and static comparator are fixed at that close, with complete specifications in Table~\ref{tab:systems}. After Selection-125, both complete systems---model, representation, prompt, program, runtime---are locked before Final-872.
 
 Both systems run all 872 queries without failure; deterministic replay is verified. The selected configuration lifts Recall@100 from 0.331 to 0.442, a paired difference of 0.111 (95\% CI [0.102, 0.120]); it wins 619 queries, ties 158, and loses 95 (Figure~\ref{fig:confirmation}). nDCG@100 rises from 0.279 to 0.366 (0.086, [0.079, 0.094]), and nDCG@10 from 0.234 to 0.297 (0.064, \ndcgtenCI).
 
@@ -174,9 +190,9 @@ Figure~\ref{fig:diagnosis} separates exposure from ordering, and the split is st
 
 \section{Discussion and Conclusion}
 
-The unit that deserves a name in cross-domain patent retrieval is the retriever--representation configuration, not the retriever alone. The model scores whatever the construction, view selection, segmentation, and family aggregation make visible; these choices deserve the precision of a checkpoint name or retrieval depth. Precision in reporting does not change the ordering. At the coarse, field level these choices do not reorder retrievers---the reordering that looks real dissolves under resampling, while the retrievers stay firmly apart. Representation specifies the evidence; the retriever decides what to do with it.
+Three results, one lesson: the unit that deserves a name in cross-domain patent retrieval is the retriever--representation configuration, not the retriever alone. The model scores whatever the construction, view selection, segmentation, and family aggregation make visible; these choices deserve the precision of a checkpoint name or retrieval depth. But precision is not leverage. At the coarse, field level these choices do not reorder retrievers---the reordering that looks real dissolves under resampling, while the retrievers stay firmly apart. Representation specifies the evidence; the retriever decides what to do with it.
 
-The protected comparison moves the burden of proof from development behavior to a complete system that holds up on held-out queries with development closed. We keep the levels apart: the transfer matrix shapes our interpretation; only the held-out comparison may provide confirmation.
+The protected comparison moves the burden of proof from development behavior to a complete system that holds up on held-out queries with development closed. We keep the two levels apart on purpose: the transfer matrix shapes how we read the result, but only the held-out comparison is allowed to confirm.
 
 The confirmed system points to where the next gain lives---and it is not the ranker. Four in five relevant families never reach the candidate pool, so reranking is capped at a headroom of 0.072 while candidate expansion still has most of the recall to win. The two interventions act on different failures: expansion changes what is exposed, reranking changes how exposed evidence is ordered. We do not rank them against each other here; we say which one the numbers make urgent.
 
