@@ -1,0 +1,377 @@
+%% Beyond the Retriever — World Patent Information submission
+%% Journal version (journal_08). Extended from the iSAI-NLP 2026 conference paper.
+%% Class: elsarticle. Build with pdflatex + bibtex.
+\documentclass[preprint,11pt,authoryear]{elsarticle}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\emergencystretch}{2em}
+
+\journal{World Patent Information}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Beyond the retriever: candidate exposure, not ranking, limits AI-based cross-domain patent search}
+
+\author[a]{Siripon Srihangpiboon\corref{cor1}\fnref{orcid1}}
+\ead{srihangpiboon.siri@gmail.com}
+\author[a]{Tuchsanai Ploysuwan\fnref{orcid2}}
+\ead{tuchsanai@it.kmitl.ac.th}
+\cortext[cor1]{Corresponding author.}
+\fntext[orcid1]{ORCID: \href{https://orcid.org/0009-0001-0611-5568}{0009-0001-0611-5568}}
+\fntext[orcid2]{ORCID: \href{https://orcid.org/0009-0000-1854-3714}{0009-0000-1854-3714}}
+\address[a]{School of Information Technology, King Mongkut's Institute of Technology Ladkrabang, Bangkok, Thailand}
+
+\begin{abstract}
+A patent retriever never sees a patent. It sees a representation somebody built for it, and it scores that. Yet AI search tools are procured, compared, and reported by model name, as though the surrounding construction were a neutral detail. We test what that assumption costs on family-level cross-domain retrieval over DAPFAM, freezing five retrievers and varying deterministic constructions under a protocol that keeps development, one-time selection, held-out confirmation, and post-confirmatory diagnosis strictly apart. Three findings follow. First, coarse construction choices do not reorder engines: the best construction changes from one retriever to the next, but the change never rises above its own resampling uncertainty (largest interval endpoint 0.011 Recall@100) while the retrievers themselves stay separated by several times that amount. Second, a configuration frozen before any held-out contact wins cleanly on 872 protected queries, lifting Recall@100 from 0.331 to 0.442 (paired difference 0.111, 95\% bootstrap CI [0.102, 0.120]). Third, and most consequential for search practice, that confirmed system still misses most of what it should find, and the reason is exposure rather than order: 78\% of relevant families never enter its Top-200 pool. Perfectly reordering that pool would add 0.072 to Recall@100; extending the pool to 1{,}000 candidates adds 0.341, roughly five times more. Even then, 57\% of relevant families remain unretrieved and 219 of 905 queries return nothing relevant at all, uniformly across all eight IPC sections. First-stage dense retrieval does not solve cross-domain prior art at any depth we tested. We argue that AI-assisted search should be reported at the configuration level, that pool depth deserves the attention usually given to ranking quality, and that the recall these systems cannot reach on their own is precisely the ground professional search strategy still has to cover.
+\end{abstract}
+
+\begin{keyword}
+patent retrieval \sep prior art search \sep cross-domain retrieval \sep document representation \sep dense retrieval \sep candidate exposure
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+\label{sec:intro}
+
+A patent retriever never sees a patent. It sees a representation we choose to hand it: a title and abstract, a full claim set, a single independent claim, a window of overlapping passages. Two systems indexed on the same corpus can therefore be reading quite different documents, and a search that fails may have failed because the evidence was never assembled in a form the engine could match.
+
+This matters more in patent search than in most retrieval settings, because so much of the professional work is recall-critical. An invalidity search that misses one document has not merely ranked poorly; it has produced the wrong answer. Yet the way AI search tools are described in procurement material, in vendor comparisons, and often in the research literature centres on the model: which encoder, which checkpoint, which benchmark score. The construction around the model, the depth of the candidate pool, and the fusion strategy usually go unrecorded, as if they were implementation trivia rather than parts of the system whose output the searcher will act on.
+
+We put that assumption under a controlled test and report what a search professional can take from the result. Working on DAPFAM, a family-level benchmark built specifically to expose the difficulty of cross-domain retrieval \citep{ayaou2026dapfam}, we freeze five heterogeneous retrievers, vary the deterministic construction handed to them, and hold the evidence levels apart: development characterises behaviour, a single selection step freezes a complete configuration, a protected held-out comparison confirms it, and only then does the confirmed system become a diagnostic instrument. Nothing is tuned after the protected set is opened.
+
+Three questions organise the paper, each of which a buyer or user of an AI patent-search tool has reason to ask.
+
+\emph{Does the way documents are prepared decide which engine wins?} If it does, comparisons that hold construction fixed are measuring an artifact. If it does not, then the construction details in a product description carry less information than they appear to.
+
+\emph{Does a system that looks strong in development still look strong on queries it has never seen?} This is the difference between a demonstration and a validated claim, and it is testable with a protocol any search team could run in-house.
+
+\emph{When a validated system still fails, where does the failure live?} Ranking and retrieval fail differently. A ranking failure buries the answer; a retrieval failure never produces it. The two call for different remedies, and the remedy chosen incorrectly is effort spent on nothing.
+
+Our answers are, in order: no, yes, and in the pool rather than the ranking. The third finding is the one that changed how we read the other two. Reordering the pool that our confirmed system produces is worth 0.072 Recall@100 at most, while deepening the pool from 200 to 1{,}000 candidates is worth 0.341. Both numbers are measured on the same metric and the same population, so they can be compared directly. The comparison says plainly that depth is the more valuable lever. What it does not say is that depth is sufficient: at a pool five times deeper, most relevant families are still missing, and hundreds of queries still retrieve nothing relevant at all.
+
+The contribution to search practice is therefore not a better system. It is a measurement of where the remaining error actually sits, produced under a protocol strict enough that the measurement can be trusted, together with the reporting conventions that would let practitioners see the same thing in the tools they use.
+
+\section{Background and related work}
+\label{sec:related}
+
+\subsection{Recall-critical search and the cross-domain case}
+
+Professional patent search is not a single task. Patentability, invalidity, freedom-to-operate, and landscaping differ in the tolerance they have for a miss, and several of them tolerate none. The searcher's response to that pressure is well established: multiple query formulations, classification-guided expansion, citation chaining, iterative reformulation as the field's vocabulary becomes clear. The purpose of all of it is coverage, not ordering.
+
+Cross-domain prior art is the hardest version. When the relevant document sits in a different technical field from the query, the two texts may describe the same mechanism in vocabularies that share very few words. Automated systems that rely on textual similarity are exactly where they are weakest, and it is one of the reasons classification systems exist.
+
+\subsection{Benchmarks and models for patent retrieval}
+
+DAPFAM provides family-level relevance with an explicit in-domain and out-of-domain split, and reports a systematic sweep over lexical and dense retrieval, document and passage units, aggregation, and fusion \citep{ayaou2026dapfam}. PatenTEB broadens evaluation of patent embeddings across retrieval and other patent-language tasks and releases the PatEmbed model family \citep{ayaou2025patenteb}, and a recent benchmark of 22 models across retrieval, classification, and clustering reports persistent out-of-domain degradation \citep{yousefiramandi2026patent}. These establish that both model family and document view affect effectiveness. Our question is different and orthogonal: not whether a view helps a given retriever, but whether a view chosen around one retriever remains the right choice when a different retriever consumes it.
+
+Two lines of work sharpen the boundary of our claim. AutoIndex learns executable representation programs around a fixed lexical backend and reports large recall gains from representation alone, including a dense result in which a learned program improves Qwen3-Embedding-0.6B by 18.3\% on a single task \citep{onuallain2026autoindex}. PHAGE injects a claim-dependency graph into the attention of a pre-trained encoder \citep{phage2026}. Both search a rich, learned representation space. We do the opposite on purpose: a small set of coarse, deterministic constructions, applied to frozen retrievers, to ask whether such choices are portable at all. Our negative result concerns that space, not representation in general, and the contrast with AutoIndex is the clearest statement of where the boundary falls.
+
+\subsection{Multi-stage retrieval and where the error can live}
+
+Modern retrieval separates candidate generation from scoring: an inexpensive first stage supplies a bounded pool, and a more expensive model reranks it \citep{asadi2013candidate,nogueira2019passage}. The separation matters here because it partitions failure. A relevant document that entered the pool but ranked poorly can be recovered by a better ranker. A relevant document that never entered the pool cannot be recovered by any ranker at all. We use this distinction only after confirmation, to measure how the error divides between the two.
+
+\section{Study design}
+\label{sec:design}
+
+\subsection{Benchmark and systems}
+
+The evaluation unit is a patent family. The benchmark holds 1{,}247 query families, 45{,}336 target families, and 49{,}869 judged relations. Cross-domain Recall@100 is the primary measure; nDCG@100 and nDCG@10 are secondary \citep{jarvelin2002cumulated}. We freeze five retrieval systems: BM25 \citep{robertson2009probabilistic}, BGE-M3 \citep{chen2024bgem3}, PatEmbed-large \citep{ayaou2025patenteb}, Arctic Embed M v2.0 \citep{yu2024arctic}, and Qwen3 Embedding 0.6B \citep{zhang2025qwen3}. No system receives fine-tuning, adapters, distillation, or continued pretraining at any point in the study.
+
+\subsection{What we mean by a construction}
+
+By \emph{construction} we mean the complete deterministic mapping from a patent family to the units a retriever will score: field selection, segmentation, family-level aggregation, and any deterministic view fusion. It is not text content alone, and naming it precisely is part of the argument. The shared surface holds five constructions: title, abstract and claims as one family document; title and abstract; the first structured independent claim; 384-token passages with 64-token overlap aggregated to the family by maximum; and labelled title, abstract and claims views combined by family-level rank fusion \citep{cormack2009rrf}.
+
+\subsection{Separated evidence}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/overview_evidence_map.pdf}
+\caption{Evidence map. Construction and transfer analysis are development evidence. Development closes before the one-time selection and the 872-query protected confirmation; the full-benchmark diagnosis runs only after the system is fixed. Each stage answers a different question and none borrows another's authority.}
+\label{fig:evidence-map}
+\end{figure*}
+
+\begin{table}[!t]
+\caption{Evidence roles and query populations. The strict cross-domain diagnostic population is not the protected confirmation population.}
+\label{tab:protocol}
+\centering
+\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Evidence role & Queries & Purpose \\
+\midrule
+Representation development & 150 & Shared screen and per-system search \\
+Combined development & 250 & Transfer and composition \\
+One-time selection & 125 & Freeze final systems \\
+Protected confirmation & 872 & Complete-system comparison \\
+Full benchmark & 1{,}247 & Characterisation and diagnosis \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:evidence-map} and Table~\ref{tab:protocol} give the protocol. The populations nest simply: the 1{,}247 query families split into 250 for development, 125 for selection, and 872 for protected confirmation. The strict cross-domain slice used later for diagnosis is a different cut, defined by relations in which query and relevant target do not share the required technical classification level, and it leaves 905 judged queries drawn from all 1{,}247. Confirmation scores and strict-slice scores are computed on different populations and are not directly comparable.
+
+Final confirmation uses paired query-level differences, 10{,}000 paired bootstrap resamples, and 95\% percentile intervals \citep{davison1997bootstrap}. After confirmation the winning system is applied to all 1{,}247 queries unchanged except for retrieval depth, and every later analysis reuses that one pool with no further retrieval or model selection.
+
+The per-retriever search registers 52 configurations in advance, including eight conditional reserves whose activation predicates never fired, leaving 44 executed. The full list, the activation predicates, and the decision rules are fixed in a version-controlled artifact with a freeze receipt dated before the first measured execution, and released with this paper (Section~\ref{sec:data}).
+
+\section{Result 1: construction choices do not reorder engines}
+\label{sec:transfer}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig1_a3_transfer.pdf}
+\caption{Best construction, for whom? Development Recall@100 for three construction sources and three consuming retrievers. The nominal best source changes with the target, but the spread within a target stays below 0.004 while the bands between targets are separated by substantially more. Development evidence; no single cell carries confirmatory weight.}
+\label{fig:transfer}
+\end{figure*}
+
+\begin{table}[!t]
+\caption{Development response across frozen retrievers. Shared-screen and per-system-search Recall@100 are produced under different decision rules; their difference is not a before-and-after effect.}
+\label{tab:development}
+\centering
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lccl@{}}
+\toprule
+Retriever & Shared screen & Per-system search & Outcome under the frozen rule \\
+\midrule
+BM25 & 0.191 & 0.235 & Tie; no winner \\
+BGE-M3 & 0.270 & 0.290 & Tie; no winner \\
+PatEmbed-large & 0.413 & 0.423 & Tie to incumbent; retained \\
+Arctic Embed & 0.341 & 0.359 & Strict improvement; retained \\
+Qwen3 Embedding & 0.364 & 0.374 & No strict improvement \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+If a construction were neutral preprocessing, frozen retrievers would respond to it alike. We test that first on a shared screen of five systems under five constructions, then let each of the three dense retrievers run its registered search. Under the per-system rule a challenger replaces its incumbent only on a strict Recall@100 gain; anything smaller is recorded as a tie. Table~\ref{tab:development} shows mixed responses, which leaves open the possibility that a construction discovered around one system might still transfer to another.
+
+We test that with a complete three-by-three matrix: each source is the construction its retriever's registered search settled on, consumed by each of the three targets, every cell computed over all 250 development queries. The PatEmbed-derived construction is title, abstract and claims in 384-token passages with 64-token overlap and maximum aggregation; the Arctic-derived is labelled title, abstract and claims in 512-token passages with 64-token overlap; the Qwen3-derived is title, abstract and claims in 2{,}048-token passages with 256-token overlap.
+
+Figure~\ref{fig:transfer} lays out the result, and read one way it looks like a real effect: the nominally best source does move. Qwen3-derived text wins for PatEmbed, Arctic-derived for Arctic, PatEmbed-derived for Qwen3, and the nDCG@100 ordering disagrees with all of them. No construction holds first place everywhere.
+
+The differences behind that reordering are very small, and because every cell is computed over the same 250 queries we can test them directly. Within each target, the paired gap between the best and second-best construction has a 95\% bootstrap interval that includes zero: $[-0.005, 0.006]$ for PatEmbed, $[-0.005, 0.011]$ for Arctic, $[-0.006, 0.009]$ for Qwen3. No construction is a stable winner under resampling, with a maximum observed best-source probability of 0.6834. These intervals are descriptive development summaries, not confirmatory tests. Read together they bound the effect: the largest value consistent with any of them is 0.011 Recall@100, which is below the narrowest separation between the retriever bands, 0.018.
+
+What does move the result is the retriever. Every construction lands near 0.419 Recall@100 on PatEmbed, near 0.34 on Arctic, and near 0.36 on Qwen3. Change the construction and positions shuffle inside a band; change the retriever and the band itself moves. A composition control agrees: two-system fusion (0.419) barely edges the strongest single system (0.418), and three-system fusion drops to 0.415, so stacking retrievers does not help monotonically.
+
+\paragraph{What this means in practice.} Within the space of coarse construction choices we tested, the field-and-segmentation details that fill product descriptions are not what separates one tool from another. The engine is. A construction tuned around one engine carries no promise when a different engine consumes it, so a benchmark result obtained under one construction should not be read as a property of the model alone, and a vendor claim that names a construction without naming the retriever, or the reverse, has not told the buyer enough to predict what they will get. This finding is bounded by the space we searched. Learned, corpus-adaptive representation programs do move dense retrievers substantially \citep{onuallain2026autoindex}; the portability of \emph{coarse} choices is what our evidence speaks to.
+
+\section{Result 2: validating a configuration rather than demonstrating it}
+\label{sec:confirmation}
+
+\begin{table}[!t]
+\caption{The two complete frozen systems, fixed when the one-time selection closed.}
+\label{tab:systems}
+\centering
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lp{0.36\textwidth}p{0.36\textwidth}@{}}
+\toprule
+ & Selected (ARM-03) & Comparator (FAST) \\
+\midrule
+Model & \texttt{datalyes/\allowbreak patembed-large}, revision \texttt{2d5c0f92} & BM25S 0.3.10 with \texttt{snowflake-\allowbreak arctic-\allowbreak embed-\allowbreak m-\allowbreak v2.0}, revision \texttt{95c27414} \\
+Construction & title, abstract, claims; 384-token passages, 64-token overlap; NFKC & title, abstract, claims as one family document; NFKC, case preserving \\
+Pooling and aggregation & mean non-padding, L2 normalised, maximum over passages & --- \\
+Query prefix & ``encode query for different document retrieval:'' & ``query:'' on the dense arm \\
+Fusion & none & reciprocal rank fusion, $k=60$ \\
+Depth & top 100 & top 100 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/fig2_a5_confirmation.pdf}
+\caption{Protected comparison of two complete frozen configurations on 872 held-out queries. (a) Absolute cross-domain Recall@100 and nDCG@100. (b) Paired differences with 95\% percentile intervals from 10{,}000 paired bootstrap resamples. (c) Query-level wins, ties, and losses on Recall@100. The comparison supports the complete selected system, not a construction effect in isolation.}
+\label{fig:confirmation}
+\end{figure*}
+
+Four frozen profiles enter one selection evaluation, scoring Recall@100 of 0.416 (ARM-03), 0.361 (BALANCED), 0.361 (DEEP), and 0.308 (FAST) on the 90 selection queries with positive cross-domain relations. The pre-specified rule selects ARM-03 as the research system. The comparator, FAST, was fixed at the same moment as the pre-specified operational baseline, not chosen after seeing any held-out outcome. Both systems are given in Table~\ref{tab:systems}. Note that the comparator is a hybrid of a lexical and a dense arm with rank fusion, which is a stronger baseline than a single-model control and is the configuration a latency-conscious deployment would plausibly choose.
+
+Both systems then run all 872 protected queries without failure, with deterministic replay verified. The selected configuration lifts Recall@100 from 0.331 to 0.442, a paired difference of 0.111 with a 95\% interval of [0.102, 0.120]. It wins 619 queries, ties 158, and loses 95. nDCG@100 rises from 0.279 to 0.366 (0.086, [0.079, 0.094]) and nDCG@10 from 0.234 to 0.297 (0.064, [0.053, 0.074]). Figure~\ref{fig:confirmation} shows all three views. The advantage is also stable across technology: grouping the 872 queries by the IPC section of the query, the selected system wins between 66\% and 79\% of queries in every section.
+
+Development and selection were closed before any of this was observed, which is what allows the comparison to carry weight, and the comparison is deliberately at the system level. The design fixes the construction together with the model, the prompt, the program, and the runtime, so the win belongs to the complete configuration and not to the construction alone. That distinction is easy to lose and expensive to lose: a result of this shape is frequently reported as evidence for whichever component the authors find most interesting.
+
+The direction is consistent with the published evidence. DAPFAM's own sweep finds passage retrieval ahead of document retrieval, and PatenTEB reports PatEmbed-large as the strongest patent-specific encoder on this benchmark \citep{ayaou2026dapfam,ayaou2025patenteb}. What the protocol adds is not the ranking but its survival on held-out data with development already closed.
+
+\paragraph{What this means in practice.} The pattern is reproducible by any search team with a query log and a few hours: freeze two complete configurations, set aside a query set nobody has looked at, run both, and compare paired per-query differences rather than aggregate scores. It converts a demonstration into a claim with a stated uncertainty. A vendor evaluation that reports a single aggregate number on queries used during tuning has not done this, and the difference is not academic: our own development-stage evidence would have supported several configurations that the protected comparison then separated clearly.
+
+\section{Result 3: the exposure ceiling}
+\label{sec:exposure}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/fig3_a7_diagnosis.pdf}
+\caption{Candidate exposure and the within-pool ordering bound for the fixed Top-200 pool on strict cross-domain relations. (a) Of 5{,}193 relevant-family incidences, 796 appear by rank 100, 332 first appear at ranks 101--200, and 4{,}065 never appear. (b) Perfect reordering inside the pool raises macro Recall@100 from 0.188 to 0.260. Incidences and macro Recall use different aggregation units.}
+\label{fig:diagnosis}
+\end{figure*}
+
+The selected system wins its comparison decisively and still, on the strict cross-domain slice, misses most of what it should find. A confirmed system is the right instrument for asking why, because whatever we learn cannot be an artifact of tuning that has not happened yet.
+
+We keep the winner fixed and run it over the full benchmark: 45{,}336 target families, 1{,}247 queries. The run materialises 188{,}944 passage chunks with full coverage, no failures, and no duplicate-family errors. Under the strict cross-domain definition, 905 judged queries hold 5{,}193 relevant-family incidences. Observed macro Recall@100 is 0.188.
+
+\subsection{How the error divides}
+
+Figure~\ref{fig:diagnosis} separates exposure from ordering inside the Top-200 pool, and the split is stark. Of 5{,}193 relevant incidences, 796 surface by rank 100 and 332 more by rank 200. The remaining 4{,}065 never appear at all. Seventy-eight percent of the evidence is not late; it is absent. The query-level view agrees: only 67 of 905 queries have every relevant family inside the top 100, while 455 expose none at all within 200 candidates.
+
+That bounds what any reranker can achieve here. Reorder the pool perfectly and macro Recall@100 rises from 0.188 to 0.260, a gain of 0.072. That is the entire prize available to a perfect ranker operating on this pool, because everything above it was never retrieved.
+
+\subsection{Does a deeper pool lift the ceiling?}
+
+\begin{table}[!t]
+\caption{Recall@100 attainable by a perfect ranker as a function of candidate pool depth, strict cross-domain slice. Every row is Recall@100; only the pool available to the ranker changes. Because the median query has few relevant families, the 100-slot cap almost never binds, so these values coincide with Recall@$k$ at the same depth.}
+\label{tab:depth}
+\centering
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+Pool depth & Oracle Recall@100 & Gain over observed & Relevant families still absent \\
+\midrule
+200 & 0.260 & 0.072 & 78.3\% \\
+300 & 0.318 & 0.129 & 73.7\% \\
+500 & 0.410 & 0.221 & 66.5\% \\
+1{,}000 & 0.529 & 0.341 & 56.9\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig5_depth_vs_ordering.pdf}
+\caption{Candidate pool depth against perfect ordering. (a) Recall@100 attainable by a perfect ranker given a pool of depth $k$, against the observed 0.188. The gain from reordering a 200-candidate pool is 0.072; the gain from deepening that pool to 1{,}000 is 0.269 on top of it. (b) The share of relevant families still never retrieved, and the number of queries returning nothing relevant, at each depth.}
+\label{fig:depth}
+\end{figure*}
+
+A pool that stops at 200 is a choice, not a law, so we replayed the frozen configuration's retained deep ranking to depths of 300, 500, and 1{,}000. No model, construction, or scoring function changed; only the cutoff did. Table~\ref{tab:depth} and Figure~\ref{fig:depth} report the outcome, and the two readings both matter.
+
+Depth pays, and it pays far more than ordering. Moving from a 200-candidate pool to a 1{,}000-candidate pool raises the attainable Recall@100 from 0.260 to 0.529. Set against the 0.072 available from perfect reordering, the deeper pool is worth roughly five times as much. Both quantities are Recall@100 on the same 905 queries, so the comparison is direct. For a practitioner deciding where to spend, this is the actionable result of the paper: the ranking is not the constraint, and a system that retrieves 200 candidates is discarding recall that costs nothing but compute to keep.
+
+Depth also does not solve the problem. At five times the depth, 2{,}957 of 5{,}193 relevant families, or 56.9\%, have still never been retrieved, and 219 of 905 queries still return nothing relevant at all. The ceiling moves; it does not lift. Whatever is failing here is not a cutoff that was set too tight.
+
+\subsection{Is this a problem of particular technologies?}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig6_section_exposure.pdf}
+\caption{Share of strict cross-domain relevant families absent from the Top-200 pool, by IPC section of the query. The horizontal axis begins at 60\%. Every section falls between 71\% and 93\%, so the failure is not concentrated in one technology.}
+\label{fig:sections}
+\end{figure*}
+
+\begin{table}[!t]
+\caption{Exposure by IPC section of the query, strict cross-domain slice, Top-200 pool. Section-level bins are used because a finer three-character breakdown gives a median of only eight queries per bin and supports no ranking.}
+\label{tab:sections}
+\centering
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}clrrrr@{}}
+\toprule
+Section & Field & Queries & Incidences & Absent & Recall@100 \\
+\midrule
+A & Human necessities & 102 & 491 & 76.2\% & 0.203 \\
+B & Operations, transport & 290 & 1{,}930 & 81.8\% & 0.167 \\
+C & Chemistry, metallurgy & 127 & 667 & 72.6\% & 0.206 \\
+D & Textiles, paper & 60 & 396 & 71.2\% & 0.262 \\
+E & Fixed constructions & 63 & 357 & 77.0\% & 0.270 \\
+F & Mechanical engineering & 133 & 777 & 80.2\% & 0.214 \\
+G & Physics & 98 & 435 & 74.7\% & 0.122 \\
+H & Electricity & 31 & 120 & 92.5\% & 0.064 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+A natural hope is that the loss concentrates in a few crowded or vocabulary-poor fields, which would make it somebody else's problem. It does not. Table~\ref{tab:sections} and Figure~\ref{fig:sections} give exposure by the IPC section of the query, and every section loses between 71\% and 93\% of its relevant families from the Top-200 pool. We report the range rather than a ranking on purpose: the smallest section holds 31 queries, and a league table built on bins that size would be noise. The stable finding is the uniformity itself. Exposure failure is a property of cross-domain retrieval on this benchmark, not a quirk of one technology.
+
+\subsection{What absence looks like}
+
+Aggregates make the scale visible but not the mechanism, so we examined queries that retrieve nothing relevant even at depth 1{,}000. In one, the query family concerns heat recovery for an organic Rankine-cycle generator (IPC F22) and a relevant family describes a heat exchanger assembly (F28). In another, the query concerns depositing material onto workpieces in reaction chambers and removing the by-products (F17), while a relevant family describes a bright tin electroplating bath (C25). In both the connection is real but oblique: the same physical process appears under a different purpose and a different professional vocabulary, and the surface text shares little. These are descriptive illustrations rather than causal analyses, and we make no claim about the relevance labels themselves. They show the kind of link that a similarity-based first stage does not make, and that a searcher armed with a classification scheme and a hypothesis about where the art might live plausibly would.
+
+\section{Implications for search practice}
+\label{sec:implications}
+
+\subsection{Report the configuration, not the model}
+
+Professional search has long treated the search strategy as part of the result: databases, query syntax, date ranges, and classification limits are documented so that another searcher can judge and repeat the work. AI-assisted retrieval has not inherited that convention, and our first result shows what it costs. A model name predicts less than practitioners are being asked to assume, and the components that go unnamed are not neutral.
+
+We propose that AI-assisted search results carry a configuration statement with six fields, which is what we report for our own systems in Table~\ref{tab:systems}:
+
+\begin{enumerate}
+\item \textbf{Model and revision.} The checkpoint identifier, pinned to a revision, since fine-tuned variants of the same base differ substantially.
+\item \textbf{Construction.} Which fields are indexed, how the document is segmented, and how segments are aggregated to the family or publication.
+\item \textbf{Query treatment.} Any prompt or prefix applied to the query, which is not cosmetic for instruction-tuned encoders.
+\item \textbf{Fusion.} Whether lexical and dense arms are combined, and by what rule.
+\item \textbf{Depth.} The number of candidates retrieved before any reranking, which our third result identifies as decisive.
+\item \textbf{Evaluation basis.} The queries on which any reported figure was computed, and whether they were held out.
+\end{enumerate}
+
+None of this is burdensome, and all of it is information the tool already has. Its absence is what makes current comparisons hard to interpret.
+
+\subsection{Spend on exposure before ranking}
+
+The measured trade is unambiguous on this benchmark. A perfect ranker over a 200-candidate pool is worth 0.072 Recall@100; a 1{,}000-candidate pool is worth 0.341. Deeper retrieval is inexpensive, since the candidate scoring is already done and only the cutoff changes, whereas reranking adds a model to the pipeline. A team evaluating tools for recall-critical work should ask what depth the first stage retrieves before asking how good the reranker is, and a team building such a system should exhaust depth before adding a reranking stage.
+
+\subsection{The recall the system cannot reach is still the searcher's}
+
+The result that should travel furthest is the one that limits the others. At five times the depth, most relevant cross-domain families remain unretrieved, and hundreds of queries surface nothing relevant. A first-stage dense retriever, however well configured and however deeply run, did not find this material on this benchmark. That is not an argument against these tools, which produce a large and well-validated improvement over a strong hybrid baseline. It is an argument about what they leave undone. The coverage strategies that professional searchers already use, and that are sometimes described as the part automation will absorb next, are addressing precisely the failure our measurements isolate. On the evidence here, the automation is not close to absorbing them.
+
+\section{Limitations}
+\label{sec:limitations}
+
+Everything about construction and transfer is development evidence from a single benchmark, and no individual transfer cell carries confirmatory weight. Our negative result concerns coarse, deterministic constructions; learned representation programs are outside the space we searched, and the literature shows they can behave differently \citep{onuallain2026autoindex}.
+
+The full-scale diagnosis examines one selected dense configuration. A different first-stage system would produce a different pool, and while the uniformity across IPC sections suggests the effect is not idiosyncratic, we have not shown that it holds for other retrievers. Exposure is characterised to depth 1{,}000, and we have not established where, if anywhere, the curve flattens.
+
+The domain analysis uses the IPC section of the query as a deterministic bin. One record carrying a non-IPC section code was excluded from the section roll-up rather than folded into a section, which is why the section totals cover 904 of the 905 queries. The three-character breakdown is retained in the released data as a descriptive appendix only, since its bins are too small for ranking.
+
+Finally, citation-based patent retrieval is an information-retrieval task evaluated against benchmark relevance judgments. It is not a legal reading of novelty, validity, infringement, or freedom to operate, and nothing here should be read as one.
+
+\section{Conclusion}
+
+A retrieval score reflects two things at once: the model that scores the evidence, and the construction that decides what evidence exists. Our first result shows that within a coarse deterministic space the second does not reorder the first, so the unit that deserves a name is the configuration rather than the model. Our second shows that a configuration frozen before contact with held-out queries can be validated properly, and that the discipline is available to any search team willing to hold a query set back.
+
+The third result is the one we did not expect to be so one-sided. Once the first-stage configuration is fixed, a third constraint governs everything downstream: whether a relevant family ever enters the pool at all. Perfect reordering of a 200-candidate pool is worth 0.072 Recall@100 on this benchmark; deepening the pool to 1{,}000 candidates is worth nearly five times that. Yet at that depth most relevant cross-domain families are still missing and 219 of 905 queries retrieve nothing relevant, evenly across every technology section. The pool decides what the model and the ranker will ever see, buying a deeper pool moves that boundary further than perfecting the order inside it, and neither one closes the gap that professional search strategy is still required to cover.
+
+\section*{Data availability}
+\label{sec:data}
+
+The analysis code, configuration manifests, preregistration artifact with its freeze receipt, and the derived data tables underlying every figure and table in this paper are available at \url{https://github.com/siriponsri/myIS}. DAPFAM is publicly available from its authors. Protected per-query payloads are referenced by path in the reproduction manifest and are not redistributed.
+
+\section*{Declaration of competing interest}
+
+The authors declare no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI in the writing process}
+
+\begin{sloppypar}
+During the preparation of this manuscript, the authors used OpenAI Codex to assist with language editing, document organization, and code/document verification. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+\end{sloppypar}
+
+\section*{CRediT authorship contribution statement}
+
+Siripon Srihangpiboon: Conceptualization, Methodology, Software, Data curation, Formal analysis, Visualization, Writing -- original draft, Writing -- review and editing. Tuchsanai Ploysuwan: Supervision, Methodology, Writing -- review and editing.
+
+\section*{Funding}
+
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+\section*{Acknowledgements}
+
+The authors acknowledge the public DAPFAM benchmark and its authors for making the data available for research. An earlier and shorter version of this work was submitted to iSAI-NLP 2026. This
+article extends it with the pool-depth analysis, the technology-section
+breakdown, the failure cases, and the practice-facing implications.
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{references/references}
+
+\end{document}

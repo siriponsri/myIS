@@ -1,0 +1,6 @@
+# source: outputs/publication/armindex/a5-a6-continuation-20260822/tables/a4_selection_profile_metrics.csv
+status,profile,eligible_out_queries,recall_at_100,p50_ms,p95_ms,p99_ms,throughput_qps,cost_usd
+DONE,ARM-03_RESEARCH_REFERENCE,90,0.416111,379.959,1684.866,1829.422,0.018710,1.198038
+DONE,BALANCED,90,0.360556,716.077,1911.764,2279.235,0.012458,1.799327
+DONE,DEEP,90,0.360556,329.676,1335.694,1750.895,0.015913,1.408582
+DONE,FAST,90,0.308333,508.938,1575.532,1709.185,0.032089,0.698540

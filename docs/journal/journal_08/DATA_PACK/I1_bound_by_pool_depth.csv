@@ -1,0 +1,6 @@
+# source: ..\04_Owner_Stores\armindex\a6\a6-goal001-20260823T052423Z-full09\deep-rankings\deep-rankings.jsonl; ..\04_Owner_Stores\a1.2-v15-20260809\protected\inputs\evaluator-relations.arrow; docs/journal/DATA_PACK/B2_depth_curve_extended.csv
+pool_depth,oracle_recall_at_100,gain_over_observed
+200,0.260167,0.071717
+300,0.317703,0.129253
+500,0.409842,0.221392
+1000,0.529463,0.341013
