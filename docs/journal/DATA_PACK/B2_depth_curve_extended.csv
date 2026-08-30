@@ -1,0 +1,8 @@
+# source: ..\\04_Owner_Stores\\armindex\\a6\\a6-goal001-20260823T052423Z-full09\\deep-rankings\\deep-rankings.jsonl; ..\\04_Owner_Stores\\a1.2-v15-20260809\\protected\\inputs\\evaluator-relations.arrow; ..\\04_Owner_Stores\\armindex\\a6\\a6-goal001-20260823T052423Z-full09\\evaluation-inputs\\ephemeral-token-map.jsonl
+status,population,k,macro_recall_at_k,cumulative_incidence_found,absent_queries
+DONE,Strict cross-domain,100,0.188450,796,541
+DONE,Strict cross-domain,150,0.233491,990,490
+DONE,Strict cross-domain,200,0.260167,1128,455
+DONE,Strict cross-domain,300,0.317703,1366,400
+DONE,Strict cross-domain,500,0.409842,1738,313
+DONE,Strict cross-domain,1000,0.529463,2236,219

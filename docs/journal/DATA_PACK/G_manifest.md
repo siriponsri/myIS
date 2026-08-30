@@ -6,10 +6,12 @@ All Task A-G outputs are post-hoc projections. No retrieval, indexing, embedding
 
 | File | Exact source artifact(s) | Script/notebook |
 |---|---|---|
-| A_domain_exposure.csv | A7 aggregate metrics; unavailable domain slice | BLOCKED: no script run |
+| A_domain_exposure.csv | DAPFAM source contract + public DAPFAM `queries.parquet` IPC labels + A7 exposure anatomy + A6 pool + relation Arrow | post-hoc strict-OUT per-IPC3 projection |
 | B_depth_curve.csv | A6 depth curve + A7 exposure anatomy | post-hoc table transcription |
-| C_final872_by_domain.csv | Final-872 aggregate quality; unavailable domain slice | BLOCKED: no script run |
+| B2_depth_curve_extended.csv | A6 retained depth-2000 rankings + relation Arrow + token map | local replay and aggregation |
+| C_final872_by_domain.csv | Public DAPFAM `queries.parquet` IPC labels + A5 qrels + returned paired rankings + owner evaluation | post-hoc per-query IPC3 recomputation |
 | D_search_space.csv | A2 frozen candidate manifest + A2 aggregate outcomes | post-hoc accounting transcription |
-| E1_screen_5x5.csv | A1 system aggregate; 25-cell payload unavailable | BLOCKED: no script run |
+| E1_screen_5x5.csv | A1 owner-local R15 cell EDA receipt + A1 aggregate figure | post-hoc 25-cell transcription |
 | E2_selection125.csv | A4 selection profile metrics | post-hoc table transcription |
-| F_case_studies.md | A7 query exposure aggregate; protected case payload unavailable | BLOCKED: no script run |
+| F_case_studies.md | Public DAPFAM `queries.parquet`/`corpus.parquet` title, abstract, IPC3 + A6 pool + relation Arrow (`domain_rel=OUT`) | post-hoc safe-ID case selection |
+| PREP_REPORT_2.md | JOURNAL_UNBLOCK_TASKS.md + all round-2 DATA_PACK files | round-2 closeout audit |
