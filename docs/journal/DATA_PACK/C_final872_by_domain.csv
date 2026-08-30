@@ -1,0 +1,3 @@
+# source: BLOCKED; per-query Final-872 outcomes plus domain labels are not exported. Aggregate source: docs/figures/13_a5_confirmation_quality.csv
+status,domain,wins,ties,losses,mean_paired_recall_at_100
+BLOCKED,DOMAIN_LABELS_NOT_EXPORTED,,,,

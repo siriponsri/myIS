@@ -1,0 +1,3 @@
+# source: BLOCKED; required aggregate-safe per-domain exposure table is not present. Checked outputs/publication/armindex/a7-seven-layer-diagnosis/*/a7-layer-aggregate-metrics.csv and docs/figures/17_a7_exposure_anatomy.csv
+status,domain,judged_queries,relevant_family_incidences,found_rank_1_100,found_rank_101_200,absent_top_200,absent_rate,macro_recall_at_100,perfect_ordering_bound
+BLOCKED,ALL_DOMAINS_NOT_EXPORTED,,,,,,,,

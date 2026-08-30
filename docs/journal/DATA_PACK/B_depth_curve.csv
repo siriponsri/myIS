@@ -1,0 +1,8 @@
+# source: docs/figures/15_a6_depth_curve.csv; outputs/publication/armindex/a7-seven-layer-diagnosis/a7-goal001-20260823T093525Z-cpu02/a7-layer-aggregate-metrics.csv; ..\\04_Owner_Stores\\armindex\\a6\\a6-goal001-20260823T052423Z-full09\\deep-rankings\\pool-200.jsonl; ..\\04_Owner_Stores\\a1.2-v15-20260809\\protected\\inputs\\evaluator-relations.arrow; A6 evaluation-inputs/ephemeral-token-map.jsonl
+status,population,k,macro_recall_at_k,cumulative_incidence_found
+DONE,Strict cross-domain,10,0.034023,154
+DONE,Strict cross-domain,20,0.070933,304
+DONE,Strict cross-domain,50,0.133994,550
+DONE,Strict cross-domain,100,0.188450,796
+DONE,Strict cross-domain,150,NOT_EXPORTED,990
+DONE,Strict cross-domain,200,0.260167,1128

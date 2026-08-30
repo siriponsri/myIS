@@ -1,0 +1,38 @@
+% source: docs/journal/WPI_JOURNAL_OUTLINE.md; docs/journal/DATA_PACK/; docs/FULL_PROJECT_REPORT_A0_A8_EN.md
+\documentclass[preprint,12pt]{elsarticle}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\begin{document}
+\begin{frontmatter}
+\title{Beyond the Retriever: Configuration and the Exposure Ceiling in AI-Based Cross-Domain Patent Search}
+\author{Siripon Sri}
+\address{myIS Research}
+\begin{abstract}
+AI patent-search tools are compared by model name, although a searcher receives a configuration: model, document construction, candidate depth, and fusion. Using the frozen ArmIndex evidence, this journal extension reframes three results as practice lessons. Construction choices transfer conditionally across engines; a one-time Selection-125 exposure must be confirmed on held-out queries; and candidate exposure limits what any downstream ranker can recover. On Final-872 the selected configuration records Recall@100 of 0.442476 versus 0.331097 for the static comparator, with 619 wins, 158 ties, and 95 losses. In the unchanged full-benchmark strict cross-domain diagnosis, 796 of 5,193 relevant family pairs appear by rank 100, 332 only at ranks 101--200, and 4,065 are absent from Top-200. Perfect ordering of the existing pool raises Recall@100 only from 0.188450 to 0.260167. These are retrieval results under citation-derived judgments, not legal conclusions.
+\end{abstract}
+\end{frontmatter}
+
+\section{Introduction: what a searcher actually buys}
+A patent retriever never sees a patent. It sees the representation supplied to it. Field selection, segmentation, overlap, aggregation, depth, and fusion determine the evidence available to a search professional. The practical questions are therefore: which construction works with the selected engine, does the apparent advantage survive held-out confirmation, and how much relevant art entered the candidate pool at all?
+
+\section{Study design and evidence boundary}
+The benchmark and frozen protocols are those of the conference study. This extension performs post-hoc aggregation only; it does not rerun retrieval, indexing, embeddings, or models. The machine-readable sources and their limitations are listed in \texttt{docs/journal/DATA\_PACK/G\_manifest.md}. Conference numbers are immutable.
+
+\section{Lesson 1: construction is conditional on the engine}
+The nine-cell transfer matrix shows target-retriever dependence. Recall@100 ranges from 0.337430 to 0.362570 on Arctic and Qwen3 targets and from 0.418436 to 0.419274 on PatEmbed. No source representation dominates all targets. A vendor claim should therefore report the complete configuration rather than a representation as universal preprocessing.
+
+\section{Lesson 2: validate a configuration like a claim}
+All four Selection-125 profiles completed 125/125 queries. On the eligible OUT-positive subset (n=90), ARM-03 scored 0.416111, BALANCED and DEEP 0.360556, and FAST 0.308333. The held-out Final-872 comparison retained the selected configuration's advantage: 0.442476 versus 0.331097 Recall@100, paired difference 0.111379 (95\% CI 0.102294--0.120438). The 619/158/95 win/tie/loss counts are immutable.
+
+\section{Lesson 3: the exposure ceiling}
+The selected configuration's strict cross-domain depth curve is 0.034023, 0.070933, 0.133994, 0.188450, and 0.260167 at k=10,20,50,100,200. The pair-level anatomy is 796 in ranks 1--100, 332 only in 101--200, and 4,065 absent from Top-200. The analytical perfect-ordering bound is 0.260167, not an implemented reranker. Candidate generation and broader pools are therefore the next engineering target for recall-critical search.
+
+\section{Implications for professional reporting}
+Report one configuration statement: model and revision; source fields and segmentation; aggregation and duplicate policy; candidate depth; fusion; metric population and denominators. State whether the number is development, selection, confirmation, or diagnosis evidence. Keep citation-derived relevance separate from legal novelty, inventive step, validity, infringement, and freedom-to-operate conclusions.
+
+\section{Limitations and gated follow-up}
+Per-domain breakdowns and qualitative case studies are not in the aggregate-safe export and remain blocked in the \texttt{DATA\_PACK}. The retained full-corpus index makes a deeper k=1000 re-score feasible, but Task H is only a feasibility check in this draft. Any future experiment requires explicit authorization, a new output directory, and preservation of the frozen Top-200 pool.
+
+\section{Conclusion}
+Representation specifies the evidence; the retriever decides what to do with it; and the pool decides what either of them ever sees. The journal contribution is a reporting and evaluation discipline for recall-critical patent search, bounded by the exact evidence retained.
+\end{document}
