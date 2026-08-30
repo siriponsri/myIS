@@ -1,47 +1,59 @@
-source: https://huggingface.co/datasets/datalyes/DAPFAM_patent; ..\\04_Owner_Stores\\armindex\\a6\\a6-goal001-20260823T052423Z-full09\\deep-rankings\\pool-200.jsonl; ..\\04_Owner_Stores\\armindex\\a6\\a6-goal001-20260823T052423Z-full09\\query-input\\opaque-queries-20260823.jsonl; ..\\04_Owner_Stores\\a1.2-v15-20260809\\protected\\inputs\\corpus.jsonl; ..\\04_Owner_Stores\\a1.2-v15-20260809\\protected\\inputs\\evaluator-relations.arrow
+# source: https://huggingface.co/datasets/datalyes/DAPFAM_patent; ..\04_Owner_Stores\armindex\a6\a6-goal001-20260823T052423Z-full09\deep-rankings\deep-rankings.jsonl; ..\04_Owner_Stores\a1.2-v15-20260809\protected\inputs\evaluator-relations.arrow
 
 # Task F Case Studies
 
-Status: DONE. The three examples are strict `OUT` relations. Opaque tokens are used as safe identifiers. Titles, first abstract sentences, and IPC 3-character domains are joined from the public DAPFAM release; local Owner Store files are used only for the frozen ranking/relation join.
+Status: DONE. These two examples are selected from the 219 judged queries with
+no relevant family in the retained Top-1000 ranking. Opaque tokens are safe
+identifiers. Query text is taken from the A6 opaque-query input; public titles,
+first abstract sentences, and IPC labels are joined from the DAPFAM release.
+The target family is a strict `OUT` relation. `Best found relevant rank: none in
+Top-1000` means that no relevant family for that query occurs at ranks 1--1000;
+it is not a claim that the family is absent from the full corpus.
 
 ## Case 1
 
-- Query: `q-efebed9260180a90d67ba901337a3b29f3aac8315dd0d592c3281327a40caac1`
-- Query title: “classifying a work machine operation”
-- Query abstract first sentence: “A method for analyzing the use of a work machine is disclosed.”
-- Absent relevant family: `f-46c02889b12a9f342e987c0f8ae9b8be`
-- Absent title: “method of operating industrial plant, and industrial plant control system”
-- Target abstract first sentence: “Field: machine building.”
-- Query domain / target domain: `D05` / `G05` (IPC 3-character)
+- Query: `q-350820864995bc2cc3153df6f7c4412462c00f930bc19e1372c60ee6a6529a50`
+- Query title: `recovering heat energy`
+- Query abstract first sentence: `Some embodiments of a generator system can be used with the working fluid in a Rankine cycle.`
+- Query domain: `F22` (first public IPC 3-character label)
+- Absent relevant family: `f-2ffc84b32901ed265ed5799e7185b996`
+- Absent title: `heat exchanger assembly`
+- Target abstract first sentence: `A heat exchanger assembly has an elongated shell provided with fluid inlet and fluid outlet openings.`
+- Target domain: `F28`
 - Query/target relation: `OUT`
-- Best found relevant rank: 1; the listed target is absent from Top-200.
+- Relevant-family count for query: 2
+- Best found relevant rank: none in Top-1000
 
-The query describes neural-network classification of machine operation from load or sensor data. The absent title concerns operation of an industrial plant and plant control. Both descriptions concern monitored or controlled industrial operation, while the relation receipt marks them as strict cross-domain.
+The query concerns recovering heat for an organic Rankine-cycle generator. The
+selected target is a heat-exchanger family in a different IPC 3-character
+domain. The example is retained because the target remains unexposed even when
+the candidate pool is extended fivefold from 200 to 1000.
 
 ## Case 2
 
-- Query: `q-9d455c3f87857eb99bb390dee713832eea1c3c8e0c80aecdb20e96aa71aa764c`
-- Query title: “tool drive system”
-- Query abstract first sentence: “A tool drive system for transferring rotational power from a rotational tool, such as a drill or ratchet, to at least one input drive shaft which then transfers the power to at least one output drive shaft.”
-- Absent relevant family: `f-cf7fdc5d27ab10d96513340c361e380d`
-- Absent title: “system for controlling motor velocity of a surgical stapling and cutting instrument according to articulation angle of end effector”
-- Target abstract first sentence: “A motorized surgical instrument is disclosed.”
-- Query domain / target domain: `B23` / `A61` (IPC 3-character)
+- Query: `q-7bcdbd44fd4825bb0d02700f61db2b4f06ab14b85540dfa66358175ad6c8e0b4`
+- Query title: `systems for depositing material onto workpieces in reaction chambers and methods for removing byproducts from reaction chambers`
+- Query abstract first sentence: `Systems for depositing material onto workpieces in reaction chambers and methods for removing byproducts from reaction chambers are disclosed herein.`
+- Query domain: `F17` (first public IPC 3-character label)
+- Absent relevant family: `f-bdb1b2d1830c06b91ba52e4b5d936304`
+- Absent title: `bright tin electroplating bath`
+- Target abstract first sentence: `Improved electrolytic tin deposition from aqueous, acid electroplating baths is achieved by addition of a new formula of brighteners.`
+- Target domain: `C25`
 - Query/target relation: `OUT`
-- Best found relevant rank: 1; the listed target is absent from Top-200.
+- Relevant-family count for query: 3
+- Best found relevant rank: none in Top-1000
 
-The query text focuses on shafts, gears, angle setting, and torque transfer. The absent title focuses on motor-velocity control in a surgical stapling and cutting instrument. The overlap is at the level of powered mechanical actuation, but the application descriptions are distinct.
+The query describes reaction-chamber exhaust and by-product trapping. The
+selected target is an electroplating-bath family in a different IPC domain.
+Again, the point is exposure failure: the target is not present in the retained
+deep ranking, so no reordering of that ranking can recover it.
 
-## Case 3
+## Selection and interpretation rule
 
-- Query: `q-fce4e6c8fe1f84935f3feb26a5b00e17de6f93c5757af1d6b22acb95ac9f3b50`
-- Query title: “bifurcated document relevance scoring”
-- Query abstract first sentence: “An information retrieval system uses phrases to index, retrieve, organize and describe documents.”
-- Absent relevant family: `f-3bd28a7a890f37f559163fc6b825b5ae`
-- Absent title: “image display system and image display device”
-- Target abstract first sentence: “Problem to be solved: to provide an image display system capable of sharing a flag added to a certain image between different display terminals.”
-- Query domain / target domain: `G60` / `G06` (IPC 3-character)
-- Query/target relation: `OUT`
-- Best found relevant rank: 1; the listed target is absent from Top-200.
-
-The query describes phrase posting lists and document relevance scoring. The absent title describes sharing image flags between a data server and multiple display terminals. The text shows a retrieval/scoring system paired with an image-display system, with no stronger causal explanation asserted here.
+Cases were selected after computing the strict-`OUT` Top-1000 exposure table.
+Only queries with zero relevant families at every retained rank through 1000
+were eligible. The examples are descriptive diagnostics, not estimates of
+semantic similarity and not evidence that the benchmark relevance labels are
+incorrect. Public text is limited to title and first abstract sentence to keep
+the projection aggregate-safe; protected qrels and raw per-query outcomes stay
+in Owner Stores.

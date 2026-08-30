@@ -15,3 +15,6 @@ All Task A-G outputs are post-hoc projections. No retrieval, indexing, embedding
 | E2_selection125.csv | A4 selection profile metrics | post-hoc table transcription |
 | F_case_studies.md | Public DAPFAM `queries.parquet`/`corpus.parquet` title, abstract, IPC3 + A6 pool + relation Arrow (`domain_rel=OUT`) | post-hoc safe-ID case selection |
 | PREP_REPORT_2.md | JOURNAL_UNBLOCK_TASKS.md + all round-2 DATA_PACK files | round-2 closeout audit |
+| I1_bound_by_pool_depth.csv | A6 retained depth-2000 rankings + relation Arrow + Rule 0 baseline | post-hoc oracle Recall@100 bound by pool depth |
+| I2_section_exposure.csv | A_domain_exposure.csv + public DAPFAM IPC labels + Rule 0 relation/pool evidence | post-hoc A-H IPC section roll-up; O60 excluded |
+| PREP_REPORT_3.md | JOURNAL_ARC_UPDATE.md + I1/I2/I3/I4 outputs | round-3 closeout and sanity audit |
