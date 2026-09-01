@@ -1,0 +1,10 @@
+# source: docs/journal/DATA_PACK/A_domain_exposure.csv; https://huggingface.co/datasets/datalyes/DAPFAM_patent; ..\04_Owner_Stores\a1.2-v15-20260809\protected\inputs\evaluator-relations.arrow; ..\04_Owner_Stores\armindex\a6\a6-goal001-20260823T052423Z-full09\deep-rankings\pool-200.jsonl
+status,section,judged_queries,relevant_family_incidences,found_rank_1_100,found_rank_101_200,absent_top_200,absent_rate,macro_recall_at_100,perfect_ordering_bound
+DONE,A,102,491,91,26,374,0.762000,0.202696,0.255644
+DONE,B,290,1930,237,115,1578,0.818000,0.166662,0.234908
+DONE,C,127,667,128,55,484,0.726000,0.205912,0.290190
+DONE,D,60,396,88,26,282,0.712000,0.261816,0.333502
+DONE,E,63,357,61,21,275,0.770000,0.269600,0.368152
+DONE,F,133,777,111,43,623,0.802000,0.214407,0.286643
+DONE,G,98,435,69,41,325,0.747000,0.122455,0.191243
+DONE,H,31,120,7,2,111,0.925000,0.063833,0.128349
