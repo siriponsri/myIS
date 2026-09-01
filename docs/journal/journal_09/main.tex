@@ -90,13 +90,18 @@ and weigh effectiveness against the computational cost of semantic search. A
 recent survey of automated and AI-based retrieval tools reaches a conclusion
 our own numbers sharpen: recall, not ranking quality, is what still limits
 real-world use \citep{poce2026survey}. What we add to that line is a controlled
-account of where the missing recall goes.
+account of where the missing recall goes. Earlier WPI work surveys deep
+learning for patent analysis \citep{krestel2021survey} and compares
+ranking-based engines for chemical prior-art identification
+\citep{rees2025evaluating}.
 
 Two lines of work sharpen the boundary of our claim. AutoIndex learns executable representation programs around a fixed lexical backend and reports large recall gains from representation alone, including a dense result in which a learned program improves Qwen3-Embedding-0.6B by 18.3\% on a single task \citep{onuallain2026autoindex}. PHAGE injects a claim-dependency graph into the attention of a pre-trained encoder \citep{phage2026}. Both search a rich, learned representation space. We do the opposite on purpose: a small set of coarse, deterministic constructions, applied to frozen retrievers, to ask whether such choices are portable at all. Our negative result concerns that space, not representation in general, and the contrast with AutoIndex is the clearest statement of where the boundary falls.
 
 \subsection{Multi-stage retrieval and where the error can live}
 
 Modern retrieval separates candidate generation from scoring: an inexpensive first stage supplies a bounded pool, and a more expensive model reranks it \citep{asadi2013candidate,nogueira2019passage}. The separation matters here because it partitions failure. A relevant document that entered the pool but ranked poorly can be recovered by a better ranker. A relevant document that never entered the pool cannot be recovered by any ranker at all. We use this distinction only after confirmation, to measure how the error divides between the two.
+
+Earlier work notes that filtering a relevant document at the first stage sets a ceiling no reranker can lift \citep{lee2021priorart,rathee2025guiding}; our contribution is to measure its size relative to ordering error on the same population.
 
 \section{Study design}
 \label{sec:design}
