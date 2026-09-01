@@ -36,7 +36,7 @@
 \address[a]{School of Information Technology, King Mongkut's Institute of Technology Ladkrabang, Bangkok, Thailand}
 
 \begin{abstract}
-A patent retriever never sees a patent. It sees a representation somebody built for it, and it scores that. Yet AI search tools are procured, compared, and reported by model name, as though the surrounding construction were a neutral detail. We test what that assumption costs on family-level cross-domain retrieval over DAPFAM, freezing five retrievers and varying deterministic constructions under a protocol that keeps development, one-time selection, held-out confirmation, and post-confirmatory diagnosis strictly apart. Three findings follow. First, coarse construction choices do not reorder engines: the best construction changes from one retriever to the next, but the change never rises above its own resampling uncertainty (largest interval endpoint 0.011 Recall@100) while the retrievers themselves stay separated by several times that amount. Second, a configuration frozen before any held-out contact wins cleanly on 872 protected queries, lifting Recall@100 from 0.331 to 0.442 (paired difference 0.111, 95\% bootstrap CI [0.102, 0.120]). Third, and most consequential for search practice, that confirmed system still misses most of what it should find, and the reason is exposure rather than order: 78\% of relevant families never enter its Top-200 pool. Perfectly reordering that pool would add 0.072 to Recall@100; extending the pool to 1{,}000 candidates adds 0.341, roughly five times more. Even then, 57\% of relevant families remain unretrieved and 219 of 905 queries return nothing relevant at all, uniformly across all eight IPC sections. First-stage dense retrieval does not solve cross-domain prior art at any depth we tested. We argue that AI-assisted search should be reported at the configuration level, that pool depth deserves the attention usually given to ranking quality, and that the recall these systems cannot reach on their own is precisely the ground professional search strategy still has to cover.
+A patent retriever never sees a patent. It sees a representation somebody built for it, and it scores that. Yet AI search tools are procured, compared, and reported by model name, as though the surrounding construction were a neutral detail. We test what that assumption costs on family-level cross-domain retrieval over DAPFAM, freezing five retrievers and varying deterministic constructions under a protocol that keeps development, one-time selection, held-out confirmation, and post-confirmatory diagnosis strictly apart. Three findings follow. First, coarse construction choices do not stably reorder engines: the best construction changes from one retriever to the next, but the change never rises above its own resampling uncertainty (largest interval endpoint 0.011 Recall@100) while the retrievers themselves stay separated by several times that amount. Second, a configuration frozen before any held-out contact wins cleanly on 872 protected queries, lifting Recall@100 from 0.331 to 0.442 (paired difference 0.111, 95\% bootstrap CI [0.102, 0.120]). Third, and most consequential for search practice, that confirmed system still misses most of what it should find, and the reason is exposure rather than order: 78\% of relevant families never enter its Top-200 pool. Perfectly reordering that pool would add 0.072 to Recall@100; extending the pool to 1{,}000 candidates adds 0.341, roughly five times more. Even then, 57\% of relevant families remain unretrieved and 219 of 905 queries return nothing relevant at all, uniformly across all eight IPC sections. First-stage dense retrieval does not solve cross-domain prior art at any depth we tested. We argue that AI-assisted search should be reported at the configuration level, that pool depth deserves the attention usually given to ranking quality, and that the recall these systems cannot reach on their own is precisely the ground professional search strategy still has to cover.
 \end{abstract}
 
 \begin{keyword}
@@ -66,7 +66,7 @@ Our answers are, in order: no, yes, and in the pool rather than the ranking. The
 
 The finding also travels upward. Retrieval-augmented and agentic patent-search systems put a language model on top of a first stage, and whatever that first stage fails to retrieve is not available to anything above it. What we measure here is the size of that constraint.
 
-The contribution to search practice is therefore not a better system. What we offer instead is a measurement of where the remaining error sits, taken
+Under a frozen, held-out-validated configuration, we decompose remaining Recall@100 error into non-exposure and misordering: the former is roughly fivefold larger and persists at fivefold depth. The contribution to search practice is therefore not a better system. What we offer instead is a measurement of where the remaining error sits, taken
 under a protocol strict enough to trust, together with the reporting conventions
 that would let practitioners see the same thing in the tools they already use.
 
@@ -90,10 +90,11 @@ and weigh effectiveness against the computational cost of semantic search. A
 recent survey of automated and AI-based retrieval tools reaches a conclusion
 our own numbers sharpen: recall, not ranking quality, is what still limits
 real-world use \citep{poce2026survey}. What we add to that line is a controlled
-account of where the missing recall goes. Earlier WPI work surveys deep
-learning for patent analysis \citep{krestel2021survey} and compares
-ranking-based engines for chemical prior-art identification
-\citep{rees2025evaluating}.
+account of where the missing recall goes. \citet{rees2025evaluating} ask
+whether prior art later filed in opposition reaches the top 100 of six
+commercial systems; their low overlap is the tool-side counterpart to our
+exposure result. \citet{krestel2021survey} trace deep learning's entry into
+patent analysis.
 
 Two lines of work sharpen the boundary of our claim. AutoIndex learns executable representation programs around a fixed lexical backend and reports large recall gains from representation alone, including a dense result in which a learned program improves Qwen3-Embedding-0.6B by 18.3\% on a single task \citep{onuallain2026autoindex}. PHAGE injects a claim-dependency graph into the attention of a pre-trained encoder \citep{phage2026}. Both search a rich, learned representation space. We do the opposite on purpose: a small set of coarse, deterministic constructions, applied to frozen retrievers, to ask whether such choices are portable at all. Our negative result concerns that space, not representation in general, and the contrast with AutoIndex is the clearest statement of where the boundary falls.
 
@@ -147,7 +148,7 @@ Final confirmation uses paired query-level differences, 10{,}000 paired bootstra
 
 The per-retriever search registers 52 configurations in advance, including eight conditional reserves whose activation predicates never fired, leaving 44 executed. The full list, the activation predicates, and the decision rules are fixed in a version-controlled artifact with a freeze receipt dated before the first measured execution, and released with this paper; see the data availability statement.
 
-\section{Result 1: construction choices do not reorder engines}
+\section{Result 1: construction choices do not stably reorder engines}
 \label{sec:transfer}
 
 \begin{figure*}[!t]
@@ -177,7 +178,7 @@ Qwen3 Embedding & 0.364 & 0.374 & No strict improvement \\
 }
 \end{table}
 
-If a construction were neutral preprocessing, frozen retrievers would respond to it alike. We test that first on a shared screen of five systems under five constructions, then let each of the three dense retrievers run its registered search. Under the per-system rule a challenger replaces its incumbent only on a strict Recall@100 gain; anything smaller is recorded as a tie. Table~\ref{tab:development} shows mixed responses, which leaves open the possibility that a construction discovered around one system might still transfer to another.
+If a construction were neutral preprocessing, frozen retrievers would respond to it alike. We test that first on a shared screen of five systems under five constructions, then let each of the three dense retrievers run its registered search. Under the per-system rule a challenger replaces its incumbent only on a strict Recall@100 gain; anything smaller is recorded as a tie. Because the columns come from different decision contexts, ``tie'' is the rule's outcome, not equal scores; their mixed responses leave transfer open.
 
 We test that with a complete three-by-three matrix: each source is the construction its retriever's registered search settled on, consumed by each of the three targets, every cell computed over all 250 development queries. The PatEmbed-derived construction is title, abstract and claims in 384-token passages with 64-token overlap and maximum aggregation; the Arctic-derived is labelled title, abstract and claims in 512-token passages with 64-token overlap; the Qwen3-derived is title, abstract and claims in 2{,}048-token passages with 256-token overlap.
 
@@ -280,7 +281,7 @@ Pool depth & Oracle Recall@100 & Gain over observed & Relevant families still ab
 
 A pool that stops at 200 is a choice, not a law, so we replayed the frozen configuration's retained deep ranking to depths of 300, 500, and 1{,}000. No model, construction, or scoring function changed; only the cutoff did. Table~\ref{tab:depth} and Figure~\ref{fig:depth} report the outcome, and the two readings both matter.
 
-Depth pays, and it pays far more than ordering. Moving from a 200-candidate pool to a 1{,}000-candidate pool raises the attainable Recall@100 from 0.260 to 0.529. Set against the 0.072 available from perfect reordering, the deeper pool is worth roughly five times as much. Both quantities are Recall@100 on the same 905 queries, so the comparison is direct. For a practitioner deciding where to spend, this is the actionable result of the paper: the ranking is not the constraint, and a system that retrieves 200 candidates is discarding recall that costs nothing but compute to keep.
+Depth pays, and it pays far more than ordering. Moving from a 200-candidate pool to a 1{,}000-candidate pool raises the attainable Recall@100 from 0.260 to 0.529. Set against the 0.072 available from perfect reordering, the deeper pool is worth roughly five times as much. Both quantities are Recall@100 on the same 905 queries, so the comparison is direct. For a practitioner deciding where to spend, this is the actionable result of the paper: within the confirmed configuration, ranking was not the dominant measured constraint, and extending our retained ranking to 1{,}000 candidates required no additional scoring pass.
 
 Depth also does not solve the problem. At five times the depth, 2{,}957 of 5{,}193 relevant families, or 56.9\%, have still never been retrieved, and 219 of 905 queries still return nothing relevant at all. The ceiling moves; it does not lift. Whatever is failing here is not a cutoff that was set too tight.
 
@@ -344,7 +345,7 @@ None of this is burdensome, and all of it is information the tool already has. I
 
 \subsection{Spend on exposure before ranking}
 
-The measured trade is unambiguous on this benchmark. A perfect ranker over a 200-candidate pool is worth 0.072 Recall@100; a 1{,}000-candidate pool is worth 0.341. Deeper retrieval is inexpensive, since the candidate scoring is already done and only the cutoff changes, whereas reranking adds a model to the pipeline. A team evaluating tools for recall-critical work should ask what depth the first stage retrieves before asking how good the reranker is, and a team building such a system should exhaust depth before adding a reranking stage.
+The measured trade is unambiguous on this benchmark. A perfect ranker over a 200-candidate pool is worth 0.072 Recall@100; a 1{,}000-candidate pool is worth 0.341. For our replay, candidate scores were already available and only the cutoff changed; production ANN systems may still incur latency and memory costs at depth 1{,}000. A team evaluating tools for recall-critical work should ask what depth the first stage retrieves before asking how good the reranker is, and a team building such a system should exhaust depth before adding a reranking stage.
 
 \subsection{What this means for LLM-based and agentic search}
 
