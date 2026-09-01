@@ -1,0 +1,5 @@
+- Coarse constructions do not stably reorder the five retrievers.
+- Held-out Recall@100 rises from 0.331 to 0.442 (+0.111).
+- At Top-200, 78% of relevant patent families are not exposed.
+- Reordering adds 0.072 Recall@100; depth 1,000 adds 0.341.
+- We propose configuration-level reporting for AI-assisted patent search.
