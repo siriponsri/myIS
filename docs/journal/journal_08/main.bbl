@@ -1,0 +1,168 @@
+\begin{thebibliography}{18}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Inproceedings
+\bibitem[{Asadi and Lin(2013)}]{asadi2013candidate}
+\bibinfo{author}{Asadi, N.}, \bibinfo{author}{Lin, J.}, \bibinfo{year}{2013}.
+\newblock \bibinfo{title}{Effectiveness/efficiency tradeoffs for candidate
+  generation in multi-stage retrieval architectures}, in:
+  \bibinfo{booktitle}{Proceedings of the 36th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}, pp.
+  \bibinfo{pages}{997--1000}.
+\newblock \DOIprefix\doi{10.1145/2484028.2484132}.
+%Type = Article
+\bibitem[{Ayaou and Cavallucci(2025)}]{ayaou2025patenteb}
+\bibinfo{author}{Ayaou, I.}, \bibinfo{author}{Cavallucci, D.},
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{{PatenTEB}: A comprehensive benchmark and model
+  family for patent text embedding}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2510.22264} .
+%Type = Article
+\bibitem[{Ayaou et~al.(2026)Ayaou, Cavallucci and Chibane}]{ayaou2026dapfam}
+\bibinfo{author}{Ayaou, I.}, \bibinfo{author}{Cavallucci, D.},
+  \bibinfo{author}{Chibane, H.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{{DAPFAM}: A domain-aware family-level dataset to
+  benchmark cross-domain patent retrieval}.
+\newblock \bibinfo{journal}{Array} \bibinfo{volume}{29},
+  \bibinfo{pages}{100720}.
+\newblock \DOIprefix\doi{10.1016/j.array.2026.100720}.
+%Type = Inproceedings
+\bibitem[{Chen et~al.(2024)Chen, Xiao, Zhang, Luo, Lian and
+  Liu}]{chen2024bgem3}
+\bibinfo{author}{Chen, J.}, \bibinfo{author}{Xiao, S.}, \bibinfo{author}{Zhang,
+  P.}, \bibinfo{author}{Luo, K.}, \bibinfo{author}{Lian, D.},
+  \bibinfo{author}{Liu, Z.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{{M3-Embedding}: Multi-linguality,
+  multi-functionality, multi-granularity text embeddings through self-knowledge
+  distillation}, in: \bibinfo{booktitle}{Findings of the Association for
+  Computational Linguistics: ACL 2024}, pp. \bibinfo{pages}{2318--2335}.
+\newblock \DOIprefix\doi{10.18653/v1/2024.findings-acl.137}.
+%Type = Article
+\bibitem[{Chikkamath et~al.(2026)Chikkamath, Andersson and
+  Endres}]{chikkamath2026rethinking}
+\bibinfo{author}{Chikkamath, R.}, \bibinfo{author}{Andersson, L.},
+  \bibinfo{author}{Endres, M.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Rethinking patent retrieval with language models:
+  Toward scalable and efficient search}.
+\newblock \bibinfo{journal}{World Patent Information} \bibinfo{volume}{84},
+  \bibinfo{pages}{102433}.
+\newblock \DOIprefix\doi{10.1016/j.wpi.2026.102433}.
+%Type = Inproceedings
+\bibitem[{Cormack et~al.(2009)Cormack, Clarke and Buettcher}]{cormack2009rrf}
+\bibinfo{author}{Cormack, G.V.}, \bibinfo{author}{Clarke, C.L.A.},
+  \bibinfo{author}{Buettcher, S.}, \bibinfo{year}{2009}.
+\newblock \bibinfo{title}{Reciprocal rank fusion outperforms condorcet and
+  individual rank learning methods}, in: \bibinfo{booktitle}{Proceedings of
+  SIGIR}, pp. \bibinfo{pages}{758--759}.
+\newblock \DOIprefix\doi{10.1145/1571941.1572114}.
+%Type = Book
+\bibitem[{Davison and Hinkley(1997)}]{davison1997bootstrap}
+\bibinfo{author}{Davison, A.C.}, \bibinfo{author}{Hinkley, D.V.},
+  \bibinfo{year}{1997}.
+\newblock \bibinfo{title}{Bootstrap Methods and Their Application}.
+\newblock \bibinfo{publisher}{Cambridge University Press}.
+\newblock \DOIprefix\doi{10.1017/CBO9780511802843}.
+%Type = Article
+\bibitem[{J{\"a}rvelin and Kek{\"a}l{\"a}inen(2002)}]{jarvelin2002cumulated}
+\bibinfo{author}{J{\"a}rvelin, K.}, \bibinfo{author}{Kek{\"a}l{\"a}inen, J.},
+  \bibinfo{year}{2002}.
+\newblock \bibinfo{title}{Cumulated gain-based evaluation of {IR} techniques}.
+\newblock \bibinfo{journal}{ACM Transactions on Information Systems}
+  \bibinfo{volume}{20}, \bibinfo{pages}{422--446}.
+\newblock \DOIprefix\doi{10.1145/582415.582418}.
+%Type = Article
+\bibitem[{Krestel et~al.(2021)Krestel, Chikkamath, Hewel and
+  Risch}]{krestel2021survey}
+\bibinfo{author}{Krestel, R.}, \bibinfo{author}{Chikkamath, R.},
+  \bibinfo{author}{Hewel, C.}, \bibinfo{author}{Risch, J.},
+  \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{A survey on deep learning for patent analysis}.
+\newblock \bibinfo{journal}{World Patent Information} \bibinfo{volume}{65},
+  \bibinfo{pages}{102035}.
+%Type = Article
+\bibitem[{Nogueira and Cho(2019)}]{nogueira2019passage}
+\bibinfo{author}{Nogueira, R.}, \bibinfo{author}{Cho, K.},
+  \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Passage re-ranking with {BERT}}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:1901.04085} .
+%Type = Article
+\bibitem[{O'Nuallain et~al.(2026)O'Nuallain, Rajkumar, Narayanasamy, Jiang,
+  Chaudhari and Drozdov}]{onuallain2026autoindex}
+\bibinfo{author}{O'Nuallain, S.}, \bibinfo{author}{Rajkumar, N.},
+  \bibinfo{author}{Narayanasamy, R.}, \bibinfo{author}{Jiang, H.},
+  \bibinfo{author}{Chaudhari, S.}, \bibinfo{author}{Drozdov, A.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{{AutoIndex}: Learning representation programs for
+  retrieval}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2607.18603} .
+%Type = Article
+\bibitem[{Poce and Cerro(2026)}]{poce2026survey}
+\bibinfo{author}{Poce, S.}, \bibinfo{author}{Cerro, G.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{A survey on automated and ai-based tools for patent
+  retrieval with a special focus on the life sciences domain}.
+\newblock \bibinfo{journal}{World Patent Information}
+  \bibinfo{note}{TODO(human): confirm the full author list, volume and article
+  number (PII S0172219026000141)}.
+%Type = Article
+\bibitem[{Rees and Wirz(2025)}]{rees2025evaluating}
+\bibinfo{author}{Rees, D.}, \bibinfo{author}{Wirz, M.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Evaluating the effectiveness of ranking-based patent
+  search engines for identifying relevant prior art: A comparative study in the
+  area of chemistry}.
+\newblock \bibinfo{journal}{World Patent Information}
+  \bibinfo{note}{TODO(human): confirm volume and article number from the
+  article page (PII S0172219025000250)}.
+%Type = Article
+\bibitem[{Robertson and Zaragoza(2009)}]{robertson2009probabilistic}
+\bibinfo{author}{Robertson, S.}, \bibinfo{author}{Zaragoza, H.},
+  \bibinfo{year}{2009}.
+\newblock \bibinfo{title}{The probabilistic relevance framework: {BM25} and
+  beyond}.
+\newblock \bibinfo{journal}{Foundations and Trends in Information Retrieval}
+  \bibinfo{volume}{3}, \bibinfo{pages}{333--389}.
+\newblock \DOIprefix\doi{10.1561/1500000019}.
+%Type = Article
+\bibitem[{Yoo et~al.(2026)Yoo, Xu, Wu and Cao}]{phage2026}
+\bibinfo{author}{Yoo, Y.}, \bibinfo{author}{Xu, Q.}, \bibinfo{author}{Wu, Z.},
+  \bibinfo{author}{Cao, L.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Heterogeneous dependency graph-guided attention for
+  patent representation learning}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2605.10073} .
+%Type = Article
+\bibitem[{Yousefiramandi and Cooney(2026)}]{yousefiramandi2026patent}
+\bibinfo{author}{Yousefiramandi, A.}, \bibinfo{author}{Cooney, C.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Benchmarking patent embeddings: A multi-task
+  evaluation of 22 models across retrieval, classification, and clustering}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2605.24297} .
+%Type = Article
+\bibitem[{Yu et~al.(2024)Yu, Merrick, Nuti and Campos}]{yu2024arctic}
+\bibinfo{author}{Yu, P.}, \bibinfo{author}{Merrick, L.}, \bibinfo{author}{Nuti,
+  G.}, \bibinfo{author}{Campos, D.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{{Arctic-Embed 2.0}: Multilingual retrieval without
+  compromise}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2412.04506} .
+%Type = Article
+\bibitem[{Zhang et~al.(2025)Zhang, Li, Long, Zhang, Lin, Yang, Xie, Yang, Liu,
+  Lin, Huang and Zhou}]{zhang2025qwen3}
+\bibinfo{author}{Zhang, Y.}, \bibinfo{author}{Li, M.}, \bibinfo{author}{Long,
+  D.}, \bibinfo{author}{Zhang, X.}, \bibinfo{author}{Lin, H.},
+  \bibinfo{author}{Yang, B.}, \bibinfo{author}{Xie, P.}, \bibinfo{author}{Yang,
+  A.}, \bibinfo{author}{Liu, D.}, \bibinfo{author}{Lin, J.},
+  \bibinfo{author}{Huang, F.}, \bibinfo{author}{Zhou, J.},
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{{Qwen3 Embedding}: Advancing text embedding and
+  reranking through foundation models}.
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2506.05176} .
+
+\end{thebibliography}

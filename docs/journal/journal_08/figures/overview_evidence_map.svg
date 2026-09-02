@@ -1,67 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 292" font-family="Helvetica, Arial, sans-serif">
-  <!-- zone backgrounds -->
-  <rect x="18" y="14" width="452" height="264" rx="12" fill="#eef3f9" stroke="#d3e0ee" stroke-width="1.2"/>
-  <rect x="524" y="14" width="244" height="264" rx="12" fill="#e9f7f0" stroke="#c9ebda" stroke-width="1.2"/>
-  <rect x="788" y="14" width="234" height="264" rx="12" fill="#fdf4e8" stroke="#f2ddbd" stroke-width="1.2"/>
-
-  <!-- zone headers -->
-  <text x="34" y="38" font-size="13" font-weight="bold" letter-spacing="1.2" fill="#33608a">DEVELOPMENT EVIDENCE</text>
-  <text x="540" y="38" font-size="13" font-weight="bold" letter-spacing="1.2" fill="#1f7a51">PROTECTED CONFIRMATION</text>
-  <text x="800" y="38" font-size="12" font-weight="bold" letter-spacing="1" fill="#b0701c">POST-CONFIRMATORY DIAGNOSIS</text>
-
-  <!-- flow spine -->
-  <line x1="100" y1="120" x2="958" y2="120" stroke="#cdd8e4" stroke-width="2"/>
-  <polygon points="237,115 248,120 237,125" fill="#9fb0c3"/>
-  <polygon points="585,115 596,120 585,125" fill="#9fb0c3"/>
-  <polygon points="772,115 783,120 772,125" fill="#9fb0c3"/>
-
-  <!-- development-closed barrier -->
-  <line x1="497" y1="30" x2="497" y2="264" stroke="#3a465c" stroke-width="2.5" stroke-dasharray="7,5"/>
-  <rect x="489" y="42" width="16" height="13" rx="2" fill="#3a465c"/>
-  <path d="M492,42 v-3 a5,5 0 0 1 10,0 v3" fill="none" stroke="#3a465c" stroke-width="2"/>
-  <circle cx="497" cy="48" r="1.6" fill="#ffffff"/>
-  <text x="490" y="162" font-size="11" font-weight="bold" letter-spacing="1.5" fill="#3a465c" text-anchor="middle" transform="rotate(-90 490 162)">DEVELOPMENT CLOSED</text>
-
-  <!-- ===== stage 01 ===== -->
-  <rect x="123" y="50" width="18" height="24" rx="2" fill="none" stroke="#2f6fb0" stroke-width="2"/>
-  <line x1="128" y1="58" x2="136" y2="58" stroke="#2f6fb0" stroke-width="1.6"/>
-  <line x1="128" y1="63" x2="136" y2="63" stroke="#2f6fb0" stroke-width="1.6"/>
-  <line x1="128" y1="68" x2="136" y2="68" stroke="#2f6fb0" stroke-width="1.6"/>
-  <circle cx="132" cy="120" r="23" fill="#2f6fb0"/>
-  <text x="132" y="126" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">01</text>
-  <text x="132" y="172" font-size="13.5" font-weight="bold" fill="#1e2a38" text-anchor="middle">Construct representations</text>
-  <text x="132" y="191" font-size="10.5" fill="#5c6b7c" text-anchor="middle">Five patent-family text views</text>
-  <rect x="78" y="209" width="108" height="22" rx="11" fill="#d9e6f4"/>
-  <text x="132" y="224" font-size="10.5" font-weight="bold" fill="#295f92" text-anchor="middle">5 constructions</text>
-
-  <!-- ===== stage 02 ===== -->
-  <line x1="342" y1="58" x2="360" y2="58" stroke="#2f6fb0" stroke-width="2"/>
-  <polygon points="360,54 367,58 360,62" fill="#2f6fb0"/>
-  <line x1="362" y1="68" x2="344" y2="68" stroke="#2f6fb0" stroke-width="2"/>
-  <polygon points="344,64 337,68 344,72" fill="#2f6fb0"/>
-  <circle cx="352" cy="120" r="23" fill="#2f6fb0"/>
-  <text x="352" y="126" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">02</text>
-  <text x="352" y="172" font-size="13.5" font-weight="bold" fill="#1e2a38" text-anchor="middle">Test transfer</text>
-  <text x="352" y="191" font-size="10.5" fill="#5c6b7c" text-anchor="middle">Do views transfer across retrievers?</text>
-  <rect x="260" y="209" width="184" height="22" rx="11" fill="#d9e6f4"/>
-  <text x="352" y="224" font-size="10.5" font-weight="bold" fill="#295f92" text-anchor="middle">no stable construction winner</text>
-
-  <!-- ===== stage 03 ===== -->
-  <path d="M636,62 L643,70 L656,53" fill="none" stroke="#2e9e6b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="646" cy="120" r="23" fill="#2e9e6b"/>
-  <text x="646" y="126" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">03</text>
-  <text x="646" y="172" font-size="13.5" font-weight="bold" fill="#1e2a38" text-anchor="middle">Freeze &amp; confirm</text>
-  <text x="646" y="191" font-size="10.5" fill="#5c6b7c" text-anchor="middle">Selection-125 &#8594; 872 held-out</text>
-  <rect x="586" y="209" width="120" height="22" rx="11" fill="#d3efe1"/>
-  <text x="646" y="224" font-size="10.5" font-weight="bold" fill="#1f7a51" text-anchor="middle">+0.111 Recall@100</text>
-
-  <!-- ===== stage 04 ===== -->
-  <circle cx="901" cy="60" r="8" fill="none" stroke="#d98a2b" stroke-width="2"/>
-  <line x1="907" y1="66" x2="914" y2="73" stroke="#d98a2b" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="905" cy="120" r="23" fill="#d98a2b"/>
-  <text x="905" y="126" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">04</text>
-  <text x="905" y="172" font-size="13.5" font-weight="bold" fill="#1e2a38" text-anchor="middle">Diagnose exposure</text>
-  <text x="905" y="191" font-size="10.5" fill="#5c6b7c" text-anchor="middle">What still caps recall in the pool?</text>
-  <rect x="830" y="209" width="150" height="22" rx="11" fill="#fae4c4"/>
-  <text x="905" y="224" font-size="10.5" font-weight="bold" fill="#a5691a" text-anchor="middle">78% of evidence absent</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 170" font-family="Helvetica, Arial, sans-serif">
+<rect x="8" y="40" width="96" height="54" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="56.0" y="59.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">Construct</text>
+<text x="56.0" y="71.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">representations</text>
+<text x="56.0" y="86.0" font-size="8.2" text-anchor="middle" fill="#8C8C8C">five text views</text>
+<text x="13.0" y="35.0" font-size="8.2" text-anchor="start" fill="#8C8C8C">1</text>
+<rect x="118" y="40" width="96" height="54" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="166.0" y="59.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">Test</text>
+<text x="166.0" y="71.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">transfer</text>
+<text x="166.0" y="86.0" font-size="8.2" text-anchor="middle" fill="#8C8C8C">no stable winner</text>
+<text x="123.0" y="35.0" font-size="8.2" text-anchor="start" fill="#8C8C8C">2</text>
+<rect x="250" y="40" width="96" height="54" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="298.0" y="59.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">Freeze</text>
+<text x="298.0" y="71.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">and confirm</text>
+<text x="298.0" y="86.0" font-size="8.2" text-anchor="middle" fill="#8C8C8C">872 held-out</text>
+<text x="255.0" y="35.0" font-size="8.2" text-anchor="start" fill="#8C8C8C">3</text>
+<rect x="360" y="40" width="96" height="54" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="408.0" y="59.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">Diagnose</text>
+<text x="408.0" y="71.0" font-size="9.5" text-anchor="middle" fill="#1A1A1A">exposure</text>
+<text x="408.0" y="86.0" font-size="8.2" text-anchor="middle" fill="#8C8C8C">Top-200 pool</text>
+<text x="365.0" y="35.0" font-size="8.2" text-anchor="start" fill="#8C8C8C">4</text>
+<line x1="104.0" y1="67.0" x2="111.0" y2="67.0" stroke="#1A1A1A" stroke-width="0.9"/>
+<polygon points="111,64.0 117,67.0 111,70.0" fill="#1A1A1A"/>
+<line x1="346.0" y1="67.0" x2="353.0" y2="67.0" stroke="#1A1A1A" stroke-width="0.9"/>
+<polygon points="353,64.0 359,67.0 353,70.0" fill="#1A1A1A"/>
+<line x1="232.0" y1="18.0" x2="232.0" y2="130.0" stroke="#1A1A1A" stroke-width="0.9" stroke-dasharray="4,3"/>
+<text x="226.0" y="14.0" font-size="8.2" text-anchor="end" fill="#1A1A1A">development closed</text>
+<line x1="232.0" y1="67.0" x2="243.0" y2="67.0" stroke="#1A1A1A" stroke-width="0.9"/>
+<polygon points="243,64.0 249,67.0 243,70.0" fill="#1A1A1A"/>
+<text x="8.0" y="148.0" font-size="8.2" text-anchor="start" fill="#8C8C8C">development evidence</text>
+<text x="250.0" y="148.0" font-size="8.2" text-anchor="start" fill="#8C8C8C">confirmation and post-confirmatory diagnosis</text>
 </svg>

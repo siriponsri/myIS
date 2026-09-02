@@ -32,8 +32,8 @@ Patent Information* 85, article 102439:
 The PII page could not be reopened in the final automated check: ScienceDirect
 returned HTTP 403 and no interactive browser session was available. Direct
 PII-page re-verification is therefore **BLOCKED**. The entry was not guessed or
-expanded; as required, it now carries a TODO note that records the unresolved
-direct-page check and the two names returned by Crossref.
+expanded; as required, it now carries an open verification note recording the
+unresolved direct-page check and the two names returned by Crossref.
 
 The related-work metadata used in this pass is available at:
 

@@ -79,5 +79,4 @@ SVG change or PDF-level edit was needed.
 Local output: `main.pdf`, 18 pages, built 30 August 2026 with MiKTeX
 `elsarticle` 3.5. The only unverified item is the online Overleaf compile, which
 requires the owner's authenticated account; the source package is otherwise
-ready for upload. The handoff archive is `Journal_08_Overleaf.zip` (61,854
-bytes; SHA-256 `9239DA57921AB0FA637506441C708CCEE8631022FF79DD4FB2E6FB0D59C3DDC8`).
+ready for upload.

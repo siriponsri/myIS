@@ -13,6 +13,13 @@ pool-depth analysis, the IPC-section breakdown, and the failure cases.
 - `DATA_PACK/` — every derived table behind the paper, with `source:` lines.
 - `REVIEW_PROMPT.md` — the verification pass to run before submission.
 
+## Build modes
+`main.tex` carries two class lines. The first is active and produces the
+single-column manuscript Elsevier asks authors to submit. Comment it out and
+uncomment the second to get a two-column build that approximates the published
+ScienceDirect layout. All six floats are `figure*`, so they span both columns in
+that mode and behave as ordinary floats in the submission build.
+
 ## Build note
 `elsarticle.cls` is provided by Elsevier / TeX Live and is **not** bundled here.
 Any full TeX Live install or Overleaf has it. The class options are set to
@@ -22,12 +29,12 @@ Any full TeX Live install or Overleaf has it. The class options are set to
 ## Figure mapping
 | # | file | status |
 |---|---|---|
-| 1 | overview_evidence_map | reused from conference |
-| 2 | fig1_a3_transfer | reused |
-| 3 | fig2_a5_confirmation | reused |
-| 4 | fig3_a7_diagnosis | reused |
-| 5 | fig5_depth_vs_ordering | **new** — the paper's central figure |
-| 6 | fig6_section_exposure | **new** |
+| 1 | overview_evidence_map | redrawn to journal convention |
+| 2 | fig1_a3_transfer | redrawn to journal convention |
+| 3 | fig2_a5_confirmation | redrawn to journal convention |
+| 4 | fig3_a7_diagnosis | redrawn to journal convention |
+| 5 | fig5_depth_vs_ordering | new, the paper's central figure |
+| 6 | fig6_section_exposure | new |
 
 ## Before submission (human)
 1. Verify the author block, CRediT statement, acknowledgements, and the

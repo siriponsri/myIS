@@ -18,3 +18,18 @@ All Task A-G outputs are post-hoc projections. No retrieval, indexing, embedding
 | I1_bound_by_pool_depth.csv | A6 retained depth-2000 rankings + relation Arrow + Rule 0 baseline | post-hoc oracle Recall@100 bound by pool depth |
 | I2_section_exposure.csv | A_domain_exposure.csv + public DAPFAM IPC labels + Rule 0 relation/pool evidence | post-hoc A-H IPC section roll-up; O60 excluded |
 | PREP_REPORT_3.md | JOURNAL_ARC_UPDATE.md + I1/I2/I3/I4 outputs | round-3 closeout and sanity audit |
+
+## Addendum — provenance gap closed (round 4)
+
+`VERIFY_REPORT.md` flagged that three source files used by the manuscript were
+absent from the header above. They are recorded here; no derived value changed.
+
+| Value in the manuscript | Exact source artifact |
+|---|---|
+| Within-target bootstrap intervals; best-source probability 0.6834 | `docs/paper/stats.json` |
+| Transfer matrix cells; band separation 0.018 | `docs/figures/07_a3_transfer_matrix.csv` |
+| Fusion controls 0.419 / 0.418 / 0.415 | `docs/figures/08_a3_fusion_controls.csv` |
+
+These three files are conference-round artifacts carried into the journal
+version unchanged. They are cited here so that every number printed in the
+manuscript resolves to a named file.
